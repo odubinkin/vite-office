@@ -178,6 +178,11 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(first.Clone().equals(first)).toBe(true);
     expect(first.equals(new SvxFirstLineIndentItem(-282, weightWhich))).toBe(false);
     expect(first.equals(new SfxInt16Item(weightWhich, -283))).toBe(false);
+    const automatic = new SvxFirstLineIndentItem(-283, weightWhich, true);
+    expect(automatic.IsAutoFirst()).toBe(true);
+    expect(automatic.QueryValue()).toEqual([-283, 1]);
+    expect(automatic.Clone().equals(automatic)).toBe(true);
+    expect(first.equals(automatic)).toBe(false);
     expect(
       /** Creates a fractional first-line indent. @returns Invalid item. */ () =>
         new SvxFirstLineIndentItem(1.5, weightWhich),

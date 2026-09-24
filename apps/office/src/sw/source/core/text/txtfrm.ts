@@ -5,7 +5,18 @@ import type { SwPageFrame } from "../layout/newfrm";
 import type { SwDoc } from "../doc/doc";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { RES_KEEP, RES_LINENUMBER, RES_UL_SPACE } from "../../../inc/hintids";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { SwFormatPageDesc } from "../attr/fmtpdsc";
+import {
+  RES_BREAK,
+  RES_KEEP,
+  RES_LINENUMBER,
+  RES_PAGEDESC,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_SPLIT,
+  RES_PARATR_WIDOWS,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
 
 /** One visible line-number glyph positioned within a text-frame fragment. */
 export interface SwLineNumberMark {
@@ -78,6 +89,13 @@ export interface SwTextFrameInput {
   readonly contextualSpacing: boolean;
   readonly upperSpacing: number;
   readonly keepWithNext?: boolean;
+  readonly keepTogether?: boolean;
+  readonly orphans?: number;
+  readonly widows?: number;
+  readonly breakBefore?: boolean;
+  readonly breakAfter?: boolean;
+  readonly pageStyleName?: string;
+  readonly pageNumber?: number;
   readonly countLineNumbers?: boolean;
 }
 
@@ -97,6 +115,9 @@ export function createSwTextFrameInputs(
     ) => {
       const measurement = measurements[index] as SwTextFrameMeasurement;
       const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
+      const paragraphBreak = (node.GetAttr(RES_BREAK) as SfxInt16Item).GetValue();
+      const pageDesc = node.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
+      const pageNumber = pageDesc.GetNumOffset();
       return {
         id: measurement.id,
         lines: measurement.lines,
@@ -105,6 +126,13 @@ export function createSwTextFrameInputs(
         contextualSpacing: spacing.GetContext(),
         upperSpacing: spacing.GetUpper(),
         keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
+        keepTogether: !(node.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue(),
+        orphans: (node.GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue(),
+        widows: (node.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue(),
+        breakBefore: paragraphBreak === 4 || paragraphBreak === 6,
+        breakAfter: paragraphBreak === 5 || paragraphBreak === 6,
+        pageStyleName: pageDesc.GetPageDescName(),
+        ...(pageNumber === undefined ? {} : { pageNumber }),
         countLineNumbers: (node.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
       };
     },

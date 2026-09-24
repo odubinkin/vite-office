@@ -62,6 +62,15 @@ export const RES_TXTATR_INETFMT = 54 as const;
 /** Paragraph adjustment item, `RES_PARATR_BEGIN + 1`. */
 export const RES_PARATR_ADJUST = 65 as const;
 
+/** Paragraph split permission, matching pinned `RES_PARATR_SPLIT`. */
+export const RES_PARATR_SPLIT = 66 as const;
+
+/** Minimum lines before a paragraph split, matching pinned `RES_PARATR_ORPHANS`. */
+export const RES_PARATR_ORPHANS = 67 as const;
+
+/** Minimum lines after a paragraph split, matching pinned `RES_PARATR_WIDOWS`. */
+export const RES_PARATR_WIDOWS = 68 as const;
+
 /** Paragraph tab-stop collection, `RES_PARATR_BEGIN + 5`. */
 export const RES_PARATR_TABSTOP = 69 as const;
 
@@ -98,6 +107,12 @@ export const RES_MARGIN_RIGHT = 94 as const;
 /** Upper/lower paragraph spacing, matching `RES_UL_SPACE`. */
 export const RES_UL_SPACE = 99 as const;
 
+/** Paragraph page descriptor and number offset, matching pinned `RES_PAGEDESC`. */
+export const RES_PAGEDESC = 100 as const;
+
+/** Page or column break mode, matching pinned `RES_BREAK`. */
+export const RES_BREAK = 101 as const;
+
 /** Keep paragraph with the following paragraph, matching `RES_KEEP`. */
 export const RES_KEEP = 117 as const;
 
@@ -118,12 +133,14 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE],
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
   [RES_CHRATR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT],
-  [RES_PARATR_LINESPACING, RES_PARATR_ADJUST],
+  [RES_PARATR_LINESPACING, RES_PARATR_WIDOWS],
   [RES_PARATR_TABSTOP, RES_PARATR_TABSTOP],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
   [RES_PARATR_LIST_ID, RES_PARATR_LIST_ISCOUNTED],
   [RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT],
   [RES_UL_SPACE, RES_UL_SPACE],
+  [RES_PAGEDESC, RES_PAGEDESC],
+  [RES_BREAK, RES_BREAK],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
 ] as const;
@@ -142,12 +159,14 @@ export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
   [RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE],
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
   [RES_CHRATR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT],
-  [RES_PARATR_LINESPACING, RES_PARATR_ADJUST],
+  [RES_PARATR_LINESPACING, RES_PARATR_WIDOWS],
   [RES_PARATR_TABSTOP, RES_PARATR_TABSTOP],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
   [RES_PARATR_LIST_LEVEL, RES_PARATR_LIST_LEVEL],
   [RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT],
   [RES_UL_SPACE, RES_UL_SPACE],
+  [RES_PAGEDESC, RES_PAGEDESC],
+  [RES_BREAK, RES_BREAK],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
 ] as const;

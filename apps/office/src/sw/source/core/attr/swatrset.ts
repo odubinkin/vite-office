@@ -30,6 +30,7 @@ import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_BREAK,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
@@ -45,6 +46,9 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_MARGIN_FIRSTLINE,
@@ -62,6 +66,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
+import { SwFormatPageDesc } from "./fmtpdsc";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 
 /** Writer-owned item pool with defaults for the currently implemented paragraph WhichIds. */
@@ -155,7 +160,10 @@ export class SwAttrPool extends SfxItemPool {
       new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE),
       /** Restores first-line indent. @param value - Persisted twips. @returns Indent item. */ (
         value,
-      ) => new SvxFirstLineIndentItem(Number(value), RES_MARGIN_FIRSTLINE),
+      ) =>
+        Array.isArray(value)
+          ? new SvxFirstLineIndentItem(Number(value[0]), RES_MARGIN_FIRSTLINE, value[1] === 1)
+          : new SvxFirstLineIndentItem(Number(value), RES_MARGIN_FIRSTLINE),
     );
     this.RegisterDefaultItem(
       new SvxRightMarginItem(0, RES_MARGIN_RIGHT),
@@ -190,12 +198,31 @@ export class SwAttrPool extends SfxItemPool {
         return new SvxLineSpacingItem(Number(value), RES_PARATR_LINESPACING);
       },
     );
-    for (const which of [RES_KEEP, RES_LINENUMBER])
+    for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])
       this.RegisterDefaultItem(
-        new SfxBoolItem(which, which === RES_LINENUMBER),
+        new SfxBoolItem(which, which === RES_LINENUMBER || which === RES_PARATR_SPLIT),
         /** Restores one boolean paragraph compatibility item. @param value - Persisted flag. @returns Boolean item. */
         (value) => new SfxBoolItem(which, Boolean(value)),
       );
+    for (const which of [RES_PARATR_ORPHANS, RES_PARATR_WIDOWS])
+      this.RegisterDefaultItem(
+        new SfxInt16Item(which, 2),
+        /** Restores a minimum paragraph line count. @param value - Persisted count. @returns Integer item. */
+        (value) => new SfxInt16Item(which, Number(value)),
+      );
+    this.RegisterDefaultItem(
+      new SfxInt16Item(RES_BREAK, 0),
+      /** Restores pinned SvxBreak ordinal. @param value - Stored mode. @returns Break item. */
+      (value) => new SfxInt16Item(RES_BREAK, Number(value)),
+    );
+    this.RegisterDefaultItem(
+      new SwFormatPageDesc(),
+      /** Restores a page-style name and restart offset. @param value - Stored pair. @returns Page descriptor item. */
+      (value) => {
+        const pair = value as readonly [string, number];
+        return new SwFormatPageDesc(pair[0], pair[1] === 0 ? undefined : pair[1]);
+      },
+    );
     this.RegisterDefaultItem(
       new SwNumRuleItem(),
       /** Restores a numbering-rule item. @param value - Persisted rule name. @returns Concrete rule item. */

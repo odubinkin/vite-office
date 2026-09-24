@@ -485,14 +485,9 @@ export function resolveParagraphStyle(
       ...(definition?.properties === undefined && parent.effectiveProperties === undefined
         ? {}
         : { effectiveProperties: { ...parent.effectiveProperties, ...definition?.properties } }),
-      ...(definition?.paragraphProperties === undefined && parent.paragraphProperties === undefined
-        ? {}
-        : {
-            paragraphProperties: {
-              ...parent.paragraphProperties,
-              ...definition?.paragraphProperties,
-            },
-          }),
+      // Built-in style properties are already held by the Writer format collection.
+      // Passing them as paragraph deltas would turn inherited defaults into direct
+      // formatting on every paragraph after an export/reimport cycle.
       style: builtInStyle,
     };
   }

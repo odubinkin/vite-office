@@ -82,6 +82,28 @@ export function WriterParagraphDialog({
           {activeTab === "spacing" ? (
             <>
               <NumberField
+                label="First line indent (pt)"
+                value={draft.firstLineIndentPt ?? 0}
+                min={-1638.35}
+                onChange={
+                  /** Changes the authored first-line offset. @param value - Point offset. @returns Nothing. */ (
+                    value,
+                  ) => setDraft({ ...draft, firstLineIndentPt: value })
+                }
+              />
+              <label className="flex items-center gap-2">
+                <input
+                  checked={draft.autoTextIndent ?? false}
+                  onChange={
+                    /** Switches Writer's font-based first-line indent. @param event - Checkbox change. @returns Nothing. */ (
+                      event,
+                    ) => setDraft({ ...draft, autoTextIndent: event.target.checked })
+                  }
+                  type="checkbox"
+                />
+                Automatic first-line indent
+              </label>
+              <NumberField
                 label="Above paragraph (pt)"
                 value={draft.upperPt}
                 min={0}
@@ -285,6 +307,127 @@ export function WriterParagraphDialog({
           ) : null}
           {activeTab === "flow" ? (
             <>
+              <label className="flex flex-col gap-1">
+                Page style
+                <select
+                  aria-label="Page style"
+                  className="rounded border px-2 py-1"
+                  value={draft.pageStyleName ?? ""}
+                  onChange={
+                    /** Selects a document page descriptor. @param event - Selection. @returns Nothing. */ (
+                      event,
+                    ) => setDraft({ ...draft, pageStyleName: event.target.value })
+                  }
+                >
+                  <option value="">Follow current</option>
+                  {(dialogRequest.request.pageStyleNames ?? ["Standard"]).map(
+                    /** Renders a named page descriptor. @param name - Writer name. @returns Option. */ (
+                      name,
+                    ) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ),
+                  )}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1">
+                Page numbering
+                <select
+                  aria-label="Page numbering"
+                  className="rounded border px-2 py-1"
+                  value={
+                    draft.pageNumber === undefined || draft.pageNumber === "auto"
+                      ? "auto"
+                      : "restart"
+                  }
+                  onChange={
+                    /** Selects automatic or restarted page numbering. @param event - Selection. @returns Nothing. */ (
+                      event,
+                    ) =>
+                      setDraft({ ...draft, pageNumber: event.target.value === "auto" ? "auto" : 1 })
+                  }
+                >
+                  <option value="auto">Continue</option>
+                  <option value="restart">Restart at</option>
+                </select>
+              </label>
+              {draft.pageNumber !== undefined && draft.pageNumber !== "auto" ? (
+                <NumberField
+                  label="Start page number"
+                  value={draft.pageNumber}
+                  min={1}
+                  onChange={
+                    /** Changes the first printed page number. @param value - Page number. @returns Nothing. */ (
+                      value,
+                    ) => setDraft({ ...draft, pageNumber: value })
+                  }
+                />
+              ) : null}
+              <label className="flex flex-col gap-1">
+                Break before
+                <select
+                  aria-label="Break before"
+                  className="rounded border px-2 py-1"
+                  value={draft.breakBefore ?? "auto"}
+                  onChange={
+                    /** Sets a page break before the paragraph. @param event - Selection. @returns Nothing. */ (
+                      event,
+                    ) => setDraft({ ...draft, breakBefore: event.target.value as "auto" | "page" })
+                  }
+                >
+                  <option value="auto">Automatic</option>
+                  <option value="page">Page</option>
+                </select>
+              </label>
+              <label className="flex flex-col gap-1">
+                Break after
+                <select
+                  aria-label="Break after"
+                  className="rounded border px-2 py-1"
+                  value={draft.breakAfter ?? "auto"}
+                  onChange={
+                    /** Sets a page break after the paragraph. @param event - Selection. @returns Nothing. */ (
+                      event,
+                    ) => setDraft({ ...draft, breakAfter: event.target.value as "auto" | "page" })
+                  }
+                >
+                  <option value="auto">Automatic</option>
+                  <option value="page">Page</option>
+                </select>
+              </label>
+              <label className="col-span-2 flex items-center gap-2">
+                <input
+                  checked={draft.keepTogether ?? false}
+                  onChange={
+                    /** Updates paragraph split permission. @param event - Checkbox change. @returns Nothing. */ (
+                      event,
+                    ) => setDraft({ ...draft, keepTogether: event.target.checked })
+                  }
+                  type="checkbox"
+                />
+                Do not split paragraph
+              </label>
+              <NumberField
+                label="Orphan control (lines)"
+                value={draft.orphans ?? 2}
+                min={0}
+                onChange={
+                  /** Updates minimum lines before a split. @param value - Count. @returns Nothing. */ (
+                    value,
+                  ) => setDraft({ ...draft, orphans: value })
+                }
+              />
+              <NumberField
+                label="Widow control (lines)"
+                value={draft.widows ?? 2}
+                min={0}
+                onChange={
+                  /** Updates minimum lines after a split. @param value - Count. @returns Nothing. */ (
+                    value,
+                  ) => setDraft({ ...draft, widows: value })
+                }
+              />
               <label className="col-span-2 flex items-center gap-2">
                 <input
                   checked={draft.keepWithNext}

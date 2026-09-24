@@ -6,9 +6,12 @@ import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   SvxLineSpacingItem,
+  SvxFirstLineIndentItem,
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
@@ -16,6 +19,12 @@ import {
 } from "../../../../editeng/source/items/paraitem";
 import {
   RES_KEEP,
+  RES_MARGIN_FIRSTLINE,
+  RES_BREAK,
+  RES_PAGEDESC,
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
   RES_LINENUMBER,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
@@ -96,6 +105,15 @@ export interface WriterParagraphFormatValue {
   readonly fontIndependent: boolean;
   readonly tabStopsPt: readonly number[];
   readonly keepWithNext: boolean;
+  readonly keepTogether?: boolean;
+  readonly orphans?: number;
+  readonly widows?: number;
+  readonly breakBefore?: "auto" | "page";
+  readonly breakAfter?: "auto" | "page";
+  readonly firstLineIndentPt?: number;
+  readonly autoTextIndent?: boolean;
+  readonly pageStyleName?: string;
+  readonly pageNumber?: number | "auto";
   readonly countLineNumbers: boolean;
 }
 
@@ -340,6 +358,25 @@ export class SwTextShell {
       value.lowerPt < 0 ||
       !Number.isInteger(value.lineValue) ||
       value.lineValue < 0 ||
+      (value.firstLineIndentPt !== undefined &&
+        (!Number.isFinite(value.firstLineIndentPt) ||
+          Math.abs(value.firstLineIndentPt * 20) > 32767)) ||
+      (value.pageNumber !== undefined &&
+        value.pageNumber !== "auto" &&
+        (!Number.isInteger(value.pageNumber) ||
+          value.pageNumber < 1 ||
+          value.pageNumber > 65535)) ||
+      (value.pageStyleName !== undefined &&
+        value.pageStyleName !== "" &&
+        this.target.GetDoc().FindPageDesc(value.pageStyleName) === undefined) ||
+      ![value.orphans ?? 2, value.widows ?? 2].every(
+        /** Checks ODF line-count bounds. @param count - Minimum lines. @returns Whether valid. */
+        (count) => Number.isInteger(count) && count >= 0 && count <= 255,
+      ) ||
+      ![value.breakBefore ?? "auto", value.breakAfter ?? "auto"].every(
+        /** Checks supported page break modes. @param mode - Break mode. @returns Whether valid. */
+        (mode) => mode === "auto" || mode === "page",
+      ) ||
       !["proportional", "fixed", "minimum", "leading"].includes(value.lineMode)
     )
       return false;
@@ -374,6 +411,38 @@ export class SwTextShell {
         ),
         this.CreateTabStops(positions, paragraph),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
+        new SfxBoolItem(RES_PARATR_SPLIT, !(value.keepTogether ?? false)),
+        new SfxInt16Item(RES_PARATR_ORPHANS, value.orphans ?? 2),
+        new SfxInt16Item(RES_PARATR_WIDOWS, value.widows ?? 2),
+        new SfxInt16Item(
+          RES_BREAK,
+          value.breakBefore === "page" && value.breakAfter === "page"
+            ? 6
+            : value.breakBefore === "page"
+              ? 4
+              : value.breakAfter === "page"
+                ? 5
+                : 0,
+        ),
+        ...(value.firstLineIndentPt === undefined && value.autoTextIndent === undefined
+          ? []
+          : [
+              new SvxFirstLineIndentItem(
+                Math.round((value.firstLineIndentPt ?? 0) * 20),
+                RES_MARGIN_FIRSTLINE,
+                value.autoTextIndent === true,
+              ),
+            ]),
+        ...(value.pageStyleName === undefined && value.pageNumber === undefined
+          ? []
+          : [
+              new SwFormatPageDesc(
+                value.pageStyleName ?? "",
+                value.pageNumber === undefined || value.pageNumber === "auto"
+                  ? undefined
+                  : value.pageNumber,
+              ),
+            ]),
         new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
       ],
     );
@@ -391,6 +460,9 @@ export class SwTextShell {
     const spacing = paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
     const lineSpacing = paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
     const tabStops = paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    const paragraphBreak = (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue();
+    const firstLine = paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
+    const pageDesc = paragraph.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
     return {
       upperPt: spacing.GetUpper() / 20,
       lowerPt: spacing.GetLower() / 20,
@@ -410,8 +482,27 @@ export class SwTextShell {
             stop.GetTabPos() / 20,
         ),
       keepWithNext: (paragraph.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
+      keepTogether: !(paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue(),
+      orphans: (paragraph.GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue(),
+      widows: (paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue(),
+      breakBefore: paragraphBreak === 4 || paragraphBreak === 6 ? "page" : "auto",
+      breakAfter: paragraphBreak === 5 || paragraphBreak === 6 ? "page" : "auto",
+      firstLineIndentPt: firstLine.ResolveTextFirstLineOffset() / 20,
+      autoTextIndent: firstLine.IsAutoFirst(),
+      pageStyleName: pageDesc.GetPageDescName(),
+      pageNumber: pageDesc.GetNumOffset() ?? "auto",
       countLineNumbers: (paragraph.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
     };
+  }
+
+  /** Lists page descriptors for the paragraph Text Flow control. @returns Existing document page-style names. */
+  public GetPageStyleNames(): readonly string[] {
+    const document = this.target.GetDoc();
+    return Array.from(
+      { length: document.GetPageDescCnt() },
+      /** Reads one canonical descriptor name. @param _unused - Array slot. @param index - Descriptor position. @returns Name. */
+      (_unused, index) => document.GetPageDesc(index).GetValue().name,
+    );
   }
 
   /** Reads document line-number visibility for the paragraph presenter. @returns Whether line numbers are painted. */
@@ -767,6 +858,7 @@ export function createWriterTextCommandRegistry(
             WRITER_COMMAND_IDS.paragraphDialog,
             target.GetParagraphFormat(),
             target.IsPaintLineNumbers(),
+            target.GetPageStyleNames(),
           )
           .then(
             /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */

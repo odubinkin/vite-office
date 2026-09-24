@@ -10,6 +10,7 @@ import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-co
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
+import type { WriterParagraphFormatValue } from "./textsh1";
 
 /** Runs the createFixture test helper. @returns Test callback result. */ function createFixture() {
   const dialogs = new WriterDialogController();
@@ -42,6 +43,44 @@ import { SwWrtShell } from "../wrtsh/wrtsh1";
 }
 
 describe("Writer text-shell commands", /** Groups Writer text-shell commands. @returns Test callback result. */ () => {
+  it("validates page flow values through the paragraph shell", /** Checks accepted page breaks and rejected page references. @returns Nothing. */ () => {
+    const { shell } = createFixture();
+    const slot = shell
+      .GetCommandShell()
+      .GetInterface()
+      .GetSlot(WRITER_COMMAND_IDS.paragraphDialog)!;
+    const base = shell.GetCommandShell().ResolveSlot(slot.slotId)!.getState()
+      .value as WriterParagraphFormatValue;
+    expect(shell.ApplyParagraphFormat({ ...base, breakBefore: "page", breakAfter: "auto" })).toBe(
+      true,
+    );
+    expect(shell.ApplyParagraphFormat({ ...base, breakBefore: "auto", breakAfter: "page" })).toBe(
+      true,
+    );
+    expect(
+      shell.ApplyParagraphFormat({
+        ...base,
+        breakBefore: "auto",
+        breakAfter: "auto",
+        pageStyleName: "Standard",
+        pageNumber: "auto",
+      }),
+    ).toBe(true);
+    expect(shell.ApplyParagraphFormat({ ...base, pageStyleName: "Missing" })).toBe(false);
+    expect(shell.ApplyParagraphFormat({ ...base, pageNumber: 0 })).toBe(false);
+    expect(shell.ApplyParagraphFormat({ ...base, pageNumber: 65536 })).toBe(false);
+    const { firstLineIndentPt, pageStyleName, ...withoutOptionalMetrics } = base;
+    void firstLineIndentPt;
+    void pageStyleName;
+    expect(
+      shell.ApplyParagraphFormat({
+        ...withoutOptionalMetrics,
+        autoTextIndent: true,
+        pageNumber: 8,
+      }),
+    ).toBe(true);
+    shell.GetDocShell().Close();
+  });
   it("inserts and edits links through accepted and cancelled dialog requests", /** Checks inserts and edits links through accepted and cancelled dialog requests. @returns Test callback result. */ async () => {
     const { dialogs, run, runValue, shell } = createFixture();
     shell.Insert("Example");

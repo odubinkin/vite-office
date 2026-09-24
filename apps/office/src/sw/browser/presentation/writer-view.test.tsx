@@ -9,6 +9,7 @@ import {
 } from "../../source/core/text/itrform2";
 import {
   SvxLineSpacingItem,
+  SvxFirstLineIndentItem,
   SvxTabStop,
   SvxTabStopItem,
   SvxULSpaceItem,
@@ -21,6 +22,8 @@ import type { WriterViewSnapshot } from "./writer-view-projection";
 import { WriterViewProjection } from "./writer-view-projection";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../svl/source/items/intitem";
+import { SwFormatPageDesc } from "../../source/core/attr/fmtpdsc";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
@@ -32,6 +35,12 @@ import {
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
   RES_KEEP,
+  RES_BREAK,
+  RES_PAGEDESC,
+  RES_MARGIN_FIRSTLINE,
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
 } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -84,12 +93,22 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     ).toBe(150);
     fireEvent.click(screen.getByText("Paragraph…"));
     fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });
+    fireEvent.change(screen.getByLabelText("First line indent (pt)"), { target: { value: "9" } });
+    fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "36" } });
     fireEvent.click(screen.getByText("New"));
     fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "72" } });
     fireEvent.click(screen.getByText("New"));
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.change(screen.getByLabelText("Page style"), { target: { value: "Standard" } });
+    fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "restart" } });
+    fireEvent.change(screen.getByLabelText("Start page number"), { target: { value: "2" } });
+    fireEvent.change(screen.getByLabelText("Break before"), { target: { value: "page" } });
+    fireEvent.change(screen.getByLabelText("Break after"), { target: { value: "page" } });
+    fireEvent.click(screen.getByLabelText("Do not split paragraph"));
+    fireEvent.change(screen.getByLabelText("Orphan control (lines)"), { target: { value: "3" } });
+    fireEvent.change(screen.getByLabelText("Widow control (lines)"), { target: { value: "4" } });
     fireEvent.click(screen.getByLabelText("Keep with next paragraph"));
     fireEvent.click(screen.getByLabelText("Show line numbers"));
     fireEvent.click(screen.getByText("OK"));
@@ -110,7 +129,35 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       ),
     ).toEqual([720, 1440]);
     expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    expect((shell.GetActiveParagraph().GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(
+      false,
+    );
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue(),
+    ).toBe(3);
+    expect((shell.GetActiveParagraph().GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(
+      4,
+    );
+    expect((shell.GetActiveParagraph().GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(6);
+    expect(
+      (
+        shell.GetActiveParagraph().GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+      ).IsAutoFirst(),
+    ).toBe(true);
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
+    ).toBe(2);
     fireEvent.click(screen.getByText("Paragraph…"));
+    expect(screen.getByLabelText("First line indent (pt)")).toHaveValue(9);
+    expect(screen.getByLabelText("Automatic first-line indent")).toBeChecked();
+    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    expect(screen.getByLabelText("Page style")).toHaveValue("Standard");
+    expect(screen.getByLabelText("Start page number")).toHaveValue(2);
+    expect(screen.getByLabelText("Break before")).toHaveValue("page");
+    expect(screen.getByLabelText("Break after")).toHaveValue("page");
+    expect(screen.getByLabelText("Do not split paragraph")).toBeChecked();
+    expect(screen.getByLabelText("Orphan control (lines)")).toHaveValue(3);
+    expect(screen.getByLabelText("Widow control (lines)")).toHaveValue(4);
     fireEvent.click(screen.getByText("Cancel"));
     await waitFor(
       /** Waits for cancellation to release the shell dialog request. @returns Nothing. */ () => {

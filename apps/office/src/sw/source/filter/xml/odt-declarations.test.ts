@@ -10,8 +10,14 @@ import {
 import { getXMLToken, ODF_NAMESPACES, XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
+import { RES_BREAK } from "../../../inc/hintids";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { RES_PAGEDESC } from "../../../inc/hintids";
+import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/paraitem";
 
-const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:meta="${ODF_NAMESPACES.meta}"`;
+const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
 
 /** Builds a minimal named-styles stream. @param definitions - Style children. @returns XML. */
 function styles(definitions: string): string {
@@ -98,6 +104,51 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
     );
   });
 
+  it("maps page-style references and number restarts to Writer's page descriptor item", /** Verifies source-backed page semantics are represented canonically. @returns Nothing. */ () => {
+    const diagnostics: OdfXmlDiagnostic[] = [];
+    const imported = importWriterXml(
+      styles(
+        '<style:style style:name="P1" style:family="paragraph" style:master-page-name="Standard"><style:paragraph-properties style:page-number="1"/></style:style>',
+      ),
+      content('<text:p text:style-name="P1">A</text:p>'),
+      { title: "fixture" },
+      undefined,
+      {
+        onDiagnostic:
+          /** Collects a page semantic diagnostic. @param diagnostic - Import event. @returns New count. */ (
+            diagnostic,
+          ) => diagnostics.push(diagnostic),
+      },
+    );
+    expect(diagnostics).toEqual([]);
+    const item = imported.document.paragraphs[0]?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc;
+    expect(item.GetPageDescName()).toBe("Standard");
+    expect(item.GetNumOffset()).toBe(1);
+    const automatic = importWriterXml(
+      styles(
+        '<style:style style:name="P2" style:family="paragraph"><style:paragraph-properties style:auto-text-indent="true" style:page-number="2"/></style:style>',
+      ),
+      content('<text:p text:style-name="P2">A</text:p>'),
+      { title: "fixture" },
+    ).document.paragraphs[0];
+    expect((automatic?.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).IsAutoFirst()).toBe(
+      true,
+    );
+    expect((automatic?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset()).toBe(2);
+  });
+  it("rejects underline colors that diverge from the font color", /** Keeps the bounded underline palette semantically honest. @returns Nothing. */ () => {
+    expect(
+      /** Imports an unsupported explicit underline color. @returns Never. */ () =>
+        importWriterXml(
+          styles(
+            '<style:style style:name="T1" style:family="text"><style:text-properties style:text-underline-color="#abcdef"/></style:style>',
+          ),
+          content("<text:p>Sample</text:p>"),
+          { title: "fixture" },
+        ),
+    ).toThrow("Unsupported ODF underline color");
+  });
+
   it("does not generalize metadata suppression to other ignored subtrees", /** Checks default ignore policy retains diagnostics. @returns Nothing. */ () => {
     const diagnostics: OdfXmlDiagnostic[] = [];
     parseOdfXmlStream(
@@ -141,6 +192,13 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
         },
       );
       expect(imported.document.paragraphs).toHaveLength(fixture.paragraphs);
+      if (fixture.file.includes("styles.odt"))
+        expect(
+          imported.document.paragraphs.filter(
+            /** Finds source-backed page breaks. @param paragraph - Imported node. @returns Whether a page break precedes it. */
+            (paragraph) => (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue() === 4,
+          ).length,
+        ).toBe(4);
       expect(diagnostics).not.toContainEqual(
         expect.objectContaining({ name: "text:display-outline-level" }),
       );

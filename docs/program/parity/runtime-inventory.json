@@ -2962,6 +2962,36 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/attr/fmtpdsc.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/attr/fmtpdsc.ts#SwFormatPageDesc",
+          "vendor/libreoffice-reference/sw/inc/fmtpdsc.hxx#SwFormatPageDesc"
+        ],
+        "justification": "The bounded page descriptor name and optional number offset are tested for ODT round trips; broader page descriptor behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwFormatPageDesc"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/inc/fmtpdsc.hxx",
+        "upstreamSymbols": [
+          "SwFormatPageDesc"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/attr/format.ts",
       "classification": "upstream-mechanism",
       "state": "active",

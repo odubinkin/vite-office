@@ -2587,6 +2587,38 @@
       "evidence": {
         "local": [
           {
+            "marker": "SwFormatPageDesc",
+            "path": "apps/office/src/sw/source/core/attr/fmtpdsc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwFormatPageDesc",
+            "path": "vendor/libreoffice-reference/sw/inc/fmtpdsc.hxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/attr/fmtpdsc.ts",
+      "localSymbols": [
+        "SwFormatPageDesc"
+      ],
+      "omittedResponsibilities": [
+        "Live SwPageDesc pointer registration and SwClient notifications are outside the current browser document slice."
+      ],
+      "preservedResponsibilities": [
+        "Stores Writer's paragraph page-style reference and optional page-number restart in a pooled item."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/fmtpdsc.hxx",
+      "upstreamSymbols": [
+        "SwFormatPageDesc"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SwFormat",
             "path": "apps/office/src/sw/source/core/attr/format.ts"
           }

@@ -51,12 +51,20 @@ export interface OdfParagraphProperties {
   readonly countLineNumbers?: boolean;
   readonly contextualSpacing?: boolean;
   readonly firstLineIndent?: number;
+  readonly autoTextIndent?: boolean;
+  readonly pageStyleName?: string;
+  readonly pageNumber?: number | "auto";
   readonly lineHeightPercent?: number;
   readonly lineHeightTwips?: number;
   readonly lineHeightAtLeastTwips?: number;
   readonly lineSpacingTwips?: number;
   readonly fontIndependentLineSpacing?: boolean;
   readonly keepWithNext?: boolean;
+  readonly keepTogether?: boolean;
+  readonly widows?: number;
+  readonly orphans?: number;
+  readonly breakBefore?: "auto" | "page";
+  readonly breakAfter?: "auto" | "page";
   readonly lowerSpacing?: number;
   readonly rightMargin?: number;
   readonly tabStopDetails?: readonly OdfTabStop[];
@@ -231,6 +239,10 @@ export class XMLTextParagraphExport {
           ...exportParagraphAttributes(parseParagraphPropertiesKey(paragraphPropertiesKey)),
         ];
         const parsedParagraphProperties = parseParagraphPropertiesKey(paragraphPropertiesKey);
+        const masterPage =
+          parsedParagraphProperties.pageStyleName === undefined
+            ? ""
+            : ` style:master-page-name="${escapeXml(parsedParagraphProperties.pageStyleName)}"`;
         const paragraphChildren = exportParagraphPropertyChildren(parsedParagraphProperties);
         const paragraphProperties =
           paragraphAttributes.length === 0 && paragraphChildren.length === 0
@@ -246,9 +258,9 @@ export class XMLTextParagraphExport {
           /* v8 ignore next -- The collected paragraph and list-rule maps share one source pass. */
           if (listStyle === undefined) throw new Error(`Missing ODF list style: ${listRule}`);
           const baseName = `${name}Base`;
-          return `<style:style style:name="${baseName}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style><style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
+          return `<style:style style:name="${baseName}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style><style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
         }
-        return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style>`;
+        return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
       },
     );
     const characterStyles = [...characterStyleNames].map(
@@ -550,6 +562,18 @@ function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
       : encodeURIComponent(JSON.stringify(properties.tabStopDetails)),
     properties?.keepWithNext === undefined ? "" : Number(properties.keepWithNext),
     properties?.countLineNumbers === undefined ? "" : Number(properties.countLineNumbers),
+    properties?.keepTogether === undefined ? "" : Number(properties.keepTogether),
+    properties?.widows,
+    properties?.orphans,
+    properties?.breakBefore,
+    properties?.breakAfter,
+    properties?.autoTextIndent === undefined ? "" : Number(properties.autoTextIndent),
+    properties?.pageStyleName === undefined
+      ? ""
+      : properties.pageStyleName === ""
+        ? "%00"
+        : encodeURIComponent(properties.pageStyleName),
+    properties?.pageNumber,
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -576,12 +600,22 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
     ,
     keepWithNext,
     countLineNumbers,
+    keepTogether,
+    widows,
+    orphans,
+    ,
+    ,
   ] = fields.map(
     /** Decodes one optional paragraph metric. @param value - Stable field. @returns Metric. */ (
       value,
     ) => (value === "" ? undefined : Number(value)),
   );
   const tabStopsKey = fields[10] as string;
+  const breakBefore = fields[16];
+  const breakAfter = fields[17];
+  const autoTextIndent = fields[18];
+  const pageStyleName = fields[19];
+  const pageNumber = fields[20];
   return {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(rightMargin === undefined ? {} : { rightMargin }),
@@ -600,6 +634,24 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
       : { tabStopDetails: JSON.parse(decodeURIComponent(tabStopsKey)) as OdfTabStop[] }),
     ...(keepWithNext === undefined ? {} : { keepWithNext: keepWithNext === 1 }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers: countLineNumbers === 1 }),
+    ...(keepTogether === undefined ? {} : { keepTogether: keepTogether === 1 }),
+    ...(widows === undefined ? {} : { widows }),
+    ...(orphans === undefined ? {} : { orphans }),
+    ...(breakBefore === undefined || breakBefore === ""
+      ? {}
+      : { breakBefore: breakBefore as "auto" | "page" }),
+    ...(breakAfter === undefined || breakAfter === ""
+      ? {}
+      : { breakAfter: breakAfter as "auto" | "page" }),
+    ...(autoTextIndent === undefined || autoTextIndent === ""
+      ? {}
+      : { autoTextIndent: autoTextIndent === "1" }),
+    ...(pageStyleName === undefined || pageStyleName === ""
+      ? {}
+      : { pageStyleName: pageStyleName === "%00" ? "" : decodeURIComponent(pageStyleName) }),
+    ...(pageNumber === undefined || pageNumber === ""
+      ? {}
+      : { pageNumber: pageNumber === "auto" ? "auto" : Number(pageNumber) }),
   };
 }
 
@@ -609,6 +661,12 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.firstLineIndent === undefined
       ? []
       : [`fo:text-indent="${exportOdfLength(properties.firstLineIndent)}"`]),
+    ...(properties.autoTextIndent === undefined
+      ? []
+      : [`style:auto-text-indent="${properties.autoTextIndent}"`]),
+    ...(properties.pageNumber === undefined
+      ? []
+      : [`style:page-number="${properties.pageNumber}"`]),
     ...(properties.rightMargin === undefined
       ? []
       : [`fo:margin-right="${exportOdfLength(properties.rightMargin)}"`]),
@@ -639,6 +697,15 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.keepWithNext === undefined
       ? []
       : [`fo:keep-with-next="${properties.keepWithNext ? "always" : "auto"}"`]),
+    ...(properties.keepTogether === undefined
+      ? []
+      : [`fo:keep-together="${properties.keepTogether ? "always" : "auto"}"`]),
+    ...(properties.widows === undefined ? [] : [`fo:widows="${properties.widows}"`]),
+    ...(properties.orphans === undefined ? [] : [`fo:orphans="${properties.orphans}"`]),
+    ...(properties.breakBefore === undefined
+      ? []
+      : [`fo:break-before="${properties.breakBefore}"`]),
+    ...(properties.breakAfter === undefined ? [] : [`fo:break-after="${properties.breakAfter}"`]),
     ...(properties.countLineNumbers === undefined
       ? []
       : [`text:number-lines="${properties.countLineNumbers}"`]),

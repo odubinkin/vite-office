@@ -142,6 +142,7 @@ class XMLStyleContext extends SvXMLImportContext {
   private hasParagraphProperties = false;
   private properties: Partial<OdfCharacterProperties> | undefined;
   private readonly name: string;
+  private readonly masterPageName: string | undefined;
   private readonly definition: Omit<
     OdfStyleDefinition,
     "alignment" | "leftMargin" | "paragraphProperties" | "properties"
@@ -155,6 +156,7 @@ class XMLStyleContext extends SvXMLImportContext {
     private readonly isDefault = false,
   ) {
     super();
+    this.masterPageName = attributes.get(XMLToken.STYLE_MASTER_PAGE_NAME) ?? undefined;
     attributes.assertOnly(
       [
         XMLToken.STYLE_NAME,
@@ -164,6 +166,7 @@ class XMLStyleContext extends SvXMLImportContext {
         XMLToken.STYLE_NEXT_STYLE_NAME,
         XMLToken.STYLE_PARENT_STYLE_NAME,
         XMLToken.STYLE_LIST_STYLE_NAME,
+        XMLToken.STYLE_MASTER_PAGE_NAME,
       ],
       "style",
     );
@@ -226,9 +229,14 @@ class XMLStyleContext extends SvXMLImportContext {
       ...this.definition,
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
       ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
-      ...(this.paragraphProperties === undefined
+      ...(this.paragraphProperties === undefined && this.masterPageName === undefined
         ? {}
-        : { paragraphProperties: this.paragraphProperties }),
+        : {
+            paragraphProperties: {
+              ...this.paragraphProperties,
+              ...(this.masterPageName === undefined ? {} : { pageStyleName: this.masterPageName }),
+            },
+          }),
       ...(this.properties === undefined ? {} : { properties: this.properties }),
     };
     if (this.isDefault) this.target.registerDefaultStyle(definition);
@@ -524,12 +532,34 @@ function importParagraphProperties(
   const rawKeep = attributes.get(XMLToken.FO_KEEP_WITH_NEXT);
   if (rawKeep !== null && rawKeep !== "always" && rawKeep !== "auto")
     throw new Error(`Unsupported ODF keep-with-next: ${rawKeep}`);
+  const rawKeepTogether = attributes.get(XMLToken.FO_KEEP_TOGETHER);
+  if (rawKeepTogether !== null && rawKeepTogether !== "always" && rawKeepTogether !== "auto")
+    throw new Error(`Unsupported ODF keep-together: ${rawKeepTogether}`);
+  const widows = importLineCount(attributes.get(XMLToken.FO_WIDOWS), "widows");
+  const orphans = importLineCount(attributes.get(XMLToken.FO_ORPHANS), "orphans");
+  const breakBefore = importPageBreak(attributes.get(XMLToken.FO_BREAK_BEFORE), "break-before");
+  const breakAfter = importPageBreak(attributes.get(XMLToken.FO_BREAK_AFTER), "break-after");
+  const autoTextIndent = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_AUTO_TEXT_INDENT),
+    "automatic first-line indent",
+  );
+  const rawPageNumber = attributes.get(XMLToken.STYLE_PAGE_NUMBER);
+  const pageNumber =
+    rawPageNumber === null || rawPageNumber === "auto"
+      ? rawPageNumber
+      : /^\d+$/u.test(rawPageNumber) && Number(rawPageNumber) >= 1 && Number(rawPageNumber) <= 65535
+        ? Number(rawPageNumber)
+        : undefined;
+  if (rawPageNumber !== null && pageNumber === undefined)
+    throw new Error(`Unsupported ODF page number: ${rawPageNumber}`);
   const countLineNumbers = importOptionalBoolean(
     attributes.get(XMLToken.TEXT_NUMBER_LINES),
     "paragraph line-number participation",
   );
   const result: OdfParagraphProperties = {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
+    ...(autoTextIndent === undefined ? {} : { autoTextIndent }),
+    ...(pageNumber === null || pageNumber === undefined ? {} : { pageNumber }),
     ...(rightMargin === undefined ? {} : { rightMargin }),
     ...(upperSpacing === undefined ? {} : { upperSpacing }),
     ...(lowerSpacing === undefined ? {} : { lowerSpacing }),
@@ -540,9 +570,30 @@ function importParagraphProperties(
     ...(contextualSpacing === undefined ? {} : { contextualSpacing }),
     ...(fontIndependentLineSpacing === undefined ? {} : { fontIndependentLineSpacing }),
     ...(rawKeep === null ? {} : { keepWithNext: rawKeep === "always" }),
+    ...(rawKeepTogether === null ? {} : { keepTogether: rawKeepTogether === "always" }),
+    ...(widows === undefined ? {} : { widows }),
+    ...(orphans === undefined ? {} : { orphans }),
+    ...(breakBefore === undefined ? {} : { breakBefore }),
+    ...(breakAfter === undefined ? {} : { breakAfter }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
   };
   return Object.keys(result).length === 0 ? undefined : result;
+}
+
+/** Parses LibreOffice's bounded paragraph line-count item. @param value - XML count. @param label - Attribute name. @returns Count when present. */
+function importLineCount(value: string | null, label: string): number | undefined {
+  if (value === null) return undefined;
+  const parsed = Number(value);
+  if (!/^\d+$/u.test(value) || !Number.isInteger(parsed) || parsed > 255)
+    throw new Error(`Unsupported ODF ${label}: ${value}`);
+  return parsed;
+}
+
+/** Maps the currently projected Writer page break choices. @param value - XML break. @param label - Attribute name. @returns Page break mode. */
+function importPageBreak(value: string | null, label: string): "auto" | "page" | undefined {
+  if (value === null) return undefined;
+  if (value === "auto" || value === "page") return value;
+  throw new Error(`Unsupported ODF ${label}: ${value}`);
 }
 
 /** Imports an optional ODF length attribute. @param attributes - Attributes. @param token - Attribute token. @param signed - Whether negative values are allowed. @param label - Error label. @returns Twips. */
@@ -570,6 +621,7 @@ function importCharacterProperties(
       XMLToken.FO_FONT_STYLE,
       XMLToken.STYLE_TEXT_UNDERLINE_STYLE,
       XMLToken.STYLE_TEXT_UNDERLINE_WIDTH,
+      XMLToken.STYLE_TEXT_UNDERLINE_COLOR,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
       XMLToken.FO_BACKGROUND_COLOR,
@@ -587,6 +639,7 @@ function importCharacterProperties(
   const posture = attributes.get(XMLToken.FO_FONT_STYLE);
   const underline = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_STYLE);
   const underlineWidth = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_WIDTH);
+  const underlineColor = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_COLOR);
   const color = attributes.get(XMLToken.FO_COLOR);
   const useWindowColor = importOptionalBoolean(
     attributes.get(XMLToken.STYLE_USE_WINDOW_FONT_COLOR),
@@ -601,6 +654,8 @@ function importCharacterProperties(
     throw new Error(`Unsupported ODF underline style: ${underline}`);
   if (underlineWidth !== null && underlineWidth !== "auto")
     throw new Error(`Unsupported ODF underline width: ${underlineWidth}`);
+  if (underlineColor !== null && underlineColor !== "font-color")
+    throw new Error(`Unsupported ODF underline color: ${underlineColor}`);
   if (color !== null && !isOdfColor(color, false))
     throw new Error(`Unsupported ODF font color: ${color}`);
   if (highlight !== null && !isOdfColor(highlight, true))

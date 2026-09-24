@@ -38,6 +38,122 @@ function paragraph(id: string, count: number, height = 300): SwTextFrameInput {
 }
 
 describe("Writer text and page frames", /** Groups Writer page-frame tests. @returns Nothing. */ () => {
+  it("honors paragraph keep-together, orphan control and page breaks", /** Checks pooled flow effects on physical page placement. @returns Nothing. */ () => {
+    const page = { ...standardPage, height: 1000, topMargin: 100, bottomMargin: 100 };
+    const kept = createSwPageFrames(
+      [paragraph("first", 1), { ...paragraph("whole", 2), keepTogether: true }],
+      page,
+    );
+    expect(
+      kept.map(
+        /** Lists page fragment IDs. @param frame - Physical page. @returns Paragraph IDs. */
+        (frame) =>
+          frame.textFrames.map(
+            /** Reads a frame identity. @param part - Text frame. @returns Node ID. */
+            (part) => part.nodeId,
+          ),
+      ),
+    ).toEqual([["first"], ["whole"]]);
+    const orphan = createSwPageFrames(
+      [paragraph("first", 1), { ...paragraph("split", 3), orphans: 2, widows: 1 }],
+      page,
+    );
+    expect(
+      orphan.map(
+        /** Lists page fragment IDs. @param frame - Physical page. @returns Paragraph IDs. */
+        (frame) =>
+          frame.textFrames.map(
+            /** Reads a frame identity. @param part - Text frame. @returns Node ID. */
+            (part) => part.nodeId,
+          ),
+      ),
+    ).toEqual([["first"], ["split"], ["split"]]);
+    const widow = createSwPageFrames(
+      [{ ...paragraph("widow", 5, 180), orphans: 2, widows: 2 }],
+      page,
+    );
+    expect(widow[0]?.textFrames[0]?.end).toBe(15);
+    expect(widow[1]?.textFrames[0]?.start).toBe(15);
+    const constrainedWidow = createSwPageFrames(
+      [paragraph("first", 1), { ...paragraph("moved", 4, 200), orphans: 2, widows: 3 }],
+      page,
+    );
+    expect(
+      constrainedWidow[0]?.textFrames.map(
+        /** Reads each text fragment ID. @param frame - Text fragment. @returns Node identity. */
+        (frame) => frame.nodeId,
+      ),
+    ).toEqual(["first"]);
+    expect(constrainedWidow[1]?.textFrames).toHaveLength(1);
+    const breaks = createSwPageFrames(
+      [
+        paragraph("first", 1),
+        { ...paragraph("second", 1), breakBefore: true, breakAfter: true },
+        paragraph("third", 1),
+      ],
+      page,
+    );
+    expect(
+      breaks.map(
+        /** Lists page fragment IDs. @param frame - Physical page. @returns Paragraph IDs. */
+        (frame) =>
+          frame.textFrames.map(
+            /** Reads a frame identity. @param part - Text frame. @returns Node ID. */
+            (part) => part.nodeId,
+          ),
+      ),
+    ).toEqual([["first"], ["second"], ["third"]]);
+  });
+  it("switches canonical page descriptors and restarts visible page numbers", /** Checks paragraph page-style references in core pagination. @returns Nothing. */ () => {
+    const standard = {
+      ...standardPage,
+      name: "Standard",
+      height: 1000,
+      topMargin: 100,
+      bottomMargin: 100,
+    };
+    const alternate = { ...standard, name: "Alternate" };
+    const pages = createSwPageFrames(
+      [
+        paragraph("first", 1),
+        { ...paragraph("second", 1), pageStyleName: "Alternate", pageNumber: 7, breakAfter: true },
+        paragraph("third", 1),
+      ],
+      {
+        initialName: "Standard",
+        descriptors: [
+          { value: standard, followName: "Standard" },
+          { value: alternate, followName: "Alternate" },
+        ],
+      },
+    );
+    expect(
+      pages.map(
+        /** Reads a page's active descriptor and number. @param page - Physical page. @returns Style and number. */
+        (page) => [page.descriptor.name, page.number],
+      ),
+    ).toEqual([
+      ["Standard", 1],
+      ["Alternate", 7],
+      ["Alternate", 8],
+    ]);
+    expect(
+      createSwPageFrames([{ ...paragraph("first", 1), pageNumber: 5 }], standard)[0]?.number,
+    ).toBe(5);
+    expect(
+      createSwPageFrames([{ ...paragraph("first", 1), pageStyleName: "Alternate" }], {
+        initialName: "Standard",
+        descriptors: [
+          { value: standard, followName: "Standard" },
+          { value: alternate, followName: "Alternate" },
+        ],
+      })[0]?.descriptor.name,
+    ).toBe("Alternate");
+    expect(
+      /** Resolves an unknown explicit page style. @returns Never. */ () =>
+        createSwPageFrames([{ ...paragraph("first", 1), pageStyleName: "Missing" }], standard),
+    ).toThrow("page style is missing");
+  });
   it("projects physical print widths for portrait, landscape, and custom paper", /** Verifies paper-size rounding independent of paragraph text. @returns Nothing. */ () => {
     const node = createWriterDocument().paragraphs[0];
     if (node === undefined) throw new Error("Writer document has no first paragraph");

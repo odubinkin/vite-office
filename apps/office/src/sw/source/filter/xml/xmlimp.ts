@@ -23,9 +23,11 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { createWriterCharacterItemSet } from "../../core/txtnode/txatbase";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   FastAttributeList,
   parseOdfXmlStream,
@@ -68,6 +70,7 @@ import { WRITER_PAPER_SIZES } from "../../core/layout/pagedesc";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_BREAK,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
@@ -83,6 +86,9 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_MARGIN_FIRSTLINE,
@@ -791,8 +797,14 @@ function putParagraphProperties(
   properties: OdfParagraphProperties,
   put: (item: SfxPoolItem) => unknown,
 ): void {
-  if (properties.firstLineIndent !== undefined)
-    put(new SvxFirstLineIndentItem(properties.firstLineIndent, RES_MARGIN_FIRSTLINE));
+  if (properties.firstLineIndent !== undefined || properties.autoTextIndent !== undefined)
+    put(
+      new SvxFirstLineIndentItem(
+        properties.firstLineIndent ?? 0,
+        RES_MARGIN_FIRSTLINE,
+        properties.autoTextIndent === true,
+      ),
+    );
   if (properties.rightMargin !== undefined)
     put(new SvxRightMarginItem(properties.rightMargin, RES_MARGIN_RIGHT));
   if (
@@ -856,6 +868,33 @@ function putParagraphProperties(
     );
   if (properties.keepWithNext !== undefined)
     put(new SfxBoolItem(RES_KEEP, properties.keepWithNext));
+  if (properties.keepTogether !== undefined)
+    put(new SfxBoolItem(RES_PARATR_SPLIT, !properties.keepTogether));
+  if (properties.orphans !== undefined)
+    put(new SfxInt16Item(RES_PARATR_ORPHANS, properties.orphans));
+  if (properties.widows !== undefined) put(new SfxInt16Item(RES_PARATR_WIDOWS, properties.widows));
+  if (properties.pageStyleName !== undefined || properties.pageNumber !== undefined)
+    put(
+      new SwFormatPageDesc(
+        properties.pageStyleName ?? "",
+        properties.pageNumber === undefined || properties.pageNumber === "auto"
+          ? undefined
+          : properties.pageNumber,
+      ),
+    );
+  if (properties.breakBefore !== undefined || properties.breakAfter !== undefined)
+    put(
+      new SfxInt16Item(
+        RES_BREAK,
+        properties.breakBefore === "page" && properties.breakAfter === "page"
+          ? 6
+          : properties.breakBefore === "page"
+            ? 4
+            : properties.breakAfter === "page"
+              ? 5
+              : 0,
+      ),
+    );
   if (properties.countLineNumbers !== undefined)
     put(new SfxBoolItem(RES_LINENUMBER, properties.countLineNumbers));
 }

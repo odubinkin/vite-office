@@ -348,6 +348,13 @@ function textFrameInputEqual(left: SwTextFrameInput, right: SwTextFrameInput | u
     left.lowerSpacing === right.lowerSpacing &&
     left.contextualSpacing === right.contextualSpacing &&
     left.keepWithNext === right.keepWithNext &&
+    left.keepTogether === right.keepTogether &&
+    left.orphans === right.orphans &&
+    left.widows === right.widows &&
+    left.breakBefore === right.breakBefore &&
+    left.breakAfter === right.breakAfter &&
+    left.pageStyleName === right.pageStyleName &&
+    left.pageNumber === right.pageNumber &&
     left.countLineNumbers === right.countLineNumbers &&
     textLinesEqual(left.lines, right.lines)
   );
@@ -383,17 +390,53 @@ export function createSwPageFrames(
       ) => [record.value.name, record] as const,
     ),
   );
-  let activeDescriptor = descriptorByName.get(
+  const initialDescriptor = descriptorByName.get(
     "initialName" in descriptor ? descriptor.initialName : descriptor.name,
   );
-  if (activeDescriptor === undefined)
+  if (initialDescriptor === undefined)
     throw new Error("Writer layout initial page descriptor is missing.");
+  let activeDescriptor: (typeof descriptorRecords)[number] = initialDescriptor;
   const pages: SwTextFrame[][] = [[]];
   const pageDescriptors: WriterPageDescriptorValue[] = [activeDescriptor.value];
+  const pageNumberOverrides = new Map<number, number>();
   let used = 0;
+  /** Advances to the current descriptor's follow page. @returns Nothing. */
+  function startFollowPage(): void {
+    const follow = descriptorByName.get(activeDescriptor.followName);
+    if (follow === undefined) throw new Error("Writer layout follow page descriptor is missing.");
+    pages.push([]);
+    activeDescriptor = follow;
+    pageDescriptors.push(follow.value);
+    used = 0;
+  }
   for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
     const gap = getSwTextFrameGap(paragraphs[paragraphIndex - 1], paragraph, settings);
     const nextParagraph = paragraphs[paragraphIndex + 1];
+    const requestedStyle = paragraph.pageStyleName;
+    if (
+      (requestedStyle !== undefined &&
+        requestedStyle !== "" &&
+        requestedStyle !== activeDescriptor.value.name) ||
+      paragraph.pageNumber !== undefined
+    ) {
+      const selected: (typeof descriptorRecords)[number] | undefined =
+        requestedStyle === undefined || requestedStyle === ""
+          ? activeDescriptor
+          : descriptorByName.get(requestedStyle);
+      if (selected === undefined)
+        throw new Error(`Writer paragraph page style is missing: ${requestedStyle}`);
+      if ((pages[pages.length - 1] as SwTextFrame[]).length > 0) {
+        pages.push([]);
+        pageDescriptors.push(selected.value);
+      } else pageDescriptors[pageDescriptors.length - 1] = selected.value;
+      activeDescriptor = selected;
+      used = 0;
+      if (paragraph.pageNumber !== undefined)
+        pageNumberOverrides.set(pages.length - 1, paragraph.pageNumber);
+    }
+    if (paragraph.breakBefore && (pages[pages.length - 1] as SwTextFrame[]).length > 0) {
+      startFollowPage();
+    }
     const currentPage = pages[pages.length - 1] as SwTextFrame[];
     const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
     const availableHeight =
@@ -406,7 +449,18 @@ export function createSwPageFrames(
       0,
     );
     const nextFirstLine = nextParagraph?.lines[0];
+    let movedForKeepTogether = false;
     if (
+      paragraph.keepTogether &&
+      currentPage.length > 0 &&
+      wholeParagraphHeight <= availableHeight &&
+      used + gap + wholeParagraphHeight > availableHeight
+    ) {
+      startFollowPage();
+      movedForKeepTogether = true;
+    }
+    if (
+      !movedForKeepTogether &&
       paragraph.keepWithNext &&
       nextParagraph !== undefined &&
       nextFirstLine !== undefined &&
@@ -419,12 +473,7 @@ export function createSwPageFrames(
         nextFirstLine.height >
         availableHeight
     ) {
-      pages.push([]);
-      activeDescriptor = descriptorByName.get(activeDescriptor.followName);
-      if (activeDescriptor === undefined)
-        throw new Error("Writer layout follow page descriptor is missing.");
-      pageDescriptors.push(activeDescriptor.value);
-      used = 0;
+      startFollowPage();
     }
     let firstLine = 0;
     while (firstLine < paragraph.lines.length) {
@@ -435,12 +484,7 @@ export function createSwPageFrames(
       const topSpacing = firstLine === 0 ? gap : 0;
       const line = paragraph.lines[firstLine] as (typeof paragraph.lines)[number];
       if (page.length > 0 && used + topSpacing + line.height > bodyHeight) {
-        pages.push([]);
-        activeDescriptor = descriptorByName.get(activeDescriptor.followName);
-        if (activeDescriptor === undefined)
-          throw new Error("Writer layout follow page descriptor is missing.");
-        pageDescriptors.push(activeDescriptor.value);
-        used = 0;
+        startFollowPage();
         continue;
       }
       let lastLine = firstLine;
@@ -452,30 +496,51 @@ export function createSwPageFrames(
         lastLine += 1;
         height += (paragraph.lines[lastLine] as SwTextLine).height;
       }
+      const minimumBefore = paragraph.orphans ?? 2;
+      const minimumAfter = paragraph.widows ?? 2;
+      if (lastLine + 1 < paragraph.lines.length) {
+        const latestValidLastLine = paragraph.lines.length - minimumAfter - 1;
+        if (latestValidLastLine >= firstLine + minimumBefore - 1)
+          while (lastLine > latestValidLastLine) {
+            height -= (paragraph.lines[lastLine] as SwTextLine).height;
+            lastLine -= 1;
+          }
+      }
+      const linesOnPage = lastLine - firstLine + 1;
+      const linesRemaining = paragraph.lines.length - lastLine - 1;
+      if (
+        linesRemaining > 0 &&
+        page.length > 0 &&
+        (linesOnPage < minimumBefore || linesRemaining < minimumAfter)
+      ) {
+        startFollowPage();
+        continue;
+      }
       page.push(makeSwTextFrame(paragraph, firstLine, lastLine, topSpacing));
       used += height;
       firstLine = lastLine + 1;
       if (firstLine < paragraph.lines.length) {
-        pages.push([]);
-        activeDescriptor = descriptorByName.get(activeDescriptor.followName);
-        if (activeDescriptor === undefined)
-          throw new Error("Writer layout follow page descriptor is missing.");
-        pageDescriptors.push(activeDescriptor.value);
-        used = 0;
+        startFollowPage();
       }
     }
+    if (paragraph.breakAfter && nextParagraph !== undefined) {
+      startFollowPage();
+    }
   }
+  let numberedPage = 0;
   return Object.freeze(
     pages.map(
       /** Freezes one physical page. @param textFrames - Page content frames. @param index - Page index. @returns Immutable page frame. */ (
         textFrames,
         index,
-      ) =>
-        Object.freeze({
+      ) => {
+        numberedPage = pageNumberOverrides.get(index) ?? numberedPage + 1;
+        return Object.freeze({
           descriptor: pageDescriptors[index] as WriterPageDescriptorValue,
-          number: index + 1,
+          number: numberedPage,
           textFrames: Object.freeze(textFrames),
-        }),
+        });
+      },
     ),
   );
 }

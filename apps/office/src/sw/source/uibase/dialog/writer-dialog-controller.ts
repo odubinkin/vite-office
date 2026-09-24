@@ -35,6 +35,7 @@ export interface WriterParagraphDialogRequest {
   readonly initialValue: WriterParagraphFormatValue;
   readonly paintLineNumbers: boolean;
   readonly kind: "paragraph";
+  readonly pageStyleNames?: readonly string[];
 }
 /** Accepted paragraph dialog values. */
 export interface WriterParagraphDialogResult {
@@ -88,17 +89,19 @@ export class WriterDialogController {
       : undefined;
   }
 
-  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @returns Accepted values or undefined. */
+  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @param pageStyleNames - Available page styles. @returns Accepted values or undefined. */
   public async RequestParagraphDialog(
     commandUrl: string,
     initialValue: WriterParagraphFormatValue,
     paintLineNumbers: boolean,
+    pageStyleNames: readonly string[],
   ): Promise<WriterParagraphDialogResult | undefined> {
     const completion = await this.controller.Request({
       commandUrl,
       initialValue,
       kind: "paragraph",
       paintLineNumbers,
+      pageStyleNames,
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterParagraphDialogResult)

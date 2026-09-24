@@ -22,7 +22,9 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   escapeXml,
   exportCharacterAttributes,
@@ -37,6 +39,8 @@ import {
 } from "../../../../xmloff/source/text/txtparae";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_BREAK,
+  RES_PAGEDESC,
   RES_CHRATR_COLOR,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
@@ -55,6 +59,9 @@ import {
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_PARATR_LIST_ID,
@@ -95,6 +102,10 @@ export function exportStylesXml(document: SwDoc): string {
           : "";
       const leftMargin = getDirectLeftMargin(collection.GetAttrSet());
       const directParagraphProperties = getParagraphProperties(collection.GetAttrSet());
+      const masterPage =
+        directParagraphProperties?.pageStyleName === undefined
+          ? ""
+          : ` style:master-page-name="${escapeXml(directParagraphProperties.pageStyleName)}"`;
       const paragraphAttributes = [
         ...(alignment === undefined ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
         ...(leftMargin === undefined ? [] : [`fo:margin-left="${exportOdfLength(leftMargin)}"`]),
@@ -117,7 +128,7 @@ export function exportStylesXml(document: SwDoc): string {
             )}/>`;
       const nextName = getWriterOdfStyleName(collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
-      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${next}${parent}>${paragraphProperties}${textProperties}</style:style>`;
+      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${next}${parent}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
     },
   );
   const pageLayouts: string[] = [];
@@ -288,6 +299,11 @@ function assertSupportedItems(
     RES_CHRATR_CTL_WEIGHT,
     RES_CHRATR_HIGHLIGHT,
     RES_PARATR_ADJUST,
+    RES_PARATR_SPLIT,
+    RES_PARATR_ORPHANS,
+    RES_PARATR_WIDOWS,
+    RES_BREAK,
+    RES_PAGEDESC,
     RES_PARATR_LINESPACING,
     RES_PARATR_TABSTOP,
     RES_MARGIN_FIRSTLINE,
@@ -410,6 +426,11 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const lineSpacing = set.GetItemIfSet(RES_PARATR_LINESPACING, false);
   const tabStop = set.GetItemIfSet(RES_PARATR_TABSTOP, false);
   const keep = set.GetItemIfSet(RES_KEEP, false);
+  const split = set.GetItemIfSet(RES_PARATR_SPLIT, false);
+  const orphans = set.GetItemIfSet(RES_PARATR_ORPHANS, false);
+  const widows = set.GetItemIfSet(RES_PARATR_WIDOWS, false);
+  const paragraphBreak = set.GetItemIfSet(RES_BREAK, false);
+  const pageDesc = set.GetItemIfSet(RES_PAGEDESC, false);
   const lineNumber = set.GetItemIfSet(RES_LINENUMBER, false);
   if (
     (firstLine !== undefined && !(firstLine instanceof SvxFirstLineIndentItem)) ||
@@ -418,12 +439,20 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem)) ||
     (tabStop !== undefined && !(tabStop instanceof SvxTabStopItem)) ||
     (keep !== undefined && !(keep instanceof SfxBoolItem)) ||
+    (split !== undefined && !(split instanceof SfxBoolItem)) ||
+    (orphans !== undefined && !(orphans instanceof SfxInt16Item)) ||
+    (widows !== undefined && !(widows instanceof SfxInt16Item)) ||
+    (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
+    (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
     (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem))
   )
     throw new Error("ODT paragraph item is invalid.");
   const properties: OdfParagraphProperties = {
     ...(firstLine instanceof SvxFirstLineIndentItem
-      ? { firstLineIndent: firstLine.ResolveTextFirstLineOffset() }
+      ? {
+          firstLineIndent: firstLine.ResolveTextFirstLineOffset(),
+          autoTextIndent: firstLine.IsAutoFirst(),
+        }
       : {}),
     ...(right instanceof SvxRightMarginItem ? { rightMargin: right.ResolveRight() } : {}),
     ...(spacing instanceof SvxULSpaceItem
@@ -468,6 +497,27 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
         }
       : {}),
     ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
+    ...(split instanceof SfxBoolItem ? { keepTogether: !split.GetValue() } : {}),
+    ...(orphans instanceof SfxInt16Item ? { orphans: orphans.GetValue() } : {}),
+    ...(widows instanceof SfxInt16Item ? { widows: widows.GetValue() } : {}),
+    ...(paragraphBreak instanceof SfxInt16Item
+      ? {
+          breakBefore:
+            paragraphBreak.GetValue() === 4 || paragraphBreak.GetValue() === 6
+              ? ("page" as const)
+              : ("auto" as const),
+          breakAfter:
+            paragraphBreak.GetValue() === 5 || paragraphBreak.GetValue() === 6
+              ? ("page" as const)
+              : ("auto" as const),
+        }
+      : {}),
+    ...(pageDesc instanceof SwFormatPageDesc
+      ? {
+          pageStyleName: pageDesc.GetPageDescName(),
+          pageNumber: pageDesc.GetNumOffset() ?? ("auto" as const),
+        }
+      : {}),
     ...(lineNumber instanceof SfxBoolItem ? { countLineNumbers: lineNumber.GetValue() } : {}),
   };
   return Object.keys(properties).length === 0 ? undefined : properties;

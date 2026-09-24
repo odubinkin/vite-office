@@ -197,18 +197,45 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.mouseDown(screen.getByRole("dialog"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });
+    fireEvent.change(screen.getByLabelText("First line indent (pt)"), { target: { value: "12" } });
+    fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "72" } });
     fireEvent.click(screen.getByText("New"));
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.change(screen.getByLabelText("Page style"), { target: { value: "Standard" } });
+    fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "restart" } });
+    fireEvent.change(screen.getByLabelText("Start page number"), { target: { value: "2" } });
+    fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "auto" } });
+    expect(screen.queryByLabelText("Start page number")).toBeNull();
+    fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "restart" } });
+    fireEvent.change(screen.getByLabelText("Start page number"), { target: { value: "2" } });
+    fireEvent.change(screen.getByLabelText("Break before"), { target: { value: "page" } });
+    fireEvent.change(screen.getByLabelText("Break after"), { target: { value: "page" } });
+    fireEvent.click(screen.getByLabelText("Do not split paragraph"));
+    fireEvent.change(screen.getByLabelText("Orphan control (lines)"), {
+      target: { value: "3" },
+    });
+    fireEvent.change(screen.getByLabelText("Widow control (lines)"), {
+      target: { value: "4" },
+    });
     fireEvent.click(screen.getByLabelText("Keep with next paragraph"));
     fireEvent.click(screen.getByLabelText("Show line numbers"));
     fireEvent.click(screen.getByText("OK"));
     expect(onParagraphFormat).toHaveBeenCalledWith(
       expect.objectContaining({
         upperPt: 6,
+        firstLineIndentPt: 12,
+        autoTextIndent: true,
         tabStopsPt: [36, 72],
         keepWithNext: true,
+        keepTogether: true,
+        orphans: 3,
+        widows: 4,
+        breakBefore: "page",
+        breakAfter: "page",
+        pageStyleName: "Standard",
+        pageNumber: 2,
       }),
     );
     expect(onShowLineNumbersChange).toHaveBeenCalledWith(true);

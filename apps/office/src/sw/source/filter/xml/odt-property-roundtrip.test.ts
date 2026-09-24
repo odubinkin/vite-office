@@ -9,17 +9,26 @@ import {
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
+  SvxFirstLineIndentItem,
 } from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_COLOR,
   RES_CHRATR_HIGHLIGHT,
+  RES_MARGIN_FIRSTLINE,
   RES_KEEP,
+  RES_BREAK,
+  RES_PAGEDESC,
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
   RES_LINENUMBER,
   RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
 import { createWriterDocument } from "../../core/doc/doc";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { readOdtDocument } from "./swxml";
@@ -46,6 +55,148 @@ async function rewriteEntry(
 }
 
 describe("Writer ODT mapped pooled properties", /** Groups symmetric property tests. @returns Nothing. */ () => {
+  it("preserves direct and inherited pagination items with explicit defaults", /** Checks Writer split, widow, orphan and page-break serialization. @returns Completion after reimport. */ async () => {
+    const pageReference = new SwFormatPageDesc("Standard", 3);
+    expect(pageReference.QueryValue()).toEqual(["Standard", 3]);
+    expect(pageReference.Clone().equals(pageReference)).toBe(true);
+    expect(pageReference.equals(new SwFormatPageDesc("Standard", 4))).toBe(false);
+    expect(pageReference.equals(new SfxInt16Item(RES_BREAK, 4))).toBe(false);
+    expect(new SwFormatPageDesc().QueryValue()).toEqual(["", 0]);
+    expect(
+      /** Creates an invalid page-number restart. @returns Invalid item. */ () =>
+        new SwFormatPageDesc("Standard", 0),
+    ).toThrow("page-number offset");
+    const writer = createWriterDocument();
+    expect(
+      (
+        writer
+          .GetAttrPool()
+          .CreateItem({ which: RES_PAGEDESC, value: ["Standard", 3] }) as SwFormatPageDesc
+      ).GetNumOffset(),
+    ).toBe(3);
+    expect(
+      (
+        writer.GetAttrPool().CreateItem({ which: RES_PAGEDESC, value: ["", 0] }) as SwFormatPageDesc
+      ).GetNumOffset(),
+    ).toBeUndefined();
+    expect(
+      (writer.GetAttrPool().CreateItem({ which: RES_BREAK, value: 4 }) as SfxInt16Item).GetValue(),
+    ).toBe(4);
+    expect(
+      (
+        writer
+          .GetAttrPool()
+          .CreateItem({ which: RES_MARGIN_FIRSTLINE, value: [0, 1] }) as SvxFirstLineIndentItem
+      ).IsAutoFirst(),
+    ).toBe(true);
+    const inherited = writer.GetTextFormatColl("heading-1");
+    inherited.SetFormatAttr(new SfxInt16Item(RES_PARATR_ORPHANS, 3));
+    inherited.SetFormatAttr(new SfxBoolItem(RES_PARATR_SPLIT, false));
+    inherited.SetFormatAttr(new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE, true));
+    inherited.SetFormatAttr(new SwFormatPageDesc("Standard"));
+    const paragraph = writer.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Writer paragraph is missing.");
+    paragraph.ChgFormatColl(inherited);
+    paragraph.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, 0));
+    paragraph.SetAttr(new SfxInt16Item(RES_BREAK, 6));
+    paragraph.SetAttr(new SwFormatPageDesc("Standard", 3));
+    const after = writer.GetNodes().MakeTextNode();
+    after.SetAttr(new SfxInt16Item(RES_BREAK, 5));
+    after.SetAttr(new SwFormatPageDesc(""));
+    const automatic = writer.GetNodes().MakeTextNode();
+    automatic.SetAttr(new SfxInt16Item(RES_BREAK, 0));
+    automatic.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, true));
+    automatic.SetAttr(new SfxInt16Item(RES_PARATR_ORPHANS, 0));
+    const bytes = writeOdtDocument(writer, metadata);
+    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    expect(styles).toContain('fo:keep-together="always"');
+    expect(styles).toContain('fo:orphans="3"');
+    expect(styles).toContain('style:auto-text-indent="true"');
+    expect(styles).toContain('style:master-page-name="Standard"');
+    expect(content).toContain('fo:widows="0"');
+    expect(content).toContain('fo:break-before="page"');
+    expect(content).toContain('fo:break-after="page"');
+    expect(content).toContain('style:master-page-name="Standard"');
+    expect(content).toContain('style:page-number="3"');
+    expect(content).toContain('fo:keep-together="auto"');
+    expect(content).toContain('fo:orphans="0"');
+    const reopened = await readOdtDocument(bytes, metadata);
+    const node = reopened.document.paragraphs[0];
+    expect((node?.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(false);
+    expect((node?.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).IsAutoFirst()).toBe(
+      true,
+    );
+    expect(node?.GetParagraphFirstLineIndent()).toBeGreaterThan(0);
+    expect((node?.GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue()).toBe(3);
+    expect((node?.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(0);
+    expect((node?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(6);
+    expect((node?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetPageDescName()).toBe("Standard");
+    expect((node?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset()).toBe(3);
+    expect((reopened.document.paragraphs[1]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(
+      5,
+    );
+    expect((reopened.document.paragraphs[2]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(
+      0,
+    );
+    expect(
+      (reopened.document.paragraphs[2]?.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue(),
+    ).toBe(true);
+    expect(
+      (reopened.document.paragraphs[2]?.GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue(),
+    ).toBe(0);
+    expect(
+      (reopened.document.paragraphs[1]?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
+    ).toBeUndefined();
+    for (const invalid of [
+      {
+        entry: "styles.xml",
+        from: 'fo:keep-together="always"',
+        to: 'fo:keep-together="sometimes"',
+        error: "Unsupported ODF keep-together",
+      },
+      {
+        entry: "styles.xml",
+        from: 'style:auto-text-indent="true"',
+        to: 'style:auto-text-indent="maybe"',
+        error: "Unsupported ODF automatic first-line indent",
+      },
+      {
+        entry: "content.xml",
+        from: 'fo:break-before="page"',
+        to: 'fo:break-before="column"',
+        error: "Unsupported ODF break-before",
+      },
+      {
+        entry: "content.xml",
+        from: 'style:page-number="3"',
+        to: 'style:page-number="bad"',
+        error: "Unsupported ODF page number",
+      },
+    ])
+      await expect(
+        readOdtDocument(
+          await rewriteEntry(
+            bytes,
+            invalid.entry,
+            /** Inserts one unsupported semantic value. @param xml - Stream. @returns Invalid XML. */
+            (xml) => xml.replace(invalid.from, invalid.to),
+          ),
+          metadata,
+        ),
+      ).rejects.toThrow(invalid.error);
+    await expect(
+      readOdtDocument(
+        await rewriteEntry(
+          bytes,
+          "content.xml",
+          /** Inserts invalid widow count. @param xml - Stream. @returns Invalid XML. */
+          (xml) => xml.replace('fo:widows="0"', 'fo:widows="bad"'),
+        ),
+        metadata,
+      ),
+    ).rejects.toThrow("Unsupported ODF widows");
+  });
   it("keeps upstream tab alignment and leader choices through ODT", /** Checks tab-stop type and leader serialization. @returns Completion after import. */ async () => {
     const writer = createWriterDocument();
     writer.paragraphs[0]?.SetAttr(
