@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241135-FVV0N3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T13:41:45.267Z",
+  "verdict": "pass",
+  "summary": "Writer core frame layout reads canonical node attributes and receives only browser line geometry.",
+  "evaluated_sha": "9c2384ef9e149ac1f5d991c569b4f1eda780cf4e",
+  "blueprint_digest": "801f3023c6c3c22082bb6c8008ff04b3a89c2ebd49fb24d7cadb66b65e35e40f",
+  "findings": [
+    "Full verify passed: 485 office tests, 98 inventory tests, 14 E2E and 100% coverage; source and runtime mappings updated."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241135-FVV0N3/README.md",
+    "apps/office/src/sw/source/core/layout/newfrm.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

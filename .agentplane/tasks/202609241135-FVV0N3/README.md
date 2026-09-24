@@ -4,7 +4,7 @@ title: "F8 Restore Writer layout measurement ownership"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,22 @@ verification:
   updated_by: "CODER"
   note: "Core layout now derives spacing, style, keep and line-number flags from current SwDoc; browser supplies only measured line geometry. Full npm run verify and git diff --check passed (485 office tests, 98 inventory tests, 14 E2E, 100% coverage)."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T13:41:45.267Z"
+  updated_by: "EVALUATOR"
+  note: "Writer core frame layout reads canonical node attributes and receives only browser line geometry."
+  evaluated_sha: "9c2384ef9e149ac1f5d991c569b4f1eda780cf4e"
+  blueprint_digest: "801f3023c6c3c22082bb6c8008ff04b3a89c2ebd49fb24d7cadb66b65e35e40f"
+  evidence_refs:
+    - ".agentplane/tasks/202609241135-FVV0N3/README.md"
+    - ".agentplane/tasks/202609241135-FVV0N3/quality/20260924-134145267-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241135-FVV0N3/quality/20260924-134145267-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241135-FVV0N3/quality/20260924-134145267-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241135-FVV0N3/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/core/layout/newfrm.test.ts"
+  findings:
+    - "Full verify passed: 485 office tests, 98 inventory tests, 14 E2E and 100% coverage; source and runtime mappings updated."
 commit: null
 comments:
   -
