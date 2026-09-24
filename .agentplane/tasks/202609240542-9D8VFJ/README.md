@@ -1,10 +1,11 @@
 ---
 id: "202609240542-9D8VFJ"
 title: "Restore document-owned Writer line numbering"
-status: "DOING"
+result_summary: "verified-202609240542-9D8VFJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -22,7 +23,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-24T06:47:39.535Z"
+  updated_at: "2026-09-24T06:48:09.003Z"
   updated_by: "CODER"
   note: "verified-202609240542-9D8VFJ"
   attempts: 0
@@ -44,11 +45,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/xml/odt-line-numbering.test.ts"
   findings:
     - "Global number format is bounded to Arabic display; native character-style and fly-frame rendering remain outside the browser slice."
-commit: null
+commit:
+  hash: "33da26582080fc5b3e171be8de1662ed90bd3ee2"
+  message: "🧾 9D8VFJ task: record line-number verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement document-owned Writer line numbering from pinned SwLineNumberInfo."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609240542-9D8VFJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609240542-9D8VFJ"
+  -
+    type: "verify"
+    at: "2026-09-24T06:48:09.003Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609240542-9D8VFJ"
+  -
+    type: "status"
+    at: "2026-09-24T06:48:09.213Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609240542-9D8VFJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-24T06:47:39.625Z"
+doc_updated_at: "2026-09-24T06:48:09.214Z"
 doc_updated_by: "CODER"
 description: "Stage 2b: add pinned SwLineNumberInfo defaults and document-owned shell command state, paragraph count flags, page restarts, undo and supported ODT round trip; React reads and paints only"
 sections:
@@ -143,11 +162,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-24T06:48:09.003Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609240542-9D8VFJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T06:47:39.625Z, excerpt_hash=sha256:55d01d2ddd9efeb477358a0cf669c98f5c27559728e4b26cd04d56983363fd68
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240542-9D8VFJ/blueprint/resolved-snapshot.json
+    - old_digest: 65e0a885e101e8cc130782aef441c11bfbd712edc345754afc6f3b05d3082aa8
+    - current_digest: 65e0a885e101e8cc130782aef441c11bfbd712edc345754afc6f3b05d3082aa8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240542-9D8VFJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609240542-9D8VFJ --result verified-202609240542-9D8VFJ --commit 33da26582080fc5b3e171be8de1662ed90bd3ee2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: "Pinned source: sw/source/core/doc/lineinfo.cxx sets position 5 mm, count-by 5, divider-by 3, left position, paint=false, count-blank=true, count-in-flys=false and restart-each-page=false. Current React writer-view.tsx owns showLineNumbers useState(false); WriterPlainTextEditor.tsx computes numbers from measured lines. Existing paragraph RES_LINENUMBER boolean and text:number-lines ODF property are separate from global document configuration."
+extensions:
+  implementation_commit:
+    hash: "6de07b8b27db6a455daf4c62fe2fdd550790bec3"
+    message: "🧩 9D8VFJ code: restore document-owned Writer line numbering"
 id_source: "generated"
 ---
 ## Summary
@@ -224,6 +277,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609240542-9D8VFJ --result verified-202609240542-9D8VFJ --commit 6de07b8b27db6a455daf4c62fe2fdd550790bec3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-24T06:48:09.003Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609240542-9D8VFJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T06:47:39.625Z, excerpt_hash=sha256:55d01d2ddd9efeb477358a0cf669c98f5c27559728e4b26cd04d56983363fd68
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240542-9D8VFJ/blueprint/resolved-snapshot.json
+- old_digest: 65e0a885e101e8cc130782aef441c11bfbd712edc345754afc6f3b05d3082aa8
+- current_digest: 65e0a885e101e8cc130782aef441c11bfbd712edc345754afc6f3b05d3082aa8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240542-9D8VFJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609240542-9D8VFJ --result verified-202609240542-9D8VFJ --commit 33da26582080fc5b3e171be8de1662ed90bd3ee2
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
