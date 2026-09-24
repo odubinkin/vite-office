@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241521-D5QMQG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T17:31:45.222Z",
+  "verdict": "pass",
+  "summary": "Scalar ODT style and page properties are implemented, exported and editable through Writer controls.",
+  "evaluated_sha": "3058c44ad8ed571a9a915f1fa26ce76d113de1a9",
+  "blueprint_digest": "29112ac133fdfb5bbdea2e818f62d24d7e12330971fae6f40a128c8835e93131",
+  "findings": [
+    "Full verify passes; pinned upstream fixtures and local diagnostic show stable semantic projection and fewer expected warnings."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241521-D5QMQG/README.md",
+    ".agentplane/tmp/verify-phase2.log",
+    "docs/program/certification-odt-scalar-style-parity.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
