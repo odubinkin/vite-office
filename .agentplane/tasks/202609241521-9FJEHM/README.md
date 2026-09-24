@@ -1,10 +1,11 @@
 ---
 id: "202609241521-9FJEHM"
 title: "Add canonical inline bookmarks and soft page breaks"
-status: "DOING"
+result_summary: "verified-202609241521-9FJEHM"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -23,9 +24,9 @@ plan_approval:
   note: "User requested implementation of the seven ordered phases in docs/program/certification-odt-import-plan.md; outside-repo sample access remains pending separate authorization."
 verification:
   state: "ok"
-  updated_at: "2026-09-24T20:19:33.070Z"
+  updated_at: "2026-09-24T20:20:01.662Z"
   updated_by: "CODER"
-  note: "Full verify and approved phase-3 private sample gate passed; table-owned breaks assigned to phase 5."
+  note: "verified-202609241521-9FJEHM"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "2e183a1"
   findings:
     - "Document-owned marks and soft pagination hints retain positions through edits, Worker transfer and ODT reimport; bookmark and break UI paths are tested."
-commit: null
+commit:
+  hash: "de6d106d35c7dec977f9eb0f2446ef9d615da96f"
+  message: "✅ 9FJEHM task: record inline marker verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609241521-9FJEHM. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full verify and approved phase-3 private sample gate passed; table-owned breaks assigned to phase 5."
+  -
+    type: "verify"
+    at: "2026-09-24T20:20:01.662Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609241521-9FJEHM"
+  -
+    type: "status"
+    at: "2026-09-24T20:20:01.783Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609241521-9FJEHM. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-24T20:19:33.118Z"
+doc_updated_at: "2026-09-24T20:20:01.784Z"
 doc_updated_by: "CODER"
 description: "Phase 3: Writer mark/hint state, nested links, Worker transfer, export and bookmark/break UI controls."
 sections:
@@ -125,11 +144,45 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-09-24T20:20:01.662Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609241521-9FJEHM
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T20:19:33.118Z, excerpt_hash=sha256:da82fcbd2fe2874155701a72d279e1d0fa1c1363c93eb7e29585f729e00ee47e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-9FJEHM/blueprint/resolved-snapshot.json
+    - old_digest: bc0e6901ec7f00e195372e7fc893b38ae197a3ea79c7115680003f55a95bfcb8
+    - current_digest: bc0e6901ec7f00e195372e7fc893b38ae197a3ea79c7115680003f55a95bfcb8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-9FJEHM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241521-9FJEHM --result verified-202609241521-9FJEHM --commit de6d106d35c7dec977f9eb0f2446ef9d615da96f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "bc5370b27280355d941863014cf46029688c8fec"
+    message: "📝 9FJEHM task: move table break gate to phase five"
 id_source: "generated"
 ---
 ## Summary
@@ -196,6 +249,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T20:20:01.662Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609241521-9FJEHM
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T20:19:33.118Z, excerpt_hash=sha256:da82fcbd2fe2874155701a72d279e1d0fa1c1363c93eb7e29585f729e00ee47e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-9FJEHM/blueprint/resolved-snapshot.json
+- old_digest: bc0e6901ec7f00e195372e7fc893b38ae197a3ea79c7115680003f55a95bfcb8
+- current_digest: bc0e6901ec7f00e195372e7fc893b38ae197a3ea79c7115680003f55a95bfcb8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-9FJEHM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241521-9FJEHM --result verified-202609241521-9FJEHM --commit de6d106d35c7dec977f9eb0f2446ef9d615da96f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
