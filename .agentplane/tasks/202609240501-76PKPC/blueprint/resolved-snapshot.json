@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "artifactKind": "agentplane.blueprint.resolved_snapshot",
+  "resolverInput": {
+    "taskId": "202609240501-76PKPC",
+    "title": "Audit implemented runtime against pinned LibreOffice",
+    "description": "Stage 1 of docs/program/vite-office-upstream-parity-plan.md: record operation-level contracts, defaults, upstream symbols, evidence and discrepancies in existing parity inventory data only",
+    "tags": [
+      "data"
+    ],
+    "owner": "CODER",
+    "taskKind": "analysis",
+    "workflowMode": "direct",
+    "workflowGitCapabilities": {
+      "workflowMode": "direct",
+      "implementationCommitLocation": "current_checkout",
+      "finishCommitSource": "explicit_hash_or_comment_commit",
+      "closeTailRequired": false,
+      "lifecycleCommentCommitLocation": "current_checkout",
+      "finishCommitFromComment": true
+    },
+    "mutation": "docs",
+    "mutationScope": "docs",
+    "touchedPaths": [],
+    "recipeHints": [],
+    "riskFlags": []
+  },
+  "selectedBlueprint": {
+    "id": "analysis.light",
+    "version": 1,
+    "title": "Lightweight analysis",
+    "taskKinds": [
+      "analysis"
+    ],
+    "workflowModes": []
+  },
+  "plan": {
+    "schemaVersion": 1,
+    "blueprintId": "analysis.light",
+    "blueprintVersion": 1,
+    "title": "Lightweight analysis",
+    "taskId": "202609240501-76PKPC",
+    "workflowMode": "direct",
+    "workflowGitCapabilities": {
+      "workflowMode": "direct",
+      "implementationCommitLocation": "current_checkout",
+      "finishCommitSource": "explicit_hash_or_comment_commit",
+      "closeTailRequired": false,
+      "lifecycleCommentCommitLocation": "current_checkout",
+      "finishCommitFromComment": true
+    },
+    "taskIntent": {
+      "taskKind": "analysis",
+      "mutationScope": "docs"
+    },
+    "whySelected": [
+      "task kind resolved to analysis",
+      "task intent kind: analysis",
+      "workflow mode: direct",
+      "task intent mutation scope: docs"
+    ],
+    "states": [
+      {
+        "id": "intake",
+        "kind": "intake",
+        "mode": "agentic",
+        "required": true,
+        "protected": false,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": []
+      },
+      {
+        "id": "scope",
+        "kind": "scope",
+        "mode": "deterministic",
+        "required": true,
+        "protected": false,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "assumptions"
+        ]
+      },
+      {
+        "id": "context_resolve",
+        "kind": "context_resolve",
+        "mode": "deterministic",
+        "required": true,
+        "protected": false,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "context_manifest",
+          "sources"
+        ]
+      },
+      {
+        "id": "work_unit",
+        "kind": "work_unit",
+        "mode": "agentic",
+        "required": true,
+        "protected": false,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "weak_links",
+          "final_output"
+        ]
+      },
+      {
+        "id": "artifact_write",
+        "kind": "artifact_write",
+        "mode": "deterministic",
+        "required": true,
+        "protected": false,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "artifact"
+        ]
+      },
+      {
+        "id": "verify_record",
+        "kind": "verify_record",
+        "mode": "record",
+        "required": true,
+        "protected": true,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "final_output"
+        ]
+      },
+      {
+        "id": "quality_gate",
+        "kind": "quality_gate",
+        "mode": "agentic",
+        "required": true,
+        "protected": true,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "quality_report"
+        ]
+      },
+      {
+        "id": "finish",
+        "kind": "finish",
+        "mode": "deterministic",
+        "required": true,
+        "protected": true,
+        "allowedCommands": [],
+        "policyModules": [],
+        "evidenceKinds": [
+          "final_output"
+        ]
+      }
+    ],
+    "requiredEvidence": [
+      {
+        "id": "analysis.sources",
+        "kind": "sources",
+        "producedBy": "context_resolve",
+        "required": true,
+        "description": "Sources used for analysis."
+      },
+      {
+        "id": "analysis.assumptions",
+        "kind": "assumptions",
+        "producedBy": "scope",
+        "required": true,
+        "description": "Assumptions and constraints."
+      },
+      {
+        "id": "analysis.weak_links",
+        "kind": "weak_links",
+        "producedBy": "work_unit",
+        "required": true,
+        "description": "Weak links or uncertainty."
+      },
+      {
+        "id": "analysis.final",
+        "kind": "final_output",
+        "producedBy": "work_unit",
+        "required": true,
+        "description": "Final answer or report."
+      },
+      {
+        "id": "analysis.quality",
+        "kind": "quality_report",
+        "producedBy": "quality_gate",
+        "required": true,
+        "description": "EVALUATOR quality verdict."
+      }
+    ],
+    "policyModules": [],
+    "allowedCommands": [],
+    "contextBudget": {
+      "maxPolicyModules": 0,
+      "maxPromptBlocks": 6,
+      "rationale": "Lightweight analysis should load sources and task context without policy modules."
+    },
+    "contextManifest": [],
+    "acceptedRecipeExtensions": [],
+    "rejectedRecipeExtensions": [],
+    "stopReasons": []
+  },
+  "nodes": [
+    {
+      "id": "intake",
+      "kind": "intake",
+      "mode": "agentic",
+      "required": true,
+      "protected": false,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": []
+    },
+    {
+      "id": "scope",
+      "kind": "scope",
+      "mode": "deterministic",
+      "required": true,
+      "protected": false,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "assumptions"
+      ]
+    },
+    {
+      "id": "context_resolve",
+      "kind": "context_resolve",
+      "mode": "deterministic",
+      "required": true,
+      "protected": false,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "context_manifest",
+        "sources"
+      ]
+    },
+    {
+      "id": "work_unit",
+      "kind": "work_unit",
+      "mode": "agentic",
+      "required": true,
+      "protected": false,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "weak_links",
+        "final_output"
+      ]
+    },
+    {
+      "id": "artifact_write",
+      "kind": "artifact_write",
+      "mode": "deterministic",
+      "required": true,
+      "protected": false,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "artifact"
+      ]
+    },
+    {
+      "id": "verify_record",
+      "kind": "verify_record",
+      "mode": "record",
+      "required": true,
+      "protected": true,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "final_output"
+      ]
+    },
+    {
+      "id": "quality_gate",
+      "kind": "quality_gate",
+      "mode": "agentic",
+      "required": true,
+      "protected": true,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "quality_report"
+      ]
+    },
+    {
+      "id": "finish",
+      "kind": "finish",
+      "mode": "deterministic",
+      "required": true,
+      "protected": true,
+      "allowedCommands": [],
+      "policyModules": [],
+      "evidenceKinds": [
+        "final_output"
+      ]
+    }
+  ],
+  "requiredEvidence": [
+    {
+      "id": "analysis.sources",
+      "kind": "sources",
+      "producedBy": "context_resolve",
+      "required": true,
+      "description": "Sources used for analysis."
+    },
+    {
+      "id": "analysis.assumptions",
+      "kind": "assumptions",
+      "producedBy": "scope",
+      "required": true,
+      "description": "Assumptions and constraints."
+    },
+    {
+      "id": "analysis.weak_links",
+      "kind": "weak_links",
+      "producedBy": "work_unit",
+      "required": true,
+      "description": "Weak links or uncertainty."
+    },
+    {
+      "id": "analysis.final",
+      "kind": "final_output",
+      "producedBy": "work_unit",
+      "required": true,
+      "description": "Final answer or report."
+    },
+    {
+      "id": "analysis.quality",
+      "kind": "quality_report",
+      "producedBy": "quality_gate",
+      "required": true,
+      "description": "EVALUATOR quality verdict."
+    }
+  ],
+  "policyModules": [],
+  "allowedCommands": [],
+  "contextBudget": {
+    "maxPolicyModules": 0,
+    "maxPromptBlocks": 6,
+    "rationale": "Lightweight analysis should load sources and task context without policy modules."
+  },
+  "contextManifest": [],
+  "acceptedRecipeExtensions": [],
+  "rejectedRecipeExtensions": [],
+  "stopReasons": [],
+  "selectionReasons": [
+    "task kind resolved to analysis",
+    "task intent kind: analysis",
+    "workflow mode: direct",
+    "task intent mutation scope: docs"
+  ],
+  "digest": {
+    "algorithm": "sha256",
+    "value": "1de3d953373c4f5c824d79ecd9744455677d28ad7215141b96c0e403198cd044"
+  }
+}
