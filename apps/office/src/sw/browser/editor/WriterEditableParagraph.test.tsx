@@ -59,6 +59,43 @@ function paragraph(color?: string, highlight?: string): WriterParagraphProjectio
 }
 
 describe("Writer editable paragraph colors", /** Groups color rendering tests. @returns Nothing. */ () => {
+  it("projects explicit and substituted font families across bold runs", /** callback handles this value. @returns The result. */ () => {
+    const source = paragraph();
+    const item: WriterParagraphProjection = {
+      ...source,
+      computedStyle: {
+        ...source.computedStyle,
+        fontFamily: "Overpass Light",
+        fontFamilyGeneric: "roman",
+      },
+      runs: [
+        {
+          attributes: { bold: true, italic: false, underline: false },
+          startOffset: 0,
+          text: "bold",
+        },
+        {
+          attributes: { bold: false, italic: false, underline: false, fontFamily: "Georgia" },
+          startOffset: 4,
+          text: "other",
+        },
+      ],
+      text: "boldother",
+    };
+    render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        listMarker={undefined}
+        paragraph={item}
+        retainElement={/** Ignores mounted text. @returns Nothing. */ () => undefined}
+      />,
+    );
+    expect(screen.getByRole("textbox")).toHaveStyle({
+      fontFamily: "Overpass Light, Liberation Serif, serif",
+    });
+    expect(screen.getByText("other")).toHaveStyle({ fontFamily: "Georgia" });
+  });
   it("positions list markers from the paragraph or list style according to ODT precedence", /** Checks both tdf114287 indentation routes. @returns Nothing. */ () => {
     const source = paragraph();
     const item: WriterParagraphProjection = {

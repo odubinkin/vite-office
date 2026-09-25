@@ -210,7 +210,14 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     for (const style of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) writer.GetTextFormatColl(style.id);
     const textBody = writer.GetTextFormatColl("text-body");
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
-      textBody.SetFormatAttr(new SvxFontItem("Source Serif 4", which));
+      textBody.SetFormatAttr(
+        new SvxFontItem(
+          "Source Serif 4",
+          which,
+          "Source Serif 4",
+          which === RES_CHRATR_FONT ? "roman" : undefined,
+        ),
+      );
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       textBody.SetFormatAttr(new SvxFontHeightItem(13 * 20, which));
     const paragraph = writer.paragraphs[0];
@@ -240,7 +247,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     const stylesXml = await firstArchive.readTextEntry("styles.xml");
     const contentXml = await firstArchive.readTextEntry("content.xml");
     expect(stylesXml).toContain(
-      '<style:font-face style:name="Source Serif 4" svg:font-family="&apos;Source Serif 4&apos;"/>',
+      '<style:font-face style:name="Source Serif 4" svg:font-family="&apos;Source Serif 4&apos;" style:font-family-generic="roman"/>',
     );
     expect(contentXml).toContain(
       '<style:font-face style:name="Noto Sans" svg:font-family="&apos;Noto Sans&apos;"/>',
@@ -294,6 +301,14 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
           .GetItemIfSet(RES_CHRATR_FONT, false) as SvxFontItem
       ).GetFamilyName(),
     ).toBe("Source Serif 4");
+    expect(
+      (
+        opened.document
+          .GetTextFormatColl("text-body")
+          .GetAttrSet()
+          .GetItemIfSet(RES_CHRATR_FONT, false) as SvxFontItem
+      ).GetGenericFamily(),
+    ).toBe("roman");
     expect(
       (
         opened.document

@@ -1743,6 +1743,35 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/editor/writer-font-family.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-font-family.ts#browserFontFamily",
+          "vendor/libreoffice-reference/vcl/source/font/PhysicalFontCollection.cxx#FindFontFamily",
+          "vendor/libreoffice-reference/vcl/source/font/PhysicalFontFamily.cxx#CalcType"
+        ],
+        "justification": "Projects the imported VCL generic family to bundled Liberation families after the requested face; full physical-font scoring against the host collection remains unimplemented.",
+        "knownViolations": [],
+        "localSymbols": [
+          "browserFontFamily"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/editor/writer-geometry.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -3964,10 +3993,10 @@
         "CAP-0111"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
+        "behaviorStatus": "divergent",
         "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
         "evidence": [
           "apps/office/src/sw/source/core/layout/newfrm.ts#createSwPageFrames",
           "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx#InsertNewPage",
@@ -3976,7 +4005,7 @@
           "apps/office/e2e/writer-layout-ratios.spec.ts#Writer keeps measured page breaks across device pixel ratios",
           "apps/office/src/sw/source/core/layout/newfrm.test.ts#reflows affected successors while retaining unchanged positioned frames"
         ],
-        "justification": "Persistent SwRootFrame uses current SwDoc revision, browser measurement revision, targeted Writer hints and typed value comparison to reconcile supported page/text-frame identity and line numbering. Native connected frame registration and unsupported content remain outside this slice.",
+        "justification": "Persistent SwRootFrame uses current SwDoc revision, browser measurement revision, targeted Writer hints and typed value comparison to reconcile supported page/text-frame identity and line numbering. The certification ODT still has a different first-page content boundary from LibreOffice GUI; the remaining difference has not been isolated between font selection, browser metrics, and page-flow calculation.",
         "knownViolations": [],
         "localSymbols": [
           "SwPageFrame",

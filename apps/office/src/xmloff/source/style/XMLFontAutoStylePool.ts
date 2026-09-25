@@ -25,25 +25,28 @@ function exportFamilyName(familyName: string): string {
 
 /** Deduplicates fonts and assigns the same stable face names as XMLFontAutoStylePool. */
 export class XMLFontAutoStylePool {
-  private readonly families = new Map<string, string>();
+  private readonly families = new Map<string, { name: string; generic?: string }>();
   private readonly names = new Set<string>();
   private readonly embedded = new Map<string, OdfEmbeddedFont[]>();
 
-  /** Registers or finds a font family. @param familyName - Semicolon-separated model family. @returns Font-face name. */
-  public Add(familyName: string): string {
+  /** Registers or finds a font family. @param familyName - Semicolon-separated model family. @param generic - ODF generic family. @returns Font-face name. */
+  public Add(familyName: string, generic?: string): string {
     const existing = this.families.get(familyName);
-    if (existing !== undefined) return existing;
+    if (existing !== undefined) {
+      if (generic !== undefined) existing.generic = generic;
+      return existing.name;
+    }
     const first = familyName.split(";", 1)[0]?.trim() || "F";
     let name = first;
     for (let suffix = 1; this.names.has(name); suffix += 1) name = `${first}${suffix}`;
-    this.families.set(familyName, name);
+    this.families.set(familyName, { name, ...(generic === undefined ? {} : { generic }) });
     this.names.add(name);
     return name;
   }
 
   /** Finds a previously registered family. @param familyName - Model family. @returns Face name or undefined. */
   public Find(familyName: string): string | undefined {
-    return this.families.get(familyName);
+    return this.families.get(familyName)?.name;
   }
 
   /** Associates a package font URI with its family face. @param font - Validated document resource. @returns Nothing. */
@@ -63,19 +66,20 @@ export class XMLFontAutoStylePool {
   /** Emits office:font-face-decls in registration order. @returns XML fragment. */
   public exportXML(): string {
     const faces = [...this.families].map(
-      /** Emits one font-face. @param entry - Family and face name. @returns XML. */ ([
+      /** Emits one font-face. @param entry - Family and face metadata. @returns XML. */ ([
         family,
-        name,
+        record,
       ]) => {
+        const { name, generic } = record;
         const resources = this.embedded.get(family) ?? [];
         const sources = resources
           .map(
             /** Emits an upstream-shaped font-face-uri and format. @param font - Package resource. @returns XML URI. */
             (font) =>
-              `<svg:font-face-uri xlink:href="${escapeXml(font.path)}" xlink:type="simple" fo:font-weight="${font.weight}" fo:font-style="${font.style}"><svg:font-face-format svg:string="${escapeXml(font.format)}"/></svg:font-face-uri>`,
+              `<svg:font-face-uri xlink:href="${escapeXml(font.path)}" xlink:type="simple" loext:font-style="${font.style}" loext:font-weight="${font.weight}"><svg:font-face-format svg:string="${escapeXml(font.format)}"/></svg:font-face-uri>`,
           )
           .join("");
-        const opening = `<style:font-face style:name="${escapeXml(name)}" svg:font-family="${escapeXml(exportFamilyName(family))}"`;
+        const opening = `<style:font-face style:name="${escapeXml(name)}" svg:font-family="${escapeXml(exportFamilyName(family))}"${generic === undefined ? "" : ` style:font-family-generic="${escapeXml(generic)}"`}`;
         return sources.length === 0
           ? `${opening}/>`
           : `${opening}><svg:font-face-src>${sources}</svg:font-face-src></style:font-face>`;

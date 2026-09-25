@@ -1,0 +1,954 @@
+/** LibreOffice runtime font faces, copied from the installed application. */
+
+@font-face {
+  font-family: "Alef";
+  src: url("/fonts/truetype/Alef-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Alef";
+  src: url("/fonts/truetype/Alef-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Amiri";
+  src: url("/fonts/truetype/Amiri-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Amiri";
+  src: url("/fonts/truetype/Amiri-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Amiri";
+  src: url("/fonts/truetype/Amiri-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Amiri";
+  src: url("/fonts/truetype/Amiri-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Amiri Quran";
+  src: url("/fonts/truetype/AmiriQuran.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Caladea";
+  src: url("/fonts/truetype/Caladea-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Caladea";
+  src: url("/fonts/truetype/Caladea-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Caladea";
+  src: url("/fonts/truetype/Caladea-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Caladea";
+  src: url("/fonts/truetype/Caladea-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Carlito";
+  src: url("/fonts/truetype/Carlito-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Carlito";
+  src: url("/fonts/truetype/Carlito-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Carlito";
+  src: url("/fonts/truetype/Carlito-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Carlito";
+  src: url("/fonts/truetype/Carlito-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "David CLM";
+  src: url("/fonts/truetype/DavidCLM-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "David CLM";
+  src: url("/fonts/truetype/DavidCLM-BoldItalic.otf") format("opentype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "David CLM";
+  src: url("/fonts/truetype/DavidCLM-Medium.otf") format("opentype");
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "David CLM";
+  src: url("/fonts/truetype/DavidCLM-MediumItalic.otf") format("opentype");
+  font-style: italic;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "David Libre";
+  src: url("/fonts/truetype/DavidLibre-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "David Libre";
+  src: url("/fonts/truetype/DavidLibre-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Math TeX Gyre";
+  src: url("/fonts/truetype/DejaVuMathTeXGyre.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSans-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSans-BoldOblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSans-ExtraLight.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSans-Oblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSans.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSansCondensed-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Condensed";
+  src: url("/fonts/truetype/DejaVuSansCondensed-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSansCondensed-BoldOblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Condensed";
+  src: url("/fonts/truetype/DejaVuSansCondensed-BoldOblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSansCondensed-Oblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Condensed";
+  src: url("/fonts/truetype/DejaVuSansCondensed-Oblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src: url("/fonts/truetype/DejaVuSansCondensed.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Condensed";
+  src: url("/fonts/truetype/DejaVuSansCondensed.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Mono";
+  src: url("/fonts/truetype/DejaVuSansMono-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Mono";
+  src: url("/fonts/truetype/DejaVuSansMono-BoldOblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Mono";
+  src: url("/fonts/truetype/DejaVuSansMono-Oblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Mono";
+  src: url("/fonts/truetype/DejaVuSansMono.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerif-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerif-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerif-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerif.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerifCondensed-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Serif Condensed";
+  src: url("/fonts/truetype/DejaVuSerifCondensed-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerifCondensed-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Serif Condensed";
+  src: url("/fonts/truetype/DejaVuSerifCondensed-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerifCondensed-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Serif Condensed";
+  src: url("/fonts/truetype/DejaVuSerifCondensed-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "DejaVu Serif";
+  src: url("/fonts/truetype/DejaVuSerifCondensed.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "DejaVu Serif Condensed";
+  src: url("/fonts/truetype/DejaVuSerifCondensed.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Frank Ruehl CLM";
+  src: url("/fonts/truetype/FrankRuehlCLM-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Frank Ruehl CLM";
+  src: url("/fonts/truetype/FrankRuehlCLM-BoldOblique.otf") format("opentype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Frank Ruehl CLM";
+  src: url("/fonts/truetype/FrankRuehlCLM-Medium.otf") format("opentype");
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Frank Ruehl CLM";
+  src: url("/fonts/truetype/FrankRuehlCLM-MediumOblique.otf") format("opentype");
+  font-style: italic;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Frank Ruhl Hofshi";
+  src: url("/fonts/truetype/FrankRuhlHofshi-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Frank Ruhl Hofshi";
+  src: url("/fonts/truetype/FrankRuhlHofshi-Regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Mono";
+  src: url("/fonts/truetype/LiberationMono-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Mono";
+  src: url("/fonts/truetype/LiberationMono-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Mono";
+  src: url("/fonts/truetype/LiberationMono-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Mono";
+  src: url("/fonts/truetype/LiberationMono-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Sans";
+  src: url("/fonts/truetype/LiberationSans-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Sans";
+  src: url("/fonts/truetype/LiberationSans-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Sans";
+  src: url("/fonts/truetype/LiberationSans-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Sans";
+  src: url("/fonts/truetype/LiberationSans-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Sans Narrow";
+  src: url("/fonts/truetype/LiberationSansNarrow-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Sans Narrow";
+  src: url("/fonts/truetype/LiberationSansNarrow-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Sans Narrow";
+  src: url("/fonts/truetype/LiberationSansNarrow-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Sans Narrow";
+  src: url("/fonts/truetype/LiberationSansNarrow-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Serif";
+  src: url("/fonts/truetype/LiberationSerif-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Serif";
+  src: url("/fonts/truetype/LiberationSerif-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Liberation Serif";
+  src: url("/fonts/truetype/LiberationSerif-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Liberation Serif";
+  src: url("/fonts/truetype/LiberationSerif-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Linux Biolinum G";
+  src: url("/fonts/truetype/LinBiolinum_RB_G.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Linux Biolinum G";
+  src: url("/fonts/truetype/LinBiolinum_RI_G.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Linux Biolinum G";
+  src: url("/fonts/truetype/LinBiolinum_R_G.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Linux Libertine Display G";
+  src: url("/fonts/truetype/LinLibertine_DR_G.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Linux Libertine G";
+  src: url("/fonts/truetype/LinLibertine_RBI_G.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Linux Libertine G";
+  src: url("/fonts/truetype/LinLibertine_RB_G.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Linux Libertine G";
+  src: url("/fonts/truetype/LinLibertine_RI_G.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Linux Libertine G";
+  src: url("/fonts/truetype/LinLibertine_RZI_G.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Linux Libertine G";
+  src: url("/fonts/truetype/LinLibertine_RZ_G.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Linux Libertine G";
+  src: url("/fonts/truetype/LinLibertine_R_G.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Miriam CLM";
+  src: url("/fonts/truetype/MiriamCLM-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Miriam CLM";
+  src: url("/fonts/truetype/MiriamCLM-Book.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Miriam Libre";
+  src: url("/fonts/truetype/MiriamLibre-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Miriam Libre";
+  src: url("/fonts/truetype/MiriamLibre-Regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Miriam Mono CLM";
+  src: url("/fonts/truetype/MiriamMonoCLM-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Miriam Mono CLM";
+  src: url("/fonts/truetype/MiriamMonoCLM-BoldOblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Miriam Mono CLM";
+  src: url("/fonts/truetype/MiriamMonoCLM-Book.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Miriam Mono CLM";
+  src: url("/fonts/truetype/MiriamMonoCLM-BookOblique.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Nachlieli CLM";
+  src: url("/fonts/truetype/NachlieliCLM-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Nachlieli CLM";
+  src: url("/fonts/truetype/NachlieliCLM-BoldOblique.otf") format("opentype");
+  font-style: italic;
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Nachlieli CLM";
+  src: url("/fonts/truetype/NachlieliCLM-Light.otf") format("opentype");
+  font-style: normal;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Nachlieli CLM";
+  src: url("/fonts/truetype/NachlieliCLM-LightOblique.otf") format("opentype");
+  font-style: italic;
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Noto Kufi Arabic";
+  src: url("/fonts/truetype/NotoKufiArabic-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Kufi Arabic";
+  src: url("/fonts/truetype/NotoKufiArabic-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  src: url("/fonts/truetype/NotoNaskhArabic-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  src: url("/fonts/truetype/NotoNaskhArabic-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url("/fonts/truetype/NotoSans-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url("/fonts/truetype/NotoSans-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url("/fonts/truetype/NotoSans-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url("/fonts/truetype/NotoSans-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans Arabic";
+  src: url("/fonts/truetype/NotoSansArabic-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans Arabic";
+  src: url("/fonts/truetype/NotoSansArabic-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans Armenian";
+  src: url("/fonts/truetype/NotoSansArmenian-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans Armenian";
+  src: url("/fonts/truetype/NotoSansArmenian-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans Georgian";
+  src: url("/fonts/truetype/NotoSansGeorgian-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans Georgian";
+  src: url("/fonts/truetype/NotoSansGeorgian-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans Hebrew";
+  src: url("/fonts/truetype/NotoSansHebrew-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans Hebrew";
+  src: url("/fonts/truetype/NotoSansHebrew-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans Lao";
+  src: url("/fonts/truetype/NotoSansLao-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans Lao";
+  src: url("/fonts/truetype/NotoSansLao-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Sans Lisu";
+  src: url("/fonts/truetype/NotoSansLisu-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Sans Lisu";
+  src: url("/fonts/truetype/NotoSansLisu-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Serif";
+  src: url("/fonts/truetype/NotoSerif-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Serif";
+  src: url("/fonts/truetype/NotoSerif-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Serif";
+  src: url("/fonts/truetype/NotoSerif-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Serif";
+  src: url("/fonts/truetype/NotoSerif-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Serif Armenian";
+  src: url("/fonts/truetype/NotoSerifArmenian-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Serif Armenian";
+  src: url("/fonts/truetype/NotoSerifArmenian-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Serif Georgian";
+  src: url("/fonts/truetype/NotoSerifGeorgian-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Serif Georgian";
+  src: url("/fonts/truetype/NotoSerifGeorgian-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Serif Hebrew";
+  src: url("/fonts/truetype/NotoSerifHebrew-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Serif Hebrew";
+  src: url("/fonts/truetype/NotoSerifHebrew-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Noto Serif Lao";
+  src: url("/fonts/truetype/NotoSerifLao-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Noto Serif Lao";
+  src: url("/fonts/truetype/NotoSerifLao-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Reem Kufi";
+  src: url("/fonts/truetype/ReemKufi.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 700;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/truetype/Rubik-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/truetype/Rubik-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/truetype/Rubik-Italic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/truetype/Rubik-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Scheherazade";
+  src: url("/fonts/truetype/Scheherazade-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Scheherazade";
+  src: url("/fonts/truetype/Scheherazade-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "OpenSymbol";
+  src: url("/fonts/truetype/opens___.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}

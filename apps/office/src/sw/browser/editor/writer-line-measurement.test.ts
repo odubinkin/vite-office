@@ -33,6 +33,41 @@ function paragraph(text: string): WriterParagraphProjection {
 }
 
 describe("browser Writer line measurement", /** Groups shaped-line cases. @returns Nothing. */ () => {
+  it("keeps different font ascenders on one visual line", /** callback handles this value. @returns The result. */ () => {
+    const element = document.createElement("p");
+    element.innerHTML = "<strong>ab</strong><span>cd</span><span>ef</span>";
+    const original = Range.prototype.getClientRects;
+    Object.defineProperty(Range.prototype, "getClientRects", {
+      configurable: true,
+      /** Simulates differing glyph ascent on the same line and a later line. @param this - Measured range. @returns Character rectangle. */
+      value: function (this: Range): DOMRectList {
+        const text = this.startContainer.textContent;
+        const top = text === "ab" ? 0 : text === "cd" ? 3 : 25;
+        const height = text === "cd" ? 18 : 16;
+        return [{ top, height }] as unknown as DOMRectList;
+      },
+    });
+    try {
+      expect(
+        measureWriterTextLines(paragraph("abcdef"), element).map(
+          /** map handles this value. @param line - Input 1. @returns The result. */ (line) => [
+            line.start,
+            line.end,
+          ],
+        ),
+      ).toEqual([
+        [0, 4],
+        [4, 6],
+      ]);
+    } finally {
+      if (original === undefined) Reflect.deleteProperty(Range.prototype, "getClientRects");
+      else
+        Object.defineProperty(Range.prototype, "getClientRects", {
+          configurable: true,
+          value: original,
+        });
+    }
+  });
   it("keeps one source offset across styled runs and ignores a missing character rectangle", /** Verifies browser range boundaries. @returns Nothing. */ () => {
     const element = document.createElement("p");
     element.innerHTML = "<strong>ab</strong><em>cd</em>";

@@ -14,7 +14,7 @@ export interface OdfEmbeddedFont {
 
 /** Consumer of imported font-face declarations. */
 export interface XMLFontStylesImportTarget {
-  registerFontFace(name: string, familyName: string): void;
+  registerFontFace(name: string, familyName: string, generic: string | undefined): void;
   registerEmbeddedFont(font: OdfEmbeddedFont): void;
 }
 
@@ -61,7 +61,11 @@ class XMLFontStyleContextFontFace extends SvXMLImportContext {
     const family = rawFamily === null ? "" : importFamilyName(rawFamily);
     this.name = name;
     this.family = family.split(";")[0] as string;
-    target.registerFontFace(name, family);
+    target.registerFontFace(
+      name,
+      family,
+      attributes.get(XMLToken.STYLE_FONT_FAMILY_GENERIC) ?? undefined,
+    );
   }
   /** Creates the upstream font-face-src context. @param element - Child token. @param attributes - Attributes. @returns Source context or null. */
   public override createFastChildContext(
@@ -110,12 +114,25 @@ class XMLFontStyleContextFontFaceUri extends SvXMLImportContext {
   ) {
     super();
     attributes.assertOnly(
-      [XMLToken.XLINK_HREF, XMLToken.XLINK_TYPE, XMLToken.FO_FONT_WEIGHT, XMLToken.FO_FONT_STYLE],
+      [
+        XMLToken.XLINK_HREF,
+        XMLToken.XLINK_TYPE,
+        XMLToken.FO_FONT_WEIGHT,
+        XMLToken.FO_FONT_STYLE,
+        XMLToken.LOEXT_FONT_WEIGHT,
+        XMLToken.LOEXT_FONT_STYLE,
+      ],
       "font face URI",
     );
     this.path = attributes.require(XMLToken.XLINK_HREF, "font face URI path");
-    const weight = attributes.get(XMLToken.FO_FONT_WEIGHT) ?? "normal";
-    const style = attributes.get(XMLToken.FO_FONT_STYLE) ?? "normal";
+    const foWeight = attributes.get(XMLToken.FO_FONT_WEIGHT);
+    const foStyle = attributes.get(XMLToken.FO_FONT_STYLE);
+    const weight = attributes.get(XMLToken.LOEXT_FONT_WEIGHT) ?? foWeight ?? "normal";
+    const style = attributes.get(XMLToken.LOEXT_FONT_STYLE) ?? foStyle ?? "normal";
+    if (foWeight !== null && foWeight !== "normal" && foWeight !== "bold")
+      throw new Error(`Unsupported embedded font weight: ${foWeight}`);
+    if (foStyle !== null && foStyle !== "normal" && foStyle !== "italic")
+      throw new Error(`Unsupported embedded font style: ${foStyle}`);
     if (weight !== "normal" && weight !== "bold")
       throw new Error(`Unsupported embedded font weight: ${weight}`);
     if (style !== "normal" && style !== "italic")

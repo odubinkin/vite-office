@@ -1,6 +1,8 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
 
 import { Fragment, useRef } from "react";
+import type { WriterTextRun } from "../../source/filter/basflt/writer-transfer";
+import { browserFontFamily } from "./writer-font-family";
 
 import type {
   WriterParagraphProjection as WriterParagraph,
@@ -107,7 +109,10 @@ export function WriterEditableParagraph({
               marginInlineEnd: listLayout?.labelFollowedBy === "space" ? "0.25em" : undefined,
               width: listLayout?.labelFollowedBy === "listtab" ? `${markerWidthPt}pt` : undefined,
               textAlign: "left",
-              fontFamily: paragraph.computedStyle.fontFamily,
+              fontFamily: browserFontFamily(
+                paragraph.computedStyle.fontFamily,
+                paragraph.computedStyle.fontFamilyGeneric,
+              ),
               fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
               fontStyle: paragraph.computedStyle.fontStyle,
               fontWeight: paragraph.computedStyle.fontWeight,
@@ -147,7 +152,10 @@ export function WriterEditableParagraph({
                 : paragraph.computedStyle.highlight,
             color:
               paragraph.computedStyle.color === "auto" ? undefined : paragraph.computedStyle.color,
-            fontFamily: paragraph.computedStyle.fontFamily,
+            fontFamily: browserFontFamily(
+              paragraph.computedStyle.fontFamily,
+              paragraph.computedStyle.fontFamilyGeneric,
+            ),
             fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
             fontStyle: paragraph.computedStyle.fontStyle,
             fontWeight: paragraph.computedStyle.fontWeight,
@@ -181,6 +189,7 @@ export function WriterEditableParagraph({
                 <Fragment key={getWriterRunProjectionKey(paragraph.id, run)}>
                   <WriterTextRunProjection
                     inheritedBold={paragraph.computedStyle.fontWeight === 700}
+                    inheritedFontFamily={paragraph.computedStyle.fontFamily}
                     inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
                     run={{
                       ...run,
@@ -200,14 +209,16 @@ export function WriterEditableParagraph({
 }
 
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
-function WriterTextRunProjection({
+export function WriterTextRunProjection({
   inheritedBold,
+  inheritedFontFamily,
   inheritedItalic,
   run,
 }: Readonly<{
   inheritedBold: boolean;
+  inheritedFontFamily: string | undefined;
   inheritedItalic: boolean;
-  run: WriterProjectedTextRun;
+  run: WriterTextRun;
 }>): React.ReactNode {
   let content: React.ReactNode = run.text;
   if (run.attributes.highlight !== undefined)
@@ -231,8 +242,11 @@ function WriterTextRunProjection({
     content = <span style={{ textDecoration: "underline" }}>{content}</span>;
   if (run.attributes.fontSizeTwips !== undefined)
     content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
+  const runFamily = run.attributes.fontFamily ?? inheritedFontFamily;
   if (run.attributes.fontFamily !== undefined)
-    content = <span style={{ fontFamily: run.attributes.fontFamily }}>{content}</span>;
+    content = (
+      <span style={{ fontFamily: browserFontFamily(runFamily, undefined) }}>{content}</span>
+    );
   if (run.attributes.italic) content = <em>{content}</em>;
   else if (inheritedItalic) content = <span style={{ fontStyle: "normal" }}>{content}</span>;
   if (run.attributes.bold) content = <strong>{content}</strong>;

@@ -4,6 +4,8 @@
 
 @import "tailwindcss";
 
+@import "./lo-runtime-fonts.css";
+
 :root {
   color-scheme: light;
   font-family:
@@ -118,6 +120,27 @@ body:has([aria-label="Writer workspace"]) {
   [data-writer-page] button,
   [data-writer-page] .sr-only {
     display: none !important;
+  }
+
+  [data-writer-page] [data-writer-editor-selected="true"] {
+    background-color: transparent !important;
+    outline: none !important;
+  }
+
+  [data-writer-page] [data-writer-border-guide="true"] {
+    border: 0 !important;
+  }
+
+  [data-writer-page] :focus,
+  [data-writer-page] :focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    caret-color: transparent !important;
+  }
+
+  [data-writer-page] ::selection {
+    background: transparent !important;
+    color: inherit !important;
   }
 }
 

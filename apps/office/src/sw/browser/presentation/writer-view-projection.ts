@@ -94,6 +94,7 @@ export interface WriterParagraphComputedStyle {
   readonly contextualSpacing?: boolean;
   readonly firstLineIndentPt: number;
   readonly fontFamily?: string;
+  readonly fontFamilyGeneric?: string;
   readonly fontStyle: "italic" | "normal";
   readonly fontSizePt: number;
   readonly fontWeight: 400 | 700;
@@ -191,6 +192,8 @@ export class WriterViewProjection {
           );
         const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
+        const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
+        const fontFamilyGeneric = font.GetGenericFamily();
         let runOffset = 0;
         return Object.freeze({
           alignment: node.GetParagraphAlignment(),
@@ -203,7 +206,8 @@ export class WriterViewProjection {
               (
                 node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
               ).ResolveTextFirstLineOffset() / 20,
-            fontFamily: (node.GetAttr(RES_CHRATR_FONT) as SvxFontItem).GetResolvedFamilyName(),
+            fontFamily: font.GetResolvedFamilyName(),
+            ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
               ? "italic"
               : "normal",

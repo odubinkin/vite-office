@@ -197,6 +197,7 @@ class SwXMLImport
   private defaultParagraphStyle: OdfStyleDefinition | undefined;
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
+  private readonly fontFaceGenerics = new Map<string, string>();
   private readonly masterPages = new Map<
     string,
     Readonly<{ followName?: string; pageLayoutName: string }>
@@ -257,12 +258,18 @@ class SwXMLImport
     return this.fontFaces.get(name);
   }
 
-  /** Registers one imported font-face declaration. @param name - Face name. @param familyName - Model family. @returns Nothing. */
-  public registerFontFace(name: string, familyName: string): void {
+  /** Resolves an imported font face's generic family. @param name - Face name. @returns ODF generic family. */
+  public getFontFaceGeneric(name: string): string | undefined {
+    return this.fontFaceGenerics.get(name);
+  }
+
+  /** Registers one imported font-face declaration. @param name - Face name. @param familyName - Model family. @param generic - ODF generic family. @returns Nothing. */
+  public registerFontFace(name: string, familyName: string, generic?: string): void {
     const existing = this.fontFaces.get(name);
     if (existing !== undefined && existing !== familyName)
       throw new Error(`Conflicting ODF font face: ${name}`);
     this.fontFaces.set(name, familyName);
+    if (generic !== undefined) this.fontFaceGenerics.set(name, generic);
   }
 
   /** Retains one package-backed font declaration for ZIP resolution after XML import. @param font - ODF face URI. @returns Nothing. */
@@ -818,7 +825,14 @@ function putCharacterProperties(
 ): void {
   if (properties.color !== undefined) put(new SfxStringItem(RES_CHRATR_COLOR, properties.color));
   if (properties.fontFamily !== undefined)
-    put(new SvxFontItem(properties.fontFamily, RES_CHRATR_FONT));
+    put(
+      new SvxFontItem(
+        properties.fontFamily,
+        RES_CHRATR_FONT,
+        properties.fontFamily,
+        properties.fontFamilyGeneric,
+      ),
+    );
   const asianFamily = properties.fontFamilyAsian ?? properties.fontFamily;
   if (asianFamily !== undefined) put(new SvxFontItem(asianFamily, RES_CHRATR_CJK_FONT));
   const complexFamily = properties.fontFamilyComplex ?? properties.fontFamily;

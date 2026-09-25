@@ -102,8 +102,17 @@ export class SwAttrPool extends SfxItemPool {
           which,
           defaults.get(which)?.resolvedFamily as string,
         ),
-        /** Restores a font item. @param value - Persisted family. @returns Font item. */ (value) =>
-          new SvxFontItem(String(value), which),
+        /** Restores a font item. @param value - Persisted family and optional ODF attributes. @returns Font item. */ (
+          value,
+        ) =>
+          typeof value === "object" && value !== null && !Array.isArray(value)
+            ? new SvxFontItem(
+                String((value as Record<string, unknown>).familyName),
+                which,
+                String((value as Record<string, unknown>).resolvedFamilyName),
+                String((value as Record<string, unknown>).genericFamily),
+              )
+            : new SvxFontItem(String(value), which),
       );
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       this.RegisterDefaultItem(

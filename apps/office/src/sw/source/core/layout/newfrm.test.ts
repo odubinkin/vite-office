@@ -38,6 +38,72 @@ function paragraph(id: string, count: number, height = 300): SwTextFrameInput {
 }
 
 describe("Writer text and page frames", /** Groups Writer page-frame tests. @returns Nothing. */ () => {
+  it("places measured table rows in body order across pages", /** callback handles this value. @returns The result. */ () => {
+    const document = createWriterDocument();
+    const first = document.paragraphs[0];
+    if (first === undefined) throw new Error("Writer has no initial paragraph");
+    const table = document.nodes.MakeTableNode("Measured", {}, first);
+    document.nodes.AppendTableRow(table, 1);
+    document.nodes.AppendTableRow(table, 1);
+    document.nodes.MakeTextNode("after");
+    const layout = new SwRootFrame(
+      /** callback handles this value. @returns The result. */ () => document,
+    );
+    const page = { ...standardPage, height: 1000, topMargin: 100, bottomMargin: 100 };
+    const pages = layout.Format(
+      [
+        { id: "first", lines: [{ start: 0, end: 0, height: 300 }] },
+        { id: "second", lines: [{ start: 0, end: 5, height: 300 }] },
+      ],
+      page,
+      undefined,
+      new SwLineNumberInfo().QueryValue(),
+      0,
+      [{ tableName: "Measured", rowHeights: [400, 400] }],
+    ).pages;
+    expect(pages).toHaveLength(2);
+    expect(
+      pages[0]?.textFrames.map(
+        /** map handles this value. @param frame - Input 1. @returns The result. */ (frame) =>
+          frame.nodeId,
+      ),
+    ).toEqual(["first"]);
+    expect(
+      pages[0]?.tableFrames.map(
+        /** map handles this value. @param frame - Input 1. @returns The result. */ (frame) => [
+          frame.firstRow,
+          frame.lastRow,
+        ],
+      ),
+    ).toEqual([[0, 0]]);
+    expect(
+      pages[1]?.tableFrames.map(
+        /** map handles this value. @param frame - Input 1. @returns The result. */ (frame) => [
+          frame.firstRow,
+          frame.lastRow,
+        ],
+      ),
+    ).toEqual([[1, 1]]);
+    expect(
+      pages[1]?.textFrames.map(
+        /** map handles this value. @param frame - Input 1. @returns The result. */ (frame) =>
+          frame.nodeId,
+      ),
+    ).toEqual(["second"]);
+    const revised = layout.Format(
+      [
+        { id: "first", lines: [{ start: 0, end: 0, height: 300 }] },
+        { id: "second", lines: [{ start: 0, end: 5, height: 300 }] },
+      ],
+      page,
+      undefined,
+      new SwLineNumberInfo().QueryValue(),
+      0,
+      [{ tableName: "Measured", rowHeights: [500, 400] }],
+    ).pages;
+    expect(revised).not.toBe(pages);
+    expect(revised[0]?.tableFrames[0]?.firstRow).toBe(0);
+  });
   it("honors paragraph keep-together, orphan control and page breaks", /** Checks pooled flow effects on physical page placement. @returns Nothing. */ () => {
     const page = { ...standardPage, height: 1000, topMargin: 100, bottomMargin: 100 };
     const kept = createSwPageFrames(
@@ -247,7 +313,9 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
       ),
     ).toEqual([["first"], ["second"]]);
     expect(createSwPageFrames([paragraph("large", 1, 700)], page)[0]?.textFrames).toHaveLength(1);
-    expect(createSwPageFrames([], page)).toEqual([{ descriptor: page, number: 1, textFrames: [] }]);
+    expect(createSwPageFrames([], page)).toEqual([
+      { descriptor: page, number: 1, textFrames: [], tableFrames: [] },
+    ]);
   });
 
   it("applies descriptor follow links to subsequent page frames", /** Verifies page-dependent descriptor application. @returns Nothing. */ () => {

@@ -83,7 +83,7 @@ import { createWriterFontAutoStylePool } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
 
-const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}"`;
+const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc): string {
@@ -123,9 +123,10 @@ export function exportStylesXml(document: SwDoc): string {
           ? ""
           : `<style:text-properties${exportCharacterAttributes(
               characterProperties,
-              /** Registers one used font. @param family - Model family. @returns Face name. */ (
+              /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @returns Face name. */ (
                 family,
-              ) => fonts.Add(family),
+                generic,
+              ) => fonts.Add(family, generic),
             )}/>`;
       const nextName = getWriterOdfStyleName(collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
@@ -219,8 +220,10 @@ export function exportContentXml(
       },
     },
     isCancelled,
-    /** Registers one used font. @param family - Model family. @returns Face name. */ (family) =>
-      fonts.Add(family),
+    /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @returns Face name. */ (
+      family,
+      generic,
+    ) => fonts.Add(family, generic),
   );
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
@@ -485,9 +488,15 @@ function getCharacterProperties(
     fontSize.GetHeight() !== complexFontSize.GetHeight()
   )
     throw new Error("ODT export does not support script-specific character formatting.");
+  const fontFamilyGeneric = font instanceof SvxFontItem ? font.GetGenericFamily() : undefined;
   return {
     ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
-    ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
+    ...(font instanceof SvxFontItem
+      ? {
+          fontFamily: font.GetFamilyName(),
+          ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
+        }
+      : {}),
     ...(asianFont instanceof SvxFontItem ? { fontFamilyAsian: asianFont.GetFamilyName() } : {}),
     ...(complexFont instanceof SvxFontItem
       ? { fontFamilyComplex: complexFont.GetFamilyName() }

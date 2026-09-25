@@ -271,6 +271,85 @@ function paragraph(id: string, text: string): WriterParagraphProjection {
 }
 
 describe("Writer physical page browser UI", /** Registers page-layout UI cases. @returns Nothing. */ () => {
+  it("keeps screen measurements while print media is active", /** callback handles this value. @returns The result. */ () => {
+    vi.stubGlobal(
+      "matchMedia",
+      /** stubGlobal handles this value. @returns The result. */ () => ({
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      }),
+    );
+    try {
+      const item = paragraph("print", "Printed text");
+      const { container, unmount } = render(
+        <WriterPlainTextEditor
+          activeParagraphId="print"
+          cursorSelection={{ point: { paragraphId: "print", offset: 0 } }}
+          editWindow={layoutEditWindow([item])}
+          pageDescriptor={page}
+          paragraphs={[item]}
+        />,
+      );
+      expect(container.querySelectorAll("[data-writer-page]")).toHaveLength(1);
+      unmount();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+  it("places table row fragments on physical pages without a scroll container", /** callback handles this value. @returns The result. */ async () => {
+    const document = createWriterDocument();
+    const first = document.paragraphs[0];
+    if (first === undefined) throw new Error("Writer has no first paragraph.");
+    first.SetText("Before");
+    const table = document.nodes.MakeTableNode("Paged", { width: 1500 }, first);
+    table.AddColumnWidth(1500);
+    document.nodes.AppendTableRow(table, 1, { minHeight: 450 });
+    document.nodes.AppendTableRow(table, 1, { minHeight: 450 });
+    const after = document.nodes.MakeTextNode("After");
+    const paragraphs = [
+      { ...paragraph("before", "Before"), nodeIndex: first.GetIndex() },
+      { ...paragraph("after", "After"), nodeIndex: after.GetIndex() },
+    ];
+    const editWindow = {
+      FocusNode: vi.fn(),
+      SetSelection: vi.fn(),
+      GetDoc: /** GetDoc handles this value. @returns The result. */ () => document,
+    } as unknown as SwEditWin;
+    const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
+    const { container } = render(
+      <WriterPlainTextEditor
+        activeParagraphId="before"
+        cursorSelection={{ point: { paragraphId: "before", offset: 0 } }}
+        editWindow={editWindow}
+        pageDescriptor={shortPage}
+        paragraphs={paragraphs}
+      />,
+    );
+    await waitFor(
+      /** callback handles this value. @returns The result. */ () =>
+        expect(container.querySelectorAll("[data-writer-page]")).toHaveLength(2),
+    );
+    const visibleTables = container.querySelectorAll("[data-writer-page] [data-writer-table]");
+    expect(visibleTables).toHaveLength(2);
+    expect(
+      [...visibleTables].map(
+        /** map handles this value. @param item - Input 1. @returns The result. */ (item) =>
+          item.querySelectorAll("tr").length,
+      ),
+    ).toEqual([1, 1]);
+    expect(
+      [...visibleTables].every(
+        /** every handles this value. @param item - Input 1. @returns The result. */ (item) =>
+          getComputedStyle(item).overflowY !== "auto",
+      ),
+    ).toBe(true);
+    fireEvent(window, new Event("resize"));
+    await waitFor(
+      /** callback handles this value. @returns The result. */ () =>
+        expect(container.querySelectorAll("[data-writer-page]")).toHaveLength(2),
+    );
+  });
   it("validates and submits page format, orientation, dimensions, and margins", /** Exercises every Page tab field. @returns Nothing. */ () => {
     const onCancel = vi.fn();
     const onSubmit = vi.fn();
@@ -641,7 +720,9 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
   });
 
   it("paginates by physical text area and renders optional workspace regions", /** Exercises page grouping and workspace branches. @returns Nothing. */ () => {
-    expect(createSwPageFrames([], page)).toEqual([{ descriptor: page, number: 1, textFrames: [] }]);
+    expect(createSwPageFrames([], page)).toEqual([
+      { descriptor: page, number: 1, textFrames: [], tableFrames: [] },
+    ]);
 
     const onDocumentTitleChange = vi.fn();
     const { rerender } = render(

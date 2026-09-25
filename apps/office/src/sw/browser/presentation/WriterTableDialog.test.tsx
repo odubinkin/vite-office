@@ -4,6 +4,13 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { createWriterDocument } from "../../source/core/doc/doc";
+import { RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT } from "../../inc/hintids";
+import {
+  FontItalic,
+  FontWeight,
+  SvxPostureItem,
+  SvxWeightItem,
+} from "../../../editeng/source/items/textitem";
 import { WriterEditableTable, editWriterTableCell } from "../editor/WriterEditableTable";
 import { WriterTableDialog } from "./WriterTableDialog";
 
@@ -188,6 +195,9 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     editor.blur();
     rerender(<WriterEditableTable onSelectRow={select} table={table} />);
     expect(editor).toHaveTextContent("xstart");
+    editor.focus();
+    editor.blur();
+    expect(editor).toHaveTextContent("xstart");
   });
 
   it("uses declared column widths when the table has no explicit width", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
@@ -197,5 +207,25 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     document.nodes.AppendTableRow(table, 1);
     render(<WriterEditableTable onSelectRow={vi.fn()} table={table} />);
     expect(screen.getByRole("table", { name: "Unsized" })).toHaveStyle({ width: "120px" });
+  });
+
+  it("renders a middle-page table fragment without first-page margins", /** callback handles this value. @returns The result. */ () => {
+    const document = createWriterDocument();
+    const table = document.nodes.MakeTableNode("Split", { marginTop: 150, marginBottom: 300 });
+    table.AddColumnWidth(1800);
+    for (let index = 0; index < 3; index += 1) document.nodes.AppendTableRow(table, 1);
+    const node = table.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0];
+    if (node === undefined) throw new Error("Middle-page cell is missing.");
+    node.SetText("Styled cell");
+    node.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+    node.SetAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
+    render(<WriterEditableTable firstRow={1} lastRow={1} onSelectRow={vi.fn()} table={table} />);
+    const fragment = screen.getByRole("table", { name: "Split" });
+    expect(fragment).toHaveStyle({ marginTop: "0px", marginBottom: "0px" });
+    expect(fragment.querySelectorAll("tr")).toHaveLength(1);
+    expect(screen.getByLabelText("Row 2 column 1 paragraph 1")).toHaveStyle({
+      fontStyle: "italic",
+      fontWeight: "700",
+    });
   });
 });

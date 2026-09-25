@@ -39,6 +39,7 @@ export function measureWriterTextLines(
   let offset = 0;
   let lineStart = 0;
   let lineTop: number | undefined;
+  let lineBottom: number | undefined;
   let lastTop: number | undefined;
   let lineHeight = height;
   while (textNode instanceof Text) {
@@ -48,7 +49,15 @@ export function measureWriterTextLines(
       range.setEnd(textNode, index + size);
       const rect = range.getClientRects()[0];
       if (rect !== undefined && rect.height > 0) {
-        if (lineTop !== undefined && Math.abs(rect.top - lineTop) > 1) {
+        const overlap =
+          lineTop === undefined || lineBottom === undefined
+            ? 0
+            : Math.min(lineBottom, rect.top + rect.height) - Math.max(lineTop, rect.top);
+        if (
+          lineTop !== undefined &&
+          lineBottom !== undefined &&
+          overlap < Math.min(lineBottom - lineTop, rect.height) * 0.5
+        ) {
           lines.push({
             start: lineStart,
             end: offset,
@@ -56,8 +65,12 @@ export function measureWriterTextLines(
           });
           lineStart = offset;
           lineHeight = height;
+          lineTop = rect.top;
+          lineBottom = rect.top + rect.height;
+        } else {
+          lineTop = Math.min(lineTop ?? rect.top, rect.top);
+          lineBottom = Math.max(lineBottom ?? rect.top + rect.height, rect.top + rect.height);
         }
-        lineTop = rect.top;
         lastTop = rect.top;
         lineHeight = Math.max(lineHeight, rect.height * 15);
       }

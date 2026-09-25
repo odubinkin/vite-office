@@ -202,6 +202,7 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
     pool.AddEmbedded(font);
     pool.AddEmbedded(font);
     expect(pool.exportXML().match(/<svg:font-face-uri/gu)).toHaveLength(1);
+    expect(pool.exportXML()).toContain('loext:font-style="normal" loext:font-weight="normal"');
     const record = encodeWriterDocument(createWriterDocument());
     expect(
       /** Decodes one invalid font transfer record. @returns Writer document. */ () =>
@@ -219,6 +220,73 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
     expect(
       decodeWriterDocument({ ...record, embeddedFonts: [font] }).GetEmbeddedFonts(),
     ).toHaveLength(1);
+  });
+
+  it("imports LibreOffice font URI weight and style extensions", /** callback handles this value. @returns The result. */ async () => {
+    const styled = await replaceEntry(
+      fixture,
+      "content.xml",
+      /** callback handles this value. @param bytes - Input 1. @returns The result. */ (bytes) =>
+        new TextEncoder().encode(
+          new TextDecoder()
+            .decode(bytes)
+            .replace(
+              'loext:font-style="normal" loext:font-weight="normal"',
+              'loext:font-style="italic" loext:font-weight="bold"',
+            ),
+        ),
+    );
+    const embedded = (await readFontFixture(styled)).document.GetEmbeddedFonts();
+    expect(embedded[0]).toMatchObject({ style: "italic", weight: "bold" });
+    for (const attribute of ['loext:font-weight="heavy"', 'loext:font-style="oblique"']) {
+      const invalid = await replaceEntry(
+        fixture,
+        "content.xml",
+        /** callback handles this value. @param bytes - Input 1. @returns The result. */ (bytes) =>
+          new TextEncoder().encode(
+            new TextDecoder()
+              .decode(bytes)
+              .replace(
+                attribute.startsWith("loext:font-weight")
+                  ? 'loext:font-weight="normal"'
+                  : 'loext:font-style="normal"',
+                attribute,
+              ),
+          ),
+      );
+      await expect(readFontFixture(invalid)).rejects.toThrow("ODF XML is malformed");
+    }
+    const foOnly = await replaceEntry(
+      fixture,
+      "content.xml",
+      /** callback handles this value. @param bytes - Input 1. @returns The result. */ (bytes) =>
+        new TextEncoder().encode(
+          new TextDecoder()
+            .decode(bytes)
+            .replace(
+              'loext:font-style="normal" loext:font-weight="normal"',
+              'fo:font-style="italic" fo:font-weight="bold"',
+            ),
+        ),
+    );
+    expect((await readFontFixture(foOnly)).document.GetEmbeddedFonts()[0]).toMatchObject({
+      style: "italic",
+      weight: "bold",
+    });
+    const noDescriptors = await replaceEntry(
+      fixture,
+      "content.xml",
+      /** callback handles this value. @param bytes - Input 1. @returns The result. */ (bytes) =>
+        new TextEncoder().encode(
+          new TextDecoder()
+            .decode(bytes)
+            .replace(' loext:font-style="normal" loext:font-weight="normal"', ""),
+        ),
+    );
+    expect((await readFontFixture(noDescriptors)).document.GetEmbeddedFonts()[0]).toMatchObject({
+      style: "normal",
+      weight: "normal",
+    });
   });
 
   it("routes font source, URI and optional format children through their owning contexts", /** Unknown child nodes cannot become phantom package resources. @returns Completion. */ async () => {

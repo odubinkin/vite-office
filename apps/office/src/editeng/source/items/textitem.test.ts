@@ -2,6 +2,12 @@
 
 import { describe, expect, it } from "vitest";
 import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
+import {
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../sw/browser/filter/xml/writer-document-codec";
+import { createWriterDocument } from "../../../sw/source/core/doc/doc";
+import { RES_CHRATR_FONT } from "../../../sw/inc/hintids";
 
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import {
@@ -49,6 +55,26 @@ describe("EditEngine character items" /** Groups pooled character item contracts
           new SvxFontItem("Liberation Serif", weightWhich, " "),
       ),
     ).toThrow("resolved family name is invalid");
+  });
+
+  it("retains the ODF generic family through the browser document transfer", /** callback handles this value. @returns The result. */ () => {
+    const font = new SvxFontItem("Overpass Light", RES_CHRATR_FONT, "Overpass Light", "roman");
+    expect(font.GetGenericFamily()).toBe("roman");
+    expect(font.Clone().GetGenericFamily()).toBe("roman");
+    expect(font.equals(new SvxFontItem("Overpass Light", RES_CHRATR_FONT))).toBe(false);
+    expect(encodeSfxPoolItem(font).value).toEqual({
+      familyName: "Overpass Light",
+      resolvedFamilyName: "Overpass Light",
+      genericFamily: "roman",
+    });
+    const document = createWriterDocument();
+    document.GetDfltTextFormatColl().SetFormatAttr(font);
+    const restored = decodeWriterDocument(encodeWriterDocument(document));
+    expect(
+      (
+        restored.GetDfltTextFormatColl().GetAttrSet().Get(RES_CHRATR_FONT) as SvxFontItem
+      ).GetGenericFamily(),
+    ).toBe("roman");
   });
 
   it("preserves FontWeight ordering, boolean threshold, identity, and snapshots" /** Verifies SvxWeightItem. @returns Nothing. */, () => {

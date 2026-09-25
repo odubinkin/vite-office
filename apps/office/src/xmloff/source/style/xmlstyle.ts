@@ -28,6 +28,7 @@ export interface XMLStyleImportTarget {
   registerTableStyle(name: string, style: OdfTableStyle): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
+  getFontFaceGeneric?(name: string): string | undefined;
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
   registerDefaultStyle(definition: OdfStyleDefinition): void;
   registerStyle(name: string, definition: OdfStyleDefinition): void;
@@ -699,6 +700,7 @@ function importCharacterProperties(
   if (complexFaceName !== null && complexFontFamily === undefined)
     throw new Error(`Undefined ODF complex font face: ${complexFaceName}`);
   const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
+  const fontFamilyGeneric = faceName === null ? undefined : target.getFontFaceGeneric?.(faceName);
   let fontSizeTwips: number | undefined;
   if (fontSize !== null) {
     try {
@@ -712,6 +714,7 @@ function importCharacterProperties(
   return {
     ...(useWindowColor === true ? { color: "auto" } : color === null ? {} : { color }),
     ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
+    ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
     ...(asianFontFamily === undefined ? {} : { fontFamilyAsian: asianFontFamily }),
     ...(complexFontFamily === undefined ? {} : { fontFamilyComplex: complexFontFamily }),
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),

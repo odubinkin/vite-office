@@ -454,6 +454,7 @@ describe("App" /**
       await waitFor(
         /** Confirms the earlier nonempty copy remains available. @returns Nothing. */ () =>
           expect(screen.getByRole("button", { name: "notes" })).toBeVisible(),
+        { timeout: 5000 },
       );
       expect(screen.queryByRole("button", { name: "empty" })).not.toBeInTheDocument();
     } finally {

@@ -6,6 +6,7 @@
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
+import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { normalizeWriterHyperlink, SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
@@ -14,7 +15,14 @@ import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
-  const value = item.QueryValue();
+  const value =
+    item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
+      ? {
+          familyName: item.GetFamilyName(),
+          resolvedFamilyName: item.GetResolvedFamilyName(),
+          genericFamily: item.GetGenericFamily() as string,
+        }
+      : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,

@@ -4,6 +4,8 @@ import type { WriterPageDescriptorValue } from "./pagedesc";
 import { WRITER_PAPER_SIZES } from "./pagedesc";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
+import { SwTableNode } from "../docnode/node";
+import type { SwTable } from "../table/swtable";
 import {
   createSwTextFrameInputs,
   getSwTextFrameGap,
@@ -23,6 +25,27 @@ export interface SwPageFrame {
   readonly descriptor: WriterPageDescriptorValue;
   readonly number: number;
   readonly textFrames: readonly SwTextFrame[];
+  readonly tableFrames: readonly SwTableFrame[];
+}
+
+/** One table fragment placed in document flow on a physical page. */
+export interface SwTableFrame {
+  readonly table: SwTable;
+  readonly firstRow: number;
+  readonly lastRow: number;
+  readonly afterParagraphIndex: number;
+}
+
+/** Device measured table rows; the core owns their placement. */
+export interface SwTableFrameMeasurement {
+  readonly tableName: string;
+  readonly rowHeights: readonly number[];
+}
+
+/** Canonical table and its position relative to body text nodes. */
+interface SwTableFrameInput extends SwTableFrameMeasurement {
+  readonly table: SwTable;
+  readonly afterParagraphIndex: number;
 }
 
 /** Writer text-frame print bounds relative to the page body's left edge, in twips. */
@@ -80,6 +103,7 @@ export class SwRootFrame {
   private lastSettings: SwTextFrameSettings | undefined;
   private lastLineInfo: SwLineNumberInfoValue | undefined;
   private lastInputs: readonly SwTextFrameInput[] = [];
+  private lastTableMeasurements: readonly SwTableFrameMeasurement[] = [];
   private snapshot: SwRootFrameSnapshot | undefined;
   private revision = 0;
 
@@ -101,13 +125,14 @@ export class SwRootFrame {
     this.dirtyFrom = Math.min(this.dirtyFrom, affected < 0 ? paragraphs.length : affected);
   }
 
-  /** Formats measured text into stable page frames and line-number marks. @param measurements - Browser device line geometry only. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @param measurementRevision - Browser device revision. @returns Immutable current layout. */
+  /** Formats measured text into stable page frames and line-number marks. @param measurements - Browser device line geometry only. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @param measurementRevision - Browser device revision. @param tableMeasurements - Browser table-row geometry. @returns Immutable current layout. */
   public Format(
     measurements: readonly SwTextFrameMeasurement[],
     descriptor: WriterPageDescriptorValue | SwPageDescriptorLayout,
     settings: SwTextFrameSettings | undefined,
     lineInfo: SwLineNumberInfoValue,
     measurementRevision = 0,
+    tableMeasurements: readonly SwTableFrameMeasurement[] = [],
   ): SwRootFrameSnapshot {
     const document = this.getDocument();
     const modelRevision = document.GetDocumentStateManager().GetModelRevision();
@@ -123,10 +148,12 @@ export class SwRootFrame {
       sameSettings &&
       sameLineInfo &&
       measurementsMatchInputs(measurements, this.lastInputs) &&
+      tableMeasurementsEqual(tableMeasurements, this.lastTableMeasurements) &&
       this.snapshot !== undefined
     )
       return this.snapshot;
     const paragraphs = createSwTextFrameInputs(document, measurements);
+    const tableInputs = createSwTableFrameInputs(document, tableMeasurements);
     const previous = this.snapshot?.pages ?? [];
     const previousInputs = this.lastInputs;
     const firstInputChange = paragraphs.findIndex(
@@ -155,7 +182,7 @@ export class SwRootFrame {
     );
     const layoutGeometryUnchanged = sameDescriptor && sameSettings;
     const pages = Object.freeze(
-      createSwPageFrames(paragraphs, descriptor, settings).map(
+      createSwPageFrames(paragraphs, descriptor, settings, tableInputs).map(
         /** Retains unchanged frame identities after formatting. @param page - New page. @param index - Page position. @returns Reconciled page. */
         (page, index) => {
           const oldPage = previous[index];
@@ -179,6 +206,7 @@ export class SwRootFrame {
           if (
             oldPage !== undefined &&
             pageDescriptorEqual(oldPage.descriptor, page.descriptor) &&
+            tableFramesEqual(oldPage.tableFrames, page.tableFrames) &&
             oldPage.textFrames.length === textFrames.length &&
             textFrames.every(
               /** Tests unchanged frame identity. @param frame - Current frame. @param frameIndex - Position. @returns Whether stable. */
@@ -216,6 +244,7 @@ export class SwRootFrame {
     this.lastSettings = settings;
     this.lastLineInfo = lineInfo;
     this.lastInputs = paragraphs;
+    this.lastTableMeasurements = tableMeasurements;
     this.dirty = false;
     this.dirtyFrom = Number.POSITIVE_INFINITY;
     this.snapshot = Object.freeze({ revision: this.revision, pages, lineNumbers });
@@ -372,11 +401,88 @@ function textFrameEqual(left: SwTextFrame, right: SwTextFrame | undefined): bool
   );
 }
 
-/** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @param settings - Paragraph spacing policy. @returns Ordered page frames. */
+/** Pairs measured rows with tables in the canonical body order. @param document - Writer document. @param measurements - Browser table-row measurements. @returns Ordered table inputs. */
+function createSwTableFrameInputs(
+  document: SwDoc,
+  measurements: readonly SwTableFrameMeasurement[],
+): readonly SwTableFrameInput[] {
+  const byName = new Map(
+    measurements.map(
+      /** map handles this value. @param entry - Input 1. @returns The result. */ (entry) =>
+        [entry.tableName, entry] as const,
+    ),
+  );
+  const tables: SwTableFrameInput[] = [];
+  let paragraphIndex = -1;
+  for (const node of document.nodes.getBodyContent()) {
+    if (node instanceof SwTableNode) {
+      const table = node.GetTable();
+      const measured = byName.get(table.GetName());
+      tables.push({
+        table,
+        tableName: table.GetName(),
+        afterParagraphIndex: paragraphIndex,
+        rowHeights: table
+          .GetTabLines()
+          .map(
+            /** map handles this value. @param row - Input 1. @param index - Input 2. @returns The result. */ (
+              row,
+              index,
+            ) => Math.max(row.GetFormat().minHeight ?? 0, measured?.rowHeights[index] ?? 240),
+          ),
+      });
+    } else paragraphIndex += 1;
+  }
+  return tables;
+}
+
+/** Compares device row measurements across formatting passes. @param left - Previous measurements. @param right - Current measurements. @returns Whether the measurements match. */
+function tableMeasurementsEqual(
+  left: readonly SwTableFrameMeasurement[],
+  right: readonly SwTableFrameMeasurement[],
+): boolean {
+  return (
+    left.length === right.length &&
+    left.every(
+      /** every handles this value. @param entry - Input 1. @param index - Input 2. @returns The result. */ (
+        entry,
+        index,
+      ) =>
+        entry.tableName === right[index]?.tableName &&
+        entry.rowHeights.length === right[index]?.rowHeights.length &&
+        entry.rowHeights.every(
+          /** every handles this value. @param height - Input 1. @param row - Input 2. @returns The result. */ (
+            height,
+            row,
+          ) => height === right[index]?.rowHeights[row],
+        ),
+    )
+  );
+}
+
+/** Compares table fragments for persistent page-frame identity. @param left - Previous frames. @param right - Current frames. @returns Whether the frames match. */
+function tableFramesEqual(left: readonly SwTableFrame[], right: readonly SwTableFrame[]): boolean {
+  return (
+    left.length === right.length &&
+    left.every(
+      /** every handles this value. @param frame - Input 1. @param index - Input 2. @returns The result. */ (
+        frame,
+        index,
+      ) =>
+        frame.table === right[index]?.table &&
+        frame.firstRow === right[index]?.firstRow &&
+        frame.lastRow === right[index]?.lastRow &&
+        frame.afterParagraphIndex === right[index]?.afterParagraphIndex,
+    )
+  );
+}
+
+/** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @param settings - Paragraph spacing policy. @param tables - Ordered table frames. @returns Ordered page frames. */
 export function createSwPageFrames(
   paragraphs: readonly SwTextFrameInput[],
   descriptor: WriterPageDescriptorValue | SwPageDescriptorLayout,
   settings?: SwTextFrameSettings,
+  tables: readonly SwTableFrameInput[] = [],
 ): readonly SwPageFrame[] {
   const descriptorRecords =
     "descriptors" in descriptor
@@ -397,6 +503,7 @@ export function createSwPageFrames(
     throw new Error("Writer layout initial page descriptor is missing.");
   let activeDescriptor: (typeof descriptorRecords)[number] = initialDescriptor;
   const pages: SwTextFrame[][] = [[]];
+  const pageTables: SwTableFrame[][] = [[]];
   const pageDescriptors: WriterPageDescriptorValue[] = [activeDescriptor.value];
   const pageNumberOverrides = new Map<number, number>();
   let used = 0;
@@ -405,10 +512,40 @@ export function createSwPageFrames(
     const follow = descriptorByName.get(activeDescriptor.followName);
     if (follow === undefined) throw new Error("Writer layout follow page descriptor is missing.");
     pages.push([]);
+    pageTables.push([]);
     activeDescriptor = follow;
     pageDescriptors.push(follow.value);
     used = 0;
   }
+  /** Checks whether either kind of content already occupies the page. @returns Whether the current page has content. */
+  function hasContent(): boolean {
+    return (
+      (pages[pages.length - 1] as SwTextFrame[]).length > 0 ||
+      (pageTables[pageTables.length - 1] as SwTableFrame[]).length > 0
+    );
+  }
+  /** Flows tables immediately after one body paragraph, splitting only between rows. @param afterParagraphIndex - Body paragraph position. @returns Nothing. */
+  function placeTables(afterParagraphIndex: number): void {
+    for (const input of tables) {
+      if (input.afterParagraphIndex !== afterParagraphIndex) continue;
+      const format = input.table.GetFormat();
+      for (let row = 0; row < input.rowHeights.length; row += 1) {
+        const height = input.rowHeights[row] as number;
+        const descriptor = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
+        const bodyHeight = descriptor.height - descriptor.topMargin - descriptor.bottomMargin;
+        const spacing = row === 0 ? (format.marginTop ?? 0) : 0;
+        if (hasContent() && used + spacing + height > bodyHeight) startFollowPage();
+        const frames = pageTables[pageTables.length - 1] as SwTableFrame[];
+        const previous = frames[frames.length - 1];
+        if (previous?.table === input.table && previous.lastRow === row - 1)
+          frames[frames.length - 1] = { ...previous, lastRow: row };
+        else frames.push({ table: input.table, firstRow: row, lastRow: row, afterParagraphIndex });
+        used += (row === 0 ? (format.marginTop ?? 0) : 0) + height;
+      }
+      used += format.marginBottom ?? 0;
+    }
+  }
+  placeTables(-1);
   for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
     const gap = getSwTextFrameGap(paragraphs[paragraphIndex - 1], paragraph, settings);
     const nextParagraph = paragraphs[paragraphIndex + 1];
@@ -425,8 +562,9 @@ export function createSwPageFrames(
           : descriptorByName.get(requestedStyle);
       if (selected === undefined)
         throw new Error(`Writer paragraph page style is missing: ${requestedStyle}`);
-      if ((pages[pages.length - 1] as SwTextFrame[]).length > 0) {
+      if (hasContent()) {
         pages.push([]);
+        pageTables.push([]);
         pageDescriptors.push(selected.value);
       } else pageDescriptors[pageDescriptors.length - 1] = selected.value;
       activeDescriptor = selected;
@@ -434,10 +572,9 @@ export function createSwPageFrames(
       if (paragraph.pageNumber !== undefined)
         pageNumberOverrides.set(pages.length - 1, paragraph.pageNumber);
     }
-    if (paragraph.breakBefore && (pages[pages.length - 1] as SwTextFrame[]).length > 0) {
+    if (paragraph.breakBefore && hasContent()) {
       startFollowPage();
     }
-    const currentPage = pages[pages.length - 1] as SwTextFrame[];
     const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
     const availableHeight =
       currentDescriptor.height - currentDescriptor.topMargin - currentDescriptor.bottomMargin;
@@ -452,7 +589,7 @@ export function createSwPageFrames(
     let movedForKeepTogether = false;
     if (
       paragraph.keepTogether &&
-      currentPage.length > 0 &&
+      hasContent() &&
       wholeParagraphHeight <= availableHeight &&
       used + gap + wholeParagraphHeight > availableHeight
     ) {
@@ -464,7 +601,7 @@ export function createSwPageFrames(
       paragraph.keepWithNext &&
       nextParagraph !== undefined &&
       nextFirstLine !== undefined &&
-      currentPage.length > 0 &&
+      hasContent() &&
       wholeParagraphHeight + nextFirstLine.height <= availableHeight &&
       used +
         gap +
@@ -483,7 +620,7 @@ export function createSwPageFrames(
         pageDescriptor.height - pageDescriptor.topMargin - pageDescriptor.bottomMargin;
       const topSpacing = firstLine === 0 ? gap : 0;
       const line = paragraph.lines[firstLine] as (typeof paragraph.lines)[number];
-      if (page.length > 0 && used + topSpacing + line.height > bodyHeight) {
+      if (hasContent() && used + topSpacing + line.height > bodyHeight) {
         startFollowPage();
         continue;
       }
@@ -510,7 +647,7 @@ export function createSwPageFrames(
       const linesRemaining = paragraph.lines.length - lastLine - 1;
       if (
         linesRemaining > 0 &&
-        page.length > 0 &&
+        hasContent() &&
         (linesOnPage < minimumBefore || linesRemaining < minimumAfter)
       ) {
         startFollowPage();
@@ -526,6 +663,7 @@ export function createSwPageFrames(
     if (paragraph.breakAfter && nextParagraph !== undefined) {
       startFollowPage();
     }
+    placeTables(paragraphIndex);
   }
   let numberedPage = 0;
   return Object.freeze(
@@ -539,6 +677,7 @@ export function createSwPageFrames(
           descriptor: pageDescriptors[index] as WriterPageDescriptorValue,
           number: numberedPage,
           textFrames: Object.freeze(textFrames),
+          tableFrames: Object.freeze(pageTables[index] as SwTableFrame[]),
         });
       },
     ),

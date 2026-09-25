@@ -17,4 +17,10 @@ describe("XMLFontAutoStylePool", /** Groups font auto-style tests. @returns Noth
       '<office:font-face-decls><style:font-face style:name="Noto Sans" svg:font-family="&apos;Noto Sans&apos;, serif"/><style:font-face style:name="Noto Sans1" svg:font-family="&apos;Noto Sans&apos;, monospace"/><style:font-face style:name="serif" svg:font-family="serif"/><style:font-face style:name="F" svg:font-family=""/></office:font-face-decls>',
     );
   });
+
+  it("preserves the ODF generic family on a newly registered font face", /** Verifies generic font metadata output. @returns Nothing. */ () => {
+    const pool = new XMLFontAutoStylePool();
+    expect(pool.Add("Missing Roman", "roman")).toBe("Missing Roman");
+    expect(pool.exportXML()).toContain('style:font-family-generic="roman"');
+  });
 });

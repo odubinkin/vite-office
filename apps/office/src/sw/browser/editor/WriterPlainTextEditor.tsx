@@ -10,11 +10,14 @@ import type { WriterParagraphProjection as WriterParagraph } from "../presentati
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { WriterEditableTable } from "./WriterEditableTable";
-import { SwTableNode } from "../../source/core/docnode/node";
 import type { SwTable } from "../../source/core/table/swtable";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import { SwRootFrame, type SwPageDescriptorLayout } from "../../source/core/layout/newfrm";
+import {
+  SwRootFrame,
+  type SwPageDescriptorLayout,
+  type SwTableFrame,
+} from "../../source/core/layout/newfrm";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type { SwTextFrameSettings, SwTextLine } from "../../source/core/text/txtfrm";
 import { createWriterLineMeasurements, measureWriterTextLines } from "./writer-line-measurement";
@@ -61,6 +64,13 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     /** Creates the offscreen measurement registry. @returns Empty paragraph registry. */ () =>
       new Map<string, HTMLParagraphElement>(),
   );
+  const [tableMeasurementElements] = useState(
+    /** callback handles this value. @returns The result. */ () =>
+      new Map<string, HTMLTableElement>(),
+  );
+  const [measuredTableRows, setMeasuredTableRows] = useState<
+    ReadonlyMap<string, readonly number[]>
+  >(/** callback handles this value. @returns The result. */ () => new Map());
   const controller = useMemo(
     /** Creates the only DOM-facing Writer edit-window implementation. @returns Stable browser controller. */
     () =>
@@ -98,6 +108,13 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     /** Starts without browser line measurements. @returns Empty line map. */ () => new Map(),
   );
   const measurements = createWriterLineMeasurements(props.paragraphs, measuredLines);
+  const tables = props.editWindow.GetDoc().GetTables();
+  const tableMeasurements = tables.map(
+    /** map handles this value. @param table - Input 1. @returns The result. */ (table) => ({
+      tableName: table.GetName(),
+      rowHeights: measuredTableRows.get(table.GetName()) ?? [],
+    }),
+  );
   const lineInfo = props.lineNumberInfo ?? new SwLineNumberInfo().QueryValue();
   const layout = (props.layout ?? testLayout).Format(
     measurements,
@@ -107,6 +124,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     props.paragraphSpacingSettings,
     { ...lineInfo, paintLineNumbers: props.showLineNumbers ?? lineInfo.paintLineNumbers },
     measurementRevision,
+    tableMeasurements,
   );
   const pages = layout.pages;
   const paragraphById = new Map(
@@ -117,39 +135,23 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     ),
   );
   const numberedFrames = layout.lineNumbers;
-  const tableAfter = new Map<string, SwTable[]>();
-  const tablesBefore: SwTable[] = [];
-  let previousParagraphId: string | undefined;
-  for (const block of props.editWindow.GetDoc().nodes.getBodyContent()) {
-    if (block instanceof SwTableNode) {
-      const target =
-        previousParagraphId === undefined
-          ? tablesBefore
-          : (tableAfter.get(previousParagraphId) ?? []);
-      target.push(block.GetTable());
-      if (previousParagraphId !== undefined) tableAfter.set(previousParagraphId, target);
-    } else
-      previousParagraphId = props.paragraphs.find(
-        /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-          paragraph,
-        ) => paragraph.nodeIndex === block.GetIndex(),
-      )?.id;
-  }
   const lastFrame = new Map<string, string>();
   for (const [pageIndex, page] of pages.entries())
     for (const frame of page.textFrames) lastFrame.set(frame.nodeId, `${pageIndex}:${frame.start}`);
   const renderTable =
-    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-      table: SwTable,
+    /** renderTable handles this value. @param frame - Input 1. @returns The result. */ (
+      frame: SwTableFrame,
     ): React.JSX.Element => (
       <WriterEditableTable
-        key={table.GetName()}
-        table={table}
-        selectedRow={props.selectedTable === table ? props.selectedTableRow : undefined}
+        key={`${frame.table.GetName()}:${frame.firstRow}`}
+        table={frame.table}
+        firstRow={frame.firstRow}
+        lastRow={frame.lastRow}
+        selectedRow={props.selectedTable === frame.table ? props.selectedTableRow : undefined}
         onSelectRow={
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
             row,
-          ) => props.onSelectTableRow?.(table, row)
+          ) => props.onSelectTableRow?.(frame.table, row)
         }
       />
     );
@@ -157,6 +159,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   useLayoutEffect(
     /** Supplies Writer with browser-shaped line boundaries after the measurement projection mounts. @returns Nothing. */
     function measureParagraphs(): () => void {
+      // Print CSS hides the offscreen device surface. Reusing screen measurements
+      // preserves the same physical page breaks in the printed document.
+      if (globalThis.matchMedia?.("print").matches)
+        return /** callback handles this value. @returns The result. */ () => undefined;
       let active = true;
       const next = new Map<string, readonly SwTextLine[]>();
       for (const paragraph of props.paragraphs) {
@@ -164,17 +170,37 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         if (element !== undefined)
           next.set(paragraph.id, measureWriterTextLines(paragraph, element));
       }
+      const nextTableRows = new Map<string, readonly number[]>();
+      for (const table of tables) {
+        const element = tableMeasurementElements.get(table.GetName());
+        if (element !== undefined)
+          nextTableRows.set(
+            table.GetName(),
+            [...element.rows].map(
+              /** map handles this value. @param row - Input 1. @returns The result. */ (row) =>
+                row.getBoundingClientRect().height * 15,
+            ),
+          );
+      }
       if (
         next.size !== measuredLines.size ||
         [...next].some(
           /** Detects changed line geometry. @param entry - Node ID and lines. @returns Whether changed. */
           ([id, lines]) => JSON.stringify(measuredLines.get(id)) !== JSON.stringify(lines),
+        ) ||
+        nextTableRows.size !== measuredTableRows.size ||
+        [...nextTableRows].some(
+          /** some handles this value. @param argument1 - Input 1. @returns The result. */ ([
+            name,
+            heights,
+          ]) => JSON.stringify(measuredTableRows.get(name)) !== JSON.stringify(heights),
         )
       ) {
         globalThis.queueMicrotask(
           /** Applies measured browser geometry after this layout pass. @returns Nothing. */ (): void => {
             if (active) {
               setMeasuredLines(next);
+              setMeasuredTableRows(nextTableRows);
               setMeasurementRevision(
                 /** Advances the device revision after line geometry changes. @param revision - Current revision. @returns Next revision. */ (
                   revision,
@@ -190,7 +216,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     },
     [
       measuredLines,
+      measuredTableRows,
       measurementElements,
+      tableMeasurementElements,
+      tables,
       measurementRoot,
       measurementRevision,
       props.pageDescriptor,
@@ -209,12 +238,15 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           ) => revision + 1,
         );
       globalThis.addEventListener("resize", invalidate);
+      const printMedia = globalThis.matchMedia?.("print");
+      printMedia?.addEventListener("change", invalidate);
       const observer =
         typeof ResizeObserver === "undefined" ? undefined : new ResizeObserver(invalidate);
       observer?.observe(measurementHost.current as HTMLDivElement);
       void globalThis.document.fonts?.ready.then(invalidate);
       return /** Removes geometry subscriptions. @returns Nothing. */ () => {
         globalThis.removeEventListener("resize", invalidate);
+        printMedia?.removeEventListener("change", invalidate);
         observer?.disconnect();
       };
     },
@@ -241,6 +273,17 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
 
   return (
     <>
+      <style media="print">
+        {pages
+          .map(
+            /** map handles this value. @param page - Input 1. @param index - Input 2. @returns The result. */ (
+              page,
+              index,
+            ) =>
+              `@page writer-page-${index + 1} { size: ${page.descriptor.width / 20}pt ${page.descriptor.height / 20}pt; margin: 0; } [data-writer-page="${index + 1}"] { page: writer-page-${index + 1}; }`,
+          )
+          .join("\n")}
+      </style>
       {props.verticalRuler && rulerLane.lane
         ? createPortal(
             <div
@@ -321,6 +364,28 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                     />
                   ),
                 )}
+                {tables.map(
+                  /** map handles this value. @param table - Input 1. @returns The result. */ (
+                    table,
+                  ) => (
+                    <WriterEditableTable
+                      key={`measure-${table.GetName()}`}
+                      table={table}
+                      /* v8 ignore next -- Hidden measurement tables are never interactive. */
+                      onSelectRow={
+                        /** callback handles this value. @returns The result. */ () => undefined
+                      }
+                      retainElement={
+                        /** callback handles this value. @param element - Input 1. @returns The result. */ (
+                          element,
+                        ) => {
+                          if (element === null) tableMeasurementElements.delete(table.GetName());
+                          else tableMeasurementElements.set(table.GetName(), element);
+                        }
+                      }
+                    />
+                  ),
+                )}
               </>,
               measurementRoot,
             )}
@@ -368,7 +433,19 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   width: page.descriptor.width / 15,
                 }}
               >
-                {pageIndex === 0 ? tablesBefore.map(renderTable) : null}
+                {page.tableFrames
+                  .filter(
+                    /** filter handles this value. @param frame - Input 1. @returns The result. */ (
+                      frame,
+                    ) =>
+                      frame.afterParagraphIndex < 0 ||
+                      !page.textFrames.some(
+                        /** some handles this value. @param textFrame - Input 1. @returns The result. */ (
+                          textFrame,
+                        ) => props.paragraphs[frame.afterParagraphIndex]?.id === textFrame.nodeId,
+                      ),
+                  )
+                  .map(renderTable)}
                 {page.textFrames.map(
                   /** Renders one Writer text-frame fragment on the current page. @param frame - Writer fragment. @param frameIndex - Fragment index. @returns Browser paragraph. */ (
                     frame,
@@ -407,7 +484,13 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                           }
                         />
                         {lastFrame.get(frame.nodeId) === `${pageIndex}:${frame.start}`
-                          ? tableAfter.get(frame.nodeId)?.map(renderTable)
+                          ? page.tableFrames
+                              .filter(
+                                /** filter handles this value. @param tableFrame - Input 1. @returns The result. */ (
+                                  tableFrame,
+                                ) => tableFrame.afterParagraphIndex === index,
+                              )
+                              .map(renderTable)
                           : null}
                       </Fragment>
                     );
