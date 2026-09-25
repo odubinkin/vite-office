@@ -100,6 +100,12 @@ export class WriterWorkflowCommandShell {
           id: WRITER_COMMAND_IDS.exportText,
         },
         {
+          capabilityId: "CAP-0101",
+          /** Opens the browser print dialog for the current document. @returns Nothing. */
+          execute: (): void => globalThis.print(),
+          id: WRITER_COMMAND_IDS.print,
+        },
+        {
           capabilityId: "CAP-0106",
           /** Copies the canonical Writer selection through the browser clipboard adapter. @param _context - Bound workflow context. @param arguments_ - Sfx request items. @returns Completion after clipboard write. */
           execute: (): Promise<void> => copyWriterSelection(wrtShell, ports.copyRichText),

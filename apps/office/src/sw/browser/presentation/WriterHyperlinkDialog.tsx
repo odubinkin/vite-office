@@ -23,6 +23,7 @@ export function WriterHyperlinkDialog({
   const [url, setUrl] = useState(initialHyperlink?.url ?? "");
   const [text, setText] = useState("");
   const [targetFrame, setTargetFrame] = useState(initialHyperlink?.targetFrame ?? "");
+  const [name, setName] = useState(initialHyperlink?.name ?? "");
   useEffect(
     /** Focuses the primary hyperlink field after the modal mounts. @returns Nothing. */ () => {
       globalThis.document.querySelector<HTMLInputElement>("#writer-hyperlink-url")?.focus();
@@ -33,10 +34,12 @@ export function WriterHyperlinkDialog({
     <div
       aria-label={title}
       aria-modal="true"
+      data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4"
       role="dialog"
     >
       <form
+        data-writer-modal-panel="true"
         className="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl"
         onSubmit={
           /** Submits normalized hyperlink fields. @param event - Form submit event. @returns Nothing. */ (
@@ -47,10 +50,12 @@ export function WriterHyperlinkDialog({
             if (destination.length === 0) return;
             const initialWithoutTarget = { ...(initialHyperlink ?? { url: destination }) };
             delete initialWithoutTarget.targetFrame;
+            delete initialWithoutTarget.name;
             onSubmit(
               {
                 ...initialWithoutTarget,
                 ...(targetFrame.length === 0 ? {} : { targetFrame }),
+                ...(name.trim().length === 0 ? {} : { name: name.trim() }),
                 url: destination,
               },
               text,
@@ -59,10 +64,15 @@ export function WriterHyperlinkDialog({
         }
       >
         <h2 className="text-lg font-bold text-slate-950">{title}</h2>
-        <div className="mt-4 grid gap-4">
+        <div className="mt-3 border-b border-slate-300 pb-2 text-sm font-semibold text-indigo-700">
+          Internet
+        </div>
+        <fieldset className="mt-4 grid gap-3 border border-slate-300 p-3">
+          <legend className="px-1 text-sm font-semibold">Hyperlink Settings</legend>
           <label className="grid gap-1 text-sm font-semibold text-slate-700">
-            {localization.GetText("writer.hyperlink.url", "URL")}
+            {localization.GetText("writer.hyperlink.url", "Link")}
             <input
+              aria-label="URL"
               className="rounded-md border border-slate-300 px-3 py-2 font-normal"
               id="writer-hyperlink-url"
               onChange={
@@ -93,8 +103,9 @@ export function WriterHyperlinkDialog({
             </label>
           ) : null}
           <label className="grid gap-1 text-sm font-semibold text-slate-700">
-            {localization.GetText("writer.hyperlink.target", "Target")}
+            {localization.GetText("writer.hyperlink.target", "Frame")}
             <select
+              aria-label="Target"
               className="rounded-md border border-slate-300 px-3 py-2 font-normal"
               onChange={
                 /** Updates the target frame choice. @param event - Selection change. @returns Nothing. */
@@ -113,7 +124,22 @@ export function WriterHyperlinkDialog({
               </option>
             </select>
           </label>
-        </div>
+        </fieldset>
+        <fieldset className="mt-4 grid gap-3 border border-slate-300 p-3">
+          <legend className="px-1 text-sm font-semibold">Further Settings</legend>
+          <label className="grid gap-1 text-sm font-semibold text-slate-700">
+            Name
+            <input
+              className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+              onChange={
+                /** Updates the hyperlink name. @param event - Name input event. @returns Nothing. */ (
+                  event,
+                ) => setName(event.target.value)
+              }
+              value={name}
+            />
+          </label>
+        </fieldset>
         <div className="mt-6 flex justify-end gap-2">
           <button
             className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold"

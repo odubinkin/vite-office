@@ -112,7 +112,12 @@ export function WriterWorkbench({
       if (tableDialog === "insert") {
         const table = activeDocument.nodes.MakeTableNode(
           value.name,
-          { width: value.width, align: "left" },
+          {
+            width: value.width,
+            align: "left",
+            headerRows: value.headerRows,
+            repeatHeaderRows: value.repeatHeaderRows,
+          },
           view.GetWrtShell().GetActiveParagraph(),
         );
         for (const columnWidth of value.columnWidths) table.AddColumnWidth(columnWidth);
@@ -120,7 +125,7 @@ export function WriterWorkbench({
           activeDocument.nodes.AppendTableRow(
             table,
             value.columns,
-            { minHeight: value.minRowHeight },
+            { minHeight: value.minRowHeight, keepTogether: value.dontSplit },
             Array.from(
               { length: value.columns },
               /** Handles the browser table interaction.  @returns Callback result. */ () => ({
@@ -133,7 +138,12 @@ export function WriterWorkbench({
         setSelectedTable(table);
         setSelectedTableRow(0);
       } else if (currentTable !== undefined) {
-        currentTable.SetFormat({ ...currentTable.GetFormat(), width: value.width });
+        currentTable.SetFormat({
+          ...currentTable.GetFormat(),
+          width: value.width,
+          headerRows: value.headerRows,
+          repeatHeaderRows: value.repeatHeaderRows,
+        });
         value.columnWidths.forEach(
           /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
             width,
@@ -143,7 +153,11 @@ export function WriterWorkbench({
         const rowIndex = selectedTableRow as number;
         const rows = currentTable.GetTabLines().slice(rowIndex, rowIndex + 1);
         for (const row of rows) {
-          row.SetFormat({ ...row.GetFormat(), minHeight: value.minRowHeight });
+          row.SetFormat({
+            ...row.GetFormat(),
+            minHeight: value.minRowHeight,
+            keepTogether: value.dontSplit,
+          });
           for (const cell of row.GetTabBoxes())
             cell.SetFormat({
               ...cell.GetFormat(),

@@ -29,3 +29,46 @@ test("sidebar remains reachable and its checked state follows visibility on a to
   await sidebar.getByRole("button", { name: "Start" }).focus();
   await expect(sidebar.getByRole("button", { name: "Start" })).toBeFocused();
 });
+
+test("the page stays within the viewport while the document and modal scroll", /** Checks mobile containment. @param page - Browser page fixture. @returns Nothing. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const canvas = page.getByRole("region", { name: "Writer document canvas" });
+  const size = await page.evaluate(
+    /** Reads viewport geometry. @returns Document and viewport dimensions. */ () => ({
+      documentWidth: document.documentElement.scrollWidth,
+      documentHeight: document.documentElement.scrollHeight,
+      viewportWidth: innerWidth,
+      viewportHeight: innerHeight,
+    }),
+  );
+  expect(size.documentWidth).toBe(size.viewportWidth);
+  expect(size.documentHeight).toBe(size.viewportHeight);
+  expect(
+    await canvas.evaluate(
+      /** Checks canvas overflow. @param element - Canvas element. @returns Whether canvas scrolls. */ (
+        element,
+      ) => element.scrollWidth > element.clientWidth,
+    ),
+  ).toBe(true);
+
+  await page.setViewportSize({ width: 390, height: 340 });
+  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Paragraph…" }).click();
+  const panel = page.locator("[data-writer-modal-panel]");
+  await expect(panel).toBeVisible();
+  expect(
+    await panel.evaluate(
+      /** Checks dialog overflow. @param element - Modal panel. @returns Whether panel scrolls. */ (
+        element,
+      ) => element.scrollHeight > element.clientHeight,
+    ),
+  ).toBe(true);
+  expect(
+    await page.evaluate(
+      /** Reads document height. @returns Height in pixels. */ () =>
+        document.documentElement.scrollHeight,
+    ),
+  ).toBe(340);
+});

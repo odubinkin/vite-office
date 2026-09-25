@@ -44,7 +44,8 @@ describe("Writer hyperlink dialog", /** Groups Writer hyperlink dialog. @returns
       target: { value: "https://new.example" },
     });
     fireEvent.change(screen.getByLabelText("Target"), { target: { value: "" } });
+    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "renamed" } });
     fireEvent.click(screen.getByText("Apply"));
-    expect(onSubmit).toHaveBeenCalledWith({ url: "https://new.example", name: "named" }, "");
+    expect(onSubmit).toHaveBeenCalledWith({ url: "https://new.example", name: "renamed" }, "");
   });
 });

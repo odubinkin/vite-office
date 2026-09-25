@@ -5,6 +5,8 @@ import type { SwTextNode } from "../txtnode/ndtxt";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
 export interface SwTableFormat {
+  readonly headerRows?: number | undefined;
+  readonly repeatHeaderRows?: boolean | undefined;
   readonly width?: number | undefined;
   readonly align?: "left" | "center" | "right" | "margins" | undefined;
   readonly marginLeft?: number | undefined;

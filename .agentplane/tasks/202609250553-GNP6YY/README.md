@@ -4,7 +4,7 @@ title: "Align Writer dialogs and browser print with upstream"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-25T06:47:31.448Z"
+  updated_by: "CODER"
+  note: "npm run verify passed: 544 office tests, 109 inventory tests, both 100% coverage, 17 e2e scenarios; mobile, modal scroll and print PDF inspected. Supported upstream dialog settings aligned; remaining unsupported tabs documented in Findings."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved Writer dialog, print, and mobile UI corrections against pinned upstream."
+  -
+    type: "verify"
+    at: "2026-09-25T06:47:31.448Z"
+    author: "CODER"
+    state: "ok"
+    note: "npm run verify passed: 544 office tests, 109 inventory tests, both 100% coverage, 17 e2e scenarios; mobile, modal scroll and print PDF inspected. Supported upstream dialog settings aligned; remaining unsupported tabs documented in Findings."
 doc_version: 3
-doc_updated_at: "2026-09-25T05:54:09.195Z"
+doc_updated_at: "2026-09-25T06:47:31.523Z"
 doc_updated_by: "CODER"
 description: "Implement the approved Writer UI corrections: upstream dialog and quick popup parity, mobile viewport containment, and browser print of document pages only."
 sections:
@@ -48,10 +54,55 @@ sections:
   Plan: "1. Audit each Writer modal and quick popup against pinned upstream UI resources and align layout, labels, tabs, and supported settings. 2. Share modal presentation and viewport scrolling; close palettes on outside interaction. 3. Contain mobile viewport overflow. 4. Wire Print at upstream menu and toolbar locations to browser print; print document pages only. 5. Remove unsupported toolbar line-spacing dropdown. 6. Add focused regression coverage, run verification, and commit intentional changes."
   Verify Steps: "Run npm run typecheck and focused Vitest suites for Writer dialogs, menu, toolbar, page layout, and mobile/print behavior; run npm run verify if feasible. Browser-check at a narrow mobile viewport that the document canvas alone scrolls and dialogs scroll within the viewport. Browser-check print preview or print CSS: only document pages appear, without Writer chrome or page overlays. Compare dialog layouts and controls against pinned LibreOffice UI XML."
   Verification: |-
+    Command: npm run verify
+    Result: pass
+    Evidence: 544 office tests and 109 inventory tests passed with 100% coverage; 17 Playwright e2e tests passed; build, static smoke, JSDoc, file-size, source-tree, source-provenance, invariants and parity checks passed.
+    Scope: Writer implementation, generated command resources, tests, browser behavior and repository gates.
+
+    Command: git diff --check
+    Result: pass
+    Evidence: no whitespace errors.
+    Scope: task diff.
+
+    Command: manual Playwright CLI browser and print PDF inspection
+    Result: pass
+    Evidence: at 390x700 the document scroll width/height equaled viewport bounds while canvas scrolled; at 390x340 the Paragraph modal panel scrolled; print PDF had one page with text Print proof and no Writer chrome.
+    Scope: mobile containment, modal scroll and browser print output.
+
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-25T06:47:31.448Z — VERIFY — ok
+
+    By: CODER
+
+    Note: npm run verify passed: 544 office tests, 109 inventory tests, both 100% coverage, 17 e2e scenarios; mobile, modal scroll and print PDF inspected. Supported upstream dialog settings aligned; remaining unsupported tabs documented in Findings.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T06:47:18.335Z, excerpt_hash=sha256:5535eecc583403effcbd86d959bf34261c2a56355b9012fd363adaa1ba611af3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250553-GNP6YY/blueprint/resolved-snapshot.json
+    - old_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+    - current_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609250553-GNP6YY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609250553-GNP6YY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commit; preserve unrelated existing task state."
-  Findings: ""
+  Findings: "The dialog layouts and quick controls follow pinned upstream structure only for Writer settings implemented by the current browser document model. LibreOffice dialog tabs and fields without model support remain unimplemented, including additional Hyperlink and Page Style tabs and advanced Paragraph options. Insert Table header-row counts and repeating headers round trip through ODT; a header marked non-repeating is not preserved as a distinct ODT state. These are follow-up gaps for full upstream parity. The browser build emits its existing bundle-size warning; the build and static smoke still pass."
 id_source: "generated"
 ---
 ## Summary
@@ -74,7 +125,52 @@ Run npm run typecheck and focused Vitest suites for Writer dialogs, menu, toolba
 
 ## Verification
 
+Command: npm run verify
+Result: pass
+Evidence: 544 office tests and 109 inventory tests passed with 100% coverage; 17 Playwright e2e tests passed; build, static smoke, JSDoc, file-size, source-tree, source-provenance, invariants and parity checks passed.
+Scope: Writer implementation, generated command resources, tests, browser behavior and repository gates.
+
+Command: git diff --check
+Result: pass
+Evidence: no whitespace errors.
+Scope: task diff.
+
+Command: manual Playwright CLI browser and print PDF inspection
+Result: pass
+Evidence: at 390x700 the document scroll width/height equaled viewport bounds while canvas scrolled; at 390x340 the Paragraph modal panel scrolled; print PDF had one page with text Print proof and no Writer chrome.
+Scope: mobile containment, modal scroll and browser print output.
+
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-25T06:47:31.448Z — VERIFY — ok
+
+By: CODER
+
+Note: npm run verify passed: 544 office tests, 109 inventory tests, both 100% coverage, 17 e2e scenarios; mobile, modal scroll and print PDF inspected. Supported upstream dialog settings aligned; remaining unsupported tabs documented in Findings.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T06:47:18.335Z, excerpt_hash=sha256:5535eecc583403effcbd86d959bf34261c2a56355b9012fd363adaa1ba611af3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250553-GNP6YY/blueprint/resolved-snapshot.json
+- old_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+- current_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609250553-GNP6YY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609250553-GNP6YY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -82,3 +178,5 @@ Run npm run typecheck and focused Vitest suites for Writer dialogs, menu, toolba
 Revert only the task implementation commit; preserve unrelated existing task state.
 
 ## Findings
+
+The dialog layouts and quick controls follow pinned upstream structure only for Writer settings implemented by the current browser document model. LibreOffice dialog tabs and fields without model support remain unimplemented, including additional Hyperlink and Page Style tabs and advanced Paragraph options. Insert Table header-row counts and repeating headers round trip through ODT; a header marked non-repeating is not preserved as a distinct ODT state. These are follow-up gaps for full upstream parity. The browser build emits its existing bundle-size warning; the build and static smoke still pass.

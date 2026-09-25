@@ -140,6 +140,7 @@ import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer
     <div
       aria-label={kind === "open" ? "Open" : kind === "export" ? "Export" : "Save As"}
       aria-modal="true"
+      data-writer-modal="true"
       className="fixed inset-0 z-[60] grid place-items-center bg-slate-950/50 p-4 backdrop-blur-[2px]"
       onKeyDown={
         /** Closes the dialog on Escape. @param event - Dialog keyboard event. @returns Nothing. */
@@ -149,7 +150,10 @@ import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer
       }
       role="dialog"
     >
-      <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+      <div
+        data-writer-modal-panel="true"
+        className="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
+      >
         <div className="flex items-start justify-between border-b border-slate-200 px-6 py-5">
           <div>
             <h2 className="text-xl font-bold text-slate-950">

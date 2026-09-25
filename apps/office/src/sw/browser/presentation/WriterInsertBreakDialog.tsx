@@ -12,6 +12,7 @@ export function WriterInsertBreakDialog({
     <div
       aria-label={localization.GetText("writer.insert-break.title", "Insert Break")}
       aria-modal="true"
+      data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4"
       onKeyDown={
         /** Cancels with Escape. @param event - Keyboard event. @returns Nothing. */
@@ -25,6 +26,7 @@ export function WriterInsertBreakDialog({
       role="dialog"
     >
       <form
+        data-writer-modal-panel="true"
         className="w-full max-w-sm rounded-xl bg-white p-5 shadow-2xl"
         onSubmit={
           /** Accepts the supported page break. @param event - Submit event. @returns Nothing. */

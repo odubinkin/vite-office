@@ -19,6 +19,8 @@ export class SwXMLTableImport {
   protected activeCell: SwTableBox | undefined;
   protected cellParagraphCount = 0;
   private rowCellIndex = 0;
+  private inHeaderRows = false;
+  private headerRowCount = 0;
 
   /** Binds the table callbacks to the temporary document. @param document - Canonical Writer graph. @returns Nothing. */
   public constructor(public readonly document: SwDoc) {}
@@ -44,6 +46,24 @@ export class SwXMLTableImport {
       name,
       tableStyleValues(style) as SwTableFormat,
     );
+    this.headerRowCount = 0;
+    this.inHeaderRows = false;
+  }
+
+  /** Starts the repeated header row group. @returns Nothing. */
+  public beginTableHeaderRows(): void {
+    this.inHeaderRows = true;
+  }
+
+  /** Persists the count of imported repeated header rows. @returns Nothing. */
+  public endTableHeaderRows(): void {
+    this.inHeaderRows = false;
+    const table = this.requireTable();
+    table.SetFormat({
+      ...table.GetFormat(),
+      headerRows: this.headerRowCount,
+      repeatHeaderRows: true,
+    });
   }
 
   /** Appends one physical table column. */
@@ -73,6 +93,7 @@ export class SwXMLTableImport {
       count,
       tableStyleValues(style) as SwTableLineFormat,
     );
+    if (this.inHeaderRows) this.headerRowCount += 1;
     this.rowCellIndex = 0;
   }
 

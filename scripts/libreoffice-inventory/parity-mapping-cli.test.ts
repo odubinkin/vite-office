@@ -103,7 +103,7 @@ describe("parity mapping CLI" /**
       parityReady: true,
       recordCount: 45,
       runtime: {
-        commandCount: 41,
+        commandCount: 42,
         placeholderSuiteCount: 6,
         schemaVersion: 3,
         semanticViolationCount: 0,

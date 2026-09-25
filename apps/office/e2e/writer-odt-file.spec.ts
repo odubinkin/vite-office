@@ -165,6 +165,6 @@ test("Writer types in a table cell and reopens the edited ODT", /** Checks nativ
     name: "edited-table.odt",
   });
   await expect(page.locator("[data-writer-table-row]")).toHaveCount(2);
-  await expect(page.locator("[data-writer-table] td")).toHaveCount(4);
+  await expect(page.locator("[data-writer-table] td, [data-writer-table] th")).toHaveCount(4);
   await expect(page.locator("[data-writer-table-cell]").first()).toHaveText("typed cell");
 });

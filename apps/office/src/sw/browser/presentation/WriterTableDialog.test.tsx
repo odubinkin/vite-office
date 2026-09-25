@@ -8,6 +8,34 @@ import { WriterEditableTable, editWriterTableCell } from "../editor/WriterEditab
 import { WriterTableDialog } from "./WriterTableDialog";
 
 describe("Writer browser table controls", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("offers upstream Insert Table Options and Styles with model-backed values", /** Checks table options and styles. @returns Nothing. */ () => {
+    const submit = vi.fn();
+    render(<WriterTableDialog availableWidth={6000} onCancel={vi.fn()} onSubmit={submit} />);
+    expect(screen.getByText("Options")).toBeVisible();
+    expect(screen.getByText("Styles")).toBeVisible();
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Rows" }), { target: { value: "3" } });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Header rows" }), {
+      target: { value: "2" },
+    });
+    fireEvent.click(screen.getByLabelText("Header"));
+    expect(screen.getByRole("spinbutton", { name: "Header rows" })).toBeDisabled();
+    fireEvent.click(screen.getByLabelText("Header"));
+    fireEvent.click(screen.getByLabelText("Repeat header rows on new pages"));
+    fireEvent.click(screen.getByLabelText("Repeat header rows on new pages"));
+    fireEvent.click(screen.getByLabelText("Don’t split table over pages"));
+    fireEvent.change(screen.getByRole("combobox", { name: "Table style" }), {
+      target: { value: "none" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Insert" }));
+    expect(submit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        headerRows: 2,
+        repeatHeaderRows: true,
+        dontSplit: true,
+        border: "none",
+      }),
+    );
+  });
   it("inserts a table using only the supported General fields", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
     const submit = vi.fn();
     const cancel = vi.fn();
@@ -34,6 +62,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     expect(
       screen.queryByRole("combobox", { name: "Cell vertical alignment" }),
     ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText("Header"));
     fireEvent.click(screen.getByRole("button", { name: "Insert" }));
     expect(submit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -45,6 +74,8 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         padding: 100,
         border: "0.5pt solid #666666",
         verticalAlign: "top",
+        headerRows: 0,
+        repeatHeaderRows: false,
       }),
     );
     expect(submit.mock.calls[0]?.[0].columnWidths).toEqual([3000, 3000]);
@@ -75,18 +106,25 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
       target: { value: "12" },
     });
+    fireEvent.click(screen.getByLabelText("Header"));
+    fireEvent.click(screen.getByLabelText("Header"));
+    fireEvent.click(screen.getByLabelText("Repeat header rows on new pages"));
+    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.click(screen.getByLabelText("Don’t split table over pages"));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
       target: { value: "1" },
     });
+    fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
+      target: { value: "bottom" },
+    });
+    fireEvent.click(screen.getByRole("tab", { name: "Borders" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
       target: { value: "0.2" },
     });
     fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
       target: { value: "0.5pt solid #666666" },
     });
-    fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
-      target: { value: "bottom" },
-    });
+    fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(submit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -95,6 +133,8 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
         padding: 113,
         border: "0.5pt solid #666666",
         verticalAlign: "bottom",
+        repeatHeaderRows: false,
+        dontSplit: true,
       }),
     );
     submit.mockClear();

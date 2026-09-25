@@ -4,6 +4,7 @@ import {
   Copy,
   FilePlus,
   FolderOpen,
+  Printer,
   Link,
   Bookmark,
   Redo2,
@@ -25,6 +26,7 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.newDocument, FilePlus],
   [WRITER_COMMAND_IDS.openOdt, FolderOpen],
+  [WRITER_COMMAND_IDS.print, Printer],
   [WRITER_COMMAND_IDS.cut, Scissors],
   [WRITER_COMMAND_IDS.copy, Copy],
   [WRITER_COMMAND_IDS.paste, ClipboardPaste],

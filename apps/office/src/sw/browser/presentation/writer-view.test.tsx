@@ -185,9 +185,11 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.click(screen.getByRole("button", { name: "Select row 2 in Table1" }));
     fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
     dialog = screen.getByRole("dialog", { name: "Table Properties" });
+    fireEvent.click(within(dialog).getByRole("tab", { name: "Columns" }));
     fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
       target: { value: "4" },
     });
+    fireEvent.click(within(dialog).getByRole("tab", { name: "Text Flow" }));
     fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
       target: { value: "1" },
     });
@@ -425,11 +427,9 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).color).toBe(
       "#ff0000",
     );
-    fireEvent.change(screen.getByLabelText("Line Spacing"), { target: { value: "150" } });
-    expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetValue(),
-    ).toBe(150);
+    expect(screen.queryByLabelText("Line Spacing")).not.toBeInTheDocument();
     openParagraphDialog();
+    fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "preset-150" } });
     fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });
     fireEvent.change(screen.getByLabelText("First line indent (pt)"), { target: { value: "9" } });
     fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
@@ -460,6 +460,9 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect((shell.GetActiveParagraph().GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(
       120,
     );
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetValue(),
+    ).toBe(150);
     expect(
       (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
         /** Projects a tab position. @param stop - Tab stop. @returns Twips. */

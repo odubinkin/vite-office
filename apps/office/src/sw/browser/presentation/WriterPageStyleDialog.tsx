@@ -46,10 +46,12 @@ export function WriterPageStyleDialog({
     <div
       aria-label={localization.GetText("writer.page-style.title", "Page Style")}
       aria-modal="true"
+      data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4"
       role="dialog"
     >
       <form
+        data-writer-modal-panel="true"
         className="w-full max-w-2xl rounded-xl bg-white p-5 shadow-2xl"
         onSubmit={
           /** Validates and accepts the draft. @param event - Form submission. @returns Nothing. */ (

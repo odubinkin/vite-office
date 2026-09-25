@@ -17,6 +17,8 @@ export interface XMLTableExportSource {
     marginTop?: number | undefined;
     marginBottom?: number | undefined;
     borderModel?: string | undefined;
+    headerRows?: number | undefined;
+    repeatHeaderRows?: boolean | undefined;
   }>;
   readonly columnWidths: readonly number[];
   readonly softPageBreakRows: readonly number[];
@@ -81,7 +83,12 @@ export interface XMLTableExportSource {
       automaticStyles += `<style:style style:name="${styleName}" style:family="table-column"><style:table-column-properties${width > 0 ? ` style:column-width="${exportOdfLength(width)}"` : ""}/></style:style>`;
       body += `<table:table-column table:style-name="${styleName}"/>`;
     }
+    const repeatedHeaders = table.format.repeatHeaderRows
+      ? Math.min(table.format.headerRows ?? 0, table.rows.length)
+      : 0;
     for (const [rowIndex, row] of table.rows.entries()) {
+      if (rowIndex === 0 && repeatedHeaders > 0) body += "<table:table-header-rows>";
+      if (rowIndex === repeatedHeaders && repeatedHeaders > 0) body += "</table:table-header-rows>";
       if (table.softPageBreakRows.includes(rowIndex)) body += "<text:soft-page-break/>";
       const rowName = `${prefix}.R${rowIndex + 1}`;
       const rowProperties = `${row.format.minHeight === undefined ? "" : ` style:min-row-height="${exportOdfLength(row.format.minHeight)}"`}${row.format.keepTogether === undefined ? "" : ` fo:keep-together="${row.format.keepTogether ? "always" : "auto"}"`}`;
@@ -95,6 +102,8 @@ export interface XMLTableExportSource {
       }
       body += "</table:table-row>";
     }
+    if (repeatedHeaders === table.rows.length && repeatedHeaders > 0)
+      body += "</table:table-header-rows>";
     if (table.softPageBreakRows.includes(table.rows.length)) body += "<text:soft-page-break/>";
     body += "</table:table>";
   }

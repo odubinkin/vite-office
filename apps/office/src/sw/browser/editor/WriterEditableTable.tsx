@@ -150,8 +150,9 @@ function WriterEditableTableCell({
                     cellIndex,
                   ) => {
                     const cellFormat = cell.GetFormat();
+                    const CellTag = rowIndex < (format.headerRows ?? 0) ? "th" : "td";
                     return (
-                      <td
+                      <CellTag
                         className={
                           selectedRow === rowIndex
                             ? "bg-indigo-50 outline outline-1 outline-indigo-300"
@@ -194,7 +195,7 @@ function WriterEditableTableCell({
                             />
                           ),
                         )}
-                      </td>
+                      </CellTag>
                     );
                   },
                 )}

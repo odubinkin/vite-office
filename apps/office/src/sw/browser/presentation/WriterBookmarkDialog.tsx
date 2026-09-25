@@ -34,6 +34,7 @@ export function WriterBookmarkDialog({
     <div
       aria-label={localization.GetText("writer.bookmark.title", "Bookmark")}
       aria-modal="true"
+      data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4"
       onKeyDown={
         /** Closes this modal with Escape. @param event - Keyboard event. @returns Nothing. */
@@ -47,6 +48,7 @@ export function WriterBookmarkDialog({
       role="dialog"
     >
       <form
+        data-writer-modal-panel="true"
         className="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl"
         onSubmit={
           /** Creates a unique bookmark from the name field. @param event - Submit event. @returns Nothing. */

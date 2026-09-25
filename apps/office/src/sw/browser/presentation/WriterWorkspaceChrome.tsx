@@ -84,7 +84,7 @@ export function WriterWorkspaceChrome({
   return (
     <section
       aria-label="Writer workspace"
-      className="flex h-screen min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
+      className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
     >
       <header className="relative z-50 shrink-0 border-b border-slate-200 bg-white">
         <div className="flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
@@ -140,7 +140,7 @@ export function WriterWorkspaceChrome({
 
         <div
           aria-label="Writer standard toolbar"
-          className="flex min-h-12 items-center gap-1 border-b border-slate-200 px-3 py-1.5"
+          className="flex min-h-12 min-w-0 items-center gap-1 overflow-x-auto border-b border-slate-200 px-3 py-1.5"
           role="toolbar"
         >
           {toolbar}
@@ -148,7 +148,7 @@ export function WriterWorkspaceChrome({
 
         <div
           aria-label="Writer formatting toolbar"
-          className="flex min-h-12 flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5"
+          className="flex min-h-12 min-w-0 flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5"
           role="toolbar"
         >
           {formattingToolbar}

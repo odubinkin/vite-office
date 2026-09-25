@@ -34,6 +34,8 @@ export interface XMLTableImportTarget extends XMLTextImportTarget {
   registerTableStyle(name: string, style: OdfTableStyle): void;
   beginTable(name: string, styleName: string): void;
   addTableColumn(styleName: string): void;
+  beginTableHeaderRows(): void;
+  endTableHeaderRows(): void;
   beginTableRow(styleName: string): void;
   beginTableCell(styleName: string): void;
   endTableCell(): void;
@@ -202,6 +204,11 @@ export class XMLTableContext extends SvXMLImportContext {
     }
     if (element === XMLToken.TABLE_TABLE_ROW)
       return new XMLTableRowContext(this.target, attributes);
+    if (element === XMLToken.TABLE_TABLE_HEADER_ROWS) {
+      attributes.assertOnly([], "table header rows");
+      this.target.beginTableHeaderRows();
+      return new XMLTableHeaderRowsContext(this.target);
+    }
     if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
       attributes.assertOnly([], "table soft page break");
       this.target.addTableSoftPageBreak();
@@ -213,6 +220,27 @@ export class XMLTableContext extends SvXMLImportContext {
   /** Closes the table. @returns Nothing. */
   public override endFastElement(): void {
     this.target.endTable();
+  }
+}
+
+/** Imports the first repeated header rows from Writer's table grouping. */
+class XMLTableHeaderRowsContext extends SvXMLImportContext {
+  /** Stores the table sink. @param target - Writer table sink. @returns Nothing. */
+  public constructor(private readonly target: XMLTableImportTarget) {
+    super();
+  }
+  /** Opens one header row. @param element - Child token. @param attributes - Row attributes. @returns Row context. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    return element === XMLToken.TABLE_TABLE_ROW
+      ? new XMLTableRowContext(this.target, attributes)
+      : null;
+  }
+  /** Completes the header group. @returns Nothing. */
+  public override endFastElement(): void {
+    this.target.endTableHeaderRows();
   }
 }
 

@@ -31,6 +31,7 @@
     "orderedList": ".uno:DefaultNumbering",
     "continueNumbering": ".uno:ContinueNumbering",
     "paste": ".uno:Paste",
+    "print": ".uno:Print",
     "promote": ".uno:IncrementLevel",
     "redo": ".uno:Redo",
     "removeBullets": ".uno:RemoveBullets",
@@ -81,6 +82,7 @@
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultNumbering" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:ContinueNumbering" },
     { "capabilityId": "CAP-0110", "commandUrl": ".uno:Paste" },
+    { "capabilityId": "CAP-0101", "commandUrl": ".uno:Print" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementLevel" },
     { "capabilityId": "CAP-0102", "commandUrl": ".uno:Redo" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:RemoveHyperlink" },
@@ -507,6 +509,31 @@
       "showsDialog": false,
       "shortcuts": ["Ctrl+V", "Meta+V", "Shift+INSERT", "PASTE"],
       "slotId": 5712
+    },
+    ".uno:Print": {
+      "browserOwned": false,
+      "argumentSchema": [
+        "PrinterName:SfxStringItem",
+        "FileName:SfxStringItem",
+        "Copies:SfxInt16Item",
+        "RangeText:SfxStringItem",
+        "Selection:SfxBoolItem",
+        "Asynchron:SfxBoolItem",
+        "Collate:SfxBoolItem",
+        "Silent:SfxBoolItem"
+      ],
+      "capabilityId": "CAP-0101",
+      "controlLabel": "Print",
+      "label": "Print",
+      "iconName": "lc_print.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+P", "Meta+P"],
+      "slotId": 5504
     },
     ".uno:IncrementLevel": {
       "browserOwned": false,
@@ -945,6 +972,14 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:Print",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:IncrementLevel",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -1348,14 +1383,6 @@
       "context": [".uno:PickList"],
       "entryKind": "command",
       "sourceUrl": ".uno:PrintPreview",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:PickList"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:Print",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -5251,14 +5278,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:Print",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:PrintDefault",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -6276,7 +6295,9 @@
           { "kind": "separator" },
           { "commandUrl": ".uno:SaveAs", "kind": "command", "visible": true },
           { "kind": "separator" },
-          { "commandUrl": ".uno:ExportTo", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:ExportTo", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Print", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "File"
@@ -6432,6 +6453,8 @@
       { "commandUrl": ".uno:AddDirect", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Open", "kind": "command", "visible": true },
       { "commandUrl": ".uno:SaveAs", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Print", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
@@ -6703,12 +6726,6 @@
         "context": [".uno:PickList"],
         "entryKind": "command",
         "sourceUrl": ".uno:PrintPreview"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:PickList"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:Print"
       },
       {
         "classification": "X",
@@ -9588,7 +9605,6 @@
         "entryKind": "command",
         "sourceUrl": ".uno:ExportDirectToEPUB"
       },
-      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Print" },
       {
         "classification": "X",
         "context": [],

@@ -69,6 +69,30 @@ function tableShape(document: ReturnType<typeof createWriterDocument>) {
 }
 
 describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("round trips a table whose only row is a repeated header", /** Checks repeated header export and import. @returns Nothing. */ async () => {
+    const document = createWriterDocument();
+    const table = document.nodes.MakeTableNode("Headings", {
+      headerRows: 1,
+      repeatHeaderRows: true,
+    });
+    table.AddColumnWidth(3000);
+    document.nodes.AppendTableRow(table, 1);
+    const metadata = { title: "Header table" };
+    const reopened = await readOdtDocument(writeOdtDocument(document, metadata), metadata);
+    expect(reopened.document.GetTables()[0]?.GetFormat()).toMatchObject({
+      headerRows: 1,
+      repeatHeaderRows: true,
+    });
+    expect(reopened.document.GetTables()[0]?.GetTabLines()).toHaveLength(1);
+    const noHeader = createWriterDocument();
+    const ordinary = noHeader.nodes.MakeTableNode("Ordinary", { repeatHeaderRows: true });
+    ordinary.AddColumnWidth(3000);
+    noHeader.nodes.AppendTableRow(ordinary, 1);
+    const content = await new ZipFile(writeOdtDocument(noHeader, metadata)).readTextEntry(
+      "content.xml",
+    );
+    expect(content).not.toContain("table:table-header-rows");
+  });
   it("imports and structurally reopens upstream tdf132642_keepWithNextTable.odt", /** Verifies the bounded table scenario.  @returns Callback result. */ async () => {
     const metadata = { title: "Upstream Writer table" };
     const imported = await readOdtDocument(upstreamTableOdt(), metadata, undefined, {
@@ -114,6 +138,8 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
         marginTop: 60,
         marginBottom: 70,
         borderModel: "collapsing",
+        headerRows: 1,
+        repeatHeaderRows: true,
       },
       before,
     );
@@ -292,6 +318,13 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(tableProps('style:width="1cm"'), "<table:table-column/><table:table-row/>"),
     ).toThrow("cell count differs");
+    expect(
+      /** Checks malformed header grouping rejection. @returns Nothing. */ () =>
+        open(
+          tableProps('style:width="1cm"'),
+          "<table:table-column/><table:table-header-rows><text:p/></table:table-header-rows>",
+        ),
+    ).toThrow();
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(

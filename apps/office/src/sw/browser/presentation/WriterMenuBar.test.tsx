@@ -73,6 +73,26 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     },
   );
 
+  it("places Print in File and the standard toolbar and invokes browser print", /** Checks the pinned placements and browser-owned print action. @returns Nothing. */ () => {
+    const print = vi
+      .spyOn(window, "print")
+      .mockImplementation(/** Stubs browser printing. @returns Nothing. */ () => undefined);
+    try {
+      render(<App />);
+      fireEvent.click(screen.getByRole("button", { name: "File" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Print" }));
+      fireEvent.click(
+        within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).getByRole(
+          "button",
+          { name: "Print" },
+        ),
+      );
+      expect(print).toHaveBeenCalledTimes(2);
+    } finally {
+      print.mockRestore();
+    }
+  });
+
   it("places implemented Writer commands in accessible top-level menus" /**
    * Verifies generated supported menus expose only upstream-positioned commands while filtered X menus stay absent.
    *
@@ -572,8 +592,8 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       });
       expect(firstFileItem).toHaveFocus();
       fireEvent.keyDown(firstFileItem, { key: "End" });
-      expect(screen.getByRole("menuitem", { name: "Export…" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Export…" }), {
+      expect(screen.getByRole("menuitem", { name: "Print" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Print" }), {
         key: "Home",
       });
       expect(firstFileItem).toHaveFocus();

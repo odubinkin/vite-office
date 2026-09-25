@@ -161,6 +161,44 @@ function WriterAdvancedFormattingControls({
 }
 
 describe("Writer advanced formatting controls", /** Handles Writer formatting state.  @returns Callback result. */ () => {
+  it("dismisses the upstream color palette on outside press and Escape and reuses recent colors", /** Checks palette dismissal and recent colors. @returns Nothing. */ () => {
+    const onColor = vi.fn();
+    render(
+      <WriterAdvancedFormattingControls
+        color="auto"
+        highlight="transparent"
+        paragraph={paragraph}
+        onColor={onColor}
+        onLineSpacing={vi.fn()}
+        onParagraphFormat={vi.fn()}
+        showLineNumbers={false}
+        onShowLineNumbersChange={vi.fn()}
+      />,
+    );
+    const trigger = screen.getByLabelText("Font Color palette");
+    const palette = trigger.closest("details") as HTMLDetailsElement;
+    fireEvent.click(trigger);
+    expect(palette.open).toBe(true);
+    fireEvent.pointerDown(screen.getByRole("combobox", { name: "Font Color palette collection" }));
+    expect(palette.open).toBe(true);
+    fireEvent.pointerDown(document.body);
+    expect(palette.open).toBe(false);
+    fireEvent.click(trigger);
+    fireEvent.keyDown(document, { key: "Enter" });
+    expect(palette.open).toBe(true);
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(palette.open).toBe(false);
+    fireEvent.click(trigger);
+    fireEvent.change(screen.getByRole("combobox", { name: "Font Color palette collection" }), {
+      target: { value: "LibreOffice" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Font Color #18a303" }));
+    expect(onColor).toHaveBeenCalledWith("color", "#18a303");
+    expect(palette.open).toBe(false);
+    fireEvent.click(trigger);
+    fireEvent.click(screen.getByRole("button", { name: "Font Color recent #18a303" }));
+    expect(onColor).toHaveBeenCalledTimes(2);
+  });
   it("uses palette defaults when bindings have no selected color", /** Checks empty slot state. @returns Nothing. */ () => {
     const onColor = vi.fn();
     render(
@@ -201,9 +239,8 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByLabelText("Font Color #ff0000"));
     expect(onColor).toHaveBeenCalledWith("color", "#ff0000");
     expect(onColor).toHaveBeenCalledTimes(1);
-    fireEvent.change(screen.getByLabelText("Line Spacing"), { target: { value: "150" } });
-    expect(onLineSpacing).toHaveBeenCalledWith(150);
-    expect(onLineSpacing).toHaveBeenCalledTimes(1);
+    expect(screen.queryByLabelText("Line Spacing")).not.toBeInTheDocument();
+    expect(onLineSpacing).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     fireEvent.mouseDown(screen.getByRole("dialog"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -275,14 +312,14 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
       />,
     );
     fireEvent.click(screen.getByLabelText("Character Highlighting Color palette"));
-    fireEvent.click(screen.getByText("No Highlight"));
+    fireEvent.click(screen.getByText("None"));
     expect(onColor).toHaveBeenCalledWith("highlight", "transparent");
     fireEvent.click(screen.getByRole("button", { name: "Character Highlighting Color" }));
     fireEvent.change(screen.getByLabelText("Character Highlighting Color custom color"), {
       target: { value: "#00ff00" },
     });
     expect(onColor).toHaveBeenCalledWith("highlight", "#00ff00");
-    fireEvent.change(screen.getByLabelText("Line Spacing"), { target: { value: "custom" } });
+    fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     expect(screen.getByLabelText("Value (pt)")).toHaveValue(12);
     fireEvent.change(screen.getByLabelText("Below paragraph (pt)"), { target: { value: "8" } });
     fireEvent.click(screen.getByLabelText("Do not add space between paragraphs of the same style"));
@@ -362,7 +399,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
       }),
     );
   });
-  it("shows single spacing when proportional value is inherited", /** Checks toolbar fallback. @returns Nothing. */ () => {
+  it("does not render a toolbar spacing selector when spacing is inherited", /** Checks the unsupported quick selector stays absent. @returns Nothing. */ () => {
     const inheritedParagraph: {
       -readonly [Key in keyof WriterParagraphComputedStyle]: WriterParagraphComputedStyle[Key];
     } = { ...paragraph };
@@ -379,6 +416,6 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
         onShowLineNumbersChange={vi.fn()}
       />,
     );
-    expect(screen.getByLabelText("Line Spacing")).toHaveValue("100");
+    expect(screen.queryByLabelText("Line Spacing")).not.toBeInTheDocument();
   });
 });

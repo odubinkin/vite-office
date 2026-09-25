@@ -42,6 +42,7 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       ".uno:AddDirect",
       ".uno:Open",
       ".uno:SaveAs",
+      ".uno:Print",
       ".uno:Cut",
       ".uno:Copy",
       ".uno:Paste",

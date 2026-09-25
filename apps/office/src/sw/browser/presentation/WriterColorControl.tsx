@@ -1,24 +1,6 @@
 /** @fileoverview Browser palette for Writer character color commands. */
-const SWATCHES = [
-  "#000000",
-  "#444444",
-  "#666666",
-  "#999999",
-  "#cccccc",
-  "#ffffff",
-  "#990000",
-  "#ff0000",
-  "#ff9900",
-  "#ffff00",
-  "#00aa00",
-  "#00ffff",
-  "#0000ff",
-  "#9900ff",
-  "#ff00ff",
-  "#f4cccc",
-  "#d9ead3",
-  "#cfe2f3",
-] as const;
+import { useEffect, useRef, useState } from "react";
+import PALETTES from "./writer-color-palettes.json" with { type: "json" };
 
 /** Renders a split apply button with a Writer-style swatch palette. @param props - Color state and callback. @returns Color control. */
 export function WriterColorControl({
@@ -36,6 +18,30 @@ export function WriterColorControl({
   disabled: boolean;
   onColor: (property: "color" | "highlight", value: string) => void;
 }>): React.JSX.Element {
+  const paletteRef = useRef<HTMLDetailsElement>(null);
+  const [recent, setRecent] = useState<readonly string[]>([]);
+  const [palette, setPalette] = useState<keyof typeof PALETTES>("Standard");
+  useEffect(
+    /** Dismisses the palette when interaction moves outside its controls. @returns Listener cleanup. */
+    () => {
+      /** Closes an open palette after an outside pointer press. @param event - Press target. @returns Nothing. */
+      function dismiss(event: PointerEvent): void {
+        if (!paletteRef.current?.contains(event.target as Node))
+          paletteRef.current?.removeAttribute("open");
+      }
+      /** Closes an open palette on Escape. @param event - Keyboard input. @returns Nothing. */
+      function dismissOnEscape(event: KeyboardEvent): void {
+        if (event.key === "Escape") paletteRef.current?.removeAttribute("open");
+      }
+      document.addEventListener("pointerdown", dismiss);
+      document.addEventListener("keydown", dismissOnEscape);
+      return /** Removes palette listeners. @returns Nothing. */ () => {
+        document.removeEventListener("pointerdown", dismiss);
+        document.removeEventListener("keydown", dismissOnEscape);
+      };
+    },
+    [],
+  );
   const currentColor = value === "auto" || value === "transparent" ? fallback : value;
   const marker = property === "color" ? "A" : "▨";
   const apply =
@@ -43,6 +49,19 @@ export function WriterColorControl({
       next: string,
     ): void => {
       onColor(property, next);
+      if (next.startsWith("#"))
+        setRecent(
+          /** Keeps the most recent distinct colors. @param previous - Previous colors. @returns Updated colors. */
+          (previous) =>
+            [
+              next,
+              ...previous.filter(
+                /** Checks whether a color differs. @param color - Existing color. @returns Whether it differs. */
+                (color) => color !== next,
+              ),
+            ].slice(0, 6),
+        );
+      paletteRef.current?.removeAttribute("open");
     };
   return (
     <div className="flex items-center" aria-label={label}>
@@ -64,25 +83,58 @@ export function WriterColorControl({
           }}
         />
       </button>
-      <details className="relative">
+      <details className="relative" ref={paletteRef}>
         <summary
           aria-label={`${label} palette`}
           className="flex h-8 w-5 cursor-pointer list-none items-center justify-center rounded-r border border-l-0 border-slate-300 bg-white text-xs"
         >
           ▾
         </summary>
-        <div className="absolute left-0 top-full z-40 w-56 rounded border border-slate-300 bg-white p-2 shadow-lg">
+        <div
+          data-writer-palette="true"
+          className="absolute left-0 top-full z-40 max-h-[min(24rem,70dvh)] w-56 overflow-auto rounded border border-slate-300 bg-white p-2 shadow-lg"
+        >
           <p className="mb-2 text-xs font-semibold">{label}</p>
+          <button
+            className="mb-2 w-full rounded border px-2 py-1 text-left text-xs"
+            disabled={disabled}
+            onClick={
+              /** Applies the default color. @returns Nothing. */ () =>
+                apply(property === "color" ? "auto" : "transparent")
+            }
+            type="button"
+          >
+            {property === "color" ? "Automatic" : "None"}
+          </button>
+          <select
+            aria-label={`${label} palette collection`}
+            className="mb-2 w-full border border-slate-300 bg-white px-1 py-1 text-xs"
+            onChange={
+              /** Changes the color collection. @param event - Selection event. @returns Nothing. */ (
+                event,
+              ) => setPalette(event.target.value as keyof typeof PALETTES)
+            }
+            value={palette}
+          >
+            {Object.keys(PALETTES).map(
+              /** Renders a palette name. @param name - Palette name. @returns Option. */ (
+                name,
+              ) => (
+                <option key={name}>{name}</option>
+              ),
+            )}
+          </select>
           <div className="grid grid-cols-6 gap-1">
-            {SWATCHES.map(
-              /** Handles Writer formatting state. @param swatch - Input value. @returns Callback result. */ (
+            {PALETTES[palette].map(
+              /** Handles Writer formatting state. @param swatch - Input value. @param index - Palette position. @returns Callback result. */ (
                 swatch,
+                index,
               ) => (
                 <button
                   aria-label={`${label} ${swatch}`}
                   className="h-6 w-6 rounded border border-slate-400"
                   disabled={disabled}
-                  key={swatch}
+                  key={`${swatch}-${index}`}
                   onClick={
                     /** Handles Writer formatting state.  @returns Callback result. */ () =>
                       apply(swatch)
@@ -93,19 +145,31 @@ export function WriterColorControl({
               ),
             )}
           </div>
-          <button
-            className="mt-2 w-full rounded border px-2 py-1 text-left text-xs"
-            disabled={disabled}
-            onClick={
-              /** Handles Writer formatting state.  @returns Callback result. */ () =>
-                apply(property === "color" ? "auto" : "transparent")
-            }
-            type="button"
-          >
-            {property === "color" ? "Automatic" : "No Highlight"}
-          </button>
+          {recent.length > 0 ? (
+            <>
+              <p className="my-2 border-b border-slate-200 pb-1 text-xs">Recent</p>
+              <div className="grid grid-cols-6 gap-1">
+                {recent.map(
+                  /** Renders a recent color. @param color - Color value. @returns Color button. */ (
+                    color,
+                  ) => (
+                    <button
+                      aria-label={`${label} recent ${color}`}
+                      className="h-6 w-6 rounded border border-slate-400"
+                      key={color}
+                      onClick={
+                        /** Reapplies a recent color. @returns Nothing. */ () => apply(color)
+                      }
+                      style={{ backgroundColor: color }}
+                      type="button"
+                    />
+                  ),
+                )}
+              </div>
+            </>
+          ) : null}
           <label className="mt-2 flex items-center justify-between text-xs">
-            Custom Color
+            Custom Color…
             <input
               aria-label={`${label} custom color`}
               disabled={disabled}
