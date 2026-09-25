@@ -4,7 +4,7 @@ title: "Correct Writer toolbar, diagnostics, and local save"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "Requested Writer regressions corrected; focused tests and full repository verification passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-25T05:24:14.875Z"
+  updated_by: "EVALUATOR"
+  note: "Requested regressions corrected and repository verification passed."
+  evaluated_sha: "0c173d6350eb4143dee0d26022b6ad92c7c04304"
+  blueprint_digest: "57fe9d020a3e11661766a9786bc515afb3faccb1faa9506b4961eefa2562b832"
+  evidence_refs:
+    - ".agentplane/tasks/202609250455-QWMWYM/README.md"
+    - ".agentplane/tasks/202609250455-QWMWYM/quality/20260925-052414875-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609250455-QWMWYM/quality/20260925-052414875-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609250455-QWMWYM/quality/20260925-052414875-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609250455-QWMWYM/blueprint/resolved-snapshot.json"
+    - "npm run verify: 540 office tests, 109 inventory tests, 15 Playwright tests, 100% coverage and all repository gates passed"
+    - "node .agentplane/policy/check-routing.mjs: policy routing OK"
+    - "git diff --check: clean"
+  findings:
+    - "The eight generated ODT certification documents and their stale links are removed; one import warning now includes every unique structural diagnostic."
+    - "Visible added Writer controls use icons at native supported placements; Paragraph is accessed through Format, and Ctrl/Meta+S flushes local storage without opening Export or Save As."
 commit: null
 comments:
   -
