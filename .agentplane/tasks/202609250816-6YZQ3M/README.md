@@ -1,10 +1,11 @@
 ---
 id: "202609250816-6YZQ3M"
 title: "Align Writer menu item indentation"
-status: "DOING"
+result_summary: "verified-202609250816-6YZQ3M"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -24,9 +25,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-25T08:24:39.879Z"
+  updated_at: "2026-09-25T08:25:04.514Z"
   updated_by: "CODER"
-  note: "All menu labels share an 18px inset in browser geometry checks; focused unit tests, 19 browser tests, 547 office tests, 109 inventory tests, and full verify passed."
+  note: "verified-202609250816-6YZQ3M"
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "apps/office/e2e/writer-menu-alignment.spec.ts"
   findings:
     - "Browser geometry confirms aligned labels for actions, checked commands, and submenus; all interactions and full verification pass."
-commit: null
+commit:
+  hash: "c0edfe0e5bec6387ee546276f5d24270abebcff2"
+  message: "🧪 6YZQ3M task: record menu alignment verification"
 comments:
   -
     author: "CODER"
     body: "Start: align menu item labels with a compact shared gutter and verify interactions."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609250816-6YZQ3M. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "All menu labels share an 18px inset in browser geometry checks; focused unit tests, 19 browser tests, 547 office tests, 109 inventory tests, and full verify passed."
+  -
+    type: "verify"
+    at: "2026-09-25T08:25:04.514Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609250816-6YZQ3M"
+  -
+    type: "status"
+    at: "2026-09-25T08:25:04.765Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609250816-6YZQ3M. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-25T08:24:39.963Z"
+doc_updated_at: "2026-09-25T08:25:04.766Z"
 doc_updated_by: "CODER"
 description: "Use the same compact label inset for Writer command, checked, radio, and submenu rows in the shared menu presenter; verify menu interaction remains intact."
 sections:
@@ -106,9 +125,43 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-09-25T08:25:04.514Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609250816-6YZQ3M
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T08:24:39.963Z, excerpt_hash=sha256:00195ac5606db8eccaac24f4029d63e5030094792e54e1c98111da47a3ea6b98
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250816-6YZQ3M/blueprint/resolved-snapshot.json
+    - old_digest: e633936575fa00a9113135a4b4bad16c8a6b7faa831b25e93171074146afaec0
+    - current_digest: e633936575fa00a9113135a4b4bad16c8a6b7faa831b25e93171074146afaec0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609250816-6YZQ3M
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609250816-6YZQ3M --result verified-202609250816-6YZQ3M --commit c0edfe0e5bec6387ee546276f5d24270abebcff2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task's menu component and test commit."
   Findings: "Command rows used 12px horizontal padding plus a 16px checkmark slot, while submenu rows used only 12px padding. Both now use 8px padding and a 10px leading slot, aligning all labels at an 18px inset. The first browser test attempt clicked View after hover had already switched the open menu, closing it; the test now uses hover and passes."
+extensions:
+  implementation_commit:
+    hash: "cd21dffe80c4e1768c94bcd67ef10d54eb168178"
+    message: "🚧 6YZQ3M task: align compact menu item labels"
 id_source: "generated"
 ---
 ## Summary
@@ -160,6 +213,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-25T08:25:04.514Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609250816-6YZQ3M
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T08:24:39.963Z, excerpt_hash=sha256:00195ac5606db8eccaac24f4029d63e5030094792e54e1c98111da47a3ea6b98
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250816-6YZQ3M/blueprint/resolved-snapshot.json
+- old_digest: e633936575fa00a9113135a4b4bad16c8a6b7faa831b25e93171074146afaec0
+- current_digest: e633936575fa00a9113135a4b4bad16c8a6b7faa831b25e93171074146afaec0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609250816-6YZQ3M
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609250816-6YZQ3M --result verified-202609250816-6YZQ3M --commit c0edfe0e5bec6387ee546276f5d24270abebcff2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
