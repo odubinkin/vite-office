@@ -1,10 +1,11 @@
 ---
 id: "202609250842-2ZV4Z6"
 title: "Match supported Writer rendering and print output to LibreOffice"
-status: "DOING"
+result_summary: "verified-202609250842-2ZV4Z6"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-25T10:56:40.106Z"
+  updated_at: "2026-09-25T10:57:08.516Z"
   updated_by: "CODER"
   note: "verified-202609250842-2ZV4Z6"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "3f6385ea700d4eda2cc8568ac5ffebfc9fa1540e"
   findings:
     - "Table rows flow at document width, editor controls are hidden in print, and font metadata and runtime faces are retained; GUI visual parity remains divergent as accepted by the user."
-commit: null
+commit:
+  hash: "b7bca9c9959a1c03b19db70c62cfe11e0d09245a"
+  message: "🧪 2ZV4Z6 task: record rendering verification and residual"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved LibreOffice rendering parity for supported Writer formatting, table pagination and print-only document presentation."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609250842-2ZV4Z6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609250842-2ZV4Z6"
+  -
+    type: "verify"
+    at: "2026-09-25T10:57:08.516Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609250842-2ZV4Z6"
+  -
+    type: "status"
+    at: "2026-09-25T10:57:08.646Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609250842-2ZV4Z6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-25T10:56:40.160Z"
+doc_updated_at: "2026-09-25T10:57:08.646Z"
 doc_updated_by: "CODER"
 description: "Correct existing supported ODT style defaults, text geometry, page filling, table layout and print presentation against vendored LibreOffice and the supplied certification document; printed pages contain only document content."
 sections:
@@ -140,6 +159,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-25T10:57:08.516Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609250842-2ZV4Z6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T10:56:40.160Z, excerpt_hash=sha256:3ac2da6f7eeab6f79d226c37a08827dd8cd590a5e0d341f958119344fc0deedf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250842-2ZV4Z6/blueprint/resolved-snapshot.json
+    - old_digest: a33968b042f8a09d7c5f3fd7ed5be578333b8594d4d9350b2ac74b75d0dd204a
+    - current_digest: a33968b042f8a09d7c5f3fd7ed5be578333b8594d4d9350b2ac74b75d0dd204a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609250842-2ZV4Z6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609250842-2ZV4Z6 --result verified-202609250842-2ZV4Z6 --commit b7bca9c9959a1c03b19db70c62cfe11e0d09245a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task commit and rerun focused Writer layout and print tests plus npm run verify."
   Findings: |-
@@ -148,6 +197,10 @@ sections:
     - Observation: Certification ODT first page and page count still differ from LibreOffice GUI; VCL/CoreText fallback for unavailable Overpass Light is not reproduced.
       Impact: Supported text can wrap and paginate differently from LibreOffice despite corrected table flow and print cleanup.
       Resolution: Recorded in docs/program/parity/writer-rendering-deviation.md and classified as divergent in runtime inventory; user accepted this residual for closeout.
+extensions:
+  implementation_commit:
+    hash: "3f6385ea700d4eda2cc8568ac5ffebfc9fa1540e"
+    message: "🚧 2ZV4Z6 task: align Writer tables fonts and print output"
 id_source: "generated"
 ---
 ## Summary
@@ -224,6 +277,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609250842-2ZV4Z6 --result verified-202609250842-2ZV4Z6 --commit 3f6385ea700d4eda2cc8568ac5ffebfc9fa1540e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-25T10:57:08.516Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609250842-2ZV4Z6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T10:56:40.160Z, excerpt_hash=sha256:3ac2da6f7eeab6f79d226c37a08827dd8cd590a5e0d341f958119344fc0deedf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250842-2ZV4Z6/blueprint/resolved-snapshot.json
+- old_digest: a33968b042f8a09d7c5f3fd7ed5be578333b8594d4d9350b2ac74b75d0dd204a
+- current_digest: a33968b042f8a09d7c5f3fd7ed5be578333b8594d4d9350b2ac74b75d0dd204a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609250842-2ZV4Z6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609250842-2ZV4Z6 --result verified-202609250842-2ZV4Z6 --commit b7bca9c9959a1c03b19db70c62cfe11e0d09245a
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
