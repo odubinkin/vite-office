@@ -1,10 +1,11 @@
 ---
 id: "202609250527-RB1W4T"
 title: "Align supported Insert Table dialog with pinned Writer UI"
-status: "DOING"
+result_summary: "verified-202609250527-RB1W4T"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-25T05:43:26.355Z"
+  updated_at: "2026-09-25T05:43:52.941Z"
   updated_by: "CODER"
   note: "verified-202609250527-RB1W4T"
   attempts: 0
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx"
   findings:
     - "Full npm run verify and routing validation passed after a transient unrelated test timeout was isolated and rerun successfully."
-commit: null
+commit:
+  hash: "2308863dfe00628cd97aa4bcf4a4303068dde717"
+  message: "🐛 RB1W4T code: align Insert Table fields with upstream"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609250527-RB1W4T. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609250527-RB1W4T"
+  -
+    type: "verify"
+    at: "2026-09-25T05:43:52.941Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609250527-RB1W4T"
+  -
+    type: "status"
+    at: "2026-09-25T05:43:53.086Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609250527-RB1W4T. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-25T05:43:26.436Z"
+doc_updated_at: "2026-09-25T05:43:53.087Z"
 doc_updated_by: "CODER"
 description: "Keep only supported native Insert Table fields in the insertion dialog and move geometry editing to the existing Table Properties interaction; update tests and verify"
 sections:
@@ -134,6 +153,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609250527-RB1W4T --result verified-202609250527-RB1W4T --commit 2308863dfe00628cd97aa4bcf4a4303068dde717
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-25T05:43:52.941Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609250527-RB1W4T
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T05:43:26.436Z, excerpt_hash=sha256:2864a3ee99de53c68ea6d6027681659634034302ce7125f0487ed97673fa6c78
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250527-RB1W4T/blueprint/resolved-snapshot.json
+    - old_digest: be3a2b94ce5636a24d43a7d1a675b8ae454c9fbe21584d2c2aa699c1c1fe742f
+    - current_digest: be3a2b94ce5636a24d43a7d1a675b8ae454c9fbe21584d2c2aa699c1c1fe742f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609250527-RB1W4T
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609250527-RB1W4T --result verified-202609250527-RB1W4T --commit 5e8576cdbf4ea25fdc73007281a407b8ce48a642
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -223,6 +272,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609250527-RB1W4T --result verified-202609250527-RB1W4T --commit 2308863dfe00628cd97aa4bcf4a4303068dde717
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-25T05:43:52.941Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609250527-RB1W4T
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T05:43:26.436Z, excerpt_hash=sha256:2864a3ee99de53c68ea6d6027681659634034302ce7125f0487ed97673fa6c78
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250527-RB1W4T/blueprint/resolved-snapshot.json
+- old_digest: be3a2b94ce5636a24d43a7d1a675b8ae454c9fbe21584d2c2aa699c1c1fe742f
+- current_digest: be3a2b94ce5636a24d43a7d1a675b8ae454c9fbe21584d2c2aa699c1c1fe742f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609250527-RB1W4T
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609250527-RB1W4T --result verified-202609250527-RB1W4T --commit 5e8576cdbf4ea25fdc73007281a407b8ce48a642
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
