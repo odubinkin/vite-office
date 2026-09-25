@@ -1,10 +1,11 @@
 ---
 id: "202609250455-QWMWYM"
 title: "Correct Writer toolbar, diagnostics, and local save"
-status: "DOING"
+result_summary: "Removed generated ODT docs and corrected import diagnostics, toolbar dialogs, and immediate local save"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "The eight generated ODT certification documents and their stale links are removed; one import warning now includes every unique structural diagnostic."
     - "Visible added Writer controls use icons at native supported placements; Paragraph is accessed through Format, and Ctrl/Meta+S flushes local storage without opening Export or Save As."
-commit: null
+commit:
+  hash: "3919e780cc44377da9401d7ec3a6ba71fff25f05"
+  message: "🧩 QWMWYM task: persist quality review evidence"
 comments:
   -
     author: "CODER"
     body: "Start: correct the four requested Writer regressions using pinned upstream resources and focused verification."
+  -
+    author: "CODER"
+    body: "Verified: all four requested Writer corrections passed the complete repository verification suite and task-scoped review."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Requested Writer regressions corrected; focused tests and full repository verification passed."
+  -
+    type: "status"
+    at: "2026-09-25T05:24:57.334Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: all four requested Writer corrections passed the complete repository verification suite and task-scoped review."
 doc_version: 3
-doc_updated_at: "2026-09-25T05:22:52.120Z"
+doc_updated_at: "2026-09-25T05:24:57.336Z"
 doc_updated_by: "CODER"
 description: "Remove generated certification ODT documents; restore unique import diagnostics; align Writer toolbar and dialogs with pinned upstream resources; make Ctrl/Meta+S flush browser autosave"
 sections:
@@ -113,6 +126,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "0c173d6350eb4143dee0d26022b6ad92c7c04304"
+    message: "🐛 QWMWYM code: restore Writer toolbar and local save behavior"
 id_source: "generated"
 ---
 ## Summary
