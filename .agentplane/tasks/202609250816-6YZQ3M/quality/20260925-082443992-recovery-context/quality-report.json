@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609250816-6YZQ3M",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-25T08:24:43.992Z",
+  "verdict": "pass",
+  "summary": "Writer menu labels now share a compact left inset.",
+  "evaluated_sha": "cd21dffe80c4e1768c94bcd67ef10d54eb168178",
+  "blueprint_digest": "e633936575fa00a9113135a4b4bad16c8a6b7faa831b25e93171074146afaec0",
+  "findings": [
+    "Browser geometry confirms aligned labels for actions, checked commands, and submenus; all interactions and full verification pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609250816-6YZQ3M/README.md",
+    "apps/office/e2e/writer-menu-alignment.spec.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
