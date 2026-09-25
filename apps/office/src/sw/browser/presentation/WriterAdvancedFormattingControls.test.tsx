@@ -120,32 +120,43 @@ function WriterAdvancedFormattingControls({
     [color, highlight, paragraph, onColor, onLineSpacing, showLineNumbers],
   );
   return (
-    <CommandAdvancedFormattingControls
-      key={request?.id ?? "closed"}
-      commandSource={source}
-      getCommandResource={getWriterCommandResource}
-      paragraph={paragraph}
-      {...(request === undefined ? {} : { dialogRequest: request })}
-      onDialogCancel={
-        /** Cancels the active test request. @param id - Request identity. @returns Nothing. */ (
-          id,
-        ) => {
-          expect(id).toBe(request?.id);
-          setRequest(undefined);
+    <>
+      <button
+        onClick={
+          /** Opens the dialog from the test's Format menu stand-in. @returns Command result. */
+          () => source.Execute(WRITER_COMMAND_IDS.paragraphDialog, undefined)
         }
-      }
-      onDialogSubmit={
-        /** Commits the accepted draft. @param id - Request identity. @param value - Submitted settings. @returns Nothing. */ (
-          id,
-          value,
-        ) => {
-          expect(id).toBe(request?.id);
-          onParagraphFormat(value.paragraphFormat);
-          onShowLineNumbersChange(value.paintLineNumbers);
-          setRequest(undefined);
+        type="button"
+      >
+        Open Paragraph from Format menu
+      </button>
+      <CommandAdvancedFormattingControls
+        key={request?.id ?? "closed"}
+        commandSource={source}
+        getCommandResource={getWriterCommandResource}
+        paragraph={paragraph}
+        {...(request === undefined ? {} : { dialogRequest: request })}
+        onDialogCancel={
+          /** Cancels the active test request. @param id - Request identity. @returns Nothing. */ (
+            id,
+          ) => {
+            expect(id).toBe(request?.id);
+            setRequest(undefined);
+          }
         }
-      }
-    />
+        onDialogSubmit={
+          /** Commits the accepted draft. @param id - Request identity. @param value - Submitted settings. @returns Nothing. */ (
+            id,
+            value,
+          ) => {
+            expect(id).toBe(request?.id);
+            onParagraphFormat(value.paragraphFormat);
+            onShowLineNumbersChange(value.paintLineNumbers);
+            setRequest(undefined);
+          }
+        }
+      />
+    </>
   );
 }
 
@@ -193,7 +204,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.change(screen.getByLabelText("Line Spacing"), { target: { value: "150" } });
     expect(onLineSpacing).toHaveBeenCalledWith(150);
     expect(onLineSpacing).toHaveBeenCalledTimes(1);
-    fireEvent.click(screen.getByText("Paragraph…"));
+    fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     fireEvent.mouseDown(screen.getByRole("dialog"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });
@@ -282,7 +293,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByLabelText("Include this paragraph in line numbering"));
     fireEvent.click(screen.getByText("Cancel"));
     expect(onParagraphFormat).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByText("Paragraph…"));
+    fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     expect(screen.getByLabelText("Below paragraph (pt)")).toHaveValue(0);
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.click(screen.getByText("Delete All"));
@@ -298,7 +309,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     expect(screen.queryByRole("option", { name: "24 pt" })).toBeNull();
     fireEvent.mouseDown(screen.getByRole("dialog").parentElement as HTMLElement);
     expect(screen.queryByRole("dialog")).toBeNull();
-    fireEvent.click(screen.getByText("Paragraph…"));
+    fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "leading" } });
     fireEvent.click(screen.getByText("OK"));
     expect(onParagraphFormat).toHaveBeenCalledWith(
@@ -335,7 +346,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByLabelText("Font Color palette"));
     fireEvent.click(screen.getByText("Automatic"));
     expect(onColor).toHaveBeenCalledWith("color", "auto");
-    fireEvent.click(screen.getByText("Paragraph…"));
+    fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "preset-150" } });
     expect(screen.getByLabelText("Value (%)")).toHaveValue(150);
     fireEvent.change(screen.getByLabelText("Value (%)"), { target: { value: "135" } });

@@ -44,11 +44,6 @@ export function WriterAdvancedFormattingControls({
     WRITER_COMMAND_IDS.lineSpacing,
     getCommandResource,
   );
-  const paragraphCommand = useBrowserCommandPresentation(
-    commandSource,
-    WRITER_COMMAND_IDS.paragraphDialog,
-    getCommandResource,
-  );
   const openDialog =
     /** Handles Writer formatting state.  @returns Callback result. */ (): void => {
       commandSource.Execute(WRITER_COMMAND_IDS.paragraphDialog);
@@ -119,14 +114,6 @@ export function WriterAdvancedFormattingControls({
           <option value="custom">More Options…</option>
         </select>
       </label>
-      <button
-        className="h-8 rounded border border-slate-300 bg-white px-2 text-xs hover:bg-slate-100"
-        disabled={!paragraphCommand.enabled}
-        onClick={openDialog}
-        type="button"
-      >
-        {paragraphCommand.resource.label}…
-      </button>
       {dialogRequest !== undefined ? (
         <WriterParagraphDialog
           dialogRequest={dialogRequest}

@@ -12,6 +12,9 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const submit = vi.fn();
     const cancel = vi.fn();
     render(<WriterTableDialog availableWidth={6000} onCancel={cancel} onSubmit={submit} />);
+    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+      target: { value: "Budget" },
+    });
     fireEvent.change(screen.getByRole("spinbutton", { name: "Rows" }), { target: { value: "3" } });
     fireEvent.change(screen.getByRole("spinbutton", { name: "Columns" }), {
       target: { value: "2" },
@@ -34,9 +37,10 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
       target: { value: "bottom" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    fireEvent.click(screen.getByRole("button", { name: "Insert" }));
     expect(submit).toHaveBeenCalledWith(
       expect.objectContaining({
+        name: "Budget",
         rows: 3,
         columns: 2,
         width: 6803,

@@ -151,7 +151,7 @@ export class InlineOdtFilterService implements OdtFilterService {
     this.Begin(options.signal);
     try {
       let ignoredDeclarations = 0;
-      const diagnosticGroups = new Set<string>();
+      const diagnosticGroups = new Map<string, OdfXmlDiagnostic>();
       const imported = await readOdtDocument(bytes, metadata, options.zipLimits, {
         ...(options.defaultFontDevice === undefined
           ? {}
@@ -164,18 +164,20 @@ export class InlineOdtFilterService implements OdtFilterService {
             stage,
           ) => options.onProgress?.(`import:${stage}`),
         onDiagnostic:
-          /** Counts unsupported SAX declarations without retaining values or content. @param diagnostic - Structural import event. @returns Nothing. */ (
+          /** Retains one example of each unsupported declaration for debugging. @param diagnostic - Structural import event. @returns Nothing. */ (
             diagnostic: OdfXmlDiagnostic,
           ): void => {
             ignoredDeclarations += 1;
-            diagnosticGroups.add(
+            diagnosticGroups.set(
               `${diagnostic.stream}\u0000${diagnostic.path}\u0000${diagnostic.kind}\u0000${diagnostic.name}`,
+              diagnostic,
             );
           },
       });
       if (ignoredDeclarations > 0)
         console.warn(
           `ODT import ignored ${ignoredDeclarations} unsupported XML declarations in ${diagnosticGroups.size} distinct contexts; see the Writer ODT compatibility contract.`,
+          [...diagnosticGroups.values()],
         );
       return createOdtFilterDocument(imported.document, imported.title);
     } catch (error) {

@@ -169,9 +169,8 @@ See the [test strategy](test-strategy.md),
 
 ## Certification ODT import slice
 
-The [whole-document acceptance record](certification-odt-acceptance.md) maps the
-seven ordered implementation phases to pinned LibreOffice ODT files and local
-tests. The verified slice covers paragraph properties, links, bookmarks, soft
+The ODT filter and browser presentation tests exercise pinned LibreOffice ODT files
+and local editing behavior. The verified slice covers paragraph properties, links, bookmarks, soft
 page breaks, embedded-font fallback, page geometry and ordered tables with
 editable cells. The source-backed table check covers structural roundtrip;
 Chromium separately verifies cell typing and save/reopen.

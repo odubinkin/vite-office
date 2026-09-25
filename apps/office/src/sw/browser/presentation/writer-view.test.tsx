@@ -81,7 +81,37 @@ const getText =
     fallback: string,
   ) => fallback;
 
+/** Opens the upstream Format menu placement for the paragraph dialog. @returns Nothing. */
+function openParagraphDialog(): void {
+  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
+}
+
 describe("Writer browser presentation", /** Groups presentation tests. @returns Nothing. */ () => {
+  it("uses icons for the standard toolbar and keeps Save and Paragraph off their upstream-hidden positions", /** Checks upstream visible command placement. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const rendered = render(<WriterWorkbench isActive view={session.view} />);
+    const standard = screen.getByRole("toolbar", { name: "Writer standard toolbar" });
+    for (const button of within(standard).getAllByRole("button"))
+      expect(button.querySelector("svg")).not.toBeNull();
+    const labels = within(standard)
+      .getAllByRole("button")
+      .map(
+        /** Reads one command's accessible label. @param button - Toolbar control. @returns Label. */
+        (button) => button.getAttribute("aria-label"),
+      );
+    expect(labels.indexOf("Insert Table")).toBeLessThan(labels.indexOf("Hyperlink"));
+    expect(labels.indexOf("Hyperlink")).toBeLessThan(labels.indexOf("Bookmark"));
+    expect(within(standard).queryByRole("button", { name: "Save" })).toBeNull();
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).queryByRole(
+        "button",
+        { name: /Paragraph/ },
+      ),
+    ).toBeNull();
+    rendered.unmount();
+    session.Close();
+  });
   it("renders an imported table before the first body paragraph", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
     const session = createWriterDocumentSession();
     const document = new SwDoc(false);
@@ -111,7 +141,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
     fireEvent.click(
       within(screen.getByRole("dialog", { name: "Insert Table" })).getByRole("button", {
-        name: "OK",
+        name: "Insert",
       }),
     );
     fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
@@ -124,7 +154,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
           { kind: "untitled", name: "Replacement" },
         ),
     );
-    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "OK" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Insert" }));
     expect(replacement.GetTables()).toHaveLength(0);
     rendered.unmount();
     session.Close();
@@ -147,7 +177,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Columns" }), {
       target: { value: "3" },
     });
-    fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    fireEvent.click(within(dialog).getByRole("button", { name: "Insert" }));
     const table = session.docShell.GetDoc().GetTables()[0];
     expect(table?.GetTabLines()).toHaveLength(2);
     expect(table?.GetTabLines()[0]?.GetTabBoxes()).toHaveLength(3);
@@ -399,7 +429,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(
       (shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetValue(),
     ).toBe(150);
-    fireEvent.click(screen.getByText("Paragraph…"));
+    openParagraphDialog();
     fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });
     fireEvent.change(screen.getByLabelText("First line indent (pt)"), { target: { value: "9" } });
     fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
@@ -455,7 +485,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(
       (shell.GetActiveParagraph().GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset(),
     ).toBe(2);
-    fireEvent.click(screen.getByText("Paragraph…"));
+    openParagraphDialog();
     expect(screen.getByLabelText("First line indent (pt)")).toHaveValue(9);
     expect(screen.getByLabelText("Automatic first-line indent")).toBeChecked();
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
@@ -478,7 +508,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(
       (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops(),
     ).toHaveLength(3);
-    fireEvent.click(screen.getByText("Paragraph…"));
+    openParagraphDialog();
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.click(screen.getByText("Delete All"));
     fireEvent.click(screen.getByText("OK"));
@@ -713,6 +743,106 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       state: "failed",
       message: "Name already exists",
     });
+    rendered.unmount();
+    session.Close();
+  });
+  it("flushes browser storage on Ctrl/Meta+S without opening Save As or Export", /** Checks immediate local save accelerator routing. @returns Completion. */ async () => {
+    const session = createWriterDocumentSession();
+    const autosave = {
+      Flush: vi.fn().mockResolvedValue(undefined),
+    } as unknown as WriterAutosaveController;
+    const rendered = render(
+      <WriterWorkbench
+        autosave={autosave}
+        fileDialogs={session.fileDialogs}
+        isActive
+        view={session.view}
+      />,
+    );
+    const ctrl = new KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      ctrlKey: true,
+      key: "s",
+    });
+    window.dispatchEvent(ctrl);
+    expect(ctrl.defaultPrevented).toBe(true);
+    const meta = new KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      metaKey: true,
+      key: "S",
+    });
+    window.dispatchEvent(meta);
+    expect(meta.defaultPrevented).toBe(true);
+    expect(autosave.Flush).toHaveBeenCalledTimes(2);
+    expect(session.fileDialogs.GetSnapshot()).toBeUndefined();
+    for (const options of [
+      { key: "q", ctrlKey: true },
+      { key: "s" },
+      { key: "s", ctrlKey: true, altKey: true },
+      { key: "s", ctrlKey: true, shiftKey: true },
+    ]) {
+      const ignored = new KeyboardEvent("keydown", { bubbles: true, cancelable: true, ...options });
+      window.dispatchEvent(ignored);
+    }
+    expect(autosave.Flush).toHaveBeenCalledTimes(2);
+    rendered.rerender(
+      <WriterWorkbench
+        autosave={autosave}
+        fileDialogs={session.fileDialogs}
+        isActive={false}
+        view={session.view}
+      />,
+    );
+    const inactive = new KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      ctrlKey: true,
+      key: "s",
+    });
+    window.dispatchEvent(inactive);
+    expect(inactive.defaultPrevented).toBe(false);
+    rendered.rerender(
+      <WriterWorkbench fileDialogs={session.fileDialogs} isActive view={session.view} />,
+    );
+    const withoutStore = new KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      ctrlKey: true,
+      key: "s",
+    });
+    window.dispatchEvent(withoutStore);
+    expect(withoutStore.defaultPrevented).toBe(true);
+    rendered.unmount();
+    session.Close();
+  });
+  it("reports immediate local save failures", /** Checks both Error and string storage failures. @returns Completion. */ async () => {
+    const session = createWriterDocumentSession();
+    const autosave = {
+      Flush: vi.fn().mockRejectedValue(new Error("Storage failed")),
+    } as unknown as WriterAutosaveController;
+    const rendered = render(<WriterWorkbench autosave={autosave} isActive view={session.view} />);
+    window.dispatchEvent(
+      new KeyboardEvent("keydown", { bubbles: true, cancelable: true, ctrlKey: true, key: "s" }),
+    );
+    await waitFor(
+      /** Waits for the first storage failure state. @returns Assertion. */
+      () =>
+        expect(session.docShell.GetMedium().GetLastOperation()).toMatchObject({
+          operation: "save",
+          state: "failed",
+          message: "Storage failed",
+        }),
+    );
+    (autosave.Flush as ReturnType<typeof vi.fn>).mockRejectedValue("quota exceeded");
+    window.dispatchEvent(
+      new KeyboardEvent("keydown", { bubbles: true, cancelable: true, metaKey: true, key: "s" }),
+    );
+    await waitFor(
+      /** Waits for the second storage failure state. @returns Assertion. */
+      () => expect(session.docShell.GetMedium().GetLastOperation().message).toBe("quota exceeded"),
+    );
     rendered.unmount();
     session.Close();
   });

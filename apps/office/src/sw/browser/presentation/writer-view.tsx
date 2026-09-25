@@ -1,6 +1,7 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { TableProperties } from "lucide-react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
@@ -110,7 +111,7 @@ export function WriterWorkbench({
     ): void => {
       if (tableDialog === "insert") {
         const table = activeDocument.nodes.MakeTableNode(
-          `Table${activeDocument.GetTables().length + 1}`,
+          value.name,
           { width: value.width, align: "left" },
           view.GetWrtShell().GetActiveParagraph(),
         );
@@ -249,6 +250,41 @@ export function WriterWorkbench({
     isActive,
     resolveArguments: resolveCommandArguments,
   });
+  useEffect(
+    /** Registers browser Save while this Writer view is mounted. @returns Listener cleanup. */
+    () => {
+      /** Saves the active document immediately through the same local store as autosave. @param event - Browser key event. @returns Nothing. */
+      function saveLocally(event: KeyboardEvent): void {
+        if (
+          !isActive ||
+          event.key.toLowerCase() !== "s" ||
+          !(event.ctrlKey || event.metaKey) ||
+          event.altKey ||
+          event.shiftKey
+        )
+          return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (autosave === undefined) return;
+        void autosave.Flush().catch(
+          /** Reports immediate save failures in the document medium. @param error - Storage failure. @returns Nothing. */
+          (error: unknown) => {
+            const shell = view.GetDocShell();
+            shell.SetMediumOperation(
+              "save",
+              "failed",
+              shell.GetDocumentState().contentGeneration,
+              error instanceof Error ? error.message : String(error),
+            );
+          },
+        );
+      }
+      window.addEventListener("keydown", saveLocally, true);
+      return /** Removes the shortcut listener. @returns Nothing. */ () =>
+        window.removeEventListener("keydown", saveLocally, true);
+    },
+    [autosave, isActive, view],
+  );
 
   return (
     <div hidden={!isActive}>
@@ -314,14 +350,30 @@ export function WriterWorkbench({
         }
         onDocumentTitleChange={handleDocumentTitleChange}
         propertiesSidebar={
-          <WriterParagraphProperties
-            alignment={snapshot.activeParagraph.alignment}
-            commandSource={commandSource}
-            listKind={snapshot.activeParagraph.list.kind}
-            paragraphNumber={snapshot.activeParagraphIndex + 1}
-            resolveArguments={resolveCommandArguments}
-            styleDisplayName={snapshot.activeParagraph.styleDisplayName}
-          />
+          <>
+            <WriterParagraphProperties
+              alignment={snapshot.activeParagraph.alignment}
+              commandSource={commandSource}
+              listKind={snapshot.activeParagraph.list.kind}
+              paragraphNumber={snapshot.activeParagraphIndex + 1}
+              resolveArguments={resolveCommandArguments}
+              styleDisplayName={snapshot.activeParagraph.styleDisplayName}
+            />
+            {currentTable === undefined ? null : (
+              <button
+                aria-label="Table Properties"
+                className="grid size-9 place-items-center rounded-lg hover:bg-indigo-50"
+                onClick={
+                  /** Opens the selected table's properties. @returns Nothing. */
+                  () => setTableDialog("properties")
+                }
+                title="Table Properties"
+                type="button"
+              >
+                <TableProperties aria-hidden={true} size={18} />
+              </button>
+            )}
+          </>
         }
         rulers={
           <WriterRulers
@@ -366,32 +418,12 @@ export function WriterWorkbench({
           <>
             <WriterCommandToolbar
               commandSource={commandSource}
+              onInsertTable={
+                /** Opens the native-positioned Insert Table dialog. @returns Nothing. */
+                () => setTableDialog("insert")
+              }
               resolveArguments={resolveCommandArguments}
             />
-            <button
-              aria-label="Insert Table"
-              className="rounded border border-slate-300 px-2 py-1 text-sm"
-              onClick={
-                /** Handles the browser table interaction.  @returns Callback result. */ () =>
-                  setTableDialog("insert")
-              }
-              type="button"
-            >
-              Insert Table
-            </button>
-            {currentTable === undefined ? null : (
-              <button
-                aria-label="Table Properties"
-                className="rounded border border-slate-300 px-2 py-1 text-sm"
-                onClick={
-                  /** Handles the browser table interaction.  @returns Callback result. */ () =>
-                    setTableDialog("properties")
-                }
-                type="button"
-              >
-                Table Properties
-              </button>
-            )}
           </>
         }
       >
@@ -434,6 +466,7 @@ export function WriterWorkbench({
       </WriterWorkspaceChrome>
       {tableDialog === undefined ? null : (
         <WriterTableDialog
+          suggestedName={`Table${activeDocument.GetTables().length + 1}`}
           {...(tableDialog === "properties" && currentTable !== undefined
             ? { table: currentTable }
             : {})}

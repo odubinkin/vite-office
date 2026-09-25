@@ -18,8 +18,8 @@ implemented commands.
 - `sw/uiconfig/swriter/menubar/menubar.xml` places New, Open, Save, and Save As
   in **File**. The browser keeps **New**, **Open**, **Save As**, and **Export**
   there. Open selects a browser copy or imports ODT/TXT; Save As creates a
-  separate browser copy; Export downloads ODT/TXT. Manual Save is absent because
-  a nonempty document is saved automatically as a primary ODT package.
+  separate browser copy; Export downloads ODT/TXT. There is no manual Save menu
+  item: Ctrl/Meta+S immediately saves through the browser-local autosave path.
 - The same file places Undo and Redo in **Edit**.
 - It places `.uno:Cut`, `.uno:Copy`, and `.uno:Paste` in **Edit** and the
   standard toolbar. The browser **Copy** command writes sanitized visible plain
@@ -70,7 +70,7 @@ frame/lifecycle coordination without a parallel Writer registry layer.
 
 `sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Cut, Copy,
 Paste, Undo, and Redo. The browser toolbar retains Open, Cut, Copy, Paste,
-Undo, and Redo. Save As appears only in **File**; manual Save is absent.
+Undo, and Redo. Save As appears only in **File**; there is no Save toolbar button.
 This placement is an approved browser divergence and must survive parity work.
 The former **Add
 paragraph** toolbar control was removed: normal Writer paragraph

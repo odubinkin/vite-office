@@ -108,11 +108,11 @@ engine; visual page count can differ from LibreOffice. Table keep-with-next,
 row splitting, full table cursor navigation and undo are not modeled. Headers,
 footers, columns, page backgrounds, printer trays, multiple page styles,
 unrelated style families, and properties outside the bounded Writer model are
-ignored during import. The [certification acceptance record](certification-odt-acceptance.md)
-distinguishes tested semantic retention from these limits.
+ignored during import. Task-local AgentPlane records and filter tests distinguish
+tested semantic retention from these limits.
 
-The browser filter groups unsupported XML declarations into one console
-summary per imported document. The detailed structural diagnostic callback
+The browser filter reports one console summary per imported document together
+with every unique structural diagnostic (stream, path, kind, name). The structural diagnostic callback
 continues to report every occurrence with stream and path, without values or
 document text. A quiet console does not imply that every LibreOffice style
 declaration has a browser effect.

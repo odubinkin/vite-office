@@ -51,6 +51,29 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       expect(warn.mock.calls.at(-1)?.[0]).toMatch(
         /^ODT import ignored \d+ unsupported XML declarations in \d+ distinct contexts/u,
       );
+      const diagnostics = warn.mock.calls.at(-1)?.[1] as readonly {
+        stream: string;
+        path: string;
+        kind: string;
+        name: string;
+      }[];
+      expect(diagnostics.length).toBeGreaterThan(0);
+      expect(
+        new Set(
+          diagnostics.map(
+            /** Serializes one structural diagnostic for uniqueness. @param entry - Diagnostic. @returns Stable JSON. */
+            (entry) => JSON.stringify(entry),
+          ),
+        ).size,
+      ).toBe(diagnostics.length);
+      expect(diagnostics[0]).toEqual(
+        expect.objectContaining({
+          stream: expect.any(String),
+          path: expect.any(String),
+          kind: expect.any(String),
+          name: expect.any(String),
+        }),
+      );
     } finally {
       warn.mockRestore();
     }

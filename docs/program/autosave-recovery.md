@@ -21,7 +21,8 @@ time. An IndexedDB transaction must finish before the shell advances its save
 position. The Writer model and action-based undo history remain live while the
 browser session is open; undo history is not encoded in the ODT.
 
-Manual Save is absent. Save As creates a separate named browser copy and adopts
+The toolbar has no manual Save button. Ctrl/Meta+S immediately writes the current
+document through the same browser-local storage path as autosave. Save As creates a separate named browser copy and adopts
 it as the current primary document, leaving the previous copy in place. Editing
 the title changes the primary copy's name atomically on the next immediate save;
 an occupied name is rejected without overwriting another document. Export is a

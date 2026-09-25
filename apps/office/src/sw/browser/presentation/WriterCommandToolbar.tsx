@@ -5,8 +5,10 @@ import {
   FilePlus,
   FolderOpen,
   Link,
+  Bookmark,
   Redo2,
   Scissors,
+  Table2,
   Undo2,
 } from "lucide-react";
 
@@ -29,27 +31,48 @@ const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.undo, Undo2],
   [WRITER_COMMAND_IDS.redo, Redo2],
   [WRITER_COMMAND_IDS.hyperlinkDialog, Link],
+  [WRITER_COMMAND_IDS.insertBookmark, Bookmark],
 ]);
+
+const beforeTable = writerStandardBarItems.slice(
+  0,
+  writerStandardBarItems.findIndex(
+    /** Finds the upstream point preceding hyperlink insertion. @param item - Toolbar placement. @returns Whether this is the hyperlink command. */
+    (item) => item.kind === "command" && item.commandId === WRITER_COMMAND_IDS.hyperlinkDialog,
+  ),
+);
+const afterTable = writerStandardBarItems.slice(beforeTable.length);
+
+/** Browser-only insertion action occupying the native Insert Table placement. */
+interface WriterCommandToolbarProps extends BrowserCommandSurfaceProps {
+  readonly onInsertTable: () => void;
+}
 
 /** Renders a standard toolbar from descriptor-backed resource items. @param props - Shared command surface. @returns Toolbar item fragment. */
 export function WriterCommandToolbar({
   commandSource,
+  onInsertTable,
   resolveArguments,
-}: BrowserCommandSurfaceProps): React.JSX.Element {
+}: WriterCommandToolbarProps): React.JSX.Element {
   const localization = useBrowserLocalization();
+  /** Localizes one generated toolbar resource. @param commandUrl - Command URL. @returns Localized resource. */
+  function getCommandResource(commandUrl: string) {
+    return selectWriterCommandResource(localization, commandUrl);
+  }
+  const common = { commandSource, getCommandResource, icons, resolveArguments };
   return (
-    <CommandToolbarItems
-      commandSource={commandSource}
-      getCommandResource={
-        /** Localizes one generated toolbar resource. @param commandUrl - Command URL. @returns Localized resource. */ (
-          commandUrl,
-        ) => {
-          return selectWriterCommandResource(localization, commandUrl);
-        }
-      }
-      icons={icons}
-      items={writerStandardBarItems}
-      resolveArguments={resolveArguments}
-    />
+    <>
+      <CommandToolbarItems {...common} items={beforeTable} />
+      <button
+        aria-label="Insert Table"
+        className="grid size-9 place-items-center rounded-lg hover:bg-indigo-50"
+        onClick={onInsertTable}
+        title="Insert Table"
+        type="button"
+      >
+        <Table2 aria-hidden={true} size={18} />
+      </button>
+      <CommandToolbarItems {...common} items={afterTable} />
+    </>
   );
 }

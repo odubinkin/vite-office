@@ -5,6 +5,7 @@ import type { SwTable } from "../../source/core/table/swtable";
 
 /** Editable table geometry expressed in Writer twips. */
 export interface WriterTableDialogValue {
+  readonly name: string;
   readonly rows: number;
   readonly columns: number;
   readonly width: number;
@@ -18,16 +19,19 @@ export interface WriterTableDialogValue {
 /** Collects supported Insert Table and Table Properties fields. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterTableDialog({
   table,
+  suggestedName = "Table1",
   availableWidth,
   onCancel,
   onSubmit,
 }: Readonly<{
   table?: SwTable;
+  suggestedName?: string;
   availableWidth: number;
   onCancel: () => void;
   onSubmit: (value: WriterTableDialogValue) => void;
 }>): React.JSX.Element {
   const rows = table?.GetTabLines();
+  const [name, setName] = useState(table?.GetName() ?? suggestedName);
   const [rowCount, setRowCount] = useState(rows?.length ?? 2);
   const [columnCount, setColumnCount] = useState(table?.GetColumnWidths().length ?? 2);
   const [width, setWidth] = useState(table?.GetFormat().width ?? availableWidth);
@@ -95,6 +99,7 @@ export interface WriterTableDialogValue {
               columnCount < 1 ||
               rowCount > 100 ||
               columnCount > 32 ||
+              name.trim().length === 0 ||
               width <= 0 ||
               columnWidths.some(
                 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
@@ -108,6 +113,7 @@ export interface WriterTableDialogValue {
               return;
             }
             onSubmit({
+              name: name.trim(),
               rows: rowCount,
               columns: columnCount,
               width,
@@ -124,7 +130,20 @@ export interface WriterTableDialogValue {
           {table === undefined ? "Insert Table" : "Table Properties"}
         </h2>
         {table === undefined ? (
-          <div className="grid grid-cols-2 gap-3">
+          <fieldset className="grid grid-cols-2 gap-3 rounded border p-3">
+            <legend className="text-sm font-bold">General</legend>
+            <label className="col-span-2 grid gap-1 text-sm font-medium">
+              Name
+              <input
+                aria-label="Name"
+                className="rounded border px-2 py-1"
+                onChange={
+                  /** Updates the upstream table name field. @param event - Name input. @returns Nothing. */
+                  (event) => setName(event.target.value)
+                }
+                value={name}
+              />
+            </label>
             <label className="grid gap-1 text-sm font-medium">
               Rows
               <input
@@ -167,7 +186,7 @@ export interface WriterTableDialogValue {
                 value={columnCount}
               />
             </label>
-          </div>
+          </fieldset>
         ) : null}
         {field("Table width (cm)", width, setWidth)}
         <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
@@ -241,7 +260,7 @@ export interface WriterTableDialogValue {
             Cancel
           </button>
           <button className="rounded bg-indigo-700 px-3 py-1 text-white" type="submit">
-            OK
+            {table === undefined ? "Insert" : "OK"}
           </button>
         </div>
       </form>

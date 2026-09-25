@@ -4,7 +4,7 @@ title: "Correct Writer toolbar, diagnostics, and local save"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-25T05:22:52.027Z"
+  updated_by: "CODER"
+  note: "Requested Writer regressions corrected; focused tests and full repository verification passed."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: correct the four requested Writer regressions using pinned upstream resources and focused verification."
+  -
+    type: "verify"
+    at: "2026-09-25T05:22:52.027Z"
+    author: "CODER"
+    state: "ok"
+    note: "Requested Writer regressions corrected; focused tests and full repository verification passed."
 doc_version: 3
-doc_updated_at: "2026-09-25T04:56:02.523Z"
+doc_updated_at: "2026-09-25T05:22:52.120Z"
 doc_updated_by: "CODER"
 description: "Remove generated certification ODT documents; restore unique import diagnostics; align Writer toolbar and dialogs with pinned upstream resources; make Ctrl/Meta+S flush browser autosave"
 sections:
@@ -51,6 +57,38 @@ sections:
   Verify Steps: "1. Confirm docs/program/certification-odt-*.md is absent and no unintended files were removed. 2. Confirm ODT import warning reports total and every distinct diagnostic with stream, path, kind and name; run focused filter tests. 3. Compare standard and formatting toolbar placements to pinned generated upstream resources, with only documented Save As deviation; verify every visible toolbar button has an icon and relevant dialogs match pinned upstream UI. 4. Verify Ctrl/Meta+S calls immediate browser autosave with no download, including failure handling. 5. Run npm run verify and inspect final git diff/status."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-25T05:22:52.027Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Requested Writer regressions corrected; focused tests and full repository verification passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T04:56:02.523Z, excerpt_hash=sha256:ca3997b874415298ede87b5c5aab47d7f1e7667ec48470682c862bf59692afc3
+
+    Details:
+
+    Command: npm run verify. Result: pass. Evidence: 540 office tests and 109 inventory tests at 100% coverage; 15 Chromium tests; build, docs, source tree, provenance, inventory and parity gates passed. Scope: final code and documentation. Command: git diff --check. Result: pass. Evidence: no whitespace errors. Scope: task diff. Command: node .agentplane/policy/check-routing.mjs. Result: pass. Evidence: policy routing OK. Scope: repository policy.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250455-QWMWYM/blueprint/resolved-snapshot.json
+    - old_digest: 57fe9d020a3e11661766a9786bc515afb3faccb1faa9506b4961eefa2562b832
+    - current_digest: 57fe9d020a3e11661766a9786bc515afb3faccb1faa9506b4961eefa2562b832
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609250455-QWMWYM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609250455-QWMWYM
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -80,6 +118,38 @@ Remove the eight generated ODT certification docs; restore full unique import di
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-25T05:22:52.027Z — VERIFY — ok
+
+By: CODER
+
+Note: Requested Writer regressions corrected; focused tests and full repository verification passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T04:56:02.523Z, excerpt_hash=sha256:ca3997b874415298ede87b5c5aab47d7f1e7667ec48470682c862bf59692afc3
+
+Details:
+
+Command: npm run verify. Result: pass. Evidence: 540 office tests and 109 inventory tests at 100% coverage; 15 Chromium tests; build, docs, source tree, provenance, inventory and parity gates passed. Scope: final code and documentation. Command: git diff --check. Result: pass. Evidence: no whitespace errors. Scope: task diff. Command: node .agentplane/policy/check-routing.mjs. Result: pass. Evidence: policy routing OK. Scope: repository policy.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250455-QWMWYM/blueprint/resolved-snapshot.json
+- old_digest: 57fe9d020a3e11661766a9786bc515afb3faccb1faa9506b4961eefa2562b832
+- current_digest: 57fe9d020a3e11661766a9786bc515afb3faccb1faa9506b4961eefa2562b832
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609250455-QWMWYM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609250455-QWMWYM
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
