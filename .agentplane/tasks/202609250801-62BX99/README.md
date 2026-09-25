@@ -1,10 +1,11 @@
 ---
 id: "202609250801-62BX99"
 title: "Keep Writer table picker above toolbars"
-status: "DOING"
+result_summary: "verified-202609250801-62BX99"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -23,7 +24,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-25T08:15:28.437Z"
+  updated_at: "2026-09-25T08:15:47.258Z"
   updated_by: "CODER"
   note: "verified-202609250801-62BX99"
   attempts: 0
@@ -43,11 +44,16 @@ quality_review:
     - "apps/office/e2e/writer-responsive-sidebar.spec.ts"
   findings:
     - "Mobile browser hit testing confirms the 2 by 2 cell is topmost; insertion, dismissal, and More Options work."
-commit: null
+commit:
+  hash: "6fd20d95e7baaaac86806889342e591af20f7fe0"
+  message: "🧪 62BX99 task: record table grid verification"
 comments:
   -
     author: "CODER"
     body: "Start: correct the table grid stacking and clipping, then verify mobile pointer interaction."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609250801-62BX99. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609250801-62BX99"
+  -
+    type: "verify"
+    at: "2026-09-25T08:15:47.258Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609250801-62BX99"
+  -
+    type: "status"
+    at: "2026-09-25T08:15:47.457Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609250801-62BX99. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-25T08:15:34.612Z"
+doc_updated_at: "2026-09-25T08:15:47.458Z"
 doc_updated_by: "CODER"
 description: "Fix table quick grid clipping and hit testing inside the scrollable standard toolbar, preserving outside dismissal and table insertion; verify on mobile and desktop."
 sections:
@@ -141,9 +160,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-25T08:15:47.258Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609250801-62BX99
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T08:15:34.612Z, excerpt_hash=sha256:c031fe411f06df69210629dcfda45ec3ee3707749779df44e66583b4123db25c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250801-62BX99/blueprint/resolved-snapshot.json
+    - old_digest: 6e49b8f3acecc0453647dac4625a35abe575fe820eba9be8afbd4224055ffd6d
+    - current_digest: 6e49b8f3acecc0453647dac4625a35abe575fe820eba9be8afbd4224055ffd6d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609250801-62BX99
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609250801-62BX99 --result verified-202609250801-62BX99 --commit 6fd20d95e7baaaac86806889342e591af20f7fe0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation and test commit for this task."
   Findings: "The standard toolbar overflow clipped the nested absolute grid. Portaling the grid to the document body with fixed viewport positioning makes cells the topmost pointer target. A full-suite Playwright Paragraph menu click was transiently detached; the isolated scenario and full 18-test browser rerun passed without code changes. The first close attempt was rejected because verification had modified the tracked task README; commit task artifacts before repeating close."
+extensions:
+  implementation_commit:
+    hash: "90a27b96fcd375cc3d95d510b07a2ca9ad049c6c"
+    message: "🚧 62BX99 task: lift Writer table grid above toolbars"
 id_source: "generated"
 ---
 ## Summary
@@ -220,6 +273,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609250801-62BX99 --result verified-202609250801-62BX99 --commit 90a27b96fcd375cc3d95d510b07a2ca9ad049c6c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-25T08:15:47.258Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609250801-62BX99
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T08:15:34.612Z, excerpt_hash=sha256:c031fe411f06df69210629dcfda45ec3ee3707749779df44e66583b4123db25c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250801-62BX99/blueprint/resolved-snapshot.json
+- old_digest: 6e49b8f3acecc0453647dac4625a35abe575fe820eba9be8afbd4224055ffd6d
+- current_digest: 6e49b8f3acecc0453647dac4625a35abe575fe820eba9be8afbd4224055ffd6d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609250801-62BX99
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609250801-62BX99 --result verified-202609250801-62BX99 --commit 6fd20d95e7baaaac86806889342e591af20f7fe0
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
