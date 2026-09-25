@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202609250842-2ZV4Z6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-25T10:56:26.345Z",
+  "verdict": "pass",
+  "summary": "Accepted partial Writer rendering closeout is implemented, verified, and documented.",
+  "evaluated_sha": "3f6385ea700d4eda2cc8568ac5ffebfc9fa1540e",
+  "blueprint_digest": "a33968b042f8a09d7c5f3fd7ed5be578333b8594d4d9350b2ac74b75d0dd204a",
+  "findings": [
+    "Table rows flow at document width, editor controls are hidden in print, and font metadata and runtime faces are retained; GUI visual parity remains divergent as accepted by the user."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609250842-2ZV4Z6/README.md",
+    "output/playwright/verify-closeout.log",
+    "docs/program/parity/writer-rendering-deviation.md",
+    "docs/program/parity/runtime-inventory.json",
+    "3f6385ea700d4eda2cc8568ac5ffebfc9fa1540e"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The supplied certification ODT still has a different first-page boundary and six browser pages versus nine GUI LibreOffice pages."
+  ]
+}
