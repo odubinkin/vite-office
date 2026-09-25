@@ -8,10 +8,13 @@ import { WriterEditableTable, editWriterTableCell } from "../editor/WriterEditab
 import { WriterTableDialog } from "./WriterTableDialog";
 
 describe("Writer browser table controls", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
-  it("chooses row and column count, widths, row height, padding, border and vertical alignment", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("inserts a table using only the supported General fields", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
     const submit = vi.fn();
     const cancel = vi.fn();
     render(<WriterTableDialog availableWidth={6000} onCancel={cancel} onSubmit={submit} />);
+    const dimensionFields = screen.getAllByRole("spinbutton");
+    expect(dimensionFields[0]).toHaveAccessibleName("Columns");
+    expect(dimensionFields[1]).toHaveAccessibleName("Rows");
     fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
       target: { value: "Budget" },
     });
@@ -19,38 +22,32 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     fireEvent.change(screen.getByRole("spinbutton", { name: "Columns" }), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
-      target: { value: "12" },
-    });
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
-      target: { value: "4" },
-    });
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
-      target: { value: "1" },
-    });
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
-      target: { value: "0.2" },
-    });
-    fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
-      target: { value: "none" },
-    });
-    fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
-      target: { value: "bottom" },
-    });
+    expect(screen.queryByRole("spinbutton", { name: "Table width (cm)" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("spinbutton", { name: "Column 1 width (cm)" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("spinbutton", { name: "Minimum row height (cm)" }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("spinbutton", { name: "Cell padding (cm)" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("combobox", { name: "Cell border" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("combobox", { name: "Cell vertical alignment" }),
+    ).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Insert" }));
     expect(submit).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "Budget",
         rows: 3,
         columns: 2,
-        width: 6803,
-        minRowHeight: 567,
-        padding: 113,
-        border: "none",
-        verticalAlign: "bottom",
+        width: 6000,
+        minRowHeight: 0,
+        padding: 100,
+        border: "0.5pt solid #666666",
+        verticalAlign: "top",
       }),
     );
-    expect(submit.mock.calls[0]?.[0].columnWidths[0]).toBe(2268);
+    expect(submit.mock.calls[0]?.[0].columnWidths).toEqual([3000, 3000]);
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(cancel).toHaveBeenCalledOnce();
   });
@@ -75,6 +72,32 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     );
     expect(screen.getByRole("dialog", { name: "Table Properties" })).toBeInTheDocument();
     expect(screen.queryByRole("spinbutton", { name: "Rows" })).not.toBeInTheDocument();
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
+      target: { value: "12" },
+    });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
+      target: { value: "1" },
+    });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Cell padding (cm)" }), {
+      target: { value: "0.2" },
+    });
+    fireEvent.change(screen.getByRole("combobox", { name: "Cell border" }), {
+      target: { value: "0.5pt solid #666666" },
+    });
+    fireEvent.change(screen.getByRole("combobox", { name: "Cell vertical alignment" }), {
+      target: { value: "bottom" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    expect(submit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        width: 6803,
+        minRowHeight: 567,
+        padding: 113,
+        border: "0.5pt solid #666666",
+        verticalAlign: "bottom",
+      }),
+    );
+    submit.mockClear();
     fireEvent.change(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
       target: { value: "0" },
     });

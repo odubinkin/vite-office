@@ -145,22 +145,6 @@ export interface WriterTableDialogValue {
               />
             </label>
             <label className="grid gap-1 text-sm font-medium">
-              Rows
-              <input
-                aria-label="Rows"
-                className="rounded border px-2 py-1"
-                max="100"
-                min="1"
-                onChange={
-                  /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                    event,
-                  ) => setRowCount(Number(event.target.value))
-                }
-                type="number"
-                value={rowCount}
-              />
-            </label>
-            <label className="grid gap-1 text-sm font-medium">
               Columns
               <input
                 aria-label="Columns"
@@ -186,74 +170,97 @@ export interface WriterTableDialogValue {
                 value={columnCount}
               />
             </label>
+            <label className="grid gap-1 text-sm font-medium">
+              Rows
+              <input
+                aria-label="Rows"
+                className="rounded border px-2 py-1"
+                max="100"
+                min="1"
+                onChange={
+                  /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+                    event,
+                  ) => setRowCount(Number(event.target.value))
+                }
+                type="number"
+                value={rowCount}
+              />
+            </label>
           </fieldset>
         ) : null}
-        {field("Table width (cm)", width, setWidth)}
-        <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
-          <legend className="text-sm font-bold">Columns</legend>
-          {Array.from(
-            { length: columnCount },
-            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-              _,
-              index,
-            ) =>
-              field(
-                `Column ${index + 1} width (cm)`,
-                columnWidths[index] as number,
-                /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                  value,
+        {table === undefined ? null : (
+          <>
+            {field("Table width (cm)", width, setWidth)}
+            <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
+              <legend className="text-sm font-bold">Columns</legend>
+              {Array.from(
+                { length: columnCount },
+                /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                  _,
+                  index,
                 ) =>
-                  setColumnWidths(
-                    Array.from(
-                      { length: columnCount },
-                      /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                        _,
-                        column,
-                      ) => (column === index ? value : (columnWidths[column] as number)),
-                    ),
+                  field(
+                    `Column ${index + 1} width (cm)`,
+                    columnWidths[index] as number,
+                    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+                      value,
+                    ) =>
+                      setColumnWidths(
+                        Array.from(
+                          { length: columnCount },
+                          /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+                            _,
+                            column,
+                          ) => (column === index ? value : (columnWidths[column] as number)),
+                        ),
+                      ),
                   ),
-              ),
-          )}
-        </fieldset>
-        <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
-          <legend className="text-sm font-bold">Rows and cells</legend>
-          {field("Minimum row height (cm)", minRowHeight, setMinRowHeight)}
-          {field("Cell padding (cm)", padding, setPadding)}
-          <label className="grid gap-1 text-sm">
-            Border
-            <select
-              aria-label="Cell border"
-              className="rounded border px-2 py-1"
-              onChange={
-                /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                  event,
-                ) => setBorder(event.target.value)
-              }
-              value={border}
-            >
-              <option value="none">None</option>
-              <option value="0.5pt solid #666666">Thin solid</option>
-              <option value="1pt solid #000000">Solid</option>
-            </select>
-          </label>
-          <label className="grid gap-1 text-sm">
-            Vertical alignment
-            <select
-              aria-label="Cell vertical alignment"
-              className="rounded border px-2 py-1"
-              onChange={
-                /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                  event,
-                ) => setVerticalAlign(event.target.value as WriterTableDialogValue["verticalAlign"])
-              }
-              value={verticalAlign}
-            >
-              <option value="top">Top</option>
-              <option value="middle">Middle</option>
-              <option value="bottom">Bottom</option>
-            </select>
-          </label>
-        </fieldset>
+              )}
+            </fieldset>
+            <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
+              <legend className="text-sm font-bold">Rows and cells</legend>
+              {field("Minimum row height (cm)", minRowHeight, setMinRowHeight)}
+              {field("Cell padding (cm)", padding, setPadding)}
+              <label className="grid gap-1 text-sm">
+                Border
+                <select
+                  aria-label="Cell border"
+                  className="rounded border px-2 py-1"
+                  onChange={
+                    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+                      event,
+                    ) => setBorder(event.target.value)
+                  }
+                  value={border}
+                >
+                  <option value="none">None</option>
+                  <option value="0.5pt solid #666666">Thin solid</option>
+                  <option value="1pt solid #000000">Solid</option>
+                </select>
+              </label>
+              <label className="grid gap-1 text-sm">
+                Vertical alignment
+                <select
+                  aria-label="Cell vertical alignment"
+                  className="rounded border px-2 py-1"
+                  onChange={
+                    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+                      event,
+                    ) =>
+                      setVerticalAlign(
+                        event.target.value as WriterTableDialogValue["verticalAlign"],
+                      )
+                  }
+                  value={verticalAlign}
+                >
+                  <option value="top">Top</option>
+                  <option value="middle">Middle</option>
+                  <option value="bottom">Bottom</option>
+                </select>
+              </label>
+            </fieldset>
+          </>
+        )}
         {error === undefined ? null : <p className="text-sm text-red-700">{error}</p>}
         <div className="flex justify-end gap-2">
           <button className="rounded border px-3 py-1" onClick={onCancel} type="button">
