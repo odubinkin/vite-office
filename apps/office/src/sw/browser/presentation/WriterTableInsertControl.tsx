@@ -1,5 +1,6 @@
 /** @fileoverview Writer standard-bar Insert Table grid and More Options popover. */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Table2 } from "lucide-react";
 
 const COLUMNS = 10;
@@ -14,13 +15,41 @@ export function WriterTableInsertControl({
   onMoreOptions: () => void;
 }>): React.JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState<readonly [number, number]>([0, 0]);
   const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState({ left: 0, top: 0, maxHeight: 0 });
+  useLayoutEffect(
+    /** Keeps the portaled grid anchored to its toolbar button. @returns Cleanup. */ () => {
+      if (!open) return;
+      /** Positions the grid within the viewport. @returns Nothing. */
+      function updatePosition(): void {
+        const anchor = (ref.current as HTMLDivElement).getBoundingClientRect();
+        setPosition({
+          left: Math.max(8, Math.min(anchor.left, window.innerWidth - 212)),
+          top: anchor.bottom,
+          maxHeight: Math.max(80, window.innerHeight - anchor.bottom - 8),
+        });
+      }
+      updatePosition();
+      window.addEventListener("resize", updatePosition);
+      document.addEventListener("scroll", updatePosition, true);
+      return /** Stops tracking the anchor. @returns Nothing. */ () => {
+        window.removeEventListener("resize", updatePosition);
+        document.removeEventListener("scroll", updatePosition, true);
+      };
+    },
+    [open],
+  );
   useEffect(
     /** Installs dismissal listeners. @returns Cleanup. */ () => {
       /** Closes the grid when a pointer press starts outside it. @param event - Pointer event. @returns Nothing. */
       function dismiss(event: PointerEvent): void {
-        if (!ref.current?.contains(event.target as Node)) setOpen(false);
+        if (
+          !ref.current?.contains(event.target as Node) &&
+          !popupRef.current?.contains(event.target as Node)
+        )
+          setOpen(false);
       }
       /** Closes the grid with Escape. @param event - Key event. @returns Nothing. */
       function onKeyDown(event: KeyboardEvent): void {
@@ -47,87 +76,93 @@ export function WriterTableInsertControl({
       >
         <Table2 aria-hidden={true} size={18} />
       </button>
-      {open && (
-        <div className="absolute left-0 top-full z-40 w-max max-h-[80dvh] overflow-auto rounded border border-slate-300 bg-white p-3 shadow-xl">
-          <p className="mb-2 text-xs font-semibold" aria-live="polite">
-            {hover[0] > 0 ? `${hover[0]} × ${hover[1]}` : "Insert Table"}
-          </p>
+      {open &&
+        createPortal(
           <div
-            className="grid grid-cols-10 gap-0.5"
-            aria-label="Table size"
-            onKeyDown={
-              /** Moves the size preview and confirms it from the keyboard. @param event - Grid key event. @returns Nothing. */
-              (event) => {
-                const step = {
-                  ArrowRight: [1, 0],
-                  ArrowLeft: [-1, 0],
-                  ArrowDown: [0, 1],
-                  ArrowUp: [0, -1],
-                }[event.key];
-                if (step !== undefined) {
-                  event.preventDefault();
-                  setHover(
-                    /** Advances the selected size. @param size - Previous dimensions. @returns New dimensions. */
-                    ([columns, rows]) => [
-                      Math.min(COLUMNS, Math.max(1, columns + (step[0] as number))),
-                      Math.min(ROWS, Math.max(1, rows + (step[1] as number))),
-                    ],
-                  );
-                } else if (event.key === "Enter" && hover[0] > 0) {
-                  event.preventDefault();
-                  setOpen(false);
-                  onInsert(hover[0], hover[1]);
+            className="fixed z-[100] w-max overflow-auto rounded border border-slate-300 bg-white p-3 shadow-xl"
+            ref={popupRef}
+            style={position}
+          >
+            <p className="mb-2 text-xs font-semibold" aria-live="polite">
+              {hover[0] > 0 ? `${hover[0]} × ${hover[1]}` : "Insert Table"}
+            </p>
+            <div
+              className="grid grid-cols-10 gap-0.5"
+              aria-label="Table size"
+              onKeyDown={
+                /** Moves the size preview and confirms it from the keyboard. @param event - Grid key event. @returns Nothing. */
+                (event) => {
+                  const step = {
+                    ArrowRight: [1, 0],
+                    ArrowLeft: [-1, 0],
+                    ArrowDown: [0, 1],
+                    ArrowUp: [0, -1],
+                  }[event.key];
+                  if (step !== undefined) {
+                    event.preventDefault();
+                    setHover(
+                      /** Advances the selected size. @param size - Previous dimensions. @returns New dimensions. */
+                      ([columns, rows]) => [
+                        Math.min(COLUMNS, Math.max(1, columns + (step[0] as number))),
+                        Math.min(ROWS, Math.max(1, rows + (step[1] as number))),
+                      ],
+                    );
+                  } else if (event.key === "Enter" && hover[0] > 0) {
+                    event.preventDefault();
+                    setOpen(false);
+                    onInsert(hover[0], hover[1]);
+                  }
                 }
               }
-            }
-          >
-            {Array.from(
-              { length: COLUMNS * ROWS },
-              /** Renders one grid cell. @param _unused - Array value. @param index - Cell index. @returns Button. */ (
-                _,
-                index,
-              ) => {
-                const columns = (index % COLUMNS) + 1;
-                const rows = Math.floor(index / COLUMNS) + 1;
-                return (
-                  <button
-                    aria-label={`${columns} columns, ${rows} rows`}
-                    className={`size-4 border ${columns <= hover[0] && rows <= hover[1] ? "border-indigo-600 bg-indigo-200" : "border-slate-300 bg-white"}`}
-                    key={index}
-                    onClick={
-                      /** Inserts the selected size. @returns Nothing. */ () => {
-                        setOpen(false);
-                        onInsert(columns, rows);
+            >
+              {Array.from(
+                { length: COLUMNS * ROWS },
+                /** Renders one grid cell. @param _unused - Array value. @param index - Cell index. @returns Button. */ (
+                  _,
+                  index,
+                ) => {
+                  const columns = (index % COLUMNS) + 1;
+                  const rows = Math.floor(index / COLUMNS) + 1;
+                  return (
+                    <button
+                      aria-label={`${columns} columns, ${rows} rows`}
+                      className={`size-4 border ${columns <= hover[0] && rows <= hover[1] ? "border-indigo-600 bg-indigo-200" : "border-slate-300 bg-white"}`}
+                      key={index}
+                      onClick={
+                        /** Inserts the selected size. @returns Nothing. */ () => {
+                          setOpen(false);
+                          onInsert(columns, rows);
+                        }
                       }
-                    }
-                    onFocus={
-                      /** Updates the selection preview. @returns Nothing. */ () =>
-                        setHover([columns, rows])
-                    }
-                    onMouseEnter={
-                      /** Updates the selection preview. @returns Nothing. */ () =>
-                        setHover([columns, rows])
-                    }
-                    type="button"
-                  />
-                );
-              },
-            )}
-          </div>
-          <button
-            className="mt-3 w-full border-t border-slate-200 pt-2 text-left text-sm hover:text-indigo-700"
-            onClick={
-              /** Opens full table options. @returns Nothing. */ () => {
-                setOpen(false);
-                onMoreOptions();
+                      onFocus={
+                        /** Updates the selection preview. @returns Nothing. */ () =>
+                          setHover([columns, rows])
+                      }
+                      onMouseEnter={
+                        /** Updates the selection preview. @returns Nothing. */ () =>
+                          setHover([columns, rows])
+                      }
+                      type="button"
+                    />
+                  );
+                },
+              )}
+            </div>
+            <button
+              className="mt-3 w-full border-t border-slate-200 pt-2 text-left text-sm hover:text-indigo-700"
+              onClick={
+                /** Opens full table options. @returns Nothing. */ () => {
+                  setOpen(false);
+                  onMoreOptions();
+                }
               }
-            }
-            type="button"
-          >
-            More Options
-          </button>
-        </div>
-      )}
+              type="button"
+            >
+              More Options
+            </button>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

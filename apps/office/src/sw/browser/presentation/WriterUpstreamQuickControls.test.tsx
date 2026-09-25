@@ -12,6 +12,9 @@ describe("Writer upstream quick controls", /** Groups quick-panel interactions. 
     const onMoreOptions = vi.fn();
     render(<WriterTableInsertControl onInsert={onInsert} onMoreOptions={onMoreOptions} />);
     fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
+    expect(screen.getByRole("button", { name: "More Options" }).parentElement?.parentElement).toBe(
+      document.body,
+    );
     fireEvent.mouseEnter(screen.getByRole("button", { name: "2 columns, 3 rows" }));
     expect(screen.getByText("2 × 3")).toBeInTheDocument();
     fireEvent.pointerDown(screen.getByRole("button", { name: "2 columns, 3 rows" }));

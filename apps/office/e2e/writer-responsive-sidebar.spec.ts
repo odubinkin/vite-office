@@ -92,6 +92,22 @@ test("the mobile table grid dismisses outside and More Options opens the full di
     .getByRole("button", { name: "Cancel" })
     .click();
   await insertTable.click();
-  await page.getByRole("button", { name: "2 columns, 2 rows" }).click();
+  const tableCell = page.getByRole("button", { name: "2 columns, 2 rows" });
+  expect(
+    await tableCell.evaluate(
+      /** Confirms the cell receives a real pointer hit above both toolbars. @param element - Grid cell. @returns Whether the cell is topmost. */ (
+        element,
+      ) => {
+        const bounds = element.getBoundingClientRect();
+        return (
+          document.elementFromPoint(
+            bounds.left + bounds.width / 2,
+            bounds.top + bounds.height / 2,
+          ) === element
+        );
+      },
+    ),
+  ).toBe(true);
+  await tableCell.click();
   await expect(page.getByRole("table", { name: "Table1" })).toBeVisible();
 });
