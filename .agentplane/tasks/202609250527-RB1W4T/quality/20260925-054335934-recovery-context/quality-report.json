@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609250527-RB1W4T",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-25T05:43:35.934Z",
+  "verdict": "pass",
+  "summary": "Supported Insert Table fields now follow pinned Writer dialog; geometry remains editable in Table Properties.",
+  "evaluated_sha": "2308863dfe00628cd97aa4bcf4a4303068dde717",
+  "blueprint_digest": "be3a2b94ce5636a24d43a7d1a675b8ae454c9fbe21584d2c2aa699c1c1fe742f",
+  "findings": [
+    "Full npm run verify and routing validation passed after a transient unrelated test timeout was isolated and rerun successfully."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609250527-RB1W4T/README.md",
+    "npm run verify",
+    "node .agentplane/policy/check-routing.mjs",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
