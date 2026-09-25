@@ -4,7 +4,7 @@ title: "Align Writer menu item indentation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     to: "DOING"
     note: "Start: align menu item labels with a compact shared gutter and verify interactions."
 doc_version: 3
-doc_updated_at: "2026-09-25T08:16:33.776Z"
+doc_updated_at: "2026-09-25T08:24:30.057Z"
 doc_updated_by: "CODER"
 description: "Use the same compact label inset for Writer command, checked, radio, and submenu rows in the shared menu presenter; verify menu interaction remains intact."
 sections:
@@ -50,9 +50,9 @@ sections:
   Scope: "Shared CommandMenuBar rendering and focused tests for action, checked, radio, and submenu rows. Keep save and export behavior unchanged."
   Plan: "1. Apply a shared compact label gutter to command, checkable, radio, and submenu rows. 2. Test text alignment and existing menu interaction in unit and browser checks. 3. Run full verification, record evidence, and commit the focused change."
   Verify Steps: "1. Run focused CommandMenuBar and WriterMenuBar unit tests. 2. Verify menu label alignment and clickability in a browser. 3. Run npm run verify. 4. Inspect git diff and status."
-  Verification: "Pending."
+  Verification: "Command: npx vitest run src/framework/browser/presentation/CommandMenuBar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx (apps/office); Result: pass; Evidence: 12 tests passed; Scope: menu interactions. Command: npm run build && npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-menu-alignment.spec.ts; Result: pass after correcting test navigation from click to hover; Evidence: 1 browser test passed and measured equal compact label offsets; Scope: rendered Format and View menus. Command: npm run verify; Result: pass; Evidence: 547 office tests, 109 inventory tests, 19 browser tests, 100% office coverage, static checks passed; Scope: repository. Command: git diff --check; Result: pass; Evidence: no whitespace errors; Scope: changed paths."
   Rollback Plan: "Revert this task's menu component and test commit."
-  Findings: "Command rows reserve a 16px checkmark slot after 12px padding, while submenu rows use only 12px padding; their labels start at different horizontal positions."
+  Findings: "Command rows used 12px horizontal padding plus a 16px checkmark slot, while submenu rows used only 12px padding. Both now use 8px padding and a 10px leading slot, aligning all labels at an 18px inset. The first browser test attempt clicked View after hover had already switched the open menu, closing it; the test now uses hover and passes."
 id_source: "generated"
 ---
 ## Summary
@@ -73,7 +73,7 @@ Shared CommandMenuBar rendering and focused tests for action, checked, radio, an
 
 ## Verification
 
-Pending.
+Command: npx vitest run src/framework/browser/presentation/CommandMenuBar.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx (apps/office); Result: pass; Evidence: 12 tests passed; Scope: menu interactions. Command: npm run build && npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-menu-alignment.spec.ts; Result: pass after correcting test navigation from click to hover; Evidence: 1 browser test passed and measured equal compact label offsets; Scope: rendered Format and View menus. Command: npm run verify; Result: pass; Evidence: 547 office tests, 109 inventory tests, 19 browser tests, 100% office coverage, static checks passed; Scope: repository. Command: git diff --check; Result: pass; Evidence: no whitespace errors; Scope: changed paths.
 
 ## Rollback Plan
 
@@ -81,4 +81,4 @@ Revert this task's menu component and test commit.
 
 ## Findings
 
-Command rows reserve a 16px checkmark slot after 12px padding, while submenu rows use only 12px padding; their labels start at different horizontal positions.
+Command rows used 12px horizontal padding plus a 16px checkmark slot, while submenu rows used only 12px padding. Both now use 8px padding and a 10px leading slot, aligning all labels at an 18px inset. The first browser test attempt clicked View after hover had already switched the open menu, closing it; the test now uses hover and passes.

@@ -289,14 +289,17 @@ export function CommandMenuBar({
               <button
                 aria-expanded={isOpen}
                 aria-haspopup="menu"
-                className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
+                className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
                 data-submenu-trigger={item.id}
                 role="menuitem"
                 tabIndex={-1}
                 type="button"
               >
-                {label}
-                <span aria-hidden="true">›</span>
+                <span aria-hidden="true" className="w-2.5 shrink-0" />
+                <span>{label}</span>
+                <span aria-hidden="true" className="ml-auto">
+                  ›
+                </span>
               </button>
               {isOpen ? (
                 <div
@@ -434,7 +437,7 @@ function BindingsMenuCommand({
     <button
       aria-checked={isCheckable ? isChecked : undefined}
       aria-keyshortcuts={resource.shortcuts[0]}
-      className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
+      className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
       disabled={!presentation.enabled}
       onClick={
         /** Dispatches this command and dismisses the popup. @returns Nothing. */ () => {
@@ -449,7 +452,7 @@ function BindingsMenuCommand({
     >
       <span
         aria-hidden="true"
-        className="flex w-4 shrink-0 justify-center font-semibold"
+        className="flex w-2.5 shrink-0 justify-center font-semibold"
         data-menu-checkmark="true"
       >
         {isCheckable && isChecked ? "✓" : null}
