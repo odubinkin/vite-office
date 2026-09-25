@@ -1,10 +1,11 @@
 ---
 id: "202609250553-GNP6YY"
 title: "Align Writer dialogs and browser print with upstream"
-status: "DOING"
+result_summary: "verified-202609250553-GNP6YY"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-25T06:48:44.002Z"
+  updated_at: "2026-09-25T06:49:13.506Z"
   updated_by: "CODER"
   note: "verified-202609250553-GNP6YY"
   attempts: 0
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Print placement follows generated upstream command locations and invokes the browser print dialog; print CSS excludes Writer UI."
     - "Modal styling and scrolling, palette dismissal, mobile containment, and supported upstream table and hyperlink settings are covered by tests."
-commit: null
+commit:
+  hash: "527559a64023cc515c8212d450d820d13310788a"
+  message: "📝 GNP6YY task: Record Writer UI quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer dialog, print, and mobile UI corrections against pinned upstream."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609250553-GNP6YY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609250553-GNP6YY"
+  -
+    type: "verify"
+    at: "2026-09-25T06:49:13.506Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609250553-GNP6YY"
+  -
+    type: "status"
+    at: "2026-09-25T06:49:13.723Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609250553-GNP6YY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-25T06:48:44.075Z"
+doc_updated_at: "2026-09-25T06:49:13.724Z"
 doc_updated_by: "CODER"
 description: "Implement the approved Writer UI corrections: upstream dialog and quick popup parity, mobile viewport containment, and browser print of document pages only."
 sections:
@@ -154,9 +173,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-25T06:49:13.506Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609250553-GNP6YY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T06:48:44.075Z, excerpt_hash=sha256:5535eecc583403effcbd86d959bf34261c2a56355b9012fd363adaa1ba611af3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250553-GNP6YY/blueprint/resolved-snapshot.json
+    - old_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+    - current_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609250553-GNP6YY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609250553-GNP6YY --result verified-202609250553-GNP6YY --commit 527559a64023cc515c8212d450d820d13310788a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commit; preserve unrelated existing task state."
   Findings: "The dialog layouts and quick controls follow pinned upstream structure only for Writer settings implemented by the current browser document model. LibreOffice dialog tabs and fields without model support remain unimplemented, including additional Hyperlink and Page Style tabs and advanced Paragraph options. Insert Table header-row counts and repeating headers round trip through ODT; a header marked non-repeating is not preserved as a distinct ODT state. These are follow-up gaps for full upstream parity. The browser build emits its existing bundle-size warning; the build and static smoke still pass."
+extensions:
+  implementation_commit:
+    hash: "7094ab6c31d797e7586036e0ab47eac80d0bf5d5"
+    message: "🚧 GNP6YY task: Align Writer dialogs and browser print"
 id_source: "generated"
 ---
 ## Summary
@@ -248,6 +301,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609250553-GNP6YY --result verified-202609250553-GNP6YY --commit 7094ab6c31d797e7586036e0ab47eac80d0bf5d5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-25T06:49:13.506Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609250553-GNP6YY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-25T06:48:44.075Z, excerpt_hash=sha256:5535eecc583403effcbd86d959bf34261c2a56355b9012fd363adaa1ba611af3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609250553-GNP6YY/blueprint/resolved-snapshot.json
+- old_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+- current_digest: 473ee4706c6909507c2cb652f500ef9b31ad6b657222ae1f07bdccbc33fd2dc9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609250553-GNP6YY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609250553-GNP6YY --result verified-202609250553-GNP6YY --commit 527559a64023cc515c8212d450d820d13310788a
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
