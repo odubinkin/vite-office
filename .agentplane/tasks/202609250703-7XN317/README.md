@@ -4,7 +4,7 @@ title: "Restore upstream Writer command and dialog entry points"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: audit all implemented Writer actions and match upstream command placements and supported dialog behavior."
 doc_version: 3
-doc_updated_at: "2026-09-25T07:04:11.112Z"
+doc_updated_at: "2026-09-25T07:54:15.944Z"
 doc_updated_by: "CODER"
 description: "Audit implemented Writer operations against pinned LibreOffice UI; restore missing command placements and faithful quick/full dialog behavior while preserving existing save/export UI."
 sections:
@@ -51,7 +51,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit for this task only; do not change existing save/export workflow or the unrelated active task."
-  Findings: "Audit in progress. Supported means document-model behavior already implemented; unsupported LibreOffice capabilities will be recorded, not represented by inert UI."
+  Findings: "Audited implemented Writer actions against pinned menubar.xml, standardbar.xml, textobjectbar.xml, tablewindow.ui, paralinespacingcontrol.ui, and linenumbering.ui. Restored missing entry points: Insert Table in standard toolbar and Table menu; Table Properties in Table menu; direct Page Break in Insert menu and standard toolbar; Line Numbering in Tools; Single Underline in Format > Text; active Line Spacing quick control in formatting toolbar. The standard toolbar Table button now opens the 10 by 15 grid with keyboard sizing and More Options; repeat-header settings moved to Table Properties > Text Flow. The supported action matrix is recorded in docs/program/writer-command-placement.md. Save and export command specifications, placements, and handlers remain unchanged. Validation: npm run verify passed, including 547 office tests and 109 inventory tests at 100 percent coverage, 18 browser e2e tests including mobile table grid, static build, provenance, and parity."
 id_source: "generated"
 ---
 ## Summary
@@ -83,4 +83,4 @@ Revert the implementation commit for this task only; do not change existing save
 
 ## Findings
 
-Audit in progress. Supported means document-model behavior already implemented; unsupported LibreOffice capabilities will be recorded, not represented by inert UI.
+Audited implemented Writer actions against pinned menubar.xml, standardbar.xml, textobjectbar.xml, tablewindow.ui, paralinespacingcontrol.ui, and linenumbering.ui. Restored missing entry points: Insert Table in standard toolbar and Table menu; Table Properties in Table menu; direct Page Break in Insert menu and standard toolbar; Line Numbering in Tools; Single Underline in Format > Text; active Line Spacing quick control in formatting toolbar. The standard toolbar Table button now opens the 10 by 15 grid with keyboard sizing and More Options; repeat-header settings moved to Table Properties > Text Flow. The supported action matrix is recorded in docs/program/writer-command-placement.md. Save and export command specifications, placements, and handlers remain unchanged. Validation: npm run verify passed, including 547 office tests and 109 inventory tests at 100 percent coverage, 18 browser e2e tests including mobile table grid, static build, provenance, and parity.

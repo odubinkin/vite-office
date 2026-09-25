@@ -1,5 +1,4 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
-
 import type { SfxShell } from "../../../../sfx2/source/control/shell";
 import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
@@ -66,7 +65,6 @@ import {
   type WriterCharacterCommandArguments,
   type WriterHyperlinkCommandArguments,
 } from "../../../sdi/swriter";
-
 /** Cursor/model primitives consumed by the text shell without importing SwWrtShell. */
 export interface SwTextShellTarget {
   readonly ApplyAction: (action: SfxUndoAction<SwUndoRedoContext>) => boolean;
@@ -96,7 +94,6 @@ export interface SwTextShellTarget {
   readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
   readonly Undo: () => boolean;
 }
-
 /** Primitive values accepted by the supported Writer paragraph dialog. */
 export interface WriterParagraphFormatValue {
   readonly upperPt: number;
@@ -118,7 +115,6 @@ export interface WriterParagraphFormatValue {
   readonly pageNumber?: number | "auto";
   readonly countLineNumbers: boolean;
 }
-
 /** Dedicated text context shell owning its execute/state registration. */
 export class SwTextShell {
   private readonly shell: SfxShell;
@@ -133,7 +129,6 @@ export class SwTextShell {
   public GetShell(): SfxShell {
     return this.shell;
   }
-
   /** Returns on/off/mixed state for one direct character format. @param format - Writer format. @returns Selection-aware state. */
   public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
     const ranges = getWriterSelectedTextRanges(this.target.GetCursor());
@@ -148,7 +143,6 @@ export class SwTextShell {
       ? (state as "off" | "on")
       : "mixed";
   }
-
   /** Applies direct character formatting through the text-shell responsibility. @param format - Writer format. @param range - Optional resolved range. @returns Whether content changed. */
   public ToggleCharacterFormat(format: WriterCharacterFormat, range?: WriterTextRange): boolean {
     if (range !== undefined) {
@@ -205,7 +199,6 @@ export class SwTextShell {
     for (const child of actions) action.AddAction(child);
     return this.target.ApplyAction(action);
   }
-
   /** Returns the uniform hyperlink at the active selection or caret. @returns Hyperlink or undefined. */
   public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
     return getWriterHyperlinkAtCursor(this.target.GetDoc(), this.target.GetCursor());
@@ -784,6 +777,7 @@ export function createWriterTextCommandRegistry(
     characterCommand(WRITER_COMMAND_IDS.bold, "bold"),
     characterCommand(WRITER_COMMAND_IDS.italic, "italic"),
     characterCommand(WRITER_COMMAND_IDS.underline, "underline"),
+    characterCommand(WRITER_COMMAND_IDS.underlineSingle, "underline"),
     {
       capabilityId: "CAP-0135",
       /** Applies dialog hyperlink data to the current selection or caret. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether content changed. */
@@ -856,6 +850,12 @@ export function createWriterTextCommandRegistry(
         );
       },
       id: WRITER_COMMAND_IDS.insertBreak,
+    },
+    {
+      capabilityId: "CAP-0112",
+      /** Inserts the upstream direct page break without opening the break dialog. @returns Whether inserted. */
+      execute: (): boolean => target.InsertHardPageBreak(),
+      id: WRITER_COMMAND_IDS.insertPageBreak,
     },
     {
       capabilityId: "CAP-0135",

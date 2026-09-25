@@ -72,3 +72,26 @@ test("the page stays within the viewport while the document and modal scroll", /
     ),
   ).toBe(340);
 });
+
+test("the mobile table grid dismisses outside and More Options opens the full dialog", /** Checks the pinned quick control on a touch viewport. @param fixtures - Browser fixtures. @returns Nothing. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  const insertTable = page.getByRole("button", { name: "Insert Table" });
+  await insertTable.click();
+  await expect(page.getByRole("button", { name: "More Options" })).toBeVisible();
+  await page
+    .getByRole("region", { name: "Writer document canvas" })
+    .click({ position: { x: 20, y: 20 } });
+  await expect(page.getByRole("button", { name: "More Options" })).toHaveCount(0);
+  await insertTable.click();
+  await page.getByRole("button", { name: "More Options" }).click();
+  await expect(page.getByRole("dialog", { name: "Insert Table" })).toBeVisible();
+  await page
+    .getByRole("dialog", { name: "Insert Table" })
+    .getByRole("button", { name: "Cancel" })
+    .click();
+  await insertTable.click();
+  await page.getByRole("button", { name: "2 columns, 2 rows" }).click();
+  await expect(page.getByRole("table", { name: "Table1" })).toBeVisible();
+});

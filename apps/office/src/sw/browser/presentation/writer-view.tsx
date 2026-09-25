@@ -11,6 +11,7 @@ import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
 import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { WriterTableDialog, type WriterTableDialogValue } from "./WriterTableDialog";
+import { WriterLineNumberingDialog } from "./WriterLineNumberingDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
 import type {
   WriterFileDialogController,
@@ -40,6 +41,9 @@ import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projecti
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwTable } from "../../source/core/table/swtable";
+import { SwLineNumberInfo } from "../../inc/lineinfo";
+import { createSfxShell } from "../../../sfx2/source/control/shell";
+import { createWriterInterface } from "../../sdi/swriter";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -97,6 +101,7 @@ export function WriterWorkbench({
   const [selectedTable, setSelectedTable] = useState<SwTable>();
   const [selectedTableRow, setSelectedTableRow] = useState<number>();
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
+  const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
   const currentTable =
     selectedTable !== undefined && activeDocument.GetTables().includes(selectedTable)
       ? selectedTable
@@ -105,6 +110,56 @@ export function WriterWorkbench({
     snapshot.pageDescriptor.width -
     snapshot.pageDescriptor.leftMargin -
     snapshot.pageDescriptor.rightMargin;
+  useEffect(
+    /** Registers browser-owned table and line-numbering slots. @returns Shell cleanup. */ () => {
+      const browserDialogShell = createSfxShell(
+        null,
+        createWriterInterface([
+          {
+            id: WRITER_COMMAND_IDS.insertTable,
+            capabilityId: "CAP-0137",
+            execute: /** Opens the insert dialog. @returns Nothing. */ () =>
+              setTableDialog("insert"),
+          },
+          {
+            id: WRITER_COMMAND_IDS.tableDialog,
+            capabilityId: "CAP-0137",
+            execute: /** Opens selected table properties. @returns Nothing. */ () =>
+              setTableDialog("properties"),
+            isEnabled: /** Checks table selection. @returns Availability. */ () =>
+              currentTable !== undefined,
+          },
+          {
+            id: WRITER_COMMAND_IDS.lineNumberingDialog,
+            capabilityId: "CAP-0125",
+            execute: /** Opens line numbering. @returns Nothing. */ () =>
+              setLineNumberingDialog(true),
+          },
+        ]),
+      );
+      const dispatcher = view.GetViewFrame().GetDispatcher();
+      dispatcher.Push(browserDialogShell);
+      return /** Releases browser-owned slots. @returns Nothing. */ () =>
+        dispatcher.Pop(browserDialogShell);
+    },
+    [currentTable, view],
+  );
+  /** Inserts a table from the upstream size grid with Writer's default table geometry. @param columns - Selected columns. @param rows - Selected rows. @returns Nothing. */
+  function insertTableFromGrid(columns: number, rows: number): void {
+    const table = activeDocument.nodes.MakeTableNode(
+      `Table${activeDocument.GetTables().length + 1}`,
+      { width: availableTableWidth, align: "left", headerRows: 1, repeatHeaderRows: true },
+      view.GetWrtShell().GetActiveParagraph(),
+    );
+    const columnWidth = Math.floor(availableTableWidth / columns);
+    for (let column = 0; column < columns; column += 1)
+      table.AddColumnWidth(
+        column === columns - 1 ? availableTableWidth - columnWidth * (columns - 1) : columnWidth,
+      );
+    for (let row = 0; row < rows; row += 1) activeDocument.nodes.AppendTableRow(table, columns);
+    setSelectedTable(table);
+    setSelectedTableRow(0);
+  }
   const submitTable =
     /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
       value: WriterTableDialogValue,
@@ -432,9 +487,9 @@ export function WriterWorkbench({
           <>
             <WriterCommandToolbar
               commandSource={commandSource}
-              onInsertTable={
-                /** Opens the native-positioned Insert Table dialog. @returns Nothing. */
-                () => setTableDialog("insert")
+              onInsertTable={insertTableFromGrid}
+              onTableMoreOptions={
+                /** Opens full table settings. @returns Nothing. */ () => setTableDialog("insert")
               }
               resolveArguments={resolveCommandArguments}
             />
@@ -492,6 +547,23 @@ export function WriterWorkbench({
           onSubmit={submitTable}
         />
       )}
+      {lineNumberingDialog ? (
+        <WriterLineNumberingDialog
+          value={snapshot.lineNumberInfo}
+          onCancel={
+            /** Discards line-numbering draft. @returns Nothing. */ () =>
+              setLineNumberingDialog(false)
+          }
+          onSubmit={
+            /** Commits line-number settings. @param value - Accepted settings. @returns Nothing. */ (
+              value,
+            ) => {
+              activeDocument.SetLineNumberInfo(SwLineNumberInfo.FromValue(value));
+              setLineNumberingDialog(false);
+            }
+          }
+        />
+      ) : null}
       {dialogRequest?.request.kind !== "hyperlink" ? null : (
         <WriterHyperlinkDialog
           {...(dialogRequest.request.initialHyperlink === undefined

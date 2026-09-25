@@ -100,6 +100,8 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
     shell.SetPaM(new SwPosition(shell.GetDoc().paragraphs[0]!, 1));
     const split = vi.spyOn(shell, "SplitNode").mockReturnValueOnce(false);
     expect(runValue(WRITER_COMMAND_IDS.insertBreak, { breakKind: "page" })).toBe(false);
+    split.mockReturnValueOnce(false);
+    expect(runValue(WRITER_COMMAND_IDS.insertPageBreak)).toBe(false);
     split.mockRestore();
     shell.GetDocShell().Close();
   });

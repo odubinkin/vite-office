@@ -188,8 +188,8 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Insert" }));
     expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toBeEnabled();
-    expect(screen.queryByRole("button", { name: "Table" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Tools" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Table" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Tools" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Window" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Help" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Add paragraph" })).not.toBeInTheDocument();
@@ -574,13 +574,13 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const file = screen.getByRole("button", { name: "File" });
       file.focus();
       fireEvent.keyDown(file, { key: "ArrowLeft" });
-      expect(screen.getByRole("button", { name: "Styles" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("button", { name: "Styles" }), { key: "Home" });
+      expect(screen.getByRole("button", { name: "Tools" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Home" });
       expect(file).toHaveFocus();
       fireEvent.keyDown(file, { key: "End" });
-      expect(screen.getByRole("button", { name: "Styles" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("button", { name: "Styles" }), { key: "Escape" });
-      fireEvent.keyDown(screen.getByRole("button", { name: "Styles" }), { key: "Tab" });
+      expect(screen.getByRole("button", { name: "Tools" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Escape" });
+      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Tab" });
 
       fireEvent.click(file);
       const firstFileItem = screen.getByRole("menuitem", { name: "New Document" });

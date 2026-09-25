@@ -106,10 +106,16 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
       target: { value: "12" },
     });
-    fireEvent.click(screen.getByLabelText("Header"));
-    fireEvent.click(screen.getByLabelText("Header"));
-    fireEvent.click(screen.getByLabelText("Repeat header rows on new pages"));
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.click(screen.getByLabelText("Header"));
+    fireEvent.click(screen.getByLabelText("Header"));
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Header rows" }), {
+      target: { value: "0" },
+    });
+    fireEvent.change(screen.getByRole("spinbutton", { name: "Header rows" }), {
+      target: { value: "1" },
+    });
+    fireEvent.click(screen.getByLabelText("Repeat header rows on new pages"));
     fireEvent.click(screen.getByLabelText("Don’t split table over pages"));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
       target: { value: "1" },

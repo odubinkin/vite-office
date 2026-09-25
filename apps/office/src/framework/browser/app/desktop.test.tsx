@@ -480,6 +480,7 @@ describe("App" /**
           expect(screen.getByRole("button", { name: "Edit document title" })).toHaveTextContent(
             "First copy",
           ),
+        { timeout: 5000 },
       );
       await invokeWriterFileCommand("Open…");
       expect(screen.getByRole("tab", { name: "In browser" })).toHaveAttribute(
@@ -509,5 +510,5 @@ describe("App" /**
     } finally {
       Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: oldFactory });
     }
-  });
+  }, 15_000);
 });

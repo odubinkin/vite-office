@@ -139,6 +139,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const session = createWriterDocumentSession();
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
     fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
+    fireEvent.click(screen.getByRole("button", { name: "More Options" }));
     fireEvent.click(
       within(screen.getByRole("dialog", { name: "Insert Table" })).getByRole("button", {
         name: "Insert",
@@ -163,6 +164,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const session = createWriterDocumentSession();
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
     fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
+    fireEvent.click(screen.getByRole("button", { name: "More Options" }));
     fireEvent.click(
       within(screen.getByRole("dialog", { name: "Insert Table" })).getByRole("button", {
         name: "Cancel",
@@ -170,6 +172,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     );
     expect(screen.queryByRole("dialog", { name: "Insert Table" })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
+    fireEvent.click(screen.getByRole("button", { name: "More Options" }));
     let dialog = screen.getByRole("dialog", { name: "Insert Table" });
     fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Rows" }), {
       target: { value: "2" },
@@ -427,7 +430,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).color).toBe(
       "#ff0000",
     );
-    expect(screen.queryByLabelText("Line Spacing")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Line Spacing" })).toBeInTheDocument();
     openParagraphDialog();
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "preset-150" } });
     fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });

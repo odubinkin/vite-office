@@ -100,7 +100,7 @@ export interface WriterTableDialogValue {
     >
       <form
         data-writer-modal-panel="true"
-        className="w-full max-w-lg space-y-4 rounded-xl bg-white p-5 shadow-2xl"
+        className="max-h-[calc(100dvh-2rem)] w-full max-w-lg space-y-4 overflow-auto rounded-xl bg-white p-5 shadow-2xl"
         onSubmit={
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
             event,
@@ -322,36 +322,7 @@ export interface WriterTableDialogValue {
               )}
             </div>
             <div className="grid min-w-0 flex-1 content-start gap-3" role="tabpanel">
-              {activeTab === "table" ? (
-                <>
-                  {field("Table width (cm)", width, setWidth)}
-                  <label className="flex items-center gap-2 text-sm">
-                    <input
-                      checked={hasHeader}
-                      onChange={
-                        /** Toggles header rows. @param event - Checkbox event. @returns Nothing. */ (
-                          event,
-                        ) => setHasHeader(event.target.checked)
-                      }
-                      type="checkbox"
-                    />
-                    Header
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
-                    <input
-                      checked={repeatHeaderRows}
-                      disabled={!hasHeader}
-                      onChange={
-                        /** Toggles repeated headers. @param event - Checkbox event. @returns Nothing. */ (
-                          event,
-                        ) => setRepeatHeaderRows(event.target.checked)
-                      }
-                      type="checkbox"
-                    />
-                    Repeat header rows on new pages
-                  </label>
-                </>
-              ) : null}
+              {activeTab === "table" ? <>{field("Table width (cm)", width, setWidth)}</> : null}
               {activeTab === "columns" ? (
                 <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
                   <legend className="text-sm font-bold">Columns</legend>
@@ -383,6 +354,48 @@ export interface WriterTableDialogValue {
               {activeTab === "text-flow" ? (
                 <fieldset className="grid gap-2 rounded border p-3">
                   <legend className="text-sm font-bold">Text Flow</legend>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      checked={hasHeader}
+                      onChange={
+                        /** Toggles header rows. @param event - Checkbox event. @returns Nothing. */ (
+                          event,
+                        ) => setHasHeader(event.target.checked)
+                      }
+                      type="checkbox"
+                    />
+                    Header
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      checked={repeatHeaderRows}
+                      disabled={!hasHeader}
+                      onChange={
+                        /** Toggles repeated headers. @param event - Checkbox event. @returns Nothing. */ (
+                          event,
+                        ) => setRepeatHeaderRows(event.target.checked)
+                      }
+                      type="checkbox"
+                    />
+                    Repeat header rows on new pages
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    Header rows
+                    <input
+                      aria-label="Header rows"
+                      className="w-16 rounded border px-2 py-1"
+                      disabled={!hasHeader || !repeatHeaderRows}
+                      max={rowCount}
+                      min="1"
+                      onChange={
+                        /** Updates repeated header count. @param event - Number input. @returns Nothing. */ (
+                          event,
+                        ) => setHeaderRows(Number(event.target.value))
+                      }
+                      type="number"
+                      value={headerRows}
+                    />
+                  </label>
                   {field("Minimum row height (cm)", minRowHeight, setMinRowHeight)}
                   <label className="flex items-center gap-2 text-sm">
                     <input

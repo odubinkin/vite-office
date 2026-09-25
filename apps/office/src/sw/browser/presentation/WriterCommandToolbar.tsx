@@ -9,10 +9,11 @@ import {
   Bookmark,
   Redo2,
   Scissors,
-  Table2,
+  SeparatorHorizontal,
   Undo2,
 } from "lucide-react";
 
+import { WriterTableInsertControl } from "./WriterTableInsertControl";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerStandardBarItems } from "../../uiconfig/swriter/toolbar/standardbar";
 import { selectWriterCommandResource } from "./writer-command-presentation";
@@ -27,6 +28,7 @@ const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.newDocument, FilePlus],
   [WRITER_COMMAND_IDS.openOdt, FolderOpen],
   [WRITER_COMMAND_IDS.print, Printer],
+  [WRITER_COMMAND_IDS.insertPageBreak, SeparatorHorizontal],
   [WRITER_COMMAND_IDS.cut, Scissors],
   [WRITER_COMMAND_IDS.copy, Copy],
   [WRITER_COMMAND_IDS.paste, ClipboardPaste],
@@ -36,24 +38,25 @@ const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.insertBookmark, Bookmark],
 ]);
 
-const beforeTable = writerStandardBarItems.slice(
-  0,
-  writerStandardBarItems.findIndex(
-    /** Finds the upstream point preceding hyperlink insertion. @param item - Toolbar placement. @returns Whether this is the hyperlink command. */
-    (item) => item.kind === "command" && item.commandId === WRITER_COMMAND_IDS.hyperlinkDialog,
-  ),
+const tableIndex = writerStandardBarItems.findIndex(
+  /** Finds Insert Table in pinned order. @param item - Toolbar placement. @returns Match. */ (
+    item,
+  ) => item.kind === "command" && item.commandId === WRITER_COMMAND_IDS.insertTable,
 );
-const afterTable = writerStandardBarItems.slice(beforeTable.length);
+const beforeTable = writerStandardBarItems.slice(0, tableIndex);
+const afterTable = writerStandardBarItems.slice(tableIndex + 1);
 
 /** Browser-only insertion action occupying the native Insert Table placement. */
 interface WriterCommandToolbarProps extends BrowserCommandSurfaceProps {
-  readonly onInsertTable: () => void;
+  readonly onInsertTable: (columns: number, rows: number) => void;
+  readonly onTableMoreOptions: () => void;
 }
 
 /** Renders a standard toolbar from descriptor-backed resource items. @param props - Shared command surface. @returns Toolbar item fragment. */
 export function WriterCommandToolbar({
   commandSource,
   onInsertTable,
+  onTableMoreOptions,
   resolveArguments,
 }: WriterCommandToolbarProps): React.JSX.Element {
   const localization = useBrowserLocalization();
@@ -65,15 +68,7 @@ export function WriterCommandToolbar({
   return (
     <>
       <CommandToolbarItems {...common} items={beforeTable} />
-      <button
-        aria-label="Insert Table"
-        className="grid size-9 place-items-center rounded-lg hover:bg-indigo-50"
-        onClick={onInsertTable}
-        title="Insert Table"
-        type="button"
-      >
-        <Table2 aria-hidden={true} size={18} />
-      </button>
+      <WriterTableInsertControl onInsert={onInsertTable} onMoreOptions={onTableMoreOptions} />
       <CommandToolbarItems {...common} items={afterTable} />
     </>
   );

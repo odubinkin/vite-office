@@ -27,6 +27,7 @@ import type { WriterParagraphStyleOption } from "./writer-view-projection";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerTextObjectBarItems } from "../../uiconfig/swriter/toolbar/textobjectbar";
+import { WriterLineSpacingControl } from "./WriterLineSpacingControl";
 import { selectWriterCommandResource } from "./writer-command-presentation";
 import type { WriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import type { WriterToolbarItemPlacement } from "../../uiconfig/swriter/ui-resource";
@@ -66,15 +67,24 @@ export function WriterFormattingToolbar({
     ) => {
       return selectWriterCommandResource(localization, commandUrl);
     };
-  return (
-    <>
+  const lineSpacingIndex = writerTextObjectBarItems.findIndex(
+    /** Finds the upstream spacing position. @param item - Toolbar placement. @returns Match. */ (
+      item,
+    ) => item.kind === "command" && item.commandId === WRITER_COMMAND_IDS.lineSpacing,
+  );
+  const beforeLineSpacing = writerTextObjectBarItems.slice(0, lineSpacingIndex);
+  const afterLineSpacing = writerTextObjectBarItems.slice(lineSpacingIndex + 1);
+  const items =
+    /** Renders one toolbar segment. @param placements - Segment placements. @returns Toolbar items. */ (
+      placements: typeof writerTextObjectBarItems,
+    ) => (
       <CommandToolbarItems
         buttonClassName="grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-sm font-bold text-slate-700 transition hover:border-indigo-400 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:border-indigo-700 data-[active=true]:bg-indigo-700 data-[active=true]:text-white"
         commandSource={commandSource}
         getButtonContent={getWriterButtonContent}
         getCommandResource={getCommandResource}
         icons={icons}
-        items={writerTextObjectBarItems}
+        items={placements}
         renderSpecialItem={
           /** Renders Writer selector placements. @param item - Generic special placement. @returns Writer selector. */ (
             item,
@@ -95,6 +105,15 @@ export function WriterFormattingToolbar({
         }
         resolveArguments={resolveArguments}
       />
+    );
+  return (
+    <>
+      {items(beforeLineSpacing)}
+      <WriterLineSpacingControl
+        commandSource={commandSource}
+        getCommandResource={getCommandResource}
+      />
+      {items(afterLineSpacing)}
       {advancedControls}
     </>
   );

@@ -7,6 +7,30 @@ copy native menu pixels.
 
 Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 
+## Supported action audit
+
+The browser action audit compares the generated command graph, registered shell
+handlers, and browser-only table/line-number presenters against the pinned
+Writer menubar and toolbar resources. The following implemented actions had a
+missing or incorrect entry point and now use the upstream placement:
+
+| Action | Pinned entry point | Browser behavior |
+| --- | --- | --- |
+| Insert table | Standard toolbar, Table menu | Toolbar opens the 10 × 15 size grid; More Options and the menu open Insert Table. |
+| Table properties | Table menu | Opens for the selected table. |
+| Page break | Standard toolbar, Insert menu | Inserts a hard page break directly. |
+| Line numbering | Tools menu | Opens the document settings supported by `SwLineNumberInfo`. |
+| Single underline | Format → Text | Uses the same direct underline state as the toolbar. |
+| Line spacing | Formatting toolbar | Opens the four pinned presets and a custom percentage control. |
+
+The Insert Table dialog keeps General, Options, and Styles together. Table
+Properties places repeat-header controls in Text Flow, matching their upstream
+tab. Browser-only table fields with an implemented model (row height and cell
+vertical alignment) remain accessible in that dialog. Unsupported upstream
+fields are excluded from the browser slice and recorded in the generated
+resource dispositions. Save and export placements retain their approved
+browser workflow.
+
 The generated Writer UI manifest records the complete reviewed graph as an
 explicit disposition for every encountered command reference: supported
 upstream, browser extension, or excluded with source and reason. Supported

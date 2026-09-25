@@ -22,7 +22,16 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
           menu,
         ) => menu.id,
       ),
-    ).toEqual(["picklist", "editmenu", "viewmenu", "insertmenu", "formatmenu", "formatstylesmenu"]);
+    ).toEqual([
+      "picklist",
+      "editmenu",
+      "viewmenu",
+      "insertmenu",
+      "formatmenu",
+      "formatstylesmenu",
+      "tablemenu",
+      "toolsmenu",
+    ]);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.bold);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.toggleHorizontalRuler);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.alignLeft);
@@ -48,6 +57,8 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       WRITER_COMMAND_IDS.paste,
       WRITER_COMMAND_IDS.undo,
       WRITER_COMMAND_IDS.redo,
+      WRITER_COMMAND_IDS.insertTable,
+      WRITER_COMMAND_IDS.insertPageBreak,
       WRITER_COMMAND_IDS.hyperlinkDialog,
       WRITER_COMMAND_IDS.insertBookmark,
     ]);

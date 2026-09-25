@@ -20,9 +20,12 @@
     "hyperlinkDialog": ".uno:HyperlinkDialog",
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
+    "insertPageBreak": ".uno:InsertPagebreak",
+    "insertTable": ".uno:InsertTable",
     "headingOne": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
     "italic": ".uno:Italic",
     "lineSpacing": ".uno:LineSpacing",
+    "lineNumberingDialog": ".uno:LineNumberingDialog",
     "increaseIndent": ".uno:IncrementIndent",
     "newDocument": ".uno:AddDirect",
     "openOdt": ".uno:Open",
@@ -39,11 +42,13 @@
     "saveOdt": ".uno:SaveAs",
     "selectAll": ".uno:SelectAll",
     "styleApply": ".uno:StyleApply",
+    "tableDialog": ".uno:TableDialog",
     "toggleHorizontalRuler": ".uno:Ruler",
     "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "toggleStatusBar": ".uno:StatusBarVisible",
     "underline": ".uno:Underline",
+    "underlineSingle": ".uno:UnderlineSingle",
     "undo": ".uno:Undo",
     "unorderedList": ".uno:DefaultBullet"
   },
@@ -71,10 +76,13 @@
     },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Italic" },
     { "capabilityId": "CAP-0125", "commandUrl": ".uno:LineSpacing" },
+    { "capabilityId": "CAP-0125", "commandUrl": ".uno:LineNumberingDialog" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementIndent" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
+    { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertTable" },
     { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
     { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
@@ -94,6 +102,8 @@
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:StatusBarVisible" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Underline" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:UnderlineSingle" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:TableDialog" },
     { "capabilityId": "CAP-0102", "commandUrl": ".uno:Undo" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultBullet" }
   ],
@@ -366,6 +376,44 @@
       "shortcuts": [],
       "slotId": 20304
     },
+    ".uno:InsertPagebreak": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0112",
+      "controlLabel": "Page Break",
+      "label": "Page Break",
+      "iconName": "lc_insertpagebreak.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Enter", "Meta+Enter"],
+      "slotId": 20323
+    },
+    ".uno:InsertTable": {
+      "browserOwned": false,
+      "argumentSchema": [
+        "TableName:SfxStringItem",
+        "Columns:SfxUInt16Item",
+        "Rows:SfxUInt16Item",
+        "Flags:SfxInt32Item",
+        "AutoFormat:SfxStringItem"
+      ],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Table",
+      "label": "Table",
+      "iconName": "lc_inserttable.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+F12", "Meta+F12"],
+      "slotId": 20330
+    },
     ".uno:Italic": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -393,6 +441,19 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 10033
+    },
+    ".uno:LineNumberingDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0125",
+      "controlLabel": "Line Numbering",
+      "label": "Line Numbering",
+      "iconName": "lc_linenumberingdialog.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 20602
     },
     ".uno:AddDirect": {
       "browserOwned": false,
@@ -726,6 +787,19 @@
       "shortcuts": [],
       "slotId": 5552
     },
+    ".uno:TableDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Table Properties",
+      "label": "Table Properties",
+      "iconName": "lc_tabledialog.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 20460
+    },
     ".uno:Underline": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -741,6 +815,18 @@
       "showsDialog": false,
       "shortcuts": ["Ctrl+U", "Meta+U"],
       "slotId": 10014
+    },
+    ".uno:UnderlineSingle": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Single Underline",
+      "label": "Single Underline",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11196
     },
     ".uno:Undo": {
       "browserOwned": false,
@@ -899,6 +985,22 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertPagebreak",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertTable",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:Italic",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -909,6 +1011,11 @@
       "classification": "supported-upstream",
       "commandUrl": ".uno:LineSpacing",
       "sources": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:LineNumberingDialog",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
       "classification": "supported-upstream",
@@ -1059,11 +1166,21 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:TableDialog",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:Underline",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:UnderlineSingle",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
       "classification": "supported-upstream",
@@ -2172,14 +2289,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:InsertMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertPagebreak",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertLinebreak",
@@ -2719,14 +2828,6 @@
       "context": [".uno:InsertMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertSignatureLine",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:UnderlineSingle",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -3956,14 +4057,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertRowsBefore",
@@ -4287,22 +4380,6 @@
       "context": [".uno:TableMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:TableSort",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:TableDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:TableMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -4806,14 +4883,6 @@
       "classification": "X",
       "context": [".uno:ToolsMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:LineNumberingDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ToolsMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:FootnoteDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
@@ -5063,14 +5132,6 @@
       "context": [".uno:ToolsMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:OptionsTreeDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:ToolsMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -5350,14 +5411,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:InsertTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:InsertGraphic",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -5391,14 +5444,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:VerticalText",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertPagebreak",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
     },
@@ -6342,6 +6387,7 @@
       {
         "id": ".uno:InsertMenu",
         "items": [
+          { "commandUrl": ".uno:InsertPagebreak", "kind": "command", "visible": true },
           {
             "id": ".uno:BreaksMenu",
             "items": [{ "commandUrl": ".uno:InsertBreak", "kind": "command", "visible": true }],
@@ -6362,7 +6408,8 @@
             "id": ".uno:FormatTextMenu",
             "items": [
               { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:Italic", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:UnderlineSingle", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Text"
@@ -6408,6 +6455,22 @@
         ],
         "kind": "menu",
         "label": "Styles"
+      },
+      {
+        "id": ".uno:TableMenu",
+        "items": [
+          { "commandUrl": ".uno:InsertTable", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:TableDialog", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Table"
+      },
+      {
+        "id": ".uno:ToolsMenu",
+        "items": [{ "commandUrl": ".uno:LineNumberingDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Tools"
       }
     ],
     "numobjectbar": [
@@ -6462,6 +6525,10 @@
       { "kind": "separator" },
       { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertTable", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertPagebreak", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
       { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true }
@@ -7317,12 +7384,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:InsertMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertPagebreak"
-      },
-      {
-        "classification": "X",
         "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertLinebreak"
@@ -7728,12 +7789,6 @@
         "context": [".uno:InsertMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertSignatureLine"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:UnderlineSingle"
       },
       {
         "classification": "X",
@@ -8655,12 +8710,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertTable"
-      },
-      {
-        "classification": "X",
         "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertRowsBefore"
@@ -8905,13 +8954,6 @@
         "entryKind": "command",
         "sourceUrl": ".uno:TableSort"
       },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:TableDialog"
-      },
-      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:TableMenu" },
       {
         "classification": "X",
         "context": [".uno:FormatFormMenu"],
@@ -9288,12 +9330,6 @@
         "classification": "X",
         "context": [".uno:ToolsMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:LineNumberingDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ToolsMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:FootnoteDialog"
       },
       {
@@ -9482,7 +9518,6 @@
         "entryKind": "command",
         "sourceUrl": ".uno:OptionsTreeDialog"
       },
-      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:ToolsMenu" },
       {
         "classification": "X",
         "context": [".uno:WindowList"],
@@ -9663,12 +9698,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:InsertTable"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:InsertGraphic"
       },
       {
@@ -9694,12 +9723,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:VerticalText"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertPagebreak"
       },
       {
         "classification": "X",

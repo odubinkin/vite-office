@@ -53,6 +53,8 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
     "Insert",
     "Format",
     "Styles",
+    "Table",
+    "Tools",
   ]);
   await expect(page.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
   await expect(
