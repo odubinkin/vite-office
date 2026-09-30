@@ -4,7 +4,7 @@ title: "Restore native numbering marker ownership and ListFormat semantics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,27 @@ verification:
   updated_by: "CODER"
   note: "Native marker setters and Writer formatting match 188 compiled states/labels and 83 cloned labels; final 629 app, 109 inventory, 19 browser tests and both 100% coverage suites pass with all mandatory gates."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T23:36:09.922Z"
+  updated_by: "EVALUATOR"
+  note: "Native shared marker state and supported Writer ListFormat behavior match pinned source probes; final mandatory gates pass unchanged."
+  evaluated_sha: "7a5d80e1add85f113e00ea6fcf70e802a0e194cf"
+  blueprint_digest: "20cdf865e68f93be3aa3b0f392fabededfbcf2657ef036f3b841c60dece9d687"
+  evidence_refs:
+    - ".agentplane/tasks/202609302319-9KTM99/README.md"
+    - ".agentplane/tasks/202609302319-9KTM99/quality/20260930-233609922-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609302319-9KTM99/quality/20260930-233609922-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609302319-9KTM99/quality/20260930-233609922-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609302319-9KTM99/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609302319-9KTM99/native-results.json"
+    - ".agentplane/tasks/202609302319-9KTM99/native-oracle.py"
+    - ".agentplane/tasks/202609302319-9KTM99/compare-native.mts"
+    - ".agentplane/tasks/202609302319-9KTM99/verify.log"
+    - "apps/office/src/editeng/source/items/numitem.test.ts"
+    - "apps/office/src/sw/source/core/doc/number-list-format.test.ts"
+  findings:
+    - "Common marker fields now belong to SvxNumberFormat; optional empty patterns, compatibility derivation, affix invalidation and native field widths are preserved. Writer base patterns and standalone empty suffix are source-backed; numeric string formatting is separate from SwTextNode visible bullet glyph projection. Clone and Worker graph v16 retain raw independent state. No blanket parity promotion or intentional save/open/recovery change."
 commit: null
 comments:
   -
