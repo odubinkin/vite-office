@@ -4,7 +4,7 @@ title: "Match SfxItemSet Put range filtering"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: align bounded SfxItemSet Put range filtering with pinned upstream, validate wider-source copying and preserve explicit state contracts."
 doc_version: 3
-doc_updated_at: "2026-09-30T14:37:40.258Z"
+doc_updated_at: "2026-09-30T14:43:40.884Z"
 doc_updated_by: "CODER"
 description: "One implemented-runtime parity correction: SfxItemSet.Put must return undefined for an item outside its WhichId ranges, as pinned SfxItemSet::PutImpl returns nullptr; PutSet must retain supported items from a wider source without throwing. Scope: itemset.ts, itemset.test.ts, runtime-inventory.json and task artifacts. Approved by the user iterative parity instruction; preserve product deviations."
 sections:
@@ -56,7 +56,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Pinned SfxItemSet::PutImpl ignores entries outside its ranges; the old local exception caused three focused tests to fail. Focused itemset tests now pass 9/9. First npm run verify attempt: 559/560 app tests passed; desktop.test.tsx immediately saves imported TXT but never saves an empty import failed at line 441 waiting for the browser copy named notes. This unrelated timing-sensitive file test passed in the preceding full verification. Diagnose by focused rerun, then repeat the full gate without changing save policy or verification criteria. Runtime inventory retains unverified module status."
 id_source: "generated"
 ---
 ## Summary
@@ -89,3 +89,5 @@ One implemented-runtime parity correction: SfxItemSet.Put must return undefined 
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Pinned SfxItemSet::PutImpl ignores entries outside its ranges; the old local exception caused three focused tests to fail. Focused itemset tests now pass 9/9. First npm run verify attempt: 559/560 app tests passed; desktop.test.tsx immediately saves imported TXT but never saves an empty import failed at line 441 waiting for the browser copy named notes. This unrelated timing-sensitive file test passed in the preceding full verification. Diagnose by focused rerun, then repeat the full gate without changing save policy or verification criteria. Runtime inventory retains unverified module status.

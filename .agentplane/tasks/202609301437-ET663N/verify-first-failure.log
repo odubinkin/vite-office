@@ -1,0 +1,85 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 190 runtime sources, 785 relative imports, 12 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  21:41:04
+   Duration  357ms (transform 61ms, setup 0ms, import 84ms, tests 10ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+ ❯ src/framework/browser/app/desktop.test.tsx (11 tests | 1 failed) 32645ms
+     × immediately saves imported TXT but never saves an empty import 4726ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/framework/browser/app/desktop.test.tsx > App > immediately saves imported TXT but never saves an empty import
+TestingLibraryElementError: Unable to find role="button" and name "notes"
+
+
+DOM dump omitted. Failure at desktop.test.tsx:441 waiting for the browser copy notes.
+       |             ^
+    442|         /** Finds the newly imported browser copy. @returns Nothing. *…
+    443|           expect(screen.getByRole("button", { name: "notes" })).toBeVi…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 115 passed (116)
+      Tests  1 failed | 559 passed (560)
+   Start at  21:41:06
+   Duration  130.56s (transform 3.92s, setup 14.61s, import 14.18s, tests 132.09s, environment 71.53s)
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage
