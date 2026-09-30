@@ -4,7 +4,7 @@ title: "Restore named and automatic style context ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "Full npm run verify exit 0; 596 app/109 inventory/19 browser tests; all coverage metrics 100%; 133 focused tests, AST extraction proof, source-tree/provenance/file-size/semantic gates, doctor and routing pass. Bounded style-container contract verified; broader model/default/duplicate/display/hint/export and UI parity remain unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T20:23:40.795Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded common/automatic style-context ownership and native direct/parent lookup verified; invalid automatic-parent export dependency removed."
+  evaluated_sha: "2554d192df75c777fafd6fc9cf976155b579a73e"
+  blueprint_digest: "cf8afb5c56f609958029f0b1921a4f50b512117c2552b92e9f0de8f5d1581266"
+  evidence_refs:
+    - ".agentplane/tasks/202609301937-HTNKEB/README.md"
+    - ".agentplane/tasks/202609301937-HTNKEB/quality/20260930-202340795-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301937-HTNKEB/quality/20260930-202340795-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301937-HTNKEB/quality/20260930-202340795-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301937-HTNKEB/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301937-HTNKEB/verify.log"
+    - ".agentplane/tasks/202609301937-HTNKEB/focused.log"
+    - ".agentplane/tasks/202609301937-HTNKEB/export-decomposition.mjs"
+    - "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts"
+    - "apps/office/src/xmloff/source/style/xmlstyle.test.ts"
+  findings:
+    - "Regular leaves remain in separate common/automatic contexts; replacement and family identities are verified with manual real ODT cases. Exact geometry, package/browser tests and all coverage gates pass. Serializer extraction has an unchanged AST body. Wider named model/export/default/display/duplicate/hint contracts and complete runtime/UI parity remain open; registered deviations unchanged."
 commit: null
 comments:
   -
@@ -72,7 +92,7 @@ events:
     state: "ok"
     note: "Full npm run verify exit 0; 596 app/109 inventory/19 browser tests; all coverage metrics 100%; 133 focused tests, AST extraction proof, source-tree/provenance/file-size/semantic gates, doctor and routing pass. Bounded style-container contract verified; broader model/default/duplicate/display/hint/export and UI parity remain unverified."
 doc_version: 3
-doc_updated_at: "2026-09-30T20:22:21.680Z"
+doc_updated_at: "2026-09-30T20:23:40.506Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Follow native per-container XML style ownership, independent named/active automatic references and automatic-first direct versus named-only parent resolution. Preserve legal common/automatic name collisions and stream replacement through real ODT cycles."
 sections:
@@ -141,6 +161,10 @@ sections:
     - Observation: Command: final npm run verify. Result: pass (exit 0). Evidence: 596 app tests in 124 files; 109 inventory tests in 36 files; 19 browser cases; app 9634/9634 statements and 7202/7202 branches, all four app/inventory coverage metrics 100%; static/build, lint/types, module/resource/docs/file-size/source-tree/provenance/invariant/parity gates passed. Scope: complete repository checks after final list-export decomposition.
       Impact: The bounded common/automatic style ownership and lookup correction is verified through native source inspection, manual model assertions and genuine package cycles without changing enforcement or registered deviations.
       Resolution: Evidence: verify.log, focused.log (133 tests/26 files), parity.log and export-decomposition.mjs. Command: ap doctor; Result: pass with the same two pre-existing hook-shim/historical-close-pointer warnings. Command: node .agentplane/policy/check-routing.mjs; Result: pass. Command: node .agentplane/tasks/202609301937-HTNKEB/export-decomposition.mjs; Result: pass. Command: git diff --check; Result: pass after compacting completed logs. Source provenance covers 196 modules (120 mapped, 60 browser, 16 infrastructure); semanticViolationCount=0 is inventory consistency, not whole-module or whole-goal parity. Wider named-style model, display-name/duplicate/default/hint contracts, new xmlnume native omission/units/default semantics and the rest of implemented runtime/UI remain pending.
+
+    - Observation: Commit-msg enforcement rejected the implementation subject scope fix; quality review correctly refused the still-staged implementation after that unsuccessful commit.
+      Impact: Lifecycle publication was deferred; direct verification remains successful and no implementation changes were lost.
+      Resolution: Recomputed the route, confirmed doctor remained healthy with the same existing warnings and retried using the required code scope. The implementation commit succeeds; quality review follows only after the tracked runtime paths are clean. No hook or policy changes.
 id_source: "generated"
 ---
 ## Summary
@@ -225,3 +249,7 @@ Revert this scoped implementation commit if source-backed style ownership or loo
 - Observation: Command: final npm run verify. Result: pass (exit 0). Evidence: 596 app tests in 124 files; 109 inventory tests in 36 files; 19 browser cases; app 9634/9634 statements and 7202/7202 branches, all four app/inventory coverage metrics 100%; static/build, lint/types, module/resource/docs/file-size/source-tree/provenance/invariant/parity gates passed. Scope: complete repository checks after final list-export decomposition.
   Impact: The bounded common/automatic style ownership and lookup correction is verified through native source inspection, manual model assertions and genuine package cycles without changing enforcement or registered deviations.
   Resolution: Evidence: verify.log, focused.log (133 tests/26 files), parity.log and export-decomposition.mjs. Command: ap doctor; Result: pass with the same two pre-existing hook-shim/historical-close-pointer warnings. Command: node .agentplane/policy/check-routing.mjs; Result: pass. Command: node .agentplane/tasks/202609301937-HTNKEB/export-decomposition.mjs; Result: pass. Command: git diff --check; Result: pass after compacting completed logs. Source provenance covers 196 modules (120 mapped, 60 browser, 16 infrastructure); semanticViolationCount=0 is inventory consistency, not whole-module or whole-goal parity. Wider named-style model, display-name/duplicate/default/hint contracts, new xmlnume native omission/units/default semantics and the rest of implemented runtime/UI remain pending.
+
+- Observation: Commit-msg enforcement rejected the implementation subject scope fix; quality review correctly refused the still-staged implementation after that unsuccessful commit.
+  Impact: Lifecycle publication was deferred; direct verification remains successful and no implementation changes were lost.
+  Resolution: Recomputed the route, confirmed doctor remained healthy with the same existing warnings and retried using the required code scope. The implementation commit succeeds; quality review follows only after the tracked runtime paths are clean. No hook or policy changes.

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301937-HTNKEB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T20:23:40.795Z",
+  "verdict": "pass",
+  "summary": "Bounded common/automatic style-context ownership and native direct/parent lookup verified; invalid automatic-parent export dependency removed.",
+  "evaluated_sha": "2554d192df75c777fafd6fc9cf976155b579a73e",
+  "blueprint_digest": "cf8afb5c56f609958029f0b1921a4f50b512117c2552b92e9f0de8f5d1581266",
+  "findings": [
+    "Regular leaves remain in separate common/automatic contexts; replacement and family identities are verified with manual real ODT cases. Exact geometry, package/browser tests and all coverage gates pass. Serializer extraction has an unchanged AST body. Wider named model/export/default/display/duplicate/hint contracts and complete runtime/UI parity remain open; registered deviations unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301937-HTNKEB/README.md",
+    ".agentplane/tasks/202609301937-HTNKEB/verify.log",
+    ".agentplane/tasks/202609301937-HTNKEB/focused.log",
+    ".agentplane/tasks/202609301937-HTNKEB/export-decomposition.mjs",
+    "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+    "apps/office/src/xmloff/source/style/xmlstyle.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
