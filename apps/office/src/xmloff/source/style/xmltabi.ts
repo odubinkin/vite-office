@@ -30,9 +30,12 @@ export class SvxXMLTabStopImportContext extends SvXMLImportContext {
       ],
       "tab stop",
     );
-    const alignment = attributes.get(XMLToken.STYLE_TYPE) ?? "left";
-    if (!["left", "right", "center", "char", "default"].includes(alignment))
-      throw new Error("Unsupported ODF tab-stop type.");
+    const type = attributes.get(XMLToken.STYLE_TYPE);
+    const alignment =
+      type !== null && ["left", "right", "center", "char", "default"].includes(type)
+        ? (type as OdfTabStop["alignment"])
+        : "left";
+    const position = attributes.get(XMLToken.STYLE_POSITION);
     const leaderStyle = attributes.get(XMLToken.STYLE_LEADER_STYLE);
     const leaderText = attributes.get(XMLToken.STYLE_LEADER_TEXT);
     const fill =
@@ -40,12 +43,8 @@ export class SvxXMLTabStopImportContext extends SvXMLImportContext {
         ? " "
         : (leaderText?.[0] ?? (leaderStyle === "dotted" ? "." : "_"));
     this.stops.push({
-      position: importOdfLength(
-        attributes.require(XMLToken.STYLE_POSITION, "tab stop position"),
-        true,
-        "tab stop position",
-      ),
-      alignment: alignment as OdfTabStop["alignment"],
+      position: position === null ? 0 : importOdfLength(position, true, "tab stop position"),
+      alignment,
       decimal: attributes.get(XMLToken.STYLE_CHAR)?.[0] ?? ",",
       fill,
     });

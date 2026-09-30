@@ -6220,9 +6220,11 @@
           "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx#sal_Int32 nMin = SAL_MIN_INT32",
           "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports and round-trips signed tab positions in paragraph and inherited style properties",
           "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#SvxXMLTabStopImportContext::endFastElement",
-          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#selects Default tab entries in XML source order before canonical sorting"
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#selects Default tab entries in XML source order before canonical sorting",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native tab position and alignment defaults through direct and inherited ODT styles",
+          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#aTabStop.Position = 0;"
         ],
-        "justification": "Owns the implemented tab-stop child parsing and source-order selection with the pinned context name in the corresponding xmltabi module. AST comparison proves all four member implementations unchanged by extraction. Existing signed/default/empty ODT sequence assertions cover retained values and package cycles. Leaf default initialization, malformed-input fallback and broader native context contracts remain individually unverified.",
+        "justification": "Owns the implemented tab-stop child parsing and source-order selection in the pinned xmltabi module. Literal ODT cases assert absent position defaults to zero, absent/empty/unrecognized type retains LEFT, and recognized alignments override it through direct and inherited style import/export/reimport. Existing signed/default/empty sequence assertions remain. Malformed-measure fallback, unknown attributes and broader native context contracts remain individually unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SvxXMLTabStopImportContext"

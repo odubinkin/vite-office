@@ -5670,6 +5670,10 @@
           {
             "marker": "SvxXMLTabStopImportContext",
             "path": "apps/office/src/xmloff/source/style/xmltabi.ts"
+          },
+          {
+            "marker": "imports native tab position and alignment defaults through direct and inherited ODT styles",
+            "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
           }
         ],
         "upstream": [
@@ -5680,6 +5684,10 @@
           {
             "marker": "SvxXMLTabStopImportContext::endFastElement",
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+          },
+          {
+            "marker": "aTabStop.Position = 0;",
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
           }
         ]
       },
@@ -5688,10 +5696,10 @@
         "SvxXMLTabStopImportContext"
       ],
       "omittedResponsibilities": [
-        "Native UNO property-state plumbing and context/default/fallback behavior beyond the implemented bounded tab sequence remain unverified or omitted."
+        "Native UNO property-state plumbing, malformed-measure fallback, unknown attributes and broader context contracts remain unverified or omitted."
       ],
       "preservedResponsibilities": [
-        "Owns the extracted bounded tab-stop parsing and source-order selection implementation, with signed positions, alignment/decimal/leader values and explicit empty sequences; uses the core conversion helper directly."
+        "Owns bounded tab-stop parsing and source-order selection, with absent position default zero and recognized-only alignment overrides retaining LEFT otherwise; preserves signed positions, decimal/leader values and explicit empty sequences using the core conversion helper."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/style/xmltabi.cxx",
