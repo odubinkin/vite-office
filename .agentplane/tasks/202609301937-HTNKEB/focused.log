@@ -1,30 +1,9 @@
 
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
 
- ❯ src/xmloff/source/text/txtpara.test.ts (6 tests | 1 failed) 9ms
-     × emits list definitions before nested and continued list references 4ms
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
-
- FAIL  src/xmloff/source/text/txtpara.test.ts > ODF text paragraph export contexts > emits list definitions before nested and continued list references
-AssertionError: expected '<style:style style:name="P1Base" styl…' to contain 'fo:margin-left="0.5in"'
-
-Expected: "fo:margin-left="0.5in""
-Received: "<style:style style:name="P1Base" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:margin-left="1.27cm" fo:text-indent="-0.635cm"></style:paragraph-properties></style:style>"
-
- ❯ src/xmloff/source/text/txtpara.test.ts:169:32
-    167|       '<style:style style:name="P1Base" style:family="paragraph" style…
-    168|     );
-    169|     expect(output.namedStyles).toContain('fo:margin-left="0.5in"');
-       |                                ^
-    170|     expect(output.namedStyles).toContain('fo:text-indent="-0.25in"');
-    171|     expect(output.automaticStyles).toContain(
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
-
-
- Test Files  1 failed | 24 passed (25)
-      Tests  1 failed | 129 passed (130)
-   Start at  03:03:03
-   Duration  9.44s (transform 1.18s, setup 1.69s, import 2.57s, tests 2.65s, environment 9.42s)
+ Test Files  26 passed (26)
+      Tests  133 passed (133)
+   Start at  03:16:20
+   Duration  9.45s (transform 1.18s, setup 1.75s, import 2.57s, tests 2.57s, environment 9.58s)
 
