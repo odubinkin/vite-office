@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/filter/xml/odt-roundtrip.test.ts (13 tests | 1 failed) 130ms
+     × imports LibreOffice-shaped nested and continued list blocks 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/filter/xml/odt-roundtrip.test.ts > Writer ODF XML filters > imports LibreOffice-shaped nested and continued list blocks
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/sw/source/filter/xml/odt-roundtrip.test.ts:454:7
+    452|           metadata(),
+    453|         ),
+    454|     ).toThrow("Unsupported ODF numbering suffix");
+       |       ^
+    455|     expect(
+    456|       /** Ignores an unrelated known table under a native list item. @…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 49 passed (50)
+   Start at  06:49:58
+   Duration  3.67s (transform 689ms, setup 698ms, import 979ms, tests 751ms, environment 3.70s)
+
