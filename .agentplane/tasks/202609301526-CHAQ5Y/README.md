@@ -4,7 +4,7 @@ title: "Align paragraph margin item source ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "Exact class-body comparison, 41 focused tests, complete verification, doctor and policy routing passed; verify.log preserves gate evidence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T15:37:00.265Z"
+  updated_by: "EVALUATOR"
+  note: "Four frame metric item classes now match pinned source ownership without behavior changes."
+  evaluated_sha: "366dc444b000210058ea83f90ab854a576cadb56"
+  blueprint_digest: "eaf1dd013c408f04d26018d8861e4bea45382e655f88bb90d2717d07ae937351"
+  evidence_refs:
+    - ".agentplane/tasks/202609301526-CHAQ5Y/README.md"
+    - ".agentplane/tasks/202609301526-CHAQ5Y/quality/20260930-153700265-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301526-CHAQ5Y/quality/20260930-153700265-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301526-CHAQ5Y/quality/20260930-153700265-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301526-CHAQ5Y/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301526-CHAQ5Y/verify.log"
+  findings:
+    - "Reviewed exact class-body equality, twenty direct import updates, relocation of existing assertions, and narrow provenance/inventory data. No forwarding shim, validator changes, or product exception changes. Full verification passed."
 commit: null
 comments:
   -

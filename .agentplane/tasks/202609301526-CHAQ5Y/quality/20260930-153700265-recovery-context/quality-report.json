@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301526-CHAQ5Y",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T15:37:00.265Z",
+  "verdict": "pass",
+  "summary": "Four frame metric item classes now match pinned source ownership without behavior changes.",
+  "evaluated_sha": "366dc444b000210058ea83f90ab854a576cadb56",
+  "blueprint_digest": "eaf1dd013c408f04d26018d8861e4bea45382e655f88bb90d2717d07ae937351",
+  "findings": [
+    "Reviewed exact class-body equality, twenty direct import updates, relocation of existing assertions, and narrow provenance/inventory data. No forwarding shim, validator changes, or product exception changes. Full verification passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301526-CHAQ5Y/README.md",
+    ".agentplane/tasks/202609301526-CHAQ5Y/verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
