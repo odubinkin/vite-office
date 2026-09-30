@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:56:55.546Z"
+doc_updated_at: "2026-09-30T22:59:59.542Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -79,6 +79,10 @@ sections:
     - Observation: The next complete verify attempt exits 134 immediately: the child npm process aborts before format:check starts (Abort trap: 6). No check assertion or source error is reported; docs check just passed.
       Impact: A terminal process launch failure leaves the full verification unproven.
       Resolution: Preserve the terminal log and retry the exact mandatory command once without changing runtime, Node settings or verification thresholds.
+
+    - Observation: Full app regression passes 623/623 and all four coverage categories at 100%. Inventory has two failures after changed context dispatch: a diagnostic fixture count and one additional inventory assertion require inspection.
+      Impact: The final mandatory run remains unproven until native-backed metadata/fixture expectations reflect actual event semantics.
+      Resolution: Inspect exact extra diagnostics and affected assertion against pinned sources; update only evidence-based expectations in matching inventory fixtures, preserving mandatory thresholds and runtime state checks.
 id_source: "generated"
 ---
 ## Summary
@@ -136,3 +140,7 @@ Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, imp
 - Observation: The next complete verify attempt exits 134 immediately: the child npm process aborts before format:check starts (Abort trap: 6). No check assertion or source error is reported; docs check just passed.
   Impact: A terminal process launch failure leaves the full verification unproven.
   Resolution: Preserve the terminal log and retry the exact mandatory command once without changing runtime, Node settings or verification thresholds.
+
+- Observation: Full app regression passes 623/623 and all four coverage categories at 100%. Inventory has two failures after changed context dispatch: a diagnostic fixture count and one additional inventory assertion require inspection.
+  Impact: The final mandatory run remains unproven until native-backed metadata/fixture expectations reflect actual event semantics.
+  Resolution: Inspect exact extra diagnostics and affected assertion against pinned sources; update only evidence-based expectations in matching inventory fixtures, preserving mandatory thresholds and runtime state checks.

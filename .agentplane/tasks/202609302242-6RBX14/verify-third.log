@@ -1,0 +1,133 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 198 runtime sources, 815 relative imports, 12 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  05:57:23
+   Duration  124ms (transform 25ms, setup 0ms, import 34ms, tests 3ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  133 passed (133)
+      Tests  623 passed (623)
+   Start at  05:57:24
+   Duration  69.77s (transform 1.76s, setup 9.98s, import 7.85s, tests 54.78s, environment 47.15s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 9712/9712 )
+Branches     : 100% ( 7296/7296 )
+Functions    : 100% ( 2703/2703 )
+Lines        : 100% ( 8945/8945 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts (7 tests | 1 failed) 5654ms
+     × records import failures without exposing package or XML error values 44ms
+ ❯ scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts (10 tests | 1 failed) 288ms
+     × preserves inline positions from sw/qa/extras/odfimport/data/tdf94882.odt 14ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/libreoffice-inventory/odt-import-diagnostics.test.ts > privacy-safe ODT import diagnostics > records import failures without exposing package or XML error values
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts:175:32
+    173|     const xmlFailure = await replaceFixtureEntry("content.xml", new Te…
+    174|     const xmlReport = await diagnoseOdtImport(xmlFailure);
+    175|     expect(xmlReport.imported).toBe(false);
+       |                                ^
+    176|     expect(xmlReport.diagnostics).toContainEqual(
+    177|       expect.objectContaining({ kind: "import-error", stream: "content…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts > pinned LibreOffice ODT feature fixtures > preserves inline positions from sw/qa/extras/odfimport/data/tdf94882.odt
+AssertionError: expected [ { …(4) }, { …(4) }, { …(4) }, …(89) ] to have a length of 91 but got 92
+
+- Expected
++ Received
+
+- 91
++ 92
+
+ ❯ scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts:95:27
+     93|         },
+     94|       );
+     95|       expect(diagnostics).toHaveLength(fixture.warnings);
+       |                           ^
+     96|       expect(
+     97|         diagnostics.some(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 34 passed (36)
+      Tests  2 failed | 107 passed (109)
+   Start at  05:58:34
+   Duration  44.04s (transform 711ms, setup 0ms, import 1.73s, tests 38.86s, environment 2ms)
+
