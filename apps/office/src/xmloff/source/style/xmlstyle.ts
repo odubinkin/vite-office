@@ -3,13 +3,8 @@
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
-import type {
-  OdfStyleDefinition,
-  XMLTextListRule,
-  XMLParagraphImportProperties,
-  XMLListLevelImport,
-} from "../text/txtparai";
-import { SvxXMLListLevelStyleContext_Impl } from "./xmlnumi";
+import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
+import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
 import { importOdfLength } from "../core/xmluconv";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
@@ -25,12 +20,11 @@ const ignoredStyleDefinitions = new Set([
 ]);
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
-export interface XMLStyleImportTarget {
+export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   registerTableStyle(name: string, style: OdfTableStyle): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
   getFontFaceGeneric?(name: string): string | undefined;
-  registerListStyle(styleName: string, rule: XMLTextListRule): void;
   registerDefaultStyle(definition: OdfStyleDefinition): void;
   registerPageLayout(name: string, layout: OdfPageLayout): void;
 }
@@ -122,7 +116,7 @@ export class XMLStylesContext extends SvXMLImportContext {
       return context;
     }
     if (element === XMLToken.TEXT_LIST_STYLE)
-      return new XMLListStyleContext(this.target, attributes);
+      return new SvxXMLListStyleContext(this.target, attributes);
     if (element === XMLToken.STYLE_PAGE_LAYOUT)
       return new XMLPageLayoutContext(this.target, attributes);
     if (element === XMLToken.TEXT_LINENUMBERING_CONFIGURATION)
@@ -319,90 +313,6 @@ class XMLStyleContext extends SvXMLImportContext {
   public override endFastElement(): void {
     if (this.supported && this.isDefault && !this.styles.IsAutoStyle())
       this.target.registerDefaultStyle(this.GetDefinition());
-  }
-}
-
-/** Accumulates one bounded list style. */
-class XMLListStyleContext extends SvXMLImportContext {
-  private readonly levels: XMLListLevelImport[] = [];
-  private readonly name: string;
-  private readonly ruleName: string;
-
-  /** Reads list-style identity attributes. @param target - Definition consumer. @param attributes - List attributes. @returns Context. */
-  public constructor(
-    private readonly target: XMLStyleImportTarget,
-    attributes: FastAttributeList,
-  ) {
-    super();
-    attributes.assertOnly([XMLToken.STYLE_NAME, XMLToken.STYLE_DISPLAY_NAME], "style property");
-    this.name = attributes.require(XMLToken.STYLE_NAME, "list style name");
-    this.ruleName = attributes.get(XMLToken.STYLE_DISPLAY_NAME) ?? this.name;
-  }
-
-  /** Imports one list-level definition. @param element - Level token. @param attributes - Level attributes. @returns Ignored leaf context. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    const kind =
-      element === XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET
-        ? "bullet"
-        : element === XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER
-          ? "numbered"
-          : undefined;
-    if (kind === undefined) throw new Error("Unsupported ODF list style child.");
-    const allowed =
-      kind === "bullet"
-        ? [XMLToken.TEXT_LEVEL, XMLToken.TEXT_BULLET_CHAR]
-        : [XMLToken.TEXT_LEVEL, XMLToken.STYLE_NUM_FORMAT, XMLToken.STYLE_NUM_SUFFIX];
-    attributes.assertOnly(allowed, "style property");
-    const rawLevel = attributes.require(XMLToken.TEXT_LEVEL, "list level");
-    const level = Number(rawLevel);
-    if (!Number.isInteger(level) || level < 1 || level > 10)
-      throw new Error(`Unsupported ODF list level: ${rawLevel}`);
-    let bulletChar: string | undefined;
-    let suffix = "";
-    if (kind === "bullet") {
-      const bullet = attributes.get(XMLToken.TEXT_BULLET_CHAR);
-      if (bullet === null) throw new Error("ODF bullet character is missing.");
-      bulletChar = [...bullet][0] ?? "";
-    } else {
-      const format = attributes.require(XMLToken.STYLE_NUM_FORMAT, "number format");
-      if (format !== "1") throw new Error(`Unsupported ODF numbering format: ${format}`);
-      const declaredSuffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX);
-      if (declaredSuffix !== null && declaredSuffix !== ".")
-        throw new Error(`Unsupported ODF numbering suffix: ${declaredSuffix}`);
-      suffix = declaredSuffix ?? "";
-    }
-    return new SvxXMLListLevelStyleContext_Impl(
-      /** Retains one complete declaration without replacing earlier declarations. @param position - MM100 property sequence. @returns Nothing. */
-      (position) => {
-        this.levels.push({
-          level: level - 1,
-          kind,
-          ...(bulletChar === undefined ? {} : { bulletChar }),
-          suffix,
-          position,
-        });
-      },
-    );
-  }
-
-  /** Rejects an unknown list-level family. @param _namespaceURI - Namespace. @param localName - Local name. @returns Never. */
-  public override createUnknownChildContext(
-    _namespaceURI: string,
-    localName: string,
-  ): SvXMLImportContext | null {
-    throw new Error(`Unsupported ODF list level style: ${localName}`);
-  }
-
-  /** Publishes the source-ordered declarations, including an empty rule. @returns Nothing. */
-  public override endFastElement(): void {
-    this.target.registerListStyle(this.name, {
-      levels: this.levels,
-      levelCount: 10,
-      name: this.ruleName,
-    });
   }
 }
 

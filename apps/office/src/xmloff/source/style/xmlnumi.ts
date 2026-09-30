@@ -1,8 +1,12 @@
 /** @fileoverview Owns independent supported list-level positioning and attribute import from pinned xmlnumi.cxx. */
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
-import { XMLToken } from "../core/xmltoken";
+import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
-import type { XMLListLevelImportProperties } from "../text/txtparai";
+import type {
+  XMLListLevelImport,
+  XMLListLevelImportProperties,
+  XMLTextListRule,
+} from "../text/txtparai";
 
 /** Parses one label-alignment leaf into native MM100 numbering properties. */
 export class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl extends SvXMLIgnoreContext {
@@ -51,16 +55,47 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     labelFollowedBy: "listtab",
     listTabPosition: 0,
   };
-  /** Creates a declared level with native zero defaults. @param save - Complete property sink. @returns Context. */
-  public constructor(private readonly save: (properties: XMLListLevelImportProperties) => void) {
+  private readonly level: number;
+  private readonly kind: "bullet" | "numbered";
+  private readonly bulletChar: string;
+  private readonly format: string;
+  private readonly suffix: string;
+  /** Retains native declaration defaults before any property children. @param element - Supported level family. @param attributes - Optional declaration fields. @returns Context. */
+  public constructor(element: XMLToken, attributes: FastAttributeList) {
     super();
+    this.kind = element === XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET ? "bullet" : "numbered";
+    attributes.assertOnly(
+      [
+        XMLToken.TEXT_LEVEL,
+        XMLToken.TEXT_BULLET_CHAR,
+        XMLToken.STYLE_NUM_FORMAT,
+        XMLToken.STYLE_NUM_SUFFIX,
+      ],
+      "list level",
+    );
+    const rawLevel = attributes.get(XMLToken.TEXT_LEVEL);
+    const parsed = rawLevel === null ? -1 : listDeclarationInt32(rawLevel);
+    this.level = rawLevel === null ? -1 : parsed >= 1 ? parsed - 1 : 0;
+    this.bulletChar = [...(attributes.get(XMLToken.TEXT_BULLET_CHAR) ?? "")][0] ?? "";
+    this.format = attributes.get(XMLToken.STYLE_NUM_FORMAT) ?? "1";
+    this.suffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX) ?? "";
   }
+
+  /** Returns the native zero-based index, retaining -1 for an absent attribute. @returns Level. */
+  public GetLevel(): number {
+    return this.level;
+  }
+
   /** Creates a properties context with independent legacy and modern fields. @param element - Child token. @param attributes - Properties. @returns Context. */
   public override createFastChildContext(
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element !== XMLToken.STYLE_LIST_LEVEL_PROPERTIES) return new SvXMLIgnoreContext();
+    if (
+      element !== XMLToken.STYLE_LIST_LEVEL_PROPERTIES &&
+      element !== XMLToken.STYLE_TEXT_PROPERTIES
+    )
+      return new SvXMLIgnoreContext();
     return new SvxXMLListLevelStyleAttrContext_Impl(
       attributes,
       /** Retains the selected fields without changing the other group. @param values - Property delta. @returns Nothing. */
@@ -73,18 +108,28 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       },
     );
   }
-  /** Publishes both groups after the full declared level. @returns Nothing. */
-  public override endFastElement(): void {
+  /** Assembles the supported native property sequence only when the owning rule reads it. @returns Declaration and both MM100 geometry groups. */
+  public GetProperties(): XMLListLevelImport {
+    if (this.kind === "numbered" && this.format !== "1")
+      throw new Error(`Unsupported ODF numbering format: ${this.format}`);
+    if (this.kind === "numbered" && this.suffix !== "" && this.suffix !== ".")
+      throw new Error(`Unsupported ODF numbering suffix: ${this.suffix}`);
     const distance = this.legacy.minLabelDistance;
-    this.save({
-      measureUnit: "mm100",
-      values: {
-        ...this.properties,
-        absLSpace: this.legacy.spaceBefore + this.legacy.minLabelWidth,
-        firstLineOffset: 0 - this.legacy.minLabelWidth,
-        charTextDistance: distance >= 32768 ? distance - 65536 : distance,
+    return {
+      level: this.level,
+      kind: this.kind,
+      ...(this.kind === "bullet" ? { bulletChar: this.bulletChar } : {}),
+      suffix: this.kind === "bullet" ? "" : this.suffix,
+      position: {
+        measureUnit: "mm100",
+        values: {
+          ...this.properties,
+          absLSpace: this.legacy.spaceBefore + this.legacy.minLabelWidth,
+          firstLineOffset: 0 - this.legacy.minLabelWidth,
+          charTextDistance: distance >= 32768 ? distance - 65536 : distance,
+        },
       },
-    });
+    };
   }
 }
 
@@ -133,4 +178,75 @@ class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
       (properties) => this.save(properties.values),
     );
   }
+}
+
+/** Model-facing numbering publication port used by the source-owned list context. */
+export interface XMLListStyleImportTarget {
+  registerListStyle(styleName: string, rule: XMLTextListRule): void;
+}
+
+/** Owns native list identity and the source-ordered level context references. */
+export class SvxXMLListStyleContext extends SvXMLImportContext {
+  private readonly levelStyles: SvxXMLListLevelStyleContext_Impl[] = [];
+  private readonly name: string;
+  private readonly ruleName: string;
+  /** Reads identity while retaining declarations in their own contexts. @param target - Writer numbering consumer. @param attributes - List identity attributes. @returns Context. */
+  public constructor(
+    private readonly target: XMLListStyleImportTarget,
+    attributes: FastAttributeList,
+  ) {
+    super();
+    attributes.assertOnly([XMLToken.STYLE_NAME, XMLToken.STYLE_DISPLAY_NAME], "style property");
+    this.name = attributes.require(XMLToken.STYLE_NAME, "list style name");
+    this.ruleName = attributes.get(XMLToken.STYLE_DISPLAY_NAME) ?? this.name;
+  }
+
+  /** Retains each native supported leaf reference in creation order. @param element - Child token. @param attributes - Declaration attributes. @returns Level context or ignored subtree. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (
+      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER &&
+      element !== XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET
+    )
+      return new SvXMLIgnoreContext();
+    const context = new SvxXMLListLevelStyleContext_Impl(element, attributes);
+    this.levelStyles.push(context);
+    return context;
+  }
+
+  /** Ignores unknown children while keeping unsupported native image numbering explicit. @param namespaceURI - Namespace. @param localName - Child name. @returns Null for native unknown-child skipping. */
+  public override createUnknownChildContext(
+    namespaceURI: string,
+    localName: string,
+  ): SvXMLImportContext | null {
+    if (namespaceURI === ODF_NAMESPACES.text && localName === "list-level-style-image")
+      throw new Error("Unsupported ODF list level style: list-level-style-image");
+    return null;
+  }
+
+  /** Publishes only the valid indices, reading properties from their retained native leaves. @returns Nothing. */
+  public override endFastElement(): void {
+    const levels: XMLListLevelImport[] = [];
+    for (const context of this.levelStyles) {
+      const level = context.GetLevel();
+      if (level >= 0 && level < 10) levels.push(context.GetProperties());
+    }
+    this.target.registerListStyle(this.name, { name: this.ruleName, levelCount: 10, levels });
+  }
+}
+
+/** Reproduces the decimal byte-string o3tl::toInt32 contract used by fast attribute iteration. @param value - Source attribute. @returns Signed32 integer or zero on no digits/overflow. */
+function listDeclarationInt32(value: string): number {
+  let start = 0;
+  while (start < value.length) {
+    const code = value.charCodeAt(start);
+    if (code === 0 || code > 32) break;
+    start += 1;
+  }
+  const match = /^[+-]?[0-9]+/u.exec(value.slice(start));
+  if (match === null) return 0;
+  const number = Number(match[0]);
+  return number >= -2147483648 && number <= 2147483647 ? number : 0;
 }

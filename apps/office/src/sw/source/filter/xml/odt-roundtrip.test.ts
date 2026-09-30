@@ -475,16 +475,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         "Duplicate ODF list style",
       ],
       [
-        '<text:list-style style:name="Foreign"><style:list-level-properties/></text:list-style>',
-        "Unsupported ODF list style child",
-      ],
-      [
         '<text:list-style style:name="Image"><text:list-level-style-image text:level="1"/></text:list-style>',
         "Unsupported ODF list level style",
-      ],
-      [
-        '<text:list-style style:name="Bullet"><text:list-level-style-bullet text:level="1"/></text:list-style>',
-        "bullet character is missing",
       ],
       [
         '<text:list-style style:name="Roman"><text:list-level-style-number text:level="1" style:num-format="i"/></text:list-style>',
@@ -495,13 +487,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         /** Imports an invalid list-style definition. @returns Invalid document. */ () =>
           importWithListStyle(fragment),
       ).toThrow(message);
-    for (const level of ["0", "1.5", "11"])
-      expect(
-        /** Imports an invalid ODF list level. @returns Invalid document. */ () =>
-          importWithListStyle(
-            `<text:list-style style:name="BadLevel${level}"><text:list-level-style-number text:level="${level}" style:num-format="1"/></text:list-style>`,
-          ),
-      ).toThrow("Unsupported ODF list level");
     expect(
       /** Imports matching aliases followed by a conflicting canonical rule name. @returns Invalid document. */ () =>
         importWithListStyle(
