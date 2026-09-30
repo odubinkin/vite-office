@@ -4,7 +4,7 @@ title: "Restore family-scoped text style identity"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Native family-plus-name identity restored; context and literal ODT declaration-order cases pass. 14 prior tests unchanged after decomposition. Full verify 590/109/19, 100% required coverage; doctor/routing/diff checks pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T19:30:26.197Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded family-plus-name identity follows pinned style index and application contracts; full verification passes."
+  evaluated_sha: "4570b3675dc3d3a46946b419c7706e4a1f3969b9"
+  blueprint_digest: "b5be320b845c5ce4f87a91cb5a934fb6d9536a1a28c45c8bda008ca45215063f"
+  evidence_refs:
+    - ".agentplane/tasks/202609301904-Z2G4HN/README.md"
+    - ".agentplane/tasks/202609301904-Z2G4HN/quality/20260930-193026197-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301904-Z2G4HN/quality/20260930-193026197-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301904-Z2G4HN/quality/20260930-193026197-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301904-Z2G4HN/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301904-Z2G4HN/focused.log"
+    - ".agentplane/tasks/202609301904-Z2G4HN/test-decomposition.log"
+    - ".agentplane/tasks/202609301904-Z2G4HN/verify.log"
+  findings:
+    - "Separate family registration and explicit lookup preserve same-name paragraph/text properties, inheritance, built-in style state and scope through order-varied real ODT cycles. Old cross-family failure guard and fixture are corrected. AST comparison preserves all 14 prior tests after required decomposition. Wider container identity and semantics remain unverified."
 commit: null
 comments:
   -
