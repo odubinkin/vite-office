@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:47:48.869Z"
+doc_updated_at: "2026-09-30T22:49:17.622Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -59,6 +59,10 @@ sections:
     - Observation: Second focus passes 56 tests and one row fixture still fails because it has no cells after its unrelated paragraph is skipped.
       Impact: The remaining failure is the pre-existing bounded row cardinality error, not child-context dispatch.
       Resolution: Give the fixture its declared cell and assert the unrelated paragraph is skipped; keep separate row cardinality rejection fixtures and add explicit unsupported cell/list-item feature checks.
+
+    - Observation: A new synthetic child-error fixture used a lowercase generic message, which the existing SAX error boundary intentionally normalizes to ODF XML is malformed.
+      Impact: This affects only the fixture message; native protocol behavior and existing parser error guards are unchanged.
+      Resolution: Use the existing Unsupported ODF error convention in the synthetic explicit-feature test and rerun focused coverage.
 id_source: "generated"
 ---
 ## Summary
@@ -96,3 +100,7 @@ Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, imp
 - Observation: Second focus passes 56 tests and one row fixture still fails because it has no cells after its unrelated paragraph is skipped.
   Impact: The remaining failure is the pre-existing bounded row cardinality error, not child-context dispatch.
   Resolution: Give the fixture its declared cell and assert the unrelated paragraph is skipped; keep separate row cardinality rejection fixtures and add explicit unsupported cell/list-item feature checks.
+
+- Observation: A new synthetic child-error fixture used a lowercase generic message, which the existing SAX error boundary intentionally normalizes to ODF XML is malformed.
+  Impact: This affects only the fixture message; native protocol behavior and existing parser error guards are unchanged.
+  Resolution: Use the existing Unsupported ODF error convention in the synthetic explicit-feature test and rerun focused coverage.

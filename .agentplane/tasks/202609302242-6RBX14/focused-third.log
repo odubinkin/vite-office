@@ -1,0 +1,30 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/xmloff/source/core/xmlimp.test.ts (3 tests | 1 failed) 7ms
+   × retains explicit child errors and inert native unknown hooks 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/xmloff/source/core/xmlimp.test.ts > retains explicit child errors and inert native unknown hooks
+AssertionError: expected [Function] to throw error including 'unsupported feature' but got 'ODF XML is malformed.'
+
+Expected: "unsupported feature"
+Received: "ODF XML is malformed."
+
+ ❯ src/xmloff/source/core/xmlimp.test.ts:127:5
+    125|         diagnostic,
+    126|       ),
+    127|   ).toThrow("unsupported feature");
+       |     ^
+    128| });
+    129|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 59 passed (60)
+   Start at  05:48:38
+   Duration  3.89s (transform 647ms, setup 699ms, import 1.02s, tests 1.60s, environment 3.62s)
+
