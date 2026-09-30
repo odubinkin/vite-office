@@ -1,0 +1,4 @@
+AST comparison passed: attribute parsing, complete tab value initializer and Default-selection predicates unchanged.
+Parent creates, stores and returns the same leaf context; end selection reads leaf.getTabStop; leaf owns its readonly value.
+Native source owns tab values in SvxXMLTabStopContext_Impl and context references in maTabStops.
+Residual: native base null children are skipped by SAX; current dispatcher rejects known null children. Existing ignore-context base preserves leaf subtree outcomes without claiming dispatcher parity.
