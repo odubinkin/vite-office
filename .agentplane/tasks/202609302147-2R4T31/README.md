@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:56:22.811Z"
+doc_updated_at: "2026-09-30T21:57:39.961Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
@@ -60,6 +60,10 @@ sections:
     - Observation: Office typecheck found a mistaken test-only WriterViewProjection API call and an unused type import; runtime type contract did not fail.
       Impact: The new integration test cannot typecheck until it uses the established Project API.
       Resolution: Correct the test to Project(document, current node, SwPaM, metadata), remove the unused import and rerun focused checks; no scope or verification changes.
+
+    - Observation: The new integration test exposed browser snapshot loss of the inactive bullet character for Arabic levels; two other failures were fixture omissions (reopen assertion still assumed fallback and error injection lacked Standard style).
+      Impact: Native base and duplicate-replacement state did not survive a browser snapshot. This is a required copy/snapshot acceptance issue within the numbering task.
+      Resolution: Add one bounded helper remediation in writer-document-codec.ts: encode the stored bullet character for both supported marker kinds using the existing optional schema field. Correct the two fixtures and retain schema v15 and mandatory checks.
 id_source: "generated"
 ---
 ## Summary
@@ -97,3 +101,7 @@ Command: npx vitest run the eight focused core/XML/ODT files from apps/office. R
 - Observation: Office typecheck found a mistaken test-only WriterViewProjection API call and an unused type import; runtime type contract did not fail.
   Impact: The new integration test cannot typecheck until it uses the established Project API.
   Resolution: Correct the test to Project(document, current node, SwPaM, metadata), remove the unused import and rerun focused checks; no scope or verification changes.
+
+- Observation: The new integration test exposed browser snapshot loss of the inactive bullet character for Arabic levels; two other failures were fixture omissions (reopen assertion still assumed fallback and error injection lacked Standard style).
+  Impact: Native base and duplicate-replacement state did not survive a browser snapshot. This is a required copy/snapshot acceptance issue within the numbering task.
+  Resolution: Add one bounded helper remediation in writer-document-codec.ts: encode the stored bullet character for both supported marker kinds using the existing optional schema field. Correct the two fixtures and retain schema v15 and mandatory checks.
