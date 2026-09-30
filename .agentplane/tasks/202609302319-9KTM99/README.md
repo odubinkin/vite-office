@@ -4,7 +4,7 @@ title: "Restore native numbering marker ownership and ListFormat semantics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore native marker ownership and ListFormat under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:29:19.376Z"
+doc_updated_at: "2026-09-30T23:30:22.092Z"
 doc_updated_by: "CODER"
 description: "Move implemented numbering marker state to SvxNumberFormat, reproduce pinned ListFormat setters and Writer decimal pattern substitution/defaults, and preserve state through clone and Worker transfer."
 sections:
@@ -63,6 +63,10 @@ sections:
     - Observation: An evidence metadata script assumed the wrong top-level JSON collection key and failed before writing either file.
       Impact: Runtime metadata remains unchanged; source and differential checks still pass.
       Resolution: Inspect actual JSON keys and apply bounded evidence entries without changing status or validators.
+
+    - Observation: Initial full verify stopped at lint. Evidence metadata also needs separate handling of browser responsibilities versus upstream preservedResponsibilities; the inventory write completed, provenance write did not.
+      Impact: No final verification pass is claimed; runtime and browser metadata record types must be handled explicitly.
+      Resolution: Apply the reported lint correction and source-provenance updates with actual record shapes, then rerun unchanged full verification.
 id_source: "generated"
 ---
 ## Summary
@@ -104,3 +108,7 @@ Iteration25 completed; clean main/direct and parent 202609240501-C9TN6M remains 
 - Observation: An evidence metadata script assumed the wrong top-level JSON collection key and failed before writing either file.
   Impact: Runtime metadata remains unchanged; source and differential checks still pass.
   Resolution: Inspect actual JSON keys and apply bounded evidence entries without changing status or validators.
+
+- Observation: Initial full verify stopped at lint. Evidence metadata also needs separate handling of browser responsibilities versus upstream preservedResponsibilities; the inventory write completed, provenance write did not.
+  Impact: No final verification pass is claimed; runtime and browser metadata record types must be handled explicitly.
+  Resolution: Apply the reported lint correction and source-provenance updates with actual record shapes, then rerun unchanged full verification.

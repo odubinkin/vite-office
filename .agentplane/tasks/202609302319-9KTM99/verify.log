@@ -1,0 +1,35 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/source/items/numitem.ts
+  125:8   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  125:36  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  129:25  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  129:52  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/number-list-format.test.ts
+  75:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  77:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  85:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  87:10  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  97:17  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  97:17  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/number.ts
+  153:11  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  154:11  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+✖ 12 problems (12 errors, 0 warnings)
+
