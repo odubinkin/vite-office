@@ -4,7 +4,7 @@ title: "Restore native list declaration defaults and ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +41,7 @@ events:
     to: "DOING"
     note: "Start: Restore native supported declaration defaults and source-owned list/level contexts under the iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:26:30.126Z"
+doc_updated_at: "2026-09-30T22:33:53.724Z"
 doc_updated_by: "CODER"
 description: "Move supported list-style and level declaration ownership to xmlnumi, restore native optional marker/format/level defaults and integer parsing, and ignore unrelated list children while preserving explicit unsupported-family errors."
 sections:
@@ -57,6 +57,10 @@ sections:
     - Observation: Focused lint rejected ASCII-control ranges in regex via no-control-regex. The native parser requires control bytes 1..32 as whitespace.
       Impact: The regex-based implementation needs an equivalent source-driven form compatible with existing lint; no gate or semantic requirement should change.
       Resolution: Replace control-range regex trimming with a bounded charCodeAt loop, then parse only the decimal sign/digit prefix. Retain native zero behavior for no digits and signed32 overflow. Rerun lint and focus.
+
+    - Observation: The initial full verification exited 2 at typecheck: inferred fixture unions omitted the optional legacy property on generated cases.
+      Impact: Test typing prevented the remaining mandatory gates from running; runtime behavior and approved acceptance criteria are unchanged.
+      Resolution: Declare the case table shape explicitly, preserve the initial log, and rerun the entire mandatory npm run verify command.
 id_source: "generated"
 ---
 ## Summary
@@ -90,3 +94,7 @@ Previous goal turn was progress: child 202609302147-2R4T31 DONE, implementation 
 - Observation: Focused lint rejected ASCII-control ranges in regex via no-control-regex. The native parser requires control bytes 1..32 as whitespace.
   Impact: The regex-based implementation needs an equivalent source-driven form compatible with existing lint; no gate or semantic requirement should change.
   Resolution: Replace control-range regex trimming with a bounded charCodeAt loop, then parse only the decimal sign/digit prefix. Retain native zero behavior for no digits and signed32 overflow. Rerun lint and focus.
+
+- Observation: The initial full verification exited 2 at typecheck: inferred fixture unions omitted the optional legacy property on generated cases.
+  Impact: Test typing prevented the remaining mandatory gates from running; runtime behavior and approved acceptance criteria are unchanged.
+  Resolution: Declare the case table shape explicitly, preserve the initial log, and rerun the entire mandatory npm run verify command.

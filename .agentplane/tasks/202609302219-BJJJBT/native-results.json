@@ -1,0 +1,138 @@
+[
+  {
+    "value": null,
+    "level": -1
+  },
+  {
+    "value": "",
+    "level": 0
+  },
+  {
+    "value": " \t",
+    "level": 0
+  },
+  {
+    "value": "invalid",
+    "level": 0
+  },
+  {
+    "value": "0",
+    "level": 0
+  },
+  {
+    "value": "-0",
+    "level": 0
+  },
+  {
+    "value": "-7",
+    "level": 0
+  },
+  {
+    "value": "1.5",
+    "level": 0
+  },
+  {
+    "value": "2junk",
+    "level": 1
+  },
+  {
+    "value": "+2",
+    "level": 1
+  },
+  {
+    "value": " 2",
+    "level": 1
+  },
+  {
+    "value": "\t3tail",
+    "level": 2
+  },
+  {
+    "value": "10",
+    "level": 9
+  },
+  {
+    "value": "11",
+    "level": 10
+  },
+  {
+    "value": "2147483647",
+    "level": 2147483646
+  },
+  {
+    "value": "2147483648",
+    "level": 0
+  },
+  {
+    "value": "-2147483648",
+    "level": 0
+  },
+  {
+    "value": "-2147483649",
+    "level": 0
+  },
+  {
+    "value": "9223372036854775807",
+    "level": 0
+  },
+  {
+    "value": "9223372036854775808",
+    "level": 0
+  },
+  {
+    "value": "-9223372036854775809",
+    "level": 0
+  },
+  {
+    "value": "\u20032",
+    "level": 0
+  },
+  {
+    "value": "\u00002",
+    "level": 0
+  },
+  {
+    "value": "0002",
+    "level": 1
+  },
+  {
+    "value": "1e2",
+    "level": 0
+  },
+  {
+    "value": "0x2",
+    "level": 0
+  },
+  {
+    "value": "+",
+    "level": 0
+  },
+  {
+    "value": "-",
+    "level": 0
+  },
+  {
+    "value": "--2",
+    "level": 0
+  },
+  {
+    "value": " + 2",
+    "level": 0
+  },
+  {
+    "value": " \n 9x",
+    "level": 8
+  },
+  {
+    "value": "123456789012345678901234567890",
+    "level": 0
+  },
+  {
+    "value": "1\u00002",
+    "level": 0
+  },
+  {
+    "value": "\u001f2",
+    "level": 1
+  }
+]
