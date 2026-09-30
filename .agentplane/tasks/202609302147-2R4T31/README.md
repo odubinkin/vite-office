@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:00:52.929Z"
+doc_updated_at: "2026-09-30T22:02:53.895Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
@@ -72,6 +72,10 @@ sections:
     - Observation: The first C++ probe compilation rejected the adapter overloads for o3tl::toTwips: integer calls were ambiguous between long and double.
       Impact: No native or local semantic result is available from that failed probe; runtime code is unaffected.
       Resolution: Use an integral constrained template for the adapter overload, retaining the extracted native MulDiv implementation and source branches unchanged. Rerun compilation and differential comparison.
+
+    - Observation: Focused lint rejects the new static-only SwXNumberingRules facade and four non-null assertions in the integration test.
+      Impact: The repository enforces instance-based classes and explicit fixture guards; semantic comparisons already match the native C++ probe.
+      Resolution: Use the native instance facade with replaceByIndex over an owned rule and explicit test guards. Do not suppress lint or alter gates. This refines the existing approved application boundary.
 id_source: "generated"
 ---
 ## Summary
@@ -121,3 +125,7 @@ Command: npx vitest run the eight focused core/XML/ODT files from apps/office. R
 - Observation: The first C++ probe compilation rejected the adapter overloads for o3tl::toTwips: integer calls were ambiguous between long and double.
   Impact: No native or local semantic result is available from that failed probe; runtime code is unaffected.
   Resolution: Use an integral constrained template for the adapter overload, retaining the extracted native MulDiv implementation and source branches unchanged. Rerun compilation and differential comparison.
+
+- Observation: Focused lint rejects the new static-only SwXNumberingRules facade and four non-null assertions in the integration test.
+  Impact: The repository enforces instance-based classes and explicit fixture guards; semantic comparisons already match the native C++ probe.
+  Resolution: Use the native instance facade with replaceByIndex over an owned rule and explicit test guards. Do not suppress lint or alter gates. This refines the existing approved application boundary.

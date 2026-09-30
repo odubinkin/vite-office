@@ -40,7 +40,7 @@ constexpr int MAXLEVEL=10,NUM_RULE=0;
 template<typename I> constexpr bool isBetween(I n,sal_Int64 minimum,sal_Int64 maximum){return n>=minimum&&n<=maximum;}
 '''+ratio+r'''
 namespace o3tl {enum class Length {mm100,twip,in,in100};
-long toTwips(long n,Length from){return from==Length::in100?MulDiv(n,1440,100):MulDiv(n,72,127);}
+template<std::integral I> long toTwips(I n,Length from){return from==Length::in100?MulDiv(n,1440,100):MulDiv(n,72,127);}
 long toTwips(double n,Length from){assert(from==Length::in);return n*1440;}
 template<typename T,typename U> T narrowing(U n){return static_cast<T>(n);}}
 namespace tools {using Long=long;}
