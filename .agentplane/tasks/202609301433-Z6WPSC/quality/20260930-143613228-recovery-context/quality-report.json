@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301433-Z6WPSC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T14:36:13.228Z",
+  "verdict": "pass",
+  "summary": "The signed side-margin correction matches pinned source semantics and passes focused and full validation.",
+  "evaluated_sha": "d17c8bd23af5f1a452774ee6adc353b6559ad823",
+  "blueprint_digest": "3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e",
+  "findings": [
+    "Signed paragraph measures and undo/redo are tested; page margins and intentional product exceptions are unchanged. Runtime inventory evidence remains bounded."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301433-Z6WPSC/README.md",
+    ".agentplane/tasks/202609301433-Z6WPSC/verify.log",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Combined paragraph item source ownership and other module operations remain unverified in the parent audit."
+  ]
+}

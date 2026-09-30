@@ -4,7 +4,7 @@ title: "Preserve signed Writer paragraph side margins"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,27 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-30T14:34:57.485Z"
+  updated_at: "2026-09-30T14:36:21.329Z"
   updated_by: "CODER"
-  note: "Signed paragraph side margins match pinned setters and ODF mappings; 17 focused tests and full npm run verify passed, including 100% required coverage, browser/static/source/inventory checks. Doctor and routing checks passed."
+  note: "verified-202609301433-Z6WPSC"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T14:36:13.228Z"
+  updated_by: "EVALUATOR"
+  note: "The signed side-margin correction matches pinned source semantics and passes focused and full validation."
+  evaluated_sha: "d17c8bd23af5f1a452774ee6adc353b6559ad823"
+  blueprint_digest: "3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e"
+  evidence_refs:
+    - ".agentplane/tasks/202609301433-Z6WPSC/README.md"
+    - ".agentplane/tasks/202609301433-Z6WPSC/quality/20260930-143613228-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301433-Z6WPSC/quality/20260930-143613228-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301433-Z6WPSC/quality/20260930-143613228-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301433-Z6WPSC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301433-Z6WPSC/verify.log"
+    - "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts"
+  findings:
+    - "Signed paragraph measures and undo/redo are tested; page margins and intentional product exceptions are unchanged. Runtime inventory evidence remains bounded."
 commit: null
 comments:
   -
@@ -42,8 +59,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Signed paragraph side margins match pinned setters and ODF mappings; 17 focused tests and full npm run verify passed, including 100% required coverage, browser/static/source/inventory checks. Doctor and routing checks passed."
+  -
+    type: "verify"
+    at: "2026-09-30T14:36:21.329Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609301433-Z6WPSC"
 doc_version: 3
-doc_updated_at: "2026-09-30T14:34:57.559Z"
+doc_updated_at: "2026-09-30T14:36:21.404Z"
 doc_updated_by: "CODER"
 description: "One upstream parity correction: permit signed text-left and right-margin item values and ODT paragraph measures, preserving the negative result of unsnapped MoveLeftMargin and its undo/redo. User authorized iterative existing-function parity fixes on 2026-09-30. Preserve deliberate recovery, save/open and rendering exceptions."
 sections:
@@ -81,6 +104,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202609301433-Z6WPSC -m 🧩 Z6WPSC task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-30T14:36:21.329Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609301433-Z6WPSC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T14:34:57.559Z, excerpt_hash=sha256:76731779f440e28da560bb761e9ee61bae38dfd40b811535589df85d0199b09c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301433-Z6WPSC/blueprint/resolved-snapshot.json
+    - old_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+    - current_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301433-Z6WPSC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609301433-Z6WPSC --result verified-202609301433-Z6WPSC --commit d17c8bd23af5f1a452774ee6adc353b6559ad823
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -140,6 +193,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202609301433-Z6WPSC -m 🧩 Z6WPSC task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-30T14:36:21.329Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609301433-Z6WPSC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T14:34:57.559Z, excerpt_hash=sha256:76731779f440e28da560bb761e9ee61bae38dfd40b811535589df85d0199b09c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301433-Z6WPSC/blueprint/resolved-snapshot.json
+- old_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+- current_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301433-Z6WPSC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609301433-Z6WPSC --result verified-202609301433-Z6WPSC --commit d17c8bd23af5f1a452774ee6adc353b6559ad823
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
