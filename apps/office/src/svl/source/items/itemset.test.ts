@@ -402,6 +402,39 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(target.PutSet(source, false)).toBe(false);
   });
 
+  it("ignores unsupported explicit state IDs while preserving valid transitions", /** Matches DisableOrInvalidateItem_ForWhichID range filtering and idempotence. @returns Nothing. */ () => {
+    const pool = createPool();
+    const parent = new SfxItemSet(pool, [[1, 3]]);
+    parent.Put(new SfxStringItem(1, "parent"));
+    parent.Put(new SfxStringItem(3, "outside inherited"));
+    const target = new SfxItemSet(pool, [[1, 2]], parent);
+    target.Put(new SfxStringItem(1, "direct"));
+    target.DisableItem(2);
+    const ranges = target.GetRanges();
+    for (const which of [0, 3, 32767]) {
+      expect(target.InvalidateItem(which)).toBeUndefined();
+      expect(target.DisableItem(which)).toBeUndefined();
+      expect(target.GetItemState(which, false)).toBe(SfxItemState.UNKNOWN);
+      expect(target.Count()).toBe(2);
+      expect(target.GetRanges()).toBe(ranges);
+      expect(target.GetParent()).toBe(parent);
+      expect(target.GetItemState(1, false)).toBe(SfxItemState.SET);
+      expect(target.GetItemState(2, false)).toBe(SfxItemState.DISABLED);
+      expect((target.Get(1) as SfxStringItem).GetValue()).toBe("direct");
+      expect((target.Get(3) as SfxStringItem).GetValue()).toBe("outside inherited");
+    }
+    target.InvalidateItem(1);
+    target.InvalidateItem(1);
+    expect(target.GetItemState(1, false)).toBe(SfxItemState.INVALID);
+    expect(target.Count()).toBe(2);
+    target.DisableItem(1);
+    target.DisableItem(1);
+    expect(target.GetItemState(1, false)).toBe(SfxItemState.DISABLED);
+    expect(target.Count()).toBe(2);
+    expect(target.ClearItem(1)).toBe(1);
+    expect((target.Get(1) as SfxStringItem).GetValue()).toBe("parent");
+  });
+
   it("rejects invalid ranges, parents, WhichIds, and missing defaults" /** Covers structural item-set invariants. @returns Nothing; assertions inspect errors. */, function rejectsInvalidSets(): void {
     const pool = createPool();
     const otherPool = createPool();
@@ -449,11 +482,9 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     ).toThrow("another pool");
     expect(set.Put(new SfxStringItem(3, "x"))).toBeUndefined();
     expect(set.Count()).toBe(0);
-    expect(
-      throwing(
-        /** Invalidates an unsupported WhichId. @returns Nothing. */ () => set.InvalidateItem(3),
-      ),
-    ).toThrow("does not accept");
+    expect(set.InvalidateItem(3)).toBeUndefined();
+    expect(set.DisableItem(3)).toBeUndefined();
+    expect(set.Count()).toBe(0);
     expect(
       throwing(/** Resolves an unregistered default. @returns Unknown item. */ () => set.Get(9)),
     ).toThrow("Unknown pool default");

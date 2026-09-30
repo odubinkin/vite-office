@@ -172,14 +172,9 @@ export class SfxItemSet {
     );
   }
 
-  /** Rejects unsupported WhichIds before mutation. @param which - Candidate identity. @returns Nothing. */
-  private assertWhich(which: number): void {
-    if (!this.containsWhich(which)) throw new Error(`SfxItemSet does not accept WhichId: ${which}`);
-  }
-
   /** Stores an explicit non-value state. @param which - Item identity. @param state - Invalid or disabled. @returns Nothing. */
   private SetItemState(which: number, state: SfxItemState.INVALID | SfxItemState.DISABLED): void {
-    this.assertWhich(which);
+    if (!this.containsWhich(which)) return;
     this.items.delete(which);
     this.itemStates.set(which, state);
   }
