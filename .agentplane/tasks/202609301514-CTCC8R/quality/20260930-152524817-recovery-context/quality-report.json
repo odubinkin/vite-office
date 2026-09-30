@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301514-CTCC8R",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T15:25:24.817Z",
+  "verdict": "pass",
+  "summary": "Unsupported explicit item states match the pinned range filter; valid state behavior remains covered.",
+  "evaluated_sha": "a27de86c1221c08cbcaeccb6702ac66b136839ca",
+  "blueprint_digest": "f1a6d0c50f8c322bd5e7ee70edfa439afc7742a61476db59738bbcb50d630cf5",
+  "findings": [
+    "Reviewed setter range check against pinned DisableOrInvalidateItem_ForWhichID. Scope is confined to the shared setter, focused regressions, and honest unverified inventory evidence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301514-CTCC8R/README.md",
+    ".agentplane/tasks/202609301514-CTCC8R/verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

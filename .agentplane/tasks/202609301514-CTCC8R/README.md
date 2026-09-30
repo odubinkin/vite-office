@@ -4,7 +4,7 @@ title: "Match SfxItemSet state setter range filtering"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,22 @@ verification:
   updated_by: "CODER"
   note: "12 focused tests and complete npm run verify passed; doctor and policy routing passed. Evidence: verify.log; exact source owner recorded in runtime inventory."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T15:25:24.817Z"
+  updated_by: "EVALUATOR"
+  note: "Unsupported explicit item states match the pinned range filter; valid state behavior remains covered."
+  evaluated_sha: "a27de86c1221c08cbcaeccb6702ac66b136839ca"
+  blueprint_digest: "f1a6d0c50f8c322bd5e7ee70edfa439afc7742a61476db59738bbcb50d630cf5"
+  evidence_refs:
+    - ".agentplane/tasks/202609301514-CTCC8R/README.md"
+    - ".agentplane/tasks/202609301514-CTCC8R/quality/20260930-152524817-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301514-CTCC8R/quality/20260930-152524817-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301514-CTCC8R/quality/20260930-152524817-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301514-CTCC8R/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301514-CTCC8R/verify.log"
+  findings:
+    - "Reviewed setter range check against pinned DisableOrInvalidateItem_ForWhichID. Scope is confined to the shared setter, focused regressions, and honest unverified inventory evidence."
 commit: null
 comments:
   -
