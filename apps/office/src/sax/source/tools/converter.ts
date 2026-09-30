@@ -10,6 +10,15 @@ const measureRatios = {
 
 /** Owns SAX scalar conversion without document or XML-context policy. */
 export const Converter = {
+  /** Serializes a core integer to centimetres with the pinned SAX precision. @param value - Core measure. @param source - Native core unit. @returns XML centimetre measure. */
+  convertMeasureToXML(value: number, source: CoreMeasureUnit): string {
+    const absolute = Math.abs(value);
+    const scaled = source === "mm100" ? absolute : Math.trunc((absolute * 127 + 36) / 72);
+    const remainder = scaled % 1000;
+    const fraction =
+      remainder === 0 ? "" : `.${String(remainder).padStart(3, "0").replace(/0+$/u, "")}`;
+    return `${value < 0 ? "-" : ""}${Math.trunc(scaled / 1000)}${fraction}cm`;
+  },
   /** Parses a native measure and rounds/clamps it to the selected core unit. Null corresponds to native false without an output value. @param value - Source measure. @param target - Core unit. @param min - Inclusive lower limit. @param max - Inclusive upper limit. @returns Converted integer or null on unsupported syntax/unit. */
   convertMeasure(
     value: string,

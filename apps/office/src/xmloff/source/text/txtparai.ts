@@ -7,7 +7,6 @@ import type {
   OdfCharacterProperties,
   OdfHyperlink,
   OdfListLevelKind,
-  OdfListLevelLayout,
   OdfParagraphAlignment,
   OdfParagraphProperties,
   XMLParagraphStyle,
@@ -37,11 +36,22 @@ export interface OdfStyleDefinition {
   readonly properties?: Partial<OdfCharacterProperties>;
 }
 
+/** Keeps import geometry in its source unit until Writer applies the numbering properties. */
+export interface XMLListLevelImportProperties {
+  readonly measureUnit: "mm100" | "twip";
+  readonly values: {
+    readonly firstLineIndent?: number;
+    readonly indentAt?: number;
+    readonly labelFollowedBy?: "listtab" | "nothing" | "space";
+    readonly listTabPosition?: number;
+  };
+}
+
 /** Document-owned numbering rule view used while applying list paragraphs. */
 export interface XMLTextListRule {
   readonly bulletChars?: readonly (string | undefined)[];
   readonly formats: readonly OdfListLevelKind[];
-  readonly levelLayouts?: readonly (OdfListLevelLayout | undefined)[];
+  readonly levelLayouts?: readonly (XMLListLevelImportProperties | undefined)[];
   readonly suffixes?: readonly (string | undefined)[];
   readonly name: string;
 }

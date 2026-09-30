@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 
 import { exportListLevelLayout } from "../style/xmlnume";
-import { exportOdfLength, exportTextParagraphs } from "./txtparae";
+import { exportTextParagraphs } from "./txtparae";
 
 describe("ODF list label alignment export", /** Groups ODF list label alignment export. @returns Test callback result. */ () => {
   it("rejects a partial numeric suffix table", /** Verifies export input validation. @returns Nothing. */ () => {
@@ -31,15 +31,15 @@ describe("ODF list label alignment export", /** Groups ODF list label alignment 
         }),
     ).toThrow("ODF list rule must define ten Writer suffixes.");
   });
-  it("omits standard geometry and fills omitted values on partial custom layouts", /** Checks omits standard geometry and fills omitted values on partial custom layouts. @returns Test callback result. */ () => {
-    expect(exportListLevelLayout(undefined, 0, exportOdfLength)).toBe("");
-    expect(exportListLevelLayout({}, 0, exportOdfLength)).toBe("");
-    const xml = exportListLevelLayout({ labelFollowedBy: "space" }, 0, exportOdfLength);
+  it("retains the alignment mode and omits zero or unused measures", /** Checks retains the alignment mode and omits zero or unused measures. @returns Test callback result. */ () => {
+    expect(exportListLevelLayout(undefined)).toBe("");
+    expect(exportListLevelLayout({})).toContain('text:label-followed-by="listtab"');
+    const xml = exportListLevelLayout({ labelFollowedBy: "space" });
     expect(xml).toContain('text:label-followed-by="space"');
-    expect(xml).toContain('fo:text-indent="-0.635cm"');
-    expect(xml).toContain('fo:margin-left="1.27cm"');
-    expect(xml).toContain('text:list-tab-stop-position="1.27cm"');
-    expect(exportListLevelLayout({ listTabPosition: 900 }, 1, exportOdfLength)).toContain(
+    expect(xml).not.toContain("fo:text-indent");
+    expect(xml).not.toContain("fo:margin-left");
+    expect(xml).not.toContain("text:list-tab-stop-position");
+    expect(exportListLevelLayout({ listTabPosition: 900 })).toContain(
       'text:label-followed-by="listtab"',
     );
   });

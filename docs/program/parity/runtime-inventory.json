@@ -826,13 +826,26 @@
           "apps/office/src/sax/source/tools/converter.test.ts#SAX native measure conversion",
           "vendor/libreoffice-reference/sax/source/tools/converter.cxx#lcl_convertMeasure",
           "vendor/libreoffice-reference/include/sax/fastattribs.hxx#std::string_view toView() const",
-          "vendor/libreoffice-reference/sax/qa/cppunit/test_converter.cxx#ConverterTest::testMeasure"
+          "vendor/libreoffice-reference/sax/qa/cppunit/test_converter.cxx#ConverterTest::testMeasure",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Owns native SAX measure parsing for the implemented Twip and MM100 targets: UTF-8 attribute-view whitespace, optional unit, supported absolute units, target-dependent pixel acceptance, signed half-away rounding and caller/default int32 saturation. Source-derived tests and 95 cases against compiled unmodified pinned parser/measure functions verify these bounded contracts. The harness supplies platform types and native conversion ratios for these two targets. Other conversion APIs, target units and the UTF-16 overload remain unimplemented/unverified; no whole-module parity is claimed.",
+        "justification": "Owns native SAX measure parsing for the implemented Twip and MM100 targets: UTF-8 attribute-view whitespace, optional unit, supported absolute units, target-dependent pixel acceptance, signed half-away rounding and caller/default int32 saturation. Source-derived tests and 95 cases against compiled unmodified pinned parser/measure functions verify these bounded contracts. The harness supplies platform types and native conversion ratios for these two targets. Other conversion APIs, target units and the UTF-16 overload remain unimplemented/unverified; no whole-module parity is claimed. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "CoreMeasureUnit",
-          "Converter"
+          "Converter",
+          "convertMeasureToXML"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sax/source/tools/converter.cxx",
@@ -4791,6 +4804,50 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
+        ],
+        "justification": "For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
+        "knownViolations": [],
+        "localSymbols": [
+          "NumberingLabelAlignmentProperties",
+          "numberingLabelAlignmentToTwips",
+          "numberingLabelAlignmentToMM100"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/unocore/unosett.cxx",
+        "upstreamSymbols": [
+          "SwXNumberingRules::SetNumberingRuleByIndex",
+          "GetPropertiesForNumFormat"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -5039,9 +5096,21 @@
           "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts#preserves tdf114287 exact print bounds across ODT export",
           "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx#SwXMLImport::CreateStylesContext",
           "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::SetAutoStyles",
-          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs"
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Exports the supported paragraph/style/list/font/hyperlink subset and exact implemented pooled-item properties. Tables, images, fields, sections, tracked changes, annotations, embedded objects, and unknown item IDs are rejected rather than covered by a generic round-trip claim. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion.",
+        "justification": "Exports the supported paragraph/style/list/font/hyperlink subset and exact implemented pooled-item properties. Tables, images, fields, sections, tracked changes, annotations, embedded objects, and unknown item IDs are rejected rather than covered by a generic round-trip claim. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "exportStylesXml",
@@ -5128,9 +5197,21 @@
           "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts#preserves tdf114287 exact print bounds across ODT export",
           "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx#SwXMLImport::CreateStylesContext",
           "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::SetAutoStyles",
-          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs"
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Imports supported Writer paragraph, style, list, font, hyperlink, whitespace, alignment, and character-property elements through canonical SwDoc operations. Known unsupported content structures are rejected; unrelated style families remain explicitly ignored and unclaimed. Family-first lookup and separate paragraph/text name maps now reproduce bounded family-plus-name identity. Five context inputs and six literal real ODT cases in forward/reverse declaration order verify direct and parent resolution, same-name common/automatic families, Standard/Heading identities, paragraph geometry, effective inline properties and scope through export/reimport. The old wrong-family Heading rejection fixture now verifies no paragraph-property leak against an absent paragraph definition. Import/export suites are decomposed without changing prior assertions. Common-versus-automatic container ownership, display-name identity, duplicate selection, cycles/defaults and wider semantic contracts remain unverified; this is no whole-module promotion. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion.",
+        "justification": "Imports supported Writer paragraph, style, list, font, hyperlink, whitespace, alignment, and character-property elements through canonical SwDoc operations. Known unsupported content structures are rejected; unrelated style families remain explicitly ignored and unclaimed. Family-first lookup and separate paragraph/text name maps now reproduce bounded family-plus-name identity. Five context inputs and six literal real ODT cases in forward/reverse declaration order verify direct and parent resolution, same-name common/automatic families, Standard/Heading identities, paragraph geometry, effective inline properties and scope through export/reimport. The old wrong-family Heading rejection fixture now verifies no paragraph-property leak against an absent paragraph definition. Import/export suites are decomposed without changing prior assertions. Common-versus-automatic container ownership, display-name identity, duplicate selection, cycles/defaults and wider semantic contracts remain unverified; this is no whole-module promotion. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "importWriterXml",
@@ -6101,9 +6182,21 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/xmloff/source/core/xmltoken.ts#getXMLToken",
-          "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx#GetXMLToken"
+          "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx#GetXMLToken",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Mapped provenance remains semantically unverified against xmloff/source/core/xmltoken.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/core/xmltoken.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "ODF_NAMESPACES",
@@ -6142,13 +6235,26 @@
           "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
           "apps/office/src/sax/source/tools/converter.ts#Converter",
           "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native MM100 tab measures and conversion failure through ODT",
-          "apps/office/src/xmloff/source/core/xmluconv.test.ts#XML native core measure delegation"
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#XML native core measure delegation",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "SvXMLUnitConverter delegates configured Twip/MM100 conversion and nullable failure/default bounds to the SAX owner. Existing helper callers retain their unaudited strict syntax/error policy while their numeric conversion now delegates to SAX. Focused delegation and source-derived numeric evidence cover implemented targets; other APIs/configuration and caller failure policies remain unverified.",
+        "justification": "SvXMLUnitConverter delegates configured Twip/MM100 conversion and nullable failure/default bounds to the SAX owner. Existing helper callers retain their unaudited strict syntax/error policy while their numeric conversion now delegates to SAX. Focused delegation and source-derived numeric evidence cover implemented targets; other APIs/configuration and caller failure policies remain unverified. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "importOdfLength",
-          "SvXMLUnitConverter"
+          "SvXMLUnitConverter",
+          "convertMeasureToXML"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "xmloff/source/core/xmluconv.cxx",
@@ -6250,10 +6356,22 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/xmloff/source/style/xmlnume.ts#exportListLevelLayout",
-          "apps/office/src/xmloff/source/text/txtparae.test.ts#omits standard geometry and fills omitted values on partial custom layouts",
-          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle"
+          "apps/office/src/xmloff/source/text/txtparae.test.ts#retains the alignment mode and omits zero or unused measures",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Extracts the existing bounded list label-alignment serializer into the native numbering-export source owner, preserving its conditions, fallback values and XML attribute output. The paragraph exporter delegates its existing length converter explicitly. Pinned exportLevelStyle owns these attributes, but broader native zero suppression, label-followed-by conditions, units and defaults remain individually unverified; this extraction does not claim semantic parity.",
+        "justification": "Extracts the existing bounded list label-alignment serializer into the native numbering-export source owner, preserving its conditions, fallback values and XML attribute output. The paragraph exporter delegates its existing length converter explicitly. Pinned exportLevelStyle owns these attributes, but broader native zero suppression, label-followed-by conditions, units and defaults remain individually unverified; this extraction does not claim semantic parity. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "exportListLevelLayout"
@@ -6262,6 +6380,47 @@
         "upstreamFile": "xmloff/source/style/xmlnume.cxx",
         "upstreamSymbols": [
           "SvxXMLNumRuleExport::exportLevelStyle"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlnumi.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
+        ],
+        "justification": "For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/style/xmlnumi.cxx",
+        "upstreamSymbols": [
+          "SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl"
         ]
       }
     },
@@ -6292,9 +6451,21 @@
           "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts#preserves tdf114287 exact print bounds across ODT export",
           "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx#SwXMLImport::CreateStylesContext",
           "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::SetAutoStyles",
-          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs"
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/xmlstyle.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Signed fo:margin-left/right paragraph measures now follow the pinned text property mappings, with ODT import/export assertions; the remaining style import operations are still unverified. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion.",
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/xmlstyle.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Signed fo:margin-left/right paragraph measures now follow the pinned text property mappings, with ODT import/export assertions; the remaining style import operations are still unverified. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "XMLStyleImportTarget",
@@ -6548,9 +6719,21 @@
           "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts#preserves tdf114287 exact print bounds across ODT export",
           "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx#SwXMLImport::CreateStylesContext",
           "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::SetAutoStyles",
-          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs"
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparae.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion.",
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparae.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "OdfCharacterProperties",
@@ -6621,9 +6804,21 @@
           "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts#preserves tdf114287 exact print bounds across ODT export",
           "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx#SwXMLImport::CreateStylesContext",
           "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::SetAutoStyles",
-          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs"
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs",
+          "apps/office/src/xmloff/source/style/xmlnumi.test.ts#uses native MM100 grammar, failed-value retention and SHRT field bounds",
+          "apps/office/src/xmloff/source/style/xmlnume.test.ts#emits label-alignment mode even for zero or default command geometry",
+          "apps/office/src/sw/source/core/unocore/unosett.test.ts#uses native integer ratios in both directions and retains only present properties",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#round-trips native MM100 defaults, parsing bounds and conditional list attributes",
+          "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts#exports the default Writer list geometry at every supported level",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#delegates native core measure export to the supported CM unit",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx#SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx#SvxXMLNumRuleExport::exportLevelStyle",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#SwXNumberingRules::SetNumberingRuleByIndex",
+          "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx#GetPropertiesForNumFormat",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&"
         ],
-        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparai.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Absent/empty text:span style names now retain inherited properties without an additional character-style lookup/hint, matching the pinned span constructor. Six context cases and eight literal ODT package cases assert nesting, paragraph/character inheritance, child overrides and scope restoration, empty leaves, controls and active hyperlinks through import/export/reimport. Contradictory bare-span rejection fixtures are corrected. Broader style identity and full inline hint ownership/precedence, legacy font conversion and broader default/contracts remain individually unverified; this is no whole-module parity claim. Unknown/wrong-family character lookup now contributes no delta instead of aborting text import; property-less text styles still inherit valid named parents, and found automatic properties survive unresolved parents. Eleven context cases and eleven literal ODT cases with named parents in styles.xml and automatic children in content.xml verify exact unresolved names, missing/wrong-family lookup, optional properties, explicit false overrides, nested inheritance/scope restoration, controls and hyperlinks through export/reimport. Separate family/common/automatic style table identity and display-name mapping, full hint ownership, cycle semantics and wider import obligations remain unverified. Family-first lookup and separate paragraph/text name maps now reproduce bounded family-plus-name identity. Five context inputs and six literal real ODT cases in forward/reverse declaration order verify direct and parent resolution, same-name common/automatic families, Standard/Heading identities, paragraph geometry, effective inline properties and scope through export/reimport. The old wrong-family Heading rejection fixture now verifies no paragraph-property leak against an absent paragraph definition. Import/export suites are decomposed without changing prior assertions. Common-versus-automatic container ownership, display-name identity, duplicate selection, cycles/defaults and wider semantic contracts remain unverified; this is no whole-module promotion. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion.",
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparai.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Absent/empty text:span style names now retain inherited properties without an additional character-style lookup/hint, matching the pinned span constructor. Six context cases and eight literal ODT package cases assert nesting, paragraph/character inheritance, child overrides and scope restoration, empty leaves, controls and active hyperlinks through import/export/reimport. Contradictory bare-span rejection fixtures are corrected. Broader style identity and full inline hint ownership/precedence, legacy font conversion and broader default/contracts remain individually unverified; this is no whole-module parity claim. Unknown/wrong-family character lookup now contributes no delta instead of aborting text import; property-less text styles still inherit valid named parents, and found automatic properties survive unresolved parents. Eleven context cases and eleven literal ODT cases with named parents in styles.xml and automatic children in content.xml verify exact unresolved names, missing/wrong-family lookup, optional properties, explicit false overrides, nested inheritance/scope restoration, controls and hyperlinks through export/reimport. Separate family/common/automatic style table identity and display-name mapping, full hint ownership, cycle semantics and wider import obligations remain unverified. Family-first lookup and separate paragraph/text name maps now reproduce bounded family-plus-name identity. Five context inputs and six literal real ODT cases in forward/reverse declaration order verify direct and parent resolution, same-name common/automatic families, Standard/Heading identities, paragraph geometry, effective inline properties and scope through export/reimport. The old wrong-family Heading rejection fixture now verifies no paragraph-property leak against an absent paragraph definition. Import/export suites are decomposed without changing prior assertions. Common-versus-automatic container ownership, display-name identity, duplicate selection, cycles/defaults and wider semantic contracts remain unverified; this is no whole-module promotion. XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion. For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. An explicit unit-marked port keeps the existing legacy Twip adapter separate. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
         "knownViolations": [],
         "localSymbols": [
           "OdfStyleDefinition",

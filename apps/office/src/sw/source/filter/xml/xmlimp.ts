@@ -1,5 +1,6 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 
+import { numberingLabelAlignmentToTwips } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
 
 import {
@@ -362,6 +363,13 @@ class SwXMLImport
   public registerListStyle(styleName: string, rule: XMLTextListRule): void {
     if (this.listRules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
     this.listRules.set(styleName, rule);
+    const layouts = rule.levelLayouts?.map(
+      /** Converts native properties only at Writer application. @param layout - Source geometry. @returns Core geometry. */
+      (layout) =>
+        layout?.measureUnit === "mm100"
+          ? numberingLabelAlignmentToTwips(layout.values)
+          : layout?.values,
+    );
     const existing = this.document.FindNumRulePtr(rule.name);
     if (existing !== undefined) {
       if (
@@ -374,7 +382,7 @@ class SwXMLImport
             (kind === "bullet" &&
               existing.GetNumFormat(level).GetBulletChar() !==
                 (rule.bulletChars?.[level] ?? "•")) ||
-            Object.entries(rule.levelLayouts?.[level] ?? {}).some(
+            Object.entries(layouts?.[level] ?? {}).some(
               /** Compares imported geometry with an existing rule. @param entry - Geometry field and value. @returns Whether they conflict. */
               ([key, value]) =>
                 key === "firstLineIndent"
@@ -400,7 +408,7 @@ class SwXMLImport
             return new SwNumFormat(kind, rule.bulletChars?.[level], {
               indentAt,
               listTabPosition: indentAt,
-              ...rule.levelLayouts?.[level],
+              ...layouts?.[level],
               /* v8 ignore next -- Streaming list-style parser always supplies suffixes for declared numeric levels. */
               ...(kind === "numbered" ? { suffix: rule.suffixes?.[level] ?? "." } : {}),
             });
@@ -476,11 +484,8 @@ class SwXMLImport
 
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
-    applyNamedParagraphStyles(
-      this.document,
-      this.styles?.GetStyleDefinitions("paragraph") ?? new Map(),
-      this.defaultParagraphStyle,
-    );
+    const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
+    applyNamedParagraphStyles(this.document, paragraphs, this.defaultParagraphStyle);
     const createValue =
       /** Converts a registered page layout to Writer geometry. @param name - Master-page name. @param layout - Imported page layout. @returns Writer page descriptor. */ (
         name: string,

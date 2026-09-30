@@ -75,9 +75,9 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
   for (const fixture of [
-    // Five table style attributes in each fixture are now handled by the table importer.
-    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 90 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 101 },
+    // Five table attributes and ten list position-mode attributes are now recognized.
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 80 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 91 },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -103,6 +103,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
               "text:bookmark-start",
               "text:bookmark-end",
               "text:soft-page-break",
+              "text:list-level-position-and-space-mode",
             ].includes(diagnostic.name),
         ),
       ).toBe(false);

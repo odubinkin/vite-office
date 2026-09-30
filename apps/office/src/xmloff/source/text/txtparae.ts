@@ -79,7 +79,7 @@ export interface OdfParagraphProperties {
 /** Marker family stored by one ODF list level style. */
 export type OdfListLevelKind = "bullet" | "numbered";
 
-/** Label-alignment geometry of one ODF list level, in Writer twips. */
+/** Exported label-alignment properties of one ODF list level, in native UNO MM100. */
 export interface OdfListLevelLayout {
   readonly firstLineIndent?: number;
   readonly indentAt?: number;
@@ -302,11 +302,7 @@ export class XMLTextParagraphExport {
                 kind === "bullet"
                   ? ` text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"`
                   : ` style:num-format="1"${rule.suffixes?.[level] === "" ? "" : ' style:num-suffix="."'}`;
-              const layout = exportListLevelLayout(
-                rule.levelLayouts?.[level],
-                level,
-                exportOdfLength,
-              );
+              const layout = exportListLevelLayout(rule.levelLayouts?.[level]);
               return layout === ""
                 ? `<${element} text:level="${level + 1}"${attributes}/>`
                 : `<${element} text:level="${level + 1}"${attributes}>${layout}</${element}>`;

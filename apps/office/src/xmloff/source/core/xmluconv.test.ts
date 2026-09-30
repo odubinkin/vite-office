@@ -35,3 +35,27 @@ describe("XML native core measure delegation", /** Groups native XML delegation 
     ).toThrow("Unsupported ODF length");
   });
 });
+
+it("delegates native core measure export to the supported CM unit", /** Checks MM100 and Twip source precision and signed rounding. @returns Nothing. */ () => {
+  const mm100 = new SvXMLUnitConverter("mm100");
+  const twips = new SvXMLUnitConverter("twip");
+  for (const [value, expected] of [
+    [0, "0cm"],
+    [1, "0.001cm"],
+    [-1, "-0.001cm"],
+    [1000, "1cm"],
+    [1008, "1.008cm"],
+    [-2147483648, "-2147483.648cm"],
+  ] as const)
+    expect(mm100.convertMeasureToXML(value)).toBe(expected);
+  for (const [value, expected] of [
+    [0, "0cm"],
+    [1, "0.002cm"],
+    [-1, "-0.002cm"],
+    [720, "1.27cm"],
+    [-720, "-1.27cm"],
+    [1134, "2cm"],
+    [127, "0.224cm"],
+  ] as const)
+    expect(twips.convertMeasureToXML(value)).toBe(expected);
+});

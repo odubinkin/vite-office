@@ -5,14 +5,15 @@ import { XMLToken } from "../core/xmltoken";
 import type {
   OdfCharacterProperties,
   OdfListLevelKind,
-  OdfListLevelLayout,
   OdfParagraphAlignment,
 } from "../text/txtparae";
 import type {
   OdfStyleDefinition,
   XMLTextListRule,
   XMLParagraphImportProperties,
+  XMLListLevelImportProperties,
 } from "../text/txtparai";
+import { SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl } from "./xmlnumi";
 import { importOdfLength } from "../core/xmluconv";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
@@ -329,7 +330,9 @@ class XMLStyleContext extends SvXMLImportContext {
 class XMLListStyleContext extends SvXMLImportContext {
   private readonly bulletChars: (string | undefined)[] = Array.from({ length: 10 });
   private readonly formats: (OdfListLevelKind | undefined)[] = Array.from({ length: 10 });
-  private readonly levelLayouts: (OdfListLevelLayout | undefined)[] = Array.from({ length: 10 });
+  private readonly levelLayouts: (XMLListLevelImportProperties | undefined)[] = Array.from({
+    length: 10,
+  });
   private readonly suffixes: (string | undefined)[] = Array.from({ length: 10 });
   private readonly name: string;
   private readonly ruleName: string;
@@ -431,7 +434,7 @@ class XMLListStyleContext extends SvXMLImportContext {
 /** Imports the label-alignment child of one list-level-properties element. */
 class XMLListLevelContext extends SvXMLImportContext {
   /** Creates a level context. @param save - Model-facing geometry sink. @returns Nothing. */
-  public constructor(private readonly save: (layout: OdfListLevelLayout) => void) {
+  public constructor(private readonly save: (layout: XMLListLevelImportProperties) => void) {
     super();
   }
 
@@ -449,7 +452,7 @@ class XMLListLevelContext extends SvXMLImportContext {
 class XMLListLevelPropertiesContext extends SvXMLImportContext {
   /** Creates a properties context. @param save - Model-facing geometry sink. @param attributes - Legacy and modern list properties. @returns Nothing. */
   public constructor(
-    private readonly save: (layout: OdfListLevelLayout) => void,
+    private readonly save: (layout: XMLListLevelImportProperties) => void,
     attributes: FastAttributeList,
   ) {
     super();
@@ -478,10 +481,13 @@ class XMLListLevelPropertiesContext extends SvXMLImportContext {
     ) {
       const indentAt = (spaceBefore ?? 0) + (minLabelWidth ?? 0);
       this.save({
-        firstLineIndent: -(minLabelWidth ?? 0),
-        indentAt,
-        labelFollowedBy: "listtab",
-        listTabPosition: indentAt + (minLabelDistance ?? 0),
+        measureUnit: "twip",
+        values: {
+          firstLineIndent: -(minLabelWidth ?? 0),
+          indentAt,
+          labelFollowedBy: "listtab",
+          listTabPosition: indentAt + (minLabelDistance ?? 0),
+        },
       });
     }
   }
@@ -492,39 +498,7 @@ class XMLListLevelPropertiesContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element !== XMLToken.STYLE_LIST_LEVEL_LABEL_ALIGNMENT) return new SvXMLIgnoreContext();
-    const rawFollow = attributes.get(XMLToken.TEXT_LABEL_FOLLOWED_BY);
-    if (
-      rawFollow !== null &&
-      rawFollow !== "listtab" &&
-      rawFollow !== "nothing" &&
-      rawFollow !== "space"
-    )
-      throw new Error(`Unsupported ODF label-followed-by: ${rawFollow}`);
-    const firstLineIndent = importOptionalLength(
-      attributes,
-      XMLToken.FO_TEXT_INDENT,
-      true,
-      "list first-line indent",
-    );
-    const indentAt = importOptionalLength(
-      attributes,
-      XMLToken.FO_MARGIN_LEFT,
-      true,
-      "list body indent",
-    );
-    const listTabPosition = importOptionalLength(
-      attributes,
-      XMLToken.TEXT_LIST_TAB_STOP_POSITION,
-      false,
-      "list tab stop",
-    );
-    this.save({
-      ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
-      ...(indentAt === undefined ? {} : { indentAt }),
-      ...(rawFollow === null ? {} : { labelFollowedBy: rawFollow }),
-      ...(listTabPosition === undefined ? {} : { listTabPosition }),
-    });
-    return new SvXMLIgnoreContext();
+    return new SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(attributes, this.save);
   }
 }
 

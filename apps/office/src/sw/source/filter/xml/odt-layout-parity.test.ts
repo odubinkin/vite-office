@@ -251,13 +251,19 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     expect(exportContentXml(source)).toContain('text:label-followed-by="space"');
   });
 
-  it("rejects unsupported list label-follow and page orientation values", /** Checks rejects unsupported list label-follow and page orientation values. @returns Test callback result. */ () => {
+  it("defaults unknown list label-follow values and rejects unsupported page orientation", /** Checks defaults unknown list label-follow values and rejects unsupported page orientation. @returns Test callback result. */ () => {
     const invalidList =
       '<text:list-style style:name="Invalid"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties><style:list-level-label-alignment text:label-followed-by="custom"/></style:list-level-properties></text:list-level-style-bullet></text:list-style>';
-    expect(
-      /** Runs the test callback. @returns Test callback result. */ () =>
-        importWriterXml(styles(""), content(invalidList, "<text:p>Item</text:p>"), metadata),
-    ).toThrow(/Unsupported ODF label-followed-by/);
+    const unknownFollow = importWriterXml(
+      styles(""),
+      content(invalidList, "<text:p>Item</text:p>"),
+      metadata,
+    )
+      .document.FindNumRulePtr("Invalid")
+      ?.GetNumFormat(0);
+    expect(unknownFollow?.GetLabelFollowedBy()).toBe("listtab");
+    expect(unknownFollow?.GetFirstLineIndent()).toBe(0);
+    expect(unknownFollow?.GetIndentAt()).toBe(0);
     const invalidPage = `<office:document-styles ${namespaces}><office:automatic-styles><style:page-layout style:name="P1"><style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" style:print-orientation="diagonal"/></style:page-layout></office:automatic-styles><office:styles/></office:document-styles>`;
     expect(
       /** Runs the test callback. @returns Test callback result. */ () =>
