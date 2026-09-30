@@ -6265,20 +6265,27 @@
           "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native tab position and alignment defaults through direct and inherited ODT styles",
           "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#aTabStop.Position = 0;",
           "apps/office/src/sax/source/tools/converter.ts#Converter",
-          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native MM100 tab measures and conversion failure through ODT"
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native MM100 tab measures and conversion failure through ODT",
+          "apps/office/src/xmloff/source/style/xmltabi.ts#SvxXMLTabStopContext_Impl",
+          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#const style::TabStop& getTabStop() const",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#keeps tab leaf values independent from ignored descendant subtrees",
+          "vendor/libreoffice-reference/xmloff/source/core/xmlictxt.cxx#SvXMLImportContext::createFastChildContext",
+          "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#if( !pParentContext )"
         ],
-        "justification": "Native tab positions are imported as integer MM100 using SvXMLUnitConverter, with failed conversion retaining zero. Import-only contracts distinguish these values from twip export data. Twenty literal direct/inherited ODT cases verify native syntax, two-stage quantization, signed rounding, units, saturation and failed-position fallback through export/reimport. Existing source-order Default, alignment/decimal/leader and empty sequence assertions remain. Broader leaf-context and export contracts remain unverified.",
+        "justification": "Native per-tab SvxXMLTabStopContext_Impl now owns construction/parsing and the MM100 tab value; the parent stores and returns leaf context references and selects through getTabStop. AST comparison proves moved parsing/value initialization and Default-selection predicates unchanged. Existing native measure/default/sequence assertions and a real direct/inherited ODT case cover ignored known/unknown descendant subtrees without changing tab fields, siblings or document text. The current ignore-context base adapts native SAX null-subtree skipping to the existing bounded dispatcher. Global null-context dispatch, exact base-class plumbing, full UNO/property-state and other native contracts remain unverified; this is no whole-module parity claim or registered intentional deviation.",
         "knownViolations": [],
         "localSymbols": [
           "XMLTabStop",
-          "SvxXMLTabStopImportContext"
+          "SvxXMLTabStopImportContext",
+          "SvxXMLTabStopContext_Impl"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "xmloff/source/style/xmltabi.cxx",
         "upstreamSymbols": [
           "SvxXMLTabStopImportContext",
           "SvxXMLTabStopImportContext::createFastChildContext",
-          "SvxXMLTabStopImportContext::endFastElement"
+          "SvxXMLTabStopImportContext::endFastElement",
+          "SvxXMLTabStopContext_Impl"
         ]
       }
     },

@@ -5739,6 +5739,14 @@
           {
             "marker": "imports native MM100 tab measures and conversion failure through ODT",
             "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
+          },
+          {
+            "marker": "SvxXMLTabStopContext_Impl",
+            "path": "apps/office/src/xmloff/source/style/xmltabi.ts"
+          },
+          {
+            "marker": "keeps tab leaf values independent from ignored descendant subtrees",
+            "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
           }
         ],
         "upstream": [
@@ -5757,26 +5765,40 @@
           {
             "marker": "GetMM100UnitConverter",
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+          },
+          {
+            "marker": "const style::TabStop& getTabStop() const",
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+          },
+          {
+            "marker": "SvXMLImportContext::createFastChildContext",
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmlictxt.cxx"
+          },
+          {
+            "marker": "if( !pParentContext )",
+            "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
           }
         ]
       },
       "localPath": "apps/office/src/xmloff/source/style/xmltabi.ts",
       "localSymbols": [
         "XMLTabStop",
-        "SvxXMLTabStopImportContext"
+        "SvxXMLTabStopImportContext",
+        "SvxXMLTabStopContext_Impl"
       ],
       "omittedResponsibilities": [
-        "Native UNO property-state plumbing, separate leaf context ownership and broader context contracts remain unverified or omitted."
+        "Native UNO/property-state plumbing, global null-context dispatch and exact base-class contracts remain individually unverified. The existing ignore-context base currently adapts native null-subtree skipping to the bounded dispatcher and is not a registered intentional deviation."
       ],
       "preservedResponsibilities": [
-        "Owns native MM100 tab import properties, failed-conversion zero fallback, recognized-only alignment overrides and source-order selection; source-derived literal direct/inherited ODT cycles cover parsing, quantization, signed rounding, units and saturation."
+        "Owns native per-tab construction/parsing and the MM100 property in SvxXMLTabStopContext_Impl. Container references own returned leaf contexts and select values via getTabStop. Moved initialization and Default-selection predicates are AST-identical; source-derived package cycles cover metrics/defaults, sibling selection and ignored known/unknown leaf descendants."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/style/xmltabi.cxx",
       "upstreamSymbols": [
         "SvxXMLTabStopImportContext",
         "SvxXMLTabStopImportContext::createFastChildContext",
-        "SvxXMLTabStopImportContext::endFastElement"
+        "SvxXMLTabStopImportContext::endFastElement",
+        "SvxXMLTabStopContext_Impl"
       ]
     },
     {

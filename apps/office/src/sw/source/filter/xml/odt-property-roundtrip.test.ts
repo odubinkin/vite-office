@@ -260,6 +260,44 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       ),
     ).rejects.toThrow("Unsupported ODF widows");
   });
+  it("keeps tab leaf values independent from ignored descendant subtrees", /** Checks leaf lifecycle, native subtree skipping and sibling selection through direct/inherited package cycles. @returns Completion after reimport. */ async () => {
+    const writer = createWriterDocument();
+    const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
+    writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
+    writer.paragraphs[0]?.SetAttr(placeholder);
+    let input = writeOdtDocument(writer, metadata);
+    const fixture =
+      '<style:tab-stops><style:tab-stop style:position="36pt" style:type="char" style:char=";" style:leader-style="solid" style:leader-text="_">discarded text<style:tab-stops><style:tab-stop style:position="-72pt" style:type="default"/><style:tab-stop style:position="0pt" style:type="right"/></style:tab-stops><probe:container xmlns:probe="urn:tab-leaf-test"><text:p>discarded paragraph<text:span>discarded span</text:span></text:p><style:tab-stop style:position="108pt" style:type="center"/></probe:container></style:tab-stop><style:tab-stop style:position="72pt" style:type="right"/></style:tab-stops>';
+    for (const entry of ["content.xml", "styles.xml"])
+      input = await rewriteEntry(
+        input,
+        entry,
+        /** Inserts nested known/unknown XML under one leaf. @param xml - Package stream. @returns Literal subtree fixture. */
+        (xml) => xml.replace(/<style:tab-stops>[\s\S]*?<\/style:tab-stops>/gu, fixture),
+      );
+    const imported = await readOdtDocument(input, metadata);
+    const reopened = await readOdtDocument(writeOdtDocument(imported.document, metadata), metadata);
+    for (const document of [imported.document, reopened.document]) {
+      const direct = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+      const inherited = document
+        .GetDfltTextFormatColl()
+        .GetAttrSet()
+        .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+      for (const item of [direct, inherited])
+        expect(
+          item.GetStops().map(
+            /** Projects all tab fields after leaf dispatch. @param stop - Imported tab. @returns Retained fields. */
+            (stop) => [stop.GetTabPos(), stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill()],
+          ),
+        ).toEqual([
+          [720, SvxTabAdjust.Decimal, ";", "_"],
+          [1440, SvxTabAdjust.Right, ",", " "],
+        ]);
+      expect(document.paragraphs).toHaveLength(1);
+      expect(document.paragraphs[0]?.GetText()).toBe("");
+    }
+  });
+
   it("imports native MM100 tab measures and conversion failure through ODT", /** Checks native parse/failure/quantization before Writer conversion through direct and inherited package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
     const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
