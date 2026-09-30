@@ -1,10 +1,11 @@
 ---
 id: "202609301452-WQ0C2J"
 title: "Match item set clone inheritance and state contracts"
-status: "DOING"
+result_summary: "Empty clones drop parents and cross-pool clones copy SET values only; same-pool clones preserve independent values and states."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/source/core/doc/writer-attributes.test.ts"
   findings:
     - "Independent values, parent ownership and invalid/disabled states have focused assertions; full gates pass. Copying no longer depends on PutSet defaults."
-commit: null
+commit:
+  hash: "ba5d1826bfbe4a360fe012a3a22196b5f6896493"
+  message: "🐛 WQ0C2J task: align item set clone inheritance and states"
 comments:
   -
     author: "CODER"
     body: "Start: match SfxItemSet and SwAttrSet clone contracts with pinned copy constructors, parent ownership and cross-pool state filtering."
+  -
+    author: "CODER"
+    body: "Verified: item set clone inheritance and direct-state copying now match pinned LibreOffice; focused and complete verification passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Empty, full same-pool and cross-pool clones match pinned inheritance/state rules; 20 focused tests and full npm run verify passed (562 app, 109 inventory, 19 browser, 100% coverage), doctor and routing passed."
+  -
+    type: "status"
+    at: "2026-09-30T15:01:37.923Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: item set clone inheritance and direct-state copying now match pinned LibreOffice; focused and complete verification passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T15:01:02.358Z"
+doc_updated_at: "2026-09-30T15:01:37.924Z"
 doc_updated_by: "CODER"
 description: "One correction to existing SfxItemSet.Clone and SwAttrSet.CloneAsValue: empty clones drop parents, complete same-pool clones preserve direct state, cross-pool clones copy only directly SET values. Compare pinned itemset.cxx and swatrset.cxx, remove redundant PutSet-plus-state copying, and add focused evidence. Scope: itemset.ts/test, swatrset.ts, writer-attributes.test.ts, runtime-inventory.json and task artifacts. Authorized iterative parity goal; preserve deliberate product deviations."
 sections:
