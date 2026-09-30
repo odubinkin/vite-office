@@ -1,10 +1,11 @@
 ---
 id: "202609301526-CHAQ5Y"
 title: "Align paragraph margin item source ownership"
-status: "DOING"
+result_summary: "Aligned existing paragraph margin and spacing item source ownership with pinned LibreOffice."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202609301526-CHAQ5Y/verify.log"
   findings:
     - "Reviewed exact class-body equality, twenty direct import updates, relocation of existing assertions, and narrow provenance/inventory data. No forwarding shim, validator changes, or product exception changes. Full verification passed."
-commit: null
+commit:
+  hash: "366dc444b000210058ea83f90ab854a576cadb56"
+  message: "♻️ CHAQ5Y task: align frame item ownership with upstream"
 comments:
   -
     author: "CODER"
     body: "Start: perform the approved single source-owner correction for existing frame margin and spacing items, preserving class bodies and behavior."
+  -
+    author: "CODER"
+    body: "Verified: unchanged frame metric classes now belong to frmitems; all focused and full validation gates passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact class-body comparison, 41 focused tests, complete verification, doctor and policy routing passed; verify.log preserves gate evidence."
+  -
+    type: "status"
+    at: "2026-09-30T15:37:16.356Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: unchanged frame metric classes now belong to frmitems; all focused and full validation gates passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T15:36:32.726Z"
+doc_updated_at: "2026-09-30T15:37:16.358Z"
 doc_updated_by: "CODER"
 description: "One bounded architecture correction under approved iterative upstream audit: move the four existing frame-owned margin and spacing item classes to editeng/source/items/frmitems.ts, update all direct consumers and test ownership, and align provenance/inventory data without changing behavior or validators."
 sections:
