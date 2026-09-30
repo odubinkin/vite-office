@@ -1,10 +1,11 @@
 ---
 id: "202609301437-ET663N"
 title: "Match SfxItemSet Put range filtering"
-status: "DOING"
+result_summary: "SfxItemSet Put matches upstream range filtering; 560 app, 109 inventory and 19 browser tests pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/svl/source/items/itemset.test.ts"
   findings:
     - "The focused branch/state tests and complete verification pass; the first unrelated TXT timing failure is retained with isolated and full passing retries."
-commit: null
+commit:
+  hash: "7ea0a3f2be327d44cabee6665f1f185e6a9ec1b9"
+  message: "🐛 ET663N task: filter unsupported SfxItemSet Put values"
 comments:
   -
     author: "CODER"
     body: "Start: align bounded SfxItemSet Put range filtering with pinned upstream, validate wider-source copying and preserve explicit state contracts."
+  -
+    author: "CODER"
+    body: "Verified: unsupported SfxItemSet Put values are ignored and wider-source copies retain supported entries; focused and full checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "SfxItemSet Put range filtering matches pinned PutImpl; focused tests and complete npm run verify retry passed. Earlier unrelated TXT-save timing failure is recorded and passed isolated and full retries without changes."
+  -
+    type: "status"
+    at: "2026-09-30T14:50:20.876Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: unsupported SfxItemSet Put values are ignored and wider-source copies retain supported entries; focused and full checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T14:49:47.765Z"
+doc_updated_at: "2026-09-30T14:50:20.878Z"
 doc_updated_by: "CODER"
 description: "One implemented-runtime parity correction: SfxItemSet.Put must return undefined for an item outside its WhichId ranges, as pinned SfxItemSet::PutImpl returns nullptr; PutSet must retain supported items from a wider source without throwing. Scope: itemset.ts, itemset.test.ts, runtime-inventory.json and task artifacts. Approved by the user iterative parity instruction; preserve product deviations."
 sections:
