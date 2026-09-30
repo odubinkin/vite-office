@@ -1,5 +1,7 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 
+import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
+
 import {
   SvxAdjust,
   SvxAdjustItem,
@@ -51,7 +53,6 @@ import type {
   OdfCharacterProperties,
   OdfHyperlink,
   OdfParagraphAlignment,
-  OdfParagraphProperties,
   XMLParagraphStyle,
 } from "../../../../xmloff/source/text/txtparae";
 import {
@@ -416,7 +417,7 @@ class SwXMLImport
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
     leftMargin: number | undefined,
-    paragraphProperties: OdfParagraphProperties | undefined,
+    paragraphProperties: XMLParagraphImportProperties | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
     listGeometryWins: boolean,
@@ -861,7 +862,7 @@ function putCharacterProperties(
 
 /** Converts ODF paragraph deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */
 function putParagraphProperties(
-  properties: OdfParagraphProperties,
+  properties: XMLParagraphImportProperties,
   put: (item: SfxPoolItem) => unknown,
 ): void {
   if (properties.firstLineIndent !== undefined || properties.autoTextIndent !== undefined)
@@ -917,7 +918,8 @@ function putParagraphProperties(
           /** Builds an upstream Writer tab from ODF properties. @param stop - ODF tab. @returns Writer tab. */
           (stop) =>
             new SvxTabStop(
-              stop.position,
+              // Pinned SvxTabStopItem::PutValue uses o3tl::toTwips on the integer MM100 property.
+              Math.trunc((stop.position * 72 + (stop.position >= 0 ? 63 : -63)) / 127),
               stop.alignment === "right"
                 ? SvxTabAdjust.Right
                 : stop.alignment === "center"

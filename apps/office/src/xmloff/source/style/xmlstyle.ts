@@ -7,9 +7,12 @@ import type {
   OdfListLevelKind,
   OdfListLevelLayout,
   OdfParagraphAlignment,
-  OdfParagraphProperties,
 } from "../text/txtparae";
-import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
+import type {
+  OdfStyleDefinition,
+  XMLTextListRule,
+  XMLParagraphImportProperties,
+} from "../text/txtparai";
 import { importOdfLength } from "../core/xmluconv";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
@@ -152,7 +155,7 @@ function importOptionalPageLength(attributes: FastAttributeList, token: XMLToken
 class XMLStyleContext extends SvXMLImportContext {
   private alignment: OdfParagraphAlignment | undefined;
   private leftMargin: number | undefined;
-  private paragraphProperties: OdfParagraphProperties | undefined;
+  private paragraphProperties: XMLParagraphImportProperties | undefined;
   private hasParagraphProperties = false;
   private properties: Partial<OdfCharacterProperties> | undefined;
   private readonly name: string;
@@ -481,7 +484,7 @@ function importLeftMargin(attributes: FastAttributeList): number | undefined {
 /** Imports supported paragraph properties. @param attributes - Property attributes. @returns Property deltas. */
 function importParagraphProperties(
   attributes: FastAttributeList,
-): OdfParagraphProperties | undefined {
+): XMLParagraphImportProperties | undefined {
   const firstLineIndent = importOptionalLength(
     attributes,
     XMLToken.FO_TEXT_INDENT,
@@ -570,7 +573,7 @@ function importParagraphProperties(
     attributes.get(XMLToken.TEXT_NUMBER_LINES),
     "paragraph line-number participation",
   );
-  const result: OdfParagraphProperties = {
+  const result: XMLParagraphImportProperties = {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(autoTextIndent === undefined ? {} : { autoTextIndent }),
     ...(pageNumber === null || pageNumber === undefined ? {} : { pageNumber }),

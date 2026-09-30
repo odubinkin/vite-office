@@ -2,15 +2,22 @@
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import { importOdfLength } from "../core/xmluconv";
+import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { OdfTabStop } from "../text/txtparae";
+
+/** Imported native tab property; position is an integer in hundredths of a millimetre. */
+export interface XMLTabStop extends OdfTabStop {
+  /** Position in the native tab property's MM100 unit. */
+  readonly position: number;
+}
 
 /** Imports ordered paragraph tab stops. */
 export class SvxXMLTabStopImportContext extends SvXMLImportContext {
-  private readonly stops: OdfTabStop[] = [];
+  private readonly unitConverter = new SvXMLUnitConverter("mm100");
+  private readonly stops: XMLTabStop[] = [];
 
   /** Creates a tab-stop container. @param setTabStops - Imported sequence sink. @returns Nothing. */
-  public constructor(private readonly setTabStops: (stops: readonly OdfTabStop[]) => void) {
+  public constructor(private readonly setTabStops: (stops: readonly XMLTabStop[]) => void) {
     super();
   }
 
@@ -43,7 +50,7 @@ export class SvxXMLTabStopImportContext extends SvXMLImportContext {
         ? " "
         : (leaderText?.[0] ?? (leaderStyle === "dotted" ? "." : "_"));
     this.stops.push({
-      position: position === null ? 0 : importOdfLength(position, true, "tab stop position"),
+      position: position === null ? 0 : (this.unitConverter.convertMeasureToCore(position) ?? 0),
       alignment,
       decimal: attributes.get(XMLToken.STYLE_CHAR)?.[0] ?? ",",
       fill,
@@ -53,7 +60,7 @@ export class SvxXMLTabStopImportContext extends SvXMLImportContext {
 
   /** Publishes the source-order sequence selected by the pinned tab importer, including an explicit empty sequence. @returns Nothing. */
   public override endFastElement(): void {
-    const selected: OdfTabStop[] = [];
+    const selected: XMLTabStop[] = [];
     for (const [index, stop] of this.stops.entries()) {
       const isDefault = stop.alignment === "default";
       if (!isDefault || index === 0) selected.push(stop);

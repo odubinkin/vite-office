@@ -13,6 +13,16 @@ import type {
   XMLParagraphStyle,
 } from "./txtparae";
 
+import type { XMLTabStop } from "../style/xmltabi";
+
+/** Imported paragraph properties keep native tab positions in MM100 until Writer item application. */
+export interface XMLParagraphImportProperties extends Omit<
+  OdfParagraphProperties,
+  "tabStopDetails"
+> {
+  readonly tabStopDetails?: readonly XMLTabStop[];
+}
+
 /** Parsed style state retained only as a reference table, never as document content. */
 export interface OdfStyleDefinition {
   readonly alignment?: OdfParagraphAlignment;
@@ -21,7 +31,7 @@ export interface OdfStyleDefinition {
   /** Direct text-left margin imported from paragraph properties, in twips. */
   readonly leftMargin?: number;
   readonly listStyleName?: string;
-  readonly paragraphProperties?: OdfParagraphProperties;
+  readonly paragraphProperties?: XMLParagraphImportProperties;
   readonly nextStyleName?: string;
   readonly parentStyleName?: string;
   readonly properties?: Partial<OdfCharacterProperties>;
@@ -61,7 +71,7 @@ export interface XMLTextImportTarget {
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
     leftMargin: number | undefined,
-    paragraphProperties: OdfParagraphProperties | undefined,
+    paragraphProperties: XMLParagraphImportProperties | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
     listGeometryWins: boolean,
@@ -491,7 +501,7 @@ interface ResolvedParagraphStyle {
   readonly effectiveProperties?: Partial<OdfCharacterProperties>;
   readonly leftMargin?: number;
   readonly listGeometryWins: boolean;
-  readonly paragraphProperties?: OdfParagraphProperties;
+  readonly paragraphProperties?: XMLParagraphImportProperties;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly style: XMLParagraphStyle;
 }

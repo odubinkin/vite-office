@@ -807,6 +807,43 @@
       }
     },
     {
+      "path": "apps/office/src/sax/source/tools/converter.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sax/source/tools/converter.ts#Converter",
+          "apps/office/src/sax/source/tools/converter.test.ts#SAX native measure conversion",
+          "vendor/libreoffice-reference/sax/source/tools/converter.cxx#lcl_convertMeasure",
+          "vendor/libreoffice-reference/include/sax/fastattribs.hxx#std::string_view toView() const",
+          "vendor/libreoffice-reference/sax/qa/cppunit/test_converter.cxx#ConverterTest::testMeasure"
+        ],
+        "justification": "Owns native SAX measure parsing for the implemented Twip and MM100 targets: UTF-8 attribute-view whitespace, optional unit, supported absolute units, target-dependent pixel acceptance, signed half-away rounding and caller/default int32 saturation. Source-derived tests and 95 cases against compiled unmodified pinned parser/measure functions verify these bounded contracts. The harness supplies platform types and native conversion ratios for these two targets. Other conversion APIs, target units and the UTF-16 overload remain unimplemented/unverified; no whole-module parity is claimed.",
+        "knownViolations": [],
+        "localSymbols": [
+          "CoreMeasureUnit",
+          "Converter"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sax/source/tools/converter.cxx",
+        "upstreamSymbols": [
+          "Converter::convertMeasure",
+          "lcl_parseMeasure",
+          "lcl_convertMeasure"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sfx2/source/control/bindings.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -6079,12 +6116,16 @@
           "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx#convertMeasureToCore",
           "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
           "apps/office/src/sw/source/filter/xml/odt-line-numbering.test.ts",
-          "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts"
+          "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+          "apps/office/src/sax/source/tools/converter.ts#Converter",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native MM100 tab measures and conversion failure through ODT",
+          "apps/office/src/xmloff/source/core/xmluconv.test.ts#XML native core measure delegation"
         ],
-        "justification": "Owns the existing bounded ODF absolute-length-to-Writer-twip conversion helper, previously embedded in the text-property dispatcher. AST comparison proves the complete function unchanged; tab, paragraph/style, table and line-number imports consume the core owner directly. Signed/unsigned conversion and existing supported units remain covered by existing caller assertions. This ownership refactor does not establish native conversion failure, clamping, full measure grammar, configuration or whole-module parity.",
+        "justification": "SvXMLUnitConverter delegates configured Twip/MM100 conversion and nullable failure/default bounds to the SAX owner. Existing helper callers retain their unaudited strict syntax/error policy while their numeric conversion now delegates to SAX. Focused delegation and source-derived numeric evidence cover implemented targets; other APIs/configuration and caller failure policies remain unverified.",
         "knownViolations": [],
         "localSymbols": [
-          "importOdfLength"
+          "importOdfLength",
+          "SvXMLUnitConverter"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "xmloff/source/core/xmluconv.cxx",
@@ -6222,11 +6263,14 @@
           "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#SvxXMLTabStopImportContext::endFastElement",
           "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#selects Default tab entries in XML source order before canonical sorting",
           "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native tab position and alignment defaults through direct and inherited ODT styles",
-          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#aTabStop.Position = 0;"
+          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#aTabStop.Position = 0;",
+          "apps/office/src/sax/source/tools/converter.ts#Converter",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports native MM100 tab measures and conversion failure through ODT"
         ],
-        "justification": "Owns the implemented tab-stop child parsing and source-order selection in the pinned xmltabi module. Literal ODT cases assert absent position defaults to zero, absent/empty/unrecognized type retains LEFT, and recognized alignments override it through direct and inherited style import/export/reimport. Existing signed/default/empty sequence assertions remain. Malformed-measure fallback, unknown attributes and broader native context contracts remain individually unverified.",
+        "justification": "Native tab positions are imported as integer MM100 using SvXMLUnitConverter, with failed conversion retaining zero. Import-only contracts distinguish these values from twip export data. Twenty literal direct/inherited ODT cases verify native syntax, two-stage quantization, signed rounding, units, saturation and failed-position fallback through export/reimport. Existing source-order Default, alignment/decimal/leader and empty sequence assertions remain. Broader leaf-context and export contracts remain unverified.",
         "knownViolations": [],
         "localSymbols": [
+          "XMLTabStop",
           "SvxXMLTabStopImportContext"
         ],
         "sourceResponsibility": "aligned",
@@ -6480,7 +6524,8 @@
           "OdfStyleDefinition",
           "XMLTextBodyContext",
           "XMLParaContext",
-          "resolveParagraphStyle"
+          "resolveParagraphStyle",
+          "XMLParagraphImportProperties"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "xmloff/source/text/txtparai.cxx",

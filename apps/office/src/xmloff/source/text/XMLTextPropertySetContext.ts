@@ -2,13 +2,12 @@
 
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import { SvxXMLTabStopImportContext } from "../style/xmltabi";
-import type { OdfTabStop } from "./txtparae";
+import { SvxXMLTabStopImportContext, type XMLTabStop } from "../style/xmltabi";
 
 /** Imports element-valued text properties such as paragraph tab stops. */
 export class XMLTextPropertySetContext extends SvXMLImportContext {
   /** Creates a property context. @param setTabStops - Optional tab-stop sink. @returns Nothing. */
-  public constructor(private readonly setTabStops?: (stops: readonly OdfTabStop[]) => void) {
+  public constructor(private readonly setTabStops?: (stops: readonly XMLTabStop[]) => void) {
     super();
   }
 

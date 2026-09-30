@@ -791,6 +791,53 @@
       "evidence": {
         "local": [
           {
+            "marker": "Converter",
+            "path": "apps/office/src/sax/source/tools/converter.ts"
+          },
+          {
+            "marker": "SAX native measure conversion",
+            "path": "apps/office/src/sax/source/tools/converter.test.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "lcl_convertMeasure",
+            "path": "vendor/libreoffice-reference/sax/source/tools/converter.cxx"
+          },
+          {
+            "marker": "std::string_view toView() const",
+            "path": "vendor/libreoffice-reference/include/sax/fastattribs.hxx"
+          },
+          {
+            "marker": "ConverterTest::testMeasure",
+            "path": "vendor/libreoffice-reference/sax/qa/cppunit/test_converter.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sax/source/tools/converter.ts",
+      "localSymbols": [
+        "CoreMeasureUnit",
+        "Converter"
+      ],
+      "omittedResponsibilities": [
+        "Other native conversion APIs, measurement target units and UTF-16-view overload remain unimplemented or individually unverified."
+      ],
+      "preservedResponsibilities": [
+        "Owns native UTF-8-view measure parsing, supported unit ratios for Twip/MM100 targets, nullable failure, signed rounding and configurable int32 bounds; 95 compiled-native differential cases and focused source-derived assertions cover the implemented contract."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sax/source/tools/converter.cxx",
+      "upstreamSymbols": [
+        "Converter::convertMeasure",
+        "lcl_parseMeasure",
+        "lcl_convertMeasure"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SfxBindings",
             "path": "apps/office/src/sfx2/source/control/bindings.ts"
           }
@@ -4661,6 +4708,14 @@
           {
             "marker": "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl",
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx"
+          },
+          {
+            "marker": "o3tl::toTwips(rTabStop.Position",
+            "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx"
+          },
+          {
+            "marker": "constexpr sal_Int64 MulDiv",
+            "path": "vendor/libreoffice-reference/include/o3tl/unit_conversion.hxx"
           }
         ]
       },
@@ -4673,7 +4728,8 @@
         "Upstream obligations outside SwXMLBodyContext_Impl::SwXMLBodyContext_Impl, SwXMLBodyContext_Impl::createFastChildContext, SwXMLDocContext_Impl::SwXMLDocContext_Impl, SwXMLDocContext_Impl::createFastChildContext and the bounded importWriterXml, parseOdfXml contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded Writer ODF XML import bridge from pinned LibreOffice `sw/source/filter/xml/xmlimp.cxx`."
+        "Reimplements the bounded Writer ODF XML import bridge from pinned LibreOffice `sw/source/filter/xml/xmlimp.cxx`.",
+        "Applies imported MM100 tab positions to Writer twips with the signed integer ratio used by SvxTabStopItem::PutValue/o3tl::toTwips."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
@@ -5533,6 +5589,10 @@
           {
             "marker": "importOdfLength",
             "path": "apps/office/src/xmloff/source/core/xmluconv.ts"
+          },
+          {
+            "marker": "SvXMLUnitConverter",
+            "path": "apps/office/src/xmloff/source/core/xmluconv.ts"
           }
         ],
         "upstream": [
@@ -5544,13 +5604,14 @@
       },
       "localPath": "apps/office/src/xmloff/source/core/xmluconv.ts",
       "localSymbols": [
-        "importOdfLength"
+        "importOdfLength",
+        "SvXMLUnitConverter"
       ],
       "omittedResponsibilities": [
-        "Native converter configuration, boolean/out-parameter failure contracts, full measurement grammar, clamping and other conversion APIs remain omitted or individually unverified."
+        "Other converter configuration/targets/APIs and legacy caller syntax/failure policies remain omitted or individually unverified."
       ],
       "preservedResponsibilities": [
-        "Owns the extracted bounded ODF absolute-length-to-core-twip helper used by tab, paragraph/style, table and line-number imports, preserving the complete existing function without compatibility aliases."
+        "Owns configured measure-to-core delegation to SAX with nullable native failure and default/caller range limits for Twip/MM100. Legacy callers retain their existing strict syntax/error adapter pending individual audit, while numeric conversion is centralized."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/core/xmluconv.cxx",
@@ -5674,6 +5735,10 @@
           {
             "marker": "imports native tab position and alignment defaults through direct and inherited ODT styles",
             "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
+          },
+          {
+            "marker": "imports native MM100 tab measures and conversion failure through ODT",
+            "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts"
           }
         ],
         "upstream": [
@@ -5688,18 +5753,23 @@
           {
             "marker": "aTabStop.Position = 0;",
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
+          },
+          {
+            "marker": "GetMM100UnitConverter",
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx"
           }
         ]
       },
       "localPath": "apps/office/src/xmloff/source/style/xmltabi.ts",
       "localSymbols": [
+        "XMLTabStop",
         "SvxXMLTabStopImportContext"
       ],
       "omittedResponsibilities": [
-        "Native UNO property-state plumbing, malformed-measure fallback, unknown attributes and broader context contracts remain unverified or omitted."
+        "Native UNO property-state plumbing, separate leaf context ownership and broader context contracts remain unverified or omitted."
       ],
       "preservedResponsibilities": [
-        "Owns bounded tab-stop parsing and source-order selection, with absent position default zero and recognized-only alignment overrides retaining LEFT otherwise; preserves signed positions, decimal/leader values and explicit empty sequences using the core conversion helper."
+        "Owns native MM100 tab import properties, failed-conversion zero fallback, recognized-only alignment overrides and source-order selection; source-derived literal direct/inherited ODT cycles cover parsing, quantization, signed rounding, units and saturation."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/style/xmltabi.cxx",
@@ -5935,7 +6005,8 @@
         "OdfStyleDefinition",
         "XMLTextBodyContext",
         "XMLParaContext",
-        "resolveParagraphStyle"
+        "resolveParagraphStyle",
+        "XMLParagraphImportProperties"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside XMLHints_Impl::push_back, std::move, XMLCharContext::XMLCharContext, sax_fastparser::castToFastAttributeList and the bounded XMLTextBodyContext/Writer target contract remain intentionally omitted."

@@ -260,6 +260,151 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       ),
     ).rejects.toThrow("Unsupported ODF widows");
   });
+  it("imports native MM100 tab measures and conversion failure through ODT", /** Checks native parse/failure/quantization before Writer conversion through direct and inherited package cycles. @returns Completion after reimport. */ async () => {
+    const writer = createWriterDocument();
+    const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
+    writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
+    writer.paragraphs[0]?.SetAttr(placeholder);
+    const base = writeOdtDocument(writer, metadata);
+    const cases = [
+      {
+        name: "malformed position retains zero and other fields",
+        xml: '<style:tab-stop style:position="bad" style:type="char" style:char=";" style:leader-style="solid" style:leader-text="_"/>',
+        expected: [[0, SvxTabAdjust.Decimal, ";", "_"]],
+      },
+      {
+        name: "empty position",
+        xml: '<style:tab-stop style:position=""/>',
+        expected: [[0, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "exponent syntax fails",
+        xml: '<style:tab-stop style:position="1e3pt"/>',
+        expected: [[0, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "positive sign fails",
+        xml: '<style:tab-stop style:position="+1pt"/>',
+        expected: [[0, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "relative unit fails",
+        xml: '<style:tab-stop style:position="1em"/>',
+        expected: [[0, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "unit suffix without space fails",
+        xml: '<style:tab-stop style:position="1ptjunk"/>',
+        expected: [[0, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "tab after unit fails",
+        xml: '<style:tab-stop style:position="1pt&#9;"/>',
+        expected: [[0, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "positive MM100 quantization differs from direct twips",
+        xml: '<style:tab-stop style:position="0.024pt"/>',
+        expected: [[1, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "negative MM100 quantization differs from direct twips",
+        xml: '<style:tab-stop style:position="-0.024pt"/>',
+        expected: [[-1, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "negative half rounds away from zero",
+        xml: '<style:tab-stop style:position="-0.025pt"/>',
+        expected: [[-1, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "unitless native property units",
+        xml: '<style:tab-stop style:position="1"/>',
+        expected: [[1, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "unitless positive half",
+        xml: '<style:tab-stop style:position=".5"/>',
+        expected: [[1, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "unitless negative half",
+        xml: '<style:tab-stop style:position="-.5"/>',
+        expected: [[-1, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "pixels supported by native MM100 target",
+        xml: '<style:tab-stop style:position="1px"/>',
+        expected: [[15, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "pica",
+        xml: '<style:tab-stop style:position="1pc"/>',
+        expected: [[240, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "case insensitive units with native trailing-space grammar",
+        xml: '<style:tab-stop style:position="1PT trailing"/>',
+        expected: [[20, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "leading and interior whitespace",
+        xml: '<style:tab-stop style:position=" &#9;-.5 CM"/>',
+        expected: [[-283, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "positive property saturation before Writer conversion",
+        xml: '<style:tab-stop style:position="999999999999999999mm"/>',
+        expected: [[1217471044, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "negative property saturation before Writer conversion",
+        xml: '<style:tab-stop style:position="-999999999999999999mm"/>',
+        expected: [[-1217471045, SvxTabAdjust.Left, ",", " "]],
+      },
+      {
+        name: "colliding converted positions use later native item insertion",
+        xml: '<style:tab-stop style:position="0.01pt"/><style:tab-stop style:position="bad" style:type="right" style:leader-style="solid" style:leader-text="!"/>',
+        expected: [[0, SvxTabAdjust.Right, ",", "!"]],
+      },
+    ] as const;
+    for (const testCase of cases) {
+      let input = base;
+      for (const entry of ["content.xml", "styles.xml"]) {
+        input = await rewriteEntry(
+          input,
+          entry,
+          /** Injects the literal sequence without sorting it. @param xml - Input stream. @returns Sequence fixture. */
+          (xml) =>
+            xml.replace(
+              /<style:tab-stops>[\s\S]*?<\/style:tab-stops>/gu,
+              `<style:tab-stops>${testCase.xml}</style:tab-stops>`,
+            ),
+        );
+      }
+      const loaded = await readOdtDocument(input, metadata);
+      const reopened = await readOdtDocument(writeOdtDocument(loaded.document, metadata), metadata);
+      for (const document of [loaded.document, reopened.document]) {
+        const direct = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+        const inherited = document
+          .GetDfltTextFormatColl()
+          .GetAttrSet()
+          .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+        for (const item of [direct, inherited]) {
+          expect(
+            item.GetStops().map(
+              /** Projects all retained tab fields. @param stop - Imported stop. @returns Comparable fields. */
+              (stop) => [stop.GetTabPos(), stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill()],
+            ),
+            testCase.name,
+          ).toEqual(testCase.expected);
+        }
+      }
+    }
+    expect(placeholder.Count()).toBe(1);
+    expect(placeholder.At(0).GetTabPos()).toBe(360);
+  });
+
   it("imports native tab position and alignment defaults through direct and inherited ODT styles", /** Checks literal native initialization and recognized-only overrides through package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
     const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
