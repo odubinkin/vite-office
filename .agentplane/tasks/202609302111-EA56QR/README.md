@@ -4,7 +4,7 @@ title: "Restore independent native numbering positioning modes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore independent native numbering position modes, source-owned geometry and exact XML selection/defaults through Writer copy, ODT cycles and browser snapshots; retain registered deviations and verify the full repository gate."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:12:46.239Z"
+doc_updated_at: "2026-09-30T21:16:44.887Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Replace the existing legacy-to-alignment workaround with independent source-owned numbering geometry and exact XML mode selection/defaults, preserving both modes through Writer copy, ODT export/reimport and browser model snapshots."
 sections:
@@ -51,7 +51,12 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the scoped implementation commit if independent numbering position state, existing commands, package export/reimport or browser snapshots regress."
-  Findings: "Source audit: native xmlnumi constructs legacy mode and zero geometry, then selects alignment only for exact label-alignment. Both attribute groups populate independent fields. Local xmlstyle overwrites one geometry with legacy Twip emulation or modern fields, never reads mode, and local SwNumFormat hardcodes alignment. Native SvxNumberFormat owns both groups and mode-dependent getters; Writer inherits/copies it. Existing modern-intent fixtures lacking the explicit mode are source-invalid and will be corrected or turned into legacy-default assertions. Full native replacement-error/omitted-level rule construction is a distinct audit; no full import or pixel-layout claim is made."
+  Findings: |-
+    Source audit: native xmlnumi constructs legacy mode and zero geometry, then selects alignment only for exact label-alignment. Both attribute groups populate independent fields. Local xmlstyle overwrites one geometry with legacy Twip emulation or modern fields, never reads mode, and local SwNumFormat hardcodes alignment. Native SvxNumberFormat owns both groups and mode-dependent getters; Writer inherits/copies it. Existing modern-intent fixtures lacking the explicit mode are source-invalid and will be corrected or turned into legacy-default assertions. Full native replacement-error/omitted-level rule construction is a distinct audit; no full import or pixel-layout claim is made.
+
+    - Observation: Initial typecheck rejected optional legacy snapshot fields passed explicitly as undefined under exactOptionalPropertyTypes.
+      Impact: Compatibility decode helper issue within approved snapshot scope; no source-contract or gate drift.
+      Resolution: Use explicit native zero defaults when older v15 snapshot fields are absent, then repeat types and all checks.
 id_source: "generated"
 ---
 ## Summary
@@ -84,3 +89,7 @@ Revert only the scoped implementation commit if independent numbering position s
 ## Findings
 
 Source audit: native xmlnumi constructs legacy mode and zero geometry, then selects alignment only for exact label-alignment. Both attribute groups populate independent fields. Local xmlstyle overwrites one geometry with legacy Twip emulation or modern fields, never reads mode, and local SwNumFormat hardcodes alignment. Native SvxNumberFormat owns both groups and mode-dependent getters; Writer inherits/copies it. Existing modern-intent fixtures lacking the explicit mode are source-invalid and will be corrected or turned into legacy-default assertions. Full native replacement-error/omitted-level rule construction is a distinct audit; no full import or pixel-layout claim is made.
+
+- Observation: Initial typecheck rejected optional legacy snapshot fields passed explicitly as undefined under exactOptionalPropertyTypes.
+  Impact: Compatibility decode helper issue within approved snapshot scope; no source-contract or gate drift.
+  Resolution: Use explicit native zero defaults when older v15 snapshot fields are absent, then repeat types and all checks.
