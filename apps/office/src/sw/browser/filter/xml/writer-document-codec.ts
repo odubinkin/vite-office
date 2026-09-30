@@ -159,7 +159,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
             return {
               ...format.GetPositionProperties(),
               bulletFont: format.GetBulletFont(),
-              ...(format.GetKind() === "bullet" ? { bulletChar: format.GetBulletChar() } : {}),
+              bulletChar: format.GetBulletChar(),
               firstLineIndent: format.GetFirstLineIndent(),
               indentAt: format.GetIndentAt(),
               includeUpperLevels: format.GetIncludeUpperLevels(),

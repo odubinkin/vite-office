@@ -17,6 +17,3 @@ Error: Build failed with 1 error:
     at async createVitest (file:///Users/odubinkin/Projects/vite-office/node_modules/vitest/dist/chunks/cli-api.BK8pd4xc.js:14221:18) {
   errors: [Getter/Setter]
 }
-
-
-

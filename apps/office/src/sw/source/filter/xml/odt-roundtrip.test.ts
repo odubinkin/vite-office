@@ -386,7 +386,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         ruleName: "Numbering 1",
         text: "beta",
       },
-      { kind: "bullet", level: 1, listId: "list1", ruleName: "L2", text: "nested" },
+      { kind: "numbered", level: 1, listId: "list1", ruleName: "L2", text: "nested" },
       { kind: "none", level: 0, listId: "", ruleName: "", text: "gap" },
       {
         kind: "numbered",
@@ -396,7 +396,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         text: "gamma",
       },
     ]);
-    expect(imported.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("●");
+    expect(imported.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("◦");
     const roundTripped = await readOdtDocument(
       writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
       metadata(),
@@ -422,7 +422,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         }),
       ),
     );
-    expect(roundTripped.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("●");
+    expect(roundTripped.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("◦");
     const restarted = importWriterXml(
       styles,
       content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
@@ -483,10 +483,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         "Unsupported ODF list level style",
       ],
       [
-        '<text:list-style style:name="Duplicate"><text:list-level-style-number text:level="1" style:num-format="1"/><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style>',
-        "Duplicate ODF list level",
-      ],
-      [
         '<text:list-style style:name="Bullet"><text:list-level-style-bullet text:level="1"/></text:list-style>',
         "bullet character is missing",
       ],
@@ -494,7 +490,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         '<text:list-style style:name="Roman"><text:list-level-style-number text:level="1" style:num-format="i"/></text:list-style>',
         "Unsupported ODF numbering format",
       ],
-      ['<text:list-style style:name="Empty"/>', "has no levels"],
     ] as const)
       expect(
         /** Imports an invalid list-style definition. @returns Invalid document. */ () =>

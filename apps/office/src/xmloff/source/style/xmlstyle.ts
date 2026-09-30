@@ -2,16 +2,12 @@
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import type {
-  OdfCharacterProperties,
-  OdfListLevelKind,
-  OdfParagraphAlignment,
-} from "../text/txtparae";
+import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
 import type {
   OdfStyleDefinition,
   XMLTextListRule,
   XMLParagraphImportProperties,
-  XMLListLevelImportProperties,
+  XMLListLevelImport,
 } from "../text/txtparai";
 import { SvxXMLListLevelStyleContext_Impl } from "./xmlnumi";
 import { importOdfLength } from "../core/xmluconv";
@@ -328,12 +324,7 @@ class XMLStyleContext extends SvXMLImportContext {
 
 /** Accumulates one bounded list style. */
 class XMLListStyleContext extends SvXMLImportContext {
-  private readonly bulletChars: (string | undefined)[] = Array.from({ length: 10 });
-  private readonly formats: (OdfListLevelKind | undefined)[] = Array.from({ length: 10 });
-  private readonly levelLayouts: (XMLListLevelImportProperties | undefined)[] = Array.from({
-    length: 10,
-  });
-  private readonly suffixes: (string | undefined)[] = Array.from({ length: 10 });
+  private readonly levels: XMLListLevelImport[] = [];
   private readonly name: string;
   private readonly ruleName: string;
 
@@ -367,27 +358,32 @@ class XMLListStyleContext extends SvXMLImportContext {
     attributes.assertOnly(allowed, "style property");
     const rawLevel = attributes.require(XMLToken.TEXT_LEVEL, "list level");
     const level = Number(rawLevel);
-    if (!Number.isInteger(level) || level < 1 || level > this.formats.length)
+    if (!Number.isInteger(level) || level < 1 || level > 10)
       throw new Error(`Unsupported ODF list level: ${rawLevel}`);
-    if (this.formats[level - 1] !== undefined)
-      throw new Error(`Duplicate ODF list level: ${rawLevel}`);
+    let bulletChar: string | undefined;
+    let suffix = "";
     if (kind === "bullet") {
       const bullet = attributes.get(XMLToken.TEXT_BULLET_CHAR);
       if (bullet === null) throw new Error("ODF bullet character is missing.");
-      this.bulletChars[level - 1] = [...bullet][0] ?? "";
+      bulletChar = [...bullet][0] ?? "";
     } else {
       const format = attributes.require(XMLToken.STYLE_NUM_FORMAT, "number format");
       if (format !== "1") throw new Error(`Unsupported ODF numbering format: ${format}`);
-      const suffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX);
-      if (suffix !== null && suffix !== ".")
-        throw new Error(`Unsupported ODF numbering suffix: ${suffix}`);
-      this.suffixes[level - 1] = suffix ?? "";
+      const declaredSuffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX);
+      if (declaredSuffix !== null && declaredSuffix !== ".")
+        throw new Error(`Unsupported ODF numbering suffix: ${declaredSuffix}`);
+      suffix = declaredSuffix ?? "";
     }
-    this.formats[level - 1] = kind;
     return new SvxXMLListLevelStyleContext_Impl(
-      /** Retains one level's label-alignment geometry. @param layout - Imported geometry. @returns Nothing. */
-      (layout) => {
-        this.levelLayouts[level - 1] = layout;
+      /** Retains one complete declaration without replacing earlier declarations. @param position - MM100 property sequence. @returns Nothing. */
+      (position) => {
+        this.levels.push({
+          level: level - 1,
+          kind,
+          ...(bulletChar === undefined ? {} : { bulletChar }),
+          suffix,
+          position,
+        });
       },
     );
   }
@@ -400,32 +396,11 @@ class XMLListStyleContext extends SvXMLImportContext {
     throw new Error(`Unsupported ODF list level style: ${localName}`);
   }
 
-  /** Publishes a complete ten-level rule. @returns Nothing. */
+  /** Publishes the source-ordered declarations, including an empty rule. @returns Nothing. */
   public override endFastElement(): void {
-    const fallback = this.formats.find(
-      /** Finds the first declared level. @param format - Candidate kind. @returns Whether declared. */
-      (format) => format !== undefined,
-    );
-    if (fallback === undefined) throw new Error(`ODF list style has no levels: ${this.name}`);
-    const fallbackBulletChar =
-      fallback === "bullet" ? this.bulletChars[this.formats.indexOf(fallback)] : undefined;
     this.target.registerListStyle(this.name, {
-      bulletChars: this.formats.map(
-        /** Completes character-special state alongside an undeclared level's fallback format. @param format - Optional kind. @param level - Level index. @returns Bullet character when applicable. */
-        (format, level) =>
-          (format ?? fallback) === "bullet"
-            ? (this.bulletChars[level] ?? fallbackBulletChar)
-            : undefined,
-      ),
-      formats: this.formats.map(
-        /** Completes an undeclared level. @param format - Optional kind. @returns Complete kind. */
-        (format) => format ?? fallback,
-      ),
-      levelLayouts: this.levelLayouts,
-      suffixes: this.suffixes.map(
-        /** Completes omitted levels from the declared fallback. @param suffix - Level suffix. @returns Complete suffix. */
-        (suffix) => suffix ?? this.suffixes[this.formats.indexOf(fallback)] ?? ".",
-      ),
+      levels: this.levels,
+      levelCount: 10,
       name: this.ruleName,
     });
   }

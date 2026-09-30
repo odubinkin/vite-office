@@ -51,12 +51,19 @@ export interface XMLListLevelImportProperties {
   };
 }
 
-/** Document-owned numbering rule view used while applying list paragraphs. */
+/** One XML declaration retained in source order until the native rule is filled. */
+export interface XMLListLevelImport {
+  readonly level: number;
+  readonly kind: OdfListLevelKind;
+  readonly bulletChar?: string;
+  readonly suffix: string;
+  readonly position: XMLListLevelImportProperties;
+}
+
+/** Numbering declarations and native rule capacity used while applying list paragraphs. */
 export interface XMLTextListRule {
-  readonly bulletChars?: readonly (string | undefined)[];
-  readonly formats: readonly OdfListLevelKind[];
-  readonly levelLayouts?: readonly (XMLListLevelImportProperties | undefined)[];
-  readonly suffixes?: readonly (string | undefined)[];
+  readonly levels: readonly XMLListLevelImport[];
+  readonly levelCount: number;
   readonly name: string;
 }
 
@@ -447,7 +454,7 @@ class XMLListContext extends SvXMLImportContext {
     const rule = target.getListRule(styleName);
     if (rule === undefined) throw new Error(`Unsupported ODF list style: ${styleName}`);
     const level = parent === undefined ? 0 : parent.level + 1;
-    if (level >= rule.formats.length) throw new Error("Unsupported ODF list level.");
+    if (level >= rule.levelCount) throw new Error("Unsupported ODF list level.");
     const xmlId = attributes.get(XMLToken.XML_ID);
     const continuedId = attributes.get(XMLToken.TEXT_CONTINUE_LIST);
     let listId = parent?.listId;

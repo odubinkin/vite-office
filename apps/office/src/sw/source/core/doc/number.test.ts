@@ -248,3 +248,49 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(second.GetActualListStartValue()).toBe(1);
   });
 });
+
+it("constructs modern Writer base levels and copies only a successful replacement", /** Checks native NUM_RULE geometry, inactive fields and owned Set copies. @returns Nothing. */ () => {
+  const rule = new SwNumRule("base");
+  for (let level = 0; level < 10; level += 1) {
+    const format = rule.GetNumFormat(level);
+    expect(format.GetKind()).toBe("numbered");
+    expect(format.GetBulletChar()).toBe(["•", "◦", "▪"][level % 3]);
+    expect(format.GetBulletFont()).toBe("");
+    expect(format.GetIncludeUpperLevels()).toBe(1);
+    expect(format.GetStart()).toBe(1);
+    expect(format.GetPrefix()).toBe("");
+    expect(format.GetSuffix()).toBe(".");
+    expect(format.GetPositionProperties()).toEqual({
+      absLSpace: 0,
+      firstLineOffset: 0,
+      charTextDistance: 0,
+      positionAndSpaceMode: "label-alignment",
+      firstLineIndent: -360,
+      indentAt: 720 + level * 360,
+      labelFollowedBy: "listtab",
+      listTabPosition: 720 + level * 360,
+    });
+    expect(
+      rule.MakeNumString(
+        Array.from(
+          { length: 10 },
+          /** Supplies source-independent counters. @param _unused - Placeholder. @param index - Level. @returns Counter. */ (
+            _unused,
+            index,
+          ) => index + 1,
+        ),
+        level,
+      ),
+    ).toBe(`${level + 1}.`);
+  }
+  const copy = rule.clone();
+  const supplied = new SwNumFormat("bullet", "●");
+  rule.Set(1, supplied);
+  expect(rule.GetNumFormat(1)).not.toBe(supplied);
+  supplied.SetPositionAndSpaceMode("label-alignment");
+  expect(rule.GetNumFormat(1).GetPositionAndSpaceMode()).toBe("label-width-and-position");
+  expect(copy.GetNumFormat(1).GetKind()).toBe("numbered");
+  expect(
+    /** Rejects an out-of-range replacement. @returns Never. */ () => rule.Set(10, supplied),
+  ).toThrow("outside 0-9");
+});

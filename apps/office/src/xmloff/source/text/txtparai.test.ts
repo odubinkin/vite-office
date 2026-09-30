@@ -540,10 +540,8 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
 
   it("resolves nested, generated, explicit, and continued list identities", /** Verifies list context state. @returns Nothing. */ () => {
     const rule = {
-      formats: Array.from(
-        { length: 10 },
-        /** Creates a bullet level. @returns Bullet kind. */ () => "bullet" as const,
-      ),
+      levels: [],
+      levelCount: 10,
       name: "Bullets",
     };
     const paragraphs = importBody(
@@ -567,10 +565,8 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
 
   it("rejects unsupported context structures and invalid inherited state", /** Verifies explicit reject policies. @returns Nothing. */ () => {
     const bullet = {
-      formats: Array.from(
-        { length: 10 },
-        /** Creates a bullet level. @returns Bullet kind. */ () => "bullet" as const,
-      ),
+      levels: [],
+      levelCount: 10,
       name: "Bullets",
     };
     for (const body of [
@@ -681,7 +677,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         importBody(
           '<text:list text:style-name="L1"><text:list-item><text:list><text:list-item><text:p/></text:list-item></text:list></text:list-item></text:list>',
           styles,
-          new Map([["L1", { formats: ["bullet"], name: "Short" }]]),
+          new Map([["L1", { levels: [], levelCount: 1, name: "Short" }]]),
         ),
     ).toThrow("Unsupported ODF list level");
     expect(

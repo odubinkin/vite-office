@@ -41,4 +41,3 @@ AssertionError: expected [ { listId: 'list1', …(4) }, …(4) ] to deeply equal
       Tests  1 failed | 51 passed (52)
    Start at  04:53:02
    Duration  3.19s (transform 674ms, setup 690ms, import 1.00s, tests 562ms, environment 3.37s)
-

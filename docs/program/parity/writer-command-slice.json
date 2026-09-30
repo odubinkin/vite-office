@@ -11093,7 +11093,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
             "marker": "SwNumFormat"
           }
         ],
@@ -11142,7 +11142,7 @@
       "closure": {
         "contract": {
           "local": {
-            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
             "marker": "SwNumFormat"
           },
           "method": "api-invariant",
@@ -11155,7 +11155,7 @@
         },
         "ownership": {
           "local": {
-            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
             "marker": "SwNumFormat"
           },
           "method": "api-invariant",

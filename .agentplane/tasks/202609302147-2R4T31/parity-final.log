@@ -1,0 +1,31 @@
+Command: npm run inventory:parity
+Result: pass; exit 0. Output compacted to report counts.
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "behaviorParityCount": 43,
+  "classifiedDivergenceCount": 105,
+  "contractParityCount": 43,
+  "defaultParityCount": 43,
+  "differentialParityCount": 43,
+  "exceptionCount": 2,
+  "gapCount": 2,
+  "implementedCount": 43,
+  "parityReady": true,
+  "ownershipParityCount": 43,
+  "recordCount": 45,
+  "schemaVersion": 6,
+  "serializationParityCount": 43,
+  "scopeLimitationCount": 74,
+  "unresolvedParityCount": 0,
+  "unclassifiedDivergenceCount": 0,
+  "verifiedCount": 43,
+  "runtime": {
+    "commandCount": 47,
+    "exportedOperationCount": 247,
+    "internalOperationCount": 2,
+    "placeholderSuiteCount": 6,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 10
+  }
+}

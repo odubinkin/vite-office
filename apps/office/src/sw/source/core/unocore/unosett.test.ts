@@ -1,6 +1,12 @@
 /** @fileoverview Verifies native signed integer numbering-property conversion at the UNO/Writer boundary. */
 import { expect, it } from "vitest";
-import { numberingPositionToTwips, numberingPositionToMM100 } from "./unosett";
+import { SwNumRule } from "../doc/number";
+import {
+  NumberingRulePropertyError,
+  SwXNumberingRules,
+  numberingPositionToTwips,
+  numberingPositionToMM100,
+} from "./unosett";
 
 it("uses native integer ratios in both directions and retains only present properties", /** Asserts source-derived manual MM100/Twip values and missing property ownership. @returns Nothing. */ () => {
   expect(numberingPositionToTwips({})).toEqual({});
@@ -50,4 +56,46 @@ it("uses native integer ratios in both directions and retains only present prope
       listTabPosition: exported,
     });
   }
+});
+
+it("validates the native numbering properties before committing one complete level", /** Checks rejection independent of selected mode and retains an already applied level. @returns Nothing. */ () => {
+  const rule = new SwNumRule("application");
+  const service = new SwXNumberingRules(rule);
+  service.replaceByIndex(2, {
+    kind: "bullet",
+    bulletChar: "●",
+    suffix: "",
+    charTextDistance: 32767,
+    absLSpace: -1,
+    firstLineOffset: 1,
+    positionAndSpaceMode: "label-width-and-position",
+    listTabPosition: 127,
+  });
+  expect(rule.GetNumFormat(2).GetCharTextDistance()).toBe(18577);
+  expect(rule.GetNumFormat(2).GetAbsLSpace()).toBe(-1);
+  expect(rule.GetNumFormat(2).GetFirstLineOffset()).toBe(1);
+  expect(rule.GetNumFormat(2).GetBulletFont()).toBe("");
+  const applied = rule.GetNumFormat(2);
+  for (const positionAndSpaceMode of ["label-alignment", "label-width-and-position"] as const)
+    for (const invalid of [
+      { charTextDistance: -1 },
+      { charTextDistance: -32768 },
+      { listTabPosition: -1 },
+    ]) {
+      expect(
+        /** Attempts a complete replacement with rejected geometry. @returns Nothing. */ () =>
+          service.replaceByIndex(2, {
+            kind: "numbered",
+            suffix: ".",
+            absLSpace: 999,
+            firstLineIndent: -10,
+            positionAndSpaceMode,
+            ...invalid,
+          }),
+      ).toThrow(NumberingRulePropertyError);
+      expect(rule.GetNumFormat(2)).toBe(applied);
+    }
+  service.replaceByIndex(2, { kind: "numbered", suffix: "." });
+  expect(rule.GetNumFormat(2).GetBulletChar()).toBe("●");
+  expect(rule.GetNumFormat(2).GetCharTextDistance()).toBe(18577);
 });

@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -21,10 +21,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T22:12:24.169Z"
+  updated_by: "CODER"
+  note: "Complete final verify passes: 617 app, 109 inventory, 19 browser, 100% coverage; 55 focused and 170 native C++ level comparisons; source/routing/diff pass, old doctor warnings unchanged."
   attempts: 0
 commit: null
 comments:
@@ -39,8 +39,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
+  -
+    type: "verify"
+    at: "2026-09-30T22:12:24.169Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete final verify passes: 617 app, 109 inventory, 19 browser, 100% coverage; 55 focused and 170 native C++ level comparisons; source/routing/diff pass, old doctor warnings unchanged."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:07:53.049Z"
+doc_updated_at: "2026-09-30T22:12:24.223Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
@@ -48,7 +54,41 @@ sections:
   Scope: "Runtime: sw/source/core/doc/number.ts, sw/source/core/unocore/unosett.ts, sw/source/filter/xml/xmlimp.ts, xmloff/source/style/xmlstyle.ts, xmloff/source/text/txtparai.ts. Matching core/context/ODT tests and parity metadata only; task-local primary-source evidence and parent progress. No network, outside-repository access, policy/gate changes, or registered open/save/recovery deviation changes."
   Plan: "1. Establish native default rule and copy/validate/commit boundaries from pinned number.cxx, unosett.cxx, xmlnumi.cxx and docstyle.cxx. 2. Introduce a base Arabic rule and owned per-level Set; retain XML declarations in source order, including duplicate and empty declarations. 3. Apply each level through Writer property validation; catch only the native invalid-property failure around the complete loop, preserving previous commits and base omitted levels. 4. Verify source-derived defaults, repeat/abort order, ODT export/reopen, copy and snapshots; run npm run verify. 5. Record evidence, scoped commit, evaluator, finish and parent progress. Existing alias conflicts and unsupported numbering families remain separate audits."
   Verify Steps: "Run focused number/unosett/xmlstyle/txtparai/ODT tests including source-derived modern base defaults, omitted/empty rules, declaration order, duplicate replacement, failure before/after success, failure regardless selected position mode, and invalid-property no partial level commit. Produce bounded differential C++ evidence by extracting actual pinned replacement loop and rejection branches where feasible. Run npm run verify with all required coverage and browser checks unchanged. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Record final clean git status and actual implementation hash."
-  Verification: "Pending implementation and complete mandatory checks."
+  Verification: |-
+    PASS: final complete npm run verify (617 app, 109 inventory, 19 browser; required 100% coverage), 55 focused tests, 17 extracted native C++ cases /170 complete level states, source/invariant/parity/routing/diff checks and doctor (same two old warnings). All initial failures and bounded corrections are recorded in Findings. Broader parity remains unverified; no mandatory check skipped.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T22:12:24.169Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete final verify passes: 617 app, 109 inventory, 19 browser, 100% coverage; 55 focused and 170 native C++ level comparisons; source/routing/diff pass, old doctor warnings unchanged.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T22:12:23.350Z, excerpt_hash=sha256:e081f401e237c179c89a9a04d7a423852b7f9c278438a598b8c537badd4484b4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609302147-2R4T31/blueprint/resolved-snapshot.json
+    - old_digest: 069c2aa1e3a32afee0b9538fd606db0f545d30db966d890ecd6d7c50c5109641
+    - current_digest: 069c2aa1e3a32afee0b9538fd606db0f545d30db966d890ecd6d7c50c5109641
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609302147-2R4T31
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202609302147-2R4T31 -m 🧩 2R4T31 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commit after reviewing dependent numbering work; keep task evidence and registered browser deviations."
   Findings: |-
     Authorization: the user's persistent /goal approves iterative safe local parity corrections, one executable child at a time. Preflight: main clean, direct workflow, parent 202609240501-C9TN6M active. Sources: pinned libreoffice-26.8.0.2 commit 9bc445578031fecf56086729d8e4940c77e14d65, repository cached vendor/libreoffice-reference. XML FillUnoNumRule iterates declarations in source order with one exception boundary; Writer SetNumberingRuleByIndex clones before SetPropertiesToNumFormat and commits only after success. Native common and automatic factories use modern base rules under the existing ODF >=1.2 setting. Local eager ten-level construction and first-declared fallback do not implement that state machine. No source-family or full formatter parity promotion is planned.
@@ -80,6 +120,22 @@ sections:
     - Observation: Initial full npm run verify passed app 617/131 with 100% coverage, then inventory validation rejected an obsolete xmlimp.ts::SwNumFormat implementation marker. The read-only parity diagnostic confirms the same stale reference.
       Impact: The implementation owner moved to unosett.ts; metadata still points at eager construction removed from xmlimp.ts. No app or coverage failure; later mandatory gates did not run yet.
       Resolution: Move the existing parity implementation reference to the actual Writer UNO owner without adding compatibility markers or changing validators. Rerun the complete mandatory command. Focused final run passed 55 tests in nine files.
+
+    Final implementation: ordered XMLListLevelImport declarations replace the eager first-declared fallback tables. Empty/omitted levels retain the modern Arabic NUM_RULE base fields, including per-level inactive bullet characters. SwXNumberingRules is an instance service over a Writer rule; it clones a level, validates supported MM100 properties and commits with SwNumRule.Set only on success. The outer XML fill failure boundary retains prior replacements and stops later declarations regardless of selected position mode; duplicate levels apply sequentially. The browser codec uses its existing optional bulletChar field for both marker kinds, retaining inactive state without a schema bump.
+
+    Command: python3 .agentplane/tasks/202609302147-2R4T31/native-oracle.py; npx tsx .agentplane/tasks/202609302147-2R4T31/compare-native.mts.
+    Result: pass. Evidence: native-results.json, native-rule-oracle.cxx, extraction script and comparison script; 17 ordered cases / 170 complete level states match. Scope: actual pinned modern base initialization, bullet defaults, MM100 rejection branches, copy/commit statements and source-order XML loop, compiled with bounded type/container/unit adapters. This is not a complete native UNO or platform build.
+
+    Command: npx vitest run the nine focused number/unosett/xmlstyle/txtparai/ODT test files from apps/office.
+    Result: pass. Evidence: focused-verified.log, 55 tests / nine files. Scope: manually source-derived defaults, empty/omitted/repeated/out-of-order levels, early/late/duplicate failure, both modes, clone/snapshot/marker/export/reopen, unrelated failure propagation. Accepted 32767 MM100 legacy distance exports as 32768 after quantization; reopen rejects it and stops subsequent declarations as native source dictates. Thirty-six common/automatic rule cases plus the boundary package case are exercised.
+
+    Command: npm run verify.
+    Result: pass, terminal exit 0. Evidence: verify.log. App 617 tests /131 files; inventory 109 /36; browser 19. Both required coverage suites retain 100% statements/branches/functions/lines. Boundary check: 198 runtime sources, 815 relative imports, 12 allowed cross-module edges. 436 authored files remain below the hard 1000-line ceiling; 111 required source paths/33 retired roots; 199 provenance modules (123 mapped, 60 browser adaptations, 16 infrastructure), 34 invariants. Resource/static/docs/build/source/invariant/parity gates pass. semanticViolationCount=0 is metadata consistency, not whole-goal parity. The first full run and obsolete metadata-marker diagnostic are retained; three implementation references now point to actual unosett.ts ownership instead of removed eager XML construction.
+
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+    Result: pass. Evidence: zero doctor errors with the same two pre-existing warnings (old hook shim; old DONE task F1JT8K points to close commit), policy routing OK, clean diff formatting. Final clean scoped state will be checked after lifecycle artifacts are committed.
+
+    Residual obligations: broader numbering/UNO services, native sparse/shared base ownership, outline and legacy base factories, numbering families, continuous numbering, font/graphics, extensions/units/versions and full line layout remain unverified. The list-style wrapper still owns marker parsing in xmlstyle rather than native xmlnumi; its unknown-child/attribute/default contract is not yet restored. Named/display/duplicate/cycle style ownership, null-context skip, hint conversion, tab constructor and all other existing core/browser operations remain open. Registered save/open/recovery deviations are unchanged. Next source-backed correction: xmlnumi.cxx level constructor initializes sNumFormat to "1", cBullet to 0 and nLevel to -1; present nonpositive levels normalize to zero, missing levels are skipped by FillUnoNumRule, missing bullet/number-format attributes retain native defaults, and unknown children return null. Local strict required attributes and wrapper ownership still differ; audit that bounded declaration contract next. Parent and goal remain active.
 id_source: "generated"
 ---
 ## Summary
@@ -100,7 +156,40 @@ Run focused number/unosett/xmlstyle/txtparai/ODT tests including source-derived 
 
 ## Verification
 
-Pending implementation and complete mandatory checks.
+PASS: final complete npm run verify (617 app, 109 inventory, 19 browser; required 100% coverage), 55 focused tests, 17 extracted native C++ cases /170 complete level states, source/invariant/parity/routing/diff checks and doctor (same two old warnings). All initial failures and bounded corrections are recorded in Findings. Broader parity remains unverified; no mandatory check skipped.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T22:12:24.169Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete final verify passes: 617 app, 109 inventory, 19 browser, 100% coverage; 55 focused and 170 native C++ level comparisons; source/routing/diff pass, old doctor warnings unchanged.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T22:12:23.350Z, excerpt_hash=sha256:e081f401e237c179c89a9a04d7a423852b7f9c278438a598b8c537badd4484b4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609302147-2R4T31/blueprint/resolved-snapshot.json
+- old_digest: 069c2aa1e3a32afee0b9538fd606db0f545d30db966d890ecd6d7c50c5109641
+- current_digest: 069c2aa1e3a32afee0b9538fd606db0f545d30db966d890ecd6d7c50c5109641
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609302147-2R4T31
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202609302147-2R4T31 -m 🧩 2R4T31 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -137,3 +226,19 @@ Command: npx vitest run the eight focused core/XML/ODT files from apps/office. R
 - Observation: Initial full npm run verify passed app 617/131 with 100% coverage, then inventory validation rejected an obsolete xmlimp.ts::SwNumFormat implementation marker. The read-only parity diagnostic confirms the same stale reference.
   Impact: The implementation owner moved to unosett.ts; metadata still points at eager construction removed from xmlimp.ts. No app or coverage failure; later mandatory gates did not run yet.
   Resolution: Move the existing parity implementation reference to the actual Writer UNO owner without adding compatibility markers or changing validators. Rerun the complete mandatory command. Focused final run passed 55 tests in nine files.
+
+Final implementation: ordered XMLListLevelImport declarations replace the eager first-declared fallback tables. Empty/omitted levels retain the modern Arabic NUM_RULE base fields, including per-level inactive bullet characters. SwXNumberingRules is an instance service over a Writer rule; it clones a level, validates supported MM100 properties and commits with SwNumRule.Set only on success. The outer XML fill failure boundary retains prior replacements and stops later declarations regardless of selected position mode; duplicate levels apply sequentially. The browser codec uses its existing optional bulletChar field for both marker kinds, retaining inactive state without a schema bump.
+
+Command: python3 .agentplane/tasks/202609302147-2R4T31/native-oracle.py; npx tsx .agentplane/tasks/202609302147-2R4T31/compare-native.mts.
+Result: pass. Evidence: native-results.json, native-rule-oracle.cxx, extraction script and comparison script; 17 ordered cases / 170 complete level states match. Scope: actual pinned modern base initialization, bullet defaults, MM100 rejection branches, copy/commit statements and source-order XML loop, compiled with bounded type/container/unit adapters. This is not a complete native UNO or platform build.
+
+Command: npx vitest run the nine focused number/unosett/xmlstyle/txtparai/ODT test files from apps/office.
+Result: pass. Evidence: focused-verified.log, 55 tests / nine files. Scope: manually source-derived defaults, empty/omitted/repeated/out-of-order levels, early/late/duplicate failure, both modes, clone/snapshot/marker/export/reopen, unrelated failure propagation. Accepted 32767 MM100 legacy distance exports as 32768 after quantization; reopen rejects it and stops subsequent declarations as native source dictates. Thirty-six common/automatic rule cases plus the boundary package case are exercised.
+
+Command: npm run verify.
+Result: pass, terminal exit 0. Evidence: verify.log. App 617 tests /131 files; inventory 109 /36; browser 19. Both required coverage suites retain 100% statements/branches/functions/lines. Boundary check: 198 runtime sources, 815 relative imports, 12 allowed cross-module edges. 436 authored files remain below the hard 1000-line ceiling; 111 required source paths/33 retired roots; 199 provenance modules (123 mapped, 60 browser adaptations, 16 infrastructure), 34 invariants. Resource/static/docs/build/source/invariant/parity gates pass. semanticViolationCount=0 is metadata consistency, not whole-goal parity. The first full run and obsolete metadata-marker diagnostic are retained; three implementation references now point to actual unosett.ts ownership instead of removed eager XML construction.
+
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+Result: pass. Evidence: zero doctor errors with the same two pre-existing warnings (old hook shim; old DONE task F1JT8K points to close commit), policy routing OK, clean diff formatting. Final clean scoped state will be checked after lifecycle artifacts are committed.
+
+Residual obligations: broader numbering/UNO services, native sparse/shared base ownership, outline and legacy base factories, numbering families, continuous numbering, font/graphics, extensions/units/versions and full line layout remain unverified. The list-style wrapper still owns marker parsing in xmlstyle rather than native xmlnumi; its unknown-child/attribute/default contract is not yet restored. Named/display/duplicate/cycle style ownership, null-context skip, hint conversion, tab constructor and all other existing core/browser operations remain open. Registered save/open/recovery deviations are unchanged. Next source-backed correction: xmlnumi.cxx level constructor initializes sNumFormat to "1", cBullet to 0 and nLevel to -1; present nonpositive levels normalize to zero, missing levels are skipped by FillUnoNumRule, missing bullet/number-format attributes retain native defaults, and unknown children return null. Local strict required attributes and wrapper ownership still differ; audit that bounded declaration contract next. Parent and goal remain active.

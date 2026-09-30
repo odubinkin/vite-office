@@ -103,7 +103,7 @@ export class SwNumRule {
   /** Creates one bounded numbering rule. @param name - Document-unique rule name. @param kind - Bullet or numbering marker family. @param defaultListId - Default list identity. @param automatic - Whether Writer may reuse the rule. @returns Nothing. */
   public constructor(
     private readonly name: string,
-    format: Exclude<WriterParagraphListKind, "none"> | readonly SwNumFormat[],
+    format: Exclude<WriterParagraphListKind, "none"> | readonly SwNumFormat[] = createBaseFormats(),
     private readonly defaultListId = name,
     private readonly automatic = false,
   ) {
@@ -122,7 +122,7 @@ export class SwNumRule {
     );
   }
 
-  private readonly formats: readonly SwNumFormat[];
+  private readonly formats: SwNumFormat[];
 
   /** Returns the document-unique rule name. @returns Rule name. */
   public GetName(): string {
@@ -139,6 +139,12 @@ export class SwNumRule {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwNumRule level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
     return this.formats[level] as SwNumFormat;
+  }
+
+  /** Replaces one level with an owned copy after caller validation. @param level - Zero-based level. @param format - Successfully applied format. @returns Nothing. */
+  public Set(level: number, format: SwNumFormat): void {
+    this.GetNumFormat(level);
+    this.formats[level] = format.clone();
   }
 
   /** Returns the default list identity. @returns List identity. */
@@ -167,29 +173,36 @@ export class SwNumRule {
   }
 }
 
+/** Creates the modern NUM_RULE base formats selected by Writer's ODF >=1.2 default. @returns Independent Arabic base levels. */
+function createBaseFormats(): readonly SwNumFormat[] {
+  return Array.from(
+    { length: WRITER_MAX_LIST_LEVEL + 1 },
+    /** Initializes one native base level, including its inactive bullet character. @param _unused - Placeholder. @param level - Zero-based level. @returns Base format. */
+    (_unused, level) => {
+      const indentAt = 720 + level * 360;
+      return new SwNumFormat("numbered", ["•", "◦", "▪"][level % 3], {
+        firstLineIndent: -360,
+        indentAt,
+        listTabPosition: indentAt,
+        positionAndSpaceMode: "label-alignment",
+        suffix: ".",
+      });
+    },
+  );
+}
+
 /** Creates the ten uniform level formats used by Writer's default list commands. @param kind - Marker family. @returns Independent level formats. */
 function createUniformFormats(
   kind: Exclude<WriterParagraphListKind, "none">,
 ): readonly SwNumFormat[] {
-  return Array.from(
-    { length: WRITER_MAX_LIST_LEVEL + 1 },
-    /** Creates one independent level format. @param _unused - Array placeholder. @param level - Zero-based list level. @returns New format. */
-    (_unused, level) => {
-      const indentAt = 720 + level * 360;
-      const bullets = ["•", "◦", "▪"] as const;
-      return new SwNumFormat(kind, kind === "bullet" ? bullets[level % bullets.length] : "", {
+  return createBaseFormats().map(
+    /** Applies the supported default list command marker to base geometry. @param format - Native base level. @returns Command format. */
+    (format) =>
+      new SwNumFormat(kind, kind === "bullet" ? format.GetBulletChar() : "", {
+        ...format.GetPositionProperties(),
         bulletFont: kind === "bullet" ? "OpenSymbol" : "",
-        firstLineIndent: -360,
-        indentAt,
-        includeUpperLevels: 1,
-        labelFollowedBy: "listtab",
-        listTabPosition: indentAt,
-        positionAndSpaceMode: "label-alignment",
-        prefix: "",
-        start: 1,
         suffix: kind === "numbered" ? "." : "",
-      });
-    },
+      }),
   );
 }
 

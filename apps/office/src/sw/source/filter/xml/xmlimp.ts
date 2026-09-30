@@ -1,6 +1,6 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 
-import { numberingPositionToTwips } from "../../core/unocore/unosett";
+import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
 
 import {
@@ -69,7 +69,7 @@ import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/te
 import { SwPosition } from "../../core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
-import { SwNumFormat, SwNumRule } from "../../core/doc/number";
+import { SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { WRITER_PAPER_SIZES } from "../../core/layout/pagedesc";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
@@ -363,56 +363,44 @@ class SwXMLImport
   public registerListStyle(styleName: string, rule: XMLTextListRule): void {
     if (this.listRules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
     this.listRules.set(styleName, rule);
-    const layouts = rule.levelLayouts?.map(
-      /** Converts native properties at Writer application. @param layout - MM100 fields. @returns Core fields. */
-      (layout) => (layout === undefined ? undefined : numberingPositionToTwips(layout.values)),
+    const imported = new SwNumRule(
+      rule.name,
+      undefined,
+      rule.name,
+      this.expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT,
     );
+    const numberingRules = new SwXNumberingRules(imported);
+    try {
+      for (const declaration of rule.levels) {
+        numberingRules.replaceByIndex(declaration.level, {
+          ...declaration.position.values,
+          kind: declaration.kind,
+          ...(declaration.bulletChar === undefined ? {} : { bulletChar: declaration.bulletChar }),
+          suffix: declaration.suffix,
+        });
+      }
+    } catch (error) {
+      // FillUnoNumRule catches the UNO failure outside the loop, retaining prior replacements.
+      if (!(error instanceof NumberingRulePropertyError)) throw error;
+    }
     const existing = this.document.FindNumRulePtr(rule.name);
     if (existing !== undefined) {
-      if (
-        rule.formats.some(
-          /** Detects a conflicting canonical level. @param kind - Imported kind. @param level - Level. @returns Whether conflicting. */
-          (kind, level) =>
-            existing.GetNumFormat(level).GetKind() !== kind ||
-            (kind === "numbered" &&
-              existing.GetNumFormat(level).GetSuffix() !== (rule.suffixes?.[level] ?? ".")) ||
-            (kind === "bullet" &&
-              existing.GetNumFormat(level).GetBulletChar() !==
-                (rule.bulletChars?.[level] ?? "•")) ||
-            Object.entries(layouts?.[level] ?? {}).some(
-              /** Compares imported geometry with an existing rule. @param entry - Geometry field and value. @returns Whether they conflict. */
-              ([key, value]) =>
-                existing.GetNumFormat(level).GetPositionProperties()[
-                  key as keyof ReturnType<SwNumFormat["GetPositionProperties"]>
-                ] !== value,
-            ),
+      for (let level = 0; level < rule.levelCount; level += 1) {
+        const previous = existing.GetNumFormat(level),
+          applied = imported.GetNumFormat(level);
+        if (
+          previous.GetKind() !== applied.GetKind() ||
+          (applied.GetKind() === "numbered" && previous.GetSuffix() !== applied.GetSuffix()) ||
+          (applied.GetKind() === "bullet" &&
+            previous.GetBulletChar() !== applied.GetBulletChar()) ||
+          JSON.stringify(previous.GetPositionProperties()) !==
+            JSON.stringify(applied.GetPositionProperties())
         )
-      )
-        throw new Error(`Conflicting ODF list rule: ${rule.name}`);
+          throw new Error(`Conflicting ODF list rule: ${rule.name}`);
+      }
       return;
     }
-    this.document.AddNumRule(
-      new SwNumRule(
-        rule.name,
-        rule.formats.map(
-          /** Creates one canonical level format. @param kind - Marker family. @param level - Zero-based level. @returns Writer format. */
-          (kind, level) => {
-            const indentAt = 720 + level * 360;
-            return new SwNumFormat(kind, rule.bulletChars?.[level], {
-              indentAt,
-              firstLineIndent: -360,
-              listTabPosition: indentAt,
-              positionAndSpaceMode: "label-alignment",
-              ...layouts?.[level],
-              /* v8 ignore next -- Streaming list-style parser always supplies suffixes for declared numeric levels. */
-              ...(kind === "numbered" ? { suffix: rule.suffixes?.[level] ?? "." } : {}),
-            });
-          },
-        ),
-        rule.name,
-        this.expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT,
-      ),
-    );
+    this.document.AddNumRule(imported);
   }
 
   /** Opens the sole office:text context. @returns Text body context. */
