@@ -701,28 +701,24 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */ () =>
         importWriterXml(withoutStandard, content, metadata(), meta),
     ).toThrow("ODF");
-    expect(
-      importWriterXml(
-        styles.replace(/<style:style style:name="Heading_20_1"[\s\S]*?<\/style:style>/, ""),
-        content,
-        metadata(),
-        meta,
-      )
-        .document.GetTextFormatColl("heading-1")
-        .GetName(),
-    ).toBe("Heading 1");
-    expect(
-      /** Imports an invalid Heading 1 family. @returns Invalid document. */ () =>
-        importWriterXml(
-          styles.replace(
-            /(<style:style style:name="Heading_20_1"[^>]*style:family=")paragraph/,
-            "$1text",
-          ),
-          content,
-          metadata(),
-          meta,
-        ),
-    ).toThrow("Heading 1 paragraph style is invalid");
+    const withoutHeading = importWriterXml(
+      styles.replace(/<style:style style:name="Heading_20_1"[\s\S]*?<\/style:style>/, ""),
+      content,
+      metadata(),
+      meta,
+    ).document.GetTextFormatColl("heading-1");
+    expect(withoutHeading.GetName()).toBe("Heading 1");
+    const characterHeading = importWriterXml(
+      styles.replace(
+        /(<style:style style:name="Heading_20_1"[^>]*style:family=")paragraph/,
+        "$1text",
+      ),
+      content,
+      metadata(),
+      meta,
+    ).document.GetTextFormatColl("heading-1");
+    expect(characterHeading.GetName()).toBe(withoutHeading.GetName());
+    expect(characterHeading.GetAttrSet().entries()).toEqual(withoutHeading.GetAttrSet().entries());
     const alternateFollow = importWriterXml(
       styles.replace(
         /(<style:style style:name="Heading_20_1"[^>]*style:next-style-name=")[^"]+/,

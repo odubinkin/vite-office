@@ -4702,6 +4702,14 @@
           {
             "marker": "importWriterXml",
             "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.test.ts",
+            "marker": "resolves equal style names within the requested family"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts",
+            "marker": "keeps equal paragraph and character names independent through package cycles"
           }
         ],
         "upstream": [
@@ -4716,20 +4724,33 @@
           {
             "marker": "constexpr sal_Int64 MulDiv",
             "path": "vendor/libreoffice-reference/include/o3tl/unit_conversion.hxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx",
+            "marker": "StyleIndexCompareByName"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx",
+            "marker": "SvXMLStylesContext_Impl::FindStyleChildContext"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
       "localSymbols": [
         "importWriterXml",
-        "parseOdfXml"
+        "parseOdfXml",
+        "SwXMLImport",
+        "getStyle",
+        "registerStyle",
+        "applyNamedParagraphStyles"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwXMLBodyContext_Impl::SwXMLBodyContext_Impl, SwXMLBodyContext_Impl::createFastChildContext, SwXMLDocContext_Impl::SwXMLDocContext_Impl, SwXMLDocContext_Impl::createFastChildContext and the bounded importWriterXml, parseOdfXml contract remain intentionally omitted."
+        "Broader native XML import contracts and ownership remain omitted or individually unverified, including common/automatic container separation, display-name identity, duplicate selection, global null-context dispatch and document/style defaults."
       ],
       "preservedResponsibilities": [
         "Reimplements the bounded Writer ODF XML import bridge from pinned LibreOffice `sw/source/filter/xml/xmlimp.cxx`.",
-        "Applies imported MM100 tab positions to Writer twips with the signed integer ratio used by SvxTabStopItem::PutValue/o3tl::toTwips."
+        "Applies imported MM100 tab positions to Writer twips with the signed integer ratio used by SvxTabStopItem::PutValue/o3tl::toTwips.",
+        "Uses the requested paragraph/text family together with the style name for bounded registration, direct/parent resolution and named paragraph application; same-name definitions and Standard/Heading family isolation are verified through context and literal ODT package cycles."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
@@ -6020,7 +6041,7 @@
           },
           {
             "marker": "accepts unstyled and empty-style spans with inherited inline state",
-            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts"
+            "path": "apps/office/src/xmloff/source/text/txtparai.test.ts"
           },
           {
             "marker": "preserves unstyled spans, inherited formatting, controls and hyperlinks through package cycles",
@@ -6032,11 +6053,19 @@
           },
           {
             "marker": "retains inline state for unresolved and property-less character styles",
-            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts"
+            "path": "apps/office/src/xmloff/source/text/txtparai.test.ts"
           },
           {
             "marker": "retains inherited formatting for unresolved and property-less styles through package cycles",
             "path": "apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.test.ts",
+            "marker": "resolves equal style names within the requested family"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts",
+            "marker": "keeps equal paragraph and character names independent through package cycles"
           }
         ],
         "upstream": [
@@ -6067,6 +6096,14 @@
           {
             "marker": "pStyle->FillPropertySet( xPropSet );",
             "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx",
+            "marker": "StyleIndexCompareByName"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx",
+            "marker": "SvXMLStylesContext_Impl::FindStyleChildContext"
           }
         ]
       },
@@ -6086,7 +6123,8 @@
       "preservedResponsibilities": [
         "Reimplements the bounded ODF text paragraph import boundary from pinned LibreOffice `xmloff/source/text/txtparai.cxx`.",
         "Accepts absent/empty span style names as no additional character-style hint, retaining inherited inline properties, supported child controls and active hyperlink state; source-derived context assertions and literal real ODT cycles verify this bounded contract.",
-        "Applies bounded family-specific no-op fallback for unknown character names, optional local properties and found child deltas independently of missing parents, matching SetStyleAndAttrs style lookup/application; literal ODT cases use real named parent styles and verify inheritance, overrides and scope across package cycles."
+        "Applies bounded family-specific no-op fallback for unknown character names, optional local properties and found child deltas independently of missing parents, matching SetStyleAndAttrs style lookup/application; literal ODT cases use real named parent styles and verify inheritance, overrides and scope across package cycles.",
+        "Uses the requested paragraph/text family together with the style name for bounded registration, direct/parent resolution and named paragraph application; same-name definitions and Standard/Heading family isolation are verified through context and literal ODT package cycles."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/text/txtparai.cxx",

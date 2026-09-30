@@ -77,7 +77,7 @@ export interface XMLTextImportTarget {
     listGeometryWins: boolean,
   ): XMLParagraphImportTarget;
   getListRule(styleName: string): XMLTextListRule | undefined;
-  getStyle(styleName: string): OdfStyleDefinition | undefined;
+  getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
   resolveBuiltInParagraphStyle?(styleName: string): string | undefined;
 }
 
@@ -521,7 +521,7 @@ export function resolveParagraphStyle(
   if (builtInStyle !== undefined) {
     if (seen.has(name)) throw new Error(`Cyclic ODF paragraph style: ${name}`);
     seen.add(name);
-    const definition = target.getStyle(name);
+    const definition = target.getStyle("paragraph", name);
     const parent: ResolvedParagraphStyle =
       builtInStyle !== "default"
         ? resolveParagraphStyle(definition?.parentStyleName ?? "Standard", heading, target, seen)
@@ -552,7 +552,7 @@ export function resolveParagraphStyle(
   }
   if (seen.has(name)) throw new Error(`Cyclic ODF paragraph style: ${name}`);
   seen.add(name);
-  const definition = target.getStyle(name);
+  const definition = target.getStyle("paragraph", name);
   if (definition?.family !== "paragraph")
     throw new Error(`Unsupported ODF paragraph style: ${name}`);
   const parent = resolveParagraphStyle(
@@ -598,7 +598,7 @@ function resolveTextStyle(
 ): Partial<OdfCharacterProperties> {
   if (seen.has(name)) throw new Error(`Cyclic ODF text style: ${name}`);
   seen.add(name);
-  const definition = target.getStyle(name);
+  const definition = target.getStyle("text", name);
   if (definition?.family !== "text") return {};
   const parent =
     definition.parentStyleName === undefined

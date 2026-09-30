@@ -196,7 +196,10 @@ class SwXMLImport
   private officeTextCount = 0;
   private paragraphCount = 0;
   private titleSeen = false;
-  private readonly styles = new Map<string, OdfStyleDefinition>();
+  private readonly styles: Record<OdfStyleDefinition["family"], Map<string, OdfStyleDefinition>> = {
+    paragraph: new Map(),
+    text: new Map(),
+  };
   private defaultParagraphStyle: OdfStyleDefinition | undefined;
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
@@ -251,9 +254,12 @@ class SwXMLImport
     return null;
   }
 
-  /** Resolves one imported style. @param styleName - ODF style name. @returns Style definition. */
-  public getStyle(styleName: string): OdfStyleDefinition | undefined {
-    return this.styles.get(styleName);
+  /** Resolves one imported style by native family and name identity. @param family - Requested style family. @param styleName - ODF style name. @returns Style definition. */
+  public getStyle(
+    family: OdfStyleDefinition["family"],
+    styleName: string,
+  ): OdfStyleDefinition | undefined {
+    return this.styles[family].get(styleName);
   }
 
   /** Resolves one imported font-face declaration. @param name - Face name. @returns Model family. */
@@ -292,8 +298,9 @@ class SwXMLImport
 
   /** Registers one parsed style. @param name - ODF style name. @param definition - Parsed definition. @returns Nothing. */
   public registerStyle(name: string, definition: OdfStyleDefinition): void {
-    if (this.styles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
-    this.styles.set(name, definition);
+    const familyStyles = this.styles[definition.family];
+    if (familyStyles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
+    familyStyles.set(name, definition);
   }
 
   /** Applies global ODF line numbering to the canonical Writer document. @param value - Imported configuration. @returns Nothing. */
@@ -462,7 +469,7 @@ class SwXMLImport
 
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
-    applyNamedParagraphStyles(this.document, this.styles, this.defaultParagraphStyle);
+    applyNamedParagraphStyles(this.document, this.styles.paragraph, this.defaultParagraphStyle);
     const createValue =
       /** Converts a registered page layout to Writer geometry. @param name - Master-page name. @param layout - Imported page layout. @returns Writer page descriptor. */ (
         name: string,
@@ -741,13 +748,10 @@ function applyNamedParagraphStyles(
   defaultStyle?: OdfStyleDefinition,
 ): void {
   const standard = styles.get("Standard");
-  if (standard?.family !== "paragraph")
-    throw new Error("ODF Writer Standard paragraph style is missing.");
+  if (standard === undefined) throw new Error("ODF Writer Standard paragraph style is missing.");
   for (const poolStyle of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
     const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
     if (definition === undefined) continue;
-    if (definition.family !== "paragraph")
-      throw new Error(`ODF Writer ${poolStyle.name} paragraph style is invalid.`);
     const collection = document.GetTextFormatColl(poolStyle.id);
     collection.SetDerivedFrom(undefined);
     if (defaultStyle?.alignment !== undefined)
@@ -795,7 +799,7 @@ function applyNamedParagraphStyles(
   }
   for (const poolStyle of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
     const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
-    if (definition?.family !== "paragraph") continue;
+    if (definition === undefined) continue;
     const collection = document.GetTextFormatColl(poolStyle.id);
     const parentId =
       definition.parentStyleName === undefined
