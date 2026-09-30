@@ -170,12 +170,31 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     const content = await new ZipFile(fixture).readTextEntry("content.xml");
     const changed = content.replace("</office:text>", "<office:spreadsheet/></office:text>");
     expect(changed).not.toBe(content);
-    const xmlFailure = await replaceFixtureEntry("content.xml", new TextEncoder().encode(changed));
+    const ignored = await diagnoseOdtImport(
+      await replaceFixtureEntry("content.xml", new TextEncoder().encode(changed)),
+    );
+    expect(ignored.imported).toBe(true);
+    expect(
+      ignored.diagnostics.some(
+        /** Detects unexpected import failures. @param diagnostic - Structural event. @returns Match. */ (
+          diagnostic,
+        ) => diagnostic.kind === "import-error",
+      ),
+    ).toBe(false);
+    const unsupported = content.replace(
+      "</office:text>",
+      '<text:section text:name="PRIVATE"/></office:text>',
+    );
+    const xmlFailure = await replaceFixtureEntry(
+      "content.xml",
+      new TextEncoder().encode(unsupported),
+    );
     const xmlReport = await diagnoseOdtImport(xmlFailure);
     expect(xmlReport.imported).toBe(false);
     expect(xmlReport.diagnostics).toContainEqual(
       expect.objectContaining({ kind: "import-error", stream: "content.xml" }),
     );
+    expect(JSON.stringify(xmlReport)).not.toContain("PRIVATE");
   });
 
   it("keeps the Reader's XML stream byte ceiling before inventory parsing", /** Checks resource ceiling. @returns Completion after rejection. */ async () => {

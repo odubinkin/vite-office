@@ -571,20 +571,29 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     };
     for (const body of [
       "<text:list/>",
-      "<text:span/>",
-      "<text:p><text:list/></text:p>",
-      '<text:p><text:span text:style-name="T1"><text:list/></text:span></text:p>',
       "<text:section/>",
       '<text:list text:style-name="L1"><text:list-item><text:p>a</text:p><text:p>b</text:p></text:list-item></text:list>',
       '<text:list text:style-name="L1"><text:list-header/></text:list>',
-      '<text:list text:style-name="L1"><text:p/></text:list>',
-      '<text:list text:style-name="L1"><text:list-item><text:section/></text:list-item></text:list>',
-      '<text:list text:style-name="L1"><text:list-item><text:span/></text:list-item></text:list>',
     ])
       expect(
         /** Imports an unsupported structure. @returns Nothing. */ () =>
           importBody(body, styles, new Map([["L1", bullet]])),
       ).toThrow("Unsupported ODF");
+    for (const [body, count] of [
+      ["<text:span><text:p>hidden</text:p></text:span>", 0],
+      ["<text:p>A<text:list><text:p>hidden</text:p></text:list>B</text:p>", 1],
+      ['<text:p><text:span text:style-name="T1"><text:list/></text:span></text:p>', 1],
+      ['<text:list text:style-name="L1"><text:p/></text:list>', 0],
+      [
+        '<text:list text:style-name="L1"><text:list-item><text:section/></text:list-item></text:list>',
+        0,
+      ],
+      [
+        '<text:list text:style-name="L1"><text:list-item><text:span/></text:list-item></text:list>',
+        0,
+      ],
+    ] as const)
+      expect(importBody(body, styles, new Map([["L1", bullet]]))).toHaveLength(count);
     expect(
       importBody(
         '<text:p>before <text:a xlink:href="https://example.test" xlink:type="simple" xlink:show="new" office:name="named" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">linked<text:span text:style-name="T1"> bold</text:span><text:tab/></text:a> after</text:p>',

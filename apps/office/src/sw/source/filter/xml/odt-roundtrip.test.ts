@@ -187,12 +187,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(imported.document.paragraphs).toHaveLength(1);
   });
 
-  it("opens ODTs containing unknown extension subtrees", /** Verifies upstream-compatible unknown children are diagnosed and skipped without importing their descendants. @returns Nothing. */ async () => {
+  it("opens ODTs containing unknown extension subtrees", /** Verifies unknown wrappers reuse the styles owner and permit supported descendants. @returns Nothing. */ async () => {
     const bytes = basicOdt();
     const archive = new ZipFile(bytes);
     const styles = (await archive.readTextEntry("styles.xml")).replace(
       "<office:styles>",
-      '<office:styles><foreign:extension xmlns:foreign="urn:foreign"><style:style style:name="Standard" style:family="paragraph"/></foreign:extension>',
+      '<office:styles><foreign:extension xmlns:foreign="urn:foreign"><style:style style:name="ExtensionStyle" style:family="paragraph"/></foreign:extension>',
     );
     const warn = vi
       .spyOn(console, "warn")
@@ -205,7 +205,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         metadata(),
       );
       expect(imported.document.paragraphs).toHaveLength(1);
-      expect(warn).toHaveBeenCalledWith("Unknown ODF element ignored: foreign:extension");
+      expect(warn).toHaveBeenCalledWith("No ODF context for unknown element: foreign:extension");
     } finally {
       warn.mockRestore();
     }
@@ -452,6 +452,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           metadata(),
         ),
     ).toThrow("Unsupported ODF numbering suffix");
+    expect(
+      /** Ignores an unrelated known table under a native list item. @returns Nothing. */ () =>
+        importWriterXml(
+          styles,
+          content.replace("<text:list-item>", "<text:list-item><table:table/>"),
+          metadata(),
+        ),
+    ).not.toThrow();
     const importWithListStyle =
       /** Imports an additional list-style fragment. @param fragment - ODF style XML. @returns Imported Writer document. */ (
         fragment: string,
@@ -672,7 +680,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           content.replace("<office:text>", "<office:styles/>").replace("</office:text>", ""),
           metadata(),
         ),
-    ).toThrow("Unsupported ODF XML element");
+    ).toThrow("exactly one office:text");
     const withoutStandard = styles.replace(
       /<style:style style:name="Standard"[\s\S]*?<\/style:style>/,
       "",
@@ -747,7 +755,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ).document.paragraphs,
     ).toHaveLength(1);
     expect(
-      /** Rejects non-font children in office:font-face-decls. @returns Invalid document. */ () =>
+      /** Ignores non-font children without replacing declarations. @returns Invalid document. */ () =>
         importWriterXml(
           styles.replace(
             "<office:font-face-decls>",
@@ -757,7 +765,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           metadata(),
           meta,
         ),
-    ).toThrow("Unsupported ODF XML element");
+    ).not.toThrow();
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () =>
@@ -847,18 +855,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         "duplicate text-properties",
       ],
       [
-        styles.replace("<office:styles>", "<office:styles><style:paragraph-properties/>"),
-        "Unsupported ODF XML element",
-      ],
-      [
-        styles.replace("</style:style>", "<style:list-level-properties/></style:style>"),
-        "Unsupported ODF XML element",
-      ],
-      [
-        styles.replace("</office:document-styles>", "<office:body/></office:document-styles>"),
-        "Unsupported ODF XML element",
-      ],
-      [
         styles.replace(
           "</style:style>",
           '<style:paragraph-properties fo:text-align="match-parent"/></style:style>',
@@ -873,14 +869,26 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ).toThrow(message);
 
     expect(
-      /** Rejects a known but invalid metadata child. @returns Invalid document. */ () =>
+      /** Ignores an unrelated known metadata child. @returns Invalid document. */ () =>
         importWriterXml(
           styles,
           content,
           metadata(),
           meta.replace("</office:meta>", "<office:body/></office:meta>"),
         ),
-    ).toThrow("Unsupported ODF XML element");
+    ).not.toThrow();
+
+    for (const changed of [
+      styles.replace(
+        "<office:styles>",
+        '<office:styles><style:paragraph-properties><style:style style:name="Phantom" style:family="paragraph"/></style:paragraph-properties>',
+      ),
+      styles.replace("</style:style>", "<style:list-level-properties/></style:style>"),
+      styles.replace("</office:document-styles>", "<office:body/></office:document-styles>"),
+    ])
+      expect(importWriterXml(changed, content, metadata(), meta).document.paragraphs).toHaveLength(
+        1,
+      );
 
     const styledContent = content.replace(
       "</office:automatic-styles>",

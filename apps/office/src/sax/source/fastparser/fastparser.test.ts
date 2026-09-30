@@ -89,7 +89,7 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
     });
   });
 
-  it("logs and ignores undeclared unknown child subtrees", /** Matches upstream's non-fatal unknown-child context fallback. @returns Nothing. */ () => {
+  it("reuses the parent for unknown children without calling its known hooks", /** Matches native parent reuse and distinct unknown event callbacks. @returns Nothing. */ () => {
     const events: string[] = [];
     const warn = vi
       .spyOn(console, "warn")
@@ -101,9 +101,12 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
         `<office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:foreign="urn:foreign"><foreign:extension><text:p>hidden</text:p></foreign:extension><text:p>visible</text:p></office:text>`,
         recordingImport(events),
       );
-      expect(warn).toHaveBeenCalledWith("Unknown ODF element ignored: foreign:extension");
+      expect(warn).toHaveBeenCalledWith("No ODF context for unknown element: foreign:extension");
       expect(events).toEqual([
         `start:${XMLToken.OFFICE_TEXT}:`,
+        `start:${XMLToken.TEXT_P}:`,
+        "text:hidden",
+        `end:${XMLToken.TEXT_P}`,
         `start:${XMLToken.TEXT_P}:`,
         "text:visible",
         `end:${XMLToken.TEXT_P}`,
@@ -114,7 +117,7 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
     }
   });
 
-  it("provides inert base hooks and rejects undeclared known children", /** Covers the default context contract. @returns Nothing. */ () => {
+  it("provides inert base hooks and skips undeclared known children", /** Covers the default context contract. @returns Nothing. */ () => {
     const context = new InertContext();
     const attributes = new FastAttributeList([]);
     context.startFastElement(XMLToken.TEXT_P, attributes);
@@ -133,7 +136,7 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
             createUnknownContext: () => null,
           },
         ),
-    ).toThrow("Unsupported ODF XML element: text:p");
+    ).not.toThrow();
     expect(
       /** Tokenizes duplicate semantic attributes. @returns Nothing. */ () =>
         new FastAttributeList([

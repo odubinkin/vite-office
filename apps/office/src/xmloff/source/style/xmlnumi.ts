@@ -1,5 +1,5 @@
 /** @fileoverview Owns independent supported list-level positioning and attribute import from pinned xmlnumi.cxx. */
-import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
+import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type {
@@ -9,7 +9,7 @@ import type {
 } from "../text/txtparai";
 
 /** Parses one label-alignment leaf into native MM100 numbering properties. */
-export class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl extends SvXMLIgnoreContext {
+export class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl extends SvXMLImportContext {
   /** Retains native parent defaults and publishes only successfully parsed numeric fields. @param attributes - Source attributes. @param save - Parent property sink. @returns Context. */
   public constructor(
     attributes: FastAttributeList,
@@ -95,7 +95,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       element !== XMLToken.STYLE_LIST_LEVEL_PROPERTIES &&
       element !== XMLToken.STYLE_TEXT_PROPERTIES
     )
-      return new SvXMLIgnoreContext();
+      return null;
     return new SvxXMLListLevelStyleAttrContext_Impl(
       attributes,
       /** Retains the selected fields without changing the other group. @param values - Property delta. @returns Nothing. */
@@ -171,7 +171,7 @@ class SvxXMLListLevelStyleAttrContext_Impl extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element !== XMLToken.STYLE_LIST_LEVEL_LABEL_ALIGNMENT) return new SvXMLIgnoreContext();
+    if (element !== XMLToken.STYLE_LIST_LEVEL_LABEL_ALIGNMENT) return null;
     return new SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(
       attributes,
       /** Retains modern fields without selecting a mode. @param properties - Alignment fields. @returns Nothing. */
@@ -210,7 +210,7 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
       element !== XMLToken.TEXT_LIST_LEVEL_STYLE_NUMBER &&
       element !== XMLToken.TEXT_LIST_LEVEL_STYLE_BULLET
     )
-      return new SvXMLIgnoreContext();
+      return null;
     const context = new SvxXMLListLevelStyleContext_Impl(element, attributes);
     this.levelStyles.push(context);
     return context;

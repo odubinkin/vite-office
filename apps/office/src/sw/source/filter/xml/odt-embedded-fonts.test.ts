@@ -289,7 +289,7 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
     });
   });
 
-  it("routes font source, URI and optional format children through their owning contexts", /** Unknown child nodes cannot become phantom package resources. @returns Completion. */ async () => {
+  it("routes font source, URI and optional format children through their owning contexts", /** Unrelated known nodes cannot become phantom package resources. @returns Completion. */ async () => {
     for (const [element, replacement] of [
       ["font-face-src", "font-face-format"],
       ["font-face-uri", "font-face-format"],
@@ -305,9 +305,8 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
             new TextDecoder().decode(bytes).replaceAll(`svg:${element}`, `svg:${replacement}`),
           ),
       );
-      await expect(readFontFixture(changed)).rejects.toThrow(
-        `Unsupported ODF XML element: svg:${replacement}`,
-      );
+      const fonts = (await readFontFixture(changed)).document.GetEmbeddedFonts();
+      expect(fonts.length).toBe(element === "font-face-format" ? 1 : 0);
     }
   });
 

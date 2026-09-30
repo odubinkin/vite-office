@@ -88,23 +88,23 @@ it("retains native declaration defaults and skips invalid indices before reading
     {
       source:
         '<foreign:list-level-style-image xmlns:foreign="urn:foreign"><text:list-level-style-bullet text:level="1" text:bullet-char="■"/></foreign:list-level-style-image>',
-      applied: -1,
-      bullet: undefined,
+      applied: 0,
+      bullet: "■",
     },
     {
       source: '<text:unknown><text:list-level-style-bullet text:level="1"/></text:unknown>',
-      applied: -1,
-      bullet: undefined,
+      applied: 0,
+      bullet: "",
     },
     {
       source:
         '<foreign:any xmlns:foreign="urn:foreign"><text:list-level-style-bullet text:level="1"/></foreign:any>',
-      applied: -1,
-      bullet: undefined,
+      applied: 0,
+      bullet: "",
     },
     {
       source:
-        '<text:list-level-style-number text:level="1"><foreign:any xmlns:foreign="urn:foreign"><style:list-level-properties text:space-before="1in"/></foreign:any><style:text-properties text:space-before="1mm" text:min-label-width="2mm"/></text:list-level-style-number>',
+        '<text:list-level-style-number text:level="1"><foreign:any xmlns:foreign="urn:foreign"><style:list-level-properties text:space-before="1mm"/></foreign:any><style:text-properties text:space-before="1mm" text:min-label-width="2mm"/></text:list-level-style-number>',
       applied: 0,
       bullet: undefined,
       legacy: true,

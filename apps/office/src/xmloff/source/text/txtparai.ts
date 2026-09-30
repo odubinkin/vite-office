@@ -152,6 +152,7 @@ export class XMLTextBodyContext extends SvXMLImportContext {
     if (element === XMLToken.TABLE_TABLE && "beginTable" in this.target)
       return new XMLTableContext(this.target as XMLTableImportTarget, attributes);
     if (element === XMLToken.TEXT_SEQUENCE_DECLS) return new SvXMLIgnoreContext(true);
+    if (element === XMLToken.TEXT_SECTION) throw new Error("Unsupported ODF text section.");
     return null;
   }
 }
@@ -470,6 +471,7 @@ class XMLListContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
+    if (element === XMLToken.TEXT_LIST_HEADER) throw new Error("Unsupported ODF list header.");
     return element === XMLToken.TEXT_LIST_ITEM
       ? new XMLListItemContext(this.target, attributes, this.state, this.active)
       : null;

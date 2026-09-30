@@ -883,22 +883,25 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
           (stop) => stop.GetTabPos(),
         ),
     ).toEqual([720, 1134]);
-    await expect(
-      readOdtDocument(
-        await rewriteEntry(
-          tabBytes,
-          "content.xml",
-          /** Replaces the tab-stop child with an invalid property child. @param xml - Content stream. @returns Changed stream. */ (
-            xml,
-          ) =>
-            xml.replace(
-              /<style:tab-stop style:position="[^"]+"[^>]*\/>/u,
-              "<style:text-properties/>",
-            ),
-        ),
-        metadata,
+    const ignoredTabChild = await readOdtDocument(
+      await rewriteEntry(
+        tabBytes,
+        "content.xml",
+        /** Replaces the tab-stop child with an invalid property child. @param xml - Content stream. @returns Changed stream. */ (
+          xml,
+        ) =>
+          xml.replace(
+            /<style:tab-stop style:position="[^"]+"[^>]*\/>/u,
+            "<style:text-properties/>",
+          ),
       ),
-    ).rejects.toThrow("Unsupported ODF XML element");
+      metadata,
+    );
+    expect(
+      (
+        ignoredTabChild.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem
+      ).GetStops(),
+    ).toHaveLength(0);
 
     const textChildBytes = await rewriteEntry(
       bytes,
@@ -911,8 +914,19 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
           "$1><style:tab-stops/></style:text-properties>",
         ),
     );
-    await expect(readOdtDocument(textChildBytes, metadata)).rejects.toThrow(
-      "Unsupported ODF XML element",
+    const ignoredTextChild = await readOdtDocument(textChildBytes, metadata);
+    expect(
+      ignoredTextChild.document.paragraphs.map(
+        /** Reads visible paragraph text. @param paragraph - Imported node. @returns Text. */ (
+          paragraph,
+        ) => paragraph.GetText(),
+      ),
+    ).toEqual(
+      reopened.document.paragraphs.map(
+        /** Reads visible paragraph text. @param paragraph - Imported node. @returns Text. */ (
+          paragraph,
+        ) => paragraph.GetText(),
+      ),
     );
 
     heading.SetFormatAttr(new SfxStringItem(RES_CHRATR_COLOR, "named-red"));

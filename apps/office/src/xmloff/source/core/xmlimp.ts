@@ -79,8 +79,8 @@ export class FastAttributeList {
   }
 }
 
-/** Base fast import context; null child results declare rejection. */
-export abstract class SvXMLImportContext {
+/** Native inert import context; the importer owns null child fallback. */
+export class SvXMLImportContext {
   /** Declares a child whose attributes are intentionally metadata-only. @param _element - Child token. @returns Whether unknown attributes are ignored. */
   public ignoreUnknownAttributesForChild(_element: XMLToken): boolean {
     void _element;
@@ -94,6 +94,21 @@ export abstract class SvXMLImportContext {
   /** Receives a known end element. @param _element - Element token. @returns Nothing. */
   public endFastElement(_element: XMLToken): void {
     void _element;
+  }
+  /** Receives an unknown start without invoking known-element hooks. @param _namespaceURI - Namespace. @param _localName - Element name. @param _attributes - Attributes. @returns Nothing. */
+  public startUnknownElement(
+    _namespaceURI: string,
+    _localName: string,
+    _attributes: FastAttributeList,
+  ): void {
+    void _namespaceURI;
+    void _localName;
+    void _attributes;
+  }
+  /** Receives an unknown end independently of known-element publication. @param _namespaceURI - Namespace. @param _localName - Element name. @returns Nothing. */
+  public endUnknownElement(_namespaceURI: string, _localName: string): void {
+    void _namespaceURI;
+    void _localName;
   }
   /** Receives character data. @param _characters - Decoded characters. @returns Nothing. */
   public characters(_characters: string): void {
@@ -156,6 +171,8 @@ interface ContextFrame {
   readonly context: SvXMLImportContext;
   readonly token: XMLToken;
   readonly name: string;
+  readonly namespaceURI: string;
+  readonly localName: string;
 }
 
 /** Parses XML through fast import contexts. @param xml - Decoded XML. @param xmlImport - Root factory. @param options - Limits and cancellation. @returns Nothing. */
@@ -186,7 +203,7 @@ export function parseOdfXmlStream(
             parent?.context.ignoreUnknownAttributesForChild(getXMLToken(tag.uri, tag.local)),
           );
           const token = getXMLToken(tag.uri, tag.local);
-          const context =
+          let context =
             parent === undefined
               ? token === XMLToken.UNKNOWN
                 ? xmlImport.createUnknownContext(tag.uri, tag.local, fastAttributes)
@@ -195,16 +212,24 @@ export function parseOdfXmlStream(
                 ? parent.context.createUnknownChildContext(tag.uri, tag.local, fastAttributes)
                 : parent.context.createFastChildContext(token, fastAttributes);
           if (context === null) {
-            if (parent === undefined || token !== XMLToken.UNKNOWN)
-              throw new Error(`Unsupported ODF XML element: ${tag.name}`);
-            if (options.onDiagnostic)
-              options.onDiagnostic({ kind: "unknown-element", path: activePath, name: tag.name });
-            else console.warn(`Unknown ODF element ignored: ${tag.name}`);
-            stack.push({ context: new SvXMLIgnoreContext(), token, name: tag.name });
-            return;
+            if (parent === undefined) throw new Error(`Unsupported ODF XML element: ${tag.name}`);
+            if (token === XMLToken.UNKNOWN) {
+              if (options.onDiagnostic)
+                options.onDiagnostic({ kind: "unknown-element", path: activePath, name: tag.name });
+              else console.warn(`No ODF context for unknown element: ${tag.name}`);
+              context = parent.context;
+            } else context = new SvXMLImportContext();
           }
-          stack.push({ context, token, name: tag.name });
-          context.startFastElement(token, fastAttributes);
+          if (token === XMLToken.UNKNOWN)
+            context.startUnknownElement(tag.uri, tag.local, fastAttributes);
+          else context.startFastElement(token, fastAttributes);
+          stack.push({
+            context,
+            token,
+            name: tag.name,
+            namespaceURI: tag.uri,
+            localName: tag.local,
+          });
         },
         /** Delivers text to the current context. @param value - Decoded text. @returns Nothing. */
         characters(value): void {
@@ -215,7 +240,9 @@ export function parseOdfXmlStream(
           const frame = stack.pop();
           /* v8 ignore next -- saxes never emits an unmatched close callback. */
           if (frame === undefined) throw new Error("ODF XML context stack is invalid.");
-          frame.context.endFastElement(frame.token);
+          if (frame.token === XMLToken.UNKNOWN)
+            frame.context.endUnknownElement(frame.namespaceURI, frame.localName);
+          else frame.context.endFastElement(frame.token);
         },
       },
       options,

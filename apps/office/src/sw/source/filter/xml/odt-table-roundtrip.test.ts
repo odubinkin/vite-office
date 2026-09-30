@@ -319,12 +319,12 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
         open(tableProps('style:width="1cm"'), "<table:table-column/><table:table-row/>"),
     ).toThrow("cell count differs");
     expect(
-      /** Checks malformed header grouping rejection. @returns Nothing. */ () =>
+      /** Ignores unrelated known header children. @returns Nothing. */ () =>
         open(
           tableProps('style:width="1cm"'),
           "<table:table-column/><table:table-header-rows><text:p/></table:table-header-rows>",
         ),
-    ).toThrow();
+    ).not.toThrow();
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(
@@ -343,21 +343,29 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(tableProps('style:width="1cm"'), "<table:table-column/><text:p/>"),
-    ).toThrow("Unsupported ODF XML element");
+    ).not.toThrow();
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(
           tableProps('style:width="1cm"'),
-          "<table:table-column/><table:table-row><text:p/></table:table-row>",
+          "<table:table-column/><table:table-row><text:p>ignored</text:p><table:table-cell><text:p>retained</text:p></table:table-cell></table:table-row>",
         ),
-    ).toThrow("Unsupported ODF XML element");
+    ).not.toThrow();
     expect(
       /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
         open(
           tableProps('style:width="1cm"'),
           "<table:table-column/><table:table-row><table:table-cell><table:table-row/></table:table-cell></table:table-row>",
         ),
-    ).toThrow("Unsupported ODF XML element");
+    ).not.toThrow();
+    for (const unsupported of ["<text:list/>", "<table:table/>", "<text:section/>"])
+      expect(
+        /** Preserves explicit rejection for native cell features not implemented here. @returns Nothing. */ () =>
+          open(
+            tableProps('style:width="1cm"'),
+            `<table:table-column/><table:table-row><table:table-cell>${unsupported}</table:table-cell></table:table-row>`,
+          ),
+      ).toThrow("Unsupported ODF table cell list, section or nested table");
     const invalidFamily = new FastAttributeList([
       {
         name: "style:name",

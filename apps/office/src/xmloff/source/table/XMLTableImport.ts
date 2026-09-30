@@ -288,6 +288,12 @@ class XMLTableCellContext extends SvXMLImportContext {
   ): SvXMLImportContext | null {
     if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
       return new XMLParaContext(this.target, element, attributes);
+    if (
+      element === XMLToken.TABLE_TABLE ||
+      element === XMLToken.TEXT_LIST ||
+      element === XMLToken.TEXT_SECTION
+    )
+      throw new Error("Unsupported ODF table cell list, section or nested table.");
     return null;
   }
   /** Closes the cell. @returns Nothing. */

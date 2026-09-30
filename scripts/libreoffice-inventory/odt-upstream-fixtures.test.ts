@@ -77,7 +77,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
   for (const fixture of [
     // Five table attributes and ten list position-mode attributes are now recognized.
     { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 80 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 91 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 92 },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -93,6 +93,15 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         },
       );
       expect(diagnostics).toHaveLength(fixture.warnings);
+      if (fixture.name === undefined)
+        expect(diagnostics).toContainEqual(
+          expect.objectContaining({
+            kind: "unknown-element",
+            name: "style:header-footer-properties",
+            path: "office:document-styles/office:automatic-styles/style:page-layout/style:header-style/style:header-footer-properties",
+            stream: "styles.xml",
+          }),
+        );
       expect(
         diagnostics.some(
           /** Detects a marker diagnostic. @param diagnostic - Diagnostic. @returns Match. */ (
