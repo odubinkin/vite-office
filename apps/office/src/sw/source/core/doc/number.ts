@@ -2,18 +2,18 @@
  * @fileoverview Calculates browser-visible Writer list markers at the `sw/source/core/doc/number.cxx` ownership boundary without changing editable paragraph text.
  */
 
+import {
+  SvxNumberFormat,
+  type NumberingPositionProperties,
+} from "../../../../editeng/source/items/numitem";
+
 import type { WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
 /** Numbering format owned by one level of a SwNumRule. */
-export class SwNumFormat {
+export class SwNumFormat extends SvxNumberFormat {
   private readonly bulletFont: string;
-  private readonly firstLineIndent: number;
-  private readonly indentAt: number;
   private readonly includeUpperLevels: number;
-  private readonly labelFollowedBy: "listtab" | "nothing" | "space";
-  private readonly listTabPosition: number;
-  private readonly positionAndSpaceMode: "label-alignment";
   private readonly prefix: string;
   private readonly start: number;
   private readonly suffix: string;
@@ -21,30 +21,22 @@ export class SwNumFormat {
   public constructor(
     private readonly kind: Exclude<WriterParagraphListKind, "none">,
     private readonly bulletChar = kind === "bullet" ? "•" : "",
-    options: Readonly<{
-      bulletFont?: string;
-      firstLineIndent?: number;
-      indentAt?: number;
-      includeUpperLevels?: number;
-      labelFollowedBy?: "listtab" | "nothing" | "space";
-      listTabPosition?: number;
-      positionAndSpaceMode?: "label-alignment";
-      prefix?: string;
-      start?: number;
-      suffix?: string;
-    }> = {},
+    options: NumberingPositionProperties &
+      Readonly<{
+        bulletFont?: string;
+        includeUpperLevels?: number;
+        prefix?: string;
+        start?: number;
+        suffix?: string;
+      }> = {},
   ) {
+    super(options);
     if (kind !== "bullet" && kind !== "numbered")
       throw new Error("SwNumFormat kind must be bullet or numbered.");
     if (kind === "bullet" && [...bulletChar].length > 1)
       throw new Error("SwNumFormat bullet character must contain at most one Unicode code point.");
     this.bulletFont = options.bulletFont ?? (kind === "bullet" ? "OpenSymbol" : "");
-    this.firstLineIndent = options.firstLineIndent ?? -360;
-    this.indentAt = options.indentAt ?? 720;
     this.includeUpperLevels = options.includeUpperLevels ?? 1;
-    this.labelFollowedBy = options.labelFollowedBy ?? "listtab";
-    this.listTabPosition = options.listTabPosition ?? this.indentAt;
-    this.positionAndSpaceMode = options.positionAndSpaceMode ?? "label-alignment";
     this.prefix = options.prefix ?? "";
     this.start = options.start ?? 1;
     this.suffix = options.suffix ?? (kind === "numbered" ? "." : "");
@@ -72,29 +64,9 @@ export class SwNumFormat {
   public GetBulletFont(): string {
     return this.bulletFont;
   }
-  /** Returns the first-line indent in twips. @returns Signed indent. */
-  public GetFirstLineIndent(): number {
-    return this.firstLineIndent;
-  }
-  /** Returns the body indent in twips. @returns Indent position. */
-  public GetIndentAt(): number {
-    return this.indentAt;
-  }
   /** Returns how many trailing list levels contribute to a numeric label. @returns Included level count. */
   public GetIncludeUpperLevels(): number {
     return this.includeUpperLevels;
-  }
-  /** Returns the label-follow separator mode. @returns Separator mode. */
-  public GetLabelFollowedBy(): "listtab" | "nothing" | "space" {
-    return this.labelFollowedBy;
-  }
-  /** Returns the list-tab position in twips. @returns Tab position. */
-  public GetListtabPos(): number {
-    return this.listTabPosition;
-  }
-  /** Returns the supported upstream spacing mode. @returns Label-alignment mode. */
-  public GetPositionAndSpaceMode(): "label-alignment" {
-    return this.positionAndSpaceMode;
   }
   /** Returns the upstream numbering type represented by this bounded format. @returns Arabic or character-special. */
   public GetNumberingType(): "arabic" | "char-special" {
@@ -116,13 +88,9 @@ export class SwNumFormat {
   /** Creates an independent format record. @returns Cloned format. */
   public clone(): SwNumFormat {
     return new SwNumFormat(this.kind, this.bulletChar, {
+      ...this.GetPositionProperties(),
       bulletFont: this.bulletFont,
-      firstLineIndent: this.firstLineIndent,
-      indentAt: this.indentAt,
       includeUpperLevels: this.includeUpperLevels,
-      labelFollowedBy: this.labelFollowedBy,
-      listTabPosition: this.listTabPosition,
-      positionAndSpaceMode: this.positionAndSpaceMode,
       prefix: this.prefix,
       start: this.start,
       suffix: this.suffix,

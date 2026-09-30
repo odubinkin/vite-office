@@ -239,10 +239,19 @@ export class WriterViewProjection {
             ? {}
             : {
                 listLayout: Object.freeze({
-                  firstLineIndentPt: listFormat.GetFirstLineIndent() / 20,
-                  indentAtPt: listFormat.GetIndentAt() / 20,
-                  labelFollowedBy: listFormat.GetLabelFollowedBy(),
-                  listTabPositionPt: listFormat.GetListtabPos() / 20,
+                  firstLineIndentPt: listFormat.GetFirstLineOffset() / 20,
+                  indentAtPt:
+                    (listFormat.GetPositionAndSpaceMode() === "label-alignment"
+                      ? listFormat.GetIndentAt()
+                      : listFormat.GetAbsLSpace()) / 20,
+                  labelFollowedBy:
+                    listFormat.GetPositionAndSpaceMode() === "label-alignment"
+                      ? listFormat.GetLabelFollowedBy()
+                      : "listtab",
+                  listTabPositionPt:
+                    (listFormat.GetPositionAndSpaceMode() === "label-alignment"
+                      ? listFormat.GetListtabPos()
+                      : listFormat.GetAbsLSpace() + listFormat.GetCharTextDistance()) / 20,
                 }),
               }),
           ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),

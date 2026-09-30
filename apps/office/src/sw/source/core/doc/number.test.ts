@@ -131,13 +131,13 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     const bullet = new SwNumFormat("bullet", "●");
     expect(bullet.GetBulletChar()).toBe("●");
     expect(bullet.GetBulletFont()).toBe("OpenSymbol");
-    expect(bullet.GetFirstLineIndent()).toBe(-360);
-    expect(bullet.GetIndentAt()).toBe(720);
+    expect(bullet.GetFirstLineIndent()).toBe(0);
+    expect(bullet.GetIndentAt()).toBe(0);
     expect(bullet.GetIncludeUpperLevels()).toBe(1);
     expect(bullet.GetLabelFollowedBy()).toBe("listtab");
-    expect(bullet.GetListtabPos()).toBe(720);
+    expect(bullet.GetListtabPos()).toBe(0);
     expect(bullet.GetNumberingType()).toBe("char-special");
-    expect(bullet.GetPositionAndSpaceMode()).toBe("label-alignment");
+    expect(bullet.GetPositionAndSpaceMode()).toBe("label-width-and-position");
     expect(bullet.GetPrefix()).toBe("");
     expect(bullet.GetStart()).toBe(1);
     expect(bullet.GetSuffix()).toBe("");

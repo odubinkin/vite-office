@@ -39,7 +39,10 @@ interface WriterNumberFormatRecord {
   readonly kind: Exclude<WriterParagraphListKind, "none">;
   readonly labelFollowedBy: "listtab" | "nothing" | "space";
   readonly listTabPosition: number;
-  readonly positionAndSpaceMode: "label-alignment";
+  readonly positionAndSpaceMode: "label-alignment" | "label-width-and-position";
+  readonly absLSpace?: number;
+  readonly firstLineOffset?: number;
+  readonly charTextDistance?: number;
   readonly prefix: string;
   readonly start: number;
   readonly suffix: string;
@@ -154,6 +157,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
           ) => {
             const format = rule.GetNumFormat(level);
             return {
+              ...format.GetPositionProperties(),
               bulletFont: format.GetBulletFont(),
               ...(format.GetKind() === "bullet" ? { bulletChar: format.GetBulletChar() } : {}),
               firstLineIndent: format.GetFirstLineIndent(),
@@ -396,6 +400,9 @@ export function decodeWriterDocument(
             format,
           ) =>
             new SwNumFormat(format.kind, format.bulletChar, {
+              absLSpace: format.absLSpace ?? 0,
+              firstLineOffset: format.firstLineOffset ?? 0,
+              charTextDistance: format.charTextDistance ?? 0,
               bulletFont: format.bulletFont,
               firstLineIndent: format.firstLineIndent,
               indentAt: format.indentAt,

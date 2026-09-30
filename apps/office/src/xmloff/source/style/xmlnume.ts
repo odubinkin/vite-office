@@ -6,6 +6,19 @@ import { SvXMLUnitConverter } from "../core/xmluconv";
 export function exportListLevelLayout(layout: OdfListLevelLayout | undefined): string {
   if (layout === undefined) return "";
   const converter = new SvXMLUnitConverter("mm100");
+  if (layout.positionAndSpaceMode !== "label-alignment") {
+    const before = (layout.absLSpace ?? 0) + (layout.firstLineOffset ?? 0);
+    const width = -(layout.firstLineOffset ?? 0);
+    const distance = layout.charTextDistance ?? 0;
+    const attributes: string[] = [];
+    if (before !== 0)
+      attributes.push(`text:space-before="${converter.convertMeasureToXML(before)}"`);
+    if (width !== 0)
+      attributes.push(`text:min-label-width="${converter.convertMeasureToXML(width)}"`);
+    if (distance > 0)
+      attributes.push(`text:min-label-distance="${converter.convertMeasureToXML(distance)}"`);
+    return `<style:list-level-properties${attributes.length === 0 ? "" : ` ${attributes.join(" ")}`}></style:list-level-properties>`;
+  }
   const follow = layout.labelFollowedBy ?? "listtab";
   const tabPosition = layout.listTabPosition ?? 0;
   const firstLineIndent = layout.firstLineIndent ?? 0;

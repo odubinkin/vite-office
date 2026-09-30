@@ -187,7 +187,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
 
   it("preserves label-alignment list geometry through the Writer model and ODT export", /** Verifies modern ODF list geometry round-trips. @returns Nothing. */ () => {
     const listStyle =
-      '<text:list-style style:name="L1"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties><style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.8in" fo:text-indent="-0.25in" fo:margin-left="0.8in"/></style:list-level-properties></text:list-level-style-bullet></text:list-style>';
+      '<text:list-style style:name="L1"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.8in" fo:text-indent="-0.25in" fo:margin-left="0.8in"/></style:list-level-properties></text:list-level-style-bullet></text:list-style>';
     const source = importWriterXml(
       styles(""),
       content(
@@ -207,7 +207,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     expect(roundTripped.FindNumRulePtr("L1")?.GetNumFormat(0).GetIndentAt()).toBe(1152);
   });
 
-  it("maps legacy list spacing into the same bounded numbering geometry", /** Verifies bounded legacy positioning import. @returns Nothing. */ () => {
+  it("retains legacy list spacing independently from modern alignment", /** Verifies bounded legacy positioning import. @returns Nothing. */ () => {
     const listStyle =
       '<text:list-style style:name="Legacy"><text:list-level-style-number text:level="1" style:num-format="1"><style:list-level-properties text:space-before="0.3in" text:min-label-width="0.2in" text:min-label-distance="0.1in"/></text:list-level-style-number></text:list-style>';
     const document = importWriterXml(
@@ -219,16 +219,20 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       metadata,
     ).document;
     const format = document.FindNumRulePtr("Legacy")?.GetNumFormat(0);
-    expect(format?.GetFirstLineIndent()).toBe(-288);
-    expect(format?.GetIndentAt()).toBe(720);
-    expect(format?.GetListtabPos()).toBe(864);
+    expect(format?.GetPositionAndSpaceMode()).toBe("label-width-and-position");
+    expect(format?.GetAbsLSpace()).toBe(720);
+    expect(format?.GetFirstLineOffset()).toBe(-288);
+    expect(format?.GetCharTextDistance()).toBe(144);
+    expect(format?.GetFirstLineIndent()).toBe(0);
+    expect(format?.GetIndentAt()).toBe(0);
+    expect(format?.GetListtabPos()).toBe(0);
   });
 
   it("retains partial modern and legacy list alignment defaults", /** Checks retains partial modern and legacy list alignment defaults. @returns Test callback result. */ () => {
     const levels = [
-      '<text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties><style:list-level-label-alignment text:label-followed-by="space"/></style:list-level-properties></text:list-level-style-bullet>',
-      '<text:list-level-style-bullet text:level="2" text:bullet-char="◦"><style:list-level-properties><style:list-level-label-alignment text:label-followed-by="nothing" fo:margin-left="0.8in"/></style:list-level-properties></text:list-level-style-bullet>',
-      '<text:list-level-style-bullet text:level="3" text:bullet-char="▪"><style:list-level-properties><style:list-level-label-alignment text:list-tab-stop-position="0.9in"/></style:list-level-properties></text:list-level-style-bullet>',
+      '<text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="space"/></style:list-level-properties></text:list-level-style-bullet>',
+      '<text:list-level-style-bullet text:level="2" text:bullet-char="◦"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="nothing" fo:margin-left="0.8in"/></style:list-level-properties></text:list-level-style-bullet>',
+      '<text:list-level-style-bullet text:level="3" text:bullet-char="▪"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:list-tab-stop-position="0.9in"/></style:list-level-properties></text:list-level-style-bullet>',
       '<text:list-level-style-bullet text:level="4" text:bullet-char="•"><style:list-level-properties text:space-before="0.3in"/></text:list-level-style-bullet>',
       '<text:list-level-style-bullet text:level="5" text:bullet-char="•"><style:list-level-properties text:min-label-width="0.2in"/></text:list-level-style-bullet>',
       '<text:list-level-style-bullet text:level="6" text:bullet-char="•"><style:list-level-properties text:min-label-distance="0.1in"/></text:list-level-style-bullet>',
@@ -246,14 +250,14 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     expect(rule.GetNumFormat(1).GetLabelFollowedBy()).toBe("nothing");
     expect(rule.GetNumFormat(2).GetListtabPos()).toBe(1296);
     expect(rule.GetNumFormat(3).GetFirstLineIndent()).toBeCloseTo(0);
-    expect(rule.GetNumFormat(4).GetFirstLineIndent()).toBe(-288);
-    expect(rule.GetNumFormat(5).GetListtabPos()).toBe(144);
+    expect(rule.GetNumFormat(4).GetFirstLineOffset()).toBe(-288);
+    expect(rule.GetNumFormat(5).GetCharTextDistance()).toBe(144);
     expect(exportContentXml(source)).toContain('text:label-followed-by="space"');
   });
 
   it("defaults unknown list label-follow values and rejects unsupported page orientation", /** Checks defaults unknown list label-follow values and rejects unsupported page orientation. @returns Test callback result. */ () => {
     const invalidList =
-      '<text:list-style style:name="Invalid"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties><style:list-level-label-alignment text:label-followed-by="custom"/></style:list-level-properties></text:list-level-style-bullet></text:list-style>';
+      '<text:list-style style:name="Invalid"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="custom"/></style:list-level-properties></text:list-level-style-bullet></text:list-style>';
     const unknownFollow = importWriterXml(
       styles(""),
       content(invalidList, "<text:p>Item</text:p>"),
@@ -330,7 +334,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       /** Runs the test callback. @param values - Test input. @returns Test callback result. */ (
         values: readonly string[],
       ) =>
-        `<text:list-style style:name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties><style:list-level-label-alignment ${values.join(" ")}/></style:list-level-properties></text:list-level-style-bullet></text:list-style>`;
+        `<text:list-style style:name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment ${values.join(" ")}/></style:list-level-properties></text:list-level-style-bullet></text:list-style>`;
     for (const [index, replacement] of [
       'fo:text-indent="-0.3in"',
       'fo:margin-left="0.6in"',
@@ -362,7 +366,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
         name: string,
         values: readonly string[],
       ) =>
-        `<text:list-style style:name="${name}" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties><style:list-level-label-alignment ${values.join(" ")}/></style:list-level-properties></text:list-level-style-bullet></text:list-style>`;
+        `<text:list-style style:name="${name}" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment ${values.join(" ")}/></style:list-level-properties></text:list-level-style-bullet></text:list-style>`;
     for (const [index, replacement] of [
       'fo:text-indent="-0.3in"',
       'fo:margin-left="0.6in"',

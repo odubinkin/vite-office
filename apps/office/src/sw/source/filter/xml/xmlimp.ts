@@ -1,6 +1,6 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 
-import { numberingLabelAlignmentToTwips } from "../../core/unocore/unosett";
+import { numberingPositionToTwips } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
 
 import {
@@ -364,11 +364,8 @@ class SwXMLImport
     if (this.listRules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
     this.listRules.set(styleName, rule);
     const layouts = rule.levelLayouts?.map(
-      /** Converts native properties only at Writer application. @param layout - Source geometry. @returns Core geometry. */
-      (layout) =>
-        layout?.measureUnit === "mm100"
-          ? numberingLabelAlignmentToTwips(layout.values)
-          : layout?.values,
+      /** Converts native properties at Writer application. @param layout - MM100 fields. @returns Core fields. */
+      (layout) => (layout === undefined ? undefined : numberingPositionToTwips(layout.values)),
     );
     const existing = this.document.FindNumRulePtr(rule.name);
     if (existing !== undefined) {
@@ -385,13 +382,9 @@ class SwXMLImport
             Object.entries(layouts?.[level] ?? {}).some(
               /** Compares imported geometry with an existing rule. @param entry - Geometry field and value. @returns Whether they conflict. */
               ([key, value]) =>
-                key === "firstLineIndent"
-                  ? existing.GetNumFormat(level).GetFirstLineIndent() !== value
-                  : key === "indentAt"
-                    ? existing.GetNumFormat(level).GetIndentAt() !== value
-                    : key === "labelFollowedBy"
-                      ? existing.GetNumFormat(level).GetLabelFollowedBy() !== value
-                      : existing.GetNumFormat(level).GetListtabPos() !== value,
+                existing.GetNumFormat(level).GetPositionProperties()[
+                  key as keyof ReturnType<SwNumFormat["GetPositionProperties"]>
+                ] !== value,
             ),
         )
       )
@@ -407,7 +400,9 @@ class SwXMLImport
             const indentAt = 720 + level * 360;
             return new SwNumFormat(kind, rule.bulletChars?.[level], {
               indentAt,
+              firstLineIndent: -360,
               listTabPosition: indentAt,
+              positionAndSpaceMode: "label-alignment",
               ...layouts?.[level],
               /* v8 ignore next -- Streaming list-style parser always supplies suffixes for declared numeric levels. */
               ...(kind === "numbered" ? { suffix: rule.suffixes?.[level] ?? "." } : {}),

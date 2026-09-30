@@ -79,8 +79,12 @@ export interface OdfParagraphProperties {
 /** Marker family stored by one ODF list level style. */
 export type OdfListLevelKind = "bullet" | "numbered";
 
-/** Exported label-alignment properties of one ODF list level, in native UNO MM100. */
+/** Exported independent positioning properties of one ODF list level, in native UNO MM100. */
 export interface OdfListLevelLayout {
+  readonly absLSpace?: number;
+  readonly firstLineOffset?: number;
+  readonly charTextDistance?: number;
+  readonly positionAndSpaceMode?: "label-width-and-position" | "label-alignment";
   readonly firstLineIndent?: number;
   readonly indentAt?: number;
   readonly labelFollowedBy?: "listtab" | "nothing" | "space";

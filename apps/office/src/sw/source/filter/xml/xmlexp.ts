@@ -77,7 +77,7 @@ import {
   RES_LINENUMBER,
 } from "../../../inc/hintids";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
-import { numberingLabelAlignmentToMM100 } from "../../core/unocore/unosett";
+import { numberingPositionToMM100 } from "../../core/unocore/unosett";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -344,7 +344,8 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
                 /** Projects one canonical list level's label alignment. @param _unused - Array value. @param index - Writer list level. @returns ODF geometry. */
                 (_unused, index) => {
                   const format = rule.GetNumFormat(index);
-                  return numberingLabelAlignmentToMM100({
+                  return numberingPositionToMM100({
+                    ...format.GetPositionProperties(),
                     firstLineIndent: format.GetFirstLineIndent(),
                     indentAt: format.GetIndentAt(),
                     labelFollowedBy: format.GetLabelFollowedBy(),

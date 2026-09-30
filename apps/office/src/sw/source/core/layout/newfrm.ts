@@ -63,7 +63,10 @@ export function projectSwTextPrintBounds(
   const left =
     format !== undefined &&
     (paragraph.DoesListGeometryWin() || paragraph.GetParagraphTextLeftMargin() === 0)
-      ? format.GetIndentAt() + format.GetFirstLineIndent()
+      ? format.GetAbsLSpace() +
+        (format.GetPositionAndSpaceMode() === "label-width-and-position"
+          ? format.GetFirstLineOffset()
+          : 0)
       : paragraph.GetParagraphTextLeftMargin() + paragraph.GetParagraphFirstLineIndent();
   const physicalWidth =
     page.paperFormat === "A4" &&

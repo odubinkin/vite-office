@@ -13,7 +13,7 @@ import type {
   XMLParagraphImportProperties,
   XMLListLevelImportProperties,
 } from "../text/txtparai";
-import { SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl } from "./xmlnumi";
+import { SvxXMLListLevelStyleContext_Impl } from "./xmlnumi";
 import { importOdfLength } from "../core/xmluconv";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
@@ -384,7 +384,7 @@ class XMLListStyleContext extends SvXMLImportContext {
       this.suffixes[level - 1] = suffix ?? "";
     }
     this.formats[level - 1] = kind;
-    return new XMLListLevelContext(
+    return new SvxXMLListLevelStyleContext_Impl(
       /** Retains one level's label-alignment geometry. @param layout - Imported geometry. @returns Nothing. */
       (layout) => {
         this.levelLayouts[level - 1] = layout;
@@ -428,77 +428,6 @@ class XMLListStyleContext extends SvXMLImportContext {
       ),
       name: this.ruleName,
     });
-  }
-}
-
-/** Imports the label-alignment child of one list-level-properties element. */
-class XMLListLevelContext extends SvXMLImportContext {
-  /** Creates a level context. @param save - Model-facing geometry sink. @returns Nothing. */
-  public constructor(private readonly save: (layout: XMLListLevelImportProperties) => void) {
-    super();
-  }
-
-  /** Reads list-level-properties and its label-alignment child. @param element - Child token. @param attributes - Properties. @returns Nested context. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (element !== XMLToken.STYLE_LIST_LEVEL_PROPERTIES) return new SvXMLIgnoreContext();
-    return new XMLListLevelPropertiesContext(this.save, attributes);
-  }
-}
-
-/** Reads the ODF label-alignment values used by SwNumFormat. */
-class XMLListLevelPropertiesContext extends SvXMLImportContext {
-  /** Creates a properties context. @param save - Model-facing geometry sink. @param attributes - Legacy and modern list properties. @returns Nothing. */
-  public constructor(
-    private readonly save: (layout: XMLListLevelImportProperties) => void,
-    attributes: FastAttributeList,
-  ) {
-    super();
-    const spaceBefore = importOptionalLength(
-      attributes,
-      XMLToken.TEXT_SPACE_BEFORE,
-      true,
-      "list space before",
-    );
-    const minLabelWidth = importOptionalLength(
-      attributes,
-      XMLToken.TEXT_MIN_LABEL_WIDTH,
-      false,
-      "list minimum label width",
-    );
-    const minLabelDistance = importOptionalLength(
-      attributes,
-      XMLToken.TEXT_MIN_LABEL_DISTANCE,
-      false,
-      "list minimum label distance",
-    );
-    if (
-      spaceBefore !== undefined ||
-      minLabelWidth !== undefined ||
-      minLabelDistance !== undefined
-    ) {
-      const indentAt = (spaceBefore ?? 0) + (minLabelWidth ?? 0);
-      this.save({
-        measureUnit: "twip",
-        values: {
-          firstLineIndent: -(minLabelWidth ?? 0),
-          indentAt,
-          labelFollowedBy: "listtab",
-          listTabPosition: indentAt + (minLabelDistance ?? 0),
-        },
-      });
-    }
-  }
-
-  /** Reads the nested label alignment. @param element - Child token. @param attributes - Alignment values. @returns Leaf context. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (element !== XMLToken.STYLE_LIST_LEVEL_LABEL_ALIGNMENT) return new SvXMLIgnoreContext();
-    return new SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl(attributes, this.save);
   }
 }
 

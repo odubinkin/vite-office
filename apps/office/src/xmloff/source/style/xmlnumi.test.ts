@@ -3,11 +3,17 @@ import { expect, it } from "vitest";
 import { parseOdfXmlStream } from "../core/xmlimp";
 import { XMLToken, ODF_NAMESPACES } from "../core/xmltoken";
 import type { XMLListLevelImportProperties } from "../text/txtparai";
-import { SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl } from "./xmlnumi";
+import {
+  SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl,
+  SvxXMLListLevelStyleContext_Impl,
+} from "./xmlnumi";
 
 /** Parses one literal modern alignment leaf through the source-owned context. @param attributes - Literal XML attributes. @returns Imported native properties. */
 function parse(attributes: string): XMLListLevelImportProperties | undefined {
-  let result: XMLListLevelImportProperties | undefined;
+  let result: XMLListLevelImportProperties | undefined = {
+    measureUnit: "mm100",
+    values: { firstLineIndent: 0, indentAt: 0, labelFollowedBy: "listtab", listTabPosition: 0 },
+  };
   parseOdfXmlStream(
     `<style:list-level-label-alignment xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" ${attributes}/>`,
     {
@@ -18,7 +24,7 @@ function parse(attributes: string): XMLListLevelImportProperties | undefined {
               values,
               /** Captures source-native properties. @param value - Parsed properties. @returns Nothing. */
               (value) => {
-                result = value;
+                result = { measureUnit: "mm100", values: { ...result?.values, ...value.values } };
               },
             )
           : null;
@@ -66,6 +72,45 @@ it("uses native MM100 grammar, failed-value retention and SHRT field bounds", /*
         indentAt: signed,
         labelFollowedBy: "listtab",
         listTabPosition: tab,
+      },
+    });
+  }
+});
+
+it("retains declared-level numeric values across missing or failed child updates", /** Asserts native parent defaults, successful-only setters, ignored children and unsigned-to-short property narrowing. @returns Nothing. */ () => {
+  for (const [distance, expected] of [
+    ["32767", 32767],
+    ["32768", -32768],
+    ["65535", -1],
+    ["999999cm", -1],
+  ]) {
+    let result: XMLListLevelImportProperties | undefined;
+    parseOdfXmlStream(
+      `<text:list-level-style-number xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}"><text:p>ignored</text:p><style:list-level-properties text:space-before="1mm" text:min-label-width="2mm" text:min-label-distance="${distance}" text:list-level-position-and-space-mode="label-alignment"><text:p>ignored</text:p><style:list-level-label-alignment text:label-followed-by="space" fo:text-indent="-1mm" fo:margin-left="2mm" text:list-tab-stop-position="3mm"/></style:list-level-properties><style:list-level-properties text:space-before="invalid"><style:list-level-label-alignment fo:text-indent="invalid" fo:margin-left=".007mm"/></style:list-level-properties></text:list-level-style-number>`,
+      {
+        /** Creates the owning level context. @returns Context. */
+        createFastContext: () =>
+          new SvxXMLListLevelStyleContext_Impl(
+            /** Captures full source-stage state before UNO application. @param value - Native MM100 properties. @returns Nothing. */
+            (value) => {
+              result = value;
+            },
+          ),
+        /** Rejects unknown roots. @returns Null. */
+        createUnknownContext: () => null,
+      },
+    );
+    expect(result).toEqual({
+      measureUnit: "mm100",
+      values: {
+        absLSpace: 300,
+        firstLineOffset: -200,
+        charTextDistance: expected,
+        positionAndSpaceMode: "label-alignment",
+        firstLineIndent: -100,
+        indentAt: 1,
+        labelFollowedBy: "listtab",
+        listTabPosition: 300,
       },
     });
   }

@@ -33,14 +33,19 @@ describe("ODF list label alignment export", /** Groups ODF list label alignment 
   });
   it("retains the alignment mode and omits zero or unused measures", /** Checks retains the alignment mode and omits zero or unused measures. @returns Test callback result. */ () => {
     expect(exportListLevelLayout(undefined)).toBe("");
-    expect(exportListLevelLayout({})).toContain('text:label-followed-by="listtab"');
-    const xml = exportListLevelLayout({ labelFollowedBy: "space" });
+    expect(exportListLevelLayout({ positionAndSpaceMode: "label-alignment" })).toContain(
+      'text:label-followed-by="listtab"',
+    );
+    const xml = exportListLevelLayout({
+      positionAndSpaceMode: "label-alignment",
+      labelFollowedBy: "space",
+    });
     expect(xml).toContain('text:label-followed-by="space"');
     expect(xml).not.toContain("fo:text-indent");
     expect(xml).not.toContain("fo:margin-left");
     expect(xml).not.toContain("text:list-tab-stop-position");
-    expect(exportListLevelLayout({ listTabPosition: 900 })).toContain(
-      'text:label-followed-by="listtab"',
-    );
+    expect(
+      exportListLevelLayout({ positionAndSpaceMode: "label-alignment", listTabPosition: 900 }),
+    ).toContain('text:label-followed-by="listtab"');
   });
 });

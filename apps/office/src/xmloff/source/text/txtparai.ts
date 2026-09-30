@@ -38,8 +38,12 @@ export interface OdfStyleDefinition {
 
 /** Keeps import geometry in its source unit until Writer applies the numbering properties. */
 export interface XMLListLevelImportProperties {
-  readonly measureUnit: "mm100" | "twip";
+  readonly measureUnit: "mm100";
   readonly values: {
+    readonly absLSpace?: number;
+    readonly firstLineOffset?: number;
+    readonly charTextDistance?: number;
+    readonly positionAndSpaceMode?: "label-width-and-position" | "label-alignment";
     readonly firstLineIndent?: number;
     readonly indentAt?: number;
     readonly labelFollowedBy?: "listtab" | "nothing" | "space";
