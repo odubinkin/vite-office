@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301724-XZQVDC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T17:30:25.839Z",
+  "verdict": "pass",
+  "summary": "Native tab default initialization and recognized-only type overrides restored with direct/inherited ODT package evidence.",
+  "evaluated_sha": "4d87aab71dbdd533705fd4ac5b85639831acda13",
+  "blueprint_digest": "555a7787d0eb4ad6d9868acf5de4046f4d8f621f5c7d7e237d0e70d5c82f1b69",
+  "findings": [
+    "Pinned source initializes position zero and LEFT; 12 literal cases independently assert defaults, exact-token alignment overrides and preserved later-Default omission. Focused and mandatory checks pass. Broader converter and context contracts remain unverified; registered product deviations untouched."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301724-XZQVDC/README.md",
+    ".agentplane/tasks/202609301724-XZQVDC/focused.log",
+    ".agentplane/tasks/202609301724-XZQVDC/verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

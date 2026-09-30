@@ -4,7 +4,7 @@ title: "Restore native tab import position and alignment defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Native zero-position and recognized-only alignment defaults verified with 12 literal direct/inherited ODT cases, focused 9 tests and full verify 578/109/19 at 100% coverage; routing and scoped diff clean."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T17:30:25.839Z"
+  updated_by: "EVALUATOR"
+  note: "Native tab default initialization and recognized-only type overrides restored with direct/inherited ODT package evidence."
+  evaluated_sha: "4d87aab71dbdd533705fd4ac5b85639831acda13"
+  blueprint_digest: "555a7787d0eb4ad6d9868acf5de4046f4d8f621f5c7d7e237d0e70d5c82f1b69"
+  evidence_refs:
+    - ".agentplane/tasks/202609301724-XZQVDC/README.md"
+    - ".agentplane/tasks/202609301724-XZQVDC/quality/20260930-173025839-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301724-XZQVDC/quality/20260930-173025839-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301724-XZQVDC/quality/20260930-173025839-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301724-XZQVDC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301724-XZQVDC/focused.log"
+    - ".agentplane/tasks/202609301724-XZQVDC/verify.log"
+  findings:
+    - "Pinned source initializes position zero and LEFT; 12 literal cases independently assert defaults, exact-token alignment overrides and preserved later-Default omission. Focused and mandatory checks pass. Broader converter and context contracts remain unverified; registered product deviations untouched."
 commit: null
 comments:
   -
