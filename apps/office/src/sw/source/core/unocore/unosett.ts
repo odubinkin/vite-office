@@ -92,12 +92,10 @@ export class SwXNumberingRules {
         ...previous.GetPositionProperties(),
         ...converted,
         bulletFont: previous.GetBulletFont(),
-        includeUpperLevels: previous.GetIncludeUpperLevels(),
-        prefix: previous.GetPrefix(),
-        start: previous.GetStart(),
-        suffix: properties.suffix,
+        ...previous.GetMarkerProperties(),
       },
     );
+    applied.SetSuffix(properties.suffix);
     rule.Set(level, applied);
   }
 }

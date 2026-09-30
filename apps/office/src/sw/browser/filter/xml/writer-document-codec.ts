@@ -43,6 +43,7 @@ interface WriterNumberFormatRecord {
   readonly absLSpace?: number;
   readonly firstLineOffset?: number;
   readonly charTextDistance?: number;
+  readonly listFormat?: string;
   readonly prefix: string;
   readonly start: number;
   readonly suffix: string;
@@ -121,7 +122,7 @@ export interface WriterDocumentRecord {
     followName: string;
     value: WriterPageDescriptorValue;
   }>[];
-  readonly swModelVersion: 15;
+  readonly swModelVersion: 16;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -163,6 +164,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
               firstLineIndent: format.GetFirstLineIndent(),
               indentAt: format.GetIndentAt(),
               includeUpperLevels: format.GetIncludeUpperLevels(),
+              ...(format.HasListFormat() ? { listFormat: format.GetListFormat() } : {}),
               kind: format.GetKind(),
               labelFollowedBy: format.GetLabelFollowedBy(),
               listTabPosition: format.GetListtabPos(),
@@ -190,7 +192,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         };
       },
     ),
-    swModelVersion: 15,
+    swModelVersion: 16,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -317,7 +319,7 @@ export function decodeWriterDocument(
 ): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 15 ||
+    candidate.swModelVersion !== 16 ||
     !isRecord(candidate.documentSettings) ||
     typeof candidate.locale !== "string" ||
     candidate.locale.length === 0 ||
@@ -410,6 +412,7 @@ export function decodeWriterDocument(
               labelFollowedBy: format.labelFollowedBy,
               listTabPosition: format.listTabPosition,
               positionAndSpaceMode: format.positionAndSpaceMode,
+              ...(format.listFormat === undefined ? {} : { listFormat: format.listFormat }),
               prefix: format.prefix,
               start: format.start,
               suffix: format.suffix,

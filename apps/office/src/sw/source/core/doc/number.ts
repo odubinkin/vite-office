@@ -5,6 +5,7 @@
 import {
   SvxNumberFormat,
   type NumberingPositionProperties,
+  type NumberingMarkerProperties,
 } from "../../../../editeng/source/items/numitem";
 
 import type { WriterParagraphList, WriterParagraphListKind } from "./list";
@@ -13,22 +14,13 @@ import { WRITER_MAX_LIST_LEVEL } from "./list";
 /** Numbering format owned by one level of a SwNumRule. */
 export class SwNumFormat extends SvxNumberFormat {
   private readonly bulletFont: string;
-  private readonly includeUpperLevels: number;
-  private readonly prefix: string;
-  private readonly start: number;
-  private readonly suffix: string;
   /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @param options - Upstream-compatible spacing, prefix, suffix, and start options. @returns Nothing. */
   public constructor(
     private readonly kind: Exclude<WriterParagraphListKind, "none">,
     private readonly bulletChar = kind === "bullet" ? "•" : "",
     options: NumberingPositionProperties &
-      Readonly<{
-        bulletFont?: string;
-        includeUpperLevels?: number;
-        prefix?: string;
-        start?: number;
-        suffix?: string;
-      }> = {},
+      NumberingMarkerProperties &
+      Readonly<{ bulletFont?: string }> = {},
   ) {
     super(options);
     if (kind !== "bullet" && kind !== "numbered")
@@ -36,18 +28,20 @@ export class SwNumFormat extends SvxNumberFormat {
     if (kind === "bullet" && [...bulletChar].length > 1)
       throw new Error("SwNumFormat bullet character must contain at most one Unicode code point.");
     this.bulletFont = options.bulletFont ?? (kind === "bullet" ? "OpenSymbol" : "");
-    this.includeUpperLevels = options.includeUpperLevels ?? 1;
-    this.prefix = options.prefix ?? "";
-    this.start = options.start ?? 1;
-    this.suffix = options.suffix ?? (kind === "numbered" ? "." : "");
-    if (!Number.isInteger(this.start) || this.start < 0)
+    if (
+      options.start !== undefined &&
+      (options.start < 0 || options.start > 65535 || !Number.isInteger(options.start))
+    )
       throw new Error("SwNumFormat start value is invalid.");
     if (
-      !Number.isInteger(this.includeUpperLevels) ||
-      this.includeUpperLevels < 1 ||
-      this.includeUpperLevels > WRITER_MAX_LIST_LEVEL + 1
+      options.includeUpperLevels !== undefined &&
+      (!Number.isInteger(options.includeUpperLevels) ||
+        options.includeUpperLevels < 0 ||
+        options.includeUpperLevels > 255)
     )
       throw new Error("SwNumFormat included upper-level count is invalid.");
+    if (options.listFormat !== undefined && typeof options.listFormat !== "string")
+      throw new Error("SwNumFormat ListFormat is invalid.");
   }
 
   /** Returns the marker family for this list level. @returns Bullet or numbered kind. */
@@ -64,36 +58,16 @@ export class SwNumFormat extends SvxNumberFormat {
   public GetBulletFont(): string {
     return this.bulletFont;
   }
-  /** Returns how many trailing list levels contribute to a numeric label. @returns Included level count. */
-  public GetIncludeUpperLevels(): number {
-    return this.includeUpperLevels;
-  }
   /** Returns the upstream numbering type represented by this bounded format. @returns Arabic or character-special. */
   public GetNumberingType(): "arabic" | "char-special" {
     return this.kind === "bullet" ? "char-special" : "arabic";
   }
-  /** Returns the label prefix. @returns Prefix. */
-  public GetPrefix(): string {
-    return this.prefix;
-  }
-  /** Returns the first number. @returns Start value. */
-  public GetStart(): number {
-    return this.start;
-  }
-  /** Returns the label suffix. @returns Suffix. */
-  public GetSuffix(): string {
-    return this.suffix;
-  }
-
   /** Creates an independent format record. @returns Cloned format. */
   public clone(): SwNumFormat {
     return new SwNumFormat(this.kind, this.bulletChar, {
       ...this.GetPositionProperties(),
       bulletFont: this.bulletFont,
-      includeUpperLevels: this.includeUpperLevels,
-      prefix: this.prefix,
-      start: this.start,
-      suffix: this.suffix,
+      ...this.GetMarkerProperties(),
     });
   }
 }
@@ -157,14 +131,65 @@ export class SwNumRule {
     return this.automatic;
   }
 
-  /** Formats one validated Writer number vector using the current level's prefix, suffix, and upper-level count. @param numbers - Root-to-current counters. @param level - Current zero-based level. @returns Visible label. */
+  /** Formats a validated Writer number vector using native patterns or legacy joining; visible bullet glyphs are projected by SwTextNode. @param numbers - Root-to-current counters. @param level - Current zero-based level. @returns Numeric string. */
   public MakeNumString(numbers: readonly number[], level: number): string {
     const format = this.GetNumFormat(level);
-    if (format.GetNumberingType() === "char-special") return format.GetBulletChar();
     if (numbers.length <= level || numbers[level] === undefined)
       throw new Error("SwNumRule number vector does not contain the requested level.");
-    const first = Math.max(0, level + 1 - format.GetIncludeUpperLevels());
-    return `${format.GetPrefix()}${numbers.slice(first, level + 1).join(".")}${format.GetSuffix()}`;
+    if (format.HasListFormat()) {
+      let pattern = format.GetListFormat();
+      for (let position = 0; position < pattern.length - 2;) {
+        if (pattern[position] !== "%") {
+          position++;
+          continue;
+        }
+        let replaceLevel: number;
+        let endPosition: number;
+        if (pattern.slice(position, position + 4) === "%10%") {
+          replaceLevel = 9;
+          endPosition = position + 4;
+        } else if (
+          pattern[position + 2] === "%" &&
+          pattern.charAt(position + 1) >= "1" &&
+          pattern.charAt(position + 1) <= "9"
+        ) {
+          replaceLevel = Number(pattern[position + 1]) - 1;
+          endPosition = position + 3;
+        } else {
+          position++;
+          continue;
+        }
+        if (level < replaceLevel) {
+          position = endPosition;
+          continue;
+        }
+        const value = numbers[replaceLevel] as number;
+        const replacement =
+          value === 0
+            ? "0"
+            : this.GetNumFormat(replaceLevel).GetNumberingType() === "char-special"
+              ? ""
+              : String(value);
+        pattern = pattern.slice(0, position) + replacement + pattern.slice(endPosition);
+        position += replacement.length;
+      }
+      return pattern;
+    }
+    const first = Math.max(0, level + 1 - Math.max(1, format.GetIncludeUpperLevels()));
+    let marker = "";
+    for (let index = first; index <= level; index++) {
+      const value = numbers[index] as number;
+      marker +=
+        value === 0
+          ? "0"
+          : this.GetNumFormat(index).GetNumberingType() === "char-special"
+            ? ""
+            : String(value);
+      if (index !== level && marker.length !== 0) marker += ".";
+    }
+    return format.GetNumberingType() === "char-special"
+      ? marker
+      : `${format.GetPrefix()}${marker}${format.GetSuffix()}`;
   }
 
   /** Creates an independent numbering rule. @returns Cloned rule. */
@@ -186,6 +211,7 @@ function createBaseFormats(): readonly SwNumFormat[] {
         listTabPosition: indentAt,
         positionAndSpaceMode: "label-alignment",
         suffix: ".",
+        listFormat: `%${level + 1}%.`,
       });
     },
   );

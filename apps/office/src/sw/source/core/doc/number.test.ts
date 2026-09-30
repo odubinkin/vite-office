@@ -154,7 +154,7 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       ),
     ]);
     expect(dots.clone().GetNumFormat(0).GetBulletChar()).toBe("●");
-    expect(dots.MakeNumString([], 0)).toBe("●");
+    expect(dots.MakeNumString([1], 0)).toBe("");
     const multilevel = new SwNumRule(
       "multilevel",
       Array.from(
@@ -176,7 +176,7 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     ).toThrow("does not contain");
     expect(
       /** Rejects an impossible upper-level count. @returns Invalid format. */ () =>
-        new SwNumFormat("numbered", "", { includeUpperLevels: 11 }),
+        new SwNumFormat("numbered", "", { includeUpperLevels: 256 }),
     ).toThrow("upper-level count");
   });
 

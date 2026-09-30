@@ -119,6 +119,10 @@
           {
             "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
             "marker": "exports only the native legacy group with nonzero and positive attribute predicates"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/numitem.ts",
+            "marker": "SetListFormat"
           }
         ],
         "upstream": [
@@ -153,6 +157,10 @@
           {
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx",
             "marker": "SvxXMLNumRuleExport::exportLevelStyle"
+          },
+          {
+            "path": "vendor/libreoffice-reference/editeng/source/items/numitem.cxx",
+            "marker": "SvxNumberFormat::SetListFormat"
           }
         ]
       },
@@ -160,13 +168,15 @@
       "localSymbols": [
         "SvxNumberFormat",
         "SvxNumPositionAndSpaceMode",
-        "NumberingPositionProperties"
+        "NumberingPositionProperties",
+        "NumberingMarkerProperties"
       ],
       "omittedResponsibilities": [
         "Full native numbering/graphic/font/units/value/copy contracts beyond positional fields remain unimplemented or individually unverified. GetPositionProperties is the browser structural copy/snapshot port for raw fields, not a native UNO API claim."
       ],
       "preservedResponsibilities": [
-        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion."
+        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
+        "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified."
       ],
       "status": "mapped",
       "upstreamPath": "editeng/source/items/numitem.cxx",
@@ -175,7 +185,11 @@
         "SvxNumberFormat::GetAbsLSpace",
         "SvxNumberFormat::GetFirstLineOffset",
         "SvxNumberFormat::GetCharTextDistance",
-        "SvxNumberFormat::SetPositionAndSpaceMode"
+        "SvxNumberFormat::SetPositionAndSpaceMode",
+        "SvxNumberFormat::SetPrefix",
+        "SvxNumberFormat::SetSuffix",
+        "SvxNumberFormat::SetListFormat",
+        "SvxNumberFormat::GetListFormat"
       ]
     },
     {
@@ -2181,7 +2195,8 @@
       "rationale": "Defines a browser Worker graph transfer representation; ODT filter and SwDocShell retain canonical SwDoc contracts.",
       "responsibilities": [
         "Encodes and decodes the Writer graph for the ODT Worker message boundary.",
-        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion."
+        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
+        "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -3755,11 +3770,12 @@
         "SwNumRule"
       ],
       "omittedResponsibilities": [
-        "Non-Arabic numbering, bitmap bullets, character styles, outline rules, list-format patterns, and native layout integration remain unsupported and unclaimed."
+        "Non-Arabic numbering, bitmap bullets, character styles, outline rules, formatter variants, XML marker transport, and native layout integration remain unsupported and unclaimed."
       ],
       "preservedResponsibilities": [
         "Owns the ten-level bullet and Arabic numbering subset, including upstream spacing, upper-level, prefix/suffix, restart, and label construction fields.",
-        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion."
+        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
+        "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
