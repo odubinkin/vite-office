@@ -1,10 +1,11 @@
 ---
 id: "202609301603-AEE039"
 title: "Match disabled pool item sentinel contracts"
-status: "DOING"
+result_summary: "Matched the existing disabled pool-item sentinel contract to pinned LibreOffice."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202609301603-AEE039/verify.log"
   findings:
     - "Reviewed sentinel source ownership, pointer identity, WhichId zero, null clone and trivial equality. Get preserves inherited and INVALID distinctions, Put ignores the singleton and ordinary clone storage is unchanged. Tests cover IDs without defaults, clone identity and codec rejection. Full verification passed; dual-map storage is a separate recorded architecture follow-up."
-commit: null
+commit:
+  hash: "1055b574768182c5c43d1db3d14607f4a0cbbddc"
+  message: "🐛 AEE039 task: return the pinned disabled pool sentinel"
 comments:
   -
     author: "CODER"
     body: "Start: replace the existing disabled Get default fallback with the pinned pool-item singleton and verify its clone/value/state contracts."
+  -
+    author: "CODER"
+    body: "Verified: disabled states return the source-owned singleton with null clone and non-value contracts; focused and full gates passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "32 focused tests and complete repository verification passed; disabled singleton identity, null clone and non-value contracts are source-backed."
+  -
+    type: "status"
+    at: "2026-09-30T16:14:19.661Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: disabled states return the source-owned singleton with null clone and non-value contracts; focused and full gates passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T16:13:13.518Z"
+doc_updated_at: "2026-09-30T16:14:19.662Z"
 doc_updated_by: "CODER"
 description: "One source-backed correction: existing disabled item states must expose pinned DISABLED_POOL_ITEM from Get instead of a default, with a real poolitem-owned singleton and nullable sentinel clone contract."
 sections:
