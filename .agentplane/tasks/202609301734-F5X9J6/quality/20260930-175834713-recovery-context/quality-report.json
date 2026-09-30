@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301734-F5X9J6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T17:58:34.713Z",
+  "verdict": "pass",
+  "summary": "Native tab metric pipeline restored with source-owned SAX and XML delegation, MM100 import values and signed Writer conversion.",
+  "evaluated_sha": "b461207e46b3b563e26310a0b08adee6be626f7a",
+  "blueprint_digest": "0436cf25d79dca7fbf62cd40b37012668802320d6bbb4e6da6294b28cbec5a45",
+  "findings": [
+    "95 compiled pinned-native comparisons and source-derived direct/inherited ODT cycles verify grammar, units, signed rounding, range limits and zero fallback. Full verify passes at 583/109/19 and 100% coverage. Strict legacy callers and broader converter/context contracts remain honestly unverified; deliberate product deviations preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301734-F5X9J6/README.md",
+    ".agentplane/tasks/202609301734-F5X9J6/native.log",
+    ".agentplane/tasks/202609301734-F5X9J6/focused.log",
+    ".agentplane/tasks/202609301734-F5X9J6/verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

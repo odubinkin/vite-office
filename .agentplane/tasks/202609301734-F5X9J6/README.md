@@ -4,7 +4,7 @@ title: "Restore native tab measure conversion pipeline"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Native tab metric pipeline passes 95 compiled-native differential cases, 20 literal ODT sequences, focused tests and full verify 583/109/19 at 100% coverage; source/provenance, doctor, routing and diff checks pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T17:58:34.713Z"
+  updated_by: "EVALUATOR"
+  note: "Native tab metric pipeline restored with source-owned SAX and XML delegation, MM100 import values and signed Writer conversion."
+  evaluated_sha: "b461207e46b3b563e26310a0b08adee6be626f7a"
+  blueprint_digest: "0436cf25d79dca7fbf62cd40b37012668802320d6bbb4e6da6294b28cbec5a45"
+  evidence_refs:
+    - ".agentplane/tasks/202609301734-F5X9J6/README.md"
+    - ".agentplane/tasks/202609301734-F5X9J6/quality/20260930-175834713-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301734-F5X9J6/quality/20260930-175834713-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301734-F5X9J6/quality/20260930-175834713-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301734-F5X9J6/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301734-F5X9J6/native.log"
+    - ".agentplane/tasks/202609301734-F5X9J6/focused.log"
+    - ".agentplane/tasks/202609301734-F5X9J6/verify.log"
+  findings:
+    - "95 compiled pinned-native comparisons and source-derived direct/inherited ODT cycles verify grammar, units, signed rounding, range limits and zero fallback. Full verify passes at 583/109/19 and 100% coverage. Strict legacy callers and broader converter/context contracts remain honestly unverified; deliberate product deviations preserved."
 commit: null
 comments:
   -
