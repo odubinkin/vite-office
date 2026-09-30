@@ -1,0 +1,54 @@
+[
+  {
+    "input": "K 0\nK 2\nT hidden\nU urn:foreign wrapper\nK 1\nT hidden\nE 1\nV urn:foreign wrapper\nE 2\nU urn:foreign wrapper\nT A\nU urn:foreign nested\nT B\nV urn:foreign nested\nK 1\nT C\nE 1\nT D\nV urn:foreign wrapper\nK 1\nT E\nE 1\nE 0\n",
+    "events": [
+      "root:start:0",
+      "root:child:2",
+      "root:unknown-child:urn:foreign:wrapper",
+      "root:unknown-start:urn:foreign:wrapper",
+      "root:text:A",
+      "root:unknown-child:urn:foreign:nested",
+      "root:unknown-start:urn:foreign:nested",
+      "root:text:B",
+      "root:unknown-end:urn:foreign:nested",
+      "root:child:1",
+      "child:start:1",
+      "child:text:C",
+      "child:end:1",
+      "root:text:D",
+      "root:unknown-end:urn:foreign:wrapper",
+      "root:child:1",
+      "child:start:1",
+      "child:text:E",
+      "child:end:1",
+      "root:end:0"
+    ]
+  },
+  {
+    "input": "U urn:foreign root\nU urn:foreign owned\nT A\nV urn:foreign owned\nT B\nV urn:foreign root\n",
+    "events": [
+      "root:unknown-start:urn:foreign:root",
+      "root:unknown-child:urn:foreign:owned",
+      "owned:unknown-start:urn:foreign:owned",
+      "owned:text:A",
+      "owned:unknown-end:urn:foreign:owned",
+      "root:text:B",
+      "root:unknown-end:urn:foreign:root"
+    ]
+  },
+  {
+    "input": "K 0\nU urn:foreign wrapper\nU urn:foreign owned\nK 2\nT hidden\nE 2\nV urn:foreign owned\nT tail\nV urn:foreign wrapper\nE 0\n",
+    "events": [
+      "root:start:0",
+      "root:unknown-child:urn:foreign:wrapper",
+      "root:unknown-start:urn:foreign:wrapper",
+      "root:unknown-child:urn:foreign:owned",
+      "owned:unknown-start:urn:foreign:owned",
+      "owned:child:2",
+      "owned:unknown-end:urn:foreign:owned",
+      "root:text:tail",
+      "root:unknown-end:urn:foreign:wrapper",
+      "root:end:0"
+    ]
+  }
+]

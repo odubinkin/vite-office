@@ -42,11 +42,11 @@ struct SvXMLImportContext {
  void startUnknownElement(const std::string& uri,const std::string& name,const Reference<xml::sax::XFastAttributeList>&){if(record)events.push_back(label+":unknown-start:"+uri+":"+name);}
  void endUnknownElement(const std::string& uri,const std::string& name){if(record)events.push_back(label+":unknown-end:"+uri+":"+name);}
  void characters(const std::string& value){if(record)events.push_back(label+":text:"+value);}
- void PutRewindMap(SvXMLNamespaceMap){}std::optional<SvXMLNamespaceMap> TakeRewindMap(){return {};}
+ void PutRewindMap(std::optional<SvXMLNamespaceMap>){}std::optional<SvXMLNamespaceMap> TakeRewindMap(){return {};}
 };
 using SvXMLImportContextRef=Reference<SvXMLImportContext>;
 struct SvXMLImport {
- std::stack<SvXMLImportContextRef> maContexts;SvXMLNamespaceMap mxNamespaceMap;
+ std::stack<SvXMLImportContextRef> maContexts;std::optional<SvXMLNamespaceMap> mxNamespaceMap;
  static std::string getNameFromToken(int value){return std::to_string(value);}
  void SetError(int,std::initializer_list<std::string>,std::string,Reference<xml::sax::XLocator>){}
  SvXMLImportContext* CreateFastContext(int,const Reference<xml::sax::XFastAttributeList>&){return new SvXMLImportContext("root");}
