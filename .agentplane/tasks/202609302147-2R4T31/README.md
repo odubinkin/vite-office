@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -26,6 +26,29 @@ verification:
   updated_by: "CODER"
   note: "Complete final verify passes: 617 app, 109 inventory, 19 browser, 100% coverage; 55 focused and 170 native C++ level comparisons; source/routing/diff pass, old doctor warnings unchanged."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T22:13:30.430Z"
+  updated_by: "EVALUATOR"
+  note: "Scoped sequential native numbering application is source-backed and fully verified; implementation d8bd6fcc54790da70f365460161ea0307a0a4ce2."
+  evaluated_sha: "d8bd6fcc54790da70f365460161ea0307a0a4ce2"
+  blueprint_digest: "069c2aa1e3a32afee0b9538fd606db0f545d30db966d890ecd6d7c50c5109641"
+  evidence_refs:
+    - ".agentplane/tasks/202609302147-2R4T31/README.md"
+    - ".agentplane/tasks/202609302147-2R4T31/quality/20260930-221330430-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609302147-2R4T31/quality/20260930-221330430-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609302147-2R4T31/quality/20260930-221330430-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609302147-2R4T31/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609302147-2R4T31/verify.log"
+    - ".agentplane/tasks/202609302147-2R4T31/focused-verified.log"
+    - ".agentplane/tasks/202609302147-2R4T31/native-results.json"
+    - ".agentplane/tasks/202609302147-2R4T31/native-oracle.py"
+    - ".agentplane/tasks/202609302147-2R4T31/compare-native.mts"
+    - "d8bd6fcc54790da70f365460161ea0307a0a4ce2"
+  findings:
+    - "The native modern base is retained for omitted and empty rules; duplicates apply in source order. Rejection has a whole-level commit boundary and stops later declarations while retaining earlier changes."
+    - "Extracted C++ primary-source branches and loop match 170 complete states; independent manual ODT/copy/snapshot/marker tests pass, including accepted-distance export/reopen rejection."
+    - "No validator, coverage gate, schema version or registered browser save/open/recovery deviation was changed. Stale implementation markers moved to the actual Writer UNO owner."
 commit: null
 comments:
   -
