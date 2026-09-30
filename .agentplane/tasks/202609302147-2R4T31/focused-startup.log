@@ -1,0 +1,22 @@
+failed to load config from /Users/odubinkin/Projects/vite-office/apps/office/vitest.config.ts
+
+⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯
+Error: Build failed with 1 error:
+
+[31m[UNRESOLVED_ENTRY] [0mCannot resolve entry module apps/office/vitest.config.ts.
+
+    at aggregateBindingErrorsIntoJsError (file:///Users/odubinkin/Projects/vite-office/node_modules/rolldown/dist/shared/error-BzLGqhSQ.mjs:48:18)
+    at unwrapBindingResult (file:///Users/odubinkin/Projects/vite-office/node_modules/rolldown/dist/shared/error-BzLGqhSQ.mjs:18:128)
+    at #build (file:///Users/odubinkin/Projects/vite-office/node_modules/rolldown/dist/shared/rolldown-I5b6h5Km.mjs:132:34)
+    at async bundleConfigFile (file:///Users/odubinkin/Projects/vite-office/node_modules/vite/dist/node/chunks/node.js:37017:17)
+    at async bundleAndLoadConfigFile (file:///Users/odubinkin/Projects/vite-office/node_modules/vite/dist/node/chunks/node.js:36918:18)
+    at async loadConfigFromFile (file:///Users/odubinkin/Projects/vite-office/node_modules/vite/dist/node/chunks/node.js:36879:42)
+    at async resolveConfig (file:///Users/odubinkin/Projects/vite-office/node_modules/vite/dist/node/chunks/node.js:36488:22)
+    at async _createServer (file:///Users/odubinkin/Projects/vite-office/node_modules/vite/dist/node/chunks/node.js:26319:65)
+    at async createViteServer (file:///Users/odubinkin/Projects/vite-office/node_modules/vitest/dist/chunks/cli-api.BK8pd4xc.js:8835:17)
+    at async createVitest (file:///Users/odubinkin/Projects/vite-office/node_modules/vitest/dist/chunks/cli-api.BK8pd4xc.js:14221:18) {
+  errors: [Getter/Setter]
+}
+
+
+
