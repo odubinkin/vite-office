@@ -278,8 +278,7 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
     which: number,
   ) {
     super(which);
-    if (!Number.isInteger(textLeft) || textLeft < 0)
-      throw new Error("SvxTextLeftMarginItem value is invalid.");
+    if (!Number.isInteger(textLeft)) throw new Error("SvxTextLeftMarginItem value is invalid.");
   }
 
   /** Returns the resolved direct text-left margin in twips. @returns Margin. */
@@ -347,14 +346,13 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
 
 /** Stores Writer's right paragraph margin in twips. */
 export class SvxRightMarginItem extends SfxPoolItem {
-  /** Creates a margin item. @param value - Non-negative twip margin. @param which - Item identity. @returns Nothing. */
+  /** Creates a margin item. @param value - Signed twip margin. @param which - Item identity. @returns Nothing. */
   public constructor(
     private readonly value: number,
     which: number,
   ) {
     super(which);
-    if (!Number.isInteger(value) || value < 0)
-      throw new Error("SvxRightMarginItem value is invalid.");
+    if (!Number.isInteger(value)) throw new Error("SvxRightMarginItem value is invalid.");
   }
   /** Returns the right margin. @returns Twips. */
   public ResolveRight(): number {

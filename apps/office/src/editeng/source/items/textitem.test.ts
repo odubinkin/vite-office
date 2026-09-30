@@ -1,13 +1,13 @@
 /** @fileoverview Verifies bounded LibreOffice character item value contracts. */
 
 import { describe, expect, it } from "vitest";
-import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
+import { decodeSfxPoolItem, encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../sw/browser/filter/xml/writer-document-codec";
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
-import { RES_CHRATR_FONT } from "../../../sw/inc/hintids";
+import { RES_CHRATR_FONT, RES_MARGIN_RIGHT, RES_MARGIN_TEXTLEFT } from "../../../sw/inc/hintids";
 
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import {
@@ -169,7 +169,7 @@ describe("EditEngine character items" /** Groups pooled character item contracts
       ).toThrow("SvxUnderlineItem value is invalid");
   });
 
-  it("preserves non-negative text-left margins and persistence values", /** Verifies SvxTextLeftMarginItem validation, cloning, equality, and persistence. @returns Nothing. */ () => {
+  it("preserves signed text-left margins and persistence values", /** Verifies SvxTextLeftMarginItem validation, cloning, equality, and persistence. @returns Nothing. */ () => {
     const margin = new SvxTextLeftMarginItem(1134, alternateWhich);
     expect(margin.ResolveTextLeft()).toBe(1134);
     expect(margin.QueryValue()).toBe(1134);
@@ -178,10 +178,18 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(margin.equals(new SvxTextLeftMarginItem(1135, alternateWhich))).toBe(false);
     expect(
       throwing(
-        /** Creates an invalid negative margin item. @returns Invalid item. */ () =>
-          new SvxTextLeftMarginItem(-1, alternateWhich),
+        /** Creates an invalid fractional margin item. @returns Invalid item. */ () =>
+          new SvxTextLeftMarginItem(-0.5, alternateWhich),
       ),
     ).toThrow("SvxTextLeftMarginItem value is invalid");
+    const negative = new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT);
+    expect(negative.ResolveTextLeft()).toBe(-720);
+    expect(negative.Clone().equals(negative)).toBe(true);
+    const restored = decodeSfxPoolItem(
+      createWriterDocument().GetAttrPool(),
+      encodeSfxPoolItem(negative),
+    );
+    expect(restored.equals(negative)).toBe(true);
   });
 
   it("preserves source-derived font-height and paragraph metric items", /** Covers validation, cloning, equality, and persistence for the style-default item subset. @returns Nothing. */ () => {
@@ -221,9 +229,18 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(right.equals(new SvxRightMarginItem(568, weightWhich))).toBe(false);
     expect(right.equals(new SfxInt16Item(weightWhich, 567))).toBe(false);
     expect(
-      /** Creates a negative right margin. @returns Invalid item. */ () =>
-        new SvxRightMarginItem(-1, weightWhich),
+      /** Creates a fractional right margin. @returns Invalid item. */ () =>
+        new SvxRightMarginItem(-0.5, weightWhich),
     ).toThrow("value is invalid");
+    const negativeRight = new SvxRightMarginItem(-360, RES_MARGIN_RIGHT);
+    expect(negativeRight.ResolveRight()).toBe(-360);
+    expect(negativeRight.Clone().equals(negativeRight)).toBe(true);
+    expect(
+      decodeSfxPoolItem(
+        createWriterDocument().GetAttrPool(),
+        encodeSfxPoolItem(negativeRight),
+      ).equals(negativeRight),
+    ).toBe(true);
 
     const spacing = new SvxULSpaceItem(120, 60, weightWhich);
     expect(spacing.GetUpper()).toBe(120);

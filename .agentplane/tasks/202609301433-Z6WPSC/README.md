@@ -4,7 +4,7 @@ title: "Preserve signed Writer paragraph side margins"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T14:34:57.485Z"
+  updated_by: "CODER"
+  note: "Signed paragraph side margins match pinned setters and ODF mappings; 17 focused tests and full npm run verify passed, including 100% required coverage, browser/static/source/inventory checks. Doctor and routing checks passed."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: complete the signed paragraph margin correction under the user-approved iterative upstream audit; preserve fixed browser product decisions."
+  -
+    type: "verify"
+    at: "2026-09-30T14:34:57.485Z"
+    author: "CODER"
+    state: "ok"
+    note: "Signed paragraph side margins match pinned setters and ODF mappings; 17 focused tests and full npm run verify passed, including 100% required coverage, browser/static/source/inventory checks. Doctor and routing checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T14:33:51.088Z"
+doc_updated_at: "2026-09-30T14:34:57.559Z"
 doc_updated_by: "CODER"
 description: "One upstream parity correction: permit signed text-left and right-margin item values and ODT paragraph measures, preserving the negative result of unsnapped MoveLeftMargin and its undo/redo. User authorized iterative existing-function parity fixes on 2026-09-30. Preserve deliberate recovery, save/open and rendering exceptions."
 sections:
@@ -52,11 +58,41 @@ sections:
   Verify Steps: "1. npm run verify passes all formatting, lint, type, source/provenance, resource, inventory, unit coverage, browser and static-build gates. 2. Signed left/right values survive clone and item-codec transfer; ODT imports and round-trips negative paragraph margins while page margins stay unchanged. 3. An unsnapped decrease from 300 by 720 twips yields -420 and supports undo/redo, following pinned SwDoc::MoveLeftMargin. 4. ap doctor and node .agentplane/policy/check-routing.mjs pass; final task diff is limited to the declared six files and task artifacts, with clean tracked checkout after closure."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T14:34:57.485Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Signed paragraph side margins match pinned setters and ODF mappings; 17 focused tests and full npm run verify passed, including 100% required coverage, browser/static/source/inventory checks. Doctor and routing checks passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T14:34:57.006Z, excerpt_hash=sha256:76731779f440e28da560bb761e9ee61bae38dfd40b811535589df85d0199b09c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301433-Z6WPSC/blueprint/resolved-snapshot.json
+    - old_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+    - current_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301433-Z6WPSC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202609301433-Z6WPSC -m 🧩 Z6WPSC task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Pinned frmitems.cxx setters accept signed side margins; txtprmap.cxx maps paragraph left/right margins with XML_TYPE_MEASURE; docfmt.cxx subtracts a complete tab distance from a positive indent in unsnapped mode. The former local non-negative guards caused five regression assertions to fail, including an exception for 300 -> -420 twips. Two production guards and two import flags were corrected. Focused command: npm exec --workspace @vite-office/office -- vitest run src/editeng/source/items/textitem.test.ts src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts. Result: pass, 17/17 assertions. Full command: npm run verify. Result: pass; see verify.log. Scope: signed item values, item codec, ODT round-trip and undo/redo. ap doctor and node .agentplane/policy/check-routing.mjs: pass, with existing unrelated hook-shim and historical close-commit warnings. Remaining combined paraitem.ts source ownership and other style/item operations remain unverified; no whole-module parity promotion. Parent audit 202609240501-C9TN6M remains open."
 id_source: "generated"
 ---
 ## Summary
@@ -81,6 +117,36 @@ One upstream parity correction: permit signed text-left and right-margin item va
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T14:34:57.485Z — VERIFY — ok
+
+By: CODER
+
+Note: Signed paragraph side margins match pinned setters and ODF mappings; 17 focused tests and full npm run verify passed, including 100% required coverage, browser/static/source/inventory checks. Doctor and routing checks passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T14:34:57.006Z, excerpt_hash=sha256:76731779f440e28da560bb761e9ee61bae38dfd40b811535589df85d0199b09c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301433-Z6WPSC/blueprint/resolved-snapshot.json
+- old_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+- current_digest: 3c9ea5b71d18c425229c973dcb6570f996b88c75c9c2dc6e11e74f523e45205e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301433-Z6WPSC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202609301433-Z6WPSC -m 🧩 Z6WPSC task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -89,3 +155,5 @@ One upstream parity correction: permit signed text-left and right-margin item va
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Pinned frmitems.cxx setters accept signed side margins; txtprmap.cxx maps paragraph left/right margins with XML_TYPE_MEASURE; docfmt.cxx subtracts a complete tab distance from a positive indent in unsnapped mode. The former local non-negative guards caused five regression assertions to fail, including an exception for 300 -> -420 twips. Two production guards and two import flags were corrected. Focused command: npm exec --workspace @vite-office/office -- vitest run src/editeng/source/items/textitem.test.ts src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts. Result: pass, 17/17 assertions. Full command: npm run verify. Result: pass; see verify.log. Scope: signed item values, item codec, ODT round-trip and undo/redo. ap doctor and node .agentplane/policy/check-routing.mjs: pass, with existing unrelated hook-shim and historical close-commit warnings. Remaining combined paraitem.ts source ownership and other style/item operations remain unverified; no whole-module parity promotion. Parent audit 202609240501-C9TN6M remains open.

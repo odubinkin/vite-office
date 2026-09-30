@@ -30,6 +30,26 @@ function createShell(text: string): SwWrtShell {
 }
 
 describe("Writer MoveLeftMargin", /** Registers upstream-backed indent cases. @returns Nothing. */ () => {
+  it("retains the signed result of an unsnapped decrease through undo and redo", /** Checks docfmt.cxx subtracts a whole tab distance from a positive indent. @returns Nothing. */ () => {
+    const shell = createShell("Body");
+    const paragraph = shell.GetActiveParagraph();
+    const tabs = shell
+      .GetDoc()
+      .GetAttrPool()
+      .GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    tabs.Remove(0, tabs.Count());
+    tabs.Insert(new SvxTabStop(720));
+    paragraph.SetParagraphTextLeftMargin(300);
+    expect(shell.ChangeParagraphIndent(false, false)).toBe(true);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(-420);
+    expect(shell.ChangeParagraphIndent(false, false)).toBe(false);
+    expect(shell.Undo()).toBe(true);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(300);
+    expect(shell.Redo()).toBe(true);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(-420);
+    expect(shell.ChangeParagraphIndent(true, false)).toBe(true);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(300);
+  });
   it("moves all selected list nodes as one numbering undo unit", /** Checks the supported non-outline SwDoc::NumUpDown range. @returns Nothing. */ () => {
     const shell = createShell("firstsecond");
     const secondId = fixtureSplitParagraph(shell, "p-1", 5);

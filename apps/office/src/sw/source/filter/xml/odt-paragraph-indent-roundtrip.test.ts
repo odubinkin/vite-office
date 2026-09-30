@@ -59,6 +59,8 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
       ["1in", 1440],
       ["1mm", 57],
       ["1pt", 20],
+      ["-1cm", -567],
+      ["-0.5in", -720],
     ] as const) {
       const imported = await readOdtDocument(
         await replaceEntry(bytes, "content.xml", content.replace("2.0003cm", value)),
@@ -68,10 +70,26 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     }
     await expect(
       readOdtDocument(
-        await replaceEntry(bytes, "content.xml", content.replace("2.0003cm", "-1cm")),
+        await replaceEntry(bytes, "content.xml", content.replace("2.0003cm", "invalid")),
         metadata(),
       ),
     ).rejects.toThrow("Unsupported ODF paragraph left margin");
+  });
+
+  it("round-trips signed paragraph side margins without changing page margins", /** Checks frmitems.cxx signed indents and txtprmap.cxx measure mappings. @returns Completion after ODT reads. */ async () => {
+    const writer = createWriterDocument();
+    const paragraph = writer.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Writer margin paragraph is missing.");
+    paragraph.SetParagraphTextLeftMargin(-720);
+    paragraph.SetParagraphRightMargin(-360);
+    const bytes = writeOdtDocument(writer, metadata());
+    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    expect(content).toContain('fo:margin-left="-1.27cm"');
+    expect(content).toContain('fo:margin-right="-0.635cm"');
+    const restored = (await readOdtDocument(bytes, metadata())).document;
+    expect(restored.paragraphs[0]?.GetParagraphTextLeftMargin()).toBe(-720);
+    expect(restored.paragraphs[0]?.GetParagraphRightMargin()).toBe(-360);
+    expect(restored.GetPageDesc().GetValue()).toEqual(writer.GetPageDesc().GetValue());
   });
 
   it("round-trips every represented paragraph metric and ignores unknown extension data", /** Verifies symmetric supported properties and tolerant foreign data. @returns Completion after package reads. */ async () => {

@@ -19,9 +19,13 @@
           "apps/office/src/editeng/source/items/paraitem.ts#SvxAdjust",
           "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxAdjust",
           "apps/office/src/editeng/source/items/paraitem.test.ts#SvxTabStopItem",
-          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert"
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxTextLeftMarginItem::SetTextLeft",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxRightMarginItem::SetRight",
+          "apps/office/src/editeng/source/items/textitem.test.ts#preserves signed text-left margins and persistence values",
+          "apps/office/src/editeng/source/items/textitem.test.ts#preserves source-derived font-height and paragraph metric items"
         ],
-        "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified.",
+        "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified. Signed text-left and right-margin item values, clone and browser item-codec round trips are now asserted against frmitems.cxx; other item contracts and the combined module ownership remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SvxAdjust",
@@ -3639,9 +3643,10 @@
           "apps/office/src/sw/source/core/doc/docfmt.ts#getMovedLeftMargin",
           "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx#SwDoc::MoveLeftMargin",
           "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#uses document-default tabs across the selected paragraph range as one undo action",
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#honors unsnapped indent requests and the upstream frame-width guard"
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#honors unsnapped indent requests and the upstream frame-width guard",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#retains the signed result of an unsnapped decrease through undo and redo"
         ],
-        "justification": "Bounded indent calculation, selected text-node traversal, default tab distance, undo and page-body width guard are asserted against pinned upstream symbols; native selection rings and table frames remain outside scope.",
+        "justification": "Bounded indent calculation, selected text-node traversal, default tab distance, undo and page-body width guard are asserted against pinned upstream symbols; native selection rings and table frames remain outside scope. An unsnapped decrease from a positive indent smaller than one default tab retains the signed result through undo/redo, matching docfmt.cxx rather than throwing in the pooled margin item.",
         "knownViolations": [],
         "localSymbols": [
           "SW_DEFAULT_INDENT_DISTANCE",
@@ -6058,9 +6063,12 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/xmloff/source/style/xmlstyle.ts#XMLStylesContext",
-          "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx#SvXMLStylesContext::createFastChildContext"
+          "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx#SvXMLStylesContext::createFastChildContext",
+          "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#CTF_PARALEFTMARGIN",
+          "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#CTF_PARARIGHTMARGIN",
+          "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts#round-trips signed paragraph side margins without changing page margins"
         ],
-        "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/xmlstyle.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/xmlstyle.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Signed fo:margin-left/right paragraph measures now follow the pinned text property mappings, with ODT import/export assertions; the remaining style import operations are still unverified.",
         "knownViolations": [],
         "localSymbols": [
           "XMLStyleImportTarget",

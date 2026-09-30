@@ -470,11 +470,11 @@ function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment |
   throw new Error(`Unsupported ODF paragraph alignment: ${value}`);
 }
 
-/** Imports a non-negative `fo:margin-left` length into Writer twips. @param attributes - Property attributes. @returns Margin or undefined. */
+/** Imports a signed `fo:margin-left` length into Writer twips. @param attributes - Property attributes. @returns Margin or undefined. */
 function importLeftMargin(attributes: FastAttributeList): number | undefined {
   const value = attributes.get(XMLToken.FO_MARGIN_LEFT);
   if (value === null) return undefined;
-  return importOdfLength(value, false, "paragraph left margin");
+  return importOdfLength(value, true, "paragraph left margin");
 }
 
 /** Imports supported paragraph properties. @param attributes - Property attributes. @returns Property deltas. */
@@ -490,7 +490,7 @@ function importParagraphProperties(
   const rightMargin = importOptionalLength(
     attributes,
     XMLToken.FO_MARGIN_RIGHT,
-    false,
+    true,
     "right margin",
   );
   const upperSpacing = importOptionalLength(
