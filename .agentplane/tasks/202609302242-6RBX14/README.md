@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:42:42.162Z"
+doc_updated_at: "2026-09-30T22:45:32.599Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -49,7 +49,12 @@ sections:
   Verify Steps: "Assert exact known/unknown start/end and character event order, new inert context identity versus reused parent, nested wrappers, sibling continuation, explicit unknown contexts, root rejection and thrown child factory errors. Compile extracted primary SvXMLImport child dispatch/end bodies with bounded dependency shims and compare manual event traces to local dispatch. Verify literal real ODT font/property/table/style/list unknown and unrelated known children, copy/snapshot/export/reopen where applicable; ensure unknown end callbacks do not prematurely publish owning list/URI/style contexts. Audit native-supported currently unsupported children and retain explicit errors. Run npm run verify unchanged with both 100% coverage suites and all browser/provenance gates; run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Record real implementation hash and final clean state."
   Verification: "Pending."
   Rollback Plan: "Revert the scoped implementation commit after inspecting later XML corrections, preserving task evidence."
-  Findings: "Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, implementation 161c65ba40f143d4ea8c876afba674d3cc73be25, parent progress 73ab49c97a3b; current clean main/direct, only parent active, no live processes. Persistent user goal authorizes safe local corrections. Pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65: xmloff/source/core/xmlimp.cxx startFastElement creates an inert SvXMLImportContext for null children; startUnknownElement reuses maContexts.top() for null children and calls distinct unknown start/end hooks; xmlictxt.cxx base hooks are inert and factories null. Local known null throws, unknown null discards subtree in SvXMLIgnoreContext and delivers known callbacks for explicit unknown contexts. This contradicts native event/reference behavior and prior foreign subtree expectations. Cached XMLFontStylesContext/xmltabi/xmltbli sources confirm unrelated known children return null; no need to relax validators. Root severe-error timing, namespace rewind and complete import ownership remain separate unverified obligations."
+  Findings: |-
+    Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, implementation 161c65ba40f143d4ea8c876afba674d3cc73be25, parent progress 73ab49c97a3b; current clean main/direct, only parent active, no live processes. Persistent user goal authorizes safe local corrections. Pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65: xmloff/source/core/xmlimp.cxx startFastElement creates an inert SvXMLImportContext for null children; startUnknownElement reuses maContexts.top() for null children and calls distinct unknown start/end hooks; xmlictxt.cxx base hooks are inert and factories null. Local known null throws, unknown null discards subtree in SvXMLIgnoreContext and delivers known callbacks for explicit unknown contexts. This contradicts native event/reference behavior and prior foreign subtree expectations. Cached XMLFontStylesContext/xmltabi/xmltbli sources confirm unrelated known children return null; no need to relax validators. Root severe-error timing, namespace rewind and complete import ownership remain separate unverified obligations.
+
+    - Observation: Initial focused run passes 52 tests and fails five tests whose old expectations treated unrelated known children as fatal. Native font/tab/style/table sources return null or an inert context for these children.
+      Impact: Source-backed acceptance fixtures must assert ignored descendants and unchanged owner state, while preserving errors for native-supported currently unimplemented cell lists/nested tables.
+      Resolution: Replace the obsolete rejection expectations with concrete imported state assertions; retain root/semantic/cell feature errors and rerun focus then mandatory gates without criterion changes.
 id_source: "generated"
 ---
 ## Summary
@@ -79,3 +84,7 @@ Revert the scoped implementation commit after inspecting later XML corrections, 
 ## Findings
 
 Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, implementation 161c65ba40f143d4ea8c876afba674d3cc73be25, parent progress 73ab49c97a3b; current clean main/direct, only parent active, no live processes. Persistent user goal authorizes safe local corrections. Pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65: xmloff/source/core/xmlimp.cxx startFastElement creates an inert SvXMLImportContext for null children; startUnknownElement reuses maContexts.top() for null children and calls distinct unknown start/end hooks; xmlictxt.cxx base hooks are inert and factories null. Local known null throws, unknown null discards subtree in SvXMLIgnoreContext and delivers known callbacks for explicit unknown contexts. This contradicts native event/reference behavior and prior foreign subtree expectations. Cached XMLFontStylesContext/xmltabi/xmltbli sources confirm unrelated known children return null; no need to relax validators. Root severe-error timing, namespace rewind and complete import ownership remain separate unverified obligations.
+
+- Observation: Initial focused run passes 52 tests and fails five tests whose old expectations treated unrelated known children as fatal. Native font/tab/style/table sources return null or an inert context for these children.
+  Impact: Source-backed acceptance fixtures must assert ignored descendants and unchanged owner state, while preserving errors for native-supported currently unimplemented cell lists/nested tables.
+  Resolution: Replace the obsolete rejection expectations with concrete imported state assertions; retain root/semantic/cell feature errors and rerun focus then mandatory gates without criterion changes.
