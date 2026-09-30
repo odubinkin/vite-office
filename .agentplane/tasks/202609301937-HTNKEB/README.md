@@ -1,10 +1,11 @@
 ---
 id: "202609301937-HTNKEB"
 title: "Restore named and automatic style context ownership"
-status: "DOING"
+result_summary: "Completed the bounded style-container correction: 596 app, 109 inventory and 19 browser tests, 100% coverage, 133 focused tests, clean source/provenance/size/invariant/parity gates. Wider runtime/UI and named-model/default/display/duplicate/hint/export obligations remain unverified; registered deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +43,9 @@ quality_review:
     - "apps/office/src/xmloff/source/style/xmlstyle.test.ts"
   findings:
     - "Regular leaves remain in separate common/automatic contexts; replacement and family identities are verified with manual real ODT cases. Exact geometry, package/browser tests and all coverage gates pass. Serializer extraction has an unchanged AST body. Wider named model/export/default/display/duplicate/hint contracts and complete runtime/UI parity remain open; registered deviations unchanged."
-commit: null
+commit:
+  hash: "2554d192df75c777fafd6fc9cf976155b579a73e"
+  message: "🧩 HTNKEB code: retain native common and automatic style contexts"
 comments:
   -
     author: "CODER"
@@ -56,6 +59,9 @@ comments:
   -
     author: "CODER"
     body: "Start: extract unchanged list label-alignment serialization into inspected xmlnume source owner; retain all passing source-derived behavior."
+  -
+    author: "CODER"
+    body: "Verified: native common/automatic context ownership, automatic-first direct lookup and named-only parents; literal ODT and geometry cycles, unchanged list serializer extraction and all full gates pass."
 events:
   -
     type: "status"
@@ -91,8 +97,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify exit 0; 596 app/109 inventory/19 browser tests; all coverage metrics 100%; 133 focused tests, AST extraction proof, source-tree/provenance/file-size/semantic gates, doctor and routing pass. Bounded style-container contract verified; broader model/default/duplicate/display/hint/export and UI parity remain unverified."
+  -
+    type: "status"
+    at: "2026-09-30T20:24:05.607Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native common/automatic context ownership, automatic-first direct lookup and named-only parents; literal ODT and geometry cycles, unchanged list serializer extraction and all full gates pass."
 doc_version: 3
-doc_updated_at: "2026-09-30T20:23:40.506Z"
+doc_updated_at: "2026-09-30T20:24:05.609Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Follow native per-container XML style ownership, independent named/active automatic references and automatic-first direct versus named-only parent resolution. Preserve legal common/automatic name collisions and stream replacement through real ODT cycles."
 sections:
