@@ -1,10 +1,11 @@
 ---
 id: "202609301514-CTCC8R"
 title: "Match SfxItemSet state setter range filtering"
-status: "DOING"
+result_summary: "Matched pinned SfxItemSet explicit state range filtering and removed exception helper."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202609301514-CTCC8R/verify.log"
   findings:
     - "Reviewed setter range check against pinned DisableOrInvalidateItem_ForWhichID. Scope is confined to the shared setter, focused regressions, and honest unverified inventory evidence."
-commit: null
+commit:
+  hash: "a27de86c1221c08cbcaeccb6702ac66b136839ca"
+  message: "🐛 CTCC8R task: ignore unsupported explicit item states"
 comments:
   -
     author: "CODER"
     body: "Start: match explicit item state setter range filtering with pinned upstream while retaining valid transitions, inheritance and idempotence."
+  -
+    author: "CODER"
+    body: "Verified: explicit state setters ignore unsupported IDs; focused and full gates passed."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "12 focused tests and complete npm run verify passed; doctor and policy routing passed. Evidence: verify.log; exact source owner recorded in runtime inventory."
+  -
+    type: "status"
+    at: "2026-09-30T15:25:28.225Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: explicit state setters ignore unsupported IDs; focused and full gates passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T15:25:06.145Z"
+doc_updated_at: "2026-09-30T15:25:28.227Z"
 doc_updated_by: "CODER"
 description: "One correction: explicit InvalidateItem and DisableItem must ignore WhichIds outside the item-set ranges, as pinned DisableOrInvalidateItem_ForWhichID does. Remove the local exception helper, retain supported transitions and idempotence, and add focused evidence. Scope: itemset.ts, itemset.test.ts, runtime-inventory.json and task artifacts. User-authorized iterative upstream parity goal; preserve product deviations."
 sections:
