@@ -4,7 +4,7 @@ title: "Restore independent native numbering positioning modes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,33 @@ verification:
   updated_by: "CODER"
   note: "Independent native position modes/defaults and source-owned geometry verified through context, signed-width C++ comparisons, Writer copy, browser snapshots and real ODT cycles. 88 compiled comparisons and 172 focused tests pass; full verify exit 0 at 612/109/19 with required 100% coverage. Final metadata/routing/doctor/diff pass; broader numbering/UNO/error/layout contracts stay unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T21:40:18.766Z"
+  updated_by: "EVALUATOR"
+  note: "Independent native legacy/alignment numbering geometry is now source-owned and selected by exact XML mode, with preserved raw copy/snapshot state and source-derived ODT evidence; mandatory verification passes."
+  evaluated_sha: "6abbf551133de1c90d7e6df2ad3ad09cea5c413b"
+  blueprint_digest: "dbfd9dea8ca2dea83aa56b770faac3658d389bb7148fed1a8d72e11d476cecf8"
+  evidence_refs:
+    - ".agentplane/tasks/202609302111-EA56QR/README.md"
+    - ".agentplane/tasks/202609302111-EA56QR/quality/20260930-214018766-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609302111-EA56QR/quality/20260930-214018766-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609302111-EA56QR/quality/20260930-214018766-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609302111-EA56QR/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609302111-EA56QR/verify.log"
+    - ".agentplane/tasks/202609302111-EA56QR/focused.log"
+    - ".agentplane/tasks/202609302111-EA56QR/parity-final.log"
+    - ".agentplane/tasks/202609302111-EA56QR/native-list-measure-oracle.cxx"
+    - ".agentplane/tasks/202609302111-EA56QR/native-position-oracle.cxx"
+    - ".agentplane/tasks/202609302111-EA56QR/native-results.json"
+    - ".agentplane/tasks/202609302111-EA56QR/native-position-results.json"
+    - ".agentplane/tasks/202609302111-EA56QR/compare-native.mjs"
+    - "apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts"
+    - "apps/office/src/editeng/source/items/numitem.test.ts"
+    - "apps/office/src/xmloff/source/style/xmlnumi.test.ts"
+  findings:
+    - "SvxNumberFormat in editeng owns native zero defaults, both geometry groups and mode-dependent getters/widths. SwNumFormat inherits and clones the raw groups. xmlnumi level contexts own defaults and successful-only updates, retaining MM100 until Writer conversion; xmlnume exports selected native fields. No legacy-to-alignment emulation or compatibility re-export remains."
+    - "Thirteen literal common/automatic inputs and repeated-properties cycles verify mode absence/spelling, conflicting groups, bounds, signs, failed updates, exact selected XML/reopen and browser raw snapshots. Current command defaults and genuine tdf114287 layout assertions stay intact. Compiled unmodified native bodies agree on 88 scalar/getter cases; full verify passes at 612/109/19 and 100% required coverage."
 commit: null
 comments:
   -
@@ -42,7 +69,7 @@ events:
     state: "ok"
     note: "Independent native position modes/defaults and source-owned geometry verified through context, signed-width C++ comparisons, Writer copy, browser snapshots and real ODT cycles. 88 compiled comparisons and 172 focused tests pass; full verify exit 0 at 612/109/19 with required 100% coverage. Final metadata/routing/doctor/diff pass; broader numbering/UNO/error/layout contracts stay unverified."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:39:31.805Z"
+doc_updated_at: "2026-09-30T21:41:10.512Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Replace the existing legacy-to-alignment workaround with independent source-owned numbering geometry and exact XML mode selection/defaults, preserving both modes through Writer copy, ODT export/reimport and browser model snapshots."
 sections:
@@ -125,6 +152,10 @@ sections:
     - Observation: The legacy-to-alignment emulation and merged geometry are removed. SwNumFormat now inherits positional state/getters from the editeng source owner. xmlnumi retains level-owned zero defaults and raw legacy measures, applies numeric changes only on successful conversion and assembles native MM100 properties at the level boundary. Exact mode spelling alone selects alignment; label-follow resets per native leaf while missing/failed numeric fields retain owning level values. ODT XML emits the active group, preserving native loss of inactive fields; Writer copy/browser snapshots preserve both groups.
       Impact: Bare/unknown-mode declarations and conflicting groups no longer borrow command geometry or infer mode from child presence. Shared conversion functions are renamed for both position groups, with direct imports and no compatibility re-export. Existing modern-intent fixtures explicitly select alignment; legacy tests now assert genuine legacy fields instead of fabricated modern state.
       Resolution: Keep full native number/font/graphic/units/assignment breadth, omitted-level/base-rule defaults and FillNumRule replacement failure semantics, NEWLINE/extensions and other export versions/units, exact line/pixel layout and remaining runtime/UI operations separate. In particular pinned xmlnumi.cxx FillNumRule catches replacement exceptions outside the level loop, while unosett.cxx rejects negative SymbolTextDistance produced by sal_Int16 narrowing; local rule application still requires that separate audit. The parent and user goal remain incomplete.
+
+    - Observation: An ad hoc metadata update initially assumed preservedResponsibilities on a browser local-only entry and raised KeyError before writing either JSON file.
+      Impact: Metadata helper issue only; no partial artifact or validator/config mutation.
+      Resolution: Used the existing responsibilities field for browser entries and preservedResponsibilities for mapped entries; provenance and complete gates pass on the corrected metadata.
 id_source: "generated"
 ---
 ## Summary
@@ -223,3 +254,7 @@ Source audit: native xmlnumi constructs legacy mode and zero geometry, then sele
 - Observation: The legacy-to-alignment emulation and merged geometry are removed. SwNumFormat now inherits positional state/getters from the editeng source owner. xmlnumi retains level-owned zero defaults and raw legacy measures, applies numeric changes only on successful conversion and assembles native MM100 properties at the level boundary. Exact mode spelling alone selects alignment; label-follow resets per native leaf while missing/failed numeric fields retain owning level values. ODT XML emits the active group, preserving native loss of inactive fields; Writer copy/browser snapshots preserve both groups.
   Impact: Bare/unknown-mode declarations and conflicting groups no longer borrow command geometry or infer mode from child presence. Shared conversion functions are renamed for both position groups, with direct imports and no compatibility re-export. Existing modern-intent fixtures explicitly select alignment; legacy tests now assert genuine legacy fields instead of fabricated modern state.
   Resolution: Keep full native number/font/graphic/units/assignment breadth, omitted-level/base-rule defaults and FillNumRule replacement failure semantics, NEWLINE/extensions and other export versions/units, exact line/pixel layout and remaining runtime/UI operations separate. In particular pinned xmlnumi.cxx FillNumRule catches replacement exceptions outside the level loop, while unosett.cxx rejects negative SymbolTextDistance produced by sal_Int16 narrowing; local rule application still requires that separate audit. The parent and user goal remain incomplete.
+
+- Observation: An ad hoc metadata update initially assumed preservedResponsibilities on a browser local-only entry and raised KeyError before writing either JSON file.
+  Impact: Metadata helper issue only; no partial artifact or validator/config mutation.
+  Resolution: Used the existing responsibilities field for browser entries and preservedResponsibilities for mapped entries; provenance and complete gates pass on the corrected metadata.
