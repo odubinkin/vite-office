@@ -4,7 +4,7 @@ title: "Restore native list label-alignment XML contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,31 @@ verification:
   updated_by: "CODER"
   note: "Pinned supported list label-alignment parsing/defaults/SHRT bounds, MM100-Writer conversion, native explicit mode/conditional XML and package reopen values verified. 74 compiled native scalar comparisons and 147 focused tests pass; full verify exit 0 at 604/109/19 and required 100% coverage; routing/doctor/diff pass. Wider contracts stay unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T21:05:45.436Z"
+  updated_by: "EVALUATOR"
+  note: "The scoped supported list label-alignment pipeline matches pinned XML defaults, MM100 bounds, signed Writer conversion and conditional CM export; full verification passes and wider parity is explicitly unclaimed."
+  evaluated_sha: "a2029fe2cf969d6f018b6b6db737b4ee0ced4e4a"
+  blueprint_digest: "6e95ad685808144b8f1708264576cca843c799d220a913ddd4402369b9cd793c"
+  evidence_refs:
+    - ".agentplane/tasks/202609302034-1CZ8BR/README.md"
+    - ".agentplane/tasks/202609302034-1CZ8BR/quality/20260930-210545436-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609302034-1CZ8BR/quality/20260930-210545436-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609302034-1CZ8BR/quality/20260930-210545436-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609302034-1CZ8BR/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609302034-1CZ8BR/verify.log"
+    - ".agentplane/tasks/202609302034-1CZ8BR/focused.log"
+    - ".agentplane/tasks/202609302034-1CZ8BR/native-list-measure-oracle.cxx"
+    - ".agentplane/tasks/202609302034-1CZ8BR/native-results.json"
+    - ".agentplane/tasks/202609302034-1CZ8BR/compare-native.mjs"
+    - ".agentplane/tasks/202609302034-1CZ8BR/diagnostic-evidence.log"
+    - "apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts"
+    - "apps/office/src/xmloff/source/style/xmlnumi.test.ts"
+    - "apps/office/src/xmloff/source/style/xmlnume.test.ts"
+  findings:
+    - "Removed command-specific default suppression; native mode is always emitted for supported alignment, only nonzero indents and LISTTAB-positive tabs are exported. Modern parsing has native zero/follow defaults, failed-measure fallback and SHRT bounds. Conversion responsibility is owned by Writer unosett and XML/SAX source modules."
+    - "Seventy-four scalar comparisons use compiled unmodified native parser/export/integer bodies with bounded platform aliases. Eleven literal cases in each common/automatic container, both default marker families and exact pinned tdf114287 bounds verify package behavior. The two diagnostic-count corrections are justified by exact ten native mode attributes and preserve semantic/reopen guards."
 commit: null
 comments:
   -
