@@ -62,11 +62,11 @@ Module boundary check passed: 194 runtime sources, 802 relative imports, 12 allo
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
-All files          |   99.98 |    99.98 |     100 |   99.98 |                   
- ...ff/source/text |   99.78 |    99.85 |     100 |   99.77 |                   
-  txtparai.ts      |   99.38 |    99.49 |     100 |   99.31 | 603               
+All files          |   99.98 |    99.98 |     100 |   99.98 |
+ ...ff/source/text |   99.78 |    99.85 |     100 |   99.77 |
+  txtparai.ts      |   99.38 |    99.49 |     100 |   99.31 | 603
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
