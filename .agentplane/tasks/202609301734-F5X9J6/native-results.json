@@ -560,6 +560,34 @@
     "native": 100
   },
   {
+    "value": "1\u732bmm",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 57
+  },
+  {
+    "value": "1\u732bmm",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 100
+  },
+  {
+    "value": "1pt\u00a0",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1pt\u00a0",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
     "value": "2147483647",
     "target": "mm100",
     "min": -2147483648,
