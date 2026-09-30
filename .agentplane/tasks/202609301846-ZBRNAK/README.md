@@ -1,10 +1,11 @@
 ---
 id: "202609301846-ZBRNAK"
 title: "Restore unresolved character style import fallback"
-status: "DOING"
+result_summary: "Unresolved and property-less character styles retain text and inherited state according to pinned style application."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202609301846-ZBRNAK/verify.log"
   findings:
     - "No-op unknown/wrong-family resolution and optional property definitions retain parent state and child deltas. Eleven context cases and eleven literal ODT cycles verify exact names, valid named parents, overrides, controls and links. Semantic statuses remain unverified for wider table identity and hint architecture."
-commit: null
+commit:
+  hash: "32787845518ca3d4e836dee7a76ccdfbaa00dee2"
+  message: "🛠 ZBRNAK task: restore unresolved character style fallback"
 comments:
   -
     author: "CODER"
     body: "Start: restore family-specific missing character-style fallback and preserve found properties, verified with context and real ODT cases."
+  -
+    author: "CODER"
+    body: "Verified: unknown character styles apply no delta; valid parent and child properties, controls and links survive real ODT cycles. Full verify 588/109/19, 100% required coverage."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Unresolved character styles apply no delta and retain found properties; 11 context and 11 real ODT cases pass. Full verify 588/109/19, 100% required coverage; doctor/routing/diff checks pass."
+  -
+    type: "status"
+    at: "2026-09-30T19:00:52.627Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: unknown character styles apply no delta; valid parent and child properties, controls and links survive real ODT cycles. Full verify 588/109/19, 100% required coverage."
 doc_version: 3
-doc_updated_at: "2026-09-30T19:00:08.525Z"
+doc_updated_at: "2026-09-30T19:00:52.628Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Follow pinned XMLTextImportHelper::SetStyleAndAttrs family-specific missing style fallback and automatic property application. Unknown/wrong-family character style names must not abort span text import; property-less text styles and unresolved parents retain inherited formatting and found child deltas."
 sections:
