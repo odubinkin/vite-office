@@ -1,10 +1,11 @@
 ---
 id: "202609302319-9KTM99"
 title: "Restore native numbering marker ownership and ListFormat semantics"
-status: "DOING"
+result_summary: "Restored native shared marker state, defaults, ListFormat setters and supported Writer substitution/fallback; owned copies and Worker v16 preserve patterns. XML marker transport and wider parity remain under the active parent goal."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "apps/office/src/sw/source/core/doc/number-list-format.test.ts"
   findings:
     - "Common marker fields now belong to SvxNumberFormat; optional empty patterns, compatibility derivation, affix invalidation and native field widths are preserved. Writer base patterns and standalone empty suffix are source-backed; numeric string formatting is separate from SwTextNode visible bullet glyph projection. Clone and Worker graph v16 retain raw independent state. No blanket parity promotion or intentional save/open/recovery change."
-commit: null
+commit:
+  hash: "7a5d80e1add85f113e00ea6fcf70e802a0e194cf"
+  message: "🧩 9KTM99 code: restore native marker ownership and ListFormat"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native marker ownership and ListFormat under the continuing parity goal."
+  -
+    author: "CODER"
+    body: "Verified: Native ListFormat marker ownership and formatting match compiled source probes; final 629 app, 109 inventory and 19 browser tests pass with both suites 100% coverage."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native marker setters and Writer formatting match 188 compiled states/labels and 83 cloned labels; final 629 app, 109 inventory, 19 browser tests and both 100% coverage suites pass with all mandatory gates."
+  -
+    type: "status"
+    at: "2026-09-30T23:36:26.666Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native ListFormat marker ownership and formatting match compiled source probes; final 629 app, 109 inventory and 19 browser tests pass with both suites 100% coverage."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:35:27.861Z"
+doc_updated_at: "2026-09-30T23:36:26.667Z"
 doc_updated_by: "CODER"
 description: "Move implemented numbering marker state to SvxNumberFormat, reproduce pinned ListFormat setters and Writer decimal pattern substitution/defaults, and preserve state through clone and Worker transfer."
 sections:
