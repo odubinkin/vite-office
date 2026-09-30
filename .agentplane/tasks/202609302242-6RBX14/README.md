@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:49:17.622Z"
+doc_updated_at: "2026-09-30T22:51:02.861Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -63,6 +63,10 @@ sections:
     - Observation: A new synthetic child-error fixture used a lowercase generic message, which the existing SAX error boundary intentionally normalizes to ODF XML is malformed.
       Impact: This affects only the fixture message; native protocol behavior and existing parser error guards are unchanged.
       Resolution: Use the existing Unsupported ODF error convention in the synthetic explicit-feature test and rerun focused coverage.
+
+    - Observation: The C++ harness initially mismatched optional namespace shim signatures. Separately, XMLTextListItemContext source proves a table child is unrelated and returns null, unlike native table-cell list/table children.
+      Impact: Harness dependencies require correction without altering extracted dispatch. A speculative table-in-list error would preserve an incorrect rejection and must be removed.
+      Resolution: Adjust only optional namespace shim types, remove the list-item guard and assert native ignore behavior; retain explicit cell list/table guards backed by XMLTextImportHelper.
 id_source: "generated"
 ---
 ## Summary
@@ -104,3 +108,7 @@ Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, imp
 - Observation: A new synthetic child-error fixture used a lowercase generic message, which the existing SAX error boundary intentionally normalizes to ODF XML is malformed.
   Impact: This affects only the fixture message; native protocol behavior and existing parser error guards are unchanged.
   Resolution: Use the existing Unsupported ODF error convention in the synthetic explicit-feature test and rerun focused coverage.
+
+- Observation: The C++ harness initially mismatched optional namespace shim signatures. Separately, XMLTextListItemContext source proves a table child is unrelated and returns null, unlike native table-cell list/table children.
+  Impact: Harness dependencies require correction without altering extracted dispatch. A speculative table-in-list error would preserve an incorrect rejection and must be removed.
+  Resolution: Adjust only optional namespace shim types, remove the list-item guard and assert native ignore behavior; retain explicit cell list/table guards backed by XMLTextImportHelper.
