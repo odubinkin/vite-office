@@ -1,10 +1,11 @@
 ---
 id: "202609301823-RR9KXK"
 title: "Restore optional text span style contract"
-status: "DOING"
+result_summary: "Absent and empty span style names preserve text and inherited formatting without lookup; scoped evidence recorded."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202609301823-RR9KXK/verify-before-coverage.log"
   findings:
     - "Only absent and empty names skip character-style lookup. Inherited state, overrides, controls and hyperlink transitions are verified in context and real ODT cycles; unknown named styles and wider hint contracts remain separate audits."
-commit: null
+commit:
+  hash: "e0a35ca2d44c2d5f176d8b21d7db0b082ec7f6be"
+  message: "🛠 RR9KXK task: restore optional span style hints"
 comments:
   -
     author: "CODER"
     body: "Start: restore native optional span style behavior and verify inherited inline state through real ODT cycles."
+  -
+    author: "CODER"
+    body: "Verified: optional span hint behavior, inherited inline state and real ODT cycles; full verify 586/109/19 and 100% required coverage."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Optional span styles follow pinned no-hint behavior; six context and eight real ODT cases pass. Full verify 586/109/19, all required coverage 100%, semantic violations zero; doctor/routing/diff checks pass."
+  -
+    type: "status"
+    at: "2026-09-30T18:43:46.157Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: optional span hint behavior, inherited inline state and real ODT cycles; full verify 586/109/19 and 100% required coverage."
 doc_version: 3
-doc_updated_at: "2026-09-30T18:43:01.549Z"
+doc_updated_at: "2026-09-30T18:43:46.159Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Native XMLImpSpanContext_Impl accepts spans with absent/empty style names and applies no additional character-style hint. Preserve inherited inline properties, control content and hyperlinks through ODT import/export/reimport."
 sections:
