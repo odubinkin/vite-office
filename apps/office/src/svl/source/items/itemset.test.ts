@@ -280,7 +280,7 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(child.ClearItem(1)).toBe(0);
     const emptyClone = child.Clone(false);
     expect(emptyClone.Count()).toBe(0);
-    expect(emptyClone.GetParent()).toBe(parent);
+    expect(emptyClone.GetParent()).toBeUndefined();
     const cloned = child.Clone();
     expect(encodeSfxItemSet(cloned)).toEqual(encodeSfxItemSet(child));
     expect(cloned.ClearItem()).toBe(1);
@@ -294,6 +294,44 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(encodeSfxItemSet(restored)).toEqual(encodeSfxItemSet(child));
     child.SetParent(undefined);
     expect(child.GetParent()).toBeUndefined();
+  });
+
+  it("clones parents and direct states only under the pinned pool and item rules", /** Compares Clone with the source copy constructor and cross-pool SET-only traversal. @returns Nothing. */ () => {
+    const pool = createPool();
+    const parent = new SfxItemSet(pool, [[1, 4]]);
+    parent.Put(new SfxStringItem(1, "inherited"));
+    const source = new SfxItemSet(pool, [[1, 4]], parent);
+    source.InvalidateItem(2);
+    source.DisableItem(3);
+    source.Put(new SfxStringItem(4, "direct"));
+    const full = source.Clone();
+    expect(full.GetParent()).toBe(parent);
+    expect(full.Count()).toBe(3);
+    expect(full.GetItemState(1)).toBe(SfxItemState.SET);
+    expect(full.GetItemState(2)).toBe(SfxItemState.INVALID);
+    expect(full.GetItemState(3)).toBe(SfxItemState.DISABLED);
+    expect(full.Get(4)).not.toBe(source.Get(4));
+    full.ClearItem(2);
+    full.Put(new SfxStringItem(4, "changed"));
+    expect(source.GetItemState(2)).toBe(SfxItemState.INVALID);
+    expect((source.Get(4) as SfxStringItem).GetValue()).toBe("direct");
+    const empty = source.Clone(false);
+    expect(empty.Count()).toBe(0);
+    expect(empty.GetRanges()).toEqual(source.GetRanges());
+    expect(empty.GetParent()).toBeUndefined();
+    expect((empty.Get(1) as SfxStringItem).GetValue()).toBe("default");
+    const otherPool = createPool();
+    const cross = source.Clone(true, otherPool);
+    expect(cross.GetPool()).toBe(otherPool);
+    expect(cross.GetParent()).toBeUndefined();
+    expect(cross.Count()).toBe(1);
+    expect(cross.GetItemState(1)).toBe(SfxItemState.DEFAULT);
+    expect(cross.GetItemState(2)).toBe(SfxItemState.DEFAULT);
+    expect(cross.GetItemState(3)).toBe(SfxItemState.DEFAULT);
+    expect((cross.Get(2) as SfxInt16Item).GetValue()).toBe(0);
+    expect((cross.Get(4) as SfxStringItem).GetValue()).toBe("direct");
+    expect(cross.Get(4)).not.toBe(source.Get(4));
+    expect(source.Clone(false, otherPool).Count()).toBe(0);
   });
 
   it("masks inherited values with explicit invalid and disabled states" /** Verifies explicit state sentinels stop parent lookup. @returns Nothing. */, () => {

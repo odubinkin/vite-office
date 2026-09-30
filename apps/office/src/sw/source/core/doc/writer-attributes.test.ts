@@ -217,6 +217,33 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect((heading.DerivedFrom() as SwFormatColl).GetName()).toBe("Heading");
   });
 
+  it("clones Writer attribute values independently and omits inheritance for empty clones", /** Matches SwAttrSet::CloneAsValue and its SfxItemSet copy constructor. @returns Nothing. */ () => {
+    const pool = createFixture().GetAttrPool();
+    const parent = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
+    parent.Put(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    const source = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES, parent);
+    source.Put(new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT));
+    source.InvalidateItem(RES_CHRATR_UNDERLINE);
+    source.DisableItem(RES_CHRATR_WEIGHT);
+    const full = source.CloneAsValue();
+    expect(full.GetParent()).toBe(parent);
+    expect(full.GetAdjust().GetAdjust()).toBe(SvxAdjust.Center);
+    expect(full.GetItemState(RES_CHRATR_UNDERLINE)).toBe(SfxItemState.INVALID);
+    expect(full.GetItemState(RES_CHRATR_WEIGHT)).toBe(SfxItemState.DISABLED);
+    expect(full.Count()).toBe(3);
+    full.ClearItem(RES_CHRATR_UNDERLINE);
+    full.Put(new SvxTextLeftMarginItem(360, RES_MARGIN_TEXTLEFT));
+    expect(source.GetItemState(RES_CHRATR_UNDERLINE)).toBe(SfxItemState.INVALID);
+    expect((source.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(-720);
+    const empty = source.CloneAsValue(false);
+    expect(empty).toBeInstanceOf(SwAttrSet);
+    expect(empty.GetPool()).toBe(pool);
+    expect(empty.GetRanges()).toEqual(source.GetRanges());
+    expect(empty.GetParent()).toBeUndefined();
+    expect(empty.Count()).toBe(0);
+    expect(empty.GetAdjust().GetAdjust()).toBe(SvxAdjust.ParaStart);
+  });
+
   it("specializes SwAttrSet and guards content-node collection ownership" /** Covers Writer typed accessors, clones, and content-format type checks. @returns Nothing; assertions inspect subtype behavior. */, function specializesWriterSets(): void {
     const writer = createFixture();
     const pool = writer.GetAttrPool();

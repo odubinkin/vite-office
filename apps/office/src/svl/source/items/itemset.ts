@@ -147,11 +147,20 @@ export class SfxItemSet {
 
   /** Creates an independent item set, optionally without deltas or in another pool. @param includeItems - Whether direct deltas are copied. @param pool - Destination pool. @returns Cloned item set. */
   public Clone(includeItems = true, pool = this.pool): SfxItemSet {
-    const clone = new SfxItemSet(pool, this.ranges, pool === this.pool ? this.parent : undefined);
-    if (includeItems) clone.PutSet(this);
-    if (includeItems)
-      for (const [which, state] of this.itemStates) clone.SetItemState(which, state);
+    const clone = new SfxItemSet(
+      pool,
+      this.ranges,
+      includeItems && pool === this.pool ? this.parent : undefined,
+    );
+    if (includeItems) this.CopyItemsTo(clone, pool === this.pool);
     return clone;
+  }
+
+  /** Translates the copy constructor's direct item entries independently of PutSet semantics. @param target - Fresh clone. @param includeStates - Whether INVALID/DISABLED entries belong to this clone. @returns Nothing. */
+  protected CopyItemsTo(target: SfxItemSet, includeStates = true): void {
+    for (const item of this.items.values()) target.Put(item);
+    if (includeStates)
+      for (const [which, state] of this.itemStates) target.SetItemState(which, state);
   }
 
   /** Reports whether this set accepts a WhichId. @param which - Candidate identity. @returns True when contained in any range. */

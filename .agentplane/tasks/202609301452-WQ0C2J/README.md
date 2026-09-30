@@ -4,7 +4,7 @@ title: "Match item set clone inheritance and state contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T15:01:02.303Z"
+  updated_by: "CODER"
+  note: "Empty, full same-pool and cross-pool clones match pinned inheritance/state rules; 20 focused tests and full npm run verify passed (562 app, 109 inventory, 19 browser, 100% coverage), doctor and routing passed."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: match SfxItemSet and SwAttrSet clone contracts with pinned copy constructors, parent ownership and cross-pool state filtering."
+  -
+    type: "verify"
+    at: "2026-09-30T15:01:02.303Z"
+    author: "CODER"
+    state: "ok"
+    note: "Empty, full same-pool and cross-pool clones match pinned inheritance/state rules; 20 focused tests and full npm run verify passed (562 app, 109 inventory, 19 browser, 100% coverage), doctor and routing passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T14:53:03.364Z"
+doc_updated_at: "2026-09-30T15:01:02.358Z"
 doc_updated_by: "CODER"
 description: "One correction to existing SfxItemSet.Clone and SwAttrSet.CloneAsValue: empty clones drop parents, complete same-pool clones preserve direct state, cross-pool clones copy only directly SET values. Compare pinned itemset.cxx and swatrset.cxx, remove redundant PutSet-plus-state copying, and add focused evidence. Scope: itemset.ts/test, swatrset.ts, writer-attributes.test.ts, runtime-inventory.json and task artifacts. Authorized iterative parity goal; preserve deliberate product deviations."
 sections:
@@ -52,11 +58,41 @@ sections:
   Verify Steps: "1. Focused itemset and writer-attributes tests prove empty clones have no parent or items, full same-pool clones preserve parent, direct values and invalid/disabled states independently, and cross-pool clones retain only directly SET values with destination defaults. 2. npm run verify passes all required checks at 100% coverage. 3. ap doctor and node .agentplane/policy/check-routing.mjs pass; final diff is confined to the five approved files and task artifacts; tracked checkout is clean after closure."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T15:01:02.303Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Empty, full same-pool and cross-pool clones match pinned inheritance/state rules; 20 focused tests and full npm run verify passed (562 app, 109 inventory, 19 browser, 100% coverage), doctor and routing passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T15:01:01.813Z, excerpt_hash=sha256:c4d522862cef82571151300b2f3ad31299476bcf5c364e2fd4fc8c6554fc5062
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301452-WQ0C2J/blueprint/resolved-snapshot.json
+    - old_digest: b18013e1f5963f2312e7e4ba61928c99c301e879d01fe95859c100117b917c2e
+    - current_digest: b18013e1f5963f2312e7e4ba61928c99c301e879d01fe95859c100117b917c2e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301452-WQ0C2J
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202609301452-WQ0C2J -m 🧩 WQ0C2J task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Pinned SfxItemSet copy constructor preserves parent and direct states; Clone(false) creates an unparented empty set, and cloning into another pool copies only directly SET values. SwAttrSet::CloneAsValue follows the copy-constructor versus empty-constructor distinction. Replaced redundant PutSet-plus-state copying with one protected copy-constructor helper so clone semantics remain independent of ordinary Put defaults. Command: npm exec --workspace @vite-office/office -- vitest run src/svl/source/items/itemset.test.ts src/sw/source/core/doc/writer-attributes.test.ts. Result: pass, 20/20 tests; three tests failed before the correction. Evidence: focused-before.log and focused-after.log. Command: npm run verify. Result: pass, 562 app tests, 109 inventory tests, 19 browser tests, 100% required coverage, all other gates. Evidence: verify.log. Command: ap doctor and node .agentplane/policy/check-routing.mjs. Result: pass, with existing unrelated hook-shim and historical close-commit warnings. Scope: five declared implementation/test/inventory files. Remaining PutSet invalid-as-default, disabled-state and other contracts stay unverified; no whole-module promotion. Deliberate browser save/open/recovery decisions remain unchanged."
 id_source: "generated"
 ---
 ## Summary
@@ -81,6 +117,36 @@ One correction to existing SfxItemSet.Clone and SwAttrSet.CloneAsValue: empty cl
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T15:01:02.303Z — VERIFY — ok
+
+By: CODER
+
+Note: Empty, full same-pool and cross-pool clones match pinned inheritance/state rules; 20 focused tests and full npm run verify passed (562 app, 109 inventory, 19 browser, 100% coverage), doctor and routing passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T15:01:01.813Z, excerpt_hash=sha256:c4d522862cef82571151300b2f3ad31299476bcf5c364e2fd4fc8c6554fc5062
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301452-WQ0C2J/blueprint/resolved-snapshot.json
+- old_digest: b18013e1f5963f2312e7e4ba61928c99c301e879d01fe95859c100117b917c2e
+- current_digest: b18013e1f5963f2312e7e4ba61928c99c301e879d01fe95859c100117b917c2e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301452-WQ0C2J
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202609301452-WQ0C2J -m 🧩 WQ0C2J task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -89,3 +155,5 @@ One correction to existing SfxItemSet.Clone and SwAttrSet.CloneAsValue: empty cl
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Pinned SfxItemSet copy constructor preserves parent and direct states; Clone(false) creates an unparented empty set, and cloning into another pool copies only directly SET values. SwAttrSet::CloneAsValue follows the copy-constructor versus empty-constructor distinction. Replaced redundant PutSet-plus-state copying with one protected copy-constructor helper so clone semantics remain independent of ordinary Put defaults. Command: npm exec --workspace @vite-office/office -- vitest run src/svl/source/items/itemset.test.ts src/sw/source/core/doc/writer-attributes.test.ts. Result: pass, 20/20 tests; three tests failed before the correction. Evidence: focused-before.log and focused-after.log. Command: npm run verify. Result: pass, 562 app tests, 109 inventory tests, 19 browser tests, 100% required coverage, all other gates. Evidence: verify.log. Command: ap doctor and node .agentplane/policy/check-routing.mjs. Result: pass, with existing unrelated hook-shim and historical close-commit warnings. Scope: five declared implementation/test/inventory files. Remaining PutSet invalid-as-default, disabled-state and other contracts stay unverified; no whole-module promotion. Deliberate browser save/open/recovery decisions remain unchanged.

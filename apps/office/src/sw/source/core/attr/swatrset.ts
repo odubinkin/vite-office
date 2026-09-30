@@ -323,8 +323,12 @@ export class SwAttrSet extends SfxItemSet {
 
   /** Creates an independent Writer attribute set. @param includeItems - Whether direct deltas are copied. @returns Cloned Writer set. */
   public CloneAsValue(includeItems = true): SwAttrSet {
-    const clone = new SwAttrSet(this.GetPool(), this.GetRanges(), this.GetParent());
-    if (includeItems) clone.PutSet(this);
+    const clone = new SwAttrSet(
+      this.GetPool(),
+      this.GetRanges(),
+      includeItems ? this.GetParent() : undefined,
+    );
+    if (includeItems) this.CopyItemsTo(clone);
     return clone;
   }
 }
