@@ -3,6 +3,7 @@
  */
 
 export { ODF_NAMESPACES } from "../core/xmltoken";
+import { exportListLevelLayout } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 
 /** Direct character properties supported by the bounded text exporter. */
@@ -141,6 +142,7 @@ export interface XMLTextExportSource {
 export interface OdfTextExport {
   readonly automaticStyles: string;
   readonly body: string;
+  readonly namedStyles: string;
 }
 
 /** Bounded xmloff export context owning one complete text export pass. */
@@ -230,6 +232,7 @@ export class XMLTextParagraphExport {
         ) => [ruleName, `L${index + 1}`] as const,
       ),
     );
+    const namedStyles: string[] = [];
     const paragraphStyles = [...paragraphStyleNames].map(
       /** Emits one automatic paragraph style. @param entry - Internal key and ODF name. @returns Style XML. */
       (entry) => {
@@ -269,7 +272,10 @@ export class XMLTextParagraphExport {
           /* v8 ignore next -- The collected paragraph and list-rule maps share one source pass. */
           if (listStyle === undefined) throw new Error(`Missing ODF list style: ${listRule}`);
           const baseName = `${name}Base`;
-          return `<style:style style:name="${baseName}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style><style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
+          namedStyles.push(
+            `<style:style style:name="${baseName}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style>`,
+          );
+          return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
         }
         return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
       },
@@ -296,7 +302,11 @@ export class XMLTextParagraphExport {
                 kind === "bullet"
                   ? ` text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"`
                   : ` style:num-format="1"${rule.suffixes?.[level] === "" ? "" : ' style:num-suffix="."'}`;
-              const layout = exportListLevelLayout(rule.levelLayouts?.[level], level);
+              const layout = exportListLevelLayout(
+                rule.levelLayouts?.[level],
+                level,
+                exportOdfLength,
+              );
               return layout === ""
                 ? `<${element} text:level="${level + 1}"${attributes}/>`
                 : `<${element} text:level="${level + 1}"${attributes}>${layout}</${element}>`;
@@ -340,31 +350,9 @@ export class XMLTextParagraphExport {
         rendered.automaticStyles,
       ].join(""),
       body: rendered.body,
+      namedStyles: namedStyles.join(""),
     };
   }
-}
-
-/** Emits non-default label-alignment geometry under its ODF list level. @param layout - Writer geometry. @param level - Zero-based level. @returns XML child or empty string. */
-export function exportListLevelLayout(
-  layout: OdfListLevelLayout | undefined,
-  level: number,
-): string {
-  if (layout === undefined) return "";
-  const defaultIndent = 720 + level * 360;
-  if (
-    (layout.firstLineIndent ?? -360) === -360 &&
-    (layout.indentAt ?? defaultIndent) === defaultIndent &&
-    (layout.labelFollowedBy ?? "listtab") === "listtab" &&
-    (layout.listTabPosition ?? defaultIndent) === defaultIndent
-  )
-    return "";
-  const attributes = [
-    `text:label-followed-by="${layout.labelFollowedBy ?? "listtab"}"`,
-    `text:list-tab-stop-position="${exportOdfLength(layout.listTabPosition ?? defaultIndent)}"`,
-    `fo:text-indent="${exportOdfLength(layout.firstLineIndent ?? -360)}"`,
-    `fo:margin-left="${exportOdfLength(layout.indentAt ?? defaultIndent)}"`,
-  ].join(" ");
-  return `<style:list-level-properties><style:list-level-label-alignment ${attributes}/></style:list-level-properties>`;
 }
 
 /** Exports live Writer paragraphs through an owned xmloff export context. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns XML fragments. */

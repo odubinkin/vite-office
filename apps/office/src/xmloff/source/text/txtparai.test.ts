@@ -19,6 +19,7 @@ import {
 
 it("falls back to Standard for an undeclared built-in heading", /** Covers the bounded style resolver when a named definition is absent. @returns Nothing. */ () => {
   const resolved = resolveParagraphStyle("Heading_20_1", true, {
+    getAutoStyle: /** Has no automatic definitions. @returns No style. */ () => undefined,
     getStyle: /** Has no named definitions. @returns No style. */ () => undefined,
   });
   expect(resolved.style).toBe("heading-1");
@@ -28,6 +29,7 @@ it("rejects a cycle through a built-in paragraph style", /** Covers named-style 
   expect(
     /** Resolves a cyclic built-in definition. @returns Invalid style. */ () =>
       resolveParagraphStyle("Heading_20_1", true, {
+        getAutoStyle: /** Has no automatic definitions. @returns No style. */ () => undefined,
         getStyle: /** Provides the cyclic style. @returns Style definition. */ () => ({
           family: "paragraph",
           parentStyleName: "Heading_20_1",
@@ -46,6 +48,7 @@ it("resolves list indentation precedence on a built-in paragraph style", /** Cov
     ],
   ] as const) {
     const resolved = resolveParagraphStyle("Standard", false, {
+      getAutoStyle: /** Has no automatic definitions. @returns No style. */ () => undefined,
       getStyle: /** Provides the tested Standard style. @returns Style definition. */ () =>
         definition,
     });
@@ -69,14 +72,16 @@ interface ImportedParagraph {
   style: XMLTextParagraphSource["style"];
 }
 
-/** Imports an office:text fragment through the model-facing context API. @param body - Body XML. @param styles - Style table. @param rules - List rules. @returns Canonical operation log. */
+/** Imports an office:text fragment through the model-facing context API. @param body - Body XML. @param styles - Style table. @param rules - List rules. @param automaticStyles - Active automatic definitions. @returns Canonical operation log. */
 function importBody(
   body: string,
   styles: Iterable<readonly [string, OdfStyleDefinition]> = new Map(),
   rules: ReadonlyMap<string, XMLTextListRule> = new Map(),
+  automaticStyles: Iterable<readonly [string, OdfStyleDefinition]> = new Map(),
 ): ImportedParagraph[] {
   const paragraphs: ImportedParagraph[] = [];
   const definitions = Array.from(styles);
+  const automaticDefinitions = Array.from(automaticStyles);
   const target: XMLTextImportTarget = {
     /** Creates one canonical paragraph operation target. @param style - Resolved style. @param alignment - Alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - List state. @returns Text sink. */
     createParagraph(
@@ -153,6 +158,12 @@ function importBody(
     },
     /** Resolves a list rule. @param name - Style name. @returns Rule. */
     getListRule: (name) => rules.get(name),
+    /** Resolves a style only in the active automatic container. @param family - Style family. @param name - Style name. @returns Automatic definition. */
+    getAutoStyle: (family, name) =>
+      automaticDefinitions.find(
+        /** Matches native automatic family/name identity. @param entry - Definition entry. @returns Whether it matches. */
+        ([candidate, definition]) => candidate === name && definition.family === family,
+      )?.[1],
     /** Resolves a style in the requested family. @param family - Style family. @param name - Style name. @returns Definition. */
     getStyle: (family, name) =>
       definitions.find(
@@ -173,6 +184,50 @@ function importBody(
   );
   return paragraphs;
 }
+
+it("uses automatic-first direct lookup with named-only parent resolution", /** Verifies the model-facing lookup boundary without merging container identities. @returns Nothing. */ () => {
+  const named: [string, OdfStyleDefinition][] = [
+    ["Shared", { family: "paragraph", leftMargin: 1440, properties: { bold: true } }],
+    ["Shared", { family: "text", properties: { bold: true } }],
+    ["TextOnly", { family: "text", properties: { bold: true } }],
+  ];
+  const automatic: [string, OdfStyleDefinition][] = [
+    [
+      "Shared",
+      {
+        family: "paragraph",
+        parentStyleName: "Shared",
+        leftMargin: 720,
+        properties: { bold: false },
+      },
+    ],
+    ["Shared", { family: "text", parentStyleName: "Shared", properties: { italic: true } }],
+    ["Orphan", { family: "text", parentStyleName: "AutoOnly", properties: { italic: true } }],
+    ["AutoOnly", { family: "text", properties: { bold: true } }],
+  ];
+  const paragraph = importBody(
+    '<text:p text:style-name="Shared"><text:span text:style-name="Shared">x</text:span></text:p>',
+    named,
+    new Map(),
+    automatic,
+  )[0];
+  expect(paragraph?.leftMargin).toBe(720);
+  expect(paragraph?.runs).toEqual([
+    { text: "x", properties: { bold: true, italic: true, underline: false } },
+  ]);
+  for (const name of ["Missing", "TextOnly"]) {
+    const missing = importBody(
+      `<text:p text:style-name="${name}"><text:span text:style-name="Orphan">x</text:span></text:p>`,
+      named,
+      new Map(),
+      automatic,
+    )[0];
+    expect(missing?.style).toBe("default");
+    expect(missing?.runs).toEqual([
+      { text: "x", properties: { bold: false, italic: true, underline: false } },
+    ]);
+  }
+});
 
 describe("ODF streaming text import contexts", /** Groups direct model import tests. @returns Nothing. */ () => {
   const styles = new Map<string, OdfStyleDefinition>([
@@ -520,7 +575,6 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     };
     for (const body of [
       "<text:list/>",
-      '<text:p text:style-name="Missing"/>',
       "<text:span/>",
       "<text:p><text:list/></text:p>",
       '<text:p><text:span text:style-name="T1"><text:list/></text:span></text:p>',

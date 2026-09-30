@@ -4631,12 +4631,40 @@
           {
             "marker": "exportStylesXml",
             "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.test.ts",
+            "marker": "retains the created leaf reference in its own family and container"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "applies automatic styles directly and resolves every parent only in common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "replaces the active automatic context while retaining independent common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+            "marker": "preserves tdf114287 exact print bounds across ODT export"
           }
         ],
         "upstream": [
           {
             "marker": "SwXMLExport::SwXMLExport",
             "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx",
+            "marker": "SwXMLImport::CreateStylesContext"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx",
+            "marker": "SvXMLImport::SetAutoStyles"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+            "marker": "XMLTextImportHelper::SetStyleAndAttrs"
           }
         ]
       },
@@ -4647,10 +4675,11 @@
         "exportMetaXml"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwXMLExport::SwXMLExport, SwXMLExport::exportDoc, SvXMLUnitConverter::GetMeasureUnit, SwModule::get and the bounded exportStylesXml, exportContentXml, exportMetaXml contract remain intentionally omitted."
+        "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`."
+        "Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.",
+        "XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
@@ -4710,6 +4739,22 @@
           {
             "path": "apps/office/src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts",
             "marker": "keeps equal paragraph and character names independent through package cycles"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.test.ts",
+            "marker": "retains the created leaf reference in its own family and container"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "applies automatic styles directly and resolves every parent only in common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "replaces the active automatic context while retaining independent common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+            "marker": "preserves tdf114287 exact print bounds across ODT export"
           }
         ],
         "upstream": [
@@ -4732,6 +4777,18 @@
           {
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx",
             "marker": "SvXMLStylesContext_Impl::FindStyleChildContext"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx",
+            "marker": "SwXMLImport::CreateStylesContext"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx",
+            "marker": "SvXMLImport::SetAutoStyles"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+            "marker": "XMLTextImportHelper::SetStyleAndAttrs"
           }
         ]
       },
@@ -4741,16 +4798,18 @@
         "parseOdfXml",
         "SwXMLImport",
         "getStyle",
-        "registerStyle",
-        "applyNamedParagraphStyles"
+        "applyNamedParagraphStyles",
+        "getAutoStyle",
+        "CreateStylesContext"
       ],
       "omittedResponsibilities": [
-        "Broader native XML import contracts and ownership remain omitted or individually unverified, including common/automatic container separation, display-name identity, duplicate selection, global null-context dispatch and document/style defaults."
+        "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
       ],
       "preservedResponsibilities": [
         "Reimplements the bounded Writer ODF XML import bridge from pinned LibreOffice `sw/source/filter/xml/xmlimp.cxx`.",
         "Applies imported MM100 tab positions to Writer twips with the signed integer ratio used by SvxTabStopItem::PutValue/o3tl::toTwips.",
-        "Uses the requested paragraph/text family together with the style name for bounded registration, direct/parent resolution and named paragraph application; same-name definitions and Standard/Heading family isolation are verified through context and literal ODT package cycles."
+        "Uses the requested paragraph/text family together with the style name for bounded registration, direct/parent resolution and named paragraph application; same-name definitions and Standard/Heading family isolation are verified through context and literal ODT package cycles.",
+        "XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
@@ -5716,14 +5775,78 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/xmloff/source/style/xmlnume.ts",
+            "marker": "exportListLevelLayout"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.test.ts",
+            "marker": "omits standard geometry and fills omitted values on partial custom layouts"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnume.cxx",
+            "marker": "SvxXMLNumRuleExport::exportLevelStyle"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/style/xmlnume.ts",
+      "localSymbols": [
+        "exportListLevelLayout"
+      ],
+      "omittedResponsibilities": [
+        "Full numbering export, native attribute omission, unit domains and defaults remain individually unverified."
+      ],
+      "preservedResponsibilities": [
+        "Extracts the existing bounded list label-alignment serializer into the native numbering-export source owner, preserving its conditions, fallback values and XML attribute output. The paragraph exporter delegates its existing length converter explicitly. Pinned exportLevelStyle owns these attributes, but broader native zero suppression, label-followed-by conditions, units and defaults remain individually unverified; this extraction does not claim semantic parity."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/style/xmlnume.cxx",
+      "upstreamSymbols": [
+        "SvxXMLNumRuleExport::exportLevelStyle"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "XMLStylesContext",
             "path": "apps/office/src/xmloff/source/style/xmlstyle.ts"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.test.ts",
+            "marker": "retains the created leaf reference in its own family and container"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "applies automatic styles directly and resolves every parent only in common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "replaces the active automatic context while retaining independent common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+            "marker": "preserves tdf114287 exact print bounds across ODT export"
           }
         ],
         "upstream": [
           {
             "marker": "SvXMLStylesContext::createFastChildContext",
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx",
+            "marker": "SwXMLImport::CreateStylesContext"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx",
+            "marker": "SvXMLImport::SetAutoStyles"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+            "marker": "XMLTextImportHelper::SetStyleAndAttrs"
           }
         ]
       },
@@ -5733,10 +5856,11 @@
         "XMLStylesContext"
       ],
       "omittedResponsibilities": [
-        "Style families and property mappers outside the bounded paragraph, character, and numbering subset remain intentionally omitted."
+        "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
       ],
       "preservedResponsibilities": [
-        "Creates style child contexts and publishes completed style definitions before document references."
+        "Creates style child contexts and publishes completed style definitions before document references.",
+        "XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/style/xmlstyle.cxx",
@@ -5993,12 +6117,40 @@
           {
             "marker": "ODF_NAMESPACES",
             "path": "apps/office/src/xmloff/source/text/txtparae.ts"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.test.ts",
+            "marker": "retains the created leaf reference in its own family and container"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "applies automatic styles directly and resolves every parent only in common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "replaces the active automatic context while retaining independent common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+            "marker": "preserves tdf114287 exact print bounds across ODT export"
           }
         ],
         "upstream": [
           {
             "marker": "HyperlinkData::HyperlinkData",
             "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx",
+            "marker": "SwXMLImport::CreateStylesContext"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx",
+            "marker": "SvXMLImport::SetAutoStyles"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+            "marker": "XMLTextImportHelper::SetStyleAndAttrs"
           }
         ]
       },
@@ -6013,10 +6165,11 @@
         "exportTextParagraphs"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside HyperlinkData::HyperlinkData, HyperlinkData::addHyperlinkAttributes, HyperlinkData::exportEvents, BoundFrames::Fill and the bounded live XMLTextExportSource contract remain intentionally omitted."
+        "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`."
+        "Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.",
+        "XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/text/txtparae.cxx",
@@ -6066,6 +6219,22 @@
           {
             "path": "apps/office/src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts",
             "marker": "keeps equal paragraph and character names independent through package cycles"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.test.ts",
+            "marker": "retains the created leaf reference in its own family and container"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "applies automatic styles directly and resolves every parent only in common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+            "marker": "replaces the active automatic context while retaining independent common styles"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+            "marker": "preserves tdf114287 exact print bounds across ODT export"
           }
         ],
         "upstream": [
@@ -6104,6 +6273,18 @@
           {
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx",
             "marker": "SvXMLStylesContext_Impl::FindStyleChildContext"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfmt.cxx",
+            "marker": "SwXMLImport::CreateStylesContext"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx",
+            "marker": "SvXMLImport::SetAutoStyles"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+            "marker": "XMLTextImportHelper::SetStyleAndAttrs"
           }
         ]
       },
@@ -6118,13 +6299,14 @@
         "resolveTextStyle"
       ],
       "omittedResponsibilities": [
-        "Native text import obligations beyond the bounded Writer target remain omitted or individually unverified, including separate family/common/automatic table identity, style display-name mapping, full hint ownership/precedence, cycle semantics, legacy font conversion and global null-context behavior."
+        "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
       ],
       "preservedResponsibilities": [
         "Reimplements the bounded ODF text paragraph import boundary from pinned LibreOffice `xmloff/source/text/txtparai.cxx`.",
         "Accepts absent/empty span style names as no additional character-style hint, retaining inherited inline properties, supported child controls and active hyperlink state; source-derived context assertions and literal real ODT cycles verify this bounded contract.",
         "Applies bounded family-specific no-op fallback for unknown character names, optional local properties and found child deltas independently of missing parents, matching SetStyleAndAttrs style lookup/application; literal ODT cases use real named parent styles and verify inheritance, overrides and scope across package cycles.",
-        "Uses the requested paragraph/text family together with the style name for bounded registration, direct/parent resolution and named paragraph application; same-name definitions and Standard/Heading family isolation are verified through context and literal ODT package cycles."
+        "Uses the requested paragraph/text family together with the style name for bounded registration, direct/parent resolution and named paragraph application; same-name definitions and Standard/Heading family isolation are verified through context and literal ODT package cycles.",
+        "XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/text/txtparai.cxx",

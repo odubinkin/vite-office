@@ -35,7 +35,6 @@ export interface XMLStyleImportTarget {
   getFontFaceGeneric?(name: string): string | undefined;
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
   registerDefaultStyle(definition: OdfStyleDefinition): void;
-  registerStyle(name: string, definition: OdfStyleDefinition): void;
   registerPageLayout(name: string, layout: OdfPageLayout): void;
 }
 
@@ -52,12 +51,56 @@ export interface OdfPageLayout {
 
 /** Imports style and numbering definitions before document references. */
 export class XMLStylesContext extends SvXMLImportContext {
+  private readonly styles: XMLStyleContext[] = [];
+
+  /** Returns whether this owns automatic styles. @returns Native container kind. */
+  public IsAutoStyle(): boolean {
+    return this.automatic;
+  }
+
+  /** Retains the source-owned leaf context. @param style - Parsed style context. @returns Nothing. */
+  public AddStyle(style: XMLStyleContext): void {
+    if (this.FindStyleChildContext(style.GetFamily(), style.GetName()) !== undefined)
+      throw new Error(`Duplicate ODF style: ${style.GetName()}`);
+    this.styles.push(style);
+  }
+
+  /** Finds a style only within this container and family. @param family - Requested family. @param name - Source name. @returns Owning leaf context. */
+  public FindStyleChildContext(
+    family: OdfStyleDefinition["family"],
+    name: string,
+  ): XMLStyleContext | undefined {
+    return this.styles.find(
+      /** Matches both native identity parts. @param style - Leaf context. @returns Whether it matches. */
+      (style) => style.GetFamily() === family && style.GetName() === name,
+    );
+  }
+
+  /** Projects one family's definitions for the Writer named-style bridge. @param family - Requested family. @returns Parsed definitions. */
+  public GetStyleDefinitions(
+    family: OdfStyleDefinition["family"],
+  ): ReadonlyMap<string, OdfStyleDefinition> {
+    return new Map(
+      this.styles
+        .filter(
+          /** Selects only the requested family. @param style - Leaf context. @returns Whether selected. */
+          (style) => style.GetFamily() === family,
+        )
+        .map(
+          /** Projects a completed leaf value without changing ownership. @param style - Leaf context. @returns Named definition. */
+          (style) => [style.GetName(), style.GetDefinition()],
+        ),
+    );
+  }
   /** Ignores only theme declaration attributes; numbering and layout remain diagnostic. @param element - Child token. @returns Whether metadata-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
     return element === XMLToken.LOEXT_THEME;
   }
-  /** Creates a style container. @param target - Definition consumer. @returns Context. */
-  public constructor(private readonly target: XMLStyleImportTarget) {
+  /** Creates one native named or automatic container. @param target - Writer property consumer. @param automatic - Whether automatic styles. @returns Context. */
+  public constructor(
+    private readonly target: XMLStyleImportTarget,
+    private readonly automatic = false,
+  ) {
     super();
   }
 
@@ -67,7 +110,7 @@ export class XMLStylesContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element === XMLToken.STYLE_DEFAULT_STYLE)
-      return new XMLStyleContext(this.target, attributes, true);
+      return new XMLStyleContext(this.target, attributes, this, true);
     if (element === XMLToken.STYLE_STYLE) {
       const family = attributes.get(XMLToken.STYLE_FAMILY);
       if (
@@ -77,7 +120,9 @@ export class XMLStylesContext extends SvXMLImportContext {
         family === "table-cell"
       )
         return new XMLTableStyleContext(this.target, attributes);
-      return new XMLStyleContext(this.target, attributes);
+      const context = new XMLStyleContext(this.target, attributes, this);
+      if (context.IsSupportedStyle()) this.AddStyle(context);
+      return context;
     }
     if (element === XMLToken.TEXT_LIST_STYLE)
       return new XMLListStyleContext(this.target, attributes);
@@ -166,10 +211,11 @@ class XMLStyleContext extends SvXMLImportContext {
   >;
   private readonly supported: boolean;
 
-  /** Reads style identity attributes. @param target - Definition consumer. @param attributes - Style attributes. @param isDefault - Whether this is style:default-style. @returns Context. */
+  /** Reads style identity attributes. @param target - Property consumer. @param attributes - Style attributes. @param styles - Owning native container. @param isDefault - Whether this is style:default-style. @returns Context. */
   public constructor(
     private readonly target: XMLStyleImportTarget,
     attributes: FastAttributeList,
+    private readonly styles: XMLStylesContext,
     private readonly isDefault = false,
   ) {
     super();
@@ -239,10 +285,24 @@ class XMLStyleContext extends SvXMLImportContext {
     return null;
   }
 
-  /** Publishes the completed supported style. @returns Nothing. */
-  public override endFastElement(): void {
-    if (!this.supported) return;
-    const definition: OdfStyleDefinition = {
+  /** Returns the source style name. @returns Name within this container. */
+  public GetName(): string {
+    return this.name;
+  }
+
+  /** Returns the implemented style family. @returns Native family identity. */
+  public GetFamily(): OdfStyleDefinition["family"] {
+    return this.definition.family;
+  }
+
+  /** Returns whether this style has a supported named identity. @returns Whether retained by the container. */
+  public IsSupportedStyle(): boolean {
+    return this.supported;
+  }
+
+  /** Projects the accumulated style value while the leaf retains ownership. @returns Current definition. */
+  public GetDefinition(): OdfStyleDefinition {
+    return {
       ...this.definition,
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
       ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
@@ -256,8 +316,12 @@ class XMLStyleContext extends SvXMLImportContext {
           }),
       ...(this.properties === undefined ? {} : { properties: this.properties }),
     };
-    if (this.isDefault) this.target.registerDefaultStyle(definition);
-    else this.target.registerStyle(this.name, definition);
+  }
+
+  /** Applies only a named-container paragraph default. @returns Nothing. */
+  public override endFastElement(): void {
+    if (this.supported && this.isDefault && !this.styles.IsAutoStyle())
+      this.target.registerDefaultStyle(this.GetDefinition());
   }
 }
 

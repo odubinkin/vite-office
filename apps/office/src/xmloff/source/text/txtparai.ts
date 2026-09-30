@@ -78,6 +78,10 @@ export interface XMLTextImportTarget {
   ): XMLParagraphImportTarget;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
+  getAutoStyle(
+    family: OdfStyleDefinition["family"],
+    styleName: string,
+  ): OdfStyleDefinition | undefined;
   resolveBuiltInParagraphStyle?(styleName: string): string | undefined;
 }
 
@@ -507,14 +511,26 @@ interface ResolvedParagraphStyle {
   readonly style: XMLParagraphStyle;
 }
 
-/** Resolves named and automatic paragraph styles like XMLParaContext. @param name - ODF style name. @param heading - Whether heading. @param target - Style resolver. @param seen - Recursion chain. @returns Resolved style. */
+/** Resolves named and automatic paragraph styles like XMLParaContext. @param name - ODF style name. @param heading - Whether heading. @param target - Style resolver. @param seen - Named recursion chain. @param namedOnly - Whether lookup is restricted to common styles. @returns Resolved style. */
 export function resolveParagraphStyle(
   name: string,
   heading: boolean,
-  target: Pick<XMLTextImportTarget, "getStyle" | "resolveBuiltInParagraphStyle">,
+  target: Pick<XMLTextImportTarget, "getStyle" | "getAutoStyle" | "resolveBuiltInParagraphStyle">,
   seen = new Set<string>(),
+  namedOnly = false,
 ): ResolvedParagraphStyle {
   if (name === "") return { listGeometryWins: false, style: heading ? "heading-1" : "default" };
+  const automatic = namedOnly ? undefined : target.getAutoStyle("paragraph", name);
+  if (automatic !== undefined) {
+    const parent = resolveParagraphStyle(
+      automatic.parentStyleName || "Standard",
+      heading,
+      target,
+      seen,
+      true,
+    );
+    return applyParagraphDefinition(automatic, parent);
+  }
   const builtInStyle =
     target.resolveBuiltInParagraphStyle?.(name) ??
     (name === "Standard" ? "default" : name === "Heading_20_1" ? "heading-1" : undefined);
@@ -524,7 +540,13 @@ export function resolveParagraphStyle(
     const definition = target.getStyle("paragraph", name);
     const parent: ResolvedParagraphStyle =
       builtInStyle !== "default"
-        ? resolveParagraphStyle(definition?.parentStyleName ?? "Standard", heading, target, seen)
+        ? resolveParagraphStyle(
+            definition?.parentStyleName || "Standard",
+            heading,
+            target,
+            seen,
+            true,
+          )
         : {
             listGeometryWins: false,
             style: heading ? ("heading-1" as const) : ("default" as const),
@@ -554,13 +576,22 @@ export function resolveParagraphStyle(
   seen.add(name);
   const definition = target.getStyle("paragraph", name);
   if (definition?.family !== "paragraph")
-    throw new Error(`Unsupported ODF paragraph style: ${name}`);
+    return resolveParagraphStyle("Standard", heading, target, seen, true);
   const parent = resolveParagraphStyle(
-    definition.parentStyleName ?? "Standard",
+    definition.parentStyleName || "Standard",
     heading,
     target,
     seen,
+    true,
   );
+  return applyParagraphDefinition(definition, parent);
+}
+
+/** Applies a found paragraph context independently of parent lookup. @param definition - Found style value. @param parent - Named parent state. @returns Combined paragraph state. */
+function applyParagraphDefinition(
+  definition: OdfStyleDefinition,
+  parent: ResolvedParagraphStyle,
+): ResolvedParagraphStyle {
   return {
     ...(definition.alignment === undefined && parent.alignment === undefined
       ? {}
@@ -590,12 +621,20 @@ export function resolveParagraphStyle(
   };
 }
 
-/** Resolves text-style inheritance. @param name - ODF style name. @param target - Style resolver. @param seen - Recursion chain. @returns Character deltas. */
+/** Resolves text-style inheritance. @param name - ODF style name. @param target - Style resolver. @param seen - Named recursion chain. @param namedOnly - Whether lookup is restricted to common styles. @returns Character deltas. */
 function resolveTextStyle(
   name: string,
-  target: Pick<XMLTextImportTarget, "getStyle">,
+  target: Pick<XMLTextImportTarget, "getStyle" | "getAutoStyle">,
   seen = new Set<string>(),
+  namedOnly = false,
 ): Partial<OdfCharacterProperties> {
+  const automatic = namedOnly ? undefined : target.getAutoStyle("text", name);
+  if (automatic !== undefined) {
+    const parent = automatic.parentStyleName
+      ? resolveTextStyle(automatic.parentStyleName, target, seen, true)
+      : {};
+    return { ...parent, ...automatic.properties };
+  }
   if (seen.has(name)) throw new Error(`Cyclic ODF text style: ${name}`);
   seen.add(name);
   const definition = target.getStyle("text", name);
@@ -603,7 +642,7 @@ function resolveTextStyle(
   const parent =
     definition.parentStyleName === undefined
       ? {}
-      : resolveTextStyle(definition.parentStyleName, target, seen);
+      : resolveTextStyle(definition.parentStyleName, target, seen, true);
   return { ...parent, ...definition.properties };
 }
 

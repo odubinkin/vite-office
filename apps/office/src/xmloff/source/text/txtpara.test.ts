@@ -145,7 +145,14 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
     ) => ({ level, listId: "list-a", rule });
     const output = exportTextParagraphs(
       source([
-        { list: list(0), runs: [{ properties: plain, text: "root" }], style: "default" },
+        {
+          list: list(0),
+          listGeometryWins: true,
+          leftMargin: 720,
+          paragraphProperties: { firstLineIndent: -360 },
+          runs: [{ properties: plain, text: "root" }],
+          style: "default",
+        },
         { list: list(1), runs: [{ properties: plain, text: "nested" }], style: "default" },
         {
           list: { ...list(0), startValue: 3 },
@@ -156,6 +163,15 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
         { list: list(0), runs: [{ properties: plain, text: "continued" }], style: "default" },
       ]),
     );
+    expect(output.namedStyles).toContain(
+      '<style:style style:name="P1Base" style:family="paragraph" style:parent-style-name="Standard"',
+    );
+    expect(output.namedStyles).toContain('fo:margin-left="1.27cm"');
+    expect(output.namedStyles).toContain('fo:text-indent="-0.635cm"');
+    expect(output.automaticStyles).toContain(
+      '<style:style style:name="P1" style:family="paragraph" style:parent-style-name="P1Base" style:list-style-name="L1"/>',
+    );
+    expect(output.automaticStyles).not.toContain('style:name="P1Base"');
     expect(output.automaticStyles).toContain('<text:list-style style:name="L1"');
     expect(output.automaticStyles).toContain('text:bullet-char="●"');
     expect(output.automaticStyles).toContain('<text:list-level-style-number text:level="2"');

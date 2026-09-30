@@ -196,10 +196,8 @@ class SwXMLImport
   private officeTextCount = 0;
   private paragraphCount = 0;
   private titleSeen = false;
-  private readonly styles: Record<OdfStyleDefinition["family"], Map<string, OdfStyleDefinition>> = {
-    paragraph: new Map(),
-    text: new Map(),
-  };
+  private styles: XMLStylesContext | undefined;
+  private autoStyles: XMLStylesContext | undefined;
   private defaultParagraphStyle: OdfStyleDefinition | undefined;
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
@@ -259,7 +257,23 @@ class SwXMLImport
     family: OdfStyleDefinition["family"],
     styleName: string,
   ): OdfStyleDefinition | undefined {
-    return this.styles[family].get(styleName);
+    return this.styles?.FindStyleChildContext(family, styleName)?.GetDefinition();
+  }
+
+  /** Resolves a direct style in the active automatic context. @param family - Requested family. @param styleName - ODF style name. @returns Automatic definition. */
+  public getAutoStyle(
+    family: OdfStyleDefinition["family"],
+    styleName: string,
+  ): OdfStyleDefinition | undefined {
+    return this.autoStyles?.FindStyleChildContext(family, styleName)?.GetDefinition();
+  }
+
+  /** Creates and retains one native style-container context. @param automatic - Whether to replace the automatic context. @returns New owning context. */
+  public CreateStylesContext(automatic: boolean): XMLStylesContext {
+    const context = new XMLStylesContext(this, automatic);
+    if (automatic) this.autoStyles = context;
+    else this.styles = context;
+    return context;
   }
 
   /** Resolves one imported font-face declaration. @param name - Face name. @returns Model family. */
@@ -294,13 +308,6 @@ class SwXMLImport
   /** Resolves one document-owned list rule. @param styleName - ODF list style name. @returns Rule view. */
   public getListRule(styleName: string): XMLTextListRule | undefined {
     return this.listRules.get(styleName);
-  }
-
-  /** Registers one parsed style. @param name - ODF style name. @param definition - Parsed definition. @returns Nothing. */
-  public registerStyle(name: string, definition: OdfStyleDefinition): void {
-    const familyStyles = this.styles[definition.family];
-    if (familyStyles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
-    familyStyles.set(name, definition);
   }
 
   /** Applies global ODF line numbering to the canonical Writer document. @param value - Imported configuration. @returns Nothing. */
@@ -469,7 +476,11 @@ class SwXMLImport
 
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
-    applyNamedParagraphStyles(this.document, this.styles.paragraph, this.defaultParagraphStyle);
+    applyNamedParagraphStyles(
+      this.document,
+      this.styles?.GetStyleDefinitions("paragraph") ?? new Map(),
+      this.defaultParagraphStyle,
+    );
     const createValue =
       /** Converts a registered page layout to Writer geometry. @param name - Master-page name. @param layout - Imported page layout. @returns Writer page descriptor. */ (
         name: string,
@@ -624,7 +635,7 @@ class SwXMLDocContext extends SvXMLImportContext {
         this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
     ) {
       attributes.assertOnly([], "styles container");
-      return new XMLStylesContext(this.xmlImport);
+      return this.xmlImport.CreateStylesContext(element === XMLToken.OFFICE_AUTOMATIC_STYLES);
     }
     if (element === XMLToken.OFFICE_BODY && this.root === XMLToken.OFFICE_DOCUMENT_CONTENT) {
       attributes.assertOnly([], "body");

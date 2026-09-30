@@ -34,6 +34,7 @@ import {
   exportParagraphPropertyChildren,
   exportTextParagraphs,
   ODF_NAMESPACES,
+  type OdfTextExport,
   type OdfCharacterProperties,
   type OdfParagraphAlignment,
   type OdfParagraphProperties,
@@ -90,6 +91,12 @@ const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc): string {
   const fonts = createWriterFontAutoStylePool(document);
+  const inheritedStyles = exportWriterText(
+    document,
+    /** Never cancels named style serialization. @returns False. */ () => false,
+    /** Registers a font used by an inherited list base. @param family - Font family. @param generic - Generic family. @returns Face name. */
+    (family, generic) => fonts.Add(family, generic),
+  ).namedStyles;
   const styles = document.GetTextFormatColls().map(
     /** Emits one named Writer paragraph style. @param collection - Style collection. @returns Style XML. */
     (collection) => {
@@ -165,7 +172,7 @@ export function exportStylesXml(document: SwDoc): string {
             ? "outside"
             : "left",
   });
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}${lineNumbering}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}${inheritedStyles}${lineNumbering}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
 }
 
 /** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */
@@ -174,7 +181,22 @@ export function exportContentXml(
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
 ): string {
   const fonts = createWriterFontAutoStylePool(document);
-  const exported = exportTextParagraphs(
+  const exported = exportWriterText(
+    document,
+    isCancelled,
+    /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @returns Face name. */
+    (family, generic) => fonts.Add(family, generic),
+  );
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
+}
+
+/** Projects the same deterministic style/body source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @returns Common/automatic style and body fragments. */
+function exportWriterText(
+  document: SwDoc,
+  isCancelled: () => boolean,
+  fontFaceName: (family: string, generic?: string) => string,
+): OdfTextExport {
+  return exportTextParagraphs(
     {
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
@@ -222,12 +244,8 @@ export function exportContentXml(
       },
     },
     isCancelled,
-    /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @returns Face name. */ (
-      family,
-      generic,
-    ) => fonts.Add(family, generic),
+    fontFaceName,
   );
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
 
 /** Serializes document metadata into meta.xml. @param title - Shell-owned title. @param locale - Stored document language. @returns Complete XML. */

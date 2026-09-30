@@ -4,7 +4,7 @@ title: "Restore named and automatic style context ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T20:22:21.624Z"
+  updated_by: "CODER"
+  note: "Full npm run verify exit 0; 596 app/109 inventory/19 browser tests; all coverage metrics 100%; 133 focused tests, AST extraction proof, source-tree/provenance/file-size/semantic gates, doctor and routing pass. Bounded style-container contract verified; broader model/default/duplicate/display/hint/export and UI parity remain unverified."
   attempts: 0
 commit: null
 comments:
@@ -65,8 +65,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: extract unchanged list label-alignment serialization into inspected xmlnume source owner; retain all passing source-derived behavior."
+  -
+    type: "verify"
+    at: "2026-09-30T20:22:21.624Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full npm run verify exit 0; 596 app/109 inventory/19 browser tests; all coverage metrics 100%; 133 focused tests, AST extraction proof, source-tree/provenance/file-size/semantic gates, doctor and routing pass. Bounded style-container contract verified; broader model/default/duplicate/display/hint/export and UI parity remain unverified."
 doc_version: 3
-doc_updated_at: "2026-09-30T20:18:18.249Z"
+doc_updated_at: "2026-09-30T20:22:21.680Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Follow native per-container XML style ownership, independent named/active automatic references and automatic-first direct versus named-only parent resolution. Preserve legal common/automatic name collisions and stream replacement through real ODT cycles."
 sections:
@@ -79,6 +85,36 @@ sections:
   Verify Steps: "1. Compare pinned XML style context AddStyle/FindStyleChildContext, SwXMLImport::CreateStylesContext and SetStyles/SetAutoStyles reference replacement, and SetStyleAndAttrs direct automatic versus named parent lookup/application. 2. Context assertions verify leaf-reference ownership, container isolation and family identity, explicit automatic precedence, named-only parents, empty/missing parents and no automatic parent recursion. 3. Literal real ODT common/automatic collisions, same names across streams, automatic context replacement, named parent chains, automatic overrides, direct/self-named parent scope and built-in paragraph inheritance assert manual model state on import/export/reimport. Update contradictory fixtures with valid named parent placement while preserving intended assertions. 4. Focused affected context/ODT suites and full npm run verify, ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check pass. Record architecture and narrow evidence without module parity promotion."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T20:22:21.624Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full npm run verify exit 0; 596 app/109 inventory/19 browser tests; all coverage metrics 100%; 133 focused tests, AST extraction proof, source-tree/provenance/file-size/semantic gates, doctor and routing pass. Bounded style-container contract verified; broader model/default/duplicate/display/hint/export and UI parity remain unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T20:22:21.100Z, excerpt_hash=sha256:fb78d2d392f0a7a9e07b52fe203655c10984f45264006a5da613fbe071f0ed8a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301937-HTNKEB/blueprint/resolved-snapshot.json
+    - old_digest: cf8afb5c56f609958029f0b1921a4f50b512117c2552b92e9f0de8f5d1581266
+    - current_digest: cf8afb5c56f609958029f0b1921a4f50b512117c2552b92e9f0de8f5d1581266
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301937-HTNKEB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609301937-HTNKEB
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this scoped implementation commit if source-backed style ownership or lookup semantics introduce a verified regression; retain previously completed corrections."
   Findings: |-
@@ -101,6 +137,10 @@ sections:
     - Observation: The full gate passed 596 app tests, 109 inventory tests, 19 browser cases and 100% coverage before the authored-size check rejected txtparae.ts at 1005 lines.
       Impact: The necessary common-style export addition crossed an enforced size boundary; deleting padding or changing enforcement is inappropriate.
       Resolution: Read the actual pinned SvxXMLNumRuleExport::exportLevelStyle in xmloff/source/style/xmlnume.cxx and extracted the existing label-alignment serializer into that owner. Canonical AST body comparison against c80f82d45904 proves identical conditions/defaults/output with only an explicit existing length converter port. No new behavior/default claim: upstream zero/label-followed-by omission and units remain unverified. Source-tree/provenance and parity pass for 196 modules (120 mapped), semanticViolationCount=0; focused 133 tests in 26 files and file-size checks pass. Repeat full gate after the final extraction.
+
+    - Observation: Command: final npm run verify. Result: pass (exit 0). Evidence: 596 app tests in 124 files; 109 inventory tests in 36 files; 19 browser cases; app 9634/9634 statements and 7202/7202 branches, all four app/inventory coverage metrics 100%; static/build, lint/types, module/resource/docs/file-size/source-tree/provenance/invariant/parity gates passed. Scope: complete repository checks after final list-export decomposition.
+      Impact: The bounded common/automatic style ownership and lookup correction is verified through native source inspection, manual model assertions and genuine package cycles without changing enforcement or registered deviations.
+      Resolution: Evidence: verify.log, focused.log (133 tests/26 files), parity.log and export-decomposition.mjs. Command: ap doctor; Result: pass with the same two pre-existing hook-shim/historical-close-pointer warnings. Command: node .agentplane/policy/check-routing.mjs; Result: pass. Command: node .agentplane/tasks/202609301937-HTNKEB/export-decomposition.mjs; Result: pass. Command: git diff --check; Result: pass after compacting completed logs. Source provenance covers 196 modules (120 mapped, 60 browser, 16 infrastructure); semanticViolationCount=0 is inventory consistency, not whole-module or whole-goal parity. Wider named-style model, display-name/duplicate/default/hint contracts, new xmlnume native omission/units/default semantics and the rest of implemented runtime/UI remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -124,6 +164,36 @@ Complete approved style context ownership/direct-parent lookup and common inheri
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T20:22:21.624Z — VERIFY — ok
+
+By: CODER
+
+Note: Full npm run verify exit 0; 596 app/109 inventory/19 browser tests; all coverage metrics 100%; 133 focused tests, AST extraction proof, source-tree/provenance/file-size/semantic gates, doctor and routing pass. Bounded style-container contract verified; broader model/default/duplicate/display/hint/export and UI parity remain unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T20:22:21.100Z, excerpt_hash=sha256:fb78d2d392f0a7a9e07b52fe203655c10984f45264006a5da613fbe071f0ed8a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301937-HTNKEB/blueprint/resolved-snapshot.json
+- old_digest: cf8afb5c56f609958029f0b1921a4f50b512117c2552b92e9f0de8f5d1581266
+- current_digest: cf8afb5c56f609958029f0b1921a4f50b512117c2552b92e9f0de8f5d1581266
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301937-HTNKEB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609301937-HTNKEB
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -151,3 +221,7 @@ Revert this scoped implementation commit if source-backed style ownership or loo
 - Observation: The full gate passed 596 app tests, 109 inventory tests, 19 browser cases and 100% coverage before the authored-size check rejected txtparae.ts at 1005 lines.
   Impact: The necessary common-style export addition crossed an enforced size boundary; deleting padding or changing enforcement is inappropriate.
   Resolution: Read the actual pinned SvxXMLNumRuleExport::exportLevelStyle in xmloff/source/style/xmlnume.cxx and extracted the existing label-alignment serializer into that owner. Canonical AST body comparison against c80f82d45904 proves identical conditions/defaults/output with only an explicit existing length converter port. No new behavior/default claim: upstream zero/label-followed-by omission and units remain unverified. Source-tree/provenance and parity pass for 196 modules (120 mapped), semanticViolationCount=0; focused 133 tests in 26 files and file-size checks pass. Repeat full gate after the final extraction.
+
+- Observation: Command: final npm run verify. Result: pass (exit 0). Evidence: 596 app tests in 124 files; 109 inventory tests in 36 files; 19 browser cases; app 9634/9634 statements and 7202/7202 branches, all four app/inventory coverage metrics 100%; static/build, lint/types, module/resource/docs/file-size/source-tree/provenance/invariant/parity gates passed. Scope: complete repository checks after final list-export decomposition.
+  Impact: The bounded common/automatic style ownership and lookup correction is verified through native source inspection, manual model assertions and genuine package cycles without changing enforcement or registered deviations.
+  Resolution: Evidence: verify.log, focused.log (133 tests/26 files), parity.log and export-decomposition.mjs. Command: ap doctor; Result: pass with the same two pre-existing hook-shim/historical-close-pointer warnings. Command: node .agentplane/policy/check-routing.mjs; Result: pass. Command: node .agentplane/tasks/202609301937-HTNKEB/export-decomposition.mjs; Result: pass. Command: git diff --check; Result: pass after compacting completed logs. Source provenance covers 196 modules (120 mapped, 60 browser, 16 infrastructure); semanticViolationCount=0 is inventory consistency, not whole-module or whole-goal parity. Wider named-style model, display-name/duplicate/default/hint contracts, new xmlnume native omission/units/default semantics and the rest of implemented runtime/UI remain pending.
