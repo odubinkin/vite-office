@@ -4,7 +4,7 @@ title: "Restore unresolved character style import fallback"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Unresolved character styles apply no delta and retain found properties; 11 context and 11 real ODT cases pass. Full verify 588/109/19, 100% required coverage; doctor/routing/diff checks pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T19:00:50.144Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded unresolved character style fallback matches pinned family lookup and independent property application; full verification passes."
+  evaluated_sha: "32787845518ca3d4e836dee7a76ccdfbaa00dee2"
+  blueprint_digest: "1972bf121a90c5f4534081678ff3d82b69fe458ec97c3150949c9c5ac7c86f96"
+  evidence_refs:
+    - ".agentplane/tasks/202609301846-ZBRNAK/README.md"
+    - ".agentplane/tasks/202609301846-ZBRNAK/quality/20260930-190050144-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301846-ZBRNAK/quality/20260930-190050144-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301846-ZBRNAK/quality/20260930-190050144-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301846-ZBRNAK/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301846-ZBRNAK/focused.log"
+    - ".agentplane/tasks/202609301846-ZBRNAK/verify.log"
+  findings:
+    - "No-op unknown/wrong-family resolution and optional property definitions retain parent state and child deltas. Eleven context cases and eleven literal ODT cycles verify exact names, valid named parents, overrides, controls and links. Semantic statuses remain unverified for wider table identity and hint architecture."
 commit: null
 comments:
   -
