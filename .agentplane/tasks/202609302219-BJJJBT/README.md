@@ -4,7 +4,7 @@ title: "Restore native list declaration defaults and ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +41,7 @@ events:
     to: "DOING"
     note: "Start: Restore native supported declaration defaults and source-owned list/level contexts under the iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:20:10.310Z"
+doc_updated_at: "2026-09-30T22:26:30.126Z"
 doc_updated_by: "CODER"
 description: "Move supported list-style and level declaration ownership to xmlnumi, restore native optional marker/format/level defaults and integer parsing, and ignore unrelated list children while preserving explicit unsupported-family errors."
 sections:
@@ -51,7 +51,12 @@ sections:
   Verify Steps: "Run focused xmlnumi/xmlstyle and ODT tests for missing/empty/default marker and numeric format, missing/present/invalid/signed/prefix/overflow level attributes, native context ownership/GetLevel/GetProperties, source order and ignored unrelated children. Produce a compiled primary-source differential probe for byte-string toInt32 and native level normalization, comparing manual context fixtures to local output. Verify literal common/automatic ODT cycles, copying/browser snapshots and native empty-bullet serialization. Run complete npm run verify with required 100% coverage unchanged. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check; record the final clean state and real implementation hash."
   Verification: "Pending."
   Rollback Plan: "Revert the scoped implementation commit after inspecting later numbering corrections; preserve task evidence and intentional browser deviations."
-  Findings: "Previous goal turn was progress: child 202609302147-2R4T31 DONE, implementation d8bd6fcc54790da70f365460161ea0307a0a4ce2, parent progress 0c452823d826; no live processes or pending mutations. Preflight confirms clean main/direct with only parent 202609240501-C9TN6M active. Persistent /goal authorizes safe local iterative corrections. Pinned source: libreoffice-26.8.0.2 commit 9bc445578031fecf56086729d8e4940c77e14d65 cached in vendor/libreoffice-reference. xmlnumi.cxx level constructor starts sNumFormat='1', cBullet=0, nLevel=-1; present levels use FastAttributeList/o3tl byte-string integer parsing and normalize nonpositive values to level zero. FillUnoNumRule skips invalid indices and reads only valid level properties. Native list context owns a vector of level references. Local xmlstyle owns marker parsing, requires optional fields and rejects unrelated children. o3tl::toInt32 uses signed64 parsing then returns zero outside signed32; byte-string whitespace is ASCII controls 1..32, not JS Unicode trim. Nonnative global null dispatch remains a separate audit; this task uses a bounded ignore-context adaptation at list owners. Prefix/start/display-level/font/graphics/number-family and wider rule contracts remain unverified."
+  Findings: |-
+    Previous goal turn was progress: child 202609302147-2R4T31 DONE, implementation d8bd6fcc54790da70f365460161ea0307a0a4ce2, parent progress 0c452823d826; no live processes or pending mutations. Preflight confirms clean main/direct with only parent 202609240501-C9TN6M active. Persistent /goal authorizes safe local iterative corrections. Pinned source: libreoffice-26.8.0.2 commit 9bc445578031fecf56086729d8e4940c77e14d65 cached in vendor/libreoffice-reference. xmlnumi.cxx level constructor starts sNumFormat='1', cBullet=0, nLevel=-1; present levels use FastAttributeList/o3tl byte-string integer parsing and normalize nonpositive values to level zero. FillUnoNumRule skips invalid indices and reads only valid level properties. Native list context owns a vector of level references. Local xmlstyle owns marker parsing, requires optional fields and rejects unrelated children. o3tl::toInt32 uses signed64 parsing then returns zero outside signed32; byte-string whitespace is ASCII controls 1..32, not JS Unicode trim. Nonnative global null dispatch remains a separate audit; this task uses a bounded ignore-context adaptation at list owners. Prefix/start/display-level/font/graphics/number-family and wider rule contracts remain unverified.
+
+    - Observation: Focused lint rejected ASCII-control ranges in regex via no-control-regex. The native parser requires control bytes 1..32 as whitespace.
+      Impact: The regex-based implementation needs an equivalent source-driven form compatible with existing lint; no gate or semantic requirement should change.
+      Resolution: Replace control-range regex trimming with a bounded charCodeAt loop, then parse only the decimal sign/digit prefix. Retain native zero behavior for no digits and signed32 overflow. Rerun lint and focus.
 id_source: "generated"
 ---
 ## Summary
@@ -81,3 +86,7 @@ Revert the scoped implementation commit after inspecting later numbering correct
 ## Findings
 
 Previous goal turn was progress: child 202609302147-2R4T31 DONE, implementation d8bd6fcc54790da70f365460161ea0307a0a4ce2, parent progress 0c452823d826; no live processes or pending mutations. Preflight confirms clean main/direct with only parent 202609240501-C9TN6M active. Persistent /goal authorizes safe local iterative corrections. Pinned source: libreoffice-26.8.0.2 commit 9bc445578031fecf56086729d8e4940c77e14d65 cached in vendor/libreoffice-reference. xmlnumi.cxx level constructor starts sNumFormat='1', cBullet=0, nLevel=-1; present levels use FastAttributeList/o3tl byte-string integer parsing and normalize nonpositive values to level zero. FillUnoNumRule skips invalid indices and reads only valid level properties. Native list context owns a vector of level references. Local xmlstyle owns marker parsing, requires optional fields and rejects unrelated children. o3tl::toInt32 uses signed64 parsing then returns zero outside signed32; byte-string whitespace is ASCII controls 1..32, not JS Unicode trim. Nonnative global null dispatch remains a separate audit; this task uses a bounded ignore-context adaptation at list owners. Prefix/start/display-level/font/graphics/number-family and wider rule contracts remain unverified.
+
+- Observation: Focused lint rejected ASCII-control ranges in regex via no-control-regex. The native parser requires control bytes 1..32 as whitespace.
+  Impact: The regex-based implementation needs an equivalent source-driven form compatible with existing lint; no gate or semantic requirement should change.
+  Resolution: Replace control-range regex trimming with a bounded charCodeAt loop, then parse only the decimal sign/digit prefix. Retain native zero behavior for no digits and signed32 overflow. Rerun lint and focus.
