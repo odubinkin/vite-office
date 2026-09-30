@@ -69,9 +69,15 @@ class XMLTabStopsContext extends SvXMLImportContext {
     return new SvXMLIgnoreContext();
   }
 
-  /** Publishes the complete tab sequence, including an explicit empty sequence. @returns Nothing. */
+  /** Publishes the source-order sequence selected by the pinned tab importer, including an explicit empty sequence. @returns Nothing. */
   public override endFastElement(): void {
-    this.setTabStops(this.stops);
+    const selected: OdfTabStop[] = [];
+    for (const [index, stop] of this.stops.entries()) {
+      const isDefault = stop.alignment === "default";
+      if (!isDefault || index === 0) selected.push(stop);
+      if (isDefault && index === 0) break;
+    }
+    this.setTabStops(selected);
   }
 }
 

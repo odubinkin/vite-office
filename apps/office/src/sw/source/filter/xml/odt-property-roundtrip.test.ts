@@ -260,6 +260,80 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       ),
     ).rejects.toThrow("Unsupported ODF widows");
   });
+  it("selects Default tab entries in XML source order before canonical sorting", /** Checks native first-Default exclusivity and later-Default omission across direct/style package cycles. @returns Completion after reimport. */ async () => {
+    const writer = createWriterDocument();
+    const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
+    writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
+    writer.paragraphs[0]?.SetAttr(placeholder);
+    const base = writeOdtDocument(writer, metadata);
+    const cases = [
+      {
+        name: "first default keeps only itself despite following lower signed positions",
+        xml: '<style:tab-stops><style:tab-stop style:position="36pt" style:type="default" style:leader-style="solid" style:leader-text="_"/><style:tab-stop style:position="-36pt" style:type="left"/><style:tab-stop style:position="72pt" style:type="right"/><style:tab-stop style:position="0pt" style:type="default"/></style:tab-stops>',
+        expected: [[720, SvxTabAdjust.Default, ",", "_"]],
+      },
+      {
+        name: "later defaults are skipped while normal fields and signed positions survive",
+        xml: '<style:tab-stops><style:tab-stop style:position="72pt" style:type="right" style:leader-style="solid" style:leader-text="_"/><style:tab-stop style:position="-36pt" style:type="default"/><style:tab-stop style:position="-18pt" style:type="center"/><style:tab-stop style:position="0pt" style:type="default"/><style:tab-stop style:position="36pt" style:type="char" style:char=";" style:leader-style="dotted" style:leader-text="."/></style:tab-stops>',
+        expected: [
+          [-360, SvxTabAdjust.Center, ",", " "],
+          [720, SvxTabAdjust.Decimal, ";", "."],
+          [1440, SvxTabAdjust.Right, ",", "_"],
+        ],
+      },
+      {
+        name: "multiple defaults retain the first in source order",
+        xml: '<style:tab-stops><style:tab-stop style:position="36pt" style:type="default"/><style:tab-stop style:position="-36pt" style:type="default"/></style:tab-stops>',
+        expected: [[720, SvxTabAdjust.Default, ",", " "]],
+      },
+      {
+        name: "single signed default is retained",
+        xml: '<style:tab-stops><style:tab-stop style:position="-18pt" style:type="default"/></style:tab-stops>',
+        expected: [[-360, SvxTabAdjust.Default, ",", " "]],
+      },
+      {
+        name: "normal stops are sorted only after selection",
+        xml: '<style:tab-stops><style:tab-stop style:position="72pt" style:type="right"/><style:tab-stop style:position="-36pt" style:type="left"/></style:tab-stops>',
+        expected: [
+          [-720, SvxTabAdjust.Left, ",", " "],
+          [1440, SvxTabAdjust.Right, ",", " "],
+        ],
+      },
+      { name: "empty sequence remains an explicit clear", xml: "<style:tab-stops/>", expected: [] },
+    ] as const;
+    for (const testCase of cases) {
+      let input = base;
+      for (const entry of ["content.xml", "styles.xml"]) {
+        input = await rewriteEntry(
+          input,
+          entry,
+          /** Injects the literal sequence without sorting it. @param xml - Input stream. @returns Sequence fixture. */
+          (xml) => xml.replace(/<style:tab-stops>[\s\S]*?<\/style:tab-stops>/gu, testCase.xml),
+        );
+      }
+      const loaded = await readOdtDocument(input, metadata);
+      const reopened = await readOdtDocument(writeOdtDocument(loaded.document, metadata), metadata);
+      for (const document of [loaded.document, reopened.document]) {
+        const direct = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+        const inherited = document
+          .GetDfltTextFormatColl()
+          .GetAttrSet()
+          .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+        for (const item of [direct, inherited]) {
+          expect(
+            item.GetStops().map(
+              /** Projects all retained tab fields. @param stop - Imported stop. @returns Comparable fields. */
+              (stop) => [stop.GetTabPos(), stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill()],
+            ),
+            testCase.name,
+          ).toEqual(testCase.expected);
+        }
+      }
+    }
+    expect(placeholder.Count()).toBe(1);
+    expect(placeholder.At(0).GetTabPos()).toBe(360);
+  });
+
   it("keeps upstream tab alignment and leader choices through ODT", /** Checks tab-stop type and leader serialization. @returns Completion after import. */ async () => {
     const writer = createWriterDocument();
     writer.paragraphs[0]?.SetAttr(
@@ -279,15 +353,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         /** Projects imported tab alignment. @param stop - Tab stop. @returns Adjustment. */
         (stop) => stop.GetAdjustment(),
       ),
-    ).toEqual([
-      SvxTabAdjust.Left,
-      SvxTabAdjust.Center,
-      SvxTabAdjust.Default,
-      SvxTabAdjust.Right,
-      SvxTabAdjust.Decimal,
-    ]);
+    ).toEqual([SvxTabAdjust.Left, SvxTabAdjust.Center, SvxTabAdjust.Right, SvxTabAdjust.Decimal]);
+    expect(tabs.GetPos(1080)).toBe(65535);
     expect(tabs.At(1).GetFill()).toBe("_");
-    expect(tabs.At(4).GetDecimal()).toBe(";");
+    expect(tabs.At(3).GetDecimal()).toBe(";");
     const withoutLeaderText = await readOdtDocument(
       await rewriteEntry(
         bytes,
@@ -302,7 +371,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       RES_PARATR_TABSTOP,
     ) as SvxTabStopItem;
     expect(inferredTabs.At(1).GetFill()).toBe("_");
-    expect(inferredTabs.At(4).GetFill()).toBe(".");
+    expect(inferredTabs.At(3).GetFill()).toBe(".");
     const withoutLeader = await readOdtDocument(
       await rewriteEntry(
         bytes,
