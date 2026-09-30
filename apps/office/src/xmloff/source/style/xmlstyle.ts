@@ -10,7 +10,8 @@ import type {
   OdfParagraphProperties,
 } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
-import { importOdfLength, XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import { importOdfLength } from "../core/xmluconv";
+import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import {
   XMLLineNumberingImportContext,

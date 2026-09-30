@@ -4,7 +4,7 @@ title: "Restore native XML tab and unit conversion module ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T17:17:44.385Z"
+  updated_by: "CODER"
+  note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all dependency/build/static/docs/source/invariant/parity gates, 194 provenance modules and semanticViolationCount=0. AST equality in architecture.log and 27 unchanged focused tests pass. Doctor/routing pass. Scope: native XML dispatch/tab/conversion responsibility split and direct consumer imports; wider contracts remain unverified."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: separate existing tab-import and length-conversion bodies into the pinned style/core owners and update direct consumers without behavior changes."
+  -
+    type: "verify"
+    at: "2026-09-30T17:17:44.385Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all dependency/build/static/docs/source/invariant/parity gates, 194 provenance modules and semanticViolationCount=0. AST equality in architecture.log and 27 unchanged focused tests pass. Doctor/routing pass. Scope: native XML dispatch/tab/conversion responsibility split and direct consumer imports; wider contracts remain unverified."
 doc_version: 3
-doc_updated_at: "2026-09-30T17:07:30.060Z"
+doc_updated_at: "2026-09-30T17:17:44.439Z"
 doc_updated_by: "CODER"
 description: "One architecture refactor under the approved iterative parity goal: separate native tab-import and shared unit-conversion responsibilities from XMLTextPropertySetContext into their pinned source owners, preserving implementation behavior and updating direct consumers and provenance."
 sections:
@@ -49,11 +55,44 @@ sections:
   Verify Steps: "1. TypeScript AST comparison against pre-refactor HEAD proves tab context member implementations and complete conversion function body are unchanged; only native class naming/export and module imports change. 2. Inspect dispatch and all length imports: XMLTextPropertySetContext exports only its dispatcher, creates the native-named context in style/xmltabi, and every direct length consumer imports core/xmluconv without compatibility aliases. 3. Existing focused mapped ODT, signed paragraph, line-number/table and native tab tests pass unchanged, covering signed values, Default source order, empty sequences and shared conversion consumers. 4. npm run verify passes every required gate at 100% coverage; ap doctor and node .agentplane/policy/check-routing.mjs pass. New runtime/provenance entries map each implemented responsibility to its pinned owner without semantic promotion. 5. Review scoped diff and finish with clean tracked/untracked git status."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T17:17:44.385Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all dependency/build/static/docs/source/invariant/parity gates, 194 provenance modules and semanticViolationCount=0. AST equality in architecture.log and 27 unchanged focused tests pass. Doctor/routing pass. Scope: native XML dispatch/tab/conversion responsibility split and direct consumer imports; wider contracts remain unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T17:17:44.023Z, excerpt_hash=sha256:4b56a3e17ff3a521b9fa94e7b2236449cdf1612408aa28425ffcb3013330eb89
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301706-8FPY82/blueprint/resolved-snapshot.json
+    - old_digest: 09fd8aa3242f965f9b0249b2ff7ffa18b589f6d3b5e66493f8e040be32aebf1b
+    - current_digest: 09fd8aa3242f965f9b0249b2ff7ffa18b589f6d3b5e66493f8e040be32aebf1b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301706-8FPY82
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609301706-8FPY82
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: The local XMLTextPropertySetContext module embedded tab parsing/selection and a shared length converter. Pinned XMLTextPropertySetContext.cxx dispatches to SvxXMLTabStopImportContext in style/xmltabi.cxx, while generic conversion is owned by core/xmluconv.cxx. Three other direct consumers imported conversion from the dispatcher.
+      Impact: Temporary mixed ownership obscured the native responsibility graph and coupled paragraph/style, table and line-number conversion to a text-property context.
+      Resolution: Extracted the tab context into style/xmltabi.ts with the pinned SvxXMLTabStopImportContext name and the complete importOdfLength helper into core/xmluconv.ts; the dispatcher and every direct consumer now import the correct owner with no compatibility re-export. AST comparison proves all four context members and the complete function unchanged (architecture.log). Metadata maps the narrowed dispatcher and two new owners individually, preserves existing record order, and leaves broader contracts/defaults unverified. Existing focused tests passed unchanged (27). Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory and 19 browser tests, all required coverage 100%, 193 runtime source dependency checks, 194 provenance modules (118 mapped), all build/static/docs/source/invariant/parity gates; semanticViolationCount=0. Doctor/routing passed with pre-existing doctor warnings. No parser/default behavior, tests, validators/schemas/generators or deliberate product deviations were changed. Native tab leaf default/fallback and full conversion contracts remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -77,6 +116,36 @@ CODER performs one native source-owner architecture refactor. Extract existing X
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T17:17:44.385Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all dependency/build/static/docs/source/invariant/parity gates, 194 provenance modules and semanticViolationCount=0. AST equality in architecture.log and 27 unchanged focused tests pass. Doctor/routing pass. Scope: native XML dispatch/tab/conversion responsibility split and direct consumer imports; wider contracts remain unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T17:17:44.023Z, excerpt_hash=sha256:4b56a3e17ff3a521b9fa94e7b2236449cdf1612408aa28425ffcb3013330eb89
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301706-8FPY82/blueprint/resolved-snapshot.json
+- old_digest: 09fd8aa3242f965f9b0249b2ff7ffa18b589f6d3b5e66493f8e040be32aebf1b
+- current_digest: 09fd8aa3242f965f9b0249b2ff7ffa18b589f6d3b5e66493f8e040be32aebf1b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301706-8FPY82
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609301706-8FPY82
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -85,3 +154,7 @@ CODER performs one native source-owner architecture refactor. Extract existing X
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: The local XMLTextPropertySetContext module embedded tab parsing/selection and a shared length converter. Pinned XMLTextPropertySetContext.cxx dispatches to SvxXMLTabStopImportContext in style/xmltabi.cxx, while generic conversion is owned by core/xmluconv.cxx. Three other direct consumers imported conversion from the dispatcher.
+  Impact: Temporary mixed ownership obscured the native responsibility graph and coupled paragraph/style, table and line-number conversion to a text-property context.
+  Resolution: Extracted the tab context into style/xmltabi.ts with the pinned SvxXMLTabStopImportContext name and the complete importOdfLength helper into core/xmluconv.ts; the dispatcher and every direct consumer now import the correct owner with no compatibility re-export. AST comparison proves all four context members and the complete function unchanged (architecture.log). Metadata maps the narrowed dispatcher and two new owners individually, preserves existing record order, and leaves broader contracts/defaults unverified. Existing focused tests passed unchanged (27). Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory and 19 browser tests, all required coverage 100%, 193 runtime source dependency checks, 194 provenance modules (118 mapped), all build/static/docs/source/invariant/parity gates; semanticViolationCount=0. Doctor/routing passed with pre-existing doctor warnings. No parser/default behavior, tests, validators/schemas/generators or deliberate product deviations were changed. Native tab leaf default/fallback and full conversion contracts remain open.

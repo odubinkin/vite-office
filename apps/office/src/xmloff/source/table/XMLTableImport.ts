@@ -2,7 +2,7 @@
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import { importOdfLength } from "../text/XMLTextPropertySetContext";
+import { importOdfLength } from "../core/xmluconv";
 import { XMLParaContext, type XMLTextImportTarget } from "../text/txtparai";
 
 /** Supported ODF table style families and physical properties. */

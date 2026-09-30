@@ -6059,6 +6059,41 @@
       }
     },
     {
+      "path": "apps/office/src/xmloff/source/core/xmluconv.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/core/xmluconv.ts#importOdfLength",
+          "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToCore",
+          "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx#convertMeasureToCore",
+          "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+          "apps/office/src/sw/source/filter/xml/odt-line-numbering.test.ts",
+          "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts"
+        ],
+        "justification": "Owns the existing bounded ODF absolute-length-to-Writer-twip conversion helper, previously embedded in the text-property dispatcher. AST comparison proves the complete function unchanged; tab, paragraph/style, table and line-number imports consume the core owner directly. Signed/unsigned conversion and existing supported units remain covered by existing caller assertions. This ownership refactor does not establish native conversion failure, clamping, full measure grammar, configuration or whole-module parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "importOdfLength"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "xmloff/source/core/xmluconv.cxx",
+        "upstreamSymbols": [
+          "SvXMLUnitConverter::convertMeasureToCore"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -6160,6 +6195,44 @@
         "upstreamSymbols": [
           "SvXMLStylesContext",
           "SvXMLStylesContext::createFastChildContext"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmltabi.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/style/xmltabi.ts#SvxXMLTabStopImportContext",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties",
+          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#case XML_ELEMENT(STYLE, XML_POSITION)",
+          "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx#sal_Int32 nMin = SAL_MIN_INT32",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports and round-trips signed tab positions in paragraph and inherited style properties",
+          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#SvxXMLTabStopImportContext::endFastElement",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#selects Default tab entries in XML source order before canonical sorting"
+        ],
+        "justification": "Owns the implemented tab-stop child parsing and source-order selection with the pinned context name in the corresponding xmltabi module. AST comparison proves all four member implementations unchanged by extraction. Existing signed/default/empty ODT sequence assertions cover retained values and package cycles. Leaf default initialization, malformed-input fallback and broader native context contracts remain individually unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SvxXMLTabStopImportContext"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "xmloff/source/style/xmltabi.cxx",
+        "upstreamSymbols": [
+          "SvxXMLTabStopImportContext",
+          "SvxXMLTabStopImportContext::createFastChildContext",
+          "SvxXMLTabStopImportContext::endFastElement"
         ]
       }
     },
@@ -6305,19 +6378,14 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts#XMLTextPropertySetContext",
-          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties",
           "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx#XMLTextPropertySetContext::createFastChildContext",
-          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#case XML_ELEMENT(STYLE, XML_POSITION)",
-          "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx#sal_Int32 nMin = SAL_MIN_INT32",
-          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports and round-trips signed tab positions in paragraph and inherited style properties",
-          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#SvxXMLTabStopImportContext::endFastElement",
-          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#selects Default tab entries in XML source order before canonical sorting"
+          "apps/office/src/xmloff/source/style/xmltabi.ts#SvxXMLTabStopImportContext",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties"
         ],
-        "justification": "The dispatch context preserves the implemented element-valued Writer tab sequence and explicit empty-sequence behavior. Signed style:position measures now match xmltabi.cxx conversion with xmluconv.hxx signed default bounds; a real package input and export/reimport test verifies negative direct and inherited-style positions with alignment and leader preservation. Existing sequence tests cover alignment, leader and decimal data. These bounded assertions do not establish all tab-import defaults, malformed-input fallback or whole-module parity; those contracts remain unverified. Unmodeled text columns, complex colors and drop caps are not claimed. Default sequence selection now follows the pinned endFastElement source-order loop: first Default is the sole retained stop, otherwise later Default entries are skipped before canonical position sorting. Six literal ODT sequence cases verify direct and inherited-style import plus export/reimport for first/later/multiple/only Default, no Default, empty and signed positions with all retained alignment/decimal/leader values. The previous middle-Default assertion was corrected to the pinned contract. Other import defaults and fallback contracts remain unverified.",
+        "justification": "Owns only the implemented element-property dispatch responsibility, creating the native-named SvxXMLTabStopImportContext from style/xmltabi.ts. Embedded tab parsing and shared conversion were extracted into their pinned source owners with unchanged implementation bodies; there is no compatibility re-export. Existing ODT assertions exercise dispatch. Unmodeled text columns, complex colors and drop caps are not claimed; broader dispatch contracts remain unverified.",
         "knownViolations": [],
         "localSymbols": [
-          "XMLTextPropertySetContext",
-          "importOdfLength"
+          "XMLTextPropertySetContext"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "xmloff/source/text/XMLTextPropertySetContext.cxx",

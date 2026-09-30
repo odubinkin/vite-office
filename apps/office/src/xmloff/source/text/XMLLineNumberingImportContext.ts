@@ -2,7 +2,7 @@
 
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import { importOdfLength } from "./XMLTextPropertySetContext";
+import { importOdfLength } from "../core/xmluconv";
 
 /** ODF line-numbering configuration independent of Writer document ownership. */
 export interface OdfLineNumberingConfiguration {
