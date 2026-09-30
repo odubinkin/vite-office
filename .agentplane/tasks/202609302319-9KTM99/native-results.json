@@ -1,0 +1,2265 @@
+[
+  {
+    "kind": "set",
+    "pattern": null,
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": null,
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": null,
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": null,
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": null,
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      1,
+      ""
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      ""
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "literal",
+    "action": "keep",
+    "expected": [
+      "",
+      "literal",
+      1,
+      "literal"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "literal",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "literal",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "literal",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "literal",
+    "action": "count",
+    "expected": [
+      "",
+      "literal",
+      7,
+      "literal"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "literal",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      1,
+      "%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "tail%",
+    "action": "keep",
+    "expected": [
+      "tail",
+      "%",
+      1,
+      "tail%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "tail%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "%",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "tail%",
+    "action": "suffix",
+    "expected": [
+      "tail",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "tail%",
+    "action": "count",
+    "expected": [
+      "tail",
+      "%",
+      7,
+      "tail%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "tail%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%0%",
+    "action": "keep",
+    "expected": [
+      "%0",
+      "",
+      1,
+      "%0%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%0%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%0%",
+    "action": "suffix",
+    "expected": [
+      "%0",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%0%",
+    "action": "count",
+    "expected": [
+      "%0",
+      "",
+      7,
+      "%0%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%0%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      1,
+      "%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "(%1%)",
+    "action": "keep",
+    "expected": [
+      "(",
+      ")",
+      1,
+      "(%1%)"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "(%1%)",
+    "action": "prefix",
+    "expected": [
+      "P",
+      ")",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "(%1%)",
+    "action": "suffix",
+    "expected": [
+      "(",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "(%1%)",
+    "action": "count",
+    "expected": [
+      "(",
+      ")",
+      7,
+      "(%1%)"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "(%1%)",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%2%/%1%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      2,
+      "%2%/%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%2%/%1%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%2%/%1%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%2%/%1%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%2%/%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%2%/%1%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%.%1%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      2,
+      "%1%.%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%.%1%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%.%1%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%.%1%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%1%.%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%.%1%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "prefix%%a%2%?%",
+    "action": "keep",
+    "expected": [
+      "prefix%%a",
+      "?%",
+      1,
+      "prefix%%a%2%?%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "prefix%%a%2%?%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "?%",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "prefix%%a%2%?%",
+    "action": "suffix",
+    "expected": [
+      "prefix%%a",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "prefix%%a%2%?%",
+    "action": "count",
+    "expected": [
+      "prefix%%a",
+      "?%",
+      7,
+      "prefix%%a%2%?%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "prefix%%a%2%?%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%10%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      1,
+      "%10%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%10%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%10%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%10%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%10%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%10%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%11%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      1,
+      "%11%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%11%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%11%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%11%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%11%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%11%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%x%3%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      2,
+      "%1%x%3%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%x%3%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%x%3%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%x%3%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%1%x%3%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%x%3%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%",
+    "action": "keep",
+    "expected": [
+      "",
+      "%",
+      1,
+      "%1%%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "%",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%",
+    "action": "count",
+    "expected": [
+      "",
+      "%",
+      7,
+      "%1%%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%x%1%abc%",
+    "action": "keep",
+    "expected": [
+      "%x",
+      "abc%",
+      1,
+      "%x%1%abc%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%x%1%abc%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "abc%",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%x%1%abc%",
+    "action": "suffix",
+    "expected": [
+      "%x",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%x%1%abc%",
+    "action": "count",
+    "expected": [
+      "%x",
+      "abc%",
+      7,
+      "%x%1%abc%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%x%1%abc%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1",
+    "action": "keep",
+    "expected": [
+      "",
+      "1",
+      1,
+      "%1"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "1",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1",
+    "action": "count",
+    "expected": [
+      "",
+      "1",
+      7,
+      "%1"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      1,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%",
+    "action": "keep",
+    "expected": [
+      "",
+      "",
+      2,
+      "%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%",
+    "action": "prefix",
+    "expected": [
+      "P",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%",
+    "action": "suffix",
+    "expected": [
+      "",
+      "S",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%",
+    "action": "count",
+    "expected": [
+      "",
+      "",
+      7,
+      "%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%"
+    ]
+  },
+  {
+    "kind": "set",
+    "pattern": "%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%%1%",
+    "action": "clear",
+    "expected": [
+      "",
+      "",
+      2,
+      null
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 0,
+    "level": 0,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      0,
+      "[]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 0,
+    "level": 2,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      0,
+      "[]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 0,
+    "level": 9,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      0,
+      "[]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 1,
+    "level": 0,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      1,
+      "[%1%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 1,
+    "level": 2,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      1,
+      "[%3%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 1,
+    "level": 9,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      1,
+      "[%10%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 2,
+    "level": 0,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      2,
+      "[%1%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 2,
+    "level": 2,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      2,
+      "[%2%.%3%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 2,
+    "level": 9,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      2,
+      "[%9%.%10%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 10,
+    "level": 0,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      10,
+      "[%1%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 10,
+    "level": 2,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      10,
+      "[%1%.%2%.%3%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 10,
+    "level": 9,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      10,
+      "[%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 255,
+    "level": 0,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      255,
+      "[%1%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 255,
+    "level": 2,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      255,
+      "[%1%.%2%.%3%]"
+    ]
+  },
+  {
+    "kind": "generate",
+    "count": 255,
+    "level": 9,
+    "prefix": "[",
+    "suffix": "]",
+    "expected": [
+      "[",
+      "]",
+      255,
+      "[%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%]"
+    ]
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "(2.3.4)"
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "(0.3.4)"
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "(2.0.4)"
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "(3.4)"
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "(0.3.4)"
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "(0.4)"
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[3|2|3]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[3|0|3]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[0|2|0]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[3||3]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[3|0|3]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[0||0]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "4:2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "4:0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "4:2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "4:"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "4:0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "4:"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "2x3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "0x3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "2x0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "x3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "0x3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "x0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "3/3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "3/3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "0/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "3/3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "3/3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      1,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "0/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "values": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "count": 0,
+    "level": 9,
+    "prefix": "",
+    "suffix": "",
+    "expected": "10/1"
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      0,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 0,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "(4)"
+  }
+]

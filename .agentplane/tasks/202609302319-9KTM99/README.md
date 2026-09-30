@@ -4,7 +4,7 @@ title: "Restore native numbering marker ownership and ListFormat semantics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore native marker ownership and ListFormat under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:22:23.684Z"
+doc_updated_at: "2026-09-30T23:27:43.631Z"
 doc_updated_by: "CODER"
 description: "Move implemented numbering marker state to SvxNumberFormat, reproduce pinned ListFormat setters and Writer decimal pattern substitution/defaults, and preserve state through clone and Worker transfer."
 sections:
@@ -55,6 +55,10 @@ sections:
     - Observation: Initial focus command referenced a nonexistent Vitest config and exited before executing tests; several read-only guesses for test/probe paths were absent.
       Impact: No semantic test evidence was produced and no runtime regression is inferred.
       Resolution: Discover actual repository config and task probe filenames before rerunning; keep verification scope unchanged.
+
+    - Observation: Compiled 161 native states/labels and 56 clone labels match. Focus passes 27 assertions but two new fixtures fail: percent scanning of %0% derives prefix %0, and the existing node API is GetListLabel.
+      Impact: The test expectation and guessed method need correction; extracted source differential confirms current implementation for the unusual percent case.
+      Resolution: Use the source-observed compatibility prefix and existing node method; rerun focus and full gates unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -88,3 +92,7 @@ Iteration25 completed; clean main/direct and parent 202609240501-C9TN6M remains 
 - Observation: Initial focus command referenced a nonexistent Vitest config and exited before executing tests; several read-only guesses for test/probe paths were absent.
   Impact: No semantic test evidence was produced and no runtime regression is inferred.
   Resolution: Discover actual repository config and task probe filenames before rerunning; keep verification scope unchanged.
+
+- Observation: Compiled 161 native states/labels and 56 clone labels match. Focus passes 27 assertions but two new fixtures fail: percent scanning of %0% derives prefix %0, and the existing node API is GetListLabel.
+  Impact: The test expectation and guessed method need correction; extracted source differential confirms current implementation for the unusual percent case.
+  Resolution: Use the source-observed compatibility prefix and existing node method; rerun focus and full gates unchanged.

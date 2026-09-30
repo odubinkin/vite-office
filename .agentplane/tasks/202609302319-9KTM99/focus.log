@@ -1,0 +1,51 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/editeng/source/items/numitem.test.ts (6 tests | 1 failed) 8ms
+   × derives compatibility fields literally from native percent scanning 4ms
+ ❯ src/sw/source/core/doc/number-list-format.test.ts (3 tests | 1 failed) 7ms
+   × preserves independent ListFormat state in owned clones and Worker transfer 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/editeng/source/items/numitem.test.ts > derives compatibility fields literally from native percent scanning
+AssertionError: expected [ '%0', '', 1 ] to deeply equal [ '', '%0%', 1 ]
+
+- Expected
++ Received
+
+  [
++   "%0",
+    "",
+-   "%0%",
+    1,
+  ]
+
+ ❯ src/editeng/source/items/numitem.test.ts:135:86
+    133|     expect(format.HasListFormat()).toBe(true);
+    134|     expect(format.GetListFormat()).toBe(pattern);
+    135|     expect([format.GetPrefix(), format.GetSuffix(), format.GetIncludeU…
+       |                                                                                      ^
+    136|       prefix,
+    137|       suffix,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/sw/source/core/doc/number-list-format.test.ts > preserves independent ListFormat state in owned clones and Worker transfer
+TypeError: node.GetListMarker is not a function
+ ❯ src/sw/source/core/doc/number-list-format.test.ts:71:15
+     69|   format.SetListFormat("§(%1%/%1%)");
+     70|   format.SetIncludeUpperLevels(0);
+     71|   expect(node.GetListMarker()).toBe("§(1/1)");
+       |               ^
+     72|   const snapshot = encodeWriterDocument(document);
+     73|   expect(snapshot.swModelVersion).toBe(16);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 3 passed (5)
+      Tests  2 failed | 27 passed (29)
+   Start at  06:27:18
+   Duration  2.07s (transform 372ms, setup 428ms, import 485ms, tests 55ms, environment 2.24s)
+
