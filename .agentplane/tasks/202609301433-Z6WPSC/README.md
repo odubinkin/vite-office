@@ -1,10 +1,11 @@
 ---
 id: "202609301433-Z6WPSC"
 title: "Preserve signed Writer paragraph side margins"
-status: "DOING"
+result_summary: "Signed side margins retain values through model transfer, ODT and undo/redo; full verification passed."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts"
   findings:
     - "Signed paragraph measures and undo/redo are tested; page margins and intentional product exceptions are unchanged. Runtime inventory evidence remains bounded."
-commit: null
+commit:
+  hash: "d17c8bd23af5f1a452774ee6adc353b6559ad823"
+  message: "🐛 Z6WPSC task: preserve signed Writer paragraph side margins"
 comments:
   -
     author: "CODER"
     body: "Start: complete the signed paragraph margin correction under the user-approved iterative upstream audit; preserve fixed browser product decisions."
+  -
+    author: "CODER"
+    body: "Verified: signed paragraph side margins and unsnapped decrease now follow pinned LibreOffice contracts; focused and full checks passed."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609301433-Z6WPSC"
+  -
+    type: "status"
+    at: "2026-09-30T14:36:50.050Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: signed paragraph side margins and unsnapped decrease now follow pinned LibreOffice contracts; focused and full checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T14:36:21.404Z"
+doc_updated_at: "2026-09-30T14:36:50.052Z"
 doc_updated_by: "CODER"
 description: "One upstream parity correction: permit signed text-left and right-margin item values and ODT paragraph measures, preserving the negative result of unsnapped MoveLeftMargin and its undo/redo. User authorized iterative existing-function parity fixes on 2026-09-30. Preserve deliberate recovery, save/open and rendering exceptions."
 sections:
