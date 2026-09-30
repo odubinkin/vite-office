@@ -4,7 +4,7 @@ title: "Match SfxItemSet invalid-as-default copying"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: "CODER"
   note: "PutSet defaults, INVALID/DISABLED handling and return values match pinned source; 22 focused tests and full npm run verify passed (564 app, 109 inventory, 19 browser, 100% coverage), doctor and routing passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T15:11:21.772Z"
+  updated_by: "EVALUATOR"
+  note: "Ordinary item set copying follows pinned invalid-as-default, disabled-source filtering and exact return semantics."
+  evaluated_sha: "9935632aa9764cb5b7ae47096c3648403a8c3c91"
+  blueprint_digest: "a930efebeeef731661f3a609bce27a81fef18d42318c46737e73feb1bab22555"
+  evidence_refs:
+    - ".agentplane/tasks/202609301502-ZN5HAJ/README.md"
+    - ".agentplane/tasks/202609301502-ZN5HAJ/quality/20260930-151121772-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301502-ZN5HAJ/quality/20260930-151121772-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301502-ZN5HAJ/quality/20260930-151121772-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301502-ZN5HAJ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301502-ZN5HAJ/verify.log"
+    - "apps/office/src/svl/source/items/itemset.test.ts"
+    - "apps/office/src/sw/source/core/doc/writer-attributes.test.ts"
+  findings:
+    - "Focused tests exercise both flag modes and Writer inheritance, while independent cloning remains intact; all full gates pass."
 commit: null
 comments:
   -

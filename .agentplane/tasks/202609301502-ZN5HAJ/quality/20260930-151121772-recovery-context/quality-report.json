@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301502-ZN5HAJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T15:11:21.772Z",
+  "verdict": "pass",
+  "summary": "Ordinary item set copying follows pinned invalid-as-default, disabled-source filtering and exact return semantics.",
+  "evaluated_sha": "9935632aa9764cb5b7ae47096c3648403a8c3c91",
+  "blueprint_digest": "a930efebeeef731661f3a609bce27a81fef18d42318c46737e73feb1bab22555",
+  "findings": [
+    "Focused tests exercise both flag modes and Writer inheritance, while independent cloning remains intact; all full gates pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301502-ZN5HAJ/README.md",
+    ".agentplane/tasks/202609301502-ZN5HAJ/verify.log",
+    "apps/office/src/svl/source/items/itemset.test.ts",
+    "apps/office/src/sw/source/core/doc/writer-attributes.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Out-of-range explicit state setters and frame item source ownership remain separate documented corrections; other operations are still unverified."
+  ]
+}
