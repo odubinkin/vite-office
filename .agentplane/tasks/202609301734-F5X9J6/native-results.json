@@ -1,0 +1,639 @@
+[
+  {
+    "value": "",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": " \t\n",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": " \t\n",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "-",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "-",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": ".",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": ".",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "-.",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "-.",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": ".mm",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": ".mm",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "1.",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": "1.",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": ".5",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": ".5",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": "-.5",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -1
+  },
+  {
+    "value": "-.5",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -1
+  },
+  {
+    "value": "1.49",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": "1.49",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": "-1.49",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -1
+  },
+  {
+    "value": "-1.49",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -1
+  },
+  {
+    "value": "1.5",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 2
+  },
+  {
+    "value": "1.5",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 2
+  },
+  {
+    "value": "-1.5",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -2
+  },
+  {
+    "value": "-1.5",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -2
+  },
+  {
+    "value": "1cm",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 567
+  },
+  {
+    "value": "1cm",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1000
+  },
+  {
+    "value": "1in",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1440
+  },
+  {
+    "value": "1in",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 2540
+  },
+  {
+    "value": "1mm",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 57
+  },
+  {
+    "value": "1mm",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 100
+  },
+  {
+    "value": "1pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 20
+  },
+  {
+    "value": "1pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 35
+  },
+  {
+    "value": "1pc",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 240
+  },
+  {
+    "value": "1pc",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 423
+  },
+  {
+    "value": "1px",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1px",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 26
+  },
+  {
+    "value": "2pc",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 480
+  },
+  {
+    "value": "2pc",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 847
+  },
+  {
+    "value": " \t-.5 CM",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -283
+  },
+  {
+    "value": " \t-.5 CM",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -500
+  },
+  {
+    "value": "1PT",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 20
+  },
+  {
+    "value": "1PT",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 35
+  },
+  {
+    "value": "2.0 In trailing",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 2880
+  },
+  {
+    "value": "2.0 In trailing",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 5080
+  },
+  {
+    "value": "0.024pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "0.024pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": "-0.024pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "-0.024pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -1
+  },
+  {
+    "value": "0.025pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": "0.025pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 1
+  },
+  {
+    "value": "-0.025pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -1
+  },
+  {
+    "value": "-0.025pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -1
+  },
+  {
+    "value": "1pt junk",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 20
+  },
+  {
+    "value": "1pt junk",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 35
+  },
+  {
+    "value": "1pt\t",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1pt\t",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1ptjunk",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1ptjunk",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1e3pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1e3pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "+1pt",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "+1pt",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1%",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1%",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1em",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1em",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1ic",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1ic",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1m",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1m",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "bad",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "bad",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "12.3.4mm",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "12.3.4mm",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": null
+  },
+  {
+    "value": "1\u00a0mm",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 57
+  },
+  {
+    "value": "1\u00a0mm",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 100
+  },
+  {
+    "value": "2147483647",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 2147483647
+  },
+  {
+    "value": "2147483648",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 2147483647
+  },
+  {
+    "value": "-2147483649",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -2147483648
+  },
+  {
+    "value": "999999999999999999mm",
+    "target": "twip",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": 2147483647
+  },
+  {
+    "value": "-999999999999999999mm",
+    "target": "mm100",
+    "min": -2147483648,
+    "max": 2147483647,
+    "native": -2147483648
+  },
+  {
+    "value": "666",
+    "target": "twip",
+    "min": -1000,
+    "max": 555,
+    "native": 555
+  },
+  {
+    "value": "-1001",
+    "target": "mm100",
+    "min": -1000,
+    "max": 555,
+    "native": -1000
+  },
+  {
+    "value": "-1pt",
+    "target": "twip",
+    "min": 0,
+    "max": 2147483647,
+    "native": 0
+  },
+  {
+    "value": "1.1",
+    "target": "mm100",
+    "min": 2,
+    "max": 8,
+    "native": 2
+  },
+  {
+    "value": "-1.1",
+    "target": "mm100",
+    "min": -8,
+    "max": -2,
+    "native": -2
+  },
+  {
+    "value": "unknown",
+    "target": "mm100",
+    "min": 0,
+    "max": 1,
+    "native": null
+  }
+]
