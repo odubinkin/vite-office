@@ -1,10 +1,11 @@
 ---
 id: "202609301617-7M8MJP"
 title: "Unify SfxItemSet value and state storage"
-status: "DOING"
+result_summary: "One PoolItemMap now owns value and sentinel entries, with source-style transitions and unchanged browser SET-only persistence. AST inspection and 48 focused tests passed; 574 application, 109 inventory and 19 browser tests passed with 100% required coverage. Doctor/routing and all other gates passed. Deliberate save/open/recovery deviations preserved; broader audit remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202609301617-7M8MJP/verify.log"
   findings:
     - "Reviewed source transitions, sentinel identity/trivial equality exclusion, Get/default inheritance, PutSet flags and change result, full/cross-pool state copies, Count/Clear and SET-only browser projection. No compatibility state map, validator changes, or deliberate product deviation changes. All declared verification passed; broader module parity remains unverified."
-commit: null
+commit:
+  hash: "1b562ee3a953c4c12f1a996a5b0acbdc5b88e473"
+  message: "🛠️ 7M8MJP task: unify native item-set entry storage"
 comments:
   -
     author: "CODER"
     body: "Start: replace the temporary dual-map item state representation with the pinned single-map architecture and preserve all established contracts."
+  -
+    author: "CODER"
+    body: "Verified: native-style single-map SfxItemSet architecture, distinct invalid singleton, preserved state/value contracts and necessary ODT test consumers; full npm run verify passes."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 574 application, 109 inventory, 19 browser tests; all required coverage 100%; all static/build/docs/source/invariant/parity gates; semanticViolationCount=0. Architecture inspection and 48 focused tests passed. Doctor and policy routing passed with pre-existing warnings only. Scope: native single-map item-set state storage, distinct invalid singleton and necessary existing test consumers; broader parity remains unverified."
+  -
+    type: "status"
+    at: "2026-09-30T16:37:04.562Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native-style single-map SfxItemSet architecture, distinct invalid singleton, preserved state/value contracts and necessary ODT test consumers; full npm run verify passes."
 doc_version: 3
-doc_updated_at: "2026-09-30T16:35:43.400Z"
+doc_updated_at: "2026-09-30T16:37:04.564Z"
 doc_updated_by: "CODER"
 description: "One architecture refactor under approved iterative parity work: replace separate item/state maps with native-style PoolItemMap entries using distinct poolitem-owned INVALID and DISABLED sentinels, preserving observable contracts."
 sections:
