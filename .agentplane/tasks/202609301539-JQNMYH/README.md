@@ -4,7 +4,7 @@ title: "Match SwAttrSet polymorphic clone contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T15:48:18.277Z"
+  updated_by: "CODER"
+  note: "13 focused tests, full npm run verify, doctor and routing passed; source-specific clone branches documented with pinned evidence."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: match the existing SwAttrSet Clone contract to all pinned same-pool and foreign-pool branches with focused regression evidence."
+  -
+    type: "verify"
+    at: "2026-09-30T15:48:18.277Z"
+    author: "CODER"
+    state: "ok"
+    note: "13 focused tests, full npm run verify, doctor and routing passed; source-specific clone branches documented with pinned evidence."
 doc_version: 3
-doc_updated_at: "2026-09-30T15:40:23.917Z"
+doc_updated_at: "2026-09-30T15:48:18.357Z"
 doc_updated_by: "CODER"
 description: "One source-backed correction under the approved iterative parity audit: override existing inherited Clone to preserve Writer type and pinned same-pool/cross-pool contracts, without changing unsupported native APIs or product deviations."
 sections:
@@ -49,11 +55,41 @@ sections:
   Verify Steps: "1. Focused Writer attribute tests reproduce subtype loss and foreign Writer-pool copying before the fix, then verify virtual dispatch through SfxItemSet, default/explicit same pool, full and empty clones, parent and all direct state/value independence. 2. Confirm foreign generic pool clones copy directly SET values only and drop parent/INVALID/DISABLED; foreign Writer pool clones remain empty and retain Writer type/document identity exactly as pinned destination iteration does. 3. npm run verify passes all gates at 100% coverage. 4. ap doctor and node .agentplane/policy/check-routing.mjs pass; source/inventory diffs remain within declared scope and final git status is clean."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T15:48:18.277Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 13 focused tests, full npm run verify, doctor and routing passed; source-specific clone branches documented with pinned evidence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T15:48:17.802Z, excerpt_hash=sha256:153b598ce594c10b0da37da2d5a53b29df25067ef832b1a7509415e1296a1fba
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301539-JQNMYH/blueprint/resolved-snapshot.json
+    - old_digest: f7543bc9bb3b086b1eb18658b2dcd5f88c52a0672b18402312aa6b8590a27522
+    - current_digest: f7543bc9bb3b086b1eb18658b2dcd5f88c52a0672b18402312aa6b8590a27522
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301539-JQNMYH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609301539-JQNMYH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Command: focused Vitest writer-attributes.test.ts from apps/office. Result: two new tests failed before implementation with SfxItemSet instead of SwAttrSet; all 13 passed after the override. Evidence: same-pool virtual dispatch preserves Writer subtype/document, parent, independent SET values and INVALID/DISABLED states; empty clones omit parent/state/value entries. Foreign generic pools delegate to SET-only base cloning. Foreign Writer pools remain empty with destination document identity: pinned SwAttrSet::Clone iterates its newly constructed empty pTmpSet, and SfxItemIter begins at map.begin/end. This unusual source behavior is preserved, not silently repaired. Command: npm run verify. Result: pass; 568 application tests, 109 inventory tests, 19 browser scenarios, 100% required coverage and all type/static/source/provenance/invariant/parity gates. Evidence: verify.log; semanticViolationCount 0. Command: ap doctor; node .agentplane/policy/check-routing.mjs. Result: pass with pre-existing doctor warnings only. Scope: one polymorphic clone contract and source-backed tests/inventory evidence; other module contracts remain unverified. No product exception changed."
 id_source: "generated"
 ---
 ## Summary
@@ -77,6 +113,36 @@ CODER repairs one inherited polymorphic Clone contract in apps/office/src/sw/sou
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T15:48:18.277Z — VERIFY — ok
+
+By: CODER
+
+Note: 13 focused tests, full npm run verify, doctor and routing passed; source-specific clone branches documented with pinned evidence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T15:48:17.802Z, excerpt_hash=sha256:153b598ce594c10b0da37da2d5a53b29df25067ef832b1a7509415e1296a1fba
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301539-JQNMYH/blueprint/resolved-snapshot.json
+- old_digest: f7543bc9bb3b086b1eb18658b2dcd5f88c52a0672b18402312aa6b8590a27522
+- current_digest: f7543bc9bb3b086b1eb18658b2dcd5f88c52a0672b18402312aa6b8590a27522
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301539-JQNMYH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609301539-JQNMYH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -85,3 +151,5 @@ CODER repairs one inherited polymorphic Clone contract in apps/office/src/sw/sou
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Command: focused Vitest writer-attributes.test.ts from apps/office. Result: two new tests failed before implementation with SfxItemSet instead of SwAttrSet; all 13 passed after the override. Evidence: same-pool virtual dispatch preserves Writer subtype/document, parent, independent SET values and INVALID/DISABLED states; empty clones omit parent/state/value entries. Foreign generic pools delegate to SET-only base cloning. Foreign Writer pools remain empty with destination document identity: pinned SwAttrSet::Clone iterates its newly constructed empty pTmpSet, and SfxItemIter begins at map.begin/end. This unusual source behavior is preserved, not silently repaired. Command: npm run verify. Result: pass; 568 application tests, 109 inventory tests, 19 browser scenarios, 100% required coverage and all type/static/source/provenance/invariant/parity gates. Evidence: verify.log; semanticViolationCount 0. Command: ap doctor; node .agentplane/policy/check-routing.mjs. Result: pass with pre-existing doctor warnings only. Scope: one polymorphic clone contract and source-backed tests/inventory evidence; other module contracts remain unverified. No product exception changed.

@@ -323,6 +323,14 @@ export class SwAttrSet extends SfxItemSet {
     return this.Get(RES_PARATR_NUMRULE, inParent) as SwNumRuleItem;
   }
 
+  /** Clones with the pinned Writer subtype and destination-pool branches. @param includeItems - Whether same-pool or generic-pool clones copy direct items. @param pool - Destination pool. @returns Independent item set. */
+  public override Clone(includeItems = true, pool: SfxItemPool = this.GetPool()): SfxItemSet {
+    if (pool === this.GetPool()) return this.CloneAsValue(includeItems);
+    // The pinned foreign Writer-pool branch iterates the newly created empty destination.
+    if (pool instanceof SwAttrPool) return new SwAttrSet(pool, this.GetRanges());
+    return super.Clone(includeItems, pool);
+  }
+
   /** Creates an independent Writer attribute set. @param includeItems - Whether direct deltas are copied. @returns Cloned Writer set. */
   public CloneAsValue(includeItems = true): SwAttrSet {
     const clone = new SwAttrSet(

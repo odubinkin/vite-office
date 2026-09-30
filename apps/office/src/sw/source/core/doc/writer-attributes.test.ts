@@ -31,6 +31,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
+import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
@@ -237,6 +238,104 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(heading.GetNextTextFormatColl()).toBe(parent);
     expect(parent.DerivedFrom()).toBeUndefined();
     expect((heading.DerivedFrom() as SwFormatColl).GetName()).toBe("Heading");
+  });
+
+  it("preserves Writer subtype through polymorphic same-pool cloning", /** Matches SwAttrSet::Clone copy construction and empty construction. @returns Nothing. */ () => {
+    const writer = createFixture();
+    const pool = writer.GetAttrPool();
+    const parent = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
+    parent.Put(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    const source = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES, parent);
+    source.Put(new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT));
+    source.InvalidateItem(RES_CHRATR_UNDERLINE);
+    source.DisableItem(RES_CHRATR_WEIGHT);
+    const polymorphic: SfxItemSet = source;
+    for (const itemSet of [source.Clone(), source.Clone(true, pool), polymorphic.Clone(true)]) {
+      expect(itemSet).toBeInstanceOf(SwAttrSet);
+      const clone = itemSet as SwAttrSet;
+      expect(clone).not.toBe(source);
+      expect(clone.GetPool()).toBe(pool);
+      expect(clone.GetDoc()).toBe(writer);
+      expect(clone.GetRanges()).toEqual(source.GetRanges());
+      expect(clone.GetParent()).toBe(parent);
+      expect(clone.GetAdjust().GetAdjust()).toBe(SvxAdjust.Center);
+      expect(clone.Count()).toBe(3);
+      expect(clone.GetItemState(RES_CHRATR_UNDERLINE, false)).toBe(SfxItemState.INVALID);
+      expect(clone.GetItemState(RES_CHRATR_WEIGHT, false)).toBe(SfxItemState.DISABLED);
+      expect(clone.GetItemIfSet(RES_MARGIN_TEXTLEFT, false)).not.toBe(
+        source.GetItemIfSet(RES_MARGIN_TEXTLEFT, false),
+      );
+      clone.ClearItem(RES_CHRATR_UNDERLINE);
+      clone.Put(new SvxTextLeftMarginItem(360, RES_MARGIN_TEXTLEFT));
+      expect(source.GetItemState(RES_CHRATR_UNDERLINE, false)).toBe(SfxItemState.INVALID);
+      expect((source.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(
+        -720,
+      );
+    }
+    for (const itemSet of [source.Clone(false), polymorphic.Clone(false, pool)]) {
+      expect(itemSet).toBeInstanceOf(SwAttrSet);
+      const clone = itemSet as SwAttrSet;
+      expect(clone.GetPool()).toBe(pool);
+      expect(clone.GetDoc()).toBe(writer);
+      expect(clone.GetRanges()).toEqual(source.GetRanges());
+      expect(clone.GetParent()).toBeUndefined();
+      expect(clone.Count()).toBe(0);
+      expect(clone.GetAdjust().GetAdjust()).toBe(SvxAdjust.ParaStart);
+      expect(clone.GetItemState(RES_CHRATR_UNDERLINE, false)).toBe(SfxItemState.DEFAULT);
+      expect(clone.GetItemState(RES_CHRATR_WEIGHT, false)).toBe(SfxItemState.DEFAULT);
+    }
+    expect(source.Count()).toBe(3);
+    expect(source.GetParent()).toBe(parent);
+  });
+
+  it("matches Writer and generic destination pool clone branches", /** Reproduces the pinned Writer destination iteration and generic SET-only clone. @returns Nothing. */ () => {
+    const pool = createFixture().GetAttrPool();
+    const parent = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
+    parent.Put(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    const source = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES, parent);
+    source.Put(new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT));
+    source.InvalidateItem(RES_CHRATR_UNDERLINE);
+    source.DisableItem(RES_CHRATR_WEIGHT);
+    const writerDestination = createFixture();
+    for (const includeItems of [true, false]) {
+      const itemSet = source.Clone(includeItems, writerDestination.GetAttrPool());
+      expect(itemSet).toBeInstanceOf(SwAttrSet);
+      const clone = itemSet as SwAttrSet;
+      expect(clone.GetPool()).toBe(writerDestination.GetAttrPool());
+      expect(clone.GetDoc()).toBe(writerDestination);
+      expect(clone.GetRanges()).toEqual(source.GetRanges());
+      expect(clone.GetParent()).toBeUndefined();
+      expect(clone.Count()).toBe(0);
+      expect(clone.GetAdjust().GetAdjust()).toBe(SvxAdjust.ParaStart);
+      expect((clone.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(0);
+      expect(clone.GetItemState(RES_CHRATR_UNDERLINE, false)).toBe(SfxItemState.DEFAULT);
+      expect(clone.GetItemState(RES_CHRATR_WEIGHT, false)).toBe(SfxItemState.DEFAULT);
+    }
+    const genericPool = new SfxItemPool();
+    for (const includeItems of [true, false]) {
+      const clone = source.Clone(includeItems, genericPool);
+      expect(clone).toBeInstanceOf(SfxItemSet);
+      expect(clone).not.toBeInstanceOf(SwAttrSet);
+      expect(clone.GetPool()).toBe(genericPool);
+      expect(clone.GetRanges()).toEqual(source.GetRanges());
+      expect(clone.GetParent()).toBeUndefined();
+      expect(clone.Count()).toBe(includeItems ? 1 : 0);
+      expect(clone.GetItemState(RES_CHRATR_UNDERLINE, false)).toBe(SfxItemState.DEFAULT);
+      expect(clone.GetItemState(RES_CHRATR_WEIGHT, false)).toBe(SfxItemState.DEFAULT);
+      expect(clone.GetItemIfSet(RES_PARATR_ADJUST)).toBeUndefined();
+      if (includeItems) {
+        expect((clone.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(
+          -720,
+        );
+        expect(clone.GetItemIfSet(RES_MARGIN_TEXTLEFT, false)).not.toBe(
+          source.GetItemIfSet(RES_MARGIN_TEXTLEFT, false),
+        );
+        clone.Put(new SvxTextLeftMarginItem(360, RES_MARGIN_TEXTLEFT));
+      }
+    }
+    expect(source.Count()).toBe(3);
+    expect(source.GetParent()).toBe(parent);
+    expect((source.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(-720);
   });
 
   it("clones Writer attribute values independently and omits inheritance for empty clones", /** Matches SwAttrSet::CloneAsValue and its SfxItemSet copy constructor. @returns Nothing. */ () => {

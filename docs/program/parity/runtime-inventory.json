@@ -3313,9 +3313,13 @@
           "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem",
           "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SVX_TAB_DEFDIST",
           "vendor/libreoffice-reference/sw/source/core/attr/swatrset.cxx#SwAttrSet::CloneAsValue",
-          "apps/office/src/sw/source/core/doc/writer-attributes.test.ts#clones Writer attribute values independently and omits inheritance for empty clones"
+          "apps/office/src/sw/source/core/doc/writer-attributes.test.ts#clones Writer attribute values independently and omits inheritance for empty clones",
+          "vendor/libreoffice-reference/sw/source/core/attr/swatrset.cxx#SwAttrSet::Clone",
+          "vendor/libreoffice-reference/include/svl/itemiter.hxx#IsAtEnd",
+          "apps/office/src/sw/source/core/doc/writer-attributes.test.ts#preserves Writer subtype through polymorphic same-pool cloning",
+          "apps/office/src/sw/source/core/doc/writer-attributes.test.ts#matches Writer and generic destination pool clone branches"
         ],
-        "justification": "RES_PARATR_TABSTOP now registers SvxTabStopItem with the pinned 1134-twip default stop, and snapshot decoding restores its full value. Other SwAttrPool and SwAttrSet operations remain unverified. Focused clone assertions now verify independent direct values/states and parent preservation for full same-pool clones; empty clones discard inheritance. SfxItemSet cross-pool clones copy directly SET values only. Item copying follows copy-constructor semantics independently of PutSet. Other module contracts remain unverified.",
+        "justification": "RES_PARATR_TABSTOP now registers SvxTabStopItem with the pinned 1134-twip default stop, and snapshot decoding restores its full value. Other SwAttrPool and SwAttrSet operations remain unverified. Focused clone assertions now verify independent direct values/states and parent preservation for full same-pool clones; empty clones discard inheritance. SfxItemSet cross-pool clones copy directly SET values only. Item copying follows copy-constructor semantics independently of PutSet. Other module contracts remain unverified. Polymorphic Clone now follows the pinned SwAttrSet override: same-pool results preserve Writer subtype and the existing value-clone contracts, generic destination pools delegate to SET-only base cloning, and foreign Writer pools produce a fresh empty SwAttrSet because the pinned code iterates that empty destination. Both flags and destination branches have focused assertions; no broader parity is inferred.",
         "knownViolations": [],
         "localSymbols": [
           "SwAttrPool",
