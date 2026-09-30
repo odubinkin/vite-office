@@ -1300,6 +1300,63 @@
   },
   {
     "kind": "marker",
+    "pattern": null,
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "2.3."
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "0.3."
+  },
+  {
+    "kind": "marker",
+    "pattern": null,
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "2.0."
+  },
+  {
+    "kind": "marker",
     "pattern": "",
     "types": [
       0,
@@ -1400,6 +1457,63 @@
       1,
       0,
       0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ""
+  },
+  {
+    "kind": "marker",
+    "pattern": "",
+    "types": [
+      0,
+      0,
+      1
     ],
     "values": [
       2,
@@ -1514,6 +1628,63 @@
       1,
       0,
       0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "literal"
+  },
+  {
+    "kind": "marker",
+    "pattern": "literal",
+    "types": [
+      0,
+      0,
+      1
     ],
     "values": [
       2,
@@ -1642,6 +1813,63 @@
   },
   {
     "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[3|2|3]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[3|0|3]"
+  },
+  {
+    "kind": "marker",
+    "pattern": "[%2%|%1%|%2%]",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "[0|2|0]"
+  },
+  {
+    "kind": "marker",
     "pattern": "%3%:%1%",
     "types": [
       0,
@@ -1753,6 +1981,63 @@
     "prefix": "(",
     "suffix": ")",
     "expected": "4:"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ":2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ":0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%3%:%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": ":2"
   },
   {
     "kind": "marker",
@@ -1870,6 +2155,63 @@
   },
   {
     "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%10%/%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%10%/2"
+  },
+  {
+    "kind": "marker",
     "pattern": "%11%/%0%/%1%",
     "types": [
       0,
@@ -1981,6 +2323,63 @@
     "prefix": "(",
     "suffix": ")",
     "expected": "%11%/%0%/"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/2"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%11%/%0%/%1%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "%11%/%0%/2"
   },
   {
     "kind": "marker",
@@ -2098,6 +2497,63 @@
   },
   {
     "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "2x3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "0x3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%1%x%2%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "2x0"
+  },
+  {
+    "kind": "marker",
     "pattern": "%2%/%2%",
     "types": [
       0,
@@ -2198,6 +2654,63 @@
       1,
       0,
       0
+    ],
+    "values": [
+      2,
+      0,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "0/0"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "3/3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      0,
+      0,
+      1
+    ],
+    "values": [
+      0,
+      3,
+      4
+    ],
+    "count": 3,
+    "level": 2,
+    "prefix": "(",
+    "suffix": ")",
+    "expected": "3/3"
+  },
+  {
+    "kind": "marker",
+    "pattern": "%2%/%2%",
+    "types": [
+      0,
+      0,
+      1
     ],
     "values": [
       2,

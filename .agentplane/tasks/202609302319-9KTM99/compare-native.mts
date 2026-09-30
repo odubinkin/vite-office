@@ -29,4 +29,4 @@ for (const [index, test] of cases.entries()) {
     assert.deepEqual([format.GetPrefix(), format.GetSuffix(), format.GetIncludeUpperLevels(), format.HasListFormat() ? format.GetListFormat() : null], test.expected, `native state ${index}`);
   }
 }
-console.log(`${cases.length} native states/labels match; all 56 marker cases also match after owned rule clone.`);
+console.log(`${cases.length} native states/labels match; all 83 marker cases also match after owned rule clone.`);

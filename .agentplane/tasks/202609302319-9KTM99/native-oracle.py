@@ -77,7 +77,7 @@ for count in [0,1,2,10,255]:
     for level in [0,2,9]:
         cases.append(dict(kind='generate',count=count,level=level,prefix='[',suffix=']'))
 for pattern in [None,'','literal','[%2%|%1%|%2%]','%3%:%1%','%10%/%1%','%11%/%0%/%1%','%1%x%2%','%2%/%2%']:
-    for kinds in [[0,0,0],[1,0,0]]:
+    for kinds in [[0,0,0],[1,0,0],[0,0,1]]:
         for values in [[2,3,4],[0,3,4],[2,0,4]]:
             cases.append(dict(kind='marker',pattern=pattern,types=kinds,values=values,count=3,level=2,prefix='(',suffix=')'))
 cases.append(dict(kind='marker',pattern='%10%/%1%',types=[0]*10,values=list(range(1,11)),count=0,level=9,prefix='',suffix=''))

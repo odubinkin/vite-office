@@ -1074,6 +1074,33 @@ std::cout<<std::quoted(out.value)<<'\n';}
 rule.formats[2].nInclUpperLevels=3;
 rule.formats[2].sPrefix="(";
 rule.formats[2].sSuffix=")";
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
 rule.formats[2].SetListFormat(OUString(""));
 rule.formats[0].type=0;
 rule.formats[1].type=0;
@@ -1128,6 +1155,36 @@ rule.formats[2].SetListFormat(OUString(""));
 rule.formats[0].type=1;
 rule.formats[1].type=0;
 rule.formats[2].type=0;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString(""));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString(""));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString(""));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
 auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
 std::cout<<std::quoted(out.value)<<'\n';}
 {SwNumRule rule;
@@ -1194,6 +1251,36 @@ std::cout<<std::quoted(out.value)<<'\n';}
 rule.formats[2].nInclUpperLevels=3;
 rule.formats[2].sPrefix="(";
 rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("literal"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("literal"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("literal"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
 rule.formats[2].SetListFormat(OUString("[%2%|%1%|%2%]"));
 rule.formats[0].type=0;
 rule.formats[1].type=0;
@@ -1248,6 +1335,36 @@ rule.formats[2].SetListFormat(OUString("[%2%|%1%|%2%]"));
 rule.formats[0].type=1;
 rule.formats[1].type=0;
 rule.formats[2].type=0;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("[%2%|%1%|%2%]"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("[%2%|%1%|%2%]"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("[%2%|%1%|%2%]"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
 auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
 std::cout<<std::quoted(out.value)<<'\n';}
 {SwNumRule rule;
@@ -1314,6 +1431,36 @@ std::cout<<std::quoted(out.value)<<'\n';}
 rule.formats[2].nInclUpperLevels=3;
 rule.formats[2].sPrefix="(";
 rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%3%:%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%3%:%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%3%:%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
 rule.formats[2].SetListFormat(OUString("%10%/%1%"));
 rule.formats[0].type=0;
 rule.formats[1].type=0;
@@ -1368,6 +1515,36 @@ rule.formats[2].SetListFormat(OUString("%10%/%1%"));
 rule.formats[0].type=1;
 rule.formats[1].type=0;
 rule.formats[2].type=0;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%10%/%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%10%/%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%10%/%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
 auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
 std::cout<<std::quoted(out.value)<<'\n';}
 {SwNumRule rule;
@@ -1434,6 +1611,36 @@ std::cout<<std::quoted(out.value)<<'\n';}
 rule.formats[2].nInclUpperLevels=3;
 rule.formats[2].sPrefix="(";
 rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%11%/%0%/%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%11%/%0%/%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%11%/%0%/%1%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
 rule.formats[2].SetListFormat(OUString("%1%x%2%"));
 rule.formats[0].type=0;
 rule.formats[1].type=0;
@@ -1494,6 +1701,36 @@ std::cout<<std::quoted(out.value)<<'\n';}
 rule.formats[2].nInclUpperLevels=3;
 rule.formats[2].sPrefix="(";
 rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%1%x%2%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%1%x%2%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%1%x%2%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
 rule.formats[2].SetListFormat(OUString("%2%/%2%"));
 rule.formats[0].type=0;
 rule.formats[1].type=0;
@@ -1548,6 +1785,36 @@ rule.formats[2].SetListFormat(OUString("%2%/%2%"));
 rule.formats[0].type=1;
 rule.formats[1].type=0;
 rule.formats[2].type=0;
+auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%2%/%2%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({2,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%2%/%2%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
+auto out=rule.MakeNumString({0,3,4},true,2,false,nullptr,0);
+std::cout<<std::quoted(out.value)<<'\n';}
+{SwNumRule rule;
+rule.formats[2].nInclUpperLevels=3;
+rule.formats[2].sPrefix="(";
+rule.formats[2].sSuffix=")";
+rule.formats[2].SetListFormat(OUString("%2%/%2%"));
+rule.formats[0].type=0;
+rule.formats[1].type=0;
+rule.formats[2].type=1;
 auto out=rule.MakeNumString({2,0,4},true,2,false,nullptr,0);
 std::cout<<std::quoted(out.value)<<'\n';}
 {SwNumRule rule;

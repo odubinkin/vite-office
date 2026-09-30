@@ -4,7 +4,7 @@ title: "Restore native numbering marker ownership and ListFormat semantics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore native marker ownership and ListFormat under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:27:43.631Z"
+doc_updated_at: "2026-09-30T23:29:19.376Z"
 doc_updated_by: "CODER"
 description: "Move implemented numbering marker state to SvxNumberFormat, reproduce pinned ListFormat setters and Writer decimal pattern substitution/defaults, and preserve state through clone and Worker transfer."
 sections:
@@ -59,6 +59,10 @@ sections:
     - Observation: Compiled 161 native states/labels and 56 clone labels match. Focus passes 27 assertions but two new fixtures fail: percent scanning of %0% derives prefix %0, and the existing node API is GetListLabel.
       Impact: The test expectation and guessed method need correction; extracted source differential confirms current implementation for the unusual percent case.
       Resolution: Use the source-observed compatibility prefix and existing node method; rerun focus and full gates unchanged.
+
+    - Observation: An evidence metadata script assumed the wrong top-level JSON collection key and failed before writing either file.
+      Impact: Runtime metadata remains unchanged; source and differential checks still pass.
+      Resolution: Inspect actual JSON keys and apply bounded evidence entries without changing status or validators.
 id_source: "generated"
 ---
 ## Summary
@@ -96,3 +100,7 @@ Iteration25 completed; clean main/direct and parent 202609240501-C9TN6M remains 
 - Observation: Compiled 161 native states/labels and 56 clone labels match. Focus passes 27 assertions but two new fixtures fail: percent scanning of %0% derives prefix %0, and the existing node API is GetListLabel.
   Impact: The test expectation and guessed method need correction; extracted source differential confirms current implementation for the unusual percent case.
   Resolution: Use the source-observed compatibility prefix and existing node method; rerun focus and full gates unchanged.
+
+- Observation: An evidence metadata script assumed the wrong top-level JSON collection key and failed before writing either file.
+  Impact: Runtime metadata remains unchanged; source and differential checks still pass.
+  Resolution: Inspect actual JSON keys and apply bounded evidence entries without changing status or validators.
