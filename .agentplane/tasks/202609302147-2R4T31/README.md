@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:02:53.895Z"
+doc_updated_at: "2026-09-30T22:07:53.049Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
@@ -76,6 +76,10 @@ sections:
     - Observation: Focused lint rejects the new static-only SwXNumberingRules facade and four non-null assertions in the integration test.
       Impact: The repository enforces instance-based classes and explicit fixture guards; semantic comparisons already match the native C++ probe.
       Resolution: Use the native instance facade with replaceByIndex over an owned rule and explicit test guards. Do not suppress lint or alter gates. This refines the existing approved application boundary.
+
+    - Observation: Initial full npm run verify passed app 617/131 with 100% coverage, then inventory validation rejected an obsolete xmlimp.ts::SwNumFormat implementation marker. The read-only parity diagnostic confirms the same stale reference.
+      Impact: The implementation owner moved to unosett.ts; metadata still points at eager construction removed from xmlimp.ts. No app or coverage failure; later mandatory gates did not run yet.
+      Resolution: Move the existing parity implementation reference to the actual Writer UNO owner without adding compatibility markers or changing validators. Rerun the complete mandatory command. Focused final run passed 55 tests in nine files.
 id_source: "generated"
 ---
 ## Summary
@@ -129,3 +133,7 @@ Command: npx vitest run the eight focused core/XML/ODT files from apps/office. R
 - Observation: Focused lint rejects the new static-only SwXNumberingRules facade and four non-null assertions in the integration test.
   Impact: The repository enforces instance-based classes and explicit fixture guards; semantic comparisons already match the native C++ probe.
   Resolution: Use the native instance facade with replaceByIndex over an owned rule and explicit test guards. Do not suppress lint or alter gates. This refines the existing approved application boundary.
+
+- Observation: Initial full npm run verify passed app 617/131 with 100% coverage, then inventory validation rejected an obsolete xmlimp.ts::SwNumFormat implementation marker. The read-only parity diagnostic confirms the same stale reference.
+  Impact: The implementation owner moved to unosett.ts; metadata still points at eager construction removed from xmlimp.ts. No app or coverage failure; later mandatory gates did not run yet.
+  Resolution: Move the existing parity implementation reference to the actual Writer UNO owner without adding compatibility markers or changing validators. Rerun the complete mandatory command. Focused final run passed 55 tests in nine files.

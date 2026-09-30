@@ -1,0 +1,15 @@
+
+> vite-office@0.1.0 inventory:parity
+> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference
+
+/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-support.ts:173
+        throw new Error(
+              ^
+
+Error: Parity local implementation marker is absent: apps/office/src/sw/source/filter/xml/xmlimp.ts :: SwNumFormat
+    at validateSide (/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-support.ts:173:15)
+    at async validateParityMappingEvidence (/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mappings.ts:336:5)
+    at async runParityMappingCli (/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-cli.ts:109:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-cli.ts:164:3)
+
+Node.js v24.13.1

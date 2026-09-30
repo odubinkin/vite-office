@@ -7,9 +7,10 @@ const fixtures = JSON.parse(readFileSync(new URL("native-results.json", import.m
 let comparisons = 0;
 for (const { declarations, expected } of fixtures) {
   const rule = new SwNumRule("oracle");
+  const service = new SwXNumberingRules(rule);
   try {
     for (const [level,kind,bullet,distance,mode,left,offset,first,indent,tab,suffix] of declarations) {
-      SwXNumberingRules.SetNumberingRuleByIndex(rule, {
+      service.replaceByIndex(level, {
         kind: kind === 1 ? "bullet" : "numbered",
         ...(kind === 1 ? { bulletChar: String.fromCodePoint(bullet) } : {}),
         suffix: suffix === 1 ? "." : "",
@@ -17,7 +18,7 @@ for (const { declarations, expected } of fixtures) {
         charTextDistance: (distance << 16) >> 16,
         positionAndSpaceMode: mode === 1 ? "label-alignment" : "label-width-and-position",
         firstLineIndent: first, indentAt: indent, listTabPosition: tab, labelFollowedBy: "listtab",
-      }, level);
+      });
     }
   } catch (error) {
     if (!(error instanceof NumberingRulePropertyError)) throw error;
