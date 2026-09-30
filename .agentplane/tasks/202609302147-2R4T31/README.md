@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:57:39.961Z"
+doc_updated_at: "2026-09-30T21:58:57.773Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
@@ -64,6 +64,10 @@ sections:
     - Observation: The new integration test exposed browser snapshot loss of the inactive bullet character for Arabic levels; two other failures were fixture omissions (reopen assertion still assumed fallback and error injection lacked Standard style).
       Impact: Native base and duplicate-replacement state did not survive a browser snapshot. This is a required copy/snapshot acceptance issue within the numbering task.
       Resolution: Add one bounded helper remediation in writer-document-codec.ts: encode the stored bullet character for both supported marker kinds using the existing optional schema field. Correct the two fixtures and retain schema v15 and mandatory checks.
+
+    - Observation: Focused run now passes all numbering state/copy/snapshot/ODT cases; only error-injection assertion expected the raw programmer-error message, whereas the SAX bridge wraps propagated errors as malformed XML.
+      Impact: No runtime defect: the unrelated error correctly aborts the import and is not swallowed by the native property-failure catch.
+      Resolution: Assert the established SAX malformed-XML wrapper; preserve the requirement that unrelated errors abort import. Evidence: focused-pass.log, 54 passed and one test-only expectation failed.
 id_source: "generated"
 ---
 ## Summary
@@ -105,3 +109,7 @@ Command: npx vitest run the eight focused core/XML/ODT files from apps/office. R
 - Observation: The new integration test exposed browser snapshot loss of the inactive bullet character for Arabic levels; two other failures were fixture omissions (reopen assertion still assumed fallback and error injection lacked Standard style).
   Impact: Native base and duplicate-replacement state did not survive a browser snapshot. This is a required copy/snapshot acceptance issue within the numbering task.
   Resolution: Add one bounded helper remediation in writer-document-codec.ts: encode the stored bullet character for both supported marker kinds using the existing optional schema field. Correct the two fixtures and retain schema v15 and mandatory checks.
+
+- Observation: Focused run now passes all numbering state/copy/snapshot/ODT cases; only error-injection assertion expected the raw programmer-error message, whereas the SAX bridge wraps propagated errors as malformed XML.
+  Impact: No runtime defect: the unrelated error correctly aborts the import and is not swallowed by the native property-failure catch.
+  Resolution: Assert the established SAX malformed-XML wrapper; preserve the requirement that unrelated errors abort import. Evidence: focused-pass.log, 54 passed and one test-only expectation failed.
