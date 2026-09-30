@@ -4,7 +4,7 @@ title: "Restore native list label-alignment XML contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned supported list label-alignment XML defaults, MM100/Writer conversion and native mode/attribute/export contracts; retain registered deviations and verify full package/browser gates."
 doc_version: 3
-doc_updated_at: "2026-09-30T20:36:18.537Z"
+doc_updated_at: "2026-09-30T20:47:07.061Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Correct the existing label-alignment import/export pipeline: MM100 defaults, parsing/clamps and Writer conversion; explicit ODF mode, nondefault attribute presence and native export quantization. Keep unsupported position modes and broader numbering obligations separate."
 sections:
@@ -51,7 +51,10 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commit if source-backed existing list label-alignment contracts regress; retain earlier verified context and item corrections."
-  Findings: ""
+  Findings: |-
+    - Observation: Initial affected ODT suites passed 121 tests; the added literal package helper then failed typechecking because it used getText rather than the canonical SwTextNode.GetText API.
+      Impact: New test helper issue; no source scope or verification criteria change.
+      Resolution: Corrected the helper API and retained the manual source-stage/core/export/reopen assertions. All required checks will run after this in-scope correction.
 id_source: "generated"
 ---
 ## Summary
@@ -82,3 +85,7 @@ Inspect pinned xmlnumi.cxx label-alignment constructor and SHRT MM100 bounds, xm
 Revert the scoped implementation commit if source-backed existing list label-alignment contracts regress; retain earlier verified context and item corrections.
 
 ## Findings
+
+- Observation: Initial affected ODT suites passed 121 tests; the added literal package helper then failed typechecking because it used getText rather than the canonical SwTextNode.GetText API.
+  Impact: New test helper issue; no source scope or verification criteria change.
+  Resolution: Corrected the helper API and retained the manual source-stage/core/export/reopen assertions. All required checks will run after this in-scope correction.
