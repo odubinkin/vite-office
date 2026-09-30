@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:59:59.542Z"
+doc_updated_at: "2026-09-30T23:03:39.428Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -83,6 +83,14 @@ sections:
     - Observation: Full app regression passes 623/623 and all four coverage categories at 100%. Inventory has two failures after changed context dispatch: a diagnostic fixture count and one additional inventory assertion require inspection.
       Impact: The final mandatory run remains unproven until native-backed metadata/fixture expectations reflect actual event semantics.
       Resolution: Inspect exact extra diagnostics and affected assertion against pinned sources; update only evidence-based expectations in matching inventory fixtures, preserving mandatory thresholds and runtime state checks.
+
+    - Observation: The exact extra diagnostic is unknown-element style:header-footer-properties under styles.xml/automatic-styles/page-layout/header-style. The privacy failure fixture inserted a valid office:spreadsheet child under office:text, which native null fallback ignores.
+      Impact: Old counts and the synthetic failure trigger encoded prior nonnative dispatch; neither indicates changed canonical Writer fixture state.
+      Resolution: Record the exact extra structural event and count 92; assert the valid unrelated child imports, then use genuinely mismatched XML with PRIVATE text to preserve sanitized error coverage. Matching inventory ODT tests are evidence fixture corrections, not validator/threshold changes.
+
+    - Observation: The revised malformed XML example throws at diagnoseOdtImport structural preflight before the import-error capture boundary; 108/109 inventory tests otherwise pass including the exact extra diagnostic.
+      Impact: This test targets sanitized semantic import failures, not parser preflight failures, so malformed XML is the wrong trigger for the existing API contract.
+      Resolution: Use well-formed XML containing the explicitly unsupported native section feature and private attribute value; verify sanitized import-error reporting in the targeted inventory test before the full rerun. Preserve diagnostic API and parser guards unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -144,3 +152,11 @@ Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, imp
 - Observation: Full app regression passes 623/623 and all four coverage categories at 100%. Inventory has two failures after changed context dispatch: a diagnostic fixture count and one additional inventory assertion require inspection.
   Impact: The final mandatory run remains unproven until native-backed metadata/fixture expectations reflect actual event semantics.
   Resolution: Inspect exact extra diagnostics and affected assertion against pinned sources; update only evidence-based expectations in matching inventory fixtures, preserving mandatory thresholds and runtime state checks.
+
+- Observation: The exact extra diagnostic is unknown-element style:header-footer-properties under styles.xml/automatic-styles/page-layout/header-style. The privacy failure fixture inserted a valid office:spreadsheet child under office:text, which native null fallback ignores.
+  Impact: Old counts and the synthetic failure trigger encoded prior nonnative dispatch; neither indicates changed canonical Writer fixture state.
+  Resolution: Record the exact extra structural event and count 92; assert the valid unrelated child imports, then use genuinely mismatched XML with PRIVATE text to preserve sanitized error coverage. Matching inventory ODT tests are evidence fixture corrections, not validator/threshold changes.
+
+- Observation: The revised malformed XML example throws at diagnoseOdtImport structural preflight before the import-error capture boundary; 108/109 inventory tests otherwise pass including the exact extra diagnostic.
+  Impact: This test targets sanitized semantic import failures, not parser preflight failures, so malformed XML is the wrong trigger for the existing API contract.
+  Resolution: Use well-formed XML containing the explicitly unsupported native section feature and private attribute value; verify sanitized import-error reporting in the targeted inventory test before the full rerun. Preserve diagnostic API and parser guards unchanged.

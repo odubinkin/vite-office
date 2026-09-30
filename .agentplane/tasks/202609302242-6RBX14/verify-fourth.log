@@ -1,0 +1,117 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 198 runtime sources, 815 relative imports, 12 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  06:01:16
+   Duration  125ms (transform 26ms, setup 0ms, import 36ms, tests 3ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  133 passed (133)
+      Tests  623 passed (623)
+   Start at  06:01:16
+   Duration  70.44s (transform 2.06s, setup 10.10s, import 8.18s, tests 55.27s, environment 47.46s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 9712/9712 )
+Branches     : 100% ( 7296/7296 )
+Functions    : 100% ( 2703/2703 )
+Lines        : 100% ( 8945/8945 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts (7 tests | 1 failed) 5678ms
+     × records import failures without exposing package or XML error values 62ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/libreoffice-inventory/odt-import-diagnostics.test.ts > privacy-safe ODT import diagnostics > records import failures without exposing package or XML error values
+Error: ODF XML is malformed.
+ ❯ parseFastXmlStream apps/office/src/sax/source/fastparser/fastparser.ts:109:11
+    107|     )
+    108|       throw error;
+    109|     throw new Error("ODF XML is malformed.", { cause: error });
+       |           ^
+    110|   }
+    111|   /* v8 ignore next -- saxes rejects empty, multi-root, and unclosed s…
+ ❯ diagnoseOdtImport scripts/libreoffice-inventory/odt-import-diagnostics.ts:77:5
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts:192:23
+
+Caused by: Error: 24:43: unexpected close tag.
+ ❯ SaxesParser.makeError node_modules/saxes/saxes.js:412:16
+ ❯ SaxesParser.fail node_modules/saxes/saxes.js:424:26
+ ❯ SaxesParser.closeTag node_modules/saxes/saxes.js:2009:18
+ ❯ SaxesParser.sCloseTag node_modules/saxes/saxes.js:1603:18
+ ❯ SaxesParser.write node_modules/saxes/saxes.js:485:36
+ ❯ parseFastXmlStream apps/office/src/sax/source/fastparser/fastparser.ts:100:12
+ ❯ diagnoseOdtImport scripts/libreoffice-inventory/odt-import-diagnostics.ts:77:5
+ ❯ scripts/libreoffice-inventory/odt-import-diagnostics.test.ts:192:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 35 passed (36)
+      Tests  1 failed | 108 passed (109)
+   Start at  06:02:28
+   Duration  43.02s (transform 668ms, setup 0ms, import 1.62s, tests 37.98s, environment 2ms)
+
