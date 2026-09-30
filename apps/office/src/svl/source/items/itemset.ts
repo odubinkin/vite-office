@@ -103,8 +103,8 @@ export class SfxItemSet {
     return stored;
   }
 
-  /** Copies every explicit delta from another set. @param source - Source item set. @returns True when at least one item changed. */
-  public PutSet(source: SfxItemSet): boolean {
+  /** Copies SET items, ignores DISABLED and handles INVALID as the pinned Put overload does. @param source - Source item set. @param invalidAsDefault - Whether INVALID clears a direct target value instead of copying the invalid state. @returns True when a SET value changes or a default-mode clear removes an entry. */
+  public PutSet(source: SfxItemSet, invalidAsDefault = true): boolean {
     let changed = false;
     source.entries().forEach(
       /** Copies one source delta. @param item - Explicit source item. @returns Nothing. */
@@ -113,10 +113,9 @@ export class SfxItemSet {
       },
     );
     for (const [which, state] of source.itemStates) {
-      if (!this.containsWhich(which)) continue;
-      if (this.GetItemState(which, false) === state) continue;
-      this.SetItemState(which, state);
-      changed = true;
+      if (state !== SfxItemState.INVALID) continue;
+      if (invalidAsDefault) changed = this.ClearItem(which) !== 0 || changed;
+      else if (this.containsWhich(which)) this.InvalidateItem(which);
     }
     return changed;
   }

@@ -1312,9 +1312,13 @@
           "apps/office/src/svl/source/items/itemset.test.ts#filters unsupported Put values and copies supported entries from wider sets",
           "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::SfxItemSet( const SfxItemSet&",
           "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Clone",
-          "apps/office/src/svl/source/items/itemset.test.ts#clones parents and direct states only under the pinned pool and item rules"
+          "apps/office/src/svl/source/items/itemset.test.ts#clones parents and direct states only under the pinned pool and item rules",
+          "vendor/libreoffice-reference/include/svl/itemset.hxx#bInvalidAsDefault = true",
+          "vendor/libreoffice-reference/svl/source/items/itemset.cxx#IsDisabledItem(&rItem)",
+          "apps/office/src/svl/source/items/itemset.test.ts#clears invalid targets by default and ignores disabled source entries",
+          "apps/office/src/sw/source/core/doc/writer-attributes.test.ts#restores Writer node and format inheritance when copying invalid default entries"
         ],
-        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Put now ignores items outside the accepted WhichId ranges, including zero, matching PutImpl; focused assertions cover unchanged local/inherited state and supported entries copied from wider source sets. Other item-set contracts remain unverified. Focused clone assertions now verify independent direct values/states and parent preservation for full same-pool clones; empty clones discard inheritance. SfxItemSet cross-pool clones copy directly SET values only. Item copying follows copy-constructor semantics independently of PutSet. Other module contracts remain unverified.",
+        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Put now ignores items outside the accepted WhichId ranges, including zero, matching PutImpl; focused assertions cover unchanged local/inherited state and supported entries copied from wider source sets. Other item-set contracts remain unverified. Focused clone assertions now verify independent direct values/states and parent preservation for full same-pool clones; empty clones discard inheritance. SfxItemSet cross-pool clones copy directly SET values only. Item copying follows copy-constructor semantics independently of PutSet. Other module contracts remain unverified. PutSet now follows the pinned invalid-as-default flag (true): INVALID removes a direct target value, DISABLED source values are ignored, and explicit false copies invalid state without independently marking the returned change flag. Writer style/node fallback and complete clone state preservation have focused assertions; other module operations remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SfxItemState",

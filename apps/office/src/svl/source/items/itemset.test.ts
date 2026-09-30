@@ -352,7 +352,7 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(child.ClearItem()).toBe(2);
   });
 
-  it("propagates inherited invalid and disabled states and copies sentinels" /** Matches recursive SfxItemSet state lookup and Put semantics. @returns Nothing. */, () => {
+  it("propagates inherited states and applies default set-copying rules" /** Matches recursive state lookup and Put invalid-as-default semantics. @returns Nothing. */, () => {
     const pool = createPool();
     const parent = new SfxItemSet(pool, [[1, 2]]);
     parent.InvalidateItem(1);
@@ -362,10 +362,44 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(child.GetItemState(2)).toBe(SfxItemState.DISABLED);
     expect(child.GetItemState(1, false)).toBe(SfxItemState.DEFAULT);
     const copy = new SfxItemSet(pool, [[1, 2]]);
-    expect(copy.PutSet(parent)).toBe(true);
-    expect(copy.GetItemState(1)).toBe(SfxItemState.INVALID);
-    expect(copy.GetItemState(2)).toBe(SfxItemState.DISABLED);
     expect(copy.PutSet(parent)).toBe(false);
+    expect(copy.GetItemState(1)).toBe(SfxItemState.DEFAULT);
+    expect(copy.GetItemState(2)).toBe(SfxItemState.DEFAULT);
+    expect(copy.PutSet(parent)).toBe(false);
+  });
+
+  it("clears invalid targets by default and ignores disabled source entries", /** Exercises pinned Put defaults, explicit false and its return-value contract. @returns Nothing. */ () => {
+    const pool = createPool();
+    const parent = new SfxItemSet(pool, [[1, 2]]);
+    parent.Put(new SfxStringItem(1, "inherited"));
+    const target = new SfxItemSet(pool, [[1, 2]], parent);
+    target.Put(new SfxStringItem(1, "direct"));
+    target.Put(new SfxInt16Item(2, 8));
+    const source = new SfxItemSet(pool, [[1, 3]]);
+    source.InvalidateItem(1);
+    source.DisableItem(2);
+    source.InvalidateItem(3);
+    expect(target.PutSet(source)).toBe(true);
+    expect(target.GetItemState(1, false)).toBe(SfxItemState.DEFAULT);
+    expect((target.Get(1) as SfxStringItem).GetValue()).toBe("inherited");
+    expect((target.Get(2) as SfxInt16Item).GetValue()).toBe(8);
+    expect(target.PutSet(source)).toBe(false);
+    expect(target.PutSet(source, false)).toBe(false);
+    expect(target.GetItemState(1, false)).toBe(SfxItemState.INVALID);
+    expect(target.GetItemState(2, false)).toBe(SfxItemState.SET);
+    expect(target.GetItemState(3, false)).toBe(SfxItemState.UNKNOWN);
+    expect(target.Clone().GetItemState(1, false)).toBe(SfxItemState.INVALID);
+    expect(source.GetItemState(1, false)).toBe(SfxItemState.INVALID);
+    expect(source.GetItemState(2, false)).toBe(SfxItemState.DISABLED);
+    expect(source.Count()).toBe(3);
+    expect(target.PutSet(source, true)).toBe(true);
+    target.DisableItem(1);
+    expect(target.PutSet(source)).toBe(true);
+    source.Put(new SfxInt16Item(2, 12));
+    expect(target.PutSet(source, false)).toBe(true);
+    expect(target.GetItemState(1, false)).toBe(SfxItemState.INVALID);
+    expect((target.Get(2) as SfxInt16Item).GetValue()).toBe(12);
+    expect(target.PutSet(source, false)).toBe(false);
   });
 
   it("rejects invalid ranges, parents, WhichIds, and missing defaults" /** Covers structural item-set invariants. @returns Nothing; assertions inspect errors. */, function rejectsInvalidSets(): void {

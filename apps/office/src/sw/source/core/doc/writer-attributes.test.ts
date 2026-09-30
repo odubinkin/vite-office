@@ -168,6 +168,29 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(node.HasSwAttrSet()).toBe(false);
   });
 
+  it("restores Writer node and format inheritance when copying invalid default entries", /** Exercises SfxItemSet Put defaults through Writer attribute owners. @returns Nothing. */ () => {
+    const writer = createFixture();
+    const pool = writer.GetAttrPool();
+    const parent = writer.GetDfltTextFormatColl();
+    parent.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    const format = new SwFormat(pool, "Direct", WRITER_TEXT_NODE_WHICH_RANGES, parent);
+    format.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
+    const node = writer.paragraphs[0];
+    if (node === undefined) throw new Error("Writer fixture paragraph is missing.");
+    node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
+    const source = new SfxItemSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
+    source.InvalidateItem(RES_PARATR_ADJUST);
+    expect(format.SetFormatAttrSet(source)).toBe(true);
+    expect(format.GetAttrSet().GetAdjust().GetAdjust()).toBe(SvxAdjust.Center);
+    expect(format.GetAttrSet().GetItemState(RES_PARATR_ADJUST, false)).toBe(SfxItemState.DEFAULT);
+    expect(format.SetFormatAttrSet(source)).toBe(false);
+    expect(node.SetAttr(source)).toBe(true);
+    expect(node.GetParagraphAlignment()).toBe("center");
+    expect(node.GetSwAttrSet().GetItemState(RES_PARATR_ADJUST, false)).toBe(SfxItemState.DEFAULT);
+    expect(node.SetAttr(source)).toBe(false);
+    expect(source.GetItemState(RES_PARATR_ADJUST, false)).toBe(SfxItemState.INVALID);
+  });
+
   it("supports SwFormat mutation, derivation, cloning, and collection follow links" /** Covers format APIs and their ownership guards. @returns Nothing; assertions inspect direct deltas. */, function mutatesFormats(): void {
     const writer = createFixture();
     const pool = writer.GetAttrPool();
