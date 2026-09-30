@@ -1,10 +1,11 @@
 ---
 id: "202609301539-JQNMYH"
 title: "Match SwAttrSet polymorphic clone contracts"
-status: "DOING"
+result_summary: "Matched the existing SwAttrSet polymorphic Clone contract to pinned LibreOffice."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202609301539-JQNMYH/verify.log"
   findings:
     - "Reviewed virtual dispatch, subtype and destination document identity, independent direct values/states, empty clones, generic SET-only delegation and the unusual pinned empty foreign Writer-pool destination. Scope remains limited to the declared three files and task artifacts; full verification passed."
-commit: null
+commit:
+  hash: "693a211aa63429f2cd03479df2b19fdd65f8b4c5"
+  message: "🐛 JQNMYH task: preserve Writer polymorphic clone contracts"
 comments:
   -
     author: "CODER"
     body: "Start: match the existing SwAttrSet Clone contract to all pinned same-pool and foreign-pool branches with focused regression evidence."
+  -
+    author: "CODER"
+    body: "Verified: Writer polymorphic cloning matches pinned subtype, parent, states and destination-pool contracts; focused and full gates passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "13 focused tests, full npm run verify, doctor and routing passed; source-specific clone branches documented with pinned evidence."
+  -
+    type: "status"
+    at: "2026-09-30T15:48:52.761Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer polymorphic cloning matches pinned subtype, parent, states and destination-pool contracts; focused and full gates passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T15:48:18.357Z"
+doc_updated_at: "2026-09-30T15:48:52.762Z"
 doc_updated_by: "CODER"
 description: "One source-backed correction under the approved iterative parity audit: override existing inherited Clone to preserve Writer type and pinned same-pool/cross-pool contracts, without changing unsupported native APIs or product deviations."
 sections:
