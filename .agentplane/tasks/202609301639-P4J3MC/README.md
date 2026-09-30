@@ -4,7 +4,7 @@ title: "Preserve signed tab-stop positions and default distances"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 576 application, 109 inventory, 19 browser tests; all required coverage 100%; all build/static/docs/source/invariant/parity gates; semanticViolationCount=0. Fourteen focused core/codec/ODT tests, doctor and routing passed. Scope: signed tab position/direct default-distance domain and negative ODF tab import; broader module parity remains unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T16:49:09.865Z"
+  updated_by: "EVALUATOR"
+  note: "Signed tab position and direct default-distance domains match pinned sal_Int32 sources; negative tab import follows signed measure conversion and round-trip evidence."
+  evaluated_sha: "9fab51e76f38c873e1ac7b20ef1adbcb40aa958f"
+  blueprint_digest: "81cdcbd5b7fc9c4f86596b8d92cd2a8d2cd77eeb54389bae125f0e8907dcc4b6"
+  evidence_refs:
+    - ".agentplane/tasks/202609301639-P4J3MC/README.md"
+    - ".agentplane/tasks/202609301639-P4J3MC/quality/20260930-164909865-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301639-P4J3MC/quality/20260930-164909865-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301639-P4J3MC/quality/20260930-164909865-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301639-P4J3MC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301639-P4J3MC/verify.log"
+  findings:
+    - "Reviewed signed endpoints and independent direct setter versus UNO PutValue restriction; generated unsigned spacing stays scoped. Ordered replacement, clone/snapshot/real-pool codec and negative direct/style ODT input/export/reimport assertions pass. Metadata records bounded evidence and removes unsupported whole-module XML parity claim. No validator/schema/generator or deliberate product-policy changes. Full verification 576/109/19 and all required coverage 100%, doctor/routing pass; remaining tab defaults/filtering remain unverified."
 commit: null
 comments:
   -
