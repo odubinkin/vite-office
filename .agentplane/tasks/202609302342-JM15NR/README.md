@@ -4,7 +4,7 @@ title: "Restore native ODF numbering marker parameter transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore native ODF marker parameter transport and source-owned per-level export under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:43:02.865Z"
+doc_updated_at: "2026-09-30T23:47:52.321Z"
 doc_updated_by: "CODER"
 description: "Preserve native prefix/suffix/start/display and ListFormat properties through XML declaration, Writer UNO application and ODF 1.3 export; refactor rule export into source-owned per-level property records."
 sections:
@@ -49,7 +49,12 @@ sections:
   Verify Steps: "Verify absent/empty/raw affixes, XML escaping, byte-prefix/invalid/negative/overflow start/display values, numeric SHRT bounds, bullet ignoring start/display, native generated pattern clamp and SetListFormat compatibility overwrite. Test standard and loext raw pattern aliases including both attribute orders and empty patterns. Check ordered UNO application and rejection retention, source-owned export records, native conditional prefix/suffix/start/display output and signed start projection. Genuine common and automatic ODT fixtures must assert complete marker state, visible labels, copies, Worker v16, exact selected XML and reopen; explicitly assert native standard ODF 1.3 pattern approximation rather than inventing losslessness. Compare representative declaration/property/export predicates to unmodified extracted pinned bodies with bounded dependency shims. Run npm run verify unchanged with both 100% coverage suites and all browser/source/provenance/ODT gates; ap doctor, policy routing and git diff --check. Record real code hash and clean final tracked state."
   Verification: "Pending implementation and final mandatory gates."
   Rollback Plan: "Revert the scoped implementation commit after inspecting later numbering corrections; retain task evidence."
-  Findings: "Previous turn is progress: iteration26 child 202609302319-9KTM99 DONE, implementation 7a5d80e1add85f113e00ea6fcf70e802a0e194cf and parent progress 6c27c2da1724ef23b6f6bd506488ec31c2f0b5ff; clean main/direct and only parent active. Persistent goal authorizes safe local correction. Pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65 xmlnumi accepts raw prefix/suffix for both families, StartWith clamp 0..32767 with negatives->1, ParentNumbering clamp 1..32767, optional style/loext ListFormat in attribute order and generated clamped placeholders. GetProperties always appends ListFormat last; numeric start/parent only. unosett applies prefix/suffix/start/accepted parent then ListFormat; xmlnume emits nonempty affixes for both families, nondefault numeric start and clamped display>1, but raw ListFormat only in extended output. Local XML adapters drop fields/reject suffixes and text export substitutes a dot. SwXML metadata generator/build-id parsing is currently absent/ignored: ancient OOo bogus-bullet-suffix correction and full generator contracts remain a separate unresolved dependency, so no complete legacy/full-module import claim. Extended export and numbering families/fonts/legal/outline/continuous/bitmap/NONE remain unverified; preserve current standard ODF 1.3 settings."
+  Findings: |-
+    Previous turn is progress: iteration26 child 202609302319-9KTM99 DONE, implementation 7a5d80e1add85f113e00ea6fcf70e802a0e194cf and parent progress 6c27c2da1724ef23b6f6bd506488ec31c2f0b5ff; clean main/direct and only parent active. Persistent goal authorizes safe local correction. Pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65 xmlnumi accepts raw prefix/suffix for both families, StartWith clamp 0..32767 with negatives->1, ParentNumbering clamp 1..32767, optional style/loext ListFormat in attribute order and generated clamped placeholders. GetProperties always appends ListFormat last; numeric start/parent only. unosett applies prefix/suffix/start/accepted parent then ListFormat; xmlnume emits nonempty affixes for both families, nondefault numeric start and clamped display>1, but raw ListFormat only in extended output. Local XML adapters drop fields/reject suffixes and text export substitutes a dot. SwXML metadata generator/build-id parsing is currently absent/ignored: ancient OOo bogus-bullet-suffix correction and full generator contracts remain a separate unresolved dependency, so no complete legacy/full-module import claim. Extended export and numbering families/fonts/legal/outline/continuous/bitmap/NONE remain unverified; preserve current standard ODF 1.3 settings.
+
+    - Observation: Initial typecheck identifies old parallel-array export fixtures after the approved per-level property-record refactor; runtime implementation compiles. Old partial suffix/bullet-array rejection cases describe states the new transport no longer represents.
+      Impact: Fixtures must use coherent level records and verify native missing-property defaults while retaining complete ten-level and invalid-character guards.
+      Resolution: Migrate fixture records, replace obsolete partial-array guards with source-backed missing-field default assertions, keep all mandatory gates unchanged and rerun.
 id_source: "generated"
 ---
 ## Summary
@@ -79,3 +84,7 @@ Revert the scoped implementation commit after inspecting later numbering correct
 ## Findings
 
 Previous turn is progress: iteration26 child 202609302319-9KTM99 DONE, implementation 7a5d80e1add85f113e00ea6fcf70e802a0e194cf and parent progress 6c27c2da1724ef23b6f6bd506488ec31c2f0b5ff; clean main/direct and only parent active. Persistent goal authorizes safe local correction. Pinned libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65 xmlnumi accepts raw prefix/suffix for both families, StartWith clamp 0..32767 with negatives->1, ParentNumbering clamp 1..32767, optional style/loext ListFormat in attribute order and generated clamped placeholders. GetProperties always appends ListFormat last; numeric start/parent only. unosett applies prefix/suffix/start/accepted parent then ListFormat; xmlnume emits nonempty affixes for both families, nondefault numeric start and clamped display>1, but raw ListFormat only in extended output. Local XML adapters drop fields/reject suffixes and text export substitutes a dot. SwXML metadata generator/build-id parsing is currently absent/ignored: ancient OOo bogus-bullet-suffix correction and full generator contracts remain a separate unresolved dependency, so no complete legacy/full-module import claim. Extended export and numbering families/fonts/legal/outline/continuous/bitmap/NONE remain unverified; preserve current standard ODF 1.3 settings.
+
+- Observation: Initial typecheck identifies old parallel-array export fixtures after the approved per-level property-record refactor; runtime implementation compiles. Old partial suffix/bullet-array rejection cases describe states the new transport no longer represents.
+  Impact: Fixtures must use coherent level records and verify native missing-property defaults while retaining complete ten-level and invalid-character guards.
+  Resolution: Migrate fixture records, replace obsolete partial-array guards with source-backed missing-field default assertions, keep all mandatory gates unchanged and rerun.

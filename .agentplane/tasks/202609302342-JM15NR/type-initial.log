@@ -1,0 +1,61 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/xmloff/source/text/txtpara.test.ts(149,11): error TS2322: Type '{ level: number; listId: string; rule: { bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }; }' is not assignable to type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(156,11): error TS2322: Type '{ level: number; listId: string; rule: { bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }; }' is not assignable to type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(158,11): error TS2322: Type '{ startValue: number; level: number; listId: string; rule: { bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }; }' is not assignable to type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(163,11): error TS2322: Type '{ level: number; listId: string; rule: { bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }; }' is not assignable to type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ bulletChars: string[]; formats: ("numbered" | "bullet")[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(203,47): error TS2741: Property 'levels' is missing in type '{ formats: "bullet"[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(219,19): error TS2353: Object literal may only specify known properties, and 'formats' does not exist in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(242,19): error TS2353: Object literal may only specify known properties, and 'bulletChars' does not exist in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(265,19): error TS2353: Object literal may only specify known properties, and 'bulletChars' does not exist in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(310,23): error TS2345: Argument of type '{ level: number; listId: string; rule: { formats: "bullet"[]; name: string; }; }' is not assignable to parameter of type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ formats: "bullet"[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(314,17): error TS2353: Object literal may only specify known properties, and 'formats' does not exist in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(328,50): error TS2345: Argument of type '{ level: number; listId: string; rule: { formats: "bullet"[]; name: string; }; }' is not assignable to parameter of type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ formats: "bullet"[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(332,48): error TS2345: Argument of type '{ listId: string; level: number; rule: { formats: "bullet"[]; name: string; }; }' is not assignable to parameter of type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ formats: "bullet"[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(336,60): error TS2741: Property 'levels' is missing in type '{ name: string; formats: "bullet"[]; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(340,19): error TS2345: Argument of type '{ listId: string; level: number; rule: { formats: "bullet"[]; name: string; }; }' is not assignable to parameter of type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ formats: "bullet"[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtpara.test.ts(342,19): error TS2345: Argument of type '{ listId: string; level: number; rule: { formats: "bullet"[]; name: string; }; }' is not assignable to parameter of type 'XMLTextListSource'.
+  Types of property 'rule' are incompatible.
+    Property 'levels' is missing in type '{ formats: "bullet"[]; name: string; }' but required in type 'XMLTextListRuleSource'.
+src/xmloff/source/text/txtparae.test.ts(14,12): error TS2322: Type '() => Generator<{ list: { level: number; listId: string; rule: { name: string; formats: "numbered"[]; suffixes: never[]; }; }; runs: { text: string; properties: { bold: false; italic: false; underline: false; }; }[]; style: "default"; }, void, any>' is not assignable to type '() => Iterable<XMLTextParagraphSource>'.
+  Call signature return types 'Generator<{ list: { level: number; listId: string; rule: { name: string; formats: "numbered"[]; suffixes: never[]; }; }; runs: { text: string; properties: { bold: false; italic: false; underline: false; }; }[]; style: "default"; }, void, any>' and 'Iterable<XMLTextParagraphSource>' are incompatible.
+    The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+      Type 'IteratorResult<{ list: { level: number; listId: string; rule: { name: string; formats: "numbered"[]; suffixes: never[]; }; }; runs: { text: string; properties: { bold: false; italic: false; underline: false; }; }[]; style: "default"; }, void>' is not assignable to type 'IteratorResult<XMLTextParagraphSource, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+        Type 'IteratorYieldResult<{ list: { level: number; listId: string; rule: { name: string; formats: "numbered"[]; suffixes: never[]; }; }; runs: { text: string; properties: { bold: false; italic: false; underline: false; }; }[]; style: "default"; }>' is not assignable to type 'IteratorResult<XMLTextParagraphSource, any>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+          Type 'IteratorYieldResult<{ list: { level: number; listId: string; rule: { name: string; formats: "numbered"[]; suffixes: never[]; }; }; runs: { text: string; properties: { bold: false; italic: false; underline: false; }; }[]; style: "default"; }>' is not assignable to type 'IteratorYieldResult<XMLTextParagraphSource>' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+            Type '{ list: { level: number; listId: string; rule: { name: string; formats: "numbered"[]; suffixes: never[]; }; }; runs: { text: string; properties: { bold: false; italic: false; underline: false; }; }[]; style: "default"; }' is not assignable to type 'XMLTextParagraphSource'.
+              The types of 'list.rule' are incompatible between these types.
+                Property 'levels' is missing in type '{ name: string; formats: "numbered"[]; suffixes: never[]; }' but required in type 'XMLTextListRuleSource'.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit
