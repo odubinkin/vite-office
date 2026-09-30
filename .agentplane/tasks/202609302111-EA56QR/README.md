@@ -1,10 +1,11 @@
 ---
 id: "202609302111-EA56QR"
 title: "Restore independent native numbering positioning modes"
-status: "DOING"
+result_summary: "Removed legacy-to-alignment emulation and restored independent source-owned native numbering position modes through ODT and Writer/browser copy state."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -49,11 +50,16 @@ quality_review:
   findings:
     - "SvxNumberFormat in editeng owns native zero defaults, both geometry groups and mode-dependent getters/widths. SwNumFormat inherits and clones the raw groups. xmlnumi level contexts own defaults and successful-only updates, retaining MM100 until Writer conversion; xmlnume exports selected native fields. No legacy-to-alignment emulation or compatibility re-export remains."
     - "Thirteen literal common/automatic inputs and repeated-properties cycles verify mode absence/spelling, conflicting groups, bounds, signs, failed updates, exact selected XML/reopen and browser raw snapshots. Current command defaults and genuine tdf114287 layout assertions stay intact. Compiled unmodified native bodies agree on 88 scalar/getter cases; full verify passes at 612/109/19 and 100% required coverage."
-commit: null
+commit:
+  hash: "6abbf551133de1c90d7e6df2ad3ad09cea5c413b"
+  message: "🧩 EA56QR code: restore independent native numbering position modes"
 comments:
   -
     author: "CODER"
     body: "Start: restore independent native numbering position modes, source-owned geometry and exact XML selection/defaults through Writer copy, ODT cycles and browser snapshots; retain registered deviations and verify the full repository gate."
+  -
+    author: "CODER"
+    body: "Verified: independent native legacy/alignment position state, exact XML mode/defaults and source-owned geometry match the inspected supported contracts. Writer copy/browser snapshots and real common/automatic ODT cycles pass; 88 native C++ comparisons, 172 focused tests and full verify 612/109/19 with 100% coverage pass. Quality/routing/doctor/diff and final metadata gates pass; registered deviations intact and wider audit open."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Independent native position modes/defaults and source-owned geometry verified through context, signed-width C++ comparisons, Writer copy, browser snapshots and real ODT cycles. 88 compiled comparisons and 172 focused tests pass; full verify exit 0 at 612/109/19 with required 100% coverage. Final metadata/routing/doctor/diff pass; broader numbering/UNO/error/layout contracts stay unverified."
+  -
+    type: "status"
+    at: "2026-09-30T21:41:25.156Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: independent native legacy/alignment position state, exact XML mode/defaults and source-owned geometry match the inspected supported contracts. Writer copy/browser snapshots and real common/automatic ODT cycles pass; 88 native C++ comparisons, 172 focused tests and full verify 612/109/19 with 100% coverage pass. Quality/routing/doctor/diff and final metadata gates pass; registered deviations intact and wider audit open."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:41:10.512Z"
+doc_updated_at: "2026-09-30T21:41:25.157Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Replace the existing legacy-to-alignment workaround with independent source-owned numbering geometry and exact XML mode selection/defaults, preserving both modes through Writer copy, ODT export/reimport and browser model snapshots."
 sections:
