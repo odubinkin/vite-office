@@ -4,7 +4,7 @@ title: "Match upstream default tab-stop import filtering"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all build/static/docs/source/invariant/parity gates, semanticViolationCount=0. Twelve focused tests cover six source-order sequence cases across direct/style import and export/reimport. Doctor and routing pass. Scope: Default tab sequence filtering; wider module parity remains unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T17:02:54.511Z"
+  updated_by: "EVALUATOR"
+  note: "Default tab import selection matches pinned endFastElement source order, retaining a first Default exclusively and skipping later Defaults before canonical sorting."
+  evaluated_sha: "982cc887a5440a16ec6fddd64f450f041a6ad787"
+  blueprint_digest: "8a1ffe2e2ec09c38ecf2a27189d7a1ff4a367fc094f8450348f44885342f5194"
+  evidence_refs:
+    - ".agentplane/tasks/202609301651-QBNFD9/README.md"
+    - ".agentplane/tasks/202609301651-QBNFD9/quality/20260930-170254511-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301651-QBNFD9/quality/20260930-170254511-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301651-QBNFD9/quality/20260930-170254511-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301651-QBNFD9/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301651-QBNFD9/verify.log"
+  findings:
+    - "Reviewed the native loop and six literal ODT sequence fixtures with independent expected full fields. Direct and inherited-style import/export/reimport cover signed positions, first/later/multiple/only/no Default and empty lists. Corrected an earlier contradictory assertion while retaining field assertions. No exporter/core-container, validator/schema/generator or deliberate product changes. Full 577/109/19 verification and required coverage 100%, doctor/routing pass; broader defaults/fallback and module ownership remain open."
 commit: null
 comments:
   -
