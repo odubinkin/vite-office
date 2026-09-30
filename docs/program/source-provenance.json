@@ -6013,11 +6013,35 @@
           {
             "marker": "OdfStyleDefinition",
             "path": "apps/office/src/xmloff/source/text/txtparai.ts"
+          },
+          {
+            "marker": "createInlineContext",
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts"
+          },
+          {
+            "marker": "accepts unstyled and empty-style spans with inherited inline state",
+            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts"
+          },
+          {
+            "marker": "preserves unstyled spans, inherited formatting, controls and hyperlinks through package cycles",
+            "path": "apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts"
           }
         ],
         "upstream": [
           {
             "marker": "XMLHints_Impl::push_back",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx"
+          },
+          {
+            "marker": "XMLImpSpanContext_Impl::XMLImpSpanContext_Impl",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx"
+          },
+          {
+            "marker": "if( !aStyleName.isEmpty() )",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx"
+          },
+          {
+            "marker": "XMLImpSpanContext_Impl::characters",
             "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx"
           }
         ]
@@ -6028,13 +6052,15 @@
         "XMLTextBodyContext",
         "XMLParaContext",
         "resolveParagraphStyle",
-        "XMLParagraphImportProperties"
+        "XMLParagraphImportProperties",
+        "createInlineContext"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside XMLHints_Impl::push_back, std::move, XMLCharContext::XMLCharContext, sax_fastparser::castToFastAttributeList and the bounded XMLTextBodyContext/Writer target contract remain intentionally omitted."
+        "Native text import obligations beyond the bounded Writer target remain omitted or individually unverified, including unknown named-style fallback, full hint ownership/precedence, legacy font conversion and global null-context behavior."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded ODF text paragraph import boundary from pinned LibreOffice `xmloff/source/text/txtparai.cxx`."
+        "Reimplements the bounded ODF text paragraph import boundary from pinned LibreOffice `xmloff/source/text/txtparai.cxx`.",
+        "Accepts absent/empty span style names as no additional character-style hint, retaining inherited inline properties, supported child controls and active hyperlink state; source-derived context assertions and literal real ODT cycles verify this bounded contract."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/text/txtparai.cxx",
@@ -6042,7 +6068,10 @@
         "XMLHints_Impl::push_back",
         "std::move",
         "XMLCharContext::XMLCharContext",
-        "sax_fastparser::castToFastAttributeList"
+        "sax_fastparser::castToFastAttributeList",
+        "XMLImpSpanContext_Impl::XMLImpSpanContext_Impl",
+        "XMLImpSpanContext_Impl::characters",
+        "XMLImpSpanContext_Impl::createFastChildContext"
       ]
     }
   ]

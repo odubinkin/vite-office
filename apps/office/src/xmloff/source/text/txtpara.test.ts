@@ -539,6 +539,68 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     ).toBe("bi \t\n");
   });
 
+  it("accepts unstyled and empty-style spans with inherited inline state", /** Checks source-derived optional style hints, child overrides and scope restoration. @returns Nothing. */ () => {
+    const definitions = new Map<string, OdfStyleDefinition>([
+      ["PBold", { family: "paragraph", properties: { bold: true, italic: true, underline: true } }],
+      ["TBold", { family: "text", properties: { bold: true } }],
+      ["TItalic", { family: "text", properties: { italic: true } }],
+    ]);
+    const cases = [
+      {
+        body: '<text:p>A<text:span>B<text:span text:style-name="">C</text:span>D</text:span>E</text:p>',
+        expected: [["ABCDE", false, false, false, null]],
+      },
+      {
+        body: '<text:p>A<text:span/><text:span text:style-name=""/>B</text:p>',
+        expected: [["AB", false, false, false, null]],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="TBold">B<text:span>C</text:span><text:span text:style-name="">D</text:span><text:span text:style-name="TItalic">E<text:span>F</text:span></text:span>G</text:span>H</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["BCD", true, false, false, null],
+          ["EF", true, true, false, null],
+          ["G", true, false, false, null],
+          ["H", false, false, false, null],
+        ],
+      },
+      {
+        body: '<text:p text:style-name="PBold">A<text:span>B<text:span text:style-name="">C</text:span>D</text:span>E</text:p>',
+        expected: [["ABCDE", true, true, true, null]],
+      },
+      {
+        body: '<text:p>A<text:span>B<text:s text:c="2"/><text:tab/><text:line-break/>C</text:span>D</text:p>',
+        expected: [["AB  \t\nCD", false, false, false, null]],
+      },
+      {
+        body: '<text:p>A<text:a xlink:href="https://example.test/span">B<text:span>C</text:span><text:span text:style-name="">D</text:span><text:span text:style-name="TBold">E</text:span>F</text:a>G</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["BCD", false, false, false, "https://example.test/span"],
+          ["E", true, false, false, "https://example.test/span"],
+          ["F", false, false, false, "https://example.test/span"],
+          ["G", false, false, false, null],
+        ],
+      },
+    ] as const;
+    for (const testCase of cases) {
+      const paragraph = importBody(testCase.body, definitions)[0];
+      expect(
+        paragraph?.runs.map(
+          /** Projects text, effective formatting and active link. @param run - Imported run. @returns Comparable source-derived state. */
+          (run) => [
+            run.text,
+            run.properties.bold,
+            run.properties.italic,
+            run.properties.underline,
+            run.hyperlink?.url ?? null,
+          ],
+        ),
+        testCase.body,
+      ).toEqual(testCase.expected);
+    }
+  });
+
   it("resolves nested, generated, explicit, and continued list identities", /** Verifies list context state. @returns Nothing. */ () => {
     const rule = {
       formats: Array.from(
@@ -577,9 +639,8 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     for (const body of [
       "<text:list/>",
       '<text:p text:style-name="Missing"/>',
-      "<text:p><text:span>x</text:span></text:p>",
-      '<text:p><text:span text:style-name="T1"><text:span>x</text:span></text:span></text:p>',
       "<text:span/>",
+      '<text:p><text:span text:style-name="Missing">x</text:span></text:p>',
       "<text:p><text:list/></text:p>",
       '<text:p><text:span text:style-name="T1"><text:list/></text:span></text:p>',
       "<text:section/>",

@@ -299,7 +299,8 @@ function createInlineContext(
   if (element === XMLToken.TEXT_SPAN) {
     attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
     const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
-    const effective = { ...properties, ...resolveTextStyle(name, target) };
+    const effective =
+      name === "" ? properties : { ...properties, ...resolveTextStyle(name, target) };
     return hyperlink === undefined
       ? new XMLSpanContext(target, paragraph, effective)
       : new XMLLinkedSpanContext(target, paragraph, effective, hyperlink);
