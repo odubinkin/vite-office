@@ -1,10 +1,11 @@
 ---
 id: "202609301639-P4J3MC"
 title: "Preserve signed tab-stop positions and default distances"
-status: "DOING"
+result_summary: "Preserves negative native tab positions and direct default distances through ordering, replacement, clone and browser codec. ODF negative direct/style positions survive input, export and reimport with alignment/leaders. 14 focused, 576 app, 109 inventory and 19 browser tests passed; required coverage 100%; all other gates and doctor/routing pass. Deliberate deviations remain intact; wider tab contracts and overall audit remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202609301639-P4J3MC/verify.log"
   findings:
     - "Reviewed signed endpoints and independent direct setter versus UNO PutValue restriction; generated unsigned spacing stays scoped. Ordered replacement, clone/snapshot/real-pool codec and negative direct/style ODT input/export/reimport assertions pass. Metadata records bounded evidence and removes unsupported whole-module XML parity claim. No validator/schema/generator or deliberate product-policy changes. Full verification 576/109/19 and all required coverage 100%, doctor/routing pass; remaining tab defaults/filtering remain unverified."
-commit: null
+commit:
+  hash: "9fab51e76f38c873e1ac7b20ef1adbcb40aa958f"
+  message: "🛠️ P4J3MC task: preserve signed tab values and ODF positions"
 comments:
   -
     author: "CODER"
     body: "Start: align direct tab position/default-distance signed domains and XML negative tab import with pinned sources; preserve all deliberate browser policies."
+  -
+    author: "CODER"
+    body: "Verified: signed sal_Int32 tab position/default-distance storage and negative ODF tab import with core/codec/package regression assertions; full npm run verify passes."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 576 application, 109 inventory, 19 browser tests; all required coverage 100%; all build/static/docs/source/invariant/parity gates; semanticViolationCount=0. Fourteen focused core/codec/ODT tests, doctor and routing passed. Scope: signed tab position/direct default-distance domain and negative ODF tab import; broader module parity remains unverified."
+  -
+    type: "status"
+    at: "2026-09-30T16:49:33.137Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: signed sal_Int32 tab position/default-distance storage and negative ODF tab import with core/codec/package regression assertions; full npm run verify passes."
 doc_version: 3
-doc_updated_at: "2026-09-30T16:48:39.713Z"
+doc_updated_at: "2026-09-30T16:49:33.138Z"
 doc_updated_by: "CODER"
 description: "One source-backed correction under the approved iterative parity audit: preserve signed sal_Int32 tab positions and direct SetDefaultDistance values, and import negative ODF tab lengths without changing UNO PutValue restrictions or deliberate browser product policies."
 sections:
