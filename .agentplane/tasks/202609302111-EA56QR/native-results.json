@@ -1,0 +1,510 @@
+[
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 0,
+    "input": "E mm100 0",
+    "expected": "0cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 1,
+    "input": "E mm100 1",
+    "expected": "0.001cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -1,
+    "input": "E mm100 -1",
+    "expected": "-0.001cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 2,
+    "input": "E mm100 2",
+    "expected": "0.002cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -2,
+    "input": "E mm100 -2",
+    "expected": "-0.002cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 72,
+    "input": "E mm100 72",
+    "expected": "0.072cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -72,
+    "input": "E mm100 -72",
+    "expected": "-0.072cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 127,
+    "input": "E mm100 127",
+    "expected": "0.127cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -127,
+    "input": "E mm100 -127",
+    "expected": "-0.127cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 250,
+    "input": "E mm100 250",
+    "expected": "0.25cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -250,
+    "input": "E mm100 -250",
+    "expected": "-0.25cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 1000,
+    "input": "E mm100 1000",
+    "expected": "1cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 1008,
+    "input": "E mm100 1008",
+    "expected": "1.008cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -1008,
+    "input": "E mm100 -1008",
+    "expected": "-1.008cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 1134,
+    "input": "E mm100 1134",
+    "expected": "1.134cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 32767,
+    "input": "E mm100 32767",
+    "expected": "32.767cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -32768,
+    "input": "E mm100 -32768",
+    "expected": "-32.768cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": 2147483647,
+    "input": "E mm100 2147483647",
+    "expected": "2147483.647cm"
+  },
+  {
+    "kind": "export",
+    "unit": "mm100",
+    "value": -2147483648,
+    "input": "E mm100 -2147483648",
+    "expected": "-2147483.648cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 0,
+    "input": "E twip 0",
+    "expected": "0cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 1,
+    "input": "E twip 1",
+    "expected": "0.002cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -1,
+    "input": "E twip -1",
+    "expected": "-0.002cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 2,
+    "input": "E twip 2",
+    "expected": "0.004cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -2,
+    "input": "E twip -2",
+    "expected": "-0.004cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 72,
+    "input": "E twip 72",
+    "expected": "0.127cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -72,
+    "input": "E twip -72",
+    "expected": "-0.127cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 127,
+    "input": "E twip 127",
+    "expected": "0.224cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -127,
+    "input": "E twip -127",
+    "expected": "-0.224cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 250,
+    "input": "E twip 250",
+    "expected": "0.441cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -250,
+    "input": "E twip -250",
+    "expected": "-0.441cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 1000,
+    "input": "E twip 1000",
+    "expected": "1.764cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 1008,
+    "input": "E twip 1008",
+    "expected": "1.778cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -1008,
+    "input": "E twip -1008",
+    "expected": "-1.778cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 1134,
+    "input": "E twip 1134",
+    "expected": "2cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 32767,
+    "input": "E twip 32767",
+    "expected": "57.797cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -32768,
+    "input": "E twip -32768",
+    "expected": "-57.799cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": 2147483647,
+    "input": "E twip 2147483647",
+    "expected": "3787922.544cm"
+  },
+  {
+    "kind": "export",
+    "unit": "twip",
+    "value": -2147483648,
+    "input": "E twip -2147483648",
+    "expected": "-3787922.546cm"
+  },
+  {
+    "kind": "uno",
+    "value": 0,
+    "input": "U 0",
+    "expected": "0 0"
+  },
+  {
+    "kind": "uno",
+    "value": 1,
+    "input": "U 1",
+    "expected": "1 2"
+  },
+  {
+    "kind": "uno",
+    "value": -1,
+    "input": "U -1",
+    "expected": "-1 -2"
+  },
+  {
+    "kind": "uno",
+    "value": 2,
+    "input": "U 2",
+    "expected": "1 2"
+  },
+  {
+    "kind": "uno",
+    "value": -2,
+    "input": "U -2",
+    "expected": "-1 -2"
+  },
+  {
+    "kind": "uno",
+    "value": 127,
+    "input": "U 127",
+    "expected": "72 127"
+  },
+  {
+    "kind": "uno",
+    "value": 250,
+    "input": "U 250",
+    "expected": "142 250"
+  },
+  {
+    "kind": "uno",
+    "value": 1008,
+    "input": "U 1008",
+    "expected": "571 1007"
+  },
+  {
+    "kind": "uno",
+    "value": 32767,
+    "input": "U 32767",
+    "expected": "18577 32768"
+  },
+  {
+    "kind": "uno",
+    "value": -32768,
+    "input": "U -32768",
+    "expected": "-18577 -32768"
+  },
+  {
+    "kind": "parse",
+    "value": "0.007mm",
+    "minimum": -32768,
+    "input": "P -32768 32767 0.007mm",
+    "expected": "1"
+  },
+  {
+    "kind": "parse",
+    "value": "0.007mm",
+    "minimum": 0,
+    "input": "P 0 32767 0.007mm",
+    "expected": "1"
+  },
+  {
+    "kind": "parse",
+    "value": "-0.007mm",
+    "minimum": -32768,
+    "input": "P -32768 32767 -0.007mm",
+    "expected": "-1"
+  },
+  {
+    "kind": "parse",
+    "value": "-0.007mm",
+    "minimum": 0,
+    "input": "P 0 32767 -0.007mm",
+    "expected": "0"
+  },
+  {
+    "kind": "parse",
+    "value": " .25CM ",
+    "minimum": -32768,
+    "input": "P -32768 32767  .25CM ",
+    "expected": "250"
+  },
+  {
+    "kind": "parse",
+    "value": " .25CM ",
+    "minimum": 0,
+    "input": "P 0 32767  .25CM ",
+    "expected": "250"
+  },
+  {
+    "kind": "parse",
+    "value": "1PX",
+    "minimum": -32768,
+    "input": "P -32768 32767 1PX",
+    "expected": "26"
+  },
+  {
+    "kind": "parse",
+    "value": "1PX",
+    "minimum": 0,
+    "input": "P 0 32767 1PX",
+    "expected": "26"
+  },
+  {
+    "kind": "parse",
+    "value": ".025pt",
+    "minimum": -32768,
+    "input": "P -32768 32767 .025pt",
+    "expected": "1"
+  },
+  {
+    "kind": "parse",
+    "value": ".025pt",
+    "minimum": 0,
+    "input": "P 0 32767 .025pt",
+    "expected": "1"
+  },
+  {
+    "kind": "parse",
+    "value": "1pc",
+    "minimum": -32768,
+    "input": "P -32768 32767 1pc",
+    "expected": "423"
+  },
+  {
+    "kind": "parse",
+    "value": "1pc",
+    "minimum": 0,
+    "input": "P 0 32767 1pc",
+    "expected": "423"
+  },
+  {
+    "kind": "parse",
+    "value": "1cm extra",
+    "minimum": -32768,
+    "input": "P -32768 32767 1cm extra",
+    "expected": "1000"
+  },
+  {
+    "kind": "parse",
+    "value": "1cm extra",
+    "minimum": 0,
+    "input": "P 0 32767 1cm extra",
+    "expected": "1000"
+  },
+  {
+    "kind": "parse",
+    "value": "3",
+    "minimum": -32768,
+    "input": "P -32768 32767 3",
+    "expected": "3"
+  },
+  {
+    "kind": "parse",
+    "value": "3",
+    "minimum": 0,
+    "input": "P 0 32767 3",
+    "expected": "3"
+  },
+  {
+    "kind": "parse",
+    "value": "+1cm",
+    "minimum": -32768,
+    "input": "P -32768 32767 +1cm",
+    "expected": "0"
+  },
+  {
+    "kind": "parse",
+    "value": "+1cm",
+    "minimum": 0,
+    "input": "P 0 32767 +1cm",
+    "expected": "0"
+  },
+  {
+    "kind": "parse",
+    "value": "invalid",
+    "minimum": -32768,
+    "input": "P -32768 32767 invalid",
+    "expected": "0"
+  },
+  {
+    "kind": "parse",
+    "value": "invalid",
+    "minimum": 0,
+    "input": "P 0 32767 invalid",
+    "expected": "0"
+  },
+  {
+    "kind": "parse",
+    "value": "1em",
+    "minimum": -32768,
+    "input": "P -32768 32767 1em",
+    "expected": "0"
+  },
+  {
+    "kind": "parse",
+    "value": "1em",
+    "minimum": 0,
+    "input": "P 0 32767 1em",
+    "expected": "0"
+  },
+  {
+    "kind": "parse",
+    "value": "999999999cm",
+    "minimum": -32768,
+    "input": "P -32768 32767 999999999cm",
+    "expected": "32767"
+  },
+  {
+    "kind": "parse",
+    "value": "999999999cm",
+    "minimum": 0,
+    "input": "P 0 32767 999999999cm",
+    "expected": "32767"
+  },
+  {
+    "kind": "parse",
+    "value": "-999999999cm",
+    "minimum": -32768,
+    "input": "P -32768 32767 -999999999cm",
+    "expected": "-32768"
+  },
+  {
+    "kind": "parse",
+    "value": "-999999999cm",
+    "minimum": 0,
+    "input": "P 0 32767 -999999999cm",
+    "expected": "0"
+  }
+]
