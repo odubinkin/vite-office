@@ -1,10 +1,11 @@
 ---
 id: "202609302219-BJJJBT"
 title: "Restore native list declaration defaults and ownership"
-status: "DOING"
+result_summary: "Supported list contexts now follow pinned ownership, optional defaults, index parsing/skipping and unrelated subtree behavior; wider parity goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts"
   findings:
     - "The old callback-owned XMLListStyleContext was removed. xmlnumi now owns source-ordered retained level contexts; invalid indices are skipped before property reads; native optional fields and byte-string parsing are covered independently and through ODT cycles."
-commit: null
+commit:
+  hash: "161c65ba40f143d4ea8c876afba674d3cc73be25"
+  message: "🧩 BJJJBT code: restore native list declaration ownership and defaults"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native supported declaration defaults and source-owned list/level contexts under the iterative goal."
+  -
+    author: "CODER"
+    body: "Verified: Restore native list declaration ownership/default/index handling; 68 source comparisons and all mandatory gates pass, clean implementation state."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native list declaration ownership/default/index correction verified: 68 compiled-source comparisons, 620 application /109 inventory /19 browser tests, both suites 100% coverage; all mandatory gates and policy checks pass, two known doctor warnings unchanged."
+  -
+    type: "status"
+    at: "2026-09-30T22:38:45.710Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Restore native list declaration ownership/default/index handling; 68 source comparisons and all mandatory gates pass, clean implementation state."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:38:03.683Z"
+doc_updated_at: "2026-09-30T22:38:45.712Z"
 doc_updated_by: "CODER"
 description: "Move supported list-style and level declaration ownership to xmlnumi, restore native optional marker/format/level defaults and integer parsing, and ignore unrelated list children while preserving explicit unsupported-family errors."
 sections:
