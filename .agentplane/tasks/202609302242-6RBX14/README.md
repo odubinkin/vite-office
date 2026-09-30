@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:53:23.738Z"
+doc_updated_at: "2026-09-30T22:55:54.202Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -71,6 +71,10 @@ sections:
     - Observation: Initial full verification stops at one missing JSDoc on the synthetic rejecting context. Diff review also finds a formatted one-line list-item guard survived the earlier multiline removal.
       Impact: Test documentation and removal of the contradicted guard are required before final validation; no runtime scope or acceptance drift.
       Resolution: Document the synthetic context, remove the exact remaining guard, keep the native ignore assertion, and rerun the entire mandatory verify command.
+
+    - Observation: The broader app suite passes 622/623 tests; one text context test conflates unrelated children with native-supported unimplemented sections/list headers. Independent docs check reports six undocumented test callbacks.
+      Impact: The text caller must preserve explicit sections/list-header capability errors while native unrelated span/list children should be ignored; callback documentation needs completion.
+      Resolution: Audit native txtimp/txtparai/list context switches, add bounded explicit guards only for supported unimplemented features, update direct text assertions, document callbacks, and rerun mandatory verify unchanged. Matching txtparai.test.ts is included as the affected direct protocol fixture.
 id_source: "generated"
 ---
 ## Summary
@@ -120,3 +124,7 @@ Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, imp
 - Observation: Initial full verification stops at one missing JSDoc on the synthetic rejecting context. Diff review also finds a formatted one-line list-item guard survived the earlier multiline removal.
   Impact: Test documentation and removal of the contradicted guard are required before final validation; no runtime scope or acceptance drift.
   Resolution: Document the synthetic context, remove the exact remaining guard, keep the native ignore assertion, and rerun the entire mandatory verify command.
+
+- Observation: The broader app suite passes 622/623 tests; one text context test conflates unrelated children with native-supported unimplemented sections/list headers. Independent docs check reports six undocumented test callbacks.
+  Impact: The text caller must preserve explicit sections/list-header capability errors while native unrelated span/list children should be ignored; callback documentation needs completion.
+  Resolution: Audit native txtimp/txtparai/list context switches, add bounded explicit guards only for supported unimplemented features, update direct text assertions, document callbacks, and rerun mandatory verify unchanged. Matching txtparai.test.ts is included as the affected direct protocol fixture.
