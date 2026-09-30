@@ -62,7 +62,7 @@ Module boundary check passed: 198 runtime sources, 815 relative imports, 12 allo
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
 -------------------|---------|----------|---------|---------|-------------------
 
@@ -130,4 +130,3 @@ AssertionError: expected [ { …(4) }, { …(4) }, { …(4) }, …(89) ] to have
       Tests  2 failed | 107 passed (109)
    Start at  05:58:34
    Duration  44.04s (transform 711ms, setup 0ms, import 1.73s, tests 38.86s, environment 2ms)
-

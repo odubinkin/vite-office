@@ -62,7 +62,7 @@ Module boundary check passed: 198 runtime sources, 815 relative imports, 12 allo
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
 -------------------|---------|----------|---------|---------|-------------------
 
@@ -114,4 +114,3 @@ Caused by: Error: 24:43: unexpected close tag.
       Tests  1 failed | 108 passed (109)
    Start at  06:02:28
    Duration  43.02s (transform 668ms, setup 0ms, import 1.62s, tests 37.98s, environment 2ms)
-

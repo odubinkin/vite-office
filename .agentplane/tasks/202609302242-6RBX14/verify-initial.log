@@ -17,4 +17,3 @@ All matched files use Prettier code style!
   113:3  error  Missing JSDoc comment  jsdoc/require-jsdoc
 
 ✖ 1 problem (1 error, 0 warnings)
-

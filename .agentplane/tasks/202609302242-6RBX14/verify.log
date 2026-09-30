@@ -39,8 +39,8 @@ Module boundary check passed: 198 runtime sources, 815 relative imports, 12 allo
 
  Test Files  1 passed (1)
       Tests  2 passed (2)
-   Start at  06:04:21
-   Duration  126ms (transform 26ms, setup 0ms, import 37ms, tests 3ms, environment 0ms)
+   Start at  06:07:50
+   Duration  126ms (transform 26ms, setup 0ms, import 34ms, tests 4ms, environment 0ms)
 
 
 > vite-office@0.1.0 test:coverage
@@ -57,8 +57,8 @@ Module boundary check passed: 198 runtime sources, 815 relative imports, 12 allo
 
  Test Files  133 passed (133)
       Tests  623 passed (623)
-   Start at  06:04:21
-   Duration  69.28s (transform 2.13s, setup 10.35s, import 8.08s, tests 53.09s, environment 47.78s)
+   Start at  06:07:51
+   Duration  69.80s (transform 2.04s, setup 9.94s, import 8.18s, tests 53.80s, environment 47.90s)
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
@@ -68,7 +68,7 @@ File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 
 =============================== Coverage summary ===============================
 Statements   : 100% ( 9712/9712 )
-Branches     : 100% ( 7296/7296 )
+Branches     : 100% ( 7297/7297 )
 Functions    : 100% ( 2703/2703 )
 Lines        : 100% ( 8945/8945 )
 ================================================================================
@@ -83,8 +83,8 @@ Lines        : 100% ( 8945/8945 )
 
  Test Files  36 passed (36)
       Tests  109 passed (109)
-   Start at  06:05:31
-   Duration  43.94s (transform 679ms, setup 0ms, import 1.63s, tests 38.94s, environment 2ms)
+   Start at  06:09:02
+   Duration  46.67s (transform 708ms, setup 0ms, import 1.71s, tests 41.51s, environment 2ms)
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
@@ -116,48 +116,48 @@ transforming...✓ 1989 modules transformed.
 rendering chunks...
 computing gzip size...
 dist/index.html                         0.56 kB │ gzip:   0.35 kB
-dist/assets/odt-worker-BEZZjXmE.js    243.49 kB
+dist/assets/odt-worker-CmYv72eS.js    243.52 kB
 dist/assets/index-C6eeDUe_.css         58.68 kB │ gzip:   9.59 kB
-dist/assets/index-DZkCzHDy.js       1,116.03 kB │ gzip: 267.47 kB
+dist/assets/index-jHU6HrX3.js       1,116.06 kB │ gzip: 267.47 kB
 
-✓ built in 728ms
+✓ built in 737ms
 [plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
-[WebServer] (node:19654) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:25816) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
 
 Running 19 tests using 4 workers
 
-(node:19658) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:25820) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:19656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:25817) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:19655) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:25818) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:19657) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:25819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-  ✓   1 apps/office/e2e/writer-clipboard.spec.ts:5:1 › copies visible formatted Writer content through the native browser copy event (1.6s)
-  ✓   2 apps/office/e2e/writer-cut-paste.spec.ts:5:1 › Writer Cut and Paste (1.6s)
-  ✓   3 apps/office/e2e/writer-character-formatting.spec.ts:5:1 › Writer direct character formatting (2.3s)
+  ✓   1 apps/office/e2e/writer-clipboard.spec.ts:5:1 › copies visible formatted Writer content through the native browser copy event (1.5s)
+  ✓   2 apps/office/e2e/writer-cut-paste.spec.ts:5:1 › Writer Cut and Paste (1.5s)
+  ✓   3 apps/office/e2e/writer-character-formatting.spec.ts:5:1 › Writer direct character formatting (2.1s)
   ✓   6 apps/office/e2e/writer-cut-paste.spec.ts:55:1 › Writer immediate spaces and structured list Paste (1.0s)
   ✓   5 apps/office/e2e/writer-clipboard.spec.ts:54:1 › Writer list clipboard (1.3s)
-  ✓   7 apps/office/e2e/writer-document-selection.spec.ts:5:1 › supports document-wide selection through Ctrl/Cmd+A and pointer dragging (1.3s)
-  ✓  10 apps/office/e2e/writer-document-selection.spec.ts:139:1 › places the caret at the first clicked position in a different paragraph (851ms)
-  ✓   8 apps/office/e2e/writer-hyperlinks.spec.ts:9:1 › Writer creates, edits, and round-trips hyperlinks (1.9s)
-  ✓   4 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (5.5s)
-  ✓  12 apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (936ms)
+  ✓   7 apps/office/e2e/writer-document-selection.spec.ts:5:1 › supports document-wide selection through Ctrl/Cmd+A and pointer dragging (1.2s)
+  ✓  10 apps/office/e2e/writer-document-selection.spec.ts:139:1 › places the caret at the first clicked position in a different paragraph (935ms)
+  ✓   8 apps/office/e2e/writer-hyperlinks.spec.ts:9:1 › Writer creates, edits, and round-trips hyperlinks (1.8s)
+  ✓  12 apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (1.0s)
+  ✓   4 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (5.7s)
   ✓   9 apps/office/e2e/writer-layout-ratios.spec.ts:11:1 › Writer keeps measured page breaks across device pixel ratios (2.8s)
-  ✓  11 apps/office/e2e/writer-lists.spec.ts:5:1 › Writer bullets and numbering (1.8s)
-  ✓  13 apps/office/e2e/writer-print.spec.ts:5:1 › Print appears in upstream locations and print media keeps only pages (783ms)
-  ✓  15 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport (764ms)
-  ✓  14 apps/office/e2e/writer-odt-file.spec.ts:15:1 › Writer opens and saves a bounded ODT file (1.2s)
-  ✓  16 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (473ms)
-  ✓  18 apps/office/e2e/writer-responsive-sidebar.spec.ts:76:1 › the mobile table grid dismisses outside and More Options opens the full dialog (732ms)
+  ✓  11 apps/office/e2e/writer-lists.spec.ts:5:1 › Writer bullets and numbering (2.0s)
+  ✓  14 apps/office/e2e/writer-print.spec.ts:5:1 › Print appears in upstream locations and print media keeps only pages (805ms)
+  ✓  15 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport (804ms)
+  ✓  13 apps/office/e2e/writer-odt-file.spec.ts:15:1 › Writer opens and saves a bounded ODT file (1.3s)
+  ✓  16 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (460ms)
+  ✓  18 apps/office/e2e/writer-responsive-sidebar.spec.ts:76:1 › the mobile table grid dismisses outside and More Options opens the full dialog (717ms)
   ✓  17 apps/office/e2e/writer-odt-file.spec.ts:87:1 › Writer keeps one ODT text node across visible page fragments after reopen (1.1s)
-  ✓  19 apps/office/e2e/writer-odt-file.spec.ts:139:1 › Writer types in a table cell and reopens the edited ODT (819ms)
+  ✓  19 apps/office/e2e/writer-odt-file.spec.ts:139:1 › Writer types in a table cell and reopens the edited ODT (808ms)
 
   19 passed (10.4s)
 
@@ -178,11 +178,11 @@ transforming...✓ 1989 modules transformed.
 rendering chunks...
 computing gzip size...
 dist/index.html                         0.56 kB │ gzip:   0.35 kB
-dist/assets/odt-worker-BEZZjXmE.js    243.49 kB
+dist/assets/odt-worker-CmYv72eS.js    243.52 kB
 dist/assets/index-C6eeDUe_.css         58.68 kB │ gzip:   9.59 kB
-dist/assets/index-DZkCzHDy.js       1,116.03 kB │ gzip: 267.47 kB
+dist/assets/index-jHU6HrX3.js       1,116.06 kB │ gzip: 267.47 kB
 
-✓ built in 530ms
+✓ built in 473ms
 [plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
@@ -248,4 +248,4 @@ LibreOffice source-tree check passed for 111 required paths and 33 retired roots
 Source provenance check passed for 199 runtime modules (123 mapped, 60 browser adaptations, 16 local infrastructure).
 
 Remaining gates: inventory:invariants passed; inventory:parity passed with semanticViolationCount=0 (metadata consistency only).
-Complete npm run verify: exit 0 observed after terminal completion of exec session 87609.
+Complete npm run verify: exit 0 observed after terminal completion of exec session 69180.
