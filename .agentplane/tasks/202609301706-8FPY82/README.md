@@ -1,10 +1,11 @@
 ---
 id: "202609301706-8FPY82"
 title: "Restore native XML tab and unit conversion module ownership"
-status: "DOING"
+result_summary: "Tab context now lives in style/xmltabi.ts under the native SvxXMLTabStopImportContext name, conversion in core/xmluconv.ts, and text-property dispatch imports the correct owner without compatibility re-exports. AST equality and 27 unchanged focused tests passed; full 577 application, 109 inventory and 19 browser tests passed at 100% required coverage. All gates, doctor and routing passed. Deliberate deviations remain intact; wider contracts and the overall audit remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202609301706-8FPY82/verify.log"
   findings:
     - "Reviewed native dispatch, xmltabi and xmluconv ownership against pinned sources. AST equality proves all four context members and complete converter unchanged. No compatibility aliases, new parser/default behavior, test rewrites, validators/schemas/generators or deliberate product changes. Metadata narrows dispatch and adds separate unverified owner records without unrelated reordering. 27 existing focused tests and full 577/109/19 verification at 100% coverage passed; doctor/routing pass. Native leaf defaults/fallback and complete conversion contracts remain open."
-commit: null
+commit:
+  hash: "cfdbf407ac5c42f45358d3f5fa94cfd2eba712b7"
+  message: "🛠️ 8FPY82 task: restore XML tab and unit source owners"
 comments:
   -
     author: "CODER"
     body: "Start: separate existing tab-import and length-conversion bodies into the pinned style/core owners and update direct consumers without behavior changes."
+  -
+    author: "CODER"
+    body: "Verified: native XML dispatch, tab-import and conversion responsibilities are separated into their pinned owners with unchanged implementation bodies and updated direct consumers; full verification passes."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all dependency/build/static/docs/source/invariant/parity gates, 194 provenance modules and semanticViolationCount=0. AST equality in architecture.log and 27 unchanged focused tests pass. Doctor/routing pass. Scope: native XML dispatch/tab/conversion responsibility split and direct consumer imports; wider contracts remain unverified."
+  -
+    type: "status"
+    at: "2026-09-30T17:18:39.611Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native XML dispatch, tab-import and conversion responsibilities are separated into their pinned owners with unchanged implementation bodies and updated direct consumers; full verification passes."
 doc_version: 3
-doc_updated_at: "2026-09-30T17:17:44.439Z"
+doc_updated_at: "2026-09-30T17:18:39.612Z"
 doc_updated_by: "CODER"
 description: "One architecture refactor under the approved iterative parity goal: separate native tab-import and shared unit-conversion responsibilities from XMLTextPropertySetContext into their pinned source owners, preserving implementation behavior and updating direct consumers and provenance."
 sections:
