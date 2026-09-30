@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301452-WQ0C2J",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T15:01:20.972Z",
+  "verdict": "pass",
+  "summary": "Item set clone semantics match pinned copy/empty constructors and SET-only cross-pool traversal.",
+  "evaluated_sha": "ba5d1826bfbe4a360fe012a3a22196b5f6896493",
+  "blueprint_digest": "b18013e1f5963f2312e7e4ba61928c99c301e879d01fe95859c100117b917c2e",
+  "findings": [
+    "Independent values, parent ownership and invalid/disabled states have focused assertions; full gates pass. Copying no longer depends on PutSet defaults."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301452-WQ0C2J/README.md",
+    ".agentplane/tasks/202609301452-WQ0C2J/verify.log",
+    "apps/office/src/svl/source/items/itemset.test.ts",
+    "apps/office/src/sw/source/core/doc/writer-attributes.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Ordinary PutSet invalid-as-default semantics and other operations remain separate unverified audit scope."
+  ]
+}
