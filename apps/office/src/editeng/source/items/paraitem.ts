@@ -23,7 +23,7 @@ export class SvxTabStop {
     private readonly decimal = "\0",
     private readonly fill = " ",
   ) {
-    if (!Number.isInteger(position) || position < 0 || position > 2147483647)
+    if (!Number.isInteger(position) || position < -2147483648 || position > 2147483647)
       throw new Error("SvxTabStop position is invalid.");
     if (
       !Number.isInteger(adjustment) ||
@@ -171,7 +171,7 @@ export class SvxTabStopItem extends SfxPoolItem {
   }
   /** Sets spacing for tabs without an explicit stop. @param distance - Twips. @returns Nothing. */
   public SetDefaultDistance(distance: number): void {
-    if (!Number.isInteger(distance) || distance < 0)
+    if (!Number.isInteger(distance) || distance < -2147483648 || distance > 2147483647)
       throw new Error("SvxTabStopItem default distance is invalid.");
     this.defaultDistance = distance;
   }

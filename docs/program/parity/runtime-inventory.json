@@ -61,9 +61,14 @@
           "apps/office/src/editeng/source/items/paraitem.ts#SvxAdjust",
           "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxAdjust",
           "apps/office/src/editeng/source/items/paraitem.test.ts#SvxTabStopItem",
-          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert"
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert",
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStop::SvxTabStop( const sal_Int32",
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::SetDefaultDistance",
+          "vendor/libreoffice-reference/include/editeng/tstpitem.hxx#sal_Int32       nTabPos",
+          "apps/office/src/editeng/source/items/paraitem.test.ts#preserves signed int32 positions and direct default distances through ordered items and codec",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports and round-trips signed tab positions in paragraph and inherited style properties"
         ],
-        "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified. Frame-owned margin and spacing classes have been moved to frmitems.ts; alignment, tabs and line spacing remain with their pinned paraitem.cxx owner.",
+        "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified. Frame-owned margin and spacing classes have been moved to frmitems.ts; alignment, tabs and line spacing remain with their pinned paraitem.cxx owner. Tab-stop positions and the direct SetDefaultDistance setter now preserve the signed sal_Int32 domain, including both endpoints; focused assertions cover rejected fractional/nonfinite/out-of-domain values, signed ordering/replacement, clone independence, complete snapshot and real Writer-pool browser-codec restoration. The generated-stop constructor retains its unsigned spacing domain. This direct setter is distinct from the native UNO PutValue negative-distance restriction. Broader paragraph contracts remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SvxAdjust",
@@ -6294,16 +6299,19 @@
         "CAP-0128"
       ],
       "semantic": {
-        "behaviorStatus": "parity",
-        "contractStatus": "parity",
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
         "defaultStatus": "not-applicable",
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts#XMLTextPropertySetContext",
           "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties",
-          "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx#XMLTextPropertySetContext::createFastChildContext"
+          "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx#XMLTextPropertySetContext::createFastChildContext",
+          "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx#case XML_ELEMENT(STYLE, XML_POSITION)",
+          "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx#sal_Int32 nMin = SAL_MIN_INT32",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports and round-trips signed tab positions in paragraph and inherited style properties"
         ],
-        "justification": "Preserves upstream element-valued text-property context ownership for the supported Writer tab-stop sequence, including alignment, leader, decimal character, and explicit empty sequence; unmodeled text columns, complex colors, and drop caps are not claimed.",
+        "justification": "The dispatch context preserves the implemented element-valued Writer tab sequence and explicit empty-sequence behavior. Signed style:position measures now match xmltabi.cxx conversion with xmluconv.hxx signed default bounds; a real package input and export/reimport test verifies negative direct and inherited-style positions with alignment and leader preservation. Existing sequence tests cover alignment, leader and decimal data. These bounded assertions do not establish all tab-import defaults, malformed-input fallback, sequence filtering, or whole-module parity; those contracts remain unverified. Unmodeled text columns, complex colors and drop caps are not claimed.",
         "knownViolations": [],
         "localSymbols": [
           "XMLTextPropertySetContext",

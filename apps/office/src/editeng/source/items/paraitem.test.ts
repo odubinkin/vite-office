@@ -2,6 +2,9 @@
 
 import { describe, expect, it } from "vitest";
 
+import { decodeSfxPoolItem, encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
+import { RES_PARATR_TABSTOP } from "../../../sw/inc/hintids";
+import { createWriterDocument } from "../../../sw/source/core/doc/doc";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "./paraitem";
 
@@ -59,7 +62,7 @@ describe("SvxTabStopItem", /** Groups upstream tab-stop contract checks. @return
   });
 
   it("rejects invalid stop and snapshot values", /** Keeps tab positions, enums and characters in the upstream domain. @returns Nothing. */ () => {
-    for (const position of [-1, 1.5, 2147483648])
+    for (const position of [-2147483649, 1.5, 2147483648, NaN, Infinity, -Infinity])
       expect(
         /** Builds an invalid position. @returns Rejected tab. */ () => new SvxTabStop(position),
       ).toThrow("position");
@@ -95,7 +98,7 @@ describe("SvxTabStopItem", /** Groups upstream tab-stop contract checks. @return
     ).toThrow("constructor");
     const item = SvxTabStopItem.FromStops(which, []);
     expect(/** Reads a missing stop. @returns Rejected stop. */ () => item.At(0)).toThrow("index");
-    for (const distance of [-1, 0.5])
+    for (const distance of [-2147483649, 0.5, 2147483648, NaN, Infinity, -Infinity])
       expect(
         /** Sets invalid spacing. @returns Nothing. */ () => item.SetDefaultDistance(distance),
       ).toThrow("distance");
@@ -116,5 +119,50 @@ describe("SvxTabStopItem", /** Groups upstream tab-stop contract checks. @return
         /** Restores an invalid snapshot. @returns Rejected item. */ () =>
           SvxTabStopItem.FromValue(which, value),
       ).toThrow("invalid");
+  });
+
+  it("preserves signed int32 positions and direct default distances through ordered items and codec", /** Verifies the native direct-storage domain independently of UNO property restrictions. @returns Nothing. */ () => {
+    const pool = createWriterDocument().GetAttrPool();
+    for (const value of [-2147483648, -720, -1, 0, 2147483647]) {
+      const item = SvxTabStopItem.FromStops(
+        RES_PARATR_TABSTOP,
+        [new SvxTabStop(value, SvxTabAdjust.Decimal, ";", ".")],
+        value,
+      );
+      expect(item.At(0).GetTabPos()).toBe(value);
+      expect(item.GetDefaultDistance()).toBe(value);
+      expect(item.QueryValue()).toEqual({
+        defaultDistance: value,
+        stops: [{ position: value, adjustment: SvxTabAdjust.Decimal, decimal: ";", fill: "." }],
+      });
+      const clone = item.Clone();
+      expect(clone).not.toBe(item);
+      expect(clone.equals(item)).toBe(true);
+      expect(SvxTabStopItem.FromValue(RES_PARATR_TABSTOP, item.QueryValue()).equals(item)).toBe(
+        true,
+      );
+      expect(decodeSfxPoolItem(pool, encodeSfxPoolItem(item)).equals(item)).toBe(true);
+    }
+    const mixed = SvxTabStopItem.FromStops(
+      RES_PARATR_TABSTOP,
+      [new SvxTabStop(360), new SvxTabStop(-360), new SvxTabStop(0), new SvxTabStop(-720)],
+      -1134,
+    );
+    expect(
+      mixed.GetStops().map(
+        /** Projects the signed order. @param stop - Stored stop. @returns Twip position. */
+        (stop) => stop.GetTabPos(),
+      ),
+    ).toEqual([-720, -360, 0, 360]);
+    expect(mixed.GetPos(-360)).toBe(1);
+    expect(mixed.Insert(new SvxTabStop(-360, SvxTabAdjust.Right))).toBe(true);
+    expect(mixed.Count()).toBe(4);
+    expect(mixed.At(1).GetAdjustment()).toBe(SvxTabAdjust.Right);
+    const clone = mixed.Clone();
+    clone.Remove(0);
+    clone.SetDefaultDistance(-1);
+    expect(mixed.Count()).toBe(4);
+    expect(mixed.GetDefaultDistance()).toBe(-1134);
+    expect(clone.GetDefaultDistance()).toBe(-1);
   });
 });

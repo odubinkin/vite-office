@@ -59,7 +59,7 @@ class XMLTabStopsContext extends SvXMLImportContext {
     this.stops.push({
       position: importOdfLength(
         attributes.require(XMLToken.STYLE_POSITION, "tab stop position"),
-        false,
+        true,
         "tab stop position",
       ),
       alignment: alignment as OdfTabStop["alignment"],

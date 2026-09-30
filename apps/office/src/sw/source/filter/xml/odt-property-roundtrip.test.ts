@@ -55,6 +55,69 @@ async function rewriteEntry(
 }
 
 describe("Writer ODT mapped pooled properties", /** Groups symmetric property tests. @returns Nothing. */ () => {
+  it("imports and round-trips signed tab positions in paragraph and inherited style properties", /** Preserves negative ODF positions and their alignment/leader choices across package cycles. @returns Completion after reimport. */ async () => {
+    const writer = createWriterDocument();
+    const inherited = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+      new SvxTabStop(-360, SvxTabAdjust.Right, ".", "_"),
+    ]);
+    writer.GetDfltTextFormatColl().SetFormatAttr(inherited);
+    writer.paragraphs[0]?.SetAttr(
+      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+        new SvxTabStop(720, SvxTabAdjust.Decimal, ";", "."),
+        new SvxTabStop(0, SvxTabAdjust.Left, ".", " "),
+        new SvxTabStop(1440, SvxTabAdjust.Center, ".", "_"),
+      ]),
+    );
+    const input = await rewriteEntry(
+      writeOdtDocument(writer, metadata),
+      "content.xml",
+      /** Moves the explicit decimal stop to a negative position in the input package. @param xml - ODF content. @returns Signed input. */
+      (xml) => xml.replace('style:position="1.27cm"', 'style:position="-1.27cm"'),
+    );
+    expect(await new ZipFile(input).readTextEntry("content.xml")).toContain(
+      'style:position="-1.27cm"',
+    );
+    const imported = await readOdtDocument(input, metadata);
+    const expected = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+      new SvxTabStop(-720, SvxTabAdjust.Decimal, ";", "."),
+      new SvxTabStop(0, SvxTabAdjust.Left, ",", " "),
+      new SvxTabStop(1440, SvxTabAdjust.Center, ",", "_"),
+    ]);
+    expect(
+      (imported.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).equals(
+        expected,
+      ),
+    ).toBe(true);
+    const importedStyle = imported.document
+      .GetDfltTextFormatColl()
+      .GetAttrSet()
+      .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    expect(importedStyle.At(0).GetTabPos()).toBe(-360);
+    expect(importedStyle.At(0).GetAdjustment()).toBe(SvxTabAdjust.Right);
+    expect(importedStyle.At(0).GetFill()).toBe("_");
+    const output = writeOdtDocument(imported.document, metadata);
+    expect(await new ZipFile(output).readTextEntry("content.xml")).toContain(
+      'style:position="-1.27cm"',
+    );
+    expect(await new ZipFile(output).readTextEntry("styles.xml")).toContain(
+      'style:position="-0.635cm"',
+    );
+    const reopened = await readOdtDocument(output, metadata);
+    expect(
+      (reopened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).equals(
+        expected,
+      ),
+    ).toBe(true);
+    expect(
+      (
+        reopened.document
+          .GetDfltTextFormatColl()
+          .GetAttrSet()
+          .Get(RES_PARATR_TABSTOP) as SvxTabStopItem
+      ).equals(importedStyle),
+    ).toBe(true);
+  });
+
   it("preserves direct and inherited pagination items with explicit defaults", /** Checks Writer split, widow, orphan and page-break serialization. @returns Completion after reimport. */ async () => {
     const pageReference = new SwFormatPageDesc("Standard", 3);
     expect(pageReference.QueryValue()).toEqual(["Standard", 3]);

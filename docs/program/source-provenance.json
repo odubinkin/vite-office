@@ -99,12 +99,24 @@
           {
             "marker": "SvxAdjust",
             "path": "apps/office/src/editeng/source/items/paraitem.ts"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/paraitem.ts",
+            "marker": "SetDefaultDistance"
           }
         ],
         "upstream": [
           {
             "marker": "SvxAdjust",
             "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+            "marker": "SvxTabStop::SvxTabStop( const sal_Int32"
+          },
+          {
+            "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+            "marker": "SvxTabStopItem::SetDefaultDistance"
           }
         ]
       },
@@ -121,7 +133,8 @@
         "Native UNO presentation, full line-spacing mutation APIs and paragraph item contracts outside the implemented subset remain omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements bounded paragraph alignment, tab-stop ordering and replacement, and line-spacing values from pinned editeng/source/items/paraitem.cxx."
+        "Reimplements bounded paragraph alignment, tab-stop ordering and replacement, and line-spacing values from pinned editeng/source/items/paraitem.cxx.",
+        "Preserves signed sal_Int32 tab positions and direct default-distance setter storage, including clone and browser value restoration; this direct API is distinct from UNO PutValue validation."
       ],
       "status": "mapped",
       "upstreamPath": "editeng/source/items/paraitem.cxx",
@@ -5762,6 +5775,14 @@
           {
             "marker": "XMLTextPropertySetContext::createFastChildContext",
             "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmltabi.cxx",
+            "marker": "case XML_ELEMENT(STYLE, XML_POSITION)"
+          },
+          {
+            "path": "vendor/libreoffice-reference/include/xmloff/xmluconv.hxx",
+            "marker": "sal_Int32 nMin = SAL_MIN_INT32"
           }
         ]
       },
@@ -5774,7 +5795,8 @@
         "Text columns, complex colors, drop caps, and other element-valued properties without current Writer model owners remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Dispatches the implemented element-valued paragraph property to a dedicated import context and writes the result through the caller's canonical item sink."
+        "Dispatches the implemented element-valued paragraph property to a dedicated import context and writes the result through the caller's canonical item sink.",
+        "Imports signed ODF tab positions using the negative-measure domain of the dedicated upstream tab-stop import context."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/text/XMLTextPropertySetContext.cxx",
