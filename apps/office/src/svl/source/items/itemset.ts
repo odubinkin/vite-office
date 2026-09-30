@@ -3,7 +3,13 @@
  */
 
 import type { SfxItemPool } from "./itempool";
-import { DISABLED_POOL_ITEM, IsDisabledItem, type SfxPoolItem } from "./poolitem";
+import {
+  DISABLED_POOL_ITEM,
+  INVALID_POOL_ITEM,
+  IsDisabledItem,
+  IsInvalidItem,
+  type SfxPoolItem,
+} from "./poolitem";
 
 /** Matches LibreOffice's externally significant SfxItemState numeric values. */
 export enum SfxItemState {
@@ -22,8 +28,7 @@ export type WhichRangesContainer = readonly WhichRange[];
 
 /** Stores only explicit item deltas and resolves inherited/default values on demand. */
 export class SfxItemSet {
-  private readonly items = new Map<number, SfxPoolItem>();
-  private readonly itemStates = new Map<number, SfxItemState.INVALID | SfxItemState.DISABLED>();
+  private readonly poolItemMap = new Map<number, SfxPoolItem>();
   private parent: SfxItemSet | undefined;
 
   /** Creates an item set for one pool and bounded WhichId ranges. @param pool - Owning item pool. @param ranges - Accepted WhichId ranges. @param parent - Optional inherited item set. @returns Nothing. */
@@ -56,19 +61,24 @@ export class SfxItemSet {
     return this.parent;
   }
 
-  /** Returns the number of explicitly set items. @returns Direct item count. */
+  /** Returns the number of direct value and state entries. @returns Direct entry count. */
   public Count(): number {
-    return this.items.size + this.itemStates.size;
+    return this.poolItemMap.size;
   }
 
-  /** Returns explicit items in ascending WhichId order. @returns Direct items. */
+  /** Returns explicit SET values in ascending WhichId order for browser projections. @returns Direct value items. */
   public entries(): readonly SfxPoolItem[] {
-    return [...this.items.values()].sort(
-      /** Orders direct items by WhichId. @param left - First item. @param right - Second item. @returns Signed WhichId order. */
-      function compareWhich(left, right): number {
-        return left.Which() - right.Which();
-      },
-    );
+    return [...this.poolItemMap.values()]
+      .filter(
+        /** Excludes state sentinels from the value projection. @param item - Stored entry. @returns Whether SET. */
+        (item) => !IsInvalidItem(item) && !IsDisabledItem(item),
+      )
+      .sort(
+        /** Orders direct items by WhichId. @param left - First item. @param right - Second item. @returns Signed WhichId order. */
+        function compareWhich(left, right): number {
+          return left.Which() - right.Which();
+        },
+      );
   }
 
   /** Returns one item's direct, inherited, or default state. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @returns Item state. */
@@ -78,18 +88,17 @@ export class SfxItemSet {
 
   /** Returns an explicitly set item, optionally searching parents. @param which - Queried WhichId. @param searchInParent - Whether parents participate. @returns Set item or undefined. */
   public GetItemIfSet(which: number, searchInParent = true): SfxPoolItem | undefined {
-    const local = this.items.get(which);
-    if (local !== undefined) return local;
-    if (this.itemStates.has(which)) return undefined;
+    const local = this.poolItemMap.get(which);
+    if (local !== undefined)
+      return IsInvalidItem(local) || IsDisabledItem(local) ? undefined : local;
     return searchInParent ? this.parent?.GetItemIfSet(which, true) : undefined;
   }
 
   /** Returns a direct, inherited, or pool-default item. @param which - Queried WhichId. @param searchInParent - Whether parents participate. @returns Effective item. */
   public Get(which: number, searchInParent = true): SfxPoolItem {
-    const local = this.items.get(which);
+    const local = this.poolItemMap.get(which);
+    if (IsInvalidItem(local)) return this.pool.GetUserOrPoolDefaultItem(which);
     if (local !== undefined) return local;
-    if (this.itemStates.get(which) === SfxItemState.DISABLED) return DISABLED_POOL_ITEM;
-    if (this.itemStates.has(which)) return this.pool.GetUserOrPoolDefaultItem(which);
     if (searchInParent && this.parent !== undefined) return this.parent.Get(which, true);
     return this.pool.GetUserOrPoolDefaultItem(which);
   }
@@ -98,27 +107,28 @@ export class SfxItemSet {
   public Put(item: SfxPoolItem): SfxPoolItem | undefined {
     if (IsDisabledItem(item)) return undefined;
     if (!this.containsWhich(item.Which())) return undefined;
-    const current = this.items.get(item.Which());
-    if (current?.equals(item) === true) return undefined;
+    const current = this.poolItemMap.get(item.Which());
+    if (
+      current !== undefined &&
+      !IsInvalidItem(current) &&
+      !IsDisabledItem(current) &&
+      current.equals(item)
+    )
+      return undefined;
     const stored = item.Clone() as SfxPoolItem;
-    this.itemStates.delete(stored.Which());
-    this.items.set(stored.Which(), stored);
+    this.poolItemMap.set(stored.Which(), stored);
     return stored;
   }
 
   /** Copies SET items, ignores DISABLED and handles INVALID as the pinned Put overload does. @param source - Source item set. @param invalidAsDefault - Whether INVALID clears a direct target value instead of copying the invalid state. @returns True when a SET value changes or a default-mode clear removes an entry. */
   public PutSet(source: SfxItemSet, invalidAsDefault = true): boolean {
     let changed = false;
-    source.entries().forEach(
-      /** Copies one source delta. @param item - Explicit source item. @returns Nothing. */
-      (item): void => {
-        changed = this.Put(item) !== undefined || changed;
-      },
-    );
-    for (const [which, state] of source.itemStates) {
-      if (state !== SfxItemState.INVALID) continue;
-      if (invalidAsDefault) changed = this.ClearItem(which) !== 0 || changed;
-      else if (this.containsWhich(which)) this.InvalidateItem(which);
+    for (const [which, item] of source.poolItemMap) {
+      if (IsDisabledItem(item)) continue;
+      if (IsInvalidItem(item)) {
+        if (invalidAsDefault) changed = this.ClearItem(which) !== 0 || changed;
+        else this.InvalidateItem(which);
+      } else changed = this.Put(item) !== undefined || changed;
     }
     return changed;
   }
@@ -126,25 +136,21 @@ export class SfxItemSet {
   /** Clears one direct item or every direct item for WhichId zero. @param which - Item identity, or zero for all. @returns Removed item count. */
   public ClearItem(which = 0): number {
     if (which === 0) {
-      const count = this.items.size;
-      this.items.clear();
-      const stateCount = this.itemStates.size;
-      this.itemStates.clear();
-      return count + stateCount;
+      const count = this.poolItemMap.size;
+      this.poolItemMap.clear();
+      return count;
     }
-    const removedItem = this.items.delete(which);
-    const removedState = this.itemStates.delete(which);
-    return removedItem || removedState ? 1 : 0;
+    return this.poolItemMap.delete(which) ? 1 : 0;
   }
 
   /** Marks one accepted WhichId invalid, matching INVALID_POOL_ITEM state. @param which - Item identity. @returns Nothing. */
   public InvalidateItem(which: number): void {
-    this.SetItemState(which, SfxItemState.INVALID);
+    this.DisableOrInvalidateItem_ForWhichID(false, which);
   }
 
   /** Marks one accepted WhichId disabled, matching DISABLED_POOL_ITEM state. @param which - Item identity. @returns Nothing. */
   public DisableItem(which: number): void {
-    this.SetItemState(which, SfxItemState.DISABLED);
+    this.DisableOrInvalidateItem_ForWhichID(true, which);
   }
 
   /** Creates an independent item set, optionally without deltas or in another pool. @param includeItems - Whether direct deltas are copied. @param pool - Destination pool. @returns Cloned item set. */
@@ -160,9 +166,11 @@ export class SfxItemSet {
 
   /** Translates the copy constructor's direct item entries independently of PutSet semantics. @param target - Fresh clone. @param includeStates - Whether INVALID/DISABLED entries belong to this clone. @returns Nothing. */
   protected CopyItemsTo(target: SfxItemSet, includeStates = true): void {
-    for (const item of this.items.values()) target.Put(item);
-    if (includeStates)
-      for (const [which, state] of this.itemStates) target.SetItemState(which, state);
+    for (const [which, item] of this.poolItemMap) {
+      if (IsInvalidItem(item) || IsDisabledItem(item)) {
+        if (includeStates) target.DisableOrInvalidateItem_ForWhichID(IsDisabledItem(item), which);
+      } else target.Put(item);
+    }
   }
 
   /** Reports whether this set accepts a WhichId. @param which - Candidate identity. @returns True when contained in any range. */
@@ -175,11 +183,14 @@ export class SfxItemSet {
     );
   }
 
-  /** Stores an explicit non-value state. @param which - Item identity. @param state - Invalid or disabled. @returns Nothing. */
-  private SetItemState(which: number, state: SfxItemState.INVALID | SfxItemState.DISABLED): void {
-    if (!this.containsWhich(which)) return;
-    this.items.delete(which);
-    this.itemStates.set(which, state);
+  /** Stores a sentinel using the pinned shared state transition. @param disable - Whether DISABLED rather than INVALID is requested. @param which - Item identity. @returns Nothing. */
+  private DisableOrInvalidateItem_ForWhichID(disable: boolean, which: number): void {
+    const sentinel = disable ? DISABLED_POOL_ITEM : INVALID_POOL_ITEM;
+    const current = this.poolItemMap.get(which);
+    if (current !== undefined) {
+      if (current === sentinel) return;
+      this.poolItemMap.set(which, sentinel);
+    } else if (this.containsWhich(which)) this.poolItemMap.set(which, sentinel);
   }
 
   /** Mirrors the recursive eState accumulator used by SfxItemSet::GetItemState_Impl. @param fallback - State accumulated by the child set. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @returns Effective item state. */
@@ -188,9 +199,10 @@ export class SfxItemSet {
     which: number,
     searchInParent: boolean,
   ): SfxItemState {
-    if (this.items.has(which)) return SfxItemState.SET;
-    const explicitState = this.itemStates.get(which);
-    if (explicitState !== undefined) return explicitState;
+    const item = this.poolItemMap.get(which);
+    if (IsInvalidItem(item)) return SfxItemState.INVALID;
+    if (IsDisabledItem(item)) return SfxItemState.DISABLED;
+    if (item !== undefined) return SfxItemState.SET;
     const localState = this.containsWhich(which) ? SfxItemState.DEFAULT : fallback;
     if (searchInParent && this.parent !== undefined)
       return this.parent.GetItemStateWithFallback(localState, which, true);

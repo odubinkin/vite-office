@@ -1290,11 +1290,23 @@
           {
             "marker": "SfxItemState",
             "path": "apps/office/src/svl/source/items/itemset.ts"
+          },
+          {
+            "marker": "poolItemMap",
+            "path": "apps/office/src/svl/source/items/itemset.ts"
           }
         ],
         "upstream": [
           {
             "marker": "SfxItemState",
+            "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx"
+          },
+          {
+            "marker": "PoolItemMap",
+            "path": "vendor/libreoffice-reference/include/svl/itemset.hxx"
+          },
+          {
+            "marker": "SfxItemSet::DisableOrInvalidateItem_ForWhichID",
             "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx"
           }
         ]
@@ -1310,7 +1322,8 @@
         "Upstream obligations outside SfxItemState, WhichRange, WhichRangesContainer, SfxItemSet and the bounded SfxItemState, WhichRange, WhichRangesContainer contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements bounded SfxItemSet delta storage, parent lookup, and item state from pinned `svl/source/items/itemset.cxx`."
+        "Reimplements bounded SfxItemSet delta storage, parent lookup, and item state from pinned `svl/source/items/itemset.cxx`.",
+        "Stores ordinary values and distinct INVALID/DISABLED singleton pointers in one native-style PoolItemMap keyed by WhichId; state transitions follow DisableOrInvalidateItem_ForWhichID."
       ],
       "status": "mapped",
       "upstreamPath": "svl/source/items/itemset.cxx",
@@ -1332,6 +1345,10 @@
           {
             "marker": "DisabledItem",
             "path": "apps/office/src/svl/source/items/poolitem.ts"
+          },
+          {
+            "marker": "InvalidItem",
+            "path": "apps/office/src/svl/source/items/poolitem.ts"
           }
         ],
         "upstream": [
@@ -1346,6 +1363,14 @@
           {
             "marker": "IsDisabledItem",
             "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx"
+          },
+          {
+            "marker": "class InvalidItem",
+            "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx"
+          },
+          {
+            "marker": "IsInvalidItem",
+            "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx"
           }
         ]
       },
@@ -1355,14 +1380,17 @@
         "SfxPoolItemSnapshot",
         "SfxPoolItem",
         "DISABLED_POOL_ITEM",
-        "IsDisabledItem"
+        "IsDisabledItem",
+        "INVALID_POOL_ITEM",
+        "IsInvalidItem"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
         "Ports bounded SfxPoolItem value and WhichId construction semantics, including zero-valued request items and the SHRT_MAX ceiling, from pinned poolitem.cxx.",
-        "Owns the pinned disabled-state singleton and pointer-identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload."
+        "Owns the pinned disabled-state singleton and pointer-identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload.",
+        "Owns the separate pinned invalid-state singleton and identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload."
       ],
       "status": "mapped",
       "upstreamPath": "svl/source/items/poolitem.cxx",
@@ -1372,7 +1400,9 @@
         "SfxPoolItem::getItemInstanceManager",
         "SfxPoolItem::SfxPoolItem",
         "DisabledItem",
-        "DISABLED_POOL_ITEM"
+        "DISABLED_POOL_ITEM",
+        "InvalidItem",
+        "INVALID_POOL_ITEM"
       ]
     },
     {

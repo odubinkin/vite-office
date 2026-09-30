@@ -38,8 +38,8 @@ describe("ODT canonical state validation", /** Registers current-schema rejectio
     const invalidCharacter = createWriterDocument();
     const invalidCharacterSet = invalidCharacter
       .GetDfltTextFormatColl()
-      .GetAttrSet() as unknown as { items: Map<number, unknown> };
-    invalidCharacterSet.items.set(RES_CHRATR_WEIGHT, new SfxInt16Item(RES_CHRATR_WEIGHT, 1));
+      .GetAttrSet() as unknown as { poolItemMap: Map<number, unknown> };
+    invalidCharacterSet.poolItemMap.set(RES_CHRATR_WEIGHT, new SfxInt16Item(RES_CHRATR_WEIGHT, 1));
     expect(
       /** Exports an item with the wrong pool-item type. @returns Styles XML when validation unexpectedly succeeds. */ () =>
         exportStylesXml(invalidCharacter),

@@ -543,9 +543,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     }
     const invalidItem = createWriterDocument();
     const invalidSet = invalidItem.GetDfltTextFormatColl().GetAttrSet() as unknown as {
-      items: Map<number, unknown>;
+      poolItemMap: Map<number, unknown>;
     };
-    invalidSet.items.set(65, {
+    invalidSet.poolItemMap.set(65, {
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       Which: () => 65,
     });
@@ -557,9 +557,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const item = new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST);
     (item as unknown as { adjust: number }).adjust = SvxAdjust.End;
     const valueSet = invalidValue.GetDfltTextFormatColl().GetAttrSet() as unknown as {
-      items: Map<number, unknown>;
+      poolItemMap: Map<number, unknown>;
     };
-    valueSet.items.set(65, item);
+    valueSet.poolItemMap.set(65, item);
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(invalidValue),

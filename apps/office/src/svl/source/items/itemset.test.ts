@@ -9,7 +9,7 @@ import {
 
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";
-import { DISABLED_POOL_ITEM, IsDisabledItem } from "./poolitem";
+import { DISABLED_POOL_ITEM, INVALID_POOL_ITEM, IsDisabledItem, IsInvalidItem } from "./poolitem";
 import { SfxItemSet, SfxItemState } from "./itemset";
 import { SfxBoolItem } from "./cenumitm";
 import { SfxInt16Item } from "./intitem";
@@ -102,6 +102,30 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
         /** Creates a fractional value. @returns Invalid item. */ () => new SfxInt16Item(2, 1.5),
       ),
     ).toThrow("16-bit");
+  });
+
+  it("distinguishes the invalid sentinel from disabled and ordinary items", /** Matches the distinct pinned InvalidItem class and identity helper. @returns Nothing. */ () => {
+    const ordinary = new SfxStringItem(0, "request");
+    expect(INVALID_POOL_ITEM).not.toBe(DISABLED_POOL_ITEM);
+    expect(INVALID_POOL_ITEM.constructor).not.toBe(DISABLED_POOL_ITEM.constructor);
+    expect(INVALID_POOL_ITEM.Which()).toBe(0);
+    expect(INVALID_POOL_ITEM.Clone()).toBeNull();
+    expect(INVALID_POOL_ITEM.equals(INVALID_POOL_ITEM)).toBe(true);
+    expect(INVALID_POOL_ITEM.equals(DISABLED_POOL_ITEM)).toBe(true);
+    expect(INVALID_POOL_ITEM.QueryValue()).toBeUndefined();
+    expect(IsInvalidItem(INVALID_POOL_ITEM)).toBe(true);
+    expect(IsInvalidItem(DISABLED_POOL_ITEM)).toBe(false);
+    expect(IsInvalidItem(ordinary)).toBe(false);
+    expect(IsInvalidItem(null)).toBe(false);
+    expect(IsInvalidItem(undefined)).toBe(false);
+    expect(IsDisabledItem(INVALID_POOL_ITEM)).toBe(false);
+    expect(
+      /** Rejects serialization of a non-value invalid sentinel. @returns Invalid snapshot. */ () =>
+        encodeSfxPoolItem(INVALID_POOL_ITEM),
+    ).toThrow("not persistence-safe");
+    const set = new SfxItemSet(createPool(), [[1, 2]]);
+    expect(set.Put(INVALID_POOL_ITEM)).toBeUndefined();
+    expect(set.Count()).toBe(0);
   });
 
   it("implements the pinned disabled singleton clone and value contracts", /** Verifies source-owned sentinel identity and non-persistence. @returns Nothing. */ () => {
@@ -357,6 +381,42 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect((cross.Get(4) as SfxStringItem).GetValue()).toBe("direct");
     expect(cross.Get(4)).not.toBe(source.Get(4));
     expect(source.Clone(false, otherPool).Count()).toBe(0);
+  });
+
+  it("replaces each explicit state with values and copies mixed entries without sentinel equality", /** Verifies mixed-value/state transitions, copy counts and SET-only snapshots. @returns Nothing. */ () => {
+    const pool = createPool();
+    const source = new SfxItemSet(pool, [[1, 3]]);
+    source.InvalidateItem(1);
+    source.DisableItem(2);
+    source.Put(new SfxStringItem(3, "third"));
+    expect(source.Count()).toBe(3);
+    expect(encodeSfxItemSet(source)).toEqual([{ which: 3, value: "third" }]);
+    expect(source.Put(new SfxStringItem(1, "first"))).toBeDefined();
+    expect(source.Put(new SfxInt16Item(2, 7))).toBeDefined();
+    expect(source.Count()).toBe(3);
+    expect(encodeSfxItemSet(source)).toEqual([
+      { which: 1, value: "first" },
+      { which: 2, value: 7 },
+      { which: 3, value: "third" },
+    ]);
+    source.InvalidateItem(1);
+    source.DisableItem(2);
+    const merged = new SfxItemSet(pool, [[1, 3]]);
+    expect(merged.PutSet(source, false)).toBe(true);
+    expect(merged.Count()).toBe(2);
+    expect(merged.GetItemState(1, false)).toBe(SfxItemState.INVALID);
+    expect(merged.GetItemState(2, false)).toBe(SfxItemState.DEFAULT);
+    expect(encodeSfxItemSet(merged)).toEqual([{ which: 3, value: "third" }]);
+    const target = source.Clone();
+    expect(target.Count()).toBe(3);
+    expect(target.GetItemState(1, false)).toBe(SfxItemState.INVALID);
+    expect(target.Get(2)).toBe(DISABLED_POOL_ITEM);
+    expect(encodeSfxItemSet(target)).toEqual([{ which: 3, value: "third" }]);
+    expect(target.Clone().Count()).toBe(3);
+    expect(target.ClearItem(1)).toBe(1);
+    expect(target.ClearItem(2)).toBe(1);
+    expect(target.ClearItem()).toBe(1);
+    expect(source.Count()).toBe(3);
   });
 
   it("returns one disabled sentinel across direct, inherited, and cloned states", /** Matches Get returning DISABLED_POOL_ITEM without looking up a pool default. @returns Nothing. */ () => {

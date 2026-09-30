@@ -4,7 +4,7 @@ title: "Unify SfxItemSet value and state storage"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T16:35:43.326Z"
+  updated_by: "CODER"
+  note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 574 application, 109 inventory, 19 browser tests; all required coverage 100%; all static/build/docs/source/invariant/parity gates; semanticViolationCount=0. Architecture inspection and 48 focused tests passed. Doctor and policy routing passed with pre-existing warnings only. Scope: native single-map item-set state storage, distinct invalid singleton and necessary existing test consumers; broader parity remains unverified."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: replace the temporary dual-map item state representation with the pinned single-map architecture and preserve all established contracts."
+  -
+    type: "verify"
+    at: "2026-09-30T16:35:43.326Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 574 application, 109 inventory, 19 browser tests; all required coverage 100%; all static/build/docs/source/invariant/parity gates; semanticViolationCount=0. Architecture inspection and 48 focused tests passed. Doctor and policy routing passed with pre-existing warnings only. Scope: native single-map item-set state storage, distinct invalid singleton and necessary existing test consumers; broader parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-09-30T16:30:19.751Z"
+doc_updated_at: "2026-09-30T16:35:43.400Z"
 doc_updated_by: "CODER"
 description: "One architecture refactor under approved iterative parity work: replace separate item/state maps with native-style PoolItemMap entries using distinct poolitem-owned INVALID and DISABLED sentinels, preserving observable contracts."
 sections:
@@ -49,11 +55,44 @@ sections:
   Verify Steps: "1. Inspect final class fields against pinned itemset.hxx/cxx: exactly one item map stores ordinary and INVALID/DISABLED item pointers; no itemStates map or compatibility layer remains. 2. Focused itemset/Writer attribute/codec tests prove distinct invalid/disabled identity, null clone/no value behavior, ordinary values replacing each state, idempotent transitions/counts, inherited states/defaults, source-style PutSet flags and return, complete same-pool state clones, SET-only cross-pool clones, and sorted SET-only browser snapshots. 3. npm run verify passes all required gates at 100% coverage. 4. ap doctor and node .agentplane/policy/check-routing.mjs pass; diff is scoped and final git status is clean."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T16:35:43.326Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 574 application, 109 inventory, 19 browser tests; all required coverage 100%; all static/build/docs/source/invariant/parity gates; semanticViolationCount=0. Architecture inspection and 48 focused tests passed. Doctor and policy routing passed with pre-existing warnings only. Scope: native single-map item-set state storage, distinct invalid singleton and necessary existing test consumers; broader parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T16:35:42.869Z, excerpt_hash=sha256:1489fa14f4b3f4bcef88f71237adf0ef03158dbbef4f52e8a2ee2eed4b465dee
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301617-7M8MJP/blueprint/resolved-snapshot.json
+    - old_digest: 65ef22b06b037fe4799bfbcea4f42e4c7bfbcf769411d51f36718f1bfee9e7c2
+    - current_digest: 65ef22b06b037fe4799bfbcea4f42e4c7bfbcf769411d51f36718f1bfee9e7c2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301617-7M8MJP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609301617-7M8MJP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: Pinned itemset.hxx defines one PoolItemMap for ordinary and INVALID/DISABLED pointers; the local implementation used separate value and state maps. Initial full verification exposed two ODT corruption tests accessing the removed private items field; diagnostics are retained in verify-before-test-consumers.log.
+      Impact: The temporary representation duplicated state transitions and obscured the upstream singleton ownership and copy contracts. Sentinel trivial equality must never suppress ordinary value replacement.
+      Resolution: Replaced both maps with poolItemMap and source-style DisableOrInvalidateItem_ForWhichID. Added poolitem-owned distinct INVALID_POOL_ITEM and IsInvalidItem with zero WhichId, null Clone and no value payload. Get, state lookup, Count, Clear, PutSet and full/cross-pool clones retain their verified semantics; browser entries remain sorted SET-only. Adapted only the necessary private-map test consumers with unchanged rejection assertions. AST inspection passed; 48 focused tests and 574 app coverage tests passed at 100%. Full npm run verify completed with exit 0: 574 application tests, 109 inventory tests, 19 browser tests, all required coverage metrics 100%, all build/static/docs/source/invariant/parity gates passed; semanticViolationCount=0. Doctor and routing passed with the two pre-existing doctor warnings; no whole-module semantic promotion or product deviation changes.
 id_source: "generated"
 ---
 ## Summary
@@ -77,6 +116,36 @@ CODER performs one SfxItemSet storage architecture refactor. Only itemset.ts, po
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T16:35:43.326Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 574 application, 109 inventory, 19 browser tests; all required coverage 100%; all static/build/docs/source/invariant/parity gates; semanticViolationCount=0. Architecture inspection and 48 focused tests passed. Doctor and policy routing passed with pre-existing warnings only. Scope: native single-map item-set state storage, distinct invalid singleton and necessary existing test consumers; broader parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T16:35:42.869Z, excerpt_hash=sha256:1489fa14f4b3f4bcef88f71237adf0ef03158dbbef4f52e8a2ee2eed4b465dee
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301617-7M8MJP/blueprint/resolved-snapshot.json
+- old_digest: 65ef22b06b037fe4799bfbcea4f42e4c7bfbcf769411d51f36718f1bfee9e7c2
+- current_digest: 65ef22b06b037fe4799bfbcea4f42e4c7bfbcf769411d51f36718f1bfee9e7c2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301617-7M8MJP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609301617-7M8MJP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -85,3 +154,7 @@ CODER performs one SfxItemSet storage architecture refactor. Only itemset.ts, po
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: Pinned itemset.hxx defines one PoolItemMap for ordinary and INVALID/DISABLED pointers; the local implementation used separate value and state maps. Initial full verification exposed two ODT corruption tests accessing the removed private items field; diagnostics are retained in verify-before-test-consumers.log.
+  Impact: The temporary representation duplicated state transitions and obscured the upstream singleton ownership and copy contracts. Sentinel trivial equality must never suppress ordinary value replacement.
+  Resolution: Replaced both maps with poolItemMap and source-style DisableOrInvalidateItem_ForWhichID. Added poolitem-owned distinct INVALID_POOL_ITEM and IsInvalidItem with zero WhichId, null Clone and no value payload. Get, state lookup, Count, Clear, PutSet and full/cross-pool clones retain their verified semantics; browser entries remain sorted SET-only. Adapted only the necessary private-map test consumers with unchanged rejection assertions. AST inspection passed; 48 focused tests and 574 app coverage tests passed at 100%. Full npm run verify completed with exit 0: 574 application tests, 109 inventory tests, 19 browser tests, all required coverage metrics 100%, all build/static/docs/source/invariant/parity gates passed; semanticViolationCount=0. Doctor and routing passed with the two pre-existing doctor warnings; no whole-module semantic promotion or product deviation changes.

@@ -1356,9 +1356,12 @@
           "apps/office/src/svl/source/items/itemset.test.ts#resolves inherited defaults through each parent own pool",
           "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Get",
           "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::PutImpl",
-          "apps/office/src/svl/source/items/itemset.test.ts#returns one disabled sentinel across direct, inherited, and cloned states"
+          "apps/office/src/svl/source/items/itemset.test.ts#returns one disabled sentinel across direct, inherited, and cloned states",
+          "vendor/libreoffice-reference/include/svl/itemset.hxx#PoolItemMap",
+          "vendor/libreoffice-reference/include/svl/itemset.hxx#m_aPoolItemMap",
+          "apps/office/src/svl/source/items/itemset.test.ts#replaces each explicit state with values and copies mixed entries without sentinel equality"
         ],
-        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Put now ignores items outside the accepted WhichId ranges, including zero, matching PutImpl; focused assertions cover unchanged local/inherited state and supported entries copied from wider source sets. Other item-set contracts remain unverified. Focused clone assertions now verify independent direct values/states and parent preservation for full same-pool clones; empty clones discard inheritance. SfxItemSet cross-pool clones copy directly SET values only. Item copying follows copy-constructor semantics independently of PutSet. Other module contracts remain unverified. PutSet now follows the pinned invalid-as-default flag (true): INVALID removes a direct target value, DISABLED source values are ignored, and explicit false copies invalid state without independently marking the returned change flag. Writer style/node fallback and complete clone state preservation have focused assertions; other module operations remain unverified. Explicit InvalidateItem and DisableItem now ignore out-of-range IDs instead of throwing, with focused assertions for unchanged direct/inherited state, count, ranges and parent plus supported idempotent transitions. Other operations remain unverified. Parent assignment now follows the pinned inline reference assignment. Missing Get values delegate to the parent Get so each parent/default or INVALID fallback uses that level own pool; local values and disabled parent search retain precedence. Focused tests cover constructor/explicit/reset assignment and distinct child/parent/grandparent defaults. Broader contracts remain unverified. Get now returns the unique DISABLED_POOL_ITEM for disabled entries, including inherited states and IDs without defaults; INVALID still resolves a pool default. Put ignores the singleton, same-pool state clones retain identity without cloning the sentinel, and state-only entries remain absent from browser persistence. These bounded assertions do not establish whole-module parity.",
+        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Put now ignores items outside the accepted WhichId ranges, including zero, matching PutImpl; focused assertions cover unchanged local/inherited state and supported entries copied from wider source sets. Other item-set contracts remain unverified. Focused clone assertions now verify independent direct values/states and parent preservation for full same-pool clones; empty clones discard inheritance. SfxItemSet cross-pool clones copy directly SET values only. Item copying follows copy-constructor semantics independently of PutSet. Other module contracts remain unverified. PutSet now follows the pinned invalid-as-default flag (true): INVALID removes a direct target value, DISABLED source values are ignored, and explicit false copies invalid state without independently marking the returned change flag. Writer style/node fallback and complete clone state preservation have focused assertions; other module operations remain unverified. Explicit InvalidateItem and DisableItem now ignore out-of-range IDs instead of throwing, with focused assertions for unchanged direct/inherited state, count, ranges and parent plus supported idempotent transitions. Other operations remain unverified. Parent assignment now follows the pinned inline reference assignment. Missing Get values delegate to the parent Get so each parent/default or INVALID fallback uses that level own pool; local values and disabled parent search retain precedence. Focused tests cover constructor/explicit/reset assignment and distinct child/parent/grandparent defaults. Broader contracts remain unverified. Get now returns the unique DISABLED_POOL_ITEM for disabled entries, including inherited states and IDs without defaults; INVALID still resolves a pool default. Put ignores the singleton, same-pool state clones retain identity without cloning the sentinel, and state-only entries remain absent from browser persistence. These bounded assertions do not establish whole-module parity. The temporary separate value/state maps are replaced by one WhichId-to-item map, matching PoolItemMap architecture. Distinct INVALID and DISABLED entries retain their zero-WhichId singleton identity under the original map key. Get, Count, Clear, state transitions and copying use that map; Put excludes sentinel equality before comparing ordinary values. Full same-pool copies retain states while PutSet skips DISABLED and cross-pool copies retain SET only. Sorted SET-only entries remain a browser projection. Focused mixed-entry tests preserve counts, replacements and snapshot filtering; broader module parity remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SfxItemState",
@@ -1399,16 +1402,22 @@
           "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#class DisabledItem",
           "vendor/libreoffice-reference/include/svl/poolitem.hxx#IsDisabledItem",
           "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem::QueryValue",
-          "apps/office/src/svl/source/items/itemset.test.ts#implements the pinned disabled singleton clone and value contracts"
+          "apps/office/src/svl/source/items/itemset.test.ts#implements the pinned disabled singleton clone and value contracts",
+          "apps/office/src/svl/source/items/poolitem.ts#InvalidItem",
+          "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#class InvalidItem",
+          "vendor/libreoffice-reference/include/svl/poolitem.hxx#IsInvalidItem",
+          "apps/office/src/svl/source/items/itemset.test.ts#distinguishes the invalid sentinel from disabled and ordinary items"
         ],
-        "justification": "Pinned SfxPoolItem accepts WhichId zero for transient/request values and asserts the SHRT_MAX ceiling; source-backed tests now distinguish that from SfxItemSet storage ranges. Broader pool-item behavior remains unverified. The module now owns DISABLED_POOL_ITEM and its identity helper, with WhichId zero, null Clone and the pinned trivial equality operator. QueryValue exposes no payload, reflecting the unsupported base UNO value query; browser codec rejects serialization. Focused assertions cover this sentinel and ordinary item contracts; broader behavior remains unverified.",
+        "justification": "Pinned SfxPoolItem accepts WhichId zero for transient/request values and asserts the SHRT_MAX ceiling; source-backed tests now distinguish that from SfxItemSet storage ranges. Broader pool-item behavior remains unverified. The module now owns DISABLED_POOL_ITEM and its identity helper, with WhichId zero, null Clone and the pinned trivial equality operator. QueryValue exposes no payload, reflecting the unsupported base UNO value query; browser codec rejects serialization. Focused assertions cover this sentinel and ordinary item contracts; broader behavior remains unverified. The module also owns the distinct INVALID_POOL_ITEM and IsInvalidItem identity helper, matching the pinned InvalidItem class with zero WhichId, null Clone, trivial equality and no value payload. Tests distinguish both static sentinel classes and reject them at the browser serialization boundary. Broader pool-item behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SfxPoolItemValue",
           "SfxPoolItemSnapshot",
           "SfxPoolItem",
           "DISABLED_POOL_ITEM",
-          "IsDisabledItem"
+          "IsDisabledItem",
+          "INVALID_POOL_ITEM",
+          "IsInvalidItem"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "svl/source/items/poolitem.cxx",
@@ -1418,7 +1427,9 @@
           "SfxPoolItem::getItemInstanceManager",
           "SfxPoolItem::SfxPoolItem",
           "DisabledItem",
-          "DISABLED_POOL_ITEM"
+          "DISABLED_POOL_ITEM",
+          "InvalidItem",
+          "INVALID_POOL_ITEM"
         ]
       }
     },
