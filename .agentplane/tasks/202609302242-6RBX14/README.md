@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:03:39.428Z"
+doc_updated_at: "2026-09-30T23:07:06.664Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -91,6 +91,10 @@ sections:
     - Observation: The revised malformed XML example throws at diagnoseOdtImport structural preflight before the import-error capture boundary; 108/109 inventory tests otherwise pass including the exact extra diagnostic.
       Impact: This test targets sanitized semantic import failures, not parser preflight failures, so malformed XML is the wrong trigger for the existing API contract.
       Resolution: Use well-formed XML containing the explicitly unsupported native section feature and private attribute value; verify sanitized import-error reporting in the targeted inventory test before the full rerun. Preserve diagnostic API and parser guards unchanged.
+
+    - Observation: Full verification now passes (session 87609 exit 0). Final source admission audit confirms XMLTextImportHelper also supports sections in cells; the local table cell has no section implementation.
+      Impact: The dispatch change must retain an explicit unsupported-feature error for cell sections instead of silently discarding native-supported content.
+      Resolution: Add the section to the existing bounded cell feature guard and its literal fixture loop. Repeat final mandatory verification on this last runtime change; no feature implementation, policy or criteria drift.
 id_source: "generated"
 ---
 ## Summary
@@ -160,3 +164,7 @@ Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, imp
 - Observation: The revised malformed XML example throws at diagnoseOdtImport structural preflight before the import-error capture boundary; 108/109 inventory tests otherwise pass including the exact extra diagnostic.
   Impact: This test targets sanitized semantic import failures, not parser preflight failures, so malformed XML is the wrong trigger for the existing API contract.
   Resolution: Use well-formed XML containing the explicitly unsupported native section feature and private attribute value; verify sanitized import-error reporting in the targeted inventory test before the full rerun. Preserve diagnostic API and parser guards unchanged.
+
+- Observation: Full verification now passes (session 87609 exit 0). Final source admission audit confirms XMLTextImportHelper also supports sections in cells; the local table cell has no section implementation.
+  Impact: The dispatch change must retain an explicit unsupported-feature error for cell sections instead of silently discarding native-supported content.
+  Resolution: Add the section to the existing bounded cell feature guard and its literal fixture loop. Repeat final mandatory verification on this last runtime change; no feature implementation, policy or criteria drift.
