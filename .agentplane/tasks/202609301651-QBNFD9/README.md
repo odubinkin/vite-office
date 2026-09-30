@@ -1,10 +1,11 @@
 ---
 id: "202609301651-QBNFD9"
 title: "Match upstream default tab-stop import filtering"
-status: "DOING"
+result_summary: "First Default tab is retained exclusively, later Default tabs are omitted, and normal/empty/signed sequences preserve native selection and retained fields. Six literal package cases and corrected prior assertion pass. Full verification: 577 app, 109 inventory and 19 browser tests with 100% required coverage; all other gates and doctor/routing passed. Deliberate product deviations are preserved; broader audit remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202609301651-QBNFD9/verify.log"
   findings:
     - "Reviewed the native loop and six literal ODT sequence fixtures with independent expected full fields. Direct and inherited-style import/export/reimport cover signed positions, first/later/multiple/only/no Default and empty lists. Corrected an earlier contradictory assertion while retaining field assertions. No exporter/core-container, validator/schema/generator or deliberate product changes. Full 577/109/19 verification and required coverage 100%, doctor/routing pass; broader defaults/fallback and module ownership remain open."
-commit: null
+commit:
+  hash: "982cc887a5440a16ec6fddd64f450f041a6ad787"
+  message: "🛠️ QBNFD9 task: match default tab import sequence selection"
 comments:
   -
     author: "CODER"
     body: "Start: match source-order Default tab filtering at the ODF sequence sink and replace the contradictory existing assertion with native package behavior."
+  -
+    author: "CODER"
+    body: "Verified: native Default tab sequence selection is performed in XML source order before canonical sorting; direct and inherited-style ODT regression cycles and full verification pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all build/static/docs/source/invariant/parity gates, semanticViolationCount=0. Twelve focused tests cover six source-order sequence cases across direct/style import and export/reimport. Doctor and routing pass. Scope: Default tab sequence filtering; wider module parity remains unverified."
+  -
+    type: "status"
+    at: "2026-09-30T17:03:17.576Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Default tab sequence selection is performed in XML source order before canonical sorting; direct and inherited-style ODT regression cycles and full verification pass."
 doc_version: 3
-doc_updated_at: "2026-09-30T17:02:23.044Z"
+doc_updated_at: "2026-09-30T17:03:17.578Z"
 doc_updated_by: "CODER"
 description: "One bounded import correction under the approved iterative parity audit: apply pinned source-order Default tab-stop sequence filtering before canonical sorting, preserving first-Default exclusivity, later-Default removal and explicit empty sequences."
 sections:
