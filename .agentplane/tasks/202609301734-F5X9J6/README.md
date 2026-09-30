@@ -1,10 +1,11 @@
 ---
 id: "202609301734-F5X9J6"
 title: "Restore native tab measure conversion pipeline"
-status: "DOING"
+result_summary: "Restored source-owned native tab measure pipeline; 95 native differential cases and full verification 583/109/19 at 100% coverage pass. Broader audit remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202609301734-F5X9J6/verify.log"
   findings:
     - "95 compiled pinned-native comparisons and source-derived direct/inherited ODT cycles verify grammar, units, signed rounding, range limits and zero fallback. Full verify passes at 583/109/19 and 100% coverage. Strict legacy callers and broader converter/context contracts remain honestly unverified; deliberate product deviations preserved."
-commit: null
+commit:
+  hash: "b461207e46b3b563e26310a0b08adee6be626f7a"
+  message: "🔧 F5X9J6 task: restore native tab measure pipeline"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned native tab measure pipeline and verify parser and package contracts."
+  -
+    author: "CODER"
+    body: "Verified: native tab metric parsing, MM100 intermediate values, signed Writer conversion and failed-position zero fallback pass compiled-native comparison, ODT cycles and all mandatory checks."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native tab metric pipeline passes 95 compiled-native differential cases, 20 literal ODT sequences, focused tests and full verify 583/109/19 at 100% coverage; source/provenance, doctor, routing and diff checks pass."
+  -
+    type: "status"
+    at: "2026-09-30T17:58:51.521Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native tab metric parsing, MM100 intermediate values, signed Writer conversion and failed-position zero fallback pass compiled-native comparison, ODT cycles and all mandatory checks."
 doc_version: 3
-doc_updated_at: "2026-09-30T17:58:02.468Z"
+doc_updated_at: "2026-09-30T17:58:51.523Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M: source-backed SAX measure parsing and XML unit converter delegation, MM100 tab import values, signed integer conversion to Writer twips, and failure retaining zero. Preserve deliberate save/open/recovery deviations."
 sections:
