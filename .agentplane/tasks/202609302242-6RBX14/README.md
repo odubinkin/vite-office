@@ -1,10 +1,11 @@
 ---
 id: "202609302242-6RBX14"
 title: "Restore native XML child fallback and unknown event dispatch"
-status: "DOING"
+result_summary: "Corrected inert known-child fallback, unknown-parent reuse and separate unknown hooks, source-owned list null adapters and affected ODT evidence; explicit unsupported native features remain honest and wider goal stays active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts"
   findings:
     - "Known null now creates an inert native-shaped context, unknown null reuses its parent, and separate unknown hooks prevent premature known publication. Source-backed ODT assertions preserve supported descendants and ignored unrelated children. Explicit unsupported native feature guards retain honest admission for sections/list headers and cell lists/sections/nested tables."
-commit: null
+commit:
+  hash: "8edc4eb4a6e804b6f574670b14910564aec16ade"
+  message: "🧩 6RBX14 code: restore native XML child fallback and unknown events"
 comments:
   -
     author: "CODER"
     body: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
+  -
+    author: "CODER"
+    body: "Verified: Native child-null reference/event dispatch matches compiled source traces; final 623 app, 109 inventory and 19 browser checks pass with both suites 100% coverage."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned child fallback/event protocol verified by 3 compiled traces /37 events, 70 focused tests and final 623 app /109 inventory /19 browser tests; both suites 100% coverage and all mandatory gates pass."
+  -
+    type: "status"
+    at: "2026-09-30T23:12:18.916Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native child-null reference/event dispatch matches compiled source traces; final 623 app, 109 inventory and 19 browser checks pass with both suites 100% coverage."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:11:30.962Z"
+doc_updated_at: "2026-09-30T23:12:18.917Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
