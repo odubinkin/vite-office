@@ -1328,12 +1328,24 @@
           {
             "marker": "SfxPoolItemValue",
             "path": "apps/office/src/svl/source/items/poolitem.ts"
+          },
+          {
+            "marker": "DisabledItem",
+            "path": "apps/office/src/svl/source/items/poolitem.ts"
           }
         ],
         "upstream": [
           {
             "marker": "SfxPoolItem",
             "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx"
+          },
+          {
+            "marker": "class DisabledItem",
+            "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx"
+          },
+          {
+            "marker": "IsDisabledItem",
+            "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx"
           }
         ]
       },
@@ -1341,13 +1353,16 @@
       "localSymbols": [
         "SfxPoolItemValue",
         "SfxPoolItemSnapshot",
-        "SfxPoolItem"
+        "SfxPoolItem",
+        "DISABLED_POOL_ITEM",
+        "IsDisabledItem"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Ports bounded SfxPoolItem value and WhichId construction semantics, including zero-valued request items and the SHRT_MAX ceiling, from pinned poolitem.cxx."
+        "Ports bounded SfxPoolItem value and WhichId construction semantics, including zero-valued request items and the SHRT_MAX ceiling, from pinned poolitem.cxx.",
+        "Owns the pinned disabled-state singleton and pointer-identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload."
       ],
       "status": "mapped",
       "upstreamPath": "svl/source/items/poolitem.cxx",
@@ -1355,7 +1370,9 @@
         "SfxPoolItem",
         "DefaultItemInstanceManager::find",
         "SfxPoolItem::getItemInstanceManager",
-        "SfxPoolItem::SfxPoolItem"
+        "SfxPoolItem::SfxPoolItem",
+        "DisabledItem",
+        "DISABLED_POOL_ITEM"
       ]
     },
     {

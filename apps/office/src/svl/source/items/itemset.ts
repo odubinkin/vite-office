@@ -3,7 +3,7 @@
  */
 
 import type { SfxItemPool } from "./itempool";
-import type { SfxPoolItem } from "./poolitem";
+import { DISABLED_POOL_ITEM, IsDisabledItem, type SfxPoolItem } from "./poolitem";
 
 /** Matches LibreOffice's externally significant SfxItemState numeric values. */
 export enum SfxItemState {
@@ -88,6 +88,7 @@ export class SfxItemSet {
   public Get(which: number, searchInParent = true): SfxPoolItem {
     const local = this.items.get(which);
     if (local !== undefined) return local;
+    if (this.itemStates.get(which) === SfxItemState.DISABLED) return DISABLED_POOL_ITEM;
     if (this.itemStates.has(which)) return this.pool.GetUserOrPoolDefaultItem(which);
     if (searchInParent && this.parent !== undefined) return this.parent.Get(which, true);
     return this.pool.GetUserOrPoolDefaultItem(which);
@@ -95,10 +96,11 @@ export class SfxItemSet {
 
   /** Stores an independent accepted item delta when its value changes. @param item - Source item. @returns Stored item, or undefined for an equal or out-of-range no-op. */
   public Put(item: SfxPoolItem): SfxPoolItem | undefined {
+    if (IsDisabledItem(item)) return undefined;
     if (!this.containsWhich(item.Which())) return undefined;
     const current = this.items.get(item.Which());
     if (current?.equals(item) === true) return undefined;
-    const stored = item.Clone();
+    const stored = item.Clone() as SfxPoolItem;
     this.itemStates.delete(stored.Which());
     this.items.set(stored.Which(), stored);
     return stored;

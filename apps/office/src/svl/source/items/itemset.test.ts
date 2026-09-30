@@ -9,6 +9,7 @@ import {
 
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";
+import { DISABLED_POOL_ITEM, IsDisabledItem } from "./poolitem";
 import { SfxItemSet, SfxItemState } from "./itemset";
 import { SfxBoolItem } from "./cenumitm";
 import { SfxInt16Item } from "./intitem";
@@ -101,6 +102,30 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
         /** Creates a fractional value. @returns Invalid item. */ () => new SfxInt16Item(2, 1.5),
       ),
     ).toThrow("16-bit");
+  });
+
+  it("implements the pinned disabled singleton clone and value contracts", /** Verifies source-owned sentinel identity and non-persistence. @returns Nothing. */ () => {
+    const ordinary = new SfxStringItem(0, "request");
+    expect(DISABLED_POOL_ITEM.Which()).toBe(0);
+    expect(DISABLED_POOL_ITEM.Clone()).toBeNull();
+    expect(DISABLED_POOL_ITEM.equals(DISABLED_POOL_ITEM)).toBe(true);
+    expect(DISABLED_POOL_ITEM.equals(ordinary)).toBe(true);
+    expect(DISABLED_POOL_ITEM.QueryValue()).toBeUndefined();
+    expect(IsDisabledItem(DISABLED_POOL_ITEM)).toBe(true);
+    expect(IsDisabledItem(ordinary)).toBe(false);
+    expect(IsDisabledItem(null)).toBe(false);
+    expect(IsDisabledItem(undefined)).toBe(false);
+    expect(
+      /** Rejects serialization of a non-value sentinel. @returns Invalid snapshot. */ () =>
+        encodeSfxPoolItem(DISABLED_POOL_ITEM),
+    ).toThrow("not persistence-safe");
+    const set = new SfxItemSet(createPool(), [[1, 2]]);
+    set.Put(new SfxStringItem(1, "direct"));
+    expect(set.Put(DISABLED_POOL_ITEM)).toBeUndefined();
+    expect(set.Count()).toBe(1);
+    expect((set.Get(1) as SfxStringItem).GetValue()).toBe("direct");
+    expect(ordinary.Clone().equals(ordinary)).toBe(true);
+    expect(encodeSfxPoolItem(ordinary)).toEqual({ which: 0, value: "request" });
   });
 
   it("implements the boolean request and state item value contract" /** Verifies boolean item cloning, values, and equality. @returns Nothing. */, () => {
@@ -332,6 +357,47 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect((cross.Get(4) as SfxStringItem).GetValue()).toBe("direct");
     expect(cross.Get(4)).not.toBe(source.Get(4));
     expect(source.Clone(false, otherPool).Count()).toBe(0);
+  });
+
+  it("returns one disabled sentinel across direct, inherited, and cloned states", /** Matches Get returning DISABLED_POOL_ITEM without looking up a pool default. @returns Nothing. */ () => {
+    const pool = createPool();
+    const parent = new SfxItemSet(pool, [[1, 3]]);
+    parent.DisableItem(1);
+    const child = new SfxItemSet(pool, [[1, 3]], parent);
+    child.DisableItem(2);
+    child.DisableItem(3);
+    const disabled = parent.Get(1);
+    expect(disabled).toBe(DISABLED_POOL_ITEM);
+    expect(disabled.Which()).toBe(0);
+    expect(disabled).not.toBe(pool.GetUserOrPoolDefaultItem(1));
+    expect(parent.Get(1, false)).toBe(disabled);
+    expect(child.Get(1)).toBe(disabled);
+    expect(child.Get(1, false)).toBe(pool.GetUserOrPoolDefaultItem(1));
+    expect(child.Get(2)).toBe(disabled);
+    expect(child.Get(2, false)).toBe(disabled);
+    expect(child.Get(3)).toBe(disabled);
+    expect(child.GetItemIfSet(1)).toBeUndefined();
+    expect(child.GetItemIfSet(2)).toBeUndefined();
+    expect(child.GetItemIfSet(3)).toBeUndefined();
+    expect(parent.Count()).toBe(1);
+    expect(child.Count()).toBe(2);
+    const clone = child.Clone();
+    expect(clone.Get(1)).toBe(disabled);
+    expect(clone.Get(2)).toBe(disabled);
+    expect(clone.Get(3)).toBe(disabled);
+    expect(clone.Count()).toBe(2);
+    expect(encodeSfxItemSet(clone)).toEqual([]);
+    child.InvalidateItem(1);
+    expect(child.Get(1)).toBe(pool.GetUserOrPoolDefaultItem(1));
+    expect(child.ClearItem(1)).toBe(1);
+    expect(child.Get(1)).toBe(disabled);
+    child.Put(new SfxInt16Item(2, 5));
+    expect((child.Get(2) as SfxInt16Item).GetValue()).toBe(5);
+    expect(child.GetItemState(2, false)).toBe(SfxItemState.SET);
+    expect(clone.Get(2)).toBe(disabled);
+    expect(child.ClearItem(3)).toBe(1);
+    expect(child.GetItemState(3, false)).toBe(SfxItemState.DEFAULT);
+    expect(child.Get(1)).toBe(disabled);
   });
 
   it("masks inherited values with explicit invalid and disabled states" /** Verifies explicit state sentinels stop parent lookup. @returns Nothing. */, () => {
