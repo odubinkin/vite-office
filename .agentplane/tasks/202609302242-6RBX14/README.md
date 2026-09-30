@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore pinned child-null fallback and unknown event dispatch under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:45:32.599Z"
+doc_updated_at: "2026-09-30T22:47:48.869Z"
 doc_updated_by: "CODER"
 description: "Match pinned SvXMLImport known-null inert contexts, unknown-null parent reuse and separate unknown callbacks; remove list fallback adapters and verify affected ODT contracts without silently implementing unsupported families."
 sections:
@@ -55,6 +55,10 @@ sections:
     - Observation: Initial focused run passes 52 tests and fails five tests whose old expectations treated unrelated known children as fatal. Native font/tab/style/table sources return null or an inert context for these children.
       Impact: Source-backed acceptance fixtures must assert ignored descendants and unchanged owner state, while preserving errors for native-supported currently unimplemented cell lists/nested tables.
       Resolution: Replace the obsolete rejection expectations with concrete imported state assertions; retain root/semantic/cell feature errors and rerun focus then mandatory gates without criterion changes.
+
+    - Observation: Second focus passes 56 tests and one row fixture still fails because it has no cells after its unrelated paragraph is skipped.
+      Impact: The remaining failure is the pre-existing bounded row cardinality error, not child-context dispatch.
+      Resolution: Give the fixture its declared cell and assert the unrelated paragraph is skipped; keep separate row cardinality rejection fixtures and add explicit unsupported cell/list-item feature checks.
 id_source: "generated"
 ---
 ## Summary
@@ -88,3 +92,7 @@ Previous goal turn was progress: iteration24 child 202609302219-BJJJBT DONE, imp
 - Observation: Initial focused run passes 52 tests and fails five tests whose old expectations treated unrelated known children as fatal. Native font/tab/style/table sources return null or an inert context for these children.
   Impact: Source-backed acceptance fixtures must assert ignored descendants and unchanged owner state, while preserving errors for native-supported currently unimplemented cell lists/nested tables.
   Resolution: Replace the obsolete rejection expectations with concrete imported state assertions; retain root/semantic/cell feature errors and rerun focus then mandatory gates without criterion changes.
+
+- Observation: Second focus passes 56 tests and one row fixture still fails because it has no cells after its unrelated paragraph is skipped.
+  Impact: The remaining failure is the pre-existing bounded row cardinality error, not child-context dispatch.
+  Resolution: Give the fixture its declared cell and assert the unrelated paragraph is skipped; keep separate row cardinality rejection fixtures and add explicit unsupported cell/list-item feature checks.
