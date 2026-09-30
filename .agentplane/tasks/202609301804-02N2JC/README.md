@@ -1,10 +1,11 @@
 ---
 id: "202609301804-02N2JC"
 title: "Restore native per-tab XML context ownership"
-status: "DOING"
+result_summary: "Restored native tab leaf ownership; AST/source comparison and full verify 584/109/19 at 100% coverage pass. Global null-context and broader runtime/UI parity remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202609301804-02N2JC/verify.log"
   findings:
     - "Source and AST evidence prove moved initialization and selection unchanged. Real direct/inherited ODT cycles cover ignored descendant subtrees and sibling/text preservation. Full verify 584/109/19 passes at 100% coverage. Ignore-context bridge and global null-dispatch contract are explicitly unverified rather than promoted or declared intentional exceptions."
-commit: null
+commit:
+  hash: "c2a47b2de54835cbad069cb9fd6e9fea25d28e68"
+  message: "🔧 02N2JC task: restore native tab leaf ownership"
 comments:
   -
     author: "CODER"
     body: "Start: restore native per-tab context/value ownership with unchanged metrics/defaults/selection and package evidence."
+  -
+    author: "CODER"
+    body: "Verified: native per-tab context/value ownership and parent reference selection preserve source-derived initialization, metrics, Default selection and ignored descendant subtree behavior through ODT cycles."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native per-tab value/reference ownership verified by pinned source and AST comparison, ODT subtree cycles, full verify 584/109/19 at 100% coverage and all required source/routing checks."
+  -
+    type: "status"
+    at: "2026-09-30T18:17:46.057Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native per-tab context/value ownership and parent reference selection preserve source-derived initialization, metrics, Default selection and ignored descendant subtree behavior through ODT cycles."
 doc_version: 3
-doc_updated_at: "2026-09-30T18:17:15.018Z"
+doc_updated_at: "2026-09-30T18:17:46.058Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Move one-tab data and parsing into SvxXMLTabStopContext_Impl; store and return leaf contexts, select through getTabStop. Preserve verified metrics/defaults/selection and existing descendant ignore semantics. Broader null-context dispatcher parity remains open."
 sections:
