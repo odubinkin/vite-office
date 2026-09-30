@@ -72,11 +72,8 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
     expect(new SfxInt16Item().Which()).toBe(0);
     expect(new SfxUnoAnyItem(0, true).Clone().Which()).toBe(0);
     expect(
-      throwing(
-        /** Rejects a zero WhichId as a stored pool item. @returns Invalid mutation. */ () =>
-          new SfxItemSet(createPool(), [[1, 2]]).Put(new SfxStringItem(0, "request return")),
-      ),
-    ).toThrow("does not accept WhichId");
+      new SfxItemSet(createPool(), [[1, 2]]).Put(new SfxStringItem(0, "request return")),
+    ).toBeUndefined();
     expect(
       throwing(
         /** Creates a WhichId above the pinned SHRT_MAX ceiling. @returns Invalid item. */ () =>
@@ -195,6 +192,38 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
           broken.CreateItem({ value: "", which: 1 }),
       ),
     ).toThrow("changed the WhichId");
+  });
+
+  it("filters unsupported Put values and copies supported entries from wider sets", /** Mirrors SfxItemSet::PutImpl range filtering without disturbing local or inherited state. @returns Nothing. */ () => {
+    const pool = createPool();
+    const parent = new SfxItemSet(pool, [[1, 3]]);
+    parent.Put(new SfxStringItem(1, "parent"));
+    const target = new SfxItemSet(pool, [[1, 2]], parent);
+    target.DisableItem(2);
+    for (const which of [0, 3, 4]) {
+      expect(target.Put(new SfxStringItem(which, "unsupported"))).toBeUndefined();
+      expect(target.Count()).toBe(1);
+      expect(target.GetItemState(1)).toBe(SfxItemState.SET);
+      expect(target.GetItemState(2)).toBe(SfxItemState.DISABLED);
+      expect(target.GetItemIfSet(which, false)).toBeUndefined();
+    }
+    const source = new SfxItemSet(pool, [[1, 4]]);
+    source.Put(new SfxStringItem(1, "supported"));
+    source.Put(new SfxInt16Item(2, 12));
+    source.Put(new SfxStringItem(3, "skip"));
+    source.Put(new SfxStringItem(4, "also skip"));
+    expect(target.PutSet(source)).toBe(true);
+    expect(encodeSfxItemSet(target)).toEqual([
+      { value: "supported", which: 1 },
+      { value: 12, which: 2 },
+    ]);
+    expect(target.PutSet(source)).toBe(false);
+    expect((parent.Get(1) as SfxStringItem).GetValue()).toBe("parent");
+    expect(source.Count()).toBe(4);
+    const unsupported = new SfxItemSet(pool, [[3, 4]]);
+    unsupported.Put(new SfxStringItem(3, "skip"));
+    expect(target.PutSet(unsupported)).toBe(false);
+    expect(target.Count()).toBe(2);
   });
 
   it("resolves direct, inherited, and default states while cloning deltas" /** Covers the central SfxItemSet lookup and mutation semantics. @returns Nothing; assertions inspect state. */, function verifiesItemSet(): void {
@@ -346,10 +375,11 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
           set.SetParent(new SfxItemSet(otherPool, [[1, 2]])),
       ),
     ).toThrow("another pool");
+    expect(set.Put(new SfxStringItem(3, "x"))).toBeUndefined();
+    expect(set.Count()).toBe(0);
     expect(
       throwing(
-        /** Stores an unsupported WhichId. @returns Unknown item. */ () =>
-          set.Put(new SfxStringItem(3, "x")),
+        /** Invalidates an unsupported WhichId. @returns Nothing. */ () => set.InvalidateItem(3),
       ),
     ).toThrow("does not accept");
     expect(

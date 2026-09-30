@@ -1306,9 +1306,12 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/svl/source/items/itemset.ts#SfxItemState",
-          "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemState"
+          "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemState",
+          "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::PutImpl",
+          "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemSet::Put(const SfxItemSet&",
+          "apps/office/src/svl/source/items/itemset.test.ts#filters unsupported Put values and copies supported entries from wider sets"
         ],
-        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Put now ignores items outside the accepted WhichId ranges, including zero, matching PutImpl; focused assertions cover unchanged local/inherited state and supported entries copied from wider source sets. Other item-set contracts remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SfxItemState",

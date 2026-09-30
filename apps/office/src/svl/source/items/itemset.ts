@@ -92,9 +92,9 @@ export class SfxItemSet {
     return this.GetItemIfSet(which, searchInParent) ?? this.pool.GetUserOrPoolDefaultItem(which);
   }
 
-  /** Stores an independent item delta when its value changes. @param item - Source item. @returns Stored item, or undefined for an equal no-op. */
+  /** Stores an independent accepted item delta when its value changes. @param item - Source item. @returns Stored item, or undefined for an equal or out-of-range no-op. */
   public Put(item: SfxPoolItem): SfxPoolItem | undefined {
-    this.assertWhich(item.Which());
+    if (!this.containsWhich(item.Which())) return undefined;
     const current = this.items.get(item.Which());
     if (current?.equals(item) === true) return undefined;
     const stored = item.Clone();
