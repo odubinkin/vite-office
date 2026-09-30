@@ -1,10 +1,11 @@
 ---
 id: "202609301551-S2X2YK"
 title: "Match SfxItemSet parent assignment and default lookup"
-status: "DOING"
+result_summary: "Matched SfxItemSet parent reference assignment and inherited pool-default lookup."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202609301551-S2X2YK/verify.log"
   findings:
     - "Reviewed removal of extra SetParent guards and Get delegation to the parent level. Focused assertions cover direct and default values, distinct pools, INVALID masks, disabled search and assignment storage invariants. The DISABLED sentinel contract remains a separate explicit follow-up. All required gates passed."
-commit: null
+commit:
+  hash: "380c4b5ee5d23622332821ca21730653ffafa750"
+  message: "🐛 S2X2YK task: match inherited parent default resolution"
 comments:
   -
     author: "CODER"
     body: "Start: correct the pinned parent assignment and inherited default lookup contract with explicit foreign-pool and invalid-state evidence."
+  -
+    author: "CODER"
+    body: "Verified: parent assignment and inherited default ownership follow pinned SfxItemSet contracts; focused and full gates passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "27 focused tests and complete verification passed; pinned parent/default contract is asserted and separate disabled sentinel gap remains explicit."
+  -
+    type: "status"
+    at: "2026-09-30T16:01:21.562Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: parent assignment and inherited default ownership follow pinned SfxItemSet contracts; focused and full gates passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T16:00:23.880Z"
+doc_updated_at: "2026-09-30T16:01:21.564Z"
 doc_updated_by: "CODER"
 description: "One inherited-value contract correction under approved iterative parity work: remove extra SetParent restrictions and follow pinned parent Get delegation for default ownership, with focused regression and full verification."
 sections:
