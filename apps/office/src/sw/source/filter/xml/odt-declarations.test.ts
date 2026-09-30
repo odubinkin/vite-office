@@ -15,7 +15,7 @@ import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
-import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/paraitem";
+import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
 
 const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:meta="${ODF_NAMESPACES.meta}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
 

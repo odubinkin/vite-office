@@ -3,7 +3,7 @@
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { SwPageFrame } from "../layout/newfrm";
 import type { SwDoc } from "../doc/doc";
-import { SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";

@@ -12,7 +12,8 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
-import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../editeng/source/items/paraitem";
+import { SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
 import {
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,

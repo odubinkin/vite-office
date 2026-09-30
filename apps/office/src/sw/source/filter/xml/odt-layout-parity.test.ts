@@ -5,7 +5,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
-import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";

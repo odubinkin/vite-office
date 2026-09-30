@@ -4,7 +4,7 @@ title: "Align paragraph margin item source ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-30T15:36:32.653Z"
+  updated_by: "CODER"
+  note: "Exact class-body comparison, 41 focused tests, complete verification, doctor and policy routing passed; verify.log preserves gate evidence."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: perform the approved single source-owner correction for existing frame margin and spacing items, preserving class bodies and behavior."
+  -
+    type: "verify"
+    at: "2026-09-30T15:36:32.653Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact class-body comparison, 41 focused tests, complete verification, doctor and policy routing passed; verify.log preserves gate evidence."
 doc_version: 3
-doc_updated_at: "2026-09-30T15:27:13.440Z"
+doc_updated_at: "2026-09-30T15:36:32.726Z"
 doc_updated_by: "CODER"
 description: "One bounded architecture correction under approved iterative upstream audit: move the four existing frame-owned margin and spacing item classes to editeng/source/items/frmitems.ts, update all direct consumers and test ownership, and align provenance/inventory data without changing behavior or validators."
 sections:
@@ -49,11 +55,41 @@ sections:
   Verify Steps: "1. Compare the four moved class bodies with pre-change paraitem.ts and confirm exact pinned frmitems.cxx ownership; no forwarding export or stale paraitem imports of the moved symbols remains. 2. Run focused EditEngine item tests and Writer pool default/attribute/ODT/ruler tests to retain signed values, clone/equality, item codec and paragraph behavior. 3. npm run verify passes format, lint, type, dependency, resources, 100% app/inventory coverage, browser, static, docs, size, source-tree, provenance, invariants and parity gates. 4. ap doctor and node .agentplane/policy/check-routing.mjs pass; diff is limited to declared ownership refactor and final git status is clean."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-30T15:36:32.653Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact class-body comparison, 41 focused tests, complete verification, doctor and policy routing passed; verify.log preserves gate evidence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T15:36:32.169Z, excerpt_hash=sha256:72aeba19b4f535f818ade1161ba69363e3e143fa75915bf1e5616283d1a68aee
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301526-CHAQ5Y/blueprint/resolved-snapshot.json
+    - old_digest: eaf1dd013c408f04d26018d8861e4bea45382e655f88bb90d2717d07ae937351
+    - current_digest: eaf1dd013c408f04d26018d8861e4bea45382e655f88bb90d2717d07ae937351
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609301526-CHAQ5Y
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609301526-CHAQ5Y
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Command: exact AST comparison against pre-change paraitem.ts. Result: pass. Evidence: all four moved class bodies are identical; no forwarding exports or stale imports. Scope: source-owner refactor, twenty direct consumers, relocated existing frame tests, provenance/inventory data. Command: focused Vitest from apps/office. Result: pass, 8 suites / 41 tests. Initial root-directory invocation could not load app-relative setup; corrected cwd passed without changing test configuration. Command: npm run verify. Result: pass, 117 application suites / 566 tests, 109 inventory tests, 19 browser scenarios, 100% coverage and all required static/source/provenance/invariant/parity gates; semanticViolationCount 0. Command: ap doctor; node .agentplane/policy/check-routing.mjs. Result: pass with only pre-existing doctor warnings. Evidence: verify.log. Each class is now owned by the counterpart of pinned editeng/source/items/frmitems.cxx; broader semantic contracts remain unverified and product exceptions were preserved."
 id_source: "generated"
 ---
 ## Summary
@@ -77,6 +113,36 @@ Approved iterative goal permits this single architecture fix. CODER moves unchan
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-30T15:36:32.653Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact class-body comparison, 41 focused tests, complete verification, doctor and policy routing passed; verify.log preserves gate evidence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-30T15:36:32.169Z, excerpt_hash=sha256:72aeba19b4f535f818ade1161ba69363e3e143fa75915bf1e5616283d1a68aee
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609301526-CHAQ5Y/blueprint/resolved-snapshot.json
+- old_digest: eaf1dd013c408f04d26018d8861e4bea45382e655f88bb90d2717d07ae937351
+- current_digest: eaf1dd013c408f04d26018d8861e4bea45382e655f88bb90d2717d07ae937351
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609301526-CHAQ5Y
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609301526-CHAQ5Y
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -85,3 +151,5 @@ Approved iterative goal permits this single architecture fix. CODER moves unchan
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Command: exact AST comparison against pre-change paraitem.ts. Result: pass. Evidence: all four moved class bodies are identical; no forwarding exports or stale imports. Scope: source-owner refactor, twenty direct consumers, relocated existing frame tests, provenance/inventory data. Command: focused Vitest from apps/office. Result: pass, 8 suites / 41 tests. Initial root-directory invocation could not load app-relative setup; corrected cwd passed without changing test configuration. Command: npm run verify. Result: pass, 117 application suites / 566 tests, 109 inventory tests, 19 browser scenarios, 100% coverage and all required static/source/provenance/invariant/parity gates; semanticViolationCount 0. Command: ap doctor; node .agentplane/policy/check-routing.mjs. Result: pass with only pre-existing doctor warnings. Evidence: verify.log. Each class is now owned by the counterpart of pinned editeng/source/items/frmitems.cxx; broader semantic contracts remain unverified and product exceptions were preserved.

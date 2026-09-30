@@ -13,13 +13,15 @@ import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
 import type { SwView } from "../../source/uibase/uiview/view";
 import {
-  SvxFirstLineIndentItem,
   SvxLineSpacingItem,
-  SvxRightMarginItem,
   SvxTabAdjust,
   SvxTabStopItem,
-  SvxULSpaceItem,
 } from "../../../editeng/source/items/paraitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
+  SvxULSpaceItem,
+} from "../../../editeng/source/items/frmitems";
 import {
   SvxFontHeightItem,
   SvxFontItem,

@@ -19,9 +19,8 @@ import {
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
-  SvxTextLeftMarginItem,
-  SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxTextLeftMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   FontItalic,
   FontLineStyle,

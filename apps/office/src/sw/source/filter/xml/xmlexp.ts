@@ -5,14 +5,16 @@
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxFirstLineIndentItem,
   SvxLineSpacingItem,
-  SvxRightMarginItem,
   SvxTabAdjust,
   SvxTabStopItem,
+} from "../../../../editeng/source/items/paraitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
-} from "../../../../editeng/source/items/paraitem";
+} from "../../../../editeng/source/items/frmitems";
 import {
   SvxFontItem,
   SvxFontHeightItem,

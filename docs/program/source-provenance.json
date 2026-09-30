@@ -35,6 +35,68 @@
       "evidence": {
         "local": [
           {
+            "marker": "SvxTextLeftMarginItem",
+            "path": "apps/office/src/editeng/source/items/frmitems.ts"
+          },
+          {
+            "marker": "SvxFirstLineIndentItem",
+            "path": "apps/office/src/editeng/source/items/frmitems.ts"
+          },
+          {
+            "marker": "SvxRightMarginItem",
+            "path": "apps/office/src/editeng/source/items/frmitems.ts"
+          },
+          {
+            "marker": "SvxULSpaceItem",
+            "path": "apps/office/src/editeng/source/items/frmitems.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SvxTextLeftMarginItem::SvxTextLeftMarginItem",
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+          },
+          {
+            "marker": "SvxFirstLineIndentItem::SvxFirstLineIndentItem",
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+          },
+          {
+            "marker": "SvxRightMarginItem::SvxRightMarginItem",
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+          },
+          {
+            "marker": "SvxULSpaceItem::SvxULSpaceItem",
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/editeng/source/items/frmitems.ts",
+      "localSymbols": [
+        "SvxTextLeftMarginItem",
+        "SvxFirstLineIndentItem",
+        "SvxRightMarginItem",
+        "SvxULSpaceItem"
+      ],
+      "omittedResponsibilities": [
+        "Native UNO property mapping and presentation, mutable percentage and font-relative metric APIs, and frame items outside the implemented paragraph subset remain omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns the implemented text-left margin, first-line indent, right margin and upper/lower paragraph spacing values, clone/equality contracts and browser persistence values in the module corresponding to pinned frmitems.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "editeng/source/items/frmitems.cxx",
+      "upstreamSymbols": [
+        "SvxTextLeftMarginItem",
+        "SvxFirstLineIndentItem",
+        "SvxRightMarginItem",
+        "SvxULSpaceItem"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SvxAdjust",
             "path": "apps/office/src/editeng/source/items/paraitem.ts"
           }
@@ -52,13 +114,14 @@
         "SvxAdjustItem",
         "SvxTabAdjust",
         "SvxTabStop",
-        "SvxTabStopItem"
+        "SvxTabStopItem",
+        "SvxLineSpacingItem"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside the bounded SvxAdjust, SvxAdjustItem and SvxTabStopItem contracts remain intentionally omitted."
+        "Native UNO presentation, full line-spacing mutation APIs and paragraph item contracts outside the implemented subset remain omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded SvxAdjustItem paragraph-alignment and SvxTabStopItem tab-stop values from pinned `editeng/source/items/paraitem.cxx`."
+        "Reimplements bounded paragraph alignment, tab-stop ordering and replacement, and line-spacing values from pinned editeng/source/items/paraitem.cxx."
       ],
       "status": "mapped",
       "upstreamPath": "editeng/source/items/paraitem.cxx",

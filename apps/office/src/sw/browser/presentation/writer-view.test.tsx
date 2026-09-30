@@ -9,11 +9,10 @@ import {
 } from "../../source/core/text/itrform2";
 import {
   SvxLineSpacingItem,
-  SvxFirstLineIndentItem,
   SvxTabStop,
   SvxTabStopItem,
-  SvxULSpaceItem,
 } from "../../../editeng/source/items/paraitem";
+import { SvxFirstLineIndentItem, SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwView } from "../../source/uibase/uiview/view";

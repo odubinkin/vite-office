@@ -10,12 +10,11 @@ import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   SvxLineSpacingItem,
-  SvxFirstLineIndentItem,
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
-  SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxFirstLineIndentItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
   RES_MARGIN_FIRSTLINE,

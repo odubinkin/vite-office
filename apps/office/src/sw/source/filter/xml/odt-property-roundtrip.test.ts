@@ -9,8 +9,8 @@ import {
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
-  SvxFirstLineIndentItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";

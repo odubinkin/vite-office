@@ -9,7 +9,7 @@ import { createWriterDocument } from "../doc/doc";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { getSwTextFrameGap, makeSwTextFrame, type SwTextFrameInput } from "../text/txtfrm";
 import { createSwTextFrameInputs } from "../text/txtfrm";
-import { SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { RES_KEEP, RES_LINENUMBER, RES_UL_SPACE } from "../../../inc/hintids";
 

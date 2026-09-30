@@ -6,14 +6,16 @@
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxFirstLineIndentItem,
   SvxLineSpacingItem,
-  SvxRightMarginItem,
   SvxTabStop,
   SvxTabStopItem,
+} from "../../../../editeng/source/items/paraitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
-} from "../../../../editeng/source/items/paraitem";
+} from "../../../../editeng/source/items/frmitems";
 import {
   FontItalic,
   FontWeight,

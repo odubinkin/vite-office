@@ -2,13 +2,12 @@
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
-  SvxAdjust,
-  SvxAdjustItem,
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
-} from "../../../../editeng/source/items/paraitem";
+} from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";

@@ -2,6 +2,48 @@
   "schemaVersion": 3,
   "modules": [
     {
+      "path": "apps/office/src/editeng/source/items/frmitems.ts",
+      "classification": "upstream-mechanism",
+      "state": "foundation",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/editeng/source/items/frmitems.ts#SvxTextLeftMarginItem",
+          "apps/office/src/editeng/source/items/frmitems.ts#SvxULSpaceItem",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxTextLeftMarginItem::SetTextLeft",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxRightMarginItem::SetRight",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxFirstLineIndentItem::SvxFirstLineIndentItem",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxULSpaceItem::SvxULSpaceItem",
+          "apps/office/src/editeng/source/items/frmitems.test.ts#preserves signed text-left margins and persistence values",
+          "apps/office/src/editeng/source/items/frmitems.test.ts#preserves first-line indent, right margin, and paragraph spacing items"
+        ],
+        "justification": "These four existing margin, indent and spacing classes now reside with their pinned frmitems.cxx owner. Existing assertions cover signed margin values, cloning, equality, browser item-codec round trips, automatic first-line mode and contextual spacing. Broader native item contracts, units and defaults remain individually unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SvxTextLeftMarginItem",
+          "SvxFirstLineIndentItem",
+          "SvxRightMarginItem",
+          "SvxULSpaceItem"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "editeng/source/items/frmitems.cxx",
+        "upstreamSymbols": [
+          "SvxTextLeftMarginItem",
+          "SvxFirstLineIndentItem",
+          "SvxRightMarginItem",
+          "SvxULSpaceItem"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/editeng/source/items/paraitem.ts",
       "classification": "upstream-mechanism",
       "state": "foundation",
@@ -19,21 +61,13 @@
           "apps/office/src/editeng/source/items/paraitem.ts#SvxAdjust",
           "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxAdjust",
           "apps/office/src/editeng/source/items/paraitem.test.ts#SvxTabStopItem",
-          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert",
-          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxTextLeftMarginItem::SetTextLeft",
-          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxRightMarginItem::SetRight",
-          "apps/office/src/editeng/source/items/textitem.test.ts#preserves signed text-left margins and persistence values",
-          "apps/office/src/editeng/source/items/textitem.test.ts#preserves source-derived font-height and paragraph metric items"
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert"
         ],
-        "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified. Signed text-left and right-margin item values, clone and browser item-codec round trips are now asserted against frmitems.cxx; other item contracts and the combined module ownership remain unverified.",
+        "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified. Frame-owned margin and spacing classes have been moved to frmitems.ts; alignment, tabs and line spacing remain with their pinned paraitem.cxx owner.",
         "knownViolations": [],
         "localSymbols": [
           "SvxAdjust",
           "SvxAdjustItem",
-          "SvxTextLeftMarginItem",
-          "SvxFirstLineIndentItem",
-          "SvxRightMarginItem",
-          "SvxULSpaceItem",
           "SvxLineSpacingItem",
           "SvxTabAdjust",
           "SvxTabStop",
@@ -46,9 +80,6 @@
           "SvxAdjustItem",
           "SvxLineSpacingItem::CreateDefault",
           "SvxAdjustItem::CreateDefault",
-          "SvxFirstLineIndentItem",
-          "SvxRightMarginItem",
-          "SvxULSpaceItem",
           "SvxTabStop",
           "SvxTabStopItem",
           "SvxTabStopItem::Insert"

@@ -22,14 +22,16 @@ import {
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxFirstLineIndentItem,
   SvxLineSpacingItem,
-  SvxRightMarginItem,
   SvxTabStop,
   SvxTabStopItem,
+} from "../../editeng/source/items/paraitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
-} from "../../editeng/source/items/paraitem";
+} from "../../editeng/source/items/frmitems";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,

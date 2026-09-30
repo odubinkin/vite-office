@@ -2,12 +2,12 @@
 
 import { describe, expect, it } from "vitest";
 
+import { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
 import {
   SvxFirstLineIndentItem,
-  SvxLineSpacingItem,
   SvxRightMarginItem,
   SvxULSpaceItem,
-} from "../../../../editeng/source/items/paraitem";
+} from "../../../../editeng/source/items/frmitems";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
