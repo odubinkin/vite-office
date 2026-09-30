@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301823-RR9KXK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T18:43:43.670Z",
+  "verdict": "pass",
+  "summary": "Bounded optional span style contract matches pinned constructor; full verification passes.",
+  "evaluated_sha": "e0a35ca2d44c2d5f176d8b21d7db0b082ec7f6be",
+  "blueprint_digest": "8a8b9a80aa238190420769bcddee0d0980e4c7e6765ffd9a199e8fbfbf19ca2a",
+  "findings": [
+    "Only absent and empty names skip character-style lookup. Inherited state, overrides, controls and hyperlink transitions are verified in context and real ODT cycles; unknown named styles and wider hint contracts remain separate audits."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301823-RR9KXK/README.md",
+    ".agentplane/tasks/202609301823-RR9KXK/focused.log",
+    ".agentplane/tasks/202609301823-RR9KXK/verify.log",
+    ".agentplane/tasks/202609301823-RR9KXK/verify-before-coverage.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

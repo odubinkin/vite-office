@@ -4,7 +4,7 @@ title: "Restore optional text span style contract"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Optional span styles follow pinned no-hint behavior; six context and eight real ODT cases pass. Full verify 586/109/19, all required coverage 100%, semantic violations zero; doctor/routing/diff checks pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T18:43:43.670Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded optional span style contract matches pinned constructor; full verification passes."
+  evaluated_sha: "e0a35ca2d44c2d5f176d8b21d7db0b082ec7f6be"
+  blueprint_digest: "8a8b9a80aa238190420769bcddee0d0980e4c7e6765ffd9a199e8fbfbf19ca2a"
+  evidence_refs:
+    - ".agentplane/tasks/202609301823-RR9KXK/README.md"
+    - ".agentplane/tasks/202609301823-RR9KXK/quality/20260930-184343670-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301823-RR9KXK/quality/20260930-184343670-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301823-RR9KXK/quality/20260930-184343670-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301823-RR9KXK/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301823-RR9KXK/focused.log"
+    - ".agentplane/tasks/202609301823-RR9KXK/verify.log"
+    - ".agentplane/tasks/202609301823-RR9KXK/verify-before-coverage.log"
+  findings:
+    - "Only absent and empty names skip character-style lookup. Inherited state, overrides, controls and hyperlink transitions are verified in context and real ODT cycles; unknown named styles and wider hint contracts remain separate audits."
 commit: null
 comments:
   -
