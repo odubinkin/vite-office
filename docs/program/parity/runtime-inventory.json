@@ -6529,9 +6529,15 @@
           "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx#if( !aStyleName.isEmpty() )",
           "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx#XMLImpSpanContext_Impl::characters",
           "apps/office/src/xmloff/source/text/txtpara.test.ts#accepts unstyled and empty-style spans with inherited inline state",
-          "apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts#preserves unstyled spans, inherited formatting, controls and hyperlinks through package cycles"
+          "apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts#preserves unstyled spans, inherited formatting, controls and hyperlinks through package cycles",
+          "apps/office/src/xmloff/source/text/txtparai.ts#resolveTextStyle",
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#XMLTextImportHelper::SetStyleAndAttrs",
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#sStyleName.clear();",
+          "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx#pStyle->FillPropertySet( xPropSet );",
+          "apps/office/src/xmloff/source/text/txtpara.test.ts#retains inline state for unresolved and property-less character styles",
+          "apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts#retains inherited formatting for unresolved and property-less styles through package cycles"
         ],
-        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparai.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Absent/empty text:span style names now retain inherited properties without an additional character-style lookup/hint, matching the pinned span constructor. Six context cases and eight literal ODT package cases assert nesting, paragraph/character inheritance, child overrides and scope restoration, empty leaves, controls and active hyperlinks through import/export/reimport. Contradictory bare-span rejection fixtures are corrected. Unknown named-style fallback, full inline hint ownership/precedence, legacy font conversion and broader default/contracts remain individually unverified; this is no whole-module parity claim.",
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparai.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Absent/empty text:span style names now retain inherited properties without an additional character-style lookup/hint, matching the pinned span constructor. Six context cases and eight literal ODT package cases assert nesting, paragraph/character inheritance, child overrides and scope restoration, empty leaves, controls and active hyperlinks through import/export/reimport. Contradictory bare-span rejection fixtures are corrected. Broader style identity and full inline hint ownership/precedence, legacy font conversion and broader default/contracts remain individually unverified; this is no whole-module parity claim. Unknown/wrong-family character lookup now contributes no delta instead of aborting text import; property-less text styles still inherit valid named parents, and found automatic properties survive unresolved parents. Eleven context cases and eleven literal ODT cases with named parents in styles.xml and automatic children in content.xml verify exact unresolved names, missing/wrong-family lookup, optional properties, explicit false overrides, nested inheritance/scope restoration, controls and hyperlinks through export/reimport. Separate family/common/automatic style table identity and display-name mapping, full hint ownership, cycle semantics and wider import obligations remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "OdfStyleDefinition",
@@ -6539,7 +6545,8 @@
           "XMLParaContext",
           "resolveParagraphStyle",
           "XMLParagraphImportProperties",
-          "createInlineContext"
+          "createInlineContext",
+          "resolveTextStyle"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "xmloff/source/text/txtparai.cxx",

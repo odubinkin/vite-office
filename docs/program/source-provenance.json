@@ -6025,6 +6025,18 @@
           {
             "marker": "preserves unstyled spans, inherited formatting, controls and hyperlinks through package cycles",
             "path": "apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts"
+          },
+          {
+            "marker": "resolveTextStyle",
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts"
+          },
+          {
+            "marker": "retains inline state for unresolved and property-less character styles",
+            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts"
+          },
+          {
+            "marker": "retains inherited formatting for unresolved and property-less styles through package cycles",
+            "path": "apps/office/src/sw/source/filter/xml/odt-span-roundtrip.test.ts"
           }
         ],
         "upstream": [
@@ -6043,6 +6055,18 @@
           {
             "marker": "XMLImpSpanContext_Impl::characters",
             "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx"
+          },
+          {
+            "marker": "XMLTextImportHelper::SetStyleAndAttrs",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx"
+          },
+          {
+            "marker": "sStyleName.clear();",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx"
+          },
+          {
+            "marker": "pStyle->FillPropertySet( xPropSet );",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx"
           }
         ]
       },
@@ -6053,14 +6077,16 @@
         "XMLParaContext",
         "resolveParagraphStyle",
         "XMLParagraphImportProperties",
-        "createInlineContext"
+        "createInlineContext",
+        "resolveTextStyle"
       ],
       "omittedResponsibilities": [
-        "Native text import obligations beyond the bounded Writer target remain omitted or individually unverified, including unknown named-style fallback, full hint ownership/precedence, legacy font conversion and global null-context behavior."
+        "Native text import obligations beyond the bounded Writer target remain omitted or individually unverified, including separate family/common/automatic table identity, style display-name mapping, full hint ownership/precedence, cycle semantics, legacy font conversion and global null-context behavior."
       ],
       "preservedResponsibilities": [
         "Reimplements the bounded ODF text paragraph import boundary from pinned LibreOffice `xmloff/source/text/txtparai.cxx`.",
-        "Accepts absent/empty span style names as no additional character-style hint, retaining inherited inline properties, supported child controls and active hyperlink state; source-derived context assertions and literal real ODT cycles verify this bounded contract."
+        "Accepts absent/empty span style names as no additional character-style hint, retaining inherited inline properties, supported child controls and active hyperlink state; source-derived context assertions and literal real ODT cycles verify this bounded contract.",
+        "Applies bounded family-specific no-op fallback for unknown character names, optional local properties and found child deltas independently of missing parents, matching SetStyleAndAttrs style lookup/application; literal ODT cases use real named parent styles and verify inheritance, overrides and scope across package cycles."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/text/txtparai.cxx",

@@ -601,6 +601,123 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
     }
   });
 
+  it("retains inline state for unresolved and property-less character styles", /** Checks family-specific no-op lookups and independent found properties against pinned style application. @returns Nothing. */ () => {
+    const definitions = new Map<string, OdfStyleDefinition>([
+      ["PBold", { family: "paragraph", properties: { bold: true, italic: true, underline: true } }],
+      ["TBold", { family: "text", properties: { bold: true } }],
+      ["TItalic", { family: "text", properties: { italic: true } }],
+      ["TEmpty", { family: "text" }],
+      ["TInherited", { family: "text", parentStyleName: "TBold" }],
+      ["TChain", { family: "text", parentStyleName: "TInherited" }],
+      ["TEmptyMissing", { family: "text", parentStyleName: "Missing" }],
+      ["TEmptyWrong", { family: "text", parentStyleName: "PBold" }],
+      [
+        "TMissingParent",
+        { family: "text", parentStyleName: "Missing", properties: { italic: true } },
+      ],
+      ["TWrongParent", { family: "text", parentStyleName: "PBold", properties: { italic: true } }],
+      [
+        "TFalse",
+        { family: "text", parentStyleName: "TBold", properties: { bold: false, italic: true } },
+      ],
+    ]);
+    const cases = [
+      {
+        body: '<text:p>A<text:span text:style-name="Missing">B</text:span><text:span text:style-name="tbold">C</text:span><text:span text:style-name=" TBold ">D</text:span><text:span text:style-name=" ">E</text:span>F</text:p>',
+        expected: [["ABCDEF", false, false, false, null]],
+      },
+      {
+        body: '<text:p text:style-name="PBold">A<text:span text:style-name="Missing">B<text:span text:style-name="Missing2">C</text:span>D</text:span>E</text:p>',
+        expected: [["ABCDE", true, true, true, null]],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="TBold">B<text:span text:style-name="Missing">C</text:span><text:span text:style-name="Missing2">D<text:span text:style-name="TItalic">E<text:span text:style-name="Missing3">F</text:span></text:span>G</text:span>H</text:span>I</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["BCD", true, false, false, null],
+          ["EF", true, true, false, null],
+          ["GH", true, false, false, null],
+          ["I", false, false, false, null],
+        ],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="TEmpty">B</text:span><text:span text:style-name="TEmptyMissing">C</text:span><text:span text:style-name="TEmptyWrong">D</text:span>E</text:p>',
+        expected: [["ABCDE", false, false, false, null]],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="TInherited">B</text:span><text:span text:style-name="TChain">C</text:span>D</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["BC", true, false, false, null],
+          ["D", false, false, false, null],
+        ],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="TMissingParent">B<text:span text:style-name="Missing">C</text:span></text:span>D</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["BC", false, true, false, null],
+          ["D", false, false, false, null],
+        ],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="PBold">B</text:span><text:span text:style-name="TBold">C<text:span text:style-name="PBold">D</text:span>E</text:span>F</text:p>',
+        expected: [
+          ["AB", false, false, false, null],
+          ["CDE", true, false, false, null],
+          ["F", false, false, false, null],
+        ],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="TWrongParent">B</text:span>C</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["B", false, true, false, null],
+          ["C", false, false, false, null],
+        ],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="TBold">B<text:span text:style-name="TFalse">C<text:span text:style-name="Missing">D</text:span></text:span>E</text:span>F</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["B", true, false, false, null],
+          ["CD", false, true, false, null],
+          ["E", true, false, false, null],
+          ["F", false, false, false, null],
+        ],
+      },
+      {
+        body: '<text:p>A<text:span text:style-name="Missing">B<text:s text:c="2"/><text:tab/><text:line-break/>C</text:span>D</text:p>',
+        expected: [["AB  \t\nCD", false, false, false, null]],
+      },
+      {
+        body: '<text:p>A<text:a xlink:href="https://example.test/style">B<text:span text:style-name="Missing">C</text:span><text:span text:style-name="TEmpty">D</text:span><text:span text:style-name="TMissingParent">E</text:span>F</text:a>G</text:p>',
+        expected: [
+          ["A", false, false, false, null],
+          ["BCD", false, false, false, "https://example.test/style"],
+          ["E", false, true, false, "https://example.test/style"],
+          ["F", false, false, false, "https://example.test/style"],
+          ["G", false, false, false, null],
+        ],
+      },
+    ] as const;
+    for (const testCase of cases) {
+      expect(
+        importBody(testCase.body, definitions)[0]?.runs.map(
+          /** Projects text, effective properties and link across style lookup boundaries. @param run - Captured run. @returns Comparable state tuple. */
+          (run) => [
+            run.text,
+            run.properties.bold,
+            run.properties.italic,
+            run.properties.underline,
+            run.hyperlink?.url ?? null,
+          ],
+        ),
+        testCase.body,
+      ).toEqual(testCase.expected);
+    }
+  });
+
   it("resolves nested, generated, explicit, and continued list identities", /** Verifies list context state. @returns Nothing. */ () => {
     const rule = {
       formats: Array.from(
@@ -640,7 +757,6 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       "<text:list/>",
       '<text:p text:style-name="Missing"/>',
       "<text:span/>",
-      '<text:p><text:span text:style-name="Missing">x</text:span></text:p>',
       "<text:p><text:list/></text:p>",
       '<text:p><text:span text:style-name="T1"><text:list/></text:span></text:p>',
       "<text:section/>",

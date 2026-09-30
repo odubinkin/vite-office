@@ -599,8 +599,7 @@ function resolveTextStyle(
   if (seen.has(name)) throw new Error(`Cyclic ODF text style: ${name}`);
   seen.add(name);
   const definition = target.getStyle(name);
-  if (definition?.family !== "text" || definition.properties === undefined)
-    throw new Error(`Unsupported ODF text style: ${name}`);
+  if (definition?.family !== "text") return {};
   const parent =
     definition.parentStyleName === undefined
       ? {}
