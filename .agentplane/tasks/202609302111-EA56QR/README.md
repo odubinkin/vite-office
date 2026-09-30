@@ -4,7 +4,7 @@ title: "Restore independent native numbering positioning modes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore independent native numbering position modes, source-owned geometry and exact XML selection/defaults through Writer copy, ODT cycles and browser snapshots; retain registered deviations and verify the full repository gate."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:16:44.887Z"
+doc_updated_at: "2026-09-30T21:30:02.176Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Replace the existing legacy-to-alignment workaround with independent source-owned numbering geometry and exact XML mode selection/defaults, preserving both modes through Writer copy, ODT export/reimport and browser model snapshots."
 sections:
@@ -57,6 +57,10 @@ sections:
     - Observation: Initial typecheck rejected optional legacy snapshot fields passed explicitly as undefined under exactOptionalPropertyTypes.
       Impact: Compatibility decode helper issue within approved snapshot scope; no source-contract or gate drift.
       Resolution: Use explicit native zero defaults when older v15 snapshot fields are absent, then repeat types and all checks.
+
+    - Observation: Focused ODT/type checks passed; lint rejected three destructured-but-unused legacy fields in the compatibility test helper. Source reread also confirmed successful-only numeric updates belong to the level context across repeated properties/leaf children.
+      Impact: In-scope helper repair and source-owned state refinement, with unchanged acceptance/gate scope.
+      Resolution: Remove old snapshot fields from a mutable copied record without unused bindings; preserve parent-owned native defaults and only apply successful numeric deltas. Add a literal repeated-context ODT assertion.
 id_source: "generated"
 ---
 ## Summary
@@ -93,3 +97,7 @@ Source audit: native xmlnumi constructs legacy mode and zero geometry, then sele
 - Observation: Initial typecheck rejected optional legacy snapshot fields passed explicitly as undefined under exactOptionalPropertyTypes.
   Impact: Compatibility decode helper issue within approved snapshot scope; no source-contract or gate drift.
   Resolution: Use explicit native zero defaults when older v15 snapshot fields are absent, then repeat types and all checks.
+
+- Observation: Focused ODT/type checks passed; lint rejected three destructured-but-unused legacy fields in the compatibility test helper. Source reread also confirmed successful-only numeric updates belong to the level context across repeated properties/leaf children.
+  Impact: In-scope helper repair and source-owned state refinement, with unchanged acceptance/gate scope.
+  Resolution: Remove old snapshot fields from a mutable copied record without unused bindings; preserve parent-owned native defaults and only apply successful numeric deltas. Add a literal repeated-context ODT assertion.
