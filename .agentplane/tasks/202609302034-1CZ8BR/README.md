@@ -1,10 +1,11 @@
 ---
 id: "202609302034-1CZ8BR"
 title: "Restore native list label-alignment XML contracts"
-status: "DOING"
+result_summary: "Restored source-owned supported list label-alignment XML defaults, units, conversion and export contracts with real ODT evidence."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
   findings:
     - "Removed command-specific default suppression; native mode is always emitted for supported alignment, only nonzero indents and LISTTAB-positive tabs are exported. Modern parsing has native zero/follow defaults, failed-measure fallback and SHRT bounds. Conversion responsibility is owned by Writer unosett and XML/SAX source modules."
     - "Seventy-four scalar comparisons use compiled unmodified native parser/export/integer bodies with bounded platform aliases. Eleven literal cases in each common/automatic container, both default marker families and exact pinned tdf114287 bounds verify package behavior. The two diagnostic-count corrections are justified by exact ten native mode attributes and preserve semantic/reopen guards."
-commit: null
+commit:
+  hash: "a2029fe2cf969d6f018b6b6db737b4ee0ced4e4a"
+  message: "🧩 1CZ8BR code: restore native list alignment XML contracts"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned supported list label-alignment XML defaults, MM100/Writer conversion and native mode/attribute/export contracts; retain registered deviations and verify full package/browser gates."
+  -
+    author: "CODER"
+    body: "Verified: supported native list label-alignment MM100 import defaults/bounds and Writer conversion, explicit mode and conditional CM export match pinned sources. 74 compiled native comparisons, 147 focused tests and complete verify 604/109/19 at required 100% coverage pass; routing/doctor/diff and quality review pass. Registered deviations are intact; wider audit remains open."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned supported list label-alignment parsing/defaults/SHRT bounds, MM100-Writer conversion, native explicit mode/conditional XML and package reopen values verified. 74 compiled native scalar comparisons and 147 focused tests pass; full verify exit 0 at 604/109/19 and required 100% coverage; routing/doctor/diff pass. Wider contracts stay unverified."
+  -
+    type: "status"
+    at: "2026-09-30T21:06:01.756Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: supported native list label-alignment MM100 import defaults/bounds and Writer conversion, explicit mode and conditional CM export match pinned sources. 74 compiled native comparisons, 147 focused tests and complete verify 604/109/19 at required 100% coverage pass; routing/doctor/diff and quality review pass. Registered deviations are intact; wider audit remains open."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:04:57.995Z"
+doc_updated_at: "2026-09-30T21:06:01.757Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Correct the existing label-alignment import/export pipeline: MM100 defaults, parsing/clamps and Writer conversion; explicit ODF mode, nondefault attribute presence and native export quantization. Keep unsupported position modes and broader numbering obligations separate."
 sections:
