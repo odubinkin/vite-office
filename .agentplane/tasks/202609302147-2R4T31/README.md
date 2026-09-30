@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:53:56.506Z"
+doc_updated_at: "2026-09-30T21:56:22.811Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
@@ -56,6 +56,10 @@ sections:
     Command: npx vitest run --config apps/office/vitest.config.ts ... . Result: fail before test execution; nonexistent config path. Evidence: focused-startup.log. Resolution: use the discovered apps/office/vite.config.ts with the office workspace cwd. Scope and mandatory acceptance checks unchanged; bounded command correction under the approved goal.
 
     Command: npx vitest run the eight focused core/XML/ODT files from apps/office. Result: 51 passed, one obsolete assertion failed. Evidence: focused.log; omitted level 2 in a one-level bullet declaration now correctly remains numbered instead of first-level bullet fallback. Resolution: update that assertion to the manually source-derived Arabic base and add explicit end-to-end coverage; no acceptance relaxation or scope drift.
+
+    - Observation: Office typecheck found a mistaken test-only WriterViewProjection API call and an unused type import; runtime type contract did not fail.
+      Impact: The new integration test cannot typecheck until it uses the established Project API.
+      Resolution: Correct the test to Project(document, current node, SwPaM, metadata), remove the unused import and rerun focused checks; no scope or verification changes.
 id_source: "generated"
 ---
 ## Summary
@@ -89,3 +93,7 @@ Authorization: the user's persistent /goal approves iterative safe local parity 
 Command: npx vitest run --config apps/office/vitest.config.ts ... . Result: fail before test execution; nonexistent config path. Evidence: focused-startup.log. Resolution: use the discovered apps/office/vite.config.ts with the office workspace cwd. Scope and mandatory acceptance checks unchanged; bounded command correction under the approved goal.
 
 Command: npx vitest run the eight focused core/XML/ODT files from apps/office. Result: 51 passed, one obsolete assertion failed. Evidence: focused.log; omitted level 2 in a one-level bullet declaration now correctly remains numbered instead of first-level bullet fallback. Resolution: update that assertion to the manually source-derived Arabic base and add explicit end-to-end coverage; no acceptance relaxation or scope drift.
+
+- Observation: Office typecheck found a mistaken test-only WriterViewProjection API call and an unused type import; runtime type contract did not fail.
+  Impact: The new integration test cannot typecheck until it uses the established Project API.
+  Resolution: Correct the test to Project(document, current node, SwPaM, metadata), remove the unused import and rerun focused checks; no scope or verification changes.
