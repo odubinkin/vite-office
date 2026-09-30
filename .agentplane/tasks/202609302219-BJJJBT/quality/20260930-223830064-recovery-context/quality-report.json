@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609302219-BJJJBT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T22:38:30.064Z",
+  "verdict": "pass",
+  "summary": "Bounded list declaration ownership/default/index correction follows the pinned sources and passes all unchanged mandatory gates.",
+  "evaluated_sha": "161c65ba40f143d4ea8c876afba674d3cc73be25",
+  "blueprint_digest": "13b52d9800715dc289bccae19f0ec70544103f67511c977c384b6dc0de1dcb71",
+  "findings": [
+    "The old callback-owned XMLListStyleContext was removed. xmlnumi now owns source-ordered retained level contexts; invalid indices are skipped before property reads; native optional fields and byte-string parsing are covered independently and through ODT cycles."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609302219-BJJJBT/README.md",
+    ".agentplane/tasks/202609302219-BJJJBT/native-results.json",
+    ".agentplane/tasks/202609302219-BJJJBT/verify.log",
+    "apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "No full-module promotion. Wider numbering/UNO/identity/global SAX null dispatch, layout and browser composition remain separate obligations; explicit unsupported families remain outstanding goal scope."
+  ]
+}

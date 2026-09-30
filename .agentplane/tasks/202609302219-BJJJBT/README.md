@@ -4,7 +4,7 @@ title: "Restore native list declaration defaults and ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -27,6 +27,24 @@ verification:
   updated_by: "CODER"
   note: "Native list declaration ownership/default/index correction verified: 68 compiled-source comparisons, 620 application /109 inventory /19 browser tests, both suites 100% coverage; all mandatory gates and policy checks pass, two known doctor warnings unchanged."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T22:38:30.064Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded list declaration ownership/default/index correction follows the pinned sources and passes all unchanged mandatory gates."
+  evaluated_sha: "161c65ba40f143d4ea8c876afba674d3cc73be25"
+  blueprint_digest: "13b52d9800715dc289bccae19f0ec70544103f67511c977c384b6dc0de1dcb71"
+  evidence_refs:
+    - ".agentplane/tasks/202609302219-BJJJBT/README.md"
+    - ".agentplane/tasks/202609302219-BJJJBT/quality/20260930-223830064-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609302219-BJJJBT/quality/20260930-223830064-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609302219-BJJJBT/quality/20260930-223830064-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609302219-BJJJBT/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609302219-BJJJBT/native-results.json"
+    - ".agentplane/tasks/202609302219-BJJJBT/verify.log"
+    - "apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts"
+  findings:
+    - "The old callback-owned XMLListStyleContext was removed. xmlnumi now owns source-ordered retained level contexts; invalid indices are skipped before property reads; native optional fields and byte-string parsing are covered independently and through ODT cycles."
 commit: null
 comments:
   -
