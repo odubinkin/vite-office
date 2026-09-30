@@ -13,8 +13,70 @@ All matched files use Prettier code style!
 > eslint . --max-warnings 0
 
 
-/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/converter.ts
-  12:14  error  Unexpected class with only static properties  @typescript-eslint/no-extraneous-class
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
 
-✖ 1 problem (1 error, 0 warnings)
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 194 runtime sources, 802 relative imports, 12 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  00:50:06
+   Duration  125ms (transform 26ms, setup 0ms, import 36ms, tests 3ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  119 passed (119)
+      Tests  583 passed (583)
+   Start at  00:50:07
+   Duration  64.84s (transform 1.89s, setup 9.60s, import 7.66s, tests 50.84s, environment 43.18s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 9598/9598 )
+Branches     : 100% ( 7180/7180 )
+Functions    : 100% ( 2664/2664 )
+Lines        : 100% ( 8835/8835 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
 
