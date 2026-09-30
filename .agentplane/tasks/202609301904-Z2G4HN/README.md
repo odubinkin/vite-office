@@ -1,10 +1,11 @@
 ---
 id: "202609301904-Z2G4HN"
 title: "Restore family-scoped text style identity"
-status: "DOING"
+result_summary: "Paragraph and text style identities and resolution remain independent for equal names; scoped source and ODT evidence recorded."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202609301904-Z2G4HN/verify.log"
   findings:
     - "Separate family registration and explicit lookup preserve same-name paragraph/text properties, inheritance, built-in style state and scope through order-varied real ODT cycles. Old cross-family failure guard and fixture are corrected. AST comparison preserves all 14 prior tests after required decomposition. Wider container identity and semantics remain unverified."
-commit: null
+commit:
+  hash: "4570b3675dc3d3a46946b419c7706e4a1f3969b9"
+  message: "🛠 Z2G4HN task: restore family-scoped style identity"
 comments:
   -
     author: "CODER"
     body: "Start: restore family-plus-name style storage and lookup, verified by direct context and literal real ODT inheritance and built-in cases."
+  -
+    author: "CODER"
+    body: "Verified: family-plus-name identity, order-independent same-name ODT inheritance and built-in styles. Prior tests unchanged after decomposition; full verify 590/109/19, 100% required coverage."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native family-plus-name identity restored; context and literal ODT declaration-order cases pass. 14 prior tests unchanged after decomposition. Full verify 590/109/19, 100% required coverage; doctor/routing/diff checks pass."
+  -
+    type: "status"
+    at: "2026-09-30T19:30:28.651Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: family-plus-name identity, order-independent same-name ODT inheritance and built-in styles. Prior tests unchanged after decomposition; full verify 590/109/19, 100% required coverage."
 doc_version: 3
-doc_updated_at: "2026-09-30T19:29:36.263Z"
+doc_updated_at: "2026-09-30T19:30:28.652Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Pinned style indexes and text application identify styles by family plus name. Separate paragraph/text registration and require family-specific resolution, preserving same-name definitions and built-in paragraph lookup through real ODT cycles."
 sections:
