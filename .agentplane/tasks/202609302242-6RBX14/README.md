@@ -4,7 +4,7 @@ title: "Restore native XML child fallback and unknown event dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,25 @@ verification:
   updated_by: "CODER"
   note: "Pinned child fallback/event protocol verified by 3 compiled traces /37 events, 70 focused tests and final 623 app /109 inventory /19 browser tests; both suites 100% coverage and all mandatory gates pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T23:12:05.139Z"
+  updated_by: "EVALUATOR"
+  note: "Pinned child-null reference and unknown event dispatch is corrected; all unchanged mandatory gates pass on the final code."
+  evaluated_sha: "8edc4eb4a6e804b6f574670b14910564aec16ade"
+  blueprint_digest: "a9f450b81f4afb6f428d4b7c5848f9188e20311d81d134197343a4a3a3717132"
+  evidence_refs:
+    - ".agentplane/tasks/202609302242-6RBX14/README.md"
+    - ".agentplane/tasks/202609302242-6RBX14/quality/20260930-231205139-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609302242-6RBX14/quality/20260930-231205139-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609302242-6RBX14/quality/20260930-231205139-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609302242-6RBX14/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609302242-6RBX14/native-traces.json"
+    - ".agentplane/tasks/202609302242-6RBX14/verify.log"
+    - "apps/office/src/xmloff/source/core/xmlimp.test.ts"
+    - "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts"
+  findings:
+    - "Known null now creates an inert native-shaped context, unknown null reuses its parent, and separate unknown hooks prevent premature known publication. Source-backed ODT assertions preserve supported descendants and ignored unrelated children. Explicit unsupported native feature guards retain honest admission for sections/list headers and cell lists/sections/nested tables."
 commit: null
 comments:
   -
