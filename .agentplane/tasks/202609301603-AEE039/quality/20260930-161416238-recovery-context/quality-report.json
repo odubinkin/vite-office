@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609301603-AEE039",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-30T16:14:16.238Z",
+  "verdict": "pass",
+  "summary": "Existing disabled states expose the pinned pool-item singleton and its native clone/value contracts.",
+  "evaluated_sha": "1055b574768182c5c43d1db3d14607f4a0cbbddc",
+  "blueprint_digest": "f1459510e3f6d7dc5fc7c46595f9318a06833a65b9f0ce1268a2b1682bf58d81",
+  "findings": [
+    "Reviewed sentinel source ownership, pointer identity, WhichId zero, null clone and trivial equality. Get preserves inherited and INVALID distinctions, Put ignores the singleton and ordinary clone storage is unchanged. Tests cover IDs without defaults, clone identity and codec rejection. Full verification passed; dual-map storage is a separate recorded architecture follow-up."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609301603-AEE039/README.md",
+    ".agentplane/tasks/202609301603-AEE039/verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
