@@ -4,7 +4,7 @@ title: "Restore sequential native numbering rule import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:52:47.674Z"
+doc_updated_at: "2026-09-30T21:53:56.506Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
@@ -54,6 +54,8 @@ sections:
     Authorization: the user's persistent /goal approves iterative safe local parity corrections, one executable child at a time. Preflight: main clean, direct workflow, parent 202609240501-C9TN6M active. Sources: pinned libreoffice-26.8.0.2 commit 9bc445578031fecf56086729d8e4940c77e14d65, repository cached vendor/libreoffice-reference. XML FillUnoNumRule iterates declarations in source order with one exception boundary; Writer SetNumberingRuleByIndex clones before SetPropertiesToNumFormat and commits only after success. Native common and automatic factories use modern base rules under the existing ODF >=1.2 setting. Local eager ten-level construction and first-declared fallback do not implement that state machine. No source-family or full formatter parity promotion is planned.
 
     Command: npx vitest run --config apps/office/vitest.config.ts ... . Result: fail before test execution; nonexistent config path. Evidence: focused-startup.log. Resolution: use the discovered apps/office/vite.config.ts with the office workspace cwd. Scope and mandatory acceptance checks unchanged; bounded command correction under the approved goal.
+
+    Command: npx vitest run the eight focused core/XML/ODT files from apps/office. Result: 51 passed, one obsolete assertion failed. Evidence: focused.log; omitted level 2 in a one-level bullet declaration now correctly remains numbered instead of first-level bullet fallback. Resolution: update that assertion to the manually source-derived Arabic base and add explicit end-to-end coverage; no acceptance relaxation or scope drift.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +87,5 @@ Revert the scoped implementation commit after reviewing dependent numbering work
 Authorization: the user's persistent /goal approves iterative safe local parity corrections, one executable child at a time. Preflight: main clean, direct workflow, parent 202609240501-C9TN6M active. Sources: pinned libreoffice-26.8.0.2 commit 9bc445578031fecf56086729d8e4940c77e14d65, repository cached vendor/libreoffice-reference. XML FillUnoNumRule iterates declarations in source order with one exception boundary; Writer SetNumberingRuleByIndex clones before SetPropertiesToNumFormat and commits only after success. Native common and automatic factories use modern base rules under the existing ODF >=1.2 setting. Local eager ten-level construction and first-declared fallback do not implement that state machine. No source-family or full formatter parity promotion is planned.
 
 Command: npx vitest run --config apps/office/vitest.config.ts ... . Result: fail before test execution; nonexistent config path. Evidence: focused-startup.log. Resolution: use the discovered apps/office/vite.config.ts with the office workspace cwd. Scope and mandatory acceptance checks unchanged; bounded command correction under the approved goal.
+
+Command: npx vitest run the eight focused core/XML/ODT files from apps/office. Result: 51 passed, one obsolete assertion failed. Evidence: focused.log; omitted level 2 in a one-level bullet declaration now correctly remains numbered instead of first-level bullet fallback. Resolution: update that assertion to the manually source-derived Arabic base and add explicit end-to-end coverage; no acceptance relaxation or scope drift.

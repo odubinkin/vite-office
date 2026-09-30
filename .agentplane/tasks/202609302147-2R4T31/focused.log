@@ -1,0 +1,44 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/filter/xml/odt-roundtrip.test.ts (13 tests | 1 failed) 130ms
+     × imports LibreOffice-shaped nested and continued list blocks 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/filter/xml/odt-roundtrip.test.ts > Writer ODF XML filters > imports LibreOffice-shaped nested and continued list blocks
+AssertionError: expected [ { listId: 'list1', …(4) }, …(4) ] to deeply equal [ { kind: 'numbered', …(4) }, …(4) ]
+
+- Expected
++ Received
+
+@@ -12,11 +12,11 @@
+      "listId": "list1",
+      "ruleName": "Numbering 1",
+      "text": "beta",
+    },
+    {
+-     "kind": "bullet",
++     "kind": "numbered",
+      "level": 1,
+      "listId": "list1",
+      "ruleName": "L2",
+      "text": "nested",
+    },
+
+ ❯ src/sw/source/filter/xml/odt-roundtrip.test.ts:374:7
+    372|         }),
+    373|       ),
+    374|     ).toEqual([
+       |       ^
+    375|       {
+    376|         kind: "numbered",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  1 failed | 51 passed (52)
+   Start at  04:53:02
+   Duration  3.19s (transform 674ms, setup 690ms, import 1.00s, tests 562ms, environment 3.37s)
+
