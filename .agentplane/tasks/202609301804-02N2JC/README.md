@@ -4,7 +4,7 @@ title: "Restore native per-tab XML context ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Native per-tab value/reference ownership verified by pinned source and AST comparison, ODT subtree cycles, full verify 584/109/19 at 100% coverage and all required source/routing checks."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T18:17:43.692Z"
+  updated_by: "EVALUATOR"
+  note: "Native per-tab value and context-reference ownership restored with unchanged parsing and selection."
+  evaluated_sha: "c2a47b2de54835cbad069cb9fd6e9fea25d28e68"
+  blueprint_digest: "21261127fbdec6f32ee961ab19349424ea0fb0b80dd32d059c1657e6928c4359"
+  evidence_refs:
+    - ".agentplane/tasks/202609301804-02N2JC/README.md"
+    - ".agentplane/tasks/202609301804-02N2JC/quality/20260930-181743692-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301804-02N2JC/quality/20260930-181743692-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301804-02N2JC/quality/20260930-181743692-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301804-02N2JC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301804-02N2JC/architecture.log"
+    - ".agentplane/tasks/202609301804-02N2JC/focused.log"
+    - ".agentplane/tasks/202609301804-02N2JC/verify.log"
+  findings:
+    - "Source and AST evidence prove moved initialization and selection unchanged. Real direct/inherited ODT cycles cover ignored descendant subtrees and sibling/text preservation. Full verify 584/109/19 passes at 100% coverage. Ignore-context bridge and global null-dispatch contract are explicitly unverified rather than promoted or declared intentional exceptions."
 commit: null
 comments:
   -
