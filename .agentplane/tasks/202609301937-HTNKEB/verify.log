@@ -1,0 +1,35 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/xmloff/source/style/xmlstyle.test.ts(48,43): error TS2345: Argument of type '"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"' is not assignable to parameter of type '"urn:oasis:names:tc:opendocument:xmlns:style:1.0"'.
+src/xmloff/source/style/xmlstyle.test.ts(87,46): error TS2345: Argument of type '"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"' is not assignable to parameter of type '"urn:oasis:names:tc:opendocument:xmlns:style:1.0"'.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit
