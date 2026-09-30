@@ -4,7 +4,7 @@ title: "Restore native XML tab and unit conversion module ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Command: npm run verify. Result: pass (exit 0). Evidence: verify.log; 577 application, 109 inventory, 19 browser tests; required coverage 100%; all dependency/build/static/docs/source/invariant/parity gates, 194 provenance modules and semanticViolationCount=0. AST equality in architecture.log and 27 unchanged focused tests pass. Doctor/routing pass. Scope: native XML dispatch/tab/conversion responsibility split and direct consumer imports; wider contracts remain unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T17:18:15.339Z"
+  updated_by: "EVALUATOR"
+  note: "Existing XML tab-import and bounded conversion implementations now reside in their native style/core owners; dispatcher and all direct consumers use the corresponding modules."
+  evaluated_sha: "cfdbf407ac5c42f45358d3f5fa94cfd2eba712b7"
+  blueprint_digest: "09fd8aa3242f965f9b0249b2ff7ffa18b589f6d3b5e66493f8e040be32aebf1b"
+  evidence_refs:
+    - ".agentplane/tasks/202609301706-8FPY82/README.md"
+    - ".agentplane/tasks/202609301706-8FPY82/quality/20260930-171815339-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301706-8FPY82/quality/20260930-171815339-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301706-8FPY82/quality/20260930-171815339-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301706-8FPY82/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301706-8FPY82/architecture.log"
+    - ".agentplane/tasks/202609301706-8FPY82/verify.log"
+  findings:
+    - "Reviewed native dispatch, xmltabi and xmluconv ownership against pinned sources. AST equality proves all four context members and complete converter unchanged. No compatibility aliases, new parser/default behavior, test rewrites, validators/schemas/generators or deliberate product changes. Metadata narrows dispatch and adds separate unverified owner records without unrelated reordering. 27 existing focused tests and full 577/109/19 verification at 100% coverage passed; doctor/routing pass. Native leaf defaults/fallback and complete conversion contracts remain open."
 commit: null
 comments:
   -
