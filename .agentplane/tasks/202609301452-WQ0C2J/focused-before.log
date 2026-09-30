@@ -1,0 +1,12 @@
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/svl/source/items/itemset.test.ts > SfxItemPool and SfxItemSet > resolves direct, inherited, and default states while cloning deltas
+AssertionError: expected SfxItemSet{ …(5) } to be undefined
+ FAIL  src/svl/source/items/itemset.test.ts > SfxItemPool and SfxItemSet > clones parents and direct states only under the pinned pool and item rules
+AssertionError: expected SfxItemSet{ …(5) } to be undefined
+ FAIL  src/sw/source/core/doc/writer-attributes.test.ts > Writer attribute ownership > clones Writer attribute values independently and omits inheritance for empty clones
+AssertionError: expected SwAttrSet{ …(5) } to be undefined
+ Test Files  2 failed (2)
+      Tests  3 failed | 17 passed (20)
+   Start at  21:55:10
+   Duration  1.20s (transform 310ms, setup 295ms, import 340ms, tests 41ms, environment 1.33s)
