@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/filter/xml/odt-roundtrip.test.ts (13 tests | 1 failed) 132ms
+     × validates XML roots, declarations, required Writer styles, and body structure 17ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/filter/xml/odt-roundtrip.test.ts > Writer ODF XML filters > validates XML roots, declarations, required Writer styles, and body structure
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/sw/source/filter/xml/odt-roundtrip.test.ts:725:7
+    723|           meta,
+    724|         ),
+    725|     ).toThrow("Heading 1 paragraph style is invalid");
+       |       ^
+    726|     const alternateFollow = importWriterXml(
+    727|       styles.replace(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 34 passed (35)
+   Start at  02:15:46
+   Duration  3.14s (transform 643ms, setup 602ms, import 900ms, tests 424ms, environment 3.49s)
+
