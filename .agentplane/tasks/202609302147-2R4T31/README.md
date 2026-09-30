@@ -1,10 +1,11 @@
 ---
 id: "202609302147-2R4T31"
 title: "Restore sequential native numbering rule import"
-status: "DOING"
+result_summary: "Native modern base rule plus sequential XML replacement preserves omitted and prior levels, applies duplicates in source order, aborts after invalid properties and retains copied/snapshotted state. Final verify: 617 app, 109 inventory, 19 browser with 100% coverage; 55 focused tests and 170 complete C++ comparison states. Goal and parent remain active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -49,11 +50,16 @@ quality_review:
     - "The native modern base is retained for omitted and empty rules; duplicates apply in source order. Rejection has a whole-level commit boundary and stops later declarations while retaining earlier changes."
     - "Extracted C++ primary-source branches and loop match 170 complete states; independent manual ODT/copy/snapshot/marker tests pass, including accepted-distance export/reopen rejection."
     - "No validator, coverage gate, schema version or registered browser save/open/recovery deviation was changed. Stale implementation markers moved to the actual Writer UNO owner."
-commit: null
+commit:
+  hash: "d8bd6fcc54790da70f365460161ea0307a0a4ce2"
+  message: "🧩 2R4T31 code: restore sequential native numbering rule import"
 comments:
   -
     author: "CODER"
     body: "Start: Restore ordered native list-level replacement and failure retention under the approved iterative goal."
+  -
+    author: "CODER"
+    body: "Verified: Restored ordered native list-level application, base defaults and rejection retention; all required gates and bounded differential evidence pass."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete final verify passes: 617 app, 109 inventory, 19 browser, 100% coverage; 55 focused and 170 native C++ level comparisons; source/routing/diff pass, old doctor warnings unchanged."
+  -
+    type: "status"
+    at: "2026-09-30T22:13:44.661Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Restored ordered native list-level application, base defaults and rejection retention; all required gates and bounded differential evidence pass."
 doc_version: 3
-doc_updated_at: "2026-09-30T22:12:24.223Z"
+doc_updated_at: "2026-09-30T22:13:44.662Z"
 doc_updated_by: "CODER"
 description: "Apply declared ODF list levels in source order to the native modern Writer base rule, retaining omitted levels and stopping after rejected numbering properties. Replace eager fallback tables with ordered declarations; preserve registered save/open/recovery deviations."
 sections:
