@@ -1,10 +1,11 @@
 ---
 id: "202609301724-XZQVDC"
 title: "Restore native tab import position and alignment defaults"
-status: "DOING"
+result_summary: "Restored native tab import defaults; 578 app, 109 inventory, 19 browser tests pass with 100% coverage. Broader converter/context parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202609301724-XZQVDC/verify.log"
   findings:
     - "Pinned source initializes position zero and LEFT; 12 literal cases independently assert defaults, exact-token alignment overrides and preserved later-Default omission. Focused and mandatory checks pass. Broader converter and context contracts remain unverified; registered product deviations untouched."
-commit: null
+commit:
+  hash: "4d87aab71dbdd533705fd4ac5b85639831acda13"
+  message: "🔧 XZQVDC task: restore native tab import defaults"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native tab position and alignment defaults with source-derived ODT cases."
+  -
+    author: "CODER"
+    body: "Verified: native zero-position and recognized-only alignment defaults pass literal ODT direct/inherited package cycles, full mandatory verification and source review."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native zero-position and recognized-only alignment defaults verified with 12 literal direct/inherited ODT cases, focused 9 tests and full verify 578/109/19 at 100% coverage; routing and scoped diff clean."
+  -
+    type: "status"
+    at: "2026-09-30T17:30:45.091Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native zero-position and recognized-only alignment defaults pass literal ODT direct/inherited package cycles, full mandatory verification and source review."
 doc_version: 3
-doc_updated_at: "2026-09-30T17:30:03.424Z"
+doc_updated_at: "2026-09-30T17:30:45.092Z"
 doc_updated_by: "CODER"
 description: "Child of runtime parity audit 202609240501-C9TN6M. Restore missing-position zero and unrecognized-type LEFT defaults from pinned xmltabi.cxx without changing registered browser deviations."
 sections:
