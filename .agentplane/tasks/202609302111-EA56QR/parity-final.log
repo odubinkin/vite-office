@@ -1,0 +1,3 @@
+Command: npm run inventory:parity
+Result: pass, terminal exit 0.
+Evidence: semanticViolationCount=0; final metadata describes replacement of the legacy Twip adapter with independent MM100 groups. Broader semantic statuses remain unverified.

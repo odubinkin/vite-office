@@ -4,7 +4,7 @@ title: "Restore independent native numbering positioning modes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore independent native numbering position modes, source-owned geometry and exact XML selection/defaults through Writer copy, ODT cycles and browser snapshots; retain registered deviations and verify the full repository gate."
 doc_version: 3
-doc_updated_at: "2026-09-30T21:30:02.176Z"
+doc_updated_at: "2026-09-30T21:33:37.962Z"
 doc_updated_by: "CODER"
 description: "Child of C9TN6M. Replace the existing legacy-to-alignment workaround with independent source-owned numbering geometry and exact XML mode selection/defaults, preserving both modes through Writer copy, ODT export/reimport and browser model snapshots."
 sections:
@@ -61,6 +61,10 @@ sections:
     - Observation: Focused ODT/type checks passed; lint rejected three destructured-but-unused legacy fields in the compatibility test helper. Source reread also confirmed successful-only numeric updates belong to the level context across repeated properties/leaf children.
       Impact: In-scope helper repair and source-owned state refinement, with unchanged acceptance/gate scope.
       Resolution: Remove old snapshot fields from a mutable copied record without unused bindings; preserve parent-owned native defaults and only apply successful numeric deltas. Add a literal repeated-context ODT assertion.
+
+    - Observation: The integer-width test table inferred loose number arrays, causing noUncheckedIndexedAccess tuple destructuring errors during types.
+      Impact: Test table annotation issue, with no runtime code or verification scope change.
+      Resolution: Declared the literal table as const to preserve tuple positions; complete mandatory gate will run on final code.
 id_source: "generated"
 ---
 ## Summary
@@ -101,3 +105,7 @@ Source audit: native xmlnumi constructs legacy mode and zero geometry, then sele
 - Observation: Focused ODT/type checks passed; lint rejected three destructured-but-unused legacy fields in the compatibility test helper. Source reread also confirmed successful-only numeric updates belong to the level context across repeated properties/leaf children.
   Impact: In-scope helper repair and source-owned state refinement, with unchanged acceptance/gate scope.
   Resolution: Remove old snapshot fields from a mutable copied record without unused bindings; preserve parent-owned native defaults and only apply successful numeric deltas. Add a literal repeated-context ODT assertion.
+
+- Observation: The integer-width test table inferred loose number arrays, causing noUncheckedIndexedAccess tuple destructuring errors during types.
+  Impact: Test table annotation issue, with no runtime code or verification scope change.
+  Resolution: Declared the literal table as const to preserve tuple positions; complete mandatory gate will run on final code.
