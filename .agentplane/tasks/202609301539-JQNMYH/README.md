@@ -4,7 +4,7 @@ title: "Match SwAttrSet polymorphic clone contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "13 focused tests, full npm run verify, doctor and routing passed; source-specific clone branches documented with pinned evidence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T15:48:49.367Z"
+  updated_by: "EVALUATOR"
+  note: "SwAttrSet polymorphic cloning follows the pinned same-pool and foreign-pool branches."
+  evaluated_sha: "693a211aa63429f2cd03479df2b19fdd65f8b4c5"
+  blueprint_digest: "f7543bc9bb3b086b1eb18658b2dcd5f88c52a0672b18402312aa6b8590a27522"
+  evidence_refs:
+    - ".agentplane/tasks/202609301539-JQNMYH/README.md"
+    - ".agentplane/tasks/202609301539-JQNMYH/quality/20260930-154849367-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301539-JQNMYH/quality/20260930-154849367-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301539-JQNMYH/quality/20260930-154849367-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301539-JQNMYH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301539-JQNMYH/verify.log"
+  findings:
+    - "Reviewed virtual dispatch, subtype and destination document identity, independent direct values/states, empty clones, generic SET-only delegation and the unusual pinned empty foreign Writer-pool destination. Scope remains limited to the declared three files and task artifacts; full verification passed."
 commit: null
 comments:
   -
