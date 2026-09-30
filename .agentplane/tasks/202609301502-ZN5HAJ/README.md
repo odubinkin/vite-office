@@ -1,10 +1,11 @@
 ---
 id: "202609301502-ZN5HAJ"
 title: "Match SfxItemSet invalid-as-default copying"
-status: "DOING"
+result_summary: "Ordinary item set copying restores inherited Writer values for INVALID by default and matches explicit-mode return behavior."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/source/core/doc/writer-attributes.test.ts"
   findings:
     - "Focused tests exercise both flag modes and Writer inheritance, while independent cloning remains intact; all full gates pass."
-commit: null
+commit:
+  hash: "9935632aa9764cb5b7ae47096c3648403a8c3c91"
+  message: "🐛 ZN5HAJ task: match invalid-as-default item set copying"
 comments:
   -
     author: "CODER"
     body: "Start: align ordinary SfxItemSet copying with the pinned invalid-as-default flag, disabled filtering and observable return contract."
+  -
+    author: "CODER"
+    body: "Verified: PutSet now follows pinned INVALID defaults and ignored DISABLED input while preserving clone state and Writer style fallback; all checks passed."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PutSet defaults, INVALID/DISABLED handling and return values match pinned source; 22 focused tests and full npm run verify passed (564 app, 109 inventory, 19 browser, 100% coverage), doctor and routing passed."
+  -
+    type: "status"
+    at: "2026-09-30T15:11:36.237Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: PutSet now follows pinned INVALID defaults and ignored DISABLED input while preserving clone state and Writer style fallback; all checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-30T15:11:04.815Z"
+doc_updated_at: "2026-09-30T15:11:36.238Z"
 doc_updated_by: "CODER"
 description: "One existing-runtime correction: align PutSet with pinned SfxItemSet::Put defaults, disabled-source filtering and return contract. INVALID clears target entries by default; explicit false copies invalid state without setting the return flag; DISABLED source entries are ignored. Verify Writer node/style inheritance and keep clone-copy semantics intact. Scope: itemset.ts, itemset.test.ts, writer-attributes.test.ts, runtime-inventory.json and task artifacts. Authorized iterative parity goal; preserve deliberate product deviations."
 sections:
