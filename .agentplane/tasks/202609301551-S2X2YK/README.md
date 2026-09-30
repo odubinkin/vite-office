@@ -4,7 +4,7 @@ title: "Match SfxItemSet parent assignment and default lookup"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "27 focused tests and complete verification passed; pinned parent/default contract is asserted and separate disabled sentinel gap remains explicit."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-30T16:00:26.877Z"
+  updated_by: "EVALUATOR"
+  note: "Parent reference assignment and default resolution match the pinned inheritance path."
+  evaluated_sha: "380c4b5ee5d23622332821ca21730653ffafa750"
+  blueprint_digest: "f83d0b6510b2313b66a28e219fea2cb0381a746a6adfa3f0674abc9a4f322162"
+  evidence_refs:
+    - ".agentplane/tasks/202609301551-S2X2YK/README.md"
+    - ".agentplane/tasks/202609301551-S2X2YK/quality/20260930-160026877-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609301551-S2X2YK/quality/20260930-160026877-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609301551-S2X2YK/quality/20260930-160026877-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609301551-S2X2YK/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609301551-S2X2YK/verify.log"
+  findings:
+    - "Reviewed removal of extra SetParent guards and Get delegation to the parent level. Focused assertions cover direct and default values, distinct pools, INVALID masks, disabled search and assignment storage invariants. The DISABLED sentinel contract remains a separate explicit follow-up. All required gates passed."
 commit: null
 comments:
   -
