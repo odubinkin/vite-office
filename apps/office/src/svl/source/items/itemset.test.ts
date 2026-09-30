@@ -15,11 +15,11 @@ import { SfxInt16Item } from "./intitem";
 import { SfxStringItem } from "./stritem";
 import { SfxUnoAnyItem } from "../../../sfx2/source/view/frame";
 
-/** Registers two simple test WhichIds. @returns Prepared item pool. */
-function createPool(): SfxItemPool {
+/** Registers two simple test WhichIds. @param defaultString - Pool-owned string default. @returns Prepared item pool. */
+function createPool(defaultString = "default"): SfxItemPool {
   const pool = new SfxItemPool();
   pool.RegisterDefaultItem(
-    new SfxStringItem(1, "default"),
+    new SfxStringItem(1, defaultString),
     /** Restores the string test item. @param value - Persisted value. @returns Restored item. */
     function restoreString(value): SfxStringItem {
       return new SfxStringItem(1, String(value));
@@ -435,9 +435,76 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect((target.Get(1) as SfxStringItem).GetValue()).toBe("parent");
   });
 
-  it("rejects invalid ranges, parents, WhichIds, and missing defaults" /** Covers structural item-set invariants. @returns Nothing; assertions inspect errors. */, function rejectsInvalidSets(): void {
+  it("assigns parent references without imposing additional ownership restrictions", /** Mirrors the inline SetParent assignment while preserving direct storage. @returns Nothing. */ () => {
     const pool = createPool();
-    const otherPool = createPool();
+    const set = new SfxItemSet(pool, [[1, 2]]);
+    set.Put(new SfxInt16Item(2, 7));
+    const item = set.GetItemIfSet(2, false);
+    const ranges = set.GetRanges();
+    expect(set.SetParent(set)).toBeUndefined();
+    expect(set.GetParent()).toBe(set);
+    expect(set.SetParent(undefined)).toBeUndefined();
+    expect(set.GetParent()).toBeUndefined();
+    const parent = new SfxItemSet(createPool(), [[1, 2]]);
+    parent.Put(new SfxStringItem(1, "foreign inherited"));
+    expect(set.SetParent(parent)).toBeUndefined();
+    expect(set.GetParent()).toBe(parent);
+    expect(set.GetPool()).toBe(pool);
+    expect(set.GetRanges()).toBe(ranges);
+    expect(set.Count()).toBe(1);
+    expect(set.GetItemIfSet(2, false)).toBe(item);
+    expect(set.GetItemState(2, false)).toBe(SfxItemState.SET);
+    expect((set.Get(1) as SfxStringItem).GetValue()).toBe("foreign inherited");
+    expect((set.Get(1, false) as SfxStringItem).GetValue()).toBe("default");
+    const constructed = new SfxItemSet(pool, [[1, 2]], parent);
+    expect(constructed.GetParent()).toBe(parent);
+    expect(constructed.Count()).toBe(0);
+    expect(constructed.Get(1)).toBe(parent.Get(1));
+    set.SetParent(undefined);
+    expect(set.GetParent()).toBeUndefined();
+    expect(set.Count()).toBe(1);
+  });
+
+  it("resolves inherited defaults through each parent own pool", /** Matches Get delegation and INVALID fallback at the owning level. @returns Nothing. */ () => {
+    const grandparentPool = createPool("grandparent default");
+    const parentPool = createPool("parent default");
+    const childPool = createPool("child default");
+    const grandparent = new SfxItemSet(grandparentPool, [[1, 2]]);
+    const parent = new SfxItemSet(parentPool, [[1, 2]], grandparent);
+    const child = new SfxItemSet(childPool, [[1, 2]], parent);
+    expect(child.Get(1)).toBe(grandparentPool.GetUserOrPoolDefaultItem(1));
+    expect(parent.Get(1, false)).toBe(parentPool.GetUserOrPoolDefaultItem(1));
+    expect(child.Get(1, false)).toBe(childPool.GetUserOrPoolDefaultItem(1));
+    expect(child.GetItemIfSet(1)).toBeUndefined();
+    expect(child.GetItemState(1)).toBe(SfxItemState.DEFAULT);
+    expect(child.Count()).toBe(0);
+    parent.InvalidateItem(1);
+    expect(child.Get(1)).toBe(parentPool.GetUserOrPoolDefaultItem(1));
+    expect(child.GetItemState(1)).toBe(SfxItemState.INVALID);
+    expect(child.GetItemIfSet(1)).toBeUndefined();
+    child.InvalidateItem(1);
+    expect(child.Get(1)).toBe(childPool.GetUserOrPoolDefaultItem(1));
+    expect(child.Get(1, false)).toBe(childPool.GetUserOrPoolDefaultItem(1));
+    expect(child.ClearItem(1)).toBe(1);
+    expect(child.Get(1)).toBe(parentPool.GetUserOrPoolDefaultItem(1));
+    expect(parent.ClearItem(1)).toBe(1);
+    expect(child.Get(1)).toBe(grandparentPool.GetUserOrPoolDefaultItem(1));
+    grandparent.Put(new SfxStringItem(1, "grandparent direct"));
+    expect(child.Get(1)).toBe(grandparent.Get(1));
+    parent.Put(new SfxStringItem(1, "parent direct"));
+    expect(child.Get(1)).toBe(parent.Get(1));
+    child.Put(new SfxStringItem(1, "child direct"));
+    expect((child.Get(1) as SfxStringItem).GetValue()).toBe("child direct");
+    expect(child.Get(1, false)).toBe(child.GetItemIfSet(1, false));
+    expect(child.ClearItem(1)).toBe(1);
+    expect(child.Get(1)).toBe(parent.Get(1));
+    child.SetParent(undefined);
+    expect(child.Get(1)).toBe(childPool.GetUserOrPoolDefaultItem(1));
+    expect(child.Count()).toBe(0);
+  });
+
+  it("rejects invalid ranges and missing defaults" /** Covers structural item-set invariants. @returns Nothing; assertions inspect errors. */, function rejectsInvalidSets(): void {
+    const pool = createPool();
     const set = new SfxItemSet(pool, [[1, 2]]);
     expect(
       throwing(
@@ -471,15 +538,6 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
           new SfxItemSet(pool, [[0, 1]]),
       ),
     ).toThrow("ranges");
-    expect(
-      throwing(/** Parents a set to itself. @returns Nothing. */ () => set.SetParent(set)),
-    ).toThrow("itself");
-    expect(
-      throwing(
-        /** Uses a parent from another pool. @returns Nothing. */ () =>
-          set.SetParent(new SfxItemSet(otherPool, [[1, 2]])),
-      ),
-    ).toThrow("another pool");
     expect(set.Put(new SfxStringItem(3, "x"))).toBeUndefined();
     expect(set.Count()).toBe(0);
     expect(set.InvalidateItem(3)).toBeUndefined();

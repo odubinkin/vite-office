@@ -48,9 +48,6 @@ export class SfxItemSet {
 
   /** Changes the inherited item set. @param parent - New parent or undefined. @returns Nothing. */
   public SetParent(parent: SfxItemSet | undefined): void {
-    if (parent !== undefined && parent.GetPool() !== this.pool)
-      throw new Error("SfxItemSet parent belongs to another pool.");
-    if (parent === this) throw new Error("SfxItemSet cannot inherit from itself.");
     this.parent = parent;
   }
 
@@ -89,7 +86,11 @@ export class SfxItemSet {
 
   /** Returns a direct, inherited, or pool-default item. @param which - Queried WhichId. @param searchInParent - Whether parents participate. @returns Effective item. */
   public Get(which: number, searchInParent = true): SfxPoolItem {
-    return this.GetItemIfSet(which, searchInParent) ?? this.pool.GetUserOrPoolDefaultItem(which);
+    const local = this.items.get(which);
+    if (local !== undefined) return local;
+    if (this.itemStates.has(which)) return this.pool.GetUserOrPoolDefaultItem(which);
+    if (searchInParent && this.parent !== undefined) return this.parent.Get(which, true);
+    return this.pool.GetUserOrPoolDefaultItem(which);
   }
 
   /** Stores an independent accepted item delta when its value changes. @param item - Source item. @returns Stored item, or undefined for an equal or out-of-range no-op. */
