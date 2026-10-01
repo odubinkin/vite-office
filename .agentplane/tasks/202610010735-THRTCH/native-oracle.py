@@ -127,4 +127,4 @@ for c in cases:
   c['expected'].append(dict(nodes=rows,events=events,outline=memberships[0],rules=memberships[1:4],registry=memberships[4]))
 assert offset==len(lines)
 root.joinpath('native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n')
-print(f'{len(identities)} unchanged added definitions;{len(cases)} sequences/{states} states. Adapters: pool ownership/equality; normal-doc reading/dtor/redline/fuzz state; shown-only hidden/orig; raw direct attribute callback; layout/wordcount event capture; chapter field no-op; unsupported background/fill declarations. No full native pool/platform/layout/field/redline/fill/live-style lifetime claim.')
+print(f'{len(identities)} unchanged added definitions;{len(cases)} sequences/{states} states. Adapters: pool ownership/equality; native reading flag; normal-doc dtor/redline/fuzz adapters; shown-only hidden/orig; raw direct attribute callback; layout/wordcount event capture; chapter field no-op; unsupported background/fill declarations. No full native pool/platform/layout/field/redline/fill/live-style lifetime claim.')

@@ -92,7 +92,7 @@ struct RedlineAccess {SwRedlineTable table;const SwRedlineTable& GetRedlineTable
 using SwNodeOffset=int;
 namespace sw {enum class IteratorMode {UnwrapMulti};}
 template<class A,class B,sw::IteratorMode C=sw::IteratorMode::UnwrapMulti>struct SwIterator {SwIterator(B&){}A* First(){return nullptr;}A* Next(){return nullptr;}};
-struct SwDoc {bool IsInReading()const{return false;}bool IsInDtor()const{return false;}FieldsAccess& getIDocumentFieldsAccess(){static FieldsAccess f;return f;}std::vector<int> notifications;void ResetAttrs(SwPaM&,bool,const std::set<sal_uInt16>&,bool);SwNumRule* FindNumRulePtr(const UIName&)const;SwNumRule* GetOutlineNumRule()const;Footnotes& GetFootnoteIdxs(){static Footnotes x;return x;}FootnoteInfo GetFootnoteInfo()const{return {};}ListAccess* lists;sw::DocumentListItemsManager* items;SwNodes* nodes;ListAccess& getIDocumentListsAccess()const;sw::DocumentListItemsManager& getIDocumentListItems()const;SwNodes& GetNodes()const;SwDocShell* GetDocShell(){return nullptr;}bool IsInXMLImport()const{return false;}bool IsInWriterfilterImport()const{return false;}RedlineAccess& getIDocumentRedlineAccess(){static RedlineAccess access;return access;}};
+struct SwDoc {bool mbInReading=false;bool IsInReading() const                    { return mbInReading; }void SetInReading( bool bNew )              { mbInReading = bNew; }bool IsInDtor()const{return false;}FieldsAccess& getIDocumentFieldsAccess(){static FieldsAccess f;return f;}std::vector<int> notifications;void ResetAttrs(SwPaM&,bool,const std::set<sal_uInt16>&,bool);SwNumRule* FindNumRulePtr(const UIName&)const;SwNumRule* GetOutlineNumRule()const;Footnotes& GetFootnoteIdxs(){static Footnotes x;return x;}FootnoteInfo GetFootnoteInfo()const{return {};}ListAccess* lists;sw::DocumentListItemsManager* items;SwNodes* nodes;ListAccess& getIDocumentListsAccess()const;sw::DocumentListItemsManager& getIDocumentListItems()const;SwNodes& GetNodes()const;SwDocShell* GetDocShell(){return nullptr;}bool IsInXMLImport()const{return false;}bool IsInWriterfilterImport()const{return false;}RedlineAccess& getIDocumentRedlineAccess(){static RedlineAccess access;return access;}};
 namespace comphelper {bool IsFuzzing(){return false;}}
 namespace o3tl {template<class T>using sorted_vector=std::set<T>;}
 
@@ -119,7 +119,7 @@ struct SwTextNode:SwContentNode {
  void SetCalcHiddenCharFlags(){}void ChkCondColl(){}void ChgTextCollUpdateNum(const SwTextFormatColl*,const SwTextFormatColl*,bool);
  SwFormatColl* ChgFormatColl(SwFormatColl*,bool=true);void SetEmptyListStyleDueToSetOutlineLevelAttr();void ResetEmptyListStyleDueToResetOutlineLevelAttr();void SetAttrOutlineLevel(int);void SetAttrListLevel(int);
  int GetAttrOutlineLevel()const{return GetAttr(RES_PARATR_OUTLINELEVEL).GetValue();}
- bool SetAttr(const SfxPoolItem&);bool SetAttr(const SfxItemSet&);bool ResetAttr(sal_uInt16,sal_uInt16=0);bool ResetAttr(const std::vector<sal_uInt16>&);sal_uInt16 ResetAllAttr();bool HasAttrListLevel()const;bool HasAttrListRestartValue()const{return mpAttrSet&&mpAttrSet->GetItemState(86,false)==SfxItemState::SET;}int GetAttrListRestartValue()const{return GetAttr(RES_PARATR_LIST_RESTARTVALUE,false).GetValue();}void DoNum(std::function<void(SwNodeNum&)>const&);bool m_bLastOutlineState=false;bool IsOutline()const;bool IsOutlineStateChanged()const;void UpdateOutlineState();bool IsInRedlines()const{return false;}SwTextNode* GetTextNode()override{return this;}bool IsNotifiable()const{return true;}bool IsNotificationEnabled()const{return true;}void NumRuleChgd();void CallSwClientNotify(const sw::LegacyModifyHint&){doc->notifications.push_back(index);}
+ bool SetAttr(const SfxPoolItem&);bool SetAttr(const SfxItemSet&);bool ResetAttr(sal_uInt16,sal_uInt16=0);bool ResetAttr(const std::vector<sal_uInt16>&);sal_uInt16 ResetAllAttr();bool HasAttrListLevel()const;bool HasAttrListRestartValue()const{return mpAttrSet&&mpAttrSet->GetItemState(86,false)==SfxItemState::SET;}int GetAttrListRestartValue()const{return GetAttr(RES_PARATR_LIST_RESTARTVALUE,false).GetValue();}void DoNum(std::function<void(SwNodeNum&)>const&);bool m_bLastOutlineState=false;bool IsOutline()const;bool IsOutlineStateChanged()const;void UpdateOutlineState();bool IsInRedlines()const{return false;}SwTextNode* GetTextNode()override{return this;}bool m_bNotifiable=true;bool IsNotifiable()const;bool IsNotificationEnabled()const;void NumRuleChgd();void CallSwClientNotify(const sw::LegacyModifyHint&){doc->notifications.push_back(index);}
  void AddToListOrig(){}void AddToListRLHidden(){}void RemoveFromListOrig(){}void RemoveFromListRLHidden(){}void SetWordCountDirty(bool){}
 };
 class SwNumberTreeNode;
@@ -137,7 +137,7 @@ public:
  virtual SwNumberTreeNode* Create()const=0;virtual bool LessThan(const SwNumberTreeNode&)const=0;
  SwNumberTreeNode* CreatePhantom();SwNumberTreeNode* GetRoot()const;SwNumberTreeNode* GetFirstNonPhantomChild();
  void ClearObsoletePhantoms();void MoveGreaterChildren(SwNumberTreeNode&,SwNumberTreeNode&);void AddChild(SwNumberTreeNode*,int,const SwDoc&);
- virtual void PreAdd(){}bool IsNotificationEnabled(const SwDoc&)const{return true;}bool IsValid()const;bool IsValid(const SwNumberTreeNode*)const;void Validate(const SwNumberTreeNode*)const;void ValidateContinuous(const SwNumberTreeNode*)const{}
+ virtual void PreAdd(){}virtual bool IsNotificationEnabled(const SwDoc&)const=0;bool IsValid()const;bool IsValid(const SwNumberTreeNode*)const;void Validate(const SwNumberTreeNode*)const;void ValidateContinuous(const SwNumberTreeNode*)const{}
  void InvalidateMe();void Invalidate(const SwNumberTreeNode*);void NotifyInvalidSiblings(const SwDoc&);void NotifyInvalidChildren(const SwDoc&);void ValidateMe();void Notify(const SwDoc&);virtual void NotifyNode()=0;virtual bool IsNotifiable(const SwDoc&)const=0;void InvalidateAndNotifyTree(const SwDoc&);
  virtual void PostRemove(){}void RemoveChild(SwNumberTreeNode*,const SwDoc&);void RemoveMe(const SwDoc&);void MoveChildren(SwNumberTreeNode*);bool HasOnlyPhantoms()const;void SetLevelInListTree(int,const SwDoc&);bool IsContinuous()const{return false;}void InvalidateTree()const;void InvalidateChildren(){SetLastValid(mChildren.end());}
  SwNumberTreeNode* GetParent()const{return mpParent;}int GetChildCount()const{return mChildren.size();}
@@ -158,7 +158,7 @@ public:
  SwNodeNum(SwNumRule* r):SwNodeNum(nullptr,r){}
  SwNodeNum(SwTextNode* n,bool):SwNodeNum(n,static_cast<SwNumRule*>(nullptr)){ownerNodes=n->nodes;}void PreAdd()override;void PostRemove()override;void ChangeNumRule(SwNumRule&);
  bool IsCountPhantoms()const override;bool LessThan(const SwNumberTreeNode&)const override;SwNumberTreeNode* Create()const override;
- void NotifyNode()override;bool IsNotifiable(const SwDoc&)const override;SwTextNode* GetTextNode()const{return text;}SwNumRule* GetNumRule()const{return mpNumRule;}
+ void NotifyNode()override;bool IsNotificationEnabled(const SwDoc&)const override;bool IsNotifiable(const SwDoc&)const override;SwTextNode* GetTextNode()const{return text;}SwNumRule* GetNumRule()const{return mpNumRule;}
  bool IsCounted()const override;bool IsRestart()const override;long GetStartValue()const override;
  bool HasCountedChildren()const override;bool IsCountedForNumbering()const override;
 };
@@ -1730,7 +1730,8 @@ UIName SwNumRule::GetOutlineRuleName()
 
 // POOL ADAPTER: direct equality/ownership/defaults, raw mutation notification; no native pool/refcount lifetime claim.
 bool equalItem(const SfxPoolItem& a,const SfxPoolItem& b){if(typeid(a)!=typeid(b))return false;if(auto* x=dynamic_cast<const SwNumRuleItem*>(&a))return x->value==static_cast<const SwNumRuleItem&>(b).value;if(auto* x=dynamic_cast<const StringItem*>(&a))return x->value==static_cast<const StringItem&>(b).value;if(auto* x=dynamic_cast<const SfxInt16Item*>(&a))return x->value==static_cast<const SfxInt16Item&>(b).value;if(auto* x=dynamic_cast<const SfxUInt16Item*>(&a))return x->value==static_cast<const SfxUInt16Item&>(b).value;return static_cast<const BoolItem&>(a).value==static_cast<const BoolItem&>(b).value;}
-void rawNotify(SwContentNode& n){auto* t=n.GetTextNode();if(t&&t->GetNodes().IsDocNodes())t->GetNodes().UpdateOutlineNode(n);}
+std::function<void(SwContentNode&)> callback;
+void rawNotify(SwContentNode& n){if(callback){auto f=std::move(callback);callback=nullptr;f(n);}auto* t=n.GetTextNode();if(t&&t->GetNodes().IsDocNodes())t->GetNodes().UpdateOutlineNode(n);}
 bool SwContentNode::SetAttr(const SfxPoolItem& x){bool changed=!mpAttrSet||!mpAttrSet->items.count(x.which)||!equalItem(*mpAttrSet->items[x.which],x);PutItem(x);if(changed)rawNotify(*this);return changed;}
 bool SwContentNode::SetAttr(const SfxItemSet& s){bool changed=false;for(auto& [id,x]:s.items){bool c=!mpAttrSet||!mpAttrSet->items.count(id)||!equalItem(*mpAttrSet->items[id],*x);PutItem(*x);changed|=c;}if(changed)rawNotify(*this);return changed;}
 bool SwContentNode::ResetAttr(sal_uInt16 a,sal_uInt16 b){std::vector<sal_uInt16> ids;for(int i=a;i<=std::max(a,b);i++)ids.push_back(i);return ResetAttr(ids);}
@@ -1845,6 +1846,15 @@ void SwTextNode::NumRuleChgd()
 
     SetWordCountDirty( true );
 }
+bool SwTextNode::IsNotifiable() const
+{
+    return m_bNotifiable && IsNotificationEnabled();
+}
+bool SwTextNode::IsNotificationEnabled() const
+{
+    const SwDoc& rDoc = GetDoc();
+    return !rDoc.IsInReading() && !rDoc.IsInDtor();
+}
 void SwNumberTreeNode::ValidateMe()
 {
     if (mpParent)
@@ -1921,6 +1931,17 @@ bool SwNodeNum::IsNotifiable(const SwDoc& rDoc) const
         aResult = pTextNode->IsNotifiable();
     else
         aResult = IsNotificationEnabled(rDoc);
+
+    return aResult;
+}
+bool SwNodeNum::IsNotificationEnabled(const SwDoc& rDoc) const
+{
+    bool aResult;
+
+    if (const SwTextNode* pTextNode = GetTextNode())
+        aResult = pTextNode->IsNotificationEnabled();
+    else
+        aResult = !rDoc.IsInReading() && !rDoc.IsInDtor();
 
     return aResult;
 }
