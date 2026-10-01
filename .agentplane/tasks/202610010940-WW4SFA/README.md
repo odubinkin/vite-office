@@ -4,7 +4,7 @@ title: "Restore Writer list restart item default"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -26,6 +26,33 @@ verification:
   updated_by: "CODER"
   note: "Verified: unchanged full npm run verify passed699app109inventory19browser,both100% all4 metrics;one complete pinned default initializer plus unchanged constructor/GetValue/Clone and actual pool/state/delta/rule-start9/explicit0and7/Undo/Worker16/ODT regressions. Doctor0errors2knownwarnings,routing/diff pass. One pool default only;whole registry/module/parent/goal and flag-setter contract remain open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T10:01:06.299Z"
+  updated_by: "EVALUATOR"
+  note: "Actual implementatione1de8fc9c500b08fd39e6faf3517423563222526 restores pinned registered restart default1 with one production-line change;source/default/state/Undo/Worker/ODT evidence and every unchanged verification gate pass. No whole registry/module/goal closure."
+  evaluated_sha: "e1de8fc9c500b08fd39e6faf3517423563222526"
+  blueprint_digest: "e869adba33a3f148cd2799ba016ac162f54842d1c5dcee4075275d7dacf4089a"
+  evidence_refs:
+    - ".agentplane/tasks/202610010940-WW4SFA/README.md"
+    - ".agentplane/tasks/202610010940-WW4SFA/quality/20261001-100106299-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010940-WW4SFA/quality/20261001-100106299-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010940-WW4SFA/quality/20261001-100106299-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010940-WW4SFA/blueprint/resolved-snapshot.json"
+    - "e1de8fc9c500b08fd39e6faf3517423563222526"
+    - ".agentplane/tasks/202610010940-WW4SFA/baseline.json"
+    - ".agentplane/tasks/202610010940-WW4SFA/native-source-identity.json"
+    - ".agentplane/tasks/202610010940-WW4SFA/native-default.cxx"
+    - ".agentplane/tasks/202610010940-WW4SFA/native-default.log"
+    - ".agentplane/tasks/202610010940-WW4SFA/focused-final.log"
+    - ".agentplane/tasks/202610010940-WW4SFA/verify-final.log"
+    - ".agentplane/tasks/202610010940-WW4SFA/doctor-final.log"
+    - ".agentplane/tasks/202610010940-WW4SFA/routing-final.log"
+    - ".agentplane/tasks/202610010940-WW4SFA/followup-flag-baseline.json"
+  findings:
+    - "Complete pinned initializer and unchanged native SfxInt16Item constructor/GetValue/Clone compile and byte-identity checks confirm86/1 and independent clone. Actual pre-edit normal/reading pool,node and clear delta0 recorded. The corrected pool default1 remains distinct from primitive constructor default0 and explicit snapshot0."
+    - "Meaningful tests prove default/direct/parent states and broadcast fallbacks,rule start9 distinct from explicit0/7,real SwUndoInsNum actions/cursor restoration,Worker16,genuine common/automatic Arabic/bullet ODT/import/reopen. All prior697app assertions retained plus2;699app109inventory19browser pass,both100% all4 metrics,all static/source gates and doctor0errors2knownwarnings/routing/clean state."
+    - "No getter/setter expansion,IO policy,config/schema/gate or semantic status promotion. Initial absent SetListKind test-fixture/type failures retained and repaired with real SetAttr(SwNumRuleItem). Terminal-padding diff diagnostic corrected only after live verify ended. Actual separate flag-retention mismatch is preserved in followup baseline,not hidden by default correction."
 commit: null
 comments:
   -
@@ -46,7 +73,7 @@ events:
     state: "ok"
     note: "Verified: unchanged full npm run verify passed699app109inventory19browser,both100% all4 metrics;one complete pinned default initializer plus unchanged constructor/GetValue/Clone and actual pool/state/delta/rule-start9/explicit0and7/Undo/Worker16/ODT regressions. Doctor0errors2knownwarnings,routing/diff pass. One pool default only;whole registry/module/parent/goal and flag-setter contract remain open."
 doc_version: 3
-doc_updated_at: "2026-10-01T09:59:27.540Z"
+doc_updated_at: "2026-10-01T10:01:48.527Z"
 doc_updated_by: "CODER"
 description: "Iteration40: restore RES_PARATR_LIST_RESTARTVALUE pool default1 from pinned bastyp/init.cxx instead of local0;prove inherited/default/direct state and real numbering,Undo,Worker16,ODT contracts without treating the default as an explicit restart. Single registered-item default correction;native full registry architecture and remaining getter/cast/client lifetime remain separate obligations. Preserve registered IO deviations and active parent goal."
 sections:
@@ -108,6 +135,8 @@ sections:
     Command:npm run verify. Result:pass(exit0),verify-final.log. Evidence:699app/157files(all697prior plus2),109inventory/36files,19browser;app100%10627statements8023branches2876functions9754lines;inventory100%1523/1080/384/1464. Remaining unchanged format/lint/types/resources/boundaries/static/docs/size/source-tree/provenance/invariants/parity gates pass;210runtime874imports12edges,471authored,111sourcepaths33retiredroots,211modules135mapped60browser16infra. Raw terminal table padding produced a git diff whitespace diagnostic while the live verify process continued;normalized only terminal trailing padding after exit0,no assertion/warning/result lines removed. Byte identities and actual compiled presence of all four native data/definitions independently rechecked. Doctor0errors2knownwarnings,routingOK,diffclean. No config/gate/schema changes or broader semantic promotion.
 
     Next boundary evidence:followup-flag-baseline.json actual node SetListRestart(true,7) then SetListRestart(false) changes [true,true,7] to [false,false,1]. Complete native ndtxt.cxx4428 SetListRestart(false) resets only RES_PARATR_LIST_ISRESTART and retains86;local wrapper also clears86. Source has separate SetAttrListRestartValue with USHRT_MAX clear and sal_Int16 conversion. SwNumberTreeTypes.hxx26 uses signed tools::Long,so do not invent an unsigned getter cast requirement. This is a separate next-task contract/architecture correction,not changed in the current one-default task. Existing list-invariants tests currently encode clearing via SetListRestart(true);use native complete body proof before changing those stale assertions. Full native registry/other defaults/clients and whole parent/goal remain active.
+
+    Quality:actual implementatione1de8fc9c500b08fd39e6faf3517423563222526 reviewed with EVALUATOR pass;quality/20261001-100106299-recovery-context/quality-report.json binds actual SHA,nonempty findings/evidence and all residual obligations. After the implementation commit tracked/untracked state was clean;only generated quality artifacts and this final task finding remain to persist before finish. Canonical blueprint verification already recorded after final Verification text;do not replace that section and discard its generated record. Parent audit/unlimited goal remain active.
 id_source: "generated"
 ---
 ## Summary
@@ -186,3 +215,5 @@ Full npm run verify,final quality/commit/clean state pending. Getter/cast/SetAtt
 Command:npm run verify. Result:pass(exit0),verify-final.log. Evidence:699app/157files(all697prior plus2),109inventory/36files,19browser;app100%10627statements8023branches2876functions9754lines;inventory100%1523/1080/384/1464. Remaining unchanged format/lint/types/resources/boundaries/static/docs/size/source-tree/provenance/invariants/parity gates pass;210runtime874imports12edges,471authored,111sourcepaths33retiredroots,211modules135mapped60browser16infra. Raw terminal table padding produced a git diff whitespace diagnostic while the live verify process continued;normalized only terminal trailing padding after exit0,no assertion/warning/result lines removed. Byte identities and actual compiled presence of all four native data/definitions independently rechecked. Doctor0errors2knownwarnings,routingOK,diffclean. No config/gate/schema changes or broader semantic promotion.
 
 Next boundary evidence:followup-flag-baseline.json actual node SetListRestart(true,7) then SetListRestart(false) changes [true,true,7] to [false,false,1]. Complete native ndtxt.cxx4428 SetListRestart(false) resets only RES_PARATR_LIST_ISRESTART and retains86;local wrapper also clears86. Source has separate SetAttrListRestartValue with USHRT_MAX clear and sal_Int16 conversion. SwNumberTreeTypes.hxx26 uses signed tools::Long,so do not invent an unsigned getter cast requirement. This is a separate next-task contract/architecture correction,not changed in the current one-default task. Existing list-invariants tests currently encode clearing via SetListRestart(true);use native complete body proof before changing those stale assertions. Full native registry/other defaults/clients and whole parent/goal remain active.
+
+Quality:actual implementatione1de8fc9c500b08fd39e6faf3517423563222526 reviewed with EVALUATOR pass;quality/20261001-100106299-recovery-context/quality-report.json binds actual SHA,nonempty findings/evidence and all residual obligations. After the implementation commit tracked/untracked state was clean;only generated quality artifacts and this final task finding remain to persist before finish. Canonical blueprint verification already recorded after final Verification text;do not replace that section and discard its generated record. Parent audit/unlimited goal remain active.
