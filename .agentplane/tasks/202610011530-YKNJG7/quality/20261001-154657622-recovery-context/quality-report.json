@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610011530-YKNJG7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-01T15:46:57.622Z",
+  "verdict": "pass",
+  "summary": "Same-actor evaluator phase reviews CODE a775dd325398baa23db153f0c6d13b21f2b769e4 against explicit upstream-independent project test requirement.",
+  "evaluated_sha": "a775dd325398baa23db153f0c6d13b21f2b769e4",
+  "blueprint_digest": "fc28f2d2c8d9da72db69ffc29e28c4a8050918a453a635e520e43ec26ac8fe8c",
+  "findings": [
+    "13semantic test/support paths and16canonical artifacts inspected. All11previous failing cases converted to authored Git/filesystem or marker inputs;no failing case skipped. Original count guards and100percent coverage retained. Default Git executor has4owned real repos,UTF8read/write wrappers realfiles. All120tooling,727application,109inventory and19browser tests pass with pinnedvendor unavailable and restoredfinally. No production code/nativefixtures changed;independent-review claim is not made."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610011530-YKNJG7/README.md",
+    ".agentplane/tasks/202610011530-YKNJG7/vendor-independence-final.json",
+    ".agentplane/tasks/202610011530-YKNJG7/browser-vendor-independence.json",
+    ".agentplane/tasks/202610011530-YKNJG7/code-scope.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Untracked unfinished task48 test was excluded only from committed-baseline coverage/build and restored;it consumes local runtime and literal JSON only. Parity CLI unit fixture proves composition rather than actual upstream markers;standalone static provenance/resource/inventory validation remains responsible for pinned-source checks."
+  ]
+}
