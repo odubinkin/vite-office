@@ -4,7 +4,7 @@ title: "Restore node-owned Writer numbering lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved persistent parity goal;restore shown text-node numbering ownership,rule/document registration and native lazy getters;preserve document IO exceptions and gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T05:10:11.899Z"
+doc_updated_at: "2026-10-01T05:18:22.174Z"
 doc_updated_by: "CODER"
 description: "Iteration36 of approved persistent parity goal:SwTextNode owns shown SwNodeNum with native AddToList/RemoveFromList/GetNum/vector contracts,SwNodeNum rule/document registration hooks and non-owning SwList topology. Remove full-list read validation and ownership wrappers;preserve registered document IO exceptions and unchanged gates."
 sections:
@@ -60,6 +60,18 @@ sections:
     - Observation: Command: npx tsx .agentplane/tasks/202610010449-CE6KDW/compare-native.ts; initial Result: fail sequence48 step10; focused test session21085 failed detached start7 expectation.
       Impact: Actual attribute transitions removed after assignment; native HandleSetAttrAtTextNode removes before assignment so invalid-rule removal sees old list. PostRemove intentionally clears retained rule, making detached start1.
       Resolution: Matched pre-mutation removal/readd including same-rule set; preserved native expected states. Actual comparison now passes120 sequences/8976 owner states; focused25 tests pass session8693; new4 lifecycle/registry tests pass53768. No native expected state weakened.
+
+    - Observation: Command: npm run test:coverage --workspace @vite-office/office -- --reporter=dot; Result: fail session14986. 666/667 tests pass across149 files; desktop.test.tsx immediately saves imported TXT but never saves an empty import cannot find recent-document button notes at line441, although title notes is rendered.
+      Impact: Failure is in unchanged registered document IO test, outside numbering correction; coverage report withheld on test failure. No IO behavior/test/config changed.
+      Resolution: Run the unchanged desktop test in isolation to distinguish timing from regression, then unchanged full npm run verify. Required coverage and full gates remain100%; record repeated failures if unresolved.
+
+    - Observation: Unchanged desktop TXT import test passes isolated session58580 (1 selected test); actual numbering comparison after cleanup passes120 sequences/8976 states session77278.
+      Impact: The full coverage failure is not reproduced in isolation; cause not proven. Full gate still required without changed IO assertions, timeouts or retries.
+      Resolution: Removed unreachable post-mutation rule/list identity branch now handled before mutation; rule Validate follows native existing-list invariant. Running unchanged npm run verify session56149 with task-local log.
+
+    - Observation: Command: npm run verify; Result: fail session56149 solely coverage threshold. All667 application tests/149 files pass including unchanged desktop import test. Statements10199/10199,functions2798/2798,lines9366/9366;branches7696/7699 (99.96%). Three uncovered branches are SwNodeNum.PreAdd native no-text/non-doc registration guards at lines33-41.
+      Impact: Global100% coverage remains required; no functional assertion failures. Later full gates were not reached in this attempt.
+      Resolution: Add literal tests for native registration guards with no text and non-document arrays, then unchanged full verify. Preserve first full log as failure evidence.
 id_source: "generated"
 ---
 ## Summary
@@ -101,3 +113,15 @@ Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions
 - Observation: Command: npx tsx .agentplane/tasks/202610010449-CE6KDW/compare-native.ts; initial Result: fail sequence48 step10; focused test session21085 failed detached start7 expectation.
   Impact: Actual attribute transitions removed after assignment; native HandleSetAttrAtTextNode removes before assignment so invalid-rule removal sees old list. PostRemove intentionally clears retained rule, making detached start1.
   Resolution: Matched pre-mutation removal/readd including same-rule set; preserved native expected states. Actual comparison now passes120 sequences/8976 owner states; focused25 tests pass session8693; new4 lifecycle/registry tests pass53768. No native expected state weakened.
+
+- Observation: Command: npm run test:coverage --workspace @vite-office/office -- --reporter=dot; Result: fail session14986. 666/667 tests pass across149 files; desktop.test.tsx immediately saves imported TXT but never saves an empty import cannot find recent-document button notes at line441, although title notes is rendered.
+  Impact: Failure is in unchanged registered document IO test, outside numbering correction; coverage report withheld on test failure. No IO behavior/test/config changed.
+  Resolution: Run the unchanged desktop test in isolation to distinguish timing from regression, then unchanged full npm run verify. Required coverage and full gates remain100%; record repeated failures if unresolved.
+
+- Observation: Unchanged desktop TXT import test passes isolated session58580 (1 selected test); actual numbering comparison after cleanup passes120 sequences/8976 states session77278.
+  Impact: The full coverage failure is not reproduced in isolation; cause not proven. Full gate still required without changed IO assertions, timeouts or retries.
+  Resolution: Removed unreachable post-mutation rule/list identity branch now handled before mutation; rule Validate follows native existing-list invariant. Running unchanged npm run verify session56149 with task-local log.
+
+- Observation: Command: npm run verify; Result: fail session56149 solely coverage threshold. All667 application tests/149 files pass including unchanged desktop import test. Statements10199/10199,functions2798/2798,lines9366/9366;branches7696/7699 (99.96%). Three uncovered branches are SwNodeNum.PreAdd native no-text/non-doc registration guards at lines33-41.
+  Impact: Global100% coverage remains required; no functional assertion failures. Later full gates were not reached in this attempt.
+  Resolution: Add literal tests for native registration guards with no text and non-document arrays, then unchanged full verify. Preserve first full log as failure evidence.
