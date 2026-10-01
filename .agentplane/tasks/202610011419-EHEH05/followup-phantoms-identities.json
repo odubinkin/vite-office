@@ -1,0 +1,8 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+  "signature": "bool SwNodeNum::IsCountPhantoms() const",
+  "sha256": "56553dd5e3a5705b8aa161798ceab411bf255047f370948c2b2c2106ff76ba50",
+  "profileSha256": "8c984a674bb82cd5ad5301bcbc4f039fd4e57e8e819d9888eba24be0c4a315fa",
+  "scope": "Read-only next-gap audit of complete unchanged native IsCountPhantoms against actual local SwNodeNum. Named bound-rule/no-rule diagnostic adapter reuses47 native rule profile. Does not certify full phantom/continuous counter/tree behavior."
+}

@@ -4,7 +4,7 @@ title: "Restore native numbering rule copy assignment reset and scalar metadata 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the approved iteration47 complete native rule lifecycle/scalar ownership correction under persistent user goal approval;preserve registered IO exceptions and every original gate."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:36:11.008Z"
+doc_updated_at: "2026-10-01T14:40:01.690Z"
 doc_updated_by: "CODER"
 description: "Iteration47: restore complete native SwNumRule copy/Assign/Reset and value-equality responsibilities with exact metadata/defaults and distinction between owned and effective levels. Preserve pointer assignment identity,recipient default mode/list ID and client ownership;source copy resets count-phantom/redline policy as native does. Persist scalar rule state across Worker16 with native legacy defaults. No new rendering/continuous-tree/UI feature or registered IO/recovery change; broader lifetime/style/name-map/counter obligations remain unverified."
 sections:
@@ -64,6 +64,14 @@ sections:
     - Observation: Focused first run passes10 tests across lifecycle and original pointer suites; the requested number-predicate.test.ts path did not select a third file because the actual classification suite is in txtnode/number-classification.test.ts. Typecheck passes.
       Impact: No implementation failure. Selected lifecycle proof now matches all native432 states plus18 equality and7 narrowing cases. Full original classification/full verify still required.
       Resolution: Retain the exact first command/log and run the correctly named original classification and format/ownership suites before full verify; do not count the nonexistent path as executed evidence.
+
+    - Observation: Read-only next-gap audit compiles complete unchanged native SwNodeNum::IsCountPhantoms with exact47 rule flags under ASan/UBSan. Native outputs [false,false,false],[false,true,true],[true,false,false],[true,true,false],orphan true. Actual local SwNodeNum outputs true in all five cases.
+      Impact: Three of five direct predicate profiles differ; restored47 scalar state alone does not certify nondefault phantom or continuous counter/rendering consumers. Full objective remains unfinished, with measured local/native followup evidence.
+      Resolution: Leave SwNodeNum/SwNumberTree unchanged in approved47 lifecycle scope. Queue source-owned phantom/continuous consumer audit as the next single correction task, with whole tree behavior individually bounded and no completion from green tests or metadata.
+
+    - Observation: Full verify-first passes727 app tests/164 files,109 inventory tests/36 files,19 browser tests,build/static and unchanged100% both coverages. check:docs fails at number.ts constructor overload declarations159/161 because both comments omit required @returns.
+      Impact: Documentation-only local omission prevents full completion; no native lifecycle, original assertion or coverage failure. Later file-size/source/provenance/invariant/parity gates have not executed in this first run.
+      Resolution: Add @returns Nothing to both overload declaration comments inside approved number.ts scope, then repeat full original npm run verify. Retain the failed log and unchanged gates; no scope or verification criteria drift.
 id_source: "generated"
 ---
 ## Summary
@@ -107,3 +115,11 @@ Read-only clean preflight main57d763b328b9,only parent active,direct route,four 
 - Observation: Focused first run passes10 tests across lifecycle and original pointer suites; the requested number-predicate.test.ts path did not select a third file because the actual classification suite is in txtnode/number-classification.test.ts. Typecheck passes.
   Impact: No implementation failure. Selected lifecycle proof now matches all native432 states plus18 equality and7 narrowing cases. Full original classification/full verify still required.
   Resolution: Retain the exact first command/log and run the correctly named original classification and format/ownership suites before full verify; do not count the nonexistent path as executed evidence.
+
+- Observation: Read-only next-gap audit compiles complete unchanged native SwNodeNum::IsCountPhantoms with exact47 rule flags under ASan/UBSan. Native outputs [false,false,false],[false,true,true],[true,false,false],[true,true,false],orphan true. Actual local SwNodeNum outputs true in all five cases.
+  Impact: Three of five direct predicate profiles differ; restored47 scalar state alone does not certify nondefault phantom or continuous counter/rendering consumers. Full objective remains unfinished, with measured local/native followup evidence.
+  Resolution: Leave SwNodeNum/SwNumberTree unchanged in approved47 lifecycle scope. Queue source-owned phantom/continuous consumer audit as the next single correction task, with whole tree behavior individually bounded and no completion from green tests or metadata.
+
+- Observation: Full verify-first passes727 app tests/164 files,109 inventory tests/36 files,19 browser tests,build/static and unchanged100% both coverages. check:docs fails at number.ts constructor overload declarations159/161 because both comments omit required @returns.
+  Impact: Documentation-only local omission prevents full completion; no native lifecycle, original assertion or coverage failure. Later file-size/source/provenance/invariant/parity gates have not executed in this first run.
+  Resolution: Add @returns Nothing to both overload declaration comments inside approved number.ts scope, then repeat full original npm run verify. Retain the failed log and unchanged gates; no scope or verification criteria drift.
