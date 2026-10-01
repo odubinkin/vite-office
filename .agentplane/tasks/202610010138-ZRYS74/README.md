@@ -1,10 +1,11 @@
 ---
 id: "202610010138-ZRYS74"
 title: "Restore native list-item start-value normalization"
-status: "DOING"
+result_summary: "Ordinary item starts follow native conversion and0..SHRTMAX acceptance; declaration consumers share conversion with unchanged defaults. Intentional document lifecycle differences preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/xml/odt-list-start-normalization.test.ts"
   findings:
     - "Strict syntax/range throws were removed in favor of shared byte-int conversion followed by the exact native0..SHRTMAX item guard. List declarations retain absent defaults,index/start/display policy; signed zero is canonical integer0. Headers bypass conversion and subsequent paragraphs consume no marker/start.115 compiled-source conversion results and170 real SAX contexts match;88 genuine common/automatic numbered/bullet ODT cases verify literal state,owned copies,Worker16,XML and reopen. Final full unchanged648/109/19 and100% coverage pass; code checkout clean."
-commit: null
+commit:
+  hash: "218b25bd8e27e82ac85819a8436a6bbaae6b58ff"
+  message: "🧩 ZRYS74 code: normalize native list-item start values"
 comments:
   -
     author: "CODER"
     body: "Start: restore native ordinary list-item start-value normalization and shared fast-attribute ownership under the persistent approved goal."
+  -
+    author: "CODER"
+    body: "Verified: native ordinary list-start normalization,shared byte-int access,115 compiled-source values,170 real contexts and88 genuine ODT cases. Full unchanged648/109/19,both100% coverage; quality pass and actual code hash. Wider parent and goal remain active."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native115 conversions/170 real contexts and21 focused tests including88 genuine ODT cases pass. Final unchanged npm run verify exit0 session48616:648/109/19,both100% coverage,all other gates. Doctor0errors/two prior warnings,routing/diff pass. No whole-module/full-goal promotion; intentional save/open/recovery preserved."
+  -
+    type: "status"
+    at: "2026-10-01T01:52:35.055Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native ordinary list-start normalization,shared byte-int access,115 compiled-source values,170 real contexts and88 genuine ODT cases. Full unchanged648/109/19,both100% coverage; quality pass and actual code hash. Wider parent and goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:52:01.255Z"
+doc_updated_at: "2026-10-01T01:52:35.057Z"
 doc_updated_by: "CODER"
 description: "Iteration31: use shared fast-attribute byte-int conversion and native list-item range acceptance instead of strict rejection. Preserve intentional save/open/recovery behavior."
 sections:
