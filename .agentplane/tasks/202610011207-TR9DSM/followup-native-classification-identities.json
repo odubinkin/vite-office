@@ -1,0 +1,27 @@
+[
+  {
+    "path": "sw/source/core/doc/number.cxx",
+    "signature": "bool SwNumFormat::IsItemize() const",
+    "sha256": "f75f72e1799ebeb73cc5c7a5627d9e8ed1cff1e7a35be225e30fb59663f74468"
+  },
+  {
+    "path": "sw/source/core/doc/number.cxx",
+    "signature": "bool SwNumFormat::IsEnumeration() const",
+    "sha256": "d7d0b06006c9c8460933c48269b22db0a48d56c97e4e3edf62bb82824206d48f"
+  },
+  {
+    "path": "sw/source/core/txtnode/ndtxt.cxx",
+    "signature": "sal_uInt16 lcl_BoundListLevel(const int nActualLevel)",
+    "sha256": "929dff3cab4f465c5d661944247ef812b43d72f5a5384d19c0811127db421daa"
+  },
+  {
+    "path": "sw/source/core/txtnode/ndtxt.cxx",
+    "signature": "bool SwTextNode::HasNumber(SwRootFrame const*const pLayout) const",
+    "sha256": "026cb88175384f28acc0e8a78122dc70b0755e267da0cf85e51430a265b7f160"
+  },
+  {
+    "path": "sw/source/core/txtnode/ndtxt.cxx",
+    "signature": "bool SwTextNode::HasBullet() const",
+    "sha256": "b3de4a7c575aec6ff54ac8add9e205811a9ced0f99820b4f28f5f60966ad32a9"
+  }
+]

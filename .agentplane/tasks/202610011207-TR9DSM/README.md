@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:45:56.774Z"
+doc_updated_at: "2026-10-01T12:50:46.741Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -97,6 +97,10 @@ sections:
     - Observation: verify-second passes712 app tests with100% coverage but the inventory CLI rejects a stale SwNumFormat marker in the UNO adapter after constructor assembly migration. Final unchanged native bodies/header methods match21 states and144 strings; doctor reports0 errors and2 pre-existing warnings; routing passes.
       Impact: The full canonical verification is incomplete until evidence references identify the actual migrated implementation.
       Resolution: Update only the UNO local implementation reference to createWriterNumFormat; retain verify-second.log and rerun the unchanged full verify chain. Do not restore unused imports or weaken evidence validation.
+
+    - Observation: verify-third passes712 app,109 inventory and19 browser tests, both100% suites, build and static smoke, then JSDoc rejects one migrated codec opening header and three new test callbacks.
+      Impact: The full verification still cannot be recorded as passing.
+      Resolution: Move the codec fileoverview before its imports, document the three callbacks, undo unrelated JSON Unicode escaping, preserve verify-third.log and rerun the exact full verify pipeline. Next separate task is supported NONE/bitmap classification: unchanged native IsItemize/IsEnumeration/HasNumber/HasBullet output [[4,true,false],[5,true,false],[6,false,true],[8,false,true]], while real attached local nodes give [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. The bitmap rendering family remains unimplemented; this is classification evidence only.
 id_source: "generated"
 ---
 ## Summary
@@ -169,3 +173,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: verify-second passes712 app tests with100% coverage but the inventory CLI rejects a stale SwNumFormat marker in the UNO adapter after constructor assembly migration. Final unchanged native bodies/header methods match21 states and144 strings; doctor reports0 errors and2 pre-existing warnings; routing passes.
   Impact: The full canonical verification is incomplete until evidence references identify the actual migrated implementation.
   Resolution: Update only the UNO local implementation reference to createWriterNumFormat; retain verify-second.log and rerun the unchanged full verify chain. Do not restore unused imports or weaken evidence validation.
+
+- Observation: verify-third passes712 app,109 inventory and19 browser tests, both100% suites, build and static smoke, then JSDoc rejects one migrated codec opening header and three new test callbacks.
+  Impact: The full verification still cannot be recorded as passing.
+  Resolution: Move the codec fileoverview before its imports, document the three callbacks, undo unrelated JSON Unicode escaping, preserve verify-third.log and rerun the exact full verify pipeline. Next separate task is supported NONE/bitmap classification: unchanged native IsItemize/IsEnumeration/HasNumber/HasBullet output [[4,true,false],[5,true,false],[6,false,true],[8,false,true]], while real attached local nodes give [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. The bitmap rendering family remains unimplemented; this is classification evidence only.

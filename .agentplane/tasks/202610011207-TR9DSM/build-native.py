@@ -42,7 +42,7 @@ old=old[:start]+'\n'+'\n'.join(inline)+old[end:]
 glyphSetter=body(header,'    void            SetBulletChar(').strip()
 old=old.replace('void SetBulletChar(int n){cBullet=n;}',glyphSetter)
 old=old.replace('SvxNumberFormat(SvxNumType);',body(header,'    const std::optional<vcl::Font>& GetBulletFont()').strip()+'\n'+body(header,'    sal_UCS4        GetBulletChar()').strip()+'\n SvxNumberFormat(SvxNumType);')
-old=old.replace('<<f.cBullet<<','<<f.GetBulletChar()<<')
+old=old.replace('<<f.cBullet<<','<<f.GetBulletChar()<<').replace('f.pBulletFont','f.GetBulletFont()')
 (out/'native-format-values.cxx').write_text(old)
 # Complete native NumberType bodies with a named bounded provider, no UNO service initialization equivalence claim.
 preamble=r'''
