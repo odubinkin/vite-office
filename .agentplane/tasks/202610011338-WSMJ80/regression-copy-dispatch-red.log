@@ -1,0 +1,28 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/doc/number-pointer.test.ts (5 tests | 1 failed | 4 skipped) 5ms
+   × matches native pointer and reference Set identity validity and every implemented field 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/doc/number-pointer.test.ts > matches native pointer and reference Set identity validity and every implemented field
+Error: Native Set must copy by construction
+ ❯ SwNumFormat.input.clone src/sw/source/core/doc/number-pointer.test.ts:148:137
+    146|       before = state(held),
+    147|       input = changed(held.clone(), row.change);
+    148|     input.clone = /** A JS adapter method is not part of the native no…
+       |                                                                                                                                         ^
+    149|     rule.Validate();
+    150|     if (row.change === 23) rule.SetByPointer(2, undefined);
+ ❯ SwNumRule.Set src/sw/source/core/doc/number.ts:266:36
+ ❯ src/sw/source/core/doc/number-pointer.test.ts:155:15
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 skipped (5)
+   Start at  21:03:39
+   Duration  1.19s (transform 345ms, setup 116ms, import 413ms, tests 5ms, environment 561ms)
+

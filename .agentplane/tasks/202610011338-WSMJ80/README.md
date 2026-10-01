@@ -4,7 +4,7 @@ title: "Restore native numbering pointer Set and in-place format assignment owne
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the approved single iteration46 native pointer Set/assignment ownership correction under persistent user goal authorization; preserve reference semantics,registered IO exceptions and all gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:59:41.219Z"
+doc_updated_at: "2026-10-01T14:04:05.626Z"
 doc_updated_by: "CODER"
 description: "Iteration46: restore the complete SwNumRule pointer overload alongside unchanged reference replacement,source-owned base/Writer format assignment and same-modify registration transfer. Replace frozen owned values with mutable native owners and stable protected const references at the JS boundary. Differentially prove raw/default/identity/validity/copy/alias behavior and every already implemented format field. Preserve registered IO/recovery exceptions and all original gates; broader native platform/graphics/style/lifetime remain unverified."
 sections:
@@ -72,6 +72,14 @@ sections:
     - Observation: First full verify passes722app/109inventory/19browser and unchanged100% coverage. Source review confirms native SvxNumberFormat copy constructor invokes its own operator=,while local constructor still duplicates raw field-copy logic.
       Impact: Value evidence passes,but matching the requested native ownership architecture requires making the base assignment responsibility the single copy path without derived virtual dispatch during base construction.
       Resolution: Refactor only the approved numitem path to source defaults plus explicit base Assign in copy construction;rerun the full suite. Record current successful verify as pre-refactor evidence and retain every acceptance gate.
+
+    - Observation: Read-only followup compiles complete unchanged native SwNumRule operator=/Reset with the current native pointer/assignment/default profile. Four states prove sparse slot clearing,pointer in-place retention,metadata reset/self no-op and retained target default mode/list ID. Current actual SwNumRule has no Assign or Reset APIs; clone is a separate native copy-constructor responsibility.
+      Impact: The existing native rule facade still lacks assignment/reset architecture. This evidence does not establish that arbitrary missing upstream functionality is implemented; full runtime/core/browser parity remains incomplete.
+      Resolution: Record native/local followup-rule artifacts as the next audit/correction candidate without implementing it in iteration46. Native name-map/client/style/platform/destructor lifetime remain unverified; parent/full goal active.
+
+    - Observation: Second full verify passes after native base-copy refactor. Source review shows both native Set overloads allocate SwNumFormat directly; the local Set paths still call virtual JS clone. The unchanged native600-trace fixture with an explicit throwing JS clone adapter reproduces that wrong dispatch boundary in regression-copy-dispatch-red.
+      Impact: Output parity alone had not proved the native copy responsibility. Source Set must not delegate ownership copying to a browser adapter method.
+      Resolution: Use direct new SwNumFormat(format) in the two approved allocation branches,preserve assignment/reference identity and every literal result,and rerun focused/full verification. No acceptance gate or scope expansion.
 id_source: "generated"
 ---
 ## Summary
@@ -123,3 +131,11 @@ Previous goal turn is PROGRESS: iteration45 actual CODE6d3f9de7b879 verified and
 - Observation: First full verify passes722app/109inventory/19browser and unchanged100% coverage. Source review confirms native SvxNumberFormat copy constructor invokes its own operator=,while local constructor still duplicates raw field-copy logic.
   Impact: Value evidence passes,but matching the requested native ownership architecture requires making the base assignment responsibility the single copy path without derived virtual dispatch during base construction.
   Resolution: Refactor only the approved numitem path to source defaults plus explicit base Assign in copy construction;rerun the full suite. Record current successful verify as pre-refactor evidence and retain every acceptance gate.
+
+- Observation: Read-only followup compiles complete unchanged native SwNumRule operator=/Reset with the current native pointer/assignment/default profile. Four states prove sparse slot clearing,pointer in-place retention,metadata reset/self no-op and retained target default mode/list ID. Current actual SwNumRule has no Assign or Reset APIs; clone is a separate native copy-constructor responsibility.
+  Impact: The existing native rule facade still lacks assignment/reset architecture. This evidence does not establish that arbitrary missing upstream functionality is implemented; full runtime/core/browser parity remains incomplete.
+  Resolution: Record native/local followup-rule artifacts as the next audit/correction candidate without implementing it in iteration46. Native name-map/client/style/platform/destructor lifetime remain unverified; parent/full goal active.
+
+- Observation: Second full verify passes after native base-copy refactor. Source review shows both native Set overloads allocate SwNumFormat directly; the local Set paths still call virtual JS clone. The unchanged native600-trace fixture with an explicit throwing JS clone adapter reproduces that wrong dispatch boundary in regression-copy-dispatch-red.
+  Impact: Output parity alone had not proved the native copy responsibility. Source Set must not delegate ownership copying to a browser adapter method.
+  Resolution: Use direct new SwNumFormat(format) in the two approved allocation branches,preserve assignment/reference identity and every literal result,and rerun focused/full verification. No acceptance gate or scope expansion.

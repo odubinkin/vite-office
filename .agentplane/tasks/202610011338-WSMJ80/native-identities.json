@@ -3,6 +3,16 @@
   "definitions": [
     {
       "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberFormat::SvxNumberFormat( SvxNumType eType )",
+      "sha256": "3f2e256217da46b01878bec9d742d15b719a57decb7649e26e67ef9045b7a8c4"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat)",
+      "sha256": "6839c7e19b233417ceac762aef07470d54753050d262f98813c5b019dc807695"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
       "signature": "SvxNumberFormat& SvxNumberFormat::operator=(",
       "sha256": "ae5367708e2a7d68343eb502b9af2e4f8f55b9534ad29ed33f04958203d038a8"
     },
