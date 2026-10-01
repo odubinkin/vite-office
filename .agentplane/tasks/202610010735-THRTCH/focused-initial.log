@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+ ❯ apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts (0 test)
+ ❯ apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts (0 test)
+ ❯ apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts (0 test)
+ ❯ apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts (0 test)
+ ❯ apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts (0 test)
+ ❯ apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts (0 test)
+ ❯ apps/office/src/sw/source/core/txtnode/ndtxt.test.ts (0 test)
+ ❯ apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts (0 test)
+ ❯ apps/office/src/sw/source/core/txtnode/ndhints.test.ts (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts [ apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts ]
+ FAIL  apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts [ apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts ]
+ FAIL  apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts [ apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts ]
+ FAIL  apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts [ apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts ]
+ FAIL  apps/office/src/sw/source/core/txtnode/ndhints.test.ts [ apps/office/src/sw/source/core/txtnode/ndhints.test.ts ]
+ FAIL  apps/office/src/sw/source/core/txtnode/ndtxt.test.ts [ apps/office/src/sw/source/core/txtnode/ndtxt.test.ts ]
+ FAIL  apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts [ apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts ]
+ FAIL  apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts [ apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts ]
+ FAIL  apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts [ apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts ]
+Error: Cannot find module '/Users/odubinkin/Projects/vite-office/src/test/setup.ts'
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+
+ Test Files  9 failed (9)
+      Tests  no tests
+   Start at  14:59:36
+   Duration  2.36s (transform 0ms, setup 0ms, import 0ms, tests 0ms, environment 3.53s)
+
