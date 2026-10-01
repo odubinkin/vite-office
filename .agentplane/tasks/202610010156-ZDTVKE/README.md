@@ -4,7 +4,7 @@ title: "Restore native repeated-sublist restart ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned repeated-sublist count and pending block restart inheritance,consumption and return under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T02:32:56.550Z"
+doc_updated_at: "2026-10-01T02:33:41.089Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
@@ -76,6 +76,10 @@ sections:
     - Observation: Final-count verify session51727 terminal exit1 after651 app/109 inventory tests,both100%. Browser18/19 passes; mobile resize test at responsive-sidebar.spec.ts58 sees html intercept Paragraph click then the menu item detaches; snapshot shows Styles open although Format was clicked. Earlier unchanged-browser full verify36986 passed19/19.
       Impact: Complete mandatory verification is not established; this may be an intermittent existing menu/resize issue but its cause is not yet proven. No browser implementation changed in this task.
       Resolution: Preserve failed terminal log,trace,screenshot/context in active task;run3 isolated repetitions of the existing mobile test without weakening assertions,timeouts,retries or config. If it passes,run unchanged full verify again; a reproduced defect must be handled as a separate correction under the goal.
+
+    - Observation: Isolated unchanged mobile viewport/menu scenario session81812 terminal exit0:3/3 repetitions pass with normal assertions,timeouts and3 workers.
+      Impact: The prior browser failure did not reproduce in this bounded check; its resize/pointer/menu-switch cause remains unresolved rather than attributed to environment without proof.
+      Resolution: Preserve the failure trace and successful repetitions,then rerun the complete unchanged verify once. Keep mobile resize/menu stability as a separate follow-up risk; no test/config/browser implementation change in this import task.
 id_source: "generated"
 ---
 ## Summary
@@ -133,3 +137,7 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent us
 - Observation: Final-count verify session51727 terminal exit1 after651 app/109 inventory tests,both100%. Browser18/19 passes; mobile resize test at responsive-sidebar.spec.ts58 sees html intercept Paragraph click then the menu item detaches; snapshot shows Styles open although Format was clicked. Earlier unchanged-browser full verify36986 passed19/19.
   Impact: Complete mandatory verification is not established; this may be an intermittent existing menu/resize issue but its cause is not yet proven. No browser implementation changed in this task.
   Resolution: Preserve failed terminal log,trace,screenshot/context in active task;run3 isolated repetitions of the existing mobile test without weakening assertions,timeouts,retries or config. If it passes,run unchanged full verify again; a reproduced defect must be handled as a separate correction under the goal.
+
+- Observation: Isolated unchanged mobile viewport/menu scenario session81812 terminal exit0:3/3 repetitions pass with normal assertions,timeouts and3 workers.
+  Impact: The prior browser failure did not reproduce in this bounded check; its resize/pointer/menu-switch cause remains unresolved rather than attributed to environment without proof.
+  Resolution: Preserve the failure trace and successful repetitions,then rerun the complete unchanged verify once. Keep mobile resize/menu stability as a separate follow-up risk; no test/config/browser implementation change in this import task.

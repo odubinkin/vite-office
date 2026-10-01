@@ -1,0 +1,17 @@
+[WebServer] (node:31199) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 3 workers
+
+(node:31202) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31203) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (1.8s)
+  ✓  2 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (1.8s)
+  ✓  1 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (1.8s)
+
+  3 passed (3.8s)
+Terminal: exec session81812 exit0.
