@@ -82,7 +82,8 @@ it("keeps rule start9 and explicit zero/seven distinct through actual list undo,
       0,
       new SfxItemSet(doc.GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES),
     );
-    node.SetListRestart(true, value);
+    node.SetListRestart(true);
+    node.SetAttrListRestartValue(value);
     checkStart(node, value);
     const undo = new SwUndoInsNum(node, before, node.CaptureListItems(), cursor, cursor);
     const restored: unknown[] = [];
@@ -103,10 +104,12 @@ it("keeps rule start9 and explicit zero/seven distinct through actual list undo,
     checkStart(transferred.paragraphs[0] as SwTextNode, value);
     node.ResetAttr(86, 86);
     checkStart(node);
-    node.SetListRestart(true, value);
+    node.SetListRestart(true);
+    node.SetAttrListRestartValue(value);
     node.ResetAttr([86, 86]);
     checkStart(node);
-    node.SetListRestart(true, value);
+    node.SetListRestart(true);
+    node.SetAttrListRestartValue(value);
     node.ResetAllAttr();
     expect(node.GetAttr(86).QueryValue()).toBe(1);
     expect(node.HasAttrListRestartValue()).toBe(false);

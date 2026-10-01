@@ -33,14 +33,13 @@ describe("Writer list attribute invariants", /** Registers source-backed list te
       second.GetListItemNumber(),
       third.GetListItemNumber(),
     ]).toEqual([1, 2, 3]);
-    second.SetListRestart(true, 5);
-    expect([second.GetListItemNumber(), third.GetListItemNumber()]).toEqual([5, 6]);
-    expect(
-      /** Rejects an invalid restart without partial mutation. @returns Nothing. */ () =>
-        second.SetListRestart(true, 40_000),
-    ).toThrow("outside the supported range");
-    expect(second.GetAttrListRestartValue()).toBe(5);
     second.SetListRestart(true);
+    second.SetAttrListRestartValue(5);
+    expect([second.GetListItemNumber(), third.GetListItemNumber()]).toEqual([5, 6]);
+    second.SetListRestart(true);
+    expect(second.GetAttrListRestartValue()).toBe(5);
+    expect([second.GetListItemNumber(), third.GetListItemNumber()]).toEqual([5, 6]);
+    second.SetAttrListRestartValue(65_535);
     expect([second.GetListItemNumber(), third.GetListItemNumber()]).toEqual([1, 2]);
     second.SetListRestart(false);
     second.SetCountedInList(false);

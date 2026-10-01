@@ -457,7 +457,8 @@ class SwXMLImport
       node.SetNumRule(list.ruleName);
       node.SetListId(list.listId);
       node.SetAttrListLevel(list.level);
-      node.SetListRestart(list.restart === true, list.startValue);
+      node.SetListRestart(list.restart === true);
+      node.SetAttrListRestartValue(list.startValue ?? 65_535);
       if (list.counted === false) node.SetCountedInList(false);
       node.AddToList();
     }

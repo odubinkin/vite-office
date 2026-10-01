@@ -45,7 +45,8 @@ it("attaches items at insertion and validates reverse-order reads without replac
   expect(list.GetListItemNumberVector(required(nodes[2]))).toEqual([7, 5, 3]);
   expect(list.GetListItemNumber(required(nodes[1]))).toBe(5);
   expect(required(records[2]).GetNumber(false)).toBe(3);
-  required(nodes[0]).SetListRestart(true, 0);
+  required(nodes[0]).SetListRestart(true);
+  required(nodes[0]).SetAttrListRestartValue(0);
   expect(list.GetListItemNumberVector(required(nodes[2]))).toEqual([0, 5, 3]);
   required(nodes[0]).SetCountedInList(false);
   expect(list.GetListItemNumberVector(required(nodes[3]))).toEqual([1]);

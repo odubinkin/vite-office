@@ -43,7 +43,8 @@ it("attaches initial inherited rules, rebinds owned records and retains native l
   expect(node.GetNum()).toBe(record);
   node.SetListId("Retained");
   node.SetAttrListLevel(2);
-  node.SetListRestart(true, 7);
+  node.SetListRestart(true);
+  node.SetAttrListRestartValue(7);
   node.SetCountedInList(false);
   expect(node.GetNumRule(false)).toBeUndefined();
   node.ChgFormatColl(second);
@@ -84,7 +85,8 @@ it("resets list attributes on removal and clears synthesized suppression on retu
   node.ChgFormatColl(first);
   node.SetListId("Retained");
   node.SetAttrListLevel(2);
-  node.SetListRestart(true, 7);
+  node.SetListRestart(true);
+  node.SetAttrListRestartValue(7);
   node.SetCountedInList(false);
   node.SetAttrOutlineLevel(4);
   node.ChgFormatColl(doc.GetDfltTextFormatColl());
@@ -235,7 +237,8 @@ it("restores exact direct list-item history and suppression through repeated sty
   shell.SetParagraphStyle(first.id);
   node.SetListId("Retained");
   node.SetAttrListLevel(2);
-  node.SetListRestart(true, 7);
+  node.SetListRestart(true);
+  node.SetAttrListRestartValue(7);
   node.SetCountedInList(false);
   node.SetAttrOutlineLevel(4);
   const before = node.CaptureListItems();

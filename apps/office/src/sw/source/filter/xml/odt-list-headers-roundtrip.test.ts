@@ -299,7 +299,8 @@ it("omits restart metadata on uncounted paragraphs as native NumberingIsNumber p
     applyWriterParagraphList(node, { kind: "numbered", styleId: "Headers", listId: "L" });
     if (index === 1) {
       node.SetCountedInList(false);
-      node.SetListRestart(true, 0);
+      node.SetListRestart(true);
+      node.SetAttrListRestartValue(0);
     }
   }
   const expected = ["7.", undefined, "8."];

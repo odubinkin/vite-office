@@ -293,18 +293,20 @@ export class SwTextNode extends SwContentNode {
     this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, level));
   }
 
-  /** Sets Writer's direct list restart attributes. @param restart - Whether this item restarts. @param value - Optional explicit start value. @returns Nothing. */
-  public SetListRestart(restart: boolean, value?: number): void {
-    if (restart && value !== undefined && (!Number.isInteger(value) || value < 0 || value > 32_767))
-      throw new Error("Writer list restart value is outside the supported range.");
-    if (!restart) {
-      this.ResetAttr(RES_PARATR_LIST_ISRESTART);
-      this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
-    } else {
-      this.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true));
-      if (value === undefined) this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
-      else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, value));
-    }
+  /** Changes only the restart flag. @param restart - Whether this item restarts. @returns Nothing. */
+  public SetListRestart(restart: boolean): void {
+    if (!restart) this.ResetAttr(RES_PARATR_LIST_ISRESTART);
+    else this.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true));
+  }
+
+  /** Sets the signed restart value or clears USHRT_MAX. @param number - Native integer input. @returns Nothing. */
+  public SetAttrListRestartValue(number: number): void {
+    const changed = this.HasAttrListRestartValue()
+      ? this.GetAttrListRestartValue() !== number
+      : number !== 65_535;
+    if (!changed && this.HasAttrListRestartValue()) return;
+    if (number === 65_535) this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
+    else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, (number << 16) >> 16));
   }
 
   /** Applies Writer's RES_PARATR_LIST_ISCOUNTED flag. @param counted - Whether this list item advances numbering. @returns Nothing. */

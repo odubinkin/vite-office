@@ -176,7 +176,8 @@ it("uses the newly selected rule in genuine ODT and preserves style attributes t
   shell.SetParagraphStyle("text-body");
   node.SetListId("Retained");
   node.SetAttrListLevel(2);
-  node.SetListRestart(true, 7);
+  node.SetListRestart(true);
+  node.SetAttrListRestartValue(7);
   expect(node.GetListLabel()).toBe("7.");
   shell.SetParagraphStyle("heading");
   expect(node.GetNum()?.GetNumRule()?.GetName()).toBe("Bullets");

@@ -1,0 +1,370 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "six complete unchanged native restart definitions; named direct-item/type/format adapters; valid direct getters and exact JS integer inputs only",
+  "cases": [
+    {
+      "name": "missing-value-reset-and-flags",
+      "rule": false,
+      "operations": [
+        ["value", 65535],
+        ["flag", false],
+        ["flag", true],
+        ["flag", true],
+        ["flag", false]
+      ],
+      "states": [
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": []
+        },
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": [["reset", 86]]
+        },
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": [["reset", 85]]
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": [["set", 85, true]]
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": [["set", 85, true]]
+        },
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": [["reset", 85]]
+        }
+      ]
+    },
+    {
+      "name": "retain-seven-across-flags",
+      "rule": true,
+      "operations": [
+        ["value", 7],
+        ["flag", true],
+        ["flag", false],
+        ["flag", true],
+        ["value", 7],
+        ["value", 0],
+        ["flag", false],
+        ["flag", true],
+        ["value", 65535],
+        ["value", 65535]
+      ],
+      "states": [
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 9,
+          "calls": []
+        },
+        {
+          "restart": false,
+          "direct": 7,
+          "effective": 7,
+          "start": 9,
+          "calls": [["set", 86, 7]]
+        },
+        {
+          "restart": true,
+          "direct": 7,
+          "effective": 7,
+          "start": 7,
+          "calls": [["set", 85, true]]
+        },
+        {
+          "restart": false,
+          "direct": 7,
+          "effective": 7,
+          "start": 9,
+          "calls": [["reset", 85]]
+        },
+        {
+          "restart": true,
+          "direct": 7,
+          "effective": 7,
+          "start": 7,
+          "calls": [["set", 85, true]]
+        },
+        {
+          "restart": true,
+          "direct": 7,
+          "effective": 7,
+          "start": 7,
+          "calls": []
+        },
+        {
+          "restart": true,
+          "direct": 0,
+          "effective": 0,
+          "start": 0,
+          "calls": [["set", 86, 0]]
+        },
+        {
+          "restart": false,
+          "direct": 0,
+          "effective": 0,
+          "start": 9,
+          "calls": [["reset", 85]]
+        },
+        {
+          "restart": true,
+          "direct": 0,
+          "effective": 0,
+          "start": 0,
+          "calls": [["set", 85, true]]
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 9,
+          "calls": [["reset", 86]]
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 9,
+          "calls": [["reset", 86]]
+        }
+      ]
+    },
+    {
+      "name": "rule-format-is-not-direct",
+      "rule": true,
+      "operations": [
+        ["flag", true],
+        ["value", 9],
+        ["value", 9],
+        ["flag", false],
+        ["value", 65535],
+        ["flag", true]
+      ],
+      "states": [
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 9,
+          "calls": []
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 9,
+          "calls": [["set", 85, true]]
+        },
+        {
+          "restart": true,
+          "direct": 9,
+          "effective": 9,
+          "start": 9,
+          "calls": [["set", 86, 9]]
+        },
+        {
+          "restart": true,
+          "direct": 9,
+          "effective": 9,
+          "start": 9,
+          "calls": []
+        },
+        {
+          "restart": false,
+          "direct": 9,
+          "effective": 9,
+          "start": 9,
+          "calls": [["reset", 85]]
+        },
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 9,
+          "calls": [["reset", 86]]
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 9,
+          "calls": [["set", 85, true]]
+        }
+      ]
+    },
+    {
+      "name": "signed-narrowing",
+      "rule": false,
+      "operations": [
+        ["flag", true],
+        ["value", -1],
+        ["value", -1],
+        ["value", 32768],
+        ["value", -32768],
+        ["value", 40000],
+        ["value", 40000],
+        ["value", -25536],
+        ["value", 65534],
+        ["value", 65535],
+        ["value", 65536],
+        ["value", 0],
+        ["value", -32769],
+        ["value", 131071],
+        ["value", 4294967303],
+        ["value", 9007199254740991],
+        ["value", -9007199254740991]
+      ],
+      "states": [
+        {
+          "restart": false,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": []
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": [["set", 85, true]]
+        },
+        {
+          "restart": true,
+          "direct": -1,
+          "effective": -1,
+          "start": -1,
+          "calls": [["set", 86, -1]]
+        },
+        {
+          "restart": true,
+          "direct": -1,
+          "effective": -1,
+          "start": -1,
+          "calls": []
+        },
+        {
+          "restart": true,
+          "direct": -32768,
+          "effective": -32768,
+          "start": -32768,
+          "calls": [["set", 86, -32768]]
+        },
+        {
+          "restart": true,
+          "direct": -32768,
+          "effective": -32768,
+          "start": -32768,
+          "calls": []
+        },
+        {
+          "restart": true,
+          "direct": -25536,
+          "effective": -25536,
+          "start": -25536,
+          "calls": [["set", 86, -25536]]
+        },
+        {
+          "restart": true,
+          "direct": -25536,
+          "effective": -25536,
+          "start": -25536,
+          "calls": [["set", 86, -25536]]
+        },
+        {
+          "restart": true,
+          "direct": -25536,
+          "effective": -25536,
+          "start": -25536,
+          "calls": []
+        },
+        {
+          "restart": true,
+          "direct": -2,
+          "effective": -2,
+          "start": -2,
+          "calls": [["set", 86, -2]]
+        },
+        {
+          "restart": true,
+          "direct": null,
+          "effective": 1,
+          "start": 1,
+          "calls": [["reset", 86]]
+        },
+        {
+          "restart": true,
+          "direct": 0,
+          "effective": 0,
+          "start": 0,
+          "calls": [["set", 86, 0]]
+        },
+        {
+          "restart": true,
+          "direct": 0,
+          "effective": 0,
+          "start": 0,
+          "calls": []
+        },
+        {
+          "restart": true,
+          "direct": 32767,
+          "effective": 32767,
+          "start": 32767,
+          "calls": [["set", 86, 32767]]
+        },
+        {
+          "restart": true,
+          "direct": -1,
+          "effective": -1,
+          "start": -1,
+          "calls": [["set", 86, -1]]
+        },
+        {
+          "restart": true,
+          "direct": 7,
+          "effective": 7,
+          "start": 7,
+          "calls": [["set", 86, 7]]
+        },
+        {
+          "restart": true,
+          "direct": -1,
+          "effective": -1,
+          "start": -1,
+          "calls": [["set", 86, -1]]
+        },
+        {
+          "restart": true,
+          "direct": 1,
+          "effective": 1,
+          "start": 1,
+          "calls": [["set", 86, 1]]
+        }
+      ]
+    }
+  ]
+}

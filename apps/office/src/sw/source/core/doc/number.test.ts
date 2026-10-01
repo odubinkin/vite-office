@@ -234,15 +234,15 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(second.GetListItemNumber()).toBe(5);
     expect(projectWriterParagraphList(second)).toMatchObject({ restart: true, startValue: 5 });
     second.SetListRestart(true);
+    expect(second.GetAttrListRestartValue()).toBe(5);
+    second.SetAttrListRestartValue(65_535);
     expect(second.HasAttrListRestartValue()).toBe(false);
     expect(
       /** Reads a missing explicit restart value. @returns Missing value. */ () =>
         second.GetAttrListRestartValue(),
     ).toThrow("is not set");
-    expect(
-      /** Installs an out-of-range restart value. @returns Nothing. */ () =>
-        second.SetListRestart(true, 40_000),
-    ).toThrow("outside the supported range");
+    second.SetAttrListRestartValue(40_000);
+    expect(second.GetAttrListRestartValue()).toBe(-25_536);
     applyWriterParagraphList(second, { kind: "none", level: 0 });
     expect(second.IsListRestart()).toBe(false);
     expect(second.GetActualListStartValue()).toBe(1);

@@ -38,7 +38,10 @@ function fixture(items: readonly Item[], start = 0) {
         listId: "counter-list",
       });
       if (item.counted === false) node.SetCountedInList(false);
-      if (item.restart !== undefined) node.SetListRestart(true, item.restart);
+      if (item.restart !== undefined) {
+        node.SetListRestart(true);
+        node.SetAttrListRestartValue(item.restart);
+      }
       return node;
     },
   );
@@ -217,7 +220,8 @@ it("continues a subtree only below native uncounted parents", /** Verifies prior
 it("revalidates zero restarts, counted changes and phantom ancestors", /** Verifies invalidation, canonical reparenting/removal and source-owned skipped-level ancestors. @returns Nothing. */ () => {
   const { nodes, list } = fixture([{ level: 0 }, { level: 0 }, { level: 0 }]);
   const middle = nodes[1] as SwTextNode;
-  middle.SetListRestart(true, 0);
+  middle.SetListRestart(true);
+  middle.SetAttrListRestartValue(0);
   expect(nodes[2]?.GetListLabel()).toBe("1.");
   middle.SetCountedInList(false);
   expect(nodes[2]?.GetListLabel()).toBe("1.");
