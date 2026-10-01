@@ -1,0 +1,19 @@
+{
+  "result": "timeout",
+  "seconds": 1,
+  "profile": {
+    "pattern": "%1%",
+    "types": [
+      2,
+      0,
+      0
+    ],
+    "values": [
+      2,
+      3,
+      4
+    ],
+    "level": 2
+  },
+  "scope": "Complete unchanged MakeNumString; NONE reference without a following placeholder never advances. Browser rejects this unsupported non-progress input with an explicit error; no native parity claim for this malformed profile."
+}
