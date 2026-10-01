@@ -71,35 +71,15 @@ export class SwList {
   /** Recalculates the bounded tree in canonical document order. @param orderedNodeIds - Body-node order. @returns Nothing. */
   public ValidateListTree(orderedNodes: readonly SwTextNode[]): void {
     if (!this.invalid) return;
-    const levelNodes: Array<SwNodeNum | undefined> = Array.from({
-      length: WRITER_MAX_LIST_LEVEL + 1,
-    });
-    // Missing intermediate levels still use separate bounded groups until native phantom construction is restored.
-    const roots = new Set<SwNodeNum>();
-    const missingLevelRoots: Array<SwNodeNum | undefined> = [];
+    let root: SwNodeNum | undefined;
     for (const node of this.nodes.values()) node.ResetTree();
     for (const textNode of orderedNodes) {
       const node = this.nodes.get(textNode);
       if (node === undefined) continue;
-      const level = node.level;
-      let parent = level === 0 ? undefined : levelNodes[level - 1];
-      if (parent === undefined) {
-        let root = missingLevelRoots[level];
-        if (root === undefined) {
-          root = new SwNodeNum(undefined, -1, textNode.GetNumRule());
-          missingLevelRoots[level] = root;
-          roots.add(root);
-        }
-        parent = root;
-      }
-      node.SetParent(parent);
-      levelNodes[level] = node;
-      for (let child = level + 1; child <= WRITER_MAX_LIST_LEVEL; child += 1) {
-        levelNodes[child] = undefined;
-        missingLevelRoots[child] = undefined;
-      }
+      root ??= new SwNodeNum(undefined, -1, textNode.GetNumRule());
+      root.AddChild(node, node.level);
     }
-    for (const root of roots) root.ValidateHierarchical();
+    root?.ValidateHierarchical();
     this.invalid = false;
   }
   /** Gets a calculated node counter. @param nodeId - Text-node id. @returns Counter when registered. */

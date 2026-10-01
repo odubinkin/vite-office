@@ -12,27 +12,30 @@ import {
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
-/** Replaces a baseline package with literal native list declarations/body. @param baseline - Package bytes. @param body - List contents. @param start - Root start. @param common - Common versus automatic style. @param bullet - Marker family. @returns Real ODT bytes. */
+/** Replaces a baseline package with literal native list declarations/body. @param baseline - Package bytes. @param body - List contents. @param start - Root start. @param common - Common versus automatic style. @param bullet - Marker family. @param phantom - Whether to declare nonzero skipped-level starts. @returns Real ODT bytes. */
 async function input(
   baseline: Uint8Array,
   body: string,
   start: number,
   common: boolean,
   bullet: boolean,
+  phantom = false,
 ): Promise<Uint8Array> {
   const zip = new ZipFile(baseline),
     output = new ZipOutputStream();
   const declaration = `<text:list-style style:name="Counters"><text:list-level-style-${bullet ? "bullet" : "number"} text:level="1" ${bullet ? 'text:bullet-char="●"' : 'style:num-format="1"'} style:num-suffix="." text:start-value="${start}"/><text:list-level-style-number text:level="2" style:num-format="1" style:num-suffix="." text:start-value="0" text:display-levels="2"/></text:list-style>`;
+  const phantomDeclaration = `<text:list-style style:name="Counters"><text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="." text:start-value="7"/><text:list-level-style-number text:level="2" style:num-format="1" style:num-suffix="." text:start-value="5" text:display-levels="2"/><text:list-level-style-number text:level="3" style:num-format="1" style:num-suffix="." text:start-value="3" text:display-levels="3"/></text:list-style>`;
+  const selectedDeclaration = phantom ? phantomDeclaration : declaration;
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" || entry === "content.xml") {
       let xml = await zip.readTextEntry(entry);
       if (entry === "styles.xml" && common)
-        xml = xml.replace("</office:styles>", `${declaration}</office:styles>`);
+        xml = xml.replace("</office:styles>", `${selectedDeclaration}</office:styles>`);
       if (entry === "content.xml") {
         if (!common)
           xml = xml.replace(
             "</office:automatic-styles>",
-            `${declaration}</office:automatic-styles>`,
+            `${selectedDeclaration}</office:automatic-styles>`,
           );
         xml = xml.replace(
           /<office:text>[\s\S]*?<\/office:text>/u,
@@ -64,6 +67,14 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
   const first = "<text:list-item><text:p>first</text:p></text:list-item>";
   const zero = '<text:list-item text:start-value="0"><text:p>restart</text:p></text:list-item>';
   for (const test of [
+    {
+      phantom: true,
+      body: `<text:list-item><text:list><text:list-item><text:list>${first.repeat(2)}</text:list></text:list-item></text:list></text:list-item>${first}<text:list-item><text:list><text:list-item><text:list>${first}</text:list></text:list-item></text:list></text:list-item>`,
+      start: 7,
+      values: [3, 4, 8, 3],
+      labels: ["7.5.3.", "7.5.4.", "8.", "8.5.3."],
+      vectors: [[7, 5, 3], [7, 5, 4], [8], [8, 5, 3]],
+    },
     {
       body: first.repeat(3),
       start: 0,
@@ -118,7 +129,14 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
   ])
     for (const common of [false, true]) {
       const result = await readOdtDocument(
-        await input(baseline, test.body, test.start, common, test.bullet ?? false),
+        await input(
+          baseline,
+          test.body,
+          test.start,
+          common,
+          test.bullet ?? false,
+          test.phantom ?? false,
+        ),
         { title: "Counters" },
       );
       const expected = test.values.map(
@@ -152,6 +170,27 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
       else expect(rootDeclaration).toContain(`text:start-value="${test.start}"`);
       if (test.body.includes('text:start-value="0"'))
         expect(xml).toContain('<text:list-item text:start-value="0">');
+      if (test.phantom) {
+        const secondDeclaration = xml.match(
+          /<text:list-level-style-number text:level="2"[^>]*>/u,
+        )?.[0];
+        expect(secondDeclaration).toContain('style:num-format="1"');
+        expect(secondDeclaration).toContain('text:start-value="5"');
+        expect(xml).toContain('text:start-value="5"');
+        expect(xml).toContain('text:start-value="3"');
+        expect(
+          result.document.paragraphs.map(
+            /** Reads native list depth. @param node - Item. @returns Level. */ (node) =>
+              node.GetAttrListLevel(),
+          ),
+        ).toEqual([2, 2, 0, 2]);
+        expect(
+          transferred.paragraphs.map(
+            /** Reads native list depth. @param node - Item. @returns Level. */ (node) =>
+              node.GetAttrListLevel(),
+          ),
+        ).toEqual([2, 2, 0, 2]);
+      }
       const reopened = await readOdtDocument(exported, { title: "Counters" });
       expect(state(reopened.document)).toEqual(expected);
     }

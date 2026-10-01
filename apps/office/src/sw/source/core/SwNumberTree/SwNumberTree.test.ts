@@ -214,7 +214,7 @@ it("continues a subtree only below native uncounted parents", /** Verifies prior
   }
 });
 
-it("revalidates zero restarts, counted changes and bounded missing-level groups", /** Verifies invalidation, canonical reparenting/removal and the explicitly unverified skipped-level bridge. @returns Nothing. */ () => {
+it("revalidates zero restarts, counted changes and phantom ancestors", /** Verifies invalidation, canonical reparenting/removal and source-owned skipped-level ancestors. @returns Nothing. */ () => {
   const { nodes, document, list } = fixture([{ level: 0 }, { level: 0 }, { level: 0 }]);
   const middle = nodes[1] as SwTextNode;
   middle.SetListRestart(true, 0);
@@ -234,7 +234,7 @@ it("revalidates zero restarts, counted changes and bounded missing-level groups"
       /** Reads bounded counters. @param node - Item. @returns Counter. */ (node) =>
         node.GetListItemNumber(),
     ),
-  ).toEqual([0, 1, 0, 0]);
+  ).toEqual([0, 1, 1, 0]);
   expect(missing.list.GetListItemNumberVector(missing.nodes[1] as SwTextNode)).toEqual([0, 0, 1]);
 });
 
@@ -244,7 +244,7 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
   const root = new SwNodeNum(undefined, -1);
   expect(node.GetStartValue()).toBe(1);
   expect(node.IsCountedForNumbering()).toBe(false);
-  node.SetParent(root);
+  root.AddChild(node, 1);
   expect(root.HasCountedChildren()).toBe(false);
   expect(root.IsCountedForNumbering()).toBe(true);
   expect(root.GetStartValue()).toBe(1);
@@ -257,8 +257,45 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
     styleId: "Levels",
   });
   node.ResetTree();
+  root.ResetTree();
   expect(node.GetStartValue()).toBe(7);
-  node.SetParent(root);
+  root.AddChild(node, 1);
   expect(node.GetStartValue()).toBe(3);
   expect(root.HasCountedChildren()).toBe(true);
+});
+
+it("constructs rule-start phantom chains and rebuilds after removal", /** Verifies actual labels, derived depth, phantom topology and reinsertion. @returns Nothing. */ () => {
+  const { document, nodes, list } = fixture([
+    { level: 2 },
+    { level: 2 },
+    { level: 0 },
+    { level: 2 },
+  ]);
+  const rule = document.FindNumRulePtr("Counters");
+  rule?.GetNumFormat(0).SetStart(7);
+  rule?.GetNumFormat(1).SetStart(5);
+  rule?.GetNumFormat(2).SetStart(3);
+  list.InvalidateListTree();
+  expect(
+    nodes.map(
+      /** Reads the actual marker. @param node - Item. @returns Marker. */ (node) =>
+        node.GetListLabel(),
+    ),
+  ).toEqual(["7.5.3.", "7.5.4.", "8.", "8.5.3."]);
+  const item = list.GetListItem(nodes[0] as SwTextNode) as SwNodeNum;
+  expect(item.GetNumberVector()).toEqual([7, 5, 3]);
+  expect(item.GetLevelInListTree()).toBe(2);
+  expect(item.GetParent()?.IsPhantom()).toBe(true);
+  expect(item.GetParent()?.GetParent()?.IsPhantom()).toBe(true);
+  expect(item.HasPhantomCountedParent()).toBe(false);
+  const root = item.GetRoot() as SwNodeNum;
+  expect(root.GetRoot()).toBeUndefined();
+  expect(root.GetLevelInListTree()).toBe(-1);
+  expect(root.IsPhantom()).toBe(false);
+  list.RemoveListItem(nodes[2] as SwTextNode);
+  list.ValidateListTree(document.paragraphs);
+  expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([7, 5, 5]);
+  list.InsertListItem(nodes[2] as SwTextNode);
+  list.ValidateListTree(document.paragraphs);
+  expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([8, 5, 3]);
 });

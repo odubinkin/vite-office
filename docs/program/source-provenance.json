@@ -3110,11 +3110,15 @@
           },
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
-            "marker": "revalidates zero restarts, counted changes and bounded missing-level groups"
+            "marker": "revalidates zero restarts, counted changes and phantom ancestors"
           },
           {
             "path": "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
             "marker": "round-trips zero starts and restarts through native list trees"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+            "marker": "constructs rule-start phantom chains and rebuilds after removal"
           }
         ],
         "upstream": [
@@ -3145,6 +3149,18 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
             "marker": "SwList::ValidateListTree"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::AddChild"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::CreatePhantom"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::HasPhantomCountedParent"
           }
         ]
       },
@@ -3153,11 +3169,10 @@
         "SwNodeNum"
       ],
       "omittedResponsibilities": [
-        "Native phantom construction, continuous/redline trees, sorted insertion/removal, lazy validity/notifications and full tree lifecycle remain unverified; eager rebuilding and bounded missing-level grouping are unresolved implementation bridges."
+        "Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full native lifecycle remain unverified; SwList retains eager rebuilding."
       ],
       "preservedResponsibilities": [
-        "Stores a list item's level and validated counter under document-list ownership.",
-        "Hierarchical counter state and sibling calculation now belong to SwNumberTreeNode; SwNodeNum supplies Writer counted/restart/start policy and native-style roots. Structural first/sibling order replaces the numeric-zero sentinel, retaining signed uncounted-first counters, zero starts/restarts, counted-descendant initialization and source-defined continuation below uncounted parents. Compiled unmodified pinned hierarchy/node/vector bodies match 1048 complete no-phantom trees / 5016 counter, continuation and vector states. Core lifecycle assertions and seven literal common/automatic ODT cases verify actual labels, copied rules/captured item sets, Worker v16, selected XML and reopen. Tree rebuilding/eager validation, missing-level grouping without native phantoms, lazy validity/notifications, continuous numbering, redline trees and broader native ownership/defaults remain individually unverified. No whole-module parity promotion; registered save/open/recovery policies are unchanged."
+        "Source-owned SwNumberTreeNode AddChild/CreatePhantom and phantom-aware first/sibling validation replace missing-level roots and zero-filled vectors. SwNodeNum supplies no-text factory, document ordering, derived-level starts and the true default phantom policy for existing hierarchical rules. Compiled unmodified pinned insertion, phantom cleanup, validation, node-policy and vector excerpts match 5736 ordered/reverse/interleaved and exhaustive insertion trees /25560 counter, continuation, vector and phantom topology states under explicit eager-reset, std::set, text/rule and disabled-notification shims. Genuine common/automatic ODT fixtures verify skipped-level starts [7,5,3], actual labels, owned copies, Worker v16, selected XML and reopen. Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full lifecycle remain unverified; canonical SwList still rebuilds eagerly. No full native build or whole-module parity claim; registered save/open/recovery differences are unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
@@ -3186,7 +3201,7 @@
           },
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
-            "marker": "revalidates zero restarts, counted changes and bounded missing-level groups"
+            "marker": "revalidates zero restarts, counted changes and phantom ancestors"
           },
           {
             "path": "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
@@ -3195,6 +3210,10 @@
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
             "marker": "SwNumberTreeNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+            "marker": "constructs rule-start phantom chains and rebuilds after removal"
           }
         ],
         "upstream": [
@@ -3221,6 +3240,18 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
             "marker": "SwList::ValidateListTree"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::AddChild"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::CreatePhantom"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::HasPhantomCountedParent"
           }
         ]
       },
@@ -3229,10 +3260,10 @@
         "SwNumberTreeNode"
       ],
       "omittedResponsibilities": [
-        "Native phantom construction, continuous/redline trees, sorted insertion/removal, lazy validity/notifications and full tree lifecycle remain unverified; eager rebuilding and bounded missing-level grouping are unresolved implementation bridges."
+        "Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full native lifecycle remain unverified; SwList retains eager rebuilding."
       ],
       "preservedResponsibilities": [
-        "Hierarchical counter state and sibling calculation now belong to SwNumberTreeNode; SwNodeNum supplies Writer counted/restart/start policy and native-style roots. Structural first/sibling order replaces the numeric-zero sentinel, retaining signed uncounted-first counters, zero starts/restarts, counted-descendant initialization and source-defined continuation below uncounted parents. Compiled unmodified pinned hierarchy/node/vector bodies match 1048 complete no-phantom trees / 5016 counter, continuation and vector states. Core lifecycle assertions and seven literal common/automatic ODT cases verify actual labels, copied rules/captured item sets, Worker v16, selected XML and reopen. Tree rebuilding/eager validation, missing-level grouping without native phantoms, lazy validity/notifications, continuous numbering, redline trees and broader native ownership/defaults remain individually unverified. No whole-module parity promotion; registered save/open/recovery policies are unchanged."
+        "Source-owned SwNumberTreeNode AddChild/CreatePhantom and phantom-aware first/sibling validation replace missing-level roots and zero-filled vectors. SwNodeNum supplies no-text factory, document ordering, derived-level starts and the true default phantom policy for existing hierarchical rules. Compiled unmodified pinned insertion, phantom cleanup, validation, node-policy and vector excerpts match 5736 ordered/reverse/interleaved and exhaustive insertion trees /25560 counter, continuation, vector and phantom topology states under explicit eager-reset, std::set, text/rule and disabled-notification shims. Genuine common/automatic ODT fixtures verify skipped-level starts [7,5,3], actual labels, owned copies, Worker v16, selected XML and reopen. Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full lifecycle remain unverified; canonical SwList still rebuilds eagerly. No full native build or whole-module parity claim; registered save/open/recovery differences are unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
@@ -3790,11 +3821,15 @@
           },
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
-            "marker": "revalidates zero restarts, counted changes and bounded missing-level groups"
+            "marker": "revalidates zero restarts, counted changes and phantom ancestors"
           },
           {
             "path": "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
             "marker": "round-trips zero starts and restarts through native list trees"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+            "marker": "constructs rule-start phantom chains and rebuilds after removal"
           }
         ],
         "upstream": [
@@ -3825,6 +3860,18 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
             "marker": "SwList::ValidateListTree"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::AddChild"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::CreatePhantom"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::HasPhantomCountedParent"
           }
         ]
       },
@@ -3843,11 +3890,10 @@
         "applyWriterParagraphList"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwList::SwList, std::move, uno::RuntimeException, SwList::~SwList and the bounded SwList and WriterParagraphList contracts remain intentionally omitted."
+        "Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full native lifecycle remain unverified; SwList retains eager rebuilding."
       ],
       "preservedResponsibilities": [
-        "Ports bounded document-owned SwList registration, invalidation, and counter-tree behavior, including the reachable uncounted-item transition, while keeping boundary projection separate from canonical item-set mutation.",
-        "Hierarchical counter state and sibling calculation now belong to SwNumberTreeNode; SwNodeNum supplies Writer counted/restart/start policy and native-style roots. Structural first/sibling order replaces the numeric-zero sentinel, retaining signed uncounted-first counters, zero starts/restarts, counted-descendant initialization and source-defined continuation below uncounted parents. Compiled unmodified pinned hierarchy/node/vector bodies match 1048 complete no-phantom trees / 5016 counter, continuation and vector states. Core lifecycle assertions and seven literal common/automatic ODT cases verify actual labels, copied rules/captured item sets, Worker v16, selected XML and reopen. Tree rebuilding/eager validation, missing-level grouping without native phantoms, lazy validity/notifications, continuous numbering, redline trees and broader native ownership/defaults remain individually unverified. No whole-module parity promotion; registered save/open/recovery policies are unchanged."
+        "Source-owned SwNumberTreeNode AddChild/CreatePhantom and phantom-aware first/sibling validation replace missing-level roots and zero-filled vectors. SwNodeNum supplies no-text factory, document ordering, derived-level starts and the true default phantom policy for existing hierarchical rules. Compiled unmodified pinned insertion, phantom cleanup, validation, node-policy and vector excerpts match 5736 ordered/reverse/interleaved and exhaustive insertion trees /25560 counter, continuation, vector and phantom topology states under explicit eager-reset, std::set, text/rule and disabled-notification shims. Genuine common/automatic ODT fixtures verify skipped-level starts [7,5,3], actual labels, owned copies, Worker v16, selected XML and reopen. Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full lifecycle remain unverified; canonical SwList still rebuilds eagerly. No full native build or whole-module parity claim; registered save/open/recovery differences are unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/list.cxx",

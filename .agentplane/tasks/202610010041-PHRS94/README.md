@@ -4,7 +4,7 @@ title: "Restore native phantom ancestors for skipped list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-01T01:05:24.147Z"
+  updated_by: "CODER"
+  note: "Final unchanged verify exit0 session53036:643 app/109 inventory/19 browser, both100% coverage. Compiled primary excerpts match5736 trees/25560 states; genuine ODT/copy/Worker/XML/reopen pass. Doctor0 errors/same2 prior warnings; routing/diff pass. First browser timeout preserved; isolated and final unchanged runs pass. Full parity remains incomplete."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore source-owned phantom ancestors and counting under the persistent approved upstream goal."
+  -
+    type: "verify"
+    at: "2026-10-01T01:05:24.147Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final unchanged verify exit0 session53036:643 app/109 inventory/19 browser, both100% coverage. Compiled primary excerpts match5736 trees/25560 states; genuine ODT/copy/Worker/XML/reopen pass. Doctor0 errors/same2 prior warnings; routing/diff pass. First browser timeout preserved; isolated and final unchanged runs pass. Full parity remains incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:01:13.820Z"
+doc_updated_at: "2026-10-01T01:05:24.201Z"
 doc_updated_by: "CODER"
 description: "Iteration29 of persistent upstream goal: replace bounded missing-level groups with source-owned phantom construction and native hierarchical phantom counting for existing Arabic/bullet lists. Preserve registered save/open/recovery deviations."
 sections:
@@ -44,7 +50,41 @@ sections:
   Scope: "SwNumberTree.ts, SwNodeNum.ts, doc/list.ts and focused tree/list tests; genuine ODT phantom counter roundtrips; runtime inventory/source provenance and task-local native probes. Preserve registered save/open/recovery differences, ODF version, Worker v16 and mandatory gates. Existing rule policy remains hierarchical and count-phantoms=true; adding persisted configurable rule flags, continuous/redline numbering, complete lazy validity/notifications and direct incremental removal are separate obligations."
   Plan: "Move skipped-level construction into SwNumberTreeNode AddChild/CreatePhantom and remove SwList missing-level roots/zero vectors. Derive levels and number vectors from parent links; preserve native phantom counted-parent, first-node decrement and subtree continuation conditions, with SwNodeNum supplying rule/start/count policy and phantom factory. Compare to compiled unmodified pinned AddChild/CreatePhantom/cleanup/counting/vector excerpts with explicit document-order, eager and notification shims. Verify source-derived deep/uneven/uncounted/restart/zero shapes and rebuild after removal/reorder; genuine common/automatic ODT state/labels/copy/Worker/XML/reopen. Finish only after unchanged full verification, quality review and intentional scoped local commits."
   Verify Steps: "Compile unmodified pinned phantom AddChild/CreatePhantom/cleanup/hierarchical validation, counted-parent and Writer node-policy/vector bodies; compare canonical SwList numbers, vectors, continuation, phantom topology over bounded skipped/deep/uneven hierarchies with zero/custom starts, counted/uncounted/restarts. Assert first level2 starts [7,5,3] yields [7,5,3] and 7.5.3.; phantom with only uncounted leaves, counted descendants and counted-parent barriers; level9; removal/reinsertion and ordering rebuild. Genuine common and automatic ODT fixtures must assert literal counters/vectors/labels, owned rule/item-set copying, Worker v16, selected standard XML and reopen. Run npm run verify unchanged, both 100% coverage suites and all browser/source/provenance/ODT gates; ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Record actual code hash and clean final tracked state."
-  Verification: "Pending implementation and declared checks; no mandatory check is skipped."
+  Verification: |-
+    Command: npm run verify. Result: pass, final session53036 terminal exit0. Evidence: 643 application tests/138 files,109 inventory tests/36 files,19 browser tests; application coverage100%9921 statements/7481 branches/2734 functions/9123 lines; inventory100%1523/1080/384/1464. All unchanged format/lint/type/module/resources/browser/static/JSDoc/size/source/provenance/invariants/parity gates completed. Native differential: python3 .agentplane/tasks/202610010041-PHRS94/native-oracle.py and npx tsx .agentplane/tasks/202610010041-PHRS94/compare-native.ts pass for5736 trees/25560 counter/continuation/vector/topology states, with explicit eager-reset/std::set/text/rule/no-notification shims. ap doctor zero errors and same2 prior warnings; routing/diff pass. No check skipped. Initial browser timeout at artifact1458fca64f09 passed unchanged in isolation and final full run; cause remains unproved. Scope: existing hierarchical Arabic/bullet phantom ancestors, rule starts, sorted insertion/relocation and eager removal/reinsertion, common/automatic ODT/copy/Worker16/XML/reopen. Full native build, lazy/continuous/redline/incremental removal and uncounted ODT list-header transport remain unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T01:05:24.147Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final unchanged verify exit0 session53036:643 app/109 inventory/19 browser, both100% coverage. Compiled primary excerpts match5736 trees/25560 states; genuine ODT/copy/Worker/XML/reopen pass. Doctor0 errors/same2 prior warnings; routing/diff pass. First browser timeout preserved; isolated and final unchanged runs pass. Full parity remains incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T01:05:23.842Z, excerpt_hash=sha256:7f39653c9e3595d95bfb2704468f9ce4fdf8a0bee036bcaeac7bbab7cf02c435
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010041-PHRS94/blueprint/resolved-snapshot.json
+    - old_digest: 07891280f8244e088837e4be943b8df38d437b6074e8bf3bbbe6fabf5e625c98
+    - current_digest: 07891280f8244e088837e4be943b8df38d437b6074e8bf3bbbe6fabf5e625c98
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610010041-PHRS94
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610010041-PHRS94
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commit through a new executable task if necessary; keep DONE evidence immutable and the parent goal active."
   Findings: |-
     Preflight: clean main/direct; only parent 202609240501-C9TN6M DOING. Previous turn is progress: iteration28 X0PFNS DONE, real implementation 203555bcef7d193f0ff1ec7869d4c4f021d2a994, full verify exit0. Pin libreoffice-26.8.0.2 /9bc445578031fecf56086729d8e4940c77e14d65. Current missing-level groups produce [0,0,3] for initial level2 with starts [7,5,3]. Native AddChild/CreatePhantom, true default phantom policy and validation define source-owned ancestors, not zero-filled projection. Compiled phantom-enabled evidence is required before asserting corrected behavior. No network/outside access or delegation. Full parity remains incomplete; uncounted ODT list-header transport is a separate known gap.
@@ -92,6 +132,10 @@ sections:
     - Observation: The unchanged responsive-sidebar test passes in isolation (session98737 exit0, 1 test/2.2s) after the full-run pointer/menu timeout.
       Impact: The failure is not reproduced by the bounded diagnostic; cause is not proved. A full mandatory pass is still required.
       Resolution: Retain the first full failure at artifact commit1458fca64f09, rerun npm run verify unchanged, and record any recurrence rather than adjusting browser assertions or gates.
+
+    - Observation: Final unchanged full verify session53036 exits0:643 application/109 inventory/19 browser; both100% coverage suites. Native comparison after final helper refactor matches5736 trees/25560 states. First full timeout is retained in artifact1458fca64f09; unchanged isolated/final browser pass. Doctor0 errors/same2 warnings; routing/diff pass.
+      Impact: Approved phantom construction/counting criteria are met; no thresholds, schemas or registered save/open/recovery policies changed. Full upstream parity remains incomplete.
+      Resolution: Close this leaf with the real implementation hash after quality review; keep parent goal active. Next read-only confirmed transport audit: exporter rejects RES_PARATR_LIST_ISCOUNTED WhichId87 and importer explicitly rejects TEXT_LIST_HEADER; pinned XMLTextNumRuleInfo reads NumberingIsNumber, exporter chooses list-header for the final unnumbered level, and native XMLTextListBlockContext accepts header via the list-item context. Audit copy/Worker counted-state and genuine header import/export/reopen before the next separate task.
 id_source: "generated"
 ---
 ## Summary
@@ -112,7 +156,40 @@ Compile unmodified pinned phantom AddChild/CreatePhantom/cleanup/hierarchical va
 
 ## Verification
 
-Pending implementation and declared checks; no mandatory check is skipped.
+Command: npm run verify. Result: pass, final session53036 terminal exit0. Evidence: 643 application tests/138 files,109 inventory tests/36 files,19 browser tests; application coverage100%9921 statements/7481 branches/2734 functions/9123 lines; inventory100%1523/1080/384/1464. All unchanged format/lint/type/module/resources/browser/static/JSDoc/size/source/provenance/invariants/parity gates completed. Native differential: python3 .agentplane/tasks/202610010041-PHRS94/native-oracle.py and npx tsx .agentplane/tasks/202610010041-PHRS94/compare-native.ts pass for5736 trees/25560 counter/continuation/vector/topology states, with explicit eager-reset/std::set/text/rule/no-notification shims. ap doctor zero errors and same2 prior warnings; routing/diff pass. No check skipped. Initial browser timeout at artifact1458fca64f09 passed unchanged in isolation and final full run; cause remains unproved. Scope: existing hierarchical Arabic/bullet phantom ancestors, rule starts, sorted insertion/relocation and eager removal/reinsertion, common/automatic ODT/copy/Worker16/XML/reopen. Full native build, lazy/continuous/redline/incremental removal and uncounted ODT list-header transport remain unverified.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T01:05:24.147Z — VERIFY — ok
+
+By: CODER
+
+Note: Final unchanged verify exit0 session53036:643 app/109 inventory/19 browser, both100% coverage. Compiled primary excerpts match5736 trees/25560 states; genuine ODT/copy/Worker/XML/reopen pass. Doctor0 errors/same2 prior warnings; routing/diff pass. First browser timeout preserved; isolated and final unchanged runs pass. Full parity remains incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T01:05:23.842Z, excerpt_hash=sha256:7f39653c9e3595d95bfb2704468f9ce4fdf8a0bee036bcaeac7bbab7cf02c435
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010041-PHRS94/blueprint/resolved-snapshot.json
+- old_digest: 07891280f8244e088837e4be943b8df38d437b6074e8bf3bbbe6fabf5e625c98
+- current_digest: 07891280f8244e088837e4be943b8df38d437b6074e8bf3bbbe6fabf5e625c98
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610010041-PHRS94
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610010041-PHRS94
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -165,3 +242,7 @@ Preflight: clean main/direct; only parent 202609240501-C9TN6M DOING. Previous tu
 - Observation: The unchanged responsive-sidebar test passes in isolation (session98737 exit0, 1 test/2.2s) after the full-run pointer/menu timeout.
   Impact: The failure is not reproduced by the bounded diagnostic; cause is not proved. A full mandatory pass is still required.
   Resolution: Retain the first full failure at artifact commit1458fca64f09, rerun npm run verify unchanged, and record any recurrence rather than adjusting browser assertions or gates.
+
+- Observation: Final unchanged full verify session53036 exits0:643 application/109 inventory/19 browser; both100% coverage suites. Native comparison after final helper refactor matches5736 trees/25560 states. First full timeout is retained in artifact1458fca64f09; unchanged isolated/final browser pass. Doctor0 errors/same2 warnings; routing/diff pass.
+  Impact: Approved phantom construction/counting criteria are met; no thresholds, schemas or registered save/open/recovery policies changed. Full upstream parity remains incomplete.
+  Resolution: Close this leaf with the real implementation hash after quality review; keep parent goal active. Next read-only confirmed transport audit: exporter rejects RES_PARATR_LIST_ISCOUNTED WhichId87 and importer explicitly rejects TEXT_LIST_HEADER; pinned XMLTextNumRuleInfo reads NumberingIsNumber, exporter chooses list-header for the final unnumbered level, and native XMLTextListBlockContext accepts header via the list-item context. Audit copy/Worker counted-state and genuine header import/export/reopen before the next separate task.
