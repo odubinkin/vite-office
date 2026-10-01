@@ -1741,6 +1741,7 @@ int main(){int count,foreignCase;while(std::cin>>count>>foreignCase){
   if(kind==10)t.nodes=value?&foreign:&nodes;
   if(kind==11)t.SetEmptyListStyleDueToSetOutlineLevelAttr();
   if(kind==12)t.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+  if(kind==13)styles[3].SetFormatAttr(SfxUInt16Item(80,value));
   for(auto& p:texts){auto* r=p->GetNumRule();auto* n=p->GetNum();auto v=p->GetNumberVector();auto id=p->GetListId();std::cout<<(r?r->GetName():UIName("-"))<<' '<<(n?n->GetNumRule()->GetName():UIName("-"))<<' '<<p->GetAttrListLevel()<<' '<<p->GetAttrOutlineLevel()<<' '<<p->IsEmptyListStyleDueToSetOutlineLevelAttr()<<' '<<(id.isEmpty()?UIName("-"):id)<<' '<<p->IsListRestart()<<' '<<p->IsCountedInList()<<' '<<p->GetActualListStartValue()<<' '<<v.size();for(auto x:v)std::cout<<' '<<x;std::cout<<'\n';
    auto* attrs=p->GetpSwAttrSet();std::cout<<(attrs?attrs->items.size():0);if(attrs)for(auto& [id,item]:attrs->items){std::cout<<' '<<id<<':';if(auto* x=dynamic_cast<SwNumRuleItem*>(item.get()))std::cout<<(x->value.empty()?"-":x->value);else if(auto* x=dynamic_cast<StringItem*>(item.get()))std::cout<<(x->value.empty()?"-":x->value);else if(auto* x=dynamic_cast<SfxInt16Item*>(item.get()))std::cout<<x->value;else if(auto* x=dynamic_cast<SfxUInt16Item*>(item.get()))std::cout<<x->value;else std::cout<<static_cast<BoolItem*>(item.get())->value;}std::cout<<'\n';
   }

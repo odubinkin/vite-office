@@ -127,6 +127,7 @@ int main(){int count,foreignCase;while(std::cin>>count>>foreignCase){
   if(kind==10)t.nodes=value?&foreign:&nodes;
   if(kind==11)t.SetEmptyListStyleDueToSetOutlineLevelAttr();
   if(kind==12)t.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+  if(kind==13)styles[3].SetFormatAttr(SfxUInt16Item(80,value));
   for(auto& p:texts){auto* r=p->GetNumRule();auto* n=p->GetNum();auto v=p->GetNumberVector();auto id=p->GetListId();std::cout<<(r?r->GetName():UIName("-"))<<' '<<(n?n->GetNumRule()->GetName():UIName("-"))<<' '<<p->GetAttrListLevel()<<' '<<p->GetAttrOutlineLevel()<<' '<<p->IsEmptyListStyleDueToSetOutlineLevelAttr()<<' '<<(id.isEmpty()?UIName("-"):id)<<' '<<p->IsListRestart()<<' '<<p->IsCountedInList()<<' '<<p->GetActualListStartValue()<<' '<<v.size();for(auto x:v)std::cout<<' '<<x;std::cout<<'\n';
    auto* attrs=p->GetpSwAttrSet();std::cout<<(attrs?attrs->items.size():0);if(attrs)for(auto& [id,item]:attrs->items){std::cout<<' '<<id<<':';if(auto* x=dynamic_cast<SwNumRuleItem*>(item.get()))std::cout<<(x->value.empty()?"-":x->value);else if(auto* x=dynamic_cast<StringItem*>(item.get()))std::cout<<(x->value.empty()?"-":x->value);else if(auto* x=dynamic_cast<SfxInt16Item*>(item.get()))std::cout<<x->value;else if(auto* x=dynamic_cast<SfxUInt16Item*>(item.get()))std::cout<<x->value;else std::cout<<static_cast<BoolItem*>(item.get())->value;}std::cout<<'\n';
   }
@@ -145,6 +146,7 @@ for a,b in itertools.product(range(16),repeat=2):
     cases.append({'count':3,'ops':[[0,0,a],[0,1,a],[3,0,1],[2,0,2],[4,0,7],[5,0,0],[0,0,b],[0,2,b],[8,2,0],[0,2,b],[9,0,a],[0,0,b],[0,0,0]]})
 for level in range(10):
     cases.extend([{'count':2,'ops':[[0,0,1],[6,0,level+1],[0,0,0],[0,0,0],[11,0,0],[0,0,2],[12,0,0],[0,0,level+3],[9,0,1],[0,0,level+3],[0,0,14]]}, {'count':2,'foreign':True,'ops':[[0,0,1],[0,0,level+3],[0,0,level+3],[1,0,2],[0,0,1],[1,0,0],[0,0,level+3],[7,0,73],[0,0,0]]}])
+cases.append({'count':2,'ops':[[13,0,11],[0,0,3],[0,0,0],[13,0,0],[0,0,3]]})
 request=''.join(f'{c["count"]} {int(c.get("foreign",False))} {len(c["ops"])} '+' '.join(' '.join(map(str,o)) for o in c['ops'])+'\n' for c in cases)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink();offset=0;states=0
 for c in cases:
