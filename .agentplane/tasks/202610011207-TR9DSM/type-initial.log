@@ -1,0 +1,23 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+apps/office/src/editeng/source/items/numitem.ts(4,38): error TS2307: Cannot find module '../../../../vcl/source/font/font' or its corresponding type declarations.
+apps/office/src/editeng/source/items/numitem.ts(77,43): error TS2339: Property 'includeUpperLevels' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(78,30): error TS2339: Property 'prefix' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(79,30): error TS2339: Property 'start' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(80,30): error TS2339: Property 'suffix' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(81,34): error TS2339: Property 'listFormat' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(83,30): error TS2339: Property 'absLSpace' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(84,36): error TS2339: Property 'firstLineOffset' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(85,38): error TS2339: Property 'charTextDistance' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(86,35): error TS2339: Property 'firstLineIndent' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(87,28): error TS2339: Property 'indentAt' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(88,35): error TS2339: Property 'labelFollowedBy' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(89,35): error TS2339: Property 'listTabPosition' does not exist on type '{}'.
+apps/office/src/editeng/source/items/numitem.ts(90,40): error TS2339: Property 'positionAndSpaceMode' does not exist on type '{}'.
+apps/office/src/sw/source/core/unocore/unosett.ts(4,10): error TS6133: 'SwNumFormat' is declared but its value is never read.

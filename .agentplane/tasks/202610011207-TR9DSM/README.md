@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:09:07.642Z"
+doc_updated_at: "2026-10-01T12:20:39.451Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -59,7 +59,12 @@ sections:
     5. Record actual CODE SHA, canonical verification and separate EVALUATOR quality phase. Close only this leaf with clean final checkout, then append parent findings and keep goal active.
   Verification: "Pending implementation and checks. No module-level semantic status or goal promotion is authorized."
   Rollback Plan: "Revert only the eventual implementation commit through a new executable task; preserve immutable baseline, native source identities and failed evidence."
-  Findings: "Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and null SwClient; source SvxNumberFormat owns cBullet=SVX_DEF_BULLET=(0xF000+149), optional pBulletFont absent, and inherits SvxNumberType(nType,show=true). Current child instead stores kind/string numberingType/glyph/font and injects browser bullet defaults. Source SetBulletFont copies Font or resets optional presence; native equality compares base fields plus registered client. Existing vcl Font family functionality has no core class yet. Source GetNumStr delegates to the numbering provider; the currently implemented Arabic provider branch uses positive signed32 OUString::number, zero special-cases in SvxNumberType, negative provider requests throw/catch. Full wider numbering families and native UNO/provider/font/client/graphics/static lifetime are not certified by this bounded existing marker family refactor."
+  Findings: |-
+    Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and null SwClient; source SvxNumberFormat owns cBullet=SVX_DEF_BULLET=(0xF000+149), optional pBulletFont absent, and inherits SvxNumberType(nType,show=true). Current child instead stores kind/string numberingType/glyph/font and injects browser bullet defaults. Source SetBulletFont copies Font or resets optional presence; native equality compares base fields plus registered client. Existing vcl Font family functionality has no core class yet. Source GetNumStr delegates to the numbering provider; the currently implemented Arabic provider branch uses positive signed32 OUString::number, zero special-cases in SvxNumberType, negative provider requests throw/catch. Full wider numbering families and native UNO/provider/font/client/graphics/static lifetime are not certified by this bounded existing marker family refactor.
+
+    - Observation: Initial typecheck identified a wrong relative editeng->vcl Font import, an unannotated empty/raw property union in the native-shaped constructor, and an obsolete UNO class import after factory migration.
+      Impact: No native evidence or verification criteria changed; fixes stay within the approved hierarchy/consumer migration.
+      Resolution: Use repository-relative path calculation, annotate the explicit raw position/marker copy record and remove the unused import. Preserve type-initial.log and rerun.
 id_source: "generated"
 ---
 ## Summary
@@ -96,3 +101,7 @@ Revert only the eventual implementation commit through a new executable task; pr
 ## Findings
 
 Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and null SwClient; source SvxNumberFormat owns cBullet=SVX_DEF_BULLET=(0xF000+149), optional pBulletFont absent, and inherits SvxNumberType(nType,show=true). Current child instead stores kind/string numberingType/glyph/font and injects browser bullet defaults. Source SetBulletFont copies Font or resets optional presence; native equality compares base fields plus registered client. Existing vcl Font family functionality has no core class yet. Source GetNumStr delegates to the numbering provider; the currently implemented Arabic provider branch uses positive signed32 OUString::number, zero special-cases in SvxNumberType, negative provider requests throw/catch. Full wider numbering families and native UNO/provider/font/client/graphics/static lifetime are not certified by this bounded existing marker family refactor.
+
+- Observation: Initial typecheck identified a wrong relative editeng->vcl Font import, an unannotated empty/raw property union in the native-shaped constructor, and an obsolete UNO class import after factory migration.
+  Impact: No native evidence or verification criteria changed; fixes stay within the approved hierarchy/consumer migration.
+  Resolution: Use repository-relative path calculation, annotate the explicit raw position/marker copy record and remove the unused import. Preserve type-initial.log and rerun.

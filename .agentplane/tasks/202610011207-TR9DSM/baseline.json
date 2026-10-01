@@ -1,0 +1,14 @@
+{
+  "numbered": {
+    "type": "arabic",
+    "bullet": "",
+    "font": ""
+  },
+  "bullet": {
+    "type": "char-special",
+    "bullet": "•",
+    "font": "OpenSymbol"
+  },
+  "baseTypeGetter": "undefined",
+  "baseParent": "Object"
+}
