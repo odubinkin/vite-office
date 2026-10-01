@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:54:56.385Z"
+doc_updated_at: "2026-10-01T12:55:48.976Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -105,6 +105,10 @@ sections:
     - Observation: verify-fourth exits0 across the full original chain:712 app,109 inventory,19 browser, both100% suites and all gates. Final consumer review finds UNO property assembly drops newly source-owned visibility and present-empty Font state, while native SetNumberingRuleByIndex starts from a full copied format and changes fonts only when a font property is supplied.
       Impact: The approved ownership migration must preserve these fields through real property updates; closing on generic green tests would miss the loss.
       Resolution: Add a regression using actual SwXNumberingRules replacement of an existing hidden format with absent/present-empty/named font values, retain those copied native fields when applying supported properties, then rerun the full unchanged verify chain. This is within the approved actual-caller/ownership scope. Preserve the successful fourth log separately.
+
+    - Observation: The actual UNO regression fails before the fix: a stored hidden native format becomes visible during a suffix/indent-only replacement, while the native method begins with SwNumFormat aFormat(rNumRule.Get(...)).
+      Impact: This demonstrates a concrete consumer ownership loss despite the prior full green run.
+      Resolution: Copy the previous optional Font and show-symbol flag into the assembled applied format before property setters, preserving other supported property behavior. Keep uno-regression-before.log, rerun that regression and the full required chain.
 id_source: "generated"
 ---
 ## Summary
@@ -185,3 +189,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: verify-fourth exits0 across the full original chain:712 app,109 inventory,19 browser, both100% suites and all gates. Final consumer review finds UNO property assembly drops newly source-owned visibility and present-empty Font state, while native SetNumberingRuleByIndex starts from a full copied format and changes fonts only when a font property is supplied.
   Impact: The approved ownership migration must preserve these fields through real property updates; closing on generic green tests would miss the loss.
   Resolution: Add a regression using actual SwXNumberingRules replacement of an existing hidden format with absent/present-empty/named font values, retain those copied native fields when applying supported properties, then rerun the full unchanged verify chain. This is within the approved actual-caller/ownership scope. Preserve the successful fourth log separately.
+
+- Observation: The actual UNO regression fails before the fix: a stored hidden native format becomes visible during a suffix/indent-only replacement, while the native method begins with SwNumFormat aFormat(rNumRule.Get(...)).
+  Impact: This demonstrates a concrete consumer ownership loss despite the prior full green run.
+  Resolution: Copy the previous optional Font and show-symbol flag into the assembled applied format before property setters, preserving other supported property behavior. Keep uno-regression-before.log, rerun that regression and the full required chain.
