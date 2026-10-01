@@ -106,13 +106,13 @@ methods += [block(collsrc,m) for m in ['void SwTextFormatColl::SetAttrOutlineLev
 methods.append(block(rulesrc,'UIName SwNumRule::GetOutlineRuleName()'))
 base += '\n'.join(methods)
 base += r'''
-int main(){int count;while(std::cin>>count){
+int main(){int count,foreignCase;while(std::cin>>count>>foreignCase){
  SwDoc doc;SwNodes nodes(&doc),foreign(&doc);sw::DocumentListItemsManager registry;ListAccess access;access.nodes=&nodes;doc.nodes=&nodes;doc.lists=&access;doc.items=&registry;
  SwNumRule counters,bullets,outline;bullets.name="Bullets";outline.name="Outline";for(auto& f:bullets.formats)f.bullet=true;access.rules[counters.name]=&counters;access.rules[bullets.name]=&bullets;access.rules[outline.name]=&outline;
  SwTextFormatColl styles[16];styles[1].SetFormatAttr(SwNumRuleItem("Counters"));styles[2].SetFormatAttr(SwNumRuleItem("Bullets"));
  for(int i=0;i<10;i++){styles[i+3].AssignToListLevelOfOutlineStyle(i);styles[i+3].SetFormatAttr(SwNumRuleItem("Outline"));}
  styles[13].attrs.parent=&styles[1].attrs;styles[14].attrs.parent=&styles[3].attrs;styles[15].SetFormatAttr(SwNumRuleItem());
- std::vector<std::unique_ptr<SwTextNode>> texts;for(int i=0;i<count;i++){auto t=std::make_unique<SwTextNode>();t->index=i;t->doc=&doc;t->nodes=&nodes;t->coll=&styles[0];texts.push_back(std::move(t));}
+ std::vector<std::unique_ptr<SwTextNode>> texts;for(int i=0;i<count;i++){auto t=std::make_unique<SwTextNode>();t->index=i;t->doc=&doc;t->nodes=foreignCase?&foreign:&nodes;t->coll=&styles[0];texts.push_back(std::move(t));}
  int ops;std::cin>>ops;for(int op=0;op<ops;op++){int kind,index,value;std::cin>>kind>>index>>value;auto& t=*texts[index];
   if(kind==0)t.ChgFormatColl(&styles[value]);
   if(kind==1)t.SetAttr(SwNumRuleItem(value==0?"":value==1?"Counters":value==2?"Bullets":"Outline"));
@@ -144,8 +144,8 @@ cases=[]
 for a,b in itertools.product(range(16),repeat=2):
     cases.append({'count':3,'ops':[[0,0,a],[0,1,a],[3,0,1],[2,0,2],[4,0,7],[5,0,0],[0,0,b],[0,2,b],[8,2,0],[0,2,b],[9,0,a],[0,0,b],[0,0,0]]})
 for level in range(10):
-    cases.extend([{'count':2,'ops':[[0,0,1],[6,0,level+1],[0,0,0],[0,0,0],[11,0,0],[0,0,2],[12,0,0],[0,0,level+3],[9,0,1],[0,0,level+3],[0,0,14]]}, {'count':2,'ops':[[10,0,1],[0,0,1],[0,0,level+3],[10,0,0],[0,0,level+3],[1,0,2],[0,0,1],[1,0,0],[0,0,level+3],[7,0,73],[0,0,0]]}])
-request=''.join(f'{c["count"]} {len(c["ops"])} '+' '.join(' '.join(map(str,o)) for o in c['ops'])+'\n' for c in cases)
+    cases.extend([{'count':2,'ops':[[0,0,1],[6,0,level+1],[0,0,0],[0,0,0],[11,0,0],[0,0,2],[12,0,0],[0,0,level+3],[9,0,1],[0,0,level+3],[0,0,14]]}, {'count':2,'foreign':True,'ops':[[0,0,1],[0,0,level+3],[0,0,level+3],[1,0,2],[0,0,1],[1,0,0],[0,0,level+3],[7,0,73],[0,0,0]]}])
+request=''.join(f'{c["count"]} {int(c.get("foreign",False))} {len(c["ops"])} '+' '.join(' '.join(map(str,o)) for o in c['ops'])+'\n' for c in cases)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink();offset=0;states=0
 for c in cases:
     c['expected']=[]
