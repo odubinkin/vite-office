@@ -1,0 +1,49 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/doc/number-pointer.test.ts (5 tests | 1 failed) 82ms
+   × keeps pointer assigned live rule reads and sparse ownership through actual document and Worker paths 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/doc/number-pointer.test.ts > keeps pointer assigned live rule reads and sparse ownership through actual document and Worker paths
+AssertionError: expected [ 4, true, 8226, false, '', 1, …(13) ] to deeply equal [ 5, true, 8226, false, '', 1, …(13) ]
+
+- Expected
++ Received
+
+@@ -1,7 +1,7 @@
+  [
+-   5,
++   4,
+    true,
+    8226,
+    false,
+    "",
+    1,
+@@ -12,10 +12,10 @@
+    -360,
+    720,
+    720,
+    0,
+    1,
+-   "",
+-   ")",
+-   false,
+    "",
++   ".",
++   true,
++   "%1%.",
+  ]
+
+ ❯ src/sw/source/core/doc/number-pointer.test.ts:106:134
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 18 passed (19)
+   Start at  20:48:31
+   Duration  1.70s (transform 418ms, setup 416ms, import 606ms, tests 217ms, environment 1.80s)
+

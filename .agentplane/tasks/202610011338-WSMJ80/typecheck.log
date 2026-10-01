@@ -1,0 +1,22 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/doc/number-pointer.test.ts(296,9): error TS7034: Variable 'items' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/sw/source/core/doc/number-pointer.test.ts(297,43): error TS7005: Variable 'items' implicitly has an 'any[]' type.
+src/sw/source/core/doc/number-pointer.test.ts(298,10): error TS7005: Variable 'items' implicitly has an 'any[]' type.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit
