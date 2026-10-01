@@ -1,0 +1,82 @@
+[
+  {
+    "signature": "void lcl_ResetParAttrs( SwTextNode &rTextNode )",
+    "sha256": "fde69ec597fe5a259964c4107c03de1d983148c9fbea083404cd857bda65c70e",
+    "bytes": 585
+  },
+  {
+    "signature": "void HandleModifyAtTextNodeFormatChange( SwTextNode& rTextNode )",
+    "sha256": "28112b260acfaa492510e1d542010b30d3b0d351b7483d8fb113b9660554c4cc",
+    "bytes": 1261
+  },
+  {
+    "signature": "void HandleApplyTextNodeFormatChange( SwTextNode& rTextNode, const UIName& sNumRule, const UIName& sOldNumRule, bool bNumRuleSet, bool bParagraphStyleChanged )",
+    "sha256": "3adf8e0da5b937028ff517e204bb4bdf5ed3bb8c1cdbe7d9c3e6575f48e7b880",
+    "bytes": 2212
+  },
+  {
+    "signature": "SwNumRule* SwTextNode::GetNumRule(bool bInParent) const",
+    "sha256": "ae684920feda6727cbf1be32dfae15a64b30f46f40c4b425c173f6cf2e7e5a85",
+    "bytes": 1110
+  },
+  {
+    "signature": "SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl, bool bSetListLevel )",
+    "sha256": "7f707f730e6ca0275b7e143400cba7aeb8eb586076a940ac2a58fd2c0ab722ea",
+    "bytes": 1069
+  },
+  {
+    "signature": "void SwTextNode::ChgTextCollUpdateNum(const SwTextFormatColl* pOldColl,\n                                      const SwTextFormatColl* pNewColl,\n                                      bool bSetListLevel)",
+    "sha256": "72fe8ab79f56e45e04eeaa13e2c5b4376bf4109e0a8203c73af8cc79dcb1f794",
+    "bytes": 1311
+  },
+  {
+    "signature": "void SwTextNode::SetEmptyListStyleDueToSetOutlineLevelAttr()",
+    "sha256": "5c0521f08bf96191752d592455779868923bca589cf22dedd54bfa51ad6445a6",
+    "bytes": 228
+  },
+  {
+    "signature": "void SwTextNode::ResetEmptyListStyleDueToResetOutlineLevelAttr()",
+    "sha256": "00cd543956ba4160e608d46243eb870addd976a19dd021a667c860ac27c8955f",
+    "bytes": 237
+  },
+  {
+    "signature": "void SwTextNode::SetAttrOutlineLevel(int nLevel)",
+    "sha256": "5cdd99d419a98d14ec9680549a1e99403522cb5e543b4845cebb891a24560bf7",
+    "bytes": 308
+  },
+  {
+    "signature": "void SwTextNode::SetAttrListLevel( int nLevel )",
+    "sha256": "b4a077994f087f058d659d3ed73f951347d910ba2b2e91854cd61796d76c1201",
+    "bytes": 327
+  },
+  {
+    "signature": "void SwTextFormatColl::SetAttrOutlineLevel( int nLevel)",
+    "sha256": "f7dc2ef51419ecd189629c960724322824de1831036461c54412274a1efba107",
+    "bytes": 280
+  },
+  {
+    "signature": "int SwTextFormatColl::GetAttrOutlineLevel() const",
+    "sha256": "54e8fec080f6e12d9c851189b68458778a912b191d1f5b96e560347e3d134eed",
+    "bytes": 115
+  },
+  {
+    "signature": "int SwTextFormatColl::GetAssignedOutlineStyleLevel() const",
+    "sha256": "510239fb199c8d192cde121df9ca3f7d5828f7965aca0bc4bf9e8c7f4e752204",
+    "bytes": 237
+  },
+  {
+    "signature": "void SwTextFormatColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)",
+    "sha256": "a5f893bf70cd0d401d5c31afc104bfedc6e6011b3250a0bd47cc62011d21d165",
+    "bytes": 968
+  },
+  {
+    "signature": "void SwTextFormatColl::DeleteAssignmentToListLevelOfOutlineStyle()",
+    "sha256": "5796a38c997cc9dbcbe09e27b1a7bec2b5e7b087615897721edac0301bba70b4",
+    "bytes": 154
+  },
+  {
+    "signature": "UIName SwNumRule::GetOutlineRuleName()",
+    "sha256": "816181a6dc7fdd08013b50a6e60b7248448468ab48f1506d75afb28d63018b62",
+    "bytes": 78
+  }
+]
