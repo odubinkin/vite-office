@@ -4,7 +4,7 @@ title: "Restore native repeated-sublist restart ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned repeated-sublist count and pending block restart inheritance,consumption and return under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T02:02:41.044Z"
+doc_updated_at: "2026-10-01T02:15:51.325Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
@@ -52,6 +52,18 @@ sections:
     - Observation: Native harness compile exits1: the extracted parent-inheritance snippet needs its native sParentListStyleName local,and token shims lacked XML_ aliases used by the unmodified child factory.
       Impact: Only harness adapters fail; no differential result is established yet.
       Resolution: Supply the native local and matching token aliases outside primary bodies,persist active artifacts and rerun unchanged evidence contract.
+
+    - Observation: Focused test command used a nonexistent apps/office/vitest.config.ts and failed before executing tests; an initial read also used nonexistent root tests directory.
+      Impact: No runtime evidence was produced by those path assumptions.
+      Resolution: Recompute route, locate repository configuration and rerun the existing Vite-config test command without changing gates.
+
+    - Observation: Native import comparison passes1536 trees/10752 paragraph states. Genuine ODT transport test passes32 numbered/bullet common/automatic packages with literal flags,starts,counters,labels,owned copies and Worker16. Newly public source-owned block/helper references have a direct ownership assertion.
+      Impact: Repeated sublists now restart and inherited flags are consumed or returned according to the bounded primary excerpts. No full native/UNO/helper build or whole-module parity claim.
+      Resolution: Retain native uncounted restart omission. Current export canonicalizes counted implicit restart to explicit start; pinned txtparae.cxx1262..1284 instead closes/reopens same-level nested lists when restart has no direct start. Record this distinct export obligation for the next task without widening the approved import correction.
+
+    - Observation: Full verify session73105 terminal exit1 after650 application tests with100% coverage. Inventory suite108/109 passes; CAP evidence still points to TEXT_START_VALUE in txtparai.ts after item ownership moved, so strict marker validation correctly fails.
+      Impact: Runtime tests pass but complete verification is not established; the source evidence reference must follow its relocated owner.
+      Resolution: Preserve failed terminal log and route-required artifacts; relocate only the existing writer-command-slice.json implementation evidence path to XMLTextListItemContext.ts as part of approved source ownership/provenance maintenance. Keep assertion,marker,schemas,gates and acceptance criteria unchanged; rerun full verify.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +97,15 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent us
 - Observation: Native harness compile exits1: the extracted parent-inheritance snippet needs its native sParentListStyleName local,and token shims lacked XML_ aliases used by the unmodified child factory.
   Impact: Only harness adapters fail; no differential result is established yet.
   Resolution: Supply the native local and matching token aliases outside primary bodies,persist active artifacts and rerun unchanged evidence contract.
+
+- Observation: Focused test command used a nonexistent apps/office/vitest.config.ts and failed before executing tests; an initial read also used nonexistent root tests directory.
+  Impact: No runtime evidence was produced by those path assumptions.
+  Resolution: Recompute route, locate repository configuration and rerun the existing Vite-config test command without changing gates.
+
+- Observation: Native import comparison passes1536 trees/10752 paragraph states. Genuine ODT transport test passes32 numbered/bullet common/automatic packages with literal flags,starts,counters,labels,owned copies and Worker16. Newly public source-owned block/helper references have a direct ownership assertion.
+  Impact: Repeated sublists now restart and inherited flags are consumed or returned according to the bounded primary excerpts. No full native/UNO/helper build or whole-module parity claim.
+  Resolution: Retain native uncounted restart omission. Current export canonicalizes counted implicit restart to explicit start; pinned txtparae.cxx1262..1284 instead closes/reopens same-level nested lists when restart has no direct start. Record this distinct export obligation for the next task without widening the approved import correction.
+
+- Observation: Full verify session73105 terminal exit1 after650 application tests with100% coverage. Inventory suite108/109 passes; CAP evidence still points to TEXT_START_VALUE in txtparai.ts after item ownership moved, so strict marker validation correctly fails.
+  Impact: Runtime tests pass but complete verification is not established; the source evidence reference must follow its relocated owner.
+  Resolution: Preserve failed terminal log and route-required artifacts; relocate only the existing writer-command-slice.json implementation evidence path to XMLTextListItemContext.ts as part of approved source ownership/provenance maintenance. Keep assertion,marker,schemas,gates and acceptance criteria unchanged; rerun full verify.
