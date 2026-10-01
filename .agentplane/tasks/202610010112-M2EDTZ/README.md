@@ -4,7 +4,7 @@ title: "Restore native unnumbered list paragraph ODT transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned ODT unnumbered paragraph/header/item consumption under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:20:44.551Z"
+doc_updated_at: "2026-10-01T01:30:12.463Z"
 doc_updated_by: "CODER"
 description: "Iteration30: carry existing SwTextNode counted state through ODT using native list-header versus list-item continuation and list-item consumption ownership. Preserve intentional save/open/recovery policies."
 sections:
@@ -52,6 +52,14 @@ sections:
     - Observation: Focused header fixture fails on text projection: new test used nonexistent SwTextNode.text and record.version fields; counted/restart/number/vector/label values match the first literal source case.
       Impact: Fixture must use canonical GetText()/text insertion and the actual Worker record schema API; no runtime list mismatch is observed.
       Resolution: Correct the test to repository APIs, persist native evidence, rerun genuine package and unchanged mandatory gates.
+
+    - Observation: A partial coverage run selected four list tests; all 10 tests passed, but unrelated txtparai/txtparae branches remained uncovered and the coverage gate exited 1.
+      Impact: This partial selection cannot establish the mandatory whole-application coverage result.
+      Resolution: Run npm run verify with unchanged full suites and 100% thresholds; retain actual terminal results.
+
+    - Observation: Full npm run verify exited 1 at the application test suite: 645 tests passed, one txtparai context test still expects multiple paragraphs and an empty list-header to throw.
+      Impact: These two legacy expectations contradict the approved native transport contract; all new genuine package tests passed.
+      Resolution: Replace the two reject expectations with accepted paragraph-count checks, retain the failed terminal log, and rerun the unchanged full verification command.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +93,11 @@ Preflight is clean main/direct; only parent202609240501-C9TN6M DOING. Previous t
 - Observation: Focused header fixture fails on text projection: new test used nonexistent SwTextNode.text and record.version fields; counted/restart/number/vector/label values match the first literal source case.
   Impact: Fixture must use canonical GetText()/text insertion and the actual Worker record schema API; no runtime list mismatch is observed.
   Resolution: Correct the test to repository APIs, persist native evidence, rerun genuine package and unchanged mandatory gates.
+
+- Observation: A partial coverage run selected four list tests; all 10 tests passed, but unrelated txtparai/txtparae branches remained uncovered and the coverage gate exited 1.
+  Impact: This partial selection cannot establish the mandatory whole-application coverage result.
+  Resolution: Run npm run verify with unchanged full suites and 100% thresholds; retain actual terminal results.
+
+- Observation: Full npm run verify exited 1 at the application test suite: 645 tests passed, one txtparai context test still expects multiple paragraphs and an empty list-header to throw.
+  Impact: These two legacy expectations contradict the approved native transport contract; all new genuine package tests passed.
+  Resolution: Replace the two reject expectations with accepted paragraph-count checks, retain the failed terminal log, and rerun the unchanged full verification command.
