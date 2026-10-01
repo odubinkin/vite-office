@@ -1,0 +1,26 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/attr/list-restart-default.test.ts (2 tests | 1 failed) 11ms
+   × keeps rule start9 and explicit zero/seven distinct through actual list undo, Worker16 and reset 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/attr/list-restart-default.test.ts > keeps rule start9 and explicit zero/seven distinct through actual list undo, Worker16 and reset
+TypeError: node.SetListKind is not a function
+ ❯ src/sw/source/core/attr/list-restart-default.test.ts:70:10
+     68|     const rule = doc.EnsureNumRule("Restart audit", "numbered");
+     69|     rule.GetNumFormat(0).SetStart(9);
+     70|     node.SetListKind("numbered", rule.GetName());
+       |          ^
+     71|     expect(node.IsListRestart()).toBe(false);
+     72|     checkStart(node);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 2 passed (3)
+   Start at  16:46:29
+   Duration  1.82s (transform 719ms, setup 362ms, import 843ms, tests 188ms, environment 1.62s)
+
