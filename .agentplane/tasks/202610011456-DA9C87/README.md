@@ -1,10 +1,11 @@
 ---
 id: "202610011456-DA9C87"
 title: "Restore native numbering tree continuous and phantom policy dispatch"
-status: "DOING"
+result_summary: "Selected native policy and continuous numbering behavior restored;732 app/109 inventory/19 browser tests and all unchanged gates pass, both coverages100%. Native42 bodies/960 sequences/69120 states/5 policies/64 markers supported by retained outputs and hashes. Project tests independent of pinned upstream;no source copies in Agentplane;parent/full goal remain active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Eight approved semantic files plus two task artifacts in actual CODE; production policy dispatch, protected continuous traversal/validation, depth-first predecessor, continuous cache/upward notifications and native SwList validation context match selected complete native outputs. Metadata changes add evidence only and retain classifications/statuses/registered deviations; original tests and gates unchanged."
     - "Fresh42 complete-definition identities and preserved sanitizer output support960 sequences/69120 states/5 policies/64 markers. Compressed fixture exactly preserves observations and decoded SHA; project tests consume local data only and focused5 tests pass while pinned upstream path is absent. Agentplane contains no tracked native source copies."
     - "Final unchanged npm run verify exit0: app732,inventory109,browser19;both coverages100%,all declared static/type/format/build/docs/size/provenance/invariant/parity gates pass. Failed red,coverage,setup and interrupted attempts are preserved with corrections;no exclusions or weakened thresholds."
-commit: null
+commit:
+  hash: "294493d03fcd31a1da8362acc6a87a5b9af4e910"
+  message: "🧩 DA9C87 code: restore native continuous numbering tree policies"
 comments:
   -
     author: "CODER"
     body: "Start: execute approved48 complete selected native continuous/phantom tree policy,validation,predecessor,cache/notification and actual document list entry under persistent user goal authorization;preserve all gates and registered IO/recovery exceptions."
+  -
+    author: "CODER"
+    body: "Verified: restored selected native continuous/phantom policy dispatch, cache and notification propagation, source-owned list validation and continuous legacy markers. Full verification and isolated fixture tests pass; source copies remain absent. Actual CODE is294493d03fcd31a1da8362acc6a87a5b9af4e910; close only this bounded leaf."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: npm run verify; focused Vitest with upstream path unavailable; ap doctor; routing; git diff --check. Result: pass. Evidence: verify-final.log, focused-without-upstream.log, native-revalidated.json and retained native output/hash logs. Scope: eight approved semantic files; actual CODE294493d03fcd31a1da8362acc6a87a5b9af4e910 (eight semantic plus two task artifact paths). App732/inventory109/browser19 pass, both coverages100%, all unchanged gates pass; no source copies and no upstream reads/compilation/invocation by project tests. Doctor0 errors/two pre-existing warnings. Whole goal/parent remain active."
+  -
+    type: "status"
+    at: "2026-10-01T16:21:34.499Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored selected native continuous/phantom policy dispatch, cache and notification propagation, source-owned list validation and continuous legacy markers. Full verification and isolated fixture tests pass; source copies remain absent. Actual CODE is294493d03fcd31a1da8362acc6a87a5b9af4e910; close only this bounded leaf."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:19:47.749Z"
+doc_updated_at: "2026-10-01T16:21:34.500Z"
 doc_updated_by: "CODER"
 description: "Iteration48: replace default-only SwNodeNum phantom policy and hierarchical-only tree dispatch with complete source-owned continuous validation,predecessor traversal,cache invalidation and notification responsibilities. Use native rule flags and native SwList validation entry;existing label fallback respects continuous mode. Verify exact pinned native mixed topology/cache/notification/counter outputs and actual document/Worker owners without broad parity promotion or changing registered IO/recovery exceptions."
 sections:
