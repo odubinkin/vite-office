@@ -1,0 +1,131 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "definitions": [
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "saDefNumIndents",
+      "sha256": "8a01bc68f6e12cb1295efac84857f88f923fa0ba0066040918c1ec729601ff04",
+      "text": "const sal_uInt16 SwNumRule::saDefNumIndents[ MAXLEVEL ] = {\n    o3tl::toTwips(25, o3tl::Length::in100),\n    o3tl::toTwips(50, o3tl::Length::in100),\n    o3tl::toTwips(75, o3tl::Length::in100),\n    o3tl::toTwips(100, o3tl::Length::in100),\n    o3tl::toTwips(125, o3tl::Length::in100),\n    o3tl::toTwips(150, o3tl::Length::in100),\n    o3tl::toTwips(175, o3tl::Length::in100),\n    o3tl::toTwips(200, o3tl::Length::in100),\n    o3tl::toTwips(225, o3tl::Length::in100),\n    o3tl::toTwips(250, o3tl::Length::in100),\n};"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "SvxNumberFormat::SvxNumberFormat( SvxNumType eType )",
+      "sha256": "ad1dd60935e60a478a7b09350fa673b7976250fed5a4b8442b973f936e685f2f",
+      "text": "SvxNumberFormat::SvxNumberFormat( SvxNumType eType )\n    : SvxNumberType(eType),\n      eNumAdjust(SvxAdjust::Left),\n      nInclUpperLevels(1),\n      nStart(1),\n      cBullet(SVX_DEF_BULLET),\n      nBulletRelSize(100),\n      nBulletColor(COL_BLACK),\n      mePositionAndSpaceMode( LABEL_WIDTH_AND_POSITION ),\n      nFirstLineOffset(0),\n      nAbsLSpace(0),\n      nCharTextDistance(0),\n      meLabelFollowedBy( LISTTAB ),\n      mnListtabPos( 0 ),\n      mnFirstLineIndent( 0 ),\n      mnIndentAt( 0 ),\n      eVertOrient(text::VertOrientation::NONE)\n{\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat)",
+      "sha256": "33022e698cfedcb36eb9fae12be4db3c564b7f9d1e13b7b6f3b28e414e4c4278",
+      "text": "SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :\n    SvxNumberType(rFormat),\n    mePositionAndSpaceMode( rFormat.mePositionAndSpaceMode )\n{\n    *this = rFormat;\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "SvxNumberFormat& SvxNumberFormat::operator=(",
+      "sha256": "7229034ddfcdb5e85ee4cc2ee09cf01b9f641eaa5c2ceda0f6c8bed14a53ce5c",
+      "text": "SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )\n{\n    if (& rFormat == this) { return *this; }\n\n    SvxNumberType::SetNumberingType(rFormat.GetNumberingType());\n    eNumAdjust          = rFormat.eNumAdjust ;\n    nInclUpperLevels    = rFormat.nInclUpperLevels ;\n    nStart              = rFormat.nStart ;\n    cBullet             = rFormat.cBullet ;\n    mePositionAndSpaceMode = rFormat.mePositionAndSpaceMode;\n    nFirstLineOffset    = rFormat.nFirstLineOffset;\n    nAbsLSpace          = rFormat.nAbsLSpace ;\n    nCharTextDistance   = rFormat.nCharTextDistance ;\n    meLabelFollowedBy = rFormat.meLabelFollowedBy;\n    mnListtabPos = rFormat.mnListtabPos;\n    mnFirstLineIndent = rFormat.mnFirstLineIndent;\n    mnIndentAt = rFormat.mnIndentAt;\n    eVertOrient         = rFormat.eVertOrient;\n    sPrefix             = rFormat.sPrefix;\n    sSuffix             = rFormat.sSuffix;\n    sListFormat         = rFormat.sListFormat;\n    aGraphicSize        = rFormat.aGraphicSize  ;\n    nBulletColor        = rFormat.nBulletColor   ;\n    nBulletRelSize      = rFormat.nBulletRelSize;\n    SetShowSymbol(rFormat.IsShowSymbol());\n    sCharStyleName      = rFormat.sCharStyleName;\n    pGraphicBrush.reset();\n    if(rFormat.pGraphicBrush)\n    {\n        pGraphicBrush.reset( new SvxBrushItem(*rFormat.pGraphicBrush) );\n    }\n    pBulletFont.reset();\n    if(rFormat.pBulletFont)\n        pBulletFont = *rFormat.pBulletFont;\n    mbIsLegal = rFormat.mbIsLegal;\n    return *this;\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "bool  SvxNumberFormat::operator==(",
+      "sha256": "02cf37eff3ceaa00f8a7d6da6605ae0d0588829b49b99a146a61da18a0963165",
+      "text": "bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const\n{\n    if( GetNumberingType()  != rFormat.GetNumberingType() ||\n        eNumAdjust          != rFormat.eNumAdjust ||\n        nInclUpperLevels    != rFormat.nInclUpperLevels ||\n        nStart              != rFormat.nStart ||\n        cBullet             != rFormat.cBullet ||\n        mePositionAndSpaceMode != rFormat.mePositionAndSpaceMode ||\n        nFirstLineOffset    != rFormat.nFirstLineOffset ||\n        nAbsLSpace          != rFormat.nAbsLSpace ||\n        nCharTextDistance   != rFormat.nCharTextDistance ||\n        meLabelFollowedBy != rFormat.meLabelFollowedBy ||\n        mnListtabPos != rFormat.mnListtabPos ||\n        mnFirstLineIndent != rFormat.mnFirstLineIndent ||\n        mnIndentAt != rFormat.mnIndentAt ||\n        eVertOrient         != rFormat.eVertOrient ||\n        sPrefix             != rFormat.sPrefix     ||\n        sSuffix             != rFormat.sSuffix     ||\n        sListFormat         != rFormat.sListFormat ||\n        aGraphicSize        != rFormat.aGraphicSize  ||\n        nBulletColor        != rFormat.nBulletColor   ||\n        nBulletRelSize      != rFormat.nBulletRelSize ||\n        IsShowSymbol()      != rFormat.IsShowSymbol() ||\n        sCharStyleName      != rFormat.sCharStyleName ||\n        mbIsLegal           != rFormat.mbIsLegal\n        )\n        return false;\n    if (\n        (pGraphicBrush && !rFormat.pGraphicBrush) ||\n        (!pGraphicBrush && rFormat.pGraphicBrush) ||\n        (pGraphicBrush && *pGraphicBrush != *rFormat.pGraphicBrush)\n       )\n    {\n        return false;\n    }\n    if (\n        (pBulletFont && !rFormat.pBulletFont) ||\n        (!pBulletFont && rFormat.pBulletFont) ||\n        (pBulletFont && *pBulletFont != *rFormat.pBulletFont)\n       )\n    {\n        return false;\n    }\n    return true;\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "void SvxNumberFormat::SetPrefix(",
+      "sha256": "290700dbd6df525f34524ad163499442d9d1cc28eaa4e5ade0016c82f8653f0e",
+      "text": "void SvxNumberFormat::SetPrefix(const OUString& rSet)\n{\n    // ListFormat manages the prefix. If badly changed via this function, sListFormat is invalidated\n    if (sListFormat)\n        sListFormat.reset();\n\n    sPrefix = rSet;\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "void SvxNumberFormat::SetSuffix(",
+      "sha256": "474179f2229294c489566e72c8a88c47205f133bb9ac3cf35b53b348c7fc2cd2",
+      "text": "void SvxNumberFormat::SetSuffix(const OUString& rSet)\n{\n    // ListFormat manages the suffix. If badly changed via this function, sListFormat is invalidated\n    if (sListFormat)\n        sListFormat.reset();\n\n    sSuffix = rSet;\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "void SvxNumberFormat::SetListFormat(const OUString&",
+      "sha256": "742181a15a77d46657625666fbd7de23fbbc00bd4d6dac40a38ba92bc42109be",
+      "text": "void SvxNumberFormat::SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel)\n{\n    sPrefix = rPrefix;\n    sSuffix = rSuffix;\n\n    // Generate list format\n    sListFormat = std::make_optional(sPrefix);\n\n    for (int i = 1; i <= nInclUpperLevels; i++)\n    {\n        int nLevelId = nLevel - nInclUpperLevels + i;\n        if (nLevelId < 0)\n            // There can be cases with current level 1, but request to show 10 upper levels. Trim it\n            continue;\n\n        *sListFormat += \"%\";\n        *sListFormat += OUString::number(nLevelId + 1);\n        *sListFormat += \"%\";\n        if (i != nInclUpperLevels)\n            *sListFormat += \".\"; // Default separator for older ODT\n    }\n\n    *sListFormat += sSuffix;\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "void SvxNumberFormat::SetListFormat(std::optional",
+      "sha256": "56d30c018b45d2eb67623bcc855fa65962310c37568041b9bc36f24df816c878",
+      "text": "void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)\n{\n    sPrefix.clear();\n    sSuffix.clear();\n\n    sListFormat = oSet;\n\n    if (!oSet.has_value())\n    {\n        return;\n    }\n\n    // For backward compatibility and UI we should create something looking like\n    // a prefix, suffix and included levels also. This is not possible in general case\n    // since level format string is much more flexible. But for most cases is okay\n\n    // If properly formatted, sListFormat should look something like \"%1%\u2026%10%\"\n    // with an optional prefix or suffix (which could theoretically include a percent symbol)\n    const sal_Int32 nLen = sListFormat->getLength();\n    sal_Int32 nFirstReplacement = sListFormat->indexOf('%');\n    while (nFirstReplacement > -1 && nFirstReplacement < nLen - 1\n           && ((*sListFormat)[nFirstReplacement + 1] < '1'\n               || (*sListFormat)[nFirstReplacement + 1] > '9'))\n    {\n        nFirstReplacement = sListFormat->indexOf('%', nFirstReplacement + 1);\n    }\n\n    sal_Int32 nLastReplacement = nFirstReplacement == -1 ? -1 : sListFormat->lastIndexOf('%');\n    while (nLastReplacement > 0\n           && ((*sListFormat)[nLastReplacement - 1] < '0'\n               || (*sListFormat)[nLastReplacement - 1] > '9'))\n    {\n        nLastReplacement = sListFormat->lastIndexOf('%', nLastReplacement);\n    }\n    if (nLastReplacement < nFirstReplacement)\n        nLastReplacement = nFirstReplacement;\n    else\n        ++nLastReplacement;\n\n    if (nFirstReplacement > 0)\n        // Everything before first '%' will be prefix\n        sPrefix = sListFormat->copy(0, nFirstReplacement);\n    if (nLastReplacement >= 0 && nLastReplacement < nLen)\n        // Everything beyond last '%' is a suffix\n        sSuffix = sListFormat->copy(nLastReplacement);\n\n    sal_uInt8 nPercents = 0;\n    for (sal_Int32 i = nFirstReplacement > 0 ? nFirstReplacement : 0; i < nLastReplacement; i++)\n    {\n        if ((*sListFormat)[i] == '%')\n            nPercents++;\n    }\n    nInclUpperLevels = nPercents/2;\n    if (nInclUpperLevels < 1)\n    {\n        // There should be always at least one level. This will be not required\n        // in future (when we get rid of prefix/suffix), but nowadays there\n        // are too many conversions \"list format\" <-> \"prefix/suffix/inclUpperLevel\"\n        nInclUpperLevels = 1;\n    }\n}\n"
+    },
+    {
+      "source": "editeng/source/items/numitem.cxx",
+      "marker": "OUString SvxNumberFormat::GetListFormat(",
+      "sha256": "070ab939103063528c0531256cbe4907b03fe1cc57710062fd0565523a66a415",
+      "text": "OUString SvxNumberFormat::GetListFormat(bool bIncludePrefixSuffix /*= true*/) const\n{\n    assert(sListFormat.has_value());\n\n    if (bIncludePrefixSuffix)\n        return *sListFormat;\n\n    // Strip prefix & suffix from string\n    return sListFormat->copy(sPrefix.getLength(), sListFormat->getLength() - sPrefix.getLength() - sSuffix.getLength());\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "SwNumFormat::SwNumFormat() :",
+      "sha256": "a08d64aa1e029dfce32782eb0cd93d7fd0f5977b9f98c9b0d5a479bca74e2114",
+      "text": "SwNumFormat::SwNumFormat() :\n    SvxNumberFormat(SVX_NUM_ARABIC),\n    SwClient( nullptr ),\n    m_aVertOrient( 0, text::VertOrientation::NONE )\n    ,m_cGrfBulletCP(USHRT_MAX)//For i120928,record the cp info of graphic within bullet\n{\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "SwNumFormat::SwNumFormat( const SwNumFormat&",
+      "sha256": "4e5fb8c4cfcd532b892e4ec897023a8c70b5b61b32b82f22241624b6efe77e48",
+      "text": "SwNumFormat::SwNumFormat( const SwNumFormat& rFormat) :\n    SvxNumberFormat(rFormat),\n    SwClient( rFormat.GetRegisteredInNonConst() ),\n    m_aVertOrient( 0, rFormat.GetVertOrient() )\n    ,m_cGrfBulletCP(rFormat.m_cGrfBulletCP)//For i120928,record the cp info of graphic within bullet\n{\n    sal_Int16 eMyVertOrient = rFormat.GetVertOrient();\n    SetGraphicBrush( rFormat.GetBrush(), &rFormat.GetGraphicSize(),\n                                                &eMyVertOrient);\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "SwNumFormat& SwNumFormat::operator=(",
+      "sha256": "ccaa7bc5dc21ace69c3f9d6bdfc129a2225e0778ea161c513ead71348de99bfc",
+      "text": "SwNumFormat& SwNumFormat::operator=( const SwNumFormat& rNumFormat)\n{\n    SvxNumberFormat::operator=(rNumFormat);\n    StartListeningToSameModifyAs(rNumFormat);\n    //For i120928,record the cp info of graphic within bullet\n    m_cGrfBulletCP = rNumFormat.m_cGrfBulletCP;\n    return *this;\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "bool SwNumFormat::operator==(",
+      "sha256": "59645fb464be5d2d9f027d68766bfffc12c2c658cf11771d28ff97d37f85ea23",
+      "text": "bool SwNumFormat::operator==( const SwNumFormat& rNumFormat) const\n{\n    bool bRet = SvxNumberFormat::operator==(rNumFormat) &&\n        GetRegisteredIn() == rNumFormat.GetRegisteredIn();\n    return bRet;\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "sal_uInt16 SwNumRule::GetNumIndent(",
+      "sha256": "fa26a52385d0ac0d69a065da2451c2949d25f874cbed9d4394c2c3316e43fff9",
+      "text": "sal_uInt16 SwNumRule::GetNumIndent( sal_uInt8 nLvl )\n{\n    OSL_ENSURE( MAXLEVEL > nLvl, \"NumLevel is out of range\" );\n    return saDefNumIndents[ nLvl ];\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "SwNumRule::SwNumRule( UIName aNm,",
+      "sha256": "d8c2c2c472c4303c20a40e3220beca9528b3d670afcbfce3973bf6eaa7851595",
+      "text": "SwNumRule::SwNumRule( UIName aNm,\n                      const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,\n                      SwNumRuleType eType )\n  : mpNumRuleMap(nullptr),\n    msName( std::move(aNm) ),\n    meRuleType( eType ),\n    mnPoolFormatId( SwPoolFormatId::UNKNOWN ),\n    mnPoolHelpId( USHRT_MAX ),\n    mnPoolHlpFileId( UCHAR_MAX ),\n    mbAutoRuleFlag( true ),\n    mbInvalidRuleFlag( true ),\n    mbContinusNum( false ),\n    mbAbsSpaces( false ),\n    mbHidden( false ),\n    mbCountPhantoms( true ),\n    mbUsedByRedline( false ),\n    meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode )\n{\n    if( !snRefCount++ )          // for the first time, initialize\n    {\n        SwNumFormat* pFormat;\n        sal_uInt8 n;\n\n        // numbering:\n        // position-and-space mode LABEL_WIDTH_AND_POSITION:\n        for( n = 0; n < MAXLEVEL; ++n )\n        {\n            pFormat = new SwNumFormat;\n            pFormat->SetIncludeUpperLevels( 1 );\n            pFormat->SetStart( 1 );\n            pFormat->SetAbsLSpace( lNumberIndent + SwNumRule::GetNumIndent( n ) );\n            pFormat->SetFirstLineOffset( lNumberFirstLineOffset );\n            pFormat->SetListFormat(\"%\" + OUString::number(n + 1) + \"%.\");\n            pFormat->SetBulletChar(numfunc::GetBulletChar(n));\n            SwNumRule::saBaseFormats[ NUM_RULE ][ n ] = pFormat;\n        }\n        // position-and-space mode LABEL_ALIGNMENT\n        // first line indent of general numbering in inch: -0,25 inch\n        const tools::Long cFirstLineIndent = o3tl::toTwips(-0.25, o3tl::Length::in);\n        // indent values of general numbering in inch:\n        const tools::Long cIndentAt[ MAXLEVEL ] = {\n            o3tl::toTwips(50, o3tl::Length::in100),\n            o3tl::toTwips(75, o3tl::Length::in100),\n            o3tl::toTwips(100, o3tl::Length::in100),\n            o3tl::toTwips(125, o3tl::Length::in100),\n            o3tl::toTwips(150, o3tl::Length::in100),\n            o3tl::toTwips(175, o3tl::Length::in100),\n            o3tl::toTwips(200, o3tl::Length::in100),\n            o3tl::toTwips(225, o3tl::Length::in100),\n            o3tl::toTwips(250, o3tl::Length::in100),\n            o3tl::toTwips(275, o3tl::Length::in100),\n        };\n        for( n = 0; n < MAXLEVEL; ++n )\n        {\n            pFormat = new SwNumFormat;\n            pFormat->SetIncludeUpperLevels( 1 );\n            pFormat->SetStart( 1 );\n            pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );\n            pFormat->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );\n            pFormat->SetListtabPos( cIndentAt[ n ] );\n            pFormat->SetFirstLineIndent( cFirstLineIndent );\n            pFormat->SetIndentAt( cIndentAt[ n ] );\n            pFormat->SetListFormat( \"%\" + OUString::number(n + 1) + \"%.\");\n            pFormat->SetBulletChar( numfunc::GetBulletChar(n));\n            SwNumRule::saLabelAlignmentBaseFormats[ NUM_RULE ][ n ] = pFormat;\n        }\n\n        // outline:\n        // position-and-space mode LABEL_WIDTH_AND_POSITION:\n        for( n = 0; n < MAXLEVEL; ++n )\n        {\n            pFormat = new SwNumFormat;\n            pFormat->SetNumberingType(SVX_NUM_NUMBER_NONE);\n            pFormat->SetIncludeUpperLevels( MAXLEVEL );\n            pFormat->SetStart( 1 );\n            pFormat->SetCharTextDistance( lOutlineMinTextDistance );\n            pFormat->SetBulletChar( numfunc::GetBulletChar(n));\n            SwNumRule::saBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;\n        }\n        // position-and-space mode LABEL_ALIGNMENT:\n        for( n = 0; n < MAXLEVEL; ++n )\n        {\n            pFormat = new SwNumFormat;\n            pFormat->SetNumberingType(SVX_NUM_NUMBER_NONE);\n            // SVX_NUM_NUMBER_NONE with the default SvxNumberFormat::LISTTAB would lead to an\n            // unexpected leading tab for the DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY case.\n            pFormat->SetLabelFollowedBy(SvxNumberFormat::NOTHING);\n            pFormat->SetIncludeUpperLevels( MAXLEVEL );\n            pFormat->SetStart( 1 );\n            pFormat->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );\n            pFormat->SetBulletChar( numfunc::GetBulletChar(n));\n            SwNumRule::saLabelAlignmentBaseFormats[ OUTLINE_RULE ][ n ] = pFormat;\n        }\n    }\n    OSL_ENSURE( !msName.isEmpty(), \"NumRule without a name!\" );\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "SwNumRule::SwNumRule( const SwNumRule&",
+      "sha256": "df3ae75b47285c6a485e2689b3ecae91f2998f6341d08f1eff6c81395677e518",
+      "text": "SwNumRule::SwNumRule( const SwNumRule& rNumRule )\n    : mpNumRuleMap(nullptr),\n      msName( rNumRule.msName ),\n      meRuleType( rNumRule.meRuleType ),\n      mnPoolFormatId( rNumRule.GetPoolFormatId() ),\n      mnPoolHelpId( rNumRule.GetPoolHelpId() ),\n      mnPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),\n      mbAutoRuleFlag( rNumRule.mbAutoRuleFlag ),\n      mbInvalidRuleFlag( true ),\n      mbContinusNum( rNumRule.mbContinusNum ),\n      mbAbsSpaces( rNumRule.mbAbsSpaces ),\n      mbHidden( rNumRule.mbHidden ),\n      mbCountPhantoms( true ),\n      mbUsedByRedline( false ),\n      meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),\n      msDefaultListId( rNumRule.msDefaultListId )\n{\n    ++snRefCount;\n    for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )\n        if( rNumRule.maFormats[ n ] )\n            Set( n, *rNumRule.maFormats[ n ] );\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const",
+      "sha256": "3b05efd86b8722741229fed61a04da3d68141373e3452cdde89a272f0e911663",
+      "text": "const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const\n{\n    assert( i < MAXLEVEL && meRuleType < RULE_END );\n    return maFormats[ i ]\n           ? *maFormats[ i ]\n           : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION\n               ? *saBaseFormats[ meRuleType ][ i ]\n               : *saLabelAlignmentBaseFormats[ meRuleType ][ i ] );\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const",
+      "sha256": "8b70fa79162cffa4bccd8e6ad006c5d979534d71763c99a4502cdc2a8abd7273",
+      "text": "const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const\n{\n    const SwNumFormat * pResult = nullptr;\n\n    assert( i < MAXLEVEL && meRuleType < RULE_END );\n    if ( i < MAXLEVEL && meRuleType < RULE_END)\n    {\n        pResult = maFormats[ i ].get();\n    }\n\n    return pResult;\n}\n"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )",
+      "sha256": "b56439ba5a92d70c90340572bfe38b4c376d0e9e92755851d45c8b8de15fa754",
+      "text": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )\n{\n    OSL_ENSURE( i < MAXLEVEL, \"Serious defect\" );\n    if( i < MAXLEVEL )\n    {\n        if( !maFormats[ i ] || (rNumFormat != Get( i )) )\n        {\n            maFormats[ i ].reset(new SwNumFormat( rNumFormat ));\n            mbInvalidRuleFlag = true;\n        }\n    }\n}\n"
+    }
+  ],
+  "adapters": [
+    "ASCII OUString/ListFormat and numeric Unicode codepoints; valid rule enums and default Twip conversions",
+    "SwClient registration is null; fonts use scalar family values; no live graphics",
+    "primitive inline setters/platform constants are declaration adapters; source factory/format/rule constructor/copy/equality/Get/Set bodies unchanged",
+    "native full static destructor/refcount release, map/graphic link/client/style/font/color/locale lifetimes are not certified"
+  ]
+}

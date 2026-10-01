@@ -1,0 +1,22 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/doc/list-invariants.test.ts(7,40): error TS6133: 'SwNumRule' is declared but its value is never read.
+src/sw/source/filter/xml/odt-list-rule-application.test.ts(6,1): error TS6133: 'SwNumFormat' is declared but its value is never read.
+src/sw/source/filter/xml/odt-list-rule-application.test.ts(67,24): error TS2552: Cannot find name 'ConstSwNumFormat'. Did you mean 'SwNumFormat'?
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit
