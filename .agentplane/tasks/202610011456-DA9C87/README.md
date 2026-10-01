@@ -4,7 +4,7 @@ title: "Restore native numbering tree continuous and phantom policy dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute approved48 complete selected native continuous/phantom tree policy,validation,predecessor,cache/notification and actual document list entry under persistent user goal authorization;preserve all gates and registered IO/recovery exceptions."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:17:56.330Z"
+doc_updated_at: "2026-10-01T16:19:19.190Z"
 doc_updated_by: "CODER"
 description: "Iteration48: replace default-only SwNodeNum phantom policy and hierarchical-only tree dispatch with complete source-owned continuous validation,predecessor traversal,cache invalidation and notification responsibilities. Use native rule flags and native SwList validation entry;existing label fallback respects continuous mode. Verify exact pinned native mixed topology/cache/notification/counter outputs and actual document/Worker owners without broad parity promotion or changing registered IO/recovery exceptions."
 sections:
@@ -52,7 +52,11 @@ sections:
     2. All flags/native defaults,parent fallback/orphan behavior,complete depth-first predecessor modes,last descendants,continuous and hierarchical counters/phantoms,start/restart/uncounted behavior,raw prefix caches/invalidations/upward notifications,insert/read orders/removal/reparenting/flag changes and actual document/registry/Worker transfer match native outputs. Source SwList validation uses notification policy and actual document context. Preserve original assertions and measured NONE guard;continuous legacy marker selection matches selected source. Supported ODT fields retain original evidence;no broader lifetime/metadata/UI claim.
     3. Focused red then green and unchanged full npm run verify all format/lint/type/dependency/resource/unit/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates with100% both coverages. ap doctor,routing,diff and exact approved scope pass;no exclusions or gate weakening.
     4. Actual post-bookkeeping CODE SHA recorded with exact semantic/artifact counts,separate canonical verification/quality/close;same-actor EVALUATOR review only,no independent-agent claim. Close leaf clean tracked/untracked,parent/full goal active with measured next gap;do not promote completion from green tests/metadata.
-  Verification: "Pending: baseline/native proof,implementation and all acceptance evidence must be recorded before canonical verify. Full goal is not achieved."
+  Verification: |-
+    Command: npm run verify. Result: pass (final attempt). Evidence: verify-final.log;732 app tests in165 files,109 inventory tests in36 files,19 browser tests;both coverages100%. App10927 statements/8275 branches/2935 functions/10020 lines;inventory1523/1080/384/1464. Format,lint,tools/app types,dependencies212 runtime sources/886 imports/13 edges,resource audit,build/static,JSDoc482 authored files,size,source-tree113 required paths/33 retired roots,provenance213 modules,inventory invariants/parity all pass. Static audit commands read pinned vendor; project tests do not read/compile/invoke pinned upstream.
+    Command: focused office Vitest policy test with vendor/libreoffice-reference temporarily unavailable and restored in finally. Result: pass5 tests,including960 sequences/69120 states/64 marker profiles/5 policy profiles,actual owners/Worker/supported ODT,empty/end/first-restart/explicit invalidation boundaries. Evidence: focused-without-upstream.log,native-revalidated.json and retained native sanitizer output/source identities. Exact pin9bc445578031fecf56086729d8e4940c77e14d65;42 native definition hashes freshly revalidated. Packed literal fixture281158 bytes decodes to identical expectations with SHA2568e97d032dd939a22778ec330ba28758db21a215d78d8824b2aba4f059e306853. No tracked Agentplane Cxx copies. Failed red/coverage/setup/interrupted attempts are retained and resolved in Findings.
+    Command: ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check. Result: pass;doctor0 errors and2 pre-existing warnings (managed shim and historical F1JT8K close SHA),routing OK,no whitespace errors.
+    Actual post-bookkeeping CODE:294493d03fcd31a1da8362acc6a87a5b9af4e910. Scope:8 approved semantic files plus2 task artifact files=10 paths;all original assertions,gates,deviations and metadata statuses remain unchanged. Separate same-actor EVALUATOR quality phase and leaf close follow;this is no independent-agent review or whole-module/full-goal completion.
   Rollback Plan: "If rollback is necessary,use a new task to revert reviewed implementation and rerun identical checks. Preserve immutable DONE tasks/native/failure evidence;do not rewrite history or alter registered IO exceptions."
   Findings: |-
     Preflight clean/direct,ORCHESTRATOR then PLANNER,four matched modules loaded,user-instructions absent. Native phantom predicate differs3/5 from actual current method as measured47;complete source continuous path is also omitted:ValidateContinuous,GetPred/GetLastDescendant,continuous SetLastValid cache propagation and upward NotifyInvalidChildren. SwList native validation calls NotifyInvalidChildren;local explicitly recursively validates hierarchical groups. Full selected responsibility will be restored together.47 commit grammar/attribution failures inform strict sequential exit checks and actual HEAD capture;do not reuse artifact SHA as CODE.
@@ -118,7 +122,10 @@ Eight semantic CODE paths:sw/source/core/SwNumberTree/SwNodeNum.ts,SwNumberTree.
 
 ## Verification
 
-Pending: baseline/native proof,implementation and all acceptance evidence must be recorded before canonical verify. Full goal is not achieved.
+Command: npm run verify. Result: pass (final attempt). Evidence: verify-final.log;732 app tests in165 files,109 inventory tests in36 files,19 browser tests;both coverages100%. App10927 statements/8275 branches/2935 functions/10020 lines;inventory1523/1080/384/1464. Format,lint,tools/app types,dependencies212 runtime sources/886 imports/13 edges,resource audit,build/static,JSDoc482 authored files,size,source-tree113 required paths/33 retired roots,provenance213 modules,inventory invariants/parity all pass. Static audit commands read pinned vendor; project tests do not read/compile/invoke pinned upstream.
+Command: focused office Vitest policy test with vendor/libreoffice-reference temporarily unavailable and restored in finally. Result: pass5 tests,including960 sequences/69120 states/64 marker profiles/5 policy profiles,actual owners/Worker/supported ODT,empty/end/first-restart/explicit invalidation boundaries. Evidence: focused-without-upstream.log,native-revalidated.json and retained native sanitizer output/source identities. Exact pin9bc445578031fecf56086729d8e4940c77e14d65;42 native definition hashes freshly revalidated. Packed literal fixture281158 bytes decodes to identical expectations with SHA2568e97d032dd939a22778ec330ba28758db21a215d78d8824b2aba4f059e306853. No tracked Agentplane Cxx copies. Failed red/coverage/setup/interrupted attempts are retained and resolved in Findings.
+Command: ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check. Result: pass;doctor0 errors and2 pre-existing warnings (managed shim and historical F1JT8K close SHA),routing OK,no whitespace errors.
+Actual post-bookkeeping CODE:294493d03fcd31a1da8362acc6a87a5b9af4e910. Scope:8 approved semantic files plus2 task artifact files=10 paths;all original assertions,gates,deviations and metadata statuses remain unchanged. Separate same-actor EVALUATOR quality phase and leaf close follow;this is no independent-agent review or whole-module/full-goal completion.
 
 ## Rollback Plan
 

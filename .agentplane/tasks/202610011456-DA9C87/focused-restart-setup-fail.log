@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts (5 tests | 1 failed) 381ms
+   × retains native empty and end sentinel validation with protected traversal 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts > retains native empty and end sentinel validation with protected traversal
+AssertionError: expected 1 to be 7 // Object.is equality
+
+- Expected
++ Received
+
+- 7
++ 1
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts:214:37
+    212|   });
+    213|   expect(required(first.GetNum()).GetPred()).toBeUndefined();
+    214|   expect(first.GetListItemNumber()).toBe(7);
+       |                                     ^
+    215|   first.SetCountedInList(false);
+    216|   expect(first.GetListItemNumber()).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  23:11:58
+   Duration  1.60s (transform 342ms, setup 121ms, import 454ms, tests 381ms, environment 543ms)
+
