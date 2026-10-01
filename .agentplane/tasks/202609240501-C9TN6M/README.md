@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 51
+revision: 52
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:21:57.084Z"
+doc_updated_at: "2026-10-01T17:21:12.360Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -196,6 +196,10 @@ sections:
     - Observation: Iteration48 leaf202610011456-DA9C87 is DONE. Actual CODE294493d03fcd31a1da8362acc6a87a5b9af4e910 (8 semantic+2 task artifacts);close3cba2b6c285e. Selected native continuous/phantom dispatch,traversal/cache/upward notification,SwList context validation and legacy continuous markers now match42 complete pinned definitions with960 sequences/69120 states/5 policies/64 markers. Final verify app732/inventory109/browser19, both coverages100%,all gates pass. New fixture tests also pass with pinned upstream absent. Source cleanup remains separate CODE581224c02406a2b6c00126fea6b6220a0636e130;test isolation separate CODEa775dd325398baa23db153f0c6d13b21f2b769e4.
       Impact: Bounded behavior evidence only;no module/status/goal promotion. Project tests must not read,compile or invoke pinned upstream;static source audits/manual comparisons remain separate. Upstream source copies must never be persisted in Agentplane artifacts.
       Resolution: Parent and full goal remain DOING/active. Next measured architecture gap: SwNumberTree.ts still exposes public optional-target ValidateHierarchical with eager no-argument descendant recursion, while pinned sw/inc/SwNumberTree.hxx:508 uses a protected required-target method. Production now calls it only with owned children;legacy diagnostic tests still call no-argument/foreign-target paths. Audit and refactor in a new one-correction leaf with source contracts and preserved assertion meaning;do not infer full parity from green gates.
+
+    - Observation: Iteration49 leaf202610011627-W77K0Q DONE;actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (8 semantic+3 task artifacts),close4ac6924cbd61. Protected mandatory nullable-target validators,comparator-equivalent GetIterator and nonrecursive prefix semantics restored. Native complete header/types/core produce128 profiles/1792 snapshots/7168 raw states,with four native compile contract rejections and preceding three local type errors now resolved. Every original expected value preserved. Full unchanged verify app734/inventory109/browser19,both100% coverages;focused21 tests pass while upstream absent;source copies absent and temporary native source/binary removed.
+      Impact: Bounded selected-contract proof only;no whole-module/status/full-goal promotion. Parent and goal remain active;registered IO/recovery deviations untouched. Tests must not read,compile or invoke pinned upstream;manual comparison/static audits remain separate and must not persist source copies.
+      Resolution: Next measured source mismatch: native RemoveChild at sw/source/core/SwNumberTree/SwNumberTree.cxx:578 selects the stored comparator-equivalent pRemove and detaches/moves its actual descendants,then calls PostRemove on the supplied pChild. Local SwNumberTree.ts still identity-searches and operates directly on supplied child. Open one new leaf to measure equivalent/distinct/owned removal including raw prefix/topology/notifications and actual document/rule/registry ownership before repair;current core-only policy adapter omits registration and cannot certify those owner effects. Wider native API/lookup/lifetime/UI gaps remain;do not mark parent complete from green gates.
 id_source: "generated"
 ---
 ## Summary
@@ -365,3 +369,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: Iteration48 leaf202610011456-DA9C87 is DONE. Actual CODE294493d03fcd31a1da8362acc6a87a5b9af4e910 (8 semantic+2 task artifacts);close3cba2b6c285e. Selected native continuous/phantom dispatch,traversal/cache/upward notification,SwList context validation and legacy continuous markers now match42 complete pinned definitions with960 sequences/69120 states/5 policies/64 markers. Final verify app732/inventory109/browser19, both coverages100%,all gates pass. New fixture tests also pass with pinned upstream absent. Source cleanup remains separate CODE581224c02406a2b6c00126fea6b6220a0636e130;test isolation separate CODEa775dd325398baa23db153f0c6d13b21f2b769e4.
   Impact: Bounded behavior evidence only;no module/status/goal promotion. Project tests must not read,compile or invoke pinned upstream;static source audits/manual comparisons remain separate. Upstream source copies must never be persisted in Agentplane artifacts.
   Resolution: Parent and full goal remain DOING/active. Next measured architecture gap: SwNumberTree.ts still exposes public optional-target ValidateHierarchical with eager no-argument descendant recursion, while pinned sw/inc/SwNumberTree.hxx:508 uses a protected required-target method. Production now calls it only with owned children;legacy diagnostic tests still call no-argument/foreign-target paths. Audit and refactor in a new one-correction leaf with source contracts and preserved assertion meaning;do not infer full parity from green gates.
+
+- Observation: Iteration49 leaf202610011627-W77K0Q DONE;actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (8 semantic+3 task artifacts),close4ac6924cbd61. Protected mandatory nullable-target validators,comparator-equivalent GetIterator and nonrecursive prefix semantics restored. Native complete header/types/core produce128 profiles/1792 snapshots/7168 raw states,with four native compile contract rejections and preceding three local type errors now resolved. Every original expected value preserved. Full unchanged verify app734/inventory109/browser19,both100% coverages;focused21 tests pass while upstream absent;source copies absent and temporary native source/binary removed.
+  Impact: Bounded selected-contract proof only;no whole-module/status/full-goal promotion. Parent and goal remain active;registered IO/recovery deviations untouched. Tests must not read,compile or invoke pinned upstream;manual comparison/static audits remain separate and must not persist source copies.
+  Resolution: Next measured source mismatch: native RemoveChild at sw/source/core/SwNumberTree/SwNumberTree.cxx:578 selects the stored comparator-equivalent pRemove and detaches/moves its actual descendants,then calls PostRemove on the supplied pChild. Local SwNumberTree.ts still identity-searches and operates directly on supplied child. Open one new leaf to measure equivalent/distinct/owned removal including raw prefix/topology/notifications and actual document/rule/registry ownership before repair;current core-only policy adapter omits registration and cannot certify those owner effects. Wider native API/lookup/lifetime/UI gaps remain;do not mark parent complete from green gates.
