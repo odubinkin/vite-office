@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 49
+revision: 50
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:52:36.972Z"
+doc_updated_at: "2026-10-01T15:48:01.661Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -188,6 +188,10 @@ sections:
     - Observation: Iteration47 leaf202610011419-EHEH05 immutable DONE at close1c888b491b1d. Actual CODE290ed15460229ef91f75e647018405c85f2c31af restores complete selected SwNumRule copy/Assign/Reset/Equals/scalar ownership and Worker16 post-copy restoration. Seven semantic paths plusfour authorized task artifacts embedded by installed CLI bookkeeping. Quality7771b97b4932 separate;corrected commit-subject/premature canonical-attribution failures retained,final canonical ok/EVALUATOR pass.
       Impact: Verified PROGRESS:30 source identities,432 native states18 equality7 narrowing under ASanUBSan;full verify-third727app109inventory19browser100% both/all gates. Three evidence records only/statuses unchanged;registered IO/recovery and original gates/assertions preserved. Full parent/goal remains DOING/active with individually unverified core/browser records.
       Resolution: Next one correction task: native SwNodeNum phantom/continuous consumer audit. Complete unchanged native IsCountPhantoms versus actual local differs3/5 profiles (native !IsContinusNum && IsCountPhantoms,bound;local always true;orphan true). Evidence in47 followup-phantoms.cxx/identities/native.json and followup-local.ts/json. No full nondefault counter/rendering/lifetime/name-map/style/Font/graphics/global/UNO or browser equivalence claim;do not finish goal from green gates or metadata.
+
+    - Observation: User clarified: do not persist upstream source copies in Agentplane artifacts;project tests must not read,compile or invoke pinned upstream. Cleanup CODE581224c02406a2b6c00126fea6b6220a0636e130 removed41trackedCxx files,3untracked sources and51embedded source bodies. Test isolation CODEa775dd325398baa23db153f0c6d13b21f2b769e4 removes12test dependencies using authored fixtures.
+      Impact: All120tooling,727application,109inventory and19browser tests pass with vendor unavailable;both coverage suites remain100percent. Static provenance/resource/inventory source audits may still read vendor. Manual native development probes use ignored scratch and retained literal results/hashes only. This is progress,not complete runtime/UI upstream parity.
+      Resolution: Both cleanup/test-isolation leaves are verified DONE. Preserve this user constraint for every future iteration. Resume existing task202610011456-DA9C87 full continuous/phantom tree dispatch correction;its native result fixture and uncommitted source-generator work remain separate. Parent and overall goal stay active.
 id_source: "generated"
 ---
 ## Summary
@@ -349,3 +353,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: Iteration47 leaf202610011419-EHEH05 immutable DONE at close1c888b491b1d. Actual CODE290ed15460229ef91f75e647018405c85f2c31af restores complete selected SwNumRule copy/Assign/Reset/Equals/scalar ownership and Worker16 post-copy restoration. Seven semantic paths plusfour authorized task artifacts embedded by installed CLI bookkeeping. Quality7771b97b4932 separate;corrected commit-subject/premature canonical-attribution failures retained,final canonical ok/EVALUATOR pass.
   Impact: Verified PROGRESS:30 source identities,432 native states18 equality7 narrowing under ASanUBSan;full verify-third727app109inventory19browser100% both/all gates. Three evidence records only/statuses unchanged;registered IO/recovery and original gates/assertions preserved. Full parent/goal remains DOING/active with individually unverified core/browser records.
   Resolution: Next one correction task: native SwNodeNum phantom/continuous consumer audit. Complete unchanged native IsCountPhantoms versus actual local differs3/5 profiles (native !IsContinusNum && IsCountPhantoms,bound;local always true;orphan true). Evidence in47 followup-phantoms.cxx/identities/native.json and followup-local.ts/json. No full nondefault counter/rendering/lifetime/name-map/style/Font/graphics/global/UNO or browser equivalence claim;do not finish goal from green gates or metadata.
+
+- Observation: User clarified: do not persist upstream source copies in Agentplane artifacts;project tests must not read,compile or invoke pinned upstream. Cleanup CODE581224c02406a2b6c00126fea6b6220a0636e130 removed41trackedCxx files,3untracked sources and51embedded source bodies. Test isolation CODEa775dd325398baa23db153f0c6d13b21f2b769e4 removes12test dependencies using authored fixtures.
+  Impact: All120tooling,727application,109inventory and19browser tests pass with vendor unavailable;both coverage suites remain100percent. Static provenance/resource/inventory source audits may still read vendor. Manual native development probes use ignored scratch and retained literal results/hashes only. This is progress,not complete runtime/UI upstream parity.
+  Resolution: Both cleanup/test-isolation leaves are verified DONE. Preserve this user constraint for every future iteration. Resume existing task202610011456-DA9C87 full continuous/phantom tree dispatch correction;its native result fixture and uncommitted source-generator work remain separate. Parent and overall goal stay active.
