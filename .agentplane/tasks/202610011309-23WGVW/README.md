@@ -4,7 +4,7 @@ title: "Restore native Writer numbering classification and layout-update predica
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-01T13:32:53.147Z"
+  updated_by: "CODER"
+  note: "PASS actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d:1032 unchanged pinned native cases under ASan/UBSan;22 focused tests; full verify-second717app/109inventory/19browser with unchanged100% coverage in both suites. Doctor0errors/2 pre-existing warnings,routing,diff and seven-path scope pass. Native profile boundaries and complete pointer-Set next gap remain explicit. Registered IO/recovery exceptions unchanged; parent and goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T13:33:32.396Z"
+  updated_by: "EVALUATOR"
+  note: "Actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d satisfies the approved single classification/raw-layout correction. Separate same-actor EVALUATOR phase reviewed exact scope,source identities,literal output and full suite; no independent-agent or whole-project equivalence claim."
+  evaluated_sha: "6d3f9de7b8799145f18a5eee9b562ade717b645d"
+  blueprint_digest: "7b2ab2d110d81c7bd8bf5c43e805dd6d39d8c485ffa3a5da6dc173a1fddd6356"
+  evidence_refs:
+    - ".agentplane/tasks/202610011309-23WGVW/README.md"
+    - ".agentplane/tasks/202610011309-23WGVW/quality/20261001-133332396-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610011309-23WGVW/quality/20261001-133332396-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610011309-23WGVW/quality/20261001-133332396-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610011309-23WGVW/blueprint/resolved-snapshot.json"
+    - "6d3f9de7b8799145f18a5eee9b562ade717b645d"
+    - ".agentplane/tasks/202610011309-23WGVW/native-identities.json"
+    - ".agentplane/tasks/202610011309-23WGVW/native-classification.json"
+    - ".agentplane/tasks/202610011309-23WGVW/regression-after.log"
+    - ".agentplane/tasks/202610011309-23WGVW/verify-second.log"
+    - ".agentplane/tasks/202610011309-23WGVW/scope-review.json"
+    - ".agentplane/tasks/202610011309-23WGVW/doctor.log"
+    - ".agentplane/tasks/202610011309-23WGVW/routing.log"
+  findings:
+    - "All seven reviewed CODE paths match approval. Eleven native source definitions and complete profile hash are exact; literal1032 native cases match production predicates/count/registry with named input adapters. Effective bounded classification and raw-owned layout semantics remain distinct. Full717app/109inventory/19browser verify passes unchanged100% coverage and all original gates. No module/status/IO/policy promotion. Initial fixture/type/lint failures retained and safely resolved."
 commit: null
 comments:
   -
@@ -35,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the approved single iteration45 native Writer classification/raw-layout predicate task under the persistent user goal authorization; preserve registered I/O/recovery deviations and unchanged source/coverage gates."
+  -
+    type: "verify"
+    at: "2026-10-01T13:32:53.147Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d:1032 unchanged pinned native cases under ASan/UBSan;22 focused tests; full verify-second717app/109inventory/19browser with unchanged100% coverage in both suites. Doctor0errors/2 pre-existing warnings,routing,diff and seven-path scope pass. Native profile boundaries and complete pointer-Set next gap remain explicit. Registered IO/recovery exceptions unchanged; parent and goal active."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:32:26.454Z"
+doc_updated_at: "2026-10-01T13:32:53.203Z"
 doc_updated_by: "CODER"
 description: "Iteration45 of the active parity audit: restore source-owned SwNumFormat.IsItemize/IsEnumeration and actual SwTextNode HasNumber/HasBullet reads, including NONE enumeration and scalar bitmap classification. Restore the distinct raw-owned HasNumberingWhichNeedsLayoutUpdate contract, without equating it to enumeration. Validate actual SwNodeNum counting and DocumentListItemsManager filtering against complete unchanged pinned native bodies and real local graphs. Preserve existing UI/ODT/Worker contracts, registered I/O/recovery deviations and the native malformed-NONE browser guard; broader bitmap graphics/layout/redline/native lifetimes remain unverified."
 sections:
@@ -58,6 +87,39 @@ sections:
     Command: npm run verify; Result: pass in verify-second.log. All original formatting,lint,type,dependencies,resources,unit/inventory coverage,browser,build,static,JSDoc,size,source-tree,provenance,invariants/parity gates pass. App717 tests/162 files and inventory109/36 pass, both100% statement/branch/function/line coverage; browser19 pass. App counts10765/8201/2902/9873; inventory1523/1080/384/1464. Dependency gate212 sources/884 imports/13 edges, provenance213 modules137 mapped60 browser16 infrastructure. No exclusions or thresholds changed.
     Command: ap doctor; Result: pass,0 errors,2 pre-existing warnings (managed shim readiness; old immutableF1JT8K close-commit pointer). Command: node .agentplane/policy/check-routing.mjs and git diff --check; Result: pass. Scope review proves unchanged module sets/status/other semantic fields and only five existing evidence records changed. Three production modules,one native fixture,one regression test,two evidence JSON files: seven approved CODE paths; ndtxt999 lines satisfies the unchanged strict limit.
     Scope: this leaf alone. Native enumeration includes NONE, itemize includes CHAR_SPECIAL/BITMAP; HasNumber/HasBullet select effective bounded actual-level formats. Layout-update independently reads raw owned attribute-level formats and excludes absent/NONE/CHAR_SPECIAL/BITMAP. Reference Set semantics remain correct; complete native pointer Set read-only followup profiles prove the next unsupported ownership/assignment contract. Registered IO/recovery exceptions,malformed-NONE guard and original assertions are preserved. Separate canonical verification/quality phase will bind the actual CODE SHA; artifacts/quality/close commits are not implementation evidence. Parent/full goal remain active; no whole-module equivalence claimed. No checks skipped.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T13:32:53.147Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d:1032 unchanged pinned native cases under ASan/UBSan;22 focused tests; full verify-second717app/109inventory/19browser with unchanged100% coverage in both suites. Doctor0errors/2 pre-existing warnings,routing,diff and seven-path scope pass. Native profile boundaries and complete pointer-Set next gap remain explicit. Registered IO/recovery exceptions unchanged; parent and goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T13:32:26.454Z, excerpt_hash=sha256:abbd3b5c100c9846826c5771fe5e7e2d8b2188e5dbb38cc0687d1d560ed399b0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011309-23WGVW/blueprint/resolved-snapshot.json
+    - old_digest: 7b2ab2d110d81c7bd8bf5c43e805dd6d39d8c485ffa3a5da6dc173a1fddd6356
+    - current_digest: 7b2ab2d110d81c7bd8bf5c43e805dd6d39d8c485ffa3a5da6dc173a1fddd6356
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610011309-23WGVW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610011309-23WGVW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If this task needs rollback, create a new executable follow-up task to revert its reviewed CODE changes locally and rerun the same verification; do not rewrite history or mutate immutable DONE tasks. Preserve native differential sources/outputs and failure evidence, and retain the parent/full objective and registered I/O exceptions."
   Findings: |-
     Read-only preflight confirms direct main78353b0aebea, clean tracked/untracked state, only parent202609240501-C9TN6M active, approvals required and no network authorization. Four matched policy modules are loaded; no user-instructions file exists. Native IsEnumeration is explicitly !IsItemize, so NUMBER_NONE is enumeration. Native SwNodeNum counting uses HasNumber||HasBullet and numbered registry filtering uses HasNumber. Native layout-update helper instead reads GetNumFormat, rejects absent owned format and suppresses NONE/CHAR_SPECIAL/BITMAP; its semantics must not be conflated with enumeration. Existing local helper uses effective Get and only ARABIC. Prior measured native4/5/6/8 classifications are [[4,true,false],[5,true,false],[6,false,true],[8,false,true]] versus actual local [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. No full project or module equivalence is claimed.
@@ -108,6 +170,39 @@ Command: focused vitest run on classification/direct-attribute/node-numbering/re
 Command: npm run verify; Result: pass in verify-second.log. All original formatting,lint,type,dependencies,resources,unit/inventory coverage,browser,build,static,JSDoc,size,source-tree,provenance,invariants/parity gates pass. App717 tests/162 files and inventory109/36 pass, both100% statement/branch/function/line coverage; browser19 pass. App counts10765/8201/2902/9873; inventory1523/1080/384/1464. Dependency gate212 sources/884 imports/13 edges, provenance213 modules137 mapped60 browser16 infrastructure. No exclusions or thresholds changed.
 Command: ap doctor; Result: pass,0 errors,2 pre-existing warnings (managed shim readiness; old immutableF1JT8K close-commit pointer). Command: node .agentplane/policy/check-routing.mjs and git diff --check; Result: pass. Scope review proves unchanged module sets/status/other semantic fields and only five existing evidence records changed. Three production modules,one native fixture,one regression test,two evidence JSON files: seven approved CODE paths; ndtxt999 lines satisfies the unchanged strict limit.
 Scope: this leaf alone. Native enumeration includes NONE, itemize includes CHAR_SPECIAL/BITMAP; HasNumber/HasBullet select effective bounded actual-level formats. Layout-update independently reads raw owned attribute-level formats and excludes absent/NONE/CHAR_SPECIAL/BITMAP. Reference Set semantics remain correct; complete native pointer Set read-only followup profiles prove the next unsupported ownership/assignment contract. Registered IO/recovery exceptions,malformed-NONE guard and original assertions are preserved. Separate canonical verification/quality phase will bind the actual CODE SHA; artifacts/quality/close commits are not implementation evidence. Parent/full goal remain active; no whole-module equivalence claimed. No checks skipped.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T13:32:53.147Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d:1032 unchanged pinned native cases under ASan/UBSan;22 focused tests; full verify-second717app/109inventory/19browser with unchanged100% coverage in both suites. Doctor0errors/2 pre-existing warnings,routing,diff and seven-path scope pass. Native profile boundaries and complete pointer-Set next gap remain explicit. Registered IO/recovery exceptions unchanged; parent and goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T13:32:26.454Z, excerpt_hash=sha256:abbd3b5c100c9846826c5771fe5e7e2d8b2188e5dbb38cc0687d1d560ed399b0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011309-23WGVW/blueprint/resolved-snapshot.json
+- old_digest: 7b2ab2d110d81c7bd8bf5c43e805dd6d39d8c485ffa3a5da6dc173a1fddd6356
+- current_digest: 7b2ab2d110d81c7bd8bf5c43e805dd6d39d8c485ffa3a5da6dc173a1fddd6356
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610011309-23WGVW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610011309-23WGVW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
