@@ -1,10 +1,11 @@
 ---
 id: "202610010735-THRTCH"
 title: "Restore Writer direct list attribute lifecycle"
-status: "DOING"
+result_summary: "Native Writer direct attribute lifecycle restored and bounded evidence verified;complete upstream core/UI audit remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -48,11 +49,16 @@ quality_review:
   findings:
     - "Source-shaped set/reset helpers replace effective-state reconciliation;guard and pre/post ordering,Arabic/bullet notification distinctions,reading context,outline index/type and complete Worker item restore are evidenced by unchanged native bodies,raw-cache/event comparison and literal integration assertions."
     - "Final verify-complete.log exits0 with692 app,109inventory,19browser and both100% coverage;all static/resource/source/policy gates preserved. Actual diff touches only approved paths and tests;code/metadata semantic statuses do not claim full upstream parity. Initial semantic and coverage failures retained,including diagnostic-only subset coverage failure."
-commit: null
+commit:
+  hash: "c1e7693682ef207f7a372c83c71a140818cbc506"
+  message: "🔧 THRTCH code: restore native Writer direct attribute lifecycle"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved iteration38 native direct-list attribute lifecycle correction under the continuing user goal,with actual pre-edit baselines and unchanged native evidence before production edits."
+  -
+    author: "CODER"
+    body: "Verified: restored pinned Writer direct-list set/reset pre/post lifecycle,native notifications and outline-index/type ownership with required reading suppression and complete Worker16 item batching.40 unchanged native definitions compare60 sequences/2130 states,1824 insertion orders/17712 vectors;unchanged full verify passes692 app,109 inventory,19 browser,both100% coverage and all other gates. Evaluator pass on actual implementation c1e7693682ef207f7a372c83c71a140818cbc506. Registered IO deviations and all wider native/core/UI residuals retained;parent goal remains active."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved iteration38 passes unchanged npm run verify:692 app,109 inventory,19 browser,both100% coverage,all remaining gates. Forty unchanged native definitions compare60 sequences/2130 states and1824 insertion orders/17712 vectors;literal ODT/Worker assertions preserved. Doctor/routing/diff pass;full native lifetime/core/UI obligations and parent goal remain unverified and active."
+  -
+    type: "status"
+    at: "2026-10-01T08:44:43.932Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored pinned Writer direct-list set/reset pre/post lifecycle,native notifications and outline-index/type ownership with required reading suppression and complete Worker16 item batching.40 unchanged native definitions compare60 sequences/2130 states,1824 insertion orders/17712 vectors;unchanged full verify passes692 app,109 inventory,19 browser,both100% coverage and all other gates. Evaluator pass on actual implementation c1e7693682ef207f7a372c83c71a140818cbc506. Registered IO deviations and all wider native/core/UI residuals retained;parent goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-01T08:44:41.276Z"
+doc_updated_at: "2026-10-01T08:44:43.934Z"
 doc_updated_by: "CODER"
 description: "Iteration38: replace detached effective-state reconciliation with source-owned SetAttr/ResetAttr helpers for existing Writer direct list/outline items,including source ordering,reentrant empty suppression,precise tree notifications and necessary outline-index ownership. Preserve registered IO exceptions and immutable prior evidence;keep parent audit active."
 sections:
@@ -120,6 +133,10 @@ sections:
     Next individually source-backed issue for a separate task,not part of this completed correction: native SwContentNode ResetAttr(single/range),ResetAttr(vector) and ResetAllAttr in node.cxx1699-1799 notify clients while the cleared direct set is still owned,then release it only when the post-callback set is empty. Unchanged single/range no-ops do not release an already allocated empty set;vector releases it. Local node.ts releases before model notifications and unconditionally releases empty single/range no-ops. Verify actual callback identity/membership and nested mutations against unchanged native bodies before changing it. Full shared autoformat/refcount/modify-lock/cache/client architecture remains independently open. Parent audit and user goal remain active.
 
     Closeout diagnostics: final raw Vite output had2 trailing spaces;only terminal whitespace in active verify-complete.log was normalized,then git diff --check passes. Initial code-commit subject lacked the required scope colon;CLI rejected it after staging only the22 intentional source/test/metadata paths. Route recomputed and corrected scope syntax succeeds. Actual amended implementation SHA:c1e7693682ef207f7a372c83c71a140818cbc506,not earlier task-only artifact commits. Evaluator reviewed that exact SHA and recorded pass at quality/20261001-084404447-recovery-context/quality-report.json with bounded findings and residuals. Runtime diff and initial clean tracked/untracked state checked;remaining quality/closure/parent progress artifacts are intentional and will be committed before final clean check. No runtime change after final full gates.
+extensions:
+  implementation_commit:
+    hash: "c1e7693682ef207f7a372c83c71a140818cbc506"
+    message: "🔧 THRTCH code: restore native Writer direct attribute lifecycle"
 id_source: "generated"
 ---
 ## Summary
