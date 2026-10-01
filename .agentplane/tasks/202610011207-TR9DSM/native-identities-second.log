@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011207-TR9DSM/build-native.py", line 76, in <module>
+    text=body(path,signature)
+  File "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011207-TR9DSM/build-native.py", line 6, in body
+    s=(root/path).read_text();start=s.index(signature);op=s.index('{',start);d=1;i=op+1
+                                    ~~~~~~~^^^^^^^^^^^
+ValueError: substring not found

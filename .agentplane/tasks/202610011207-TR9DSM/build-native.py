@@ -71,7 +71,7 @@ int main(){std::cout<<"[";bool first=true;for(int type:{4,5,6,8})for(bool show:{
 # Previously extracted format/Writer bodies must still exactly match their pinned complete source definitions.
 for path, signatures in [
  (num, ['SvxNumberFormat::SvxNumberFormat( SvxNumType eType )', 'SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat)', 'SvxNumberFormat& SvxNumberFormat::operator=', 'bool  SvxNumberFormat::operator==']),
- ('sw/source/core/doc/number.cxx', ['SwNumFormat::SwNumFormat()', 'SwNumFormat::SwNumFormat(const SwNumFormat& rFormat)', 'bool SwNumFormat::operator=='])]:
+ ('sw/source/core/doc/number.cxx', ['SwNumFormat::SwNumFormat()', 'SwNumFormat::SwNumFormat(const SwNumFormat& rNumFormat)', 'bool SwNumFormat::operator=='])]:
  for signature in signatures:
   text=body(path,signature)
   assert text in old, signature

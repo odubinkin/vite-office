@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:40:49.368Z"
+doc_updated_at: "2026-10-01T12:41:53.608Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -89,6 +89,10 @@ sections:
     - Observation: The strict size gate now passes with999 lines; text-node kind projection still uses its actual paragraph level. Native identity enrichment initially used the wrong SwNumFormat copy-parameter name.
       Impact: No caller behavior may be changed merely to reduce source size; source identity matching is exact.
       Resolution: Keep actual-level semantics, consolidate the contiguous imports, correct the source signature to rNumFormat and retain the initial identity failure log before rerunning.
+
+    - Observation: Full verify-initial stops at lint: the decimal-only formatter accepts but does not use its locale parameter. native-identities-second fails because the exact copy signature includes a space after the opening parenthesis and uses rFormat.
+      Impact: Both checks must pass before native/state equivalence or task completion can be recorded.
+      Resolution: Explicitly consume the bounded adapter locale without changing its decimal behavior, use the exact inspected native signature, preserve both failure logs and rerun the full pipeline.
 id_source: "generated"
 ---
 ## Summary
@@ -153,3 +157,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: The strict size gate now passes with999 lines; text-node kind projection still uses its actual paragraph level. Native identity enrichment initially used the wrong SwNumFormat copy-parameter name.
   Impact: No caller behavior may be changed merely to reduce source size; source identity matching is exact.
   Resolution: Keep actual-level semantics, consolidate the contiguous imports, correct the source signature to rNumFormat and retain the initial identity failure log before rerunning.
+
+- Observation: Full verify-initial stops at lint: the decimal-only formatter accepts but does not use its locale parameter. native-identities-second fails because the exact copy signature includes a space after the opening parenthesis and uses rFormat.
+  Impact: Both checks must pass before native/state equivalence or task completion can be recorded.
+  Resolution: Explicitly consume the bounded adapter locale without changing its decimal behavior, use the exact inspected native signature, preserve both failure logs and rerun the full pipeline.
