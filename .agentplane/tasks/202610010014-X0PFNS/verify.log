@@ -13,14 +13,247 @@ All matched files use Prettier code style!
 > eslint . --max-warnings 0
 
 
-/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts
-  48:11  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
 
-/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts
-  89:9  error  Unexpected aliasing of 'this' to local variable  @typescript-eslint/no-this-alias
 
-/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts
-  128:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
 
-✖ 3 problems (3 errors, 0 warnings)
 
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 199 runtime sources, 817 relative imports, 12 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  07:29:04
+   Duration  123ms (transform 27ms, setup 0ms, import 35ms, tests 3ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  137 passed (137)
+      Tests  640 passed (640)
+   Start at  07:29:05
+   Duration  71.70s (transform 2.09s, setup 10.52s, import 8.66s, tests 53.61s, environment 49.38s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 9874/9874 )
+Branches     : 100% ( 7423/7423 )
+Functions    : 100% ( 2720/2720 )
+Lines        : 100% ( 9083/9083 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+
+ Test Files  36 passed (36)
+      Tests  109 passed (109)
+   Start at  07:30:17
+   Duration  45.75s (transform 744ms, setup 0ms, import 1.78s, tests 40.45s, environment 2ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1523/1523 )
+Branches     : 100% ( 1080/1080 )
+Functions    : 100% ( 384/384 )
+Lines        : 100% ( 1464/1464 )
+================================================================================
+
+> vite-office@0.1.0 test:e2e
+> npm run build && playwright test --config apps/office/playwright.config.ts
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2K
+transforming...✓ 1990 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.56 kB │ gzip:   0.35 kB
+dist/assets/odt-worker-DWv1sXSD.js    247.89 kB
+dist/assets/index-C6eeDUe_.css         58.68 kB │ gzip:   9.59 kB
+dist/assets/index-D9wpl0EK.js       1,120.44 kB │ gzip: 268.85 kB
+
+✓ built in 796ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:59236) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 19 tests using 4 workers
+
+(node:59238) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:59239) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:59237) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:59240) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 apps/office/e2e/writer-cut-paste.spec.ts:5:1 › Writer Cut and Paste (1.6s)
+  ✓   3 apps/office/e2e/writer-clipboard.spec.ts:5:1 › copies visible formatted Writer content through the native browser copy event (1.7s)
+  ✓   1 apps/office/e2e/writer-character-formatting.spec.ts:5:1 › Writer direct character formatting (2.3s)
+  ✓   5 apps/office/e2e/writer-cut-paste.spec.ts:55:1 › Writer immediate spaces and structured list Paste (998ms)
+  ✓   6 apps/office/e2e/writer-clipboard.spec.ts:54:1 › Writer list clipboard (1.3s)
+  ✓   7 apps/office/e2e/writer-document-selection.spec.ts:5:1 › supports document-wide selection through Ctrl/Cmd+A and pointer dragging (1.3s)
+  ✓  10 apps/office/e2e/writer-document-selection.spec.ts:139:1 › places the caret at the first clicked position in a different paragraph (859ms)
+  ✓   8 apps/office/e2e/writer-hyperlinks.spec.ts:9:1 › Writer creates, edits, and round-trips hyperlinks (2.0s)
+  ✓  12 apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (1.0s)
+  ✓   4 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (5.8s)
+  ✓   9 apps/office/e2e/writer-layout-ratios.spec.ts:11:1 › Writer keeps measured page breaks across device pixel ratios (2.7s)
+  ✓  11 apps/office/e2e/writer-lists.spec.ts:5:1 › Writer bullets and numbering (1.8s)
+  ✓  13 apps/office/e2e/writer-print.spec.ts:5:1 › Print appears in upstream locations and print media keeps only pages (673ms)
+  ✓  15 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport (804ms)
+  ✓  14 apps/office/e2e/writer-odt-file.spec.ts:15:1 › Writer opens and saves a bounded ODT file (1.2s)
+  ✓  16 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (466ms)
+  ✓  18 apps/office/e2e/writer-responsive-sidebar.spec.ts:76:1 › the mobile table grid dismisses outside and More Options opens the full dialog (656ms)
+  ✓  17 apps/office/e2e/writer-odt-file.spec.ts:87:1 › Writer keeps one ODT text node across visible page fragments after reopen (1.0s)
+  ✓  19 apps/office/e2e/writer-odt-file.spec.ts:139:1 › Writer types in a table cell and reopens the edited ODT (835ms)
+
+  19 passed (10.9s)
+
+> vite-office@0.1.0 test:static
+> npm run build && node scripts/check-static-build.mjs
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2K
+transforming...✓ 1990 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.56 kB │ gzip:   0.35 kB
+dist/assets/odt-worker-DWv1sXSD.js    247.89 kB
+dist/assets/index-C6eeDUe_.css         58.68 kB │ gzip:   9.59 kB
+dist/assets/index-D9wpl0EK.js       1,120.44 kB │ gzip: 268.85 kB
+
+✓ built in 514ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Static build smoke passed: relative assets, 2 JavaScript bundle(s), no backend endpoints.
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+JSDoc validation passed for 440 authored source files.
+
+> vite-office@0.1.0 check:file-size
+> node scripts/check-file-size.mjs
+
+File-size check scanned 443 authored files.
+Decomposition review candidates:
+apps/office/src/framework/browser/app/desktop.test.tsx: 516 lines
+apps/office/src/svl/source/items/itemset.test.ts: 677 lines
+apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx: 545 lines
+apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx: 507 lines
+apps/office/src/sw/browser/filter/xml/writer-document-codec.ts: 555 lines
+apps/office/src/sw/browser/presentation/writer-view.test.tsx: 924 lines
+apps/office/src/sw/browser/presentation/writer-view.tsx: 753 lines
+apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx: 651 lines
+apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx: 770 lines
+apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx: 543 lines
+apps/office/src/sw/source/core/doc/writer-attributes.test.ts: 721 lines
+apps/office/src/sw/source/core/doc/writer-model.test.ts: 959 lines
+apps/office/src/sw/source/core/layout/newfrm.test.ts: 628 lines
+apps/office/src/sw/source/core/layout/newfrm.ts: 689 lines
+apps/office/src/sw/source/core/txtnode/ndhints.ts: 652 lines
+apps/office/src/sw/source/core/txtnode/ndtxt.ts: 835 lines
+apps/office/src/sw/source/core/undo/undobj.test.ts: 633 lines
+apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts: 939 lines
+apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts: 950 lines
+apps/office/src/sw/source/filter/xml/xmlexp.ts: 656 lines
+apps/office/src/sw/source/filter/xml/xmlimp.ts: 978 lines
+apps/office/src/sw/source/uibase/shells/textsh1.ts: 996 lines
+apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts: 972 lines
+apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts: 702 lines
+apps/office/src/vcl/browser/lo-runtime-fonts.css: 955 lines
+apps/office/src/xmloff/source/style/xmlstyle.ts: 608 lines
+apps/office/src/xmloff/source/text/txtparae.ts: 953 lines
+apps/office/src/xmloff/source/text/txtparai.test.ts: 741 lines
+apps/office/src/xmloff/source/text/txtparai.ts: 685 lines
+scripts/check-source-provenance.ts: 699 lines
+scripts/generate-writer-ui-resources.ts: 622 lines
+scripts/libreoffice-inventory/contracts.ts: 536 lines
+scripts/libreoffice-inventory/parity-mappings.test.ts: 870 lines
+scripts/libreoffice-inventory/parity-mappings.ts: 991 lines
+scripts/libreoffice-inventory/runtime-inventory.test.ts: 566 lines
+scripts/libreoffice-inventory/runtime-inventory.ts: 805 lines
+
+> vite-office@0.1.0 check:source-tree
+> node scripts/check-lo-source-tree.mjs
+
+LibreOffice source-tree check passed for 111 required paths and 33 retired roots.
+
+> vite-office@0.1.0 check:source-provenance
+> tsx scripts/check-source-provenance.ts
+
+Source provenance check passed for 200 runtime modules (124 mapped, 60 browser adaptations, 16 local infrastructure).
+
+> vite-office@0.1.0 inventory:invariants
+> tsx scripts/libreoffice-inventory/invariants-cli.ts
+
+{"invariantCount":34,"status":"valid"}
+
+> vite-office@0.1.0 inventory:parity
+> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference
+
+Terminal result: unchanged npm run verify exited 0 (session 39633).
+Parity JSON: baseline 9bc445578031fecf56086729d8e4940c77e14d65; semanticViolationCount=0. Schema/gate validity does not establish full semantic parity; native tree obligations remain unverified.

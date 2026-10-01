@@ -17,6 +17,7 @@ import {
   RES_PARATR_LIST_RESTARTVALUE,
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../para/paratr";
+import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 
 describe("Writer list attribute invariants", /** Registers source-backed list tests. @returns Nothing. */ () => {
   it("revalidates restart and counted changes without advancing an uncounted item", /** Checks SwNodeNum::IsCounted and SwNumberTreeNode::ValidateChildren. @returns Nothing. */ () => {
@@ -67,11 +68,13 @@ describe("Writer list attribute invariants", /** Registers source-backed list te
     second.SetAttrListLevel(1);
     list?.ValidateListTree(document.paragraphs);
     expect(list?.GetListItem(second)?.level).toBe(1);
-    expect(list?.GetListItem(second)?.GetParent()?.GetTextNode()).toBe(first);
+    expect((list?.GetListItem(second)?.GetParent() as SwNodeNum | undefined)?.GetTextNode()).toBe(
+      first,
+    );
     expect(list?.GetListItemNumberVector(second)).toEqual([1, 1]);
     second.SetAttrListLevel(0);
     list?.ValidateListTree(document.paragraphs);
-    expect(list?.GetListItem(second)?.GetParent()).toBeUndefined();
+    expect((list?.GetListItem(second)?.GetParent() as SwNodeNum).GetTextNode()).toBeUndefined();
     expect(list?.GetListItemNumber(second)).toBe(2);
   });
 

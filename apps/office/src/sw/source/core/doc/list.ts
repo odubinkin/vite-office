@@ -71,34 +71,35 @@ export class SwList {
   /** Recalculates the bounded tree in canonical document order. @param orderedNodeIds - Body-node order. @returns Nothing. */
   public ValidateListTree(orderedNodes: readonly SwTextNode[]): void {
     if (!this.invalid) return;
-    const counters = Array.from(
-      { length: WRITER_MAX_LIST_LEVEL + 1 },
-      /** Creates one zeroed level counter. @returns Initial counter. */ () => 0,
-    );
     const levelNodes: Array<SwNodeNum | undefined> = Array.from({
       length: WRITER_MAX_LIST_LEVEL + 1,
     });
+    // Missing intermediate levels still use separate bounded groups until native phantom construction is restored.
+    const roots = new Set<SwNodeNum>();
+    const missingLevelRoots: Array<SwNodeNum | undefined> = [];
     for (const node of this.nodes.values()) node.ResetTree();
     for (const textNode of orderedNodes) {
       const node = this.nodes.get(textNode);
       if (node === undefined) continue;
       const level = node.level;
-      node.SetParent(level === 0 ? undefined : levelNodes[level - 1]);
+      let parent = level === 0 ? undefined : levelNodes[level - 1];
+      if (parent === undefined) {
+        let root = missingLevelRoots[level];
+        if (root === undefined) {
+          root = new SwNodeNum(undefined, -1, textNode.GetNumRule());
+          missingLevelRoots[level] = root;
+          roots.add(root);
+        }
+        parent = root;
+      }
+      node.SetParent(parent);
       levelNodes[level] = node;
-      for (let child = level + 1; child <= WRITER_MAX_LIST_LEVEL; child += 1)
+      for (let child = level + 1; child <= WRITER_MAX_LIST_LEVEL; child += 1) {
         levelNodes[child] = undefined;
-      const start = textNode.IsListRestart()
-        ? textNode.GetActualListStartValue()
-        : (textNode.GetNumRule()?.GetNumFormat(level).GetStart() ?? 1);
-      if (textNode.IsCountedInList())
-        counters[level] =
-          textNode.IsListRestart() || counters[level] === 0
-            ? start
-            : (counters[level] as number) + 1;
-      else if (counters[level] === 0) counters[level] = start - 1;
-      for (let child = level + 1; child <= WRITER_MAX_LIST_LEVEL; child += 1) counters[child] = 0;
-      node.SetNumber(counters[level] as number);
+        missingLevelRoots[child] = undefined;
+      }
     }
+    for (const root of roots) root.ValidateHierarchical();
     this.invalid = false;
   }
   /** Gets a calculated node counter. @param nodeId - Text-node id. @returns Counter when registered. */

@@ -8,6 +8,7 @@ import {
   normalizeWriterParagraphList,
 } from "./list";
 import { SwList } from "./list";
+import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { createWriterDocument } from "./doc";
 
 describe("Writer list state" /** Groups serializable list-state tests. @returns Nothing; Vitest registers enclosed cases. */, function defineWriterListTests(): void {
@@ -88,7 +89,9 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     list.ValidateListTree([first, nested]);
     expect(list.GetListItemNumber(first)).toBe(1);
     expect(list.GetListItemNumber(nested)).toBe(1);
-    expect(list.GetListItem(nested)?.GetParent()?.GetTextNode()).toBe(first);
+    expect((list.GetListItem(nested)?.GetParent() as SwNodeNum | undefined)?.GetTextNode()).toBe(
+      first,
+    );
     expect(list.GetListItem(first)?.GetChildren()).toEqual([list.GetListItem(nested)]);
     expect(list.HasNodes()).toBe(true);
     list.InvalidateListTree();

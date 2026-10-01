@@ -3382,24 +3382,79 @@
         "CAP-0127"
       ],
       "semantic": {
-        "behaviorStatus": "parity",
-        "contractStatus": "parity",
-        "defaultStatus": "parity",
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts#SwNodeNum",
-          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::SwNodeNum"
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::SwNodeNum",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#initializes structurally and advances counted siblings after zero",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#retains native first uncounted descendant and nested sibling rules",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#continues a subtree only below native uncounted parents",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#revalidates zero restarts, counted changes and bounded missing-level groups",
+          "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts#round-trips zero starts and restarts through native list trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::ValidateHierarchical",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumberVector_",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsCounted",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsRestart",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::GetStartValue",
+          "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::ValidateListTree"
         ],
-        "justification": "Ports the supported counter value and level node owned by Writer's document list tree.",
+        "justification": "Ports the supported counter value and level node owned by Writer's document list tree. Hierarchical counter state and sibling calculation now belong to SwNumberTreeNode; SwNodeNum supplies Writer counted/restart/start policy and native-style roots. Structural first/sibling order replaces the numeric-zero sentinel, retaining signed uncounted-first counters, zero starts/restarts, counted-descendant initialization and source-defined continuation below uncounted parents. Compiled unmodified pinned hierarchy/node/vector bodies match 1048 complete no-phantom trees / 5016 counter, continuation and vector states. Core lifecycle assertions and seven literal common/automatic ODT cases verify actual labels, copied rules/captured item sets, Worker v16, selected XML and reopen. Tree rebuilding/eager validation, missing-level grouping without native phantoms, lazy validity/notifications, continuous numbering, redline trees and broader native ownership/defaults remain individually unverified. No whole-module parity promotion; registered save/open/recovery policies are unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "SwNodeNum"
         ],
-        "sourceResponsibility": "aligned",
+        "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
         "upstreamSymbols": [
           "SwNodeNum::SwNodeNum",
-          "SwNodeNum::GetStartValue"
+          "SwNodeNum::GetStartValue",
+          "SwNodeNum::IsCounted",
+          "SwNodeNum::IsRestart"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112",
+        "CAP-0127"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#initializes structurally and advances counted siblings after zero",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#retains native first uncounted descendant and nested sibling rules",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#continues a subtree only below native uncounted parents",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#revalidates zero restarts, counted changes and bounded missing-level groups",
+          "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts#round-trips zero starts and restarts through native list trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::ValidateHierarchical",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumberVector_",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsCounted",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsRestart",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::GetStartValue",
+          "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::ValidateListTree"
+        ],
+        "justification": "Hierarchical counter state and sibling calculation now belong to SwNumberTreeNode; SwNodeNum supplies Writer counted/restart/start policy and native-style roots. Structural first/sibling order replaces the numeric-zero sentinel, retaining signed uncounted-first counters, zero starts/restarts, counted-descendant initialization and source-defined continuation below uncounted parents. Compiled unmodified pinned hierarchy/node/vector bodies match 1048 complete no-phantom trees / 5016 counter, continuation and vector states. Core lifecycle assertions and seven literal common/automatic ODT cases verify actual labels, copied rules/captured item sets, Worker v16, selected XML and reopen. Tree rebuilding/eager validation, missing-level grouping without native phantoms, lazy validity/notifications, continuous numbering, redline trees and broader native ownership/defaults remain individually unverified. No whole-module parity promotion; registered save/open/recovery policies are unchanged.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwNumberTreeNode"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+        "upstreamSymbols": [
+          "SwNumberTreeNode::SwNumberTreeNode",
+          "SwNumberTreeNode::ValidateHierarchical",
+          "SwNumberTreeNode::GetNumberVector_"
         ]
       }
     },
@@ -3939,9 +3994,20 @@
           "apps/office/src/sw/source/core/doc/list.ts#WRITER_PARAGRAPH_LIST_KINDS",
           "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::SwList",
           "apps/office/src/sw/source/core/doc/list-invariants.test.ts#revalidates restart and counted changes",
-          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::ValidateChildren"
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::ValidateChildren",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#initializes structurally and advances counted siblings after zero",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#retains native first uncounted descendant and nested sibling rules",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#continues a subtree only below native uncounted parents",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#revalidates zero restarts, counted changes and bounded missing-level groups",
+          "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts#round-trips zero starts and restarts through native list trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::ValidateHierarchical",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumberVector_",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsCounted",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsRestart",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::GetStartValue",
+          "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::ValidateListTree"
         ],
-        "justification": "The bounded counter-tree paths for restart, uncounted items and level reparenting have source-backed assertions. Broader SwList responsibilities and unsupported native document ranges remain unverified.",
+        "justification": "The bounded counter-tree paths for restart, uncounted items and level reparenting have source-backed assertions. Broader SwList responsibilities and unsupported native document ranges remain unverified. Hierarchical counter state and sibling calculation now belong to SwNumberTreeNode; SwNodeNum supplies Writer counted/restart/start policy and native-style roots. Structural first/sibling order replaces the numeric-zero sentinel, retaining signed uncounted-first counters, zero starts/restarts, counted-descendant initialization and source-defined continuation below uncounted parents. Compiled unmodified pinned hierarchy/node/vector bodies match 1048 complete no-phantom trees / 5016 counter, continuation and vector states. Core lifecycle assertions and seven literal common/automatic ODT cases verify actual labels, copied rules/captured item sets, Worker v16, selected XML and reopen. Tree rebuilding/eager validation, missing-level grouping without native phantoms, lazy validity/notifications, continuous numbering, redline trees and broader native ownership/defaults remain individually unverified. No whole-module parity promotion; registered save/open/recovery policies are unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "WRITER_PARAGRAPH_LIST_KINDS",
