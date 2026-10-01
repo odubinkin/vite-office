@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "task_id": "202610011627-W77K0Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-01T17:19:10.473Z",
+  "verdict": "pass",
+  "summary": "Same-actor EVALUATOR phase passes iteration49 at actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a. Protected explicit nullable-target validation and ordered equivalence are restored; no independent-agent,whole-module or goal-completion claim.",
+  "evaluated_sha": "c36b910aa271ecab1515f81e4df2032282c32c4a",
+  "blueprint_digest": "6e4236bdc3db01ece666279ab99ecc49ec1c62568fd3c5aa776562b0f71985e5",
+  "findings": [
+    "Exact eight semantic files plus three task artifacts in actual CODE. The public eager hierarchy bridge is removed; both validators require explicit arguments and remain protected. Protected GetIterator resolves native comparator equivalence. Distinct-key foreign/null targets preserve caches, equivalent objects and owned targets validate only their native prefix; loop termination follows the selected source iterator condition.",
+    "Native complete unchanged header/types/core input produces128 profiles/1792 snapshots/7168 states with named container/policy/diagnostic/registration aliases,ASan/UBSan and four expected compiler failures. Local typechecking rejects preceding public/optional contracts and now passes. Packed fixture exactly matches native output and three fresh file hashes match pin;no source copies or upstream reads/compilation/invocation by project tests. Generated temporary source/binary disposed of after comparison.",
+    "Original expectation values remain unchanged; phantom timing now requests the exact selected native root last-child prefix, lifecycle diagnostics access protected methods only in tests and continuous sentinel calls explicitly pass undefined. Focused21 tests/5 files pass with upstream absent. Final unchanged verify app734/inventory109/browser19,both coverages100%,all declared gates pass. Failed red/type/native-container/provenance attempts retained and resolved;metadata statuses,classifications and IO/recovery deviations unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610011627-W77K0Q/README.md",
+    ".agentplane/tasks/202610011627-W77K0Q/verify-final.log",
+    ".agentplane/tasks/202610011627-W77K0Q/focused-without-upstream.log",
+    ".agentplane/tasks/202610011627-W77K0Q/evidence-final.json",
+    ".agentplane/tasks/202610011627-W77K0Q/native-identities.json",
+    ".agentplane/tasks/202610011627-W77K0Q/native-output.json",
+    ".agentplane/tasks/202610011627-W77K0Q/red-test.log",
+    ".agentplane/tasks/202610011627-W77K0Q/red-types.log",
+    "Native bad_public_h/c and bad_arg_h/c logs:four expected protected/too-few-arguments compiler rejections",
+    "git show c36b910aa271ecab1515f81e4df2032282c32c4a:8 semantic+3 task paths;doctor0 errors/two pre-existing warnings,routing/diff pass"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "This core policy adapter omits registration and full native doc/style/layout/service/global/destructor lifetimes;prior owner/Worker/ODT native fixtures remain separate unchanged evidence. Other child-lookup consumers remain to audit: native RemoveChild resolves a stored equivalent pRemove while local code still uses supplied-object identity and topology. Close only this leaf;parent/full goal remains active."
+  ]
+}

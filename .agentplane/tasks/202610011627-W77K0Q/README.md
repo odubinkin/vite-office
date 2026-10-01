@@ -4,7 +4,7 @@ title: "Restore protected explicit-target numbering validation contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,37 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-01T17:16:25.892Z"
+  updated_by: "CODER"
+  note: "Command: unchanged npm run verify, upstream-unavailable focused tree suites, manual native probe/compiler contracts, doctor/routing/diff. Result: pass. Evidence: verify-final.log,focused-without-upstream.log,evidence-final.json,native-identities.json,native-output.json and four bad_public/arg logs. Scope: eight semantic paths in actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (eight semantic plus three task artifacts = eleven files). App734/inventory109/browser19, both coverages100%, all gates pass; native128 profiles/1792 snapshots/7168 states, four compiler contracts, all original expectations retained. No upstream calls/reads/compilation by project tests, no source copies in canonical artifacts; metadata statuses/deviations unchanged. Parent/full goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T17:19:10.473Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor EVALUATOR phase passes iteration49 at actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a. Protected explicit nullable-target validation and ordered equivalence are restored; no independent-agent,whole-module or goal-completion claim."
+  evaluated_sha: "c36b910aa271ecab1515f81e4df2032282c32c4a"
+  blueprint_digest: "6e4236bdc3db01ece666279ab99ecc49ec1c62568fd3c5aa776562b0f71985e5"
+  evidence_refs:
+    - ".agentplane/tasks/202610011627-W77K0Q/README.md"
+    - ".agentplane/tasks/202610011627-W77K0Q/quality/20261001-171910473-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610011627-W77K0Q/quality/20261001-171910473-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610011627-W77K0Q/quality/20261001-171910473-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610011627-W77K0Q/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610011627-W77K0Q/verify-final.log"
+    - ".agentplane/tasks/202610011627-W77K0Q/focused-without-upstream.log"
+    - ".agentplane/tasks/202610011627-W77K0Q/evidence-final.json"
+    - ".agentplane/tasks/202610011627-W77K0Q/native-identities.json"
+    - ".agentplane/tasks/202610011627-W77K0Q/native-output.json"
+    - ".agentplane/tasks/202610011627-W77K0Q/red-test.log"
+    - ".agentplane/tasks/202610011627-W77K0Q/red-types.log"
+    - "Native bad_public_h/c and bad_arg_h/c logs:four expected protected/too-few-arguments compiler rejections"
+    - "git show c36b910aa271ecab1515f81e4df2032282c32c4a:8 semantic+3 task paths;doctor0 errors/two pre-existing warnings,routing/diff pass"
+  findings:
+    - "Exact eight semantic files plus three task artifacts in actual CODE. The public eager hierarchy bridge is removed; both validators require explicit arguments and remain protected. Protected GetIterator resolves native comparator equivalence. Distinct-key foreign/null targets preserve caches, equivalent objects and owned targets validate only their native prefix; loop termination follows the selected source iterator condition."
+    - "Native complete unchanged header/types/core input produces128 profiles/1792 snapshots/7168 states with named container/policy/diagnostic/registration aliases,ASan/UBSan and four expected compiler failures. Local typechecking rejects preceding public/optional contracts and now passes. Packed fixture exactly matches native output and three fresh file hashes match pin;no source copies or upstream reads/compilation/invocation by project tests. Generated temporary source/binary disposed of after comparison."
+    - "Original expectation values remain unchanged; phantom timing now requests the exact selected native root last-child prefix, lifecycle diagnostics access protected methods only in tests and continuous sentinel calls explicitly pass undefined. Focused21 tests/5 files pass with upstream absent. Final unchanged verify app734/inventory109/browser19,both coverages100%,all declared gates pass. Failed red/type/native-container/provenance attempts retained and resolved;metadata statuses,classifications and IO/recovery deviations unchanged."
 commit: null
 comments:
   -
@@ -45,8 +71,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: refined same eight-file leaf now includes source ordered-child equivalence for explicit hierarchical target lookup; persistent user goal authorizes this native contract repair, with all original expected values and upstream-independent project tests preserved."
+  -
+    type: "verify"
+    at: "2026-10-01T17:16:25.892Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: unchanged npm run verify, upstream-unavailable focused tree suites, manual native probe/compiler contracts, doctor/routing/diff. Result: pass. Evidence: verify-final.log,focused-without-upstream.log,evidence-final.json,native-identities.json,native-output.json and four bad_public/arg logs. Scope: eight semantic paths in actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (eight semantic plus three task artifacts = eleven files). App734/inventory109/browser19, both coverages100%, all gates pass; native128 profiles/1792 snapshots/7168 states, four compiler contracts, all original expectations retained. No upstream calls/reads/compilation by project tests, no source copies in canonical artifacts; metadata statuses/deviations unchanged. Parent/full goal active."
 doc_version: 3
-doc_updated_at: "2026-10-01T17:16:22.438Z"
+doc_updated_at: "2026-10-01T17:19:09.869Z"
 doc_updated_by: "CODER"
 description: "Iteration49 of the active implemented-runtime parity goal: remove the nonnative public eager no-argument hierarchical validation bridge, require explicit nullable targets on both protected validators, preserve original assertion meaning using source-shaped access, and compare native prefix/cache/null/foreign-target observations from manual local probes. Project tests must neither read nor compile nor invoke pinned upstream; native source must only exist in ignored scratch, never canonical Agentplane artifacts. Registered IO/recovery deviations remain untouched."
 sections:
@@ -78,6 +110,39 @@ sections:
     Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py (manual developer comparison). Result: pass ASan/UBSan, 128 profiles / 1792 snapshots / 7168 record states; four expected native compiler failures prove protected access and mandatory arguments. Complete native header/type/core input file hashes freshly match pin 9bc445578031fecf56086729d8e4940c77e14d65. Literal packed fixture matches native-output.json exactly; decoded SHA256 50d650fdb7e1998fc898fee8a6849922f1da5802383166ff057b51f21143e2a2; fixture 14662 bytes. Named ordered-child/bulk-insert,Long/pointer,diagnostic/Arabic/reading/event/omitted-registration adapters bound core-only proof. All project tests use local data only; no native source stored in canonical Agentplane artifacts.
     Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass; doctor zero errors and two pre-existing warnings (managed shim and historical F1JT8K close SHA), routing OK, no whitespace errors.
     Actual post-bookkeeping CODE: c36b910aa271ecab1515f81e4df2032282c32c4a. Exact scope: eight approved semantic paths plus three task artifact paths = eleven files. Metadata changes only record bounded evidence, with no status/classification or registered deviation changes. Separate canonical verification, same-actor EVALUATOR review and leaf close follow. No independent-agent or full-goal completion claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T17:16:25.892Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: unchanged npm run verify, upstream-unavailable focused tree suites, manual native probe/compiler contracts, doctor/routing/diff. Result: pass. Evidence: verify-final.log,focused-without-upstream.log,evidence-final.json,native-identities.json,native-output.json and four bad_public/arg logs. Scope: eight semantic paths in actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (eight semantic plus three task artifacts = eleven files). App734/inventory109/browser19, both coverages100%, all gates pass; native128 profiles/1792 snapshots/7168 states, four compiler contracts, all original expectations retained. No upstream calls/reads/compilation by project tests, no source copies in canonical artifacts; metadata statuses/deviations unchanged. Parent/full goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T17:16:22.438Z, excerpt_hash=sha256:506145af04500a6908aea2199bdc739b86ea17aa4e5381e63e45a483d34a0ae0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011627-W77K0Q/blueprint/resolved-snapshot.json
+    - old_digest: 6e4236bdc3db01ece666279ab99ecc49ec1c62568fd3c5aa776562b0f71985e5
+    - current_digest: 6e4236bdc3db01ece666279ab99ecc49ec1c62568fd3c5aa776562b0f71985e5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610011627-W77K0Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610011627-W77K0Q
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf implementation commit and its eight intentional semantic paths via a follow-up task if required. Preserve task history, source hashes and literal results; never restore upstream source copies into artifacts or rewrite Git history."
   Findings: |-
     Fresh inspection confirms native header methods are protected and require explicit pointer arguments. Native hierarchical GetIterator(nullptr) resolves no child and returns without mutation; current local undefined-target overload instead validates recursively. Current production calls are owned-child only; three legacy diagnostic tests still rely on public/no-argument access. Prior iteration 48 completed with native 960 sequences/69120 states and unchanged full verification. Existing native result fixtures remain independent local test inputs.
@@ -97,6 +162,10 @@ sections:
     - Observation: Final unchanged npm run verify exits0 after correcting seven new provenance references to path/marker objects and removing duplicates. App734 tests/166 files and inventory109/36 files plus browser19 pass;both coverages100%. Original expectations unchanged; current focused21 tests/5 files pass while pinned upstream is unavailable. Native128 profiles/1792 snapshots/7168 raw states match the packed fixture, four expected native compiler failures prove access/argument contracts, three fresh source-file hashes match pin.
       Impact: Selected validation/lookup contracts are restored without test gate weakening or source artifacts. The earlier red,type and provenance failures are resolved; doctor0 errors/two pre-existing warnings and routing/diff checks pass.
       Resolution: Record actual CODE SHA with eight semantic paths and exact artifact count, persist final logs/integrity proof, perform same-actor EVALUATOR review and close only this leaf. Parent/full goal remains active. Native RemoveChild still uses GetIterator to select a stored equivalent child (pRemove), while local removal uses identity indexOf and the supplied child; audit this measured remaining mismatch in the next separate leaf.
+
+    - Observation: The successful manual comparison is complete; the task-owned ignored contract-probe.cxx and executable were removed after hashes/results/compiler evidence were captured.
+      Impact: No native source is retained even in this leaf temporary probe storage. Canonical artifacts already contain no upstream source copies; project tests use only the local packed result fixture.
+      Resolution: Reproduce manual evidence with the preserved developer generator when needed;never restore source copies into task artifacts or run the generator from project tests.
 id_source: "generated"
 ---
 ## Summary
@@ -138,6 +207,39 @@ Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py (manual devel
 Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass; doctor zero errors and two pre-existing warnings (managed shim and historical F1JT8K close SHA), routing OK, no whitespace errors.
 Actual post-bookkeeping CODE: c36b910aa271ecab1515f81e4df2032282c32c4a. Exact scope: eight approved semantic paths plus three task artifact paths = eleven files. Metadata changes only record bounded evidence, with no status/classification or registered deviation changes. Separate canonical verification, same-actor EVALUATOR review and leaf close follow. No independent-agent or full-goal completion claim.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T17:16:25.892Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: unchanged npm run verify, upstream-unavailable focused tree suites, manual native probe/compiler contracts, doctor/routing/diff. Result: pass. Evidence: verify-final.log,focused-without-upstream.log,evidence-final.json,native-identities.json,native-output.json and four bad_public/arg logs. Scope: eight semantic paths in actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (eight semantic plus three task artifacts = eleven files). App734/inventory109/browser19, both coverages100%, all gates pass; native128 profiles/1792 snapshots/7168 states, four compiler contracts, all original expectations retained. No upstream calls/reads/compilation by project tests, no source copies in canonical artifacts; metadata statuses/deviations unchanged. Parent/full goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T17:16:22.438Z, excerpt_hash=sha256:506145af04500a6908aea2199bdc739b86ea17aa4e5381e63e45a483d34a0ae0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011627-W77K0Q/blueprint/resolved-snapshot.json
+- old_digest: 6e4236bdc3db01ece666279ab99ecc49ec1c62568fd3c5aa776562b0f71985e5
+- current_digest: 6e4236bdc3db01ece666279ab99ecc49ec1c62568fd3c5aa776562b0f71985e5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610011627-W77K0Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610011627-W77K0Q
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only this leaf implementation commit and its eight intentional semantic paths via a follow-up task if required. Preserve task history, source hashes and literal results; never restore upstream source copies into artifacts or rewrite Git history.
@@ -161,3 +263,7 @@ Fresh inspection confirms native header methods are protected and require explic
 - Observation: Final unchanged npm run verify exits0 after correcting seven new provenance references to path/marker objects and removing duplicates. App734 tests/166 files and inventory109/36 files plus browser19 pass;both coverages100%. Original expectations unchanged; current focused21 tests/5 files pass while pinned upstream is unavailable. Native128 profiles/1792 snapshots/7168 raw states match the packed fixture, four expected native compiler failures prove access/argument contracts, three fresh source-file hashes match pin.
   Impact: Selected validation/lookup contracts are restored without test gate weakening or source artifacts. The earlier red,type and provenance failures are resolved; doctor0 errors/two pre-existing warnings and routing/diff checks pass.
   Resolution: Record actual CODE SHA with eight semantic paths and exact artifact count, persist final logs/integrity proof, perform same-actor EVALUATOR review and close only this leaf. Parent/full goal remains active. Native RemoveChild still uses GetIterator to select a stored equivalent child (pRemove), while local removal uses identity indexOf and the supplied child; audit this measured remaining mismatch in the next separate leaf.
+
+- Observation: The successful manual comparison is complete; the task-owned ignored contract-probe.cxx and executable were removed after hashes/results/compiler evidence were captured.
+  Impact: No native source is retained even in this leaf temporary probe storage. Canonical artifacts already contain no upstream source copies; project tests use only the local packed result fixture.
+  Resolution: Reproduce manual evidence with the preserved developer generator when needed;never restore source copies into task artifacts or run the generator from project tests.
