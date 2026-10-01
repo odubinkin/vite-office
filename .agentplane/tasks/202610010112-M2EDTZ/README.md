@@ -4,7 +4,7 @@ title: "Restore native unnumbered list paragraph ODT transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned ODT unnumbered paragraph/header/item consumption under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:13:16.801Z"
+doc_updated_at: "2026-10-01T01:20:44.551Z"
 doc_updated_by: "CODER"
 description: "Iteration30: carry existing SwTextNode counted state through ODT using native list-header versus list-item continuation and list-item consumption ownership. Preserve intentional save/open/recovery policies."
 sections:
@@ -46,7 +46,12 @@ sections:
   Verify Steps: "Reproduce current WhichId87 export failure and prove Worker16/CaptureListItems retain false. Compare list/item/header open-close events and paragraph placement to compiled unmodified pinned exportListChange with explicit bounded export/string/metadata shims; verify native item-stack push/pop/set/top and source-derived first-paragraph consumption/outer clearing. Assert initial and nested headers, skipped ancestors, ordinary counted siblings, uncounted same/shallow continuations, ordinary multi-paragraph items, paragraphs before/after nested lists, ignored malformed/header start, counted restart0 and uncounted restart omission. Genuine common/automatic ODT fixtures must assert literal text/count/level/restart/number/vector/label state, independent owned rule/item copies, Worker16, selected XML structure and reopen for numbered and bullet lists. Run npm run verify unchanged with both100% coverage suites and all browser/source/provenance/ODT gates, ap doctor, routing validator and git diff --check. Record implementation commit and clean final tracked state; no whole-module/full-goal completion claim."
   Verification: "Pending implementation and declared checks. No mandatory gate is skipped."
   Rollback Plan: "Revert only the scoped implementation through a new executable task if needed; keep DONE artifacts immutable and the parent goal active."
-  Findings: "Preflight is clean main/direct; only parent202609240501-C9TN6M DOING. Previous turn is progress: iteration29 PHRS94 DONE, implementation dd328458813306a78d7a9c6551ff7d3ec56dadee; quality b8c3529654d82592728796904e0c4625b05d426a; close430b8348921802071a91c4cdb2bc9cd45361b929; parent fb06d9eb1144. Native pin libreoffice-26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Read-only reproduction: false counted flag survives Worker16 and has no marker, but ODT exporter rejects WhichId87. txtparai explicitly rejects header and second paragraph. Native XMLTextNumRuleInfo reads NumberingIsNumber and only reads restart/start when numbered; exportListChange opens header only for final newly opened unnumbered level and appends unnumbered same/decreasing-level paragraphs inside the current item. XMLTextListItemContext accepts header, ignores its start and sets list-item marker only for ordinary items; txtimp consumes this marker after a paragraph, XMLTextListBlockContext clears restored outer marker on nested return. One transport/ownership task covers this coupled contract. No network/outside access or delegation."
+  Findings: |-
+    Preflight is clean main/direct; only parent202609240501-C9TN6M DOING. Previous turn is progress: iteration29 PHRS94 DONE, implementation dd328458813306a78d7a9c6551ff7d3ec56dadee; quality b8c3529654d82592728796904e0c4625b05d426a; close430b8348921802071a91c4cdb2bc9cd45361b929; parent fb06d9eb1144. Native pin libreoffice-26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Read-only reproduction: false counted flag survives Worker16 and has no marker, but ODT exporter rejects WhichId87. txtparai explicitly rejects header and second paragraph. Native XMLTextNumRuleInfo reads NumberingIsNumber and only reads restart/start when numbered; exportListChange opens header only for final newly opened unnumbered level and appends unnumbered same/decreasing-level paragraphs inside the current item. XMLTextListItemContext accepts header, ignores its start and sets list-item marker only for ordinary items; txtimp consumes this marker after a paragraph, XMLTextListBlockContext clears restored outer marker on nested return. One transport/ownership task covers this coupled contract. No network/outside access or delegation.
+
+    - Observation: Focused header fixture fails on text projection: new test used nonexistent SwTextNode.text and record.version fields; counted/restart/number/vector/label values match the first literal source case.
+      Impact: Fixture must use canonical GetText()/text insertion and the actual Worker record schema API; no runtime list mismatch is observed.
+      Resolution: Correct the test to repository APIs, persist native evidence, rerun genuine package and unchanged mandatory gates.
 id_source: "generated"
 ---
 ## Summary
@@ -76,3 +81,7 @@ Revert only the scoped implementation through a new executable task if needed; k
 ## Findings
 
 Preflight is clean main/direct; only parent202609240501-C9TN6M DOING. Previous turn is progress: iteration29 PHRS94 DONE, implementation dd328458813306a78d7a9c6551ff7d3ec56dadee; quality b8c3529654d82592728796904e0c4625b05d426a; close430b8348921802071a91c4cdb2bc9cd45361b929; parent fb06d9eb1144. Native pin libreoffice-26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Read-only reproduction: false counted flag survives Worker16 and has no marker, but ODT exporter rejects WhichId87. txtparai explicitly rejects header and second paragraph. Native XMLTextNumRuleInfo reads NumberingIsNumber and only reads restart/start when numbered; exportListChange opens header only for final newly opened unnumbered level and appends unnumbered same/decreasing-level paragraphs inside the current item. XMLTextListItemContext accepts header, ignores its start and sets list-item marker only for ordinary items; txtimp consumes this marker after a paragraph, XMLTextListBlockContext clears restored outer marker on nested return. One transport/ownership task covers this coupled contract. No network/outside access or delegation.
+
+- Observation: Focused header fixture fails on text projection: new test used nonexistent SwTextNode.text and record.version fields; counted/restart/number/vector/label values match the first literal source case.
+  Impact: Fixture must use canonical GetText()/text insertion and the actual Worker record schema API; no runtime list mismatch is observed.
+  Resolution: Correct the test to repository APIs, persist native evidence, rerun genuine package and unchanged mandatory gates.
