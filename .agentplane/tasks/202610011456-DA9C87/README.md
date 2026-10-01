@@ -4,7 +4,7 @@ title: "Restore native numbering tree continuous and phantom policy dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute approved48 complete selected native continuous/phantom tree policy,validation,predecessor,cache/notification and actual document list entry under persistent user goal authorization;preserve all gates and registered IO/recovery exceptions."
 doc_version: 3
-doc_updated_at: "2026-10-01T15:06:11.652Z"
+doc_updated_at: "2026-10-01T15:49:20.963Z"
 doc_updated_by: "CODER"
 description: "Iteration48: replace default-only SwNodeNum phantom policy and hierarchical-only tree dispatch with complete source-owned continuous validation,predecessor traversal,cache invalidation and notification responsibilities. Use native rule flags and native SwList validation entry;existing label fallback respects continuous mode. Verify exact pinned native mixed topology/cache/notification/counter outputs and actual document/Worker owners without broad parity promotion or changing registered IO/recovery exceptions."
 sections:
@@ -60,6 +60,10 @@ sections:
     - Observation: Initial native generator failed before generation/compilation with a Python syntax error:node signature comprehension had a mismatched closing parenthesis at line18.
       Impact: No native output or implementation change claimed. This is an evidence-generator typo inside approved task scope;no scope/risk/gate drift.
       Resolution: Fix the comprehension closing bracket,then generate and compile unchanged native source profiles. Preserve this failure in Findings and sequentially stop after every nonzero mutation;full acceptance criteria unchanged.
+
+    - Observation: User forbids persisted upstream source copies and upstream-dependent project tests. Separate cleanup CODE581224c02406a2b6c00126fea6b6220a0636e130 removed all41trackedCxx sources plus current3untracked source files,51embedded source bodies;source generators now use ignored .agentplane/tmp/upstream-probes via manual-only storage helper. Separate CODEa775dd325398baa23db153f0c6d13b21f2b769e4 isolates all project tests from pinned vendor,verified with vendor absent.
+      Impact: Current48 native outputs and literal fixture remain valid;generated source copies are deleted and may be regenerated only in ignored scratch. Manual probe dependencies require earlier profile generation in dependency order. Do not add source copies or invoke native upstream in project tests. This48tree implementation remains incomplete and goal staysactive.
+      Resolution: Restored owned unfinished generator edits after unrelated lifecycle closure. Continue full approved continuous/phantom dispatch responsibility with local tests consuming retained literal JSON. Persist only generator,identities,logs/results and never generated native source files.
 id_source: "generated"
 ---
 ## Summary
@@ -99,3 +103,7 @@ Preflight clean/direct,ORCHESTRATOR then PLANNER,four matched modules loaded,use
 - Observation: Initial native generator failed before generation/compilation with a Python syntax error:node signature comprehension had a mismatched closing parenthesis at line18.
   Impact: No native output or implementation change claimed. This is an evidence-generator typo inside approved task scope;no scope/risk/gate drift.
   Resolution: Fix the comprehension closing bracket,then generate and compile unchanged native source profiles. Preserve this failure in Findings and sequentially stop after every nonzero mutation;full acceptance criteria unchanged.
+
+- Observation: User forbids persisted upstream source copies and upstream-dependent project tests. Separate cleanup CODE581224c02406a2b6c00126fea6b6220a0636e130 removed all41trackedCxx sources plus current3untracked source files,51embedded source bodies;source generators now use ignored .agentplane/tmp/upstream-probes via manual-only storage helper. Separate CODEa775dd325398baa23db153f0c6d13b21f2b769e4 isolates all project tests from pinned vendor,verified with vendor absent.
+  Impact: Current48 native outputs and literal fixture remain valid;generated source copies are deleted and may be regenerated only in ignored scratch. Manual probe dependencies require earlier profile generation in dependency order. Do not add source copies or invoke native upstream in project tests. This48tree implementation remains incomplete and goal staysactive.
+  Resolution: Restored owned unfinished generator edits after unrelated lifecycle closure. Continue full approved continuous/phantom dispatch responsibility with local tests consuming retained literal JSON. Persist only generator,identities,logs/results and never generated native source files.

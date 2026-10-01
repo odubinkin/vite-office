@@ -1,0 +1,224 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "definitions": [
+    {
+      "path": "sw/inc/numrule.hxx",
+      "signature": "bool IsContinusNum()",
+      "sha256": "2e613cfaededbce8692aeff3801093222370e6f12610dc6ab344099649668632"
+    },
+    {
+      "path": "sw/inc/numrule.hxx",
+      "signature": "void SetContinusNum(",
+      "sha256": "fb9dbe1d26cbbf515b9472cf58d93a64887747b8b2d61bdc876fabedf6af53d9"
+    },
+    {
+      "path": "sw/inc/numrule.hxx",
+      "signature": "bool IsCountPhantoms()",
+      "sha256": "2c44c47f1c45d2b0630d3f7f91a7b9cb8709f2cdd2bbb60111eef7b1088149a4"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "bool SwNodeNum::IsContinuous()",
+      "sha256": "46509569aa9cc1bd62529c4a94a219ff6c86b70aec4e51965859ff54dce8cbe3"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::ValidateContinuous(",
+      "sha256": "05edd9eef2049c6b93a152bfd73d7b82606a881923eee49f5e12d72e5ee5ddda"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "SwNumberTreeNode * SwNumberTreeNode::GetLastDescendant()",
+      "sha256": "4d74b2bb9f1c8ba9b2b389a4db5a70e5fc59cce22cceacb3c321e8c0dac00b5b"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "SwNumberTreeNode * SwNumberTreeNode::GetPred(",
+      "sha256": "eee6ff92b2025862061b53da63bd430bb7f5afe3e4d3f7c9cbb1a36b8ea9760b"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "void SwNumRule::SetCountPhantoms(",
+      "sha256": "4fceaaad1e985acb24c5116cf8904c7c2055481c47568dafb1c3258543df640a"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "bool SwNodeNum::IsCountPhantoms()",
+      "sha256": "56553dd5e3a5705b8aa161798ceab411bf255047f370948c2b2c2106ff76ba50"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "bool SwNodeNum::IsCounted()",
+      "sha256": "fb8d6da92be2f6bd67fefa2cb1a4bae4e04c0553506647e77bb2ff38cad8928c"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "bool SwNodeNum::IsRestart()",
+      "sha256": "f49dda3d90b68b26ccfbe16e0ee8096b04abf423443c36ad3341033ba6e8d5d4"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue()",
+      "sha256": "90214045e14284d4782a408206b75b9b19e78f110591ba14ef556c072c078d3c"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "void SwNodeNum::PreAdd()",
+      "sha256": "a162cb62535acab604356ab8f8d569271bd500a62716e375e27e5bfa1346c9ce"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "void SwNodeNum::PostRemove()",
+      "sha256": "70c43d24d6307b73d638dccd2b935702772ea1d6ae63192b7f926194418f3b1d"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "void SwNodeNum::ChangeNumRule(",
+      "sha256": "6aa84aba996bf100ae542a5ae6a60f7a54c12d8a14f609b0a15f2351deabdcf1"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "void SwNodeNum::NotifyNode()",
+      "sha256": "0faf1c750b8c788e3264ec0d4789497ab781cbfcc246a92fdb3b210231e2904e"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "bool SwNodeNum::IsNotificationEnabled(",
+      "sha256": "e1601c9031be9e3a96ab3411c01b0c18f278cecbd198247c50106b2806ca9b41"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "bool SwNodeNum::IsNotifiable(",
+      "sha256": "cf7bd716d4d1cecd28c49cccdc6395be084bfca6738d4f268aab9474bcf78f34"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::ValidateHierarchical(",
+      "sha256": "0842a454ddf94807bf5381462111fe1b57e7614604f0f8fa8da2324cdaa0b366"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::Validate(",
+      "sha256": "3a7afead31a117ce03cd569878f1785c8ec225517ce5a8eaab607b61ba7f474a"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::SetLastValid\n",
+      "sha256": "860b40e70d1a6c6105c28e2ae78cf63386a6187adcdff0389d3b1d789414c982"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::NotifyInvalidChildren(",
+      "sha256": "5eccbc8df451b7fb8377de28b5d62ae6508d96ca2a615e2e09c17ab1d0d1669e"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::Notify(",
+      "sha256": "7648e90487034db466fccaf3b7ac7cd64b0d67729de77465cd2d249c85408f5c"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::InvalidateTree()",
+      "sha256": "89f7fff000da080a932dcaeba2df7783128c4e484e67c4cbb171bfd500c05f18"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::Invalidate(",
+      "sha256": "80d6a702dc2fb83d521c180c7edc6d7d599c22828b3491613fc6362519083404"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::AddChild(",
+      "sha256": "7a41385efbe79a1094fb6f6aca5903bc1879ed2030c07fb8ebe541a98e9f816c"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::RemoveChild(",
+      "sha256": "9e87b260d6106c51cb533c7f33dcd3ceef4e29c6f74cf380e98a3be66388e086"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::RemoveMe(",
+      "sha256": "4f94cd4abf8f0b48b2d5c302dd280e441b00371e9da4868fd4b12f63a6a35eb2"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::SetLevelInListTree(",
+      "sha256": "0c4783de4a813f77390aea38ed0acc6786a7e1b466f65027f144f42b8fb74ba9"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "SwNumberTreeNode * SwNumberTreeNode::CreatePhantom()",
+      "sha256": "b5bf95d99124e99e5eff2be39c9058ebe4dd1a74130e7a4803197498ee188118"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::ClearObsoletePhantoms()",
+      "sha256": "565f0af3e08c310facb689ef4a563a67a69c593ed89a86dd9e17aa6663d8afb0"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::MoveChildren(",
+      "sha256": "a2dd25f24503d64ba568cf18160b99c4329b1ee26f89bff27a95d17ed229f19e"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::MoveGreaterChildren(",
+      "sha256": "d72c23c5120fcd59777dd96666b7fbd932cd45ffca8087a91031a4a2235ab59e"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "void SwNumberTreeNode::GetNumberVector_(",
+      "sha256": "0727d69cda5c37d09c152ac5473d024e756402e806d7f9c9a4ac14d1c3bd8d00"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "bool SwNumberTreeNode::IsCounted()",
+      "sha256": "97954b07c7222329a80d100a8f24a79f88d195a5fbdf0d5d5fc413ec55333392"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "signature": "bool SwNumberTreeNode::HasPhantomCountedParent()",
+      "sha256": "7e4e455b495bcc867db86402c99f60dc672b5d0955e4c71fbe56d14b74ea340b"
+    },
+    {
+      "path": "sw/source/core/doc/list.cxx",
+      "signature": "void SwList::ValidateListTree(",
+      "sha256": "f956a0070e0d16c891101b61a8608627f7d308c13b4673ce105cceac34777178"
+    },
+    {
+      "path": "sw/source/core/doc/list.cxx",
+      "signature": "void SwList::InvalidateListTree()",
+      "sha256": "41a4b11d51f8453a39823c306493d9d46e838630f4546b1665e3fc144824d712"
+    },
+    {
+      "path": "sw/source/core/doc/list.cxx",
+      "signature": "void SwList::InsertListItem(",
+      "sha256": "d4e70bb119026a953c8bbf169d96445f3d699dc3b818404205ddc8768f5f6a05"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "void SwNumRule::Validate(",
+      "sha256": "8e0637a9973365a27d029e2ceeba5101474a2f7a887d2629d1090f99b6382fb8"
+    },
+    {
+      "path": "sw/inc/numrule.hxx",
+      "signature": "bool IsContinusNum()",
+      "sha256": "2e613cfaededbce8692aeff3801093222370e6f12610dc6ab344099649668632"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector",
+      "sha256": "1fdc10485e2d3b2909b26319c8ef5c27b8cacb52d493c6aa1465c3070482a0dd"
+    }
+  ],
+  "priorProfiles": [
+    ".agentplane/tasks/202610010735-THRTCH/native-source-identity.json",
+    ".agentplane/tasks/202610010449-CE6KDW/native-owner.cxx",
+    ".agentplane/tasks/202610011419-EHEH05/native-identities.json"
+  ],
+  "policyProfileSha256": "0f292a77ef94b26533df04d4b3d385a7b5e6ac4bc185e202ad207f49b3ba6323",
+  "treeProfileSha256": "9408710704d845a247295c4ddf1af5dddff8a98b43ad32992a2a65652ee13f96",
+  "markerProfileSha256": "76cdf21d79bfe6c70e9c5ae248acb8654a5fe228ed3b58e0775ef19f6277893e",
+  "scope": "Complete unchanged selected tree/record/list/owner/notification and marker bodies. Rule format start/type/raw presence are named bound-input adapters (native scalar getters exact;complete metadata/default format source proof retained47). Attribute pool/string/document position range/style/no-layout/no-redline/fuzz/dtor/field/raw callback/normal broadcaster-event capture/static service/decimal formatter aliases bound proof. Root hidden/original trees empty;single canonical shown document range. Native full format/style/Font/graphics/locale/service/global/destructor/UNO/redline/layout/ODT metadata/UI lifetimes remain unverified."
+}
