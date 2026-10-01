@@ -119,7 +119,18 @@ for i in range(40):
   ops.append([k,w,v] if k in [0,8] else [1,84,v,86,7] if k==1 else [2,w,random.choice([0,w,87])] if k==2 else [3,*random.sample([84,85,86,87],random.randrange(5))] if k==3 else [4] if k==4 else [k,w] if k in [5,6] else [7] if k==7 else [9,random.randrange(3),84,v])
  cases.append({'ops':ops})
 request=''.join(str(len(c['ops']))+' '+' '.join(str(o[0])+' '+str(len(o)-1)+' '+' '.join(map(str,o[1:])) for o in c['ops'])+'\n' for c in cases)
-lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink();assert len(lines)==len(cases)
+try:
+ lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines()
+except subprocess.CalledProcessError:
+ for i,c in enumerate(cases):
+  one=str(len(c['ops']))+' '+' '.join(str(o[0])+' '+str(len(o)-1)+' '+' '.join(map(str,o[1:])) for o in c['ops'])+'\n'
+  r=subprocess.run([str(binary)],input=one,text=True,capture_output=True)
+  if r.returncode:
+   (root/'native-crash-case.json').write_text(json.dumps({'case':i,**c},indent=2)+'\n')
+   print('Native dependency adapter crash case',i,c,flush=True);break
+ raise
+finally:binary.unlink()
+assert len(lines)==len(cases)
 for c,l in zip(cases,lines):c['expected']=json.loads(l)
 (root/'native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n');(root/'native-source-identity.json').write_text(json.dumps(defs,indent=2)+'\n')
 print(f'{len(defs)} unchanged definitions;{len(cases)} sequences/{sum(len(c["ops"]) for c in cases)} states. Fresh-handle style-access/raw-pool/unlocked model-observer/no-platform-cache adapters;no full native autostyle pool/refcount/surrogate/modify-lock/conditional/auto-style/fill/client lifetime claim.')
