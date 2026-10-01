@@ -1,10 +1,11 @@
 ---
 id: "202610010536-95XQFH"
 title: "Restore Writer numbering transitions on paragraph style changes"
-status: "DOING"
+result_summary: "Restored Writer collection numbering transitions and exact undo,Worker and named ODT state"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 29
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Actual initial mismatch is retained in baseline.json. Sixteen unchanged additional native definitions with source identity match277 sequences/10394 real states;8 unsigned source definitions verify supported constructors/defaults/query/owned clones/equality. No whole-native build or body rewriting claim."
     - "Source-shaped collection helpers reconcile owned numbering records and five-item reset;independent outline assignment/items and synthesized marker survive exact undo,clone,Worker16 and genuine named-style ODT/reopen. Named ODT dependencies are implemented without silently accepting unsupported direct outline state."
     - "Final unchanged npm run verify exits0:682 app,109 inventory,19 browser;both100% coverage and all required source/static/docs/invariant gates pass. Production/assertion/config changes were not used to mask prior UI timing failures;all earlier failed logs remain retained."
-commit: null
+commit:
+  hash: "d7ad7407f2bfbb3b2fea77e094dc77bdc554f56c"
+  message: "🧩 95XQFH code: restore Writer collection numbering transitions"
 comments:
   -
     author: "CODER"
     body: "Start: approved persistent parity goal;restore native numbering transitions on explicit paragraph style switches,pooled outline dependencies and exact affected undo state;preserve IO exceptions and all verification gates."
+  -
+    author: "CODER"
+    body: "Verified: restored source-owned Writer collection numbering transitions and exact undo,Worker and named ODT state;277 native sequences/10394 actual states and8 unsigned definitions pass. Final unchanged verify passes682 app,109 inventory and19 browser tests with both100% coverage and all static/source gates. Registered IO deviations preserved;broader native obligations and unexplained UI timing failures remain in active parent audit."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final unchanged npm run verify passes682 app/109 inventory/19 browser tests,both100% coverage,all static/source/invariant gates;native16 bodies277 sequences10394 actual states and8 unsigned definitions pass. Bounded collection-numbering/undo/ODT/Worker correction only;explicit residuals and prior unexplained UI timing failures retained in Findings;no waived gates or IO deviations."
+  -
+    type: "status"
+    at: "2026-10-01T07:24:24.454Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored source-owned Writer collection numbering transitions and exact undo,Worker and named ODT state;277 native sequences/10394 actual states and8 unsigned definitions pass. Final unchanged verify passes682 app,109 inventory and19 browser tests with both100% coverage and all static/source gates. Registered IO deviations preserved;broader native obligations and unexplained UI timing failures remain in active parent audit."
 doc_version: 3
-doc_updated_at: "2026-10-01T07:22:00.784Z"
+doc_updated_at: "2026-10-01T07:24:24.455Z"
 doc_updated_by: "CODER"
 description: "Iteration37 of approved persistent parity goal:implement native ChgFormatColl/HandleModifyAtTextNodeFormatChange/HandleApplyTextNodeFormatChange and existing assigned-heading level updates;restore owned rule/list state,outline suppression attributes and exact undo. Preserve registered document IO deviations and unchanged gates."
 sections:
@@ -124,6 +137,10 @@ sections:
     Command:npm run verify (verify-final-pass.log);Result:all runtime stages pass,final docs check fail;Evidence:682 app/153 files,109 inventory/36 files,19 browser13.4s,both100% coverage(app10331/7828/2827/9491;inventory1523/1080/384/1464),build/static pass;JSDoc9 missing comments on new test callbacks. Added documentation only. Subsequent check:docs passes464 files;file-size passes467 with decomposition candidates,source-tree111/33,provenance208(132mapped/60browser/16local),34 invariants valid,parity semanticViolationCount0. Retain full logs and prior unexplained UI failures;no production/assertion/config/gate changes in this documentation repair. Complete unchanged full command required before closure.
 
     Command:npm run verify (verify-terminal.log,session32251);Result:pass exit0;Evidence:682 app/153 files93.45s,109 inventory/36 files56.35s,19 browser16.9s;both coverage100% on all four metrics(app10331/7828/2827/9491;inventory1523/1080/384/1464);all unchanged build/static/docs464/file-size467/source-tree111+33/provenance208(132mapped/60browser/16local)/34invariants/parity semanticViolationCount0 gates pass. Final doctor0errors,two pre-existing warnings;policy routing passes. git diff --check initially rejects trailing spaces emitted by coverage/Vite in completed task log;normalized log line endings/trailing whitespace only,without changing results. Empty-index guard suggest-allow was premature;use intentional concrete runtime allowlist for code commit. Prior unexplained menu/Desktop waits and old iteration32 browser issue remain carried risks;no whole-module/full-native/parent/goal completion claim. No skipped/waived gates,network,outside access/subagents or registered IO changes.
+extensions:
+  implementation_commit:
+    hash: "d7ad7407f2bfbb3b2fea77e094dc77bdc554f56c"
+    message: "🧩 95XQFH code: restore Writer collection numbering transitions"
 id_source: "generated"
 ---
 ## Summary
