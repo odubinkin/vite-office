@@ -1,0 +1,5058 @@
+[
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "["
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        ""
+      ],
+      [
+        "text:display-levels",
+        ""
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "0"
+      ],
+      [
+        "text:display-levels",
+        "0"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "-7"
+      ],
+      [
+        "text:display-levels",
+        "-7"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "+3.5"
+      ],
+      [
+        "text:display-levels",
+        "+3.5"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 3,
+      "includeUpperLevels": 3,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 3,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "3"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        " \t7tail"
+      ],
+      [
+        "text:display-levels",
+        " \t7tail"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 7,
+      "includeUpperLevels": 7,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 7,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "7"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "invalid"
+      ],
+      [
+        "text:display-levels",
+        "invalid"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "32767"
+      ],
+      [
+        "text:display-levels",
+        "32767"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "32768"
+      ],
+      [
+        "text:display-levels",
+        "32768"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483647"
+      ],
+      [
+        "text:display-levels",
+        "2147483647"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483648"
+      ],
+      [
+        "text:display-levels",
+        "2147483648"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "-2147483649"
+      ],
+      [
+        "text:display-levels",
+        "-2147483649"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "9223372036854775808"
+      ],
+      [
+        "text:display-levels",
+        "9223372036854775808"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "\u20032"
+      ],
+      [
+        "text:display-levels",
+        "\u20032"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        ""
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": ""
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "[%2%|%1%|%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 3,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%10%.%1%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "literal"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "literal"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "literal",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "exportAttributes": {
+      "style:num-suffix": "literal"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%%"
+    },
+    "applied": {
+      "prefix": "%",
+      "suffix": "%",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "%",
+      "style:num-suffix": "%"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%9%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%9%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-list-format",
+        "ignored"
+      ],
+      [
+        "loext:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "loext:num-list-format",
+        "ignored"
+      ],
+      [
+        "style:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "[%1%|"
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[%1%|",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%|%1%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%|%1%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "["
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        ""
+      ],
+      [
+        "text:display-levels",
+        ""
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "0"
+      ],
+      [
+        "text:display-levels",
+        "0"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "-7"
+      ],
+      [
+        "text:display-levels",
+        "-7"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "+3.5"
+      ],
+      [
+        "text:display-levels",
+        "+3.5"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 3,
+      "includeUpperLevels": 3,
+      "listFormat": "%1%.%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 3,
+      "includeUpperLevels": 2,
+      "listFormat": "%1%.%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "3",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        " \t7tail"
+      ],
+      [
+        "text:display-levels",
+        " \t7tail"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 7,
+      "includeUpperLevels": 7,
+      "listFormat": "%1%.%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 7,
+      "includeUpperLevels": 2,
+      "listFormat": "%1%.%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "7",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "invalid"
+      ],
+      [
+        "text:display-levels",
+        "invalid"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "32767"
+      ],
+      [
+        "text:display-levels",
+        "32767"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%.%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 2,
+      "listFormat": "%1%.%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "32768"
+      ],
+      [
+        "text:display-levels",
+        "32768"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%.%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 2,
+      "listFormat": "%1%.%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483647"
+      ],
+      [
+        "text:display-levels",
+        "2147483647"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%.%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 2,
+      "listFormat": "%1%.%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483648"
+      ],
+      [
+        "text:display-levels",
+        "2147483648"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "-2147483649"
+      ],
+      [
+        "text:display-levels",
+        "-2147483649"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "9223372036854775808"
+      ],
+      [
+        "text:display-levels",
+        "9223372036854775808"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "\u20032"
+      ],
+      [
+        "text:display-levels",
+        "\u20032"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        ""
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": ""
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "[%2%|%1%|%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 3,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%10%.%1%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "exportAttributes": {
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "literal"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "literal"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "literal",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "exportAttributes": {
+      "style:num-suffix": "literal"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%%"
+    },
+    "applied": {
+      "prefix": "%",
+      "suffix": "%",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "%",
+      "style:num-suffix": "%"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%9%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%9%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-list-format",
+        "ignored"
+      ],
+      [
+        "loext:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "loext:num-list-format",
+        "ignored"
+      ],
+      [
+        "style:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "[%1%|"
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[%1%|",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "["
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%10%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%10%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        ""
+      ],
+      [
+        "text:display-levels",
+        ""
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "0"
+      ],
+      [
+        "text:display-levels",
+        "0"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "-7"
+      ],
+      [
+        "text:display-levels",
+        "-7"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "+3.5"
+      ],
+      [
+        "text:display-levels",
+        "+3.5"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 3,
+      "includeUpperLevels": 3,
+      "listFormat": "%8%.%9%.%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 3,
+      "includeUpperLevels": 3,
+      "listFormat": "%8%.%9%.%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "3",
+      "text:display-levels": "3"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        " \t7tail"
+      ],
+      [
+        "text:display-levels",
+        " \t7tail"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 7,
+      "includeUpperLevels": 7,
+      "listFormat": "%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 7,
+      "includeUpperLevels": 7,
+      "listFormat": "%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "7",
+      "text:display-levels": "7"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "invalid"
+      ],
+      [
+        "text:display-levels",
+        "invalid"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "32767"
+      ],
+      [
+        "text:display-levels",
+        "32767"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 10,
+      "listFormat": "%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767",
+      "text:display-levels": "10"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "32768"
+      ],
+      [
+        "text:display-levels",
+        "32768"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 10,
+      "listFormat": "%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767",
+      "text:display-levels": "10"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483647"
+      ],
+      [
+        "text:display-levels",
+        "2147483647"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 32767,
+      "listFormat": "%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 32767,
+      "includeUpperLevels": 10,
+      "listFormat": "%1%.%2%.%3%.%4%.%5%.%6%.%7%.%8%.%9%.%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "32767",
+      "text:display-levels": "10"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483648"
+      ],
+      [
+        "text:display-levels",
+        "2147483648"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "-2147483649"
+      ],
+      [
+        "text:display-levels",
+        "-2147483649"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "9223372036854775808"
+      ],
+      [
+        "text:display-levels",
+        "9223372036854775808"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "\u20032"
+      ],
+      [
+        "text:display-levels",
+        "\u20032"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 0,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")",
+      "text:start-value": "0"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        ""
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": ""
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "[%2%|%1%|%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 3,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "3"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%10%.%1%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "exportAttributes": {
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "literal"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "literal"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "literal",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "exportAttributes": {
+      "style:num-suffix": "literal"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%%"
+    },
+    "applied": {
+      "prefix": "%",
+      "suffix": "%",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "%",
+      "style:num-suffix": "%"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%9%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%9%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-list-format",
+        "ignored"
+      ],
+      [
+        "loext:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "loext:num-list-format",
+        "ignored"
+      ],
+      [
+        "style:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "numbered",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "[%1%|"
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[%1%|",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%|%10%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%|%10%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]",
+      "text:display-levels": "2"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "["
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        ""
+      ],
+      [
+        "text:display-levels",
+        ""
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "0"
+      ],
+      [
+        "text:display-levels",
+        "0"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "-7"
+      ],
+      [
+        "text:display-levels",
+        "-7"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "+3.5"
+      ],
+      [
+        "text:display-levels",
+        "+3.5"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        " \t7tail"
+      ],
+      [
+        "text:display-levels",
+        " \t7tail"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "invalid"
+      ],
+      [
+        "text:display-levels",
+        "invalid"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "32767"
+      ],
+      [
+        "text:display-levels",
+        "32767"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "32768"
+      ],
+      [
+        "text:display-levels",
+        "32768"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483647"
+      ],
+      [
+        "text:display-levels",
+        "2147483647"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483648"
+      ],
+      [
+        "text:display-levels",
+        "2147483648"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "-2147483649"
+      ],
+      [
+        "text:display-levels",
+        "-2147483649"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "9223372036854775808"
+      ],
+      [
+        "text:display-levels",
+        "9223372036854775808"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "text:start-value",
+        "\u20032"
+      ],
+      [
+        "text:display-levels",
+        "\u20032"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%1%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        ""
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "[%2%|%1%|%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 3,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%10%.%1%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%.%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "literal"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "literal",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "exportAttributes": {
+      "style:num-suffix": "literal"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "applied": {
+      "prefix": "%",
+      "suffix": "%",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "%",
+      "style:num-suffix": "%"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%9%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-list-format",
+        "ignored"
+      ],
+      [
+        "loext:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "loext:num-list-format",
+        "ignored"
+      ],
+      [
+        "style:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 0,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "[%1%|"
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[%1%|",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%|%1%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%|%1%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "["
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        ""
+      ],
+      [
+        "text:display-levels",
+        ""
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "0"
+      ],
+      [
+        "text:display-levels",
+        "0"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "-7"
+      ],
+      [
+        "text:display-levels",
+        "-7"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "+3.5"
+      ],
+      [
+        "text:display-levels",
+        "+3.5"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        " \t7tail"
+      ],
+      [
+        "text:display-levels",
+        " \t7tail"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "invalid"
+      ],
+      [
+        "text:display-levels",
+        "invalid"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "32767"
+      ],
+      [
+        "text:display-levels",
+        "32767"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "32768"
+      ],
+      [
+        "text:display-levels",
+        "32768"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483647"
+      ],
+      [
+        "text:display-levels",
+        "2147483647"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483648"
+      ],
+      [
+        "text:display-levels",
+        "2147483648"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "-2147483649"
+      ],
+      [
+        "text:display-levels",
+        "-2147483649"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "9223372036854775808"
+      ],
+      [
+        "text:display-levels",
+        "9223372036854775808"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "text:start-value",
+        "\u20032"
+      ],
+      [
+        "text:display-levels",
+        "\u20032"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%2%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        ""
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "[%2%|%1%|%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 3,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%10%.%1%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%.%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "literal"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "literal",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "exportAttributes": {
+      "style:num-suffix": "literal"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "applied": {
+      "prefix": "%",
+      "suffix": "%",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "%",
+      "style:num-suffix": "%"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%9%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-list-format",
+        "ignored"
+      ],
+      [
+        "loext:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "loext:num-list-format",
+        "ignored"
+      ],
+      [
+        "style:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 1,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "[%1%|"
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[%1%|",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "["
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%10%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%10%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        ""
+      ],
+      [
+        "text:display-levels",
+        ""
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "0"
+      ],
+      [
+        "text:display-levels",
+        "0"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "-7"
+      ],
+      [
+        "text:display-levels",
+        "-7"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "+3.5"
+      ],
+      [
+        "text:display-levels",
+        "+3.5"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        " \t7tail"
+      ],
+      [
+        "text:display-levels",
+        " \t7tail"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "invalid"
+      ],
+      [
+        "text:display-levels",
+        "invalid"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "32767"
+      ],
+      [
+        "text:display-levels",
+        "32767"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "32768"
+      ],
+      [
+        "text:display-levels",
+        "32768"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483647"
+      ],
+      [
+        "text:display-levels",
+        "2147483647"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "2147483648"
+      ],
+      [
+        "text:display-levels",
+        "2147483648"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "-2147483649"
+      ],
+      [
+        "text:display-levels",
+        "-2147483649"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "9223372036854775808"
+      ],
+      [
+        "text:display-levels",
+        "9223372036854775808"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "text:start-value",
+        "\u20032"
+      ],
+      [
+        "text:display-levels",
+        "\u20032"
+      ],
+      [
+        "style:num-suffix",
+        ")"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": ")",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%)"
+    },
+    "exportAttributes": {
+      "style:num-suffix": ")"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        ""
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": ""
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "[%2%|%1%|%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 3,
+      "listFormat": "[%2%|%1%|%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%10%.%1%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%10%.%1%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "%10%.%1%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "literal"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "literal",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "literal"
+    },
+    "exportAttributes": {
+      "style:num-suffix": "literal"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "applied": {
+      "prefix": "%",
+      "suffix": "%",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%%"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "%",
+      "style:num-suffix": "%"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "ignored"
+      ],
+      [
+        "style:num-suffix",
+        "ignored"
+      ],
+      [
+        "text:display-levels",
+        "2"
+      ],
+      [
+        "style:num-list-format",
+        "%9%"
+      ]
+    ],
+    "declaration": {
+      "prefix": "ignored",
+      "suffix": "ignored",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "applied": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "%9%"
+    },
+    "exportAttributes": {}
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-list-format",
+        "ignored"
+      ],
+      [
+        "loext:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "loext:num-list-format",
+        "ignored"
+      ],
+      [
+        "style:num-list-format",
+        "[%1%/%2%]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "",
+      "suffix": "",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%/%2%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%/%2%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  },
+  {
+    "kind": "bullet",
+    "level": 9,
+    "attributes": [
+      [
+        "style:num-prefix",
+        "[%1%|"
+      ],
+      [
+        "style:num-suffix",
+        "]"
+      ]
+    ],
+    "declaration": {
+      "prefix": "[%1%|",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 1,
+      "listFormat": "[%1%|%10%]"
+    },
+    "applied": {
+      "prefix": "[",
+      "suffix": "]",
+      "start": 1,
+      "includeUpperLevels": 2,
+      "listFormat": "[%1%|%10%]"
+    },
+    "exportAttributes": {
+      "style:num-prefix": "[",
+      "style:num-suffix": "]"
+    }
+  }
+]

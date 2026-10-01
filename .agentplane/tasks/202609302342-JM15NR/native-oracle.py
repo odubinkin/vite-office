@@ -31,7 +31,7 @@ marker=Path('.agentplane/tasks/202609302319-9KTM99/native-marker-oracle.cxx').re
 marker=re.sub(r'using sal_Int32=.*?; using LanguageType=int;', 'using sal_uInt8=uint8_t;using sal_uInt16=uint16_t;using LanguageType=int;',marker)
 marker=marker.replace('OUString makeStringAndClear(){return value;}', 'void append(sal_Int32 n){value+=OUString::number(n);} OUString makeStringAndClear(){auto out=value;value.clear();return out;}')
 marker=marker.replace('char operator[](int32_t n)const', 'sal_Int32 iterateCodePoints(sal_Int32* n)const{return static_cast<unsigned char>(value.at((*n)++));}\n char operator[](int32_t n)const')
-setters='\n'.join(next(line for line in hdr.splitlines() if name in line) for name in ['void            SetIncludeUpperLevels(', 'void            SetStart('])
+setters='\n'.join(next(line for line in hdr.splitlines() if name in line) for name in ['void            SetIncludeUpperLevels(', 'void            SetStart(', 'sal_uInt16      GetStart('])
 marker=marker.replace('void SetPrefix(const OUString&);',setters+'\n void SetPrefix(const OUString&);')
 tokens=sorted(set(re.findall(r'XML_ELEMENT\([A-Z_]+, (XML_[A-Z_]+)\)',attrs)))
 preamble=r'''

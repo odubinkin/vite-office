@@ -156,6 +156,7 @@ struct SvxNumberFormat {
  OUString sPrefix,sSuffix; std::optional<OUString> sListFormat; sal_uInt8 nInclUpperLevels=1; sal_uInt16 nStart=1; int type=0;
      void            SetIncludeUpperLevels( sal_uInt8 nSet ) { nInclUpperLevels = nSet;}
     void            SetStart(sal_uInt16 nSet) {nStart = nSet;}
+    sal_uInt16      GetStart() const {return nStart;}
  void SetPrefix(const OUString&); void SetSuffix(const OUString&);
  void SetListFormat(const OUString&,const OUString&,int); void SetListFormat(std::optional<OUString> oSet=std::nullopt);
  bool HasListFormat()const{return sListFormat.has_value();} OUString GetListFormat(bool=true)const;
