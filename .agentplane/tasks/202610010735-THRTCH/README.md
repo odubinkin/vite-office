@@ -4,7 +4,7 @@ title: "Restore Writer direct list attribute lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -26,6 +26,28 @@ verification:
   updated_by: "CODER"
   note: "Approved iteration38 passes unchanged npm run verify:692 app,109 inventory,19 browser,both100% coverage,all remaining gates. Forty unchanged native definitions compare60 sequences/2130 states and1824 insertion orders/17712 vectors;literal ODT/Worker assertions preserved. Doctor/routing/diff pass;full native lifetime/core/UI obligations and parent goal remain unverified and active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T08:44:04.447Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed actual implementation c1e7693682ef207f7a372c83c71a140818cbc506 against approved bounded direct-attribute lifecycle and unchanged hard gates;ready for owner closure,not overall parity promotion."
+  evaluated_sha: "c1e7693682ef207f7a372c83c71a140818cbc506"
+  blueprint_digest: "ef24f6201b6bcd2976afd34e22c33951a4a06cba2d68b3f884959e1cefc61a07"
+  evidence_refs:
+    - ".agentplane/tasks/202610010735-THRTCH/README.md"
+    - ".agentplane/tasks/202610010735-THRTCH/quality/20261001-084404447-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010735-THRTCH/quality/20261001-084404447-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010735-THRTCH/quality/20261001-084404447-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010735-THRTCH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010735-THRTCH/verify-complete.log"
+    - ".agentplane/tasks/202610010735-THRTCH/comparison.json"
+    - ".agentplane/tasks/202610010735-THRTCH/native-source-identity.json"
+    - ".agentplane/tasks/202610010735-THRTCH/phantom-final.log"
+    - ".agentplane/tasks/202610010735-THRTCH/doctor-final.log"
+    - ".agentplane/tasks/202610010735-THRTCH/routing-final.log"
+  findings:
+    - "Source-shaped set/reset helpers replace effective-state reconciliation;guard and pre/post ordering,Arabic/bullet notification distinctions,reading context,outline index/type and complete Worker item restore are evidenced by unchanged native bodies,raw-cache/event comparison and literal integration assertions."
+    - "Final verify-complete.log exits0 with692 app,109inventory,19browser and both100% coverage;all static/resource/source/policy gates preserved. Actual diff touches only approved paths and tests;code/metadata semantic statuses do not claim full upstream parity. Initial semantic and coverage failures retained,including diagnostic-only subset coverage failure."
 commit: null
 comments:
   -
@@ -46,7 +68,7 @@ events:
     state: "ok"
     note: "Approved iteration38 passes unchanged npm run verify:692 app,109 inventory,19 browser,both100% coverage,all remaining gates. Forty unchanged native definitions compare60 sequences/2130 states and1824 insertion orders/17712 vectors;literal ODT/Worker assertions preserved. Doctor/routing/diff pass;full native lifetime/core/UI obligations and parent goal remain unverified and active."
 doc_version: 3
-doc_updated_at: "2026-10-01T08:42:21.293Z"
+doc_updated_at: "2026-10-01T08:44:41.276Z"
 doc_updated_by: "CODER"
 description: "Iteration38: replace detached effective-state reconciliation with source-owned SetAttr/ResetAttr helpers for existing Writer direct list/outline items,including source ordering,reentrant empty suppression,precise tree notifications and necessary outline-index ownership. Preserve registered IO exceptions and immutable prior evidence;keep parent audit active."
 sections:
@@ -88,7 +110,7 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
-    <!-- END VERIFICATION RESULTS -->
+    <!-- END VERIFICATION RESULTS --> Actual implementation SHA:c1e7693682ef207f7a372c83c71a140818cbc506. Evaluator pass:quality/20261001-084404447-recovery-context/quality-report.json. Runtime diff reviewed;final lifecycle/parent artifact commit and clean check follow without any further implementation changes.
   Rollback Plan: "Revert only the actual iteration38 implementation commit if required;preserve task evidence and all prior DONE artifacts. No history rewriting or registered IO changes."
   Findings: |-
     Actual pre-edit baselines retained. Final unchanged extraction40 added definitions,60 sequences/2130 state comparisons passes,including reading true/false,nested mutation guards,ordinary/typed outline and raw cache/notification snapshots before validating vectors.1824 insertion orders/17712 before-after vectors agree with unchanged native timing;the independent prior fresh-topology literals are retained. Native evidence corrects source-stale cache/unknown-rule literals only. Initial full gate5 ODT failures exposed missing native reading suppression and sequential Worker attachment;scope/plan reapproved before dependency repair. Following suppression,6 focused failures were isolated to Worker direct batch using inherited style ranges;canonical text-node ranges retain all list items and12 original ODT tests now pass without altered expectations. All failures remain in logs. Harness construction/compile adapter errors,wrong initial test cwd,optional hint typing,nonnull/JSDoc test errors,1000line helper split/import mistakes,unsorted manifest and interrupted metadata-key update were corrected locally;no gate waiver or blanket invalidation. Full gates still pending. Full dtor/platform/temporary notification blockers/layout/fields/UNO/history/live-style/fill/default factories remain unverified. Prior UI asynchronous explanations remain unproven;parent goal active.
@@ -96,6 +118,8 @@ sections:
     Command: npm run verify. Result: fail on the first post-reading full rerun,690 tests pass but5 branch gaps;next692 pass with1 guard gap. Explicit index/id/assigned-level cases correct those tests;focused two-file coverage probe has all106 handler branches covered but fails global thresholds because it intentionally runs only a subset,so it is not global evidence. Full unchanged rerun in verify-complete.log exits0:692 application tests/155files,109inventory/36files,19browser;both suites100% statements/branches/functions/lines. Application counts10562/7973/2868/9699. All remaining resource,format,lint,type,dependency,static,documentation,size,source-tree,provenance,invariant and parity consistency gates pass;210runtime modules134mapped60browser16infrastructure. No config/coverage exclusions/validators changed. Command: ap doctor. Result: pass,zero errors,same preexisting hook-readiness and historic close-SHA warnings retained. Command: node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Full native40definition60sequence2130state and1824order17712vector comparisons pass. Metadata consistency alone is not whole parity proof;all wider semantic statuses remain unverified. No network/outside access/subagents or registered IO changes.
 
     Next individually source-backed issue for a separate task,not part of this completed correction: native SwContentNode ResetAttr(single/range),ResetAttr(vector) and ResetAllAttr in node.cxx1699-1799 notify clients while the cleared direct set is still owned,then release it only when the post-callback set is empty. Unchanged single/range no-ops do not release an already allocated empty set;vector releases it. Local node.ts releases before model notifications and unconditionally releases empty single/range no-ops. Verify actual callback identity/membership and nested mutations against unchanged native bodies before changing it. Full shared autoformat/refcount/modify-lock/cache/client architecture remains independently open. Parent audit and user goal remain active.
+
+    Closeout diagnostics: final raw Vite output had2 trailing spaces;only terminal whitespace in active verify-complete.log was normalized,then git diff --check passes. Initial code-commit subject lacked the required scope colon;CLI rejected it after staging only the22 intentional source/test/metadata paths. Route recomputed and corrected scope syntax succeeds. Actual amended implementation SHA:c1e7693682ef207f7a372c83c71a140818cbc506,not earlier task-only artifact commits. Evaluator reviewed that exact SHA and recorded pass at quality/20261001-084404447-recovery-context/quality-report.json with bounded findings and residuals. Runtime diff and initial clean tracked/untracked state checked;remaining quality/closure/parent progress artifacts are intentional and will be committed before final clean check. No runtime change after final full gates.
 id_source: "generated"
 ---
 ## Summary
@@ -149,7 +173,7 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
-<!-- END VERIFICATION RESULTS -->
+<!-- END VERIFICATION RESULTS --> Actual implementation SHA:c1e7693682ef207f7a372c83c71a140818cbc506. Evaluator pass:quality/20261001-084404447-recovery-context/quality-report.json. Runtime diff reviewed;final lifecycle/parent artifact commit and clean check follow without any further implementation changes.
 
 ## Rollback Plan
 
@@ -162,3 +186,5 @@ Actual pre-edit baselines retained. Final unchanged extraction40 added definitio
 Command: npm run verify. Result: fail on the first post-reading full rerun,690 tests pass but5 branch gaps;next692 pass with1 guard gap. Explicit index/id/assigned-level cases correct those tests;focused two-file coverage probe has all106 handler branches covered but fails global thresholds because it intentionally runs only a subset,so it is not global evidence. Full unchanged rerun in verify-complete.log exits0:692 application tests/155files,109inventory/36files,19browser;both suites100% statements/branches/functions/lines. Application counts10562/7973/2868/9699. All remaining resource,format,lint,type,dependency,static,documentation,size,source-tree,provenance,invariant and parity consistency gates pass;210runtime modules134mapped60browser16infrastructure. No config/coverage exclusions/validators changed. Command: ap doctor. Result: pass,zero errors,same preexisting hook-readiness and historic close-SHA warnings retained. Command: node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Full native40definition60sequence2130state and1824order17712vector comparisons pass. Metadata consistency alone is not whole parity proof;all wider semantic statuses remain unverified. No network/outside access/subagents or registered IO changes.
 
 Next individually source-backed issue for a separate task,not part of this completed correction: native SwContentNode ResetAttr(single/range),ResetAttr(vector) and ResetAllAttr in node.cxx1699-1799 notify clients while the cleared direct set is still owned,then release it only when the post-callback set is empty. Unchanged single/range no-ops do not release an already allocated empty set;vector releases it. Local node.ts releases before model notifications and unconditionally releases empty single/range no-ops. Verify actual callback identity/membership and nested mutations against unchanged native bodies before changing it. Full shared autoformat/refcount/modify-lock/cache/client architecture remains independently open. Parent audit and user goal remain active.
+
+Closeout diagnostics: final raw Vite output had2 trailing spaces;only terminal whitespace in active verify-complete.log was normalized,then git diff --check passes. Initial code-commit subject lacked the required scope colon;CLI rejected it after staging only the22 intentional source/test/metadata paths. Route recomputed and corrected scope syntax succeeds. Actual amended implementation SHA:c1e7693682ef207f7a372c83c71a140818cbc506,not earlier task-only artifact commits. Evaluator reviewed that exact SHA and recorded pass at quality/20261001-084404447-recovery-context/quality-report.json with bounded findings and residuals. Runtime diff and initial clean tracked/untracked state checked;remaining quality/closure/parent progress artifacts are intentional and will be committed before final clean check. No runtime change after final full gates.
