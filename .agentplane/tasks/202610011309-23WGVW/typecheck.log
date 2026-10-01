@@ -1,0 +1,24 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/txtnode/number-classification.test.ts(119,7): error TS2415: Class 'PolicyRoot' incorrectly extends base class 'SwNodeNum'.
+  Types have separate declarations of a private property 'phantom'.
+src/sw/source/core/txtnode/number-classification.test.ts(123,5): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'SwNodeNum'.
+src/sw/source/core/txtnode/number-classification.test.ts(142,26): error TS2345: Argument of type 'PolicyRoot' is not assignable to parameter of type 'SwNodeNum'.
+  Types have separate declarations of a private property 'phantom'.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit

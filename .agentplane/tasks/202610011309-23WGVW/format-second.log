@@ -1,0 +1,4 @@
+apps/office/src/sw/source/core/doc/number.ts 71ms (unchanged)
+apps/office/src/sw/source/core/txtnode/ndtxt.ts 49ms (unchanged)
+apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts 14ms (unchanged)
+apps/office/src/sw/source/core/txtnode/number-classification.test.ts 12ms (unchanged)
