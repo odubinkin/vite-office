@@ -1,0 +1,13 @@
+{
+  "initial": {
+    "effective": "Counters",
+    "owned": null,
+    "inList": false
+  },
+  "changed": {
+    "effective": "Bullets",
+    "owned": "Counters",
+    "label": "1."
+  },
+  "headingLevel": 0
+}
