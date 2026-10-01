@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:50:46.741Z"
+doc_updated_at: "2026-10-01T12:54:56.385Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -101,6 +101,10 @@ sections:
     - Observation: verify-third passes712 app,109 inventory and19 browser tests, both100% suites, build and static smoke, then JSDoc rejects one migrated codec opening header and three new test callbacks.
       Impact: The full verification still cannot be recorded as passing.
       Resolution: Move the codec fileoverview before its imports, document the three callbacks, undo unrelated JSON Unicode escaping, preserve verify-third.log and rerun the exact full verify pipeline. Next separate task is supported NONE/bitmap classification: unchanged native IsItemize/IsEnumeration/HasNumber/HasBullet output [[4,true,false],[5,true,false],[6,false,true],[8,false,true]], while real attached local nodes give [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. The bitmap rendering family remains unimplemented; this is classification evidence only.
+
+    - Observation: verify-fourth exits0 across the full original chain:712 app,109 inventory,19 browser, both100% suites and all gates. Final consumer review finds UNO property assembly drops newly source-owned visibility and present-empty Font state, while native SetNumberingRuleByIndex starts from a full copied format and changes fonts only when a font property is supplied.
+      Impact: The approved ownership migration must preserve these fields through real property updates; closing on generic green tests would miss the loss.
+      Resolution: Add a regression using actual SwXNumberingRules replacement of an existing hidden format with absent/present-empty/named font values, retain those copied native fields when applying supported properties, then rerun the full unchanged verify chain. This is within the approved actual-caller/ownership scope. Preserve the successful fourth log separately.
 id_source: "generated"
 ---
 ## Summary
@@ -177,3 +181,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: verify-third passes712 app,109 inventory and19 browser tests, both100% suites, build and static smoke, then JSDoc rejects one migrated codec opening header and three new test callbacks.
   Impact: The full verification still cannot be recorded as passing.
   Resolution: Move the codec fileoverview before its imports, document the three callbacks, undo unrelated JSON Unicode escaping, preserve verify-third.log and rerun the exact full verify pipeline. Next separate task is supported NONE/bitmap classification: unchanged native IsItemize/IsEnumeration/HasNumber/HasBullet output [[4,true,false],[5,true,false],[6,false,true],[8,false,true]], while real attached local nodes give [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. The bitmap rendering family remains unimplemented; this is classification evidence only.
+
+- Observation: verify-fourth exits0 across the full original chain:712 app,109 inventory,19 browser, both100% suites and all gates. Final consumer review finds UNO property assembly drops newly source-owned visibility and present-empty Font state, while native SetNumberingRuleByIndex starts from a full copied format and changes fonts only when a font property is supplied.
+  Impact: The approved ownership migration must preserve these fields through real property updates; closing on generic green tests would miss the loss.
+  Resolution: Add a regression using actual SwXNumberingRules replacement of an existing hidden format with absent/present-empty/named font values, retain those copied native fields when applying supported properties, then rerun the full unchanged verify chain. This is within the approved actual-caller/ownership scope. Preserve the successful fourth log separately.
