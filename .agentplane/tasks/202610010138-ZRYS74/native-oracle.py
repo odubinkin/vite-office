@@ -26,7 +26,7 @@ def body(file, marker):
 tmpl = 'sal/rtl/strtmpl.hxx'
 view = 'include/o3tl/string_view.hxx'
 pieces = [
-    body(tmpl, 'template <typename C> struct with_length'),
+    body(tmpl, 'template <typename C> struct with_length') + ';',
     body(tmpl, 'inline sal_Int16 implGetDigit'),
     body(tmpl, 'template <typename T, class Iter> inline bool HandleSignChar'),
     body(tmpl, 'template <typename T> std::pair<T, sal_Int16> DivMod'),
@@ -79,6 +79,7 @@ file.write_text(source)
 binary = task / 'native-start'
 subprocess.run(['clang++', '-std=c++20', '-O0', str(file), '-o', str(binary)], check=True)
 output = subprocess.check_output([str(binary)], text=True).splitlines()
+binary.unlink()
 rows = []
 for value, line in zip(values, output, strict=True):
     number, start, header = map(int, line.split(','))

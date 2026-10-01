@@ -44,7 +44,7 @@ template <typename C> struct with_length
     }
     auto begin() const { return p; }
     auto end() const { return p + len; }
-}
+};
 inline sal_Int16 implGetDigit(sal_Unicode ch, sal_Int16 nRadix)
 {
     sal_Int16 n = -1;
