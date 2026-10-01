@@ -1,0 +1,177 @@
+[
+  {
+    "signature": "class HandleSetAttrAtTextNode",
+    "bytes": 634,
+    "sha256": "fc8cb476ae02c8bd400a76285946209e5bfb9ff56e804a3a15dd5dcb78e25645"
+  },
+  {
+    "signature": "class HandleResetAttrAtTextNode",
+    "bytes": 802,
+    "sha256": "73eea6f7a5622897896ce1d5376ef946cc3c48f8a52d45d384be01328d135bf0"
+  },
+  {
+    "signature": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode( SwTextNode& rTextNode,\n                                                    const SfxPoolItem& pItem )\n        : mrTextNode( rTextNode ),\n          mbAddTextNodeToList( false ),\n          mbUpdateListLevel( false ),\n          mbUpdateListRestart( false ),\n          mbUpdateListCount( false ),\n          // #i70748#\n          mbOutlineLevelSet( false )",
+    "bytes": 3996,
+    "sha256": "79267e32790ccc538cbf3237c4a3a7a6d13f590f2eec786c9e5e08b92661e7bb"
+  },
+  {
+    "signature": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode( SwTextNode& rTextNode,\n                                                    const SfxItemSet& rItemSet )\n        : mrTextNode( rTextNode ),\n          mbAddTextNodeToList( false ),\n          mbUpdateListLevel( false ),\n          mbUpdateListRestart( false ),\n          mbUpdateListCount( false ),\n          // #i70748#\n          mbOutlineLevelSet( false )",
+    "bytes": 3076,
+    "sha256": "69b70935375a255baa6350825d4f99c3ca9d10759103374310c15518b7981941"
+  },
+  {
+    "signature": "HandleSetAttrAtTextNode::~HandleSetAttrAtTextNode() COVERITY_NOEXCEPT_FALSE",
+    "bytes": 2071,
+    "sha256": "c3cd0b80e6bca596c6191c21f2ede317def127105f12267ac4d946fa0b7685d5"
+  },
+  {
+    "signature": "HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode,\n                                                        const sal_uInt16 nWhich1,\n                                                        sal_uInt16 nWhich2 )\n        : mrTextNode( rTextNode ),\n          mbListStyleOrIdReset( false ),\n          mbUpdateListLevel( false ),\n          mbUpdateListRestart( false ),\n          mbUpdateListCount( false )",
+    "bytes": 756,
+    "sha256": "3aa9171219c518ecfea5ba6ddd27ac1feee3b7f545de7fca9145107c866b4300"
+  },
+  {
+    "signature": "HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode,\n                                                        const std::vector<sal_uInt16>& rWhichArr )\n        : mrTextNode( rTextNode ),\n          mbListStyleOrIdReset( false ),\n          mbUpdateListLevel( false ),\n          mbUpdateListRestart( false ),\n          mbUpdateListCount( false )",
+    "bytes": 605,
+    "sha256": "d3a88aab7836146d7c09493d9e89dd871bf63f1bd7585719b0e80fb9be981d77"
+  },
+  {
+    "signature": "HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode )\n        : mrTextNode( rTextNode ),\n          mbListStyleOrIdReset( true ),\n          mbUpdateListLevel( false ),\n          mbUpdateListRestart( false ),\n          mbUpdateListCount( false )",
+    "bytes": 463,
+    "sha256": "49cd12bad5aaee1b3bb31f3db7f84aefa58c3d14c4e238598434f864028ff07e"
+  },
+  {
+    "signature": "void HandleResetAttrAtTextNode::init( sal_uInt16 rWhich, bool& rbRemoveFromList )",
+    "bytes": 1822,
+    "sha256": "6923b2ed28666ca9234dc79dae9f62b717114cd1368eaf9f971ae948582a8fc6"
+  },
+  {
+    "signature": "HandleResetAttrAtTextNode::~HandleResetAttrAtTextNode() COVERITY_NOEXCEPT_FALSE",
+    "bytes": 2517,
+    "sha256": "cdf1f20e0dd78916db660b0f8a55bdcb3b66b8d6433b315f4814be0c29c23a73"
+  },
+  {
+    "signature": "bool SwTextNode::SetAttr( const SfxPoolItem& pItem )",
+    "bytes": 323,
+    "sha256": "236427dfac7890b8b0e03a2b6f06cac36882d8148c4d080525113740fe7dff27"
+  },
+  {
+    "signature": "bool SwTextNode::SetAttr( const SfxItemSet& rSet )",
+    "bytes": 319,
+    "sha256": "0e8a61d64579b660ecc92cd1a9c206cad1ddca810b02450a6de361642d682f71"
+  },
+  {
+    "signature": "bool SwTextNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )",
+    "bytes": 367,
+    "sha256": "eb7407b874f6576d5725be5c700c17ce74d19578ab2c76b9dd40e4fae9429355"
+  },
+  {
+    "signature": "bool SwTextNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )",
+    "bytes": 355,
+    "sha256": "a8c02456fe930ad33601306c13e2289986e770982d4c2a801ff0154d1a878d1a"
+  },
+  {
+    "signature": "sal_uInt16 SwTextNode::ResetAllAttr()",
+    "bytes": 315,
+    "sha256": "c8032aa31b9be8c08f9c97bdb1d2977e7db61036551eb4b81f34d459ee0d5618"
+  },
+  {
+    "signature": "bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode)",
+    "bytes": 684,
+    "sha256": "dab12576ec572d309ff2276a62f9ec59f6e258710df677a2638dea446cf9b64a"
+  },
+  {
+    "signature": "void SwTextNode::DoNum(std::function<void (SwNodeNum &)> const& rFunc)",
+    "bytes": 611,
+    "sha256": "fc78d3ebaf111d0f9710330ae717ea196dad58a41c8f4dbb395394d5c9413826"
+  },
+  {
+    "signature": "bool SwTextNode::HasAttrListLevel() const",
+    "bytes": 170,
+    "sha256": "1be0c7ed8b77c6cd3cbddefe22112a79e0f7c67190bbbb9d414c1b3a44e477ab"
+  },
+  {
+    "signature": "bool SwTextNode::IsOutline() const",
+    "bytes": 376,
+    "sha256": "f5fede5721cd40f9f8aca0c01353218e29cedf47e5b3d72da29979cfd94c4707"
+  },
+  {
+    "signature": "bool SwTextNode::IsOutlineStateChanged() const",
+    "bytes": 97,
+    "sha256": "193f59183634445ca0224b306729e334acf31e7dc6b1123368b3e7960465101f"
+  },
+  {
+    "signature": "void SwTextNode::UpdateOutlineState()",
+    "bytes": 80,
+    "sha256": "0770495f4975d010fb51c7c4a0fdf79f341392a2a25e6104baba4408f9c02519"
+  },
+  {
+    "signature": "void SwTextNode::NumRuleChgd()",
+    "bytes": 817,
+    "sha256": "e1b98d7d0c04f5f814eb860f64d1fa9c3360b7b30af7c8f2f4a28ddb9888b921"
+  },
+  {
+    "signature": "void SwNumberTreeNode::ValidateMe()",
+    "bytes": 91,
+    "sha256": "bbd5086ed69b13ec6f589cfdd1221fa30e332740c151a7d6ea8bde8d98a54060"
+  },
+  {
+    "signature": "void SwNumberTreeNode::Notify(const SwDoc& rDoc)",
+    "bytes": 221,
+    "sha256": "7648e90487034db466fccaf3b7ac7cd64b0d67729de77465cd2d249c85408f5c"
+  },
+  {
+    "signature": "void SwNumberTreeNode::NotifyInvalidChildren(const SwDoc& rDoc)",
+    "bytes": 1071,
+    "sha256": "5eccbc8df451b7fb8377de28b5d62ae6508d96ca2a615e2e09c17ab1d0d1669e"
+  },
+  {
+    "signature": "void SwNumberTreeNode::NotifyInvalidSiblings(const SwDoc& rDoc)",
+    "bytes": 143,
+    "sha256": "55d2f2916a79708d2aba6b8f0e6c6a18e84440549420cc1b4b0202b71e65b269"
+  },
+  {
+    "signature": "void SwNodeNum::NotifyNode()",
+    "bytes": 118,
+    "sha256": "0faf1c750b8c788e3264ec0d4789497ab781cbfcc246a92fdb3b210231e2904e"
+  },
+  {
+    "signature": "bool SwNodeNum::IsNotifiable(const SwDoc& rDoc) const",
+    "bytes": 251,
+    "sha256": "cf7bd716d4d1cecd28c49cccdc6395be084bfca6738d4f268aab9474bcf78f34"
+  },
+  {
+    "signature": "bool CompareSwOutlineNodes::operator()(const SwNode* lhs, const SwNode* rhs) const",
+    "bytes": 132,
+    "sha256": "4877e7a370fc31e82185c1cbe6f10686a65a5735ef5a341c9aaefe6e1b0e0f4d"
+  },
+  {
+    "signature": "bool SwOutlineNodes::Seek_Entry(const SwNode* rP, size_type* pnPos) const",
+    "bytes": 208,
+    "sha256": "1af642b74b53fc4c6122b6d976df46a5e656c23b705135c2290c8088dadc733c"
+  },
+  {
+    "signature": "void SwNodes::UpdateOutlineNode(SwNode & rNd)",
+    "bytes": 1007,
+    "sha256": "a271ddf253617cde999baa564ca1af0e45ef2e70d4a307ad8fb419286720f2cf"
+  },
+  {
+    "signature": "void InvalidateAndNotifyTree(const SwDoc& rDoc)",
+    "bytes": 180,
+    "sha256": "2ad723e6d087f186baa93fbe475cb3e2917d771f48022501bcc60dc494b56ef4"
+  },
+  {
+    "signature": "SwNumRuleType GetRuleType() const",
+    "bytes": 66,
+    "sha256": "3892d2e816a1ad195264fc2210376c03926668de3d02cd4a5e55a481b2014724"
+  },
+  {
+    "signature": "void SetRuleType( SwNumRuleType eNew )",
+    "bytes": 142,
+    "sha256": "79387fad738dac838955ed163bd58ac262252de3c870b360f693a7e1a43e6965"
+  },
+  {
+    "signature": "bool IsOutlineRule() const",
+    "bytes": 65,
+    "sha256": "79646726cb20524e2f1d4c40e003b44709113030c00dc4d25ba19a4d4be9d2a8"
+  }
+]
