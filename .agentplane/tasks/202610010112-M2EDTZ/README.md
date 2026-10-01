@@ -4,7 +4,7 @@ title: "Restore native unnumbered list paragraph ODT transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Native transport oracle368 and genuine ODT/copy/Worker16 checks pass. Final unchanged npm run verify exit0 session62469:646 app,109 inventory,19 browser; both100% coverage and all remaining gates. Doctor0errors/two prior warnings,routing/diff pass. Bounded list transport only; wider ownership/default/UI obligations remain unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T01:35:22.514Z"
+  updated_by: "EVALUATOR"
+  note: "Scoped native header/item continuation transport is source-owned and verified; implementation fd0ede9f505568377bbcd15595938cb72dbfcf8c."
+  evaluated_sha: "fd0ede9f505568377bbcd15595938cb72dbfcf8c"
+  blueprint_digest: "dc155964b210398cdaffbaa43516bc2e28882341ededba19af4bdc708f95e765"
+  evidence_refs:
+    - ".agentplane/tasks/202610010112-M2EDTZ/README.md"
+    - ".agentplane/tasks/202610010112-M2EDTZ/quality/20261001-013522514-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010112-M2EDTZ/quality/20261001-013522514-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010112-M2EDTZ/quality/20261001-013522514-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010112-M2EDTZ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010112-M2EDTZ/verify.log"
+    - ".agentplane/tasks/202610010112-M2EDTZ/native-results.json"
+    - "apps/office/src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts"
+  findings:
+    - "The real Writer projection preserves counted WhichId87 and omits uncounted restart/start metadata as native NumberingIsNumber does. XMLOFF tracks actual open tags and consumes ordinary item markers once; nested return clears restored outer state. Genuine common/automatic package cases assert text,counters,labels,vectors,owned copies,Worker16,structure and reopen. Legacy contradictory rejection expectations were updated without lowering gates."
 commit: null
 comments:
   -
