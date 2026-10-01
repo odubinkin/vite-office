@@ -1,6 +1,6 @@
 {
-  "sequences": 55,
-  "states": 2054,
+  "sequences": 57,
+  "states": 2070,
   "definitions": 35,
   "pass": true,
   "profile": "Shown Arabic/bullet/Outline rules, real collection/item/node/list ownership, canonical and foreign arrays; explicit dependency adapters, no full native build,live-style/history/footnote/layout/fields/redline/background lifetime claim"

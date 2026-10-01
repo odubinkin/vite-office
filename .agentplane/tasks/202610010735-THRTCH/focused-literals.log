@@ -1,0 +1,33 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts (5 tests | 1 failed) 27ms
+   × maintains real sorted outline identity across move, clone, replacement, deletion and copying 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts > maintains real sorted outline identity across move, clone, replacement, deletion and copying
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts:134:31
+    132|   );
+    133|   redline.SetAttrOutlineLevel(3);
+    134|   expect(redline.IsOutline()).toBe(false);
+       |                               ^
+    135| });
+    136|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 9 passed (10)
+      Tests  1 failed | 39 passed (40)
+   Start at  15:11:08
+   Duration  6.51s (transform 2.08s, setup 1.13s, import 3.15s, tests 654ms, environment 6.17s)
+

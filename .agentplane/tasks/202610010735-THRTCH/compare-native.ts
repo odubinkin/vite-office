@@ -23,12 +23,14 @@ for (const [index, test] of cases.entries()) {
   styles[2]!.AssignToListLevelOfOutlineStyle(2);styles[2]!.SetFormatAttr(new SwNumRuleItem('Outline'));
   const nodes=doc.GetNodes();
   const texts = Array.from({length:test.count},() => {const node=nodes.MakeTextNode();node.ChgFormatColl(styles[0]!);return node;});
+  let pendingStyle:number|undefined;
   const events:number[]=[];
   const notify=doc.NotifyModelChange.bind(doc);
-  doc.NotifyModelChange=(hint)=>{if(hint.kind==='numbering-changed')events.push(texts.findIndex(n=>n.GetIndex()===hint.nodeIndex));notify(hint);};
+  doc.NotifyModelChange=(hint)=>{if(hint.kind==='numbering-changed')events.push(texts.findIndex(n=>n.GetIndex()===hint.nodeIndex));notify(hint);if(hint.kind==='attribute-set-changed'&&pendingStyle!==undefined){const value=pendingStyle;pendingStyle=undefined;texts.find(n=>n.GetIndex()===hint.nodeIndex)!.ChgFormatColl(styles[value]!);}};
   const snapshots=[];
   for (const [step, op] of test.ops.entries()) {
     const [kind, at, value] = op as [number,number,number];const node=texts[at]!;events.splice(0);
+    if(kind===18){pendingStyle=value;node.SetAttrOutlineLevel(4);}
     if(kind===16) for(let i=0;i<10;i++) rules[0]!.GetNumFormat(i).SetStart(value);
     if(kind===17) node.SetAttr(new SwNumRuleItem("unknown"));
     if(kind===0)node.ChgFormatColl(styles[value]!);

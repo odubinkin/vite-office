@@ -1730,7 +1730,8 @@ UIName SwNumRule::GetOutlineRuleName()
 
 // POOL ADAPTER: direct equality/ownership/defaults, raw mutation notification; no native pool/refcount lifetime claim.
 bool equalItem(const SfxPoolItem& a,const SfxPoolItem& b){if(typeid(a)!=typeid(b))return false;if(auto* x=dynamic_cast<const SwNumRuleItem*>(&a))return x->value==static_cast<const SwNumRuleItem&>(b).value;if(auto* x=dynamic_cast<const StringItem*>(&a))return x->value==static_cast<const StringItem&>(b).value;if(auto* x=dynamic_cast<const SfxInt16Item*>(&a))return x->value==static_cast<const SfxInt16Item&>(b).value;if(auto* x=dynamic_cast<const SfxUInt16Item*>(&a))return x->value==static_cast<const SfxUInt16Item&>(b).value;return static_cast<const BoolItem&>(a).value==static_cast<const BoolItem&>(b).value;}
-void rawNotify(SwContentNode& n){auto* t=n.GetTextNode();if(t&&t->GetNodes().IsDocNodes())t->GetNodes().UpdateOutlineNode(n);}
+std::function<void(SwContentNode&)> callback;
+void rawNotify(SwContentNode& n){if(callback){auto f=std::move(callback);callback=nullptr;f(n);}auto* t=n.GetTextNode();if(t&&t->GetNodes().IsDocNodes())t->GetNodes().UpdateOutlineNode(n);}
 bool SwContentNode::SetAttr(const SfxPoolItem& x){bool changed=!mpAttrSet||!mpAttrSet->items.count(x.which)||!equalItem(*mpAttrSet->items[x.which],x);PutItem(x);if(changed)rawNotify(*this);return changed;}
 bool SwContentNode::SetAttr(const SfxItemSet& s){bool changed=false;for(auto& [id,x]:s.items){bool c=!mpAttrSet||!mpAttrSet->items.count(id)||!equalItem(*mpAttrSet->items[id],*x);PutItem(*x);changed|=c;}if(changed)rawNotify(*this);return changed;}
 bool SwContentNode::ResetAttr(sal_uInt16 a,sal_uInt16 b){std::vector<sal_uInt16> ids;for(int i=a;i<=std::max(a,b);i++)ids.push_back(i);return ResetAttr(ids);}
@@ -2492,6 +2493,7 @@ int main(){int count;while(std::cin>>count){
  SwTextFormatColl styles[3];styles[1].SetFormatAttr(SwNumRuleItem("Counters"));styles[2].AssignToListLevelOfOutlineStyle(2);styles[2].SetFormatAttr(SwNumRuleItem("Outline"));
  std::vector<std::unique_ptr<SwTextNode>> texts;for(int i=0;i<count;i++){auto t=std::make_unique<SwTextNode>();t->index=i;t->doc=&doc;t->nodes=&nodes;t->coll=&styles[0];texts.push_back(std::move(t));}
  int ops;std::cin>>ops;for(int op=0;op<ops;op++){int kind,index,value;std::cin>>kind>>index>>value;auto& t=*texts[index];doc.notifications.clear();
+ if(kind==18){callback=[&](SwContentNode& n){n.GetTextNode()->ChgFormatColl(&styles[value]);};t.SetAttrOutlineLevel(4);}
  if(kind==16)for(auto& f:counters.formats)f.start=value;
  if(kind==17)t.SetAttr(SwNumRuleItem("unknown"));
  if(kind==0)t.ChgFormatColl(&styles[value]);
