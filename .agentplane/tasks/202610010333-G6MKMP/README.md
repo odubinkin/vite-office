@@ -4,7 +4,7 @@ title: "Restore native processed list continuation import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned processed continuation and DefaultListId projection under the persistent approved upstream goal;safe local scope and unchanged gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:44:46.710Z"
+doc_updated_at: "2026-10-01T03:49:59.639Z"
 doc_updated_by: "CODER"
 description: "Iteration34: replace list alias map with source-owned processed list records,parse native continue-numbering/root-only identity attributes,resolve chains and DefaultListId projection;preserve registered save/open/recovery differences."
 sections:
@@ -64,6 +64,14 @@ sections:
     - Observation: Compiled native constructor/helper comparison passes3080 sequences/15388 states. Typecheck session34662 exited2 because one constructor statement still uses removed wrapper name state after direct helper refactoring.
       Impact: Native context behavior is supported,but the paragraph item module does not yet typecheck.
       Resolution: Replace the remaining state reference with textLists,rerun focused types/tests;no scope or gate changes. Keep real native output and adapter limitations explicit.
+
+    - Observation: Focused session66042 terminal1:11 tests pass,3 fail only at old literal identities. Generated rule-counter IDs now use native list timestamp/random IDs,and genuine firstroot L now maps to imported rule DefaultListId Restart.
+      Impact: The source-derived identity correction intentionally invalidates those expectations;unknown-reference adoption assertion is also stale after root validation. Native3080/15388 context comparison remains passing.
+      Resolution: Update only literal identity expectations under native DefaultListId,assert generated IDs as native list-prefixed decimal while exact clock/RNG/collision cases remain in native probe and focused helper tests;make unknown-reference fixture assert its independent own ID. Add independent genuine continuation/default fixtures rather than projecting expected state from actual output.
+
+    - Observation: Broader XML test session13232 terminal1:153 tests pass/37files;one existing real ODT test expects list1 while native first-style default now maps to Numbering 1. Earlier read-only search guessed nonexistent odt-list-start-value.test.ts;rg actual subtree remains authoritative.
+      Impact: No additional runtime failure is observed;the remaining old literal identity is stale,while other list counter/style/restart suites pass.
+      Resolution: Persist focused failure log;change only this fixture expected paragraph ListId to its existing native rule DefaultListId Numbering 1,retain all counter/rule/text/reopen checks. Run new literal continuation package scenarios and full unchanged gates.
 id_source: "generated"
 ---
 ## Summary
@@ -109,3 +117,11 @@ Previous goal turn is progress:DWV0NC DONE,implementation9ac1779d7b3845eb320d939
 - Observation: Compiled native constructor/helper comparison passes3080 sequences/15388 states. Typecheck session34662 exited2 because one constructor statement still uses removed wrapper name state after direct helper refactoring.
   Impact: Native context behavior is supported,but the paragraph item module does not yet typecheck.
   Resolution: Replace the remaining state reference with textLists,rerun focused types/tests;no scope or gate changes. Keep real native output and adapter limitations explicit.
+
+- Observation: Focused session66042 terminal1:11 tests pass,3 fail only at old literal identities. Generated rule-counter IDs now use native list timestamp/random IDs,and genuine firstroot L now maps to imported rule DefaultListId Restart.
+  Impact: The source-derived identity correction intentionally invalidates those expectations;unknown-reference adoption assertion is also stale after root validation. Native3080/15388 context comparison remains passing.
+  Resolution: Update only literal identity expectations under native DefaultListId,assert generated IDs as native list-prefixed decimal while exact clock/RNG/collision cases remain in native probe and focused helper tests;make unknown-reference fixture assert its independent own ID. Add independent genuine continuation/default fixtures rather than projecting expected state from actual output.
+
+- Observation: Broader XML test session13232 terminal1:153 tests pass/37files;one existing real ODT test expects list1 while native first-style default now maps to Numbering 1. Earlier read-only search guessed nonexistent odt-list-start-value.test.ts;rg actual subtree remains authoritative.
+  Impact: No additional runtime failure is observed;the remaining old literal identity is stale,while other list counter/style/restart suites pass.
+  Resolution: Persist focused failure log;change only this fixture expected paragraph ListId to its existing native rule DefaultListId Numbering 1,retain all counter/rule/text/reopen checks. Run new literal continuation package scenarios and full unchanged gates.
