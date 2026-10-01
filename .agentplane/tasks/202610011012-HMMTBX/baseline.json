@@ -1,0 +1,38 @@
+[
+  {
+    "reading": false,
+    "before": [
+      true,
+      true,
+      7
+    ],
+    "after": [
+      false,
+      false,
+      1
+    ],
+    "repeated": [
+      true,
+      false,
+      1
+    ]
+  },
+  {
+    "reading": true,
+    "before": [
+      true,
+      true,
+      7
+    ],
+    "after": [
+      false,
+      false,
+      1
+    ],
+    "repeated": [
+      true,
+      false,
+      1
+    ]
+  }
+]
