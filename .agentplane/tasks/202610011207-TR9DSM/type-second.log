@@ -1,0 +1,9 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+apps/office/src/sw/source/core/unocore/unosett.ts(4,10): error TS6133: 'SwNumFormat' is declared but its value is never read.
