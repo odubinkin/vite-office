@@ -1,0 +1,24 @@
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+file:///Users/odubinkin/Projects/vite-office/scripts/check-jsdoc.mjs:237
+    throw new Error(`JSDoc validation failed:\n${errors.join("\n")}`);
+          ^
+
+Error: JSDoc validation failed:
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:25 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:31 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:37 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:44 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:46 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:91 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:103 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:117 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:118 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:121 function is missing JSDoc
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts:123 function is missing JSDoc
+    at main (file:///Users/odubinkin/Projects/vite-office/scripts/check-jsdoc.mjs:237:11)
+    at async file:///Users/odubinkin/Projects/vite-office/scripts/check-jsdoc.mjs:243:1
+
+Node.js v24.13.1
