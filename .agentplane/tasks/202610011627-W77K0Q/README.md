@@ -1,10 +1,11 @@
 ---
 id: "202610011627-W77K0Q"
 title: "Restore protected explicit-target numbering validation contracts"
-status: "DOING"
+result_summary: "Native selected validation/lookup contracts restored;734 app,109 inventory,19 browser tests pass,both coverages100%. Native128 profiles/1792 snapshots/7168 states and four access/argument compiler contracts support bounded proof. Project tests independent of upstream;no source copies retained;metadata statuses and registered deviations unchanged."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,7 +49,9 @@ quality_review:
     - "Exact eight semantic files plus three task artifacts in actual CODE. The public eager hierarchy bridge is removed; both validators require explicit arguments and remain protected. Protected GetIterator resolves native comparator equivalence. Distinct-key foreign/null targets preserve caches, equivalent objects and owned targets validate only their native prefix; loop termination follows the selected source iterator condition."
     - "Native complete unchanged header/types/core input produces128 profiles/1792 snapshots/7168 states with named container/policy/diagnostic/registration aliases,ASan/UBSan and four expected compiler failures. Local typechecking rejects preceding public/optional contracts and now passes. Packed fixture exactly matches native output and three fresh file hashes match pin;no source copies or upstream reads/compilation/invocation by project tests. Generated temporary source/binary disposed of after comparison."
     - "Original expectation values remain unchanged; phantom timing now requests the exact selected native root last-child prefix, lifecycle diagnostics access protected methods only in tests and continuous sentinel calls explicitly pass undefined. Focused21 tests/5 files pass with upstream absent. Final unchanged verify app734/inventory109/browser19,both coverages100%,all declared gates pass. Failed red/type/native-container/provenance attempts retained and resolved;metadata statuses,classifications and IO/recovery deviations unchanged."
-commit: null
+commit:
+  hash: "c36b910aa271ecab1515f81e4df2032282c32c4a"
+  message: "🧩 W77K0Q code: restore protected explicit-target numbering validation"
 comments:
   -
     author: "CODER"
@@ -56,6 +59,9 @@ comments:
   -
     author: "CODER"
     body: "Start: refined same eight-file leaf now includes source ordered-child equivalence for explicit hierarchical target lookup; persistent user goal authorizes this native contract repair, with all original expected values and upstream-independent project tests preserved."
+  -
+    author: "CODER"
+    body: "Verified: restored protected explicit-target hierarchical/continuous validation, native ordered-child equivalence and deferred prefix semantics; preserved every original expected value. Full unchanged gates and upstream-unavailable focused tests pass. Actual implementation CODE c36b910aa271ecab1515f81e4df2032282c32c4a; close only this leaf, parent/full goal remains active."
 events:
   -
     type: "status"
@@ -77,8 +83,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: unchanged npm run verify, upstream-unavailable focused tree suites, manual native probe/compiler contracts, doctor/routing/diff. Result: pass. Evidence: verify-final.log,focused-without-upstream.log,evidence-final.json,native-identities.json,native-output.json and four bad_public/arg logs. Scope: eight semantic paths in actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (eight semantic plus three task artifacts = eleven files). App734/inventory109/browser19, both coverages100%, all gates pass; native128 profiles/1792 snapshots/7168 states, four compiler contracts, all original expectations retained. No upstream calls/reads/compilation by project tests, no source copies in canonical artifacts; metadata statuses/deviations unchanged. Parent/full goal active."
+  -
+    type: "status"
+    at: "2026-10-01T17:20:16.827Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored protected explicit-target hierarchical/continuous validation, native ordered-child equivalence and deferred prefix semantics; preserved every original expected value. Full unchanged gates and upstream-unavailable focused tests pass. Actual implementation CODE c36b910aa271ecab1515f81e4df2032282c32c4a; close only this leaf, parent/full goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-01T17:19:09.869Z"
+doc_updated_at: "2026-10-01T17:20:16.828Z"
 doc_updated_by: "CODER"
 description: "Iteration49 of the active implemented-runtime parity goal: remove the nonnative public eager no-argument hierarchical validation bridge, require explicit nullable targets on both protected validators, preserve original assertion meaning using source-shaped access, and compare native prefix/cache/null/foreign-target observations from manual local probes. Project tests must neither read nor compile nor invoke pinned upstream; native source must only exist in ignored scratch, never canonical Agentplane artifacts. Registered IO/recovery deviations remain untouched."
 sections:
