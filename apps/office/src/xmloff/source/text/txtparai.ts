@@ -56,7 +56,11 @@ export interface XMLListLevelImport {
   readonly level: number;
   readonly kind: OdfListLevelKind;
   readonly bulletChar?: string;
+  readonly prefix: string;
   readonly suffix: string;
+  readonly startWith?: number;
+  readonly parentNumbering?: number;
+  readonly listFormat: string;
   readonly position: XMLListLevelImportProperties;
 }
 

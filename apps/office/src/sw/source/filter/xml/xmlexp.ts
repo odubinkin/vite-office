@@ -326,37 +326,21 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
             level,
             ...(node.IsListRestart() ? { startValue: node.GetActualListStartValue() } : {}),
             rule: {
-              bulletChars: Array.from(
+              levels: Array.from(
                 { length: WRITER_MAX_LIST_LEVEL + 1 },
-                /** Projects one SwNumFormat character-special marker. @param _unused - Array value. @param index - Writer list level. @returns Bullet character when applicable. */
+                /** Projects one native numbering property sequence, including signed UNO StartWith. @param _unused - Array slot. @param index - Writer list level. @returns Level properties. */
                 (_unused, index) => {
                   const format = rule.GetNumFormat(index);
-                  return format.GetKind() === "bullet" ? format.GetBulletChar() : undefined;
+                  return {
+                    ...numberingPositionToMM100(format.GetPositionProperties()),
+                    kind: format.GetKind(),
+                    bulletChar: format.GetBulletChar(),
+                    prefix: format.GetPrefix(),
+                    suffix: format.GetSuffix(),
+                    startWith: (format.GetStart() << 16) >> 16,
+                    parentNumbering: format.GetIncludeUpperLevels(),
+                  };
                 },
-              ),
-              formats: Array.from(
-                { length: WRITER_MAX_LIST_LEVEL + 1 },
-                /** Projects one SwNumFormat family. @param _unused - Array value. @param index - Writer list level. @returns Marker family. */
-                (_unused, index) => rule.GetNumFormat(index).GetKind(),
-              ),
-              levelLayouts: Array.from(
-                { length: WRITER_MAX_LIST_LEVEL + 1 },
-                /** Projects one canonical list level's label alignment. @param _unused - Array value. @param index - Writer list level. @returns ODF geometry. */
-                (_unused, index) => {
-                  const format = rule.GetNumFormat(index);
-                  return numberingPositionToMM100({
-                    ...format.GetPositionProperties(),
-                    firstLineIndent: format.GetFirstLineIndent(),
-                    indentAt: format.GetIndentAt(),
-                    labelFollowedBy: format.GetLabelFollowedBy(),
-                    listTabPosition: format.GetListtabPos(),
-                  });
-                },
-              ),
-              suffixes: Array.from(
-                { length: WRITER_MAX_LIST_LEVEL + 1 },
-                /** Projects one numeric label suffix. @param _unused - Array value. @param index - Writer list level. @returns Suffix when numbered. */
-                (_unused, index) => rule.GetNumFormat(index).GetSuffix(),
               ),
               name: rule.GetName(),
             },

@@ -54,6 +54,11 @@ export class FastAttributeList {
     return this.byToken.get(token) ?? null;
   }
 
+  /** Iterates known token/value pairs in native attribute order. @returns Ordered attribute iterator. */
+  public [Symbol.iterator](): IterableIterator<[XMLToken, string]> {
+    return this.byToken[Symbol.iterator]();
+  }
+
   /** Requires one non-empty attribute. @param token - Attribute token. @param label - Diagnostic label. @returns Value. */
   public require(token: XMLToken, label: string): string {
     const value = this.get(token);

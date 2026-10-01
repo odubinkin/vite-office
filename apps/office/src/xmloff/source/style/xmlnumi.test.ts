@@ -207,7 +207,11 @@ it("owns source-created leaf references and reads them only at list publication"
       {
         level: 0,
         kind: "numbered",
+        prefix: "",
         suffix: "",
+        startWith: 1,
+        parentNumbering: 1,
+        listFormat: "%1%",
         position: {
           measureUnit: "mm100",
           values: {
@@ -226,7 +230,9 @@ it("owns source-created leaf references and reads them only at list publication"
         level: 0,
         kind: "bullet",
         bulletChar: "",
+        prefix: "",
         suffix: "",
+        listFormat: "%1%",
         position: {
           measureUnit: "mm100",
           values: {

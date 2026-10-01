@@ -129,14 +129,13 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
 
   it("emits list definitions before nested and continued list references", /** Verifies list serialization. @returns Nothing. */ () => {
     const rule = {
-      bulletChars: Array.from(
+      levels: Array.from(
         { length: 10 },
-        /** Selects a test bullet character. @returns Character-special marker. */ () => "●",
-      ),
-      formats: Array.from(
-        { length: 10 },
-        /** Selects a test level kind. @param _unused - Empty slot. @param level - Level. @returns Marker kind. */
-        (_unused, level) => (level === 1 ? ("numbered" as const) : ("bullet" as const)),
+        /** Creates one coherent source property record. @param _unused - Slot. @param level - Level. @returns Level properties. */
+        (_unused, level) => ({
+          kind: level === 1 ? ("numbered" as const) : ("bullet" as const),
+          bulletChar: "●",
+        }),
       ),
       name: "Mixed list",
     };
@@ -194,7 +193,7 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
           /** Cancels immediately. @returns True. */ () => true,
         ),
     ).toThrow("cancelled");
-    const invalidRule = { formats: ["bullet" as const], name: "short" };
+    const invalidRule = { levels: [{ kind: "bullet" as const }], name: "short" };
     expect(
       /** Exports an incomplete rule. @returns Nothing. */ () =>
         exportTextParagraphs(
@@ -216,9 +215,11 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
                 level: 0,
                 listId: "id",
                 rule: {
-                  formats: Array.from(
+                  levels: Array.from(
                     { length: 10 },
-                    /** Creates one numbered level. @returns Numbered kind. */ () => "numbered",
+                    /** Creates one numbered level. @returns Numbered kind. */ () => ({
+                      kind: "numbered" as const,
+                    }),
                   ),
                   name: "numbered",
                 },
@@ -231,29 +232,6 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
         ),
     ).toThrow("start value");
     expect(
-      /** Exports an incomplete bullet-character table. @returns Nothing. */ () =>
-        exportTextParagraphs(
-          source([
-            {
-              list: {
-                level: 0,
-                listId: "id",
-                rule: {
-                  bulletChars: ["●"],
-                  formats: Array.from(
-                    { length: 10 },
-                    /** Creates one bullet level. @returns Bullet kind. */ () => "bullet",
-                  ),
-                  name: "short",
-                },
-              },
-              runs: [],
-              style: "default",
-            },
-          ]),
-        ),
-    ).toThrow("define ten Writer bullet characters");
-    expect(
       /** Exports a multi-character bullet marker. @returns Nothing. */ () =>
         exportTextParagraphs(
           source([
@@ -262,13 +240,12 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
                 level: 0,
                 listId: "id",
                 rule: {
-                  bulletChars: Array.from(
+                  levels: Array.from(
                     { length: 10 },
-                    /** Creates one invalid marker. @returns Multi-character marker. */ () => "ab",
-                  ),
-                  formats: Array.from(
-                    { length: 10 },
-                    /** Creates one bullet level. @returns Bullet kind. */ () => "bullet",
+                    /** Creates one invalid marker property record. @returns Level properties. */ () => ({
+                      kind: "bullet" as const,
+                      bulletChar: "ab",
+                    }),
                   ),
                   name: "invalid",
                 },
@@ -292,9 +269,9 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
 
   it("validates conflicting list state, levels, identities, and XML id collisions", /** Covers strict list export guards. @returns Nothing. */ () => {
     const bullet = {
-      formats: Array.from(
+      levels: Array.from(
         { length: 10 },
-        /** Creates a bullet level. @returns Bullet kind. */ () => "bullet" as const,
+        /** Creates a bullet level. @returns Bullet kind. */ () => ({ kind: "bullet" as const }),
       ),
       name: "Rule",
     };
@@ -311,10 +288,11 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
             paragraph({
               ...valid,
               rule: {
-                formats: Array.from(
+                levels: Array.from(
                   { length: 10 },
-                  /** Creates a numbered level. @returns Numbered kind. */ () =>
-                    "numbered" as const,
+                  /** Creates a numbered level. @returns Numbered kind. */ () => ({
+                    kind: "numbered" as const,
+                  }),
                 ),
                 name: "Rule",
               },

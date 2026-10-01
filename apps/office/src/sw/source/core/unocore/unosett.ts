@@ -63,6 +63,10 @@ export interface WriterNumberingRuleProperties extends NumberingPositionProperti
   readonly kind: "bullet" | "numbered";
   readonly bulletChar?: string;
   readonly suffix: string;
+  readonly prefix?: string;
+  readonly startWith?: number;
+  readonly parentNumbering?: number;
+  readonly listFormat?: string;
 }
 
 /** Writer-owned copy, validation and commit boundary corresponding to SwXNumberingRules. */
@@ -95,7 +99,16 @@ export class SwXNumberingRules {
         ...previous.GetMarkerProperties(),
       },
     );
+    if (properties.prefix !== undefined) applied.SetPrefix(properties.prefix);
     applied.SetSuffix(properties.suffix);
+    if (properties.startWith !== undefined) applied.SetStart(properties.startWith);
+    if (
+      properties.parentNumbering !== undefined &&
+      properties.parentNumbering >= 0 &&
+      properties.parentNumbering <= 10
+    )
+      applied.SetIncludeUpperLevels(properties.parentNumbering);
+    if (properties.listFormat !== undefined) applied.SetListFormat(properties.listFormat);
     rule.Set(level, applied);
   }
 }

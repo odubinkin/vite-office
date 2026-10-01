@@ -444,14 +444,22 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           .paragraphs[0] as import("../../core/txtnode/ndtxt").SwTextNode,
       ),
     ).toMatchObject({ restart: true, startValue: 3 });
+    const parenthesized = importWriterXml(
+      styles,
+      content.replace('style:num-suffix="."', 'style:num-suffix=")"'),
+      metadata(),
+    ).document;
     expect(
-      /** Imports an unsupported numbering suffix. @returns Invalid document. */ () =>
-        importWriterXml(
-          styles,
-          content.replace('style:num-suffix="."', 'style:num-suffix=")"'),
-          metadata(),
-        ),
-    ).toThrow("Unsupported ODF numbering suffix");
+      parenthesized
+        .GetNumRuleTable()
+        .find(
+          /** Resolves the modified numeric rule. @param rule - Rule. @returns Match. */ (rule) =>
+            rule.GetKind() === "numbered",
+        )
+        ?.GetNumFormat(0)
+        .GetSuffix(),
+    ).toBe(")");
+    expect(parenthesized.paragraphs[0]?.GetListLabel()).toBe("1)");
     expect(
       /** Ignores an unrelated known table under a native list item. @returns Nothing. */ () =>
         importWriterXml(

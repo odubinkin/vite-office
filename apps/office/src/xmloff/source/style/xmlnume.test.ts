@@ -1,6 +1,7 @@
 /** @fileoverview Verifies native ODF 1.3 mode and label-alignment attribute predicates. */
 import { expect, it } from "vitest";
-import { exportListLevelLayout } from "./xmlnume";
+import { escapeXml } from "../text/txtparae";
+import { SvxXMLNumRuleExport, exportListLevelLayout } from "./xmlnume";
 
 it("emits label-alignment mode even for zero or default command geometry", /** Verifies native mode/version ownership and absence of command-geometry suppression. @returns Nothing. */ () => {
   expect(exportListLevelLayout(undefined)).toBe("");
@@ -73,4 +74,45 @@ it("exports only the native legacy group with nonzero and positive attribute pre
   );
   expect(exportListLevelLayout({ absLSpace: 0 })).not.toContain("text:space-before");
   expect(exportListLevelLayout({ firstLineOffset: 0 })).not.toContain("text:min-label-width");
+});
+
+it("owns native marker attribute omission, available-level clamping and bullet controls", /** Checks exact standard ODF output properties separately from paragraph export. @returns Nothing. */ () => {
+  const exporter = new SvxXMLNumRuleExport(escapeXml);
+  expect(exporter.exportLevelStyle(0, { kind: "numbered" })).toBe(
+    '<text:list-level-style-number text:level="1" style:num-format="1"><style:list-level-properties></style:list-level-properties></text:list-level-style-number>',
+  );
+  const numeric = exporter.exportLevelStyle(1, {
+    kind: "numbered",
+    prefix: '&<"',
+    suffix: ">'",
+    startWith: 0,
+    parentNumbering: 10,
+  });
+  expect(numeric).toContain(
+    'style:num-prefix="&amp;&lt;&quot;" style:num-suffix="&gt;&apos;" style:num-format="1" text:start-value="0" text:display-levels="2"',
+  );
+  expect(
+    exporter.exportLevelStyle(0, { kind: "numbered", startWith: 1, parentNumbering: 10 }),
+  ).not.toContain("text:display-levels");
+  for (const [bulletChar, expected] of [
+    [undefined, "\uF095"],
+    ["", ""],
+    ["\u0001", "\uF095"],
+    ["●", "●"],
+  ] as const) {
+    const properties = {
+      kind: "bullet" as const,
+      prefix: "[",
+      suffix: "]",
+      startWith: 9,
+      parentNumbering: 9,
+      ...(bulletChar === undefined ? {} : { bulletChar }),
+    };
+    const xml = exporter.exportLevelStyle(2, properties);
+    expect(xml).toContain(
+      `style:num-prefix="[" style:num-suffix="]" text:bullet-char="${expected}"`,
+    );
+    expect(xml).not.toContain("text:start-value");
+    expect(xml).not.toContain("text:display-levels");
+  }
 });

@@ -60,6 +60,10 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   private readonly bulletChar: string;
   private readonly format: string;
   private readonly suffix: string;
+  private readonly prefix: string;
+  private readonly startWith: number;
+  private readonly parentNumbering: number;
+  private listFormat: string | undefined;
   /** Retains native declaration defaults before any property children. @param element - Supported level family. @param attributes - Optional declaration fields. @returns Context. */
   public constructor(element: XMLToken, attributes: FastAttributeList) {
     super();
@@ -70,6 +74,11 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
         XMLToken.TEXT_BULLET_CHAR,
         XMLToken.STYLE_NUM_FORMAT,
         XMLToken.STYLE_NUM_SUFFIX,
+        XMLToken.STYLE_NUM_PREFIX,
+        XMLToken.TEXT_START_VALUE,
+        XMLToken.TEXT_DISPLAY_LEVELS,
+        XMLToken.STYLE_NUM_LIST_FORMAT,
+        XMLToken.LOEXT_NUM_LIST_FORMAT,
       ],
       "list level",
     );
@@ -79,6 +88,14 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     this.bulletChar = [...(attributes.get(XMLToken.TEXT_BULLET_CHAR) ?? "")][0] ?? "";
     this.format = attributes.get(XMLToken.STYLE_NUM_FORMAT) ?? "1";
     this.suffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX) ?? "";
+    this.prefix = attributes.get(XMLToken.STYLE_NUM_PREFIX) ?? "";
+    const start = listDeclarationInt32(attributes.get(XMLToken.TEXT_START_VALUE) ?? "1");
+    const display = listDeclarationInt32(attributes.get(XMLToken.TEXT_DISPLAY_LEVELS) ?? "1");
+    this.startWith = this.kind === "bullet" ? 1 : start < 0 ? 1 : Math.min(start, 32767);
+    this.parentNumbering = this.kind === "bullet" ? 1 : Math.max(1, Math.min(display, 32767));
+    for (const [token, value] of attributes)
+      if (token === XMLToken.STYLE_NUM_LIST_FORMAT || token === XMLToken.LOEXT_NUM_LIST_FORMAT)
+        this.listFormat = value;
   }
 
   /** Returns the native zero-based index, retaining -1 for an absent attribute. @returns Level. */
@@ -112,14 +129,26 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   public GetProperties(): XMLListLevelImport {
     if (this.kind === "numbered" && this.format !== "1")
       throw new Error(`Unsupported ODF numbering format: ${this.format}`);
-    if (this.kind === "numbered" && this.suffix !== "" && this.suffix !== ".")
-      throw new Error(`Unsupported ODF numbering suffix: ${this.suffix}`);
+    if (this.listFormat === undefined) {
+      this.listFormat = this.prefix;
+      const display = Math.min(this.parentNumbering, this.level + 1);
+      for (let index = 1; index <= display; index++) {
+        this.listFormat += `%${this.level - display + index + 1}%`;
+        if (index !== display) this.listFormat += ".";
+      }
+      this.listFormat += this.suffix;
+    }
     const distance = this.legacy.minLabelDistance;
     return {
       level: this.level,
       kind: this.kind,
       ...(this.kind === "bullet" ? { bulletChar: this.bulletChar } : {}),
-      suffix: this.kind === "bullet" ? "" : this.suffix,
+      prefix: this.prefix,
+      suffix: this.suffix,
+      ...(this.kind === "bullet"
+        ? {}
+        : { startWith: this.startWith, parentNumbering: this.parentNumbering }),
+      listFormat: this.listFormat,
       position: {
         measureUnit: "mm100",
         values: {

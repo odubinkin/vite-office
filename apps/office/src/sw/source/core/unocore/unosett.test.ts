@@ -99,3 +99,52 @@ it("validates the native numbering properties before committing one complete lev
   expect(rule.GetNumFormat(2).GetBulletChar()).toBe("●");
   expect(rule.GetNumFormat(2).GetCharTextDistance()).toBe(18577);
 });
+
+it("applies marker properties before ListFormat and ignores native out-of-range ParentNumbering", /** Verifies property ordering, raw starts and copy/commit failure retention. @returns Nothing. */ () => {
+  const rule = new SwNumRule("markers");
+  const service = new SwXNumberingRules(rule);
+  service.replaceByIndex(2, {
+    kind: "numbered",
+    prefix: "ignored",
+    suffix: "ignored",
+    startWith: 7,
+    parentNumbering: 1,
+    listFormat: "[%1%/%3%]",
+  });
+  expect(rule.GetNumFormat(2).GetMarkerProperties()).toEqual({
+    prefix: "[",
+    suffix: "]",
+    start: 7,
+    includeUpperLevels: 2,
+    listFormat: "[%1%/%3%]",
+  });
+  for (const count of [-1, 11, 32767]) {
+    service.replaceByIndex(2, { kind: "numbered", suffix: ")", parentNumbering: count });
+    expect(rule.GetNumFormat(2).GetIncludeUpperLevels()).toBe(2);
+    expect(rule.GetNumFormat(2).HasListFormat()).toBe(false);
+  }
+  for (const count of [0, 10]) {
+    service.replaceByIndex(2, {
+      kind: "numbered",
+      suffix: "",
+      startWith: -1,
+      parentNumbering: count,
+    });
+    expect(rule.GetNumFormat(2).GetStart()).toBe(65535);
+    expect(rule.GetNumFormat(2).GetIncludeUpperLevels()).toBe(count);
+  }
+  const previous = rule.GetNumFormat(2);
+  expect(
+    /** Rejects complete replacement after invalid native geometry. @returns Nothing. */ () =>
+      service.replaceByIndex(2, {
+        kind: "numbered",
+        prefix: "new",
+        suffix: "new",
+        startWith: 9,
+        parentNumbering: 3,
+        listFormat: "%3%",
+        charTextDistance: -1,
+      }),
+  ).toThrow(NumberingRulePropertyError);
+  expect(rule.GetNumFormat(2)).toBe(previous);
+});

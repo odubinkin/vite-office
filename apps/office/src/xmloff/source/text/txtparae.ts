@@ -3,7 +3,7 @@
  */
 
 export { ODF_NAMESPACES } from "../core/xmltoken";
-import { exportListLevelLayout } from "../style/xmlnume";
+import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 
 /** Direct character properties supported by the bounded text exporter. */
@@ -93,12 +93,8 @@ export interface OdfListLevelLayout {
 
 /** Neutral projection of one document-owned Writer numbering rule. */
 export interface XMLTextListRuleSource {
-  /** Per-level character-special markers in zero-based Writer order. */
-  readonly bulletChars?: readonly (string | undefined)[];
-  /** Per-level marker families in zero-based Writer order. */
-  readonly formats: readonly OdfListLevelKind[];
-  readonly levelLayouts?: readonly (OdfListLevelLayout | undefined)[];
-  readonly suffixes?: readonly (string | undefined)[];
+  /** Per-level native property records in zero-based Writer order. */
+  readonly levels: readonly XMLListLevelExport[];
   /** Canonical SwNumRule name. */
   readonly name: string;
 }
@@ -164,6 +160,7 @@ export class XMLTextParagraphExport {
     const paragraphStyleNames = new Map<string, string>();
     const characterStyleNames = new Map<string, string>();
     const listRules = new Map<string, XMLTextListRuleSource>();
+    const numRuleExport = new SvxXMLNumRuleExport(escapeXml);
     for (const paragraph of source.paragraphs()) {
       if (isCancelled()) throw new Error("ODT operation was cancelled.");
       if (paragraph.list !== undefined) {
@@ -172,28 +169,12 @@ export class XMLTextParagraphExport {
         const existing = listRules.get(list.rule.name);
         if (
           existing !== undefined &&
-          (existing.formats.some(
-            /** Detects a conflicting list level. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
-            (kind, index) => kind !== list.rule.formats[index],
-          ) ||
-            existing.formats.some(
-              /** Detects a conflicting character-special marker. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
-              (kind, index) =>
-                kind === "bullet" &&
-                (existing.bulletChars?.[index] ?? "•") !== (list.rule.bulletChars?.[index] ?? "•"),
-            ) ||
-            existing.formats.some(
-              /** Detects a conflicting numeric suffix. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
-              (kind, index) =>
-                kind === "numbered" &&
-                (existing.suffixes?.[index] ?? ".") !== (list.rule.suffixes?.[index] ?? "."),
-            ) ||
-            existing.formats.some(
-              /** Detects conflicting list geometry. @param _kind - Level kind. @param index - Level index. @returns Whether layouts differ. */
-              (_, index) =>
-                JSON.stringify(existing.levelLayouts?.[index] ?? {}) !==
-                JSON.stringify(list.rule.levelLayouts?.[index] ?? {}),
-            ))
+          existing.levels.some(
+            /** Compares complete serialized level properties with native omission defaults. @param properties - Existing level. @param index - Level. @returns Whether conflicting. */
+            (properties, index) =>
+              numRuleExport.exportLevelStyle(index, properties) !==
+              numRuleExport.exportLevelStyle(index, list.rule.levels[index] as XMLListLevelExport),
+          )
         )
           throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
         listRules.set(list.rule.name, list.rule);
@@ -296,21 +277,10 @@ export class XMLTextParagraphExport {
       /** Emits one automatic ODF list style. @param rule - Writer numbering rule. @param index - Stable style index. @returns Style XML. */
       (rule) => {
         const name = listStyleNames.get(rule.name) as string;
-        const levels = rule.formats
+        const levels = rule.levels
           .map(
-            /** Emits one list-level style. @param kind - Marker family. @param level - Zero-based Writer level. @returns Level XML. */
-            (kind, level) => {
-              const element =
-                kind === "bullet" ? "text:list-level-style-bullet" : "text:list-level-style-number";
-              const attributes =
-                kind === "bullet"
-                  ? ` text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"`
-                  : ` style:num-format="1"${rule.suffixes?.[level] === "" ? "" : ' style:num-suffix="."'}`;
-              const layout = exportListLevelLayout(rule.levelLayouts?.[level]);
-              return layout === ""
-                ? `<${element} text:level="${level + 1}"${attributes}/>`
-                : `<${element} text:level="${level + 1}"${attributes}>${layout}</${element}>`;
-            },
+            /** Delegates each native property record to numbering export ownership. @param properties - Level properties. @param level - Zero-based level. @returns Level XML. */
+            (properties, level) => numRuleExport.exportLevelStyle(level, properties),
           )
           .join("");
         return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
@@ -555,7 +525,7 @@ function exportHyperlinkStart(hyperlink: OdfHyperlink): string {
 
 /** Validates list metadata before XML generation. @param list - Neutral list state. @returns Nothing. */
 function assertList(list: XMLTextListSource): void {
-  if (!Number.isInteger(list.level) || list.level < 0 || list.level >= list.rule.formats.length)
+  if (!Number.isInteger(list.level) || list.level < 0 || list.level >= list.rule.levels.length)
     throw new Error("ODF list level is outside its numbering rule.");
   if (list.listId.length === 0 || list.rule.name.length === 0)
     throw new Error("ODF list identity and rule name must not be blank.");
@@ -564,16 +534,12 @@ function assertList(list: XMLTextListSource): void {
     (!Number.isInteger(list.startValue) || list.startValue < 0 || list.startValue > 32_767)
   )
     throw new Error("ODF list start value is outside the supported range.");
-  if (list.rule.formats.length !== 10)
+  if (list.rule.levels.length !== 10)
     throw new Error("ODF list rule must define ten Writer levels.");
-  if (list.rule.bulletChars !== undefined && list.rule.bulletChars.length !== 10)
-    throw new Error("ODF list rule must define ten Writer bullet characters.");
-  if (list.rule.suffixes !== undefined && list.rule.suffixes.length !== 10)
-    throw new Error("ODF list rule must define ten Writer suffixes.");
-  list.rule.bulletChars?.forEach(
-    /** Validates one upstream-shaped character-special marker. @param bulletChar - Marker value. @returns Nothing. */
-    (bulletChar) => {
-      if (bulletChar !== undefined && [...bulletChar].length > 1)
+  list.rule.levels.forEach(
+    /** Validates one upstream-shaped character-special marker. @param properties - Level properties. @returns Nothing. */
+    (properties) => {
+      if (properties.bulletChar !== undefined && [...properties.bulletChar].length > 1)
         throw new Error("ODF bullet character must contain at most one Unicode code point.");
     },
   );

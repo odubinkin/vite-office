@@ -2,6 +2,46 @@
 import type { OdfListLevelLayout } from "../text/txtparae";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 
+/** Native-style UNO properties for one supported numbering level at the XML export boundary. */
+export interface XMLListLevelExport extends OdfListLevelLayout {
+  readonly kind: "bullet" | "numbered";
+  readonly bulletChar?: string;
+  readonly prefix?: string;
+  readonly suffix?: string;
+  readonly startWith?: number;
+  readonly parentNumbering?: number;
+}
+
+/** Source-owned standard ODF numbering exporter with an XML attribute encoding port. */
+export class SvxXMLNumRuleExport {
+  /** Binds the XML writer encoding boundary. @param escapeValue - XML value encoding. @returns Exporter. */
+  public constructor(private readonly escapeValue: (value: string) => string) {}
+  /** Exports one native numbering property sequence. @param level - Zero-based level. @param properties - Level properties. @returns Standard ODF 1.3 XML. */
+  public exportLevelStyle(level: number, properties: XMLListLevelExport): string {
+    const attributes = [`text:level="${level + 1}"`];
+    if (properties.prefix)
+      attributes.push(`style:num-prefix="${this.escapeValue(properties.prefix)}"`);
+    if (properties.suffix)
+      attributes.push(`style:num-suffix="${this.escapeValue(properties.suffix)}"`);
+    const element =
+      properties.kind === "bullet"
+        ? "text:list-level-style-bullet"
+        : "text:list-level-style-number";
+    if (properties.kind === "bullet") {
+      let bullet = properties.bulletChar ?? "\uF095";
+      if (bullet.length !== 0 && (bullet.codePointAt(0) as number) < 32) bullet = "\uF095";
+      attributes.push(`text:bullet-char="${this.escapeValue(bullet)}"`);
+    } else {
+      attributes.push('style:num-format="1"');
+      const start = properties.startWith ?? 1;
+      if (start !== 1) attributes.push(`text:start-value="${start}"`);
+      const display = Math.min(properties.parentNumbering ?? 1, level + 1);
+      if (display > 1) attributes.push(`text:display-levels="${display}"`);
+    }
+    return `<${element} ${attributes.join(" ")}>${exportListLevelLayout(properties)}</${element}>`;
+  }
+}
+
 /** Emits native mode and conditional label-alignment attributes. @param layout - Native UNO MM100 properties, or no supported alignment. @returns List-level XML. */
 export function exportListLevelLayout(layout: OdfListLevelLayout | undefined): string {
   if (layout === undefined) return "";

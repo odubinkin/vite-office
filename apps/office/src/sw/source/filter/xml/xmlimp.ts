@@ -372,12 +372,8 @@ class SwXMLImport
     const numberingRules = new SwXNumberingRules(imported);
     try {
       for (const declaration of rule.levels) {
-        numberingRules.replaceByIndex(declaration.level, {
-          ...declaration.position.values,
-          kind: declaration.kind,
-          ...(declaration.bulletChar === undefined ? {} : { bulletChar: declaration.bulletChar }),
-          suffix: declaration.suffix,
-        });
+        const { level, position, ...properties } = declaration;
+        numberingRules.replaceByIndex(level, { ...position.values, ...properties });
       }
     } catch (error) {
       // FillUnoNumRule catches the UNO failure outside the loop, retaining prior replacements.
@@ -390,7 +386,8 @@ class SwXMLImport
           applied = imported.GetNumFormat(level);
         if (
           previous.GetKind() !== applied.GetKind() ||
-          (applied.GetKind() === "numbered" && previous.GetSuffix() !== applied.GetSuffix()) ||
+          JSON.stringify(previous.GetMarkerProperties()) !==
+            JSON.stringify(applied.GetMarkerProperties()) ||
           (applied.GetKind() === "bullet" &&
             previous.GetBulletChar() !== applied.GetBulletChar()) ||
           JSON.stringify(previous.GetPositionProperties()) !==
