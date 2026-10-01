@@ -4,7 +4,7 @@ title: "Restore native processed list continuation import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned processed continuation and DefaultListId projection under the persistent approved upstream goal;safe local scope and unchanged gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:40:29.984Z"
+doc_updated_at: "2026-10-01T03:44:46.710Z"
 doc_updated_by: "CODER"
 description: "Iteration34: replace list alias map with source-owned processed list records,parse native continue-numbering/root-only identity attributes,resolve chains and DefaultListId projection;preserve registered save/open/recovery differences."
 sections:
@@ -60,6 +60,10 @@ sections:
     - Observation: Native probe compile session50518 exited1:ASCII OUString adapter lacked constexpr literal support,and full extracted GenerateNewListId also calls comphelper RNG after time/date. Earlier short source read ended before this RNG line.
       Impact: No native result exists yet. Generated IDs must include uniform0..INT_MAX random addition plus collision suffix;timestamp-only implementation would be wrong.
       Resolution: Fix only platform adapters with literal-capable ASCII storage and fixed RNG input;retain the native body unchanged. Runtime generator will use browser uniform31bit random and native time/date arithmetic;tests inject fixed clock/RNG and exercise collisions. This refines the approved native generator within existing scope,without altering pass criteria or legacy/stable-export exclusions.
+
+    - Observation: Compiled native constructor/helper comparison passes3080 sequences/15388 states. Typecheck session34662 exited2 because one constructor statement still uses removed wrapper name state after direct helper refactoring.
+      Impact: Native context behavior is supported,but the paragraph item module does not yet typecheck.
+      Resolution: Replace the remaining state reference with textLists,rerun focused types/tests;no scope or gate changes. Keep real native output and adapter limitations explicit.
 id_source: "generated"
 ---
 ## Summary
@@ -101,3 +105,7 @@ Previous goal turn is progress:DWV0NC DONE,implementation9ac1779d7b3845eb320d939
 - Observation: Native probe compile session50518 exited1:ASCII OUString adapter lacked constexpr literal support,and full extracted GenerateNewListId also calls comphelper RNG after time/date. Earlier short source read ended before this RNG line.
   Impact: No native result exists yet. Generated IDs must include uniform0..INT_MAX random addition plus collision suffix;timestamp-only implementation would be wrong.
   Resolution: Fix only platform adapters with literal-capable ASCII storage and fixed RNG input;retain the native body unchanged. Runtime generator will use browser uniform31bit random and native time/date arithmetic;tests inject fixed clock/RNG and exercise collisions. This refines the approved native generator within existing scope,without altering pass criteria or legacy/stable-export exclusions.
+
+- Observation: Compiled native constructor/helper comparison passes3080 sequences/15388 states. Typecheck session34662 exited2 because one constructor statement still uses removed wrapper name state after direct helper refactoring.
+  Impact: Native context behavior is supported,but the paragraph item module does not yet typecheck.
+  Resolution: Replace the remaining state reference with textLists,rerun focused types/tests;no scope or gate changes. Keep real native output and adapter limitations explicit.
