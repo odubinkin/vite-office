@@ -4,7 +4,7 @@ title: "Restore node-owned Writer numbering lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved persistent parity goal;restore shown text-node numbering ownership,rule/document registration and native lazy getters;preserve document IO exceptions and gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T04:50:25.210Z"
+doc_updated_at: "2026-10-01T04:57:40.837Z"
 doc_updated_by: "CODER"
 description: "Iteration36 of approved persistent parity goal:SwTextNode owns shown SwNodeNum with native AddToList/RemoveFromList/GetNum/vector contracts,SwNodeNum rule/document registration hooks and non-owning SwList topology. Remove full-list read validation and ownership wrappers;preserve registered document IO exceptions and unchanged gates."
 sections:
@@ -46,7 +46,12 @@ sections:
   Verify Steps: "Run actual baseline for missing GetNum/vector/lifecycle ownership APIs,whole-list counter read validating unrelated tails and detached records reading current text rule rather than retained native rule. Compile full unmodified pinned GetNum/GetNumberVector/IsInList/FindList/AddToList/RemoveFromList plus PreAdd/PostRemove/ChangeNumRule/Create,rule membership and document registry methods with explicit single-shown/no-layout/no-redline/doc-node/platform dependencies;record adapters and source body identity. Compare actual owner/tree/rule/registry objects for add/remove/readd,duplicate add,level/restart/counted/list/rule changes,detach/reinsert/move/delete/copy,Arabic/bullet,rule membership ordering/duplicate suppression,numbered registry filtering,and reverse/prefix-only reads with literal vectors/counters/labels and independent copies. Include genuine ODT/Worker/undo suites. Focused tests/lint/types/docs/provenance/parity before unchanged npm run verify;both coverage suites100%,all browser/static/resource/source/invariant gates. Doctor,routing,diff,real code SHA,evaluator pass and clean final checkout required;no weakened/skipped gates."
   Verification: "Pending owner execution;prior iteration35 is evidence only for retained topology,not this ownership correction."
   Rollback Plan: "Revert only the actual implementation commit if this ownership correction fails;preserve task evidence and prior DONE artifacts. No destructive history operations."
-  Findings: "Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions. Previous turn is verified progress:iteration35 code77fda1c876bba94fa18514fa0b2dce43e1d38493,full verify59167 exit0,closed child and clean parent98252afbd500. Native ndtxt.hxx owns mpNodeNum;shown AddToList allocates,RemoveFromList removes/resets,GetNum/GetNumberVector directly access it. PreAdd/PostRemove register rule clients and document list items. Current local SwList map allocates records,SwNodeNum reads text rule dynamically and paragraph getters force whole-list validation. Persistent goal authorizes this safe in-repo source-shaped correction and lifecycle;no network/outside access or subagents."
+  Findings: |-
+    Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions. Previous turn is verified progress:iteration35 code77fda1c876bba94fa18514fa0b2dce43e1d38493,full verify59167 exit0,closed child and clean parent98252afbd500. Native ndtxt.hxx owns mpNodeNum;shown AddToList allocates,RemoveFromList removes/resets,GetNum/GetNumberVector directly access it. PreAdd/PostRemove register rule clients and document list items. Current local SwList map allocates records,SwNodeNum reads text rule dynamically and paragraph getters force whole-list validation. Persistent goal authorizes this safe in-repo source-shaped correction and lifecycle;no network/outside access or subagents.
+
+    - Observation: Actual pre-edit baseline:missing GetNum/GetNumberVector/AddToList;first counter7 read computes unrelated raw tail0to8;orphan retains dynamic format start7 instead of native cleared binding/default1. Native-owner compile24098 failed only five missing declaration methods in explicit frame/range/list-items adapters;no native body changed.
+      Impact: Incomplete native dependency declarations prevent comparison and are not successful evidence. Reading tail/raw state and cleared rule binding must be independently verified after repair.
+      Resolution: Add only range/frame/native node getIDocumentListItems forwarding adapter declarations;recompile full untouched native methods. Keep this failure and unsupported hidden/layout/platform callbacks explicit;no verification gate change.
 id_source: "generated"
 ---
 ## Summary
@@ -76,3 +81,7 @@ Revert only the actual implementation commit if this ownership correction fails;
 ## Findings
 
 Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions. Previous turn is verified progress:iteration35 code77fda1c876bba94fa18514fa0b2dce43e1d38493,full verify59167 exit0,closed child and clean parent98252afbd500. Native ndtxt.hxx owns mpNodeNum;shown AddToList allocates,RemoveFromList removes/resets,GetNum/GetNumberVector directly access it. PreAdd/PostRemove register rule clients and document list items. Current local SwList map allocates records,SwNodeNum reads text rule dynamically and paragraph getters force whole-list validation. Persistent goal authorizes this safe in-repo source-shaped correction and lifecycle;no network/outside access or subagents.
+
+- Observation: Actual pre-edit baseline:missing GetNum/GetNumberVector/AddToList;first counter7 read computes unrelated raw tail0to8;orphan retains dynamic format start7 instead of native cleared binding/default1. Native-owner compile24098 failed only five missing declaration methods in explicit frame/range/list-items adapters;no native body changed.
+  Impact: Incomplete native dependency declarations prevent comparison and are not successful evidence. Reading tail/raw state and cleared rule binding must be independently verified after repair.
+  Resolution: Add only range/frame/native node getIDocumentListItems forwarding adapter declarations;recompile full untouched native methods. Keep this failure and unsupported hidden/layout/platform callbacks explicit;no verification gate change.

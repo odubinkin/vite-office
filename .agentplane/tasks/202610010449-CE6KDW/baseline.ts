@@ -3,6 +3,7 @@ import {createWriterDocument} from '../../../apps/office/src/sw/source/core/doc/
 import {applyWriterParagraphList} from '../../../apps/office/src/sw/source/core/doc/list';
 const doc=createWriterDocument();const first=doc.paragraphs[0]!;const tail=doc.nodes.MakeTextNode();
 for(const node of [first,tail])applyWriterParagraphList(node,{kind:'numbered',level:0,styleId:'Counters',listId:'native-list'});
+doc.FindNumRulePtr('Counters')!.GetNumFormat(0).SetStart(7);
 const list=doc.GetDocumentListsManager().GetListByName('native-list')!;
 const record=list.GetListItem(tail)!;
 const before=record.GetNumber(false);const read=first.GetListItemNumber();const after=record.GetNumber(false);
