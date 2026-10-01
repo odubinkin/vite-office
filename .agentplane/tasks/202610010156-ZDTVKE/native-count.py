@@ -12,8 +12,7 @@ root = task.parents[2]
 header = (root / 'vendor/libreoffice-reference/xmloff/source/text/XMLTextListItemContext.hxx').read_text()
 assert 'sal_Int16 mnSubListCount;' in header
 source = (task / 'native-sublist.cxx').read_text().split('int main(){')[0]
-assert 'int mnSubListCount=0;' in source
-source = source.replace('int mnSubListCount=0;', 'sal_Int16 mnSubListCount=0;')
+assert 'sal_Int16 mnSubListCount=0;' in source
 source += '''int main(){Import imp;Attr attr;Attr*attrs=&attr;
 XMLTextListBlockContext root(imp,imp,attrs);
 XMLTextListItemContext item(imp,attrs,false);

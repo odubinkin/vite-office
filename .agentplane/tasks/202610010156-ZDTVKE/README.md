@@ -4,7 +4,7 @@ title: "Restore native repeated-sublist restart ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned repeated-sublist count and pending block restart inheritance,consumption and return under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T02:22:39.904Z"
+doc_updated_at: "2026-10-01T02:32:56.550Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
@@ -72,6 +72,10 @@ sections:
     - Observation: Additional primary-header audit finds mnSubListCount is sal_Int16, while the first probe adapter/local counter used unbounded/int count. Compiled unmodified item child factory with the actual signed16 field matches9 boundary states across65538 child lists;32768 narrows negative and65538 returns to2.
       Impact: The current bounded1536-tree comparison remains valid, but the implementation needs native signed16 assignment narrowing for large documents within the existing1,000,000-element parser ceiling.
       Resolution: Keep this within the approved per-item count correction. Wait for current verify terminal without changing live runtime inputs; then narrow the counter,add actual-context boundary test,correct the native adapter field and rerun final unchanged verification. No broader native overflow policy claim.
+
+    - Observation: Final-count verify session51727 terminal exit1 after651 app/109 inventory tests,both100%. Browser18/19 passes; mobile resize test at responsive-sidebar.spec.ts58 sees html intercept Paragraph click then the menu item detaches; snapshot shows Styles open although Format was clicked. Earlier unchanged-browser full verify36986 passed19/19.
+      Impact: Complete mandatory verification is not established; this may be an intermittent existing menu/resize issue but its cause is not yet proven. No browser implementation changed in this task.
+      Resolution: Preserve failed terminal log,trace,screenshot/context in active task;run3 isolated repetitions of the existing mobile test without weakening assertions,timeouts,retries or config. If it passes,run unchanged full verify again; a reproduced defect must be handled as a separate correction under the goal.
 id_source: "generated"
 ---
 ## Summary
@@ -125,3 +129,7 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent us
 - Observation: Additional primary-header audit finds mnSubListCount is sal_Int16, while the first probe adapter/local counter used unbounded/int count. Compiled unmodified item child factory with the actual signed16 field matches9 boundary states across65538 child lists;32768 narrows negative and65538 returns to2.
   Impact: The current bounded1536-tree comparison remains valid, but the implementation needs native signed16 assignment narrowing for large documents within the existing1,000,000-element parser ceiling.
   Resolution: Keep this within the approved per-item count correction. Wait for current verify terminal without changing live runtime inputs; then narrow the counter,add actual-context boundary test,correct the native adapter field and rerun final unchanged verification. No broader native overflow policy claim.
+
+- Observation: Final-count verify session51727 terminal exit1 after651 app/109 inventory tests,both100%. Browser18/19 passes; mobile resize test at responsive-sidebar.spec.ts58 sees html intercept Paragraph click then the menu item detaches; snapshot shows Styles open although Format was clicked. Earlier unchanged-browser full verify36986 passed19/19.
+  Impact: Complete mandatory verification is not established; this may be an intermittent existing menu/resize issue but its cause is not yet proven. No browser implementation changed in this task.
+  Resolution: Preserve failed terminal log,trace,screenshot/context in active task;run3 isolated repetitions of the existing mobile test without weakening assertions,timeouts,retries or config. If it passes,run unchanged full verify again; a reproduced defect must be handled as a separate correction under the goal.

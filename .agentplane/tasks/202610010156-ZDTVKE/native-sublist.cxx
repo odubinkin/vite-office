@@ -40,7 +40,7 @@ void ResetRestartNumbering() { mbRestartNumbering = false; }
  void endFastElement(int) override;
 };
 struct XMLTextListItemContext:SvXMLImportContext {
- Import&rTxtImport;short start;int mnSubListCount=0;
+ Import&rTxtImport;short start;sal_Int16 mnSubListCount=0;
  XMLTextListItemContext(Import&i,const css::uno::Reference<Attr>&a,bool head):SvXMLImportContext(i),rTxtImport(i),start(head?-1:a->start){if(!head)i.lists.SetListItem(this);}
  void endFastElement(int)override;
  css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(sal_Int32,const css::uno::Reference<css::xml::sax::XFastAttributeList>&);

@@ -1,0 +1,211 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 202 runtime sources, 830 relative imports, 12 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  09:26:29
+   Duration  259ms (transform 48ms, setup 0ms, import 64ms, tests 6ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  143 passed (143)
+      Tests  651 passed (651)
+   Start at  09:26:30
+   Duration  181.72s (transform 4.28s, setup 26.67s, import 20.57s, tests 142.61s, environment 125.38s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 9952/9952 )
+Branches     : 100% ( 7505/7505 )
+Functions    : 100% ( 2743/2743 )
+Lines        : 100% ( 9152/9152 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+
+ Test Files  36 passed (36)
+      Tests  109 passed (109)
+   Start at  09:29:33
+   Duration  88.21s (transform 1.10s, setup 0ms, import 2.70s, tests 78.74s, environment 4ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1523/1523 )
+Branches     : 100% ( 1080/1080 )
+Functions    : 100% ( 384/384 )
+Lines        : 100% ( 1464/1464 )
+================================================================================
+
+> vite-office@0.1.0 test:e2e
+> npm run build && playwright test --config apps/office/playwright.config.ts
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2K
+transforming...✓ 1993 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.56 kB │ gzip:   0.35 kB
+dist/assets/odt-worker-DYq0Vy93.js    250.83 kB
+dist/assets/index-C6eeDUe_.css         58.68 kB │ gzip:   9.59 kB
+dist/assets/index-DPETyKKc.js       1,123.39 kB │ gzip: 269.69 kB
+
+✓ built in 1.18s
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:30694) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 19 tests using 4 workers
+
+(node:30702) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30703) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30705) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30704) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 apps/office/e2e/writer-clipboard.spec.ts:5:1 › copies visible formatted Writer content through the native browser copy event (3.7s)
+  ✓   2 apps/office/e2e/writer-cut-paste.spec.ts:5:1 › Writer Cut and Paste (4.0s)
+  ✓   3 apps/office/e2e/writer-character-formatting.spec.ts:5:1 › Writer direct character formatting (5.6s)
+  ✓   6 apps/office/e2e/writer-cut-paste.spec.ts:55:1 › Writer immediate spaces and structured list Paste (2.9s)
+  ✓   5 apps/office/e2e/writer-clipboard.spec.ts:54:1 › Writer list clipboard (3.4s)
+  ✓   7 apps/office/e2e/writer-document-selection.spec.ts:5:1 › supports document-wide selection through Ctrl/Cmd+A and pointer dragging (3.3s)
+  ✓  10 apps/office/e2e/writer-document-selection.spec.ts:139:1 › places the caret at the first clicked position in a different paragraph (2.4s)
+  ✓   8 apps/office/e2e/writer-hyperlinks.spec.ts:9:1 › Writer creates, edits, and round-trips hyperlinks (4.8s)
+  ✓  12 apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (2.4s)
+  ✓   4 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (14.9s)
+  ✓   9 apps/office/e2e/writer-layout-ratios.spec.ts:11:1 › Writer keeps measured page breaks across device pixel ratios (7.4s)
+  ✓  11 apps/office/e2e/writer-lists.spec.ts:5:1 › Writer bullets and numbering (4.2s)
+  ✓  13 apps/office/e2e/writer-print.spec.ts:5:1 › Print appears in upstream locations and print media keeps only pages (1.7s)
+  ✓  15 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport (1.8s)
+  ✓  14 apps/office/e2e/writer-odt-file.spec.ts:15:1 › Writer opens and saves a bounded ODT file (2.6s)
+  ✓  17 apps/office/e2e/writer-odt-file.spec.ts:87:1 › Writer keeps one ODT text node across visible page fragments after reopen (2.4s)
+  ✓  18 apps/office/e2e/writer-odt-file.spec.ts:139:1 › Writer types in a table cell and reopens the edited ODT (1.4s)
+  ✘  16 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (30.1s)
+(node:30833) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  19 apps/office/e2e/writer-responsive-sidebar.spec.ts:76:1 › the mobile table grid dismisses outside and More Options opens the full dialog (1.1s)
+
+
+  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('menuitem', { name: 'Paragraph…' })
+        - locator resolved to <button tabindex="-1" type="button" role="menuitem" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - performing click action
+        - <html lang="en">…</html> intercepts pointer events
+      - retrying click action
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+
+
+      56 |   await page.setViewportSize({ width: 390, height: 340 });
+      57 |   await page.getByRole("button", { name: "Format" }).click();
+    > 58 |   await page.getByRole("menuitem", { name: "Paragraph…" }).click();
+         |                                                            ^
+      59 |   const panel = page.locator("[data-writer-modal-panel]");
+      60 |   await expect(panel).toBeVisible();
+      61 |   expect(
+        at /Users/odubinkin/Projects/vite-office/apps/office/e2e/writer-responsive-sidebar.spec.ts:58:60
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll
+  18 passed (52.2s)
+Terminal: exec session51727 exit1.
