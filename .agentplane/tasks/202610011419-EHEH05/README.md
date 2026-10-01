@@ -1,10 +1,11 @@
 ---
 id: "202610011419-EHEH05"
 title: "Restore native numbering rule copy assignment reset and scalar metadata ownership"
-status: "DOING"
+result_summary: "Iteration47 selected native numbering rule lifecycle/scalar ownership verified;actual CODE290ed1546022;full objective active,next phantom/continuous consumer gap measured."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Actual same-name document client/list/registry and Worker stored-owner checks pass;post-copy scalar restoration prevents phantom/redline loss. Legacy omission uses native defaults,malformed metadata rejected,supported ODT existing fields preserved. Full original verify-third exit0:727app109inventory19browser100% both/all gates. No original assertion/gate/dependency/registered IO/recovery changes;only3 metadata records/statuses unchanged."
     - "Reviewed actual CODE290ed against current canonical packet HEAD:all seven semantic paths identical. Installed AgentPlane bookkeeping auto-amend included four authorized task artifacts (README,scope/check evidence,completed verify-third log) in actual CODE,eleven total paths;this is not seven total files and no artifact-only SHA is implementation. Premature canonical ok was explicitly corrected to rework then final ok with actual SHA;rejected uppercase subject and attribution failures retained."
     - "Same actor in a separate review phase;no independent-agent review claimed. Read-only next phantom predicate audit differs3/5;complete objective remains unachieved. Scope/mandatory evidence pass;finish only47."
-commit: null
+commit:
+  hash: "290ed15460229ef91f75e647018405c85f2c31af"
+  message: "🔧 EHEH05 code: restore native numbering rule lifecycle and scalar ownership"
 comments:
   -
     author: "CODER"
     body: "Start: execute the approved iteration47 complete native rule lifecycle/scalar ownership correction under persistent user goal approval;preserve registered IO exceptions and every original gate."
+  -
+    author: "CODER"
+    body: "Verified: restored approved47 complete selected native rule copy/Assign/Reset/Equals and scalar/default ownership with post-copy Worker restoration. Actual CODE290ed15460229ef91f75e647018405c85f2c31af;canonical final ok and same-actor EVALUATOR pass. Native432 states18 equality7 narrowing under ASanUBSan;full727app109inventory19browser100% both/all gates. Seven semantic paths plusfour CLI-bookkeeping task artifacts in actual CODE;quality/close separate. Only leaf DONE;full goal/parent active,next phantom consumer differs3/5. No registered IO/recovery or gate changes."
 events:
   -
     type: "status"
@@ -78,8 +84,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified final actual CODE290ed15460229ef91f75e647018405c85f2c31af. Native432 states18 equality7 narrowing,ASanUBSan clean;full verify-third727app109inventory19browser100% both and all gates pass. Corrected premature note/rework retained. Only47 leaf scope;full goal active,next phantom consumer gap measured."
+  -
+    type: "status"
+    at: "2026-10-01T14:52:02.928Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored approved47 complete selected native rule copy/Assign/Reset/Equals and scalar/default ownership with post-copy Worker restoration. Actual CODE290ed15460229ef91f75e647018405c85f2c31af;canonical final ok and same-actor EVALUATOR pass. Native432 states18 equality7 narrowing under ASanUBSan;full727app109inventory19browser100% both/all gates. Seven semantic paths plusfour CLI-bookkeeping task artifacts in actual CODE;quality/close separate. Only leaf DONE;full goal/parent active,next phantom consumer differs3/5. No registered IO/recovery or gate changes."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:51:46.514Z"
+doc_updated_at: "2026-10-01T14:52:02.929Z"
 doc_updated_by: "CODER"
 description: "Iteration47: restore complete native SwNumRule copy/Assign/Reset and value-equality responsibilities with exact metadata/defaults and distinction between owned and effective levels. Preserve pointer assignment identity,recipient default mode/list ID and client ownership;source copy resets count-phantom/redline policy as native does. Persist scalar rule state across Worker16 with native legacy defaults. No new rendering/continuous-tree/UI feature or registered IO/recovery change; broader lifetime/style/name-map/counter obligations remain unverified."
 sections:
@@ -183,6 +196,10 @@ sections:
     - Observation: Actual CODE HEAD after installed AgentPlane own bookkeeping amend is290ed15460229ef91f75e647018405c85f2c31af. git show lists eleven paths:seven approved semantic CODE paths plusfour active canonical task artifacts README,code-scope.json,final-checks.json,completed verify-third.log.
       Impact: All paths are intentional authorized47 scope. Earlier planned seven paths describes semantic implementation only,not total actual commit file count. No history rewrite requested or performed by the agent;quality reviewed actual amended HEAD and unchanged semantic bytes through packet HEAD.
       Resolution: Record exact eleven total/seven semantic/four canonical artifact attribution. Actual CODE290ed remains distinct from later82e000 verification packet and quality/close commits. Final canonical ok and same-actor EVALUATOR pass reference actual CODE;finish leaf only/full goal active.
+extensions:
+  implementation_commit:
+    hash: "290ed15460229ef91f75e647018405c85f2c31af"
+    message: "🔧 EHEH05 code: restore native numbering rule lifecycle and scalar ownership"
 id_source: "generated"
 ---
 ## Summary
