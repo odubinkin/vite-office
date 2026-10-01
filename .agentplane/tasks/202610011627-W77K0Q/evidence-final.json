@@ -1,0 +1,14 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "profileCount": 128,
+  "snapshots": 1792,
+  "recordStates": 7168,
+  "nativeCompileContracts": 4,
+  "decodedLiteralSha256": "50d650fdb7e1998fc898fee8a6849922f1da5802383166ff057b51f21143e2a2",
+  "fixtureBytes": 14662,
+  "literalMatchesNative": true,
+  "freshFileHashes": 3,
+  "sourceCopiesInTrackedAgentplane": 0,
+  "focusedFilesWithoutUpstream": 5,
+  "focusedTestsWithoutUpstream": 21
+}

@@ -4,7 +4,7 @@ title: "Restore protected explicit-target numbering validation contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -46,7 +46,7 @@ events:
     to: "DOING"
     note: "Start: refined same eight-file leaf now includes source ordered-child equivalence for explicit hierarchical target lookup; persistent user goal authorizes this native contract repair, with all original expected values and upstream-independent project tests preserved."
 doc_version: 3
-doc_updated_at: "2026-10-01T17:13:35.534Z"
+doc_updated_at: "2026-10-01T17:16:22.438Z"
 doc_updated_by: "CODER"
 description: "Iteration49 of the active implemented-runtime parity goal: remove the nonnative public eager no-argument hierarchical validation bridge, require explicit nullable targets on both protected validators, preserve original assertion meaning using source-shaped access, and compare native prefix/cache/null/foreign-target observations from manual local probes. Project tests must neither read nor compile nor invoke pinned upstream; native source must only exist in ignored scratch, never canonical Agentplane artifacts. Registered IO/recovery deviations remain untouched."
 sections:
@@ -72,7 +72,12 @@ sections:
     2. Preserve planned RED runtime and exact three type-contract failures, then GREEN. Both validators are protected with required explicit nullable targets; protected GetIterator finds comparator-equivalent child or end sentinel. Hierarchical null/distinct-key foreign targets do not mutate; equivalent or owned targets validate only the native prefix, with no eager descendants. Continuous sentinel behavior and every original expected vector/state remain unchanged; legacy tests use demand/explicit diagnostic access.
     3. Focused suites with upstream path temporarily unavailable and restored in finally pass. Unchanged full npm run verify passes every format/lint/tools/app type/dependency/resource/app/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gate, both100% coverages. Doctor,policy routing,diff and exact eight semantic files pass;no exclusions or weakened gates.
     4. Record actual post-bookkeeping CODE SHA and semantic/artifact counts; separate canonical verify, same-actor EVALUATOR quality phase and leaf close. Final tracked/untracked state clean; parent/full goal active, no whole-module/status promotion. Preserve native alias/lifetime and remaining implemented-contract gaps.
-  Verification: "Pending baseline/native differential, implementation, focused isolation and full unchanged gates. No whole-module or goal completion claim."
+  Verification: |-
+    Command: npm run verify. Result: pass (final attempt). Evidence: verify-final.log. App 734 tests in 166 files, inventory 109 tests in 36 files, browser 19 tests; both coverages 100%. App 10924 statements / 8273 branches / 2937 functions / 10020 lines; inventory 1523 / 1080 / 384 / 1464. All unchanged format/lint/tools/app types/dependency/resource/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates pass. Dependencies: 212 sources, 886 imports, 13 edges. JSDoc: 483 authored files. Source tree: 113 required paths, 33 retired roots. Provenance: 213 runtime modules. Static audit commands read upstream; tests do not.
+    Command: focused Vitest tree suites with pinned upstream path temporarily absent and restored in finally. Result: pass, 21 tests / 5 files. Evidence: focused-without-upstream.log. Every original assertion value retained; phantom timing now requests the exact native last-child prefix, without eager descendants. Typecheck succeeds after exactly three expected preceding contract errors; planned RED and failed native adapter/provenance attempts are retained and resolved in Findings.
+    Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py (manual developer comparison). Result: pass ASan/UBSan, 128 profiles / 1792 snapshots / 7168 record states; four expected native compiler failures prove protected access and mandatory arguments. Complete native header/type/core input file hashes freshly match pin 9bc445578031fecf56086729d8e4940c77e14d65. Literal packed fixture matches native-output.json exactly; decoded SHA256 50d650fdb7e1998fc898fee8a6849922f1da5802383166ff057b51f21143e2a2; fixture 14662 bytes. Named ordered-child/bulk-insert,Long/pointer,diagnostic/Arabic/reading/event/omitted-registration adapters bound core-only proof. All project tests use local data only; no native source stored in canonical Agentplane artifacts.
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass; doctor zero errors and two pre-existing warnings (managed shim and historical F1JT8K close SHA), routing OK, no whitespace errors.
+    Actual post-bookkeeping CODE: c36b910aa271ecab1515f81e4df2032282c32c4a. Exact scope: eight approved semantic paths plus three task artifact paths = eleven files. Metadata changes only record bounded evidence, with no status/classification or registered deviation changes. Separate canonical verification, same-actor EVALUATOR review and leaf close follow. No independent-agent or full-goal completion claim.
   Rollback Plan: "Revert only this leaf implementation commit and its eight intentional semantic paths via a follow-up task if required. Preserve task history, source hashes and literal results; never restore upstream source copies into artifacts or rewrite Git history."
   Findings: |-
     Fresh inspection confirms native header methods are protected and require explicit pointer arguments. Native hierarchical GetIterator(nullptr) resolves no child and returns without mutation; current local undefined-target overload instead validates recursively. Current production calls are owned-child only; three legacy diagnostic tests still rely on public/no-argument access. Prior iteration 48 completed with native 960 sequences/69120 states and unchanged full verification. Existing native result fixtures remain independent local test inputs.
@@ -127,7 +132,11 @@ Current-actor CODER executes after sequential ORCHESTRATOR approval/start. No de
 
 ## Verification
 
-Pending baseline/native differential, implementation, focused isolation and full unchanged gates. No whole-module or goal completion claim.
+Command: npm run verify. Result: pass (final attempt). Evidence: verify-final.log. App 734 tests in 166 files, inventory 109 tests in 36 files, browser 19 tests; both coverages 100%. App 10924 statements / 8273 branches / 2937 functions / 10020 lines; inventory 1523 / 1080 / 384 / 1464. All unchanged format/lint/tools/app types/dependency/resource/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates pass. Dependencies: 212 sources, 886 imports, 13 edges. JSDoc: 483 authored files. Source tree: 113 required paths, 33 retired roots. Provenance: 213 runtime modules. Static audit commands read upstream; tests do not.
+Command: focused Vitest tree suites with pinned upstream path temporarily absent and restored in finally. Result: pass, 21 tests / 5 files. Evidence: focused-without-upstream.log. Every original assertion value retained; phantom timing now requests the exact native last-child prefix, without eager descendants. Typecheck succeeds after exactly three expected preceding contract errors; planned RED and failed native adapter/provenance attempts are retained and resolved in Findings.
+Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py (manual developer comparison). Result: pass ASan/UBSan, 128 profiles / 1792 snapshots / 7168 record states; four expected native compiler failures prove protected access and mandatory arguments. Complete native header/type/core input file hashes freshly match pin 9bc445578031fecf56086729d8e4940c77e14d65. Literal packed fixture matches native-output.json exactly; decoded SHA256 50d650fdb7e1998fc898fee8a6849922f1da5802383166ff057b51f21143e2a2; fixture 14662 bytes. Named ordered-child/bulk-insert,Long/pointer,diagnostic/Arabic/reading/event/omitted-registration adapters bound core-only proof. All project tests use local data only; no native source stored in canonical Agentplane artifacts.
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass; doctor zero errors and two pre-existing warnings (managed shim and historical F1JT8K close SHA), routing OK, no whitespace errors.
+Actual post-bookkeeping CODE: c36b910aa271ecab1515f81e4df2032282c32c4a. Exact scope: eight approved semantic paths plus three task artifact paths = eleven files. Metadata changes only record bounded evidence, with no status/classification or registered deviation changes. Separate canonical verification, same-actor EVALUATOR review and leaf close follow. No independent-agent or full-goal completion claim.
 
 ## Rollback Plan
 
