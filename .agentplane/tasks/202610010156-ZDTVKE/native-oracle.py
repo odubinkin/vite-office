@@ -70,6 +70,7 @@ using sal_Int32=int; using sal_Int16=short; using OUString=std::string;
 #define XMLOFF_WARN_UNKNOWN_ELEMENT(a,b)
 #define XML_ELEMENT(a,b) a##_##b
 constexpr int TEXT_H=1,TEXT_P=2,LO_EXT_P=3,TEXT_LIST=4;
+constexpr int TEXT_XML_H=TEXT_H,TEXT_XML_P=TEXT_P,LO_EXT_XML_P=LO_EXT_P,TEXT_XML_LIST=TEXT_LIST;
 struct Attr {short start=-1;};
 namespace css {namespace xml::sax {struct XFastContextHandler {virtual ~XFastContextHandler()=default;};using XFastAttributeList=Attr;} namespace uno {template<class T>using Reference=T*;}}
 template<class T>struct Ref {T*p=nullptr;bool is(){return p!=nullptr;}T*get(){return p;}};
@@ -80,7 +81,7 @@ struct Import {Lists lists;Progress progress;Lists&GetTextListHelper(){return li
 struct SvXMLImportContext:css::xml::sax::XFastContextHandler {Import&imp;SvXMLImportContext(Import&i):imp(i){}Import&GetImport(){return imp;}virtual void endFastElement(int){};};
 struct XMLTextListBlockContext:SvXMLImportContext {
  Import&mrTxtImport;std::string msListStyleName="L",msListId="L-1",msContinueListId;int mxNumRules=1,mnLevel=0;bool mbRestartNumbering=false,mbSetDefaults=false;Ref<XMLTextListBlockContext> mxParentListBlock;
- XMLTextListBlockContext(Import&i,Import&txt,const css::uno::Reference<Attr>&,bool bRestartNumberingAtSubList=false):SvXMLImportContext(i),mrTxtImport(txt){if(!txt.lists.stack.empty())mxParentListBlock.p=txt.lists.stack.back().first;
+ XMLTextListBlockContext(Import&i,Import&txt,const css::uno::Reference<Attr>&,bool bRestartNumberingAtSubList=false):SvXMLImportContext(i),mrTxtImport(txt){OUString sParentListStyleName;if(!txt.lists.stack.empty())mxParentListBlock.p=txt.lists.stack.back().first;
 ''' + inherit + '''
  txt.lists.PushListContext(this);}
  int GetNumRules(){return mxNumRules;}int GetLevel(){return mnLevel;}std::string GetListId(){return msListId;}std::string GetContinueListId(){return msContinueListId;}
