@@ -1,0 +1,40 @@
+{
+  "flag": [
+    {
+      "text": "x",
+      "id": "Counters-1",
+      "restart": false,
+      "number": 7
+    }
+  ],
+  "unknown": [
+    {
+      "text": "x",
+      "id": "unknown",
+      "restart": false,
+      "number": 7
+    }
+  ],
+  "nested": [
+    {
+      "text": "a",
+      "id": "A",
+      "restart": false,
+      "number": 7
+    },
+    {
+      "text": "b",
+      "id": "nested",
+      "restart": false,
+      "number": 5
+    }
+  ],
+  "default": [
+    {
+      "text": "x",
+      "id": "A",
+      "restart": false,
+      "number": 7
+    }
+  ]
+}

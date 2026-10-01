@@ -4,7 +4,7 @@ title: "Restore native processed list continuation import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned processed continuation and DefaultListId projection under the persistent approved upstream goal;safe local scope and unchanged gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:36:38.479Z"
+doc_updated_at: "2026-10-01T03:40:29.984Z"
 doc_updated_by: "CODER"
 description: "Iteration34: replace list alias map with source-owned processed list records,parse native continue-numbering/root-only identity attributes,resolve chains and DefaultListId projection;preserve registered save/open/recovery differences."
 sections:
@@ -52,6 +52,14 @@ sections:
     - Observation: Initial baseline harness exited1 because writeOdtDocument was called without its required metadata.title argument;no runtime source had been edited.
       Impact: No baseline output or implementation conclusion exists yet.
       Resolution: Use the documented writer call with title and reader title,rerun the same bounded package cases;persist harness evidence before runtime edits.
+
+    - Observation: Actual genuine baseline exited0: continue-numbering is ignored as an unknown SAX attribute,not rejected as inferred from assertOnly;unknown target becomes unknown,nested xml:id replaces A with nested,and DefaultListId mapping is absent. Initial text snapshot used nonexistent p.text and is omitted in JSON.
+      Impact: The native correction is unchanged;baseline wording and snapshot must report observed behavior,not source-only inference.
+      Resolution: Use GetText snapshot and retain actual baseline;compile native token/context behavior before implementation. The planned acceptance covers ignored/rejected attribute failure equally and no gate or scope changes are needed.
+
+    - Observation: Native probe compile session50518 exited1:ASCII OUString adapter lacked constexpr literal support,and full extracted GenerateNewListId also calls comphelper RNG after time/date. Earlier short source read ended before this RNG line.
+      Impact: No native result exists yet. Generated IDs must include uniform0..INT_MAX random addition plus collision suffix;timestamp-only implementation would be wrong.
+      Resolution: Fix only platform adapters with literal-capable ASCII storage and fixed RNG input;retain the native body unchanged. Runtime generator will use browser uniform31bit random and native time/date arithmetic;tests inject fixed clock/RNG and exercise collisions. This refines the approved native generator within existing scope,without altering pass criteria or legacy/stable-export exclusions.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +93,11 @@ Previous goal turn is progress:DWV0NC DONE,implementation9ac1779d7b3845eb320d939
 - Observation: Initial baseline harness exited1 because writeOdtDocument was called without its required metadata.title argument;no runtime source had been edited.
   Impact: No baseline output or implementation conclusion exists yet.
   Resolution: Use the documented writer call with title and reader title,rerun the same bounded package cases;persist harness evidence before runtime edits.
+
+- Observation: Actual genuine baseline exited0: continue-numbering is ignored as an unknown SAX attribute,not rejected as inferred from assertOnly;unknown target becomes unknown,nested xml:id replaces A with nested,and DefaultListId mapping is absent. Initial text snapshot used nonexistent p.text and is omitted in JSON.
+  Impact: The native correction is unchanged;baseline wording and snapshot must report observed behavior,not source-only inference.
+  Resolution: Use GetText snapshot and retain actual baseline;compile native token/context behavior before implementation. The planned acceptance covers ignored/rejected attribute failure equally and no gate or scope changes are needed.
+
+- Observation: Native probe compile session50518 exited1:ASCII OUString adapter lacked constexpr literal support,and full extracted GenerateNewListId also calls comphelper RNG after time/date. Earlier short source read ended before this RNG line.
+  Impact: No native result exists yet. Generated IDs must include uniform0..INT_MAX random addition plus collision suffix;timestamp-only implementation would be wrong.
+  Resolution: Fix only platform adapters with literal-capable ASCII storage and fixed RNG input;retain the native body unchanged. Runtime generator will use browser uniform31bit random and native time/date arithmetic;tests inject fixed clock/RNG and exercise collisions. This refines the approved native generator within existing scope,without altering pass criteria or legacy/stable-export exclusions.
