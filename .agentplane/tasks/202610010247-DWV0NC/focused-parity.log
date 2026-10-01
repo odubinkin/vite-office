@@ -2,4 +2,4 @@
 > vite-office@0.1.0 inventory:parity
 > tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference
 
-Terminal exit0; semanticViolationCount=None; unchanged parity CLI passed.
+Terminal session18298 exit0; unchanged parity CLI passed. Full runtime semantic totals are retained in the complete verification evidence.

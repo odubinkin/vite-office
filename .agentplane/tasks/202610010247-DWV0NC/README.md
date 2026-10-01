@@ -4,7 +4,7 @@ title: "Restore native implicit list restart export ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned implicit/direct restart metadata and native conditional list transitions under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:19:42.494Z"
+doc_updated_at: "2026-10-01T03:20:52.477Z"
 doc_updated_by: "CODER"
 description: "Iteration33: preserve independent numbered,restart,direct-start and format-start metadata under XMLTextNumRuleInfo and export native implicit-restart list transitions. Preserve registered save/open/recovery differences."
 sections:
@@ -64,6 +64,10 @@ sections:
     - Observation: Focused genuine ODT session84490 passed all52 package scenarios. The first provenance check failed ENOENT because new evidence referenced xmloff/inc/XMLTextNumRuleInfo.hxx; the actual pinned header is xmloff/source/text/XMLTextNumRuleInfo.hxx. An initial documentation search also used nonexistent docs/writer-odt-format.md; bounded rg --files located docs/program/writer-odt-format.md.
       Impact: Runtime tests pass, but the evidence path must be corrected before full verification. No validator or gate change is required.
       Resolution: Use the actual source/text header and its inline Reset marker, repeat focused provenance/parity checks, retain the failed log and the bounded native scope.
+
+    - Observation: Focused lint session11915 exited1 for three prohibited non-null assertions in the new test; typecheck session31393 and parity CLI session18298 exited0. The compact parity note initially queried the top-level semanticViolationCount and printed None; this field belongs to runtime.
+      Impact: No runtime failure or parity promotion; test code and compact evidence require correction before full verification.
+      Resolution: Replace non-null assertions with explicit missing-fixture guards; retain unchanged lint rules. Correct the compact note to report only the observed exit0, and retain runtime semantic totals from the full verification output.
 id_source: "generated"
 ---
 ## Summary
@@ -109,3 +113,7 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Previous goal
 - Observation: Focused genuine ODT session84490 passed all52 package scenarios. The first provenance check failed ENOENT because new evidence referenced xmloff/inc/XMLTextNumRuleInfo.hxx; the actual pinned header is xmloff/source/text/XMLTextNumRuleInfo.hxx. An initial documentation search also used nonexistent docs/writer-odt-format.md; bounded rg --files located docs/program/writer-odt-format.md.
   Impact: Runtime tests pass, but the evidence path must be corrected before full verification. No validator or gate change is required.
   Resolution: Use the actual source/text header and its inline Reset marker, repeat focused provenance/parity checks, retain the failed log and the bounded native scope.
+
+- Observation: Focused lint session11915 exited1 for three prohibited non-null assertions in the new test; typecheck session31393 and parity CLI session18298 exited0. The compact parity note initially queried the top-level semanticViolationCount and printed None; this field belongs to runtime.
+  Impact: No runtime failure or parity promotion; test code and compact evidence require correction before full verification.
+  Resolution: Replace non-null assertions with explicit missing-fixture guards; retain unchanged lint rules. Correct the compact note to report only the observed exit0, and retain runtime semantic totals from the full verification output.
