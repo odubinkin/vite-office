@@ -1,0 +1,15 @@
+{
+  "before": {
+    "attached": false,
+    "vector": [],
+    "number": 0
+  },
+  "after": {
+    "sameItem": false,
+    "sameRoot": false,
+    "vector": [
+      1,
+      1
+    ]
+  }
+}
