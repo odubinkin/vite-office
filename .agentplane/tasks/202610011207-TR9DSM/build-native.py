@@ -67,3 +67,18 @@ int main(){std::cout<<"[";bool first=true;for(int type:{4,5,6,8})for(bool show:{
 '''
 (out/'native-number-type.cxx').write_text(preamble)
 (out/'native-source-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':manifest,'scope':'Complete native bodies unchanged. Named platform adapters bound to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. No native global lifetime, other Font attributes/equality, graphics, style registrations or wider numbering family equivalence.'},indent=2)+'\n')
+
+# Previously extracted format/Writer bodies must still exactly match their pinned complete source definitions.
+for path, signatures in [
+ (num, ['SvxNumberFormat::SvxNumberFormat( SvxNumType eType )', 'SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat)', 'SvxNumberFormat& SvxNumberFormat::operator=', 'bool  SvxNumberFormat::operator==']),
+ ('sw/source/core/doc/number.cxx', ['SwNumFormat::SwNumFormat()', 'SwNumFormat::SwNumFormat(const SwNumFormat& rFormat)', 'bool SwNumFormat::operator=='])]:
+ for signature in signatures:
+  text=body(path,signature)
+  assert text in old, signature
+# Source precondition and selected provider arms are adapter evidence, not a claim to compile the full provider.
+for path,markers in [('i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx',['if( number <= 0 )','case ARABIC:','case NUMBER_NONE:']),('include/editeng/numdef.hxx',['#define SVX_DEF_BULLET (0xF000 + 149)']),('offapi/com/sun/star/style/NumberingType.idl',['const short ARABIC = 4;','const short NUMBER_NONE = 5;','const short CHAR_SPECIAL = 6;','const short BITMAP = 8;']),('editeng/Library_editeng.mk',['gb_Library_use_libraries,editeng','    vcl '])]:
+ contents=(root/path).read_text()
+ for marker in markers:
+  assert marker in contents, marker
+ manifest.append({'path':path,'markers':markers,'fileSha256':hashlib.sha256(contents.encode()).hexdigest()})
+(out/'native-source-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':manifest,'scope':'Complete native bodies unchanged. Named platform adapters bounded to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. Inline header getters/setters are represented in profile declarations; full UNO provider/initialization/global lifetime/Font attributes/equality/graphics/style registrations and wider numbering families remain unverified.'},indent=2)+'\n')

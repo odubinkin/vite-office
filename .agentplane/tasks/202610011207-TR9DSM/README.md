@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:39:12.882Z"
+doc_updated_at: "2026-10-01T12:40:49.368Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -85,6 +85,10 @@ sections:
     - Observation: Focused36 application tests and6 native-edge boundary tests pass; source provenance passes213 modules and dependency gating passes13 explicit cross-module edges. The second size check reports exactly1000 lines in ndtxt.ts.
       Impact: The preserved strict size gate still rejects the migrated text-node file.
       Resolution: Simplify the bound-rule kind reader through the same native helper using optional lookup. Retain both failed size logs. Generated native debug bundles were inadvertently included in an artifact checkpoint; move them to ignored in-repo tmp and remove their tracked copies, keeping all sources/build/run logs and literal results.
+
+    - Observation: The strict size gate now passes with999 lines; text-node kind projection still uses its actual paragraph level. Native identity enrichment initially used the wrong SwNumFormat copy-parameter name.
+      Impact: No caller behavior may be changed merely to reduce source size; source identity matching is exact.
+      Resolution: Keep actual-level semantics, consolidate the contiguous imports, correct the source signature to rNumFormat and retain the initial identity failure log before rerunning.
 id_source: "generated"
 ---
 ## Summary
@@ -145,3 +149,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: Focused36 application tests and6 native-edge boundary tests pass; source provenance passes213 modules and dependency gating passes13 explicit cross-module edges. The second size check reports exactly1000 lines in ndtxt.ts.
   Impact: The preserved strict size gate still rejects the migrated text-node file.
   Resolution: Simplify the bound-rule kind reader through the same native helper using optional lookup. Retain both failed size logs. Generated native debug bundles were inadvertently included in an artifact checkpoint; move them to ignored in-repo tmp and remove their tracked copies, keeping all sources/build/run logs and literal results.
+
+- Observation: The strict size gate now passes with999 lines; text-node kind projection still uses its actual paragraph level. Native identity enrichment initially used the wrong SwNumFormat copy-parameter name.
+  Impact: No caller behavior may be changed merely to reduce source size; source identity matching is exact.
+  Resolution: Keep actual-level semantics, consolidate the contiguous imports, correct the source signature to rNumFormat and retain the initial identity failure log before rerunning.
