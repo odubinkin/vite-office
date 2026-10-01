@@ -2486,36 +2486,5 @@ sal_uInt16 SwTextNode::ResetAllAttr()
 
     return nRet;
 }
-int main(){int count;while(std::cin>>count){
- SwDoc doc;SwNodes nodes(&doc);sw::DocumentListItemsManager registry;ListAccess access;access.nodes=&nodes;doc.nodes=&nodes;doc.lists=&access;doc.items=&registry;
- SwNumRule counters,bullets,outline;bullets.name="Bullets";outline.name="Outline";outline.SetRuleType(OUTLINE_RULE);for(auto& f:bullets.formats)f.bullet=true;for(auto* r:{&counters,&bullets,&outline})access.rules[r->name]=r;
- SwTextFormatColl styles[3];styles[1].SetFormatAttr(SwNumRuleItem("Counters"));styles[2].AssignToListLevelOfOutlineStyle(2);styles[2].SetFormatAttr(SwNumRuleItem("Outline"));
- std::vector<std::unique_ptr<SwTextNode>> texts;for(int i=0;i<count;i++){auto t=std::make_unique<SwTextNode>();t->index=i;t->doc=&doc;t->nodes=&nodes;t->coll=&styles[0];texts.push_back(std::move(t));}
- int ops;std::cin>>ops;for(int op=0;op<ops;op++){int kind,index,value;std::cin>>kind>>index>>value;auto& t=*texts[index];doc.notifications.clear();
- if(kind==16)for(auto& f:counters.formats)f.start=value;
- if(kind==17)t.SetAttr(SwNumRuleItem("unknown"));
- if(kind==0)t.ChgFormatColl(&styles[value]);
- if(kind==1)t.SetAttr(SwNumRuleItem(value==0?"":value==1?"Counters":value==2?"Bullets":"Outline"));
- if(kind==2)t.SetAttrListLevel(value);
- if(kind==3)t.SetAttr(StringItem(83,value?"Retained":""));
- if(kind==4)t.SetAttr(BoolItem(85,value));
- if(kind==5)t.SetAttr(BoolItem(87,value));
- if(kind==6)t.SetAttrOutlineLevel(value);
- if(kind==7)t.ResetAttr(value);
- if(kind==8)t.SetAttr(SfxInt16Item(86,value));
- if(kind==9)t.ResetAllAttr();
- if(kind==10){SfxItemSet s;s.Put(SfxInt16Item(84,value));s.Put(BoolItem(85,true));s.Put(SfxInt16Item(86,7));s.Put(BoolItem(87,false));t.SetAttr(s);}
- if(kind==11)t.ResetAttr(std::vector<sal_uInt16>{84,86,85,87});
- if(kind==12)t.ResetAttr(84,87);
- if(kind==13)t.SetEmptyListStyleDueToSetOutlineLevelAttr();
- if(kind==14)t.ResetEmptyListStyleDueToResetOutlineLevelAttr();
- if(kind==15){SfxItemSet s;s.Put(SwNumRuleItem(value?"Counters":""));s.Put(StringItem(83,"Retained"));s.Put(SfxUInt16Item(80,4));s.Put(SfxInt16Item(84,2));t.SetAttr(s);}
- std::cout<<doc.notifications.size();for(int i:doc.notifications)std::cout<<' '<<i;std::cout<<'\n';
- for(auto& p:texts){auto* r=p->GetNumRule();auto* n=p->GetNum();auto id=p->GetListId();std::cout<<(r?r->name:UIName("-"))<<' '<<(n?n->GetNumRule()->name:UIName("-"))<<' '<<p->GetAttrListLevel()<<' '<<p->GetAttrOutlineLevel()<<' '<<p->IsEmptyListStyleDueToSetOutlineLevelAttr()<<' '<<(id.isEmpty()?UIName("-"):id)<<' '<<p->IsListRestart()<<' '<<p->IsCountedInList()<<' '<<p->GetActualListStartValue()<<' '<<(n?n->GetNumber(false):-999)<<'\n';
- auto* attrs=p->GetpSwAttrSet();std::cout<<(attrs?attrs->items.size():0);if(attrs)for(auto& [id,item]:attrs->items){std::cout<<' '<<id<<':';if(auto* x=dynamic_cast<SwNumRuleItem*>(item.get()))std::cout<<(x->value.empty()?"-":x->value);else if(auto* x=dynamic_cast<StringItem*>(item.get()))std::cout<<(x->value.empty()?"-":x->value);else if(auto* x=dynamic_cast<SfxInt16Item*>(item.get()))std::cout<<x->value;else if(auto* x=dynamic_cast<SfxUInt16Item*>(item.get()))std::cout<<x->value;else std::cout<<static_cast<BoolItem*>(item.get())->value;}std::cout<<'\n';}
- std::cout<<nodes.m_aOutlineNodes.size();for(auto* p:nodes.m_aOutlineNodes)std::cout<<' '<<p->GetIndex();std::cout<<'\n';
- for(auto* r:{&counters,&bullets,&outline}){std::cout<<r->maTextNodeList.size();for(auto* p:r->maTextNodeList)std::cout<<' '<<p->index;std::cout<<'\n';}
- sw::DocumentListItemsManager::tSortedNodeNumList items;registry.getNumItems(items);std::cout<<items.size();for(auto* n:items)std::cout<<' '<<n->GetTextNode()->index;std::cout<<'\n';
- for(auto& p:texts){auto v=p->GetNumberVector();std::cout<<v.size();for(auto x:v)std::cout<<' '<<x;std::cout<<'\n';}
- }
-}}
+
+int main(){int count;while(std::cin>>count){SwDoc doc;SwNodes nodes(&doc);sw::DocumentListItemsManager registry;ListAccess access;access.nodes=&nodes;doc.nodes=&nodes;doc.lists=&access;doc.items=&registry;SwNumRule rule;access.rules[rule.name]=&rule;for(auto& f:rule.formats)f.start=0;SwTextFormatColl style;std::vector<std::unique_ptr<SwTextNode>> texts;std::vector<int> levels;for(int i=0;i<count;i++){int level,counted;std::cin>>level>>counted;levels.push_back(level);auto p=std::make_unique<SwTextNode>();p->index=i;p->doc=&doc;p->nodes=&nodes;p->coll=&style;p->SetAttr(SwNumRuleItem("Counters"));p->SetAttrListLevel(level);if(!counted)p->SetAttr(BoolItem(87,false));texts.push_back(std::move(p));}int starts[]={7,5,3,2,4,6,8,9,10,11};for(int i=0;i<10;i++)rule.formats[i].start=starts[i];int orders;std::cin>>orders;std::vector<std::unique_ptr<SwNodeNum>> roots;for(int o=0;o<orders;o++){roots.push_back(std::make_unique<SwNodeNum>(&rule));auto& root=*roots.back();for(auto& p:texts)p->mpNodeNum->RemoveMe(doc);for(int i=0;i<count;i++){int at;std::cin>>at;root.AddChild(texts[at]->mpNodeNum.get(),levels[at],doc);}if(!root.mChildren.empty())root.ValidateHierarchical(*root.mChildren.rbegin());for(auto& p:texts){auto v=p->GetNumberVector();std::cout<<v.size();for(auto x:v)std::cout<<' '<<x;std::cout<<'\n';}root.InvalidateTree();for(auto& p:texts){auto v=p->GetNumberVector();std::cout<<v.size();for(auto x:v)std::cout<<' '<<x;std::cout<<'\n';}}}}

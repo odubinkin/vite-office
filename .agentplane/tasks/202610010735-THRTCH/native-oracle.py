@@ -12,6 +12,7 @@ def block(s,m):
  while depth:depth+=(s[i]=='{')-(s[i]=='}');i+=1
  return s[start:i]
 base=Path('.agentplane/tasks/202610010536-95XQFH/native-style.cxx').read_text().split('int main(){',1)[0]
+base=base.replace('int GetIndex()const{return index;}','int GetIndex()const override{return index;}')
 base=base.replace('#include <vector>','#include <vector>\n#include <functional>\n#define COVERITY_NOEXCEPT_FALSE')
 base=base.replace('bool isEmpty()const{return empty();}', 'bool isEmpty()const{return empty();}int getLength()const{return size();}')
 base=base.replace('virtual ~SfxPoolItem()=default;', 'virtual ~SfxPoolItem()=default;int Which()const{return which;}template<class T>const typename T::type& StaticWhichCast(T id)const{return static_cast<const typename T::type&>(*this);}')
@@ -61,6 +62,8 @@ int main(){int count;while(std::cin>>count){
  SwTextFormatColl styles[3];styles[1].SetFormatAttr(SwNumRuleItem("Counters"));styles[2].AssignToListLevelOfOutlineStyle(2);styles[2].SetFormatAttr(SwNumRuleItem("Outline"));
  std::vector<std::unique_ptr<SwTextNode>> texts;for(int i=0;i<count;i++){auto t=std::make_unique<SwTextNode>();t->index=i;t->doc=&doc;t->nodes=&nodes;t->coll=&styles[0];texts.push_back(std::move(t));}
  int ops;std::cin>>ops;for(int op=0;op<ops;op++){int kind,index,value;std::cin>>kind>>index>>value;auto& t=*texts[index];doc.notifications.clear();
+ if(kind==16)for(auto& f:counters.formats)f.start=value;
+ if(kind==17)t.SetAttr(SwNumRuleItem("unknown"));
  if(kind==0)t.ChgFormatColl(&styles[value]);
  if(kind==1)t.SetAttr(SwNumRuleItem(value==0?"":value==1?"Counters":value==2?"Bullets":"Outline"));
  if(kind==2)t.SetAttrListLevel(value);
@@ -101,6 +104,7 @@ for rule,level in itertools.product([1,2,3],range(10)):
 for level in range(11):
  cases.extend([{'count':2,'ops':[[6,0,level],[6,0,level],[1,0,1],[6,0,0],[7,0,73],[6,0,level],[7,0,80],[9,0,0],[13,0,0],[1,0,2],[14,0,0]]},{'count':2,'ops':[[0,0,1],[7,0,83],[6,0,level],[15,0,0],[15,0,1],[9,0,0],[0,0,2],[7,0,73],[9,0,0],[0,0,0]]}])
 cases.append({'count':3,'ops':[[6,2,2],[6,0,3],[6,1,1],[7,1,80],[9,2,0],[6,0,0]]})
+cases.extend([{'count':4,'ops':[[16,0,0],[1,0,1],[5,0,0],[1,1,1],[2,1,1],[5,1,0],[1,2,1],[2,2,2],[1,3,1]]},{'count':2,'ops':[[16,0,7],[1,0,1],[1,1,1],[17,1,0]]}])
 req=''.join(f'{c["count"]} {len(c["ops"])} '+' '.join(' '.join(map(str,o))for o in c['ops'])+'\n'for c in cases)
 lines=subprocess.check_output([str(binary)],input=req,text=True).splitlines();binary.unlink();offset=0;states=0
 for c in cases:

@@ -29,6 +29,8 @@ for (const [index, test] of cases.entries()) {
   const snapshots=[];
   for (const [step, op] of test.ops.entries()) {
     const [kind, at, value] = op as [number,number,number];const node=texts[at]!;events.splice(0);
+    if(kind===16) for(let i=0;i<10;i++) rules[0]!.GetNumFormat(i).SetStart(value);
+    if(kind===17) node.SetAttr(new SwNumRuleItem("unknown"));
     if(kind===0)node.ChgFormatColl(styles[value]!);
     if(kind===1)node.SetAttr(new SwNumRuleItem(['','Counters','Bullets','Outline'][value]!));
     if(kind===2)node.SetAttrListLevel(value);
@@ -52,5 +54,5 @@ for (const [index, test] of cases.entries()) {
     if(!isDeepStrictEqual(actual,test.expected[step])){writeFileSync(path+'comparison-failure.json',JSON.stringify({index,step,ops:test.ops.slice(0,step+1),actual,expected:test.expected[step]},null,2)+'\n');throw new Error(`Native comparison mismatch at sequence ${index} step ${step}`);}
   }
 }
-writeFileSync(path+'comparison.json',JSON.stringify({sequences:cases.length,states,definitions:35,pass:true,profile:'Shown Arabic/bullet/Outline rules, real collection/item/node/list ownership, canonical and foreign arrays; explicit dependency adapters, no full native build or callback/history/footnote/layout/outline-index claim'},null,2)+'\n');
+writeFileSync(path+'comparison.json',JSON.stringify({sequences:cases.length,states,definitions:35,pass:true,profile:'Shown Arabic/bullet/Outline rules, real collection/item/node/list ownership, canonical and foreign arrays; explicit dependency adapters, no full native build,live-style/history/footnote/layout/fields/redline/background lifetime claim'},null,2)+'\n');
 console.log(`Compared ${cases.length} sequences/${states} actual pre-read cache/notification/outline/rule/node/list/item states to unchanged native source.`);
