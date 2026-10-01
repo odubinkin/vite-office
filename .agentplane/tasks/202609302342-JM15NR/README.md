@@ -4,7 +4,7 @@ title: "Restore native ODF numbering marker parameter transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,26 @@ verification:
   updated_by: "CODER"
   note: "Unchanged npm run verify exits 0: 634 application, 109 inventory and 19 browser tests, both 100% coverage suites; 144 native declaration/applied/export differential cases match. Genuine common/automatic ODT, clone, Worker v16, selected XML and native standard-format approximation pass. Doctor zero errors with two prior warnings, routing/diff pass. Wider numbering and zero-start continuation are separate unresolved obligations; no full parity claim."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T00:09:30.447Z"
+  updated_by: "EVALUATOR"
+  note: "Approved native ODF marker transport and per-level source-owned export satisfy bounded Verify Steps at c8d63aa66bdeba160dbcf355c0ec2ed059f66259."
+  evaluated_sha: "c8d63aa66bdeba160dbcf355c0ec2ed059f66259"
+  blueprint_digest: "cd237efb975829f95b10ebb1c0651b39e4c7abe271e85d1842e553e240bd4f99"
+  evidence_refs:
+    - ".agentplane/tasks/202609302342-JM15NR/README.md"
+    - ".agentplane/tasks/202609302342-JM15NR/quality/20261001-000930447-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609302342-JM15NR/quality/20261001-000930447-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609302342-JM15NR/quality/20261001-000930447-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609302342-JM15NR/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202609302342-JM15NR/verify.log"
+    - ".agentplane/tasks/202609302342-JM15NR/native-oracle.py"
+    - ".agentplane/tasks/202609302342-JM15NR/native-results.json"
+    - ".agentplane/tasks/202609302342-JM15NR/compare-native.ts"
+    - "apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts"
+  findings:
+    - "Code now preserves raw affixes, native start/display parsing and optional alias order/empty patterns, applies ListFormat last, and delegates standard ODF marker output to xmlnume with native signed narrowing/omissions. Actual ODT tests cover common/automatic states, labels, clones, Worker v16 and explicit standard-format approximation; compiled primary excerpts match 144 declaration/applied/export cases. Full unchanged verify passes both 100% suites and all 19 browser checks; module statuses stay unverified. Intentional save/open/recovery behavior is preserved."
 commit: null
 comments:
   -
