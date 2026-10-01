@@ -28,11 +28,14 @@ import {
   RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
 import {
+  SwList,
   WRITER_LIST_WHICH_RANGES,
   WRITER_MAX_LIST_LEVEL,
   type WriterParagraphListKind,
 } from "../doc/list";
 import { type SwTextFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
+import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
+import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
 import { type SwNumRule } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
@@ -92,7 +95,6 @@ export interface SwTextFragment {
 /** Effective attributes used to reconcile one text node with its document list tree. */
 interface SwTextNodeListState {
   readonly id: string;
-  readonly ruleName: string;
   readonly level: number;
   readonly restart: boolean;
   readonly restartValue: number | undefined;
@@ -114,6 +116,7 @@ export class SwTextNode extends SwContentNode {
   private mText: string;
   private pSwpHints: SwpHints | undefined;
   private listGeometryWins = false;
+  private mpNodeNum: SwNodeNum | undefined;
 
   /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
   public constructor(
@@ -291,32 +294,121 @@ export class SwTextNode extends SwContentNode {
   /** Reconciles direct list attributes like pinned HandleSetAttrAtTextNode. @param itemOrSet - Direct pooled item or set. @returns Whether an item changed. */
   public override SetAttr(itemOrSet: SfxPoolItem | SfxItemSet): boolean {
     const before = this.CaptureEffectiveListState();
+    const ruleItem =
+      itemOrSet instanceof SfxItemSet
+        ? itemOrSet.GetItemIfSet(RES_PARATR_NUMRULE, false)
+        : itemOrSet.Which() === RES_PARATR_NUMRULE
+          ? itemOrSet
+          : undefined;
+    const listItem =
+      itemOrSet instanceof SfxItemSet
+        ? itemOrSet.GetItemIfSet(RES_PARATR_LIST_ID, false)
+        : itemOrSet.Which() === RES_PARATR_LIST_ID
+          ? itemOrSet
+          : undefined;
+    const reattach =
+      ruleItem !== undefined ||
+      (listItem !== undefined && (listItem as SfxStringItem).GetValue() !== before.id);
+    if (reattach) this.RemoveFromList();
     const changed = super.SetAttr(itemOrSet);
-    if (changed) this.ReconcileListState(before);
+    if (reattach) this.AddToList();
+    else if (changed) this.ReconcileListState(before);
     return changed;
   }
 
   /** Reconciles a cleared direct list attribute. @param which - Direct WhichId. @returns Whether an item was removed. */
   public override ResetAttr(which: number): boolean {
     const before = this.CaptureEffectiveListState();
+    const reattach = which === RES_PARATR_NUMRULE || which === RES_PARATR_LIST_ID;
+    if (reattach) this.RemoveFromList();
     const changed = super.ResetAttr(which);
-    if (changed) this.ReconcileListState(before);
+    if (reattach) this.AddToList();
+    else if (changed) this.ReconcileListState(before);
     return changed;
   }
 
   /** Reconciles every list attribute after a full direct reset. @returns Number of removed items. */
   public override ResetAllAttr(): number {
-    const before = this.CaptureEffectiveListState();
+    this.RemoveFromList();
     const removed = super.ResetAllAttr();
-    if (removed > 0) this.ReconcileListState(before);
+    this.AddToList();
     return removed;
+  }
+
+  /** Returns the shown number record owned by this paragraph. @returns Owned record. */
+  public GetNum(): SwNodeNum | undefined {
+    return this.mpNodeNum;
+  }
+  /** Returns the validating root-to-item number vector. @returns Counters or an empty vector. */
+  public GetNumberVector(): readonly number[] {
+    return this.mpNodeNum?.GetNumberVector() ?? [];
+  }
+  /** Reports membership through the owned record's parent. @returns Whether attached to a list. */
+  public IsInList(): boolean {
+    return this.mpNodeNum?.GetParent() !== undefined;
+  }
+  /** Returns the derived tree level. @returns Tree level, or minus one without a record. */
+  public GetActualListLevel(): number {
+    return this.mpNodeNum?.GetLevelInListTree() ?? -1;
+  }
+  /** Reports enumeration using the bound rule and actual level. @returns Number presence. */
+  public HasNumber(): boolean {
+    return (
+      this.mpNodeNum
+        ?.GetNumRule()
+        ?.GetNumFormat(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
+        .GetNumberingType() === "arabic"
+    );
+  }
+  /** Reports character-special numbering using the bound rule. @returns Bullet presence. */
+  public HasBullet(): boolean {
+    return (
+      this.mpNodeNum
+        ?.GetNumRule()
+        ?.GetNumFormat(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
+        .GetNumberingType() === "char-special"
+    );
+  }
+  /** Returns the document's shown numbered-item registry. @returns Registry. */
+  public getIDocumentListItems(): DocumentListItemsManager {
+    return this.GetDoc().getIDocumentListItems();
+  }
+  /** Finds or creates the effective document list. @returns List when a rule and identity exist. */
+  private FindList(): SwList | undefined {
+    const id = this.GetListId();
+    if (id.length === 0) return undefined;
+    const lists = this.GetDoc().GetDocumentListsManager();
+    const existing = lists.GetListByName(id);
+    if (existing !== undefined) return existing;
+    const rule = this.GetNumRule();
+    return rule === undefined ? undefined : lists.CreateList(rule.GetName(), id);
+  }
+  /** Allocates and inserts the shown record for a connected document node. @returns Nothing. */
+  public AddToList(): void {
+    if (this.IsInList()) return;
+    const list = this.FindList();
+    if (
+      list === undefined ||
+      !this.GetNodes().IsDocNodes() ||
+      this.GetNodes().indexOfOrUndefined(this) === undefined
+    )
+      return;
+    if (this.mpNodeNum !== undefined)
+      throw new Error("SwTextNode already owns an orphan number record.");
+    this.mpNodeNum = new SwNodeNum(this);
+    list.InsertListItem(this.mpNodeNum, this.GetAttrListLevel());
+  }
+  /** Detaches and releases an attached shown record. @returns Nothing. */
+  public RemoveFromList(): void {
+    if (!this.IsInList()) return;
+    SwList.RemoveListItem(this.mpNodeNum as SwNodeNum);
+    this.mpNodeNum = undefined;
   }
 
   /** Captures effective list attributes before one node mutation. @returns List transition state. */
   private CaptureEffectiveListState(): SwTextNodeListState {
     return {
       id: this.GetListId(),
-      ruleName: this.GetNumRuleName(),
       level: this.GetAttrListLevel(),
       restart: this.IsListRestart(),
       restartValue: this.HasAttrListRestartValue() ? this.GetAttrListRestartValue() : undefined,
@@ -329,14 +421,8 @@ export class SwTextNode extends SwContentNode {
     if (this.GetNodes().indexOfOrUndefined(this) === undefined) return;
     const after = this.CaptureEffectiveListState();
     const lists = this.GetDoc().GetDocumentListsManager();
-    if (before.id !== after.id || before.ruleName !== after.ruleName) {
-      if (before.id.length > 0) lists.GetListByName(before.id)?.RemoveListItem(this);
-      if (this.GetNumRule() !== undefined && after.id.length > 0)
-        lists.CreateList(after.ruleName, after.id).InsertListItem(this, after.level);
-      return;
-    }
     const list = lists.GetListByName(after.id);
-    if (before.level !== after.level) list?.InsertListItem(this, after.level);
+    if (before.level !== after.level) this.mpNodeNum?.SetLevelInListTree(after.level);
     else if (
       before.restart !== after.restart ||
       before.restartValue !== after.restartValue ||
@@ -402,26 +488,17 @@ export class SwTextNode extends SwContentNode {
 
   /** Returns the document-owned list counter after validation. @returns One-based value for numbered list items. */
   public GetListItemNumber(): number | undefined {
-    const listId = this.GetListId();
-    if (listId.length === 0) return undefined;
-    const list = this.GetDoc().GetDocumentListsManager().GetListByName(listId);
-    if (list === undefined) return undefined;
-    list.ValidateListTree();
-    return list.GetListItemNumber(this);
+    return this.mpNodeNum?.GetNumber();
   }
 
   /** Returns the model-owned visible list label after validating the number tree. @returns Bullet or formatted numeric label. */
   public GetListLabel(): string | undefined {
-    const rule = this.GetNumRule();
+    const rule = this.mpNodeNum?.GetNumRule();
     if (rule === undefined || !this.IsCountedInList()) return undefined;
-    const level = this.GetAttrListLevel();
+    const level = this.GetActualListLevel();
     const format = rule.GetNumFormat(level);
     if (format.GetNumberingType() === "char-special") return format.GetBulletChar();
-    const list = this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId());
-    if (list === undefined) return undefined;
-    list.ValidateListTree();
-    const numbers = list.GetListItemNumberVector(this);
-    return numbers === undefined ? undefined : rule.MakeNumString(numbers, level);
+    return rule.MakeNumString(this.GetNumberVector(), level);
   }
 
   /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @param hyperlink - Optional inherited hyperlink. @returns Inserted text. */

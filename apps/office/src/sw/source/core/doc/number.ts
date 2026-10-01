@@ -8,7 +8,8 @@ import {
   type NumberingMarkerProperties,
 } from "../../../../editeng/source/items/numitem";
 
-import type { WriterParagraphList, WriterParagraphListKind } from "./list";
+import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwList, WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
 /** Numbering format owned by one level of a SwNumRule. */
@@ -97,6 +98,51 @@ export class SwNumRule {
   }
 
   private readonly formats: SwNumFormat[];
+  private readonly textNodes: SwTextNode[] = [];
+  private invalidRuleFlag = true;
+
+  /** Copies insertion-ordered rule clients into caller-owned storage. @param output - Output clients. @returns Nothing. */
+  public GetTextNodeList(output: SwTextNode[]): void {
+    output.splice(0, output.length, ...this.textNodes);
+  }
+  /** Counts registered text clients. @returns Client count. */
+  public GetTextNodeListSize(): number {
+    return this.textNodes.length;
+  }
+  /** Registers a client once by object identity. @param node - Text client. @returns Nothing. */
+  public AddTextNode(node: SwTextNode): void {
+    if (!this.textNodes.includes(node)) this.textNodes.push(node);
+  }
+  /** Unregisters a client, invalidating its list when the rule is still invalid. @param node - Text client. @returns Nothing. */
+  public RemoveTextNode(node: SwTextNode): void {
+    const position = this.textNodes.indexOf(node);
+    if (position < 0) return;
+    this.textNodes.splice(position, 1);
+    if (this.invalidRuleFlag)
+      node.GetDoc().GetDocumentListsManager().GetListByName(node.GetListId())?.InvalidateListTree();
+  }
+  /** Reports pending rule validation. @returns Invalid-rule flag. */
+  public IsInvalidRule(): boolean {
+    return this.invalidRuleFlag;
+  }
+  /** Marks the rule for validation. @returns Nothing. */
+  public Invalidate(): void {
+    this.invalidRuleFlag = true;
+  }
+  /** Invalidates then validates each distinct list referenced by clients. @returns Nothing. */
+  public Validate(): void {
+    const lists = new Set<SwList>();
+    for (const node of this.textNodes) {
+      const list = node
+        .GetDoc()
+        .GetDocumentListsManager()
+        .GetListByName(node.GetListId()) as SwList;
+      lists.add(list);
+    }
+    for (const list of lists) list.InvalidateListTree();
+    for (const list of lists) list.ValidateListTree();
+    this.invalidRuleFlag = false;
+  }
 
   /** Returns the document-unique rule name. @returns Rule name. */
   public GetName(): string {
@@ -119,6 +165,7 @@ export class SwNumRule {
   public Set(level: number, format: SwNumFormat): void {
     this.GetNumFormat(level);
     this.formats[level] = format.clone();
+    this.invalidRuleFlag = true;
   }
 
   /** Returns the default list identity. @returns List identity. */

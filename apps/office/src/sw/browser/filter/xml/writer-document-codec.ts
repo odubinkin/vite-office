@@ -515,7 +515,7 @@ export function decodeWriterDocument(
   } finally {
     position.Dispose();
   }
-  document.GetDocumentListsManager().RegisterListItem(node);
+  node.AddToList();
   for (const offset of nodeRecord.softPageBreaks ?? [])
     document.GetIDocumentMarkAccess().AddSoftPageBreak(node, offset);
 }

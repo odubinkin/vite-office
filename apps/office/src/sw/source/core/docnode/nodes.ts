@@ -38,6 +38,11 @@ export class SwNodes {
     return this.document;
   }
 
+  /** Reports canonical document-node ownership. @returns Whether this is the document array. */
+  public IsDocNodes(): boolean {
+    return this === this.document.GetNodes();
+  }
+
   /** Returns the current node count, including fixed sentinels. @returns Total node count. */
   public Count(): number {
     return this.nodeArray.length;
@@ -184,7 +189,7 @@ export class SwNodes {
     if (source.GetNodes() !== this || node.GetNodes() !== this)
       throw new Error("SwTextNode belongs to another SwNodes array.");
     this.nodeArray.splice(source.GetIndex() + 1, 0, node);
-    this.document.GetDocumentListsManager().RegisterListItem(node);
+    node.AddToList();
     this.document.NotifyModelChange({
       index: node.GetIndex(),
       kind: "node-inserted",
@@ -203,7 +208,7 @@ export class SwNodes {
     if (next !== undefined) node.CollapseContentIndicesTo(next, 0);
     else node.CollapseContentIndicesTo(previous as SwTextNode, (previous as SwTextNode).Len());
     const nodeIndex = node.GetIndex();
-    this.document.GetDocumentListsManager().UnregisterListItem(node, node.GetListId());
+    node.RemoveFromList();
     this.nodeArray.splice(nodeIndex, 1);
     this.document.NotifyModelChange({ index: nodeIndex, kind: "node-removed" });
   }
@@ -216,9 +221,9 @@ export class SwNodes {
       throw new Error("Replacement SwTextNode already belongs to body content.");
     const index = node.GetIndex();
     node.MoveAllContentIndicesTo(replacement);
-    this.document.GetDocumentListsManager().UnregisterListItem(node, node.GetListId());
+    node.RemoveFromList();
     this.nodeArray[index] = replacement;
-    this.document.GetDocumentListsManager().RegisterListItem(replacement);
+    replacement.AddToList();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
     this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
@@ -235,11 +240,14 @@ export class SwNodes {
     const currentIndex = node.GetIndex();
     const otherIndex = other.GetIndex();
     const lists = this.document.GetDocumentListsManager();
-    for (const item of [node, other])
-      lists.GetListByName(item.GetListId())?.GetListItem(item)?.RemoveMe();
+    for (const item of [node, other]) item.GetNum()?.RemoveMe();
     this.nodeArray[currentIndex] = other;
     this.nodeArray[otherIndex] = node;
-    for (const item of [node, other]) lists.RegisterListItem(item);
+    for (const item of [node, other]) {
+      const record = item.GetNum();
+      if (record !== undefined)
+        lists.GetListByName(item.GetListId())?.InsertListItem(record, item.GetAttrListLevel());
+    }
     this.document.NotifyModelChange({
       index: currentIndex,
       kind: "node-inserted",
@@ -257,7 +265,7 @@ export class SwNodes {
       (node): void => {
         const clone = node.CloneTo(this);
         this.nodeArray.splice(this.endOfContent.GetIndex(), 0, clone);
-        this.document.GetDocumentListsManager().RegisterListItem(clone);
+        clone.AddToList();
       },
     );
   }

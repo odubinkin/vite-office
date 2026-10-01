@@ -4,10 +4,11 @@ import { SwAttrPool } from "../attr/swatrset";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode } from "../docnode/node";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTable } from "../table/swtable";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import { DocumentMarkAccess } from "./docbm";
+import { DocumentListItemsManager } from "./DocumentListItemsManager";
 import { DocumentListsManager } from "./DocumentListsManager";
 import { DocumentSettingManager } from "./DocumentSettingManager";
 import { DocumentStateManager } from "./DocumentStateManager";
@@ -49,6 +50,7 @@ export class SwDoc {
   private readonly contentOperationsManager: DocumentContentOperationsManager;
   private readonly markAccess: DocumentMarkAccess;
   private readonly listsManager: DocumentListsManager;
+  private readonly listItemsManager = new DocumentListItemsManager();
   private readonly settingManager = new DocumentSettingManager();
   private readonly stateManager = new DocumentStateManager();
   private readonly stylePoolManager: DocumentStylePoolManager;
@@ -208,6 +210,12 @@ export class SwDoc {
   public GetDocumentListsManager(): DocumentListsManager {
     return this.listsManager;
   }
+
+  /** Returns the source-owned shown numbered-item registry. @returns Document list items. */
+  public getIDocumentListItems(): DocumentListItemsManager {
+    return this.listItemsManager;
+  }
+
   /** Returns settings ownership. @returns Settings manager. */
   public GetDocumentSettingManager(): DocumentSettingManager {
     return this.settingManager;
@@ -280,6 +288,7 @@ export class SwDoc {
   }
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
+    for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
     this.undoManager.Dispose();
     this.stateManager.Dispose();
   }

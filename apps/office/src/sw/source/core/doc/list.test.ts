@@ -3,6 +3,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  applyWriterParagraphList,
   createDefaultWriterParagraphList,
   isWriterParagraphListKind,
   normalizeWriterParagraphList,
@@ -71,7 +72,8 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
 
   it("owns, invalidates, validates, and removes bounded SwNodeNum items", /** Verifies the supported SwList lifecycle. @returns Nothing. */ () => {
     const document = createWriterDocument();
-    const list = new SwList("list-a", document.EnsureNumRule("Numbering 1", "numbered"));
+    document.EnsureNumRule("Numbering 1", "numbered");
+    const list = document.GetDocumentListsManager().CreateList("Numbering 1", "list-a");
     const first = document.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode;
     const nested = document.nodes.MakeTextNode();
     const missing = document.nodes.MakeTextNode();
@@ -81,10 +83,21 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     list.SetDefaultListStyleName("Numbering 2");
     expect(list.GetDefaultListStyleName()).toBe("Numbering 2");
     expect(
-      /** Inserts an invalid level. @returns Nothing. */ () => list.InsertListItem(first, 10),
+      /** Inserts an invalid level. @returns Nothing. */ () =>
+        list.InsertListItem(new SwNodeNum(first), 10),
     ).toThrow("outside 0-9");
-    list.InsertListItem(first, 0);
-    list.InsertListItem(nested, 1);
+    applyWriterParagraphList(first, {
+      kind: "numbered",
+      styleId: "Numbering 1",
+      listId: "list-a",
+      level: 0,
+    });
+    applyWriterParagraphList(nested, {
+      kind: "numbered",
+      styleId: "Numbering 1",
+      listId: "list-a",
+      level: 1,
+    });
     list.ValidateListTree();
     list.ValidateListTree();
     expect(list.GetListItemNumber(first)).toBe(1);
@@ -95,8 +108,8 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     expect(list.GetListItem(first)?.GetChildren()).toEqual([list.GetListItem(nested)]);
     expect(list.HasNodes()).toBe(true);
     list.InvalidateListTree();
-    list.RemoveListItem(nested);
-    list.RemoveListItem(missing);
+    nested.RemoveFromList();
+    SwList.RemoveListItem(new SwNodeNum(missing));
     list.ValidateListTree();
     expect(list.GetListItemNumber(nested)).toBeUndefined();
   });

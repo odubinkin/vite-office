@@ -222,7 +222,11 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
       const root = new SwNodeNum(undefined, rule);
       const records = nodes.map(
         /** Creates independent native insertion records. @param node - Canonical item. @param index - Position. @returns Orphan. */
-        (node) => new SwNodeNum(node),
+        (node) => {
+          const record = node.GetNum() as SwNodeNum;
+          record.RemoveMe();
+          return record;
+        },
       );
       for (const index of order)
         root.AddChild(records[index] as SwNodeNum, test.levels[index] as number);

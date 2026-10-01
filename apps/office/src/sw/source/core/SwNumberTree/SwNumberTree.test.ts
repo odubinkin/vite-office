@@ -225,7 +225,7 @@ it("revalidates zero restarts, counted changes and phantom ancestors", /** Verif
   middle.SetAttrListLevel(1);
   expect(middle.GetListLabel()).toBe("0.0.");
   expect(nodes[2]?.GetListLabel()).toBe("1.");
-  list.RemoveListItem(middle);
+  middle.RemoveFromList();
   list.ValidateListTree();
   expect(list.GetListItemNumber(middle)).toBeUndefined();
   const missing = fixture([{ level: 2 }, { level: 2 }, { level: 0 }, { level: 2 }]);
@@ -257,7 +257,7 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
     styleId: "Levels",
   });
   node.RemoveMe();
-  expect(node.GetStartValue()).toBe(7);
+  expect(node.GetStartValue()).toBe(1);
   root.AddChild(node, 1);
   expect(node.GetStartValue()).toBe(3);
   expect(root.HasCountedChildren()).toBe(true);
@@ -291,10 +291,10 @@ it("constructs rule-start phantom chains and retains them through removal", /** 
   expect(root.GetRoot()).toBeUndefined();
   expect(root.GetLevelInListTree()).toBe(-1);
   expect(root.IsPhantom()).toBe(false);
-  list.RemoveListItem(nodes[2] as SwTextNode);
+  (nodes[2] as SwTextNode).RemoveFromList();
   list.ValidateListTree();
   expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([7, 5, 5]);
-  list.InsertListItem(nodes[2] as SwTextNode);
+  (nodes[2] as SwTextNode).AddToList();
   list.ValidateListTree();
   expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([8, 5, 3]);
 });

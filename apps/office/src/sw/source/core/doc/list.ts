@@ -35,7 +35,6 @@ export const WRITER_LIST_WHICH_RANGES = [
 export class SwList {
   private readonly root: SwNodeNum;
   private defaultListStyleName: string;
-  private readonly nodes = new Map<SwTextNode, SwNodeNum>();
 
   /** Creates a list. @param listId - Unique list identity. @param defaultListStyle - Owning numbering rule. @returns Nothing. */
   public constructor(
@@ -58,24 +57,15 @@ export class SwList {
   public SetDefaultListStyleName(name: string): void {
     this.defaultListStyleName = name;
   }
-  /** Registers or updates one item. @param node - Canonical text node. @param level - Bounded level. @returns Nothing. */
-  public InsertListItem(node: SwTextNode, level = node.GetAttrListLevel()): void {
+  /** Inserts a text-owned orphan into the retained tree. @param node - Number record owned by a text node. @param level - Bounded level. @returns Nothing. */
+  public InsertListItem(node: SwNodeNum, level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwList level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    const existing = this.nodes.get(node);
-    if (existing !== undefined) {
-      if (existing.GetParent() === undefined) this.root.AddChild(existing, level);
-      else existing.SetLevelInListTree(level);
-      return;
-    }
-    const item = new SwNodeNum(node);
-    this.nodes.set(node, item);
-    this.root.AddChild(item, level);
+    this.root.AddChild(node, level);
   }
-  /** Removes one item. @param node - Canonical text node. @returns Nothing. */
-  public RemoveListItem(node: SwTextNode): void {
-    this.nodes.get(node)?.RemoveMe();
-    this.nodes.delete(node);
+  /** Detaches a text-owned record from its list. @param node - Number record. @returns Nothing. */
+  public static RemoveListItem(node: SwNodeNum): void {
+    node.RemoveMe();
   }
   /** Invalidates counters after document ordering or level changes. @returns Nothing. */
   public InvalidateListTree(): void {
@@ -87,15 +77,16 @@ export class SwList {
   }
   /** Gets a calculated node counter. @param node - Canonical text node. @returns Counter when registered. */
   public GetListItemNumber(node: SwTextNode): number | undefined {
-    return this.nodes.get(node)?.GetNumber();
+    return this.GetListItem(node)?.GetNumber();
   }
   /** Returns the validating root-to-item number vector. @param node - Canonical text node. @returns Number vector when registered. */
   public GetListItemNumberVector(node: SwTextNode): readonly number[] | undefined {
-    return this.nodes.get(node)?.GetNumberVector();
+    return this.GetListItem(node)?.GetNumberVector();
   }
   /** Returns the retained number-tree node. @param node - Canonical text node. @returns Tree record. */
   public GetListItem(node: SwTextNode): SwNodeNum | undefined {
-    return this.nodes.get(node);
+    const item = node.GetNum();
+    return item?.GetRoot() === this.root ? item : undefined;
   }
   /** Reports whether this list has registered items. @returns True when non-empty. */
   public HasNodes(): boolean {

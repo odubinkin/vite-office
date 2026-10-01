@@ -4,7 +4,7 @@ title: "Restore node-owned Writer numbering lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-01T05:25:47.449Z"
+  updated_by: "CODER"
+  note: "Native20+37 definitions;120 sequences/8976 owner states match. Full unchanged verify32678 exit0:668+109 tests,19 browser scenarios,both coverage gates100%,all resource/static/docs/source/provenance/invariant/parity gates. Doctor0 errors,two existing warnings;routing/diff clean. Shown numbering ownership/registration/lazy reads only;IO exceptions and all residual parity obligations preserved."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: approved persistent parity goal;restore shown text-node numbering ownership,rule/document registration and native lazy getters;preserve document IO exceptions and gates."
+  -
+    type: "verify"
+    at: "2026-10-01T05:25:47.449Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native20+37 definitions;120 sequences/8976 owner states match. Full unchanged verify32678 exit0:668+109 tests,19 browser scenarios,both coverage gates100%,all resource/static/docs/source/provenance/invariant/parity gates. Doctor0 errors,two existing warnings;routing/diff clean. Shown numbering ownership/registration/lazy reads only;IO exceptions and all residual parity obligations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-01T05:18:22.174Z"
+doc_updated_at: "2026-10-01T05:26:31.109Z"
 doc_updated_by: "CODER"
 description: "Iteration36 of approved persistent parity goal:SwTextNode owns shown SwNodeNum with native AddToList/RemoveFromList/GetNum/vector contracts,SwNodeNum rule/document registration hooks and non-owning SwList topology. Remove full-list read validation and ownership wrappers;preserve registered document IO exceptions and unchanged gates."
 sections:
@@ -44,7 +50,41 @@ sections:
   Scope: "Runtime:sw/source/core/txtnode/ndtxt.ts,SwNumberTree/SwNodeNum.ts,SwNumberTree.ts,doc/list.ts,number.ts,doc.ts,DocumentListsManager.ts,new DocumentListItemsManager.ts,docnode/nodes.ts;sw/browser/filter/xml/writer-document-codec.ts and sw/source/filter/xml/xmlimp.ts registration call sites. Tests:new node-numbering-lifecycle.test.ts,new DocumentListItemsManager.test.ts,existing ndtxt/doc/list/list-invariants/number/SwNumberTree suites and impacted ODT assertions only when source-stale. Task-local baseline/native probes;bounded runtime-inventory/source-provenance including the new source-owned manager. Existing shown document-node hierarchical Arabic/bullet slice. Native layout expansion,redline/undo-node arrays,full callback/word-count/lifetime platform machinery,legacy/default factories remain explicit separate obligations. Preserve registered save/open/recovery deviations,Worker16/ODF1.3,all gates;no blanket status/default/goal promotion."
   Plan: "1. Capture actual owner/read/rule baseline. 2. Compile unmodified native lifecycle,registration and getter methods with explicit platform adapters. 3. Transfer shown record ownership to SwTextNode and rule/registry hooks to SwNodeNum;SwList owns only roots and references. Remove full-list reads and registration wrappers;reconcile document/ODT/copy/move lifecycle. 4. Add native/literal identity and membership evidence with bounded metadata for new manager. 5. Focused checks,full unchanged verify,real implementation SHA/evaluator/finish child/update active parent. Owner CODER;one correction;existing IO deviations preserved;authorization from persistent goal."
   Verify Steps: "Run actual baseline for missing GetNum/vector/lifecycle ownership APIs,whole-list counter read validating unrelated tails and detached records reading current text rule rather than retained native rule. Compile full unmodified pinned GetNum/GetNumberVector/IsInList/FindList/AddToList/RemoveFromList plus PreAdd/PostRemove/ChangeNumRule/Create,rule membership and document registry methods with explicit single-shown/no-layout/no-redline/doc-node/platform dependencies;record adapters and source body identity. Compare actual owner/tree/rule/registry objects for add/remove/readd,duplicate add,level/restart/counted/list/rule changes,detach/reinsert/move/delete/copy,Arabic/bullet,rule membership ordering/duplicate suppression,numbered registry filtering,and reverse/prefix-only reads with literal vectors/counters/labels and independent copies. Include genuine ODT/Worker/undo suites. Focused tests/lint/types/docs/provenance/parity before unchanged npm run verify;both coverage suites100%,all browser/static/resource/source/invariant gates. Doctor,routing,diff,real code SHA,evaluator pass and clean final checkout required;no weakened/skipped gates."
-  Verification: "Pending owner execution;prior iteration35 is evidence only for retained topology,not this ownership correction."
+  Verification: |-
+    PASS. Baseline persisted before edits. Native oracle session80179 compiles20 additional full unmodified owner/registration methods alongside37 retained native tree/list definitions;explicit shown/doc-node/no-layout/no-redline/platform dependencies and byte identity checks. Actual compare-native.ts matches120 sequences/8976 owner states,including lazy raw prefix,reverse vectors,bound rules,rule client order and numbered registry. Focused25+new5 lifecycle/registry tests and native guard coverage pass;genuine ODT/Worker/undo pass in full suite. Unchanged npm run verify session32678 exit0;verify-final.log:668 application tests/149 files,109 inventory tests/36 files,19 browser scenarios20.3s. Both global coverage gates100%:application10199 statements/7699 branches/2798 functions/9366 lines;inventory1523/1080/384/1464. Format,lint,types,module/resource gates,static build,JSDoc457,file-size,source-tree111/33,provenance205/129,invariants,parity semantic violations0 all pass. Doctor95655 exit0/errors0/two pre-existing warnings;policy routing and diff checks pass. No skipped/weakened gates or IO changes. First coverage-only desktop import failure remains recorded;unchanged isolated test and subsequent two complete app suites pass,root cause not proven. Native layout/redline/continuous/configurable-phantom/full callbacks/lifetime/default-factory obligations and whole goal remain unverified;no blanket promotion. Actual implementation commit/evaluator/clean final state recorded at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T05:25:47.449Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native20+37 definitions;120 sequences/8976 owner states match. Full unchanged verify32678 exit0:668+109 tests,19 browser scenarios,both coverage gates100%,all resource/static/docs/source/provenance/invariant/parity gates. Doctor0 errors,two existing warnings;routing/diff clean. Shown numbering ownership/registration/lazy reads only;IO exceptions and all residual parity obligations preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T05:25:46.944Z, excerpt_hash=sha256:19b7f0e9ad3efca0cbf5b405dd4056d18cb49145ba94b9d850d137e7086e5934
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010449-CE6KDW/blueprint/resolved-snapshot.json
+    - old_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+    - current_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610010449-CE6KDW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610010449-CE6KDW -m 🧩 CE6KDW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the actual implementation commit if this ownership correction fails;preserve task evidence and prior DONE artifacts. No destructive history operations."
   Findings: |-
     Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions. Previous turn is verified progress:iteration35 code77fda1c876bba94fa18514fa0b2dce43e1d38493,full verify59167 exit0,closed child and clean parent98252afbd500. Native ndtxt.hxx owns mpNodeNum;shown AddToList allocates,RemoveFromList removes/resets,GetNum/GetNumberVector directly access it. PreAdd/PostRemove register rule clients and document list items. Current local SwList map allocates records,SwNodeNum reads text rule dynamically and paragraph getters force whole-list validation. Persistent goal authorizes this safe in-repo source-shaped correction and lifecycle;no network/outside access or subagents.
@@ -72,6 +112,14 @@ sections:
     - Observation: Command: npm run verify; Result: fail session56149 solely coverage threshold. All667 application tests/149 files pass including unchanged desktop import test. Statements10199/10199,functions2798/2798,lines9366/9366;branches7696/7699 (99.96%). Three uncovered branches are SwNodeNum.PreAdd native no-text/non-doc registration guards at lines33-41.
       Impact: Global100% coverage remains required; no functional assertion failures. Later full gates were not reached in this attempt.
       Resolution: Add literal tests for native registration guards with no text and non-document arrays, then unchanged full verify. Preserve first full log as failure evidence.
+
+    - Observation: Command: npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts src/sw/source/core/doc/DocumentListItemsManager.test.ts src/sw/source/core/SwNumberTree --coverage --coverage.include=src/sw/source/core/SwNumberTree/SwNodeNum.ts; Result: pass session82480.
+      Impact: All19 selected tests pass; SwNodeNum statements35/35,branches35/35,functions15/15,lines31/31. This is focused coverage only, not a substitute for unchanged full global gate.
+      Resolution: Absent-text and foreign-array source guards are tested with literal rule/client/registry states. Native comparison remains120/8976 match. Unchanged full npm run verify running with verify-final.log.
+
+    - Observation: Command: ap commit with subject scope core; Result: fail session44789 before commit creation. Commit-msg hook requires task-intent scope code/task/close/integrate; staged verified paths retained and HEAD unchanged7ce5b0f1076d.
+      Impact: Incorrect commit subject only; actual full verification passed, implementation and gates unchanged. No hook bypass or policy modification.
+      Resolution: Retry owner commit using required scope code,then evaluate actual resulting implementation SHA. Do not close against an artifact-only HEAD.
 id_source: "generated"
 ---
 ## Summary
@@ -92,7 +140,40 @@ Run actual baseline for missing GetNum/vector/lifecycle ownership APIs,whole-lis
 
 ## Verification
 
-Pending owner execution;prior iteration35 is evidence only for retained topology,not this ownership correction.
+PASS. Baseline persisted before edits. Native oracle session80179 compiles20 additional full unmodified owner/registration methods alongside37 retained native tree/list definitions;explicit shown/doc-node/no-layout/no-redline/platform dependencies and byte identity checks. Actual compare-native.ts matches120 sequences/8976 owner states,including lazy raw prefix,reverse vectors,bound rules,rule client order and numbered registry. Focused25+new5 lifecycle/registry tests and native guard coverage pass;genuine ODT/Worker/undo pass in full suite. Unchanged npm run verify session32678 exit0;verify-final.log:668 application tests/149 files,109 inventory tests/36 files,19 browser scenarios20.3s. Both global coverage gates100%:application10199 statements/7699 branches/2798 functions/9366 lines;inventory1523/1080/384/1464. Format,lint,types,module/resource gates,static build,JSDoc457,file-size,source-tree111/33,provenance205/129,invariants,parity semantic violations0 all pass. Doctor95655 exit0/errors0/two pre-existing warnings;policy routing and diff checks pass. No skipped/weakened gates or IO changes. First coverage-only desktop import failure remains recorded;unchanged isolated test and subsequent two complete app suites pass,root cause not proven. Native layout/redline/continuous/configurable-phantom/full callbacks/lifetime/default-factory obligations and whole goal remain unverified;no blanket promotion. Actual implementation commit/evaluator/clean final state recorded at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T05:25:47.449Z — VERIFY — ok
+
+By: CODER
+
+Note: Native20+37 definitions;120 sequences/8976 owner states match. Full unchanged verify32678 exit0:668+109 tests,19 browser scenarios,both coverage gates100%,all resource/static/docs/source/provenance/invariant/parity gates. Doctor0 errors,two existing warnings;routing/diff clean. Shown numbering ownership/registration/lazy reads only;IO exceptions and all residual parity obligations preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T05:25:46.944Z, excerpt_hash=sha256:19b7f0e9ad3efca0cbf5b405dd4056d18cb49145ba94b9d850d137e7086e5934
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010449-CE6KDW/blueprint/resolved-snapshot.json
+- old_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+- current_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610010449-CE6KDW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610010449-CE6KDW -m 🧩 CE6KDW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -125,3 +206,11 @@ Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions
 - Observation: Command: npm run verify; Result: fail session56149 solely coverage threshold. All667 application tests/149 files pass including unchanged desktop import test. Statements10199/10199,functions2798/2798,lines9366/9366;branches7696/7699 (99.96%). Three uncovered branches are SwNodeNum.PreAdd native no-text/non-doc registration guards at lines33-41.
   Impact: Global100% coverage remains required; no functional assertion failures. Later full gates were not reached in this attempt.
   Resolution: Add literal tests for native registration guards with no text and non-document arrays, then unchanged full verify. Preserve first full log as failure evidence.
+
+- Observation: Command: npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts src/sw/source/core/doc/DocumentListItemsManager.test.ts src/sw/source/core/SwNumberTree --coverage --coverage.include=src/sw/source/core/SwNumberTree/SwNodeNum.ts; Result: pass session82480.
+  Impact: All19 selected tests pass; SwNodeNum statements35/35,branches35/35,functions15/15,lines31/31. This is focused coverage only, not a substitute for unchanged full global gate.
+  Resolution: Absent-text and foreign-array source guards are tested with literal rule/client/registry states. Native comparison remains120/8976 match. Unchanged full npm run verify running with verify-final.log.
+
+- Observation: Command: ap commit with subject scope core; Result: fail session44789 before commit creation. Commit-msg hook requires task-intent scope code/task/close/integrate; staged verified paths retained and HEAD unchanged7ce5b0f1076d.
+  Impact: Incorrect commit subject only; actual full verification passed, implementation and gates unchanged. No hook bypass or policy modification.
+  Resolution: Retry owner commit using required scope code,then evaluate actual resulting implementation SHA. Do not close against an artifact-only HEAD.

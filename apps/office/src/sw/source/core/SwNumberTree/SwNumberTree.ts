@@ -17,6 +17,10 @@ export abstract class SwNumberTreeNode {
   public abstract IsCountPhantoms(): boolean;
   /** Creates an unattached node retaining the numbering rule. @returns Node. */
   protected abstract Create(): SwNumberTreeNode;
+  /** Registers a real record before tree insertion. @returns Nothing. */
+  protected abstract PreAdd(): void;
+  /** Unregisters a real record after tree removal. @returns Nothing. */
+  protected abstract PostRemove(): void;
   /** Orders records by native document position. @param node - Compared record. @returns Whether this precedes node. */
   public abstract LessThan(node: SwNumberTreeNode): boolean;
   /** Reads restart policy. @returns Restart flag. */
@@ -40,6 +44,7 @@ export abstract class SwNumberTreeNode {
       parent?.AddChild(child, depth - 1);
       return;
     }
+    child.PreAdd();
     // A sorted native child container rejects equivalent records.
     const equivalent = this.children[position - 1];
     if (equivalent !== undefined && !equivalent.LessThan(child)) return;
@@ -247,7 +252,10 @@ export abstract class SwNumberTreeNode {
   public RemoveChild(child: SwNumberTreeNode): void {
     if (child.IsPhantom()) return;
     let position = this.children.indexOf(child);
-    if (position < 0) return;
+    if (position < 0) {
+      child.PostRemove();
+      return;
+    }
     child.parent = undefined;
     let predecessor = this.children[position - 1];
     if (position === 0 && child.children.length > 0) {
@@ -260,6 +268,7 @@ export abstract class SwNumberTreeNode {
     }
     this.SetLastValid(predecessor?.IsPhantom() ? undefined : predecessor);
     this.children.splice(position, 1);
+    child.PostRemove();
   }
   /** Detaches an item and clears obsolete phantom chains without rebuilding the root. @returns Nothing. */
   public RemoveMe(): void {
