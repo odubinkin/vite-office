@@ -1,0 +1,16 @@
+
+> vite-office@0.1.0 check:source-provenance
+> tsx scripts/check-source-provenance.ts
+
+/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:643
+    throw new Error(
+          ^
+
+Error: Source provenance filename divergences mismatch; missing: apps/office/src/sw/source/core/docnode/node-attribute-handle.ts; stale: none.
+    at assertSamePaths (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:643:11)
+    at validateFilenameDivergences (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:465:3)
+    at validateSourceProvenanceManifest (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:160:3)
+    at async main (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:681:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:698:57)
+
+Node.js v24.13.1
