@@ -39,8 +39,8 @@ Module boundary check passed: 209 runtime sources, 869 relative imports, 12 allo
 
  Test Files  1 passed (1)
       Tests  2 passed (2)
-   Start at  15:34:51
-   Duration  119ms (transform 25ms, setup 0ms, import 33ms, tests 4ms, environment 0ms)
+   Start at  15:31:06
+   Duration  117ms (transform 25ms, setup 0ms, import 33ms, tests 3ms, environment 0ms)
 
 
 > vite-office@0.1.0 test:coverage
@@ -56,26 +56,30 @@ Module boundary check passed: 209 runtime sources, 869 relative imports, 12 allo
 
 
  Test Files  155 passed (155)
-      Tests  692 passed (692)
-   Start at  15:34:52
-   Duration  77.91s (transform 2.29s, setup 11.16s, import 9.50s, tests 60.95s, environment 52.19s)
+      Tests  690 passed (690)
+   Start at  15:31:07
+   Duration  79.29s (transform 2.16s, setup 12.10s, import 9.69s, tests 61.63s, environment 52.43s)
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |     100 |    99.98 |     100 |     100 |                   
- ...e/core/txtnode |     100 |    99.83 |     100 |     100 |                   
+All files          |     100 |    99.93 |     100 |     100 |                   
+ ...e/core/docnode |     100 |    97.45 |     100 |     100 |                   
+  ndnum.ts         |     100 |    83.33 |     100 |     100 | 25                
+  nodes.ts         |     100 |    97.26 |     100 |     100 | 64-65             
+ ...e/core/txtnode |     100 |    99.66 |     100 |     100 |                   
   ...e-handlers.ts |     100 |    99.05 |     100 |     100 | 172               
+  ndtxt.ts         |     100 |     99.5 |     100 |     100 | 492               
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
 Statements   : 100% ( 10562/10562 )
-Branches     : 99.98% ( 7972/7973 )
+Branches     : 99.93% ( 7968/7973 )
 Functions    : 100% ( 2868/2868 )
 Lines        : 100% ( 9699/9699 )
 ================================================================================
-ERROR: Coverage for branches (99.98%) does not meet global threshold (100%)
+ERROR: Coverage for branches (99.93%) does not meet global threshold (100%)
 npm error Lifecycle script `test:coverage` failed with error:
 npm error code 1
 npm error path /Users/odubinkin/Projects/vite-office/apps/office
