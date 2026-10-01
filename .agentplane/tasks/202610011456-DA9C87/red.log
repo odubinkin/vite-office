@@ -1,0 +1,84 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts (4 tests | 4 failed) 15ms
+   × matches native bound orphan and inherited continuous phantom policies 3ms
+   × matches native complete policy counter cache notification and traversal sequences 3ms
+   × matches native continuous legacy marker selection without changing explicit list patterns 5ms
+   × retains continuous and phantom policy on real Worker document owners and native copy reset boundaries 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts > matches native bound orphan and inherited continuous phantom policies
+TypeError: root.IsContinuous is not a function
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts:153:12
+    151|     root.AddChild(child, 0);
+    152|     expect([
+    153|       root.IsContinuous(),
+       |            ^
+    154|       root.IsCountPhantoms(),
+    155|       child.IsContinuous(),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts > matches native complete policy counter cache notification and traversal sequences
+TypeError: node.IsContinuous is not a function
+ ❯ tree src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts:72:10
+     70|     node.IsPhantom(),
+     71|     node.IsCounted(),
+     72|     node.IsContinuous(),
+       |          ^
+     73|     node.IsCountPhantoms(),
+     74|     node
+ ❯ snapshot src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts:102:43
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts:230:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts > matches native continuous legacy marker selection without changing explicit list patterns
+AssertionError: expected '[2.3]' to be '[3]' // Object.is equality
+
+Expected: "[3]"
+Received: "[2.3]"
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts:252:73
+    250|       rule.Set(n, f);
+    251|     }
+    252|     expect(rule.MakeNumString([2, 3, 4, 5, 6, 7, 8, 9, 10, 11], level)…
+       |                                                                         ^
+    253|   }
+    254| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts > retains continuous and phantom policy on real Worker document owners and native copy reset boundaries
+AssertionError: expected [ 1, 1, 2, 2 ] to deeply equal [ 1, 2, 3, 4 ]
+
+- Expected
++ Received
+
+  [
+    1,
++   1,
+    2,
+-   3,
+-   4,
++   2,
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts:283:5
+    281|         p.GetListItemNumber(),
+    282|     ),
+    283|   ).toEqual([1, 2, 3, 4]);
+       |     ^
+    284|   const copied = decodeWriterDocument(encodeWriterDocument(doc)),
+    285|     owner = required(copied.FindNumRulePtr("attached"));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  22:51:17
+   Duration  8.00s (transform 4.43s, setup 125ms, import 7.22s, tests 15ms, environment 547ms)
+
