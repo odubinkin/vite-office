@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:20:39.451Z"
+doc_updated_at: "2026-10-01T12:29:08.680Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -65,6 +65,14 @@ sections:
     - Observation: Initial typecheck identified a wrong relative editeng->vcl Font import, an unannotated empty/raw property union in the native-shaped constructor, and an obsolete UNO class import after factory migration.
       Impact: No native evidence or verification criteria changed; fixes stay within the approved hierarchy/consumer migration.
       Resolution: Use repository-relative path calculation, annotate the explicit raw position/marker copy record and remove the unused import. Preserve type-initial.log and rerun.
+
+    - Observation: type-second.log records one unused migrated SwNumFormat import in unosett.ts.
+      Impact: The migrated contract does not yet pass typecheck.
+      Resolution: Remove the obsolete value import and rerun typecheck; preserve the failed log. The findings command itself needed its documented structured arguments and was retried without state corruption.
+
+    - Observation: The third typecheck reached the application compilation and reports obsolete value imports plus a missing SvxNumType test import.
+      Impact: The tools compile now passes, but migrated application/test imports remain incomplete.
+      Resolution: Repair the imports only and rerun typecheck; retain type-third.log as evidence.
 id_source: "generated"
 ---
 ## Summary
@@ -105,3 +113,11 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: Initial typecheck identified a wrong relative editeng->vcl Font import, an unannotated empty/raw property union in the native-shaped constructor, and an obsolete UNO class import after factory migration.
   Impact: No native evidence or verification criteria changed; fixes stay within the approved hierarchy/consumer migration.
   Resolution: Use repository-relative path calculation, annotate the explicit raw position/marker copy record and remove the unused import. Preserve type-initial.log and rerun.
+
+- Observation: type-second.log records one unused migrated SwNumFormat import in unosett.ts.
+  Impact: The migrated contract does not yet pass typecheck.
+  Resolution: Remove the obsolete value import and rerun typecheck; preserve the failed log. The findings command itself needed its documented structured arguments and was retried without state corruption.
+
+- Observation: The third typecheck reached the application compilation and reports obsolete value imports plus a missing SvxNumType test import.
+  Impact: The tools compile now passes, but migrated application/test imports remain incomplete.
+  Resolution: Repair the imports only and rerun typecheck; retain type-third.log as evidence.
