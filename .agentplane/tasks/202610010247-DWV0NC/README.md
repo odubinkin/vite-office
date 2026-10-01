@@ -1,10 +1,11 @@
 ---
 id: "202610010247-DWV0NC"
 title: "Restore native implicit list restart export ownership"
-status: "DOING"
+result_summary: "Restored native implicit restart ownership and selected list transitions;retain broader identity/continuation/default/UNO/UI obligations."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Writer now exposes restart and direct item independently;XMLTextNumRuleInfo owns numbered gate,absent sentinel,one-based level and retained format start. Native implicit nested split/root/opening fallback match actual structural/start output within resolved-rule scope."
     - "Primary probe uses unmodified exportListChange and metadata/getter excerpts with explicit adapters;2403 sequences/288 states and12 valid Writer projections are checked.48 native raw getter cases are normative evidence,not48 local cases.84 genuine ODT scenarios assert literal reopen omissions/gains,copies andWorker16."
     - "Full verify session60245 terminal0 passes654 app/109 inventory tests,19 browser scenarios,all coverage100%,unchanged gates;provenance204/128mapped,invariants34,semanticViolationCount0. No threshold/schema/policy changes,unsupported whole-module promotion or save/open/recovery change."
-commit: null
+commit:
+  hash: "9ac1779d7b3845eb320d93995d2d2e65dda59809"
+  message: "🧩 DWV0NC code: restore native implicit list restart export"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned implicit/direct restart metadata and native conditional list transitions under the persistent approved goal."
+  -
+    author: "CODER"
+    body: "Verified: native independent restart metadata and conditional XML export;2403 native sequences,288 states,84 genuine ODT packages;full verify60245 exit0,654+109 tests,19 browser and100% coverage;quality pass. Full goal remains active."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: native bounded restart metadata and conditional XML transitions;2403 sequences/288 states/84 genuine packages;full verify60245 exit0,654+109 tests,19 browser,all coverage100% and unchanged gates. Full goal remains active."
+  -
+    type: "status"
+    at: "2026-10-01T03:28:25.981Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native independent restart metadata and conditional XML export;2403 native sequences,288 states,84 genuine ODT packages;full verify60245 exit0,654+109 tests,19 browser and100% coverage;quality pass. Full goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:27:19.483Z"
+doc_updated_at: "2026-10-01T03:28:25.983Z"
 doc_updated_by: "CODER"
 description: "Iteration33: preserve independent numbered,restart,direct-start and format-start metadata under XMLTextNumRuleInfo and export native implicit-restart list transitions. Preserve registered save/open/recovery differences."
 sections:
