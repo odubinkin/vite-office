@@ -232,7 +232,14 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
       );
       for (const index of order)
         root.AddChild(records[index] as SwNodeNum, test.levels[index] as number);
-      root.ValidateHierarchical();
+      const lastChild = root.GetChildren().at(-1);
+      if (lastChild !== undefined)
+        (
+          root as unknown as {
+            /** Requests the same protected native group prefix as the timing oracle. @param target - Last owned child. @returns Nothing. */
+            ValidateHierarchical(target: typeof lastChild): void;
+          }
+        ).ValidateHierarchical(lastChild);
       const native = nativeTiming[cases.indexOf(test)];
       expect(
         records.map(

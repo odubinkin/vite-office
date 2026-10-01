@@ -251,7 +251,7 @@ export abstract class SwNumberTreeNode {
     return sibling ? previous : (previous.GetLastDescendant() ?? previous);
   }
   /** Validates the continuous prefix through a target, retaining the native end sentinel when no target is reached. @param target - Last child to validate, absent to reach the end. @returns Nothing. */
-  protected ValidateContinuous(target?: SwNumberTreeNode): void {
+  protected ValidateContinuous(target: SwNumberTreeNode | undefined): void {
     let position = this.lastValid === undefined ? -1 : this.children.indexOf(this.lastValid);
     let child: SwNumberTreeNode | undefined;
     do {
@@ -284,12 +284,20 @@ export abstract class SwNumberTreeNode {
   public IsContinueingPreviousSubTree(): boolean {
     return this.continuingPreviousSubTree;
   }
-  /** Validates a native hierarchical prefix, or all descendant groups when no target is supplied. @param target - Optional last child to validate. @returns Nothing. */
-  public ValidateHierarchical(target?: SwNumberTreeNode): void {
-    const first = this.children[0];
-    if (first === undefined) return;
-    const end = target === undefined ? this.children.length - 1 : this.children.indexOf(target);
+  /** Finds native ordered-child equivalence, retaining an end sentinel for a missing pointer. @param child - Explicit child pointer or null equivalent. @returns Child index, or minus one for the end. */
+  protected GetIterator(child: SwNumberTreeNode | undefined): number {
+    return child === undefined
+      ? -1
+      : this.children.findIndex(
+          /** Resolves the sorted-container equivalence class. @param candidate - Stored child. @returns Whether equivalent. */
+          (candidate) => !candidate.LessThan(child) && !child.LessThan(candidate),
+        );
+  }
+  /** Validates the native child prefix, leaving null and missing targets unchanged. @param target - Explicit child pointer or null equivalent. @returns Nothing. */
+  protected ValidateHierarchical(target: SwNumberTreeNode | undefined): void {
+    const end = this.GetIterator(target);
     if (end < 0) return;
+    const first = this.children[0] as SwNumberTreeNode;
     let current = this.lastValid === undefined ? -1 : this.children.indexOf(this.lastValid);
     let number = current < 0 ? 0 : (this.children[current] as SwNumberTreeNode).value;
     if (current < 0) {
@@ -315,14 +323,13 @@ export abstract class SwNumberTreeNode {
       }
       first.value = number;
     }
-    while (current < end) {
+    while (current !== end) {
       const child = this.children[++current] as SwNumberTreeNode;
       child.continuingPreviousSubTree = false;
       if (child.IsCounted()) number = child.IsRestart() ? child.GetStartValue() : number + 1;
       child.value = number;
     }
     this.SetLastValid(this.children[current], true);
-    if (target === undefined) for (const child of this.children) child.ValidateHierarchical();
   }
   /** Reports an empty subtree or a chain containing only phantoms. @returns Phantom-only flag. */
   private HasOnlyPhantoms(): boolean {

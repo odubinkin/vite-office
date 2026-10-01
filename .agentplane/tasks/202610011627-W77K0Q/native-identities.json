@@ -41,10 +41,10 @@
       "sha256": "cefb7023a850cc792abf075b6804f01aea974f1b1da90c6be543d636515bda92"
     }
   ],
-  "sourceProfileSha256": "db4271228d79b803ea75fea934f97219bf7921ec154c7587e056bfb7f08e2ae3",
+  "sourceProfileSha256": "51b066b6c17d4fed3dff8c5608a6cc4ac52d77fe1df4369f3d55a812718b2063",
   "profileCount": 128,
-  "snapshots": 1664,
-  "recordStates": 6656,
+  "snapshots": 1792,
+  "recordStates": 7168,
   "compileContracts": [
     {
       "flag": "BAD_PUBLIC_H",

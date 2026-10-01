@@ -4,7 +4,7 @@ title: "Restore protected explicit-target numbering validation contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -46,7 +46,7 @@ events:
     to: "DOING"
     note: "Start: refined same eight-file leaf now includes source ordered-child equivalence for explicit hierarchical target lookup; persistent user goal authorizes this native contract repair, with all original expected values and upstream-independent project tests preserved."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:50:09.515Z"
+doc_updated_at: "2026-10-01T17:13:35.534Z"
 doc_updated_by: "CODER"
 description: "Iteration49 of the active implemented-runtime parity goal: remove the nonnative public eager no-argument hierarchical validation bridge, require explicit nullable targets on both protected validators, preserve original assertion meaning using source-shaped access, and compare native prefix/cache/null/foreign-target observations from manual local probes. Project tests must neither read nor compile nor invoke pinned upstream; native source must only exist in ignored scratch, never canonical Agentplane artifacts. Registered IO/recovery deviations remain untouched."
 sections:
@@ -84,6 +84,14 @@ sections:
     - Observation: Planned RED confirms profile0 step1: local hierarchical undefined-target recursively changes raw0 counters to-1 and last-valid pointers, unlike literal native no-op. Typecheck reports exactly3 expected true-to-false contract failures: public hierarchical visibility and optional target tuple on both methods. Native GetIterator uses ordered-container equivalence, so a distinct foreign key is a no-op but an equivalent nonmember object resolves the stored child; plain identity indexOf is also nonnative for this target contract.
       Impact: Restoring only visibility/argument count would leave an observable selected-contract mismatch. The approved eight semantic paths still suffice.
       Resolution: Refine the same leaf to restore protected explicit-target GetIterator semantics for hierarchical lookup and add a fresh equivalent-object native snapshot before first-prefix validation. Preserve all original expected values and existing gates; reapprove refined verification under the persistent full parity goal before production edits.
+
+    - Observation: Command: npm run verify (first full attempt). Result: fail at source-provenance schema after preceding checks pass; added evidence.local references were strings, while this manifest requires structured reference objects. Production/test gates passed, including both unchanged100% coverages.
+      Impact: Static provenance validation correctly rejects malformed newly added evidence; no implementation or native differential failure.
+      Resolution: Preserve task49-verify-first.log, recompute route, encode only this task-added provenance references using the existing object schema, run the focused source/provenance validator, and rerun unchanged full verification after correction.
+
+    - Observation: Final unchanged npm run verify exits0 after correcting seven new provenance references to path/marker objects and removing duplicates. App734 tests/166 files and inventory109/36 files plus browser19 pass;both coverages100%. Original expectations unchanged; current focused21 tests/5 files pass while pinned upstream is unavailable. Native128 profiles/1792 snapshots/7168 raw states match the packed fixture, four expected native compiler failures prove access/argument contracts, three fresh source-file hashes match pin.
+      Impact: Selected validation/lookup contracts are restored without test gate weakening or source artifacts. The earlier red,type and provenance failures are resolved; doctor0 errors/two pre-existing warnings and routing/diff checks pass.
+      Resolution: Record actual CODE SHA with eight semantic paths and exact artifact count, persist final logs/integrity proof, perform same-actor EVALUATOR review and close only this leaf. Parent/full goal remains active. Native RemoveChild still uses GetIterator to select a stored equivalent child (pRemove), while local removal uses identity indexOf and the supplied child; audit this measured remaining mismatch in the next separate leaf.
 id_source: "generated"
 ---
 ## Summary
@@ -136,3 +144,11 @@ Fresh inspection confirms native header methods are protected and require explic
 - Observation: Planned RED confirms profile0 step1: local hierarchical undefined-target recursively changes raw0 counters to-1 and last-valid pointers, unlike literal native no-op. Typecheck reports exactly3 expected true-to-false contract failures: public hierarchical visibility and optional target tuple on both methods. Native GetIterator uses ordered-container equivalence, so a distinct foreign key is a no-op but an equivalent nonmember object resolves the stored child; plain identity indexOf is also nonnative for this target contract.
   Impact: Restoring only visibility/argument count would leave an observable selected-contract mismatch. The approved eight semantic paths still suffice.
   Resolution: Refine the same leaf to restore protected explicit-target GetIterator semantics for hierarchical lookup and add a fresh equivalent-object native snapshot before first-prefix validation. Preserve all original expected values and existing gates; reapprove refined verification under the persistent full parity goal before production edits.
+
+- Observation: Command: npm run verify (first full attempt). Result: fail at source-provenance schema after preceding checks pass; added evidence.local references were strings, while this manifest requires structured reference objects. Production/test gates passed, including both unchanged100% coverages.
+  Impact: Static provenance validation correctly rejects malformed newly added evidence; no implementation or native differential failure.
+  Resolution: Preserve task49-verify-first.log, recompute route, encode only this task-added provenance references using the existing object schema, run the focused source/provenance validator, and rerun unchanged full verification after correction.
+
+- Observation: Final unchanged npm run verify exits0 after correcting seven new provenance references to path/marker objects and removing duplicates. App734 tests/166 files and inventory109/36 files plus browser19 pass;both coverages100%. Original expectations unchanged; current focused21 tests/5 files pass while pinned upstream is unavailable. Native128 profiles/1792 snapshots/7168 raw states match the packed fixture, four expected native compiler failures prove access/argument contracts, three fresh source-file hashes match pin.
+  Impact: Selected validation/lookup contracts are restored without test gate weakening or source artifacts. The earlier red,type and provenance failures are resolved; doctor0 errors/two pre-existing warnings and routing/diff checks pass.
+  Resolution: Record actual CODE SHA with eight semantic paths and exact artifact count, persist final logs/integrity proof, perform same-actor EVALUATOR review and close only this leaf. Parent/full goal remains active. Native RemoveChild still uses GetIterator to select a stored equivalent child (pRemove), while local removal uses identity indexOf and the supplied child; audit this measured remaining mismatch in the next separate leaf.

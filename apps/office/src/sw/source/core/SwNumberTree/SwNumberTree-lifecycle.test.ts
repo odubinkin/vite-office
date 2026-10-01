@@ -112,6 +112,10 @@ it("moves canonical paragraphs with retained list records and independent copied
 });
 it("keeps native orphan and invalid removal contracts bounded", /** Checks source no-op branches and an empty retained root. @returns Nothing. */ () => {
   const root = new SwNodeNum(undefined);
+  const diagnostic = root as unknown as {
+    /** Invokes the protected native missing-child diagnostic. @param target - Foreign record. @returns Nothing. */
+    ValidateHierarchical(target: SwNodeNum): void;
+  };
   const document = createWriterDocument();
   const node = new SwNodeNum(document.paragraphs[0]);
   const missing = new SwNodeNum(document.nodes.MakeTextNode());
@@ -120,7 +124,7 @@ it("keeps native orphan and invalid removal contracts bounded", /** Checks sourc
   node.RemoveMe();
   root.RemoveChild(missing);
   root.AddChild(node, 2);
-  root.ValidateHierarchical(missing);
+  diagnostic.ValidateHierarchical(missing);
   const phantom = required(node.GetParent());
   required(phantom.GetParent()).RemoveChild(phantom);
   expect(node.GetLevelInListTree()).toBe(2);
@@ -129,7 +133,7 @@ it("keeps native orphan and invalid removal contracts bounded", /** Checks sourc
   node.RemoveMe();
   expect(root.GetChildren()).toEqual([]);
   expect(node.GetNumberVector()).toEqual([]);
-  root.ValidateHierarchical(missing);
+  diagnostic.ValidateHierarchical(missing);
 });
 
 /** Requires a fixture record before asserting its literal state. @param value - Fixture record. @returns Present record. */

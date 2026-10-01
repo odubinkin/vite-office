@@ -53,7 +53,7 @@ interface TreeDiagnostic {
   /** Reads native protected traversal. @returns Last descendant. */
   GetLastDescendant(): SwNumberTreeNode | undefined;
   /** Invokes native protected continuous validation. @param target - Requested child. @returns Nothing. */
-  ValidateContinuous(target?: SwNumberTreeNode): void;
+  ValidateContinuous(target: SwNumberTreeNode | undefined): void;
 }
 /** Decodes stored literal output without consulting or invoking upstream. */
 const native = JSON.parse(gunzipSync(Buffer.from(data.data, "base64")).toString("utf8")) as {
@@ -173,7 +173,7 @@ it("retains native empty and end sentinel validation with protected traversal", 
   rule.SetContinusNum(true);
   const root = new SwNodeNum(undefined, rule),
     probe = root as unknown as TreeDiagnostic;
-  probe.ValidateContinuous();
+  probe.ValidateContinuous(undefined);
   expect(probe.lastValid).toBeUndefined();
   expect(probe.GetLastDescendant()).toBeUndefined();
   const child = new SwNodeNum(undefined, rule),
@@ -187,12 +187,12 @@ it("retains native empty and end sentinel validation with protected traversal", 
   expect(probe.GetLastDescendant()).toBe(child);
   probe.ValidateContinuous(child);
   expect(probe.lastValid).toBe(child);
-  probe.ValidateContinuous();
+  probe.ValidateContinuous(undefined);
   expect(probe.lastValid).toBeUndefined();
   const skippedRoot = new SwNodeNum(undefined, rule),
     descendant = new SwNodeNum(undefined, rule);
   skippedRoot.AddChild(descendant, 1, doc);
-  (skippedRoot as unknown as TreeDiagnostic).ValidateContinuous();
+  (skippedRoot as unknown as TreeDiagnostic).ValidateContinuous(undefined);
   const phantom = required(skippedRoot.GetChildren()[0]);
   expect(phantom.IsCounted()).toBe(false);
   expect(phantom.GetPred()).toBeUndefined();
