@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "202610011207-TR9DSM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-01T13:02:05.075Z",
+  "verdict": "pass",
+  "summary": "Approved native standalone format ownership migration is implemented and source-compared for the existing bounded profile; actual caller ownership regression is reproduced then fixed; final full original verification passes.",
+  "evaluated_sha": "2827ce1e51f6954632f121a382fd22f0cf8a40cd",
+  "blueprint_digest": "2eceb17655ed76bdc5db8daa0ba29868a7231fefbf26b6d093d0d77aca2d7ece",
+  "findings": [
+    "Actual CODE2827ce1e51f6954632f121a382fd22f0cf8a40cd contains33 intentional paths: native numeric enum/type hierarchy, U+F095 default, unsigned32 glyph, show flag, optional const copied Font family values, null SwClient composition, explicit browser assembly/projections, migrated actual callers and Worker16 legacy/ownership/malformed paths. No registered save/open/recovery behavior or policy/coverage gate was changed.",
+    "Complete unchanged pinned constructor/copy/equality/format/font and inline header bodies are matched by32 source records and165 value/formatting traces with ASan/UBSan clean. Existing40 base/19 ownership/16 valid NONE assertions remain literal. The sole editeng->vcl edge cites native Library_editeng.mk;6 boundary test cases retain reverse/browser rejections.",
+    "The real UNO replacement regression fails before the preservation fix and passes after it, including absent/present-empty/named Font and hidden state. verify-fifth exits0:713 app,109 inventory,19 browser; both100% suites and every unchanged gate. doctor0 errors/2 prior warnings; routing and diff pass. This is a separate quality-role phase by the current actor, not an independent subagent review."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610011207-TR9DSM/README.md",
+    "2827ce1e51f6954632f121a382fd22f0cf8a40cd",
+    ".agentplane/tasks/202610011207-TR9DSM/verify-fifth.log",
+    ".agentplane/tasks/202610011207-TR9DSM/native-source-identities.json",
+    ".agentplane/tasks/202610011207-TR9DSM/uno-regression-before.log",
+    ".agentplane/tasks/202610011207-TR9DSM/uno-regression-after.log",
+    ".agentplane/tasks/202610011207-TR9DSM/boundary-test.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native full Font attributes/equality/metrics, live style/graphics ownership, native static/global/formatter lifetime and service-absence profiles, wider numbering families and full UNO property machinery remain individually unverified; no whole-module/status or goal promotion. JavaScript SwClient composition covers the currently exposed null registration only.",
+    "Next separate measured mismatch: NONE is native enumeration for SwTextNode.HasNumber; local compares only ARABIC. Bitmap classification also differs, while bitmap rendering remains unimplemented. Native trailing-NONE non-progress input stays the explicit browser guard recorded by iteration43. Full browser composition/fidelity audit remains active."
+  ]
+}

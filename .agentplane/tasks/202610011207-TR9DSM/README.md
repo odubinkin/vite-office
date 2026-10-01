@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 26
 origin:
   system: "manual"
 depends_on:
@@ -21,11 +21,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-01T13:01:16.909Z"
+  updated_by: "CODER"
+  note: "Final verify-fifth exited0:713 app,109 inventory,19 browser; original100% coverage in both suites. Native21 format/equality states+144 NumberType traces,6 source-backed dependency cases,actual UNO regression red/green; doctor0 errors/routing/diff pass. Actual implementation2827ce1e51f6954632f121a382fd22f0cf8a40cd. Bounded profile only; goal stays active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T13:02:05.075Z"
+  updated_by: "EVALUATOR"
+  note: "Approved native standalone format ownership migration is implemented and source-compared for the existing bounded profile; actual caller ownership regression is reproduced then fixed; final full original verification passes."
+  evaluated_sha: "2827ce1e51f6954632f121a382fd22f0cf8a40cd"
+  blueprint_digest: "2eceb17655ed76bdc5db8daa0ba29868a7231fefbf26b6d093d0d77aca2d7ece"
+  evidence_refs:
+    - ".agentplane/tasks/202610011207-TR9DSM/README.md"
+    - ".agentplane/tasks/202610011207-TR9DSM/quality/20261001-130205075-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610011207-TR9DSM/quality/20261001-130205075-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610011207-TR9DSM/quality/20261001-130205075-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610011207-TR9DSM/blueprint/resolved-snapshot.json"
+    - "2827ce1e51f6954632f121a382fd22f0cf8a40cd"
+    - ".agentplane/tasks/202610011207-TR9DSM/verify-fifth.log"
+    - ".agentplane/tasks/202610011207-TR9DSM/native-source-identities.json"
+    - ".agentplane/tasks/202610011207-TR9DSM/uno-regression-before.log"
+    - ".agentplane/tasks/202610011207-TR9DSM/uno-regression-after.log"
+    - ".agentplane/tasks/202610011207-TR9DSM/boundary-test.log"
+  findings:
+    - "Actual CODE2827ce1e51f6954632f121a382fd22f0cf8a40cd contains33 intentional paths: native numeric enum/type hierarchy, U+F095 default, unsigned32 glyph, show flag, optional const copied Font family values, null SwClient composition, explicit browser assembly/projections, migrated actual callers and Worker16 legacy/ownership/malformed paths. No registered save/open/recovery behavior or policy/coverage gate was changed."
+    - "Complete unchanged pinned constructor/copy/equality/format/font and inline header bodies are matched by32 source records and165 value/formatting traces with ASan/UBSan clean. Existing40 base/19 ownership/16 valid NONE assertions remain literal. The sole editeng->vcl edge cites native Library_editeng.mk;6 boundary test cases retain reverse/browser rejections."
+    - "The real UNO replacement regression fails before the preservation fix and passes after it, including absent/present-empty/named Font and hidden state. verify-fifth exits0:713 app,109 inventory,19 browser; both100% suites and every unchanged gate. doctor0 errors/2 prior warnings; routing and diff pass. This is a separate quality-role phase by the current actor, not an independent subagent review."
 commit: null
 comments:
   -
@@ -39,8 +62,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
+  -
+    type: "verify"
+    at: "2026-10-01T13:01:16.909Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final verify-fifth exited0:713 app,109 inventory,19 browser; original100% coverage in both suites. Native21 format/equality states+144 NumberType traces,6 source-backed dependency cases,actual UNO regression red/green; doctor0 errors/routing/diff pass. Actual implementation2827ce1e51f6954632f121a382fd22f0cf8a40cd. Bounded profile only; goal stays active."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:00:32.436Z"
+doc_updated_at: "2026-10-01T13:01:16.972Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -57,7 +86,41 @@ sections:
     3. Migrate all real readers and constructor callers to the native core API or explicit assembly adapter. Preserve existing browser command defaults, genuine ODT and restart expectations and Worker graph16 historical records; transfer numeric core type, raw glyph, optional Font and show-symbol state without conflating absent/present-empty fonts or absent/empty patterns. Test malformed records.
     4. Run focused and full npm run verify with original100% thresholds in both suites, browser/ODT/static/type/lint/docs/file-size/source/provenance/inventory gates. Keep all forbidden dependency/layer checks; the sole additional editeng->vcl edge must cite native Library_editeng.mk and be tested, with no general allowlist relaxation. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check.
     5. Record actual CODE SHA, canonical verification and separate EVALUATOR quality phase. Close only this leaf with clean final checkout, then append parent findings and keep goal active.
-  Verification: "Pending implementation and checks. No module-level semantic status or goal promotion is authorized."
+  Verification: |-
+    PASS: final npm run verify exited0 (verify-fifth.log) after the source-backed UNO ownership regression. 713 application tests/161 files; 109 inventory tests/36 files; 19 browser tests. Application coverage:10757/10757 statements,8190/8190 branches,2900/2900 functions,9866/9866 lines. Inventory coverage:1523/1523 statements,1080/1080 branches,384/384 functions,1464/1464 lines. Original100% thresholds and every format/lint/type/dependency/resource/build/static/JSDoc/size/tree/provenance/invariant/parity gate pass without exclusions. Focused36 application tests,6 native-edge boundary cases and5 format/UNO regression tests pass. The actual UNO regression fails before the fix and passes after it; both logs retained. Complete unchanged pinned native bodies/header methods plus32 exact identity records compare21 format-value/equality states and144 NumberType traces under ASan/UBSan with no diagnostics; original40 rule/19 ownership/16 valid NONE assertions remain. Named platform, null-client, family-only Font/COW and decimal-provider adapters are explicit; full Font attributes/equality, graphics/styles, global/native service lifetimes and wider families remain unverified. Sole extra dependency editeng->vcl is proved by native Library_editeng.mk and source-backed boundary regression; all reverse/browser/inner-layer gates remain. ap doctor:0 errors,2 pre-existing warnings; routing and git diff --check pass. Actual CODE:2827ce1e51f6954632f121a382fd22f0cf8a40cd,33 reviewed implementation/fixture/metadata paths. Tracked and untracked status is empty after CODE; canonical verification/quality/closure artifacts follow. Registered I/O/recovery deviations are preserved. Parent and unlimited goal remain active; next measured separate gap is native NONE list classification, documented in followup native/local evidence.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T13:01:16.909Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final verify-fifth exited0:713 app,109 inventory,19 browser; original100% coverage in both suites. Native21 format/equality states+144 NumberType traces,6 source-backed dependency cases,actual UNO regression red/green; doctor0 errors/routing/diff pass. Actual implementation2827ce1e51f6954632f121a382fd22f0cf8a40cd. Bounded profile only; goal stays active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T13:01:16.518Z, excerpt_hash=sha256:d834d23a425dfedd39f9fba0ff5bffa4844ba105576fd4e22a0250376ded4be6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011207-TR9DSM/blueprint/resolved-snapshot.json
+    - old_digest: 2eceb17655ed76bdc5db8daa0ba29868a7231fefbf26b6d093d0d77aca2d7ece
+    - current_digest: 2eceb17655ed76bdc5db8daa0ba29868a7231fefbf26b6d093d0d77aca2d7ece
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610011207-TR9DSM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610011207-TR9DSM
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the eventual implementation commit through a new executable task; preserve immutable baseline, native source identities and failed evidence."
   Findings: |-
     Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and null SwClient; source SvxNumberFormat owns cBullet=SVX_DEF_BULLET=(0xF000+149), optional pBulletFont absent, and inherits SvxNumberType(nType,show=true). Current child instead stores kind/string numberingType/glyph/font and injects browser bullet defaults. Source SetBulletFont copies Font or resets optional presence; native equality compares base fields plus registered client. Existing vcl Font family functionality has no core class yet. Source GetNumStr delegates to the numbering provider; the currently implemented Arabic provider branch uses positive signed32 OUString::number, zero special-cases in SvxNumberType, negative provider requests throw/catch. Full wider numbering families and native UNO/provider/font/client/graphics/static lifetime are not certified by this bounded existing marker family refactor.
@@ -140,7 +203,40 @@ Canonical editeng SvxNumberType/SvxNumberFormat state, constructors/copies, type
 
 ## Verification
 
-Pending implementation and checks. No module-level semantic status or goal promotion is authorized.
+PASS: final npm run verify exited0 (verify-fifth.log) after the source-backed UNO ownership regression. 713 application tests/161 files; 109 inventory tests/36 files; 19 browser tests. Application coverage:10757/10757 statements,8190/8190 branches,2900/2900 functions,9866/9866 lines. Inventory coverage:1523/1523 statements,1080/1080 branches,384/384 functions,1464/1464 lines. Original100% thresholds and every format/lint/type/dependency/resource/build/static/JSDoc/size/tree/provenance/invariant/parity gate pass without exclusions. Focused36 application tests,6 native-edge boundary cases and5 format/UNO regression tests pass. The actual UNO regression fails before the fix and passes after it; both logs retained. Complete unchanged pinned native bodies/header methods plus32 exact identity records compare21 format-value/equality states and144 NumberType traces under ASan/UBSan with no diagnostics; original40 rule/19 ownership/16 valid NONE assertions remain. Named platform, null-client, family-only Font/COW and decimal-provider adapters are explicit; full Font attributes/equality, graphics/styles, global/native service lifetimes and wider families remain unverified. Sole extra dependency editeng->vcl is proved by native Library_editeng.mk and source-backed boundary regression; all reverse/browser/inner-layer gates remain. ap doctor:0 errors,2 pre-existing warnings; routing and git diff --check pass. Actual CODE:2827ce1e51f6954632f121a382fd22f0cf8a40cd,33 reviewed implementation/fixture/metadata paths. Tracked and untracked status is empty after CODE; canonical verification/quality/closure artifacts follow. Registered I/O/recovery deviations are preserved. Parent and unlimited goal remain active; next measured separate gap is native NONE list classification, documented in followup native/local evidence.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T13:01:16.909Z — VERIFY — ok
+
+By: CODER
+
+Note: Final verify-fifth exited0:713 app,109 inventory,19 browser; original100% coverage in both suites. Native21 format/equality states+144 NumberType traces,6 source-backed dependency cases,actual UNO regression red/green; doctor0 errors/routing/diff pass. Actual implementation2827ce1e51f6954632f121a382fd22f0cf8a40cd. Bounded profile only; goal stays active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T13:01:16.518Z, excerpt_hash=sha256:d834d23a425dfedd39f9fba0ff5bffa4844ba105576fd4e22a0250376ded4be6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011207-TR9DSM/blueprint/resolved-snapshot.json
+- old_digest: 2eceb17655ed76bdc5db8daa0ba29868a7231fefbf26b6d093d0d77aca2d7ece
+- current_digest: 2eceb17655ed76bdc5db8daa0ba29868a7231fefbf26b6d093d0d77aca2d7ece
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610011207-TR9DSM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610011207-TR9DSM
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
