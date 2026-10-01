@@ -1,10 +1,11 @@
 ---
 id: "202610010449-CE6KDW"
 title: "Restore node-owned Writer numbering lifecycle"
-status: "DOING"
+result_summary: "verified-202610010449-CE6KDW"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-01T05:25:47.449Z"
+  updated_at: "2026-10-01T05:27:56.814Z"
   updated_by: "CODER"
-  note: "Native20+37 definitions;120 sequences/8976 owner states match. Full unchanged verify32678 exit0:668+109 tests,19 browser scenarios,both coverage gates100%,all resource/static/docs/source/provenance/invariant/parity gates. Doctor0 errors,two existing warnings;routing/diff clean. Shown numbering ownership/registration/lazy reads only;IO exceptions and all residual parity obligations preserved."
+  note: "verified-202610010449-CE6KDW"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "SwTextNode owns records;SwList allocation/map and manager registration wrappers removed. PreAdd/PostRemove retain rule bindings and native memberships. Attr list/rule changes detach before mutation;lazy prefix reads no longer validate unrelated tails."
     - "Full unmodified native20 owner/registry definitions and37 tree/list definitions compare120 sequences/8976 actual owner states;literal guards,record identities,moves/deletes/copies,clients,registry and real ODT/Worker/undo coverage independently support the implementation."
     - "Unchanged full verify32678 exit0:668+109 tests,19 browser scenarios,both global100% coverage gates and all static/resource/docs/source/invariant/parity checks pass. Failure evidence preserved;no ignored/changed thresholds or IO tests."
-commit: null
+commit:
+  hash: "14f848e71c7bafc67bc82230343fa9e16b9969ce"
+  message: "🧩 CE6KDW code: restore text-owned Writer numbering lifecycle"
 comments:
   -
     author: "CODER"
     body: "Start: approved persistent parity goal;restore shown text-node numbering ownership,rule/document registration and native lazy getters;preserve document IO exceptions and gates."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610010449-CE6KDW. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native20+37 definitions;120 sequences/8976 owner states match. Full unchanged verify32678 exit0:668+109 tests,19 browser scenarios,both coverage gates100%,all resource/static/docs/source/provenance/invariant/parity gates. Doctor0 errors,two existing warnings;routing/diff clean. Shown numbering ownership/registration/lazy reads only;IO exceptions and all residual parity obligations preserved."
+  -
+    type: "verify"
+    at: "2026-10-01T05:27:56.814Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610010449-CE6KDW"
+  -
+    type: "status"
+    at: "2026-10-01T05:27:56.964Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610010449-CE6KDW. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-01T05:26:31.109Z"
+doc_updated_at: "2026-10-01T05:27:56.965Z"
 doc_updated_by: "CODER"
 description: "Iteration36 of approved persistent parity goal:SwTextNode owns shown SwNodeNum with native AddToList/RemoveFromList/GetNum/vector contracts,SwNodeNum rule/document registration hooks and non-owning SwList topology. Remove full-list read validation and ownership wrappers;preserve registered document IO exceptions and unchanged gates."
 sections:
@@ -100,6 +119,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610010449-CE6KDW -m 🧩 CE6KDW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-01T05:27:56.814Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610010449-CE6KDW
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T05:26:31.109Z, excerpt_hash=sha256:19b7f0e9ad3efca0cbf5b405dd4056d18cb49145ba94b9d850d137e7086e5934
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010449-CE6KDW/blueprint/resolved-snapshot.json
+    - old_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+    - current_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610010449-CE6KDW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610010449-CE6KDW --result verified-202610010449-CE6KDW --commit f6e8170a36dd0b65172b22ffb0087b0b8d700d32
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -189,6 +238,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610010449-CE6KDW -m 🧩 CE6KDW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-01T05:27:56.814Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610010449-CE6KDW
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T05:26:31.109Z, excerpt_hash=sha256:19b7f0e9ad3efca0cbf5b405dd4056d18cb49145ba94b9d850d137e7086e5934
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010449-CE6KDW/blueprint/resolved-snapshot.json
+- old_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+- current_digest: 69afd1edd6cd196ef336c4e571f58e9124b0cba7574abf61927668b8be0a7623
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610010449-CE6KDW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610010449-CE6KDW --result verified-202610010449-CE6KDW --commit f6e8170a36dd0b65172b22ffb0087b0b8d700d32
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
