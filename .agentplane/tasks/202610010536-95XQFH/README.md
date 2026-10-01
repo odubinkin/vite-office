@@ -4,7 +4,7 @@ title: "Restore Writer numbering transitions on paragraph style changes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,30 @@ verification:
   updated_by: "CODER"
   note: "Final unchanged npm run verify passes682 app/109 inventory/19 browser tests,both100% coverage,all static/source/invariant gates;native16 bodies277 sequences10394 actual states and8 unsigned definitions pass. Bounded collection-numbering/undo/ODT/Worker correction only;explicit residuals and prior unexplained UI timing failures retained in Findings;no waived gates or IO deviations."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T07:23:26.387Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed actual implementation d7ad7407f2bfbb3b2fea77e094dc77bdc554f56c against approved bounded collection-numbering scope and complete final verification;eligible for child closure,not parent or goal completion."
+  evaluated_sha: "d7ad7407f2bfbb3b2fea77e094dc77bdc554f56c"
+  blueprint_digest: "cd16e0aefb86c2eba9f5bf7ff0ffe8ad82521785723a7fdd72832cb7b20042e3"
+  evidence_refs:
+    - ".agentplane/tasks/202610010536-95XQFH/README.md"
+    - ".agentplane/tasks/202610010536-95XQFH/quality/20261001-072326387-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010536-95XQFH/quality/20261001-072326387-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010536-95XQFH/quality/20261001-072326387-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010536-95XQFH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010536-95XQFH/baseline.json"
+    - ".agentplane/tasks/202610010536-95XQFH/comparison.json"
+    - ".agentplane/tasks/202610010536-95XQFH/native-source-identity.json"
+    - ".agentplane/tasks/202610010536-95XQFH/unsigned-native-results.json"
+    - ".agentplane/tasks/202610010536-95XQFH/verify-terminal.log"
+    - ".agentplane/tasks/202610010536-95XQFH/marker-baseline.json"
+    - ".agentplane/tasks/202610010536-95XQFH/assignment-baseline.json"
+  findings:
+    - "Actual initial mismatch is retained in baseline.json. Sixteen unchanged additional native definitions with source identity match277 sequences/10394 real states;8 unsigned source definitions verify supported constructors/defaults/query/owned clones/equality. No whole-native build or body rewriting claim."
+    - "Source-shaped collection helpers reconcile owned numbering records and five-item reset;independent outline assignment/items and synthesized marker survive exact undo,clone,Worker16 and genuine named-style ODT/reopen. Named ODT dependencies are implemented without silently accepting unsupported direct outline state."
+    - "Final unchanged npm run verify exits0:682 app,109 inventory,19 browser;both100% coverage and all required source/static/docs/invariant gates pass. Production/assertion/config changes were not used to mask prior UI timing failures;all earlier failed logs remain retained."
 commit: null
 comments:
   -
