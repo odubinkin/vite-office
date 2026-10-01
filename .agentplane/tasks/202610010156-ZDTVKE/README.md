@@ -4,7 +4,7 @@ title: "Restore native repeated-sublist restart ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned repeated-sublist count and pending block restart inheritance,consumption and return under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T02:15:51.325Z"
+doc_updated_at: "2026-10-01T02:19:07.910Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
@@ -64,6 +64,10 @@ sections:
     - Observation: Full verify session73105 terminal exit1 after650 application tests with100% coverage. Inventory suite108/109 passes; CAP evidence still points to TEXT_START_VALUE in txtparai.ts after item ownership moved, so strict marker validation correctly fails.
       Impact: Runtime tests pass but complete verification is not established; the source evidence reference must follow its relocated owner.
       Resolution: Preserve failed terminal log and route-required artifacts; relocate only the existing writer-command-slice.json implementation evidence path to XMLTextListItemContext.ts as part of approved source ownership/provenance maintenance. Keep assertion,marker,schemas,gates and acceptance criteria unchanged; rerun full verify.
+
+    - Observation: Second full verify session93645 terminal exit1:650 application tests still100%; inventory108/109 fails because the two new runtime module entries were appended instead of lexicographically ordered.
+      Impact: All relocated source markers now resolve; strict manifest ordering prevents complete verification. The previous commentary inferred a second stale marker before the terminal report; actual cause is ordering.
+      Resolution: Preserve terminal evidence,sort only existing runtime modules by path and provenance entries by localPath under the current schema,run focused parity CLI/provenance validation before the third unchanged full verify. No runtime,gate or acceptance changes.
 id_source: "generated"
 ---
 ## Summary
@@ -109,3 +113,7 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent us
 - Observation: Full verify session73105 terminal exit1 after650 application tests with100% coverage. Inventory suite108/109 passes; CAP evidence still points to TEXT_START_VALUE in txtparai.ts after item ownership moved, so strict marker validation correctly fails.
   Impact: Runtime tests pass but complete verification is not established; the source evidence reference must follow its relocated owner.
   Resolution: Preserve failed terminal log and route-required artifacts; relocate only the existing writer-command-slice.json implementation evidence path to XMLTextListItemContext.ts as part of approved source ownership/provenance maintenance. Keep assertion,marker,schemas,gates and acceptance criteria unchanged; rerun full verify.
+
+- Observation: Second full verify session93645 terminal exit1:650 application tests still100%; inventory108/109 fails because the two new runtime module entries were appended instead of lexicographically ordered.
+  Impact: All relocated source markers now resolve; strict manifest ordering prevents complete verification. The previous commentary inferred a second stale marker before the terminal report; actual cause is ordering.
+  Resolution: Preserve terminal evidence,sort only existing runtime modules by path and provenance entries by localPath under the current schema,run focused parity CLI/provenance validation before the third unchanged full verify. No runtime,gate or acceptance changes.
