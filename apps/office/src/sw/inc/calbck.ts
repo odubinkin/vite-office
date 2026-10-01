@@ -21,6 +21,13 @@ export class SwClient extends SfxListener<SwModelHint> {
     this.StartListening(modify);
   }
 
+  /** Follows the native source client registration, detaching when it has no modify. @param other - Source registration. @returns Nothing. */
+  public StartListeningToSameModifyAs(other: Pick<SwClient, "GetRegisteredIn">): void {
+    const source = other.GetRegisteredIn();
+    if (source !== undefined) this.RegisterToModify(source);
+    else this.Dispose();
+  }
+
   /** Returns the current Writer source. @returns Registered modify, when present. */
   public GetRegisteredIn(): SwModify | undefined {
     return this.registeredIn;

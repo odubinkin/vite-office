@@ -89,39 +89,40 @@ export interface NumberingMarkerProperties {
 export class SvxNumberFormat extends SvxNumberType {
   private cBullet = SVX_DEF_BULLET;
   private pBulletFont: ConstFont | undefined;
-  private position: Required<NumberingPositionProperties>;
-  private includeUpperLevels: number;
-  private prefix: string;
-  private start: number;
-  private suffix: string;
+  private position: Required<NumberingPositionProperties> = {
+    absLSpace: 0,
+    firstLineOffset: 0,
+    charTextDistance: 0,
+    firstLineIndent: 0,
+    indentAt: 0,
+    labelFollowedBy: "listtab",
+    listTabPosition: 0,
+    positionAndSpaceMode: "label-width-and-position",
+  };
+  private includeUpperLevels = 1;
+  private prefix = "";
+  private start = 1;
+  private suffix = "";
   private listFormat: string | undefined;
-  /** Initializes or copies the implemented native format fields. @param format - Native type or const source. @returns Nothing. */
+  /** Initializes native defaults, then delegates copy construction to the nonvirtual base assignment responsibility. @param format - Native type or const source. @returns Nothing. */
   public constructor(format: SvxNumType | ConstSvxNumberFormat = SvxNumType.SVX_NUM_ARABIC) {
     super(format);
-    const properties: NumberingPositionProperties & NumberingMarkerProperties =
-      typeof format === "number"
-        ? {}
-        : { ...format.GetPositionProperties(), ...format.GetMarkerProperties() };
-    this.includeUpperLevels = (properties.includeUpperLevels ?? 1) & 255;
-    this.prefix = properties.prefix ?? "";
-    this.start = (properties.start ?? 1) & 65535;
-    this.suffix = properties.suffix ?? "";
-    this.listFormat = properties.listFormat;
-    this.position = {
-      absLSpace: (properties.absLSpace ?? 0) | 0,
-      firstLineOffset: (properties.firstLineOffset ?? 0) | 0,
-      charTextDistance: ((properties.charTextDistance ?? 0) << 16) >> 16,
-      firstLineIndent: properties.firstLineIndent ?? 0,
-      indentAt: properties.indentAt ?? 0,
-      labelFollowedBy: properties.labelFollowedBy ?? "listtab",
-      listTabPosition: properties.listTabPosition ?? 0,
-      positionAndSpaceMode: properties.positionAndSpaceMode ?? "label-width-and-position",
-    };
-    if (typeof format !== "number") {
-      this.cBullet = format.GetBulletChar();
-      const font = format.GetBulletFont();
-      this.pBulletFont = font === undefined ? undefined : Object.freeze(new Font(font));
-    }
+    if (typeof format !== "number") SvxNumberFormat.prototype.Assign.call(this, format);
+  }
+  /** Implements native value assignment without re-deriving raw pattern compatibility or inactive geometry. @param other - Const source. @returns This assigned value. */
+  public Assign(other: ConstSvxNumberFormat): this {
+    if (other === this) return this;
+    this.SetNumberingType(other.GetNumberingType());
+    this.includeUpperLevels = other.GetIncludeUpperLevels();
+    this.start = other.GetStart();
+    this.cBullet = other.GetBulletChar();
+    this.position = other.GetPositionProperties();
+    this.prefix = other.GetPrefix();
+    this.suffix = other.GetSuffix();
+    this.listFormat = other.GetMarkerProperties().listFormat;
+    this.SetShowSymbol(other.IsShowSymbol());
+    this.SetBulletFont(other.GetBulletFont());
+    return this;
   }
   /** Decodes the existing raw position/marker record without re-deriving inactive fields or ListFormat compatibility state. This is a browser transfer/assembly adapter, not a native constructor. @param properties - Raw fields. @param type - Native type. @returns Format. */
   public static FromProperties(
@@ -341,4 +342,4 @@ export class SvxNumberFormat extends SvxNumberType {
 }
 
 /** Const reference to implemented base format fields. */
-export type ConstSvxNumberFormat = Omit<SvxNumberFormat, `Set${string}`>;
+export type ConstSvxNumberFormat = Omit<SvxNumberFormat, `Set${string}` | "Assign">;

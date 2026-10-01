@@ -24,6 +24,7 @@ export class SwNumFormat extends SvxNumberFormat {
   /** Initializes native defaults or copies a const base format. @param format - Optional source format. @returns Nothing. */
   public constructor(format?: ConstSvxNumberFormat) {
     super(format ?? SvxNumType.SVX_NUM_ARABIC);
+    if (format instanceof SwNumFormat) this.client.StartListeningToSameModifyAs(format);
   }
   /** Classifies native character-special and bitmap itemization independently of symbol visibility. @returns Itemize flag. */
   public IsItemize(): boolean {
@@ -42,6 +43,12 @@ export class SwNumFormat extends SvxNumberFormat {
   /** Reads the composed native SwClient registration; JS has one base class. @returns Registered source, initially undefined. */
   public GetRegisteredIn(): SwModify | undefined {
     return this.client.GetRegisteredIn();
+  }
+  /** Implements native base assignment followed by Writer registration transfer. @param other - Const source. @returns Assigned format. */
+  public override Assign(other: ConstSwNumFormat): this {
+    super.Assign(other);
+    this.client.StartListeningToSameModifyAs(other);
+    return this;
   }
   /** Compares implemented base fields and native client registration. @param other - Const Writer format. @returns Equality. */
   public override Equals(other: ConstSwNumFormat): boolean {
@@ -109,7 +116,30 @@ export function getWriterNumFormatBullet(format: ConstSwNumFormat | undefined): 
 }
 
 /** Const format reference: callers clone before changing an owned or shared level. */
-export type ConstSwNumFormat = Omit<SwNumFormat, `Set${string}`>;
+export type ConstSwNumFormat = Omit<SwNumFormat, `Set${string}` | "Assign">;
+
+/** Stable JS const-pointer bridge: native owners stay mutable while exported reads retain identity and reject setters/assignment. */
+const constFormatViews = new WeakMap<SwNumFormat, ConstSwNumFormat>();
+/** Returns the cached protected read view for one native owner. @param owner - Mutable owned format. @returns Stable const reference. */
+function constFormatReference(owner: SwNumFormat): ConstSwNumFormat {
+  const existing = constFormatViews.get(owner);
+  if (existing !== undefined) return existing;
+  const target = Object.freeze(Object.create(SwNumFormat.prototype)) as SwNumFormat;
+  const reference = new Proxy(target, {
+    /** Resolves reads against the current owner, keeping mutation outside the const boundary. @param unused - Frozen facade. @param key - Requested member. @returns Bound reader or protected mutator. */
+    get(unused, key) {
+      void unused;
+      if (String(key).startsWith("Set") || key === "Assign")
+        return /** Rejects a forced runtime const violation. @returns Nothing. */ (): never => {
+          throw new TypeError("Cannot mutate a const SwNumFormat reference; clone it first.");
+        };
+      const member: unknown = Reflect.get(owner, key);
+      return typeof member === "function" ? member.bind(owner) : member;
+    },
+  });
+  constFormatViews.set(owner, reference);
+  return reference;
+}
 
 /** Native numbering-rule classification, independent of the reserved name. */
 export enum SwNumRuleType {
@@ -135,7 +165,7 @@ export class SwNumRule {
 
   private defaultListId = "";
   private automatic = true;
-  private readonly formats: (ConstSwNumFormat | undefined)[] = Array.from({ length: 10 });
+  private readonly formats: (SwNumFormat | undefined)[] = Array.from({ length: 10 });
   private readonly textNodes: SwTextNode[] = [];
   private invalidRuleFlag = true;
   /** Returns native rule classification. @returns Stored type. */
@@ -219,15 +249,38 @@ export class SwNumRule {
   }
   /** Returns only an explicitly owned const format. @param level - Native level. @returns Owned format or undefined for the native null pointer. */
   public GetNumFormat(level: number): ConstSwNumFormat | undefined {
+    this.CheckLevel(level);
+    const owned = this.formats[level];
+    return owned === undefined ? undefined : constFormatReference(owned);
+  }
+  /** Preserves the established browser integer-level input guard independently of const-view creation. @param level - Input level. @returns Nothing. */
+  private CheckLevel(level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwNumRule level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    return this.formats[level];
   }
   /** Copies a changed reference format; equal owned values preserve identity and validity. @param level - Native level. @param format - Const source format. @returns Nothing. */
   public Set(level: number, format: ConstSwNumFormat): void {
-    const owned = this.GetNumFormat(level);
+    this.CheckLevel(level);
+    const owned = this.formats[level];
     if (owned === undefined || !owned.Equals(format)) {
-      this.formats[level] = Object.freeze(format.clone());
+      this.formats[level] = new SwNumFormat(format);
+      this.invalidRuleFlag = true;
+    }
+  }
+  /** Implements the native pointer overload, distinct from reference replacement. @param level - Native level. @param format - Const source pointer or native null as undefined. @returns Nothing. */
+  public SetByPointer(level: number, format: ConstSwNumFormat | undefined): void {
+    this.CheckLevel(level);
+    const owned = this.formats[level];
+    if (owned === undefined) {
+      if (format !== undefined) {
+        this.formats[level] = new SwNumFormat(format);
+        this.invalidRuleFlag = true;
+      }
+    } else if (format === undefined) {
+      this.formats[level] = undefined;
+      this.invalidRuleFlag = true;
+    } else if (!owned.Equals(format)) {
+      owned.Assign(format);
       this.invalidRuleFlag = true;
     }
   }
