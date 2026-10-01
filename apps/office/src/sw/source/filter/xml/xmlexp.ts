@@ -326,8 +326,9 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
             listId,
             level,
             counted: node.IsCountedInList(),
-            ...(node.IsCountedInList() && node.IsListRestart()
-              ? { startValue: node.GetActualListStartValue() }
+            restart: node.IsListRestart(),
+            ...(node.IsListRestart() && node.HasAttrListRestartValue()
+              ? { startValue: node.GetAttrListRestartValue() }
               : {}),
             rule: {
               levels: Array.from(

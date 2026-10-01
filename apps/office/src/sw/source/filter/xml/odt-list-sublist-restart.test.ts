@@ -95,6 +95,7 @@ it("imports native repeated-sublist restart and pending return through real pack
   const baseline = writeOdtDocument(createWriterDocument(), { title: "Sublist" });
   const cases = [
     {
+      gainedStarts: [] as string[],
       body: `<text:list-item><text:p>root</text:p>${list(item("first"))}${list(item("second"))}${list("<text:list-item><text:p>third</text:p><text:p>tail</text:p></text:list-item>")}<text:p>after</text:p></text:list-item>${item("next")}`,
       expected: [
         p("root", 0, true, false, [7]),
@@ -107,6 +108,7 @@ it("imports native repeated-sublist restart and pending return through real pack
       ],
     },
     {
+      gainedStarts: ["second"] as string[],
       body: `<text:list-item>${list("")}${list(item("second") + item("child next"))}<text:p>after</text:p></text:list-item>${item("next")}`,
       expected: [
         p("second", 1, true, true, [7, 5]),
@@ -116,6 +118,7 @@ it("imports native repeated-sublist restart and pending return through real pack
       ],
     },
     {
+      gainedStarts: [] as string[],
       body: `<text:list-item><text:p>root</text:p>${list(item("first"))}${list("")}<text:p>after</text:p></text:list-item>${item("next")}`,
       expected: [
         p("root", 0, true, false, [7]),
@@ -125,6 +128,7 @@ it("imports native repeated-sublist restart and pending return through real pack
       ],
     },
     {
+      gainedStarts: [] as string[],
       body: `<text:list-item><text:p>root</text:p>${list(item("first"))}${list("<text:list-header><text:p>header</text:p></text:list-header>" + item("second"))}<text:p>after</text:p></text:list-item>`,
       expected: [
         p("root", 0, true, false, [7]),
@@ -135,6 +139,7 @@ it("imports native repeated-sublist restart and pending return through real pack
       ],
     },
     {
+      gainedStarts: ["deep"] as string[],
       body: `<text:list-item><text:p>root</text:p>${list(item("first"))}${list(`<text:list-item>${list(item("deep"))}<text:p>parent tail</text:p></text:list-item>`)}<text:p>after</text:p></text:list-item>`,
       expected: [
         p("root", 0, true, false, [7]),
@@ -145,6 +150,7 @@ it("imports native repeated-sublist restart and pending return through real pack
       ],
     },
     {
+      gainedStarts: [] as string[],
       body: `<text:list-item><text:p>root</text:p>${list(item("first"))}${list(`<text:list-item>${list("")}</text:list-item>`)}<text:p>after</text:p></text:list-item>${item("next")}`,
       expected: [
         p("root", 0, true, false, [7]),
@@ -154,6 +160,7 @@ it("imports native repeated-sublist restart and pending return through real pack
       ],
     },
     {
+      gainedStarts: [] as string[],
       body: `<text:list-item><text:p>root</text:p>${list(item("first"))}${list(item("second"))}</text:list-item><text:list-item><text:p>next</text:p>${list(item("new first"))}</text:list-item>`,
       expected: [
         p("root", 0, true, false, [7]),
@@ -164,6 +171,7 @@ it("imports native repeated-sublist restart and pending return through real pack
       ],
     },
     {
+      gainedStarts: [] as string[],
       body: `<text:list-item text:start-value="0"><text:p>root</text:p>${list('<text:list-item text:start-value="2"><text:p>first</text:p></text:list-item>')}${list('<text:list-item text:start-value="0"><text:p>second</text:p><text:p>tail</text:p></text:list-item>')}<text:p>after</text:p></text:list-item>${item("next")}`,
       expected: [
         p("root", 0, true, true, [0], 0),
@@ -234,13 +242,25 @@ it("imports native repeated-sublist restart and pending return through real pack
         const exported = writeOdtDocument(imported, { title: "Sublist" });
         const xml = await new ZipFile(exported).readTextEntry("content.xml");
         expect(xml).toContain('office:version="1.3"');
-        for (const paragraph of expected)
-          if (paragraph.restart && paragraph.counted)
-            expect(xml).toContain(`text:start-value="${paragraph.start}"`);
+        const starts = [...xml.matchAll(/<text:list-item[^>]*text:start-value="([^"]*)"/gu)].map(
+          /** Reads actual item attributes rather than style starts. @param match - Item. @returns Start. */
+          (match) => Number(match[1]),
+        );
+        expect(starts).toEqual(
+          expected
+            .filter(
+              /** Selects direct starts and literal new-level fallback paragraphs. @param paragraph - State. @returns Whether emitted. */
+              (paragraph) =>
+                paragraph.explicit !== undefined || test.gainedStarts.includes(paragraph.text),
+            )
+            .map(
+              /** Reads the independently asserted start. @param paragraph - State. @returns Start. */
+              (paragraph) => paragraph.start,
+            ),
+        );
         const reopened = (await readOdtDocument(exported, { title: "Sublist" })).document;
-        // Current export canonicalizes counted implicit restart to an explicit start.
-        // Native same-level nested restart splitting is a separate export audit obligation.
-        // Native NumberingIsNumber projection drops uncounted restart metadata.
+        // Native same-level implicit restart splits without a direct start.
+        // Newly opened levels may gain a fallback; uncounted restart is omitted.
         expect(state(reopened)).toEqual(
           expected.map(
             /** Applies the documented bounded export projection. @param paragraph - Imported state. @returns Reopened state. */ (
@@ -249,7 +269,8 @@ it("imports native repeated-sublist restart and pending return through real pack
               ...paragraph,
               restart: paragraph.counted && paragraph.restart,
               explicit:
-                paragraph.counted && paragraph.restart ? paragraph.start : paragraph.explicit,
+                paragraph.explicit ??
+                (test.gainedStarts.includes(paragraph.text) ? paragraph.start : undefined),
             }),
           ),
         );

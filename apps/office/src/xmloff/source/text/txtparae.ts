@@ -2,6 +2,8 @@
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
 
+import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
+
 export { ODF_NAMESPACES } from "../core/xmltoken";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
@@ -109,7 +111,9 @@ export interface XMLTextListSource {
   readonly level: number;
   /** Document numbering rule. */
   readonly rule: XMLTextListRuleSource;
-  /** Explicit value for a list item that restarts numbering. */
+  /** Native ParaIsNumberingRestart, independent of a direct start value. */
+  readonly restart?: boolean;
+  /** Native NumberingStartValue; absence remains distinct from the format start. */
   readonly startValue?: number;
 }
 
@@ -350,6 +354,7 @@ function exportParagraphBody(
   const openItems: Array<"list-item" | "list-header"> = [];
   const listIdentities = new Map<string, { readonly rootId: string; segments: number }>();
   const usedXmlIds = new Set<string>();
+  const info = new XMLTextNumRuleInfo();
 
   /** Closes every currently open list item and list. @returns Nothing. */
   function closeAllLists(): void {
@@ -368,6 +373,7 @@ function exportParagraphBody(
   ): void {
     const styleName = listStyleNames.get(paragraphList.rule.name) as string;
     let identityAttributes = "";
+    let restartAtContinuedList = !root;
     if (root) {
       const prior = listIdentities.get(paragraphList.listId);
       if (prior === undefined) {
@@ -375,16 +381,20 @@ function exportParagraphBody(
         listIdentities.set(paragraphList.listId, { rootId, segments: 1 });
         identityAttributes = ` xml:id="${rootId}"`;
       } else {
+        restartAtContinuedList = true;
         prior.segments += 1;
         const segmentId = createXmlId(`${prior.rootId}-${prior.segments}`, usedXmlIds);
         identityAttributes = ` xml:id="${segmentId}" text:continue-list="${prior.rootId}"`;
       }
     }
-    const startValue =
-      includeStartValue && paragraphList.counted !== false && paragraphList.startValue !== undefined
-        ? ` text:start-value="${paragraphList.startValue}"`
-        : "";
-    const item = includeStartValue && paragraphList.counted === false ? "list-header" : "list-item";
+    const startValue = includeStartValue
+      ? info.HasStartValue()
+        ? ` text:start-value="${info.GetStartValue()}"`
+        : restartAtContinuedList && info.IsRestart()
+          ? ` text:start-value="${info.GetListLevelStartValue()}"`
+          : ""
+      : "";
+    const item = includeStartValue && !info.IsNumbered() ? "list-header" : "list-item";
     body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:${item}${startValue}>`;
     openItems.push(item);
     openRules.push(paragraphList.rule.name);
@@ -397,21 +407,22 @@ function exportParagraphBody(
       paragraphStyleNames,
       characterStyleNames,
     );
+    info.Set(paragraph.list);
     if (paragraph.list === undefined) {
       closeAllLists();
       body += paragraphXml;
       continue;
     }
     const list = paragraph.list;
-    const currentRuleAtLevel = openRules[list.level];
+    const currentRuleAtLevel = openRules[info.GetLevel() - 1];
     if (
       activeListId !== undefined &&
-      (activeListId !== list.listId ||
-        (currentRuleAtLevel !== undefined && currentRuleAtLevel !== list.rule.name))
+      (activeListId !== info.GetListId() ||
+        (currentRuleAtLevel !== undefined && currentRuleAtLevel !== info.GetNumRulesName()))
     )
       closeAllLists();
     if (openRules.length === 0) {
-      activeListId = list.listId;
+      activeListId = info.GetListId();
       for (let level = 0; level <= list.level; level += 1)
         openListLevel(list, level === 0, level === list.level);
     } else if (list.level >= openRules.length) {
@@ -422,8 +433,16 @@ function exportParagraphBody(
         body += `</text:${openItems.pop()}></text:list>`;
         openRules.pop();
       }
-      if (list.counted !== false) {
-        body += `</text:${openItems.pop()}><text:list-item${list.startValue === undefined ? "" : ` text:start-value="${list.startValue}"`}>`;
+      if (info.IsNumbered()) {
+        body += `</text:${openItems.pop()}>`;
+        if (info.IsRestart() && !info.HasStartValue() && info.GetLevel() !== 1)
+          body += "</text:list><text:list>";
+        const startValue = info.HasStartValue()
+          ? ` text:start-value="${info.GetStartValue()}"`
+          : info.IsRestart() && info.GetLevel() === 1
+            ? ` text:start-value="${info.GetListLevelStartValue()}"`
+            : "";
+        body += `<text:list-item${startValue}>`;
         openItems.push("list-item");
       }
     }
@@ -538,7 +557,9 @@ function assertList(list: XMLTextListSource): void {
   if (list.listId.length === 0 || list.rule.name.length === 0)
     throw new Error("ODF list identity and rule name must not be blank.");
   if (
+    list.counted !== false &&
     list.startValue !== undefined &&
+    list.startValue !== -1 &&
     (!Number.isInteger(list.startValue) || list.startValue < 0 || list.startValue > 32_767)
   )
     throw new Error("ODF list start value is outside the supported range.");
