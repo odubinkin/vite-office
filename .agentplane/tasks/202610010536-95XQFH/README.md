@@ -4,7 +4,7 @@ title: "Restore Writer numbering transitions on paragraph style changes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved persistent parity goal;restore native numbering transitions on explicit paragraph style switches,pooled outline dependencies and exact affected undo state;preserve IO exceptions and all verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T06:56:55.381Z"
+doc_updated_at: "2026-10-01T07:04:26.932Z"
 doc_updated_by: "CODER"
 description: "Iteration37 of approved persistent parity goal:implement native ChgFormatColl/HandleModifyAtTextNodeFormatChange/HandleApplyTextNodeFormatChange and existing assigned-heading level updates;restore owned rule/list state,outline suppression attributes and exact undo. Preserve registered document IO deviations and unchanged gates."
 sections:
@@ -52,6 +52,8 @@ sections:
     Full verify-full.log failed 4 of 680 tests: three obsolete unsupported-attribute diagnostic expectations and one actual Worker restore direct-level mismatch. The source-backed diagnostics were updated; restore now applies collection without defaults and replaces exact direct items. assignment-baseline.json separately proves legacy/deleted assignment loss; explicit assignment is retained independently with absent-field pool-factory compatibility. Focused 5 ODT suites passed34 tests after repairs. Latest unchanged native bodies match277 sequences/10394 actual states. Focused helper/unsigned coverage passes12 tests with100% statements/branches/functions/lines (41/41,41/41,8/8,38/38). SwContentNode::SetAttr and SfxItemSet::PutImpl were read to confirm direct default-valued items are retained. Final unchanged full verification pending.
 
     Command: npm run verify (verify-final.log); Result: fail; Evidence: 681/682 tests pass,153 files; unchanged WriterMenuBar accessible-menu test exceeds existing30000ms timeout (36800ms),no failed semantic assertion; Scope: full app stage,downstream coverage/inventory/browser/static not reached. Command: npx vitest run src/sw/browser/presentation/WriterMenuBar.test.tsx (menu-isolated.log); Result: pass9 tests; Evidence:26.25s total,20.69s tests with unchanged source/assertions/config; Scope: bounded reproduction only,root cause of full-run timeout unproven. Full unchanged verification will be repeated;no gate waiver. CLI route/verify guidance initially attempted from apps/office rejected E_GIT;recomputed route and ran exact guidance from repository root.
+
+    Command: npm run verify (verify-rerun.log); Result: app tests pass682/682 in153 files,coverage gate fail; Evidence:10330/10331 statements,7827/7828 branches,2827/2827 functions,9490/9491 lines. Single uncovered xmlexp unsupported-direct-item rejection remained after named NUMRULE/OUTLINE support replaced the old unsupported named-rule fixture. Added real direct paragraph outline level4 rejection and state-retention assertions;general direct-outline ODT export remains an explicit residual rather than silently dropping the item. Focused canonical-state test first had imprecise error owner substring;corrected to existing paragraph-at-node context,then passes. No production or gate changes after latest full app pass;complete unchanged verify pending.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +87,5 @@ Command: actual baseline.ts before runtime edits;Result: confirmed mismatch;Evid
 Full verify-full.log failed 4 of 680 tests: three obsolete unsupported-attribute diagnostic expectations and one actual Worker restore direct-level mismatch. The source-backed diagnostics were updated; restore now applies collection without defaults and replaces exact direct items. assignment-baseline.json separately proves legacy/deleted assignment loss; explicit assignment is retained independently with absent-field pool-factory compatibility. Focused 5 ODT suites passed34 tests after repairs. Latest unchanged native bodies match277 sequences/10394 actual states. Focused helper/unsigned coverage passes12 tests with100% statements/branches/functions/lines (41/41,41/41,8/8,38/38). SwContentNode::SetAttr and SfxItemSet::PutImpl were read to confirm direct default-valued items are retained. Final unchanged full verification pending.
 
 Command: npm run verify (verify-final.log); Result: fail; Evidence: 681/682 tests pass,153 files; unchanged WriterMenuBar accessible-menu test exceeds existing30000ms timeout (36800ms),no failed semantic assertion; Scope: full app stage,downstream coverage/inventory/browser/static not reached. Command: npx vitest run src/sw/browser/presentation/WriterMenuBar.test.tsx (menu-isolated.log); Result: pass9 tests; Evidence:26.25s total,20.69s tests with unchanged source/assertions/config; Scope: bounded reproduction only,root cause of full-run timeout unproven. Full unchanged verification will be repeated;no gate waiver. CLI route/verify guidance initially attempted from apps/office rejected E_GIT;recomputed route and ran exact guidance from repository root.
+
+Command: npm run verify (verify-rerun.log); Result: app tests pass682/682 in153 files,coverage gate fail; Evidence:10330/10331 statements,7827/7828 branches,2827/2827 functions,9490/9491 lines. Single uncovered xmlexp unsupported-direct-item rejection remained after named NUMRULE/OUTLINE support replaced the old unsupported named-rule fixture. Added real direct paragraph outline level4 rejection and state-retention assertions;general direct-outline ODT export remains an explicit residual rather than silently dropping the item. Focused canonical-state test first had imprecise error owner substring;corrected to existing paragraph-at-node context,then passes. No production or gate changes after latest full app pass;complete unchanged verify pending.
