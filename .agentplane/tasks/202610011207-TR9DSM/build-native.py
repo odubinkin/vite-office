@@ -33,6 +33,16 @@ int main(){std::cout<<"{\\\"defaults\\\":[";for(int type:{4,5,6,8}){if(type!=4)s
 SvxNumberFormat f(4);Font source;f.SetBulletFont(&source);state(f);Font copied(source);source.SetFamilyName("changed");std::cout<<",";state(f);source.SetFamilyName("OpenSymbol");f.SetBulletFont(&source);SvxNumberFormat copy(f);source.SetFamilyName("changed-again");std::cout<<",";state(copy);copy.SetBulletFont(nullptr);std::cout<<",";state(copy);std::cout<<"],\\\"equality\\\":[";
 for(int change=0;change<6;change++){if(change)std::cout<<",";SwNumFormat a,b(a);switch(change){case 1:b.SetShowSymbol(false);break;case 2:b.SetNumberingType(5);break;case 3:b.SetBulletChar(128578);break;case 4:b.SetBulletFont(&copied);break;case 5:b.SetBulletFont(&source);break;}std::cout<<(a==b?"true":"false");}std::cout<<"]}";}
 '''
+# Inline getters/setters are also inserted verbatim from their native header bodies.
+header='include/editeng/numitem.hxx'
+inline=[body(header,sig).strip() for sig in ['    void            SetNumberingType(', '    SvxNumType      GetNumberingType()', '    void            SetShowSymbol(', '    bool            IsShowSymbol()']]
+start=old.index(' int GetNumberingType()const{return nNumType;}')
+end=old.index(' };',start)
+old=old[:start]+'\n'+'\n'.join(inline)+old[end:]
+glyphSetter=body(header,'    void            SetBulletChar(').strip()
+old=old.replace('void SetBulletChar(int n){cBullet=n;}',glyphSetter)
+old=old.replace('SvxNumberFormat(SvxNumType);',body(header,'    const std::optional<vcl::Font>& GetBulletFont()').strip()+'\n'+body(header,'    sal_UCS4        GetBulletChar()').strip()+'\n SvxNumberFormat(SvxNumType);')
+old=old.replace('<<f.cBullet<<','<<f.GetBulletChar()<<')
 (out/'native-format-values.cxx').write_text(old)
 # Complete native NumberType bodies with a named bounded provider, no UNO service initialization equivalence claim.
 preamble=r'''
@@ -65,13 +75,17 @@ for sig in ['SvxNumberType::SvxNumberType(SvxNumType nType)','SvxNumberType::Svx
 preamble+=r'''
 int main(){std::cout<<"[";bool first=true;for(int type:{4,5,6,8})for(bool show:{true,false})for(bool legal:{false,true})for(int64_t input:{int64_t(0),int64_t(1),int64_t(7),int64_t(-1),int64_t(32767),int64_t(65535),int64_t(2147483647),int64_t(2147483648),int64_t(4294967295)}){SvxNumberType original(type);original.SetShowSymbol(show);SvxNumberType copy(original);if(!first)std::cout<<",";first=false;auto s=copy.GetNumStr(static_cast<sal_Int32>(input),{},legal);std::cout<<"["<<type<<","<<(show?"true":"false")<<","<<(legal?"true":"false")<<","<<input<<",\""<<s.text<<"\","<<(copy.IsTextFormat()?"true":"false")<<"]";}std::cout<<"]";}
 '''
+start=preamble.index('void SetNumberingType(SvxNumType nSet){nNumType=nSet;}')
+end=preamble.index('};',start)
+isText=body(header,'    bool            IsTextFormat() const').strip()
+preamble=preamble[:start]+'\n'+'\n'.join(inline)+'\n'+isText+preamble[end:]
 (out/'native-number-type.cxx').write_text(preamble)
 (out/'native-source-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':manifest,'scope':'Complete native bodies unchanged. Named platform adapters bound to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. No native global lifetime, other Font attributes/equality, graphics, style registrations or wider numbering family equivalence.'},indent=2)+'\n')
 
 # Previously extracted format/Writer bodies must still exactly match their pinned complete source definitions.
 for path, signatures in [
  (num, ['SvxNumberFormat::SvxNumberFormat( SvxNumType eType )', 'SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat)', 'SvxNumberFormat& SvxNumberFormat::operator=', 'bool  SvxNumberFormat::operator==']),
- ('sw/source/core/doc/number.cxx', ['SwNumFormat::SwNumFormat()', 'SwNumFormat::SwNumFormat(const SwNumFormat& rNumFormat)', 'bool SwNumFormat::operator=='])]:
+ ('sw/source/core/doc/number.cxx', ['SwNumFormat::SwNumFormat()', 'SwNumFormat::SwNumFormat( const SwNumFormat& rFormat)', 'bool SwNumFormat::operator=='])]:
  for signature in signatures:
   text=body(path,signature)
   assert text in old, signature

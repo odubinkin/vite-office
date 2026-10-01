@@ -42,6 +42,41 @@
       "sha256": "24be3e0112c2e2fc2580493e16ae7163597ab6288fb4233212b0ea83cd285ac2"
     },
     {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    void            SetNumberingType(",
+      "sha256": "b2de20df0fd453ef0706994f65e3d9ade5b8b31bba4eac708223261183955764"
+    },
+    {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    SvxNumType      GetNumberingType()",
+      "sha256": "7f3a33d863747f0cf0cb456e2dd93a0981ef8d090cc473f9047788e93c656b7b"
+    },
+    {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    void            SetShowSymbol(",
+      "sha256": "c944d524cce736be0f30f0e1ed000bb4fa170ea36f6f9c0b89bccff0077636da"
+    },
+    {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    bool            IsShowSymbol()",
+      "sha256": "4252463321deab4f15f1d54ec9dfddd5281b0ba544a0b383f6af928ed7588939"
+    },
+    {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    void            SetBulletChar(",
+      "sha256": "eaca3d4b5ff9582070c97f3569f0a9879ad52789eee4ec03663572fd3276477e"
+    },
+    {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    const std::optional<vcl::Font>& GetBulletFont()",
+      "sha256": "bacdc44112a22b32f52e9ca701400a2a1b4751c2454fef5b9ac12046df07c74b"
+    },
+    {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    sal_UCS4        GetBulletChar()",
+      "sha256": "2f6d64e00135dcdeb842e2e936a34fbc9c125985fc4d448240be065548540593"
+    },
+    {
       "path": "editeng/source/items/numitem.cxx",
       "signature": "SvxNumberType::SvxNumberType(SvxNumType nType)",
       "sha256": "43fc518d3c5aa1d58f01b3fdc874ce37d84cfb9efe42d9309805140f0e013be2"
@@ -65,7 +100,81 @@
       "path": "editeng/source/items/numitem.cxx",
       "signature": "OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale, bool bIsLegal ) const",
       "sha256": "d538805d9bb371b4758117d68699ba2e0332b372f2c382ff1168993248fb440b"
+    },
+    {
+      "path": "include/editeng/numitem.hxx",
+      "signature": "    bool            IsTextFormat() const",
+      "sha256": "9458a411493a83728c3910e81e159ca311a044fcac075e8af78aecbe24fcca80"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberFormat::SvxNumberFormat( SvxNumType eType )",
+      "sha256": "3f2e256217da46b01878bec9d742d15b719a57decb7649e26e67ef9045b7a8c4"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat)",
+      "sha256": "6839c7e19b233417ceac762aef07470d54753050d262f98813c5b019dc807695"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberFormat& SvxNumberFormat::operator=",
+      "sha256": "ae5367708e2a7d68343eb502b9af2e4f8f55b9534ad29ed33f04958203d038a8"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "bool  SvxNumberFormat::operator==",
+      "sha256": "dcef428a6a4c1448316835f464a7c2d8fe558ab5d8835971c3d4507eb8005ccc"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumFormat::SwNumFormat()",
+      "sha256": "32abd026b6ece4cfe8749b8aad697378a30aafe12986ec7009c8da3b3a7da186"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumFormat::SwNumFormat( const SwNumFormat& rFormat)",
+      "sha256": "072939049928faf9ea9c164fd3fe535706ec8fd0b7fefb7021147d0f36e0f508"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "bool SwNumFormat::operator==",
+      "sha256": "2f69e5ba55c36e1db05997f1087eeed5132068ac50e1cbbcf34cc64476e3e63b"
+    },
+    {
+      "path": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+      "markers": [
+        "if( number <= 0 )",
+        "case ARABIC:",
+        "case NUMBER_NONE:"
+      ],
+      "fileSha256": "8e185e8fcd3ce00e3ceb8341161fc4e114fd24a64fbcdf484fb79c5d7cf9eef6"
+    },
+    {
+      "path": "include/editeng/numdef.hxx",
+      "markers": [
+        "#define SVX_DEF_BULLET (0xF000 + 149)"
+      ],
+      "fileSha256": "ceeb35c08edc54db9a63ad932999624a6e4013b3e6e4692eaeb443bfbb4b0dc9"
+    },
+    {
+      "path": "offapi/com/sun/star/style/NumberingType.idl",
+      "markers": [
+        "const short ARABIC = 4;",
+        "const short NUMBER_NONE = 5;",
+        "const short CHAR_SPECIAL = 6;",
+        "const short BITMAP = 8;"
+      ],
+      "fileSha256": "d6700269e1e6d8c3007743b5ec2d5b9f83b4295b561c4cd85c39472426a43dd9"
+    },
+    {
+      "path": "editeng/Library_editeng.mk",
+      "markers": [
+        "gb_Library_use_libraries,editeng",
+        "    vcl "
+      ],
+      "fileSha256": "3f7094d9e143914cfc3db46828ebc2fb37efeafe136a492bef69047cd5d4753a"
     }
   ],
-  "scope": "Complete native bodies unchanged. Named platform adapters bound to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. No native global lifetime, other Font attributes/equality, graphics, style registrations or wider numbering family equivalence."
+  "scope": "Complete native bodies unchanged. Named platform adapters bounded to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. Inline header getters/setters are represented in profile declarations; full UNO provider/initialization/global lifetime/Font attributes/equality/graphics/style registrations and wider numbering families remain unverified."
 }

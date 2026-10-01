@@ -51,7 +51,11 @@ OUString operator""_ustr(const char16_t* s,size_t){return OUString(s);}
 using UIName=OUString;
 
 // Native service lifetime is not asserted by this format-value profile.
-struct SvxNumberType { static inline int nRefCount=0; int nNumType; bool bShowSymbol; SvxNumberType(SvxNumType);SvxNumberType(const SvxNumberType&); int GetNumberingType()const{return nNumType;}void SetNumberingType(int nSet){nNumType=nSet;}bool IsShowSymbol()const{return bShowSymbol;}void SetShowSymbol(bool bSet){bShowSymbol=bSet;} };
+struct SvxNumberType { static inline int nRefCount=0; int nNumType; bool bShowSymbol; SvxNumberType(SvxNumType);SvxNumberType(const SvxNumberType&);
+void            SetNumberingType(SvxNumType nSet) {nNumType = nSet;}
+SvxNumType      GetNumberingType() const {return nNumType;}
+void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
+bool            IsShowSymbol()const{return bShowSymbol;} };
 SvxNumberType::SvxNumberType(SvxNumType nType) :
     nNumType(nType),
     bShowSymbol(true)
@@ -93,10 +97,12 @@ struct SvxNumberFormat:SvxNumberType {
  int meLabelFollowedBy;tools::Long mnListtabPos,mnFirstLineIndent,mnIndentAt;
  OUString sPrefix,sSuffix,sCharStyleName;std::optional<OUString>sListFormat;Size aGraphicSize;bool mbIsLegal=false;
  std::unique_ptr<SvxBrushItem>pGraphicBrush;std::optional<Font>pBulletFont;
+ const std::optional<vcl::Font>& GetBulletFont() const { return pBulletFont; }
+sal_UCS4        GetBulletChar()const {return cBullet;}
  SvxNumberFormat(SvxNumType);SvxNumberFormat(const SvxNumberFormat&);SvxNumberFormat&operator=(const SvxNumberFormat&);bool operator==(const SvxNumberFormat&)const;
  void SetBulletFont(const vcl::Font*);void SetPrefix(const OUString&);void SetSuffix(const OUString&);void SetListFormat(const OUString&,const OUString&,int);void SetListFormat(std::optional<OUString>);OUString GetListFormat(bool=true)const;
  void SetIncludeUpperLevels(int n){nInclUpperLevels=n;}void SetStart(int n){nStart=n;}void SetAbsLSpace(int n){nAbsLSpace=n;}void SetFirstLineOffset(int n){nFirstLineOffset=n;}
- void SetBulletChar(int n){cBullet=n;}void SetPositionAndSpaceMode(SvxNumPositionAndSpaceMode n){mePositionAndSpaceMode=n;}void SetLabelFollowedBy(int n){meLabelFollowedBy=n;}
+ void            SetBulletChar(sal_UCS4 cSet){cBullet = cSet;}void SetPositionAndSpaceMode(SvxNumPositionAndSpaceMode n){mePositionAndSpaceMode=n;}void SetLabelFollowedBy(int n){meLabelFollowedBy=n;}
  void SetListtabPos(int n){mnListtabPos=n;}void SetFirstLineIndent(int n){mnFirstLineIndent=n;}void SetIndentAt(int n){mnIndentAt=n;}void SetCharTextDistance(int n){nCharTextDistance=n;}
  const OUString&GetPrefix()const{return sPrefix;}const OUString&GetSuffix()const{return sSuffix;}int GetIncludeUpperLevels()const{return nInclUpperLevels;}int GetVertOrient()const{return eVertOrient;}
  bool HasListFormat()const{return sListFormat.has_value();}const SvxBrushItem*GetBrush()const{return pGraphicBrush.get();}const Size&GetGraphicSize()const{return aGraphicSize;}
@@ -562,7 +568,7 @@ void SvxNumberFormat::SetBulletFont(const vcl::Font* pFont)
     else
         pBulletFont.reset();
 }
-void state(const SvxNumberFormat&f){std::cout<<"["<<f.GetNumberingType()<<","<<(f.IsShowSymbol()?"true":"false")<<","<<f.cBullet<<","<<(f.pBulletFont?"true":"false")<<",\""<<(f.pBulletFont?f.pBulletFont->GetFamilyName().value:"")<<"\","<<int(f.nStart)<<","<<int(f.nInclUpperLevels)<<","<<f.nAbsLSpace<<","<<f.nFirstLineOffset<<","<<f.nCharTextDistance<<","<<f.mnFirstLineIndent<<","<<f.mnIndentAt<<","<<f.mnListtabPos<<","<<f.meLabelFollowedBy<<","<<f.mePositionAndSpaceMode<<",\""<<f.sPrefix.value<<"\",\""<<f.sSuffix.value<<"\","<<(f.HasListFormat()?"true":"false")<<"]";}
+void state(const SvxNumberFormat&f){std::cout<<"["<<f.GetNumberingType()<<","<<(f.IsShowSymbol()?"true":"false")<<","<<f.GetBulletChar()<<","<<(f.pBulletFont?"true":"false")<<",\""<<(f.pBulletFont?f.pBulletFont->GetFamilyName().value:"")<<"\","<<int(f.nStart)<<","<<int(f.nInclUpperLevels)<<","<<f.nAbsLSpace<<","<<f.nFirstLineOffset<<","<<f.nCharTextDistance<<","<<f.mnFirstLineIndent<<","<<f.mnIndentAt<<","<<f.mnListtabPos<<","<<f.meLabelFollowedBy<<","<<f.mePositionAndSpaceMode<<",\""<<f.sPrefix.value<<"\",\""<<f.sSuffix.value<<"\","<<(f.HasListFormat()?"true":"false")<<"]";}
 int main(){std::cout<<"{\"defaults\":[";for(int type:{4,5,6,8}){if(type!=4)std::cout<<",";SvxNumberFormat f(type);state(f);}SwNumFormat sw;std::cout<<",";state(sw);std::cout<<"],\"glyphs\":[";bool first=true;for(int64_t v:{int64_t(0),int64_t(1),int64_t(61589),int64_t(128578),int64_t(4294967295),int64_t(-1)}){if(!first)std::cout<<",";first=false;SwNumFormat f;f.SetBulletChar(v);SwNumFormat copy(f);state(copy);}std::cout<<"],\"fonts\":[";
 SvxNumberFormat f(4);Font source;f.SetBulletFont(&source);state(f);Font copied(source);source.SetFamilyName("changed");std::cout<<",";state(f);source.SetFamilyName("OpenSymbol");f.SetBulletFont(&source);SvxNumberFormat copy(f);source.SetFamilyName("changed-again");std::cout<<",";state(copy);copy.SetBulletFont(nullptr);std::cout<<",";state(copy);std::cout<<"],\"equality\":[";
 for(int change=0;change<6;change++){if(change)std::cout<<",";SwNumFormat a,b(a);switch(change){case 1:b.SetShowSymbol(false);break;case 2:b.SetNumberingType(5);break;case 3:b.SetBulletChar(128578);break;case 4:b.SetBulletFont(&copied);break;case 5:b.SetBulletFont(&source);break;}std::cout<<(a==b?"true":"false");}std::cout<<"]}";}

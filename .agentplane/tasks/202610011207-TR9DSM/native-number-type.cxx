@@ -20,8 +20,17 @@ struct Formatter {OUString makeNumberingString(const Sequence<PropertyValue>&p,c
 struct Reference {std::shared_ptr<Formatter>ptr;bool is()const{return bool(ptr);}Formatter*operator->()const{return ptr.get();}Reference&operator=(std::nullptr_t){ptr.reset();return *this;}};
 void lcl_getFormatter(Reference&r){if(!r.is())r.ptr=std::make_shared<Formatter>();}
 struct SvxNumberType {static inline int nRefCount=0;static inline Reference xFormatter;int nNumType;bool bShowSymbol;SvxNumberType(SvxNumType);SvxNumberType(const SvxNumberType&);~SvxNumberType();OUString GetNumStr(sal_Int32,const css::lang::Locale&,bool=false)const;
-void SetNumberingType(SvxNumType nSet){nNumType=nSet;}SvxNumType GetNumberingType()const{return nNumType;}void SetShowSymbol(bool bSet){bShowSymbol=bSet;}bool IsShowSymbol()const{return bShowSymbol;}
-bool IsTextFormat()const{return css::style::NumberingType::NUMBER_NONE!=nNumType&&css::style::NumberingType::CHAR_SPECIAL!=nNumType&&css::style::NumberingType::BITMAP!=nNumType;}};
+
+void            SetNumberingType(SvxNumType nSet) {nNumType = nSet;}
+SvxNumType      GetNumberingType() const {return nNumType;}
+void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
+bool            IsShowSymbol()const{return bShowSymbol;}
+bool            IsTextFormat() const
+                    {
+                        return css::style::NumberingType::NUMBER_NONE != nNumType &&
+                               css::style::NumberingType::CHAR_SPECIAL != nNumType &&
+                               css::style::NumberingType::BITMAP != nNumType;
+                    }};
 
 SvxNumberType::SvxNumberType(SvxNumType nType) :
     nNumType(nType),
