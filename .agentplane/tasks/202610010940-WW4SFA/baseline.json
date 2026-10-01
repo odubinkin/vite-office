@@ -1,0 +1,20 @@
+[
+  {
+    "reading": false,
+    "poolDefault": 0,
+    "nodeDefault": 0,
+    "state": 0,
+    "hasDirect": false,
+    "restart": false,
+    "clearDelta": 0
+  },
+  {
+    "reading": true,
+    "poolDefault": 0,
+    "nodeDefault": 0,
+    "state": 0,
+    "hasDirect": false,
+    "restart": false,
+    "clearDelta": 0
+  }
+]
