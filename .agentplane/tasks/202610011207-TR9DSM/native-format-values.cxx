@@ -66,7 +66,7 @@ SvxNumberType::SvxNumberType(const SvxNumberType& rType) :
 }
 // Named family-only ImplFont and COW platform adapter. Native other Font attributes/equality remain unverified.
 struct ImplFont { OUString name; const OUString&GetFamilyName()const{return name;}void SetFamilyName(const OUString&s){name=s;} };
-struct FontCow { std::shared_ptr<ImplFont> ptr=std::make_shared<ImplFont>();const ImplFont*operator->()const{return ptr.get();}ImplFont*operator->(){if(!ptr.unique())ptr=std::make_shared<ImplFont>(*ptr);return ptr.get();} };
+struct FontCow { std::shared_ptr<ImplFont> ptr=std::make_shared<ImplFont>();const ImplFont*operator->()const{return ptr.get();}ImplFont*operator->(){if(ptr.use_count()!=1)ptr=std::make_shared<ImplFont>(*ptr);return ptr.get();} };
 namespace vcl {struct Font {using ImplType=FontCow;ImplType mpImplFont;Font();Font(const Font&);const OUString&GetFamilyName()const;void SetFamilyName(const OUString&);bool operator==(const Font&r)const{return GetFamilyName()==r.GetFamilyName();} };}
 using vcl::Font;
 Font::ImplType& GetGlobalDefault()

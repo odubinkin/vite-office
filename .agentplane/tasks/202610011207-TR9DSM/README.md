@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:31:48.862Z"
+doc_updated_at: "2026-10-01T12:35:23.084Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -77,6 +77,10 @@ sections:
     - Observation: The first native format-value harness build fails because this C++20 library removes shared_ptr::unique(). type-fourth.log passes both tool and application compilation.
       Impact: Native Font COW platform adapter must use the supported reference-count query; source bodies are unchanged.
       Resolution: Use use_count() != 1 in the named COW adapter, preserve native-format-build.log, and rebuild with ASan/UBSan.
+
+    - Observation: Both native harnesses execute 21 format-value states and 144 NumberType traces without ASan/UBSan diagnostics. Import migration pushes ndtxt.ts to 1005 lines.
+      Impact: The unchanged file-size gate requires a small source-owned caller cleanup; broader native services, Font attributes and registered-client branches remain unverified.
+      Resolution: Preserve the literal oracle fixture and failed size log. Keep Font-family assembly inside the editeng transfer adapter so Writer core adds no vcl dependency and existing adapter gates remain strict. Consolidate repeated text-node rule reads to stay within the size limit without exclusions.
 id_source: "generated"
 ---
 ## Summary
@@ -129,3 +133,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: The first native format-value harness build fails because this C++20 library removes shared_ptr::unique(). type-fourth.log passes both tool and application compilation.
   Impact: Native Font COW platform adapter must use the supported reference-count query; source bodies are unchanged.
   Resolution: Use use_count() != 1 in the named COW adapter, preserve native-format-build.log, and rebuild with ASan/UBSan.
+
+- Observation: Both native harnesses execute 21 format-value states and 144 NumberType traces without ASan/UBSan diagnostics. Import migration pushes ndtxt.ts to 1005 lines.
+  Impact: The unchanged file-size gate requires a small source-owned caller cleanup; broader native services, Font attributes and registered-client branches remain unverified.
+  Resolution: Preserve the literal oracle fixture and failed size log. Keep Font-family assembly inside the editeng transfer adapter so Writer core adds no vcl dependency and existing adapter gates remain strict. Consolidate repeated text-node rule reads to stay within the size limit without exclusions.

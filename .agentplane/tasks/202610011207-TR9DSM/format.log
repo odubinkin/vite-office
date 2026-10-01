@@ -1,0 +1,27 @@
+apps/office/src/editeng/inc/svxenum.ts 23ms (unchanged)
+apps/office/src/vcl/source/font/font.ts 11ms
+apps/office/src/sw/source/core/doc/number-format.test.ts 23ms
+apps/office/src/sw/source/core/doc/number-format-native.json 17ms
+apps/office/src/editeng/source/items/numitem.test.ts 16ms
+apps/office/src/editeng/source/items/numitem.ts 27ms
+apps/office/src/sw/browser/filter/xml/writer-document-codec.ts 37ms
+apps/office/src/sw/browser/presentation/writer-view-projection.ts 16ms
+apps/office/src/sw/source/core/doc/DocumentListsManager.ts 6ms
+apps/office/src/sw/source/core/doc/list.ts 15ms
+apps/office/src/sw/source/core/doc/number-list-format.test.ts 7ms (unchanged)
+apps/office/src/sw/source/core/doc/number-ownership.test.ts 17ms
+apps/office/src/sw/source/core/doc/number.test.ts 18ms
+apps/office/src/sw/source/core/doc/number.ts 15ms
+apps/office/src/sw/source/core/doc/writer-attributes.test.ts 37ms
+apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts 7ms
+apps/office/src/sw/source/core/txtnode/ndtxt.ts 30ms
+apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts 8ms (unchanged)
+apps/office/src/sw/source/core/unocore/unosett.test.ts 5ms
+apps/office/src/sw/source/core/unocore/unosett.ts 4ms
+apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts 7ms
+apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts 10ms
+apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts 45ms
+apps/office/src/sw/source/filter/xml/xmlexp.ts 47ms
+apps/office/src/sw/source/filter/xml/xmlimp.ts 37ms
+apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts 13ms
+scripts/check-module-boundaries.mjs 17ms (unchanged)

@@ -1,0 +1,48 @@
+File-size check scanned 480 authored files.
+Decomposition review candidates:
+apps/office/src/framework/browser/app/desktop.test.tsx: 516 lines
+apps/office/src/svl/source/items/itemset.test.ts: 677 lines
+apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx: 545 lines
+apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx: 507 lines
+apps/office/src/sw/browser/filter/xml/writer-document-codec.ts: 655 lines
+apps/office/src/sw/browser/presentation/writer-view.test.tsx: 924 lines
+apps/office/src/sw/browser/presentation/writer-view.tsx: 753 lines
+apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx: 651 lines
+apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx: 770 lines
+apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx: 543 lines
+apps/office/src/sw/source/core/doc/writer-attributes.test.ts: 723 lines
+apps/office/src/sw/source/core/doc/writer-model.test.ts: 959 lines
+apps/office/src/sw/source/core/layout/newfrm.test.ts: 628 lines
+apps/office/src/sw/source/core/layout/newfrm.ts: 689 lines
+apps/office/src/sw/source/core/txtnode/ndhints.ts: 652 lines
+apps/office/src/sw/source/core/undo/undobj.test.ts: 633 lines
+apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts: 517 lines
+apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts: 939 lines
+apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts: 952 lines
+apps/office/src/sw/source/filter/xml/xmlexp.ts: 725 lines
+apps/office/src/sw/source/filter/xml/xmlimp.ts: 992 lines
+apps/office/src/sw/source/uibase/shells/textsh1.ts: 996 lines
+apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts: 972 lines
+apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts: 702 lines
+apps/office/src/vcl/browser/lo-runtime-fonts.css: 955 lines
+apps/office/src/xmloff/source/style/xmlstyle.ts: 613 lines
+apps/office/src/xmloff/source/text/txtparae.ts: 982 lines
+apps/office/src/xmloff/source/text/txtparai.test.ts: 741 lines
+apps/office/src/xmloff/source/text/txtparai.ts: 590 lines
+scripts/check-source-provenance.ts: 699 lines
+scripts/generate-writer-ui-resources.ts: 622 lines
+scripts/libreoffice-inventory/contracts.ts: 536 lines
+scripts/libreoffice-inventory/parity-mappings.test.ts: 870 lines
+scripts/libreoffice-inventory/parity-mappings.ts: 991 lines
+scripts/libreoffice-inventory/runtime-inventory.test.ts: 566 lines
+scripts/libreoffice-inventory/runtime-inventory.ts: 805 lines
+file:///Users/odubinkin/Projects/vite-office/scripts/check-file-size.mjs:166
+    throw new Error(`Authored files at or above 1,000 lines:\n${failures.join("\n")}`);
+          ^
+
+Error: Authored files at or above 1,000 lines:
+apps/office/src/sw/source/core/txtnode/ndtxt.ts: 1005 lines
+    at main (file:///Users/odubinkin/Projects/vite-office/scripts/check-file-size.mjs:166:11)
+    at async file:///Users/odubinkin/Projects/vite-office/scripts/check-file-size.mjs:170:1
+
+Node.js v24.13.1

@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '.agentplane/tasks/202610011207-TR9DSM/native-number-type'
+relocations:     []
+...
