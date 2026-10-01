@@ -1,6 +1,7 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
-import { XMLTextListsHelper, type XMLTextListBlock } from "./txtlists";
+import { XMLTextListsHelper, type XMLTextListImportState } from "./txtlists";
+import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
@@ -119,19 +120,9 @@ const DEFAULT_PROPERTIES: OdfCharacterProperties = {
   underline: false,
 };
 
-/** Per-stream list identity state. */
-interface ListImportState {
-  generatedListId: number;
-  readonly listIds: Map<string, string>;
-  readonly textLists: XMLTextListsHelper;
-}
-
-/** Effective nested list state. */
-type ActiveList = XMLTextListBlock;
-
 /** Handles office:text children and owns list identity state for one stream. */
 export class XMLTextBodyContext extends SvXMLImportContext {
-  private readonly lists: ListImportState = {
+  private readonly lists: XMLTextListImportState = {
     generatedListId: 0,
     listIds: new Map(),
     textLists: new XMLTextListsHelper(),
@@ -155,7 +146,7 @@ export class XMLTextBodyContext extends SvXMLImportContext {
     if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
       return new XMLParaContext(this.target, element, attributes);
     if (element === XMLToken.TEXT_LIST)
-      return new XMLListContext(this.target, attributes, this.lists);
+      return new XMLTextListBlockContext(this.target, attributes, this.lists);
     if (element === XMLToken.TABLE_TABLE && "beginTable" in this.target)
       return new XMLTableContext(this.target as XMLTableImportTarget, attributes);
     if (element === XMLToken.TEXT_SEQUENCE_DECLS) return new SvXMLIgnoreContext(true);
@@ -438,114 +429,6 @@ class XMLCharacterContext extends SvXMLImportContext {
   /** Inserts the represented character data. @returns Nothing. */
   public override startFastElement(): void {
     this.paragraph.appendText(this.value, this.properties, this.hyperlink);
-  }
-}
-
-/** Imports one text:list and resolves its rule through the document-facing target. */
-class XMLListContext extends SvXMLImportContext {
-  private readonly active: ActiveList;
-
-  /** Resolves a list context. @param target - Writer target. @param attributes - List attributes. @param state - Stream identity state. @param parent - Optional parent list. @returns Context. */
-  public constructor(
-    private readonly target: XMLTextImportTarget,
-    attributes: FastAttributeList,
-    private readonly state: ListImportState,
-    parent?: ActiveList,
-  ) {
-    super();
-    attributes.assertOnly(
-      [XMLToken.TEXT_STYLE_NAME, XMLToken.TEXT_CONTINUE_LIST, XMLToken.XML_ID],
-      "list",
-    );
-    const styleName = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? parent?.styleName;
-    if (styleName === undefined) throw new Error("Unsupported ODF list without a list style.");
-    const rule = target.getListRule(styleName);
-    if (rule === undefined) throw new Error(`Unsupported ODF list style: ${styleName}`);
-    const level = parent === undefined ? 0 : parent.level + 1;
-    if (level >= rule.levelCount) throw new Error("Unsupported ODF list level.");
-    const xmlId = attributes.get(XMLToken.XML_ID);
-    const continuedId = attributes.get(XMLToken.TEXT_CONTINUE_LIST);
-    let listId = parent?.listId;
-    if (continuedId !== null) listId = state.listIds.get(continuedId) ?? continuedId;
-    else if (xmlId !== null) listId = xmlId;
-    else if (listId === undefined) listId = `${rule.name}-${++state.generatedListId}`;
-    if (xmlId !== null) state.listIds.set(xmlId, listId);
-    this.active = { level, listId, rule, styleName };
-    state.textLists.PushListContext(this.active);
-  }
-
-  /** Creates a list-item context. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    return element === XMLToken.TEXT_LIST_ITEM || element === XMLToken.TEXT_LIST_HEADER
-      ? new XMLListItemContext(
-          this.target,
-          attributes,
-          this.state,
-          this.active,
-          element === XMLToken.TEXT_LIST_HEADER,
-        )
-      : null;
-  }
-  /** Restores the parent block and clears its item after a sublist, as native XMLTextListBlockContext does. @returns Nothing. */
-  public override endFastElement(): void {
-    this.state.textLists.PopListContext();
-    this.state.textLists.SetListItem(undefined);
-  }
-}
-
-/** Owns the native numbered-item signal while paragraph contexts mutate Writer directly. */
-class XMLListItemContext extends SvXMLImportContext {
-  private readonly startValue: number | undefined;
-
-  /** Creates a list-item context. @param target - Writer target. @param attributes - Item attributes. @param state - Stream list state. @param active - Active list. @param header - Whether this is a header without a numbered-item signal. @returns Context. */
-  public constructor(
-    private readonly target: XMLTextImportTarget,
-    attributes: FastAttributeList,
-    private readonly state: ListImportState,
-    private readonly active: ActiveList,
-    header: boolean,
-  ) {
-    super();
-    attributes.assertOnly([XMLToken.TEXT_START_VALUE], "list item");
-    if (!header) {
-      const startValue = attributes.getAsInteger(XMLToken.TEXT_START_VALUE);
-      if (startValue !== null && startValue >= 0 && startValue <= 32_767)
-        this.startValue = startValue;
-      state.textLists.SetListItem(this);
-    }
-  }
-  /** Returns the explicit start retained only for ordinary items. @returns Start value. */
-  public GetStartValue(): number | undefined {
-    return this.startValue;
-  }
-  /** Clears the numbered item after its container ends. @returns Nothing. */
-  public override endFastElement(): void {
-    this.state.textLists.SetListItem(undefined);
-  }
-
-  /** Creates paragraph or nested-list children. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
-  public override createFastChildContext(
-    element: XMLToken,
-    attributes: FastAttributeList,
-  ): SvXMLImportContext | null {
-    if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H) {
-      const item = this.state.textLists.ListContextTop()?.item;
-      const startValue = item?.GetStartValue();
-      this.state.textLists.SetListItem(undefined);
-      return new XMLParaContext(this.target, element, attributes, {
-        level: this.active.level,
-        listId: this.active.listId,
-        ...(item === undefined ? { counted: false } : {}),
-        ...(startValue === undefined ? {} : { restart: true, startValue }),
-        ruleName: this.active.rule.name,
-      });
-    }
-    if (element === XMLToken.TEXT_LIST)
-      return new XMLListContext(this.target, attributes, this.state, this.active);
-    return null;
   }
 }
 

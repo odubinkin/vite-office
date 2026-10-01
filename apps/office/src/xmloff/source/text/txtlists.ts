@@ -1,6 +1,12 @@
 /** @fileoverview Owns native list-block/item context stack state during bounded Writer SAX import. */
 import type { XMLTextListRule } from "./txtparai";
 
+/** Per-stream identities and the native context stack retained by the text importer. */
+export interface XMLTextListImportState {
+  generatedListId: number;
+  readonly listIds: Map<string, string>;
+  readonly textLists: XMLTextListsHelper;
+}
 /** Supported list-block state retained by the import helper. */
 export interface XMLTextListBlock {
   readonly level: number;

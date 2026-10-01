@@ -81,6 +81,17 @@ Header start attributes are ignored. Restart and
 start metadata on unnumbered paragraphs are omitted by the native numbered-state
 projection; Worker records and owned item-set copies retain their model state.
 
+For existing resolved list rules, source-owned `XMLTextListItemContext` counts
+nested lists and requests a restart on its second and later sublists.
+`XMLTextListBlockContext` inherits pending restart from its actual parent and
+returns any unconsumed flag when it closes. The first paragraph consumes this
+flag, including an unnumbered header; empty sublists can return it to an outer
+paragraph. The model retains an implicit restart independently from an explicit
+start value. Current export turns counted implicit restart into an explicit
+start; native same-level nested restart list splitting remains a separate export
+audit obligation. Continue-numbering, missing-rule factories/defaults and style
+overrides are also outside this bounded import correction.
+
 Spaces are emitted as `text:s`, including `text:c` for runs, while tabs and
 in-paragraph line breaks use `text:tab` and `text:line-break`. This retains exact
 current `SwTextNode` text through semantic round trips. Internal browser paragraph

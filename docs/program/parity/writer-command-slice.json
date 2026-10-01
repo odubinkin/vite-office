@@ -11507,7 +11507,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "path": "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
             "marker": "TEXT_START_VALUE"
           },
           {
@@ -11560,7 +11560,7 @@
       "closure": {
         "contract": {
           "local": {
-            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "path": "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
             "marker": "TEXT_START_VALUE"
           },
           "method": "api-invariant",
@@ -11573,7 +11573,7 @@
         },
         "ownership": {
           "local": {
-            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "path": "apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
             "marker": "TEXT_START_VALUE"
           },
           "method": "api-invariant",
