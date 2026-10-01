@@ -1,10 +1,11 @@
 ---
 id: "202610011207-TR9DSM"
 title: "Restore native standalone numbering format inheritance and defaults"
-status: "DOING"
+result_summary: "Restored native standalone numbering ownership/defaults/copies and actual caller/Worker state preservation; full713/109/19 verification and bounded native differential evidence pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on:
@@ -49,11 +50,16 @@ quality_review:
     - "Actual CODE2827ce1e51f6954632f121a382fd22f0cf8a40cd contains33 intentional paths: native numeric enum/type hierarchy, U+F095 default, unsigned32 glyph, show flag, optional const copied Font family values, null SwClient composition, explicit browser assembly/projections, migrated actual callers and Worker16 legacy/ownership/malformed paths. No registered save/open/recovery behavior or policy/coverage gate was changed."
     - "Complete unchanged pinned constructor/copy/equality/format/font and inline header bodies are matched by32 source records and165 value/formatting traces with ASan/UBSan clean. Existing40 base/19 ownership/16 valid NONE assertions remain literal. The sole editeng->vcl edge cites native Library_editeng.mk;6 boundary test cases retain reverse/browser rejections."
     - "The real UNO replacement regression fails before the preservation fix and passes after it, including absent/present-empty/named Font and hidden state. verify-fifth exits0:713 app,109 inventory,19 browser; both100% suites and every unchanged gate. doctor0 errors/2 prior warnings; routing and diff pass. This is a separate quality-role phase by the current actor, not an independent subagent review."
-commit: null
+commit:
+  hash: "2827ce1e51f6954632f121a382fd22f0cf8a40cd"
+  message: "🔧 TR9DSM code: restore native numbering format ownership"
 comments:
   -
     author: "CODER"
     body: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
+  -
+    author: "CODER"
+    body: "Verified: restored the native standalone SvxNumberType/SvxNumberFormat/SwNumFormat ownership profile, U+F095 default, optional copied Font and unsigned glyph/show state; migrated real callers and Worker16 records; reproduced and fixed actual UNO field loss. Full verify-fifth exits0:713 app,109 inventory,19 browser,both100% suites and all gates; native165 traces and source-backed dependency case pass; separate quality role passes. Actual CODE2827ce1e51f6954632f121a382fd22f0cf8a40cd. Bounded native service/font/style/graphics/lifetime obligations and the next NONE classification mismatch remain explicit; parent and goal stay active; registered I/O deviations preserved."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final verify-fifth exited0:713 app,109 inventory,19 browser; original100% coverage in both suites. Native21 format/equality states+144 NumberType traces,6 source-backed dependency cases,actual UNO regression red/green; doctor0 errors/routing/diff pass. Actual implementation2827ce1e51f6954632f121a382fd22f0cf8a40cd. Bounded profile only; goal stays active."
+  -
+    type: "status"
+    at: "2026-10-01T13:03:23.294Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored the native standalone SvxNumberType/SvxNumberFormat/SwNumFormat ownership profile, U+F095 default, optional copied Font and unsigned glyph/show state; migrated real callers and Worker16 records; reproduced and fixed actual UNO field loss. Full verify-fifth exits0:713 app,109 inventory,19 browser,both100% suites and all gates; native165 traces and source-backed dependency case pass; separate quality role passes. Actual CODE2827ce1e51f6954632f121a382fd22f0cf8a40cd. Bounded native service/font/style/graphics/lifetime obligations and the next NONE classification mismatch remain explicit; parent and goal stay active; registered I/O deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:01:16.972Z"
+doc_updated_at: "2026-10-01T13:03:23.296Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -176,6 +189,10 @@ sections:
     - Observation: verify-fifth exits0 after the actual UNO ownership fix:713 app tests across161 files,109 inventory tests across36 files,19 browser tests, unchanged100% statements/branches/functions/lines in both suites; every format/lint/type/dependency/resource/build/static/JSDoc/file-size/source-tree/provenance/invariant/parity gate passes. Native32 identity records and unchanged bodies/header methods match21 format-value/equality states and144 NumberType traces under ASan/UBSan. Focused native-edge test passes6 assertions/cases and actual UNO regression passes5 tests after its retained pre-fix failure.
       Impact: The approved standalone format ownership migration now has concrete source, constructor/state/copy, caller, Worker legacy and whole-suite evidence. This proves the bounded existing profile, not complete project parity.
       Resolution: Commit only reviewed implementation/fixtures/metadata and canonical task artifacts, record actual CODE and canonical verification, run the separate EVALUATOR quality phase, close this leaf cleanly, then update the parent and keep the goal active. Next task: native IsItemize/IsEnumeration plus HasNumber/HasBullet classification of existing NONE levels; preserve the measured native trailing-NONE browser guard and registered I/O deviations.
+extensions:
+  implementation_commit:
+    hash: "2827ce1e51f6954632f121a382fd22f0cf8a40cd"
+    message: "🔧 TR9DSM code: restore native numbering format ownership"
 id_source: "generated"
 ---
 ## Summary
