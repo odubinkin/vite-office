@@ -1,0 +1,434 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/filter/xml/odt-list-implicit-restart.test.ts (1 test | 1 failed) 33ms
+   × exports native implicit restart positions and direct starts through genuine ODT 33ms
+ ❯ src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts (2 tests | 2 failed) 104ms
+   × round-trips native headers and unnumbered item continuations 102ms
+   × omits restart metadata on uncounted paragraphs as native NumberingIsNumber projection does 2ms
+ ❯ src/sw/source/filter/xml/odt-list-start-normalization.test.ts (1 test | 1 failed) 42ms
+   × normalizes native ordinary starts and ignores header starts across document boundaries 41ms
+ ❯ src/sw/source/filter/xml/odt-list-sublist-restart.test.ts (1 test | 1 failed) 181ms
+   × imports native repeated-sublist restart and pending return through real packages 180ms
+ ❯ src/sw/source/filter/xml/odt-text-collection-numbering.test.ts (7 tests | 1 failed) 53ms
+   × uses the newly selected rule in genuine ODT and preserves style attributes through Worker transfer 20ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts > round-trips native headers and unnumbered item continuations
+AssertionError: expected [ { text: 'header', …(6) }, …(5) ] to deeply equal [ { text: 'header', …(6) }, …(5) ]
+
+- Expected
++ Received
+
+  [
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "7.",
+      "level": 0,
+-     "number": 6,
++     "number": 7,
+      "restart": false,
+      "text": "header",
+      "vector": [
+-       6,
++       7,
+      ],
+    },
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "8.",
+      "level": 0,
+-     "number": 6,
++     "number": 8,
+      "restart": false,
+      "text": "header tail",
+      "vector": [
+-       6,
++       8,
+      ],
+    },
+    {
+      "counted": true,
+-     "label": "0.",
++     "label": "9.",
+      "level": 0,
+-     "number": 0,
+-     "restart": true,
++     "number": 9,
++     "restart": false,
+      "text": "zero",
+      "vector": [
+-       0,
++       9,
+      ],
+    },
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "10.",
+      "level": 0,
+-     "number": 0,
++     "number": 10,
+      "restart": false,
+      "text": "tail",
+      "vector": [
+-       0,
++       10,
+      ],
+    },
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "11.",
+      "level": 0,
+-     "number": 0,
++     "number": 11,
+      "restart": false,
+      "text": "after",
+      "vector": [
+-       0,
++       11,
+      ],
+    },
+    {
+      "counted": true,
+-     "label": "1.",
++     "label": "12.",
+      "level": 0,
+-     "number": 1,
++     "number": 12,
+      "restart": false,
+      "text": "next",
+      "vector": [
+-       1,
++       12,
+      ],
+    },
+  ]
+
+ ❯ src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts:281:34
+    279|       expect(record.swModelVersion).toBe(16);
+    280|       const transferred = decodeWriterDocument(record);
+    281|       expect(state(transferred)).toEqual(expected);
+       |                                  ^
+    282|       const exported = writeOdtDocument(imported.document, { title: "H…
+    283|       const xml = await new ZipFile(exported).readTextEntry("content.x…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts > omits restart metadata on uncounted paragraphs as native NumberingIsNumber projection does
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts:313:49
+    311|   ).toEqual(expected);
+    312|   const worker = decodeWriterDocument(encodeWriterDocument(document));
+    313|   expect(worker.paragraphs[1]?.IsListRestart()).toBe(true);
+       |                                                 ^
+    314|   const exported = writeOdtDocument(document, { title: "Headers" });
+    315|   const xml = await new ZipFile(exported).readTextEntry("content.xml");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/sw/source/filter/xml/odt-list-implicit-restart.test.ts > exports native implicit restart positions and direct starts through genuine ODT
+AssertionError: expected [ { text: 'first', level: +0, …(9) } ] to deeply equal [ { text: 'first', level: +0, …(9) } ]
+
+- Expected
++ Received
+
+@@ -4,11 +4,11 @@
+      "direct": undefined,
+      "identity": "Restart",
+      "label": "7.",
+      "level": 0,
+      "number": 7,
+-     "restart": true,
++     "restart": false,
+      "rule": "Restart",
+      "start": 7,
+      "text": "first",
+      "vector": [
+        7,
+
+ ❯ src/sw/source/filter/xml/odt-list-implicit-restart.test.ts:382:31
+    380|         const worker = decodeWriterDocument(record);
+    381|         expect(worker.FindNumRulePtr("Restart")).not.toBe(rule);
+    382|         expect(state(worker)).toEqual(expected(test.before));
+       |                               ^
+    383|         const bytes = writeOdtDocument(doc, { title: "Restart" });
+    384|         const xml = await new ZipFile(bytes).readTextEntry("content.xm…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/sw/source/filter/xml/odt-list-start-normalization.test.ts > normalizes native ordinary starts and ignores header starts across document boundaries
+AssertionError: expected [ { text: 'header', …(7) }, …(6) ] to deeply equal [ { text: 'header', …(7) }, …(6) ]
+
+- Expected
++ Received
+
+  [
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "7.",
+      "level": 0,
+-     "number": 6,
++     "number": 7,
+      "restart": false,
+      "start": 7,
+      "text": "header",
+      "vector": [
+-       6,
++       7,
+      ],
+    },
+    {
+      "counted": true,
+-     "label": "7.",
++     "label": "8.",
+      "level": 0,
+-     "number": 7,
++     "number": 8,
+      "restart": false,
+      "start": 7,
+      "text": "first",
+      "vector": [
+-       7,
++       8,
+      ],
+    },
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "9.",
+      "level": 0,
+-     "number": 7,
++     "number": 9,
+      "restart": false,
+      "start": 7,
+      "text": "tail",
+      "vector": [
+-       7,
++       9,
+      ],
+    },
+    {
+      "counted": true,
+-     "label": "7.5.",
++     "label": "9.5.",
+      "level": 1,
+      "number": 5,
+      "restart": false,
+      "start": 5,
+      "text": "child",
+      "vector": [
+-       7,
++       9,
+        5,
+      ],
+    },
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "9.6.",
+      "level": 1,
+-     "number": 5,
++     "number": 6,
+      "restart": false,
+      "start": 5,
+      "text": "child tail",
+      "vector": [
+-       7,
+-       5,
++       9,
++       6,
+      ],
+    },
+    {
+-     "counted": false,
+-     "label": undefined,
++     "counted": true,
++     "label": "10.",
+      "level": 0,
+-     "number": 7,
++     "number": 10,
+      "restart": false,
+      "start": 7,
+      "text": "after nested",
+      "vector": [
+-       7,
++       10,
+      ],
+    },
+    {
+      "counted": true,
+-     "label": "8.",
++     "label": "11.",
+      "level": 0,
+-     "number": 8,
++     "number": 11,
+      "restart": false,
+      "start": 7,
+      "text": "next",
+      "vector": [
+-       8,
++       11,
+      ],
+    },
+  ]
+
+ ❯ src/sw/source/filter/xml/odt-list-start-normalization.test.ts:187:53
+    185|         const record = encodeWriterDocument(document);
+    186|         expect(record.swModelVersion).toBe(16);
+    187|         expect(state(decodeWriterDocument(record))).toEqual(actual);
+       |                                                     ^
+    188|         const output = writeOdtDocument(document, { title: "Starts" });
+    189|         const content = await new ZipFile(output).readTextEntry("conte…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/sw/source/filter/xml/odt-list-sublist-restart.test.ts > imports native repeated-sublist restart and pending return through real packages
+AssertionError: expected [ …(7) ] to deeply equal [ …(7) ]
+
+- Expected
++ Received
+
+@@ -27,71 +27,71 @@
+      ],
+    },
+    {
+      "counted": true,
+      "explicit": undefined,
+-     "label": "7.5.",
++     "label": "7.6.",
+      "level": 1,
+-     "number": 5,
+-     "restart": true,
++     "number": 6,
++     "restart": false,
+      "start": 5,
+      "text": "second",
+      "vector": [
+        7,
+-       5,
++       6,
+      ],
+    },
+    {
+      "counted": true,
+      "explicit": undefined,
+-     "label": "7.5.",
++     "label": "7.7.",
+      "level": 1,
+-     "number": 5,
+-     "restart": true,
++     "number": 7,
++     "restart": false,
+      "start": 5,
+      "text": "third",
+      "vector": [
+        7,
+-       5,
++       7,
+      ],
+    },
+    {
+-     "counted": false,
++     "counted": true,
+      "explicit": undefined,
+-     "label": undefined,
++     "label": "7.8.",
+      "level": 1,
+-     "number": 5,
++     "number": 8,
+      "restart": false,
+      "start": 5,
+      "text": "tail",
+      "vector": [
+        7,
+-       5,
++       8,
+      ],
+    },
+    {
+-     "counted": false,
++     "counted": true,
+      "explicit": undefined,
+-     "label": undefined,
++     "label": "8.",
+      "level": 0,
+-     "number": 7,
++     "number": 8,
+      "restart": false,
+      "start": 7,
+      "text": "after",
+      "vector": [
+-       7,
++       8,
+      ],
+    },
+    {
+      "counted": true,
+      "explicit": undefined,
+-     "label": "8.",
++     "label": "9.",
+      "level": 0,
+-     "number": 8,
++     "number": 9,
+      "restart": false,
+      "start": 7,
+      "text": "next",
+      "vector": [
+-       8,
++       9,
+      ],
+    },
+  ]
+
+ ❯ src/sw/source/filter/xml/odt-list-sublist-restart.test.ts:241:53
+    239|         const record = encodeWriterDocument(imported);
+    240|         expect(record.swModelVersion).toBe(16);
+    241|         expect(state(decodeWriterDocument(record))).toEqual(expected);
+       |                                                     ^
+    242|         const exported = writeOdtDocument(imported, { title: "Sublist"…
+    243|         const xml = await new ZipFile(exported).readTextEntry("content…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/sw/source/filter/xml/odt-text-collection-numbering.test.ts > uses the newly selected rule in genuine ODT and preserves style attributes through Worker transfer
+AssertionError: expected 'Bullets' to be 'Retained' // Object.is equality
+
+Expected: "Retained"
+Received: "Bullets"
+
+ ❯ src/sw/source/filter/xml/odt-text-collection-numbering.test.ts:190:35
+    188|     const paragraph = firstParagraph(current);
+    189|     expect(paragraph.GetNum()?.GetNumRule()?.GetName()).toBe("Bullets"…
+    190|     expect(paragraph.GetListId()).toBe("Retained");
+       |                                   ^
+    191|     expect(paragraph.GetAttrListLevel()).toBe(2);
+    192|     expect(paragraph.GetListLabel()).toBe("▪");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  5 failed | 9 passed (14)
+      Tests  6 failed | 40 passed (46)
+   Start at  15:24:31
+   Duration  5.90s (transform 1.24s, setup 1.23s, import 2.28s, tests 717ms, environment 6.05s)
+

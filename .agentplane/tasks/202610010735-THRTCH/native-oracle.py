@@ -7,6 +7,7 @@ tree=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree
 num=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx').read_text()
 ndnum=Path('vendor/libreoffice-reference/sw/source/core/docnode/ndnum.cxx').read_text()
 header=Path('vendor/libreoffice-reference/sw/inc/numrule.hxx').read_text()
+docheader=Path('vendor/libreoffice-reference/sw/inc/doc.hxx').read_text()
 def block(s,m):
  start=s.index(m);b=s.index('{',start);i=b+1;depth=1
  while depth:depth+=(s[i]=='{')-(s[i]=='}');i+=1
@@ -22,13 +23,14 @@ base=base.replace('SfxItemState GetItemState(int id,bool=false)const{return item
 base=base.replace('constexpr int RES_CONDTXTFMTCOLL', 'using SfxItemSet=AttrStore;\nconstexpr int RES_CONDTXTFMTCOLL')
 base=base.replace('struct SwContentNode {','struct SwContentNode {virtual ~SwContentNode()=default;virtual int GetIndex()const{return -1;}virtual SwTextNode* GetTextNode(){return nullptr;}bool SetAttr(const SfxPoolItem&);bool SetAttr(const SfxItemSet&);bool ResetAttr(sal_uInt16,sal_uInt16=0);bool ResetAttr(const std::vector<sal_uInt16>&);sal_uInt16 ResetAllAttr();')
 base=base.replace('struct Footnotes {','using SwNode=SwContentNode;struct CompareSwOutlineNodes{bool operator()(const SwNode*,const SwNode*)const;};struct SwOutlineNodes:std::vector<SwNode*>{using size_type=std::size_t;auto lower_bound(const SwNode* p)const{return std::lower_bound(begin(),end(),p,CompareSwOutlineNodes());}bool Seek_Entry(const SwNode*,size_type*)const;bool contains(const SwNode* p)const{size_type i;return Seek_Entry(p,&i);}void insert(SwNode* p){size_type i;if(!Seek_Entry(p,&i))std::vector<SwNode*>::insert(begin()+i,p);}void erase(SwNode* p){size_type i;if(Seek_Entry(p,&i))std::vector<SwNode*>::erase(begin()+i);}};namespace sw{struct LegacyModifyHint{LegacyModifyHint(void*,void*){}};}enum class SwFieldIds{Chapter};struct FieldType{void UpdateFields(){}};struct FieldsAccess{FieldType* GetSysFieldType(SwFieldIds){static FieldType f;return &f;}};\nstruct Footnotes {')
-base=base.replace('struct SwDoc {','struct SwDoc {bool IsInReading()const{return false;}bool IsInDtor()const{return false;}FieldsAccess& getIDocumentFieldsAccess(){static FieldsAccess f;return f;}std::vector<int> notifications;')
+base=base.replace('struct SwDoc {','struct SwDoc {bool mbInReading=false;'+block(docheader,'bool IsInReading()')+block(docheader,'void SetInReading(')+'bool IsInDtor()const{return false;}FieldsAccess& getIDocumentFieldsAccess(){static FieldsAccess f;return f;}std::vector<int> notifications;')
 base=base.replace('struct SwNumFormat {','constexpr int SVX_NUM_NUMBER_NONE=0,SVX_NUM_CHAR_SPECIAL=1,SVX_NUM_BITMAP=2,SVX_NUM_ARABIC=3;enum SwNumRuleType{OUTLINE_RULE,NUM_RULE,RULE_END};\nstruct SwNumFormat {int GetNumberingType()const{return bullet?SVX_NUM_CHAR_SPECIAL:SVX_NUM_ARABIC;}')
 base=base.replace('struct SwNumRule {','struct SwNumRule {SwNumRuleType meRuleType=NUM_RULE;'+block(header,'SwNumRuleType GetRuleType()')+block(header,'void SetRuleType(')+block(header,'bool IsOutlineRule()'))
 base=base.replace('void UpdateOutlineNode(SwTextNode&){}','SwDoc& GetDoc(){return *owner;}SwOutlineNodes m_aOutlineNodes;void UpdateOutlineNode(SwNode&);')
-base=base.replace('void SetAttr(const SfxPoolItem&);void ResetAttr(int);','bool SetAttr(const SfxPoolItem&);bool SetAttr(const SfxItemSet&);bool ResetAttr(sal_uInt16,sal_uInt16=0);bool ResetAttr(const std::vector<sal_uInt16>&);sal_uInt16 ResetAllAttr();bool HasAttrListLevel()const;bool HasAttrListRestartValue()const{return mpAttrSet&&mpAttrSet->GetItemState(86,false)==SfxItemState::SET;}int GetAttrListRestartValue()const{return GetAttr(RES_PARATR_LIST_RESTARTVALUE,false).GetValue();}void DoNum(std::function<void(SwNodeNum&)>const&);bool m_bLastOutlineState=false;bool IsOutline()const;bool IsOutlineStateChanged()const;void UpdateOutlineState();bool IsInRedlines()const{return false;}SwTextNode* GetTextNode()override{return this;}bool IsNotifiable()const{return true;}bool IsNotificationEnabled()const{return true;}void NumRuleChgd();void CallSwClientNotify(const sw::LegacyModifyHint&){doc->notifications.push_back(index);}')
+base=base.replace('void SetAttr(const SfxPoolItem&);void ResetAttr(int);','bool SetAttr(const SfxPoolItem&);bool SetAttr(const SfxItemSet&);bool ResetAttr(sal_uInt16,sal_uInt16=0);bool ResetAttr(const std::vector<sal_uInt16>&);sal_uInt16 ResetAllAttr();bool HasAttrListLevel()const;bool HasAttrListRestartValue()const{return mpAttrSet&&mpAttrSet->GetItemState(86,false)==SfxItemState::SET;}int GetAttrListRestartValue()const{return GetAttr(RES_PARATR_LIST_RESTARTVALUE,false).GetValue();}void DoNum(std::function<void(SwNodeNum&)>const&);bool m_bLastOutlineState=false;bool IsOutline()const;bool IsOutlineStateChanged()const;void UpdateOutlineState();bool IsInRedlines()const{return false;}SwTextNode* GetTextNode()override{return this;}bool m_bNotifiable=true;bool IsNotifiable()const;bool IsNotificationEnabled()const;void NumRuleChgd();void CallSwClientNotify(const sw::LegacyModifyHint&){doc->notifications.push_back(index);}')
 base=base.replace('void NotifyInvalidSiblings(const SwDoc&){}void NotifyInvalidChildren(const SwDoc&){}','void NotifyInvalidSiblings(const SwDoc&);void NotifyInvalidChildren(const SwDoc&);void ValidateMe();void Notify(const SwDoc&);virtual void NotifyNode()=0;virtual bool IsNotifiable(const SwDoc&)const=0;void InvalidateAndNotifyTree(const SwDoc&);')
-base=base.replace('SwTextNode* GetTextNode()const{return text;}', 'void NotifyNode()override;bool IsNotifiable(const SwDoc&)const override;SwTextNode* GetTextNode()const{return text;}')
+base=base.replace('bool IsNotificationEnabled(const SwDoc&)const{return true;}', 'virtual bool IsNotificationEnabled(const SwDoc&)const=0;')
+base=base.replace('SwTextNode* GetTextNode()const{return text;}', 'void NotifyNode()override;bool IsNotificationEnabled(const SwDoc&)const override;bool IsNotifiable(const SwDoc&)const override;SwTextNode* GetTextNode()const{return text;}')
 # Old direct attribute bridge dependency is replaced by raw pool adapters; full native wrappers follow.
 for m in ['void SwTextNode::SetAttr(const SfxPoolItem& item)','void SwTextNode::ResetAttr(int id)']:
  base=base.replace(block(base,m),'')
@@ -47,9 +49,9 @@ sal_uInt16 SwContentNode::ResetAllAttr(){int n=mpAttrSet?mpAttrSet->items.size()
 classes=[block(text,'class HandleSetAttrAtTextNode')+';',block(text,'class HandleResetAttrAtTextNode')+';']
 markers=['HandleSetAttrAtTextNode::HandleSetAttrAtTextNode( SwTextNode& rTextNode,\n                                                    const SfxPoolItem&', 'HandleSetAttrAtTextNode::HandleSetAttrAtTextNode( SwTextNode& rTextNode,\n                                                    const SfxItemSet&', 'HandleSetAttrAtTextNode::~HandleSetAttrAtTextNode()', 'HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode,\n                                                        const sal_uInt16', 'HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode,\n                                                        const std::vector', 'HandleResetAttrAtTextNode::HandleResetAttrAtTextNode( SwTextNode& rTextNode )', 'void HandleResetAttrAtTextNode::init(', 'HandleResetAttrAtTextNode::~HandleResetAttrAtTextNode()']
 helpers=[block(text,m) for m in markers]
-extra=[block(text,m) for m in ['bool HasNumberingWhichNeedsLayoutUpdate(', 'void SwTextNode::DoNum(', 'bool SwTextNode::HasAttrListLevel()', 'bool SwTextNode::IsOutline() const', 'bool SwTextNode::IsOutlineStateChanged() const', 'void SwTextNode::UpdateOutlineState()', 'void SwTextNode::NumRuleChgd()']]
+extra=[block(text,m) for m in ['bool HasNumberingWhichNeedsLayoutUpdate(', 'void SwTextNode::DoNum(', 'bool SwTextNode::HasAttrListLevel()', 'bool SwTextNode::IsOutline() const', 'bool SwTextNode::IsOutlineStateChanged() const', 'void SwTextNode::UpdateOutlineState()', 'void SwTextNode::NumRuleChgd()', 'bool SwTextNode::IsNotifiable() const','bool SwTextNode::IsNotificationEnabled() const']]
 extra+=[block(tree,m) for m in ['void SwNumberTreeNode::ValidateMe()', 'void SwNumberTreeNode::Notify(', 'void SwNumberTreeNode::NotifyInvalidChildren(', 'void SwNumberTreeNode::NotifyInvalidSiblings(']]
-extra+=[block(num,m) for m in ['void SwNodeNum::NotifyNode()', 'bool SwNodeNum::IsNotifiable(']]
+extra+=[block(num,m) for m in ['void SwNodeNum::NotifyNode()', 'bool SwNodeNum::IsNotifiable(', 'bool SwNodeNum::IsNotificationEnabled(']]
 extra+=[block(ndnum,m) for m in ['bool CompareSwOutlineNodes::operator()', 'bool SwOutlineNodes::Seek_Entry(', 'void SwNodes::UpdateOutlineNode(']]
 inline=block(Path('vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx').read_text(),'void InvalidateAndNotifyTree(')
 extra.append('void SwNumberTreeNode::'+inline[len('void '):])
@@ -63,6 +65,7 @@ int main(){int count;while(std::cin>>count){
  SwTextFormatColl styles[3];styles[1].SetFormatAttr(SwNumRuleItem("Counters"));styles[2].AssignToListLevelOfOutlineStyle(2);styles[2].SetFormatAttr(SwNumRuleItem("Outline"));
  std::vector<std::unique_ptr<SwTextNode>> texts;for(int i=0;i<count;i++){auto t=std::make_unique<SwTextNode>();t->index=i;t->doc=&doc;t->nodes=&nodes;t->coll=&styles[0];texts.push_back(std::move(t));}
  int ops;std::cin>>ops;for(int op=0;op<ops;op++){int kind,index,value;std::cin>>kind>>index>>value;auto& t=*texts[index];doc.notifications.clear();
+ if(kind==19)doc.SetInReading(value);
  if(kind==18){callback=[&](SwContentNode& n){n.GetTextNode()->ChgFormatColl(&styles[value]);};t.SetAttrOutlineLevel(4);}
  if(kind==16)for(auto& f:counters.formats)f.start=value;
  if(kind==17)t.SetAttr(SwNumRuleItem("unknown"));
@@ -93,7 +96,7 @@ int main(){int count;while(std::cin>>count){
 }}
 '''
 # Exact byte identities; previously unchanged full dependencies are retained too.
-identities=classes+helpers+wrappers+extra[:-1]+[inline]+[block(header,m) for m in ['SwNumRuleType GetRuleType()','void SetRuleType(','bool IsOutlineRule()']]
+identities=classes+helpers+wrappers+extra[:-1]+[inline]+[block(docheader,m)for m in ['bool IsInReading()','void SetInReading(']]+[block(header,m) for m in ['SwNumRuleType GetRuleType()','void SetRuleType(','bool IsOutlineRule()']]
 for body in identities:
  if body!=inline:assert body in base
 root.joinpath('native-attributes.cxx').write_text(base)
@@ -108,6 +111,7 @@ for level in range(11):
 cases.append({'count':3,'ops':[[6,2,2],[6,0,3],[6,1,1],[7,1,80],[9,2,0],[6,0,0]]})
 cases.extend([{'count':4,'ops':[[16,0,0],[1,0,1],[5,0,0],[1,1,1],[2,1,1],[5,1,0],[1,2,1],[2,2,2],[1,3,1]]},{'count':2,'ops':[[16,0,7],[1,0,1],[1,1,1],[17,1,0]]}])
 cases.extend([{'count':2,'ops':[[1,0,1],[18,0,2],[9,0,0],[18,0,1]]},{'count':2,'ops':[[13,0,0],[18,0,2],[7,0,80],[18,0,0]]}])
+cases.extend([{'count':2,'ops':[[19,0,1],[1,0,rule],[5,0,0],[1,1,rule],[10,0,2],[7,0,85],[19,0,0],[7,0,87],[11,0,0],[9,0,0]]}for rule in [1,2,3]])
 req=''.join(f'{c["count"]} {len(c["ops"])} '+' '.join(' '.join(map(str,o))for o in c['ops'])+'\n'for c in cases)
 lines=subprocess.check_output([str(binary)],input=req,text=True).splitlines();binary.unlink();offset=0;states=0
 for c in cases:

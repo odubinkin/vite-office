@@ -110,6 +110,16 @@
     "sha256": "e1b98d7d0c04f5f814eb860f64d1fa9c3360b7b30af7c8f2f4a28ddb9888b921"
   },
   {
+    "signature": "bool SwTextNode::IsNotifiable() const",
+    "bytes": 94,
+    "sha256": "d3c2ce6d1d47b033fd36f956c7b4aa047916d27943ce688da1c121c8f679d117"
+  },
+  {
+    "signature": "bool SwTextNode::IsNotificationEnabled() const",
+    "bytes": 136,
+    "sha256": "df10bd3077da9bf3fdd28db3277aef9e1ff6c39b5d05605f7c64a6efe05d1b99"
+  },
+  {
     "signature": "void SwNumberTreeNode::ValidateMe()",
     "bytes": 91,
     "sha256": "bbd5086ed69b13ec6f589cfdd1221fa30e332740c151a7d6ea8bde8d98a54060"
@@ -140,6 +150,11 @@
     "sha256": "cf7bd716d4d1cecd28c49cccdc6395be084bfca6738d4f268aab9474bcf78f34"
   },
   {
+    "signature": "bool SwNodeNum::IsNotificationEnabled(const SwDoc& rDoc) const",
+    "bytes": 281,
+    "sha256": "e1601c9031be9e3a96ab3411c01b0c18f278cecbd198247c50106b2806ca9b41"
+  },
+  {
     "signature": "bool CompareSwOutlineNodes::operator()(const SwNode* lhs, const SwNode* rhs) const",
     "bytes": 132,
     "sha256": "4877e7a370fc31e82185c1cbe6f10686a65a5735ef5a341c9aaefe6e1b0e0f4d"
@@ -158,6 +173,16 @@
     "signature": "void InvalidateAndNotifyTree(const SwDoc& rDoc)",
     "bytes": 180,
     "sha256": "2ad723e6d087f186baa93fbe475cb3e2917d771f48022501bcc60dc494b56ef4"
+  },
+  {
+    "signature": "bool IsInReading() const",
+    "bytes": 67,
+    "sha256": "fab5b93fb67e8491ffdb1fc631179af2a5a42c957ab1f9b1e765361ddf0f6ac6"
+  },
+  {
+    "signature": "void SetInReading( bool bNew )",
+    "bytes": 67,
+    "sha256": "880e4db87f85f6d940352a4535322163226a10db3f5fc7b07553b4f946f95d1d"
   },
   {
     "signature": "SwNumRuleType GetRuleType() const",

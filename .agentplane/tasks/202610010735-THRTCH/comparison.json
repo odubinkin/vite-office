@@ -1,7 +1,7 @@
 {
-  "sequences": 57,
-  "states": 2070,
-  "definitions": 35,
+  "sequences": 60,
+  "states": 2130,
+  "definitions": 40,
   "pass": true,
   "profile": "Canonical shown Arabic/bullet and independently typed outline rules, actual collection/item/node/list/index ownership, nested guards and raw cache/notification timing; explicit dependency adapters, no full native build,live-style/history/footnote/layout/fields/redline/background lifetime claim"
 }
