@@ -4,7 +4,7 @@ title: "Separate Writer list restart flag and value setters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-01T10:13:02.808Z"
+doc_updated_at: "2026-10-01T10:19:35.687Z"
 doc_updated_by: "CODER"
 description: "Iteration 41: restore pinned SwTextNode SetListRestart(bool) and SetAttrListRestartValue(number) contracts, retain direct values across flag transitions, reproduce signed Int16 casting and USHRT_MAX reset, and migrate existing ODT/test callers without altering registered save/open/recovery deviations."
 sections:
@@ -50,7 +50,7 @@ sections:
   Verify Steps: "1. Record actual pre-edit SwDoc/SwTextNode loss of direct value when changing only the flag. Compile complete unchanged pinned native setter/accessor bodies and record source identities, named adapter scope and native trace literals. 2. Application tests must agree with native supported traces for flag-only changes retaining direct values, missing/equal values, explicit zero, USHRT_MAX clearing and signed Int16 narrowing (including negative and wrapped numbers). Verify real list counters and existing Undo/Worker16/ODT behavior with original assertions retained except source-disproved combined-setter assertions. 3. npm run verify passes every unchanged gate, including 100% statements/branches/functions/lines for app and inventory; no coverage exclusions, reduced criteria, broad module-status promotion or IO exceptions added. 4. ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check pass; record intentional paths, actual implementation commit, evaluator result, verification and clean final tracked/untracked state."
   Verification: "Pending source-backed implementation and all declared checks. No skip approved."
   Rollback Plan: "Revert only this child implementation commit and its intentional source/test/provenance edits; preserve immutable completed task evidence and registered deviations."
-  Findings: "Confirmed native ndtxt.cxx SetListRestart changes only Which85, while the existing combined setter clears Which86 on false and true-without-value. Native SetAttrListRestartValue separately compares the original signed tSwNumTreeNumber input, resets at USHRT_MAX and casts non-sentinel inputs to sal_Int16. The sole production combined call is XML import; other combined calls are tests. Existing browser list item-set composition already owns explicit combined state. Getter absent-value diagnostics, JS-number domain beyond exact integers, full client/attribute/style lifetime and ODT inactive-value persistence are not implicitly certified by this task."
+  Findings: "Confirmed native ndtxt.cxx SetListRestart changes only Which85, while the existing combined setter clears Which86 on false and true-without-value. Native SetAttrListRestartValue separately compares the original signed tSwNumTreeNumber input, resets at USHRT_MAX and casts non-sentinel inputs to sal_Int16. The sole production combined call is XML import; other combined calls are tests. Existing browser list item-set composition already owns explicit combined state. Getter absent-value diagnostics, JS-number domain beyond exact integers, full client/attribute/style lifetime and ODT inactive-value persistence are not implicitly certified by this task. Harness-only failures: native compilation/execution succeeded initially, but fixture copy used a nonexistent src/test/fixtures directory; rg located actual src/test and final copy was repaired. The first focused run passed40 existing/new tests but the native mutation-attempt serializer emitted integer1 for SfxBoolItem true. Correct the named typed JSON serializer, preserve unchanged source bodies; no assertion or production behavior change. Initial logs are retained. Typecheck and lint passed."
 id_source: "generated"
 ---
 ## Summary
@@ -79,4 +79,4 @@ Revert only this child implementation commit and its intentional source/test/pro
 
 ## Findings
 
-Confirmed native ndtxt.cxx SetListRestart changes only Which85, while the existing combined setter clears Which86 on false and true-without-value. Native SetAttrListRestartValue separately compares the original signed tSwNumTreeNumber input, resets at USHRT_MAX and casts non-sentinel inputs to sal_Int16. The sole production combined call is XML import; other combined calls are tests. Existing browser list item-set composition already owns explicit combined state. Getter absent-value diagnostics, JS-number domain beyond exact integers, full client/attribute/style lifetime and ODT inactive-value persistence are not implicitly certified by this task.
+Confirmed native ndtxt.cxx SetListRestart changes only Which85, while the existing combined setter clears Which86 on false and true-without-value. Native SetAttrListRestartValue separately compares the original signed tSwNumTreeNumber input, resets at USHRT_MAX and casts non-sentinel inputs to sal_Int16. The sole production combined call is XML import; other combined calls are tests. Existing browser list item-set composition already owns explicit combined state. Getter absent-value diagnostics, JS-number domain beyond exact integers, full client/attribute/style lifetime and ODT inactive-value persistence are not implicitly certified by this task. Harness-only failures: native compilation/execution succeeded initially, but fixture copy used a nonexistent src/test/fixtures directory; rg located actual src/test and final copy was repaired. The first focused run passed40 existing/new tests but the native mutation-attempt serializer emitted integer1 for SfxBoolItem true. Correct the named typed JSON serializer, preserve unchanged source bodies; no assertion or production behavior change. Initial logs are retained. Typecheck and lint passed.

@@ -63,6 +63,6 @@ try:
  for case,trace in zip(cases,traces):case['states']=trace
  fixture={'pin':'9bc445578031fecf56086729d8e4940c77e14d65','scope':'six complete unchanged native restart definitions; named direct-item/type/format adapters; valid direct getters and exact JS integer inputs only','cases':cases}
  (root/'native-result.json').write_text(json.dumps(fixture,indent=2)+'\n')
- target=Path('apps/office/src/test/fixtures/writer-native-list-restart.json');target.write_text(json.dumps(fixture,indent=2)+'\n')
+ target=Path('apps/office/src/test/writer-native-list-restart.json');target.write_text(json.dumps(fixture,indent=2)+'\n')
  print(f'PASS: {len(records)} unchanged source definitions; {len(cases)} cases; {sum(len(c["states"]) for c in cases)} literal native states')
 finally:binary.unlink(missing_ok=True)
