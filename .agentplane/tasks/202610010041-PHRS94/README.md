@@ -4,7 +4,7 @@ title: "Restore native phantom ancestors for skipped list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned phantom ancestors and counting under the persistent approved upstream goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:00:29.845Z"
+doc_updated_at: "2026-10-01T01:01:13.820Z"
 doc_updated_by: "CODER"
 description: "Iteration29 of persistent upstream goal: replace bounded missing-level groups with source-owned phantom construction and native hierarchical phantom counting for existing Arabic/bullet lists. Preserve registered save/open/recovery deviations."
 sections:
@@ -88,6 +88,10 @@ sections:
     - Observation: Full verify session29507 exits1 after 643 application /109 inventory tests and both100% coverage suites pass: responsive-sidebar browser test times out on Paragraph menu click after viewport resize (html intercepts pointer; element detaches). Other18 browser tests pass.
       Impact: Remaining full gates did not run; closure is not allowed. Failure occurs in responsive menu interaction outside list counter code.
       Resolution: Inspect captured browser evidence and run the unchanged failing test once as a bounded diagnostic. If transient, rerun full verify unchanged; if reproducible, preserve failure and route a separate correction without altering this leaf verification contract.
+
+    - Observation: The unchanged responsive-sidebar test passes in isolation (session98737 exit0, 1 test/2.2s) after the full-run pointer/menu timeout.
+      Impact: The failure is not reproduced by the bounded diagnostic; cause is not proved. A full mandatory pass is still required.
+      Resolution: Retain the first full failure at artifact commit1458fca64f09, rerun npm run verify unchanged, and record any recurrence rather than adjusting browser assertions or gates.
 id_source: "generated"
 ---
 ## Summary
@@ -157,3 +161,7 @@ Preflight: clean main/direct; only parent 202609240501-C9TN6M DOING. Previous tu
 - Observation: Full verify session29507 exits1 after 643 application /109 inventory tests and both100% coverage suites pass: responsive-sidebar browser test times out on Paragraph menu click after viewport resize (html intercepts pointer; element detaches). Other18 browser tests pass.
   Impact: Remaining full gates did not run; closure is not allowed. Failure occurs in responsive menu interaction outside list counter code.
   Resolution: Inspect captured browser evidence and run the unchanged failing test once as a bounded diagnostic. If transient, rerun full verify unchanged; if reproducible, preserve failure and route a separate correction without altering this leaf verification contract.
+
+- Observation: The unchanged responsive-sidebar test passes in isolation (session98737 exit0, 1 test/2.2s) after the full-run pointer/menu timeout.
+  Impact: The failure is not reproduced by the bounded diagnostic; cause is not proved. A full mandatory pass is still required.
+  Resolution: Retain the first full failure at artifact commit1458fca64f09, rerun npm run verify unchanged, and record any recurrence rather than adjusting browser assertions or gates.
