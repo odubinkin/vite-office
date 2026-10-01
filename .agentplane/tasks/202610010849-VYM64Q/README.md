@@ -1,10 +1,11 @@
 ---
 id: "202610010849-VYM64Q"
 title: "Restore Writer attribute handle mutation lifecycle"
-status: "DOING"
+result_summary: "Writer registered-item handle lifecycle restored and verified against unchanged native owners;full audit/goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -52,11 +53,16 @@ quality_review:
     - "Source responsibility is split as native:virtual SfxItemSet Changed before Put/Clear storage;SwAttrSet old/new capture/category/parent defaults;node AttrSetHandleHelper copy/commit preserves retained handles and SwContentNode owns notification-before-release/no-op distinctions. No in-node synthetic delta reconciliation or scope/gate/IO drift."
     - "All692 prior app tests retain assertions plus5 meaningful native/literal tests;697app109inventory19browser pass,both100% all4metrics.24 complete unchanged native definitions and byte identities,300sequences1815 actual SwDoc/base-owner states;fixture equals regenerated native results after correcting generic86 adapter default to source1."
     - "Initial compile/CWD/lint/docs/provenance errors and native destructive last-handle SIGSEGV retained;none accepted as passing evidence. Defined changing nested resets are compared;full raw native callback lifetime is unproved rather than fabricated. Current native86 default1 versus registered local0 remains separate next-task obligation."
-commit: null
+commit:
+  hash: "83e10770fa8b34cc851c7bd88275935040bac0ef"
+  message: "🔧 VYM64Q code: restore Writer attribute handle mutation lifecycle"
 comments:
   -
     author: "CODER"
     body: "Start: restore approved existing Writer attribute handle mutation lifecycle under the continuing explicit goal,with real baseline and unchanged source evidence before production edits;retain all registered IO and bounded native lifetime gaps."
+  -
+    author: "CODER"
+    body: "Verified: restored native registered-item attribute handle copy/commit,pre-mutation Changed delta capture and notification-before-empty-release/no-op overload contracts. Actual code83e10770fa8b34cc851c7bd88275935040bac0ef has EVALUATOR pass;24 unchanged native definitions/300 sequences1815 real states and literal assertions;full npm run verify697app109inventory19browser,both100% all4 metrics,doctor0errors2knownwarnings,routing/diff/clean state. Full native pool/default/client lifetime and86 default0 versus native1 remain separate active-parent/goal obligations;registered IO unchanged."
 events:
   -
     type: "status"
@@ -77,8 +83,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: unchanged full npm run verify exit0;697app109inventory19browser,both100% all4 metrics,24 unchanged pinned definitions/300 sequences1815 real states,doctor0errors2knownwarnings,routing and clean code state. Actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef EVALUATOR pass. Re-record canonical blueprint evidence after CLI Verification section update replaced its generated verification block;no source/test or acceptance change."
+  -
+    type: "status"
+    at: "2026-10-01T09:36:23.127Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored native registered-item attribute handle copy/commit,pre-mutation Changed delta capture and notification-before-empty-release/no-op overload contracts. Actual code83e10770fa8b34cc851c7bd88275935040bac0ef has EVALUATOR pass;24 unchanged native definitions/300 sequences1815 real states and literal assertions;full npm run verify697app109inventory19browser,both100% all4 metrics,doctor0errors2knownwarnings,routing/diff/clean state. Full native pool/default/client lifetime and86 default0 versus native1 remain separate active-parent/goal obligations;registered IO unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-01T09:35:57.238Z"
+doc_updated_at: "2026-10-01T09:36:23.129Z"
 doc_updated_by: "CODER"
 description: "Iteration39: replace in-place SwContentNode attribute mutation with source-owned copy/commit handle helpers,restore native clear-delta callbacks and notification-before-release/no-op contracts. SetAttr participates in the same handle lifecycle so nested notification writes cannot mutate retained old sets. Existing registered items/unlocked observer path only;full native autostyle cache/refcount/modify-lock/lifetime remains explicit. Preserve IO deviations and active parent audit."
 sections:
@@ -140,6 +153,10 @@ sections:
     Command: native compile/setup and focused/static checks. Result: initial dependency declarations failed (constexpr typedWhich,svl::Items shape,unregisterItemSet reference);only named adapter declarations repaired. Initial focused run from repo root failed before tests because setup expects apps/office cwd;corrected run passed36 tests. Initial lint rejected non-null assertions/static-only class;source namespace helper is now a const method object,with source-guaranteed handle casts rather than added runtime policy. Source provenance rejected qualified local symbol strings and missing filename split registration;repaired actual markers and explicit responsibility split. JSDoc counted typed this receivers;documented them. All initial failure logs retained.
 
     Command: npm run test:coverage. Result: pass. Evidence:697 tests/156 files,all692 prior assertions retained;100% statements10627,branches8023,functions2876,lines9754. Scope: entire unchanged application coverage gates. Focused native comparison independently checks real delta scratch receivers via transparent spies;literal tests assert parent/default84 values,slot and sentinel exclusions,storage pre-mutation timing,retained handles and callback ownership. No whole native automatic-style pool,modify-lock/cache/refcount/surrogate,conditional/auto-style/client lifetime,default-module,parent audit or unlimited-goal closure inferred. Full npm run verify and final quality/clean state remain pending.
+extensions:
+  implementation_commit:
+    hash: "83e10770fa8b34cc851c7bd88275935040bac0ef"
+    message: "🔧 VYM64Q code: restore Writer attribute handle mutation lifecycle"
 id_source: "generated"
 ---
 ## Summary
