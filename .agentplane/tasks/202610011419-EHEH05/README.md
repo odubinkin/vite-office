@@ -4,7 +4,7 @@ title: "Restore native numbering rule copy assignment reset and scalar metadata 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the approved iteration47 complete native rule lifecycle/scalar ownership correction under persistent user goal approval;preserve registered IO exceptions and every original gate."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:22:47.287Z"
+doc_updated_at: "2026-10-01T14:32:45.172Z"
 doc_updated_by: "CODER"
 description: "Iteration47: restore complete native SwNumRule copy/Assign/Reset and value-equality responsibilities with exact metadata/defaults and distinction between owned and effective levels. Preserve pointer assignment identity,recipient default mode/list ID and client ownership;source copy resets count-phantom/redline policy as native does. Persist scalar rule state across Worker16 with native legacy defaults. No new rendering/continuous-tree/UI feature or registered IO/recovery change; broader lifetime/style/name-map/counter obligations remain unverified."
 sections:
@@ -54,7 +54,12 @@ sections:
     4. Actual CODE SHA separate from artifact/quality/close commits,canonical verification and separate EVALUATOR phase;finish leaf only with clean final tracked/untracked state. Parent/full goal remain active with a measured next gap;no broad module equivalence.
   Verification: "Pending: no implementation or completed acceptance verification claimed. Record full source/profile limits,actual commands/results and CODE before closure."
   Rollback Plan: "If rollback is needed,use a new executable task to revert reviewed CODE locally and rerun identical verification. Do not rewrite history or modify immutable DONE leaves. Retain source/native/failure evidence,parent/full goal and registered IO/recovery exceptions."
-  Findings: "Read-only clean preflight main57d763b328b9,only parent active,direct route,four matched modules loaded,no user-instructions file. Native Assign/Reset preserve default mode/list ID and unmentioned client containers;copy ctor separately resets CountPhantoms=true and UsedByRedline=false. Existing local clone copies only already stored fields;selected native scalar metadata is absent. Native UNKNOWN=USHRT_MAX65535;prior format-only C++ profile used named pool-placeholder0 and never certified pool defaults. Correct it before metadata proof. Complete46 followup-rule bodies and four states remain read-only evidence. Native nondefault continuous-tree/phantom consumers and full name-map/lifetime/style/GrabBag behavior exceed this leaf;do not claim those implemented from scalar metadata or green tests."
+  Findings: |-
+    Read-only clean preflight main57d763b328b9,only parent active,direct route,four matched modules loaded,no user-instructions file. Native Assign/Reset preserve default mode/list ID and unmentioned client containers;copy ctor separately resets CountPhantoms=true and UsedByRedline=false. Existing local clone copies only already stored fields;selected native scalar metadata is absent. Native UNKNOWN=USHRT_MAX65535;prior format-only C++ profile used named pool-placeholder0 and never certified pool defaults. Correct it before metadata proof. Complete46 followup-rule bodies and four states remain read-only evidence. Native nondefault continuous-tree/phantom consumers and full name-map/lifetime/style/GrabBag behavior exceed this leaf;do not claim those implemented from scalar metadata or green tests.
+
+    - Observation: Fresh baseline lacks Assign/Reset/Equals and native scalar getters. Five focused regressions fail at missing native APIs/UNKNOWN, as captured in red.log; native profile passed ASan/UBSan.
+      Impact: Existing rule lifecycle and Worker scalar state differ from pinned source. Native profile covers432 states,18 equality branches and7 narrowing boundaries; named paragraph-style/client-container and platform aliases do not certify full native lifetime or nondefault consumers.
+      Resolution: Proceed within approved47 scope with full source-shaped rule lifecycle/scalars and post-document-copy Worker restoration. Preserve red and native evidence; no original tests or thresholds changed.
 id_source: "generated"
 ---
 ## Summary
@@ -90,3 +95,7 @@ If rollback is needed,use a new executable task to revert reviewed CODE locally 
 ## Findings
 
 Read-only clean preflight main57d763b328b9,only parent active,direct route,four matched modules loaded,no user-instructions file. Native Assign/Reset preserve default mode/list ID and unmentioned client containers;copy ctor separately resets CountPhantoms=true and UsedByRedline=false. Existing local clone copies only already stored fields;selected native scalar metadata is absent. Native UNKNOWN=USHRT_MAX65535;prior format-only C++ profile used named pool-placeholder0 and never certified pool defaults. Correct it before metadata proof. Complete46 followup-rule bodies and four states remain read-only evidence. Native nondefault continuous-tree/phantom consumers and full name-map/lifetime/style/GrabBag behavior exceed this leaf;do not claim those implemented from scalar metadata or green tests.
+
+- Observation: Fresh baseline lacks Assign/Reset/Equals and native scalar getters. Five focused regressions fail at missing native APIs/UNKNOWN, as captured in red.log; native profile passed ASan/UBSan.
+  Impact: Existing rule lifecycle and Worker scalar state differ from pinned source. Native profile covers432 states,18 equality branches and7 narrowing boundaries; named paragraph-style/client-container and platform aliases do not certify full native lifetime or nondefault consumers.
+  Resolution: Proceed within approved47 scope with full source-shaped rule lifecycle/scalars and post-document-copy Worker restoration. Preserve red and native evidence; no original tests or thresholds changed.
