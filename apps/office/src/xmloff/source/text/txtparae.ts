@@ -101,6 +101,8 @@ export interface XMLTextListRuleSource {
 
 /** Neutral list attributes applied to one paragraph. */
 export interface XMLTextListSource {
+  /** Native NumberingIsNumber; false paragraphs continue an open item or start a header. */
+  readonly counted?: boolean;
   /** Effective Writer list identity. */
   readonly listId: string;
   /** Zero-based Writer list level. */
@@ -345,13 +347,14 @@ function exportParagraphBody(
   let body = "";
   let activeListId: string | undefined;
   const openRules: string[] = [];
+  const openItems: Array<"list-item" | "list-header"> = [];
   const listIdentities = new Map<string, { readonly rootId: string; segments: number }>();
   const usedXmlIds = new Set<string>();
 
   /** Closes every currently open list item and list. @returns Nothing. */
   function closeAllLists(): void {
     while (openRules.length > 0) {
-      body += "</text:list-item></text:list>";
+      body += `</text:${openItems.pop()}></text:list>`;
       openRules.pop();
     }
     activeListId = undefined;
@@ -378,10 +381,12 @@ function exportParagraphBody(
       }
     }
     const startValue =
-      includeStartValue && paragraphList.startValue !== undefined
+      includeStartValue && paragraphList.counted !== false && paragraphList.startValue !== undefined
         ? ` text:start-value="${paragraphList.startValue}"`
         : "";
-    body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:list-item${startValue}>`;
+    const item = includeStartValue && paragraphList.counted === false ? "list-header" : "list-item";
+    body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:${item}${startValue}>`;
+    openItems.push(item);
     openRules.push(paragraphList.rule.name);
   }
 
@@ -414,10 +419,13 @@ function exportParagraphBody(
         openListLevel(list, false, openRules.length === list.level);
     } else {
       while (openRules.length - 1 > list.level) {
-        body += "</text:list-item></text:list>";
+        body += `</text:${openItems.pop()}></text:list>`;
         openRules.pop();
       }
-      body += `</text:list-item><text:list-item${list.startValue === undefined ? "" : ` text:start-value="${list.startValue}"`}>`;
+      if (list.counted !== false) {
+        body += `</text:${openItems.pop()}><text:list-item${list.startValue === undefined ? "" : ` text:start-value="${list.startValue}"`}>`;
+        openItems.push("list-item");
+      }
     }
     body += paragraphXml;
   }

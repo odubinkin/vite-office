@@ -451,6 +451,7 @@ class SwXMLImport
       node.SetListId(list.listId);
       node.SetAttrListLevel(list.level);
       node.SetListRestart(list.restart === true, list.startValue);
+      if (list.counted === false) node.SetCountedInList(false);
       this.document.GetDocumentListsManager().RegisterListItem(node);
     }
     if (properties !== undefined)

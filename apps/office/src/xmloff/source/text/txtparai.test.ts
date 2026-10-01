@@ -569,17 +569,17 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       levelCount: 10,
       name: "Bullets",
     };
-    for (const body of [
-      "<text:list/>",
-      "<text:section/>",
-      '<text:list text:style-name="L1"><text:list-item><text:p>a</text:p><text:p>b</text:p></text:list-item></text:list>',
-      '<text:list text:style-name="L1"><text:list-header/></text:list>',
-    ])
+    for (const body of ["<text:list/>", "<text:section/>"])
       expect(
         /** Imports an unsupported structure. @returns Nothing. */ () =>
           importBody(body, styles, new Map([["L1", bullet]])),
       ).toThrow("Unsupported ODF");
     for (const [body, count] of [
+      [
+        '<text:list text:style-name="L1"><text:list-item><text:p>a</text:p><text:p>b</text:p></text:list-item></text:list>',
+        2,
+      ],
+      ['<text:list text:style-name="L1"><text:list-header/></text:list>', 0],
       ["<text:span><text:p>hidden</text:p></text:span>", 0],
       ["<text:p>A<text:list><text:p>hidden</text:p></text:list>B</text:p>", 1],
       ['<text:p><text:span text:style-name="T1"><text:list/></text:span></text:p>', 1],

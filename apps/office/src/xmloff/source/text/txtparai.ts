@@ -1,5 +1,7 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
+import { XMLTextListsHelper, type XMLTextListBlock } from "./txtlists";
+
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { XMLTableContext, type XMLTableImportTarget } from "../table/XMLTableImport";
@@ -75,6 +77,7 @@ export interface XMLTextListRule {
 export interface XMLParagraphListState {
   readonly level: number;
   readonly listId: string;
+  readonly counted?: boolean;
   readonly restart?: boolean;
   readonly ruleName: string;
   readonly startValue?: number;
@@ -120,19 +123,19 @@ const DEFAULT_PROPERTIES: OdfCharacterProperties = {
 interface ListImportState {
   generatedListId: number;
   readonly listIds: Map<string, string>;
+  readonly textLists: XMLTextListsHelper;
 }
 
 /** Effective nested list state. */
-interface ActiveList {
-  readonly level: number;
-  readonly listId: string;
-  readonly rule: XMLTextListRule;
-  readonly styleName: string;
-}
+type ActiveList = XMLTextListBlock;
 
 /** Handles office:text children and owns list identity state for one stream. */
 export class XMLTextBodyContext extends SvXMLImportContext {
-  private readonly lists: ListImportState = { generatedListId: 0, listIds: new Map() };
+  private readonly lists: ListImportState = {
+    generatedListId: 0,
+    listIds: new Map(),
+    textLists: new XMLTextListsHelper(),
+  };
 
   /** Sequence declarations carry no modeled effect without sequence fields. @param element - Child token. @returns Whether declaration-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
@@ -468,6 +471,7 @@ class XMLListContext extends SvXMLImportContext {
     else if (listId === undefined) listId = `${rule.name}-${++state.generatedListId}`;
     if (xmlId !== null) state.listIds.set(xmlId, listId);
     this.active = { level, listId, rule, styleName };
+    state.textLists.PushListContext(this.active);
   }
 
   /** Creates a list-item context. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
@@ -475,35 +479,54 @@ class XMLListContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element === XMLToken.TEXT_LIST_HEADER) throw new Error("Unsupported ODF list header.");
-    return element === XMLToken.TEXT_LIST_ITEM
-      ? new XMLListItemContext(this.target, attributes, this.state, this.active)
+    return element === XMLToken.TEXT_LIST_ITEM || element === XMLToken.TEXT_LIST_HEADER
+      ? new XMLListItemContext(
+          this.target,
+          attributes,
+          this.state,
+          this.active,
+          element === XMLToken.TEXT_LIST_HEADER,
+        )
       : null;
+  }
+  /** Restores the parent block and clears its item after a sublist, as native XMLTextListBlockContext does. @returns Nothing. */
+  public override endFastElement(): void {
+    this.state.textLists.PopListContext();
+    this.state.textLists.SetListItem(undefined);
   }
 }
 
-/** Enforces the bounded list-item structure while children mutate Writer directly. */
+/** Owns the native numbered-item signal while paragraph contexts mutate Writer directly. */
 class XMLListItemContext extends SvXMLImportContext {
-  private paragraphCount = 0;
   private readonly startValue: number | undefined;
 
-  /** Creates a list-item context. @param target - Writer target. @param attributes - Item attributes. @param state - Stream list state. @param active - Active list. @returns Context. */
+  /** Creates a list-item context. @param target - Writer target. @param attributes - Item attributes. @param state - Stream list state. @param active - Active list. @param header - Whether this is a header without a numbered-item signal. @returns Context. */
   public constructor(
     private readonly target: XMLTextImportTarget,
     attributes: FastAttributeList,
     private readonly state: ListImportState,
     private readonly active: ActiveList,
+    header: boolean,
   ) {
     super();
     attributes.assertOnly([XMLToken.TEXT_START_VALUE], "list item");
     const rawStartValue = attributes.get(XMLToken.TEXT_START_VALUE);
-    if (rawStartValue !== null) {
+    if (!header && rawStartValue !== null) {
       if (!/^\d+$/.test(rawStartValue)) throw new Error("Unsupported ODF list start value.");
       const startValue = Number(rawStartValue);
       if (!Number.isSafeInteger(startValue) || startValue < 0 || startValue > 32_767)
         throw new Error("Unsupported ODF list start value.");
       this.startValue = startValue;
     }
+    if (!header) state.textLists.SetListItem(this);
+  }
+  /** Returns the explicit start retained only for ordinary items. @returns Start value. */
+  public GetStartValue(): number | undefined {
+    return this.startValue;
+  }
+  /** Clears the numbered item after its container ends. @returns Nothing. */
+  public override endFastElement(): void {
+    this.state.textLists.SetListItem(undefined);
   }
 
   /** Creates paragraph or nested-list children. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
@@ -512,12 +535,14 @@ class XMLListItemContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H) {
-      if (++this.paragraphCount > 1)
-        throw new Error("Unsupported ODF list item with multiple paragraphs.");
+      const item = this.state.textLists.ListContextTop()?.item;
+      const startValue = item?.GetStartValue();
+      this.state.textLists.SetListItem(undefined);
       return new XMLParaContext(this.target, element, attributes, {
         level: this.active.level,
         listId: this.active.listId,
-        ...(this.startValue === undefined ? {} : { restart: true, startValue: this.startValue }),
+        ...(item === undefined ? { counted: false } : {}),
+        ...(startValue === undefined ? {} : { restart: true, startValue }),
         ruleName: this.active.rule.name,
       });
     }

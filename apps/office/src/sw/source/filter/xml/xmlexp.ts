@@ -67,6 +67,7 @@ import {
   RES_PARATR_WIDOWS,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
+  RES_PARATR_LIST_ISCOUNTED,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_LEVEL,
@@ -324,7 +325,10 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
           list: {
             listId,
             level,
-            ...(node.IsListRestart() ? { startValue: node.GetActualListStartValue() } : {}),
+            counted: node.IsCountedInList(),
+            ...(node.IsCountedInList() && node.IsListRestart()
+              ? { startValue: node.GetActualListStartValue() }
+              : {}),
             rule: {
               levels: Array.from(
                 { length: WRITER_MAX_LIST_LEVEL + 1 },
@@ -399,6 +403,7 @@ function assertSupportedItems(
   ]);
   if (allowListItems)
     for (const which of [
+      RES_PARATR_LIST_ISCOUNTED,
       RES_PARATR_LIST_ID,
       RES_PARATR_LIST_ISRESTART,
       RES_PARATR_LIST_LEVEL,

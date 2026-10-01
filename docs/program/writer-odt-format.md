@@ -62,12 +62,20 @@ per level, while each listed `SwTextNode` stores the rule name, list identity,
 and level in `RES_PARATR_NUMRULE`, `RES_PARATR_LIST_ID`, and
 `RES_PARATR_LIST_LEVEL`. The xmloff boundary writes automatic
 `text:list-style` definitions and nests flat Writer nodes in `text:list` and
-`text:list-item` elements. Root `xml:id` and `text:continue-list` segments
+`text:list-item` and `text:list-header` elements. The native counted flag
+`RES_PARATR_LIST_ISCOUNTED` crosses the filter: the first paragraph of an ordinary
+item is numbered; later paragraphs and headers are unnumbered. After a nested
+list, following paragraphs in its enclosing item are also unnumbered. A newly
+opened unnumbered level uses `text:list-header`; same-level unnumbered paragraphs
+continue the open item. Skipped-level ancestors use ordinary item wrappers. Root `xml:id` and `text:continue-list` segments
 retain list identity across intervening ordinary paragraphs. Import performs
 the inverse traversal, including LibreOffice output that declares only the
 levels used by a list style; missing internal formats are completed when the
 ten-level `SwNumRule` is built. Explicit `text:start-value` values on
-`text:list-item` map to Writer restart items and are emitted again on export.
+`text:list-item` map to the first numbered paragraph's Writer restart items and
+are emitted again on export. Header start attributes are ignored. Restart and
+start metadata on unnumbered paragraphs are omitted by the native numbered-state
+projection; Worker records and owned item-set copies retain their model state.
 
 Spaces are emitted as `text:s`, including `text:c` for runs, while tabs and
 in-paragraph line breaks use `text:tab` and `text:line-break`. This retains exact
@@ -101,8 +109,8 @@ certification sample retain their logical positions through Worker transfer and
 ODT save/reopen.
 
 Images, fields, annotations, tracked changes, sections, objects, scripts,
-signatures, encryption, RDF, custom bullet glyphs, non-decimal numbering,
-merged or nested tables, and list headers remain unsupported. Table rows are
+signatures, encryption, RDF, non-decimal numbering,
+and merged or nested tables remain unsupported. Table rows are
 visible at their body-order anchors but are not paginated by the page-frame
 engine; visual page count can differ from LibreOffice. Table keep-with-next,
 row splitting, full table cursor navigation and undo are not modeled. Headers,
