@@ -13,7 +13,7 @@ import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import {
   RES_PARATR_ADJUST,
   RES_CHRATR_FONTSIZE,
@@ -40,7 +40,6 @@ import {
   HandleResetAttrAtTextNode,
   IsOutlineAtTextNode,
 } from "./ndtxt-attribute-handlers";
-import { SfxItemState } from "../../../../svl/source/items/itemset";
 import { HandleModifyAtTextNodeFormatChange } from "./ndtxt-format-change";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
@@ -329,11 +328,13 @@ export class SwTextNode extends SwContentNode {
   public HasAttrListRestartValue(): boolean {
     return this.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_LIST_RESTARTVALUE, false) !== undefined;
   }
-
-  /** Returns the direct list restart value. @returns Explicit value. */
+  /** Reads the effective restart item after a nonfatal absent-direct diagnostic. @returns Signed restart value. */
   public GetAttrListRestartValue(): number {
-    if (!this.HasAttrListRestartValue()) throw new Error("Writer list restart value is not set.");
-    return (this.GetAttr(RES_PARATR_LIST_RESTARTVALUE, false) as SfxInt16Item).GetValue();
+    if (!this.HasAttrListRestartValue())
+      console.warn(
+        "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node.",
+      );
+    return (this.GetAttr(RES_PARATR_LIST_RESTARTVALUE) as SfxInt16Item).GetValue();
   }
 
   /** Returns the explicit or format-defined list start value. @returns Effective start. */

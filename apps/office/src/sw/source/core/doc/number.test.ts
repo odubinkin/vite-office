@@ -1,6 +1,6 @@
 /** @fileoverview Verifies browser-visible Writer list marker calculation at the `number.cxx`-derived document boundary. */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   getWriterParagraphListMarker,
@@ -237,10 +237,15 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(second.GetAttrListRestartValue()).toBe(5);
     second.SetAttrListRestartValue(65_535);
     expect(second.HasAttrListRestartValue()).toBe(false);
-    expect(
-      /** Reads a missing explicit restart value. @returns Missing value. */ () =>
-        second.GetAttrListRestartValue(),
-    ).toThrow("is not set");
+    const warning = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Captures the nonfatal native precondition diagnostic. @returns Nothing. */ () => {},
+      );
+    expect(second.GetAttrListRestartValue()).toBe(1);
+    expect(second.HasAttrListRestartValue()).toBe(false);
+    expect(warning).toHaveBeenCalledOnce();
+    warning.mockRestore();
     second.SetAttrListRestartValue(40_000);
     expect(second.GetAttrListRestartValue()).toBe(-25_536);
     applyWriterParagraphList(second, { kind: "none", level: 0 });
