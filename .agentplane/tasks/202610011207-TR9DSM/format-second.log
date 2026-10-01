@@ -1,0 +1,4 @@
+apps/office/src/sw/source/core/txtnode/ndtxt.ts 380ms (unchanged)
+scripts/check-module-boundaries.mjs 33ms (unchanged)
+scripts/check-module-boundaries.test.ts 11ms
+scripts/check-lo-source-tree.mjs 4ms (unchanged)

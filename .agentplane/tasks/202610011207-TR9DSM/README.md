@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:35:23.084Z"
+doc_updated_at: "2026-10-01T12:39:12.882Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -81,6 +81,10 @@ sections:
     - Observation: Both native harnesses execute 21 format-value states and 144 NumberType traces without ASan/UBSan diagnostics. Import migration pushes ndtxt.ts to 1005 lines.
       Impact: The unchanged file-size gate requires a small source-owned caller cleanup; broader native services, Font attributes and registered-client branches remain unverified.
       Resolution: Preserve the literal oracle fixture and failed size log. Keep Font-family assembly inside the editeng transfer adapter so Writer core adds no vcl dependency and existing adapter gates remain strict. Consolidate repeated text-node rule reads to stay within the size limit without exclusions.
+
+    - Observation: Focused36 application tests and6 native-edge boundary tests pass; source provenance passes213 modules and dependency gating passes13 explicit cross-module edges. The second size check reports exactly1000 lines in ndtxt.ts.
+      Impact: The preserved strict size gate still rejects the migrated text-node file.
+      Resolution: Simplify the bound-rule kind reader through the same native helper using optional lookup. Retain both failed size logs. Generated native debug bundles were inadvertently included in an artifact checkpoint; move them to ignored in-repo tmp and remove their tracked copies, keeping all sources/build/run logs and literal results.
 id_source: "generated"
 ---
 ## Summary
@@ -137,3 +141,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: Both native harnesses execute 21 format-value states and 144 NumberType traces without ASan/UBSan diagnostics. Import migration pushes ndtxt.ts to 1005 lines.
   Impact: The unchanged file-size gate requires a small source-owned caller cleanup; broader native services, Font attributes and registered-client branches remain unverified.
   Resolution: Preserve the literal oracle fixture and failed size log. Keep Font-family assembly inside the editeng transfer adapter so Writer core adds no vcl dependency and existing adapter gates remain strict. Consolidate repeated text-node rule reads to stay within the size limit without exclusions.
+
+- Observation: Focused36 application tests and6 native-edge boundary tests pass; source provenance passes213 modules and dependency gating passes13 explicit cross-module edges. The second size check reports exactly1000 lines in ndtxt.ts.
+  Impact: The preserved strict size gate still rejects the migrated text-node file.
+  Resolution: Simplify the bound-rule kind reader through the same native helper using optional lookup. Retain both failed size logs. Generated native debug bundles were inadvertently included in an artifact checkpoint; move them to ignored in-repo tmp and remove their tracked copies, keeping all sources/build/run logs and literal results.
