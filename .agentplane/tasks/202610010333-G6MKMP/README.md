@@ -1,10 +1,11 @@
 ---
 id: "202610010333-G6MKMP"
 title: "Restore native processed list continuation import"
-status: "DOING"
+result_summary: "Restored native resolved-list continuation and default identity import; broader SwList/factory/legacy obligations remain separate."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Reviewed actual implementation, native probe and package expectations. Nine full compiled native definitions remain unmodified;3082 sequences/15392 states cover root/nested flags,processed chains/default projection and generated collisions. Baseline corrects the initial rejection inference: unknown continue-numbering was ignored by old SAX."
     - "112 genuine ODT packages verify independent literal state,counters,vectors,labels,stored item/rule ownership,Worker16 and native reopen projection. Cohesive517line case table remains below enforced1000line gate; no test/config/status promotion."
     - "Full verify67226 exited0:657 app plus109 inventory tests,19 browser scenarios,both coverage suites100%,all unchanged gates. Doctor0errors/two existing warnings,routing and diff clean."
-commit: null
+commit:
+  hash: "508212bf8c0775ae17cda0d291793898834cbf97"
+  message: "🧩 G6MKMP code: restore native processed list continuation import"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned processed continuation and DefaultListId projection under the persistent approved upstream goal;safe local scope and unchanged gates."
+  -
+    author: "CODER"
+    body: "Verified: native processed continuation/default identity,3082 sequences/15392 states,112 genuine ODT packages,657+109 tests,19 browser,all coverage100%,unchanged gates,evaluator pass; parent goal active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: source-owned processed continuation/default identity;3082 native sequences/15392 states,112 genuine ODT packages;full verify67226 terminal0,657+109 tests,19 browser,all coverage100%,unchanged gates. Parent/full goal active."
+  -
+    type: "status"
+    at: "2026-10-01T04:16:55.220Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native processed continuation/default identity,3082 sequences/15392 states,112 genuine ODT packages,657+109 tests,19 browser,all coverage100%,unchanged gates,evaluator pass; parent goal active."
 doc_version: 3
-doc_updated_at: "2026-10-01T04:12:00.708Z"
+doc_updated_at: "2026-10-01T04:16:55.223Z"
 doc_updated_by: "CODER"
 description: "Iteration34: replace list alias map with source-owned processed list records,parse native continue-numbering/root-only identity attributes,resolve chains and DefaultListId projection;preserve registered save/open/recovery differences."
 sections:
