@@ -4,7 +4,7 @@ title: "Restore native numbering tree continuous and phantom policy dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute approved48 complete selected native continuous/phantom tree policy,validation,predecessor,cache/notification and actual document list entry under persistent user goal authorization;preserve all gates and registered IO/recovery exceptions."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:04:59.003Z"
+doc_updated_at: "2026-10-01T16:06:53.121Z"
 doc_updated_by: "CODER"
 description: "Iteration48: replace default-only SwNodeNum phantom policy and hierarchical-only tree dispatch with complete source-owned continuous validation,predecessor traversal,cache invalidation and notification responsibilities. Use native rule flags and native SwList validation entry;existing label fallback respects continuous mode. Verify exact pinned native mixed topology/cache/notification/counter outputs and actual document/Worker owners without broad parity promotion or changing registered IO/recovery exceptions."
 sections:
@@ -72,6 +72,10 @@ sections:
     - Observation: Command: npm run verify. Result: fail. All 165 app files and 732 tests pass; coverage reports 8274/8275 branches (99.98%), with one unexercised first-child uncounted branch at SwNumberTree.ts:270.
       Impact: The unchanged 100% branch gate blocks verification; no parity test or production assertion failed.
       Resolution: Retain verify-first.log, recompute route, add a meaningful boundary case for the native no-predecessor uncounted path, and rerun the unchanged checks.
+
+    - Observation: Command: npx vitest run --config apps/office/vitest.config.ts apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts. Result: fail at startup because that config path does not exist.
+      Impact: No test ran; this was an incorrect invocation, unrelated to implementation.
+      Resolution: Use the existing apps/office/vite.config.ts by running Vitest in the office workspace. Preserve the startup log and route before retry.
 id_source: "generated"
 ---
 ## Summary
@@ -123,3 +127,7 @@ Preflight clean/direct,ORCHESTRATOR then PLANNER,four matched modules loaded,use
 - Observation: Command: npm run verify. Result: fail. All 165 app files and 732 tests pass; coverage reports 8274/8275 branches (99.98%), with one unexercised first-child uncounted branch at SwNumberTree.ts:270.
   Impact: The unchanged 100% branch gate blocks verification; no parity test or production assertion failed.
   Resolution: Retain verify-first.log, recompute route, add a meaningful boundary case for the native no-predecessor uncounted path, and rerun the unchanged checks.
+
+- Observation: Command: npx vitest run --config apps/office/vitest.config.ts apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts. Result: fail at startup because that config path does not exist.
+  Impact: No test ran; this was an incorrect invocation, unrelated to implementation.
+  Resolution: Use the existing apps/office/vite.config.ts by running Vitest in the office workspace. Preserve the startup log and route before retry.
