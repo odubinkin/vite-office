@@ -1,0 +1,29 @@
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:205:82: error: non-type template argument is not a constant expression
+  205 |         pStyleNames.emplace( *aNewSet.GetPool(), WhichRangesContainer(svl::Items<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>));
+      |                                                                                  ^~~~~~~~~~~~~~~~~~~~~
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:205:82: note: non-constexpr function 'operator int' cannot be used in a constant expression
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:17:48: note: declared here
+   17 | template<class T>struct TypedWhichId{int value;operator int()const{return value;}};
+      |                                                ^
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:205:139: error: expected '(' for function-style cast or type construction
+  205 |         pStyleNames.emplace( *aNewSet.GetPool(), WhichRangesContainer(svl::Items<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>));
+      |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:250:82: error: non-type template argument is not a constant expression
+  250 |         pStyleNames.emplace( *aNewSet.GetPool(), WhichRangesContainer(svl::Items<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>));
+      |                                                                                  ^~~~~~~~~~~~~~~~~~~~~
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:250:82: note: non-constexpr function 'operator int' cannot be used in a constant expression
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:17:48: note: declared here
+   17 | template<class T>struct TypedWhichId{int value;operator int()const{return value;}};
+      |                                                ^
+.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx:250:139: error: expected '(' for function-style cast or type construction
+  250 |         pStyleNames.emplace( *aNewSet.GetPool(), WhichRangesContainer(svl::Items<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>));
+      |                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+4 errors generated.
+Traceback (most recent call last):
+  File "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010849-VYM64Q/native-oracle.py", line 103, in <module>
+    binary=root/'native-attributes';subprocess.run(['clang++','-std=c++20',str(root/'native-attributes.cxx'),'-o',str(binary)],check=True)
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['clang++', '-std=c++20', '.agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx', '-o', '.agentplane/tasks/202610010849-VYM64Q/native-attributes']' returned non-zero exit status 1.

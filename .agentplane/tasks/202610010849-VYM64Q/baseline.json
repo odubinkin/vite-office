@@ -1,0 +1,98 @@
+[
+  {
+    "mode": "single",
+    "result": false,
+    "retained": false,
+    "allocated": false
+  },
+  {
+    "mode": "reversed",
+    "result": false,
+    "retained": false,
+    "allocated": false
+  },
+  {
+    "mode": "vector",
+    "result": false,
+    "retained": false,
+    "allocated": false
+  },
+  {
+    "mode": "all",
+    "result": 0,
+    "retained": false,
+    "allocated": false
+  },
+  {
+    "mode": "set",
+    "result": true,
+    "events": [
+      {
+        "allocated": true,
+        "count": 1,
+        "same": true,
+        "old": [
+          2
+        ]
+      }
+    ],
+    "oldAfter": [
+      2
+    ],
+    "current": [
+      2
+    ]
+  },
+  {
+    "mode": "single",
+    "result": true,
+    "events": [
+      {
+        "allocated": false,
+        "count": -1,
+        "same": false,
+        "old": []
+      }
+    ],
+    "oldAfter": []
+  },
+  {
+    "mode": "all",
+    "result": 1,
+    "events": [
+      {
+        "allocated": false,
+        "count": -1,
+        "same": false,
+        "old": []
+      }
+    ],
+    "oldAfter": []
+  },
+  {
+    "mode": "nested",
+    "result": true,
+    "events": [
+      {
+        "allocated": false,
+        "count": -1,
+        "same": false,
+        "old": []
+      },
+      {
+        "allocated": true,
+        "count": 1,
+        "same": false,
+        "old": []
+      }
+    ],
+    "oldAfter": [],
+    "current": [
+      2
+    ]
+  },
+  {
+    "mode": "sentinel-count",
+    "result": 3
+  }
+]
