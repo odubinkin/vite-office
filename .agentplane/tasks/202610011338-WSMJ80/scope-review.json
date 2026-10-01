@@ -30,7 +30,7 @@
     "apps/office/src/sw/source/core/doc/number.ts": 480,
     "apps/office/src/editeng/source/items/numitem.ts": 346,
     "apps/office/src/sw/inc/calbck.ts": 147,
-    "apps/office/src/sw/source/core/doc/number-pointer.test.ts": 326
+    "apps/office/src/sw/source/core/doc/number-pointer.test.ts": 330
   },
   "originalTestsUnchanged": true
 }
