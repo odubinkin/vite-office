@@ -21,9 +21,10 @@ base=r'''
 #include <iostream>
 #include <cassert>
 #include <utility>
+#include <deque>
 #define OSL_ENSURE(a,b) assert(a)
 using sal_uInt16=unsigned short;
-struct SfxPoolItem{int which,value,state=0;int Which()const{return which;}};
+struct SfxPoolItem{int which,value,state=0;int Which()const{return which;}static bool areSame(const SfxPoolItem& a,const SfxPoolItem& b){return a.which==b.which&&a.value==b.value&&a.state==b.state;}};
 bool IsInvalidItem(const SfxPoolItem* p){return p&&p->state==1;}
 bool IsDisabledItem(const SfxPoolItem* p){return p&&p->state==2;}
 struct SfxStringItem:SfxPoolItem{struct Str{bool isEmpty()const{return true;}};Str GetValue()const{return {};}};
@@ -34,20 +35,22 @@ constexpr TypedWhichId<SfxStringItem> RES_FRMATR_STYLE_NAME{701};constexpr int R
 enum class SfxItemState{DEFAULT,SET};
 struct WhichRangesContainer{template<class T>WhichRangesContainer(T){}};
 namespace svl{template<int...>constexpr int Items=0;}
-struct SfxItemPool{static constexpr int SFX_WHICH_MAX=4999;static bool IsWhich(sal_uInt16);const SfxPoolItem& GetUserOrPoolDefaultItem(int id)const{static std::map<int,SfxPoolItem> items;auto [at,added]=items.emplace(id,SfxPoolItem{id,id==86?65535:id==87?1:0});return at->second;}};
+struct SfxItemPool{std::deque<SfxPoolItem> arena;void unregisterItemSet(const void*){}static constexpr int SFX_WHICH_MAX=4999;static bool IsWhich(sal_uInt16);const SfxPoolItem& GetUserOrPoolDefaultItem(int id)const{static std::map<int,SfxPoolItem> items;auto [at,added]=items.emplace(id,SfxPoolItem{id,id==86?65535:id==87?1:0});return at->second;}};
+const SfxPoolItem* implCreateItemEntry(SfxItemPool& p,const SfxPoolItem* x,bool){p.arena.push_back(*x);return &p.arena.back();}void implCleanupItemEntry(const SfxPoolItem*){}
 struct SfxItemSet{
- std::map<int,std::shared_ptr<SfxPoolItem>> items;SfxItemPool* pool;const SfxItemSet* parent=nullptr;
+ using PoolItemMap=std::map<int,const SfxPoolItem*>;PoolItemMap m_aPoolItemMap;int m_nRegister=0;SfxItemPool* pool;const SfxItemSet* parent=nullptr;
  SfxItemSet(SfxItemPool& p,int):pool(&p){}SfxItemSet(SfxItemPool& p,WhichRangesContainer):pool(&p){}
  virtual ~SfxItemSet()=default;virtual void Changed(const SfxPoolItem*,const SfxPoolItem*)const;
- SfxItemPool* GetPool()const{return pool;}int GetRanges()const{return 0;}int Count()const{return items.size();}
+ SfxItemPool* GetPool()const{return pool;}auto GetRanges()const{return Range{};}struct Range{bool doesContainWhich(int id)const{return id>0;}operator int()const{return 0;}};int Count()const{return m_aPoolItemMap.size();}
  const SfxItemSet* GetParent()const{return parent;}void SetParent(const SfxItemSet* p){parent=p;}
- const SfxPoolItem& Get(int id)const{auto at=items.find(id);return at==items.end()?(parent?parent->Get(id):pool->GetUserOrPoolDefaultItem(id)):*at->second;}
+ const SfxPoolItem& Get(int id)const{auto at=m_aPoolItemMap.find(id);return at==m_aPoolItemMap.end()?(parent?parent->Get(id):pool->GetUserOrPoolDefaultItem(id)):*at->second;}
  template<class T>const T* GetItemIfSet(TypedWhichId<T>,bool)const{return nullptr;}
- SfxItemState GetItemState(int id,bool)const{return items.count(id)?SfxItemState::SET:SfxItemState::DEFAULT;}
- const SfxPoolItem* Put(const SfxPoolItem& x){auto at=items.find(x.which);const SfxPoolItem* old=at==items.end()?nullptr:at->second.get();if(old&&old->value==x.value&&old->state==x.state)return nullptr;auto p=std::make_shared<SfxPoolItem>(x);Changed(old,p.get());items[x.which]=p;return p.get();}
- const SfxPoolItem* PutImpl(const SfxPoolItem& x,bool){return Put(x);}
- bool Put(const SfxItemSet& x){bool changed=false;for(auto& [id,item]:x.items){if(IsDisabledItem(item.get()))continue;if(IsInvalidItem(item.get()))changed=ClearItem(id)!=0||changed;else changed=(Put(*item)!=nullptr)||changed;}return changed;}
- sal_uInt16 ClearItem(sal_uInt16 id){if(!Count())return 0;if(id){auto at=items.find(id);if(at==items.end())return 0;Changed(at->second.get(),nullptr);items.erase(at);return 1;}for(auto& [at,item]:items)Changed(item.get(),nullptr);auto n=Count();items.clear();return n;}
+ SfxItemState GetItemState(int id,bool)const{return m_aPoolItemMap.count(id)?SfxItemState::SET:SfxItemState::DEFAULT;}
+ const SfxPoolItem* Put(const SfxPoolItem& x){return PutImpl(x,false);}const SfxPoolItem* PutImpl(const SfxPoolItem&,bool);
+ bool Put(const SfxItemSet& x){bool changed=false;for(auto& [id,item]:x.m_aPoolItemMap){if(IsDisabledItem(item))continue;if(IsInvalidItem(item))changed=ClearItem(id)!=0||changed;else changed=(Put(*item)!=nullptr)||changed;}return changed;}
+ sal_uInt16 ClearItem(sal_uInt16);sal_uInt16 ClearSingleItem_ForWhichID(sal_uInt16);void ClearSingleItem_PrepareRemove(const SfxPoolItem*);sal_uInt16 ClearAllItemsImpl();
+ void checkRemovePoolRegistration(const SfxPoolItem*){}void checkAddPoolRegistration(const SfxPoolItem*){}
+
 };
 struct SwAttrSet:SfxItemSet{
  SwAttrSet* m_pOldSet=nullptr;SwAttrSet* m_pNewSet=nullptr;
@@ -81,6 +84,7 @@ void SetParent(std::shared_ptr<const SwAttrSet>&,const SwContentNode&,const SwFo
 base=base.replace('static bool IsWhich(sal_uInt16);','SfxItemPool& GetAttrPool(){return *this;}static bool IsWhich(sal_uInt16);')
 pool=take('pool','static bool IsWhich(');base+='\nbool SfxItemPool::'+pool[len('static bool '):]+'\n'
 base+=take('set','void SfxItemSet::Changed(')+'\n'
+for m in ['const SfxPoolItem* SfxItemSet::PutImpl(', 'sal_uInt16 SfxItemSet::ClearItem(', 'sal_uInt16 SfxItemSet::ClearSingleItem_ForWhichID(', 'void SfxItemSet::ClearSingleItem_PrepareRemove(', 'sal_uInt16 SfxItemSet::ClearAllItemsImpl()']:base+=take('set',m)+'\n'
 base+=take('attr','void SwAttrSet::Changed(')+'\n'
 for m in ['bool SwAttrSet::Put_BC( const SfxPoolItem&','bool SwAttrSet::Put_BC( const SfxItemSet&','sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,','sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1,']:
  base+=take('attr',m)+'\n'
@@ -90,12 +94,12 @@ for m in ['static const SfxPoolItem* Put(', 'static bool Put( std::shared_ptr', 
 base+='}\n'
 for m in ['bool SwContentNode::SetAttr(const SfxPoolItem&','bool SwContentNode::SetAttr( const SfxItemSet&','bool SwContentNode::ResetAttr( sal_uInt16','bool SwContentNode::ResetAttr( const std::vector','sal_uInt16 SwContentNode::ResetAllAttr()','sal_uInt16 SwContentNode::ClearItemsFromAttrSet(']:base+=take('node',m)+'\n'
 base+=r'''
-void print(const SwAttrSet* s){if(!s){std::cout<<"null";return;}std::cout<<'[';bool comma=false;for(auto& [id,p]:s->items){if(comma)std::cout<<',';comma=true;std::cout<<'['<<id<<','<<p->value<<','<<p->state<<']';}std::cout<<']';}
+void print(const SwAttrSet* s){if(!s){std::cout<<"null";return;}std::cout<<'[';bool comma=false;for(auto& [id,p]:s->m_aPoolItemMap){if(comma)std::cout<<',';comma=true;std::cout<<'['<<id<<','<<p->value<<','<<p->state<<']';}std::cout<<']';}
 int main(){int count;while(std::cin>>count){SwContentNode node;std::cout<<'[';for(int at=0;at<count;at++){int kind,size;std::cin>>kind>>size;std::vector<int> x(size);for(auto& v:x)std::cin>>v;auto before=node.mpAttrSet;node.events.clear();int result=-1;
  if(kind==0)result=node.SetAttr(SfxPoolItem{x[0],x[1]});
  if(kind==1){SfxItemSet s(node.pool,0);for(int i=0;i<size;i+=2)s.Put(SfxPoolItem{x[i],x[i+1]});result=node.SetAttr(s);}
  if(kind==2)result=node.ResetAttr(x[0],x[1]);if(kind==3){std::vector<sal_uInt16> ids(x.begin(),x.end());result=node.ResetAttr(ids);}if(kind==4)result=node.ResetAllAttr();
- if(kind==5||kind==6){if(!node.mpAttrSet)node.NewAttrSet(node.pool);const_cast<SwAttrSet*>(node.mpAttrSet.get())->items[x[0]]=std::make_shared<SfxPoolItem>(SfxPoolItem{x[0],0,kind==5?1:2});}
+ if(kind==5||kind==6){if(!node.mpAttrSet)node.NewAttrSet(node.pool);const_cast<SwAttrSet*>(node.mpAttrSet.get())->m_aPoolItemMap[x[0]]=nullptr;SfxPoolItem sentinel{x[0],0,kind==5?1:2};const_cast<SwAttrSet*>(node.mpAttrSet.get())->m_aPoolItemMap[x[0]]=implCreateItemEntry(node.pool,&sentinel,false);}
  if(kind==7){SfxItemSet empty(node.pool,0);result=node.SetAttr(empty);}if(kind==8)node.format.attrs.Put(SfxPoolItem{x[0],x[1]});if(kind==9)node.pending=x;
  if(at)std::cout<<',';std::cout<<"{\"result\":"<<result<<",\"same\":"<<(before==node.mpAttrSet?"true":"false")<<",\"current\":";print(node.mpAttrSet.get());std::cout<<",\"retained\":";print(before.get());std::cout<<",\"events\":[";for(int i=0;i<node.events.size();i++){if(i)std::cout<<',';auto e=node.events[i];std::cout<<'['<<e[0]<<','<<e[1]<<','<<e[2]<<']';}std::cout<<"]}";}std::cout<<"]\n";}}
 '''
