@@ -44,7 +44,7 @@ struct SwTextNode {
  void SetAttrListRestartValue(SwNumberTree::tSwNumTreeNumber);
  bool HasAttrListRestartValue()const;
  SwNumberTree::tSwNumTreeNumber GetAttrListRestartValue()const,GetActualListStartValue()const;
- void Print(){std::cout<<"{\"restart\":"<<(IsListRestart()?"true":"false")<<",\"direct\":"; if(HasAttrListRestartValue())std::cout<<GetAttrListRestartValue();else std::cout<<"null";std::cout<<",\"effective\":"<<static_cast<const SfxInt16Item&>(GetAttr(86)).GetValue()<<",\"start\":"<<GetActualListStartValue()<<",\"calls\":[";bool comma=false;for(auto c:calls){if(comma)std::cout<<",";comma=true;std::cout<<"[\""<<(c.set?"set":"reset")<<"\","<<c.which;if(c.set)std::cout<<","<<c.value;std::cout<<"]";}std::cout<<"]}";calls.clear();}
+ void Print(){std::cout<<"{\"restart\":"<<(IsListRestart()?"true":"false")<<",\"direct\":"; if(HasAttrListRestartValue())std::cout<<GetAttrListRestartValue();else std::cout<<"null";std::cout<<",\"effective\":"<<static_cast<const SfxInt16Item&>(GetAttr(86)).GetValue()<<",\"start\":"<<GetActualListStartValue()<<",\"calls\":[";bool comma=false;for(auto c:calls){if(comma)std::cout<<",";comma=true;std::cout<<"[\""<<(c.set?"set":"reset")<<"\","<<c.which;if(c.set){std::cout<<",";if(c.which==85)std::cout<<(c.value?"true":"false");else std::cout<<c.value;}std::cout<<"]";}std::cout<<"]}";calls.clear();}
 };
 '''
 main='int main(){std::cout<<"[";\n'
