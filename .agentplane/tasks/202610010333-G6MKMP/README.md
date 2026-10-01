@@ -4,7 +4,7 @@ title: "Restore native processed list continuation import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-01T04:12:00.611Z"
+  updated_by: "CODER"
+  note: "Verified: source-owned processed continuation/default identity;3082 native sequences/15392 states,112 genuine ODT packages;full verify67226 terminal0,657+109 tests,19 browser,all coverage100%,unchanged gates. Parent/full goal active."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore source-owned processed continuation and DefaultListId projection under the persistent approved upstream goal;safe local scope and unchanged gates."
+  -
+    type: "verify"
+    at: "2026-10-01T04:12:00.611Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: source-owned processed continuation/default identity;3082 native sequences/15392 states,112 genuine ODT packages;full verify67226 terminal0,657+109 tests,19 browser,all coverage100%,unchanged gates. Parent/full goal active."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:58:46.780Z"
+doc_updated_at: "2026-10-01T04:12:00.708Z"
 doc_updated_by: "CODER"
 description: "Iteration34: replace list alias map with source-owned processed list records,parse native continue-numbering/root-only identity attributes,resolve chains and DefaultListId projection;preserve registered save/open/recovery differences."
 sections:
@@ -44,7 +50,58 @@ sections:
   Scope: "Runtime txtlists.ts,XMLTextListBlockContext.ts,XMLTextListItemContext.ts,txtparai.ts,xmltoken.ts and sw/source/filter/xml/xmlimp.ts. Focused helper/context/token/import tests,new genuine ODT continuation test and existing XML/ODT fixtures whose literal identities change under native DefaultListId or timestamp generation. Runtime inventory,source provenance,writer-odt-format.md and task-local native/baseline probes. Preserve Worker16,ODF1.3,save/open/recovery divergences and all gates. Existing resolved Arabic/bullet rules;factory/style-override,OOo build-id/MSO metadata APIs,stable-export environment switch,numbered-paragraph and full UNO/native architecture remain separately unverified."
   Plan: "Replace stream alias/generator bookkeeping with source-owned XMLTextListsHelper processed records:style/continue pair,first-list-to-style-default map,last processed/style and per-style last ID;native query/getter and GetListIdForListBlock projection. Generate list-prefixed timestamp IDs using native DateTime time/date arithmetic via a JS Date clock adapter and native processed collision suffix;do not retain rule-counter IDs or accidentally coalesce explicit/generated IDs. XMLTextListBlockContext keeps own raw ID and separate continuation ID,inherits both at nested levels and ignores nested xml:id/continue-list. Parse exact true continue-numbering at every level;other values request restart and override inherited pending flag. At modern root,generate absent/empty own ID,implicit true continuation connects only the last processed list with matching raw style and different ID;validate known targets and resolve to master;unknown targets clear. Register only new root IDs;duplicates retain prior processed metadata and last-list state. Expose imported SwNumRule.GetDefaultListId through typed XML rule metadata and apply GetListIdForListBlock at paragraph projection,includingfirst-style default remap. Keep existing rule resolution and unsupported factories unchanged. Reproduce actual old failures. Compile unmodified primary block constructor and helper/projection/generator bodies with explicit platform/OUString/token/reference/UNO-property/resolved-rule/modern-no-build-id/noMSO adapters;compare actual SAX trees,raw/effectiveIDs/restarts/helper snapshots and collision/default states. Real common/automatic numbered/bullet ODT fixtures assert literal text,count/level/restart/direct starts,counters/vectors/labels,identity,ownedcopy/Worker16,XML/reopen projections. Update only source-stale literal identity expectations;no roundtrip shortcuts. Focused lint/types/provenance/parity precede full unchanged verify;doctor/routing/diff,actualcodehash/quality/clean closure."
   Verify Steps: "Reproduce old continue-numbering rejection,unknown continuation adoption,nested identity replacement and default-ID omission. Compiled unmodified pinned XMLTextListBlockContext constructor,processed/helper/default projection and GenerateNewListId bodies must match actual local SAX/context behavior for absent/empty/true/false/1/TRUE/whitespace continue values,bothlevels,known/unknown/emptychains,same/differentstyle,duplicate/currentselfIDs,emptylists/pendingheaders,explicitstart0,first/default remap and timestamp collision suffixes;document exact adapters and unsupported legacy/MSO/build-id/factory behavior. Genuine common/automatic numbered/bullet ODT packages verify literal state/counters/vectors/labels,independent rule/items,copies,Worker16,selected export and independent native reopen projection,includingdefaultidentity and siblingchain. Focused tests/lint/typecheck/provenance/parity first. npm run verify unchanged must passboth100%coverage suites and allbrowser/resource/static/docs/source/provenance/invariant gates. ap doctor,node .agentplane/policy/check-routing.mjs,git diff --check;record actual implementation hash,evaluator pass and clean final state. No schema/config/gate weakening,blanket parity/default/whole-goal promotion."
-  Verification: "Pending implementation and required native,package and full verification."
+  Verification: |-
+    Command: npx tsx task-local baseline.ts on pre-edit sources; python3 native-oracle.py; npx tsx compare-native.ts; primary-body identity assertion.
+    Result: pass after documented harness adapter repairs.
+    Evidence: actual old genuine ODT ignores unknown continue-numbering,adopts unknown targets,replaces inherited nested IDs and omits DefaultListId mapping. Compiled full pinned block constructor/end and processed/default/generator methods match3082 actual block/helper sequences/15392 raw/effective identity,restart and query states. Fixed clock/RNG includes1,INT_MAX and browser high-bit masking;collision suffixes are literal. Nine full compiled native definitions remain byte-identical;inline getters retain native bodies. Explicit ASCII/token/platform/raw-reference/typed DefaultListId/resolved-rule/modern-no-build-id/no-MSO/fixed DateTime/RNG adapters,no full native/UNO/factory/legacy/MSO/stable-env or lifetime claim.
+    Scope: existing resolved Arabic/bullet list import and first-style default/continuation projection;full module/default status remains unverified.
+
+    Command: focused Vitest helper/context/XML/package tests; npm run typecheck; npm run lint; npm run check:docs; npm run check:source-provenance; npm run inventory:parity.
+    Result: pass after Findings repairs.
+    Evidence:112 new genuine packages across28 cases/two marker families/common versus automatic styles. Literal text,count,level,restart,direct/effective starts,counters/vectors/labels,identity,owned rule/items,Worker16,selected roots/start attrs and independent native reopen projections pass. Session32967 package tests and96991 typecheck pass after actual pooled item API repair;full verification additionally asserts distinct stored paragraph identity items. Session98268 passes17 tests including revised prior ODT expectations;helper3 tests cover native defaults/records/generator collisions. Focused lint82777/docs19688/provenance exit0;parity30254 exit0/semanticViolationCount0. Initial errors and stale identity expectations are retained,not treated as unexplained successful checks.
+
+    Command: npm run verify > .agentplane/tasks/202610010333-G6MKMP/verify.log 2>&1.
+    Result: pass;terminal session67226 exit0.
+    Evidence:657 app tests/146files,109 inventory tests/36files,19 browser scenarios. App100% statements10049,branches7581,functions2764,lines9243;inventory100% statements1523,branches1080,functions384,lines1464. Unchanged formatting/lint/types/dependencies/resources/static/JSDoc453/file-size/source-tree111/provenance204(128mapped)/invariants34/parity semanticViolationCount0 gates pass. New517line fixture remains below enforced1000line limit and its cohesive28case table is reviewed;no threshold or gate change.
+    Scope: all required existing gates,no skips/config/schema changes or whole-goal claim.
+
+    Command: ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check.
+    Result: pass.
+    Evidence:doctor0errors/2existing warnings:managed hook readiness and oldDONE F1JT8K close hash;policy routingOK;diff clean. Actual implementation SHA,quality report and clean final state are recorded at closure.
+    Residual obligations: native SwList insertion/validation/tree ownership,full default factories and export identity/style overrides,old build-id/MSO/stable-env metadata behavior,numbered-paragraph/full UNO/native lifetimes,broader signed/orphan restart contracts and earlier mobile resize/menu stability. Parent/full goal remain active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T04:12:00.611Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: source-owned processed continuation/default identity;3082 native sequences/15392 states,112 genuine ODT packages;full verify67226 terminal0,657+109 tests,19 browser,all coverage100%,unchanged gates. Parent/full goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T04:11:59.978Z, excerpt_hash=sha256:180e20d385aba22feb3ce78dfd823e5e971e6b6bea858fb62e11a1293b7c8909
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010333-G6MKMP/blueprint/resolved-snapshot.json
+    - old_digest: 521c697f534183229ed9b002592854b0889cd568aa7d6bcb00770a649223498a
+    - current_digest: 521c697f534183229ed9b002592854b0889cd568aa7d6bcb00770a649223498a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610010333-G6MKMP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610010333-G6MKMP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit if the approved correction regresses supported behavior;retain task evidence and record a new follow-up task. Do not alter prior DONE artifacts."
   Findings: |-
     Previous goal turn is progress:DWV0NC DONE,implementation9ac1779d7b3845eb320d93995d2d2e65dda59809,quality663a7cebe9c10b97f5bcab02198794ba88b7e96a,close4a8aaefeb5e039b8c25633f9095fb36eb6c86179,parentprogressaef4fd95285e. Fresh main/direct clean;parentC9TN6M onlyactive. No gateway.user.instructions. Persistent user goal authorizes safe local iterations without additional pauses;no outside/network/delegation. Pinlibreoffice-26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Current alias map invents unknown continuation IDs and accepts nested identity attrs. TEXT_CONTINUE_NUMBERING token absent. Primary block constructor root-only attrs,exacttrue flag,processedchain validation and default mapping require independentraw/effective identities;SwNumRule alreadyexposesGetDefaultListId butXML typedbridge omitsit. Native GenerateNewListId usesDateTime encodedtime+date andsuffixcollision. Native Time::assemble andDate constructor support JSDate clock projection at millisecondprecision;environment stableexport/legacy/MSO branches have no current APIs and remain separate,notclaimed. Two read-only searches guessed nonexistent txtimp.ts/xmlimp-paragraphs.ts and xmltoken.test.ts;route recomputed and actual files/symbols inspected via rg --files. No mutation or check success was inferred from those failures.
@@ -104,7 +161,57 @@ Reproduce old continue-numbering rejection,unknown continuation adoption,nested 
 
 ## Verification
 
-Pending implementation and required native,package and full verification.
+Command: npx tsx task-local baseline.ts on pre-edit sources; python3 native-oracle.py; npx tsx compare-native.ts; primary-body identity assertion.
+Result: pass after documented harness adapter repairs.
+Evidence: actual old genuine ODT ignores unknown continue-numbering,adopts unknown targets,replaces inherited nested IDs and omits DefaultListId mapping. Compiled full pinned block constructor/end and processed/default/generator methods match3082 actual block/helper sequences/15392 raw/effective identity,restart and query states. Fixed clock/RNG includes1,INT_MAX and browser high-bit masking;collision suffixes are literal. Nine full compiled native definitions remain byte-identical;inline getters retain native bodies. Explicit ASCII/token/platform/raw-reference/typed DefaultListId/resolved-rule/modern-no-build-id/no-MSO/fixed DateTime/RNG adapters,no full native/UNO/factory/legacy/MSO/stable-env or lifetime claim.
+Scope: existing resolved Arabic/bullet list import and first-style default/continuation projection;full module/default status remains unverified.
+
+Command: focused Vitest helper/context/XML/package tests; npm run typecheck; npm run lint; npm run check:docs; npm run check:source-provenance; npm run inventory:parity.
+Result: pass after Findings repairs.
+Evidence:112 new genuine packages across28 cases/two marker families/common versus automatic styles. Literal text,count,level,restart,direct/effective starts,counters/vectors/labels,identity,owned rule/items,Worker16,selected roots/start attrs and independent native reopen projections pass. Session32967 package tests and96991 typecheck pass after actual pooled item API repair;full verification additionally asserts distinct stored paragraph identity items. Session98268 passes17 tests including revised prior ODT expectations;helper3 tests cover native defaults/records/generator collisions. Focused lint82777/docs19688/provenance exit0;parity30254 exit0/semanticViolationCount0. Initial errors and stale identity expectations are retained,not treated as unexplained successful checks.
+
+Command: npm run verify > .agentplane/tasks/202610010333-G6MKMP/verify.log 2>&1.
+Result: pass;terminal session67226 exit0.
+Evidence:657 app tests/146files,109 inventory tests/36files,19 browser scenarios. App100% statements10049,branches7581,functions2764,lines9243;inventory100% statements1523,branches1080,functions384,lines1464. Unchanged formatting/lint/types/dependencies/resources/static/JSDoc453/file-size/source-tree111/provenance204(128mapped)/invariants34/parity semanticViolationCount0 gates pass. New517line fixture remains below enforced1000line limit and its cohesive28case table is reviewed;no threshold or gate change.
+Scope: all required existing gates,no skips/config/schema changes or whole-goal claim.
+
+Command: ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check.
+Result: pass.
+Evidence:doctor0errors/2existing warnings:managed hook readiness and oldDONE F1JT8K close hash;policy routingOK;diff clean. Actual implementation SHA,quality report and clean final state are recorded at closure.
+Residual obligations: native SwList insertion/validation/tree ownership,full default factories and export identity/style overrides,old build-id/MSO/stable-env metadata behavior,numbered-paragraph/full UNO/native lifetimes,broader signed/orphan restart contracts and earlier mobile resize/menu stability. Parent/full goal remain active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T04:12:00.611Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: source-owned processed continuation/default identity;3082 native sequences/15392 states,112 genuine ODT packages;full verify67226 terminal0,657+109 tests,19 browser,all coverage100%,unchanged gates. Parent/full goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T04:11:59.978Z, excerpt_hash=sha256:180e20d385aba22feb3ce78dfd823e5e971e6b6bea858fb62e11a1293b7c8909
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010333-G6MKMP/blueprint/resolved-snapshot.json
+- old_digest: 521c697f534183229ed9b002592854b0889cd568aa7d6bcb00770a649223498a
+- current_digest: 521c697f534183229ed9b002592854b0889cd568aa7d6bcb00770a649223498a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610010333-G6MKMP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610010333-G6MKMP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

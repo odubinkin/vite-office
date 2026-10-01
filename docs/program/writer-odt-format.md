@@ -68,7 +68,17 @@ item is numbered; later paragraphs and headers are unnumbered. After a nested
 list, following paragraphs in its enclosing item are also unnumbered. A newly
 opened unnumbered level uses `text:list-header`; same-level unnumbered paragraphs
 continue the open item. Skipped-level ancestors use ordinary item wrappers. Root `xml:id` and `text:continue-list` segments
-retain list identity across intervening ordinary paragraphs. Import performs
+use source-owned processed-list records across intervening ordinary paragraphs.
+Nested identity attributes do not replace inherited root IDs. Exact
+`text:continue-numbering="true"` clears pending restart; other present values
+request restart, including on nested lists. Modern implicit root continuation
+selects only the last processed root with the same raw style and a different own
+ID. Unknown targets are ignored; known chains resolve to their master. A block
+retains its own and continuation IDs independently, then the helper projects the
+paragraph ID and maps the first root of each style to the existing rule
+`DefaultListId`. Duplicate root IDs keep their prior processed records. Missing
+or empty IDs use native time/date/random generation and processed-ID collision
+suffixes; JS Date and browser RNG supply the platform values. Import performs
 the inverse traversal, including LibreOffice output that declares only the
 levels used by a list style; missing internal formats are completed when the
 ten-level `SwNumRule` is built. Explicit `text:start-value` values on
@@ -95,7 +105,7 @@ root item can omit restart. Re-entered list segments follow the native
 conditional fallback. These native omissions and gains can change reopened
 restart fields and counters; they are asserted explicitly in package tests.
 Unnumbered restart/start fields remain in copies and Worker records but are
-omitted from XML. Full processed-list identity, continue-numbering,
+omitted from XML. Complete export helper identity, legacy/build-id/MSO continuation defaults,
 missing-rule factories/defaults, style overrides and full UNO metadata ownership
 remain separate audit obligations.
 

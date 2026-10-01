@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { FastAttributeList } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import type { XMLTextImportTarget } from "./txtparai";
-import { XMLTextListsHelper, type XMLTextListImportState } from "./txtlists";
+import { XMLTextListsHelper } from "./txtlists";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 import { XMLTextListItemContext } from "./XMLTextListItemContext";
 
@@ -18,11 +18,7 @@ it("retains native block references and returns pending restart from empty subli
     getStyle: /** Has no common style. @returns Nothing. */ () => undefined,
     getAutoStyle: /** Has no automatic style. @returns Nothing. */ () => undefined,
   };
-  const state: XMLTextListImportState = {
-    generatedListId: 0,
-    listIds: new Map(),
-    textLists: new XMLTextListsHelper(),
-  };
+  const state = new XMLTextListsHelper();
   const empty = new FastAttributeList([]);
   const root = new XMLTextListBlockContext(
     target,
@@ -37,22 +33,22 @@ it("retains native block references and returns pending restart from empty subli
     ]),
     state,
   );
-  expect(state.textLists.ListContextTop()?.block).toBe(root);
+  expect(state.ListContextTop()?.block).toBe(root);
   expect(root.rule).toBe(rule);
   const item = root.createFastChildContext(
     XMLToken.TEXT_LIST_ITEM,
     empty,
   ) as XMLTextListItemContext;
   expect(item).toBeInstanceOf(XMLTextListItemContext);
-  expect(state.textLists.ListContextTop()?.item).toBe(item);
+  expect(state.ListContextTop()?.item).toBe(item);
   const first = item.createFastChildContext(XMLToken.TEXT_LIST, empty) as XMLTextListBlockContext;
   expect(first).toBeInstanceOf(XMLTextListBlockContext);
-  expect(state.textLists.ListContextTop()?.block).toBe(first);
+  expect(state.ListContextTop()?.block).toBe(first);
   expect(first.rule).toBe(rule);
   expect(first.IsRestartNumbering()).toBe(false);
   first.endFastElement();
-  expect(state.textLists.ListContextTop()?.block).toBe(root);
-  expect(state.textLists.ListContextTop()?.item).toBeUndefined();
+  expect(state.ListContextTop()?.block).toBe(root);
+  expect(state.ListContextTop()?.item).toBeUndefined();
   const second = item.createFastChildContext(XMLToken.TEXT_LIST, empty) as XMLTextListBlockContext;
   expect(second.IsRestartNumbering()).toBe(true);
   const nestedItem = second.createFastChildContext(
@@ -72,7 +68,7 @@ it("retains native block references and returns pending restart from empty subli
   expect(root.IsRestartNumbering()).toBe(false);
   item.endFastElement();
   root.endFastElement();
-  expect(state.textLists.ListContextTop()).toBeUndefined();
+  expect(state.ListContextTop()).toBeUndefined();
 });
 
 it("narrows repeated-sublist count to the native signed16 field", /** Verifies primary factory boundary states independently of the restart flag returned by empty lists. @returns Nothing. */ () => {
@@ -88,11 +84,7 @@ it("narrows repeated-sublist count to the native signed16 field", /** Verifies p
     getStyle: /** Has no common style. @returns Nothing. */ () => undefined,
     getAutoStyle: /** Has no automatic style. @returns Nothing. */ () => undefined,
   };
-  const state: XMLTextListImportState = {
-    generatedListId: 0,
-    listIds: new Map(),
-    textLists: new XMLTextListsHelper(),
-  };
+  const state = new XMLTextListsHelper();
   const empty = new FastAttributeList([]);
   const root = new XMLTextListBlockContext(
     target,
@@ -133,5 +125,5 @@ it("narrows repeated-sublist count to the native signed16 field", /** Verifies p
   ]);
   item.endFastElement();
   root.endFastElement();
-  expect(state.textLists.ListContextTop()).toBeUndefined();
+  expect(state.ListContextTop()).toBeUndefined();
 });

@@ -362,7 +362,6 @@ class SwXMLImport
   /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing. */
   public registerListStyle(styleName: string, rule: XMLTextListRule): void {
     if (this.listRules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
-    this.listRules.set(styleName, rule);
     const imported = new SwNumRule(
       rule.name,
       undefined,
@@ -395,9 +394,11 @@ class SwXMLImport
         )
           throw new Error(`Conflicting ODF list rule: ${rule.name}`);
       }
+      this.listRules.set(styleName, { ...rule, defaultListId: existing.GetDefaultListId() });
       return;
     }
     this.document.AddNumRule(imported);
+    this.listRules.set(styleName, { ...rule, defaultListId: imported.GetDefaultListId() });
   }
 
   /** Opens the sole office:text context. @returns Text body context. */

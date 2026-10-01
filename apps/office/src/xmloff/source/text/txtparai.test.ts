@@ -559,7 +559,7 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       { level: 0, listId: "root", ruleName: "Bullets" },
       { level: 1, listId: "root", ruleName: "Bullets" },
       { level: 0, listId: "root", ruleName: "Bullets" },
-      { level: 0, listId: "Bullets-1", ruleName: "Bullets" },
+      { level: 0, listId: expect.stringMatching(/^list\d+$/u), ruleName: "Bullets" },
     ]);
   });
 
@@ -701,17 +701,17 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         )[0]?.list,
       ).toEqual({
         level: 0,
-        listId: "Bullets-1",
+        listId: expect.stringMatching(/^list\d+$/u),
         ruleName: "Bullets",
         ...(startValue === undefined ? {} : { restart: true, startValue }),
       });
     expect(
       importBody(
-        '<text:list text:style-name="L1" text:continue-list="external"><text:list-item><text:p/></text:list-item></text:list>',
+        '<text:list text:style-name="L1" xml:id="isolated" text:continue-list="external"><text:list-item><text:p/></text:list-item></text:list>',
         styles,
         new Map([["L1", bullet]]),
       )[0]?.list?.listId,
-    ).toBe("external");
+    ).toBe("isolated");
     expect(importBody('<text:p text:style-name="P2"/>', styles)[0]?.properties).toEqual({
       underline: true,
     });

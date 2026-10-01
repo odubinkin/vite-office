@@ -345,7 +345,7 @@ it("exports native implicit restart positions and direct starts through genuine 
                   : row.restart && row.direct !== undefined
                     ? row.direct
                     : starts[row.level],
-              identity: row.vector === undefined ? "" : "L",
+              identity: row.vector === undefined ? "" : "Restart",
               rule: row.vector === undefined ? undefined : "Restart",
               number: row.vector?.at(-1),
               vector: row.vector,

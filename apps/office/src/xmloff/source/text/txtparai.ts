@@ -1,6 +1,6 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
-import { XMLTextListsHelper, type XMLTextListImportState } from "./txtlists";
+import { XMLTextListsHelper } from "./txtlists";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
@@ -71,6 +71,8 @@ export interface XMLListLevelImport {
 export interface XMLTextListRule {
   readonly levels: readonly XMLListLevelImport[];
   readonly levelCount: number;
+  /** Native resolved numbering rule property;absent in property-less adapters. */
+  readonly defaultListId?: string;
   readonly name: string;
 }
 
@@ -122,11 +124,7 @@ const DEFAULT_PROPERTIES: OdfCharacterProperties = {
 
 /** Handles office:text children and owns list identity state for one stream. */
 export class XMLTextBodyContext extends SvXMLImportContext {
-  private readonly lists: XMLTextListImportState = {
-    generatedListId: 0,
-    listIds: new Map(),
-    textLists: new XMLTextListsHelper(),
-  };
+  private readonly lists = new XMLTextListsHelper();
 
   /** Sequence declarations carry no modeled effect without sequence fields. @param element - Child token. @returns Whether declaration-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
