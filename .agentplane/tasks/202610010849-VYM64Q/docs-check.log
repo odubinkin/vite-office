@@ -1,0 +1,15 @@
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+file:///Users/odubinkin/Projects/vite-office/scripts/check-jsdoc.mjs:237
+    throw new Error(`JSDoc validation failed:\n${errors.join("\n")}`);
+          ^
+
+Error: JSDoc validation failed:
+apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts:40 function documents 3/4 parameters
+apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts:47 function documents 4/5 parameters
+    at main (file:///Users/odubinkin/Projects/vite-office/scripts/check-jsdoc.mjs:237:11)
+    at async file:///Users/odubinkin/Projects/vite-office/scripts/check-jsdoc.mjs:243:1
+
+Node.js v24.13.1

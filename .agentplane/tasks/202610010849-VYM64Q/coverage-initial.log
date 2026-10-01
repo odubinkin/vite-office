@@ -10,3 +10,21 @@
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
       Coverage enabled with v8
 
+
+ Test Files  156 passed (156)
+      Tests  697 passed (697)
+   Start at  16:26:13
+   Duration  78.83s (transform 3.54s, setup 10.67s, import 11.00s, tests 62.26s, environment 52.05s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 10627/10627 )
+Branches     : 100% ( 8023/8023 )
+Functions    : 100% ( 2876/2876 )
+Lines        : 100% ( 9754/9754 )
+================================================================================
