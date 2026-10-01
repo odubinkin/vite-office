@@ -4,7 +4,7 @@ title: "Restore native numbering rule copy assignment reset and scalar metadata 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,36 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-01T14:48:52.409Z"
+  state: "ok"
+  updated_at: "2026-10-01T14:50:19.704Z"
   updated_by: "CODER"
-  note: "Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA."
-  attempts: 1
+  note: "Verified final actual CODE290ed15460229ef91f75e647018405c85f2c31af. Native432 states18 equality7 narrowing,ASanUBSan clean;full verify-third727app109inventory19browser100% both and all gates pass. Corrected premature note/rework retained. Only47 leaf scope;full goal active,next phantom consumer gap measured."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T14:51:22.812Z"
+  updated_by: "EVALUATOR"
+  note: "Separate same-actor EVALUATOR phase passes approved47 selected lifecycle/scalar responsibility and exact CODE290ed15460229ef91f75e647018405c85f2c31af with final acceptance evidence;finish leaf only,full goal active."
+  evaluated_sha: "290ed15460229ef91f75e647018405c85f2c31af"
+  blueprint_digest: "e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477"
+  evidence_refs:
+    - ".agentplane/tasks/202610011419-EHEH05/README.md"
+    - ".agentplane/tasks/202610011419-EHEH05/quality/20261001-145122812-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610011419-EHEH05/quality/20261001-145122812-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610011419-EHEH05/quality/20261001-145122812-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json"
+    - "290ed15460229ef91f75e647018405c85f2c31af"
+    - ".agentplane/tasks/202610011419-EHEH05/verify-third.log"
+    - ".agentplane/tasks/202610011419-EHEH05/native-identities.json"
+    - ".agentplane/tasks/202610011419-EHEH05/native-rule.cxx"
+    - ".agentplane/tasks/202610011419-EHEH05/final-checks.json"
+    - ".agentplane/tasks/202610011419-EHEH05/followup-native.json"
+    - ".agentplane/tasks/202610011419-EHEH05/followup-local.json"
+  findings:
+    - "Native full selected ctor/copy/operator=/Reset/operator==/scalar/ref/pointer/Get bodies and30 identities compare432 states18 equality7 narrowing;typed UNKNOWN65535 and ushort/byte contracts correct;raw optional ownership,in-place pointer behavior,self/equal assignment,recipient-only state and copy-specific flags match literal source output."
+    - "Actual same-name document client/list/registry and Worker stored-owner checks pass;post-copy scalar restoration prevents phantom/redline loss. Legacy omission uses native defaults,malformed metadata rejected,supported ODT existing fields preserved. Full original verify-third exit0:727app109inventory19browser100% both/all gates. No original assertion/gate/dependency/registered IO/recovery changes;only3 metadata records/statuses unchanged."
+    - "Reviewed actual CODE290ed against current canonical packet HEAD:all seven semantic paths identical. Installed AgentPlane bookkeeping auto-amend included four authorized task artifacts (README,scope/check evidence,completed verify-third log) in actual CODE,eleven total paths;this is not seven total files and no artifact-only SHA is implementation. Premature canonical ok was explicitly corrected to rework then final ok with actual SHA;rejected uppercase subject and attribution failures retained."
+    - "Same actor in a separate review phase;no independent-agent review claimed. Read-only next phantom predicate audit differs3/5;complete objective remains unachieved. Scope/mandatory evidence pass;finish only47."
 commit: null
 comments:
   -
@@ -47,8 +72,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA."
+  -
+    type: "verify"
+    at: "2026-10-01T14:50:19.704Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified final actual CODE290ed15460229ef91f75e647018405c85f2c31af. Native432 states18 equality7 narrowing,ASanUBSan clean;full verify-third727app109inventory19browser100% both and all gates pass. Corrected premature note/rework retained. Only47 leaf scope;full goal active,next phantom consumer gap measured."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:50:01.130Z"
+doc_updated_at: "2026-10-01T14:51:46.514Z"
 doc_updated_by: "CODER"
 description: "Iteration47: restore complete native SwNumRule copy/Assign/Reset and value-equality responsibilities with exact metadata/defaults and distinction between owned and effective levels. Preserve pointer assignment identity,recipient default mode/list ID and client ownership;source copy resets count-phantom/redline policy as native does. Persist scalar rule state across Worker16 with native legacy defaults. No new rendering/continuous-tree/UI feature or registered IO/recovery change; broader lifetime/style/name-map/counter obligations remain unverified."
 sections:
@@ -88,6 +119,39 @@ sections:
     Scope: same-actor separate EVALUATOR review required;no independent reviewer claim. Actual CODE read from git HEAD after AgentPlane own commit bookkeeping amend.
 
     Next measured gap: complete unchanged native SwNodeNum::IsCountPhantoms (followup-phantoms.cxx/identities/native.json) versus actual local SwNodeNum (followup-local.ts/json) differs3/5 profiles:bound native !IsContinusNum && IsCountPhantoms,local always true,no-rule native true. ASan/UBSan clean. This read-only audit leaves SwNodeNum/SwNumberTree unchanged in47;next single correction audits this consumer. Full goal/parent active and all other remaining core/browser obligations individually unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T14:50:19.704Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified final actual CODE290ed15460229ef91f75e647018405c85f2c31af. Native432 states18 equality7 narrowing,ASanUBSan clean;full verify-third727app109inventory19browser100% both and all gates pass. Corrected premature note/rework retained. Only47 leaf scope;full goal active,next phantom consumer gap measured.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:50:01.130Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
+    - old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+    - current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610011419-EHEH05
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610011419-EHEH05
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If rollback is needed,use a new executable task to revert reviewed CODE locally and rerun identical verification. Do not rewrite history or modify immutable DONE leaves. Retain source/native/failure evidence,parent/full goal and registered IO/recovery exceptions."
   Findings: |-
     Read-only clean preflight main57d763b328b9,only parent active,direct route,four matched modules loaded,no user-instructions file. Native Assign/Reset preserve default mode/list ID and unmentioned client containers;copy ctor separately resets CountPhantoms=true and UsedByRedline=false. Existing local clone copies only already stored fields;selected native scalar metadata is absent. Native UNKNOWN=USHRT_MAX65535;prior format-only C++ profile used named pool-placeholder0 and never certified pool defaults. Correct it before metadata proof. Complete46 followup-rule bodies and four states remain read-only evidence. Native nondefault continuous-tree/phantom consumers and full name-map/lifetime/style/GrabBag behavior exceed this leaf;do not claim those implemented from scalar metadata or green tests.
@@ -115,6 +179,10 @@ sections:
     - Observation: Final full verify-third passed. CODE commit attempt was rejected because uppercase CODE violates installed commit subject grammar. Dependent orchestration incorrectly continued: actual-code.txt was absent,doc update failed,artifact persistence rejected mixed staged CODE paths,and verify recorded ok before the implementation SHA existed.
       Impact: All tested implementation remains intact and staged;no CODE commit was created or leaf finished. The premature canonical note must be corrected and must not attribute b77faa artifact SHA as implementation.
       Resolution: Recompute live route;record rework for incomplete commit attribution,unstage only active task artifacts,commit exactly7 CODE paths with valid lowercase code scope,then populate actual verification and rerun canonical verify/EVALUATOR/finish using actual CODE SHA. Preserve all failures;no implementation or gate changes.
+
+    - Observation: Actual CODE HEAD after installed AgentPlane own bookkeeping amend is290ed15460229ef91f75e647018405c85f2c31af. git show lists eleven paths:seven approved semantic CODE paths plusfour active canonical task artifacts README,code-scope.json,final-checks.json,completed verify-third.log.
+      Impact: All paths are intentional authorized47 scope. Earlier planned seven paths describes semantic implementation only,not total actual commit file count. No history rewrite requested or performed by the agent;quality reviewed actual amended HEAD and unchanged semantic bytes through packet HEAD.
+      Resolution: Record exact eleven total/seven semantic/four canonical artifact attribution. Actual CODE290ed remains distinct from later82e000 verification packet and quality/close commits. Final canonical ok and same-actor EVALUATOR pass reference actual CODE;finish leaf only/full goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -165,6 +233,39 @@ Scope: same-actor separate EVALUATOR review required;no independent reviewer cla
 
 Next measured gap: complete unchanged native SwNodeNum::IsCountPhantoms (followup-phantoms.cxx/identities/native.json) versus actual local SwNodeNum (followup-local.ts/json) differs3/5 profiles:bound native !IsContinusNum && IsCountPhantoms,local always true,no-rule native true. ASan/UBSan clean. This read-only audit leaves SwNodeNum/SwNumberTree unchanged in47;next single correction audits this consumer. Full goal/parent active and all other remaining core/browser obligations individually unverified.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T14:50:19.704Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified final actual CODE290ed15460229ef91f75e647018405c85f2c31af. Native432 states18 equality7 narrowing,ASanUBSan clean;full verify-third727app109inventory19browser100% both and all gates pass. Corrected premature note/rework retained. Only47 leaf scope;full goal active,next phantom consumer gap measured.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:50:01.130Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
+- old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+- current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610011419-EHEH05
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610011419-EHEH05
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 If rollback is needed,use a new executable task to revert reviewed CODE locally and rerun identical verification. Do not rewrite history or modify immutable DONE leaves. Retain source/native/failure evidence,parent/full goal and registered IO/recovery exceptions.
@@ -196,3 +297,7 @@ Read-only clean preflight main57d763b328b9,only parent active,direct route,four 
 - Observation: Final full verify-third passed. CODE commit attempt was rejected because uppercase CODE violates installed commit subject grammar. Dependent orchestration incorrectly continued: actual-code.txt was absent,doc update failed,artifact persistence rejected mixed staged CODE paths,and verify recorded ok before the implementation SHA existed.
   Impact: All tested implementation remains intact and staged;no CODE commit was created or leaf finished. The premature canonical note must be corrected and must not attribute b77faa artifact SHA as implementation.
   Resolution: Recompute live route;record rework for incomplete commit attribution,unstage only active task artifacts,commit exactly7 CODE paths with valid lowercase code scope,then populate actual verification and rerun canonical verify/EVALUATOR/finish using actual CODE SHA. Preserve all failures;no implementation or gate changes.
+
+- Observation: Actual CODE HEAD after installed AgentPlane own bookkeeping amend is290ed15460229ef91f75e647018405c85f2c31af. git show lists eleven paths:seven approved semantic CODE paths plusfour active canonical task artifacts README,code-scope.json,final-checks.json,completed verify-third.log.
+  Impact: All paths are intentional authorized47 scope. Earlier planned seven paths describes semantic implementation only,not total actual commit file count. No history rewrite requested or performed by the agent;quality reviewed actual amended HEAD and unchanged semantic bytes through packet HEAD.
+  Resolution: Record exact eleven total/seven semantic/four canonical artifact attribution. Actual CODE290ed remains distinct from later82e000 verification packet and quality/close commits. Final canonical ok and same-actor EVALUATOR pass reference actual CODE;finish leaf only/full goal active.
