@@ -5,6 +5,13 @@
   "recordStates": 69120,
   "policyProfiles": 5,
   "markerStates": 64,
-  "literalFixtureSha256": "3a3954ea4b3870d8edce61519eb92ca84863031a95bdaab9cb7ac6359cfc99fe",
-  "result": "matches retained literal native sanitizer output;fresh source-body hashes match pinned vendor;no source copies persisted or upstream invoked by tests"
+  "result": "matches retained literal native sanitizer output;fresh source-body hashes match pinned vendor;no source copies persisted or upstream invoked by tests",
+  "originalPrettyFixtureSha256": "3a3954ea4b3870d8edce61519eb92ca84863031a95bdaab9cb7ac6359cfc99fe",
+  "fixtureEncoding": "gzip-base64",
+  "encodedFixtureSha256": "b70b3a623561c9a12f72f3781fd41369c1d959a72ba30f38332edb006ed7db4e",
+  "decodedLiteralSha256": "8e97d032dd939a22778ec330ba28758db21a215d78d8824b2aba4f059e306853",
+  "encodedBytes": 281158,
+  "decodedBytes": 9064129,
+  "unchangedLiteralObservations": true,
+  "withoutUpstreamFocusedTests": 5
 }

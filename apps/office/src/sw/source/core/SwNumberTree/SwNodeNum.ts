@@ -1,4 +1,4 @@
-/** @fileoverview Supplies Writer text-node policy to the source-owned hierarchical number tree. */
+/** @fileoverview Supplies Writer text-node policy to the source-owned hierarchical and continuous number tree. */
 
 import type { SwDoc } from "../doc/doc";
 import type { SwNumRule } from "../doc/number";
@@ -63,9 +63,14 @@ export class SwNodeNum extends SwNumberTreeNode {
   protected Create(): SwNodeNum {
     return new SwNodeNum(undefined, this.GetNumRule());
   }
-  /** Reads the native true default for existing hierarchical rules. @returns Phantom counting enabled. */
+  /** Reads bound-rule continuous policy or inherits it from a parent. @returns Continuous flag, false for an unbound orphan. */
+  public IsContinuous(): boolean {
+    return this.GetNumRule()?.IsContinusNum() ?? this.GetParent()?.IsContinuous() ?? false;
+  }
+  /** Reads native phantom policy independently of parent inheritance. @returns Whether phantoms count, true without a bound rule. */
   public IsCountPhantoms(): boolean {
-    return true;
+    const rule = this.GetNumRule();
+    return rule === undefined || (!rule.IsContinusNum() && rule.IsCountPhantoms());
   }
   /** Compares phantom/root records before real text records, then document indexes. @param node - Compared record. @returns Native ordering. */
   public LessThan(node: SwNumberTreeNode): boolean {

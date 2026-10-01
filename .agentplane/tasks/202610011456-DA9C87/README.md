@@ -4,7 +4,7 @@ title: "Restore native numbering tree continuous and phantom policy dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute approved48 complete selected native continuous/phantom tree policy,validation,predecessor,cache/notification and actual document list entry under persistent user goal authorization;preserve all gates and registered IO/recovery exceptions."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:06:53.121Z"
+doc_updated_at: "2026-10-01T16:17:56.330Z"
 doc_updated_by: "CODER"
 description: "Iteration48: replace default-only SwNodeNum phantom policy and hierarchical-only tree dispatch with complete source-owned continuous validation,predecessor traversal,cache invalidation and notification responsibilities. Use native rule flags and native SwList validation entry;existing label fallback respects continuous mode. Verify exact pinned native mixed topology/cache/notification/counter outputs and actual document/Worker owners without broad parity promotion or changing registered IO/recovery exceptions."
 sections:
@@ -76,6 +76,22 @@ sections:
     - Observation: Command: npx vitest run --config apps/office/vitest.config.ts apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts. Result: fail at startup because that config path does not exist.
       Impact: No test ran; this was an incorrect invocation, unrelated to implementation.
       Resolution: Use the existing apps/office/vite.config.ts by running Vitest in the office workspace. Preserve the startup log and route before retry.
+
+    - Observation: Command: npm run verify (second full attempt). Result: fail; all 732 tests pass and the exact same single branch at SwNumberTree.ts:270 remains uncovered. The skipped-level phantom boundary passes with upstream unavailable, but did not exercise the missing branch.
+      Impact: The 100% gate correctly remains blocking. The initial inference from the displayed line was insufficient.
+      Resolution: Inspect precise V8/Istanbul branch locations and counts, add the corresponding actual document boundary, and rerun unchanged verification. Preserve both failed attempts.
+
+    - Observation: The coverage HTML identifies the missing branch as child.GetStartValue() when a counted first node has IsRestart=true. Focused native-boundary test without upstream failed: the paragraph helper cleared pre-insertion restart attributes, yielding1 instead of7. A third full invocation was inadvertently launched before checking this failed exit and was interrupted.
+      Impact: No production parity regression: the test setup did not retain its requested restart state. Full verification cannot be accepted until corrected setup passes.
+      Resolution: Set restart through the actual paragraph API after list insertion, assert the restart flag/value and predecessor explicitly, rerun focused isolation first, and only on exit0 run full checks. Keep the failed evidence.
+
+    - Observation: The corrected first-restart setup passes its native7 counter assertion. A further new expectation that changing the count flag immediately clears a valid prefix during reading failed (actual retained7).
+      Impact: The first-restart branch is now exercised, but the additional assertion assumed invalidation during reading without matching the existing native operation sequence.
+      Resolution: Retain the failed isolation log; inspect counted-state handling and explicitly invalidate the list tree, as the native matrix does for deferred policy changes, before checking the no-predecessor uncounted formula.
+
+    - Observation: Resolved coverage failure: HTML pinpointed the counted first-node restart true branch; actual post-insertion restart attributes exercise counter7 with no predecessor. The false-count boundary uses explicit native InvalidateMe before expecting0; automatic count refresh is guarded by HasNumberingWhichNeedsLayoutUpdate, rather than universally guaranteed by SetCountedInList. New focused5 tests pass with vendor/libreoffice-reference temporarily absent.
+      Impact: All original assertions and 960 native sequences /69120 record states /64 marker states remain intact. Latest full app732 tests pass at100% including8275/8275 branches.
+      Resolution: Retain every failed attempt and the successful isolation log. Fixture storage is deterministic gzip/base64 (281158 bytes), decoded JSON is byte-hash anchored and exactly preserves the native observations; no source copies or upstream calls were added to tests.
 id_source: "generated"
 ---
 ## Summary
@@ -131,3 +147,19 @@ Preflight clean/direct,ORCHESTRATOR then PLANNER,four matched modules loaded,use
 - Observation: Command: npx vitest run --config apps/office/vitest.config.ts apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts. Result: fail at startup because that config path does not exist.
   Impact: No test ran; this was an incorrect invocation, unrelated to implementation.
   Resolution: Use the existing apps/office/vite.config.ts by running Vitest in the office workspace. Preserve the startup log and route before retry.
+
+- Observation: Command: npm run verify (second full attempt). Result: fail; all 732 tests pass and the exact same single branch at SwNumberTree.ts:270 remains uncovered. The skipped-level phantom boundary passes with upstream unavailable, but did not exercise the missing branch.
+  Impact: The 100% gate correctly remains blocking. The initial inference from the displayed line was insufficient.
+  Resolution: Inspect precise V8/Istanbul branch locations and counts, add the corresponding actual document boundary, and rerun unchanged verification. Preserve both failed attempts.
+
+- Observation: The coverage HTML identifies the missing branch as child.GetStartValue() when a counted first node has IsRestart=true. Focused native-boundary test without upstream failed: the paragraph helper cleared pre-insertion restart attributes, yielding1 instead of7. A third full invocation was inadvertently launched before checking this failed exit and was interrupted.
+  Impact: No production parity regression: the test setup did not retain its requested restart state. Full verification cannot be accepted until corrected setup passes.
+  Resolution: Set restart through the actual paragraph API after list insertion, assert the restart flag/value and predecessor explicitly, rerun focused isolation first, and only on exit0 run full checks. Keep the failed evidence.
+
+- Observation: The corrected first-restart setup passes its native7 counter assertion. A further new expectation that changing the count flag immediately clears a valid prefix during reading failed (actual retained7).
+  Impact: The first-restart branch is now exercised, but the additional assertion assumed invalidation during reading without matching the existing native operation sequence.
+  Resolution: Retain the failed isolation log; inspect counted-state handling and explicitly invalidate the list tree, as the native matrix does for deferred policy changes, before checking the no-predecessor uncounted formula.
+
+- Observation: Resolved coverage failure: HTML pinpointed the counted first-node restart true branch; actual post-insertion restart attributes exercise counter7 with no predecessor. The false-count boundary uses explicit native InvalidateMe before expecting0; automatic count refresh is guarded by HasNumberingWhichNeedsLayoutUpdate, rather than universally guaranteed by SetCountedInList. New focused5 tests pass with vendor/libreoffice-reference temporarily absent.
+  Impact: All original assertions and 960 native sequences /69120 record states /64 marker states remain intact. Latest full app732 tests pass at100% including8275/8275 branches.
+  Resolution: Retain every failed attempt and the successful isolation log. Fixture storage is deterministic gzip/base64 (281158 bytes), decoded JSON is byte-hash anchored and exactly preserves the native observations; no source copies or upstream calls were added to tests.

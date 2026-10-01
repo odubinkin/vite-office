@@ -19,6 +19,7 @@ import type { SwNumRule } from "./number";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { SwNumRuleItem } from "../para/paratr";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwDoc } from "./doc";
 
 /** Enumerates list variants currently mapped to LibreOffice Writer's default bullet and numbering commands. */
 export const WRITER_PARAGRAPH_LIST_KINDS = ["none", "bullet", "numbered"] as const;
@@ -72,9 +73,11 @@ export class SwList {
   public InvalidateListTree(): void {
     this.root.InvalidateTree();
   }
-  /** Validates retained hierarchical prefixes without changing node ownership or topology. @returns Nothing. */
-  public ValidateListTree(): void {
-    this.root.ValidateHierarchical();
+  /** Validates by notifying the native invalid prefix under the actual document reading policy. @param document - Operation context, resolved from rule clients for legacy callers. @returns Nothing. */
+  public ValidateListTree(document?: SwDoc): void {
+    const clients: SwTextNode[] = [];
+    if (document === undefined) this.root.GetNumRule()?.GetTextNodeList(clients);
+    this.root.NotifyInvalidChildren(document ?? clients[0]?.GetDoc());
   }
   /** Gets a calculated node counter. @param node - Canonical text node. @returns Counter when registered. */
   public GetListItemNumber(node: SwTextNode): number | undefined {

@@ -306,7 +306,7 @@ export class SwNumRule {
       lists.add(list);
     }
     for (const list of lists) list.InvalidateListTree();
-    for (const list of lists) list.ValidateListTree();
+    for (const list of lists) list.ValidateListTree(this.textNodes[0]?.GetDoc());
     this.invalidRuleFlag = false;
   }
 
@@ -504,7 +504,9 @@ export class SwNumRule {
       }
       return pattern;
     }
-    const first = Math.max(0, level + 1 - Math.max(1, format.GetIncludeUpperLevels()));
+    const first = this.IsContinusNum()
+      ? level
+      : Math.max(0, level + 1 - Math.max(1, format.GetIncludeUpperLevels()));
     let marker = "";
     for (let index = first; index <= level; index++) {
       if (this.Get(index).GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE) continue;

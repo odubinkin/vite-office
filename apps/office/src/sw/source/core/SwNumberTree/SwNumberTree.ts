@@ -1,4 +1,4 @@
-/** @fileoverview Owns Writer hierarchical counters and phantom ancestors for skipped list levels. */
+/** @fileoverview Owns Writer hierarchical and continuous counters and phantom ancestors for skipped list levels. */
 
 import type { SwDoc } from "../doc/doc";
 
@@ -17,6 +17,8 @@ export abstract class SwNumberTreeNode {
   }
   /** Reads phantom counting policy. @returns Whether phantom ancestors contribute. */
   public abstract IsCountPhantoms(): boolean;
+  /** Reads continuous numbering policy. @returns Whether counters advance in depth-first order. */
+  public abstract IsContinuous(): boolean;
   /** Creates an unattached node retaining the numbering rule. @returns Node. */
   protected abstract Create(): SwNumberTreeNode;
   /** Registers a real record before tree insertion. @returns Nothing. */
@@ -54,13 +56,15 @@ export abstract class SwNumberTreeNode {
   }
   /** Notifies the invalid prefix suffix and following uncounted subtree. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
   public NotifyInvalidChildren(document?: SwDoc): void {
-    if (!this.IsNotifiable(document)) return;
-    let position = this.lastValid === undefined ? 0 : this.children.indexOf(this.lastValid) + 1;
-    while (position < this.children.length)
-      (this.children[position++] as SwNumberTreeNode).Notify(document);
-    const siblings = this.parent?.children;
-    const next = siblings?.[siblings.indexOf(this) + 1];
-    if (next !== undefined && !next.IsCounted()) next.NotifyInvalidChildren(document);
+    if (this.IsNotifiable(document)) {
+      let position = this.lastValid === undefined ? 0 : this.children.indexOf(this.lastValid) + 1;
+      while (position < this.children.length)
+        (this.children[position++] as SwNumberTreeNode).Notify(document);
+      const siblings = this.parent?.children;
+      const next = siblings?.[siblings.indexOf(this) + 1];
+      if (next !== undefined && !next.IsCounted()) next.NotifyInvalidChildren(document);
+    }
+    if (this.IsContinuous()) this.parent?.NotifyInvalidChildren(document);
   }
   /** Notifies this record's affected siblings. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
   public NotifyInvalidSiblings(document?: SwDoc): void {
@@ -210,6 +214,12 @@ export abstract class SwNumberTreeNode {
       const next = siblings?.[siblings.indexOf(this) + 1];
       if (next !== undefined && !next.IsCounted()) next.SetLastValid(undefined);
     }
+    if (this.IsContinuous()) {
+      const position = this.lastValid === undefined ? 0 : this.children.indexOf(this.lastValid) + 1;
+      for (let index = position; index < this.children.length; index++)
+        (this.children[index] as SwNumberTreeNode).InvalidateTree();
+      this.parent?.SetLastValid(this, validating);
+    }
   }
   /** Invalidates a counted prefix from one changed child onward. @param child - Changed child. @returns Nothing. */
   private Invalidate(child: SwNumberTreeNode): void {
@@ -222,7 +232,48 @@ export abstract class SwNumberTreeNode {
   }
   /** Validates this parent's prefix through one child. @param child - Owned child. @returns Nothing. */
   private Validate(child: SwNumberTreeNode): void {
-    if (!this.IsValid(child)) this.ValidateHierarchical(child);
+    if (!this.IsValid(child)) {
+      if (this.IsContinuous()) this.ValidateContinuous(child);
+      else this.ValidateHierarchical(child);
+    }
+  }
+  /** Finds the last descendant in native child order. @returns Last descendant, absent for a leaf. */
+  protected GetLastDescendant(): SwNumberTreeNode | undefined {
+    const last = this.children.at(-1);
+    return last?.GetLastDescendant() ?? last;
+  }
+  /** Finds the depth-first predecessor or direct previous sibling, excluding the root. @param sibling - Whether to omit preceding sibling descendants. @returns Predecessor. */
+  public GetPred(sibling = false): SwNumberTreeNode | undefined {
+    if (this.parent === undefined) return undefined;
+    const position = this.parent.children.indexOf(this);
+    if (position === 0) return this.parent.parent === undefined ? undefined : this.parent;
+    const previous = this.parent.children[position - 1] as SwNumberTreeNode;
+    return sibling ? previous : (previous.GetLastDescendant() ?? previous);
+  }
+  /** Validates the continuous prefix through a target, retaining the native end sentinel when no target is reached. @param target - Last child to validate, absent to reach the end. @returns Nothing. */
+  protected ValidateContinuous(target?: SwNumberTreeNode): void {
+    let position = this.lastValid === undefined ? -1 : this.children.indexOf(this.lastValid);
+    let child: SwNumberTreeNode | undefined;
+    do {
+      child = this.children[++position];
+      if (child !== undefined) {
+        const predecessor = child.GetPred();
+        if (predecessor !== undefined) {
+          child.value = !child.IsCounted()
+            ? predecessor.GetNumber(predecessor.parent !== child.parent)
+            : child.IsRestart()
+              ? child.GetStartValue()
+              : predecessor.GetNumber(predecessor.parent !== child.parent) + 1;
+        } else {
+          child.value = !child.IsCounted()
+            ? this.GetStartValue() - 1
+            : child.IsRestart()
+              ? child.GetStartValue()
+              : this.GetStartValue();
+        }
+      }
+    } while (child !== undefined && child !== target);
+    this.SetLastValid(child, true);
   }
   /** Returns the signed counter, validating its parent prefix by default. @param validate - Whether to validate. @returns Counter. */
   public GetNumber(validate = true): number {
