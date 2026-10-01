@@ -1,0 +1,63 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "definitions": [
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumRule::SwNumRule( UIName",
+      "sha256": "503694c67d459629e125f6a359ab3a19ff73129f8267fb22cd03d8eab37d40f5"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "const SwNumFormat& SwNumRule::Get(",
+      "sha256": "a033938c7fa0311e0de3ec46929023090bc87fe5154f3b8d07ed42f7a9084a5a"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "const SwNumFormat* SwNumRule::GetNumFormat(",
+      "sha256": "b0abb2f8738fd5807b1e8168265742ae3ca39c96b5e9628e6f5e2f1e4a9f3c58"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "bool SwNumFormat::IsItemize() const",
+      "sha256": "f75f72e1799ebeb73cc5c7a5627d9e8ed1cff1e7a35be225e30fb59663f74468"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "bool SwNumFormat::IsEnumeration() const",
+      "sha256": "d7d0b06006c9c8460933c48269b22db0a48d56c97e4e3edf62bb82824206d48f"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "signature": "sal_uInt16 lcl_BoundListLevel(const int nActualLevel)",
+      "sha256": "929dff3cab4f465c5d661944247ef812b43d72f5a5384d19c0811127db421daa"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "signature": "bool SwTextNode::HasNumber(SwRootFrame const*const pLayout) const",
+      "sha256": "026cb88175384f28acc0e8a78122dc70b0755e267da0cf85e51430a265b7f160"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "signature": "bool SwTextNode::HasBullet() const",
+      "sha256": "b3de4a7c575aec6ff54ac8add9e205811a9ced0f99820b4f28f5f60966ad32a9"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "signature": "bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode)",
+      "sha256": "dab12576ec572d309ff2276a62f9ec59f6e258710df677a2638dea446cf9b64a"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "signature": "bool SwNodeNum::IsCountedForNumbering() const",
+      "sha256": "88382bc5d2cddf96ff1dffec58dd7c0c44f48e7292565dd329ffc873cefa1bb9"
+    },
+    {
+      "path": "sw/source/core/doc/DocumentListItemsManager.cxx",
+      "signature": "void DocumentListItemsManager::getNumItems(",
+      "sha256": "1b306e13dd3e527772508a0d98cf0a1b432073de9d1bc607bca78bc98a5b1a78"
+    }
+  ],
+  "previousProfile": ".agentplane/tasks/202610011207-TR9DSM/native-source-identities.json",
+  "profileSha256": "3c28068cdadc5fe4923d51ea06416510e16bf126959320665b16e76c227b811c",
+  "scope": "Complete unchanged native predicates/bound-level/counting/registry and actual native rule constructor/Get/GetNumFormat/Set/default tables. Named shown-record/null-layout/count/phantom/already-ordered-container/platform/font/style/graphics aliases are explicit. Native full tree counter algorithm, layout/redline/graphics/Font/service/global lifetimes are not certified; bitmap is scalar classification only."
+}

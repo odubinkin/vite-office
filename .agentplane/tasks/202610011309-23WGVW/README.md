@@ -4,7 +4,7 @@ title: "Restore native Writer numbering classification and layout-update predica
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved single iteration45 native Writer classification/raw-layout predicate task under the persistent user goal authorization; preserve registered I/O/recovery deviations and unchanged source/coverage gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:12:36.882Z"
+doc_updated_at: "2026-10-01T13:20:54.418Z"
 doc_updated_by: "CODER"
 description: "Iteration45 of the active parity audit: restore source-owned SwNumFormat.IsItemize/IsEnumeration and actual SwTextNode HasNumber/HasBullet reads, including NONE enumeration and scalar bitmap classification. Restore the distinct raw-owned HasNumberingWhichNeedsLayoutUpdate contract, without equating it to enumeration. Validate actual SwNodeNum counting and DocumentListItemsManager filtering against complete unchanged pinned native bodies and real local graphs. Preserve existing UI/ODT/Worker contracts, registered I/O/recovery deviations and the native malformed-NONE browser guard; broader bitmap graphics/layout/redline/native lifetimes remain unverified."
 sections:
@@ -54,7 +54,12 @@ sections:
     4. Record actual CODE SHA separately from artifact/quality/close commits, canonical verification, separate EVALUATOR quality phase and clean final tracked/untracked state. Close only this leaf; parent/full goal remain active with the next measured mismatch recorded.
   Verification: "Pending: no implementation or completed verification is claimed. All acceptance checks must be run and source/profile limits documented before closure."
   Rollback Plan: "If this task needs rollback, create a new executable follow-up task to revert its reviewed CODE changes locally and rerun the same verification; do not rewrite history or mutate immutable DONE tasks. Preserve native differential sources/outputs and failure evidence, and retain the parent/full objective and registered I/O exceptions."
-  Findings: "Read-only preflight confirms direct main78353b0aebea, clean tracked/untracked state, only parent202609240501-C9TN6M active, approvals required and no network authorization. Four matched policy modules are loaded; no user-instructions file exists. Native IsEnumeration is explicitly !IsItemize, so NUMBER_NONE is enumeration. Native SwNodeNum counting uses HasNumber||HasBullet and numbered registry filtering uses HasNumber. Native layout-update helper instead reads GetNumFormat, rejects absent owned format and suppresses NONE/CHAR_SPECIAL/BITMAP; its semantics must not be conflated with enumeration. Existing local helper uses effective Get and only ARABIC. Prior measured native4/5/6/8 classifications are [[4,true,false],[5,true,false],[6,false,true],[8,false,true]] versus actual local [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. No full project or module equivalence is claimed."
+  Findings: |-
+    Read-only preflight confirms direct main78353b0aebea, clean tracked/untracked state, only parent202609240501-C9TN6M active, approvals required and no network authorization. Four matched policy modules are loaded; no user-instructions file exists. Native IsEnumeration is explicitly !IsItemize, so NUMBER_NONE is enumeration. Native SwNodeNum counting uses HasNumber||HasBullet and numbered registry filtering uses HasNumber. Native layout-update helper instead reads GetNumFormat, rejects absent owned format and suppresses NONE/CHAR_SPECIAL/BITMAP; its semantics must not be conflated with enumeration. Existing local helper uses effective Get and only ARABIC. Prior measured native4/5/6/8 classifications are [[4,true,false],[5,true,false],[6,false,true],[8,false,true]] versus actual local [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. No full project or module equivalence is claimed.
+
+    - Observation: Fresh baseline reproduces NONE classification/counting/registry loss and sparse effective-format repaint mismatch. Native ASan/UBSan harness emits1032 cases (4 format,1008 node,4 root,16 registry) without diagnostics. Initial regression-before confirms missing native predicates and raw-layout mismatch; its registry fixture also applies a default-counted list after setting the counted input, overwriting that supplied input.
+      Impact: Implementation errors are measured, but the fixture must supply counted policy after list assembly so native/local profile inputs match.
+      Resolution: Preserve regression-before.log. Correct only fixture counted-input timing; restore source-owned native format predicates/effective const read and distinct raw-owned layout helper. Keep original expected native output and all existing tests/gates.
 id_source: "generated"
 ---
 ## Summary
@@ -90,3 +95,7 @@ If this task needs rollback, create a new executable follow-up task to revert it
 ## Findings
 
 Read-only preflight confirms direct main78353b0aebea, clean tracked/untracked state, only parent202609240501-C9TN6M active, approvals required and no network authorization. Four matched policy modules are loaded; no user-instructions file exists. Native IsEnumeration is explicitly !IsItemize, so NUMBER_NONE is enumeration. Native SwNodeNum counting uses HasNumber||HasBullet and numbered registry filtering uses HasNumber. Native layout-update helper instead reads GetNumFormat, rejects absent owned format and suppresses NONE/CHAR_SPECIAL/BITMAP; its semantics must not be conflated with enumeration. Existing local helper uses effective Get and only ARABIC. Prior measured native4/5/6/8 classifications are [[4,true,false],[5,true,false],[6,false,true],[8,false,true]] versus actual local [[4,true,false],[5,false,false],[6,false,true],[8,false,false]]. No full project or module equivalence is claimed.
+
+- Observation: Fresh baseline reproduces NONE classification/counting/registry loss and sparse effective-format repaint mismatch. Native ASan/UBSan harness emits1032 cases (4 format,1008 node,4 root,16 registry) without diagnostics. Initial regression-before confirms missing native predicates and raw-layout mismatch; its registry fixture also applies a default-counted list after setting the counted input, overwriting that supplied input.
+  Impact: Implementation errors are measured, but the fixture must supply counted policy after list assembly so native/local profile inputs match.
+  Resolution: Preserve regression-before.log. Correct only fixture counted-input timing; restore source-owned native format predicates/effective const read and distinct raw-owned layout helper. Keep original expected native output and all existing tests/gates.

@@ -1,0 +1,41 @@
+{
+  "rows": [
+    {
+      "type": 4,
+      "hasNumber": true,
+      "hasBullet": false,
+      "layout": true,
+      "counted": true,
+      "registry": 1
+    },
+    {
+      "type": 5,
+      "hasNumber": false,
+      "hasBullet": false,
+      "layout": false,
+      "counted": false,
+      "registry": 0
+    },
+    {
+      "type": 6,
+      "hasNumber": false,
+      "hasBullet": true,
+      "layout": false,
+      "counted": true,
+      "registry": 0
+    },
+    {
+      "type": 8,
+      "hasNumber": false,
+      "hasBullet": false,
+      "layout": false,
+      "counted": false,
+      "registry": 0
+    }
+  ],
+  "sparse": {
+    "hasNumber": true,
+    "raw": false,
+    "layout": true
+  }
+}

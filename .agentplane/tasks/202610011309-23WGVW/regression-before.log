@@ -1,0 +1,68 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/txtnode/number-classification.test.ts (4 tests | 3 failed) 17ms
+   × matches native format enumeration itemize copy and type-change predicates 3ms
+   × matches all native effective classification raw-layout counting and registry profiles 7ms
+   × matches native root phantom and counted numbered-registry filtering 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/txtnode/number-classification.test.ts > matches native format enumeration itemize copy and type-change predicates
+TypeError: (intermediate value).IsEnumeration is not a function
+ ❯ src/sw/source/core/txtnode/number-classification.test.ts:60:28
+     58| }
+     59| it("matches native format enumeration itemize copy and type-change pre…
+     60|   expect(new SwNumFormat().IsEnumeration()).toBe(true);
+       |                            ^
+     61|   for (const [type, enumeration, itemize, copyEnumeration, copyItemize…
+     62|     const format = new SwNumFormat();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/sw/source/core/txtnode/number-classification.test.ts > matches all native effective classification raw-layout counting and registry profiles
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ src/sw/source/core/txtnode/number-classification.test.ts:102:54
+    100|     expect(node.HasNumber()).toBe(number);
+    101|     expect(node.HasBullet()).toBe(bullet);
+    102|     expect(HasNumberingWhichNeedsLayoutUpdate(node)).toBe(layout);
+       |                                                      ^
+    103|     expect(record.IsCountedForNumbering()).toBe(countedNumbering);
+    104|     const registry = new DocumentListItemsManager(),
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/sw/source/core/txtnode/number-classification.test.ts > matches native root phantom and counted numbered-registry filtering
+AssertionError: expected [ +0 ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   0,
++ ]
+
+ ❯ src/sw/source/core/txtnode/number-classification.test.ts:175:7
+    173|         ) => records.indexOf(item),
+    174|       ),
+    175|     ).toEqual(included);
+       |       ^
+    176|     doc.Dispose();
+    177|   }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  20:19:26
+   Duration  1.08s (transform 200ms, setup 126ms, import 237ms, tests 17ms, environment 586ms)
+
