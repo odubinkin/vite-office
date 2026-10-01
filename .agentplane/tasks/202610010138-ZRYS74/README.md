@@ -4,7 +4,7 @@ title: "Restore native list-item start-value normalization"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "Native115 conversions/170 real contexts and21 focused tests including88 genuine ODT cases pass. Final unchanged npm run verify exit0 session48616:648/109/19,both100% coverage,all other gates. Doctor0errors/two prior warnings,routing/diff pass. No whole-module/full-goal promotion; intentional save/open/recovery preserved."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T01:52:31.897Z"
+  updated_by: "EVALUATOR"
+  note: "Native ordinary start normalization and shared attribute integer access are source-backed and verified; actual implementation218b25bd8e27e82ac85819a8436a6bbaae6b58ff."
+  evaluated_sha: "218b25bd8e27e82ac85819a8436a6bbaae6b58ff"
+  blueprint_digest: "557b7218eec88179c26216fba06b692f854ca63daee68e1dac7217f8bfa3caee"
+  evidence_refs:
+    - ".agentplane/tasks/202610010138-ZRYS74/README.md"
+    - ".agentplane/tasks/202610010138-ZRYS74/quality/20261001-015231897-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010138-ZRYS74/quality/20261001-015231897-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010138-ZRYS74/quality/20261001-015231897-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010138-ZRYS74/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010138-ZRYS74/verify.log"
+    - ".agentplane/tasks/202610010138-ZRYS74/native-results.json"
+    - ".agentplane/tasks/202610010138-ZRYS74/compare-native.ts"
+    - "apps/office/src/sw/source/filter/xml/odt-list-start-normalization.test.ts"
+  findings:
+    - "Strict syntax/range throws were removed in favor of shared byte-int conversion followed by the exact native0..SHRTMAX item guard. List declarations retain absent defaults,index/start/display policy; signed zero is canonical integer0. Headers bypass conversion and subsequent paragraphs consume no marker/start.115 compiled-source conversion results and170 real SAX contexts match;88 genuine common/automatic numbered/bullet ODT cases verify literal state,owned copies,Worker16,XML and reopen. Final full unchanged648/109/19 and100% coverage pass; code checkout clean."
 commit: null
 comments:
   -

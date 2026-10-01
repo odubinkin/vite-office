@@ -1,0 +1,22 @@
+# EVALUATOR opinion: pass
+
+Native ordinary start normalization and shared attribute integer access are source-backed and verified; actual implementation218b25bd8e27e82ac85819a8436a6bbaae6b58ff.
+
+## Findings
+- Strict syntax/range throws were removed in favor of shared byte-int conversion followed by the exact native0..SHRTMAX item guard. List declarations retain absent defaults,index/start/display policy; signed zero is canonical integer0. Headers bypass conversion and subsequent paragraphs consume no marker/start.115 compiled-source conversion results and170 real SAX contexts match;88 genuine common/automatic numbered/bullet ODT cases verify literal state,owned copies,Worker16,XML and reopen. Final full unchanged648/109/19 and100% coverage pass; code checkout clean.
+
+## Evidence
+- .agentplane/tasks/202610010138-ZRYS74/README.md
+- .agentplane/tasks/202610010138-ZRYS74/verify.log
+- .agentplane/tasks/202610010138-ZRYS74/native-results.json
+- .agentplane/tasks/202610010138-ZRYS74/compare-native.ts
+- apps/office/src/sw/source/filter/xml/odt-list-start-normalization.test.ts
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- FastAttributeList remains an explicit xmloff adapter with nullable bool/out-integer projection; full native SAX class/token/container ownership and other scalar/radix/UTF16 APIs are not implemented or proven. Compiled primary bodies use platform/UTF8/iterator shims,not a full LibreOffice build. Repeated-sublist restart and broad UNO/list/style/core/UI contracts remain open. Save/open/recovery differences remain intentional.
