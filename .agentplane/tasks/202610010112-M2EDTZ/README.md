@@ -1,10 +1,11 @@
 ---
 id: "202610010112-M2EDTZ"
 title: "Restore native unnumbered list paragraph ODT transport"
-status: "DOING"
+result_summary: "Native list headers, first-paragraph item consumption, nested-return clearing and unnumbered continuation export now match the pinned bounded contract. No intentional document lifecycle deviations changed."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts"
   findings:
     - "The real Writer projection preserves counted WhichId87 and omits uncounted restart/start metadata as native NumberingIsNumber does. XMLOFF tracks actual open tags and consumes ordinary item markers once; nested return clears restored outer state. Genuine common/automatic package cases assert text,counters,labels,vectors,owned copies,Worker16,structure and reopen. Legacy contradictory rejection expectations were updated without lowering gates."
-commit: null
+commit:
+  hash: "fd0ede9f505568377bbcd15595938cb72dbfcf8c"
+  message: "🧩 M2EDTZ code: restore native unnumbered list ODT transport"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned ODT unnumbered paragraph/header/item consumption under the persistent approved goal."
+  -
+    author: "CODER"
+    body: "Verified: native unnumbered list ODT transport,368 compiled-source event comparisons,genuine common/automatic packages,owned copies and Worker16; full unchanged verification646/109/19 and100% coverage. Quality pass; scoped code hash recorded; wider parent remains active."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native transport oracle368 and genuine ODT/copy/Worker16 checks pass. Final unchanged npm run verify exit0 session62469:646 app,109 inventory,19 browser; both100% coverage and all remaining gates. Doctor0errors/two prior warnings,routing/diff pass. Bounded list transport only; wider ownership/default/UI obligations remain unverified."
+  -
+    type: "status"
+    at: "2026-10-01T01:35:41.475Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native unnumbered list ODT transport,368 compiled-source event comparisons,genuine common/automatic packages,owned copies and Worker16; full unchanged verification646/109/19 and100% coverage. Quality pass; scoped code hash recorded; wider parent remains active."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:34:49.627Z"
+doc_updated_at: "2026-10-01T01:35:41.476Z"
 doc_updated_by: "CODER"
 description: "Iteration30: carry existing SwTextNode counted state through ODT using native list-header versus list-item continuation and list-item consumption ownership. Preserve intentional save/open/recovery policies."
 sections:
