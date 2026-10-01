@@ -4,7 +4,7 @@ title: "Restore native repeated-sublist restart ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "Source-owned repeated-sublist restart inheritance/consumption/return and signed16 count match bounded primary probes;32 genuine ODT packages/copies/Worker16 pass. Full unchanged verify session36449 terminal exit0:651/109/19 tests,both100% coverage,all gates. Doctor/routing/diff pass;explicit export and broader contracts remain unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T02:41:46.975Z"
+  updated_by: "EVALUATOR"
+  note: "Approved bounded source-owned repeated-sublist import correction passes at actual implementation c79a6ff3539469ea8eb8f3ddccdd437adb8eb847;recommend child closure only."
+  evaluated_sha: "c79a6ff3539469ea8eb8f3ddccdd437adb8eb847"
+  blueprint_digest: "3fc11ed766f45ed61277be549964808cc012d15cc99e52d90c3809de371f7959"
+  evidence_refs:
+    - ".agentplane/tasks/202610010156-ZDTVKE/README.md"
+    - ".agentplane/tasks/202610010156-ZDTVKE/quality/20261001-024146975-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010156-ZDTVKE/quality/20261001-024146975-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010156-ZDTVKE/quality/20261001-024146975-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010156-ZDTVKE/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010156-ZDTVKE/verify.log"
+    - ".agentplane/tasks/202610010156-ZDTVKE/native-results.json"
+    - ".agentplane/tasks/202610010156-ZDTVKE/native-count-results.json"
+    - "apps/office/src/xmloff/source/text/XMLTextListBlockContext.test.ts"
+    - "apps/office/src/sw/source/filter/xml/odt-list-sublist-restart.test.ts"
+  findings:
+    - "Actual block instances are now retained by helper;item owns start and signed16 sublist count;block owns inherited pending restart and returns it before pop;first paragraph consumes it irrespective of counted state. Existing identity/rule resolution is unchanged. Reviewed primary excerpts,ownership and genuine ODT tests,diff and final terminal log rather than relying on status metadata."
+    - "Native1536 trees/10752 states and9 count-boundary states with explicit adapters,32 genuine packages/copies/Worker16,reopen projections and unchanged651/109/19 full verification satisfy this import scope. Evidence relocation changes only3 paths;schema,gates,thresholds,registered divergences and whole-module status remain unchanged."
 commit: null
 comments:
   -
@@ -42,7 +63,7 @@ events:
     state: "ok"
     note: "Source-owned repeated-sublist restart inheritance/consumption/return and signed16 count match bounded primary probes;32 genuine ODT packages/copies/Worker16 pass. Full unchanged verify session36449 terminal exit0:651/109/19 tests,both100% coverage,all gates. Doctor/routing/diff pass;explicit export and broader contracts remain unverified."
 doc_version: 3
-doc_updated_at: "2026-10-01T02:41:13.423Z"
+doc_updated_at: "2026-10-01T02:42:38.322Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
@@ -120,6 +141,10 @@ sections:
     - Observation: Isolated unchanged mobile viewport/menu scenario session81812 terminal exit0:3/3 repetitions pass with normal assertions,timeouts and3 workers.
       Impact: The prior browser failure did not reproduce in this bounded check; its resize/pointer/menu-switch cause remains unresolved rather than attributed to environment without proof.
       Resolution: Preserve the failure trace and successful repetitions,then rerun the complete unchanged verify once. Keep mobile resize/menu stability as a separate follow-up risk; no test/config/browser implementation change in this import task.
+
+    - Observation: Quality artifact commit exits5: commit-msg policy rejects quality scope and requires code,task,close or integrate. A following finish attempt is rejected before DONE because those quality files remain staged.
+      Impact: Implementation c79a6ff3539469ea8eb8f3ddccdd437adb8eb847 and verification are intact;task remains DOING and no close commit was created. This is a commit subject mistake,not a runtime test or weakened-hook issue.
+      Resolution: Recompute route,run diagnostic doctor/status,stage the updated active README and commit only existing task quality artifacts with the allowed task subject;then finish using the actual code hash with an empty index. Do not bypass hooks or use close-unstage to hide files.
 id_source: "generated"
 ---
 ## Summary
@@ -214,3 +239,7 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent us
 - Observation: Isolated unchanged mobile viewport/menu scenario session81812 terminal exit0:3/3 repetitions pass with normal assertions,timeouts and3 workers.
   Impact: The prior browser failure did not reproduce in this bounded check; its resize/pointer/menu-switch cause remains unresolved rather than attributed to environment without proof.
   Resolution: Preserve the failure trace and successful repetitions,then rerun the complete unchanged verify once. Keep mobile resize/menu stability as a separate follow-up risk; no test/config/browser implementation change in this import task.
+
+- Observation: Quality artifact commit exits5: commit-msg policy rejects quality scope and requires code,task,close or integrate. A following finish attempt is rejected before DONE because those quality files remain staged.
+  Impact: Implementation c79a6ff3539469ea8eb8f3ddccdd437adb8eb847 and verification are intact;task remains DOING and no close commit was created. This is a commit subject mistake,not a runtime test or weakened-hook issue.
+  Resolution: Recompute route,run diagnostic doctor/status,stage the updated active README and commit only existing task quality artifacts with the allowed task subject;then finish using the actual code hash with an empty index. Do not bypass hooks or use close-unstage to hide files.
