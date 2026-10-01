@@ -1,0 +1,37 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts
+  28:23  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts
+   18:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   26:10  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   27:10  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   28:10  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   37:3   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   53:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   66:23  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   78:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   79:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   80:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   81:5   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   82:5   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   83:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   95:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  101:17  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+✖ 16 problems (16 errors, 0 warnings)
+

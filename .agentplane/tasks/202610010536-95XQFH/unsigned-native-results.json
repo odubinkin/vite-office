@@ -1,0 +1,47 @@
+{
+  "definitions": 8,
+  "rows": [
+    "0 0",
+    "80 0 0 1 1 1 1 1",
+    "80 1 1 1 1 1 1 1",
+    "80 32768 32768 1 1 1 1 1",
+    "80 65535 65535 1 1 1 1 1",
+    "0 0"
+  ],
+  "pass": true,
+  "identity": [
+    {
+      "signature": "CntUInt16Item(sal_uInt16 which, sal_uInt16 nTheValue):\n        SfxPoolItem(which), m_nValue(nTheValue)",
+      "sha256": "5b3c5fe427b8b9d13487ab7a6717c39352c5ee2e2c5464e6349dd7947b8865b5"
+    },
+    {
+      "signature": "sal_uInt16 GetValue() const",
+      "sha256": "b9563c7e496e898651ff400cd4f9d2252a42ed98b4bdfb228b6e4da6ce420b7b"
+    },
+    {
+      "signature": "explicit SfxUInt16Item(sal_uInt16 which = 0, sal_uInt16 nValue = 0):\n        CntUInt16Item(which, nValue)",
+      "sha256": "4a4081402503ccce066224c25c39b660867c55bc379165165a4f7c580185040f"
+    },
+    {
+      "signature": "virtual SfxUInt16Item* Clone(SfxItemPool * = nullptr) const override",
+      "sha256": "2b92d78a4b4e49331735d974dfb511b977865f22ca714d704a45a100cf434365"
+    },
+    {
+      "signature": "bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const",
+      "sha256": "b531f71e43925c34b7df3291abe4e9202d99cca8c6ec1b535e7844858eb46120"
+    },
+    {
+      "signature": "bool CntUInt16Item::QueryValue(css::uno::Any& rVal, sal_uInt8) const",
+      "sha256": "98b309f1c6dc9d1c00185a703e2c8f11990d2336c51a325064df07a3671d76b3"
+    },
+    {
+      "signature": "CntUInt16Item* CntUInt16Item::Clone(SfxItemPool *) const",
+      "sha256": "4629e47bb7f58f5916dd0f909ae6e4fffd08f37e5d50cfc8ef9ae1c084f4019a"
+    },
+    {
+      "signature": "SfxPoolItem* SfxUInt16Item::CreateDefault()",
+      "sha256": "4a9f0a5ef62b7dfc0ffd50e41e262ca09599a7ce9b9ede3d840fc3c41eb99d6d"
+    }
+  ],
+  "profile": "Native unsigned ctor/value/query/clones/equality/default factory;explicit Which/type/UNO Any scalar adapters. JS rejects values that typed sal_uInt16 cannot represent;full mutation/hash/presentation/pooling not claimed."
+}
