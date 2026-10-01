@@ -1,0 +1,116 @@
+[
+  {
+    "source": "pool",
+    "marker": "static bool IsWhich(",
+    "bytes": 75,
+    "sha256": "8fe51e72a191117a93f90e46bdd4de3aa5b795aefe232ce6bd662657e09ac43b"
+  },
+  {
+    "source": "set",
+    "marker": "void SfxItemSet::Changed(",
+    "bytes": 74,
+    "sha256": "e5d5e4febcb02c8bd2bc8eb8080fbb623d50b976d274071b32105374766c1751"
+  },
+  {
+    "source": "attr",
+    "marker": "void SwAttrSet::Changed(",
+    "bytes": 2270,
+    "sha256": "813b561349321e3d2cb927044b0f06b7cd3f673a86db6240ce65500d10eb6c16"
+  },
+  {
+    "source": "attr",
+    "marker": "bool SwAttrSet::Put_BC( const SfxPoolItem&",
+    "bytes": 262,
+    "sha256": "fc83742cbd770ff40d57f746119f9513f2e867e81d7e9bc386139b6c66538725"
+  },
+  {
+    "source": "attr",
+    "marker": "bool SwAttrSet::Put_BC( const SfxItemSet&",
+    "bytes": 248,
+    "sha256": "ea4f6a1f1226bbea6c29f36d56d2315aaa3237c1002dd06d1065a94f48b9b355"
+  },
+  {
+    "source": "attr",
+    "marker": "sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,",
+    "bytes": 282,
+    "sha256": "cfcff67536235e9954cfe5e90b6b6aec0bc2a8cb11f2b3195d9250887bfa9ece"
+  },
+  {
+    "source": "attr",
+    "marker": "sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1,",
+    "bytes": 429,
+    "sha256": "73eb36a8547d7b05a8036d5db22ec3571ca98efc931397baabf7d195536174b2"
+  },
+  {
+    "source": "node",
+    "marker": "static const SfxPoolItem* Put(",
+    "bytes": 358,
+    "sha256": "c881b8efa507d37d166b954401fe93a045adbf52539b0b5dded5adf416787e44"
+  },
+  {
+    "source": "node",
+    "marker": "static bool Put( std::shared_ptr",
+    "bytes": 733,
+    "sha256": "bedaa7bfa2343efcbdeb4b2d994aaa512c4fc3614aa36de9bf78d97d4c45d125"
+  },
+  {
+    "source": "node",
+    "marker": "static bool Put_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,\n            const SwContentNode& rNode, const SfxPoolItem&",
+    "bytes": 602,
+    "sha256": "218dcaf231f5ad2caef0d6e5066bbbae9a3e97a6ff0990560ea8641637c539d3"
+  },
+  {
+    "source": "node",
+    "marker": "static bool Put_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,\n            const SwContentNode& rNode, const SfxItemSet&",
+    "bytes": 1035,
+    "sha256": "b48acc3a38906342b3294e2655b2a07db0ca00485fa2ba2255e153e63dd04d67"
+  },
+  {
+    "source": "node",
+    "marker": "static sal_uInt16 ClearItem_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,\n                     const SwContentNode& rNode, sal_uInt16 nWhich,",
+    "bytes": 477,
+    "sha256": "9a625983cbfc16fe14d17a200617e11a736eaa6fc880d31bcbebde4eb28dac40"
+  },
+  {
+    "source": "node",
+    "marker": "static sal_uInt16 ClearItem_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,\n                     const SwContentNode& rNode,\n                     sal_uInt16 nWhich1,",
+    "bytes": 529,
+    "sha256": "61b5edffffbe8170058218e07dc34ba875825b35697a0d8dbaa1957b6ae02951"
+  },
+  {
+    "source": "node",
+    "marker": "bool SwContentNode::SetAttr(const SfxPoolItem&",
+    "bytes": 944,
+    "sha256": "ed10deaded9b0d36cbac5ba67b9130ac352ebb9d5fcd4810ee7e26782e32dacb"
+  },
+  {
+    "source": "node",
+    "marker": "bool SwContentNode::SetAttr( const SfxItemSet&",
+    "bytes": 3149,
+    "sha256": "2e5308eed914b3ca032abf1720c738d2ba0a9e721f43023e0dbed06f75e88c2d"
+  },
+  {
+    "source": "node",
+    "marker": "bool SwContentNode::ResetAttr( sal_uInt16",
+    "bytes": 1251,
+    "sha256": "1b604e54e3bbf008fed105010f3f8c839c7a4238a937dfef49bf9b6fc82b4955"
+  },
+  {
+    "source": "node",
+    "marker": "bool SwContentNode::ResetAttr( const std::vector",
+    "bytes": 882,
+    "sha256": "fc001a1860e3cb8f1f8b6c4874ed8ecd9020a1027038642b265b3184c2e868c0"
+  },
+  {
+    "source": "node",
+    "marker": "sal_uInt16 SwContentNode::ResetAllAttr()",
+    "bytes": 846,
+    "sha256": "d0cc18ccd05d59dc2131ed4ae562f8e96b9cef3e76851b0b43097c3b8eb34735"
+  },
+  {
+    "source": "node",
+    "marker": "sal_uInt16 SwContentNode::ClearItemsFromAttrSet(",
+    "bytes": 495,
+    "sha256": "b67ad1f2bedb35458f8788058cded93cd6e568f24db130d46ee7532d3f48c3f4"
+  }
+]

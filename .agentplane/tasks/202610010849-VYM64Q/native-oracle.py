@@ -107,16 +107,18 @@ for kind in [2,3,4]:
   resets=[[kind,84,84],[kind,84,83],[kind,84,87],[kind,0,0]] if kind==2 else [[3],[3,84],[3,84,84,85,87],[3,86,84]] if kind==3 else [[4]]
   for reset in resets:
    cases.append({'ops':state+[reset]})
-   for cb in [[0,84,2],[1,86,0],[2,84,3]]:cases.append({'ops':state+[[9,*cb],reset]})
+   for cb in [[0,84,2],[1,83,0],[2,84,3]]:cases.append({'ops':state+[[9,*cb],reset]})
 for x in [0,2,4]:
  for which in [84,86]:
   cases.append({'ops':[[8,84,3],[0,which,4],[0,which,x],[0,which,x],[1,84,x,86,7],[3,84,86],[4]]})
+cases.append({'ops':[[0,84,4],[0,85,1],[0,86,7],[9,1,86,0],[2,84,84]]})
+cases.append({'ops':[[0,86,7],[9,1,86,0],[0,84,4]]})
 random.seed(39)
 for i in range(40):
  ops=[]
  for j in range(25):
   k=random.randrange(10);w=random.choice([84,85,86,87]);v=random.choice([0,1,2,4,7])
-  ops.append([k,w,v] if k in [0,8] else [1,84,v,86,7] if k==1 else [2,w,random.choice([0,w,87])] if k==2 else [3,*random.sample([84,85,86,87],random.randrange(5))] if k==3 else [4] if k==4 else [k,w] if k in [5,6] else [7] if k==7 else [9,random.randrange(3),84,v])
+  ops.append([k,w,v] if k in [0,8] else [1,84,v,86,7] if k==1 else [2,w,random.choice([0,w,87])] if k==2 else [3,*random.sample([84,85,86,87],random.randrange(5))] if k==3 else [4] if k==4 else [k,w] if k in [5,6] else [7] if k==7 else [9,random.choice([0,2]),84,v])
  cases.append({'ops':ops})
 request=''.join(str(len(c['ops']))+' '+' '.join(str(o[0])+' '+str(len(o)-1)+' '+' '.join(map(str,o[1:])) for o in c['ops'])+'\n' for c in cases)
 try:
