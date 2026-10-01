@@ -1,0 +1,15 @@
+
+> vite-office@0.1.0 check:source-provenance
+> tsx scripts/check-source-provenance.ts
+
+/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:433
+    throw new Error(
+          ^
+
+Error: Source provenance local symbols are absent from apps/office/src/sw/source/core/docnode/node.ts: SwContentNode.SetAttr, SwContentNode.ResetAttr, SwContentNode.ResetAllAttr.
+    at assertSymbolsPresent (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:433:11)
+    at validateSourceProvenanceManifest (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:151:7)
+    at async main (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:681:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:698:57)
+
+Node.js v24.13.1

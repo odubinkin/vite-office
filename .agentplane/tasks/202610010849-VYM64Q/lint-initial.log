@@ -1,0 +1,36 @@
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/attr/swatrset.ts
+  313:31  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts
+   60:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   68:26  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   68:57  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   68:76  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   94:41  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   94:50  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  106:27  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  107:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  142:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  159:16  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  161:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  164:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  173:25  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  184:10  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/docnode/node-attribute-handle.ts
+  12:14  error  Unexpected class with only static properties  @typescript-eslint/no-extraneous-class
+  20:18  error  Forbidden non-null assertion                  @typescript-eslint/no-non-null-assertion
+  34:18  error  Forbidden non-null assertion                  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/docnode/node.ts
+  196:13  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  205:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  219:11  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+✖ 21 problems (21 errors, 0 warnings)
+
