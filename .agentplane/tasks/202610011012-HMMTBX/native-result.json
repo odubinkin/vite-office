@@ -4,7 +4,6 @@
   "cases": [
     {
       "name": "missing-value-reset-and-flags",
-      "parent": false,
       "rule": false,
       "operations": [
         [
@@ -102,7 +101,6 @@
     },
     {
       "name": "retain-seven-across-flags",
-      "parent": false,
       "rule": true,
       "operations": [
         [
@@ -277,8 +275,7 @@
       ]
     },
     {
-      "name": "parent-is-not-direct",
-      "parent": true,
+      "name": "rule-format-is-not-direct",
       "rule": true,
       "operations": [
         [
@@ -310,14 +307,14 @@
         {
           "restart": false,
           "direct": null,
-          "effective": 9,
+          "effective": 1,
           "start": 9,
           "calls": []
         },
         {
           "restart": true,
           "direct": null,
-          "effective": 9,
+          "effective": 1,
           "start": 9,
           "calls": [
             [
@@ -362,7 +359,7 @@
         {
           "restart": false,
           "direct": null,
-          "effective": 9,
+          "effective": 1,
           "start": 9,
           "calls": [
             [
@@ -374,7 +371,7 @@
         {
           "restart": true,
           "direct": null,
-          "effective": 9,
+          "effective": 1,
           "start": 9,
           "calls": [
             [
@@ -388,7 +385,6 @@
     },
     {
       "name": "signed-narrowing",
-      "parent": false,
       "rule": false,
       "operations": [
         [

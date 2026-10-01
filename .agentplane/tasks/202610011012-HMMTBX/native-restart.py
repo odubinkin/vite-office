@@ -9,8 +9,8 @@ def block(marker):
  return s[a:i]
 markers=['void SwTextNode::SetListRestart(', 'bool SwTextNode::IsListRestart()', 'void SwTextNode::SetAttrListRestartValue(', 'bool SwTextNode::HasAttrListRestartValue()', 'SwNumberTree::tSwNumTreeNumber SwTextNode::GetAttrListRestartValue()', 'SwNumberTree::tSwNumTreeNumber SwTextNode::GetActualListStartValue()']
 records=[{'source':source_path,'marker':m,'sha256':hashlib.sha256(block(m).encode()).hexdigest(),'text':block(m)} for m in markers]
-(root/'native-source-identity.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':records,'adapters':['fixed Which85/86 typed item payloads; map direct-item storage with pool false/1 and optional parent9','SetAttr/ResetAttr attempt recorder; not native callbacks/cache/style-access','signed 64-bit tools::Long and sal_Int16 platform types; exact integer inputs only','OSL_ENSURE precondition assertion; only valid direct-value getter calls','optional rule/format start9 and zero level; no full native numbering tree']},indent=2)+'\n')
-cases=[{'name':'missing-value-reset-and-flags','parent':False,'rule':False,'operations':[['value',65535],['flag',False],['flag',True],['flag',True],['flag',False]]},{'name':'retain-seven-across-flags','parent':False,'rule':True,'operations':[['value',7],['flag',True],['flag',False],['flag',True],['value',7],['value',0],['flag',False],['flag',True],['value',65535],['value',65535]]},{'name':'parent-is-not-direct','parent':True,'rule':True,'operations':[['flag',True],['value',9],['value',9],['flag',False],['value',65535],['flag',True]]},{'name':'signed-narrowing','parent':False,'rule':False,'operations':[['flag',True]]+[['value',n] for n in [-1,-1,32768,-32768,40000,40000,-25536,65534,65535,65536,0,-32769,131071,4294967303,9007199254740991,-9007199254740991]]}]
+(root/'native-source-identity.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':records,'adapters':['fixed Which85/86 typed item payloads; map direct-item storage with pool false/1; native TextFormatColl excludes Which86','SetAttr/ResetAttr attempt recorder; not native callbacks/cache/style-access','signed 64-bit tools::Long and sal_Int16 platform types; exact integer inputs only','OSL_ENSURE precondition assertion; only valid direct-value getter calls','optional rule/format start9 and zero level; no full native numbering tree']},indent=2)+'\n')
+cases=[{'name':'missing-value-reset-and-flags','rule':False,'operations':[['value',65535],['flag',False],['flag',True],['flag',True],['flag',False]]},{'name':'retain-seven-across-flags','rule':True,'operations':[['value',7],['flag',True],['flag',False],['flag',True],['value',7],['value',0],['flag',False],['flag',True],['value',65535],['value',65535]]},{'name':'rule-format-is-not-direct','rule':True,'operations':[['flag',True],['value',9],['value',9],['flag',False],['value',65535],['flag',True]]},{'name':'signed-narrowing','rule':False,'operations':[['flag',True]]+[['value',n] for n in [-1,-1,32768,-32768,40000,40000,-25536,65534,65535,65536,0,-32769,131071,4294967303,9007199254740991,-9007199254740991]]}]
 pre=r'''
 #include <cassert>
 #include <climits>
@@ -32,9 +32,9 @@ struct SwNumFormat {int GetStart()const{return 9;}};
 struct SwNumRule {SwNumFormat format;const SwNumFormat* GetNumFormat(sal_uInt16)const{return &format;}};
 struct Call {bool set;int which;int64_t value;};
 struct SwTextNode {
- SwAttrSet attributes; bool parent=false,hasRule=false; SwNumRule rule; std::vector<Call> calls;
+ SwAttrSet attributes; mutable std::map<int,Attr> effective; bool hasRule=false; SwNumRule rule; std::vector<Call> calls;
  const SwAttrSet* GetpSwAttrSet()const{return &attributes;}
- Attr GetAttr(int w)const{auto it=attributes.values.find(w); auto v=it!=attributes.values.end()?it->second:(w==85?0:(parent?9:1));return {{w,v!=0},{w,static_cast<sal_Int16>(v)}};}
+ const Attr& GetAttr(int w)const{auto it=attributes.values.find(w); auto v=it!=attributes.values.end()?it->second:(w==85?0:1);effective.insert_or_assign(w,Attr{{w,v!=0},{w,static_cast<sal_Int16>(v)}});return effective.at(w);}
  void SetAttr(const SfxBoolItem& i){calls.push_back({true,i.which,i.value});attributes.values[i.which]=i.value;}
  void SetAttr(const SfxInt16Item& i){calls.push_back({true,i.which,i.value});attributes.values[i.which]=i.value;}
  void ResetAttr(int w){calls.push_back({false,w,0});attributes.values.erase(w);}
@@ -49,7 +49,7 @@ struct SwTextNode {
 '''
 main='int main(){std::cout<<"[";\n'
 for i,case in enumerate(cases):
- main+=('{SwTextNode n;n.parent='+str(case['parent']).lower()+';n.hasRule='+str(case['rule']).lower()+';std::cout<<'+json.dumps((',' if i else '')+'[')+';n.Print();\n')
+ main+=('{SwTextNode n;n.hasRule='+str(case['rule']).lower()+';std::cout<<'+json.dumps((',' if i else '')+'[')+';n.Print();\n')
  for op,v in case['operations']:
   val=str(v).lower() if isinstance(v,bool) else str(v)+'LL'
   main+=f'n.{"SetListRestart" if op=="flag" else "SetAttrListRestartValue"}({val});std::cout<<",";n.Print();\n'
@@ -58,11 +58,12 @@ main+='std::cout<<"]\\n";}\n'
 (root/'native-restart.cxx').write_text(pre+'\n'.join(r['text'] for r in records)+'\n'+main)
 binary=root/'native-restart'
 try:
- subprocess.run(['clang++','-std=c++20',str(root/'native-restart.cxx'),'-o',str(binary)],check=True)
+ subprocess.run(['clang++','-std=c++20','-fsanitize=address,undefined','-fno-omit-frame-pointer',str(root/'native-restart.cxx'),'-o',str(binary)],check=True)
  traces=json.loads(subprocess.check_output([str(binary)],text=True))
  for case,trace in zip(cases,traces):case['states']=trace
  fixture={'pin':'9bc445578031fecf56086729d8e4940c77e14d65','scope':'six complete unchanged native restart definitions; named direct-item/type/format adapters; valid direct getters and exact JS integer inputs only','cases':cases}
  (root/'native-result.json').write_text(json.dumps(fixture,indent=2)+'\n')
- target=Path('apps/office/src/test/writer-native-list-restart.json');target.write_text(json.dumps(fixture,indent=2)+'\n')
+ target=Path('apps/office/src/test/writer-native-list-restart.json');
+ if not target.exists() or json.loads(target.read_text())!=fixture:target.write_text(json.dumps(fixture,indent=2)+'\n')
  print(f'PASS: {len(records)} unchanged source definitions; {len(cases)} cases; {sum(len(c["states"]) for c in cases)} literal native states')
 finally:binary.unlink(missing_ok=True)

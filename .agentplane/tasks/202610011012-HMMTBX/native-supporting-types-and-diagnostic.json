@@ -1,0 +1,28 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "signed type and diagnostic macro evidence only; absent native getter execution remains next iteration",
+  "records": [
+    {
+      "source": "include/osl/diagnose.h",
+      "fileSha256": "155ecd7e3f13e46c8c71a0987ec1e87a29c5854250c203eeb85de63125fc3480",
+      "lines": [
+        "#define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), \"legacy.osl\", \"%s\", m)"
+      ]
+    },
+    {
+      "source": "sw/inc/SwNumberTreeTypes.hxx",
+      "fileSha256": "06a05ccea699f333af3e6fa2c0c0f04615701ddbfc641151a602e569c78e83b0",
+      "lines": [
+        "typedef tools::Long tSwNumTreeNumber;"
+      ]
+    },
+    {
+      "source": "include/tools/long.hxx",
+      "fileSha256": "edf6b294bccf7fc8ebe162a8f57fa40cc596521bc4d92f85b0e8f40c3ef605bb",
+      "lines": [
+        "typedef sal_Int64 Long;",
+        "typedef long Long;"
+      ]
+    }
+  ]
+}

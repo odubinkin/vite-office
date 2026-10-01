@@ -19,9 +19,9 @@ struct SwNumFormat {int GetStart()const{return 9;}};
 struct SwNumRule {SwNumFormat format;const SwNumFormat* GetNumFormat(sal_uInt16)const{return &format;}};
 struct Call {bool set;int which;int64_t value;};
 struct SwTextNode {
- SwAttrSet attributes; bool parent=false,hasRule=false; SwNumRule rule; std::vector<Call> calls;
+ SwAttrSet attributes; mutable std::map<int,Attr> effective; bool hasRule=false; SwNumRule rule; std::vector<Call> calls;
  const SwAttrSet* GetpSwAttrSet()const{return &attributes;}
- Attr GetAttr(int w)const{auto it=attributes.values.find(w); auto v=it!=attributes.values.end()?it->second:(w==85?0:(parent?9:1));return {{w,v!=0},{w,static_cast<sal_Int16>(v)}};}
+ const Attr& GetAttr(int w)const{auto it=attributes.values.find(w); auto v=it!=attributes.values.end()?it->second:(w==85?0:1);effective.insert_or_assign(w,Attr{{w,v!=0},{w,static_cast<sal_Int16>(v)}});return effective.at(w);}
  void SetAttr(const SfxBoolItem& i){calls.push_back({true,i.which,i.value});attributes.values[i.which]=i.value;}
  void SetAttr(const SfxInt16Item& i){calls.push_back({true,i.which,i.value});attributes.values[i.which]=i.value;}
  void ResetAttr(int w){calls.push_back({false,w,0});attributes.values.erase(w);}
@@ -113,14 +113,14 @@ SwNumberTree::tSwNumTreeNumber SwTextNode::GetActualListStartValue() const
     return nListRestartValue;
 }
 int main(){std::cout<<"[";
-{SwTextNode n;n.parent=false;n.hasRule=false;std::cout<<"[";n.Print();
+{SwTextNode n;n.hasRule=false;std::cout<<"[";n.Print();
 n.SetAttrListRestartValue(65535LL);std::cout<<",";n.Print();
 n.SetListRestart(false);std::cout<<",";n.Print();
 n.SetListRestart(true);std::cout<<",";n.Print();
 n.SetListRestart(true);std::cout<<",";n.Print();
 n.SetListRestart(false);std::cout<<",";n.Print();
 std::cout<<"]";}
-{SwTextNode n;n.parent=false;n.hasRule=true;std::cout<<",[";n.Print();
+{SwTextNode n;n.hasRule=true;std::cout<<",[";n.Print();
 n.SetAttrListRestartValue(7LL);std::cout<<",";n.Print();
 n.SetListRestart(true);std::cout<<",";n.Print();
 n.SetListRestart(false);std::cout<<",";n.Print();
@@ -132,7 +132,7 @@ n.SetListRestart(true);std::cout<<",";n.Print();
 n.SetAttrListRestartValue(65535LL);std::cout<<",";n.Print();
 n.SetAttrListRestartValue(65535LL);std::cout<<",";n.Print();
 std::cout<<"]";}
-{SwTextNode n;n.parent=true;n.hasRule=true;std::cout<<",[";n.Print();
+{SwTextNode n;n.hasRule=true;std::cout<<",[";n.Print();
 n.SetListRestart(true);std::cout<<",";n.Print();
 n.SetAttrListRestartValue(9LL);std::cout<<",";n.Print();
 n.SetAttrListRestartValue(9LL);std::cout<<",";n.Print();
@@ -140,7 +140,7 @@ n.SetListRestart(false);std::cout<<",";n.Print();
 n.SetAttrListRestartValue(65535LL);std::cout<<",";n.Print();
 n.SetListRestart(true);std::cout<<",";n.Print();
 std::cout<<"]";}
-{SwTextNode n;n.parent=false;n.hasRule=false;std::cout<<",[";n.Print();
+{SwTextNode n;n.hasRule=false;std::cout<<",[";n.Print();
 n.SetListRestart(true);std::cout<<",";n.Print();
 n.SetAttrListRestartValue(-1LL);std::cout<<",";n.Print();
 n.SetAttrListRestartValue(-1LL);std::cout<<",";n.Print();

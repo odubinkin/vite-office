@@ -39,7 +39,7 @@
     }
   ],
   "adapters": [
-    "fixed Which85/86 typed item payloads; map direct-item storage with pool false/1 and optional parent9",
+    "fixed Which85/86 typed item payloads; map direct-item storage with pool false/1; native TextFormatColl excludes Which86",
     "SetAttr/ResetAttr attempt recorder; not native callbacks/cache/style-access",
     "signed 64-bit tools::Long and sal_Int16 platform types; exact integer inputs only",
     "OSL_ENSURE precondition assertion; only valid direct-value getter calls",

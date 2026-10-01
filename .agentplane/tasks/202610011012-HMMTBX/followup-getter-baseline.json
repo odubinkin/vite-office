@@ -1,0 +1,18 @@
+[
+  {
+    "reading": false,
+    "hasDirect": false,
+    "effective": 1,
+    "getter": {
+      "throws": "Writer list restart value is not set."
+    }
+  },
+  {
+    "reading": true,
+    "hasDirect": false,
+    "effective": 1,
+    "getter": {
+      "throws": "Writer list restart value is not set."
+    }
+  }
+]
