@@ -1,0 +1,42 @@
+{
+  "implementationPaths": [
+    "scripts/check-module-boundaries.test.ts",
+    "scripts/libreoffice-inventory/cli.test.ts",
+    "scripts/libreoffice-inventory/cppunit-registration-cli.test.ts",
+    "scripts/libreoffice-inventory/dictionaries-cli.test.ts",
+    "scripts/libreoffice-inventory/help-topics-cli.test.ts",
+    "scripts/libreoffice-inventory/junit-source-target-cli.test.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+    "scripts/libreoffice-inventory/python-test-module-cli.test.ts",
+    "scripts/libreoffice-inventory/test-source-target-cli.test.ts",
+    "scripts/libreoffice-inventory/tests-cli.test.ts",
+    "scripts/libreoffice-inventory/translations-cli.test.ts",
+    "scripts/libreoffice-inventory/ui-test-source-cli.test.ts",
+    "scripts/test-fixtures/inventory-reference.ts"
+  ],
+  "changedBehavior": "All project test suites use owned inputs and run with pinned vendor unavailable. Default Git and filesystem adapters remain covered; native count and 100 percent coverage guards unchanged. Standalone static vendor provenance/resource/inventory commands are not converted to tests.",
+  "counts": {
+    "applicationTests": 727,
+    "inventoryTests": 109,
+    "toolingTestsIncludingInventory": 120,
+    "browserTests": 19
+  },
+  "excluded": "Only untracked unfinished task48 policy test during committed-baseline verification; restored afterward. It imports literal JSON and local runtime only.",
+  "byteHashes": {
+    "scripts/check-module-boundaries.test.ts": "c14dd4346392d92f475f776d46e4fb91c8ea4954665ccb1deba0988a07768af0",
+    "scripts/libreoffice-inventory/cli.test.ts": "5831e57a35478bbcab81193570eba84a90580cb44461e6af8d3ccab9b4e1491e",
+    "scripts/libreoffice-inventory/cppunit-registration-cli.test.ts": "0a6b574cce049e7de23db9c232aa8e78d9f00a3224a034da2d7ba9bdd71ba955",
+    "scripts/libreoffice-inventory/dictionaries-cli.test.ts": "4d9c2345b288ea1e3d633052563f9dca0e0e49683b7177a5090424f29d835894",
+    "scripts/libreoffice-inventory/help-topics-cli.test.ts": "6d9751672bc409471bbb113f798aadb60c86f1905c870552fa503c050c9722c4",
+    "scripts/libreoffice-inventory/junit-source-target-cli.test.ts": "c5576f7e8ccb83ef2133b6089c0796887ffc81c536243a86c8f9171ad0aa7d51",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts": "51ac6499860bda6bae1dfc95fa5cf09cc3b48baee6d9bc5a8a8b210f494f8b0c",
+    "scripts/libreoffice-inventory/python-test-module-cli.test.ts": "aa4c2a8b4d6b41c519b3edad44a8f16dbfa50fdf3435152ef638a77705e34fbf",
+    "scripts/libreoffice-inventory/test-source-target-cli.test.ts": "9ec2c2003b90ddc65a8293b1d9cdd1b3b3e7f2c379273a99a69bece17bf46822",
+    "scripts/libreoffice-inventory/tests-cli.test.ts": "dfe15068214791c510625fcf715f97f99fd7915526b381bbc61151b10806d720",
+    "scripts/libreoffice-inventory/translations-cli.test.ts": "4b22362f1acbdfeafc38fbb5f27a91c4edef2a57929b5f152ad457bdda2333df",
+    "scripts/libreoffice-inventory/ui-test-source-cli.test.ts": "1c36f6cd0eb76feccc9c0eb2c6e77f8db82481eb6b9a30aece4aa5e998f0d847",
+    "scripts/test-fixtures/inventory-reference.ts": "5bd2d3b50fa1c9c2f61e3dce940e9d3949f647ea425ac6eedf10be7dd1045f16"
+  },
+  "productionChanged": false,
+  "nativeFixturesChanged": false
+}

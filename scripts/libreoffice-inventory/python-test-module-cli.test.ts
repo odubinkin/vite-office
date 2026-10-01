@@ -1,12 +1,13 @@
 /**
- * @fileoverview Verifies strict PythonTest module command options and the complete production read/write path against the pinned baseline.
+ * @fileoverview Verifies strict PythonTest module command options and the complete production read/write path against owned source fixtures.
  */
 
-import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { rm } from "node:fs/promises";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
+
+import { createInventoryCliFixture } from "../test-fixtures/inventory-reference";
 
 import {
   parsePythonTestModuleCliOptions,
@@ -67,29 +68,29 @@ describe("PythonTest module inventory CLI" /**
     ]);
   });
 
-  it("runs the production Git and filesystem path to write the complete linked Python inventory" /**
-   * Verifies default executor, pinned makefile reader, and UTF-8 writer preserve all physical module evidence.
+  it("runs filesystem readers and writers with owned Git and source fixtures" /**
+   * Verifies fixture Git executor, real makefile reader, and UTF-8 writer preserve all physical module evidence.
    *
    * @returns A promise resolving after temporary output cleanup completes.
    */, async function runsProductionCommand(): Promise<void> {
-    const directory = await mkdtemp(
-      path.join(tmpdir(), "vite-office-python-test-module-inventory-"),
-    );
+    const fixture = await createInventoryCliFixture();
+    const { directory } = fixture;
     const output = path.join(directory, "core-python-test-modules.json");
     try {
       await runPythonTestModuleCli(
         [
           "--baseline",
-          "docs/program/libreoffice-baseline.json",
+          fixture.baselinePath,
           "--reference-root",
-          "vendor/libreoffice-reference",
+          fixture.referenceRoot,
           "--constructors",
-          "docs/program/inventory/core-tests.json",
+          fixture.constructorsPath,
           "--output",
           output,
         ],
         readUtf8File,
         writeUtf8File,
+        fixture.git,
       );
       const inventory = JSON.parse(await readUtf8File(output));
       expect(inventory).toMatchObject({

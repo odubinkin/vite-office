@@ -1,8 +1,10 @@
 /**
- * @fileoverview Verifies strict parity-mapping CLI options and the production read-only validation path against the pinned Writer command manifest.
+ * @fileoverview Verifies strict parity-mapping CLI composition with local manifests and owned marker evidence, independently of upstream source availability.
  */
 
 import { describe, expect, it } from "vitest";
+
+import { createMarkerEvidenceFixture } from "../test-fixtures/inventory-reference";
 
 import {
   parseParityMappingCliOptions,
@@ -23,7 +25,7 @@ const validArguments = [
   "--local-root",
   ".",
   "--upstream-root",
-  "vendor/libreoffice-reference",
+  "fixture-upstream",
 ] as const;
 
 describe("parity mapping CLI" /**
@@ -70,15 +72,26 @@ describe("parity mapping CLI" /**
     ]);
   });
 
-  it("reads the pinned Writer mapping and reports bounded unresolved ODT parity" /**
-   * Verifies production reading preserves atomic ODT gaps while resolving all declared local, upstream, and divergence evidence without writing a repository file.
+  it("composes the Writer mapping report with owned upstream marker evidence" /**
+   * Verifies CLI report composition and local runtime validation without treating synthetic markers as a check of actual upstream source parity.
    *
    * @returns A promise resolving after the report is captured and inspected.
    */, async function runsProductionValidation(): Promise<void> {
     let output = "";
+    const evidence = createMarkerEvidenceFixture(
+      JSON.parse(await readUtf8File("docs/program/parity/writer-command-slice.json")),
+    );
     await runParityMappingCli(
       validArguments,
-      readUtf8File,
+      /** Reads local project files and supplies owned upstream marker text. @param file - Requested evidence path. @returns Local source or synthetic marker contents. */
+      async function readOwnedEvidence(file: string): Promise<string> {
+        if (file.startsWith("fixture-upstream/")) {
+          const text = evidence.get(file.slice("fixture-upstream/".length));
+          if (text === undefined) throw new Error(`Undeclared fixture evidence: ${file}`);
+          return text;
+        }
+        return readUtf8File(file);
+      },
       /**
        * Captures the canonical report emitted by the read-only CLI.
        *

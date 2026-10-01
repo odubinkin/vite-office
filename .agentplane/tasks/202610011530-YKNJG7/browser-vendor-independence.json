@@ -1,0 +1,17 @@
+{
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:e2e"
+      ],
+      "log": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011530-YKNJG7/browser-without-vendor.log",
+      "exitCode": 0,
+      "vendorUnavailable": true
+    }
+  ],
+  "vendorRestored": true,
+  "unfinishedTestRestored": true,
+  "referenceHead": "9bc445578031fecf56086729d8e4940c77e14d65"
+}

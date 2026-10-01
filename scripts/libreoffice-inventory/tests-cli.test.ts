@@ -2,11 +2,12 @@
  * @fileoverview Verifies strict core test-inventory CLI options, injected boundaries, and the production filesystem/Git execution path.
  */
 
-import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { rm } from "node:fs/promises";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
+
+import { createInventoryCliFixture } from "../test-fixtures/inventory-reference";
 
 import { parseTestCliOptions, readUtf8File, runTestCli, writeUtf8File } from "./tests-cli";
 
@@ -38,25 +39,27 @@ describe("test inventory CLI" /**
     expectOptionError(["--baseline", "--reference-root", "b", "--output", "c"]);
   });
 
-  it("runs the production Git and filesystem path to write a valid generated inventory" /**
-   * Verifies the default executor and UTF-8 wrappers work with the real ignored baseline checkout.
+  it("runs filesystem readers and writers with owned Git and source fixtures" /**
+   * Verifies the explicit Git fixture and real UTF-8 wrappers work without a pinned checkout.
    *
    * @returns A promise resolving after temporary output cleanup completes.
    */, async function runsProductionCommand(): Promise<void> {
-    const directory = await mkdtemp(path.join(tmpdir(), "vite-office-test-inventory-"));
+    const fixture = await createInventoryCliFixture();
+    const { directory } = fixture;
     const output = path.join(directory, "core-tests.json");
     try {
       await runTestCli(
         [
           "--baseline",
-          "docs/program/libreoffice-baseline.json",
+          fixture.baselinePath,
           "--reference-root",
-          "vendor/libreoffice-reference",
+          fixture.referenceRoot,
           "--output",
           output,
         ],
         readUtf8File,
         writeUtf8File,
+        fixture.git,
       );
       const inventory = JSON.parse(await readUtf8File(output));
       expect(inventory).toMatchObject({

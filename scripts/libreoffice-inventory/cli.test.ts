@@ -2,6 +2,9 @@
  * @fileoverview Verifies strict CLI option handling, injected file/Git boundaries, UTF-8 reads, and entrypoint detection.
  */
 
+import { rm } from "node:fs/promises";
+import { createGitReferenceFixture } from "../test-fixtures/inventory-reference";
+
 import { pathToFileURL } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -140,35 +143,35 @@ describe("inventory CLI" /**
   });
 
   it("uses the production Git executor when no test executor is supplied" /**
-   * Verifies the default command boundary can validate the ignored pinned checkout end to end.
+   * Verifies the default command boundary can validate owned temporary repositories end to end.
    *
-   * @returns A promise resolving after live report assertions complete.
+   * @returns A promise resolving after owned repository report assertions complete.
    */, async function usesProductionGitExecutor(): Promise<void> {
     let output = "";
 
-    await runCli(
-      [
-        "--baseline",
-        "docs/program/libreoffice-baseline.json",
-        "--reference-root",
-        "vendor/libreoffice-reference",
-      ],
-      readUtf8File,
-      /**
-       * Captures the live canonical report without writing a generated artifact.
-       *
-       * @param nextOutput - Complete CLI JSON payload.
-       * @returns Nothing after retaining output.
-       */
-      function captureLiveOutput(nextOutput: string): void {
-        output = nextOutput;
-      },
-    );
+    const fixture = await createGitReferenceFixture();
+    try {
+      await runCli(
+        ["--baseline", fixture.baselinePath, "--reference-root", fixture.referenceRoot],
+        readUtf8File,
+        /**
+         * Captures the live canonical report without writing a generated artifact.
+         *
+         * @param nextOutput - Complete CLI JSON payload.
+         * @returns Nothing after retaining output.
+         */
+        function captureLiveOutput(nextOutput: string): void {
+          output = nextOutput;
+        },
+      );
 
-    expect(JSON.parse(output)).toMatchObject({
-      baselineTag: "libreoffice-26.8.0.2",
-      status: "valid",
-    });
+      expect(JSON.parse(output)).toMatchObject({
+        baselineTag: "inventory-fixture-tag",
+        status: "valid",
+      });
+    } finally {
+      await rm(fixture.directory, { force: true, recursive: true });
+    }
   }, 30_000);
 
   it("reads UTF-8 files and compares entry URLs with process paths" /**

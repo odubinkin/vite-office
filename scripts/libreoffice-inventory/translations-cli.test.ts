@@ -1,12 +1,13 @@
 /**
- * @fileoverview Verifies strict PO catalog CLI options and real generation against the pinned ignored translations corpus.
+ * @fileoverview Verifies strict PO catalog CLI options and real generation against owned translation path fixtures.
  */
 
-import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { rm } from "node:fs/promises";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
+
+import { createInventoryCliFixture } from "../test-fixtures/inventory-reference";
 
 import {
   parseTranslationCatalogCliOptions,
@@ -50,34 +51,34 @@ describe("translation catalog inventory CLI" /**
     expectOptionError(["--baseline", "--reference-root", "b", "--output", "c"]);
   });
 
-  it("runs the production Git and filesystem path to write every pinned PO catalog" /**
-   * Verifies default Git execution and UTF-8 wrappers against the ignored pinned translations checkout.
+  it("runs filesystem readers and writers with owned Git and source fixtures" /**
+   * Verifies fixture Git paths and real UTF-8 wrappers without the pinned translations checkout.
    *
    * @returns A promise resolving after temporary output cleanup completes.
    */, async function runsProductionCommand(): Promise<void> {
-    const directory = await mkdtemp(
-      path.join(tmpdir(), "vite-office-translation-catalog-inventory-"),
-    );
+    const fixture = await createInventoryCliFixture();
+    const { directory } = fixture;
     const output = path.join(directory, "translation-catalogs.json");
     try {
       await runTranslationCatalogCli(
         [
           "--baseline",
-          "docs/program/libreoffice-baseline.json",
+          fixture.baselinePath,
           "--reference-root",
-          "vendor/libreoffice-reference",
+          fixture.referenceRoot,
           "--output",
           output,
         ],
         readUtf8File,
         writeUtf8File,
+        fixture.git,
       );
       const inventory = JSON.parse(await readUtf8File(output));
       expect(inventory).toMatchObject({
         corpusId: "translations",
         generatedBy: "inventory:translations",
         schemaVersion: 1,
-        translationsCommit: "362fd2cb41c5404e3712db9fad55b2357001e1f3",
+        translationsCommit: "fixture-translations-commit",
       });
       expect(inventory.records).toHaveLength(25_699);
       expect(Object.keys(inventory.summary)).toHaveLength(131);

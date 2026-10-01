@@ -1,12 +1,13 @@
 /**
- * @fileoverview Verifies strict dictionary inventory CLI options and real pinned-corpus generation.
+ * @fileoverview Verifies strict dictionary inventory CLI options and owned fixture generation.
  */
 
-import { mkdtemp, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { rm } from "node:fs/promises";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
+
+import { createInventoryCliFixture } from "../test-fixtures/inventory-reference";
 
 import {
   parseDictionaryFileCliOptions,
@@ -43,30 +44,32 @@ describe("dictionary file inventory CLI" /**
     expectOptionError(["--baseline", "--reference-root", "b", "--output", "c"]);
   });
 
-  it("runs production Git and filesystem paths for every pinned dictionary file" /**
-   * Verifies default boundaries against the ignored pinned dictionaries checkout.
+  it("runs filesystem readers and writers with owned Git and source fixtures" /**
+   * Verifies fixture Git paths and real UTF-8 boundaries without the pinned dictionaries checkout.
    *
    * @returns A promise resolving after temporary output cleanup completes.
    */, async function runsProductionCommand(): Promise<void> {
-    const directory = await mkdtemp(path.join(tmpdir(), "vite-office-dictionary-inventory-"));
+    const fixture = await createInventoryCliFixture();
+    const { directory } = fixture;
     const output = path.join(directory, "dictionary-files.json");
     try {
       await runDictionaryFileCli(
         [
           "--baseline",
-          "docs/program/libreoffice-baseline.json",
+          fixture.baselinePath,
           "--reference-root",
-          "vendor/libreoffice-reference",
+          fixture.referenceRoot,
           "--output",
           output,
         ],
         readUtf8File,
         writeUtf8File,
+        fixture.git,
       );
       const inventory = JSON.parse(await readUtf8File(output));
       expect(inventory).toMatchObject({
         corpusId: "dictionaries",
-        dictionariesCommit: "3324dee0a221a5cb67525c533216d33b0aed08e9",
+        dictionariesCommit: "fixture-dictionaries-commit",
         generatedBy: "inventory:dictionaries",
         schemaVersion: 1,
         summary: { aff: 98, dic: 147 },

@@ -1,0 +1,46 @@
+{
+  "commands": [
+    {
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "scripts"
+      ],
+      "log": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011530-YKNJG7/tool-tests-final.log",
+      "exitCode": 0,
+      "vendorUnavailable": true
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "log": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011530-YKNJG7/coverage-without-vendor-final.log",
+      "exitCode": 0,
+      "vendorUnavailable": true
+    },
+    {
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "scripts/check-module-boundaries.test.ts"
+      ],
+      "log": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011530-YKNJG7/format-final.log",
+      "exitCode": 0,
+      "vendorUnavailable": true
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck:tools"
+      ],
+      "log": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011530-YKNJG7/typecheck-tools-final.log",
+      "exitCode": 0,
+      "vendorUnavailable": true
+    }
+  ],
+  "vendorRestored": true,
+  "unfinishedTestRestored": true,
+  "referenceHead": "9bc445578031fecf56086729d8e4940c77e14d65"
+}
