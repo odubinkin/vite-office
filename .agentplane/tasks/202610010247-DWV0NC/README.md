@@ -4,7 +4,7 @@ title: "Restore native implicit list restart export ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,29 @@ verification:
   updated_by: "CODER"
   note: "Verified: native bounded restart metadata and conditional XML transitions;2403 sequences/288 states/84 genuine packages;full verify60245 exit0,654+109 tests,19 browser,all coverage100% and unchanged gates. Full goal remains active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T03:28:12.528Z"
+  updated_by: "EVALUATOR"
+  note: "Implementation9ac1779d7b3845eb320d93995d2d2e65dda59809 satisfies the approved bounded restart export correction;finish this child only,retain parent/goal active."
+  evaluated_sha: "9ac1779d7b3845eb320d93995d2d2e65dda59809"
+  blueprint_digest: "118c21db4363d1a33830703cc48c1f84fc9190be1fa262d95225902b488b803e"
+  evidence_refs:
+    - ".agentplane/tasks/202610010247-DWV0NC/README.md"
+    - ".agentplane/tasks/202610010247-DWV0NC/quality/20261001-032812528-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010247-DWV0NC/quality/20261001-032812528-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010247-DWV0NC/quality/20261001-032812528-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010247-DWV0NC/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010247-DWV0NC/native-oracle.py"
+    - ".agentplane/tasks/202610010247-DWV0NC/native-results.json"
+    - ".agentplane/tasks/202610010247-DWV0NC/compare-native.ts"
+    - ".agentplane/tasks/202610010247-DWV0NC/baseline.xml"
+    - ".agentplane/tasks/202610010247-DWV0NC/verify.log"
+    - "apps/office/src/sw/source/filter/xml/odt-list-implicit-restart.test.ts"
+  findings:
+    - "Writer now exposes restart and direct item independently;XMLTextNumRuleInfo owns numbered gate,absent sentinel,one-based level and retained format start. Native implicit nested split/root/opening fallback match actual structural/start output within resolved-rule scope."
+    - "Primary probe uses unmodified exportListChange and metadata/getter excerpts with explicit adapters;2403 sequences/288 states and12 valid Writer projections are checked.48 native raw getter cases are normative evidence,not48 local cases.84 genuine ODT scenarios assert literal reopen omissions/gains,copies andWorker16."
+    - "Full verify session60245 terminal0 passes654 app/109 inventory tests,19 browser scenarios,all coverage100%,unchanged gates;provenance204/128mapped,invariants34,semanticViolationCount0. No threshold/schema/policy changes,unsupported whole-module promotion or save/open/recovery change."
 commit: null
 comments:
   -
