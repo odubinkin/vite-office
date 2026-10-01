@@ -1,0 +1,39 @@
+{
+  "docs/program/source-provenance.json": {
+    "moduleSetUnchanged": true,
+    "changedExistingEvidencePaths": [
+      "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "apps/office/src/sw/source/core/doc/DocumentListItemsManager.ts",
+      "apps/office/src/sw/source/core/doc/number.ts",
+      "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+      "apps/office/src/sw/source/core/txtnode/ndtxt.ts"
+    ],
+    "statusAndOtherSemanticFieldsUnchanged": true
+  },
+  "docs/program/parity/runtime-inventory.json": {
+    "moduleSetUnchanged": true,
+    "changedExistingEvidencePaths": [
+      "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "apps/office/src/sw/source/core/doc/DocumentListItemsManager.ts",
+      "apps/office/src/sw/source/core/doc/number.ts",
+      "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+      "apps/office/src/sw/source/core/txtnode/ndtxt.ts"
+    ],
+    "statusAndOtherSemanticFieldsUnchanged": true
+  },
+  "approvedCodePaths": [
+    "apps/office/src/sw/source/core/doc/number.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+    "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+    "apps/office/src/sw/source/core/txtnode/number-classification-native.json",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "sourceLimits": {
+    "apps/office/src/sw/source/core/doc/number.ts": 427,
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": 999,
+    "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts": 229,
+    "apps/office/src/sw/source/core/txtnode/number-classification.test.ts": 205
+  }
+}

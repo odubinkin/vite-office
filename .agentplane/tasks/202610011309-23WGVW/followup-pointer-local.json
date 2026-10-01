@@ -1,0 +1,16 @@
+{
+  "scope": "Actual existing reference Set path; pointer overload is absent. Reference replacement is correct and must remain distinct.",
+  "ownedFrozen": true,
+  "changedReference": {
+    "same": false,
+    "type": 5
+  },
+  "unsupportedNull": {
+    "name": "TypeError",
+    "message": "Cannot read properties of undefined (reading 'GetPositionProperties')"
+  },
+  "afterUnsupportedNull": {
+    "owned": true,
+    "type": 5
+  }
+}

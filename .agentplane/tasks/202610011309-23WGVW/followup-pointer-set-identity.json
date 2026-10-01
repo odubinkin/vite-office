@@ -1,0 +1,9 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "path": "sw/source/core/doc/number.cxx",
+  "signature": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat* pNumFormat )",
+  "sha256": "dffb9b10078c4938ab773da6486fdb1e60897218487a95ccc0aca82d58bbf6a7",
+  "priorProfile": ".agentplane/tasks/202610011207-TR9DSM/native-format-values.cxx",
+  "profileSha256": "5de8f6c8b23908208e3e2655f90024b29a556d9b88de96d89cb2b49f986b3d68",
+  "scope": "Read-only next-task evidence. Complete unchanged pointer Set body and prior complete rule/format assignment/default bodies; previous platform/null-client/family-only-font aliases retained. Native pointer and reference overload semantics are distinct. No implementation45 scope expansion."
+}
