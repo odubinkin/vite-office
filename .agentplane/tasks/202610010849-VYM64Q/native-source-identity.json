@@ -12,6 +12,36 @@
     "sha256": "e5d5e4febcb02c8bd2bc8eb8080fbb623d50b976d274071b32105374766c1751"
   },
   {
+    "source": "set",
+    "marker": "const SfxPoolItem* SfxItemSet::PutImpl(",
+    "bytes": 1719,
+    "sha256": "d2cc3e5ac6f502bed4564a7ca712d1c8503d800d5a530918faf8e013603e6cd8"
+  },
+  {
+    "source": "set",
+    "marker": "sal_uInt16 SfxItemSet::ClearItem(",
+    "bytes": 232,
+    "sha256": "7eb5a032109e79a3cc9183d172c20af46bccb0a4d6ce9878ec858427094ee97a"
+  },
+  {
+    "source": "set",
+    "marker": "sal_uInt16 SfxItemSet::ClearSingleItem_ForWhichID(",
+    "bytes": 417,
+    "sha256": "edf6898bd15ef1b383c1efbbe3d85eff1f4e20149c08d9d06708d43da543d9a4"
+  },
+  {
+    "source": "set",
+    "marker": "void SfxItemSet::ClearSingleItem_PrepareRemove(",
+    "bytes": 317,
+    "sha256": "caf3b592e4061cbad4fa50c866a66740cbe0ee624e899e252bcafc8c6621d57e"
+  },
+  {
+    "source": "set",
+    "marker": "sal_uInt16 SfxItemSet::ClearAllItemsImpl()",
+    "bytes": 645,
+    "sha256": "b541d5f3a60bc026531fa109bbd0892cd8b0101812733fee2c75ae49b361c2b0"
+  },
+  {
     "source": "attr",
     "marker": "void SwAttrSet::Changed(",
     "bytes": 2270,
