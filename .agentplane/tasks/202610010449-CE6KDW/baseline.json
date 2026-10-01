@@ -1,0 +1,10 @@
+{
+  "ownerGetNum": "undefined",
+  "nodeVector": "undefined",
+  "addToList": "undefined",
+  "before": 0,
+  "read": 1,
+  "after": 2,
+  "orphanStart": 1,
+  "orphanRuleReadIsDynamic": true
+}

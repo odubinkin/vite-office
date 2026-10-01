@@ -1,0 +1,11 @@
+import {writeFileSync} from 'node:fs';
+import {createWriterDocument} from '../../../apps/office/src/sw/source/core/doc/doc';
+import {applyWriterParagraphList} from '../../../apps/office/src/sw/source/core/doc/list';
+const doc=createWriterDocument();const first=doc.paragraphs[0]!;const tail=doc.nodes.MakeTextNode();
+for(const node of [first,tail])applyWriterParagraphList(node,{kind:'numbered',level:0,styleId:'Counters',listId:'native-list'});
+const list=doc.GetDocumentListsManager().GetListByName('native-list')!;
+const record=list.GetListItem(tail)!;
+const before=record.GetNumber(false);const read=first.GetListItemNumber();const after=record.GetNumber(false);
+list.RemoveListItem(tail);const orphanStart=record.GetStartValue();
+const value={ownerGetNum:typeof (first as any).GetNum,nodeVector:typeof (first as any).GetNumberVector,addToList:typeof(first as any).AddToList,before,read,after,orphanStart,orphanRuleReadIsDynamic:orphanStart===tail.GetNumRule()!.GetNumFormat(0).GetStart()};
+writeFileSync('.agentplane/tasks/202610010449-CE6KDW/baseline.json',JSON.stringify(value,null,2)+'\n');console.log(value);
