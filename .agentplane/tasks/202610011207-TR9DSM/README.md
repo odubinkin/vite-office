@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:29:08.680Z"
+doc_updated_at: "2026-10-01T12:31:48.862Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -73,6 +73,10 @@ sections:
     - Observation: The third typecheck reached the application compilation and reports obsolete value imports plus a missing SvxNumType test import.
       Impact: The tools compile now passes, but migrated application/test imports remain incomplete.
       Resolution: Repair the imports only and rerun typecheck; retain type-third.log as evidence.
+
+    - Observation: The first native format-value harness build fails because this C++20 library removes shared_ptr::unique(). type-fourth.log passes both tool and application compilation.
+      Impact: Native Font COW platform adapter must use the supported reference-count query; source bodies are unchanged.
+      Resolution: Use use_count() != 1 in the named COW adapter, preserve native-format-build.log, and rebuild with ASan/UBSan.
 id_source: "generated"
 ---
 ## Summary
@@ -121,3 +125,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: The third typecheck reached the application compilation and reports obsolete value imports plus a missing SvxNumType test import.
   Impact: The tools compile now passes, but migrated application/test imports remain incomplete.
   Resolution: Repair the imports only and rerun typecheck; retain type-third.log as evidence.
+
+- Observation: The first native format-value harness build fails because this C++20 library removes shared_ptr::unique(). type-fourth.log passes both tool and application compilation.
+  Impact: Native Font COW platform adapter must use the supported reference-count query; source bodies are unchanged.
+  Resolution: Use use_count() != 1 in the named COW adapter, preserve native-format-build.log, and rebuild with ASan/UBSan.

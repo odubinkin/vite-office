@@ -1,0 +1,71 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "definitions": [
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberType::SvxNumberType(SvxNumType nType)",
+      "sha256": "43fc518d3c5aa1d58f01b3fdc874ce37d84cfb9efe42d9309805140f0e013be2"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberType::SvxNumberType(const SvxNumberType& rType)",
+      "sha256": "4124b177384552690e556da6835de0f2f80660d09e31ff05d8f23d1c00fc1294"
+    },
+    {
+      "path": "vcl/source/font/font.cxx",
+      "signature": "Font::ImplType& GetGlobalDefault()",
+      "sha256": "47d73b68cb436da3886b2c65fbbe0288b536ceade5231a70daf911ff56b68ad0"
+    },
+    {
+      "path": "vcl/source/font/font.cxx",
+      "signature": "Font::Font() :",
+      "sha256": "f8d672682bb1902273788fba838042794e890f120a060af4a7be217fffabdfd2"
+    },
+    {
+      "path": "vcl/source/font/font.cxx",
+      "signature": "Font::Font( const vcl::Font& rFont )",
+      "sha256": "8d6f96d23c62d0b99011b6b8a8f364d9beba4074eda5db45842116fe2b389c5d"
+    },
+    {
+      "path": "vcl/source/font/font.cxx",
+      "signature": "void Font::SetFamilyName(",
+      "sha256": "d594e2ca3745185fb2dfe807659414ab042bec611475d586a3943e8687213862"
+    },
+    {
+      "path": "vcl/source/font/font.cxx",
+      "signature": "const OUString& Font::GetFamilyName() const",
+      "sha256": "bb900a6e41c5643d459015f58b2cd2f89f5c5fc90730ea4e23e602c78f00651c"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "void SvxNumberFormat::SetBulletFont(",
+      "sha256": "24be3e0112c2e2fc2580493e16ae7163597ab6288fb4233212b0ea83cd285ac2"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberType::SvxNumberType(SvxNumType nType)",
+      "sha256": "43fc518d3c5aa1d58f01b3fdc874ce37d84cfb9efe42d9309805140f0e013be2"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberType::SvxNumberType(const SvxNumberType& rType)",
+      "sha256": "4124b177384552690e556da6835de0f2f80660d09e31ff05d8f23d1c00fc1294"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberType::~SvxNumberType()",
+      "sha256": "fe75aa235980c96552d930b664cf4b6994d2be57c323004e12a03ae146e580dc"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "static bool isArabicNumberingType(SvxNumType t)",
+      "sha256": "7bddc33966c5d2f95ca9429dbf2a4d12637172347a21978f5f60c5e0dd50e2a6"
+    },
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLocale, bool bIsLegal ) const",
+      "sha256": "d538805d9bb371b4758117d68699ba2e0332b372f2c382ff1168993248fb440b"
+    }
+  ],
+  "scope": "Complete native bodies unchanged. Named platform adapters bound to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. No native global lifetime, other Font attributes/equality, graphics, style registrations or wider numbering family equivalence."
+}

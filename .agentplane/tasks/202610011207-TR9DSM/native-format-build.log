@@ -1,0 +1,4 @@
+.agentplane/tasks/202610011207-TR9DSM/native-format-values.cxx:69:158: error: no member named 'unique' in 'std::shared_ptr<ImplFont>'
+   69 | struct FontCow { std::shared_ptr<ImplFont> ptr=std::make_shared<ImplFont>();const ImplFont*operator->()const{return ptr.get();}ImplFont*operator->(){if(!ptr.unique())ptr=std::make_shared<ImplFont>(*ptr);return ptr.get();} };
+      |                                                                                                                                                          ~~~ ^
+1 error generated.
