@@ -1,0 +1,38 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree.test.ts (6 tests | 1 failed) 27ms
+   × continues a subtree only below native uncounted parents 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree.test.ts > continues a subtree only below native uncounted parents
+AssertionError: expected [ +0, +0, +0, 1 ] to deeply equal [ -1, +0, +0, +0 ]
+
+- Expected
++ Received
+
+  [
+-   -1,
+    0,
+    0,
+    0,
++   1,
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree.test.ts:206:7
+    204|           node.GetListItemNumber(),
+    205|       ),
+    206|     ).toEqual(values);
+       |       ^
+    207|     expect(
+    208|       nodes.map(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 33 passed (34)
+   Start at  15:04:48
+   Duration  6.06s (transform 1.46s, setup 1.16s, import 2.35s, tests 615ms, environment 5.88s)
+
