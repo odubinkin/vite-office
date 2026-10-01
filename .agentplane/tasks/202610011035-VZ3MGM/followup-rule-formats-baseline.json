@@ -1,4 +1,6 @@
 {
+  "equalSetRetainsIdentity": false,
+  "equalSetInvalidates": true,
   "effectiveAccessorExists": false,
   "rawGetterReturnsOwnedDefault": true,
   "firstStart": 1,

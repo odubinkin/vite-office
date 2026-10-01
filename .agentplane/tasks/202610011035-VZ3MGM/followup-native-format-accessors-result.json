@@ -1,0 +1,7 @@
+{
+  "freshRawPresent": false,
+  "effectiveIsSharedBase": true,
+  "setCreatesOwnedClone": true,
+  "equalSetRetainsIdentity": true,
+  "equalSetInvalidates": false
+}
