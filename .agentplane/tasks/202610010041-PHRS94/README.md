@@ -4,7 +4,7 @@ title: "Restore native phantom ancestors for skipped list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,29 @@ verification:
   updated_by: "CODER"
   note: "Final unchanged verify exit0 session53036:643 app/109 inventory/19 browser, both100% coverage. Compiled primary excerpts match5736 trees/25560 states; genuine ODT/copy/Worker/XML/reopen pass. Doctor0 errors/same2 prior warnings; routing/diff pass. First browser timeout preserved; isolated and final unchanged runs pass. Full parity remains incomplete."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T01:06:30.763Z"
+  updated_by: "EVALUATOR"
+  note: "Approved phantom ancestor construction/counting and bounded source ownership criteria pass at implementation dd328458813306a78d7a9c6551ff7d3ec56dadee."
+  evaluated_sha: "dd328458813306a78d7a9c6551ff7d3ec56dadee"
+  blueprint_digest: "07891280f8244e088837e4be943b8df38d437b6074e8bf3bbbe6fabf5e625c98"
+  evidence_refs:
+    - ".agentplane/tasks/202610010041-PHRS94/README.md"
+    - ".agentplane/tasks/202610010041-PHRS94/quality/20261001-010630763-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010041-PHRS94/quality/20261001-010630763-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010041-PHRS94/quality/20261001-010630763-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010041-PHRS94/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010041-PHRS94/verify.log"
+    - ".agentplane/tasks/202610010041-PHRS94/native-oracle.py"
+    - ".agentplane/tasks/202610010041-PHRS94/native-hierarchical-oracle.cxx"
+    - ".agentplane/tasks/202610010041-PHRS94/native-results.json"
+    - ".agentplane/tasks/202610010041-PHRS94/compare-native.ts"
+    - "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts"
+    - "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts"
+    - "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts"
+  findings:
+    - "SwNumberTreeNode now owns native AddChild/CreatePhantom, descendant relocation/empty-phantom cleanup, derived levels, counted-parent predicates and parent-first vectors. SwList missing-level groups and zero-filled projection are removed. Compiled unmodified pinned primary bodies match 5736 legal ordered/reverse/interleaved/exhaustive insertion trees and 25560 counter/continuation/vector/phantom states under explicit eager-reset/std::set/text/rule/no-notification shims. Permanent core assertions cover native starts, skipped/deep/uncounted chains, level9, orphan/equivalence rejection and removal/reinsertion. Genuine common/automatic ODT cases verify literals [7,5,3], actual labels, independent rule/item copies, Worker16, selected XML and reopen. Final unchanged full verify exits0:643 application,109 inventory,19 browser tests and both100% coverage suites. Source provenance200 modules,34 invariants valid, semanticViolationCount0; doctor0 errors/same2 prior warnings; routing/diff pass. Registered save/open/recovery differences remain unchanged; no whole-module promotion."
 commit: null
 comments:
   -

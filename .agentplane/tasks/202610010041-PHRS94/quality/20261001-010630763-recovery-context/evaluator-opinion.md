@@ -1,0 +1,26 @@
+# EVALUATOR opinion: pass
+
+Approved phantom ancestor construction/counting and bounded source ownership criteria pass at implementation dd328458813306a78d7a9c6551ff7d3ec56dadee.
+
+## Findings
+- SwNumberTreeNode now owns native AddChild/CreatePhantom, descendant relocation/empty-phantom cleanup, derived levels, counted-parent predicates and parent-first vectors. SwList missing-level groups and zero-filled projection are removed. Compiled unmodified pinned primary bodies match 5736 legal ordered/reverse/interleaved/exhaustive insertion trees and 25560 counter/continuation/vector/phantom states under explicit eager-reset/std::set/text/rule/no-notification shims. Permanent core assertions cover native starts, skipped/deep/uncounted chains, level9, orphan/equivalence rejection and removal/reinsertion. Genuine common/automatic ODT cases verify literals [7,5,3], actual labels, independent rule/item copies, Worker16, selected XML and reopen. Final unchanged full verify exits0:643 application,109 inventory,19 browser tests and both100% coverage suites. Source provenance200 modules,34 invariants valid, semanticViolationCount0; doctor0 errors/same2 prior warnings; routing/diff pass. Registered save/open/recovery differences remain unchanged; no whole-module promotion.
+
+## Evidence
+- .agentplane/tasks/202610010041-PHRS94/README.md
+- .agentplane/tasks/202610010041-PHRS94/verify.log
+- .agentplane/tasks/202610010041-PHRS94/native-oracle.py
+- .agentplane/tasks/202610010041-PHRS94/native-hierarchical-oracle.cxx
+- .agentplane/tasks/202610010041-PHRS94/native-results.json
+- .agentplane/tasks/202610010041-PHRS94/compare-native.ts
+- apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts
+- apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts
+- apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- No full native build: configurable persisted phantom rule policy, continuous/redline trees, complete lazy validity/notifications and direct incremental removal remain unverified; SwList still rebuilds eagerly. Uncounted ODT list-header transport is an open separate gap. Initial responsive browser pointer/menu timeout is preserved at artifact1458fca64f09; unchanged isolated and final full runs pass, but transient cause is unproved.
