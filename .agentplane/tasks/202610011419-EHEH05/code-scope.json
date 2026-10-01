@@ -1,0 +1,18 @@
+{
+  "paths": [
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/inc/poolfmt.ts",
+    "apps/office/src/sw/source/core/doc/number.ts",
+    "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+    "apps/office/src/sw/source/core/doc/number-rule-lifecycle-native.json",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "constraints": "Only approved47 implementation/test/native fixture/evidence paths. No original tests,policy,dependencies,coverage gates,registered IO/recovery changes. Only3 existing implementation evidence records changed; statuses unchanged. Native full client/style/Font/graphics/global service/destructor/name-map/GrabBag/continuous/phantom consumers remain individually unverified.",
+  "maxLines": {
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": 709,
+    "apps/office/src/sw/inc/poolfmt.ts": 343,
+    "apps/office/src/sw/source/core/doc/number.ts": 622,
+    "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts": 385
+  }
+}

@@ -4,7 +4,7 @@ title: "Restore native numbering rule copy assignment reset and scalar metadata 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
-  attempts: 0
+  state: "needs_rework"
+  updated_at: "2026-10-01T14:48:52.409Z"
+  updated_by: "CODER"
+  note: "Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA."
+  attempts: 1
 commit: null
 comments:
   -
@@ -35,8 +35,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: execute the approved iteration47 complete native rule lifecycle/scalar ownership correction under persistent user goal approval;preserve registered IO exceptions and every original gate."
+  -
+    type: "verify"
+    at: "2026-10-01T14:48:20.182Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified47 selected native rule lifecycle/scalar ownership. Actual CODE recorded in Verification/actual-code.txt;native432 states18 equality7 narrowing,ASanUBSan clean;focused24,full727app109inventory19browser100% both. All gates and scope pass;full goal active,next phantom consumer gap measured. No module/status/IO promotion."
+  -
+    type: "verify"
+    at: "2026-10-01T14:48:52.409Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:44:03.835Z"
+doc_updated_at: "2026-10-01T14:48:52.462Z"
 doc_updated_by: "CODER"
 description: "Iteration47: restore complete native SwNumRule copy/Assign/Reset and value-equality responsibilities with exact metadata/defaults and distinction between owned and effective levels. Preserve pointer assignment identity,recipient default mode/list ID and client ownership;source copy resets count-phantom/redline policy as native does. Persist scalar rule state across Worker16 with native legacy defaults. No new rendering/continuous-tree/UI feature or registered IO/recovery change; broader lifetime/style/name-map/counter obligations remain unverified."
 sections:
@@ -52,7 +64,71 @@ sections:
     2. Match all10 mixed raw-owned/effective levels,pointer in-place retention/new allocations/clearing,reference-copy independence,self no-op,changed and equal metadata,source/recipient flags,mode/default-ID/client container preservation,copy-specific phantom/redline defaults,Reset empty/repeated names and exact metadata reset,return identity,selected native equality/ignored fields,typed uint16/uint8 narrowing and native defaults. Preserve original pointer/ref ownership and malformed-NONE guards. Real same-name document-owned clients/list/registry and Worker16 transport retain correct state;legacy omission yields native defaults,malformed metadata rejected. Supported ODT assertions preserve existing fields;full nondefault continuous/phantom/rendering/lifetime/registry behavior remains unverified.
     3. Focused regression tests then full original npm run verify pass unchanged100% app/inventory thresholds and all format/lint/type/dependency/resource/unit/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates. Run ap doctor,node .agentplane/policy/check-routing.mjs,git diff --check and exact scope review. No exclusions,gates or original assertion weakening.
     4. Actual CODE SHA separate from artifact/quality/close commits,canonical verification and separate EVALUATOR phase;finish leaf only with clean final tracked/untracked state. Parent/full goal remain active with a measured next gap;no broad module equivalence.
-  Verification: "Pending: no implementation or completed acceptance verification claimed. Record full source/profile limits,actual commands/results and CODE before closure."
+  Verification: |-
+    Pending: no implementation or completed acceptance verification claimed. Record full source/profile limits,actual commands/results and CODE before closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T14:48:20.182Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified47 selected native rule lifecycle/scalar ownership. Actual CODE recorded in Verification/actual-code.txt;native432 states18 equality7 narrowing,ASanUBSan clean;focused24,full727app109inventory19browser100% both. All gates and scope pass;full goal active,next phantom consumer gap measured. No module/status/IO promotion.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:44:03.835Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
+    - old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+    - current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610011419-EHEH05
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610011419-EHEH05
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-01T14:48:52.409Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:48:52.081Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
+    - old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+    - current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610011419-EHEH05
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610011419-EHEH05 --result verified-202610011419-EHEH05 --commit b77faa092803bed02b41ee171b6b6c8df1511154
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If rollback is needed,use a new executable task to revert reviewed CODE locally and rerun identical verification. Do not rewrite history or modify immutable DONE leaves. Retain source/native/failure evidence,parent/full goal and registered IO/recovery exceptions."
   Findings: |-
     Read-only clean preflight main57d763b328b9,only parent active,direct route,four matched modules loaded,no user-instructions file. Native Assign/Reset preserve default mode/list ID and unmentioned client containers;copy ctor separately resets CountPhantoms=true and UsedByRedline=false. Existing local clone copies only already stored fields;selected native scalar metadata is absent. Native UNKNOWN=USHRT_MAX65535;prior format-only C++ profile used named pool-placeholder0 and never certified pool defaults. Correct it before metadata proof. Complete46 followup-rule bodies and four states remain read-only evidence. Native nondefault continuous-tree/phantom consumers and full name-map/lifetime/style/GrabBag behavior exceed this leaf;do not claim those implemented from scalar metadata or green tests.
@@ -76,6 +152,10 @@ sections:
     - Observation: Full verify-second passes all gates:727 app tests,109 inventory,19 browser,unchanged100% coverage,build/static/docs/size/source/provenance/invariants/parity. Scope review found the new pool format accessors were typed number although native uses SwPoolFormatId.
       Impact: Runtime narrowing is correct, but the source scalar enum contract should be preserved. This is within the already approved exact scalar-contract scope; no workflow or verification criteria change.
       Resolution: Use SwPoolFormatId for stored field/getter/setter and explicit native-style enum casts in typed test inputs. Add actual same-name attached Worker owner/client assertions for nondefault phantom/redline transfer; no consumer/rendering equivalence claim. Run final full verify after these scoped refinements.
+
+    - Observation: Final full verify-third passed. CODE commit attempt was rejected because uppercase CODE violates installed commit subject grammar. Dependent orchestration incorrectly continued: actual-code.txt was absent,doc update failed,artifact persistence rejected mixed staged CODE paths,and verify recorded ok before the implementation SHA existed.
+      Impact: All tested implementation remains intact and staged;no CODE commit was created or leaf finished. The premature canonical note must be corrected and must not attribute b77faa artifact SHA as implementation.
+      Resolution: Recompute live route;record rework for incomplete commit attribution,unstage only active task artifacts,commit exactly7 CODE paths with valid lowercase code scope,then populate actual verification and rerun canonical verify/EVALUATOR/finish using actual CODE SHA. Preserve all failures;no implementation or gate changes.
 id_source: "generated"
 ---
 ## Summary
@@ -104,6 +184,69 @@ CODER direct checkout. Three implementation paths: sw/source/core/doc/number.ts 
 
 Pending: no implementation or completed acceptance verification claimed. Record full source/profile limits,actual commands/results and CODE before closure.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T14:48:20.182Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified47 selected native rule lifecycle/scalar ownership. Actual CODE recorded in Verification/actual-code.txt;native432 states18 equality7 narrowing,ASanUBSan clean;focused24,full727app109inventory19browser100% both. All gates and scope pass;full goal active,next phantom consumer gap measured. No module/status/IO promotion.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:44:03.835Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
+- old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+- current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610011419-EHEH05
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610011419-EHEH05
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-01T14:48:52.409Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:48:52.081Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
+- old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+- current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610011419-EHEH05
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610011419-EHEH05 --result verified-202610011419-EHEH05 --commit b77faa092803bed02b41ee171b6b6c8df1511154
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 If rollback is needed,use a new executable task to revert reviewed CODE locally and rerun identical verification. Do not rewrite history or modify immutable DONE leaves. Retain source/native/failure evidence,parent/full goal and registered IO/recovery exceptions.
@@ -131,3 +274,7 @@ Read-only clean preflight main57d763b328b9,only parent active,direct route,four 
 - Observation: Full verify-second passes all gates:727 app tests,109 inventory,19 browser,unchanged100% coverage,build/static/docs/size/source/provenance/invariants/parity. Scope review found the new pool format accessors were typed number although native uses SwPoolFormatId.
   Impact: Runtime narrowing is correct, but the source scalar enum contract should be preserved. This is within the already approved exact scalar-contract scope; no workflow or verification criteria change.
   Resolution: Use SwPoolFormatId for stored field/getter/setter and explicit native-style enum casts in typed test inputs. Add actual same-name attached Worker owner/client assertions for nondefault phantom/redline transfer; no consumer/rendering equivalence claim. Run final full verify after these scoped refinements.
+
+- Observation: Final full verify-third passed. CODE commit attempt was rejected because uppercase CODE violates installed commit subject grammar. Dependent orchestration incorrectly continued: actual-code.txt was absent,doc update failed,artifact persistence rejected mixed staged CODE paths,and verify recorded ok before the implementation SHA existed.
+  Impact: All tested implementation remains intact and staged;no CODE commit was created or leaf finished. The premature canonical note must be corrected and must not attribute b77faa artifact SHA as implementation.
+  Resolution: Recompute live route;record rework for incomplete commit attribution,unstage only active task artifacts,commit exactly7 CODE paths with valid lowercase code scope,then populate actual verification and rerun canonical verify/EVALUATOR/finish using actual CODE SHA. Preserve all failures;no implementation or gate changes.

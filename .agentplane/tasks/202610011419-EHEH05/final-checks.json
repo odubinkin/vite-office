@@ -1,0 +1,27 @@
+[
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "node",
+      ".agentplane/policy/check-routing.mjs"
+    ],
+    "exitCode": 0,
+    "output": "policy routing OK\n"
+  },
+  {
+    "command": [
+      "ap",
+      "doctor"
+    ],
+    "exitCode": 0,
+    "output": "doctor (OK)\ndoctor: checking workspace\ndoctor: checking branch_pr drift\ndoctor: checking runtime source\ndoctor: checking project-local blueprints\ndoctor: checking prompt graph\ndoctor: checking recent task archive\ndoctor: checking workflow contract\n{\"ts\":\"2026-10-01T14:45:58.492Z\",\"component\":\"workflow-runtime\",\"event\":\"workflow_doctor_check\",\"details\":{\"ok\":true,\"findings\":0}}\nwarning: doctor findings: errors=0 warnings=2 info=2\n- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches\nLikely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery\nNext action: agentplane hooks install (rewrite the shim with the current fallback chain)\nDetails: Shim path: .agentplane/bin/agentplane\n  - AGENTPLANE_HOOK_RUNNER fallback: present\n  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present\n  - Runner startup readiness: missing\n- [INFO] State: managed pre-push hook will use installed clean-project fallback checks\nLikely cause: this project does not ship a repository-local scripts/run-pre-push-hook.mjs\nNext action: add project-local package scripts such as format:check or test, or keep the installed fallback (make pre-push behavior explicit when the project needs stricter repository-specific checks)\nDetails: Missing repository script: scripts/run-pre-push-hook.mjs\n  - Fallback will consider declared scripts: build, format:check, test\n- [INFO] Project blueprint compatibility: compatible; trusted=0\n- [WARN] DONE task implementation commit points to a close commit: 202608130934-F1JT8K -> 2f09942125323c78d59dd69faa19dec7450cdd36 (\ud83e\uddea F1JT8K close: record label and selection verification)\n"
+  }
+]

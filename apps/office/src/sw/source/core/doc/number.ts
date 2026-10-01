@@ -12,6 +12,7 @@ import {
 
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 export { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -154,20 +155,104 @@ export class SwNumRule {
   public static GetOutlineRuleName(): string {
     return "Outline";
   }
-  /** Initializes optional owned levels and native shared defaults. @param name - Rule name. @param defaultMode - Native base-table selection. @param type - Native rule classification. @returns Nothing. */
+  /** Initializes optional owned levels and shared defaults. @param name - Rule name. @param defaultMode - Base table selector. @param type - Classification. @returns Nothing. */
+  public constructor(name: string, defaultMode: SvxNumPositionAndSpaceMode, type?: SwNumRuleType);
+  /** Copies metadata and independent owned levels with native copy-specific flags and empty clients. @param rule - Source rule. @returns Nothing. */
+  public constructor(rule: SwNumRule);
+  /** Implements the native constructor and copy constructor boundaries. @param source - Name or source rule. @param defaultMode - Base table selector for new rules. @param type - Classification for new rules. @returns Nothing. */
   public constructor(
-    private readonly name: string,
-    private readonly defaultMode: SvxNumPositionAndSpaceMode,
-    private meRuleType = SwNumRuleType.NUM_RULE,
+    source: string | SwNumRule,
+    defaultMode?: SvxNumPositionAndSpaceMode,
+    type = SwNumRuleType.NUM_RULE,
   ) {
-    if (name.trim().length === 0) throw new Error("SwNumRule name must not be blank.");
+    if (source instanceof SwNumRule) {
+      this.name = source.name;
+      this.defaultMode = source.defaultMode;
+      this.meRuleType = source.meRuleType;
+      this.defaultListId = source.defaultListId;
+      this.automatic = source.automatic;
+      this.continusNum = source.continusNum;
+      this.absSpaces = source.absSpaces;
+      this.hidden = source.hidden;
+      this.poolFormatId = source.poolFormatId;
+      this.poolHelpId = source.poolHelpId;
+      this.poolHlpFileId = source.poolHlpFileId;
+      for (let level = 0; level < 10; level++) {
+        const format = source.formats[level];
+        if (format !== undefined) this.Set(level, format);
+      }
+    } else {
+      if (source.trim().length === 0) throw new Error("SwNumRule name must not be blank.");
+      this.name = source;
+      this.defaultMode = defaultMode as SvxNumPositionAndSpaceMode;
+      this.meRuleType = type;
+    }
   }
 
+  private name: string;
+  private readonly defaultMode: SvxNumPositionAndSpaceMode;
+  private meRuleType: SwNumRuleType;
   private defaultListId = "";
   private automatic = true;
   private readonly formats: (SwNumFormat | undefined)[] = Array.from({ length: 10 });
   private readonly textNodes: SwTextNode[] = [];
   private invalidRuleFlag = true;
+  private continusNum = false;
+  private absSpaces = false;
+  private hidden = false;
+  private countPhantoms = true;
+  private usedByRedline = false;
+  private poolFormatId: SwPoolFormatId = SwPoolFormatId.UNKNOWN;
+  private poolHelpId = 65535;
+  private poolHlpFileId = 255;
+  /** Assigns raw owned levels through pointer Set and native selected metadata, retaining recipient clients, mode and list identity. @param source - Source rule. @returns Recipient identity. */
+  public Assign(source: SwNumRule): this {
+    if (this !== source) {
+      for (let level = 0; level < 10; level++) this.SetByPointer(level, source.formats[level]);
+      this.meRuleType = source.meRuleType;
+      this.name = source.name;
+      this.automatic = source.automatic;
+      this.invalidRuleFlag = true;
+      this.continusNum = source.continusNum;
+      this.absSpaces = source.absSpaces;
+      this.hidden = source.hidden;
+      this.poolFormatId = source.GetPoolFormatId();
+      this.poolHelpId = source.GetPoolHelpId();
+      this.poolHlpFileId = source.GetPoolHlpFileId();
+    }
+    return this;
+  }
+  /** Clears owned levels and restores native reset metadata, accepting the supplied name verbatim and retaining recipient-only state. @param name - Replacement name. @returns Nothing. */
+  public Reset(name: string): void {
+    for (let level = 0; level < 10; level++) this.SetByPointer(level, undefined);
+    this.meRuleType = SwNumRuleType.NUM_RULE;
+    this.name = name;
+    this.automatic = true;
+    this.invalidRuleFlag = true;
+    this.continusNum = false;
+    this.absSpaces = false;
+    this.hidden = false;
+    this.poolFormatId = SwPoolFormatId.UNKNOWN;
+    this.poolHelpId = 65535;
+    this.poolHlpFileId = 255;
+  }
+  /** Compares the native selected metadata and all effective formats, independently of raw presence and recipient-only flags. @param rule - Other rule. @returns Native value equality. */
+  public Equals(rule: SwNumRule): boolean {
+    if (
+      this.meRuleType !== rule.meRuleType ||
+      this.name !== rule.name ||
+      this.automatic !== rule.automatic ||
+      this.continusNum !== rule.continusNum ||
+      this.absSpaces !== rule.absSpaces ||
+      this.poolFormatId !== rule.GetPoolFormatId() ||
+      this.poolHelpId !== rule.GetPoolHelpId() ||
+      this.poolHlpFileId !== rule.GetPoolHlpFileId()
+    )
+      return false;
+    for (let level = 0; level < 10; level++)
+      if (!rule.Get(level).Equals(this.Get(level))) return false;
+    return true;
+  }
   /** Returns native rule classification. @returns Stored type. */
   public GetRuleType(): SwNumRuleType {
     return this.meRuleType;
@@ -307,6 +392,70 @@ export class SwNumRule {
     return this.automatic;
   }
 
+  /** Returns the continuous numbering flag. @returns Stored value. */
+  public IsContinusNum(): boolean {
+    return this.continusNum;
+  }
+  /** Assigns the continuous numbering flag with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetContinusNum(value: boolean): void {
+    this.continusNum = value;
+  }
+  /** Returns the absolute spaces flag. @returns Stored value. */
+  public IsAbsSpaces(): boolean {
+    return this.absSpaces;
+  }
+  /** Assigns the absolute spaces flag with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetAbsSpaces(value: boolean): void {
+    this.absSpaces = value;
+  }
+  /** Returns the hidden flag. @returns Stored value. */
+  public IsHidden(): boolean {
+    return this.hidden;
+  }
+  /** Assigns the hidden flag with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetHidden(value: boolean): void {
+    this.hidden = value;
+  }
+  /** Returns the phantom counting flag. @returns Stored value. */
+  public IsCountPhantoms(): boolean {
+    return this.countPhantoms;
+  }
+  /** Assigns the phantom counting flag with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetCountPhantoms(value: boolean): void {
+    this.countPhantoms = value;
+  }
+  /** Returns the redline usage flag. @returns Stored value. */
+  public IsUsedByRedline(): boolean {
+    return this.usedByRedline;
+  }
+  /** Assigns the redline usage flag with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetUsedByRedline(value: boolean): void {
+    this.usedByRedline = value;
+  }
+  /** Returns the native pool format identity. @returns Stored value. */
+  public GetPoolFormatId(): SwPoolFormatId {
+    return this.poolFormatId;
+  }
+  /** Assigns the native pool format identity with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetPoolFormatId(value: SwPoolFormatId): void {
+    this.poolFormatId = value & 0xffff;
+  }
+  /** Returns the native help identity. @returns Stored value. */
+  public GetPoolHelpId(): number {
+    return this.poolHelpId;
+  }
+  /** Assigns the native help identity with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetPoolHelpId(value: number): void {
+    this.poolHelpId = value & 0xffff;
+  }
+  /** Returns the native help file identity. @returns Stored value. */
+  public GetPoolHlpFileId(): number {
+    return this.poolHlpFileId;
+  }
+  /** Assigns the native help file identity with native field narrowing. @param value - Native scalar input. @returns Nothing. */
+  public SetPoolHlpFileId(value: number): void {
+    this.poolHlpFileId = value & 0xff;
+  }
   /** Formats a validated Writer number vector using native patterns or legacy joining; visible bullet glyphs are projected by SwTextNode. @param numbers - Root-to-current counters. @param level - Current zero-based level. @returns Numeric string. */
   public MakeNumString(numbers: readonly number[], level: number): string {
     const format = this.Get(level);
@@ -368,16 +517,9 @@ export class SwNumRule {
       : `${format.GetPrefix()}${marker}${format.GetSuffix()}`;
   }
 
-  /** Creates an independent numbering rule. @returns Cloned rule. */
+  /** Copies through the native rule copy constructor. @returns Independent rule with native copy-specific defaults. */
   public clone(): SwNumRule {
-    const clone = new SwNumRule(this.name, this.defaultMode, this.meRuleType);
-    clone.SetDefaultListId(this.defaultListId);
-    clone.SetAutoRule(this.automatic);
-    for (let level = 0; level < 10; level++) {
-      const format = this.formats[level];
-      if (format !== undefined) clone.Set(level, format);
-    }
-    return clone;
+    return new SwNumRule(this);
   }
 }
 

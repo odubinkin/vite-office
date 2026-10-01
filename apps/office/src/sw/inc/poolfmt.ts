@@ -3,6 +3,11 @@
  * LibreOffice `sw/inc/poolfmt.hxx` and `SwStyleNameMapper.cxx` tables.
  */
 
+/** Native unsigned16 pool identity sentinel; other native pool enum families remain outside this bounded export. */
+export enum SwPoolFormatId {
+  UNKNOWN = 65535,
+}
+
 /** Built-in paragraph-style groups encoded in the upper pool-id bits. */
 export type WriterParagraphStyleGroup = "text" | "lists" | "extra" | "index" | "document" | "html";
 

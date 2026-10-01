@@ -65,8 +65,21 @@ interface WriterNumberFormatRecord {
   readonly suffix: string;
 }
 
+/** Native scalar rule state transported independently of copy-constructor policy. */
+interface WriterNumberRuleScalarState {
+  readonly continusNum: boolean;
+  readonly absSpaces: boolean;
+  readonly hidden: boolean;
+  readonly countPhantoms: boolean;
+  readonly usedByRedline: boolean;
+  readonly poolFormatId: number;
+  readonly poolHelpId: number;
+  readonly poolHlpFileId: number;
+}
+
 /** Primitive graph record for one document numbering rule. */
 interface WriterNumberRuleRecord {
+  readonly scalarState?: WriterNumberRuleScalarState;
   readonly ruleType?: SwNumRuleType;
   readonly ownedLevels?: readonly boolean[];
   readonly defaultPositionAndSpaceMode?: "label-alignment" | "label-width-and-position";
@@ -172,6 +185,16 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
         rule,
       ) => ({
+        scalarState: {
+          continusNum: rule.IsContinusNum(),
+          absSpaces: rule.IsAbsSpaces(),
+          hidden: rule.IsHidden(),
+          countPhantoms: rule.IsCountPhantoms(),
+          usedByRedline: rule.IsUsedByRedline(),
+          poolFormatId: rule.GetPoolFormatId(),
+          poolHelpId: rule.GetPoolHelpId(),
+          poolHlpFileId: rule.GetPoolHlpFileId(),
+        },
         automatic: rule.IsAutoRule(),
         defaultPositionAndSpaceMode: rule.GetDefaultNumberFormatPositionAndSpaceMode(),
         ownedLevels: Array.from(
@@ -517,7 +540,38 @@ export function decodeWriterDocument(
       if (rule.ownedLevels === undefined || rule.ownedLevels[level])
         restoredRule.Set(level, decoded);
     }
-    document.AddNumRule(restoredRule);
+    const owner = document.AddNumRule(restoredRule);
+    const scalar = rule.scalarState;
+    if (scalar !== undefined) {
+      if (
+        scalar === null ||
+        typeof scalar !== "object" ||
+        [
+          scalar.continusNum,
+          scalar.absSpaces,
+          scalar.hidden,
+          scalar.countPhantoms,
+          scalar.usedByRedline,
+        ].some(
+          /** Rejects malformed native boolean state. @param value - Candidate. @returns Invalidity. */
+          (value) => typeof value !== "boolean",
+        ) ||
+        [scalar.poolFormatId, scalar.poolHelpId, scalar.poolHlpFileId].some(
+          /** Enforces native unsigned fields before restoring their narrowed setters. @param value - Candidate. @param index - Field. @returns Invalidity. */
+          (value, index) =>
+            !Number.isInteger(value) || value < 0 || value > (index === 2 ? 255 : 65535),
+        )
+      )
+        throw new Error("Stored Writer numbering scalar state is invalid.");
+      owner.SetContinusNum(scalar.continusNum);
+      owner.SetAbsSpaces(scalar.absSpaces);
+      owner.SetHidden(scalar.hidden);
+      owner.SetCountPhantoms(scalar.countPhantoms);
+      owner.SetUsedByRedline(scalar.usedByRedline);
+      owner.SetPoolFormatId(scalar.poolFormatId);
+      owner.SetPoolHelpId(scalar.poolHelpId);
+      owner.SetPoolHlpFileId(scalar.poolHlpFileId);
+    }
   }
   if (record.textNodes.length === 0)
     throw new Error("Stored Writer document has no body text node.");
