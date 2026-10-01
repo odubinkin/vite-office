@@ -8,6 +8,53 @@ import {
 } from "./xmlimp";
 import { XMLToken, ODF_NAMESPACES } from "./xmltoken";
 
+it("converts native decimal byte-view attributes with distinct absence and zero", /** Verifies literal signed, partial, control, UTF8 and overflow contracts independently of list policy. @returns Nothing. */ () => {
+  expect(new FastAttributeList([]).getAsInteger(XMLToken.TEXT_START_VALUE)).toBeNull();
+  for (const [value, expected] of [
+    ["", 0],
+    ["+", 0],
+    ["-", 0],
+    ["garbage", 0],
+    ["-0", 0],
+    ["+0", 0],
+    ["0", 0],
+    ["12tail", 12],
+    ["+12tail", 12],
+    ["-12tail", -12],
+    ["1.5", 1],
+    ["0x10", 0],
+    ["0002", 2],
+    [" \t\n+12", 12],
+    [" + 12", 0],
+    ["\0" + "12", 0],
+    ["12\0" + "34", 12],
+    ["\u00a012", 0],
+    ["\u200012", 0],
+    ["１２", 0],
+    ["2147483647", 2147483647],
+    ["2147483648", 0],
+    ["-2147483648", -2147483648],
+    ["-2147483649", 0],
+    ["9223372036854775808", 0],
+    ["-9223372036854775809", 0],
+    ["9".repeat(1000), 0],
+    ["0".repeat(1000) + "12", 12],
+  ] as const) {
+    const attributes = new FastAttributeList([
+      {
+        name: "text:start-value",
+        prefix: "text",
+        local: "start-value",
+        uri: ODF_NAMESPACES.text,
+        value,
+      },
+    ]);
+    expect(attributes.getAsInteger(XMLToken.TEXT_START_VALUE), JSON.stringify(value)).toBe(
+      expected,
+    );
+  }
+});
+
 /** Records identity, native events and child factory calls. */
 class ProtocolContext extends SvXMLImportContext {
   /** Binds the trace. @param label - Context identity. @param events - Trace sink. @returns Context. */

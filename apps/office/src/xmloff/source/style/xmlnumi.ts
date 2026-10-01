@@ -82,15 +82,14 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       ],
       "list level",
     );
-    const rawLevel = attributes.get(XMLToken.TEXT_LEVEL);
-    const parsed = rawLevel === null ? -1 : listDeclarationInt32(rawLevel);
-    this.level = rawLevel === null ? -1 : parsed >= 1 ? parsed - 1 : 0;
+    const parsed = attributes.getAsInteger(XMLToken.TEXT_LEVEL);
+    this.level = parsed === null ? -1 : parsed >= 1 ? parsed - 1 : 0;
     this.bulletChar = [...(attributes.get(XMLToken.TEXT_BULLET_CHAR) ?? "")][0] ?? "";
     this.format = attributes.get(XMLToken.STYLE_NUM_FORMAT) ?? "1";
     this.suffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX) ?? "";
     this.prefix = attributes.get(XMLToken.STYLE_NUM_PREFIX) ?? "";
-    const start = listDeclarationInt32(attributes.get(XMLToken.TEXT_START_VALUE) ?? "1");
-    const display = listDeclarationInt32(attributes.get(XMLToken.TEXT_DISPLAY_LEVELS) ?? "1");
+    const start = attributes.getAsInteger(XMLToken.TEXT_START_VALUE) ?? 1;
+    const display = attributes.getAsInteger(XMLToken.TEXT_DISPLAY_LEVELS) ?? 1;
     this.startWith = this.kind === "bullet" ? 1 : start < 0 ? 1 : Math.min(start, 32767);
     this.parentNumbering = this.kind === "bullet" ? 1 : Math.max(1, Math.min(display, 32767));
     for (const [token, value] of attributes)
@@ -264,18 +263,4 @@ export class SvxXMLListStyleContext extends SvXMLImportContext {
     }
     this.target.registerListStyle(this.name, { name: this.ruleName, levelCount: 10, levels });
   }
-}
-
-/** Reproduces the decimal byte-string o3tl::toInt32 contract used by fast attribute iteration. @param value - Source attribute. @returns Signed32 integer or zero on no digits/overflow. */
-function listDeclarationInt32(value: string): number {
-  let start = 0;
-  while (start < value.length) {
-    const code = value.charCodeAt(start);
-    if (code === 0 || code > 32) break;
-    start += 1;
-  }
-  const match = /^[+-]?[0-9]+/u.exec(value.slice(start));
-  if (match === null) return 0;
-  const number = Number(match[0]);
-  return number >= -2147483648 && number <= 2147483647 ? number : 0;
 }

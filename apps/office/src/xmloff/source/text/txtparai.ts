@@ -510,15 +510,12 @@ class XMLListItemContext extends SvXMLImportContext {
   ) {
     super();
     attributes.assertOnly([XMLToken.TEXT_START_VALUE], "list item");
-    const rawStartValue = attributes.get(XMLToken.TEXT_START_VALUE);
-    if (!header && rawStartValue !== null) {
-      if (!/^\d+$/.test(rawStartValue)) throw new Error("Unsupported ODF list start value.");
-      const startValue = Number(rawStartValue);
-      if (!Number.isSafeInteger(startValue) || startValue < 0 || startValue > 32_767)
-        throw new Error("Unsupported ODF list start value.");
-      this.startValue = startValue;
+    if (!header) {
+      const startValue = attributes.getAsInteger(XMLToken.TEXT_START_VALUE);
+      if (startValue !== null && startValue >= 0 && startValue <= 32_767)
+        this.startValue = startValue;
+      state.textLists.SetListItem(this);
     }
-    if (!header) state.textLists.SetListItem(this);
   }
   /** Returns the explicit start retained only for ordinary items. @returns Start value. */
   public GetStartValue(): number | undefined {

@@ -54,6 +54,22 @@ export class FastAttributeList {
     return this.byToken.get(token) ?? null;
   }
 
+  /** Reads the native decimal byte-view integer; null adapts the native absent-attribute false result. @param token - Attribute token. @returns Signed32 value or null when absent; invalid/overflow values convert to zero. */
+  public getAsInteger(token: XMLToken): number | null {
+    const value = this.get(token);
+    if (value === null) return null;
+    let start = 0;
+    while (start < value.length) {
+      const code = value.charCodeAt(start);
+      if (code === 0 || code > 32) break;
+      start += 1;
+    }
+    const match = /^[+-]?[0-9]+/u.exec(value.slice(start));
+    if (match === null) return 0;
+    const number = Number(match[0]);
+    return number >= -2147483648 && number <= 2147483647 ? number || 0 : 0;
+  }
+
   /** Iterates known token/value pairs in native attribute order. @returns Ordered attribute iterator. */
   public [Symbol.iterator](): IterableIterator<[XMLToken, string]> {
     return this.byToken[Symbol.iterator]();

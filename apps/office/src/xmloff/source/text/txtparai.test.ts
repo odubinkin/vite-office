@@ -689,22 +689,22 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
           new Map([["L1", { levels: [], levelCount: 1, name: "Short" }]]),
         ),
     ).toThrow("Unsupported ODF list level");
-    expect(
-      /** Imports a restart outside Writer's bounded integer range. @returns Nothing. */ () =>
+    for (const [value, startValue] of [
+      ["40000", undefined],
+      ["nope", 0],
+    ] as const)
+      expect(
         importBody(
-          '<text:list text:style-name="L1"><text:list-item text:start-value="40000"><text:p/></text:list-item></text:list>',
+          `<text:list text:style-name="L1"><text:list-item text:start-value="${value}"><text:p/></text:list-item></text:list>`,
           styles,
           new Map([["L1", bullet]]),
-        ),
-    ).toThrow("list start value");
-    expect(
-      /** Imports a non-integer restart value. @returns Nothing. */ () =>
-        importBody(
-          '<text:list text:style-name="L1"><text:list-item text:start-value="nope"><text:p/></text:list-item></text:list>',
-          styles,
-          new Map([["L1", bullet]]),
-        ),
-    ).toThrow("list start value");
+        )[0]?.list,
+      ).toEqual({
+        level: 0,
+        listId: "Bullets-1",
+        ruleName: "Bullets",
+        ...(startValue === undefined ? {} : { restart: true, startValue }),
+      });
     expect(
       importBody(
         '<text:list text:style-name="L1" text:continue-list="external"><text:list-item><text:p/></text:list-item></text:list>',

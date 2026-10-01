@@ -73,7 +73,11 @@ the inverse traversal, including LibreOffice output that declares only the
 levels used by a list style; missing internal formats are completed when the
 ten-level `SwNumRule` is built. Explicit `text:start-value` values on
 `text:list-item` map to the first numbered paragraph's Writer restart items and
-are emitted again on export. Header start attributes are ignored. Restart and
+are emitted again on export. Ordinary item starts use native decimal byte-int
+conversion: leading ASCII control/space, an optional sign and the initial digit
+sequence are read; no digits or overflow convert to zero. Only converted
+`0…32767` values set a restart; negative or larger values leave normal numbering.
+Header start attributes are ignored. Restart and
 start metadata on unnumbered paragraphs are omitted by the native numbered-state
 projection; Worker records and owned item-set copies retain their model state.
 
