@@ -1,0 +1,13 @@
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/number.ts
+  201:8  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts
+  6:15  error  'ConstSwNumFormat' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (2 errors, 0 warnings)
+

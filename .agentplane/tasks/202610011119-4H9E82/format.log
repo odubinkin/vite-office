@@ -1,0 +1,37 @@
+apps/office/src/sw/browser/filter/xml/writer-document-codec.ts 263ms
+apps/office/src/sw/browser/presentation/writer-view-projection.ts 75ms
+apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts 21ms (unchanged)
+apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts 55ms (unchanged)
+apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts 52ms (unchanged)
+apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts 44ms (unchanged)
+apps/office/src/sw/source/core/attr/list-restart-default.test.ts 19ms (unchanged)
+apps/office/src/sw/source/core/doc/DocumentListsManager.ts 18ms
+apps/office/src/sw/source/core/doc/list-invariants.test.ts 17ms (unchanged)
+apps/office/src/sw/source/core/doc/list.ts 29ms (unchanged)
+apps/office/src/sw/source/core/doc/number-list-format.test.ts 24ms (unchanged)
+apps/office/src/sw/source/core/doc/number.test.ts 43ms
+apps/office/src/sw/source/core/doc/number.ts 42ms
+apps/office/src/sw/source/core/doc/writer-attributes.test.ts 89ms
+apps/office/src/sw/source/core/layout/newfrm.ts 54ms (unchanged)
+apps/office/src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts 28ms (unchanged)
+apps/office/src/sw/source/core/txtnode/direct-attribute-native.test.ts 28ms
+apps/office/src/sw/source/core/txtnode/list-restart-contract.test.ts 14ms (unchanged)
+apps/office/src/sw/source/core/txtnode/list-restart-getter.test.ts 16ms (unchanged)
+apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts 20ms
+apps/office/src/sw/source/core/txtnode/ndtxt.ts 87ms (unchanged)
+apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts 23ms (unchanged)
+apps/office/src/sw/source/core/unocore/unosett.test.ts 14ms (unchanged)
+apps/office/src/sw/source/core/unocore/unosett.ts 11ms (unchanged)
+apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts 38ms (unchanged)
+apps/office/src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts 18ms
+apps/office/src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts 31ms (unchanged)
+apps/office/src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts 14ms (unchanged)
+apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts 22ms
+apps/office/src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts 18ms
+apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts 99ms (unchanged)
+apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts 198ms (unchanged)
+apps/office/src/sw/source/filter/xml/xmlexp.ts 143ms (unchanged)
+apps/office/src/sw/source/filter/xml/xmlimp.ts 143ms (unchanged)
+apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts 41ms (unchanged)
+apps/office/src/sw/source/core/doc/number-ownership.test.ts 32ms
+apps/office/src/sw/source/core/doc/number-ownership-native.json 52ms
