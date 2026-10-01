@@ -4,7 +4,7 @@ title: "Restore Writer numbering format ownership and access contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -21,11 +21,35 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-01T11:53:46.171Z"
+  updated_by: "CODER"
+  note: "Final npm run verify exit0:708 app,109 inventory,19 browser and100% both suites. Corrected pinned native22 definition/constant proof matches40 defaults,19 ownership and16 valid NONE states; measured malformed NONE timeout is an explicit browser guard. Actual CODE b683076f536555cb8f33deb6ef698f7e4d54a588; no whole-module or goal promotion."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T11:54:51.123Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed actual CODE b683076f536555cb8f33deb6ef698f7e4d54a588: the approved existing format ownership/access boundary meets its bounded native and unchanged full verification contract; finish this leaf only."
+  evaluated_sha: "b683076f536555cb8f33deb6ef698f7e4d54a588"
+  blueprint_digest: "47a434a2f20a92510d4c341b4fe47663ba76bc979d8dc71bc22e832a71715f64"
+  evidence_refs:
+    - ".agentplane/tasks/202610011119-4H9E82/README.md"
+    - ".agentplane/tasks/202610011119-4H9E82/quality/20261001-115451123-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610011119-4H9E82/quality/20261001-115451123-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610011119-4H9E82/quality/20261001-115451123-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610011119-4H9E82/blueprint/resolved-snapshot.json"
+    - "b683076f536555cb8f33deb6ef698f7e4d54a588"
+    - ".agentplane/tasks/202610011119-4H9E82/quality-code-diff.log"
+    - ".agentplane/tasks/202610011119-4H9E82/verify-fourth.log"
+    - ".agentplane/tasks/202610011119-4H9E82/native-source-identity.json"
+    - ".agentplane/tasks/202610011119-4H9E82/native-final.log"
+    - ".agentplane/tasks/202610011119-4H9E82/native-none-identity.json"
+    - ".agentplane/tasks/202610011119-4H9E82/native-stall-result.json"
+  findings:
+    - "Source-shaped SwNumRule owns sparse frozen const copies; Get selects shared four-family defaults, GetNumFormat returns optional owned levels, equal reference Set preserves pointer/validity, and clone copies only present levels. Implemented base equality remains in SvxNumberFormat. All consumer mutations use clone-and-Set and both native restart/tree starts retain raw optional reads."
+    - "Corrected pinned primitive glyph constant leaves40 table/19 equality results unchanged.22 unchanged definitions/constants plus16 valid NONE marker results are traceable; actual native non-progress profile is retained as timeout, with a documented and tested browser rejection. No claim of whole constructor invalid-domain, pointer-overload, full type/font/client/graphics/static destruction or module parity."
+    - "Final verify-fourth.log records actual exit0:708 app,109 inventory,19 browser,100% every category in both suites and all original remaining gates. Legacy graph16 explicit levels and existing ODT assertions are preserved; optional graph metadata transports new raw absence and default selection without schema-version or registered I/O/recovery changes."
 commit: null
 comments:
   -
@@ -39,8 +63,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: user-authorized iteration 43 restores optional owned formats and shared effective defaults, with consumer and Worker migration and unchanged verification gates."
+  -
+    type: "verify"
+    at: "2026-10-01T11:53:46.171Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final npm run verify exit0:708 app,109 inventory,19 browser and100% both suites. Corrected pinned native22 definition/constant proof matches40 defaults,19 ownership and16 valid NONE states; measured malformed NONE timeout is an explicit browser guard. Actual CODE b683076f536555cb8f33deb6ef698f7e4d54a588; no whole-module or goal promotion."
 doc_version: 3
-doc_updated_at: "2026-10-01T11:51:35.724Z"
+doc_updated_at: "2026-10-01T11:53:46.224Z"
 doc_updated_by: "CODER"
 description: "Iteration 43: separate optional owned levels from shared effective defaults, preserve source-equivalent Set no-op and copy ownership, and migrate existing consumers and Worker serialization without changing registered I/O deviations."
 sections:
@@ -57,7 +87,45 @@ sections:
     3. Preserve existing list/restart/UNO/ODT assertions while migrating mutations to clone-and-Set. Worker transfer must preserve absence and default selection; legacy graph v16 records without ownership metadata must retain existing explicit levels. Verify malformed boundary rejection.
     4. Run focused new and migrated tests and npm run verify unchanged, including both 100% suites, lint/types, browser, genuine ODT fixtures, inventory/provenance/source paths, static build and authored-file sizes. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check.
     5. Record actual CODE SHA, verification and independent quality-phase review, finish only this leaf and leave the parent and goal active. Final tracked state must be clean.
-  Verification: "Pending implementation and checks. No module-level parity promotion is authorized."
+  Verification: |-
+    Command: npm run verify. Result: pass, fourth full invocation actual exit0, recorded in verify-fourth.log on final implementation. Evidence:708 application tests/160 files;109 inventory tests/36 files;19 browser tests. Application100% statements10684/branches8087/functions2882/lines9798; inventory100% statements1523/branches1080/functions384/lines1464. Every unchanged format/lint/type/dependency/resources/coverage/browser/static/docs/file-size/source-tree/provenance/invariant/parity gate passed. Native identity/provenance status consistency does not establish whole-module parity.
+    Command: python3 .agentplane/tasks/202610011119-4H9E82/native-oracle.py. Result: pass with corrected pinned SVX_DEF_BULLET constant;20 complete unchanged definitions/constants,40 base states and19 ownership/equality states under ASan/UBSan. Literal final fixture equals final native JSON. Initial constant-adapter log retained; values for shared tables/ownership are unchanged because native factories override glyphs.
+    Command: python3 .agentplane/tasks/202610011119-4H9E82/native-none.py. Result: pass;2 complete unchanged methods and16 valid NONE marker states under ASan/UBSan. Command: native-stall.py. Result: observed one-second native non-progress timeout for NONE trailing reference; browser rejects this unsupported input explicitly, with no equivalence claim.
+    Command: npm run format:check after corrected literal fixture and metadata formatting. Result: pass. Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass; doctor0 errors and the same2 historical warnings. Source limits:ndtxt999 split lines, XML import991. Scope:41 intentional implementation/fixture/metadata paths. No gate, coverage, policy, schema-version or registered I/O/recovery change. CODE:b683076f536555cb8f33deb6ef698f7e4d54a588. Initial failed type/focused/full coverage attempts retained and resolved; no mandatory check skipped.
+    Residual:full native pointer-overload/dtor/static release,registered char style,font/graphics/type hierarchy and malformed native non-progress equivalence are not certified. The next measured existing standalone default glyph differs:localempty/nativeU+F095. Parent and goal remain active. Quality-phase review and final clean close follow this verification record.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T11:53:46.171Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final npm run verify exit0:708 app,109 inventory,19 browser and100% both suites. Corrected pinned native22 definition/constant proof matches40 defaults,19 ownership and16 valid NONE states; measured malformed NONE timeout is an explicit browser guard. Actual CODE b683076f536555cb8f33deb6ef698f7e4d54a588; no whole-module or goal promotion.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T11:53:45.860Z, excerpt_hash=sha256:327a5b0e3207433a332af839127ae1afa6458f78c1d1ffb9d72ce1d69bac5f50
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011119-4H9E82/blueprint/resolved-snapshot.json
+    - old_digest: 47a434a2f20a92510d4c341b4fe47663ba76bc979d8dc71bc22e832a71715f64
+    - current_digest: 47a434a2f20a92510d4c341b4fe47663ba76bc979d8dc71bc22e832a71715f64
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610011119-4H9E82
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610011119-4H9E82 -m 🧩 4H9E82 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the eventual implementation commit through a new executable task; retain immutable native observations and failed attempts."
   Findings: |-
     Baseline from immutable iteration 42: effective Get absent; ten eager owned slots; equal Set replaces identity and invalidates. Native accessor/ref-Set proof has empty raw slots, shared Get defaults and equal owned no-op. Native pointer Set overload, full style/client/font/graphic ownership and static destruction lifetime remain outside the currently implemented reference overload and must not be claimed certified. Direct workflow remains local. Parent goal has not achieved whole-project parity.
@@ -120,7 +188,44 @@ SwNumRule/SwNumFormat and inherited implemented marker/position equality; source
 
 ## Verification
 
-Pending implementation and checks. No module-level parity promotion is authorized.
+Command: npm run verify. Result: pass, fourth full invocation actual exit0, recorded in verify-fourth.log on final implementation. Evidence:708 application tests/160 files;109 inventory tests/36 files;19 browser tests. Application100% statements10684/branches8087/functions2882/lines9798; inventory100% statements1523/branches1080/functions384/lines1464. Every unchanged format/lint/type/dependency/resources/coverage/browser/static/docs/file-size/source-tree/provenance/invariant/parity gate passed. Native identity/provenance status consistency does not establish whole-module parity.
+Command: python3 .agentplane/tasks/202610011119-4H9E82/native-oracle.py. Result: pass with corrected pinned SVX_DEF_BULLET constant;20 complete unchanged definitions/constants,40 base states and19 ownership/equality states under ASan/UBSan. Literal final fixture equals final native JSON. Initial constant-adapter log retained; values for shared tables/ownership are unchanged because native factories override glyphs.
+Command: python3 .agentplane/tasks/202610011119-4H9E82/native-none.py. Result: pass;2 complete unchanged methods and16 valid NONE marker states under ASan/UBSan. Command: native-stall.py. Result: observed one-second native non-progress timeout for NONE trailing reference; browser rejects this unsupported input explicitly, with no equivalence claim.
+Command: npm run format:check after corrected literal fixture and metadata formatting. Result: pass. Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass; doctor0 errors and the same2 historical warnings. Source limits:ndtxt999 split lines, XML import991. Scope:41 intentional implementation/fixture/metadata paths. No gate, coverage, policy, schema-version or registered I/O/recovery change. CODE:b683076f536555cb8f33deb6ef698f7e4d54a588. Initial failed type/focused/full coverage attempts retained and resolved; no mandatory check skipped.
+Residual:full native pointer-overload/dtor/static release,registered char style,font/graphics/type hierarchy and malformed native non-progress equivalence are not certified. The next measured existing standalone default glyph differs:localempty/nativeU+F095. Parent and goal remain active. Quality-phase review and final clean close follow this verification record.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T11:53:46.171Z — VERIFY — ok
+
+By: CODER
+
+Note: Final npm run verify exit0:708 app,109 inventory,19 browser and100% both suites. Corrected pinned native22 definition/constant proof matches40 defaults,19 ownership and16 valid NONE states; measured malformed NONE timeout is an explicit browser guard. Actual CODE b683076f536555cb8f33deb6ef698f7e4d54a588; no whole-module or goal promotion.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T11:53:45.860Z, excerpt_hash=sha256:327a5b0e3207433a332af839127ae1afa6458f78c1d1ffb9d72ce1d69bac5f50
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011119-4H9E82/blueprint/resolved-snapshot.json
+- old_digest: 47a434a2f20a92510d4c341b4fe47663ba76bc979d8dc71bc22e832a71715f64
+- current_digest: 47a434a2f20a92510d4c341b4fe47663ba76bc979d8dc71bc22e832a71715f64
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610011119-4H9E82
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610011119-4H9E82 -m 🧩 4H9E82 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
