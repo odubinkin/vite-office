@@ -4,7 +4,7 @@ title: "Restore Writer numbering format ownership and access contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: user-authorized iteration 43 restores optional owned formats and shared effective defaults, with consumer and Worker migration and unchanged verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T11:33:35.669Z"
+doc_updated_at: "2026-10-01T11:37:59.552Z"
 doc_updated_by: "CODER"
 description: "Iteration 43: separate optional owned levels from shared effective defaults, preserve source-equivalent Set no-op and copy ownership, and migrate existing consumers and Worker serialization without changing registered I/O deviations."
 sections:
@@ -73,6 +73,10 @@ sections:
     - Observation: Focused run: 192 existing tests passed, three failures in newly projected absent ListFormat states and one remaining fixture that cast a const owned format to mutable. Lint/typechecks caught forbidden non-null indexing and a doubled const type name.
       Impact: The immutable native data and existing ODT expectations remain unchanged. Runtime freezing exposed the residual fixture mutation.
       Resolution: Guard projection by HasListFormat, migrate the residual fixture to clone-and-Set, use a bounded table type assertion and correct the type import. Retain initial logs.
+
+    - Observation: First full verify stopped at TypeScript because the moved base equality requires override on SwNumFormat.Equals. Reviewing newly reachable NONE base formats also identified the native delimiter skip in pattern replacement, which must be preserved rather than treating NONE as a bullet.
+      Impact: No gates changed. This is the approved four-family default and consumer boundary; no additional functionality scope.
+      Resolution: Add override, execute unchanged complete MakeNumString against bounded valid NONE patterns, preserve exact delimiter skip and raw start reads, then repeat full verification.
 id_source: "generated"
 ---
 ## Summary
@@ -121,3 +125,7 @@ Baseline from immutable iteration 42: effective Get absent; ten eager owned slot
 - Observation: Focused run: 192 existing tests passed, three failures in newly projected absent ListFormat states and one remaining fixture that cast a const owned format to mutable. Lint/typechecks caught forbidden non-null indexing and a doubled const type name.
   Impact: The immutable native data and existing ODT expectations remain unchanged. Runtime freezing exposed the residual fixture mutation.
   Resolution: Guard projection by HasListFormat, migrate the residual fixture to clone-and-Set, use a bounded table type assertion and correct the type import. Retain initial logs.
+
+- Observation: First full verify stopped at TypeScript because the moved base equality requires override on SwNumFormat.Equals. Reviewing newly reachable NONE base formats also identified the native delimiter skip in pattern replacement, which must be preserved rather than treating NONE as a bullet.
+  Impact: No gates changed. This is the approved four-family default and consumer boundary; no additional functionality scope.
+  Resolution: Add override, execute unchanged complete MakeNumString against bounded valid NONE patterns, preserve exact delimiter skip and raw start reads, then repeat full verification.

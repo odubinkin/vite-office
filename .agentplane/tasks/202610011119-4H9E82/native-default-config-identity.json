@@ -1,0 +1,17 @@
+{
+  "scope": "Native default config source identities; configuration file loading, locale/font settings and user overrides are not executed or certified. Oracle supplies the pinned default bullet configuration profile.",
+  "definitions": [
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "void SwDefBulletConfig::SetToDefault()",
+      "sha256": "5c0fbfa5c8864b567abdf4ca6278e2c2f0ca4183c790bcf30c62a24b83835abb",
+      "text": "void SwDefBulletConfig::SetToDefault()\n    {\n        msFontname = \"OpenSymbol\";\n        mbUserDefinedFontname = false;\n        meFontWeight = WEIGHT_DONTKNOW;\n        meFontItalic = ITALIC_NONE;\n\n        mnLevelChars[0] = 0x2022;\n        mnLevelChars[1] = 0x25e6;\n        mnLevelChars[2] = 0x25aa;\n        mnLevelChars[3] = 0x2022;\n        mnLevelChars[4] = 0x25e6;\n        mnLevelChars[5] = 0x25aa;\n        mnLevelChars[6] = 0x2022;\n        mnLevelChars[7] = 0x25e6;\n        mnLevelChars[8] = 0x25aa;\n        mnLevelChars[9] = 0x2022;\n    }"
+    },
+    {
+      "source": "sw/source/core/doc/number.cxx",
+      "marker": "sal_Unicode GetBulletChar( sal_uInt8 nLevel )",
+      "sha256": "3c99112c0623ccae955ea5fd605c846199d22d65aa324991b98edaca855a9209",
+      "text": "sal_Unicode GetBulletChar( sal_uInt8 nLevel )\n    {\n        return SwDefBulletConfig::getInstance().GetChar( nLevel );\n    }"
+    }
+  ]
+}

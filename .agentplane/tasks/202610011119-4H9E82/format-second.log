@@ -1,0 +1,4 @@
+apps/office/src/sw/source/core/doc/number.ts 72ms
+apps/office/src/sw/source/core/doc/number-ownership.test.ts 23ms (unchanged)
+apps/office/src/sw/source/filter/xml/odt-list-rule-application.test.ts 19ms (unchanged)
+apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts 19ms (unchanged)

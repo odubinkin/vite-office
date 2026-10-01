@@ -1,0 +1,3 @@
+apps/office/src/editeng/source/items/numitem.ts 54ms
+apps/office/src/sw/source/core/doc/number.ts 33ms
+apps/office/src/sw/source/core/doc/number-ownership.test.ts 21ms
