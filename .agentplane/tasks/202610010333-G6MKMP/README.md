@@ -4,7 +4,7 @@ title: "Restore native processed list continuation import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned processed continuation and DefaultListId projection under the persistent approved upstream goal;safe local scope and unchanged gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:56:59.598Z"
+doc_updated_at: "2026-10-01T03:58:46.780Z"
 doc_updated_by: "CODER"
 description: "Iteration34: replace list alias map with source-owned processed list records,parse native continue-numbering/root-only identity attributes,resolve chains and DefaultListId projection;preserve registered save/open/recovery differences."
 sections:
@@ -80,6 +80,10 @@ sections:
     - Observation: Extended native probe/comparison passes3082 sequences/15392 states including RNG1/INT_MAX and high-bit masking;112 genuine package scenarios and3 helper tests pass in session18530. Typecheck48719 exited2:new copy assertion incorrectly assumed CaptureListItems returns a record with level;it actually returns SfxItemSet.
       Impact: The optional property guard made the intended item ownership assertion vacuous;other literal states/copies/Worker/XML/reopen checks passed. Ownership evidence must use the real pooled-item API.
       Resolution: Use SfxItemSet.GetItem with RES_PARATR_LIST_LEVEL and assert cloned present items are distinct;retain unchanged type/lint gates. Repeat focused package/types verification before full verify.
+
+    - Observation: Typecheck18332 exited2:same incorrect items.level remains because the text replacement assumed12space indentation while formatter uses14;the new identity constant is consequently unused. Focused session98268 still passes17 tests,with the ownership guard still vacuous.
+      Impact: The intended ownership repair was not applied;no successful typecheck is claimed.
+      Resolution: Use an asserted structural replacement independent of indentation,call actual SfxItemSet.GetItemIfSet(RES_PARATR_LIST_ID,false),require the direct identity item for every listed paragraph and assert distinct copy storage. Inspect changed source before rerunning checks.
 id_source: "generated"
 ---
 ## Summary
@@ -141,3 +145,7 @@ Previous goal turn is progress:DWV0NC DONE,implementation9ac1779d7b3845eb320d939
 - Observation: Extended native probe/comparison passes3082 sequences/15392 states including RNG1/INT_MAX and high-bit masking;112 genuine package scenarios and3 helper tests pass in session18530. Typecheck48719 exited2:new copy assertion incorrectly assumed CaptureListItems returns a record with level;it actually returns SfxItemSet.
   Impact: The optional property guard made the intended item ownership assertion vacuous;other literal states/copies/Worker/XML/reopen checks passed. Ownership evidence must use the real pooled-item API.
   Resolution: Use SfxItemSet.GetItem with RES_PARATR_LIST_LEVEL and assert cloned present items are distinct;retain unchanged type/lint gates. Repeat focused package/types verification before full verify.
+
+- Observation: Typecheck18332 exited2:same incorrect items.level remains because the text replacement assumed12space indentation while formatter uses14;the new identity constant is consequently unused. Focused session98268 still passes17 tests,with the ownership guard still vacuous.
+  Impact: The intended ownership repair was not applied;no successful typecheck is claimed.
+  Resolution: Use an asserted structural replacement independent of indentation,call actual SfxItemSet.GetItemIfSet(RES_PARATR_LIST_ID,false),require the direct identity item for every listed paragraph and assert distinct copy storage. Inspect changed source before rerunning checks.
