@@ -4,7 +4,7 @@ title: "Restore native hierarchical list counter calculation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Final unchanged verify exits 0: 640 application/109 inventory/19 browser checks and both 100% coverage suites. Compiled unmodified native hierarchy/node/vector excerpts match 1048 trees / 5016 states; source-derived zero/restart/uncounted/continuation and genuine common/automatic ODT/copy/Worker/XML/reopen assertions pass. Doctor zero errors with two prior warnings; routing/diff pass. Full phantom/lazy/continuous/redline/lifecycle and uncounted XML transport remain unverified; no full parity claim."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-01T00:35:35.558Z"
+  updated_by: "EVALUATOR"
+  note: "Approved hierarchical counter ownership and native first/sibling semantics satisfy bounded Verify Steps at 203555bcef7d193f0ff1ec7869d4c4f021d2a994."
+  evaluated_sha: "203555bcef7d193f0ff1ec7869d4c4f021d2a994"
+  blueprint_digest: "50b3b661567b1012825f5b656cf628e6da5c1e71950b94c69b7b78a719e9af19"
+  evidence_refs:
+    - ".agentplane/tasks/202610010014-X0PFNS/README.md"
+    - ".agentplane/tasks/202610010014-X0PFNS/quality/20261001-003535558-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610010014-X0PFNS/quality/20261001-003535558-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610010014-X0PFNS/quality/20261001-003535558-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610010014-X0PFNS/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610010014-X0PFNS/verify.log"
+    - ".agentplane/tasks/202610010014-X0PFNS/native-oracle.py"
+    - ".agentplane/tasks/202610010014-X0PFNS/native-hierarchical-oracle.cxx"
+    - ".agentplane/tasks/202610010014-X0PFNS/native-results.json"
+    - ".agentplane/tasks/202610010014-X0PFNS/compare-native.ts"
+    - "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts"
+    - "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts"
+  findings:
+    - "SwNumberTreeNode now owns links, signed counters, first/sibling calculation and vectors; SwNodeNum owns counted/restart/start/descendant numbering policy. Numeric-zero sentinel is removed; zero starts/restarts, signed uncounted-first values, counted descendants and previous-subtree continuation match 1048 compiled-native legal no-phantom hierarchies / 5016 states. Five core tests and seven common/automatic ODT cases verify actual labels, owned rule/item-set copies, Worker v16, selected XML and reopen. Full unchanged verify passes 640 application, 109 inventory and 19 browser tests with both 100% coverage suites. Old blanket SwNodeNum parity metadata is corrected to unverified; registered save/open/recovery is preserved."
 commit: null
 comments:
   -
