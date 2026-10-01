@@ -1,10 +1,11 @@
 ---
 id: "202610011530-YKNJG7"
 title: "Make project tests independent of pinned upstream"
-status: "DOING"
+result_summary: "ProjectTestsIndependentOfPinnedUpstream;120tooling727application109inventory19browserPass;100percentCoveragePreserved"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -40,7 +41,9 @@ quality_review:
     - ".agentplane/tasks/202610011530-YKNJG7/code-scope.json"
   findings:
     - "13semantic test/support paths and16canonical artifacts inspected. All11previous failing cases converted to authored Git/filesystem or marker inputs;no failing case skipped. Original count guards and100percent coverage retained. Default Git executor has4owned real repos,UTF8read/write wrappers realfiles. All120tooling,727application,109inventory and19browser tests pass with pinnedvendor unavailable and restoredfinally. No production code/nativefixtures changed;independent-review claim is not made."
-commit: null
+commit:
+  hash: "a775dd325398baa23db153f0c6d13b21f2b769e4"
+  message: "🧪 YKNJG7 code: decouple project tests from pinned upstream"
 comments:
   -
     author: "CODER"
@@ -48,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Apply user-authorized project-wide upstream independence constraint to all11measured tooling cases using owned fixtures."
+  -
+    author: "CODER"
+    body: "Verified: All project tooling, application, inventory and browser tests pass without the pinned upstream checkout; owned fixtures preserve Git/filesystem coverage and count guards, with100percent coverage unchanged."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS actual CODE a775dd325398baa23db153f0c6d13b21f2b769e4:13semantic test/support paths plus16canonical task artifacts embedded by CLI bookkeeping. With pinned vendor unavailable:120tooling tests,727application tests,109inventory tests and19browser tests pass;both coverage suites remain100percent across all metrics. Owned4Git repos exercise default executor;real UTF8file wrappers preserved,other Git streams deterministic;native count guards unchanged. Finally restored pinnedvendorHEAD9bc445578031fecf56086729d8e4940c77e14d65 and unfinished untracked task48test. Format/lint/tooltypecheck/docs/doctor/routing/diff pass;no production/nativefixture changes. Initial11failures retained. Static audit commands may read vendor;project tests do not."
+  -
+    type: "status"
+    at: "2026-10-01T15:47:32.611Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: All project tooling, application, inventory and browser tests pass without the pinned upstream checkout; owned fixtures preserve Git/filesystem coverage and count guards, with100percent coverage unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-01T15:46:56.746Z"
+doc_updated_at: "2026-10-01T15:47:32.612Z"
 doc_updated_by: "CODER"
 description: "User-authorized removal of all pinned upstream access from project tests: module-boundary test plus11discovered inventory CLI integration cases. Use owned deterministic fixtures, preserve count guards and real Git/filesystem adapter coverage, and verify suites with vendor absent. No production behavior changes."
 sections:
@@ -120,6 +133,10 @@ sections:
     - Observation: The vendor-unavailable all-tooling run failed11tests across inventory CLI suites: production Git/filesystem cases read pinned upstream repositories. The vendor directory and unfinished task48 test were restored in finally handling.
       Impact: The initial text audit understated actual upstream test dependencies; the project-wide independence criterion remains unmet. Do not report that all tests are independent or weaken/skip those cases.
       Resolution: Record this failed evidence and inspect the11CLI filesystem cases. Close the narrow module-boundary correction using focused evidence, then route a separate measured task replacing pinned-source integration inputs with owned temporary Git/fixture inputs while retaining real filesystem and Git-path coverage.
+extensions:
+  implementation_commit:
+    hash: "a775dd325398baa23db153f0c6d13b21f2b769e4"
+    message: "🧪 YKNJG7 code: decouple project tests from pinned upstream"
 id_source: "generated"
 ---
 ## Summary
