@@ -144,6 +144,9 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
         (number, index) => ({ number, label: test.labels[index], vector: test.vectors[index] }),
       );
       expect(state(result.document)).toEqual(expected);
+      expect(result.document.GetAttrPool().GetUserOrPoolDefaultItem(86).QueryValue()).toBe(1);
+      for (const node of result.document.paragraphs)
+        if (!node.HasAttrListRestartValue()) expect(node.GetAttr(86).QueryValue()).toBe(1);
       const rule = result.document.FindNumRulePtr("Counters") as SwNumRule;
       const copied = createWriterDocument();
       copied.GetDocumentListsManager().AddNumRule(rule.clone());
@@ -159,6 +162,9 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
       expect(copied.FindNumRulePtr("Counters")).not.toBe(rule);
       const transferred = decodeWriterDocument(encodeWriterDocument(result.document));
       expect(state(transferred)).toEqual(expected);
+      expect(transferred.GetAttrPool().GetUserOrPoolDefaultItem(86).QueryValue()).toBe(1);
+      for (const node of transferred.paragraphs)
+        if (!node.HasAttrListRestartValue()) expect(node.GetAttr(86).QueryValue()).toBe(1);
       const exported = writeOdtDocument(result.document, { title: "Counters" });
       const xml = await new ZipFile(exported).readTextEntry("content.xml");
       expect(xml).toContain('office:version="1.3"');
@@ -193,5 +199,8 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
       }
       const reopened = await readOdtDocument(exported, { title: "Counters" });
       expect(state(reopened.document)).toEqual(expected);
+      expect(reopened.document.GetAttrPool().GetUserOrPoolDefaultItem(86).QueryValue()).toBe(1);
+      for (const node of reopened.document.paragraphs)
+        if (!node.HasAttrListRestartValue()) expect(node.GetAttr(86).QueryValue()).toBe(1);
     }
 });

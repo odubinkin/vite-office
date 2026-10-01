@@ -3618,12 +3618,20 @@
           {
             "marker": "SwAttrPool",
             "path": "apps/office/src/sw/source/core/attr/swatrset.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+            "marker": "new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 1)"
           }
         ],
         "upstream": [
           {
             "marker": "SwAttrPool",
             "path": "vendor/libreoffice-reference/sw/source/core/attr/swatrset.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
+            "marker": "new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 )"
           }
         ]
       },
@@ -3639,7 +3647,8 @@
       "preservedResponsibilities": [
         "Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.",
         "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
-        "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations."
+        "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations.",
+        "Iteration40 restores only RES_PARATR_LIST_RESTARTVALUE default1 from the complete pinned init.cxx initializer;unchanged native SfxInt16Item constructor/GetValue/Clone compiled with base/type adapters confirms86/1 and independent copy. Actual pool/default/direct/parent and clear-delta tests distinguish item default from rule start and explicit0/7. Undo,Worker16 and genuine common/automatic Arabic/bullet ODT/reopen retain direct state and counters. Whole native registry architecture,other defaults,getter/cast and client lifetime remain unverified;no whole-module promotion or IO change."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/attr/swatrset.cxx",

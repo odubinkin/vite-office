@@ -273,7 +273,7 @@ export class SwAttrPool extends SfxItemPool {
       ) => new SfxBoolItem(RES_PARATR_LIST_ISRESTART, Boolean(value)),
     );
     this.RegisterDefaultItem(
-      new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 0),
+      new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 1),
       /** Restores the list restart value. @param value - Persisted counter. @returns Integer item. */ (
         value,
       ) => new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, Number(value)),
