@@ -1,0 +1,127 @@
+{
+  "sequence": 48,
+  "step": 10,
+  "operation": [
+    6,
+    1,
+    1
+  ],
+  "actual": {
+    "raw": [
+      2,
+      0,
+      1,
+      0
+    ],
+    "nodes": [
+      {
+        "vector": [
+          0,
+          5,
+          2
+        ],
+        "number": 2,
+        "rule": "Counters"
+      },
+      {
+        "vector": [
+          10,
+          15,
+          13
+        ],
+        "number": 13,
+        "rule": "Other"
+      },
+      {
+        "vector": [
+          1
+        ],
+        "number": 1,
+        "rule": "Counters"
+      },
+      {
+        "vector": [
+          1,
+          5,
+          0
+        ],
+        "number": 0,
+        "rule": "Counters"
+      }
+    ],
+    "rules": [
+      [
+        0,
+        2,
+        3
+      ],
+      [
+        1
+      ]
+    ],
+    "registry": [
+      1,
+      2,
+      3
+    ]
+  },
+  "expected": {
+    "raw": [
+      2,
+      0,
+      1,
+      0
+    ],
+    "nodes": [
+      {
+        "number": 2,
+        "rule": "Counters",
+        "vector": [
+          -1,
+          4,
+          2
+        ]
+      },
+      {
+        "number": 13,
+        "rule": "Other",
+        "vector": [
+          10,
+          15,
+          13
+        ]
+      },
+      {
+        "number": 0,
+        "rule": "Counters",
+        "vector": [
+          0
+        ]
+      },
+      {
+        "number": 0,
+        "rule": "Counters",
+        "vector": [
+          0,
+          5,
+          0
+        ]
+      }
+    ],
+    "rules": [
+      [
+        0,
+        2,
+        3
+      ],
+      [
+        1
+      ]
+    ],
+    "registry": [
+      1,
+      2,
+      3
+    ]
+  }
+}

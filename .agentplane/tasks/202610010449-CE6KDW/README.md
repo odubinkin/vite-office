@@ -4,7 +4,7 @@ title: "Restore node-owned Writer numbering lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved persistent parity goal;restore shown text-node numbering ownership,rule/document registration and native lazy getters;preserve document IO exceptions and gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T04:57:40.837Z"
+doc_updated_at: "2026-10-01T05:05:16.534Z"
 doc_updated_by: "CODER"
 description: "Iteration36 of approved persistent parity goal:SwTextNode owns shown SwNodeNum with native AddToList/RemoveFromList/GetNum/vector contracts,SwNodeNum rule/document registration hooks and non-owning SwList topology. Remove full-list read validation and ownership wrappers;preserve registered document IO exceptions and unchanged gates."
 sections:
@@ -52,6 +52,10 @@ sections:
     - Observation: Actual pre-edit baseline:missing GetNum/GetNumberVector/AddToList;first counter7 read computes unrelated raw tail0to8;orphan retains dynamic format start7 instead of native cleared binding/default1. Native-owner compile24098 failed only five missing declaration methods in explicit frame/range/list-items adapters;no native body changed.
       Impact: Incomplete native dependency declarations prevent comparison and are not successful evidence. Reading tail/raw state and cleared rule binding must be independently verified after repair.
       Resolution: Add only range/frame/native node getIDocumentListItems forwarding adapter declarations;recompile full untouched native methods. Keep this failure and unsupported hidden/layout/platform callbacks explicit;no verification gate change.
+
+    - Observation: Command: npm run typecheck --workspace @vite-office/office; Result: fail (session7380). Transitional diagnostics: old tests called list-owned Insert/Remove APIs; SwTextNode type-only import used for teardown; XML call-site replacement retained this prefix.
+      Impact: Owner API migration required updating actual lifecycle fixtures and two imports/call sites; no verification gate relaxed.
+      Resolution: Migrated tests to canonical node-owned AddToList/RemoveFromList, preserved tree-record insertion contracts, fixed value import and XML node reference; rerun pending.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +89,7 @@ Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions
 - Observation: Actual pre-edit baseline:missing GetNum/GetNumberVector/AddToList;first counter7 read computes unrelated raw tail0to8;orphan retains dynamic format start7 instead of native cleared binding/default1. Native-owner compile24098 failed only five missing declaration methods in explicit frame/range/list-items adapters;no native body changed.
   Impact: Incomplete native dependency declarations prevent comparison and are not successful evidence. Reading tail/raw state and cleared rule binding must be independently verified after repair.
   Resolution: Add only range/frame/native node getIDocumentListItems forwarding adapter declarations;recompile full untouched native methods. Keep this failure and unsupported hidden/layout/platform callbacks explicit;no verification gate change.
+
+- Observation: Command: npm run typecheck --workspace @vite-office/office; Result: fail (session7380). Transitional diagnostics: old tests called list-owned Insert/Remove APIs; SwTextNode type-only import used for teardown; XML call-site replacement retained this prefix.
+  Impact: Owner API migration required updating actual lifecycle fixtures and two imports/call sites; no verification gate relaxed.
+  Resolution: Migrated tests to canonical node-owned AddToList/RemoveFromList, preserved tree-record insertion contracts, fixed value import and XML node reference; rerun pending.
