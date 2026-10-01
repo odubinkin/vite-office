@@ -1,0 +1,112 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 209 runtime sources, 869 relative imports, 12 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  15:38:17
+   Duration  117ms (transform 25ms, setup 0ms, import 33ms, tests 3ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  155 passed (155)
+      Tests  692 passed (692)
+   Start at  15:38:17
+   Duration  87.94s (transform 2.50s, setup 12.84s, import 10.64s, tests 65.24s, environment 61.78s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 10562/10562 )
+Branches     : 100% ( 7973/7973 )
+Functions    : 100% ( 2868/2868 )
+Lines        : 100% ( 9699/9699 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+
+ Test Files  36 passed (36)
+      Tests  109 passed (109)
+   Start at  15:39:46
+   Duration  55.28s (transform 785ms, setup 0ms, import 1.88s, tests 49.69s, environment 2ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1523/1523 )
+Branches     : 100% ( 1080/1080 )
+Functions    : 100% ( 384/384 )
+Lines        : 100% ( 1464/1464 )
+================================================================================
+
+> vite-office@0.1.0 test:e2e
+> npm run build && playwright test --config apps/office/playwright.config.ts
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
