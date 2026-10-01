@@ -1,10 +1,11 @@
 ---
 id: "202610011338-WSMJ80"
 title: "Restore native numbering pointer Set and in-place format assignment ownership"
-status: "DOING"
+result_summary: "Iteration46 verified progress: complete native pointer Set,raw implemented-field assignment,source-shaped nonvirtual copy construction,stable protected const ownership,actual document/Worker/ODT integration. Native full lifetime/platform/style/graphics/Font/wider-field obligations remain unverified;native rule Assign/Reset is next audited missing contract. Close leaf only."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - ".agentplane/tasks/202610011338-WSMJ80/diff-final.log"
   findings:
     - "Exact7 approved paths and13 full unchanged native identities match639 ASan/UBSan literal states. Pointer in-place/null/default behavior is distinct from reference replacement. Native base constructor calls nonvirtual assignment;Set allocation constructs directly and throwing JS clone regression proves the boundary. Every implemented raw field,optional Font,type/show,registration,protected stable const identity,real document/Worker/supported ODT path passes. Original tests,statuses,module sets,IO exceptions and100% gates preserved. Final722app/109inventory/19browser plus all original checks pass;fixture/invocation/type/dispatch failures retained and resolved."
-commit: null
+commit:
+  hash: "4b889d127aa8e89392bf14f04c2017b3324addca"
+  message: "🔧 WSMJ80 code: restore native pointer Set and nonvirtual format assignment ownership"
 comments:
   -
     author: "CODER"
     body: "Start: execute the approved single iteration46 native pointer Set/assignment ownership correction under persistent user goal authorization; preserve reference semantics,registered IO exceptions and all gates."
+  -
+    author: "CODER"
+    body: "Verified: actual CODE4b889d127aa8e89392bf14f04c2017b3324addca restores native pointer/ref ownership distinction,nonvirtual base/Writer copying and assignment,registration transfer and protected live const references.639 native profiles,19 focused tests,full722app/109inventory/19browser and unchanged100% coverage,canonical verification and separate quality phase pass. Parent/full goal active;registered IO exceptions unchanged."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS actual CODE4b889d127aa8e89392bf14f04c2017b3324addca:639 unchanged pinned native profiles under ASan/UBSan,13 exact identities,19 focused tests and final verify-third722app/109inventory/19browser with both original100% coverage gates. Direct nonvirtual copy/Assign,distinct pointer/reference ownership,const identity,registration and actual document/Worker/ODT paths proven within explicit native profile limits. Doctor0errors/2oldwarnings,routing,diff/scope pass;parent/full goal active and registered IO exceptions unchanged."
+  -
+    type: "status"
+    at: "2026-10-01T14:11:53.111Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual CODE4b889d127aa8e89392bf14f04c2017b3324addca restores native pointer/ref ownership distinction,nonvirtual base/Writer copying and assignment,registration transfer and protected live const references.639 native profiles,19 focused tests,full722app/109inventory/19browser and unchanged100% coverage,canonical verification and separate quality phase pass. Parent/full goal active;registered IO exceptions unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:11:19.740Z"
+doc_updated_at: "2026-10-01T14:11:53.113Z"
 doc_updated_by: "CODER"
 description: "Iteration46: restore the complete SwNumRule pointer overload alongside unchanged reference replacement,source-owned base/Writer format assignment and same-modify registration transfer. Replace frozen owned values with mutable native owners and stable protected const references at the JS boundary. Differentially prove raw/default/identity/validity/copy/alias behavior and every already implemented format field. Preserve registered IO/recovery exceptions and all original gates; broader native platform/graphics/style/lifetime remain unverified."
 sections:
@@ -149,6 +162,10 @@ sections:
     - Observation: Second full verify passes after native base-copy refactor. Source review shows both native Set overloads allocate SwNumFormat directly; the local Set paths still call virtual JS clone. The unchanged native600-trace fixture with an explicit throwing JS clone adapter reproduces that wrong dispatch boundary in regression-copy-dispatch-red.
       Impact: Output parity alone had not proved the native copy responsibility. Source Set must not delegate ownership copying to a browser adapter method.
       Resolution: Use direct new SwNumFormat(format) in the two approved allocation branches,preserve assignment/reference identity and every literal result,and rerun focused/full verification. No acceptance gate or scope expansion.
+extensions:
+  implementation_commit:
+    hash: "4b889d127aa8e89392bf14f04c2017b3324addca"
+    message: "🔧 WSMJ80 code: restore native pointer Set and nonvirtual format assignment ownership"
 id_source: "generated"
 ---
 ## Summary
