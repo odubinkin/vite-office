@@ -1,10 +1,11 @@
 ---
 id: "202610011309-23WGVW"
 title: "Restore native Writer numbering classification and layout-update predicates"
-status: "DOING"
+result_summary: "Iteration45 verified progress: native NONE enumeration,CHAR_SPECIAL/BITMAP itemize,actual bounded effective node reads,raw-owned layout policy,count/registry filtering;complete original checks pass. Native broader layout/font/client/graphics/service/global lifetimes and pointer Set remain unverified. Close this leaf only."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - ".agentplane/tasks/202610011309-23WGVW/routing.log"
   findings:
     - "All seven reviewed CODE paths match approval. Eleven native source definitions and complete profile hash are exact; literal1032 native cases match production predicates/count/registry with named input adapters. Effective bounded classification and raw-owned layout semantics remain distinct. Full717app/109inventory/19browser verify passes unchanged100% coverage and all original gates. No module/status/IO/policy promotion. Initial fixture/type/lint failures retained and safely resolved."
-commit: null
+commit:
+  hash: "6d3f9de7b8799145f18a5eee9b562ade717b645d"
+  message: "🔧 23WGVW code: restore native Writer classification and owned layout predicates"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved single iteration45 native Writer classification/raw-layout predicate task under the persistent user goal authorization; preserve registered I/O/recovery deviations and unchanged source/coverage gates."
+  -
+    author: "CODER"
+    body: "Verified: actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d restores native format classification and distinct raw-owned layout-update policy;1032 native cases,717app/109inventory/19browser,unchanged100% coverage,canonical verification and separate quality phase pass. Parent/full goal remain active with pointer Set ownership/assignment next;registered I/O/recovery deviations unchanged."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d:1032 unchanged pinned native cases under ASan/UBSan;22 focused tests; full verify-second717app/109inventory/19browser with unchanged100% coverage in both suites. Doctor0errors/2 pre-existing warnings,routing,diff and seven-path scope pass. Native profile boundaries and complete pointer-Set next gap remain explicit. Registered IO/recovery exceptions unchanged; parent and goal active."
+  -
+    type: "status"
+    at: "2026-10-01T13:34:00.109Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual CODE6d3f9de7b8799145f18a5eee9b562ade717b645d restores native format classification and distinct raw-owned layout-update policy;1032 native cases,717app/109inventory/19browser,unchanged100% coverage,canonical verification and separate quality phase pass. Parent/full goal remain active with pointer Set ownership/assignment next;registered I/O/recovery deviations unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:32:53.203Z"
+doc_updated_at: "2026-10-01T13:34:00.110Z"
 doc_updated_by: "CODER"
 description: "Iteration45 of the active parity audit: restore source-owned SwNumFormat.IsItemize/IsEnumeration and actual SwTextNode HasNumber/HasBullet reads, including NONE enumeration and scalar bitmap classification. Restore the distinct raw-owned HasNumberingWhichNeedsLayoutUpdate contract, without equating it to enumeration. Validate actual SwNodeNum counting and DocumentListItemsManager filtering against complete unchanged pinned native bodies and real local graphs. Preserve existing UI/ODT/Worker contracts, registered I/O/recovery deviations and the native malformed-NONE browser guard; broader bitmap graphics/layout/redline/native lifetimes remain unverified."
 sections:
@@ -139,6 +152,10 @@ sections:
     - Observation: Read-only next-gap profile compiles the complete unchanged native pointer Set overload with prior full constructor/Get/GetNumFormat/assignment/default bodies. Six ASan/UBSan states prove absent-null no-op, pointer allocation, equal-pointer identity/validity, changed-pointer in-place identity, owned-null removal/default fallback, and distinct changed-reference replacement. Existing local reference Set correctly replaces identity, but no pointer overload exists: null input throws and frozen owned objects cannot support native in-place assignment.
       Impact: A separate correction needs the complete pointer overload plus source-shaped ownership/assignment architecture; reference Set behavior must remain distinct and scalar reset-only support is insufficient.
       Resolution: Preserve native/local followup-pointer evidence as the next task candidate; do not expand implementation45. Native platform/null-client/family-only-font/graphics limitations remain explicit; parent and goal remain active.
+extensions:
+  implementation_commit:
+    hash: "6d3f9de7b8799145f18a5eee9b562ade717b645d"
+    message: "🔧 23WGVW code: restore native Writer classification and owned layout predicates"
 id_source: "generated"
 ---
 ## Summary
