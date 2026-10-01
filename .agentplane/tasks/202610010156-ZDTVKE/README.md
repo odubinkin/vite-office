@@ -4,7 +4,7 @@ title: "Restore native repeated-sublist restart ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned repeated-sublist count and pending block restart inheritance,consumption and return under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T02:19:07.910Z"
+doc_updated_at: "2026-10-01T02:22:39.904Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
@@ -68,6 +68,10 @@ sections:
     - Observation: Second full verify session93645 terminal exit1:650 application tests still100%; inventory108/109 fails because the two new runtime module entries were appended instead of lexicographically ordered.
       Impact: All relocated source markers now resolve; strict manifest ordering prevents complete verification. The previous commentary inferred a second stale marker before the terminal report; actual cause is ordering.
       Resolution: Preserve terminal evidence,sort only existing runtime modules by path and provenance entries by localPath under the current schema,run focused parity CLI/provenance validation before the third unchanged full verify. No runtime,gate or acceptance changes.
+
+    - Observation: Additional primary-header audit finds mnSubListCount is sal_Int16, while the first probe adapter/local counter used unbounded/int count. Compiled unmodified item child factory with the actual signed16 field matches9 boundary states across65538 child lists;32768 narrows negative and65538 returns to2.
+      Impact: The current bounded1536-tree comparison remains valid, but the implementation needs native signed16 assignment narrowing for large documents within the existing1,000,000-element parser ceiling.
+      Resolution: Keep this within the approved per-item count correction. Wait for current verify terminal without changing live runtime inputs; then narrow the counter,add actual-context boundary test,correct the native adapter field and rerun final unchanged verification. No broader native overflow policy claim.
 id_source: "generated"
 ---
 ## Summary
@@ -117,3 +121,7 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent us
 - Observation: Second full verify session93645 terminal exit1:650 application tests still100%; inventory108/109 fails because the two new runtime module entries were appended instead of lexicographically ordered.
   Impact: All relocated source markers now resolve; strict manifest ordering prevents complete verification. The previous commentary inferred a second stale marker before the terminal report; actual cause is ordering.
   Resolution: Preserve terminal evidence,sort only existing runtime modules by path and provenance entries by localPath under the current schema,run focused parity CLI/provenance validation before the third unchanged full verify. No runtime,gate or acceptance changes.
+
+- Observation: Additional primary-header audit finds mnSubListCount is sal_Int16, while the first probe adapter/local counter used unbounded/int count. Compiled unmodified item child factory with the actual signed16 field matches9 boundary states across65538 child lists;32768 narrows negative and65538 returns to2.
+  Impact: The current bounded1536-tree comparison remains valid, but the implementation needs native signed16 assignment narrowing for large documents within the existing1,000,000-element parser ceiling.
+  Resolution: Keep this within the approved per-item count correction. Wait for current verify terminal without changing live runtime inputs; then narrow the counter,add actual-context boundary test,correct the native adapter field and rerun final unchanged verification. No broader native overflow policy claim.
