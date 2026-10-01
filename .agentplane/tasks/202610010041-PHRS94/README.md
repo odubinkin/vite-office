@@ -1,10 +1,11 @@
 ---
 id: "202610010041-PHRS94"
 title: "Restore native phantom ancestors for skipped list levels"
-status: "DOING"
+result_summary: "Source-owned phantom insertion/relocation/counting and derived vectors restored for skipped levels. Full verify passes643 app/109 inventory/19 browser and both100% coverage suites. Parent upstream goal remains active; next separate audit is uncounted ODT list-header transport."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts"
   findings:
     - "SwNumberTreeNode now owns native AddChild/CreatePhantom, descendant relocation/empty-phantom cleanup, derived levels, counted-parent predicates and parent-first vectors. SwList missing-level groups and zero-filled projection are removed. Compiled unmodified pinned primary bodies match 5736 legal ordered/reverse/interleaved/exhaustive insertion trees and 25560 counter/continuation/vector/phantom states under explicit eager-reset/std::set/text/rule/no-notification shims. Permanent core assertions cover native starts, skipped/deep/uncounted chains, level9, orphan/equivalence rejection and removal/reinsertion. Genuine common/automatic ODT cases verify literals [7,5,3], actual labels, independent rule/item copies, Worker16, selected XML and reopen. Final unchanged full verify exits0:643 application,109 inventory,19 browser tests and both100% coverage suites. Source provenance200 modules,34 invariants valid, semanticViolationCount0; doctor0 errors/same2 prior warnings; routing/diff pass. Registered save/open/recovery differences remain unchanged; no whole-module promotion."
-commit: null
+commit:
+  hash: "dd328458813306a78d7a9c6551ff7d3ec56dadee"
+  message: "🧩 PHRS94 code: restore native phantom list ancestors"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned phantom ancestors and counting under the persistent approved upstream goal."
+  -
+    author: "CODER"
+    body: "Verified: native phantom ancestors/counting replace missing-level groups;5736 trees/25560 native states and final unchanged full verification pass."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final unchanged verify exit0 session53036:643 app/109 inventory/19 browser, both100% coverage. Compiled primary excerpts match5736 trees/25560 states; genuine ODT/copy/Worker/XML/reopen pass. Doctor0 errors/same2 prior warnings; routing/diff pass. First browser timeout preserved; isolated and final unchanged runs pass. Full parity remains incomplete."
+  -
+    type: "status"
+    at: "2026-10-01T01:06:46.495Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native phantom ancestors/counting replace missing-level groups;5736 trees/25560 native states and final unchanged full verification pass."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:05:24.201Z"
+doc_updated_at: "2026-10-01T01:06:46.496Z"
 doc_updated_by: "CODER"
 description: "Iteration29 of persistent upstream goal: replace bounded missing-level groups with source-owned phantom construction and native hierarchical phantom counting for existing Arabic/bullet lists. Preserve registered save/open/recovery deviations."
 sections:
