@@ -1,0 +1,3 @@
+apps/office/src/sw/source/core/txtnode/ndtxt.ts 145ms (unchanged)
+apps/office/src/sw/source/core/doc/number.test.ts 49ms
+apps/office/src/test/writer-native-restart-getter.json 20ms

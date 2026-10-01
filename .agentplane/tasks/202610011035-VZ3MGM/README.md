@@ -4,7 +4,7 @@ title: "Restore Writer restart getter diagnostic and fallback contract"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: restore the native restart getter diagnostic and fallback in the current direct checkout."
 doc_version: 3
-doc_updated_at: "2026-10-01T10:37:00.999Z"
+doc_updated_at: "2026-10-01T10:42:03.724Z"
 doc_updated_by: "CODER"
 description: "Iteration42: replace the source-disproved absent restart getter exception with a nonfatal diagnostic and effective attribute read, preserving direct/default state, setter contracts and registered save/open/recovery deviations."
 sections:
@@ -50,7 +50,7 @@ sections:
   Verify Steps: "1. Real pre-edit SwDoc nodes must reproduce the current exception with HasAttrListRestartValue=false and effective86=1. Compile complete unchanged pinned native getter/Has/effective GetAttr and exact warning macro chain; record named adapters and hashes. Enabled warnings report the native diagnostic, disabled warnings still return the same default/direct values. 2. New application tests agree with literal native getter values and warning-enabled diagnostic trace for absent allocation, allocated other attributes, explicit zero/seven/signed16, cleared value, flag-only transitions and rule start9 distinct from pool1; getter leaves direct attributes, handles, flags and model notifications unchanged in normal/reading documents. 3. npm run verify passes every unchanged gate with app/inventory100% statements,branches,functions,lines and existing Undo/Worker16/ODT/browser assertions retained. No reduced assertions or blanket semantic promotion. 4. ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check pass; actual code commit/evaluator/recorded verification and clean final tracked/untracked state are required. Registered save/open/recovery deviations remain unchanged."
   Verification: "Pending native evidence, implementation and unchanged full gates. No skip approved."
   Rollback Plan: "Revert only this child implementation SHA and its intentional source/test/provenance changes; preserve immutable task evidence and registered deviations."
-  Findings: "Current main is clean; only parent202609240501-C9TN6M is active. Previous iteration41 is verified progress (actual code74b853c6,701/109/19 tests and100% both suites). Native ndtxt.cxx GetAttrListRestartValue uses OSL_ENSURE then effective GetAttr, while local getter throws absent and requests inParent=false. Pinned diagnose.h OSL_ENSURE expands to SAL_DETAIL_WARN_IF_FORMAT; sal/detail/log.h gates a diagnostic call by SAL_LOG_WARN and continues. Existing xmloff/core/filter runtime already uses console.warn for native diagnostic adaptation. No fake style-parent86 profile: native TextFormatColl excludes86. Full platform logging filtering/format/location and full attribute/default/client lifetime are not certified by this bounded getter correction."
+  Findings: "Current main is clean; only parent202609240501-C9TN6M is active. Previous iteration41 is verified progress (actual code74b853c6,701/109/19 tests and100% both suites). Native ndtxt.cxx GetAttrListRestartValue uses OSL_ENSURE then effective GetAttr, while local getter throws absent and requests inParent=false. Pinned diagnose.h OSL_ENSURE expands to SAL_DETAIL_WARN_IF_FORMAT; sal/detail/log.h gates a diagnostic call by SAL_LOG_WARN and continues. Existing xmloff/core/filter runtime already uses console.warn for native diagnostic adaptation. No fake style-parent86 profile: native TextFormatColl excludes86. Full platform logging filtering/format/location and full attribute/default/client lifetime are not certified by this bounded getter correction. A task-local terminal discovery accidentally used the apps/office relative vitest path from repository root (exit127); no test ran and no production issue occurred. New test's guessed GetItems API was caught during actual item-set inventory before validation and will use the real entries contract. No scope/criteria drift."
 id_source: "generated"
 ---
 ## Summary
@@ -79,4 +79,4 @@ Revert only this child implementation SHA and its intentional source/test/proven
 
 ## Findings
 
-Current main is clean; only parent202609240501-C9TN6M is active. Previous iteration41 is verified progress (actual code74b853c6,701/109/19 tests and100% both suites). Native ndtxt.cxx GetAttrListRestartValue uses OSL_ENSURE then effective GetAttr, while local getter throws absent and requests inParent=false. Pinned diagnose.h OSL_ENSURE expands to SAL_DETAIL_WARN_IF_FORMAT; sal/detail/log.h gates a diagnostic call by SAL_LOG_WARN and continues. Existing xmloff/core/filter runtime already uses console.warn for native diagnostic adaptation. No fake style-parent86 profile: native TextFormatColl excludes86. Full platform logging filtering/format/location and full attribute/default/client lifetime are not certified by this bounded getter correction.
+Current main is clean; only parent202609240501-C9TN6M is active. Previous iteration41 is verified progress (actual code74b853c6,701/109/19 tests and100% both suites). Native ndtxt.cxx GetAttrListRestartValue uses OSL_ENSURE then effective GetAttr, while local getter throws absent and requests inParent=false. Pinned diagnose.h OSL_ENSURE expands to SAL_DETAIL_WARN_IF_FORMAT; sal/detail/log.h gates a diagnostic call by SAL_LOG_WARN and continues. Existing xmloff/core/filter runtime already uses console.warn for native diagnostic adaptation. No fake style-parent86 profile: native TextFormatColl excludes86. Full platform logging filtering/format/location and full attribute/default/client lifetime are not certified by this bounded getter correction. A task-local terminal discovery accidentally used the apps/office relative vitest path from repository root (exit127); no test ran and no production issue occurred. New test's guessed GetItems API was caught during actual item-set inventory before validation and will use the real entries contract. No scope/criteria drift.

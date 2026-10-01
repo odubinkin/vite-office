@@ -1,0 +1,295 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "unchanged native getter/Has/effective attribute owners and OSL/SAL warning chain; explicit item/default/log sink adapters; warning-enabled browser console adaptation",
+  "operations": [
+    [
+      "set",
+      84,
+      0
+    ],
+    [
+      "set",
+      85,
+      1
+    ],
+    [
+      "set",
+      86,
+      0
+    ],
+    [
+      "set",
+      85,
+      0
+    ],
+    [
+      "set",
+      86,
+      7
+    ],
+    [
+      "set",
+      86,
+      -32768
+    ],
+    [
+      "set",
+      86,
+      -1
+    ],
+    [
+      "set",
+      86,
+      32767
+    ],
+    [
+      "clear",
+      86,
+      0
+    ],
+    [
+      "clear",
+      84,
+      0
+    ],
+    [
+      "clear",
+      85,
+      0
+    ]
+  ],
+  "profiles": [
+    {
+      "warnings": false,
+      "states": [
+        {
+          "value": 1,
+          "direct": false,
+          "count": 0,
+          "allocated": false,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 1,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 2,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 0,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 0,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 7,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": -32768,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": -1,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 32767,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 2,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 1,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 0,
+          "allocated": false,
+          "inParent": true,
+          "diagnostics": []
+        }
+      ]
+    },
+    {
+      "warnings": true,
+      "states": [
+        {
+          "value": 1,
+          "direct": false,
+          "count": 0,
+          "allocated": false,
+          "inParent": true,
+          "diagnostics": [
+            {
+              "area": "legacy.osl",
+              "message": "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node."
+            }
+          ]
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 1,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": [
+            {
+              "area": "legacy.osl",
+              "message": "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node."
+            }
+          ]
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 2,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": [
+            {
+              "area": "legacy.osl",
+              "message": "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node."
+            }
+          ]
+        },
+        {
+          "value": 0,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 0,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 7,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": -32768,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": -1,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 32767,
+          "direct": true,
+          "count": 3,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": []
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 2,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": [
+            {
+              "area": "legacy.osl",
+              "message": "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node."
+            }
+          ]
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 1,
+          "allocated": true,
+          "inParent": true,
+          "diagnostics": [
+            {
+              "area": "legacy.osl",
+              "message": "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node."
+            }
+          ]
+        },
+        {
+          "value": 1,
+          "direct": false,
+          "count": 0,
+          "allocated": false,
+          "inParent": true,
+          "diagnostics": [
+            {
+              "area": "legacy.osl",
+              "message": "<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
