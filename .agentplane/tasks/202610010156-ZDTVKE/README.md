@@ -1,10 +1,11 @@
 ---
 id: "202610010156-ZDTVKE"
 title: "Restore native repeated-sublist restart ownership"
-status: "DOING"
+result_summary: "Restored native repeated-sublist import ownership and pending restart,including signed16 count boundaries. Native uncounted export omission retained;implicit-restart export splitting and wider contracts remain separate follow-ups. Full upstream goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Actual block instances are now retained by helper;item owns start and signed16 sublist count;block owns inherited pending restart and returns it before pop;first paragraph consumes it irrespective of counted state. Existing identity/rule resolution is unchanged. Reviewed primary excerpts,ownership and genuine ODT tests,diff and final terminal log rather than relying on status metadata."
     - "Native1536 trees/10752 states and9 count-boundary states with explicit adapters,32 genuine packages/copies/Worker16,reopen projections and unchanged651/109/19 full verification satisfy this import scope. Evidence relocation changes only3 paths;schema,gates,thresholds,registered divergences and whole-module status remain unchanged."
-commit: null
+commit:
+  hash: "c79a6ff3539469ea8eb8f3ddccdd437adb8eb847"
+  message: "🧩 ZDTVKE code: restore native repeated-sublist restart ownership"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned repeated-sublist count and pending block restart inheritance,consumption and return under the persistent approved goal."
+  -
+    author: "CODER"
+    body: "Verified: source-owned repeated-sublist restart inheritance,consumption,return and signed16 count pass native1536 trees/10752 states plus9 boundaries,32 real ODT packages and unchanged651/109/19 tests with both100% coverage;quality pass at actual code c79a6ff3539469ea8eb8f3ddccdd437adb8eb847."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source-owned repeated-sublist restart inheritance/consumption/return and signed16 count match bounded primary probes;32 genuine ODT packages/copies/Worker16 pass. Full unchanged verify session36449 terminal exit0:651/109/19 tests,both100% coverage,all gates. Doctor/routing/diff pass;explicit export and broader contracts remain unverified."
+  -
+    type: "status"
+    at: "2026-10-01T02:42:55.605Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source-owned repeated-sublist restart inheritance,consumption,return and signed16 count pass native1536 trees/10752 states plus9 boundaries,32 real ODT packages and unchanged651/109/19 tests with both100% coverage;quality pass at actual code c79a6ff3539469ea8eb8f3ddccdd437adb8eb847."
 doc_version: 3
-doc_updated_at: "2026-10-01T02:42:38.322Z"
+doc_updated_at: "2026-10-01T02:42:55.608Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
