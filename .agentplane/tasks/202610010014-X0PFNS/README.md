@@ -1,10 +1,11 @@
 ---
 id: "202610010014-X0PFNS"
 title: "Restore native hierarchical list counter calculation"
-status: "DOING"
+result_summary: "Native hierarchical zero starts/restarts and uncounted/continuation calculation restored under SwNumberTreeNode/SwNodeNum ownership. 640 application, 109 inventory and 19 browser tests pass with both 100% coverage suites. Parent goal remains active; next separate audit restores phantom construction for skipped levels."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts"
   findings:
     - "SwNumberTreeNode now owns links, signed counters, first/sibling calculation and vectors; SwNodeNum owns counted/restart/start/descendant numbering policy. Numeric-zero sentinel is removed; zero starts/restarts, signed uncounted-first values, counted descendants and previous-subtree continuation match 1048 compiled-native legal no-phantom hierarchies / 5016 states. Five core tests and seven common/automatic ODT cases verify actual labels, owned rule/item-set copies, Worker v16, selected XML and reopen. Full unchanged verify passes 640 application, 109 inventory and 19 browser tests with both 100% coverage suites. Old blanket SwNodeNum parity metadata is corrected to unverified; registered save/open/recovery is preserved."
-commit: null
+commit:
+  hash: "203555bcef7d193f0ff1ec7869d4c4f021d2a994"
+  message: "🧩 X0PFNS code: restore native hierarchical list counters"
 comments:
   -
     author: "CODER"
     body: "Start: restore native hierarchical first/sibling counter calculation and source ownership in the current direct checkout under the persistent approved goal."
+  -
+    author: "CODER"
+    body: "Verified: source-owned hierarchical first/sibling counters restore zero progression and native uncounted/continuation semantics; compiled 1048-tree/5016-state comparison and unchanged full mandatory verification pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final unchanged verify exits 0: 640 application/109 inventory/19 browser checks and both 100% coverage suites. Compiled unmodified native hierarchy/node/vector excerpts match 1048 trees / 5016 states; source-derived zero/restart/uncounted/continuation and genuine common/automatic ODT/copy/Worker/XML/reopen assertions pass. Doctor zero errors with two prior warnings; routing/diff pass. Full phantom/lazy/continuous/redline/lifecycle and uncounted XML transport remain unverified; no full parity claim."
+  -
+    type: "status"
+    at: "2026-10-01T00:35:49.298Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source-owned hierarchical first/sibling counters restore zero progression and native uncounted/continuation semantics; compiled 1048-tree/5016-state comparison and unchanged full mandatory verification pass."
 doc_version: 3
-doc_updated_at: "2026-10-01T00:34:38.788Z"
+doc_updated_at: "2026-10-01T00:35:49.299Z"
 doc_updated_by: "CODER"
 description: "Iteration 28 of persistent upstream parity goal: remove zero-as-uninitialized counter emulation, restore source-owned first/sibling hierarchical calculation and node count/restart/start contracts for existing list trees; preserve registered save/open/recovery deviations."
 sections:
