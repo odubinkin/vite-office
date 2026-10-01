@@ -4,7 +4,7 @@ title: "Restore native numbering rule copy assignment reset and scalar metadata 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,7 +48,7 @@ events:
     state: "needs_rework"
     note: "Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:48:52.462Z"
+doc_updated_at: "2026-10-01T14:50:01.130Z"
 doc_updated_by: "CODER"
 description: "Iteration47: restore complete native SwNumRule copy/Assign/Reset and value-equality responsibilities with exact metadata/defaults and distinction between owned and effective levels. Preserve pointer assignment identity,recipient default mode/list ID and client ownership;source copy resets count-phantom/redline policy as native does. Persist scalar rule state across Worker16 with native legacy defaults. No new rendering/continuous-tree/UI feature or registered IO/recovery change; broader lifetime/style/name-map/counter obligations remain unverified."
 sections:
@@ -65,70 +65,29 @@ sections:
     3. Focused regression tests then full original npm run verify pass unchanged100% app/inventory thresholds and all format/lint/type/dependency/resource/unit/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates. Run ap doctor,node .agentplane/policy/check-routing.mjs,git diff --check and exact scope review. No exclusions,gates or original assertion weakening.
     4. Actual CODE SHA separate from artifact/quality/close commits,canonical verification and separate EVALUATOR phase;finish leaf only with clean final tracked/untracked state. Parent/full goal remain active with a measured next gap;no broad module equivalence.
   Verification: |-
-    Pending: no implementation or completed acceptance verification claimed. Record full source/profile limits,actual commands/results and CODE before closure.
+    Actual CODE: 290ed15460229ef91f75e647018405c85f2c31af. Seven approved implementation/test/native fixture/evidence paths. Artifact/quality/close SHAs are separate;full parent/goal active. Earlier premature ok was corrected to rework before actual CODE creation;never finish against artifact b77faa.
 
-    <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-01T14:48:20.182Z — VERIFY — ok
+    Command: python3 .agentplane/tasks/202610011419-EHEH05/build-native.py;clang++ -std=c++20 -fsanitize=address,undefined -fno-omit-frame-pointer .agentplane/tasks/202610011419-EHEH05/native-rule.cxx -o .agentplane/tmp/numbering47/native-rule;ASAN_OPTIONS=detect_leaks=0 .agentplane/tmp/numbering47/native-rule.
+    Result: pass.
+    Evidence: native-build.log/native-run.log clean;native-output.json matches literal native fixture;native-identities.json has pin9bc445578031fecf56086729d8e4940c77e14d65,30 complete definitions/inline/constants/header identities,full profile hash and prior44/46 profiles.48 mixed traces/432 rule states,18 equality branches,7 narrowing boundaries,native defaults/UNKNOWN65535. Fixture/profile integrity checked.
+    Scope: complete unchanged selected rule ctor/copy/Assign/Reset/Equals/ref/pointer Set/Get/scalar bodies and actual ushort/byte fields. Named source text/style-client vector inputs,direct native invalid flag,ASCII UIName,family-only Font/COW,platform/global-service/graphics/null-style adapters bound proof. Complete native name-map/paragraph styles/GrabBag/grf links/Font/graphics/global/destructor/client lifetime/nondefault consumers are individually unverified;no native full-build claim.
 
-    By: CODER
+    Command: ../../node_modules/.bin/vitest run src/sw/source/core/doc/number-rule-lifecycle.test.ts src/sw/source/core/doc/number-pointer.test.ts src/sw/source/core/doc/number-format.test.ts src/sw/source/core/doc/number-ownership.test.ts src/sw/source/core/txtnode/number-classification.test.ts (cwd apps/office).
+    Result: pass after red.log five missing-API/default regressions.
+    Evidence: focused-second.log24 tests/5 files. Final full run includes refined exact pool enum contract and actual same-name attached Worker owner/client assertions.
+    Scope: all10 raw/effective levels,pointer retention/clear/new ownership,independent copies,self/equal assignment,metadata copied/retained,empty/repeated Reset,selected/ignored equality,ushort/byte narrowing,actual same-name document client/list/registry and Worker owner,strict metadata domains/legacy defaults,supported genuine ODT existing format fields. Full ODT metadata and nondefault continuous/phantom counter/rendering consumers remain unverified.
 
-    Note: Verified47 selected native rule lifecycle/scalar ownership. Actual CODE recorded in Verification/actual-code.txt;native432 states18 equality7 narrowing,ASanUBSan clean;focused24,full727app109inventory19browser100% both. All gates and scope pass;full goal active,next phantom consumer gap measured. No module/status/IO promotion.
-    Attempts: 0
+    Command: npm run verify (final verify-third.log).
+    Result: pass,exit0.
+    Evidence:727 app tests/164 files,109 inventory tests/36 files,19 browser tests.100% app10895 statements/8226 branches/2931 functions/9992 lines;100% inventory1523/1080/384/1464. All original format/lint/type/dependency/resource/unit/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates pass.212 runtime sources/885 imports/13 allowed edges;480 JSDoc files/483 size files;213 modules137mapped60browser16infrastructure. First docs-only failure/second pass retained;last refinements pass full third run. No original test/assertion/gate weakening or mandatory skip.
+    Scope: approved leaf acceptance only;green gates are not whole-module or full-goal proof.
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:44:03.835Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+    Command: git diff --check;node .agentplane/policy/check-routing.mjs;ap doctor;exact CODE/evidence status scope review.
+    Result: pass.
+    Evidence: final-checks.json/code-scope.json. Doctor0 errors/2 preexisting warnings:managed shim readiness and immutable F1JT8K close/implementation attribution. Only3 existing evidence records updated;semantic statuses unchanged. No policy/dependency/coverage/registered IO/recovery changes. Final clean tracked/untracked state required after leaf closure.
+    Scope: same-actor separate EVALUATOR review required;no independent reviewer claim. Actual CODE read from git HEAD after AgentPlane own commit bookkeeping amend.
 
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
-    - old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-    - current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610011419-EHEH05
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610011419-EHEH05
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    ### 2026-10-01T14:48:52.409Z — VERIFY — needs_rework
-
-    By: CODER
-
-    Note: Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA.
-    Attempts: 1
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:48:52.081Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
-    - old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-    - current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610011419-EHEH05
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task complete 202610011419-EHEH05 --result verified-202610011419-EHEH05 --commit b77faa092803bed02b41ee171b6b6c8df1511154
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: true
-    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-    - risks: none
-
-    <!-- END VERIFICATION RESULTS -->
+    Next measured gap: complete unchanged native SwNodeNum::IsCountPhantoms (followup-phantoms.cxx/identities/native.json) versus actual local SwNodeNum (followup-local.ts/json) differs3/5 profiles:bound native !IsContinusNum && IsCountPhantoms,local always true,no-rule native true. ASan/UBSan clean. This read-only audit leaves SwNodeNum/SwNumberTree unchanged in47;next single correction audits this consumer. Full goal/parent active and all other remaining core/browser obligations individually unverified.
   Rollback Plan: "If rollback is needed,use a new executable task to revert reviewed CODE locally and rerun identical verification. Do not rewrite history or modify immutable DONE leaves. Retain source/native/failure evidence,parent/full goal and registered IO/recovery exceptions."
   Findings: |-
     Read-only clean preflight main57d763b328b9,only parent active,direct route,four matched modules loaded,no user-instructions file. Native Assign/Reset preserve default mode/list ID and unmentioned client containers;copy ctor separately resets CountPhantoms=true and UsedByRedline=false. Existing local clone copies only already stored fields;selected native scalar metadata is absent. Native UNKNOWN=USHRT_MAX65535;prior format-only C++ profile used named pool-placeholder0 and never certified pool defaults. Correct it before metadata proof. Complete46 followup-rule bodies and four states remain read-only evidence. Native nondefault continuous-tree/phantom consumers and full name-map/lifetime/style/GrabBag behavior exceed this leaf;do not claim those implemented from scalar metadata or green tests.
@@ -182,70 +141,29 @@ CODER direct checkout. Three implementation paths: sw/source/core/doc/number.ts 
 
 ## Verification
 
-Pending: no implementation or completed acceptance verification claimed. Record full source/profile limits,actual commands/results and CODE before closure.
+Actual CODE: 290ed15460229ef91f75e647018405c85f2c31af. Seven approved implementation/test/native fixture/evidence paths. Artifact/quality/close SHAs are separate;full parent/goal active. Earlier premature ok was corrected to rework before actual CODE creation;never finish against artifact b77faa.
 
-<!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-01T14:48:20.182Z — VERIFY — ok
+Command: python3 .agentplane/tasks/202610011419-EHEH05/build-native.py;clang++ -std=c++20 -fsanitize=address,undefined -fno-omit-frame-pointer .agentplane/tasks/202610011419-EHEH05/native-rule.cxx -o .agentplane/tmp/numbering47/native-rule;ASAN_OPTIONS=detect_leaks=0 .agentplane/tmp/numbering47/native-rule.
+Result: pass.
+Evidence: native-build.log/native-run.log clean;native-output.json matches literal native fixture;native-identities.json has pin9bc445578031fecf56086729d8e4940c77e14d65,30 complete definitions/inline/constants/header identities,full profile hash and prior44/46 profiles.48 mixed traces/432 rule states,18 equality branches,7 narrowing boundaries,native defaults/UNKNOWN65535. Fixture/profile integrity checked.
+Scope: complete unchanged selected rule ctor/copy/Assign/Reset/Equals/ref/pointer Set/Get/scalar bodies and actual ushort/byte fields. Named source text/style-client vector inputs,direct native invalid flag,ASCII UIName,family-only Font/COW,platform/global-service/graphics/null-style adapters bound proof. Complete native name-map/paragraph styles/GrabBag/grf links/Font/graphics/global/destructor/client lifetime/nondefault consumers are individually unverified;no native full-build claim.
 
-By: CODER
+Command: ../../node_modules/.bin/vitest run src/sw/source/core/doc/number-rule-lifecycle.test.ts src/sw/source/core/doc/number-pointer.test.ts src/sw/source/core/doc/number-format.test.ts src/sw/source/core/doc/number-ownership.test.ts src/sw/source/core/txtnode/number-classification.test.ts (cwd apps/office).
+Result: pass after red.log five missing-API/default regressions.
+Evidence: focused-second.log24 tests/5 files. Final full run includes refined exact pool enum contract and actual same-name attached Worker owner/client assertions.
+Scope: all10 raw/effective levels,pointer retention/clear/new ownership,independent copies,self/equal assignment,metadata copied/retained,empty/repeated Reset,selected/ignored equality,ushort/byte narrowing,actual same-name document client/list/registry and Worker owner,strict metadata domains/legacy defaults,supported genuine ODT existing format fields. Full ODT metadata and nondefault continuous/phantom counter/rendering consumers remain unverified.
 
-Note: Verified47 selected native rule lifecycle/scalar ownership. Actual CODE recorded in Verification/actual-code.txt;native432 states18 equality7 narrowing,ASanUBSan clean;focused24,full727app109inventory19browser100% both. All gates and scope pass;full goal active,next phantom consumer gap measured. No module/status/IO promotion.
-Attempts: 0
+Command: npm run verify (final verify-third.log).
+Result: pass,exit0.
+Evidence:727 app tests/164 files,109 inventory tests/36 files,19 browser tests.100% app10895 statements/8226 branches/2931 functions/9992 lines;100% inventory1523/1080/384/1464. All original format/lint/type/dependency/resource/unit/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates pass.212 runtime sources/885 imports/13 allowed edges;480 JSDoc files/483 size files;213 modules137mapped60browser16infrastructure. First docs-only failure/second pass retained;last refinements pass full third run. No original test/assertion/gate weakening or mandatory skip.
+Scope: approved leaf acceptance only;green gates are not whole-module or full-goal proof.
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:44:03.835Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
+Command: git diff --check;node .agentplane/policy/check-routing.mjs;ap doctor;exact CODE/evidence status scope review.
+Result: pass.
+Evidence: final-checks.json/code-scope.json. Doctor0 errors/2 preexisting warnings:managed shim readiness and immutable F1JT8K close/implementation attribution. Only3 existing evidence records updated;semantic statuses unchanged. No policy/dependency/coverage/registered IO/recovery changes. Final clean tracked/untracked state required after leaf closure.
+Scope: same-actor separate EVALUATOR review required;no independent reviewer claim. Actual CODE read from git HEAD after AgentPlane own commit bookkeeping amend.
 
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
-- old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-- current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610011419-EHEH05
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610011419-EHEH05
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-### 2026-10-01T14:48:52.409Z — VERIFY — needs_rework
-
-By: CODER
-
-Note: Acceptance tests pass,but prior canonical ok note was premature: CODE commit rejected by subject grammar and actual-code.txt absent. Correct commit attribution and Verification before canonical ok;do not finish using artifact b77faa SHA.
-Attempts: 1
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T14:48:52.081Z, excerpt_hash=sha256:bf883cba010c76df5bdcb61c10f9e80e985b599a7a44458f5c46ab229e8616af
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011419-EHEH05/blueprint/resolved-snapshot.json
-- old_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-- current_digest: e0ebc0c325c369cb95335bf8fe6e3c70b81d27e70f9eab0119313f786f6f3477
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610011419-EHEH05
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task complete 202610011419-EHEH05 --result verified-202610011419-EHEH05 --commit b77faa092803bed02b41ee171b6b6c8df1511154
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: true
-- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-- risks: none
-
-<!-- END VERIFICATION RESULTS -->
+Next measured gap: complete unchanged native SwNodeNum::IsCountPhantoms (followup-phantoms.cxx/identities/native.json) versus actual local SwNodeNum (followup-local.ts/json) differs3/5 profiles:bound native !IsContinusNum && IsCountPhantoms,local always true,no-rule native true. ASan/UBSan clean. This read-only audit leaves SwNodeNum/SwNumberTree unchanged in47;next single correction audits this consumer. Full goal/parent active and all other remaining core/browser obligations individually unverified.
 
 ## Rollback Plan
 

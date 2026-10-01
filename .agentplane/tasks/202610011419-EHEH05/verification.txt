@@ -1,0 +1,23 @@
+Actual CODE: 290ed15460229ef91f75e647018405c85f2c31af. Seven approved implementation/test/native fixture/evidence paths. Artifact/quality/close SHAs are separate;full parent/goal active. Earlier premature ok was corrected to rework before actual CODE creation;never finish against artifact b77faa.
+
+Command: python3 .agentplane/tasks/202610011419-EHEH05/build-native.py;clang++ -std=c++20 -fsanitize=address,undefined -fno-omit-frame-pointer .agentplane/tasks/202610011419-EHEH05/native-rule.cxx -o .agentplane/tmp/numbering47/native-rule;ASAN_OPTIONS=detect_leaks=0 .agentplane/tmp/numbering47/native-rule.
+Result: pass.
+Evidence: native-build.log/native-run.log clean;native-output.json matches literal native fixture;native-identities.json has pin9bc445578031fecf56086729d8e4940c77e14d65,30 complete definitions/inline/constants/header identities,full profile hash and prior44/46 profiles.48 mixed traces/432 rule states,18 equality branches,7 narrowing boundaries,native defaults/UNKNOWN65535. Fixture/profile integrity checked.
+Scope: complete unchanged selected rule ctor/copy/Assign/Reset/Equals/ref/pointer Set/Get/scalar bodies and actual ushort/byte fields. Named source text/style-client vector inputs,direct native invalid flag,ASCII UIName,family-only Font/COW,platform/global-service/graphics/null-style adapters bound proof. Complete native name-map/paragraph styles/GrabBag/grf links/Font/graphics/global/destructor/client lifetime/nondefault consumers are individually unverified;no native full-build claim.
+
+Command: ../../node_modules/.bin/vitest run src/sw/source/core/doc/number-rule-lifecycle.test.ts src/sw/source/core/doc/number-pointer.test.ts src/sw/source/core/doc/number-format.test.ts src/sw/source/core/doc/number-ownership.test.ts src/sw/source/core/txtnode/number-classification.test.ts (cwd apps/office).
+Result: pass after red.log five missing-API/default regressions.
+Evidence: focused-second.log24 tests/5 files. Final full run includes refined exact pool enum contract and actual same-name attached Worker owner/client assertions.
+Scope: all10 raw/effective levels,pointer retention/clear/new ownership,independent copies,self/equal assignment,metadata copied/retained,empty/repeated Reset,selected/ignored equality,ushort/byte narrowing,actual same-name document client/list/registry and Worker owner,strict metadata domains/legacy defaults,supported genuine ODT existing format fields. Full ODT metadata and nondefault continuous/phantom counter/rendering consumers remain unverified.
+
+Command: npm run verify (final verify-third.log).
+Result: pass,exit0.
+Evidence:727 app tests/164 files,109 inventory tests/36 files,19 browser tests.100% app10895 statements/8226 branches/2931 functions/9992 lines;100% inventory1523/1080/384/1464. All original format/lint/type/dependency/resource/unit/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gates pass.212 runtime sources/885 imports/13 allowed edges;480 JSDoc files/483 size files;213 modules137mapped60browser16infrastructure. First docs-only failure/second pass retained;last refinements pass full third run. No original test/assertion/gate weakening or mandatory skip.
+Scope: approved leaf acceptance only;green gates are not whole-module or full-goal proof.
+
+Command: git diff --check;node .agentplane/policy/check-routing.mjs;ap doctor;exact CODE/evidence status scope review.
+Result: pass.
+Evidence: final-checks.json/code-scope.json. Doctor0 errors/2 preexisting warnings:managed shim readiness and immutable F1JT8K close/implementation attribution. Only3 existing evidence records updated;semantic statuses unchanged. No policy/dependency/coverage/registered IO/recovery changes. Final clean tracked/untracked state required after leaf closure.
+Scope: same-actor separate EVALUATOR review required;no independent reviewer claim. Actual CODE read from git HEAD after AgentPlane own commit bookkeeping amend.
+
+Next measured gap: complete unchanged native SwNodeNum::IsCountPhantoms (followup-phantoms.cxx/identities/native.json) versus actual local SwNodeNum (followup-local.ts/json) differs3/5 profiles:bound native !IsContinusNum && IsCountPhantoms,local always true,no-rule native true. ASan/UBSan clean. This read-only audit leaves SwNodeNum/SwNumberTree unchanged in47;next single correction audits this consumer. Full goal/parent active and all other remaining core/browser obligations individually unverified.
