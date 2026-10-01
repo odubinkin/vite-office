@@ -1,10 +1,11 @@
 ---
 id: "202609302342-JM15NR"
 title: "Restore native ODF numbering marker parameter transport"
-status: "DOING"
+result_summary: "Native ODF marker parameters preserved for existing Arabic/bullet levels; standard ODF 1.3 approximation retained, export arrays refactored, 634 application/109 inventory/19 browser tests pass with both 100% coverage suites. Full goal remains active; next separate correction is zero-start sibling counter continuation."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts"
   findings:
     - "Code now preserves raw affixes, native start/display parsing and optional alias order/empty patterns, applies ListFormat last, and delegates standard ODF marker output to xmlnume with native signed narrowing/omissions. Actual ODT tests cover common/automatic states, labels, clones, Worker v16 and explicit standard-format approximation; compiled primary excerpts match 144 declaration/applied/export cases. Full unchanged verify passes both 100% suites and all 19 browser checks; module statuses stay unverified. Intentional save/open/recovery behavior is preserved."
-commit: null
+commit:
+  hash: "c8d63aa66bdeba160dbcf355c0ec2ed059f66259"
+  message: "🧩 JM15NR code: preserve native ODF marker parameters"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native ODF marker parameter transport and source-owned per-level export under the continuing parity goal."
+  -
+    author: "CODER"
+    body: "Verified: native ODF marker transport and source-owned property-record export; compiled 144-case native comparison and full unchanged mandatory verification pass."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Unchanged npm run verify exits 0: 634 application, 109 inventory and 19 browser tests, both 100% coverage suites; 144 native declaration/applied/export differential cases match. Genuine common/automatic ODT, clone, Worker v16, selected XML and native standard-format approximation pass. Doctor zero errors with two prior warnings, routing/diff pass. Wider numbering and zero-start continuation are separate unresolved obligations; no full parity claim."
+  -
+    type: "status"
+    at: "2026-10-01T00:09:46.443Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native ODF marker transport and source-owned property-record export; compiled 144-case native comparison and full unchanged mandatory verification pass."
 doc_version: 3
-doc_updated_at: "2026-10-01T00:08:51.842Z"
+doc_updated_at: "2026-10-01T00:09:46.444Z"
 doc_updated_by: "CODER"
 description: "Preserve native prefix/suffix/start/display and ListFormat properties through XML declaration, Writer UNO application and ODF 1.3 export; refactor rule export into source-owned per-level property records."
 sections:
