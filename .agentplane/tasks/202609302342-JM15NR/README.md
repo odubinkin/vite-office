@@ -4,7 +4,7 @@ title: "Restore native ODF numbering marker parameter transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore native ODF marker parameter transport and source-owned per-level export under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:55:14.212Z"
+doc_updated_at: "2026-10-01T00:04:53.571Z"
 doc_updated_by: "CODER"
 description: "Preserve native prefix/suffix/start/display and ListFormat properties through XML declaration, Writer UNO application and ODF 1.3 export; refactor rule export into source-owned per-level property records."
 sections:
@@ -63,6 +63,10 @@ sections:
     - Observation: Focused run passes the migrated exporter/context/UNO and old suffix fixture checks; all three new package fixtures fail before semantic assertions because readOdtDocument requires a metadata argument.
       Impact: The new fixture helper call contract is wrong; no marker behavior mismatch is inferred.
       Resolution: Use the existing reader metadata contract and rerun these fixtures, preserving planned source assertions and full gates.
+
+    - Observation: The bounded C++ probe initially lacked the existing native GetStart inline accessor in its dependency shim; adding the unmodified header accessor fixed compilation. The fixture metadata repair passes all three genuine-package tests.
+      Impact: Neither failure indicates a runtime marker mismatch.
+      Resolution: Compiled unmodified pinned attribute loop, generated ListFormat block, marker property publication/UNO branches, signed start projection and export predicates. All 144 declarations, 144 applied marker states and 144 standard export attribute sets match local runtime. ASCII OUString/modern-no-build-id/Arabic-bullet/standard-ODF bounds are explicit; no full-native-build claim. The exact scripts/results are task-local; wider and ancient-generator dependencies remain unresolved.
 id_source: "generated"
 ---
 ## Summary
@@ -104,3 +108,7 @@ Previous turn is progress: iteration26 child 202609302319-9KTM99 DONE, implement
 - Observation: Focused run passes the migrated exporter/context/UNO and old suffix fixture checks; all three new package fixtures fail before semantic assertions because readOdtDocument requires a metadata argument.
   Impact: The new fixture helper call contract is wrong; no marker behavior mismatch is inferred.
   Resolution: Use the existing reader metadata contract and rerun these fixtures, preserving planned source assertions and full gates.
+
+- Observation: The bounded C++ probe initially lacked the existing native GetStart inline accessor in its dependency shim; adding the unmodified header accessor fixed compilation. The fixture metadata repair passes all three genuine-package tests.
+  Impact: Neither failure indicates a runtime marker mismatch.
+  Resolution: Compiled unmodified pinned attribute loop, generated ListFormat block, marker property publication/UNO branches, signed start projection and export predicates. All 144 declarations, 144 applied marker states and 144 standard export attribute sets match local runtime. ASCII OUString/modern-no-build-id/Arabic-bullet/standard-ODF bounds are explicit; no full-native-build claim. The exact scripts/results are task-local; wider and ancient-generator dependencies remain unresolved.
