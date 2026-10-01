@@ -4,7 +4,7 @@ title: "Restore native numbering rule copy assignment reset and scalar metadata 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the approved iteration47 complete native rule lifecycle/scalar ownership correction under persistent user goal approval;preserve registered IO exceptions and every original gate."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:40:01.690Z"
+doc_updated_at: "2026-10-01T14:44:03.835Z"
 doc_updated_by: "CODER"
 description: "Iteration47: restore complete native SwNumRule copy/Assign/Reset and value-equality responsibilities with exact metadata/defaults and distinction between owned and effective levels. Preserve pointer assignment identity,recipient default mode/list ID and client ownership;source copy resets count-phantom/redline policy as native does. Persist scalar rule state across Worker16 with native legacy defaults. No new rendering/continuous-tree/UI feature or registered IO/recovery change; broader lifetime/style/name-map/counter obligations remain unverified."
 sections:
@@ -72,6 +72,10 @@ sections:
     - Observation: Full verify-first passes727 app tests/164 files,109 inventory tests/36 files,19 browser tests,build/static and unchanged100% both coverages. check:docs fails at number.ts constructor overload declarations159/161 because both comments omit required @returns.
       Impact: Documentation-only local omission prevents full completion; no native lifecycle, original assertion or coverage failure. Later file-size/source/provenance/invariant/parity gates have not executed in this first run.
       Resolution: Add @returns Nothing to both overload declaration comments inside approved number.ts scope, then repeat full original npm run verify. Retain the failed log and unchanged gates; no scope or verification criteria drift.
+
+    - Observation: Full verify-second passes all gates:727 app tests,109 inventory,19 browser,unchanged100% coverage,build/static/docs/size/source/provenance/invariants/parity. Scope review found the new pool format accessors were typed number although native uses SwPoolFormatId.
+      Impact: Runtime narrowing is correct, but the source scalar enum contract should be preserved. This is within the already approved exact scalar-contract scope; no workflow or verification criteria change.
+      Resolution: Use SwPoolFormatId for stored field/getter/setter and explicit native-style enum casts in typed test inputs. Add actual same-name attached Worker owner/client assertions for nondefault phantom/redline transfer; no consumer/rendering equivalence claim. Run final full verify after these scoped refinements.
 id_source: "generated"
 ---
 ## Summary
@@ -123,3 +127,7 @@ Read-only clean preflight main57d763b328b9,only parent active,direct route,four 
 - Observation: Full verify-first passes727 app tests/164 files,109 inventory tests/36 files,19 browser tests,build/static and unchanged100% both coverages. check:docs fails at number.ts constructor overload declarations159/161 because both comments omit required @returns.
   Impact: Documentation-only local omission prevents full completion; no native lifecycle, original assertion or coverage failure. Later file-size/source/provenance/invariant/parity gates have not executed in this first run.
   Resolution: Add @returns Nothing to both overload declaration comments inside approved number.ts scope, then repeat full original npm run verify. Retain the failed log and unchanged gates; no scope or verification criteria drift.
+
+- Observation: Full verify-second passes all gates:727 app tests,109 inventory,19 browser,unchanged100% coverage,build/static/docs/size/source/provenance/invariants/parity. Scope review found the new pool format accessors were typed number although native uses SwPoolFormatId.
+  Impact: Runtime narrowing is correct, but the source scalar enum contract should be preserved. This is within the already approved exact scalar-contract scope; no workflow or verification criteria change.
+  Resolution: Use SwPoolFormatId for stored field/getter/setter and explicit native-style enum casts in typed test inputs. Add actual same-name attached Worker owner/client assertions for nondefault phantom/redline transfer; no consumer/rendering equivalence claim. Run final full verify after these scoped refinements.
