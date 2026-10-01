@@ -1,10 +1,11 @@
 ---
 id: "202610010940-WW4SFA"
 title: "Restore Writer list restart item default"
-status: "DOING"
+result_summary: "Writer restart item default1 restored with native literal/state/Undo/Worker/ODT evidence;full parity goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -53,11 +54,16 @@ quality_review:
     - "Complete pinned initializer and unchanged native SfxInt16Item constructor/GetValue/Clone compile and byte-identity checks confirm86/1 and independent clone. Actual pre-edit normal/reading pool,node and clear delta0 recorded. The corrected pool default1 remains distinct from primitive constructor default0 and explicit snapshot0."
     - "Meaningful tests prove default/direct/parent states and broadcast fallbacks,rule start9 distinct from explicit0/7,real SwUndoInsNum actions/cursor restoration,Worker16,genuine common/automatic Arabic/bullet ODT/import/reopen. All prior697app assertions retained plus2;699app109inventory19browser pass,both100% all4 metrics,all static/source gates and doctor0errors2knownwarnings/routing/clean state."
     - "No getter/setter expansion,IO policy,config/schema/gate or semantic status promotion. Initial absent SetListKind test-fixture/type failures retained and repaired with real SetAttr(SwNumRuleItem). Terminal-padding diff diagnostic corrected only after live verify ended. Actual separate flag-retention mismatch is preserved in followup baseline,not hidden by default correction."
-commit: null
+commit:
+  hash: "e1de8fc9c500b08fd39e6faf3517423563222526"
+  message: "🔧 WW4SFA code: restore Writer list restart item default"
 comments:
   -
     author: "CODER"
     body: "Start: correct source-proven registered list restart item default under persistent approved goal,with actual pre-edit baseline and state/Undo/Worker/ODT evidence;retain all registered IO deviations and full-goal residual obligations."
+  -
+    author: "CODER"
+    body: "Verified: source-proven RES_PARATR_LIST_RESTARTVALUE registered SfxInt16 default restored0 to1;native complete initializer and unchanged constructor/GetValue/Clone confirm typed value and independent clone. Actual codee1de8fc9c500b08fd39e6faf3517423563222526 has EVALUATOR pass;699app109inventory19browser,both100% allfour metrics,all static/source gates,doctor0errors2knownwarnings,routing/diff/clean code. Direct/default/parent deltas,rule-start9,explicit0/7,real Undo,Worker16,genuine common/automatic Arabic/bullet ODT/reopen pass. Registered IO unchanged;SetListRestart flag/value retention,full registry/defaults/client lifetime and parent/goal remain open."
 events:
   -
     type: "status"
@@ -72,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: unchanged full npm run verify passed699app109inventory19browser,both100% all4 metrics;one complete pinned default initializer plus unchanged constructor/GetValue/Clone and actual pool/state/delta/rule-start9/explicit0and7/Undo/Worker16/ODT regressions. Doctor0errors2knownwarnings,routing/diff pass. One pool default only;whole registry/module/parent/goal and flag-setter contract remain open."
+  -
+    type: "status"
+    at: "2026-10-01T10:02:47.372Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source-proven RES_PARATR_LIST_RESTARTVALUE registered SfxInt16 default restored0 to1;native complete initializer and unchanged constructor/GetValue/Clone confirm typed value and independent clone. Actual codee1de8fc9c500b08fd39e6faf3517423563222526 has EVALUATOR pass;699app109inventory19browser,both100% allfour metrics,all static/source gates,doctor0errors2knownwarnings,routing/diff/clean code. Direct/default/parent deltas,rule-start9,explicit0/7,real Undo,Worker16,genuine common/automatic Arabic/bullet ODT/reopen pass. Registered IO unchanged;SetListRestart flag/value retention,full registry/defaults/client lifetime and parent/goal remain open."
 doc_version: 3
-doc_updated_at: "2026-10-01T10:01:48.527Z"
+doc_updated_at: "2026-10-01T10:02:47.374Z"
 doc_updated_by: "CODER"
 description: "Iteration40: restore RES_PARATR_LIST_RESTARTVALUE pool default1 from pinned bastyp/init.cxx instead of local0;prove inherited/default/direct state and real numbering,Undo,Worker16,ODT contracts without treating the default as an explicit restart. Single registered-item default correction;native full registry architecture and remaining getter/cast/client lifetime remain separate obligations. Preserve registered IO deviations and active parent goal."
 sections:
@@ -137,6 +150,10 @@ sections:
     Next boundary evidence:followup-flag-baseline.json actual node SetListRestart(true,7) then SetListRestart(false) changes [true,true,7] to [false,false,1]. Complete native ndtxt.cxx4428 SetListRestart(false) resets only RES_PARATR_LIST_ISRESTART and retains86;local wrapper also clears86. Source has separate SetAttrListRestartValue with USHRT_MAX clear and sal_Int16 conversion. SwNumberTreeTypes.hxx26 uses signed tools::Long,so do not invent an unsigned getter cast requirement. This is a separate next-task contract/architecture correction,not changed in the current one-default task. Existing list-invariants tests currently encode clearing via SetListRestart(true);use native complete body proof before changing those stale assertions. Full native registry/other defaults/clients and whole parent/goal remain active.
 
     Quality:actual implementatione1de8fc9c500b08fd39e6faf3517423563222526 reviewed with EVALUATOR pass;quality/20261001-100106299-recovery-context/quality-report.json binds actual SHA,nonempty findings/evidence and all residual obligations. After the implementation commit tracked/untracked state was clean;only generated quality artifacts and this final task finding remain to persist before finish. Canonical blueprint verification already recorded after final Verification text;do not replace that section and discard its generated record. Parent audit/unlimited goal remain active.
+extensions:
+  implementation_commit:
+    hash: "e1de8fc9c500b08fd39e6faf3517423563222526"
+    message: "🔧 WW4SFA code: restore Writer list restart item default"
 id_source: "generated"
 ---
 ## Summary
