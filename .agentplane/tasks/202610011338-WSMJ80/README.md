@@ -4,7 +4,7 @@ title: "Restore native numbering pointer Set and in-place format assignment owne
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the approved single iteration46 native pointer Set/assignment ownership correction under persistent user goal authorization; preserve reference semantics,registered IO exceptions and all gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:51:52.189Z"
+doc_updated_at: "2026-10-01T13:59:41.219Z"
 doc_updated_by: "CODER"
 description: "Iteration46: restore the complete SwNumRule pointer overload alongside unchanged reference replacement,source-owned base/Writer format assignment and same-modify registration transfer. Replace frozen owned values with mutable native owners and stable protected const references at the JS boundary. Differentially prove raw/default/identity/validity/copy/alias behavior and every already implemented format field. Preserve registered IO/recovery exceptions and all original gates; broader native platform/graphics/style/lifetime remain unverified."
 sections:
@@ -68,6 +68,10 @@ sections:
     - Observation: Named-rule selection still reproduces the Worker mismatch. Source inspection shows AddNumRule clones and returns the document-owned rule; the integration fixture had continued mutating the external source rule,so live document nodes/transport correctly retained defaults.
       Impact: The first fixture diagnosis was incomplete. Pointer behavior must be exercised on the actual returned document owner before any integration claim.
       Resolution: Retain both failed logs. Bind the integration rule to AddNumRule return,leave all literal expectations unchanged,and add supported genuine ODT export/reopen assertions for pointer-assigned fields.
+
+    - Observation: First full verify passes722app/109inventory/19browser and unchanged100% coverage. Source review confirms native SvxNumberFormat copy constructor invokes its own operator=,while local constructor still duplicates raw field-copy logic.
+      Impact: Value evidence passes,but matching the requested native ownership architecture requires making the base assignment responsibility the single copy path without derived virtual dispatch during base construction.
+      Resolution: Refactor only the approved numitem path to source defaults plus explicit base Assign in copy construction;rerun the full suite. Record current successful verify as pre-refactor evidence and retain every acceptance gate.
 id_source: "generated"
 ---
 ## Summary
@@ -115,3 +119,7 @@ Previous goal turn is PROGRESS: iteration45 actual CODE6d3f9de7b879 verified and
 - Observation: Named-rule selection still reproduces the Worker mismatch. Source inspection shows AddNumRule clones and returns the document-owned rule; the integration fixture had continued mutating the external source rule,so live document nodes/transport correctly retained defaults.
   Impact: The first fixture diagnosis was incomplete. Pointer behavior must be exercised on the actual returned document owner before any integration claim.
   Resolution: Retain both failed logs. Bind the integration rule to AddNumRule return,leave all literal expectations unchanged,and add supported genuine ODT export/reopen assertions for pointer-assigned fields.
+
+- Observation: First full verify passes722app/109inventory/19browser and unchanged100% coverage. Source review confirms native SvxNumberFormat copy constructor invokes its own operator=,while local constructor still duplicates raw field-copy logic.
+  Impact: Value evidence passes,but matching the requested native ownership architecture requires making the base assignment responsibility the single copy path without derived virtual dispatch during base construction.
+  Resolution: Refactor only the approved numitem path to source defaults plus explicit base Assign in copy construction;rerun the full suite. Record current successful verify as pre-refactor evidence and retain every acceptance gate.

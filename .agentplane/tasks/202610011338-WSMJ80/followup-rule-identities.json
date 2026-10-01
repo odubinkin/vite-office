@@ -1,0 +1,17 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "definitions": [
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )",
+      "sha256": "8540082d5fb3eec192e56925f07a17e1709ad0e22bbb149209bfcf92ce4f57b2"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "void SwNumRule::Reset( const UIName& rName )",
+      "sha256": "4df418ef30061f73395943479da22649d5f647664e286d96029aadea27a9edfe"
+    }
+  ],
+  "profileSha256": "6d9f136f1d2afe52db824b124d798038b96dd9ae08e6dc1917b30a04fe22e335",
+  "scope": "Read-only next-contract audit. Complete unchanged native rule operator=/Reset and current full native format/pointer/default profile; platform/global/style/destructor lifetimes remain unverified. Default mode/list ID are retained by native assignment/reset. No implementation46 scope expansion."
+}

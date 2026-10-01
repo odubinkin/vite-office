@@ -1,0 +1,5 @@
+{
+  "scope": "Actual existing native rule facade: assignment/reset contract APIs are absent; clone is a distinct copy constructor.",
+  "Assign": "undefined",
+  "Reset": "undefined"
+}
