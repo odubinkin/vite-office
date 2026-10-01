@@ -1,0 +1,29 @@
+# EVALUATOR opinion: pass
+
+Reviewed actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef:approved registered-item copy/commit and pre-release notification lifecycle restored;unchanged full verification passes. Parent/goal and full native pooling/default/client-lifetime obligations remain open.
+
+## Findings
+- Source responsibility is split as native:virtual SfxItemSet Changed before Put/Clear storage;SwAttrSet old/new capture/category/parent defaults;node AttrSetHandleHelper copy/commit preserves retained handles and SwContentNode owns notification-before-release/no-op distinctions. No in-node synthetic delta reconciliation or scope/gate/IO drift.
+- All692 prior app tests retain assertions plus5 meaningful native/literal tests;697app109inventory19browser pass,both100% all4metrics.24 complete unchanged native definitions and byte identities,300sequences1815 actual SwDoc/base-owner states;fixture equals regenerated native results after correcting generic86 adapter default to source1.
+- Initial compile/CWD/lint/docs/provenance errors and native destructive last-handle SIGSEGV retained;none accepted as passing evidence. Defined changing nested resets are compared;full raw native callback lifetime is unproved rather than fabricated. Current native86 default1 versus registered local0 remains separate next-task obligation.
+
+## Evidence
+- .agentplane/tasks/202610010849-VYM64Q/README.md
+- 83e10770fa8b34cc851c7bd88275935040bac0ef
+- .agentplane/tasks/202610010849-VYM64Q/verify-final.log
+- .agentplane/tasks/202610010849-VYM64Q/baseline.json
+- .agentplane/tasks/202610010849-VYM64Q/native-source-identity.json
+- .agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx
+- .agentplane/tasks/202610010849-VYM64Q/native-results.json
+- .agentplane/tasks/202610010849-VYM64Q/native-crash-case.json
+- .agentplane/tasks/202610010849-VYM64Q/doctor-final.log
+- .agentplane/tasks/202610010849-VYM64Q/routing-final.log
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Full native automatic-style pooling/dedup,const-handle sharing,refcount/surrogates,modify locks/cache,conditional/RES_AUTO_STYLE and native client lifetime remain unimplemented/unverified;destructive final-handle callback has no defined adapter oracle. Current86 default0 needs separate correction against native1. No whole-module/default/parent-audit/goal closure or unexplained prior UI-flake cause inferred.
