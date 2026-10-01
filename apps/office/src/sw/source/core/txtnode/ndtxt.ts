@@ -199,7 +199,7 @@ export class SwTextNode extends SwContentNode {
   /** Returns the effective list family from the paragraph's SwNumRule. @returns List kind. */
   public GetListKind(): WriterParagraphListKind {
     const rule = this.GetNumRule();
-    return rule === undefined ? "none" : rule.GetNumFormat(this.GetAttrListLevel()).GetKind();
+    return rule === undefined ? "none" : rule.Get(this.GetAttrListLevel()).GetKind();
   }
 
   /** Returns the SwNumRuleItem value applied to this text node. @returns Rule name, or an empty string. */
@@ -341,7 +341,7 @@ export class SwTextNode extends SwContentNode {
   public GetActualListStartValue(): number {
     if (this.IsListRestart() && this.HasAttrListRestartValue())
       return this.GetAttrListRestartValue();
-    return this.GetNumRule()?.GetNumFormat(this.GetAttrListLevel()).GetStart() ?? 1;
+    return this.GetNumRule()?.GetNumFormat(this.GetAttrListLevel())?.GetStart() ?? 1;
   }
 
   /** Returns RES_PARATR_LIST_ID, falling back to the rule's default list id like Writer. @returns Effective list identity. */
@@ -467,7 +467,7 @@ export class SwTextNode extends SwContentNode {
     return (
       this.mpNodeNum
         ?.GetNumRule()
-        ?.GetNumFormat(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
+        ?.Get(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
         .GetNumberingType() === "arabic"
     );
   }
@@ -476,7 +476,7 @@ export class SwTextNode extends SwContentNode {
     return (
       this.mpNodeNum
         ?.GetNumRule()
-        ?.GetNumFormat(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
+        ?.Get(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
         .GetNumberingType() === "char-special"
     );
   }
@@ -581,7 +581,7 @@ export class SwTextNode extends SwContentNode {
     const rule = this.mpNodeNum?.GetNumRule();
     if (rule === undefined || !this.IsCountedInList()) return undefined;
     const level = this.GetActualListLevel();
-    const format = rule.GetNumFormat(level);
+    const format = rule.Get(level);
     if (format.GetNumberingType() === "char-special") return format.GetBulletChar();
     return rule.MakeNumString(this.GetNumberVector(), level);
   }

@@ -203,9 +203,7 @@ export class HandleResetAttrAtTextNode {
 /** Reads source enumeration repaint policy for the existing Arabic/bullet formats. @param node - Paragraph. @returns Whether counting changes need tree notification. */
 export function HasNumberingWhichNeedsLayoutUpdate(node: SwTextNode): boolean {
   const rule = node.GetNum()?.GetNumRule();
-  return (
-    rule !== undefined && rule.GetNumFormat(node.GetAttrListLevel()).GetNumberingType() === "arabic"
-  );
+  return rule !== undefined && rule.Get(node.GetAttrListLevel()).GetNumberingType() === "arabic";
 }
 
 /** Reads the native normal-document outline policy. @param node - Paragraph. @returns Outline membership state. */

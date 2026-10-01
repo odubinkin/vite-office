@@ -195,7 +195,7 @@ export function projectWriterParagraphList(node: SwTextNode): WriterParagraphLis
   const restart = node.IsListRestart();
   const startValue = node.HasAttrListRestartValue() ? node.GetAttrListRestartValue() : undefined;
   return {
-    kind: rule.GetNumFormat(level).GetKind(),
+    kind: rule.Get(level).GetKind(),
     level,
     ...(rule.IsAutoRule() ? {} : { styleId: ruleName }),
     ...(restart ? { restart: true } : {}),
@@ -221,7 +221,7 @@ export function createWriterListItemSet(node: SwTextNode, value: unknown): SfxIt
     ruleName =
       previousRule?.IsAutoRule() === true &&
       previous !== undefined &&
-      previousRule.GetNumFormat(previous.GetAttrListLevel()).GetKind() === normalized.kind
+      previousRule.Get(previous.GetAttrListLevel()).GetKind() === normalized.kind
         ? previousRule.GetName()
         : node.GetDoc().GetDocumentListsManager().CreateAutomaticNumRule(normalized.kind).GetName();
   }
@@ -229,7 +229,7 @@ export function createWriterListItemSet(node: SwTextNode, value: unknown): SfxIt
   if (
     normalized.styleId !== undefined &&
     namedRule !== undefined &&
-    namedRule.GetNumFormat(normalized.level).GetKind() !== normalized.kind
+    namedRule.Get(normalized.level).GetKind() !== normalized.kind
   )
     ruleName = node
       .GetDoc()

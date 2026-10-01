@@ -2,7 +2,8 @@
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwNodes } from "../docnode/nodes";
-import { SwNumRule, SwNumRuleType } from "../doc/number";
+import { SwNumRuleType } from "../doc/number";
+import { createWriterNumRule } from "../doc/DocumentListsManager";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { SwTextNode } from "./ndtxt";
@@ -174,7 +175,7 @@ it("retains shown record operation and notification policy boundaries", /** Veri
   node.ResetAttr([73, 84, 85, 86, 87]);
 });
 it("distinguishes explicit outline rule type from its reserved name and retains clone metadata", /** Verifies native setter invalidation and no name inference without adding outline factories. @returns Nothing. */ () => {
-  const named = new SwNumRule("Outline");
+  const named = createWriterNumRule("Outline");
   expect(named.GetRuleType()).toBe(SwNumRuleType.NUM_RULE);
   expect(named.IsOutlineRule()).toBe(false);
   named.Validate();

@@ -59,7 +59,7 @@ export function projectSwTextPrintBounds(
   paragraph: SwTextNode,
   page: WriterPageDescriptorValue,
 ): SwTextPrintBounds {
-  const format = paragraph.GetNumRule()?.GetNumFormat(paragraph.GetAttrListLevel());
+  const format = paragraph.GetNumRule()?.Get(paragraph.GetAttrListLevel());
   const left =
     format !== undefined &&
     (paragraph.DoesListGeometryWin() || paragraph.GetParagraphTextLeftMargin() === 0)

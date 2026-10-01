@@ -2,7 +2,7 @@
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
 import { applyWriterParagraphList, SwList } from "../doc/list";
-import { SwNumFormat } from "../doc/number";
+import { type SwNumRule, SwNumFormat } from "../doc/number";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "./ndtxt";
@@ -18,7 +18,7 @@ it("owns records in text nodes and validates insertion notifications before pref
   expect(first.HasNumber()).toBe(false);
   expect(first.HasBullet()).toBe(false);
   const rule = doc.EnsureNumRule("Counters", "numbered");
-  rule.GetNumFormat(0).SetStart(7);
+  updateRuleStart(rule, 0, 7);
   for (const node of [first, tail])
     applyWriterParagraphList(node, {
       kind: "numbered",
@@ -114,8 +114,8 @@ it("removes old clients before changing list attributes and preserves native reg
   const copy = rule.clone();
   expect(copy.GetTextNodeListSize()).toBe(0);
   expect(copy.IsInvalidRule()).toBe(true);
-  copy.GetNumFormat(0).SetStart(9);
-  expect(rule.GetNumFormat(0).GetStart()).toBe(4);
+  updateRuleStart(copy, 0, 9);
+  expect(rule.Get(0).GetStart()).toBe(4);
   rule.RemoveTextNode(doc.nodes.MakeTextNode());
   expect(rule.GetTextNodeListSize()).toBe(3);
   const absent = doc.nodes.MakeTextNode();
@@ -210,3 +210,10 @@ it("keeps native registration guards for absent text and non-document records", 
   expect(clients).toEqual([]);
   expect(root.GetChildren()).toEqual([]);
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

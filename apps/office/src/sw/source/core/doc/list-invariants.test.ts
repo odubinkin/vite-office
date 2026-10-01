@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import { createWriterDocument } from "./doc";
 import { applyWriterParagraphList, WRITER_LIST_WHICH_RANGES } from "./list";
-import { getWriterParagraphListMarker, SwNumRule } from "./number";
+import { getWriterParagraphListMarker } from "./number";
+import { createWriterNumRule } from "./DocumentListsManager";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -131,7 +132,7 @@ describe("Writer list attribute invariants", /** Registers source-backed list te
     expect(trailing.GetListLabel()).toBeUndefined();
     document
       .GetDocumentListsManager()
-      .AddNumRule(new SwNumRule("orphan-rule", "numbered", "orphan-list"));
+      .AddNumRule(createWriterNumRule("orphan-rule", "numbered", "orphan-list"));
     trailing.SetNumRule("orphan-rule");
     trailing.SetListId("");
     expect(trailing.GetListLabel()).toBeUndefined();

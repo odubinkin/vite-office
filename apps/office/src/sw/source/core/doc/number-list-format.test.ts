@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwNumFormat, SwNumRule } from "./number";
+import { createWriterNumRule } from "./DocumentListsManager";
 import { createWriterDocument } from "./doc";
 import { applyWriterParagraphList } from "./list";
 import {
@@ -12,9 +13,9 @@ import { SwXNumberingRules } from "../unocore/unosett";
 
 it("uses native empty standalone suffix and level-specific base ListFormat", /** Checks constructor defaults separately from rule initialization. @returns Nothing. */ () => {
   expect(new SwNumFormat("numbered").GetSuffix()).toBe("");
-  const rule = new SwNumRule("base");
+  const rule = createWriterNumRule("base");
   for (let level = 0; level < 10; level++)
-    expect(rule.GetNumFormat(level).GetListFormat()).toBe(`%${level + 1}%.`);
+    expect(rule.Get(level).GetListFormat()).toBe(`%${level + 1}%.`);
   for (const options of [
     { start: 65536 },
     { start: 1.5 },
@@ -32,31 +33,44 @@ it("uses native empty standalone suffix and level-specific base ListFormat", /**
 });
 
 it("substitutes requested Arabic levels literally and retains unavailable placeholders", /** Asserts noncontiguous/repeated/tenth references and legacy fallback. @returns Nothing. */ () => {
-  const rule = new SwNumRule("patterns");
-  const format = rule.GetNumFormat(2);
+  const rule = createWriterNumRule("patterns");
+  const format = rule.Get(2).clone();
   format.SetListFormat("[%2%|%1%|%2%]");
+  rule.Set(2, format);
   format.SetIncludeUpperLevels(0);
+  rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("[3|2|3]");
   format.SetListFormat("%10%/%1%/%11%/%0%/%3");
+  rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("%10%/2/%11%/%0%/%3");
-  rule.GetNumFormat(9).SetListFormat("%10%:%1%");
+  const tenth = rule.Get(9).clone();
+  tenth.SetListFormat("%10%:%1%");
+  rule.Set(9, tenth);
   expect(rule.MakeNumString([2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 9)).toBe("11:2");
   format.SetListFormat("");
+  rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("");
   format.SetListFormat("literal");
+  rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("literal");
   format.SetListFormat("(%1%.%3%)");
+  rule.Set(2, format);
   expect(rule.MakeNumString([0, 3, 0], 2)).toBe("(0.0)");
   format.SetPrefix("[");
+  rule.Set(2, format);
   format.SetSuffix("]");
+  rule.Set(2, format);
   format.SetIncludeUpperLevels(0);
+  rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("[4]");
   format.SetIncludeUpperLevels(3);
+  rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("[2.3.4]");
   rule.Set(0, new SwNumFormat("bullet", "•"));
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("[3.4]");
   expect(rule.MakeNumString([0, 3, 4], 2)).toBe("[0.3.4]");
   format.SetListFormat("%1%/%2%/%3%");
+  rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("/3/4");
   expect(rule.MakeNumString([0, 3, 4], 2)).toBe("0/3/4");
   const bullet = new SwNumFormat("bullet", "•", {
@@ -76,23 +90,26 @@ it("preserves independent ListFormat state in owned clones and Worker transfer",
   const node = document.paragraphs[0] as SwTextNode;
   applyWriterParagraphList(node, { kind: "numbered", level: 0 });
   const rule = node.GetNumRule() as SwNumRule;
-  const format = rule.GetNumFormat(0);
+  const format = rule.Get(0).clone();
   format.SetListFormat("§(%1%/%1%)");
+  rule.Set(0, format);
   format.SetIncludeUpperLevels(0);
+  rule.Set(0, format);
   expect(node.GetListLabel()).toBe("§(1/1)");
   const snapshot = encodeWriterDocument(document);
   expect(snapshot.swModelVersion).toBe(16);
   const restored = decodeWriterDocument(snapshot);
-  const copy = (restored.GetNumRuleTable()[0] as SwNumRule).GetNumFormat(0);
+  const copy = (restored.GetNumRuleTable()[0] as SwNumRule).Get(0);
   expect(copy.GetMarkerProperties()).toEqual(format.GetMarkerProperties());
   expect((restored.paragraphs[0] as SwTextNode).GetListLabel()).toBe("§(1/1)");
   const cloned = rule.clone();
   format.SetSuffix("!");
+  rule.Set(0, format);
   expect(format.HasListFormat()).toBe(false);
-  expect(cloned.GetNumFormat(0).GetListFormat()).toBe("§(%1%/%1%)");
+  expect(cloned.Get(0).GetListFormat()).toBe("§(%1%/%1%)");
   const service = new SwXNumberingRules(cloned);
   service.replaceByIndex(0, { kind: "numbered", suffix: "." });
-  expect(cloned.GetNumFormat(0).HasListFormat()).toBe(false);
+  expect(cloned.Get(0).HasListFormat()).toBe(false);
   expect(copy.GetListFormat()).toBe("§(%1%/%1%)");
   const malformed = structuredClone(snapshot);
   Object.assign(

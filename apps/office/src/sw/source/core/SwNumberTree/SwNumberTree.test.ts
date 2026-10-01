@@ -1,4 +1,5 @@
 /** @fileoverview Verifies source-owned signed first/sibling counters, zero restarts and uncounted-parent subtrees. */
+import type { SwNumRule } from "../doc/number";
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
 import { applyWriterParagraphList, type SwList } from "../doc/list";
@@ -17,14 +18,16 @@ function fixture(items: readonly Item[], start = 0) {
   const document = createWriterDocument();
   const rule = document.EnsureNumRule("Counters", "numbered", 0);
   for (let level = 0; level < 10; level++) {
-    rule.GetNumFormat(level).SetStart(start);
-    rule.GetNumFormat(level).SetListFormat(
+    updateRuleStart(rule, level, start);
+    const format = rule.Get(level).clone();
+    format.SetListFormat(
       Array.from(
         { length: level + 1 },
         /** Adds one included level reference. @param _slot - Array slot. @param index - Level. @returns Placeholder. */
         (_slot, index) => `%${index + 1}%`,
       ).join(".") + ".",
     );
+    rule.Set(level, format);
   }
   const nodes = items.map(
     /** Applies one literal node policy. @param item - Policy. @param index - Document index. @returns Text node. */
@@ -253,8 +256,8 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
   expect(root.IsCountedForNumbering()).toBe(true);
   expect(root.GetStartValue()).toBe(1);
   const rule = document.EnsureNumRule("Levels", "numbered", 0);
-  rule.GetNumFormat(0).SetStart(7);
-  rule.GetNumFormat(1).SetStart(3);
+  updateRuleStart(rule, 0, 7);
+  updateRuleStart(rule, 1, 3);
   applyWriterParagraphList(document.paragraphs[0] as SwTextNode, {
     kind: "numbered",
     level: 0,
@@ -275,9 +278,9 @@ it("constructs rule-start phantom chains and retains them through removal", /** 
     { level: 2 },
   ]);
   const rule = document.FindNumRulePtr("Counters");
-  rule?.GetNumFormat(0).SetStart(7);
-  rule?.GetNumFormat(1).SetStart(5);
-  rule?.GetNumFormat(2).SetStart(3);
+  updateRuleStart(rule, 0, 7);
+  updateRuleStart(rule, 1, 5);
+  updateRuleStart(rule, 2, 3);
   list.InvalidateListTree();
   expect(
     nodes.map(
@@ -302,3 +305,10 @@ it("constructs rule-start phantom chains and retains them through removal", /** 
   list.ValidateListTree();
   expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([8, 5, 3]);
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

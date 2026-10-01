@@ -1,4 +1,5 @@
 /** @fileoverview Compares Writer restart flag/value setters to six complete unchanged pinned native definitions. */
+import type { SwNumRule } from "../doc/number";
 import { expect, it, vi } from "vitest";
 import native from "../../../../test/writer-native-list-restart.json";
 import { SwDoc } from "../doc/doc";
@@ -21,7 +22,7 @@ it("matches literal native flag/value states and mutation attempts in normal and
       doc.SetInReading(reading);
       const node = doc.paragraphs[0] as SwTextNode;
       if (test.rule) {
-        doc.EnsureNumRule("Restart format", "numbered").GetNumFormat(0).SetStart(9);
+        updateRuleStart(doc.EnsureNumRule("Restart format", "numbered"), 0, 9);
         node.SetNumRule("Restart format");
       }
       const put = vi.spyOn(node, "SetAttr");
@@ -68,7 +69,7 @@ it("retains inactive values through real list counters, undo and Worker16 before
     const first = doc.paragraphs[0] as SwTextNode;
     const second = doc.GetNodes().MakeTextNode();
     const rule = doc.EnsureNumRule("Counter restart", "numbered");
-    rule.GetNumFormat(0).SetStart(9);
+    updateRuleStart(rule, 0, 9);
     first.SetNumRule(rule.GetName());
     second.SetNumRule(rule.GetName());
     first.SetAttrListRestartValue(value);
@@ -121,3 +122,10 @@ it("retains inactive values through real list counters, undo and Worker16 before
     expect(reopened.GetListItemNumber()).toBe(9);
   }
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

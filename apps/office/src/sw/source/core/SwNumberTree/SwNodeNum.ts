@@ -103,6 +103,6 @@ export class SwNodeNum extends SwNumberTreeNode {
     if (this.IsRestart() && this.textNode !== undefined)
       return this.textNode.GetActualListStartValue();
     const level = this.GetParent() === undefined ? 0 : this.GetLevelInListTree();
-    return this.GetNumRule()?.GetNumFormat(level).GetStart() ?? 1;
+    return this.GetNumRule()?.GetNumFormat(level)?.GetStart() ?? 1;
   }
 }

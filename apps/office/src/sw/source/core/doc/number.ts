@@ -6,6 +6,7 @@ import {
   SvxNumberFormat,
   type NumberingPositionProperties,
   type NumberingMarkerProperties,
+  type SvxNumPositionAndSpaceMode,
 } from "../../../../editeng/source/items/numitem";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -15,19 +16,21 @@ import { WRITER_MAX_LIST_LEVEL } from "./list";
 /** Numbering format owned by one level of a SwNumRule. */
 export class SwNumFormat extends SvxNumberFormat {
   private readonly bulletFont: string;
+  private readonly numberingType: "arabic" | "char-special" | "none";
   /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @param options - Upstream-compatible spacing, prefix, suffix, and start options. @returns Nothing. */
   public constructor(
     private readonly kind: Exclude<WriterParagraphListKind, "none">,
     private readonly bulletChar = kind === "bullet" ? "•" : "",
     options: NumberingPositionProperties &
       NumberingMarkerProperties &
-      Readonly<{ bulletFont?: string }> = {},
+      Readonly<{ bulletFont?: string; numberingType?: "arabic" | "char-special" | "none" }> = {},
   ) {
     super(options);
     if (kind !== "bullet" && kind !== "numbered")
       throw new Error("SwNumFormat kind must be bullet or numbered.");
     if (kind === "bullet" && [...bulletChar].length > 1)
       throw new Error("SwNumFormat bullet character must contain at most one Unicode code point.");
+    this.numberingType = options.numberingType ?? (kind === "bullet" ? "char-special" : "arabic");
     this.bulletFont = options.bulletFont ?? (kind === "bullet" ? "OpenSymbol" : "");
     if (
       options.start !== undefined &&
@@ -59,19 +62,33 @@ export class SwNumFormat extends SvxNumberFormat {
   public GetBulletFont(): string {
     return this.bulletFont;
   }
-  /** Returns the upstream numbering type represented by this bounded format. @returns Arabic or character-special. */
-  public GetNumberingType(): "arabic" | "char-special" {
-    return this.kind === "bullet" ? "char-special" : "arabic";
+  /** Returns the upstream numbering type represented by this bounded format. @returns Arabic, character-special or disabled numbering. */
+  public GetNumberingType(): "arabic" | "char-special" | "none" {
+    return this.numberingType;
   }
+  /** Compares every implemented native format field, including inactive geometry and optional patterns. @param other - Const format. @returns Whether the implemented values are equal. */
+  public override Equals(other: ConstSwNumFormat): boolean {
+    return (
+      super.Equals(other) &&
+      this.GetNumberingType() === other.GetNumberingType() &&
+      this.bulletChar === other.GetBulletChar() &&
+      this.bulletFont === other.GetBulletFont()
+    );
+  }
+
   /** Creates an independent format record. @returns Cloned format. */
   public clone(): SwNumFormat {
     return new SwNumFormat(this.kind, this.bulletChar, {
       ...this.GetPositionProperties(),
       bulletFont: this.bulletFont,
+      numberingType: this.numberingType,
       ...this.GetMarkerProperties(),
     });
   }
 }
+
+/** Const format reference: callers clone before changing an owned or shared level. */
+export type ConstSwNumFormat = Omit<SwNumFormat, `Set${string}`>;
 
 /** Native numbering-rule classification, independent of the reserved name. */
 export enum SwNumRuleType {
@@ -86,32 +103,20 @@ export class SwNumRule {
   public static GetOutlineRuleName(): string {
     return "Outline";
   }
-  /** Creates one bounded numbering rule. @param name - Document-unique rule name. @param kind - Bullet or numbering marker family. @param defaultListId - Default list identity. @param automatic - Whether Writer may reuse the rule. @returns Nothing. */
+  /** Initializes optional owned levels and native shared defaults. @param name - Rule name. @param defaultMode - Native base-table selection. @param type - Native rule classification. @returns Nothing. */
   public constructor(
     private readonly name: string,
-    format: Exclude<WriterParagraphListKind, "none"> | readonly SwNumFormat[] = createBaseFormats(),
-    private readonly defaultListId = name,
-    private readonly automatic = false,
+    private readonly defaultMode: SvxNumPositionAndSpaceMode,
+    private meRuleType = SwNumRuleType.NUM_RULE,
   ) {
-    if (name.trim().length === 0 || defaultListId.trim().length === 0)
-      throw new Error("SwNumRule name and list id must not be blank.");
-    if (!Array.isArray(format) && format !== "bullet" && format !== "numbered")
-      throw new Error("SwNumRule kind must be bullet or numbered.");
-    const suppliedFormats = Array.isArray(format)
-      ? (format as readonly SwNumFormat[])
-      : createUniformFormats(format as Exclude<WriterParagraphListKind, "none">);
-    if (suppliedFormats.length !== WRITER_MAX_LIST_LEVEL + 1)
-      throw new Error("SwNumRule must define every supported list level.");
-    this.formats = suppliedFormats.map(
-      /** Clones one caller-owned level format. @param format - Source format. @returns Owned clone. */
-      (format) => format.clone(),
-    );
+    if (name.trim().length === 0) throw new Error("SwNumRule name must not be blank.");
   }
 
-  private readonly formats: SwNumFormat[];
+  private defaultListId = "";
+  private automatic = true;
+  private readonly formats: (ConstSwNumFormat | undefined)[] = Array.from({ length: 10 });
   private readonly textNodes: SwTextNode[] = [];
   private invalidRuleFlag = true;
-  private meRuleType = SwNumRuleType.NUM_RULE;
   /** Returns native rule classification. @returns Stored type. */
   public GetRuleType(): SwNumRuleType {
     return this.meRuleType;
@@ -176,21 +181,46 @@ export class SwNumRule {
 
   /** Returns the browser-supported marker family. @returns Bullet or numbered kind. */
   public GetKind(): Exclude<WriterParagraphListKind, "none"> {
-    return this.GetNumFormat(0).GetKind();
+    return this.Get(0).GetKind();
   }
 
-  /** Returns the numbering format at a zero-based Writer list level. @param level - List level. @returns Owned level format. */
-  public GetNumFormat(level: number): SwNumFormat {
+  /** Returns the effective const format, selecting the shared table when no owned level exists. @param level - Native level. @returns Effective format. */
+  public Get(level: number): ConstSwNumFormat {
+    return (
+      this.GetNumFormat(level) ??
+      ((
+        baseFormats[this.meRuleType] as Record<
+          SvxNumPositionAndSpaceMode,
+          readonly ConstSwNumFormat[]
+        >
+      )[this.defaultMode][level] as ConstSwNumFormat)
+    );
+  }
+  /** Returns only an explicitly owned const format. @param level - Native level. @returns Owned format or undefined for the native null pointer. */
+  public GetNumFormat(level: number): ConstSwNumFormat | undefined {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwNumRule level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    return this.formats[level] as SwNumFormat;
+    return this.formats[level];
   }
-
-  /** Replaces one level with an owned copy after caller validation. @param level - Zero-based level. @param format - Successfully applied format. @returns Nothing. */
-  public Set(level: number, format: SwNumFormat): void {
-    this.GetNumFormat(level);
-    this.formats[level] = format.clone();
-    this.invalidRuleFlag = true;
+  /** Copies a changed reference format; equal owned values preserve identity and validity. @param level - Native level. @param format - Const source format. @returns Nothing. */
+  public Set(level: number, format: ConstSwNumFormat): void {
+    const owned = this.GetNumFormat(level);
+    if (owned === undefined || !owned.Equals(format)) {
+      this.formats[level] = Object.freeze(format.clone());
+      this.invalidRuleFlag = true;
+    }
+  }
+  /** Exposes the native private default-table selector for the browser graph adapter. @returns Mode. */
+  public GetDefaultNumberFormatPositionAndSpaceMode(): SvxNumPositionAndSpaceMode {
+    return this.defaultMode;
+  }
+  /** Assigns the list identity at the document assembly boundary. @param id - Identity. @returns Nothing. */
+  public SetDefaultListId(id: string): void {
+    this.defaultListId = id;
+  }
+  /** Assigns the automatic-rule flag. @param automatic - Flag. @returns Nothing. */
+  public SetAutoRule(automatic: boolean): void {
+    this.automatic = automatic;
   }
 
   /** Returns the default list identity. @returns List identity. */
@@ -205,9 +235,10 @@ export class SwNumRule {
 
   /** Formats a validated Writer number vector using native patterns or legacy joining; visible bullet glyphs are projected by SwTextNode. @param numbers - Root-to-current counters. @param level - Current zero-based level. @returns Numeric string. */
   public MakeNumString(numbers: readonly number[], level: number): string {
-    const format = this.GetNumFormat(level);
+    const format = this.Get(level);
     if (numbers.length <= level || numbers[level] === undefined)
       throw new Error("SwNumRule number vector does not contain the requested level.");
+    if (format.GetNumberingType() === "none") return format.GetPrefix() + format.GetSuffix();
     if (format.HasListFormat()) {
       let pattern = format.GetListFormat();
       for (let position = 0; position < pattern.length - 2;) {
@@ -235,11 +266,18 @@ export class SwNumRule {
           position = endPosition;
           continue;
         }
+        if (this.Get(replaceLevel).GetNumberingType() === "none") {
+          const next = pattern.indexOf("%", endPosition);
+          if (next === -1)
+            throw new Error("SwNumRule disabled level has no following placeholder.");
+          pattern = pattern.slice(0, position) + pattern.slice(next);
+          continue;
+        }
         const value = numbers[replaceLevel] as number;
         const replacement =
           value === 0
             ? "0"
-            : this.GetNumFormat(replaceLevel).GetNumberingType() === "char-special"
+            : this.Get(replaceLevel).GetNumberingType() === "char-special"
               ? ""
               : String(value);
         pattern = pattern.slice(0, position) + replacement + pattern.slice(endPosition);
@@ -250,11 +288,12 @@ export class SwNumRule {
     const first = Math.max(0, level + 1 - Math.max(1, format.GetIncludeUpperLevels()));
     let marker = "";
     for (let index = first; index <= level; index++) {
+      if (this.Get(index).GetNumberingType() === "none") continue;
       const value = numbers[index] as number;
       marker +=
         value === 0
           ? "0"
-          : this.GetNumFormat(index).GetNumberingType() === "char-special"
+          : this.Get(index).GetNumberingType() === "char-special"
             ? ""
             : String(value);
       if (index !== level && marker.length !== 0) marker += ".";
@@ -266,45 +305,60 @@ export class SwNumRule {
 
   /** Creates an independent numbering rule. @returns Cloned rule. */
   public clone(): SwNumRule {
-    const clone = new SwNumRule(this.name, this.formats, this.defaultListId, this.automatic);
-    clone.SetRuleType(this.meRuleType);
+    const clone = new SwNumRule(this.name, this.defaultMode, this.meRuleType);
+    clone.SetDefaultListId(this.defaultListId);
+    clone.SetAutoRule(this.automatic);
+    for (let level = 0; level < 10; level++) {
+      const format = this.formats[level];
+      if (format !== undefined) clone.Set(level, format);
+    }
     return clone;
   }
 }
 
-/** Creates the modern NUM_RULE base formats selected by Writer's ODF >=1.2 default. @returns Independent Arabic base levels. */
-function createBaseFormats(): readonly SwNumFormat[] {
+/** Initializes the four immutable tables shared by all rules, with native Twip defaults. @param outline - Outline classification. @param mode - Geometry group. @returns Shared levels. */
+function createBaseFormats(
+  outline: boolean,
+  mode: SvxNumPositionAndSpaceMode,
+): readonly ConstSwNumFormat[] {
   return Array.from(
-    { length: WRITER_MAX_LIST_LEVEL + 1 },
-    /** Initializes one native base level, including its inactive bullet character. @param _unused - Placeholder. @param level - Zero-based level. @returns Base format. */
+    { length: 10 },
+    /** Initializes one complete implemented base level. @param _unused - Placeholder. @param level - Native level. @returns Const format. */
     (_unused, level) => {
-      const indentAt = 720 + level * 360;
-      return new SwNumFormat("numbered", ["•", "◦", "▪"][level % 3], {
-        firstLineIndent: -360,
-        indentAt,
-        listTabPosition: indentAt,
-        positionAndSpaceMode: "label-alignment",
-        suffix: ".",
-        listFormat: `%${level + 1}%.`,
-      });
+      const indent = 720 + level * 360;
+      return Object.freeze(
+        new SwNumFormat("numbered", ["•", "◦", "▪"][level % 3], {
+          bulletFont: "",
+          numberingType: outline ? "none" : "arabic",
+          includeUpperLevels: outline ? 10 : 1,
+          positionAndSpaceMode: mode,
+          ...(outline
+            ? {
+                charTextDistance: mode === "label-width-and-position" ? 216 : 0,
+                labelFollowedBy: mode === "label-alignment" ? "nothing" : "listtab",
+              }
+            : {
+                ...(mode === "label-alignment"
+                  ? { firstLineIndent: -360, indentAt: indent, listTabPosition: indent }
+                  : {
+                      absLSpace: indent,
+                      firstLineOffset: -360,
+                    }),
+                suffix: ".",
+                listFormat: `%${level + 1}%.`,
+              }),
+        }),
+      );
     },
   );
 }
-
-/** Creates the ten uniform level formats used by Writer's default list commands. @param kind - Marker family. @returns Independent level formats. */
-function createUniformFormats(
-  kind: Exclude<WriterParagraphListKind, "none">,
-): readonly SwNumFormat[] {
-  return createBaseFormats().map(
-    /** Applies the supported default list command marker to base geometry. @param format - Native base level. @returns Command format. */
-    (format) =>
-      new SwNumFormat(kind, kind === "bullet" ? format.GetBulletChar() : "", {
-        ...format.GetPositionProperties(),
-        bulletFont: kind === "bullet" ? "OpenSymbol" : "",
-        suffix: kind === "numbered" ? "." : "",
-      }),
-  );
-}
+const baseFormats = [true, false].map(
+  /** Shares both geometry families for a native rule type. @param outline - Classification. @returns Tables. */
+  (outline) => ({
+    "label-width-and-position": createBaseFormats(outline, "label-width-and-position"),
+    "label-alignment": createBaseFormats(outline, "label-alignment"),
+  }),
+);
 
 /** Describes the list subset of a Writer paragraph needed for deterministic marker calculation. */
 export interface WriterNumberingParagraph {
@@ -351,9 +405,7 @@ export function getWriterParagraphListMarker(
     return undefined;
   if (paragraph.listMarker !== undefined) return paragraph.listMarker;
   if (kind === "bullet")
-    return (
-      paragraph.bulletChar ?? paragraph.GetNumRule?.()?.GetNumFormat(level).GetBulletChar() ?? "•"
-    );
+    return paragraph.bulletChar ?? paragraph.GetNumRule?.()?.Get(level).GetBulletChar() ?? "•";
   const documentNumber = paragraph.GetListItemNumber?.();
   if (documentNumber !== undefined) return `${documentNumber}.`;
   return undefined;

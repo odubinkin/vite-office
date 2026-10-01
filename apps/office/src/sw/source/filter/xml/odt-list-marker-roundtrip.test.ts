@@ -1,4 +1,5 @@
 /** @fileoverview Verifies pinned ODF list marker properties across genuine common/automatic packages and standard ODF 1.3 approximation. */
+import type { SwNumRule } from "../../core/doc/number";
 import { expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
@@ -145,12 +146,12 @@ it("preserves native marker parameters through common and automatic ODT cycles",
       );
       const rule = result.document.FindNumRulePtr("Markers");
       expect(rule, test.name).toBeDefined();
-      const format = rule?.GetNumFormat(1) as SwNumFormat;
+      const format = rule?.Get(1) as SwNumFormat;
       expect(state(format), test.name).toEqual(test.expected);
       expect(result.document.paragraphs[1]?.GetListLabel(), test.name).toBe(test.label);
-      expect(rule?.clone().GetNumFormat(1).GetMarkerProperties()).toEqual(test.expected);
+      expect(rule?.clone().Get(1).GetMarkerProperties()).toEqual(test.expected);
       const restored = decodeWriterDocument(encodeWriterDocument(result.document));
-      expect(state(restored.FindNumRulePtr("Markers")?.GetNumFormat(1) as SwNumFormat)).toEqual(
+      expect(state(restored.FindNumRulePtr("Markers")?.Get(1) as SwNumFormat)).toEqual(
         test.expected,
       );
       expect(restored.paragraphs[1]?.GetListLabel()).toBe(test.label);
@@ -172,9 +173,9 @@ it("preserves native marker parameters through common and automatic ODT cycles",
         expect(opening).toContain('text:start-value="7" text:display-levels="2"');
       }
       const reopened = await readOdtDocument(exported, { title: "Markers" });
-      expect(
-        state(reopened.document.FindNumRulePtr("Markers")?.GetNumFormat(1) as SwNumFormat),
-      ).toEqual(test.expected);
+      expect(state(reopened.document.FindNumRulePtr("Markers")?.Get(1) as SwNumFormat)).toEqual(
+        test.expected,
+      );
       expect(reopened.document.paragraphs[1]?.GetListLabel()).toBe(test.label);
     }
 });
@@ -240,19 +241,19 @@ it("retains native explicit pattern precedence and standard ODF 1.3 approximatio
         { title: "Markers" },
       );
       const rule = result.document.FindNumRulePtr("Markers");
-      expect(state(rule?.GetNumFormat(1) as SwNumFormat)).toEqual(test.expected);
+      expect(state(rule?.Get(1) as SwNumFormat)).toEqual(test.expected);
       expect(result.document.paragraphs[1]?.GetListLabel()).toBe(test.label);
       const restored = decodeWriterDocument(encodeWriterDocument(result.document));
-      expect(state(restored.FindNumRulePtr("Markers")?.GetNumFormat(1) as SwNumFormat)).toEqual(
+      expect(state(restored.FindNumRulePtr("Markers")?.Get(1) as SwNumFormat)).toEqual(
         test.expected,
       );
       const exported = writeOdtDocument(result.document, { title: "Patterns" });
       const xml = await new ZipFile(exported).readTextEntry("content.xml");
       expect(xml).not.toContain("num-list-format=");
       const reopened = await readOdtDocument(exported, { title: "Markers" });
-      expect(
-        state(reopened.document.FindNumRulePtr("Markers")?.GetNumFormat(1) as SwNumFormat),
-      ).toEqual(test.reopened);
+      expect(state(reopened.document.FindNumRulePtr("Markers")?.Get(1) as SwNumFormat)).toEqual(
+        test.reopened,
+      );
       expect(reopened.document.paragraphs[1]?.GetListLabel()).toBe(test.reopenedLabel);
     }
 });
@@ -260,9 +261,11 @@ it("retains native explicit pattern precedence and standard ODF 1.3 approximatio
 it("projects native signed UNO StartWith and omitted zero ParentNumbering on export", /** Verifies source narrowing/omission independently of positive XML declaration bounds. @returns Completion. */ async () => {
   const bytes = writeOdtDocument(createWriterDocument(), { title: "Signed" });
   const result = await readOdtDocument(await input(bytes, "", false), { title: "Markers" });
-  const format = result.document.FindNumRulePtr("Markers")?.GetNumFormat(1) as SwNumFormat;
+  const rule = result.document.FindNumRulePtr("Markers") as SwNumRule;
+  const format = rule.Get(1).clone();
   format.SetStart(65535);
   format.SetIncludeUpperLevels(0);
+  rule.Set(1, format);
   const exported = writeOdtDocument(result.document, { title: "Signed" });
   const xml = await new ZipFile(exported).readTextEntry("content.xml");
   expect(xml.match(/<text:list-level-style-number text:level="2"[^>]*>/u)?.[0]).toContain(
@@ -270,8 +273,6 @@ it("projects native signed UNO StartWith and omitted zero ParentNumbering on exp
   );
   expect(xml).not.toContain("text:display-levels=");
   const reopened = await readOdtDocument(exported, { title: "Markers" });
-  expect(reopened.document.FindNumRulePtr("Markers")?.GetNumFormat(1).GetStart()).toBe(1);
-  expect(reopened.document.FindNumRulePtr("Markers")?.GetNumFormat(1).GetIncludeUpperLevels()).toBe(
-    1,
-  );
+  expect(reopened.document.FindNumRulePtr("Markers")?.Get(1).GetStart()).toBe(1);
+  expect(reopened.document.FindNumRulePtr("Markers")?.Get(1).GetIncludeUpperLevels()).toBe(1);
 });

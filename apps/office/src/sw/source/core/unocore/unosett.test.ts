@@ -1,6 +1,6 @@
 /** @fileoverview Verifies native signed integer numbering-property conversion at the UNO/Writer boundary. */
 import { expect, it } from "vitest";
-import { SwNumRule } from "../doc/number";
+import { createWriterNumRule } from "../doc/DocumentListsManager";
 import {
   NumberingRulePropertyError,
   SwXNumberingRules,
@@ -59,7 +59,7 @@ it("uses native integer ratios in both directions and retains only present prope
 });
 
 it("validates the native numbering properties before committing one complete level", /** Checks rejection independent of selected mode and retains an already applied level. @returns Nothing. */ () => {
-  const rule = new SwNumRule("application");
+  const rule = createWriterNumRule("application");
   const service = new SwXNumberingRules(rule);
   service.replaceByIndex(2, {
     kind: "bullet",
@@ -71,11 +71,11 @@ it("validates the native numbering properties before committing one complete lev
     positionAndSpaceMode: "label-width-and-position",
     listTabPosition: 127,
   });
-  expect(rule.GetNumFormat(2).GetCharTextDistance()).toBe(18577);
-  expect(rule.GetNumFormat(2).GetAbsLSpace()).toBe(-1);
-  expect(rule.GetNumFormat(2).GetFirstLineOffset()).toBe(1);
-  expect(rule.GetNumFormat(2).GetBulletFont()).toBe("");
-  const applied = rule.GetNumFormat(2);
+  expect(rule.Get(2).GetCharTextDistance()).toBe(18577);
+  expect(rule.Get(2).GetAbsLSpace()).toBe(-1);
+  expect(rule.Get(2).GetFirstLineOffset()).toBe(1);
+  expect(rule.Get(2).GetBulletFont()).toBe("");
+  const applied = rule.Get(2);
   for (const positionAndSpaceMode of ["label-alignment", "label-width-and-position"] as const)
     for (const invalid of [
       { charTextDistance: -1 },
@@ -93,15 +93,15 @@ it("validates the native numbering properties before committing one complete lev
             ...invalid,
           }),
       ).toThrow(NumberingRulePropertyError);
-      expect(rule.GetNumFormat(2)).toBe(applied);
+      expect(rule.Get(2)).toBe(applied);
     }
   service.replaceByIndex(2, { kind: "numbered", suffix: "." });
-  expect(rule.GetNumFormat(2).GetBulletChar()).toBe("●");
-  expect(rule.GetNumFormat(2).GetCharTextDistance()).toBe(18577);
+  expect(rule.Get(2).GetBulletChar()).toBe("●");
+  expect(rule.Get(2).GetCharTextDistance()).toBe(18577);
 });
 
 it("applies marker properties before ListFormat and ignores native out-of-range ParentNumbering", /** Verifies property ordering, raw starts and copy/commit failure retention. @returns Nothing. */ () => {
-  const rule = new SwNumRule("markers");
+  const rule = createWriterNumRule("markers");
   const service = new SwXNumberingRules(rule);
   service.replaceByIndex(2, {
     kind: "numbered",
@@ -111,7 +111,7 @@ it("applies marker properties before ListFormat and ignores native out-of-range 
     parentNumbering: 1,
     listFormat: "[%1%/%3%]",
   });
-  expect(rule.GetNumFormat(2).GetMarkerProperties()).toEqual({
+  expect(rule.Get(2).GetMarkerProperties()).toEqual({
     prefix: "[",
     suffix: "]",
     start: 7,
@@ -120,8 +120,8 @@ it("applies marker properties before ListFormat and ignores native out-of-range 
   });
   for (const count of [-1, 11, 32767]) {
     service.replaceByIndex(2, { kind: "numbered", suffix: ")", parentNumbering: count });
-    expect(rule.GetNumFormat(2).GetIncludeUpperLevels()).toBe(2);
-    expect(rule.GetNumFormat(2).HasListFormat()).toBe(false);
+    expect(rule.Get(2).GetIncludeUpperLevels()).toBe(2);
+    expect(rule.Get(2).HasListFormat()).toBe(false);
   }
   for (const count of [0, 10]) {
     service.replaceByIndex(2, {
@@ -130,10 +130,10 @@ it("applies marker properties before ListFormat and ignores native out-of-range 
       startWith: -1,
       parentNumbering: count,
     });
-    expect(rule.GetNumFormat(2).GetStart()).toBe(65535);
-    expect(rule.GetNumFormat(2).GetIncludeUpperLevels()).toBe(count);
+    expect(rule.Get(2).GetStart()).toBe(65535);
+    expect(rule.Get(2).GetIncludeUpperLevels()).toBe(count);
   }
-  const previous = rule.GetNumFormat(2);
+  const previous = rule.Get(2);
   expect(
     /** Rejects complete replacement after invalid native geometry. @returns Nothing. */ () =>
       service.replaceByIndex(2, {
@@ -146,5 +146,5 @@ it("applies marker properties before ListFormat and ignores native out-of-range 
         charTextDistance: -1,
       }),
   ).toThrow(NumberingRulePropertyError);
-  expect(rule.GetNumFormat(2)).toBe(previous);
+  expect(rule.Get(2)).toBe(previous);
 });

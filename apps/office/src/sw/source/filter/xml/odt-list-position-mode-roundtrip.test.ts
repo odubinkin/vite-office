@@ -5,7 +5,7 @@ import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
-import { SwNumRule } from "../../core/doc/number";
+import { createWriterNumRule } from "../../core/doc/DocumentListsManager";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { projectSwTextPrintBounds } from "../../core/layout/newfrm";
 import {
@@ -132,7 +132,7 @@ it("selects native mode independently of child geometry through common and autom
       const paragraph = document.paragraphs[0];
       if (paragraph === undefined) throw new Error("Position fixture has no paragraph");
       expect(paragraph.GetText()).toBe("x");
-      const format = paragraph.GetNumRule()?.GetNumFormat(0);
+      const format = paragraph.GetNumRule()?.Get(0);
       if (format === undefined) throw new Error("Position fixture has no numbering format");
       expect(format).toBeInstanceOf(SvxNumberFormat);
       const [
@@ -167,9 +167,7 @@ it("selects native mode independently of child geometry through common and autom
       );
       const snapshot = encodeWriterDocument(document);
       const copied = decodeWriterDocument(snapshot);
-      expect(copied.paragraphs[0]?.GetNumRule()?.GetNumFormat(0).GetPositionProperties()).toEqual(
-        raw,
-      );
+      expect(copied.paragraphs[0]?.GetNumRule()?.Get(0).GetPositionProperties()).toEqual(raw);
       expect(encodeWriterDocument(copied)).toEqual(snapshot);
       const left = testCase.alignment ? indentAt + firstLineIndent : absLSpace + firstLineOffset;
       expect(projectSwTextPrintBounds(paragraph, document.GetPageDesc().GetValue()).left).toBe(
@@ -200,7 +198,7 @@ it("selects native mode independently of child geometry through common and autom
       expect(actual, testCase.properties).toBe(testCase.alignment ? modernXml : testCase.legacyXml);
       const reopened = (await readOdtDocument(exported, metadata)).document.paragraphs[0]
         ?.GetNumRule()
-        ?.GetNumFormat(0);
+        ?.Get(0);
       expect(reopened?.GetPositionProperties()).toEqual(
         testCase.alignment
           ? { ...raw, absLSpace: 0, firstLineOffset: 0, charTextDistance: 0, listTabPosition: 0 }
@@ -217,7 +215,7 @@ it("selects native mode independently of child geometry through common and autom
 
 it("retains pre-existing browser snapshots with absent inactive legacy fields", /** Verifies v15 decoding compatibility without changing native command defaults. @returns Nothing. */ () => {
   const document = createWriterDocument();
-  document.AddNumRule(new SwNumRule("Default", "numbered"));
+  document.AddNumRule(createWriterNumRule("Default", "numbered"));
   document.paragraphs[0]?.SetNumRule("Default");
   const current = encodeWriterDocument(document);
   const older = {
@@ -239,7 +237,7 @@ it("retains pre-existing browser snapshots with absent inactive legacy fields", 
       }),
     ),
   };
-  const restored = decodeWriterDocument(older).paragraphs[0]?.GetNumRule()?.GetNumFormat(0);
+  const restored = decodeWriterDocument(older).paragraphs[0]?.GetNumRule()?.Get(0);
   expect(restored?.GetPositionProperties()).toEqual({
     absLSpace: 0,
     firstLineOffset: 0,
@@ -258,7 +256,7 @@ it("retains source-owned fields across repeated position properties and failed m
   for (const common of [false, true]) {
     const document = (await readOdtDocument(await input(base, properties, common), metadata))
       .document;
-    expect(document.paragraphs[0]?.GetNumRule()?.GetNumFormat(0).GetPositionProperties()).toEqual({
+    expect(document.paragraphs[0]?.GetNumRule()?.Get(0).GetPositionProperties()).toEqual({
       absLSpace: 720,
       firstLineOffset: -288,
       charTextDistance: 1,
@@ -274,7 +272,7 @@ it("retains source-owned fields across repeated position properties and failed m
       '<style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.286cm" fo:text-indent="-0.635cm" fo:margin-left="0.002cm"/></style:list-level-properties>',
     );
     const reopened = (await readOdtDocument(exported, metadata)).document;
-    expect(reopened.paragraphs[0]?.GetNumRule()?.GetNumFormat(0).GetPositionProperties()).toEqual({
+    expect(reopened.paragraphs[0]?.GetNumRule()?.Get(0).GetPositionProperties()).toEqual({
       absLSpace: 0,
       firstLineOffset: 0,
       charTextDistance: 0,

@@ -133,7 +133,7 @@ it("retains native declaration defaults and skips invalid indices before reading
       if (restored === undefined) throw new Error("Fixture snapshot lost its rule");
       for (let level = 0; level < 10; level += 1) {
         const applied = level === testCase.applied,
-          format = rule.GetNumFormat(level);
+          format = rule.Get(level);
         const kind = applied && testCase.bullet !== undefined ? "bullet" : "numbered";
         expect(format.GetKind(), testCase.source).toBe(kind);
         expect(format.GetSuffix()).toBe(applied ? "" : ".");
@@ -151,9 +151,9 @@ it("retains native declaration defaults and skips invalid indices before reading
           listTabPosition: applied ? 0 : 720 + level * 360,
         };
         expect(format.GetPositionProperties()).toEqual(position);
-        expect(copied.GetNumFormat(level).GetPositionProperties()).toEqual(position);
-        expect(restored.GetNumFormat(level).GetPositionProperties()).toEqual(position);
-        expect(restored.GetNumFormat(level).GetBulletChar()).toBe(format.GetBulletChar());
+        expect(copied.Get(level).GetPositionProperties()).toEqual(position);
+        expect(restored.Get(level).GetPositionProperties()).toEqual(position);
+        expect(restored.Get(level).GetBulletChar()).toBe(format.GetBulletChar());
       }
       expect(
         document.paragraphs.map(
@@ -175,12 +175,10 @@ it("retains native declaration defaults and skips invalid indices before reading
       ).document.FindNumRulePtr("Defaults");
       if (reopened === undefined) throw new Error("Reopen lost its rule");
       for (let level = 0; level < 10; level += 1) {
-        expect(reopened.GetNumFormat(level).GetKind()).toBe(rule.GetNumFormat(level).GetKind());
-        expect(reopened.GetNumFormat(level).GetBulletChar()).toBe(
-          rule.GetNumFormat(level).GetBulletChar(),
-        );
-        expect(reopened.GetNumFormat(level).GetPositionProperties()).toEqual(
-          rule.GetNumFormat(level).GetPositionProperties(),
+        expect(reopened.Get(level).GetKind()).toBe(rule.Get(level).GetKind());
+        expect(reopened.Get(level).GetBulletChar()).toBe(rule.Get(level).GetBulletChar());
+        expect(reopened.Get(level).GetPositionProperties()).toEqual(
+          rule.Get(level).GetPositionProperties(),
         );
       }
       if (testCase.source.includes("foreign:"))

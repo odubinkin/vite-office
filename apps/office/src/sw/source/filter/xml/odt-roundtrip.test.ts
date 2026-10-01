@@ -396,7 +396,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         text: "gamma",
       },
     ]);
-    expect(imported.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("◦");
+    expect(imported.document.FindNumRulePtr("L2")?.Get(1).GetBulletChar()).toBe("◦");
     const roundTripped = await readOdtDocument(
       writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
       metadata(),
@@ -422,7 +422,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         }),
       ),
     );
-    expect(roundTripped.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("◦");
+    expect(roundTripped.document.FindNumRulePtr("L2")?.Get(1).GetBulletChar()).toBe("◦");
     const restarted = importWriterXml(
       styles,
       content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
@@ -456,7 +456,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           /** Resolves the modified numeric rule. @param rule - Rule. @returns Match. */ (rule) =>
             rule.GetKind() === "numbered",
         )
-        ?.GetNumFormat(0)
+        ?.Get(0)
         .GetSuffix(),
     ).toBe(")");
     expect(parenthesized.paragraphs[0]?.GetListLabel()).toBe("1)");
@@ -482,7 +482,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         '<text:list-style style:name="Blank"><text:list-level-style-bullet text:level="1" text:bullet-char=""/></text:list-style>',
       )
         .document.FindNumRulePtr("Blank")
-        ?.GetNumFormat(0)
+        ?.Get(0)
         .GetBulletChar(),
     ).toBe("");
     for (const [fragment, message] of [

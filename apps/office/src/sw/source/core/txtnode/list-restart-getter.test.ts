@@ -1,4 +1,5 @@
 /** @fileoverview Checks the nonfatal restart getter against unchanged native owner bodies and OSL/SAL warning macros. */
+import type { SwNumRule } from "../doc/number";
 import { expect, it, vi } from "vitest";
 import native from "../../../../test/writer-native-restart-getter.json";
 import { SwDoc } from "../doc/doc";
@@ -85,7 +86,7 @@ it("keeps pool getter1 distinct from rule start9 across independent flag and val
     const doc = new SwDoc();
     doc.SetInReading(reading);
     const node = doc.paragraphs[0] as SwTextNode;
-    doc.EnsureNumRule("Getter rule", "numbered").GetNumFormat(0).SetStart(9);
+    updateRuleStart(doc.EnsureNumRule("Getter rule", "numbered"), 0, 9);
     node.SetNumRule("Getter rule");
     for (const restart of [false, true]) {
       node.SetListRestart(restart);
@@ -117,3 +118,10 @@ it("keeps pool getter1 distinct from rule start9 across independent flag and val
   }
   warning.mockRestore();
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

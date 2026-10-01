@@ -61,6 +61,7 @@ import type { SwNodes } from "../docnode/nodes";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatColl } from "./fmtcol";
 import { SwNumFormat, SwNumRule } from "./number";
+import { createWriterNumRule } from "./DocumentListsManager";
 import { createSwFormatAutoFormat, SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
 import { SwpHints } from "../txtnode/ndhints";
 import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc";
@@ -483,7 +484,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const writer = createFixture();
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture has no text node.");
-    const rule = new SwNumRule("List 1", "numbered", "list-id-1");
+    const rule = createWriterNumRule("List 1", "numbered", "list-id-1");
     const stored = writer.AddNumRule(rule);
     expect(stored).not.toBe(rule);
     expect(stored.GetName()).toBe("List 1");
@@ -505,7 +506,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(
       throwing(
         /** Adds a duplicate rule. @returns Duplicate rule. */ () =>
-          writer.AddNumRule(new SwNumRule("List 1", "bullet")),
+          writer.AddNumRule(createWriterNumRule("List 1", "bullet")),
       ),
     ).toThrow("Duplicate");
     applyWriterParagraphList(node, { kind: "numbered", level: 2, styleId: "Outline" });
@@ -546,19 +547,20 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
       ).toThrow("outside 0-9");
     expect(
       throwing(
-        /** Creates a blank rule name. @returns Invalid rule. */ () => new SwNumRule(" ", "bullet"),
+        /** Creates a blank rule name. @returns Invalid rule. */ () =>
+          createWriterNumRule(" ", "bullet"),
       ),
     ).toThrow("must not be blank");
     expect(
       throwing(
         /** Creates a blank list identity. @returns Invalid rule. */ () =>
-          new SwNumRule("Rule", "bullet", " "),
+          createWriterNumRule("Rule", "bullet", " "),
       ),
     ).toThrow("must not be blank");
     expect(
       throwing(
         /** Creates an invalid rule kind. @returns Invalid rule. */ () =>
-          new SwNumRule("Rule", "none" as "bullet"),
+          createWriterNumRule("Rule", "none" as "bullet"),
       ),
     ).toThrow("bullet or numbered");
     const mixedFormats = Array.from(
@@ -566,13 +568,13 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
       /** Creates a per-level numbering format. @param _unused - Unused array slot. @param level - Zero-based level. @returns Numbering format. */
       (_unused, level) => new SwNumFormat(level === 1 ? "bullet" : "numbered"),
     );
-    const mixedRule = new SwNumRule("Mixed", mixedFormats, "mixed-id");
-    expect(mixedRule.GetNumFormat(0).GetKind()).toBe("numbered");
-    expect(mixedRule.GetNumFormat(1).GetKind()).toBe("bullet");
+    const mixedRule = createWriterNumRule("Mixed", mixedFormats, "mixed-id");
+    expect(mixedRule.Get(0).GetKind()).toBe("numbered");
+    expect(mixedRule.Get(1).GetKind()).toBe("bullet");
     expect(
       throwing(
         /** Reads a format beyond Writer's level table. @returns Invalid format. */ () =>
-          mixedRule.GetNumFormat(10),
+          mixedRule.Get(10),
       ),
     ).toThrow("outside 0-9");
   });

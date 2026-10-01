@@ -85,7 +85,7 @@ export class SwXNumberingRules {
     properties: WriterNumberingRuleProperties,
     level: number,
   ): void {
-    const previous = rule.GetNumFormat(level).clone();
+    const previous = rule.Get(level).clone();
     const converted = numberingPositionToTwips(properties);
     if ((properties.charTextDistance ?? 0) < 0 || (converted.listTabPosition ?? 0) < 0)
       throw new NumberingRulePropertyError("Invalid numbering position property.");

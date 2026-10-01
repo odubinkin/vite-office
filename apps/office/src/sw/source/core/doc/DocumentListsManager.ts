@@ -1,7 +1,7 @@
 /** @fileoverview Implements the bounded list manager from pinned LibreOffice `sw/source/core/doc/DocumentListsManager.cxx`. */
 
 import type { DocumentStateManager } from "./DocumentStateManager";
-import { SwNumRule } from "./number";
+import { SwNumRule, SwNumFormat } from "./number";
 import { SwList } from "./list";
 
 /** Owns the numbering-rule table required by the supported Writer slice. */
@@ -82,17 +82,48 @@ export class DocumentListsManager {
     do name = `List ${this.nextNumRuleId++}`;
     while (this.numRules.has(name));
     const listId = this.CreateUniqueListId();
-    return this.AddNumRule(new SwNumRule(name, kind, listId, true));
+    return this.AddNumRule(createWriterNumRule(name, kind, listId, true));
   }
 
   /** Finds or creates a compatible bounded rule. @param name - Rule name. @param kind - Rule family. @param level - Checked level. @returns Document-owned rule. */
   public EnsureNumRule(name: string, kind: "bullet" | "numbered", level = 0): SwNumRule {
     const existing = this.FindNumRulePtr(name);
     if (existing !== undefined) {
-      if (existing.GetNumFormat(level).GetKind() !== kind)
+      if (existing.Get(level).GetKind() !== kind)
         throw new Error(`SwNumRule ${name} has a different format at level ${level}.`);
       return existing;
     }
-    return this.AddNumRule(new SwNumRule(name, kind));
+    return this.AddNumRule(createWriterNumRule(name, kind));
   }
+}
+
+/** Assembles the browser's existing list command/import records using native rule ownership. @param name - Rule name. @param format - Command family or complete explicit levels. @param defaultListId - Document identity. @param automatic - Reuse flag. @returns Rule. */
+export function createWriterNumRule(
+  name: string,
+  format?: "bullet" | "numbered" | readonly SwNumFormat[],
+  defaultListId = name,
+  automatic = false,
+): SwNumRule {
+  if (defaultListId.trim().length === 0) throw new Error("SwNumRule list id must not be blank.");
+  const rule = new SwNumRule(name, "label-alignment");
+  rule.SetDefaultListId(defaultListId);
+  rule.SetAutoRule(automatic);
+  if (format === undefined) return rule;
+  if (Array.isArray(format)) {
+    if (format.length !== 10) throw new Error("SwNumRule must define every supported list level.");
+    for (let level = 0; level < 10; level++) rule.Set(level, format[level] as SwNumFormat);
+  } else {
+    if (format !== "bullet" && format !== "numbered")
+      throw new Error("SwNumRule kind must be bullet or numbered.");
+    for (let level = 0; level < 10; level++)
+      rule.Set(
+        level,
+        new SwNumFormat(format, format === "bullet" ? rule.Get(level).GetBulletChar() : "", {
+          ...rule.Get(level).GetPositionProperties(),
+          bulletFont: format === "bullet" ? "OpenSymbol" : "",
+          suffix: format === "numbered" ? "." : "",
+        }),
+      );
+  }
+  return rule;
 }

@@ -163,7 +163,7 @@ export class SwTransferable {
         const number = listKind === "numbered" ? paragraph.GetListItemNumber() : undefined;
         const marker =
           listKind === "bullet"
-            ? paragraph.GetNumRule()?.GetNumFormat(paragraph.GetAttrListLevel()).GetBulletChar()
+            ? paragraph.GetNumRule()?.Get(paragraph.GetAttrListLevel()).GetBulletChar()
             : number === undefined
               ? undefined
               : `${number}.`;

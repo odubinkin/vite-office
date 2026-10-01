@@ -406,7 +406,7 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
       { length: WRITER_MAX_LIST_LEVEL + 1 },
       /** Projects one native numbering property sequence, including signed UNO StartWith. @param _unused - Array slot. @param index - Writer list level. @returns Level properties. */
       (_unused, index) => {
-        const format = rule.GetNumFormat(index);
+        const format = rule.Get(index);
         return {
           ...numberingPositionToMM100(format.GetPositionProperties()),
           kind: format.GetKind(),

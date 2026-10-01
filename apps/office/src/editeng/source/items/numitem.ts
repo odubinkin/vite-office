@@ -50,6 +50,26 @@ export class SvxNumberFormat {
       positionAndSpaceMode: properties.positionAndSpaceMode ?? "label-width-and-position",
     };
   }
+  /** Compares all implemented base-format marker and position fields without conflating active geometry or optional patterns. @param other - Const base format. @returns Implemented value equality. */
+  public Equals(
+    other: Pick<SvxNumberFormat, "GetPositionProperties" | "GetMarkerProperties">,
+  ): boolean {
+    const position = this.GetPositionProperties(),
+      otherPosition = other.GetPositionProperties();
+    const marker = this.GetMarkerProperties(),
+      otherMarker = other.GetMarkerProperties();
+    return (
+      (Object.keys(position) as (keyof typeof position)[]).every(
+        /** Compares one independently stored geometry field. @param key - Field. @returns Equality. */
+        (key) => position[key] === otherPosition[key],
+      ) &&
+      marker.includeUpperLevels === otherMarker.includeUpperLevels &&
+      marker.start === otherMarker.start &&
+      marker.prefix === otherMarker.prefix &&
+      marker.suffix === otherMarker.suffix &&
+      marker.listFormat === otherMarker.listFormat
+    );
+  }
   /** Returns the stored compatibility count. @returns Unsigned byte. */
   public GetIncludeUpperLevels(): number {
     return this.includeUpperLevels;

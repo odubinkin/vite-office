@@ -173,12 +173,9 @@ export class WriterViewProjection {
       ) => {
         const list = projectWriterParagraphList(node);
         const bulletChar =
-          list.kind === "bullet"
-            ? node.GetNumRule()?.GetNumFormat(list.level).GetBulletChar()
-            : undefined;
+          list.kind === "bullet" ? node.GetNumRule()?.Get(list.level).GetBulletChar() : undefined;
         const listMarker = node.GetListLabel();
-        const listFormat =
-          list.kind === "none" ? undefined : node.GetNumRule()?.GetNumFormat(list.level);
+        const listFormat = list.kind === "none" ? undefined : node.GetNumRule()?.Get(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;

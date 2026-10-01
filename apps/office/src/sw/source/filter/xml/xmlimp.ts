@@ -70,7 +70,7 @@ import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/te
 import { SwPosition } from "../../core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
-import { SwNumRule } from "../../core/doc/number";
+import { createWriterNumRule } from "../../core/doc/DocumentListsManager";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { WRITER_PAPER_SIZES } from "../../core/layout/pagedesc";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
@@ -368,7 +368,7 @@ class SwXMLImport
   /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing. */
   public registerListStyle(styleName: string, rule: XMLTextListRule): void {
     if (this.listRules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
-    const imported = new SwNumRule(
+    const imported = createWriterNumRule(
       rule.name,
       undefined,
       rule.name,
@@ -387,8 +387,8 @@ class SwXMLImport
     const existing = this.document.FindNumRulePtr(rule.name);
     if (existing !== undefined) {
       for (let level = 0; level < rule.levelCount; level += 1) {
-        const previous = existing.GetNumFormat(level),
-          applied = imported.GetNumFormat(level);
+        const previous = existing.Get(level),
+          applied = imported.Get(level);
         if (
           previous.GetKind() !== applied.GetKind() ||
           JSON.stringify(previous.GetMarkerProperties()) !==

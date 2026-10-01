@@ -4,7 +4,7 @@ title: "Restore Writer numbering format ownership and access contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: user-authorized iteration 43 restores optional owned formats and shared effective defaults, with consumer and Worker migration and unchanged verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T11:46:36.168Z"
+doc_updated_at: "2026-10-01T11:51:35.724Z"
 doc_updated_by: "CODER"
 description: "Iteration 43: separate optional owned levels from shared effective defaults, preserve source-equivalent Set no-op and copy ownership, and migrate existing consumers and Worker serialization without changing registered I/O deviations."
 sections:
@@ -85,6 +85,14 @@ sections:
     - Observation: Third full run passed all 708 app tests and left only the source-shaped constructor blank-name rejection uncovered (number.ts line112); functions and lines are already 100%, one statement/branch below threshold.
       Impact: Native valid-name default/ownership profiles and browser guard all pass. The existing repository blank-name input guard moved out of the assembly constructor and needs a direct boundary regression.
       Resolution: Test the preserved direct-constructor blank-name guard, retain the full third log and repeat unchanged npm run verify. No coverage exclusions or threshold changes.
+
+    - Observation: Final application gate passes 708 tests/160 files and all four 100% coverage thresholds. The next read-only obligation is measured independently: the unchanged standalone native SwNumFormat constructors initialize bullet code point8226 (SVX_DEF_BULLET), while actual new SwNumFormat("numbered") stores an empty bullet. Source type hierarchy and font/style ownership also remain unverified.
+      Impact: The current sparse rule ownership correction is verified at application level; this separate existing standalone-format/default obligation is not folded into iteration43.
+      Resolution: Finish the unchanged inventory/browser/static/source validation, close only the executable ownership leaf, and retain native/local followup evidence for iteration44. Keep parent and goal active.
+
+    - Observation: Final fourth npm run verify exited0:708 app/160 files,109 inventory/36,19 browser; both suites100% in every coverage category; every unchanged static/docs/file-size/source/provenance/parity gate passed. Final source size ndtxt999 split lines, XML import991. Native primitive followup constant was corrected after bounded empty header lookup: actual include/editeng/numdef.hxx SVX_DEF_BULLET is0xF095 (61589), not0x2022. Retain the initial constant-adapter log.
+      Impact: The corrected20-definition ASan/UBSan oracle produces identical40 shared-table and19 ownership states because native tables explicitly override their glyphs. The next actual standalone constructor gap is empty local glyph versus nativeU+F095. The additional2 complete native methods match16 valid NONE states. The measured malformed NONE timeout is explicitly rejected and remains unverified native equivalence.
+      Resolution: Record actual CODE SHA, canonical successful verification and quality review, finish only this leaf and append parent progress. No module-wide/default-registry/UI goal completion or registered I/O change. Full static destruction, pointer overload, registered style/font/graphics and SvxNumberType hierarchy remain separate obligations.
 id_source: "generated"
 ---
 ## Summary
@@ -145,3 +153,11 @@ Baseline from immutable iteration 42: effective Get absent; ten eager owned slot
 - Observation: Third full run passed all 708 app tests and left only the source-shaped constructor blank-name rejection uncovered (number.ts line112); functions and lines are already 100%, one statement/branch below threshold.
   Impact: Native valid-name default/ownership profiles and browser guard all pass. The existing repository blank-name input guard moved out of the assembly constructor and needs a direct boundary regression.
   Resolution: Test the preserved direct-constructor blank-name guard, retain the full third log and repeat unchanged npm run verify. No coverage exclusions or threshold changes.
+
+- Observation: Final application gate passes 708 tests/160 files and all four 100% coverage thresholds. The next read-only obligation is measured independently: the unchanged standalone native SwNumFormat constructors initialize bullet code point8226 (SVX_DEF_BULLET), while actual new SwNumFormat("numbered") stores an empty bullet. Source type hierarchy and font/style ownership also remain unverified.
+  Impact: The current sparse rule ownership correction is verified at application level; this separate existing standalone-format/default obligation is not folded into iteration43.
+  Resolution: Finish the unchanged inventory/browser/static/source validation, close only the executable ownership leaf, and retain native/local followup evidence for iteration44. Keep parent and goal active.
+
+- Observation: Final fourth npm run verify exited0:708 app/160 files,109 inventory/36,19 browser; both suites100% in every coverage category; every unchanged static/docs/file-size/source/provenance/parity gate passed. Final source size ndtxt999 split lines, XML import991. Native primitive followup constant was corrected after bounded empty header lookup: actual include/editeng/numdef.hxx SVX_DEF_BULLET is0xF095 (61589), not0x2022. Retain the initial constant-adapter log.
+  Impact: The corrected20-definition ASan/UBSan oracle produces identical40 shared-table and19 ownership states because native tables explicitly override their glyphs. The next actual standalone constructor gap is empty local glyph versus nativeU+F095. The additional2 complete native methods match16 valid NONE states. The measured malformed NONE timeout is explicitly rejected and remains unverified native equivalence.
+  Resolution: Record actual CODE SHA, canonical successful verification and quality review, finish only this leaf and append parent progress. No module-wide/default-registry/UI goal completion or registered I/O change. Full static destruction, pointer overload, registered style/font/graphics and SvxNumberType hierarchy remain separate obligations.

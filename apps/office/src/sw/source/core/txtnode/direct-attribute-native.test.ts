@@ -1,4 +1,5 @@
 /** @fileoverview Compares real Writer nodes, caches and notifications against unchanged pinned native attribute handlers. */
+import type { SwNumRule } from "../doc/number";
 import { expect, it } from "vitest";
 import { isDeepStrictEqual } from "node:util";
 import cases from "../../../../test/writer-native-attributes.json";
@@ -85,8 +86,7 @@ it("matches unchanged native pre/post handlers before validating counter reads",
         pendingStyle = value;
         node.SetAttrOutlineLevel(4);
       }
-      if (kind === 16)
-        for (let i = 0; i < 10; i++) required(rules[0]).GetNumFormat(i).SetStart(value);
+      if (kind === 16) for (let i = 0; i < 10; i++) updateRuleStart(required(rules[0]), i, value);
       if (kind === 17) node.SetAttr(new SwNumRuleItem("unknown"));
       if (kind === 0) node.ChgFormatColl(required(styles[value]));
       if (kind === 1)
@@ -193,3 +193,10 @@ it("matches unchanged native pre/post handlers before validating counter reads",
   }
   expect(states).toBe(2130);
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

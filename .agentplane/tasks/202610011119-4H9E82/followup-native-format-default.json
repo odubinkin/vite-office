@@ -1,10 +1,10 @@
 {
-  "scope": "Existing complete unchanged native standalone SwNumFormat/default base constructors from the identity manifest; named platform and null-client adapters remain in force. Not full type/font/style/native lifetime certification.",
+  "scope": "Unchanged complete native SwNumFormat/default base constructors, with correct pinned include/editeng/numdef.hxx constant. Named platform/null-client adapters remain. Not full type/font/style/native lifetime certification.",
   "state": [
     0,
     1,
     1,
-    8226,
+    61589,
     0,
     0,
     0,
@@ -17,5 +17,10 @@
     "",
     false,
     ""
-  ]
+  ],
+  "sourceConstant": {
+    "path": "include/editeng/numdef.hxx",
+    "definition": "#define SVX_DEF_BULLET (0xF000 + 149) // Character for lists",
+    "value": 61589
+  }
 }

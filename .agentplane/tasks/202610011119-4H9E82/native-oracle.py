@@ -20,7 +20,7 @@ pre=r'''
 #include <cstdint>
 #include <climits>
 using sal_Int32=int32_t;using sal_Int16=int16_t;using sal_uInt8=uint8_t;using sal_uInt16=uint16_t;using sal_UCS4=uint32_t;using SvxNumType=int;
-constexpr int MAXLEVEL=10,NUM_RULE=1,OUTLINE_RULE=0,RULE_END=2,SVX_NUM_ARABIC=0,SVX_NUM_CHAR_SPECIAL=1,SVX_NUM_NUMBER_NONE=2,SVX_DEF_BULLET=0x2022,COL_BLACK=0;
+constexpr int MAXLEVEL=10,NUM_RULE=1,OUTLINE_RULE=0,RULE_END=2,SVX_NUM_ARABIC=0,SVX_NUM_CHAR_SPECIAL=1,SVX_NUM_NUMBER_NONE=2,SVX_DEF_BULLET=0xF095,COL_BLACK=0;
 using SwNumRuleType=int;
 #define OSL_ENSURE(c,m) assert(c)
 namespace tools {using Long=int64_t;}

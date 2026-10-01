@@ -36,6 +36,7 @@ import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 /** Primitive graph record for one numbering level. */
 interface WriterNumberFormatRecord {
   readonly bulletFont: string;
+  readonly numberingType?: "arabic" | "char-special" | "none";
   readonly bulletChar?: string;
   readonly firstLineIndent: number;
   readonly indentAt: number;
@@ -56,6 +57,8 @@ interface WriterNumberFormatRecord {
 /** Primitive graph record for one document numbering rule. */
 interface WriterNumberRuleRecord {
   readonly ruleType?: SwNumRuleType;
+  readonly ownedLevels?: readonly boolean[];
+  readonly defaultPositionAndSpaceMode?: "label-alignment" | "label-width-and-position";
   readonly automatic: boolean;
   readonly formats: readonly WriterNumberFormatRecord[];
   readonly listId: string;
@@ -159,6 +162,12 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         rule,
       ) => ({
         automatic: rule.IsAutoRule(),
+        defaultPositionAndSpaceMode: rule.GetDefaultNumberFormatPositionAndSpaceMode(),
+        ownedLevels: Array.from(
+          { length: 10 },
+          /** Retains native optional level ownership. @param _unused - Placeholder. @param level - Level. @returns Presence. */
+          (_unused, level) => rule.GetNumFormat(level) !== undefined,
+        ),
         ...(rule.GetRuleType() === SwNumRuleType.NUM_RULE ? {} : { ruleType: rule.GetRuleType() }),
         formats: Array.from(
           { length: 10 },
@@ -166,10 +175,11 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
             _,
             level,
           ) => {
-            const format = rule.GetNumFormat(level);
+            const format = rule.Get(level);
             return {
               ...format.GetPositionProperties(),
               bulletFont: format.GetBulletFont(),
+              numberingType: format.GetNumberingType(),
               bulletChar: format.GetBulletChar(),
               firstLineIndent: format.GetFirstLineIndent(),
               indentAt: format.GetIndentAt(),
@@ -428,33 +438,49 @@ export function decodeWriterDocument(
       rule.ruleType !== SwNumRuleType.OUTLINE_RULE
     )
       throw new Error("Stored Writer numbering rule type is invalid.");
-    const restoredRule = new SwNumRule(
-      rule.name,
-      rule.formats.map(
-        /** Decodes one numbering level. @param format - Primitive format record. @returns Model format. */ (
-          format,
-        ) =>
-          new SwNumFormat(format.kind, format.bulletChar, {
-            absLSpace: format.absLSpace ?? 0,
-            firstLineOffset: format.firstLineOffset ?? 0,
-            charTextDistance: format.charTextDistance ?? 0,
-            bulletFont: format.bulletFont,
-            firstLineIndent: format.firstLineIndent,
-            indentAt: format.indentAt,
-            includeUpperLevels: format.includeUpperLevels,
-            labelFollowedBy: format.labelFollowedBy,
-            listTabPosition: format.listTabPosition,
-            positionAndSpaceMode: format.positionAndSpaceMode,
-            ...(format.listFormat === undefined ? {} : { listFormat: format.listFormat }),
-            prefix: format.prefix,
-            start: format.start,
-            suffix: format.suffix,
-          }),
-      ),
-      rule.listId,
-      rule.automatic,
-    );
-    restoredRule.SetRuleType(rule.ruleType ?? SwNumRuleType.NUM_RULE);
+    if (
+      rule.formats.length !== 10 ||
+      (rule.ownedLevels !== undefined &&
+        (rule.ownedLevels.length !== 10 ||
+          rule.ownedLevels.some(
+            /** Rejects malformed presence bits. @param owned - Candidate. @returns Invalidity. */
+            (owned) => typeof owned !== "boolean",
+          )))
+    )
+      throw new Error("Stored Writer numbering ownership is invalid.");
+    const mode = rule.defaultPositionAndSpaceMode ?? "label-alignment";
+    if (mode !== "label-alignment" && mode !== "label-width-and-position")
+      throw new Error("Stored Writer numbering default mode is invalid.");
+    const restoredRule = new SwNumRule(rule.name, mode, rule.ruleType ?? SwNumRuleType.NUM_RULE);
+    restoredRule.SetDefaultListId(rule.listId);
+    restoredRule.SetAutoRule(rule.automatic);
+    for (let level = 0; level < 10; level++) {
+      const format = rule.formats[level] as WriterNumberFormatRecord;
+      if (
+        format.numberingType !== undefined &&
+        !["arabic", "char-special", "none"].includes(format.numberingType)
+      )
+        throw new Error("Stored Writer numbering format type is invalid.");
+      const decoded = new SwNumFormat(format.kind, format.bulletChar, {
+        absLSpace: format.absLSpace ?? 0,
+        firstLineOffset: format.firstLineOffset ?? 0,
+        charTextDistance: format.charTextDistance ?? 0,
+        bulletFont: format.bulletFont,
+        ...(format.numberingType === undefined ? {} : { numberingType: format.numberingType }),
+        firstLineIndent: format.firstLineIndent,
+        indentAt: format.indentAt,
+        includeUpperLevels: format.includeUpperLevels,
+        labelFollowedBy: format.labelFollowedBy,
+        listTabPosition: format.listTabPosition,
+        positionAndSpaceMode: format.positionAndSpaceMode,
+        ...(format.listFormat === undefined ? {} : { listFormat: format.listFormat }),
+        prefix: format.prefix,
+        start: format.start,
+        suffix: format.suffix,
+      });
+      if (rule.ownedLevels === undefined || rule.ownedLevels[level])
+        restoredRule.Set(level, decoded);
+    }
     document.AddNumRule(restoredRule);
   }
   if (record.textNodes.length === 0)

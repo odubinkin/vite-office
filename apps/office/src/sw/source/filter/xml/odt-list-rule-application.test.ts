@@ -3,7 +3,7 @@ import { expect, it, vi } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createWriterDocument } from "../../core/doc/doc";
-import { type SwNumFormat } from "../../core/doc/number";
+import { type ConstSwNumFormat } from "../../core/doc/number";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
@@ -64,7 +64,7 @@ function applied(level: number, bullet?: string) {
 }
 
 /** Projects the fields under audit without calling a production default factory. @param format - Writer format. @returns Audited state. */
-function state(format: SwNumFormat) {
+function state(format: ConstSwNumFormat) {
   return {
     kind: format.GetKind(),
     bullet: format.GetBulletChar(),
@@ -154,9 +154,9 @@ it("applies list declarations in source order and stops at native property rejec
         if (restored === undefined) throw new Error("Fixture snapshot lost its rule");
         for (let level = 0; level < 10; level += 1) {
           const expected = testCase.changes.get(level) ?? base(level);
-          expect(state(rule.GetNumFormat(level)), testCase.levels).toEqual(expected);
-          expect(state(copied.GetNumFormat(level))).toEqual(expected);
-          expect(state(restored.GetNumFormat(level))).toEqual(expected);
+          expect(state(rule.Get(level)), testCase.levels).toEqual(expected);
+          expect(state(copied.Get(level))).toEqual(expected);
+          expect(state(restored.Get(level))).toEqual(expected);
         }
         const current = document.paragraphs[0];
         if (current === undefined) throw new Error("Fixture lost its current node");
@@ -192,7 +192,7 @@ it("applies list declarations in source order and stops at native property rejec
         for (let level = 0; level < 10; level += 1) {
           const expected = testCase.changes.get(level) ?? base(level);
           // Numeric XML does not export inactive bullet chars; reopening starts from the native base.
-          expect(state(reopened.GetNumFormat(level))).toEqual({
+          expect(state(reopened.Get(level))).toEqual({
             ...expected,
             ...(expected.kind === "numbered" ? { bullet: base(level).bullet } : {}),
           });
@@ -209,7 +209,7 @@ it("retains the native accepted distance boundary and its subsequent export reje
   const document = (
     await readOdtDocument(await input(original, levels, false), { title: "Boundary" })
   ).document;
-  expect(document.FindNumRulePtr("Ordered")?.GetNumFormat(0).GetCharTextDistance()).toBe(18577);
+  expect(document.FindNumRulePtr("Ordered")?.Get(0).GetCharTextDistance()).toBe(18577);
   const exported = writeOdtDocument(document, { title: "Boundary" });
   const xml = await new ZipFile(exported).readTextEntry("content.xml");
   expect(xml).toContain('text:min-label-distance="32.768cm"');
@@ -218,7 +218,7 @@ it("retains the native accepted distance boundary and its subsequent export reje
   );
   if (reopened === undefined) throw new Error("Boundary fixture lost its rule");
   for (let level = 0; level < 10; level += 1)
-    expect(state(reopened.GetNumFormat(level))).toEqual(base(level));
+    expect(state(reopened.Get(level))).toEqual(base(level));
 });
 
 it("propagates unrelated application failures instead of treating them as a UNO rejection", /** Ensures programmer errors retain their import failure rather than a silent partial document. @returns Nothing. */ () => {

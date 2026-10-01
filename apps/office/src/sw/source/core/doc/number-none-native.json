@@ -1,0 +1,98 @@
+[
+  {
+    "pattern": null,
+    "types": [2, 0, 0],
+    "values": [2, 3, 4],
+    "expected": "(3.4)"
+  },
+  {
+    "pattern": null,
+    "types": [2, 0, 0],
+    "values": [0, 0, 4],
+    "expected": "(0.4)"
+  },
+  {
+    "pattern": null,
+    "types": [0, 2, 0],
+    "values": [2, 3, 4],
+    "expected": "(2.4)"
+  },
+  {
+    "pattern": null,
+    "types": [0, 2, 0],
+    "values": [0, 0, 4],
+    "expected": "(0.4)"
+  },
+  {
+    "pattern": null,
+    "types": [2, 2, 0],
+    "values": [2, 3, 4],
+    "expected": "(4)"
+  },
+  {
+    "pattern": null,
+    "types": [2, 2, 0],
+    "values": [0, 0, 4],
+    "expected": "(4)"
+  },
+  {
+    "pattern": null,
+    "types": [0, 0, 2],
+    "values": [2, 3, 4],
+    "expected": "()"
+  },
+  {
+    "pattern": null,
+    "types": [0, 0, 2],
+    "values": [0, 0, 4],
+    "expected": "()"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [2, 0, 0],
+    "values": [2, 3, 4],
+    "expected": "3.4"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [2, 0, 0],
+    "values": [0, 0, 4],
+    "expected": "0.4"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [0, 2, 0],
+    "values": [2, 3, 4],
+    "expected": "2.4"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [0, 2, 0],
+    "values": [0, 0, 4],
+    "expected": "0.4"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [2, 2, 0],
+    "values": [2, 3, 4],
+    "expected": "4"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [2, 2, 0],
+    "values": [0, 0, 4],
+    "expected": "4"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [0, 0, 2],
+    "values": [2, 3, 4],
+    "expected": "()"
+  },
+  {
+    "pattern": "%1%.%2%.%3%",
+    "types": [0, 0, 2],
+    "values": [0, 0, 4],
+    "expected": "()"
+  }
+]

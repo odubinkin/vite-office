@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the pinned Writer restart item default without synthesizing direct list restart state. */
+import type { SwNumRule } from "../doc/number";
 import { expect, it } from "vitest";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -69,7 +70,7 @@ it("keeps rule start9 and explicit zero/seven distinct through actual list undo,
     const doc = new SwDoc();
     const node = doc.paragraphs[0] as SwTextNode;
     const rule = doc.EnsureNumRule("Restart audit", "numbered");
-    rule.GetNumFormat(0).SetStart(9);
+    updateRuleStart(rule, 0, 9);
     node.SetAttr(new SwNumRuleItem(rule.GetName()));
     expect(node.IsListRestart()).toBe(false);
     checkStart(node);
@@ -115,3 +116,10 @@ it("keeps rule start9 and explicit zero/seven distinct through actual list undo,
     expect(node.HasAttrListRestartValue()).toBe(false);
   }
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

@@ -57,7 +57,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
         );
         if (second === undefined || ninth === undefined || sixteenth === undefined)
           throw new Error("tdf114287 fixture has fewer than 16 paragraphs");
-        const format = second.GetNumRule()?.GetNumFormat(0);
+        const format = second.GetNumRule()?.Get(0);
         const mm100 =
           /** Converts Writer twips to hundredths of a millimetre. @param twips - Writer length. @returns mm100 length. */ (
             twips: number,
@@ -196,7 +196,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const format = source.FindNumRulePtr("L1")?.GetNumFormat(0);
+    const format = source.FindNumRulePtr("L1")?.Get(0);
     expect(format?.GetFirstLineIndent()).toBe(-360);
     expect(format?.GetIndentAt()).toBe(1152);
     expect(format?.GetListtabPos()).toBe(1152);
@@ -204,7 +204,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     const exported = exportContentXml(source);
     expect(exported).toContain("style:list-level-label-alignment");
     const roundTripped = importWriterXml(styles(""), exported, metadata).document;
-    expect(roundTripped.FindNumRulePtr("L1")?.GetNumFormat(0).GetIndentAt()).toBe(1152);
+    expect(roundTripped.FindNumRulePtr("L1")?.Get(0).GetIndentAt()).toBe(1152);
   });
 
   it("retains legacy list spacing independently from modern alignment", /** Verifies bounded legacy positioning import. @returns Nothing. */ () => {
@@ -218,7 +218,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const format = document.FindNumRulePtr("Legacy")?.GetNumFormat(0);
+    const format = document.FindNumRulePtr("Legacy")?.Get(0);
     expect(format?.GetPositionAndSpaceMode()).toBe("label-width-and-position");
     expect(format?.GetAbsLSpace()).toBe(720);
     expect(format?.GetFirstLineOffset()).toBe(-288);
@@ -246,12 +246,12 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       metadata,
     ).document;
     const rule = source.FindNumRulePtr("Partial")!;
-    expect(rule.GetNumFormat(0).GetLabelFollowedBy()).toBe("space");
-    expect(rule.GetNumFormat(1).GetLabelFollowedBy()).toBe("nothing");
-    expect(rule.GetNumFormat(2).GetListtabPos()).toBe(1296);
-    expect(rule.GetNumFormat(3).GetFirstLineIndent()).toBeCloseTo(0);
-    expect(rule.GetNumFormat(4).GetFirstLineOffset()).toBe(-288);
-    expect(rule.GetNumFormat(5).GetCharTextDistance()).toBe(144);
+    expect(rule.Get(0).GetLabelFollowedBy()).toBe("space");
+    expect(rule.Get(1).GetLabelFollowedBy()).toBe("nothing");
+    expect(rule.Get(2).GetListtabPos()).toBe(1296);
+    expect(rule.Get(3).GetFirstLineIndent()).toBeCloseTo(0);
+    expect(rule.Get(4).GetFirstLineOffset()).toBe(-288);
+    expect(rule.Get(5).GetCharTextDistance()).toBe(144);
     expect(exportContentXml(source)).toContain('text:label-followed-by="space"');
   });
 
@@ -264,7 +264,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       metadata,
     )
       .document.FindNumRulePtr("Invalid")
-      ?.GetNumFormat(0);
+      ?.Get(0);
     expect(unknownFollow?.GetLabelFollowedBy()).toBe("listtab");
     expect(unknownFollow?.GetFirstLineIndent()).toBe(0);
     expect(unknownFollow?.GetIndentAt()).toBe(0);

@@ -292,7 +292,7 @@ it("round-trips native headers and unnumbered item continuations", /** Verifies 
 it("omits restart metadata on uncounted paragraphs as native NumberingIsNumber projection does", /** Verifies native export omission without inventing header restart retention. @returns Completion. */ async () => {
   const document = createWriterDocument();
   const rule = document.EnsureNumRule("Headers", "numbered", 0);
-  rule.GetNumFormat(0).SetStart(7);
+  updateRuleStart(rule, 0, 7);
   for (let index = 0; index < 3; index++) {
     const node =
       index === 0 ? (document.paragraphs[0] as SwTextNode) : document.nodes.MakeTextNode();
@@ -326,3 +326,10 @@ it("omits restart metadata on uncounted paragraphs as native NumberingIsNumber p
   ).toEqual(expected);
   expect(reopened.document.paragraphs[1]?.IsCountedInList()).toBe(false);
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

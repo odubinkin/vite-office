@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native phantom insertion, descendant relocation and orphan guards. */
+import type { SwNumRule } from "../doc/number";
 import nativeTiming from "../../../../test/writer-native-phantom-timing.json";
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
@@ -213,7 +214,7 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
     const rule = document.FindNumRulePtr("Counters");
     [7, 5, 3, 2, 4, 6, 8, 9, 10, 11].forEach(
       /** Sets literal level starts. @param start - Start value. @param level - Rule level. @returns Nothing. */
-      (start, level) => rule?.GetNumFormat(level).SetStart(start),
+      (start, level) => updateRuleStart(rule, level, start),
     );
     const indexes = nodes.map(
       /** Builds document positions. @param _node - Item. @param index - Position. @returns Position. */
@@ -292,3 +293,10 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   root.AddChild(new SwNodeNum(text), 0);
   expect(root.GetChildren()).toEqual([orphan]);
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

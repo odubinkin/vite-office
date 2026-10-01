@@ -1,4 +1,5 @@
 /** @fileoverview Verifies retained Writer list topology and native validating reads across document mutations. */
+import type { SwNumRule } from "../doc/number";
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
@@ -8,7 +9,7 @@ import { SwNodeNum } from "./SwNodeNum";
 function fixture(levels: readonly number[]) {
   const document = createWriterDocument();
   const rule = document.EnsureNumRule("Counters", "numbered");
-  for (let level = 0; level < 10; level++) rule.GetNumFormat(level).SetStart([7, 5, 3][level] ?? 1);
+  for (let level = 0; level < 10; level++) updateRuleStart(rule, level, [7, 5, 3][level] ?? 1);
   const nodes = levels.map(
     /** Registers one canonical list item. @param level - Item level. @param index - Body position. @returns Item. */
     (level, index) => {
@@ -171,3 +172,10 @@ it("removes a real item with an empty phantom descendant without leaving root ch
   expect(item.GetParent()).toBeUndefined();
   expect(item.GetChildren()).toEqual([]);
 });
+
+/** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
+function updateRuleStart(rule: SwNumRule | undefined, level: number, start: number): void {
+  const format = (rule as SwNumRule).Get(level).clone();
+  format.SetStart(start);
+  (rule as SwNumRule).Set(level, format);
+}

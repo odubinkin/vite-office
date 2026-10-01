@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
-import { SwNumRule } from "../../core/doc/number";
+import { createWriterNumRule } from "../../core/doc/DocumentListsManager";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
@@ -43,7 +43,7 @@ async function input(base: Uint8Array, attributes: string, common: boolean): Pro
 function geometry(document: SwDoc) {
   const paragraph = document.paragraphs[0];
   expect(paragraph?.GetText()).toBe("x");
-  const format = paragraph?.GetNumRule()?.GetNumFormat(0);
+  const format = paragraph?.GetNumRule()?.Get(0);
   return [
     format?.GetFirstLineIndent(),
     format?.GetIndentAt(),
@@ -139,7 +139,7 @@ it("round-trips native MM100 defaults, parsing bounds and conditional list attri
 it("exports the default Writer list geometry at every supported level", /** Ensures default command lists retain native explicit alignment rather than falling back to legacy interpretation. @returns Completion after both marker families. */ async () => {
   for (const kind of ["bullet", "numbered"] as const) {
     const document = createWriterDocument();
-    document.AddNumRule(new SwNumRule("Default", kind));
+    document.AddNumRule(createWriterNumRule("Default", kind));
     const paragraph = document.paragraphs[0];
     if (paragraph === undefined) throw new Error("Default list paragraph missing");
     paragraph.SetNumRule("Default");
@@ -155,7 +155,7 @@ it("exports the default Writer list geometry at every supported level", /** Ensu
       await readOdtDocument(exported, { title: "Default list" })
     ).document.paragraphs[0]?.GetNumRule();
     for (let level = 0; level < 10; level++) {
-      const format = restored?.GetNumFormat(level);
+      const format = restored?.Get(level);
       expect(format?.GetFirstLineIndent()).toBe(-360);
       expect(format?.GetIndentAt()).toBe(720 + level * 360);
       expect(format?.GetListtabPos()).toBe(720 + level * 360);
