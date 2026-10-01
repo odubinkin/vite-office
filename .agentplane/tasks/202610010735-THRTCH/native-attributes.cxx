@@ -21,7 +21,7 @@ using UIName=OUString;
 
 using sal_Int16=int16_t;struct SwNumRule;struct SwPaM;
 template<class T>struct TypedWhichId {using type=T;int id;constexpr operator int()const{return id;}};
-struct SfxPoolItem {int which;SfxPoolItem(int id):which(id){}virtual ~SfxPoolItem()=default;int Which()const{return which;}template<class T>const T& StaticWhichCast(T id)const{return static_cast<const typename T::type&>(*this);}};
+struct SfxPoolItem {int which;SfxPoolItem(int id):which(id){}virtual ~SfxPoolItem()=default;int Which()const{return which;}template<class T>const typename T::type& StaticWhichCast(T id)const{return static_cast<const typename T::type&>(*this);}};
 struct SwNumRuleItem:SfxPoolItem {UIName value;SwNumRuleItem(UIName v=""):SfxPoolItem(73),value(v){}const UIName& GetValue()const{return value;}};
 struct SfxInt16Item:SfxPoolItem {sal_Int16 value;SfxInt16Item(int id,sal_Int16 v):SfxPoolItem(id),value(v){}int GetValue()const{return value;}};
 struct SfxUInt16Item:SfxPoolItem {sal_uInt16 value;SfxUInt16Item(int id,sal_uInt16 v):SfxPoolItem(id),value(v){}int GetValue()const{return value;}};
@@ -105,7 +105,7 @@ constexpr int SVX_NUM_NUMBER_NONE=0,SVX_NUM_CHAR_SPECIAL=1,SVX_NUM_BITMAP=2,SVX_
 struct SwNumFormat {int GetNumberingType()const{return bullet?SVX_NUM_CHAR_SPECIAL:SVX_NUM_ARABIC;}long start=1;bool bullet=false;long GetStart()const{return start;}bool IsEnumeration()const{return !bullet;}bool IsItemize()const{return bullet;}};
 struct SwNumRule {SwNumRuleType meRuleType=NUM_RULE;SwNumRuleType GetRuleType() const           { return meRuleType; }void SetRuleType( SwNumRuleType eNew )      { meRuleType = eNew;
                                                   mbInvalidRuleFlag = true; }bool IsOutlineRule() const { return meRuleType == OUTLINE_RULE; }using tTextNodeList=std::vector<SwTextNode*>;tTextNodeList maTextNodeList;bool mbInvalidRuleFlag=true;OUString name="Counters";SwNumFormat formats[10];bool IsContinusNum()const{return false;}bool IsCountPhantoms()const{return true;}const SwNumFormat* GetNumFormat(sal_uInt16 level)const{return &formats[level];}const SwNumFormat& Get(sal_uInt16 level)const{return formats[level];}const UIName& GetName()const{return name;}static UIName GetOutlineRuleName();void GetTextNodeList(tTextNodeList&)const;std::size_t GetTextNodeListSize()const;void AddTextNode(SwTextNode&);void RemoveTextNode(SwTextNode&);void Validate(const SwDoc&);};
-struct SwNodes {SwDoc* owner;SwDoc& m_rMyDoc;SwNodes(SwDoc* d):owner(d),m_rMyDoc(*d){}bool canonical=true;bool IsDocNodes()const;SwOutlineNodes m_aOutlineNodes;void UpdateOutlineNode(SwNode&);SwTextNode* operator[](int){return nullptr;}};
+struct SwNodes {SwDoc* owner;SwDoc& m_rMyDoc;SwNodes(SwDoc* d):owner(d),m_rMyDoc(*d){}bool canonical=true;bool IsDocNodes()const;SwDoc& GetDoc(){return *owner;}SwOutlineNodes m_aOutlineNodes;void UpdateOutlineNode(SwNode&);SwTextNode* operator[](int){return nullptr;}};
 struct SwTextNode:SwContentNode {
  int index=0;bool counted=true,restart=false;long actualStart=0;int level=0;bool canonical=true;SwDoc* doc;SwNodes* nodes;SwNumRule* rule;OUString listId="A";
  std::unique_ptr<SwNodeNum> mpNodeNum,mpNodeNumRLHidden,mpNodeNumOrig;
