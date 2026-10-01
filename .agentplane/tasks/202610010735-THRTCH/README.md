@@ -4,7 +4,7 @@ title: "Restore Writer direct list attribute lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved iteration38 native direct-list attribute lifecycle correction under the continuing user goal,with actual pre-edit baselines and unchanged native evidence before production edits."
 doc_version: 3
-doc_updated_at: "2026-10-01T07:36:59.652Z"
+doc_updated_at: "2026-10-01T07:53:04.782Z"
 doc_updated_by: "CODER"
 description: "Iteration38: replace detached effective-state reconciliation with source-owned SetAttr/ResetAttr helpers for existing Writer direct list/outline items,including source ordering,reentrant empty suppression,precise tree notifications and necessary outline-index ownership. Preserve registered IO exceptions and immutable prior evidence;keep parent audit active."
 sections:
@@ -50,7 +50,7 @@ sections:
   Verify Steps: "Before production edits,save actual baseline confirming positive outline without numbering does not synthesize empty-rule intent and explicit numbering does not clear stale intent;probe current bulk mutation ordering and cache behavior. Compile unmodified pinned HandleSetAttrAtTextNode constructors/destructor,HandleResetAttrAtTextNode constructors/init/destructor and SetAttr/ResetAttr/ResetAllAttr wrappers,needed native notification/validation,outline state/index and rule-type definitions,with exact byte hashes and explicit unsupported platform/lifetime/layout/fields/redline/background adapters. Compare genuine SwDoc/SwTextNode/SfxItemSet/SwNodeNum/rule/list/outline-index state across singles,batches,no-ops,default-valued items,same/different rules/IDs,inherited attributes,all supported levels/restarts/counts,suppression/return,nested guard paths and reset single/range/vector/all. Include nonvalidating caches and notification order before vectors to avoid lazy reads masking drift. Literal assertions must independently prove rule/client/registry/index identity and source Arabic-versus-bullet count distinctions;exact undo/clone/Worker16 and real ordinary named/automatic ODT/reopen exercise integration. Focused tests,lints/types/docs/file-size/source/provenance/parity before unchanged npm run verify;all682+prior app tests,109inventory and19browser plus additions,both coverage gates100%,all other gates unchanged. Doctor,routing,diff,recorded verification,actual implementation SHA,evaluator pass and clean final tracked/untracked state. No skipped/waived gates,blanket parity/default/status promotion,IO deviations,network,outside access or subagents."
   Verification: "Pending actual owner baseline,independent unchanged native comparison and complete final gates."
   Rollback Plan: "Revert only the actual iteration38 implementation commit if required;preserve task evidence and all prior DONE artifacts. No history rewriting or registered IO changes."
-  Findings: "Read-only source review:existing SetAttr/ResetAttr/ResetAllAttr bridge ignores native outline suppression and coalesces multiple list deltas behind an else-if full-list invalidation. Source helpers instead retain separate flags,pre-remove/reset actions and destructor ordering. Source UpdateOutlineNode owns sorted outline membership and last-state transition;notification methods own validated-prefix invalidation and traversal. Old iteration37 immutable artifacts can be read as dependency extraction inputs but must not be edited. No baseline/native/runtime verification claim yet. Existing unproven menu/Desktop asynchronous failures and old iteration32 mobile issue remain carried risks."
+  Findings: "Actual pre-edit baseline saved: positive outline4 leaves marker false and no direct NUMRULE; explicit Counters leaves stale marker true; outline0 and reset-all leave stale marker; absent direct ID reset discards inherited owned record. Initial baseline harness omitted SfxItemSet ranges; constructor failure corrected only in harness before rerun. Independent native extraction compiles35 unchanged added definitions with source SHA/byte identities,53 sequences/2010 states before production edits. First native compile failed only typed adapter return type and missing SwNodes GetDoc declaration; fixed declarations without editing extracted bodies. Explicit pool/raw callback/normal-document/shown/layout event/chapter field/background declaration adapters remain bounded; no full platform lifetime or live-style claim. Old UI asynchronous causes remain unproven."
 id_source: "generated"
 ---
 ## Summary
@@ -79,4 +79,4 @@ Revert only the actual iteration38 implementation commit if required;preserve ta
 
 ## Findings
 
-Read-only source review:existing SetAttr/ResetAttr/ResetAllAttr bridge ignores native outline suppression and coalesces multiple list deltas behind an else-if full-list invalidation. Source helpers instead retain separate flags,pre-remove/reset actions and destructor ordering. Source UpdateOutlineNode owns sorted outline membership and last-state transition;notification methods own validated-prefix invalidation and traversal. Old iteration37 immutable artifacts can be read as dependency extraction inputs but must not be edited. No baseline/native/runtime verification claim yet. Existing unproven menu/Desktop asynchronous failures and old iteration32 mobile issue remain carried risks.
+Actual pre-edit baseline saved: positive outline4 leaves marker false and no direct NUMRULE; explicit Counters leaves stale marker true; outline0 and reset-all leave stale marker; absent direct ID reset discards inherited owned record. Initial baseline harness omitted SfxItemSet ranges; constructor failure corrected only in harness before rerun. Independent native extraction compiles35 unchanged added definitions with source SHA/byte identities,53 sequences/2010 states before production edits. First native compile failed only typed adapter return type and missing SwNodes GetDoc declaration; fixed declarations without editing extracted bodies. Explicit pool/raw callback/normal-document/shown/layout event/chapter field/background declaration adapters remain bounded; no full platform lifetime or live-style claim. Old UI asynchronous causes remain unproven.
