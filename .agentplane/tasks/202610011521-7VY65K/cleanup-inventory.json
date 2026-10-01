@@ -1,0 +1,308 @@
+{
+  "deleted": [
+    {
+      "path": ".agentplane/tasks/202609301734-F5X9J6/native-measure-oracle.cxx",
+      "sha256": "3d2d0791aac8bb3640559117c94d7e8694ba475735ed4202864bdf1cc0b556eb",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302034-1CZ8BR/native-list-measure-oracle.cxx",
+      "sha256": "2cc3412ecf07c3cbf641f3f4d0ae98526ef6015b5214d85be2381dcbd8680c0b",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302111-EA56QR/native-list-measure-oracle.cxx",
+      "sha256": "2cc3412ecf07c3cbf641f3f4d0ae98526ef6015b5214d85be2381dcbd8680c0b",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302111-EA56QR/native-position-oracle.cxx",
+      "sha256": "88f7e6045f3eb498014ed0c92e450e74251439cee650a8e9ecc01ed9404f6446",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302147-2R4T31/native-rule-oracle.cxx",
+      "sha256": "a35814d4e8f94f3579ce6dc77f11e061a76a670c97d378cababa83d584b72efb",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302219-BJJJBT/native-level-oracle.cxx",
+      "sha256": "4c21e2fa8b02ee4a31788130bc7f5e6518cd1d667f54f90890e8aaa4bb91f314",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/native-dispatch.cxx",
+      "sha256": "8a517a9328432b3f3a0f5c5139f4092a726071b2015639b69a877837aebb7123",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302319-9KTM99/native-marker-oracle.cxx",
+      "sha256": "ef9afd15790f7deea8efd54c2241d9dd1d42bdff4177986b5c3a4b861162e435",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202609302342-JM15NR/native-marker-transport.cxx",
+      "sha256": "51c16dc93d80ea0f95cff4bf6fe09a32e3ff62f8a9ec4608516900fd8124d5a4",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010014-X0PFNS/native-hierarchical-oracle.cxx",
+      "sha256": "75de887370cf30772f8e058c75eaeae84c7c3418ca70886dd8dbc40f5dc2cc4c",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010041-PHRS94/native-hierarchical-oracle.cxx",
+      "sha256": "50cd9e3f582a62fa27a5ee6f7a4f0d64b15273a0392f28858394b265e68f091d",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010112-M2EDTZ/native-list-transport.cxx",
+      "sha256": "c958aa840b4987c334891604361fe2757064e321cf55997616337cf7e9886b8c",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010138-ZRYS74/native-start.cxx",
+      "sha256": "a55bfabfe8bbf9b5c131f66d5cabb70a398ab8a1834e35a73d04d27ded3e2a6e",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/native-count.cxx",
+      "sha256": "4344532de13b3ab5f3e025218dafca793be69bb4315ee8c2d3cf3840f8c896a0",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/native-sublist.cxx",
+      "sha256": "c8af894b259ea1334abeeec1eb68ed9babb6454b3dae15288b30de95d8def4e4",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010247-DWV0NC/native-export.cxx",
+      "sha256": "f1bf3dfc05485398323aa751143d4f68818dd1f9876d9c4df8b02d6b689ef857",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010333-G6MKMP/native-import.cxx",
+      "sha256": "e1f985ad0e806071db7da5a0ec651a9a1ea2faf57c3ad447e1a2e4c8919e7ea1",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010418-7548FA/native-lifecycle.cxx",
+      "sha256": "ec65d3e9a532a07912cefd4d47a6401abe41e0dc1b3a5f24fc177e47002d8272",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010449-CE6KDW/native-owner.cxx",
+      "sha256": "a7ae1b4d8d900018c17b7deebbf5c028fd86f438ed6ce6ec7c8d131068173c00",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010536-95XQFH/native-style.cxx",
+      "sha256": "f69bed85a7e990aea86df0ace85efe75095bec960982d147beb70a8710cd501b",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010536-95XQFH/unsigned-native.cxx",
+      "sha256": "483a7cefc50d87d4f6785e3acb704f6b8387822d6a889650744b1209da298d3c",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/native-attributes.cxx",
+      "sha256": "c8b6482039ceebd1cd35464225845a5b17c60fa4220d2f1d8e60b0ebbb99615d",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/native-phantom-timing.cxx",
+      "sha256": "04bb939594d64b97c0ffb5ebef32d80e0719a227fab9fea87b5d0ec547a544cf",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010849-VYM64Q/native-attributes.cxx",
+      "sha256": "9d1a0cac6ec773e20e06cee5c17de19d19788af22ab8f7a52f3df2f3b63ad887",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610010940-WW4SFA/native-default.cxx",
+      "sha256": "7c55ad65ac383229f3d961c77df86e9400ffda1986b307313a1d3660c08a1f60",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011012-HMMTBX/native-restart.cxx",
+      "sha256": "63a30563776e5694ec7f23c05537f2065fbf0ddf8035aa850bedf03cc9f79146",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/followup-native-formats.cxx",
+      "sha256": "ad6150d0750a7af8e10dda2d990dc5231a56e5ad9531de648341d90c1d84ae5e",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/native-getter.cxx",
+      "sha256": "c6341ec864dd30f378e06b97901f8e169a0c86531f31ed8279e289cb21868a51",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/followup-native-format-default.cxx",
+      "sha256": "b1986fdf9ecfd49dbb3f39879c733d5d2aa7511ec040e60ab326da85bac5105e",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/native-none.cxx",
+      "sha256": "9c3724cd34e023bfe5d6cddcee37802e06632cd26fb1c0ccf488bbf8ca6f55b2",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/native-rule-formats.cxx",
+      "sha256": "bd32fdd8b4f2ec81a94f8db25fbafdcf45f96529551d2432c758c4ae81fe78ca",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/native-stall.cxx",
+      "sha256": "3e3f05e3399b4bcecffd35f35331e0edd112ff45a5b8adf762ed8d39457b6e03",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/followup-native-classification.cxx",
+      "sha256": "e0037147ad8f3eeec6408be4d15bd175e4af98973635b545e884e2abb34443e3",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/native-format-values.cxx",
+      "sha256": "c197b1a5d12199c50eb041cfb838deb74335cb072ab4e0857ae4e6f926ff5a23",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/native-number-type.cxx",
+      "sha256": "1d4ebe35bbf1e96a58a1c8bc4fde5545bebdce463f5dec2c426a10d2a9307071",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011309-23WGVW/followup-pointer-set.cxx",
+      "sha256": "5de8f6c8b23908208e3e2655f90024b29a556d9b88de96d89cb2b49f986b3d68",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011309-23WGVW/native-classification.cxx",
+      "sha256": "3c28068cdadc5fe4923d51ea06416510e16bf126959320665b16e76c227b811c",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011338-WSMJ80/followup-rule.cxx",
+      "sha256": "6d9f136f1d2afe52db824b124d798038b96dd9ae08e6dc1917b30a04fe22e335",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011338-WSMJ80/native-pointer.cxx",
+      "sha256": "6ffdd863595e47a112780f1c7a6c7a6780461f961f183506a445325b3b2379db",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011419-EHEH05/followup-phantoms.cxx",
+      "sha256": "8c984a674bb82cd5ad5301bcbc4f039fd4e57e8e819d9888eba24be0c4a315fa",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011419-EHEH05/native-rule.cxx",
+      "sha256": "19181fc6e6cd79a213ea2e2c6b980ad059f9be9336d04ccf21482a6ee8e7c967",
+      "tracked": true
+    },
+    {
+      "path": ".agentplane/tasks/202610011456-DA9C87/native-markers.cxx",
+      "sha256": "76cdf21d79bfe6c70e9c5ae248acb8654a5fe228ed3b58e0775ef19f6277893e",
+      "tracked": false
+    },
+    {
+      "path": ".agentplane/tasks/202610011456-DA9C87/native-policy.cxx",
+      "sha256": "0f292a77ef94b26533df04d4b3d385a7b5e6ac4bc185e202ad207f49b3ba6323",
+      "tracked": false
+    },
+    {
+      "path": ".agentplane/tasks/202610011456-DA9C87/native-tree.cxx",
+      "sha256": "9408710704d845a247295c4ddf1af5dddff8a98b43ad32992a2a65652ee13f96",
+      "tracked": false
+    }
+  ],
+  "identities": [
+    {
+      "path": ".agentplane/tasks/202610010940-WW4SFA/native-source-identity.json",
+      "bodies": 4
+    },
+    {
+      "path": ".agentplane/tasks/202610011012-HMMTBX/native-source-identity.json",
+      "bodies": 6
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/followup-native-format-accessors-identity.json",
+      "bodies": 3
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/followup-native-rule-format-identity.json",
+      "bodies": 3
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/native-source-identity.json",
+      "bodies": 11
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/native-default-config-identity.json",
+      "bodies": 2
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/native-none-identity.json",
+      "bodies": 2
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/native-source-identity.json",
+      "bodies": 20
+    }
+  ],
+  "generators": [
+    ".agentplane/tasks/202609301734-F5X9J6/native-oracle.py",
+    ".agentplane/tasks/202609302034-1CZ8BR/native-oracle.py",
+    ".agentplane/tasks/202609302111-EA56QR/native-oracle.py",
+    ".agentplane/tasks/202609302147-2R4T31/native-oracle.py",
+    ".agentplane/tasks/202609302219-BJJJBT/native-oracle.py",
+    ".agentplane/tasks/202609302242-6RBX14/native-dispatch.py",
+    ".agentplane/tasks/202609302319-9KTM99/native-oracle.py",
+    ".agentplane/tasks/202609302342-JM15NR/native-oracle.py",
+    ".agentplane/tasks/202610010014-X0PFNS/native-oracle.py",
+    ".agentplane/tasks/202610010041-PHRS94/native-oracle.py",
+    ".agentplane/tasks/202610010112-M2EDTZ/native-oracle.py",
+    ".agentplane/tasks/202610010138-ZRYS74/native-oracle.py",
+    ".agentplane/tasks/202610010156-ZDTVKE/native-count.py",
+    ".agentplane/tasks/202610010156-ZDTVKE/native-oracle.py",
+    ".agentplane/tasks/202610010247-DWV0NC/native-oracle.py",
+    ".agentplane/tasks/202610010333-G6MKMP/native-oracle.py",
+    ".agentplane/tasks/202610010418-7548FA/native-oracle.py",
+    ".agentplane/tasks/202610010449-CE6KDW/native-oracle.py",
+    ".agentplane/tasks/202610010536-95XQFH/native-oracle.py",
+    ".agentplane/tasks/202610010536-95XQFH/unsigned-oracle.py",
+    ".agentplane/tasks/202610010735-THRTCH/native-oracle.py",
+    ".agentplane/tasks/202610010735-THRTCH/phantom-oracle.py",
+    ".agentplane/tasks/202610010849-VYM64Q/native-oracle.py",
+    ".agentplane/tasks/202610010940-WW4SFA/native-default.py",
+    ".agentplane/tasks/202610011012-HMMTBX/native-restart.py",
+    ".agentplane/tasks/202610011035-VZ3MGM/followup-native-formats.py",
+    ".agentplane/tasks/202610011035-VZ3MGM/native-getter.py",
+    ".agentplane/tasks/202610011119-4H9E82/native-none.py",
+    ".agentplane/tasks/202610011119-4H9E82/native-oracle.py",
+    ".agentplane/tasks/202610011119-4H9E82/native-stall.py",
+    ".agentplane/tasks/202610011207-TR9DSM/build-native.py",
+    ".agentplane/tasks/202610011207-TR9DSM/followup-native-classification.py",
+    ".agentplane/tasks/202610011309-23WGVW/build-native.py",
+    ".agentplane/tasks/202610011338-WSMJ80/build-native.py",
+    ".agentplane/tasks/202610011419-EHEH05/build-followup.py",
+    ".agentplane/tasks/202610011419-EHEH05/build-native.py",
+    ".agentplane/tasks/202610011456-DA9C87/build-native.py"
+  ],
+  "checks": {
+    "zeroSourceCopies": true,
+    "preservedHashesAndResults": true,
+    "generatorSyntax": 37,
+    "representativeProfiles": [
+      "default 86/1/1/1",
+      "marker 188 states",
+      "restart 42 states"
+    ],
+    "projectTestAudit": "Application tests/config contain no vendor/source compiler references. scripts/check-module-boundaries.test.ts currently reads native Library_editeng.mk and requires a separate correction task. npm verify also has static vendor-reading provenance/resource/inventory gates; no native compiler/execution."
+  }
+}
