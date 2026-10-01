@@ -1,0 +1,7 @@
+.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:1801:60: error: too few arguments to function call, single argument 'pNode' was not specified
+ 1801 |     void missingHierarchyArgument() { ValidateHierarchical(); }
+      |                                       ~~~~~~~~~~~~~~~~~~~~ ^
+.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:730:24: note: 'ValidateHierarchical' declared here
+  730 | void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) const
+      |                        ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.

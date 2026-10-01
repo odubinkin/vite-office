@@ -47,7 +47,7 @@ prefix = r'''
 #define SAL_WARN_IF(condition, area, message) ((void)(condition))
 using sal_uIntPtr = uintptr_t;
 namespace tools { using Long = long; }
-namespace o3tl { template<class T, class Compare> using sorted_vector = std::set<T, Compare>; }
+namespace o3tl { template<class T, class Compare> class sorted_vector : public std::set<T, Compare> { using Base = std::set<T, Compare>; public: using Base::insert; void insert(const sorted_vector& other) { Base::insert(other.begin(), other.end()); } }; }
 class SwDoc { public: bool reading = true; std::vector<int> events; };
 '''
 types = '\n'.join(line for line in texts[paths[1]].splitlines() if not line.startswith('#include') and not line.startswith('#pragma'))

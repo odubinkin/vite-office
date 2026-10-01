@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011627-W77K0Q/build-contract-probe.py", line 138, in <module>
+    assert build.returncode == 0, 'Native compilation failed; see native-build.log'
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Native compilation failed; see native-build.log
