@@ -1,0 +1,7 @@
+{
+  "sequences": 276,
+  "states": 10384,
+  "definitions": 16,
+  "pass": true,
+  "profile": "Shown Arabic/bullet/Outline rules, real collection/item/node/list ownership, canonical and foreign arrays; explicit dependency adapters, no full native build or callback/history/footnote/layout/outline-index claim"
+}

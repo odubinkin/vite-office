@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import { SwDoc } from '../../../apps/office/src/sw/source/core/doc/doc';
+import type { SwNodeNum } from '../../../apps/office/src/sw/source/core/SwNumberTree/SwNodeNum';
 import { SwNodes } from '../../../apps/office/src/sw/source/core/docnode/nodes';
 import { SwTextFormatColl } from '../../../apps/office/src/sw/source/core/doc/fmtcol';
 import { SwNumRuleItem } from '../../../apps/office/src/sw/source/core/para/paratr';
@@ -36,7 +37,8 @@ for (const [index, test] of cases.entries()) {
     if(kind===9)node.ChgFormatColl(styles[value]!,false);
     if(kind===11)node.SetEmptyListStyleDueToSetOutlineLevelAttr();
     if(kind===12)node.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-    const actual={nodes:texts.map(n=>({rule:n.GetNumRule()?.GetName()??'-',owned:n.GetNum()?.GetNumRule()?.GetName()??'-',level:n.GetAttrListLevel(),outline:n.GetAttrOutlineLevel(),empty:n.IsEmptyListStyleDueToSetOutlineLevelAttr(),id:n.GetListId()||'-',restart:n.IsListRestart(),counted:n.IsCountedInList(),start:n.GetActualListStartValue(),vector:[...n.GetNumberVector()],attrs:Object.fromEntries((n.GetpSwAttrSet()?.entries()??[]).map(i=>[String(i.Which()),i.QueryValue()===''?'-':typeof i.QueryValue()==='boolean'?String(Number(i.QueryValue())):String(i.QueryValue())]))})),rules:rules.map(r=>{const out:typeof texts=[];r.GetTextNodeList(out);return out.map(n=>texts.indexOf(n));}),registry:doc.getIDocumentListItems().getNumItems().map(n=>texts.indexOf(n.GetTextNode()!))};
+    const registry:SwNodeNum[]=[];doc.getIDocumentListItems().getNumItems(registry);
+    const actual={nodes:texts.map(n=>({rule:n.GetNumRule()?.GetName()??'-',owned:n.GetNum()?.GetNumRule()?.GetName()??'-',level:n.GetAttrListLevel(),outline:n.GetAttrOutlineLevel(),empty:n.IsEmptyListStyleDueToSetOutlineLevelAttr(),id:n.GetListId()||'-',restart:n.IsListRestart(),counted:n.IsCountedInList(),start:n.GetActualListStartValue(),vector:[...n.GetNumberVector()],attrs:Object.fromEntries((n.GetpSwAttrSet()?.entries()??[]).map(i=>[String(i.Which()),i.QueryValue()===''?'-':typeof i.QueryValue()==='boolean'?String(Number(i.QueryValue())):String(i.QueryValue())]))})),rules:rules.map(r=>{const out:typeof texts=[];r.GetTextNodeList(out);return out.map(n=>texts.indexOf(n));}),registry:registry.map(n=>texts.indexOf(n.GetTextNode()!))};
     states += texts.length;snapshots.push(actual);
     if(!isDeepStrictEqual(actual,test.expected[step])){writeFileSync(path+'comparison-failure.json',JSON.stringify({index,step,ops:test.ops.slice(0,step+1),actual,expected:test.expected[step]},null,2)+'\n');throw new Error(`Native comparison mismatch at sequence ${index} step ${step}`);}
   }
