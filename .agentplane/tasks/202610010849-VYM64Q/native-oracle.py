@@ -28,12 +28,12 @@ bool IsInvalidItem(const SfxPoolItem* p){return p&&p->state==1;}
 bool IsDisabledItem(const SfxPoolItem* p){return p&&p->state==2;}
 struct SfxStringItem:SfxPoolItem{struct Str{bool isEmpty()const{return true;}};Str GetValue()const{return {};}};
 struct SwAttrSet;struct SwFormatAutoFormat{std::shared_ptr<SwAttrSet> GetStyleHandle()const{return {};}};
-template<class T>struct TypedWhichId{int value;operator int()const{return value;}};
+template<class T>struct TypedWhichId{int value;constexpr operator int()const{return value;}};
 constexpr TypedWhichId<SwFormatAutoFormat> RES_AUTO_STYLE{700};
 constexpr TypedWhichId<SfxStringItem> RES_FRMATR_STYLE_NAME{701};constexpr int RES_FRMATR_CONDITIONAL_STYLE_NAME=702,RES_PARATR_NUMRULE=73;
 enum class SfxItemState{DEFAULT,SET};
 struct WhichRangesContainer{template<class T>WhichRangesContainer(T){}};
-namespace svl{template<int...>struct Items{};}
+namespace svl{template<int...>constexpr int Items=0;}
 struct SfxItemPool{static constexpr int SFX_WHICH_MAX=4999;static bool IsWhich(sal_uInt16);const SfxPoolItem& GetUserOrPoolDefaultItem(int id)const{static std::map<int,SfxPoolItem> items;auto [at,added]=items.emplace(id,SfxPoolItem{id,id==86?65535:id==87?1:0});return at->second;}};
 struct SfxItemSet{
  std::map<int,std::shared_ptr<SfxPoolItem>> items;SfxItemPool* pool;const SfxItemSet* parent=nullptr;
