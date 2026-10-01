@@ -4,7 +4,7 @@ title: "Restore native standalone numbering format inheritance and defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration44 restores standalone native format inheritance/defaults and marker/font value ownership, with explicit existing assembly and Worker migrations and full verification."
 doc_version: 3
-doc_updated_at: "2026-10-01T12:55:48.976Z"
+doc_updated_at: "2026-10-01T13:00:32.436Z"
 doc_updated_by: "CODER"
 description: "Iteration44: restore SwNumFormat/SvxNumberFormat/SvxNumberType constructor, marker type/glyph/font ownership and value copies; migrate existing command, UNO and Worker assembly and consumers while preserving existing browser and registered I/O behavior."
 sections:
@@ -109,6 +109,10 @@ sections:
     - Observation: The actual UNO regression fails before the fix: a stored hidden native format becomes visible during a suffix/indent-only replacement, while the native method begins with SwNumFormat aFormat(rNumRule.Get(...)).
       Impact: This demonstrates a concrete consumer ownership loss despite the prior full green run.
       Resolution: Copy the previous optional Font and show-symbol flag into the assembled applied format before property setters, preserving other supported property behavior. Keep uno-regression-before.log, rerun that regression and the full required chain.
+
+    - Observation: verify-fifth exits0 after the actual UNO ownership fix:713 app tests across161 files,109 inventory tests across36 files,19 browser tests, unchanged100% statements/branches/functions/lines in both suites; every format/lint/type/dependency/resource/build/static/JSDoc/file-size/source-tree/provenance/invariant/parity gate passes. Native32 identity records and unchanged bodies/header methods match21 format-value/equality states and144 NumberType traces under ASan/UBSan. Focused native-edge test passes6 assertions/cases and actual UNO regression passes5 tests after its retained pre-fix failure.
+      Impact: The approved standalone format ownership migration now has concrete source, constructor/state/copy, caller, Worker legacy and whole-suite evidence. This proves the bounded existing profile, not complete project parity.
+      Resolution: Commit only reviewed implementation/fixtures/metadata and canonical task artifacts, record actual CODE and canonical verification, run the separate EVALUATOR quality phase, close this leaf cleanly, then update the parent and keep the goal active. Next task: native IsItemize/IsEnumeration plus HasNumber/HasBullet classification of existing NONE levels; preserve the measured native trailing-NONE browser guard and registered I/O deviations.
 id_source: "generated"
 ---
 ## Summary
@@ -193,3 +197,7 @@ Source SwNumFormat default ctor delegates to SvxNumberFormat(SVX_NUM_ARABIC) and
 - Observation: The actual UNO regression fails before the fix: a stored hidden native format becomes visible during a suffix/indent-only replacement, while the native method begins with SwNumFormat aFormat(rNumRule.Get(...)).
   Impact: This demonstrates a concrete consumer ownership loss despite the prior full green run.
   Resolution: Copy the previous optional Font and show-symbol flag into the assembled applied format before property setters, preserving other supported property behavior. Keep uno-regression-before.log, rerun that regression and the full required chain.
+
+- Observation: verify-fifth exits0 after the actual UNO ownership fix:713 app tests across161 files,109 inventory tests across36 files,19 browser tests, unchanged100% statements/branches/functions/lines in both suites; every format/lint/type/dependency/resource/build/static/JSDoc/file-size/source-tree/provenance/invariant/parity gate passes. Native32 identity records and unchanged bodies/header methods match21 format-value/equality states and144 NumberType traces under ASan/UBSan. Focused native-edge test passes6 assertions/cases and actual UNO regression passes5 tests after its retained pre-fix failure.
+  Impact: The approved standalone format ownership migration now has concrete source, constructor/state/copy, caller, Worker legacy and whole-suite evidence. This proves the bounded existing profile, not complete project parity.
+  Resolution: Commit only reviewed implementation/fixtures/metadata and canonical task artifacts, record actual CODE and canonical verification, run the separate EVALUATOR quality phase, close this leaf cleanly, then update the parent and keep the goal active. Next task: native IsItemize/IsEnumeration plus HasNumber/HasBullet classification of existing NONE levels; preserve the measured native trailing-NONE browser guard and registered I/O deviations.
