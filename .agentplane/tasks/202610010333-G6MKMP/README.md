@@ -4,7 +4,7 @@ title: "Restore native processed list continuation import"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned processed continuation and DefaultListId projection under the persistent approved upstream goal;safe local scope and unchanged gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:49:59.639Z"
+doc_updated_at: "2026-10-01T03:56:59.598Z"
 doc_updated_by: "CODER"
 description: "Iteration34: replace list alias map with source-owned processed list records,parse native continue-numbering/root-only identity attributes,resolve chains and DefaultListId projection;preserve registered save/open/recovery differences."
 sections:
@@ -72,6 +72,14 @@ sections:
     - Observation: Broader XML test session13232 terminal1:153 tests pass/37files;one existing real ODT test expects list1 while native first-style default now maps to Numbering 1. Earlier read-only search guessed nonexistent odt-list-start-value.test.ts;rg actual subtree remains authoritative.
       Impact: No additional runtime failure is observed;the remaining old literal identity is stale,while other list counter/style/restart suites pass.
       Resolution: Persist focused failure log;change only this fixture expected paragraph ListId to its existing native rule DefaultListId Numbering 1,retain all counter/rule/text/reopen checks. Run new literal continuation package scenarios and full unchanged gates.
+
+    - Observation: New package session34846 exited1 because its snapshot reads SwList.GetListItemNumberVector before the documented validated-tree precondition;first registered records have no materialized parent yet. Existing snapshots first use SwTextNode.GetListItemNumber,which calls ValidateListTree.
+      Impact: This is a test call-order problem for the current SwList API and also exposes a separate native architecture obligation:upstream number nodes are attached before recursive vector reads,while local SwList reconstructs lazily. No continuation identity mismatch was observed at this assertion.
+      Resolution: Read the canonical node counter before the validated-list vector in this task fixture,retain independent literal expectations and record deferred SwList insertion/validation ownership for a separate core task. Do not modify core ownership outside the approved import scope or claim it verified. Read-only fallback located actual SwNumberTree source after guessed directories failed.
+
+    - Observation: Extended native probe/comparison passes3082 sequences/15392 states including RNG1/INT_MAX and high-bit masking;112 genuine package scenarios and3 helper tests pass in session18530. Typecheck48719 exited2:new copy assertion incorrectly assumed CaptureListItems returns a record with level;it actually returns SfxItemSet.
+      Impact: The optional property guard made the intended item ownership assertion vacuous;other literal states/copies/Worker/XML/reopen checks passed. Ownership evidence must use the real pooled-item API.
+      Resolution: Use SfxItemSet.GetItem with RES_PARATR_LIST_LEVEL and assert cloned present items are distinct;retain unchanged type/lint gates. Repeat focused package/types verification before full verify.
 id_source: "generated"
 ---
 ## Summary
@@ -125,3 +133,11 @@ Previous goal turn is progress:DWV0NC DONE,implementation9ac1779d7b3845eb320d939
 - Observation: Broader XML test session13232 terminal1:153 tests pass/37files;one existing real ODT test expects list1 while native first-style default now maps to Numbering 1. Earlier read-only search guessed nonexistent odt-list-start-value.test.ts;rg actual subtree remains authoritative.
   Impact: No additional runtime failure is observed;the remaining old literal identity is stale,while other list counter/style/restart suites pass.
   Resolution: Persist focused failure log;change only this fixture expected paragraph ListId to its existing native rule DefaultListId Numbering 1,retain all counter/rule/text/reopen checks. Run new literal continuation package scenarios and full unchanged gates.
+
+- Observation: New package session34846 exited1 because its snapshot reads SwList.GetListItemNumberVector before the documented validated-tree precondition;first registered records have no materialized parent yet. Existing snapshots first use SwTextNode.GetListItemNumber,which calls ValidateListTree.
+  Impact: This is a test call-order problem for the current SwList API and also exposes a separate native architecture obligation:upstream number nodes are attached before recursive vector reads,while local SwList reconstructs lazily. No continuation identity mismatch was observed at this assertion.
+  Resolution: Read the canonical node counter before the validated-list vector in this task fixture,retain independent literal expectations and record deferred SwList insertion/validation ownership for a separate core task. Do not modify core ownership outside the approved import scope or claim it verified. Read-only fallback located actual SwNumberTree source after guessed directories failed.
+
+- Observation: Extended native probe/comparison passes3082 sequences/15392 states including RNG1/INT_MAX and high-bit masking;112 genuine package scenarios and3 helper tests pass in session18530. Typecheck48719 exited2:new copy assertion incorrectly assumed CaptureListItems returns a record with level;it actually returns SfxItemSet.
+  Impact: The optional property guard made the intended item ownership assertion vacuous;other literal states/copies/Worker/XML/reopen checks passed. Ownership evidence must use the real pooled-item API.
+  Resolution: Use SfxItemSet.GetItem with RES_PARATR_LIST_LEVEL and assert cloned present items are distinct;retain unchanged type/lint gates. Repeat focused package/types verification before full verify.

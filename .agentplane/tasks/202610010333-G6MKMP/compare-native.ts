@@ -6,13 +6,14 @@ import {ODF_NAMESPACES} from '../../../apps/office/src/xmloff/source/core/xmltok
 import {XMLTextListsHelper} from '../../../apps/office/src/xmloff/source/text/txtlists';
 import {XMLTextListBlockContext} from '../../../apps/office/src/xmloff/source/text/XMLTextListBlockContext';
 import type {XMLTextImportTarget} from '../../../apps/office/src/xmloff/source/text/txtparai';
-const data=JSON.parse(readFileSync(new URL('./native-results.json',import.meta.url),'utf8')) as {cases:{defaults:boolean;actions:{op:number;signal?:boolean;attrs?:[number,string][];id?:string}[];expected:string}[]};
-const RealDate=Date,random=crypto.getRandomValues;
+const data=JSON.parse(readFileSync(new URL('./native-results.json',import.meta.url),'utf8')) as {cases:{defaults:boolean;rng?:number;rawRng?:number;actions:{op:number;signal?:boolean;attrs?:[number,string][];id?:string}[];expected:string}[]};
+const RealDate=Date,random=crypto.getRandomValues;let currentRng=0;
 globalThis.Date=class extends RealDate{constructor(){super(new RealDate(2026,9,1,12,34,56,789).getTime());}} as DateConstructor;
-crypto.getRandomValues=(array)=>{(array as Uint32Array).fill(0);return array;};
+crypto.getRandomValues=(array)=>{(array as Uint32Array).fill(currentRng);return array;};
 let states=0;
 try{
 for(const [index,test]of data.cases.entries()){
+ currentRng=test.rawRng??test.rng??0;
  const helper=new XMLTextListsHelper(),stack:XMLTextListBlockContext[]=[];
  const rules=new Map(['S','T'].map(name=>[name,{name,levelCount:10,levels:[],...(test.defaults?{defaultListId:'D'+name}:{})}]));
  const target:XMLTextImportTarget={getListRule:name=>rules.get(name),getStyle:()=>undefined,getAutoStyle:()=>undefined,createParagraph:()=>{throw new Error('No paragraph adapter in constructor comparison');}};
