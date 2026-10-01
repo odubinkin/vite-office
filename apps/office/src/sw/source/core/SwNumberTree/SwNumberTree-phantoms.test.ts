@@ -219,10 +219,10 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
       (_node, index) => index,
     );
     for (const order of orders(indexes)) {
-      const root = new SwNodeNum(undefined, -1, rule);
+      const root = new SwNodeNum(undefined, rule);
       const records = nodes.map(
         /** Creates independent native insertion records. @param node - Canonical item. @param index - Position. @returns Orphan. */
-        (node, index) => new SwNodeNum(node, test.levels[index] as number),
+        (node) => new SwNodeNum(node),
       );
       for (const index of order)
         root.AddChild(records[index] as SwNodeNum, test.levels[index] as number);
@@ -233,7 +233,12 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
           (record) => record.GetNumberVector(),
         ),
       ).toEqual(test.vectors);
-      for (const record of records) expect(record.GetLevelInListTree()).toBe(record.level);
+      records.forEach(
+        /** Verifies independently supplied insertion levels. @param record - Attached record. @param index - Literal policy index. @returns Nothing. */ (
+          record,
+          index,
+        ) => expect(record.GetLevelInListTree()).toBe(test.levels[index]),
+      );
     }
   }
 });
@@ -256,8 +261,8 @@ class PhantomRoot extends SwNodeNum {
 it("rejects non-orphan insertion and duplicate phantom records", /** Verifies native orphan/depth/equivalence guards and cleanup of empty phantom chains. @returns Nothing. */ () => {
   const document = createWriterDocument();
   const text = document.paragraphs[0] as SwTextNode;
-  const root = new PhantomRoot(undefined, -1);
-  const orphan = new SwNodeNum(text, 0);
+  const root = new PhantomRoot(undefined);
+  const orphan = new SwNodeNum(text);
   root.AddChild(orphan, -1);
   expect(root.GetChildren()).toEqual([]);
   const phantom = root.destinationPhantom() as SwNumberTreeNode;
@@ -265,13 +270,12 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   expect(root.createPhantom()).toBeUndefined();
   root.clearPhantoms();
   expect(root.GetChildren()).toEqual([]);
-  phantom.ResetTree();
   expect(phantom.HasPhantomCountedParent()).toBe(false);
   root.AddChild(orphan, 0);
-  const another = new PhantomRoot(undefined, -1);
+  const another = new PhantomRoot(undefined);
   another.AddChild(orphan, 0);
   another.AddChild(root, 0);
   expect(another.GetChildren()).toEqual([]);
-  root.AddChild(new SwNodeNum(text, 0), 0);
+  root.AddChild(new SwNodeNum(text), 0);
   expect(root.GetChildren()).toEqual([orphan]);
 });

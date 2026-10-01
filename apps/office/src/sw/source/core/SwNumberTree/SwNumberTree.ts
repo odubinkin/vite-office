@@ -5,11 +5,10 @@ export abstract class SwNumberTreeNode {
   private children: SwNumberTreeNode[] = [];
   private parent: SwNumberTreeNode | undefined;
   private value = 0;
+  private lastValid: SwNumberTreeNode | undefined;
   private phantom = false;
   private continuingPreviousSubTree = false;
 
-  /** Retains the requested insertion level. @param level - Zero-based item level, or -1 for a root. @returns Node. */
-  protected constructor(public readonly level: number) {}
   /** Reads whether this node advances numbering. @returns Counted flag. */
   public IsCounted(): boolean {
     return !this.IsPhantom() || (this.IsCountPhantoms() && this.HasCountedChildren());
@@ -37,6 +36,7 @@ export abstract class SwNumberTreeNode {
     const position = greater < 0 ? this.children.length : greater;
     if (depth > 0) {
       const parent = position === 0 ? this.CreatePhantom() : this.children[position - 1];
+      if (position === 0) this.SetLastValid(undefined);
       parent?.AddChild(child, depth - 1);
       return;
     }
@@ -54,7 +54,10 @@ export abstract class SwNumberTreeNode {
       destination = destination.GetDestinationPhantom();
     }
     child.ClearObsoletePhantoms();
+    const predecessor = this.children[position - 1];
+    if (predecessor === undefined || this.IsValid(predecessor)) this.SetLastValid(predecessor);
     this.ClearObsoletePhantoms();
+    if (!this.IsCounted()) this.parent?.Invalidate(this);
   }
   /** Retains an existing destination phantom or constructs one for descendant relocation. @returns Destination record. */
   protected GetDestinationPhantom(): SwNumberTreeNode | undefined {
@@ -75,7 +78,11 @@ export abstract class SwNumberTreeNode {
     const first = this.children[0];
     if (first?.IsPhantom()) {
       first.ClearObsoletePhantoms();
-      if (first.children.length === 0) this.children.shift();
+      if (first.children.length === 0) {
+        this.SetLastValid(undefined);
+        this.children.shift();
+        first.parent = undefined;
+      }
     }
   }
   /** Finds the first real descendant for native ordering. @returns Real record. */
@@ -95,15 +102,12 @@ export abstract class SwNumberTreeNode {
             (child) => compare.LessThan(child),
           );
     if (from < 0) return;
+    this.SetLastValid(undefined);
     for (const child of this.children.splice(from)) {
       child.parent = destination;
       destination.children.push(child);
     }
-  }
-  /** Clears previously calculated links before rebuilding in document order. @returns Nothing. */
-  public ResetTree(): void {
-    this.parent = undefined;
-    this.children = [];
+    if (this.children.length > 0) this.SetLastValid(this.children.at(-1));
   }
   /** Returns the owning number-tree node. @returns Parent, including root. */
   public GetParent(): SwNumberTreeNode | undefined {
@@ -135,43 +139,143 @@ export abstract class SwNumberTreeNode {
   public GetChildren(): readonly SwNumberTreeNode[] {
     return this.children;
   }
-  /** Returns the calculated signed counter. @returns Counter. */
-  public GetNumber(): number {
+  /** Tests whether a child is inside this parent's validated prefix. @param child - Owned child. @returns Prefix validity. */
+  private IsValid(child: SwNumberTreeNode): boolean {
+    return this.lastValid !== undefined && child.parent === this && !this.lastValid.LessThan(child);
+  }
+  /** Retains a validated prefix or invalidates it and the next uncounted subtree. @param node - Last valid child. @param validating - Whether validation advances the prefix. @returns Nothing. */
+  private SetLastValid(node: SwNumberTreeNode | undefined, validating = false): void {
+    if (
+      validating ||
+      node === undefined ||
+      (this.lastValid !== undefined && node.LessThan(this.lastValid))
+    ) {
+      this.lastValid = node;
+      const siblings = this.parent?.children;
+      const next = siblings?.[siblings.indexOf(this) + 1];
+      if (next !== undefined && !next.IsCounted()) next.SetLastValid(undefined);
+    }
+  }
+  /** Invalidates a counted prefix from one changed child onward. @param child - Changed child. @returns Nothing. */
+  private Invalidate(child: SwNumberTreeNode): void {
+    if (this.IsValid(child)) this.SetLastValid(this.children[this.children.indexOf(child) - 1]);
+  }
+  /** Invalidates every descendant prefix without changing topology. @returns Nothing. */
+  public InvalidateTree(): void {
+    this.lastValid = undefined;
+    for (const child of this.children) child.InvalidateTree();
+  }
+  /** Validates this parent's prefix through one child. @param child - Owned child. @returns Nothing. */
+  private Validate(child: SwNumberTreeNode): void {
+    if (!this.IsValid(child)) this.ValidateHierarchical(child);
+  }
+  /** Returns the signed counter, validating its parent prefix by default. @param validate - Whether to validate. @returns Counter. */
+  public GetNumber(validate = true): number {
+    if (validate) this.parent?.Validate(this);
     return this.value;
   }
   /** Reports native continuation below an uncounted parent. @returns Whether a preceding subtree supplied the counter. */
   public IsContinueingPreviousSubTree(): boolean {
     return this.continuingPreviousSubTree;
   }
-  /** Calculates native first/sibling counters, then validates descendant groups in order. @returns Nothing. */
-  public ValidateHierarchical(): void {
+  /** Validates a native hierarchical prefix, or all descendant groups when no target is supplied. @param target - Optional last child to validate. @returns Nothing. */
+  public ValidateHierarchical(target?: SwNumberTreeNode): void {
     const first = this.children[0];
     if (first === undefined) return;
-    let number = first.GetStartValue();
-    if (!first.IsCounted() && (!first.HasCountedChildren() || first.IsPhantom())) number--;
-    first.continuingPreviousSubTree = false;
-    const parentCounted = this.IsCounted() && (!this.IsPhantom() || this.HasPhantomCountedParent());
-    if (!first.IsRestart() && this.parent !== undefined && !parentCounted) {
-      const siblings = this.parent.children;
-      let previous = siblings.indexOf(this);
-      while (previous > 0) {
-        const preceding = siblings[--previous] as SwNumberTreeNode;
-        if (preceding.children.length > 0) {
-          first.continuingPreviousSubTree = true;
-          number = (preceding.children.at(-1) as SwNumberTreeNode).GetNumber();
-          if (first.IsCounted() && (!first.IsPhantom() || first.HasPhantomCountedParent()))
-            number++;
-          break;
-        } else if (preceding.IsCounted()) break;
+    const end = target === undefined ? this.children.length - 1 : this.children.indexOf(target);
+    if (end < 0) return;
+    let current = this.lastValid === undefined ? -1 : this.children.indexOf(this.lastValid);
+    let number = current < 0 ? 0 : (this.children[current] as SwNumberTreeNode).value;
+    if (current < 0) {
+      current = 0;
+      number = first.GetStartValue();
+      if (!first.IsCounted() && (!first.HasCountedChildren() || first.IsPhantom())) number--;
+      first.continuingPreviousSubTree = false;
+      const parentCounted =
+        this.IsCounted() && (!this.IsPhantom() || this.HasPhantomCountedParent());
+      if (!first.IsRestart() && this.parent !== undefined && !parentCounted) {
+        const siblings = this.parent.children;
+        let previous = siblings.indexOf(this);
+        while (previous > 0) {
+          const preceding = siblings[--previous] as SwNumberTreeNode;
+          if (preceding.children.length > 0) {
+            first.continuingPreviousSubTree = true;
+            number = (preceding.children.at(-1) as SwNumberTreeNode).GetNumber();
+            if (first.IsCounted() && (!first.IsPhantom() || first.HasPhantomCountedParent()))
+              number++;
+            break;
+          } else if (preceding.IsCounted()) break;
+        }
       }
+      first.value = number;
     }
-    first.value = number;
-    for (const child of this.children.slice(1)) {
+    while (current < end) {
+      const child = this.children[++current] as SwNumberTreeNode;
       child.continuingPreviousSubTree = false;
       if (child.IsCounted()) number = child.IsRestart() ? child.GetStartValue() : number + 1;
       child.value = number;
     }
-    for (const child of this.children) child.ValidateHierarchical();
+    this.SetLastValid(this.children[current], true);
+    if (target === undefined) for (const child of this.children) child.ValidateHierarchical();
+  }
+  /** Reports an empty subtree or a chain containing only phantoms. @returns Phantom-only flag. */
+  private HasOnlyPhantoms(): boolean {
+    return (
+      this.children.length === 0 ||
+      (this.children.length === 1 &&
+        (this.children[0] as SwNumberTreeNode).IsPhantom() &&
+        (this.children[0] as SwNumberTreeNode).HasOnlyPhantoms())
+    );
+  }
+  /** Moves descendants to a predecessor, merging a leading phantom into its last child. @param destination - Predecessor. @returns Nothing. */
+  private MoveChildren(destination: SwNumberTreeNode): void {
+    const first = this.children[0];
+    if (first === undefined) return;
+    this.SetLastValid(undefined);
+    if (first.IsPhantom()) {
+      const last = destination.children.at(-1) ?? destination.CreatePhantom();
+      first.MoveChildren(last as SwNumberTreeNode);
+      this.children.shift();
+      first.parent = undefined;
+    }
+    for (const child of this.children) child.parent = destination;
+    destination.children.push(...this.children);
+    this.children = [];
+    this.lastValid = undefined;
+  }
+  /** Removes a real child, retaining its descendants under a predecessor or phantom. @param child - Owned real child. @returns Nothing. */
+  public RemoveChild(child: SwNumberTreeNode): void {
+    if (child.IsPhantom()) return;
+    let position = this.children.indexOf(child);
+    if (position < 0) return;
+    child.parent = undefined;
+    let predecessor = this.children[position - 1];
+    if (position === 0 && child.children.length > 0) {
+      predecessor = this.CreatePhantom();
+      position = this.children.indexOf(child);
+    }
+    if (child.children.length > 0 && predecessor !== undefined) {
+      child.MoveChildren(predecessor);
+      predecessor.InvalidateTree();
+    }
+    this.SetLastValid(predecessor?.IsPhantom() ? undefined : predecessor);
+    this.children.splice(position, 1);
+  }
+  /** Detaches an item and clears obsolete phantom chains without rebuilding the root. @returns Nothing. */
+  public RemoveMe(): void {
+    let savedParent = this.parent;
+    if (savedParent === undefined) return;
+    savedParent.RemoveChild(this);
+    while (savedParent?.IsPhantom() && savedParent.HasOnlyPhantoms())
+      savedParent = savedParent.parent;
+    savedParent?.ClearObsoletePhantoms();
+  }
+  /** Reparents an attached item through native removal and insertion. @param level - New non-negative level. @returns Nothing. */
+  public SetLevelInListTree(level: number): void {
+    if (level < 0 || this.parent === undefined || level === this.GetLevelInListTree()) return;
+    const root = this.GetRoot() as SwNumberTreeNode;
+    this.RemoveMe();
+    root.AddChild(this, level);
   }
   /** Returns counters from real and phantom ancestors. @returns Root-to-item vector. */
   public GetNumberVector(): readonly number[] {

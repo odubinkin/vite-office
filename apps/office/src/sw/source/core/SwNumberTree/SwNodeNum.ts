@@ -6,13 +6,12 @@ import { SwNumberTreeNode } from "./SwNumberTree";
 
 /** Registered list item, root or phantom retaining the owning numbering rule. */
 export class SwNodeNum extends SwNumberTreeNode {
-  /** Creates a text or root record. @param textNode - Canonical text node, absent for a root. @param level - Zero-based item level, or -1 for a root. @param rootRule - Root rule reference without a text node. @returns Node. */
+  /** Creates a text or root record. @param textNode - Canonical text node, absent for a root. @param rootRule - Root rule reference without a text node. @returns Node. */
   public constructor(
     private readonly textNode: SwTextNode | undefined,
-    level: number,
     private readonly rootRule?: SwNumRule,
   ) {
-    super(level);
+    super();
   }
   /** Returns the canonical list item. @returns Text node, absent for a root. */
   public GetTextNode(): SwTextNode | undefined {
@@ -20,7 +19,7 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Creates a no-text record retaining the current rule. @returns Root/phantom factory record. */
   protected Create(): SwNodeNum {
-    return new SwNodeNum(undefined, -1, this.textNode?.GetNumRule() ?? this.rootRule);
+    return new SwNodeNum(undefined, this.textNode?.GetNumRule() ?? this.rootRule);
   }
   /** Reads the native true default for existing hierarchical rules. @returns Phantom counting enabled. */
   public IsCountPhantoms(): boolean {

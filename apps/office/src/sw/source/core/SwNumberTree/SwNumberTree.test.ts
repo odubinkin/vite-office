@@ -98,7 +98,7 @@ it("initializes structurally and advances counted siblings after zero", /** Asse
     ).toEqual(test.labels);
     expect(list.GetListItem(nodes[0] as SwTextNode)).toBeInstanceOf(SwNumberTreeNode);
     const root = list.GetListItem(nodes[0] as SwTextNode)?.GetParent() as SwNodeNum;
-    expect(root.level).toBe(-1);
+    expect(root.GetLevelInListTree()).toBe(-1);
     expect(root.GetTextNode()).toBeUndefined();
     expect(root.IsCounted()).toBe(true);
     expect(root.IsRestart()).toBe(false);
@@ -215,7 +215,7 @@ it("continues a subtree only below native uncounted parents", /** Verifies prior
 });
 
 it("revalidates zero restarts, counted changes and phantom ancestors", /** Verifies invalidation, canonical reparenting/removal and source-owned skipped-level ancestors. @returns Nothing. */ () => {
-  const { nodes, document, list } = fixture([{ level: 0 }, { level: 0 }, { level: 0 }]);
+  const { nodes, list } = fixture([{ level: 0 }, { level: 0 }, { level: 0 }]);
   const middle = nodes[1] as SwTextNode;
   middle.SetListRestart(true, 0);
   expect(nodes[2]?.GetListLabel()).toBe("1.");
@@ -226,7 +226,7 @@ it("revalidates zero restarts, counted changes and phantom ancestors", /** Verif
   expect(middle.GetListLabel()).toBe("0.0.");
   expect(nodes[2]?.GetListLabel()).toBe("1.");
   list.RemoveListItem(middle);
-  list.ValidateListTree(document.paragraphs);
+  list.ValidateListTree();
   expect(list.GetListItemNumber(middle)).toBeUndefined();
   const missing = fixture([{ level: 2 }, { level: 2 }, { level: 0 }, { level: 2 }]);
   expect(
@@ -240,8 +240,8 @@ it("revalidates zero restarts, counted changes and phantom ancestors", /** Verif
 
 it("retains native root and unattached node numbering policy", /** Verifies no-text roots, missing rules and numbering-present descendant policy. @returns Nothing. */ () => {
   const document = createWriterDocument();
-  const node = new SwNodeNum(document.paragraphs[0] as SwTextNode, 1);
-  const root = new SwNodeNum(undefined, -1);
+  const node = new SwNodeNum(document.paragraphs[0] as SwTextNode);
+  const root = new SwNodeNum(undefined);
   expect(node.GetStartValue()).toBe(1);
   expect(node.IsCountedForNumbering()).toBe(false);
   root.AddChild(node, 1);
@@ -256,15 +256,14 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
     level: 0,
     styleId: "Levels",
   });
-  node.ResetTree();
-  root.ResetTree();
+  node.RemoveMe();
   expect(node.GetStartValue()).toBe(7);
   root.AddChild(node, 1);
   expect(node.GetStartValue()).toBe(3);
   expect(root.HasCountedChildren()).toBe(true);
 });
 
-it("constructs rule-start phantom chains and rebuilds after removal", /** Verifies actual labels, derived depth, phantom topology and reinsertion. @returns Nothing. */ () => {
+it("constructs rule-start phantom chains and retains them through removal", /** Verifies actual labels, derived depth, phantom topology and reinsertion. @returns Nothing. */ () => {
   const { document, nodes, list } = fixture([
     { level: 2 },
     { level: 2 },
@@ -293,9 +292,9 @@ it("constructs rule-start phantom chains and rebuilds after removal", /** Verifi
   expect(root.GetLevelInListTree()).toBe(-1);
   expect(root.IsPhantom()).toBe(false);
   list.RemoveListItem(nodes[2] as SwTextNode);
-  list.ValidateListTree(document.paragraphs);
+  list.ValidateListTree();
   expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([7, 5, 5]);
   list.InsertListItem(nodes[2] as SwTextNode);
-  list.ValidateListTree(document.paragraphs);
+  list.ValidateListTree();
   expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([8, 5, 3]);
 });

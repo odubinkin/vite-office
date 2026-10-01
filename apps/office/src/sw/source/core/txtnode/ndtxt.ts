@@ -406,7 +406,7 @@ export class SwTextNode extends SwContentNode {
     if (listId.length === 0) return undefined;
     const list = this.GetDoc().GetDocumentListsManager().GetListByName(listId);
     if (list === undefined) return undefined;
-    list.ValidateListTree(this.GetDoc().paragraphs);
+    list.ValidateListTree();
     return list.GetListItemNumber(this);
   }
 
@@ -419,7 +419,7 @@ export class SwTextNode extends SwContentNode {
     if (format.GetNumberingType() === "char-special") return format.GetBulletChar();
     const list = this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId());
     if (list === undefined) return undefined;
-    list.ValidateListTree(this.GetDoc().paragraphs);
+    list.ValidateListTree();
     const numbers = list.GetListItemNumberVector(this);
     return numbers === undefined ? undefined : rule.MakeNumString(numbers, level);
   }

@@ -64,16 +64,16 @@ describe("Writer list attribute invariants", /** Registers source-backed list te
     applyWriterParagraphList(first, { kind: "numbered", level: 0 });
     applyWriterParagraphList(second, { kind: "numbered", level: 0 });
     const list = document.GetDocumentListsManager().GetListByName(first.GetListId());
-    expect(list?.GetListItemNumber(second)).toBe(0);
+    expect(list?.GetListItemNumber(second)).toBe(2);
     second.SetAttrListLevel(1);
-    list?.ValidateListTree(document.paragraphs);
-    expect(list?.GetListItem(second)?.level).toBe(1);
+    list?.ValidateListTree();
+    expect(list?.GetListItem(second)?.GetLevelInListTree()).toBe(1);
     expect((list?.GetListItem(second)?.GetParent() as SwNodeNum | undefined)?.GetTextNode()).toBe(
       first,
     );
     expect(list?.GetListItemNumberVector(second)).toEqual([1, 1]);
     second.SetAttrListLevel(0);
-    list?.ValidateListTree(document.paragraphs);
+    list?.ValidateListTree();
     expect((list?.GetListItem(second)?.GetParent() as SwNodeNum).GetTextNode()).toBeUndefined();
     expect(list?.GetListItemNumber(second)).toBe(2);
   });

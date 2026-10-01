@@ -3400,12 +3400,21 @@
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsRestart",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::GetStartValue",
           "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::ValidateListTree",
-          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#constructs rule-start phantom chains and rebuilds after removal",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#constructs rule-start phantom chains and retains them through removal",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::AddChild",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::CreatePhantom",
-          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::HasPhantomCountedParent"
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::HasPhantomCountedParent",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#attaches items at insertion and validates reverse-order reads without replacing their root",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#reparents retained items and moves descendants through native predecessor phantoms",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#moves canonical paragraphs with retained list records and independent copied trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumber",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveMe",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveChild",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLevelInListTree",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLastValid",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::InvalidateTree"
         ],
-        "justification": "Source-owned SwNumberTreeNode AddChild/CreatePhantom and phantom-aware first/sibling validation replace missing-level roots and zero-filled vectors. SwNodeNum supplies no-text factory, document ordering, derived-level starts and the true default phantom policy for existing hierarchical rules. Compiled unmodified pinned insertion, phantom cleanup, validation, node-policy and vector excerpts match 5736 ordered/reverse/interleaved and exhaustive insertion trees /25560 counter, continuation, vector and phantom topology states under explicit eager-reset, std::set, text/rule and disabled-notification shims. Genuine common/automatic ODT fixtures verify skipped-level starts [7,5,3], actual labels, owned copies, Worker v16, selected XML and reopen. Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full lifecycle remain unverified; canonical SwList still rebuilds eagerly. No full native build or whole-module parity claim; registered save/open/recovery differences are unchanged.",
+        "justification": "Iteration35 retains the shown single body-range SwList root and attached SwNodeNum records at insertion. Source-shaped prefix validity,validating GetNumber/vector reads,RemoveChild/RemoveMe/MoveChildren and SetLevelInListTree preserve topology through removal and level changes;canonical movement detaches/reinserts retained records. Removed deferred reconstruction,ResetTree,ordering parameter and stale insertion-level constructor/cache. Compiled37 unmodified pinned definitions compare864 shuffled/mixed counted/restart lifecycle sequences/73056 item states,including reverse immediate reads,complete removal/reinsert and phantom topology. Literal document tests cover retained identities,zero restart,move/delete and independent copied trees;existing ODT/Worker contracts remain covered. Native range constructor,redline/continuous trees,configurable phantom policy,complete callbacks/reading suppression,full SwTextNode ownership/native lifetimes and default factories remain unverified. SwList explicit validation traverses retained groups;native notification dispatch is not claimed. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "SwNodeNum"
@@ -3447,12 +3456,21 @@
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsRestart",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::GetStartValue",
           "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::ValidateListTree",
-          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#constructs rule-start phantom chains and rebuilds after removal",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#constructs rule-start phantom chains and retains them through removal",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::AddChild",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::CreatePhantom",
-          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::HasPhantomCountedParent"
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::HasPhantomCountedParent",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#attaches items at insertion and validates reverse-order reads without replacing their root",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#reparents retained items and moves descendants through native predecessor phantoms",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#moves canonical paragraphs with retained list records and independent copied trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumber",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveMe",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveChild",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLevelInListTree",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLastValid",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::InvalidateTree"
         ],
-        "justification": "Source-owned SwNumberTreeNode AddChild/CreatePhantom and phantom-aware first/sibling validation replace missing-level roots and zero-filled vectors. SwNodeNum supplies no-text factory, document ordering, derived-level starts and the true default phantom policy for existing hierarchical rules. Compiled unmodified pinned insertion, phantom cleanup, validation, node-policy and vector excerpts match 5736 ordered/reverse/interleaved and exhaustive insertion trees /25560 counter, continuation, vector and phantom topology states under explicit eager-reset, std::set, text/rule and disabled-notification shims. Genuine common/automatic ODT fixtures verify skipped-level starts [7,5,3], actual labels, owned copies, Worker v16, selected XML and reopen. Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full lifecycle remain unverified; canonical SwList still rebuilds eagerly. No full native build or whole-module parity claim; registered save/open/recovery differences are unchanged.",
+        "justification": "Iteration35 retains the shown single body-range SwList root and attached SwNodeNum records at insertion. Source-shaped prefix validity,validating GetNumber/vector reads,RemoveChild/RemoveMe/MoveChildren and SetLevelInListTree preserve topology through removal and level changes;canonical movement detaches/reinserts retained records. Removed deferred reconstruction,ResetTree,ordering parameter and stale insertion-level constructor/cache. Compiled37 unmodified pinned definitions compare864 shuffled/mixed counted/restart lifecycle sequences/73056 item states,including reverse immediate reads,complete removal/reinsert and phantom topology. Literal document tests cover retained identities,zero restart,move/delete and independent copied trees;existing ODT/Worker contracts remain covered. Native range constructor,redline/continuous trees,configurable phantom policy,complete callbacks/reading suppression,full SwTextNode ownership/native lifetimes and default factories remain unverified. SwList explicit validation traverses retained groups;native notification dispatch is not claimed. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "SwNumberTreeNode"
@@ -3700,9 +3718,18 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/doc/DocumentListsManager.ts#DocumentListsManager",
-          "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx#DocumentListsManager::DocumentListsManager"
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx#DocumentListsManager::DocumentListsManager",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#attaches items at insertion and validates reverse-order reads without replacing their root",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#reparents retained items and moves descendants through native predecessor phantoms",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#moves canonical paragraphs with retained list records and independent copied trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumber",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveMe",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveChild",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLevelInListTree",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLastValid",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::InvalidateTree"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentListsManager.cxx; Phase 2 preserves the bounded upstream manager boundary.",
+        "justification": "Iteration35 retains the shown single body-range SwList root and attached SwNodeNum records at insertion. Source-shaped prefix validity,validating GetNumber/vector reads,RemoveChild/RemoveMe/MoveChildren and SetLevelInListTree preserve topology through removal and level changes;canonical movement detaches/reinserts retained records. Removed deferred reconstruction,ResetTree,ordering parameter and stale insertion-level constructor/cache. Compiled37 unmodified pinned definitions compare864 shuffled/mixed counted/restart lifecycle sequences/73056 item states,including reverse immediate reads,complete removal/reinsert and phantom topology. Literal document tests cover retained identities,zero restart,move/delete and independent copied trees;existing ODT/Worker contracts remain covered. Native range constructor,redline/continuous trees,configurable phantom policy,complete callbacks/reading suppression,full SwTextNode ownership/native lifetimes and default factories remain unverified. SwList explicit validation traverses retained groups;native notification dispatch is not claimed. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "DocumentListsManager"
@@ -4014,12 +4041,21 @@
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::IsRestart",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::GetStartValue",
           "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::ValidateListTree",
-          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#constructs rule-start phantom chains and rebuilds after removal",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts#constructs rule-start phantom chains and retains them through removal",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::AddChild",
           "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::CreatePhantom",
-          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::HasPhantomCountedParent"
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::HasPhantomCountedParent",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#attaches items at insertion and validates reverse-order reads without replacing their root",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#reparents retained items and moves descendants through native predecessor phantoms",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#moves canonical paragraphs with retained list records and independent copied trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumber",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveMe",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveChild",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLevelInListTree",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLastValid",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::InvalidateTree"
         ],
-        "justification": "Source-owned SwNumberTreeNode AddChild/CreatePhantom and phantom-aware first/sibling validation replace missing-level roots and zero-filled vectors. SwNodeNum supplies no-text factory, document ordering, derived-level starts and the true default phantom policy for existing hierarchical rules. Compiled unmodified pinned insertion, phantom cleanup, validation, node-policy and vector excerpts match 5736 ordered/reverse/interleaved and exhaustive insertion trees /25560 counter, continuation, vector and phantom topology states under explicit eager-reset, std::set, text/rule and disabled-notification shims. Genuine common/automatic ODT fixtures verify skipped-level starts [7,5,3], actual labels, owned copies, Worker v16, selected XML and reopen. Configurable persisted phantom policy, continuous/redline trees, complete lazy validity/notifications, incremental removal and full lifecycle remain unverified; canonical SwList still rebuilds eagerly. No full native build or whole-module parity claim; registered save/open/recovery differences are unchanged.",
+        "justification": "Iteration35 retains the shown single body-range SwList root and attached SwNodeNum records at insertion. Source-shaped prefix validity,validating GetNumber/vector reads,RemoveChild/RemoveMe/MoveChildren and SetLevelInListTree preserve topology through removal and level changes;canonical movement detaches/reinserts retained records. Removed deferred reconstruction,ResetTree,ordering parameter and stale insertion-level constructor/cache. Compiled37 unmodified pinned definitions compare864 shuffled/mixed counted/restart lifecycle sequences/73056 item states,including reverse immediate reads,complete removal/reinsert and phantom topology. Literal document tests cover retained identities,zero restart,move/delete and independent copied trees;existing ODT/Worker contracts remain covered. Native range constructor,redline/continuous trees,configurable phantom policy,complete callbacks/reading suppression,full SwTextNode ownership/native lifetimes and default factories remain unverified. SwList explicit validation traverses retained groups;native notification dispatch is not claimed. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "WRITER_PARAGRAPH_LIST_KINDS",
@@ -4196,9 +4232,18 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/docnode/nodes.ts#SwNodes",
-          "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx#SwNodes"
+          "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx#SwNodes",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#attaches items at insertion and validates reverse-order reads without replacing their root",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#reparents retained items and moves descendants through native predecessor phantoms",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#moves canonical paragraphs with retained list records and independent copied trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumber",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveMe",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveChild",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLevelInListTree",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLastValid",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::InvalidateTree"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/docnode/nodes.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Iteration35 retains the shown single body-range SwList root and attached SwNodeNum records at insertion. Source-shaped prefix validity,validating GetNumber/vector reads,RemoveChild/RemoveMe/MoveChildren and SetLevelInListTree preserve topology through removal and level changes;canonical movement detaches/reinserts retained records. Removed deferred reconstruction,ResetTree,ordering parameter and stale insertion-level constructor/cache. Compiled37 unmodified pinned definitions compare864 shuffled/mixed counted/restart lifecycle sequences/73056 item states,including reverse immediate reads,complete removal/reinsert and phantom topology. Literal document tests cover retained identities,zero restart,move/delete and independent copied trees;existing ODT/Worker contracts remain covered. Native range constructor,redline/continuous trees,configurable phantom policy,complete callbacks/reading suppression,full SwTextNode ownership/native lifetimes and default factories remain unverified. SwList explicit validation traverses retained groups;native notification dispatch is not claimed. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "SwNodes"
@@ -4634,9 +4679,18 @@
           "apps/office/src/sw/source/core/doc/list-invariants.test.ts#revalidates restart and counted changes",
           "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::SetCountedInList",
           "apps/office/src/sw/source/core/doc/list-invariants.test.ts#reconciles direct item and item-set transitions like HandleSetAttrAtTextNode",
-          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#HandleSetAttrAtTextNode"
+          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#HandleSetAttrAtTextNode",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#attaches items at insertion and validates reverse-order reads without replacing their root",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#reparents retained items and moves descendants through native predecessor phantoms",
+          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts#moves canonical paragraphs with retained list records and independent copied trees",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::GetNumber",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveMe",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::RemoveChild",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLevelInListTree",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::SetLastValid",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::InvalidateTree"
         ],
-        "justification": "Source-backed tests cover direct SetAttr/ResetAttr list registration, level, counted and restart transitions plus list item capture/restore. Other SwTextNode operations remain unverified.",
+        "justification": "Iteration35 retains the shown single body-range SwList root and attached SwNodeNum records at insertion. Source-shaped prefix validity,validating GetNumber/vector reads,RemoveChild/RemoveMe/MoveChildren and SetLevelInListTree preserve topology through removal and level changes;canonical movement detaches/reinserts retained records. Removed deferred reconstruction,ResetTree,ordering parameter and stale insertion-level constructor/cache. Compiled37 unmodified pinned definitions compare864 shuffled/mixed counted/restart lifecycle sequences/73056 item states,including reverse immediate reads,complete removal/reinsert and phantom topology. Literal document tests cover retained identities,zero restart,move/delete and independent copied trees;existing ODT/Worker contracts remain covered. Native range constructor,redline/continuous trees,configurable phantom policy,complete callbacks/reading suppression,full SwTextNode ownership/native lifetimes and default factories remain unverified. SwList explicit validation traverses retained groups;native notification dispatch is not claimed. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "knownViolations": [],
         "localSymbols": [
           "WRITER_CHARACTER_FORMATS",

@@ -70,8 +70,8 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
   });
 
   it("owns, invalidates, validates, and removes bounded SwNodeNum items", /** Verifies the supported SwList lifecycle. @returns Nothing. */ () => {
-    const list = new SwList("list-a", "Numbering 1");
     const document = createWriterDocument();
+    const list = new SwList("list-a", document.EnsureNumRule("Numbering 1", "numbered"));
     const first = document.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode;
     const nested = document.nodes.MakeTextNode();
     const missing = document.nodes.MakeTextNode();
@@ -85,8 +85,8 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     ).toThrow("outside 0-9");
     list.InsertListItem(first, 0);
     list.InsertListItem(nested, 1);
-    list.ValidateListTree([missing, first, nested]);
-    list.ValidateListTree([first, nested]);
+    list.ValidateListTree();
+    list.ValidateListTree();
     expect(list.GetListItemNumber(first)).toBe(1);
     expect(list.GetListItemNumber(nested)).toBe(1);
     expect((list.GetListItem(nested)?.GetParent() as SwNodeNum | undefined)?.GetTextNode()).toBe(
@@ -97,7 +97,7 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     list.InvalidateListTree();
     list.RemoveListItem(nested);
     list.RemoveListItem(missing);
-    list.ValidateListTree([first]);
+    list.ValidateListTree();
     expect(list.GetListItemNumber(nested)).toBeUndefined();
   });
 });

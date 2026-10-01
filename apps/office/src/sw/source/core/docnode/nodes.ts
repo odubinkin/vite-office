@@ -234,9 +234,12 @@ export class SwNodes {
     const other = textNodes[target] as SwTextNode;
     const currentIndex = node.GetIndex();
     const otherIndex = other.GetIndex();
+    const lists = this.document.GetDocumentListsManager();
+    for (const item of [node, other])
+      lists.GetListByName(item.GetListId())?.GetListItem(item)?.RemoveMe();
     this.nodeArray[currentIndex] = other;
     this.nodeArray[otherIndex] = node;
-    this.document.GetDocumentListsManager().InvalidateAllLists();
+    for (const item of [node, other]) lists.RegisterListItem(item);
     this.document.NotifyModelChange({
       index: currentIndex,
       kind: "node-inserted",

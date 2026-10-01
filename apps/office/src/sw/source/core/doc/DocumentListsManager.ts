@@ -38,12 +38,12 @@ export class DocumentListsManager {
 
   /** Creates or returns a document-owned list for a numbering rule. @param ruleName - Default list-style name. @param listId - Optional persistent identity. @returns List. */
   public CreateList(ruleName: string, listId = ""): SwList {
-    if (this.FindNumRulePtr(ruleName) === undefined)
-      throw new Error(`Unknown SwNumRule: ${ruleName}`);
+    const rule = this.FindNumRulePtr(ruleName);
+    if (rule === undefined) throw new Error(`Unknown SwNumRule: ${ruleName}`);
     const identity = listId.length === 0 ? this.CreateUniqueListId() : listId;
     const existing = this.lists.get(identity);
     if (existing !== undefined) return existing;
-    const list = new SwList(identity, ruleName);
+    const list = new SwList(identity, rule);
     this.lists.set(identity, list);
     return list;
   }
