@@ -1,10 +1,11 @@
 ---
 id: "202610011119-4H9E82"
 title: "Restore Writer numbering format ownership and access contracts"
-status: "DOING"
+result_summary: "Restored Writer effective/raw format access and sparse ownership; full verify708/109/19 and100% both suites; parent goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -50,11 +51,16 @@ quality_review:
     - "Source-shaped SwNumRule owns sparse frozen const copies; Get selects shared four-family defaults, GetNumFormat returns optional owned levels, equal reference Set preserves pointer/validity, and clone copies only present levels. Implemented base equality remains in SvxNumberFormat. All consumer mutations use clone-and-Set and both native restart/tree starts retain raw optional reads."
     - "Corrected pinned primitive glyph constant leaves40 table/19 equality results unchanged.22 unchanged definitions/constants plus16 valid NONE marker results are traceable; actual native non-progress profile is retained as timeout, with a documented and tested browser rejection. No claim of whole constructor invalid-domain, pointer-overload, full type/font/client/graphics/static destruction or module parity."
     - "Final verify-fourth.log records actual exit0:708 app,109 inventory,19 browser,100% every category in both suites and all original remaining gates. Legacy graph16 explicit levels and existing ODT assertions are preserved; optional graph metadata transports new raw absence and default selection without schema-version or registered I/O/recovery changes."
-commit: null
+commit:
+  hash: "b683076f536555cb8f33deb6ef698f7e4d54a588"
+  message: "🔧 4H9E82 code: restore Writer format ownership and const access"
 comments:
   -
     author: "CODER"
     body: "Start: user-authorized iteration 43 restores optional owned formats and shared effective defaults, with consumer and Worker migration and unchanged verification gates."
+  -
+    author: "CODER"
+    body: "Verified: restored sparse const Writer rule formats, shared four-family effective defaults and native reference-Set/copy ownership. All actual callers and Worker-v16 ownership metadata migrated; full verify708/109/19 with100% both suites.22 unchanged native definitions/constants match40 defaults,19 ownership and16 valid NONE markers; native malformed non-progress is retained as a measured timeout and explicit browser guard. CODE b683076f536555cb8f33deb6ef698f7e4d54a588; structured quality pass recorded. Full parent runtime/UI goal remains active and registered I/O/recovery deviations are unchanged."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final npm run verify exit0:708 app,109 inventory,19 browser and100% both suites. Corrected pinned native22 definition/constant proof matches40 defaults,19 ownership and16 valid NONE states; measured malformed NONE timeout is an explicit browser guard. Actual CODE b683076f536555cb8f33deb6ef698f7e4d54a588; no whole-module or goal promotion."
+  -
+    type: "status"
+    at: "2026-10-01T11:55:38.551Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored sparse const Writer rule formats, shared four-family effective defaults and native reference-Set/copy ownership. All actual callers and Worker-v16 ownership metadata migrated; full verify708/109/19 with100% both suites.22 unchanged native definitions/constants match40 defaults,19 ownership and16 valid NONE markers; native malformed non-progress is retained as a measured timeout and explicit browser guard. CODE b683076f536555cb8f33deb6ef698f7e4d54a588; structured quality pass recorded. Full parent runtime/UI goal remains active and registered I/O/recovery deviations are unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-01T11:53:46.224Z"
+doc_updated_at: "2026-10-01T11:55:38.552Z"
 doc_updated_by: "CODER"
 description: "Iteration 43: separate optional owned levels from shared effective defaults, preserve source-equivalent Set no-op and copy ownership, and migrate existing consumers and Worker serialization without changing registered I/O deviations."
 sections:
@@ -161,6 +174,10 @@ sections:
     - Observation: Final fourth npm run verify exited0:708 app/160 files,109 inventory/36,19 browser; both suites100% in every coverage category; every unchanged static/docs/file-size/source/provenance/parity gate passed. Final source size ndtxt999 split lines, XML import991. Native primitive followup constant was corrected after bounded empty header lookup: actual include/editeng/numdef.hxx SVX_DEF_BULLET is0xF095 (61589), not0x2022. Retain the initial constant-adapter log.
       Impact: The corrected20-definition ASan/UBSan oracle produces identical40 shared-table and19 ownership states because native tables explicitly override their glyphs. The next actual standalone constructor gap is empty local glyph versus nativeU+F095. The additional2 complete native methods match16 valid NONE states. The measured malformed NONE timeout is explicitly rejected and remains unverified native equivalence.
       Resolution: Record actual CODE SHA, canonical successful verification and quality review, finish only this leaf and append parent progress. No module-wide/default-registry/UI goal completion or registered I/O change. Full static destruction, pointer overload, registered style/font/graphics and SvxNumberType hierarchy remain separate obligations.
+extensions:
+  implementation_commit:
+    hash: "b683076f536555cb8f33deb6ef698f7e4d54a588"
+    message: "🔧 4H9E82 code: restore Writer format ownership and const access"
 id_source: "generated"
 ---
 ## Summary
