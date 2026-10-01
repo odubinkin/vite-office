@@ -4,7 +4,7 @@ title: "Restore node-owned Writer numbering lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved persistent parity goal;restore shown text-node numbering ownership,rule/document registration and native lazy getters;preserve document IO exceptions and gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T05:05:16.534Z"
+doc_updated_at: "2026-10-01T05:10:11.899Z"
 doc_updated_by: "CODER"
 description: "Iteration36 of approved persistent parity goal:SwTextNode owns shown SwNodeNum with native AddToList/RemoveFromList/GetNum/vector contracts,SwNodeNum rule/document registration hooks and non-owning SwList topology. Remove full-list read validation and ownership wrappers;preserve registered document IO exceptions and unchanged gates."
 sections:
@@ -56,6 +56,10 @@ sections:
     - Observation: Command: npm run typecheck --workspace @vite-office/office; Result: fail (session7380). Transitional diagnostics: old tests called list-owned Insert/Remove APIs; SwTextNode type-only import used for teardown; XML call-site replacement retained this prefix.
       Impact: Owner API migration required updating actual lifecycle fixtures and two imports/call sites; no verification gate relaxed.
       Resolution: Migrated tests to canonical node-owned AddToList/RemoveFromList, preserved tree-record insertion contracts, fixed value import and XML node reference; rerun pending.
+
+    - Observation: Command: npx tsx .agentplane/tasks/202610010449-CE6KDW/compare-native.ts; initial Result: fail sequence48 step10; focused test session21085 failed detached start7 expectation.
+      Impact: Actual attribute transitions removed after assignment; native HandleSetAttrAtTextNode removes before assignment so invalid-rule removal sees old list. PostRemove intentionally clears retained rule, making detached start1.
+      Resolution: Matched pre-mutation removal/readd including same-rule set; preserved native expected states. Actual comparison now passes120 sequences/8976 owner states; focused25 tests pass session8693; new4 lifecycle/registry tests pass53768. No native expected state weakened.
 id_source: "generated"
 ---
 ## Summary
@@ -93,3 +97,7 @@ Fresh preflight clean main/direct,parent C9TN6M only active,no user-instructions
 - Observation: Command: npm run typecheck --workspace @vite-office/office; Result: fail (session7380). Transitional diagnostics: old tests called list-owned Insert/Remove APIs; SwTextNode type-only import used for teardown; XML call-site replacement retained this prefix.
   Impact: Owner API migration required updating actual lifecycle fixtures and two imports/call sites; no verification gate relaxed.
   Resolution: Migrated tests to canonical node-owned AddToList/RemoveFromList, preserved tree-record insertion contracts, fixed value import and XML node reference; rerun pending.
+
+- Observation: Command: npx tsx .agentplane/tasks/202610010449-CE6KDW/compare-native.ts; initial Result: fail sequence48 step10; focused test session21085 failed detached start7 expectation.
+  Impact: Actual attribute transitions removed after assignment; native HandleSetAttrAtTextNode removes before assignment so invalid-rule removal sees old list. PostRemove intentionally clears retained rule, making detached start1.
+  Resolution: Matched pre-mutation removal/readd including same-rule set; preserved native expected states. Actual comparison now passes120 sequences/8976 owner states; focused25 tests pass session8693; new4 lifecycle/registry tests pass53768. No native expected state weakened.
