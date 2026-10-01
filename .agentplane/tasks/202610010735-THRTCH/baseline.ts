@@ -10,5 +10,5 @@ node.SetAttrOutlineLevel(4);const positive=snapshot();
 node.SetEmptyListStyleDueToSetOutlineLevelAttr();node.SetAttr(new SwNumRuleItem('Counters'));const explicit=snapshot();
 node.SetAttrOutlineLevel(0);const zero=snapshot();node.ResetAttr(80);const reset=snapshot();node.ResetAllAttr();const all=snapshot();
 const numbered=doc.GetTextFormatColl('text-body');numbered.SetFormatAttr(new SwNumRuleItem('Counters'));node.ChgFormatColl(numbered);const retained=node.GetNum();const removedAbsentId=node.ResetAttr(83),sameRecord=node.GetNum()===retained;
-const set=new SfxItemSet(doc.GetAttrPool());set.Put(new SfxInt16Item(84,1));set.Put(new SfxBoolItem(85,true));set.Put(new SfxInt16Item(86,7));node.SetAttr(set);const batch={...snapshot(),vector:node.GetNumberVector(),cached:node.GetNum()?.GetNumber(false)};
+const set=new SfxItemSet(doc.GetAttrPool(),[[1,87]]);set.Put(new SfxInt16Item(84,1));set.Put(new SfxBoolItem(85,true));set.Put(new SfxInt16Item(86,7));node.SetAttr(set);const batch={...snapshot(),vector:node.GetNumberVector(),cached:node.GetNum()?.GetNumber(false)};
 const result={positive,explicit,zero,reset,all,absentId:{removedAbsentId,sameRecord},batch};writeFileSync('.agentplane/tasks/202610010735-THRTCH/baseline.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

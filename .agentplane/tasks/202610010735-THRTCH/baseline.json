@@ -1,0 +1,67 @@
+{
+  "positive": {
+    "outline": 4,
+    "empty": false,
+    "rule": null,
+    "owned": null,
+    "items": {
+      "80": 4
+    }
+  },
+  "explicit": {
+    "outline": 4,
+    "empty": true,
+    "rule": "Counters",
+    "owned": "Counters",
+    "items": {
+      "73": "Counters",
+      "80": 4
+    }
+  },
+  "zero": {
+    "outline": 0,
+    "empty": true,
+    "rule": "Counters",
+    "owned": "Counters",
+    "items": {
+      "73": "Counters",
+      "80": 0
+    }
+  },
+  "reset": {
+    "outline": 0,
+    "empty": true,
+    "rule": "Counters",
+    "owned": "Counters",
+    "items": {
+      "73": "Counters"
+    }
+  },
+  "all": {
+    "outline": 0,
+    "empty": true,
+    "rule": null,
+    "owned": null,
+    "items": {}
+  },
+  "absentId": {
+    "removedAbsentId": false,
+    "sameRecord": false
+  },
+  "batch": {
+    "outline": 0,
+    "empty": false,
+    "rule": "Counters",
+    "owned": "Counters",
+    "items": {
+      "84": 1,
+      "85": true,
+      "86": 7
+    },
+    "vector": [
+      1,
+      7
+    ],
+    "cached": 7
+  }
+}
