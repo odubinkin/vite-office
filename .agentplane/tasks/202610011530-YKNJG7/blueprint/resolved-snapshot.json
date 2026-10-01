@@ -3,8 +3,8 @@
   "artifactKind": "agentplane.blueprint.resolved_snapshot",
   "resolverInput": {
     "taskId": "202610011530-YKNJG7",
-    "title": "Remove pinned upstream access from module boundary test",
-    "description": "Enforce explicit user requirement that project tests do not read, compile or invoke pinned upstream. Remove direct native Makefile read from existing boundary tooling test while preserving every local allowed/rejected edge assertion. Native development probes remain manual and outside test commands.",
+    "title": "Make project tests independent of pinned upstream",
+    "description": "User-authorized removal of all pinned upstream access from project tests: module-boundary test plus11discovered inventory CLI integration cases. Use owned deterministic fixtures, preserve count guards and real Git/filesystem adapter coverage, and verify suites with vendor absent. No production behavior changes.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "31731c0cccafabbd26c807d5fdbb51446b9ab982d06467ea426976ad634d9555"
+    "value": "fc28f2d2c8d9da72db69ffc29e28c4a8050918a453a635e520e43ec26ac8fe8c"
   }
 }

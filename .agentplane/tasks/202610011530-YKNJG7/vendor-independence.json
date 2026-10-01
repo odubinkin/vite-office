@@ -1,0 +1,17 @@
+{
+  "commands": [
+    {
+      "command": [
+        "node_modules/.bin/vitest",
+        "run",
+        "scripts"
+      ],
+      "log": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011530-YKNJG7/tool-tests.log",
+      "exitCode": 1,
+      "vendorUnavailable": true
+    }
+  ],
+  "vendorRestored": true,
+  "unfinishedTestRestored": true,
+  "referenceHead": "9bc445578031fecf56086729d8e4940c77e14d65"
+}

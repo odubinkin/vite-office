@@ -1,0 +1,94 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+ ❯ scripts/libreoffice-inventory/help-topics-cli.test.ts (2 tests | 1 failed) 155ms
+     × runs the production Git and filesystem path to write every pinned XHP topic 147ms
+ ❯ scripts/libreoffice-inventory/ui-test-source-cli.test.ts (2 tests | 1 failed) 330ms
+     × runs the production Git and filesystem path to write the complete linked UITest Python inventory 327ms
+ ❯ scripts/libreoffice-inventory/test-source-target-cli.test.ts (2 tests | 1 failed) 312ms
+     × runs the production Git and filesystem path to write the complete linked inventory 255ms
+ ❯ scripts/libreoffice-inventory/tests-cli.test.ts (2 tests | 1 failed) 399ms
+     × runs the production Git and filesystem path to write a valid generated inventory 391ms
+ ❯ scripts/libreoffice-inventory/python-test-module-cli.test.ts (2 tests | 1 failed) 344ms
+     × runs the production Git and filesystem path to write the complete linked Python inventory 341ms
+ ❯ scripts/libreoffice-inventory/cppunit-registration-cli.test.ts (2 tests | 1 failed) 379ms
+     × runs the production path to write all linked Cppunit registration records 373ms
+ ❯ scripts/libreoffice-inventory/cli.test.ts (4 tests | 1 failed) 246ms
+     × uses the production Git executor when no test executor is supplied 185ms
+ ❯ scripts/libreoffice-inventory/translations-cli.test.ts (2 tests | 1 failed) 178ms
+     × runs the production Git and filesystem path to write every pinned PO catalog 175ms
+ ❯ scripts/libreoffice-inventory/dictionaries-cli.test.ts (2 tests | 1 failed) 172ms
+     × runs production Git and filesystem paths for every pinned dictionary file 165ms
+ ❯ scripts/libreoffice-inventory/junit-source-target-cli.test.ts (2 tests | 1 failed) 242ms
+     × runs the production Git and filesystem path to write the complete linked Java inventory 218ms
+ ❯ scripts/libreoffice-inventory/parity-mapping-cli.test.ts (3 tests | 1 failed) 34ms
+     × reads the pinned Writer mapping and reports bounded unresolved ODT parity 26ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/libreoffice-inventory/cli.test.ts > inventory CLI > uses the production Git executor when no test executor is supplied
+ FAIL  scripts/libreoffice-inventory/python-test-module-cli.test.ts > PythonTest module inventory CLI > runs the production Git and filesystem path to write the complete linked Python inventory
+Error: Command failed: git -C vendor/libreoffice-reference/translations rev-parse --is-shallow-repository
+fatal: cannot change to 'vendor/libreoffice-reference/translations': No such file or directory
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  scripts/libreoffice-inventory/cppunit-registration-cli.test.ts > Cppunit registration inventory CLI > runs the production path to write all linked Cppunit registration records
+Error: Command failed: git -C vendor/libreoffice-reference/helpcontent2 ls-files -z
+fatal: cannot change to 'vendor/libreoffice-reference/helpcontent2': No such file or directory
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  scripts/libreoffice-inventory/dictionaries-cli.test.ts > dictionary file inventory CLI > runs production Git and filesystem paths for every pinned dictionary file
+Error: Command failed: git -C vendor/libreoffice-reference/translations remote get-url origin
+fatal: cannot change to 'vendor/libreoffice-reference/translations': No such file or directory
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  scripts/libreoffice-inventory/help-topics-cli.test.ts > help topic inventory CLI > runs the production Git and filesystem path to write every pinned XHP topic
+Error: Command failed: git -C vendor/libreoffice-reference/helpcontent2 rev-parse --is-shallow-repository
+fatal: cannot change to 'vendor/libreoffice-reference/helpcontent2': No such file or directory
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  scripts/libreoffice-inventory/junit-source-target-cli.test.ts > Junit source-target inventory CLI > runs the production Git and filesystem path to write the complete linked Java inventory
+Error: Command failed: git -C vendor/libreoffice-reference/helpcontent2 status --short
+fatal: cannot change to 'vendor/libreoffice-reference/helpcontent2': No such file or directory
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI > reads the pinned Writer mapping and reports bounded unresolved ODT parity
+Error: ENOENT: no such file or directory, open 'vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml'
+ ❯ validateSide scripts/libreoffice-inventory/parity-mapping-support.ts:171:24
+    169|   for (const kind of ["implementation", "tests", "docs"] as const) {
+    170|     for (const reference of evidence[kind]) {
+    171|       const contents = await readEvidence(`${root}/${reference.path}`);
+       |                        ^
+    172|       if (!contents.includes(reference.marker))
+    173|         throw new Error(
+ ❯ validateParityMappingEvidence scripts/libreoffice-inventory/parity-mappings.ts:337:5
+ ❯ runParityMappingCli scripts/libreoffice-inventory/parity-mapping-cli.ts:109:18
+ ❯ runsProductionValidation scripts/libreoffice-inventory/parity-mapping-cli.test.ts:79:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  scripts/libreoffice-inventory/test-source-target-cli.test.ts > test source-target inventory CLI > runs the production Git and filesystem path to write the complete linked inventory
+ FAIL  scripts/libreoffice-inventory/tests-cli.test.ts > test inventory CLI > runs the production Git and filesystem path to write a valid generated inventory
+ FAIL  scripts/libreoffice-inventory/ui-test-source-cli.test.ts > UITest source-target inventory CLI > runs the production Git and filesystem path to write the complete linked UITest Python inventory
+Error: Command failed: git -C vendor/libreoffice-reference/translations rev-parse refs/tags/libreoffice-26.8.0.2^{tag}
+fatal: cannot change to 'vendor/libreoffice-reference/translations': No such file or directory
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ FAIL  scripts/libreoffice-inventory/translations-cli.test.ts > translation catalog inventory CLI > runs the production Git and filesystem path to write every pinned PO catalog
+Error: Command failed: git -C vendor/libreoffice-reference/translations status --short
+fatal: cannot change to 'vendor/libreoffice-reference/translations': No such file or directory
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+
+
+ Test Files  11 failed | 28 passed (39)
+      Tests  11 failed | 109 passed (120)
+   Start at  22:31:40
+   Duration  3.87s (transform 4.78s, setup 0ms, import 7.55s, tests 6.01s, environment 4ms)
+

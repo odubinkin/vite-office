@@ -1,10 +1,10 @@
 ---
 id: "202610011530-YKNJG7"
-title: "Remove pinned upstream access from module boundary test"
+title: "Make project tests independent of pinned upstream"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -13,7 +13,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-01T15:30:45.425Z"
+  updated_at: "2026-10-01T15:36:18.104Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -27,6 +27,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Remove direct upstream read from module boundary test and verify existing suites with vendor unavailable."
+  -
+    author: "CODER"
+    body: "Start: Apply user-authorized project-wide upstream independence constraint to all11measured tooling cases using owned fixtures."
 events:
   -
     type: "status"
@@ -35,18 +38,30 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Remove direct upstream read from module boundary test and verify existing suites with vendor unavailable."
+  -
+    type: "status"
+    at: "2026-10-01T15:36:18.546Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: Apply user-authorized project-wide upstream independence constraint to all11measured tooling cases using owned fixtures."
 doc_version: 3
-doc_updated_at: "2026-10-01T15:30:45.876Z"
+doc_updated_at: "2026-10-01T15:36:18.546Z"
 doc_updated_by: "CODER"
-description: "Enforce explicit user requirement that project tests do not read, compile or invoke pinned upstream. Remove direct native Makefile read from existing boundary tooling test while preserving every local allowed/rejected edge assertion. Native development probes remain manual and outside test commands."
+description: "User-authorized removal of all pinned upstream access from project tests: module-boundary test plus11discovered inventory CLI integration cases. Use owned deterministic fixtures, preserve count guards and real Git/filesystem adapter coverage, and verify suites with vendor absent. No production behavior changes."
 sections:
   Summary: "Make the module-boundary tooling test independent of pinned upstream, as explicitly required by the user."
-  Scope: "scripts/check-module-boundaries.test.ts only for implementation; task evidence and lifecycle records. Preserve all local allowlist/reverse/browser edge assertions. No production/runtime behavior or existing parity task changes. Temporarily relocate vendor and the unfinished task48 test within ignored repository scratch during verification, restoring both with finally handling."
-  Plan: "Remove the native Makefile read and fs import from the boundary test; retain local dependency assertions and describe their contract accurately. Verify formatting, type checking and selected tooling tests without vendor. Run the existing application and inventory coverage suites with vendor unavailable, excluding only unfinished task48 test already outside the committed baseline. Restore vendor and unfinished work, run doctor/routing/diff, record evidence and commit this one-test correction separately."
-  Verify Steps: "Run focused boundary, provenance and resource-model tooling tests with vendor/libreoffice-reference temporarily unavailable; run existing committed application and inventory coverage suites without vendor, excluding the unfinished untracked task48 test, preserving original coverage thresholds. Run format check on the changed file and npm run typecheck:tools. Audit project test command chains for native compiler/developer probe invocation. Ensure vendor and unfinished task48 test restored even on failure; unchanged production source and native fixtures. Run ap doctor, routing validator and git diff --check; inspect exact implementation scope and record verification/evaluator before closure."
-  Verification: "Pending targeted test correction. Test independence is measured with vendor unavailable, not inferred only from text search. Static resource/provenance/inventory audit commands in npm verify may read vendor and remain separate from test commands; no native execution."
+  Scope: "scripts/check-module-boundaries.test.ts,11 inventory CLI test files (cli,tests-cli,test-source-target-cli,junit-source-target-cli,python-test-module-cli,ui-test-source-cli,cppunit-registration-cli,help-topics-cli,translations-cli,dictionaries-cli,parity-mapping-cli),and shared authored test fixture support under scripts/test-fixtures. No production runtime/inventory parser/count guard or package test command changes. Preserve native result fixture bytes and unfinished task48 work. The user's explicit project-wide test constraint authorizes this measured scope correction."
+  Plan: "Replace pinned checkout inputs in all11measured CLI cases with deterministic owned fixtures. Preserve existing count assertions and real file reader/writer coverage; exercise default Git executor against four small test-owned repositories, with other CLI cases using explicit Git boundary fixtures and generated makefile/source declaration text. Parity CLI uses synthetic upstream marker evidence and real local manifest/runtime reads, leaving actual provenance audit to standalone static command. Run all tooling tests and committed application/inventory coverage without vendor, format/lint/tool typecheck and doctor/routing/diff. Commit separately from completed source cleanup and task48; close only this test-independence correction."
+  Verify Steps: "Run all39tool test files with vendor/libreoffice-reference unavailable, including11previous failures; run committed application and inventory coverage suites without vendor excluding only untracked unfinished task48 test. Keep all100percent thresholds/count guards unchanged. Confirm default Git executor uses four small owned repos, filesystem reader/writer paths remain tested, parity CLI reads only synthetic upstream markers and local project files. Run changed-file Prettier/ESLint,JSDoc check,typecheck:tools,doctor,routing,diff-check;restore vendor/test in finally,review exact scope and unchanged production/native fixture bytes. Record canonical verification/evaluator and preserve failed first-run evidence."
+  Verification: "First vendor-unavailable all-tool run:11failed/109passed across39files. Vendor and unfinished task48 test restored. This exposed actual dependency through CLI default Git and file adapters. Pending updated fixture implementation; do not skip failing cases or claim test independence before all suites pass."
   Rollback Plan: "Revert the isolated test correction commit. Restore temporary vendor/test relocation in finally handling before any lifecycle commit."
-  Findings: "The existing boundary test directly reads editeng/Library_editeng.mk. The application tests have no compiler or upstream source references; native JSON fixtures contain literal data. The unfinished task48 test is not part of the committed test baseline and expects not-yet-implemented tree methods; exclude it only for this baseline-independence check."
+  Findings: |-
+    The existing boundary test directly reads editeng/Library_editeng.mk. The application tests have no compiler or upstream source references; native JSON fixtures contain literal data. The unfinished task48 test is not part of the committed test baseline and expects not-yet-implemented tree methods; exclude it only for this baseline-independence check.
+
+    - Observation: The vendor-unavailable all-tooling run failed11tests across inventory CLI suites: production Git/filesystem cases read pinned upstream repositories. The vendor directory and unfinished task48 test were restored in finally handling.
+      Impact: The initial text audit understated actual upstream test dependencies; the project-wide independence criterion remains unmet. Do not report that all tests are independent or weaken/skip those cases.
+      Resolution: Record this failed evidence and inspect the11CLI filesystem cases. Close the narrow module-boundary correction using focused evidence, then route a separate measured task replacing pinned-source integration inputs with owned temporary Git/fixture inputs while retaining real filesystem and Git-path coverage.
 id_source: "generated"
 ---
 ## Summary
@@ -55,19 +70,19 @@ Make the module-boundary tooling test independent of pinned upstream, as explici
 
 ## Scope
 
-scripts/check-module-boundaries.test.ts only for implementation; task evidence and lifecycle records. Preserve all local allowlist/reverse/browser edge assertions. No production/runtime behavior or existing parity task changes. Temporarily relocate vendor and the unfinished task48 test within ignored repository scratch during verification, restoring both with finally handling.
+scripts/check-module-boundaries.test.ts,11 inventory CLI test files (cli,tests-cli,test-source-target-cli,junit-source-target-cli,python-test-module-cli,ui-test-source-cli,cppunit-registration-cli,help-topics-cli,translations-cli,dictionaries-cli,parity-mapping-cli),and shared authored test fixture support under scripts/test-fixtures. No production runtime/inventory parser/count guard or package test command changes. Preserve native result fixture bytes and unfinished task48 work. The user's explicit project-wide test constraint authorizes this measured scope correction.
 
 ## Plan
 
-Remove the native Makefile read and fs import from the boundary test; retain local dependency assertions and describe their contract accurately. Verify formatting, type checking and selected tooling tests without vendor. Run the existing application and inventory coverage suites with vendor unavailable, excluding only unfinished task48 test already outside the committed baseline. Restore vendor and unfinished work, run doctor/routing/diff, record evidence and commit this one-test correction separately.
+Replace pinned checkout inputs in all11measured CLI cases with deterministic owned fixtures. Preserve existing count assertions and real file reader/writer coverage; exercise default Git executor against four small test-owned repositories, with other CLI cases using explicit Git boundary fixtures and generated makefile/source declaration text. Parity CLI uses synthetic upstream marker evidence and real local manifest/runtime reads, leaving actual provenance audit to standalone static command. Run all tooling tests and committed application/inventory coverage without vendor, format/lint/tool typecheck and doctor/routing/diff. Commit separately from completed source cleanup and task48; close only this test-independence correction.
 
 ## Verify Steps
 
-Run focused boundary, provenance and resource-model tooling tests with vendor/libreoffice-reference temporarily unavailable; run existing committed application and inventory coverage suites without vendor, excluding the unfinished untracked task48 test, preserving original coverage thresholds. Run format check on the changed file and npm run typecheck:tools. Audit project test command chains for native compiler/developer probe invocation. Ensure vendor and unfinished task48 test restored even on failure; unchanged production source and native fixtures. Run ap doctor, routing validator and git diff --check; inspect exact implementation scope and record verification/evaluator before closure.
+Run all39tool test files with vendor/libreoffice-reference unavailable, including11previous failures; run committed application and inventory coverage suites without vendor excluding only untracked unfinished task48 test. Keep all100percent thresholds/count guards unchanged. Confirm default Git executor uses four small owned repos, filesystem reader/writer paths remain tested, parity CLI reads only synthetic upstream markers and local project files. Run changed-file Prettier/ESLint,JSDoc check,typecheck:tools,doctor,routing,diff-check;restore vendor/test in finally,review exact scope and unchanged production/native fixture bytes. Record canonical verification/evaluator and preserve failed first-run evidence.
 
 ## Verification
 
-Pending targeted test correction. Test independence is measured with vendor unavailable, not inferred only from text search. Static resource/provenance/inventory audit commands in npm verify may read vendor and remain separate from test commands; no native execution.
+First vendor-unavailable all-tool run:11failed/109passed across39files. Vendor and unfinished task48 test restored. This exposed actual dependency through CLI default Git and file adapters. Pending updated fixture implementation; do not skip failing cases or claim test independence before all suites pass.
 
 ## Rollback Plan
 
@@ -76,3 +91,7 @@ Revert the isolated test correction commit. Restore temporary vendor/test reloca
 ## Findings
 
 The existing boundary test directly reads editeng/Library_editeng.mk. The application tests have no compiler or upstream source references; native JSON fixtures contain literal data. The unfinished task48 test is not part of the committed test baseline and expects not-yet-implemented tree methods; exclude it only for this baseline-independence check.
+
+- Observation: The vendor-unavailable all-tooling run failed11tests across inventory CLI suites: production Git/filesystem cases read pinned upstream repositories. The vendor directory and unfinished task48 test were restored in finally handling.
+  Impact: The initial text audit understated actual upstream test dependencies; the project-wide independence criterion remains unmet. Do not report that all tests are independent or weaken/skip those cases.
+  Resolution: Record this failed evidence and inspect the11CLI filesystem cases. Close the narrow module-boundary correction using focused evidence, then route a separate measured task replacing pinned-source integration inputs with owned temporary Git/fixture inputs while retaining real filesystem and Git-path coverage.
