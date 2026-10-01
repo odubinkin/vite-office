@@ -595,13 +595,14 @@ void validate(SwNumberTreeNode& parent){
 int main(){int count;while(std::cin>>count){
  SwNumRule rule;for(auto& f:rule.formats)std::cin>>f.start;
  SwNodeNum root(nullptr,&rule);std::vector<std::unique_ptr<SwTextNode>> texts;std::vector<std::unique_ptr<SwNodeNum>> nodes;
- SwDoc doc;
+ SwDoc doc;std::vector<int> depths;
  for(int i=0;i<count;i++){
   int level, counted, restart;long actual;std::cin>>level>>counted>>restart>>actual;
   auto text=std::make_unique<SwTextNode>();text->index=i;text->counted=counted;text->restart=restart;text->actualStart=actual;
-  auto n=std::make_unique<SwNodeNum>(text.get(),&rule);root.AddChild(n.get(),level,doc);
+  auto n=std::make_unique<SwNodeNum>(text.get(),&rule);depths.push_back(level);
   texts.push_back(std::move(text));nodes.push_back(std::move(n));
  }
+ for(int i=0;i<count;i++){int position;std::cin>>position;root.AddChild(nodes[position].get(),depths[position],doc);}
  validate(root);
  for(auto& n:nodes){SwNumberTree::tNumberVector vector;n->GetNumberVector_(vector,false);std::cout<<n->mnNumber<<' '<<n->mbContinueingPreviousSubTree<<' '<<vector.size();for(auto number:vector)std::cout<<' '<<number;std::cout<<' '<<vector.size();std::vector<bool> phantoms;for(auto p=n.get();p->GetParent();p=static_cast<SwNodeNum*>(p->GetParent()))phantoms.push_back(p->IsPhantom());for(auto p=phantoms.rbegin();p!=phantoms.rend();p++)std::cout<<' '<<*p;std::cout<<'\n';}
 }}

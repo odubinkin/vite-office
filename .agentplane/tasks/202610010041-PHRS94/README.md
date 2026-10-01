@@ -4,7 +4,7 @@ title: "Restore native phantom ancestors for skipped list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned phantom ancestors and counting under the persistent approved upstream goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T00:46:23.572Z"
+doc_updated_at: "2026-10-01T00:47:56.765Z"
 doc_updated_by: "CODER"
 description: "Iteration29 of persistent upstream goal: replace bounded missing-level groups with source-owned phantom construction and native hierarchical phantom counting for existing Arabic/bullet lists. Preserve registered save/open/recovery deviations."
 sections:
@@ -52,6 +52,14 @@ sections:
     - Observation: Focused test command referenced absent apps/office/vitest.config.ts and exited1 before running tests.
       Impact: No semantic result; installed app uses its actual Vite configuration.
       Resolution: Locate repository test configuration and rerun focused checks without changing gates.
+
+    - Observation: Focused source tree checks: 13 pass; unattached-policy fixture reuses a root after resetting only its child, leaving the old phantom container populated.
+      Impact: AddChild correctly rejects duplicate-equivalent insertion; the fixture must discard both old links for the eager rebuild contract.
+      Resolution: Reset the fixture root before reinsertion, preserving native orphan/equivalence contracts; rerun checks.
+
+    - Observation: ODT focused check reaches correct [7,5,3] labels/copy/Worker/export, then fails an assertion that assumed adjacent XML attribute order.
+      Impact: Selected declaration contains the expected values with num-suffix between attributes; semantic transport is not failing.
+      Resolution: Assert each value inside the selected level declaration independently and rerun genuine package roundtrips.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +93,11 @@ Preflight: clean main/direct; only parent 202609240501-C9TN6M DOING. Previous tu
 - Observation: Focused test command referenced absent apps/office/vitest.config.ts and exited1 before running tests.
   Impact: No semantic result; installed app uses its actual Vite configuration.
   Resolution: Locate repository test configuration and rerun focused checks without changing gates.
+
+- Observation: Focused source tree checks: 13 pass; unattached-policy fixture reuses a root after resetting only its child, leaving the old phantom container populated.
+  Impact: AddChild correctly rejects duplicate-equivalent insertion; the fixture must discard both old links for the eager rebuild contract.
+  Resolution: Reset the fixture root before reinsertion, preserving native orphan/equivalence contracts; rerun checks.
+
+- Observation: ODT focused check reaches correct [7,5,3] labels/copy/Worker/export, then fails an assertion that assumed adjacent XML attribute order.
+  Impact: Selected declaration contains the expected values with num-suffix between attributes; semantic transport is not failing.
+  Resolution: Assert each value inside the selected level declaration independently and rerun genuine package roundtrips.

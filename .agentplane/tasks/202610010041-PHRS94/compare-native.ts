@@ -4,7 +4,8 @@ import assert from "node:assert/strict";
 import {createWriterDocument} from "../../../apps/office/src/sw/source/core/doc/doc";
 import {applyWriterParagraphList} from "../../../apps/office/src/sw/source/core/doc/list";
 interface Item {level:number;counted:boolean;restart:boolean;actualStart:number;}
-interface Row {starts:number[];items:Item[];expected:{number:number;continuation:boolean;vector:number[];phantoms:boolean[]}[];}
+import {SwNodeNum} from "../../../apps/office/src/sw/source/core/SwNumberTree/SwNodeNum";
+interface Row {order:number[];starts:number[];items:Item[];expected:{number:number;continuation:boolean;vector:number[];phantoms:boolean[]}[];}
 const rows:Row[]=JSON.parse(readFileSync(new URL("./native-results.json",import.meta.url),"utf8"));
 let total=0;
 for(const [index,row] of rows.entries()){
@@ -16,6 +17,8 @@ for(const [index,row] of rows.entries()){
   node.SetCountedInList(item.counted);if(item.restart)node.SetListRestart(true,item.actualStart);
  });
  const list=document.GetDocumentListsManager().GetListByName("counter-list")!;
+ const root=new SwNodeNum(undefined,-1,rule);const records=document.paragraphs.map(node=>new SwNodeNum(node,node.GetAttrListLevel()));for(const i of row.order)root.AddChild(records[i]!,row.items[i]!.level);root.ValidateHierarchical();
+ const direct=records.map(record=>{const phantoms:boolean[]=[];for(let p=record;p.GetParent();p=p.GetParent() as typeof record)phantoms.unshift(p.IsPhantom());return {number:record.GetNumber(),continuation:record.IsContinueingPreviousSubTree(),vector:record.GetNumberVector(),phantoms};});assert.deepEqual(direct,row.expected,`ordered insertion ${index}`);
  const actual=document.paragraphs.map(node=>{const number=node.GetListItemNumber();const record=list.GetListItem(node)!;const phantoms:boolean[]=[];for(let p=record;p.GetParent();p=p.GetParent() as typeof record)phantoms.unshift(p.IsPhantom());return {number,continuation:record.IsContinueingPreviousSubTree(),vector:list.GetListItemNumberVector(node),phantoms};});
  assert.deepEqual(actual,row.expected,`canonical hierarchy ${index}`);total+=actual.length;
 }

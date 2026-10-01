@@ -79,13 +79,14 @@ void validate(SwNumberTreeNode& parent){
 int main(){int count;while(std::cin>>count){
  SwNumRule rule;for(auto& f:rule.formats)std::cin>>f.start;
  SwNodeNum root(nullptr,&rule);std::vector<std::unique_ptr<SwTextNode>> texts;std::vector<std::unique_ptr<SwNodeNum>> nodes;
- SwDoc doc;
+ SwDoc doc;std::vector<int> depths;
  for(int i=0;i<count;i++){
   int level, counted, restart;long actual;std::cin>>level>>counted>>restart>>actual;
   auto text=std::make_unique<SwTextNode>();text->index=i;text->counted=counted;text->restart=restart;text->actualStart=actual;
-  auto n=std::make_unique<SwNodeNum>(text.get(),&rule);root.AddChild(n.get(),level,doc);
+  auto n=std::make_unique<SwNodeNum>(text.get(),&rule);depths.push_back(level);
   texts.push_back(std::move(text));nodes.push_back(std::move(n));
  }
+ for(int i=0;i<count;i++){int position;std::cin>>position;root.AddChild(nodes[position].get(),depths[position],doc);}
  validate(root);
  for(auto& n:nodes){SwNumberTree::tNumberVector vector;n->GetNumberVector_(vector,false);std::cout<<n->mnNumber<<' '<<n->mbContinueingPreviousSubTree<<' '<<vector.size();for(auto number:vector)std::cout<<' '<<number;std::cout<<' '<<vector.size();std::vector<bool> phantoms;for(auto p=n.get();p->GetParent();p=static_cast<SwNodeNum*>(p->GetParent()))phantoms.push_back(p->IsPhantom());for(auto p=phantoms.rbegin();p!=phantoms.rend();p++)std::cout<<' '<<*p;std::cout<<'\n';}
 }}
@@ -101,7 +102,12 @@ for shape in shapes:
   for count_mask in count_masks:
    for restart_mask in restart_masks:
     cases.append({'starts':starts,'items':[{'level':level,'counted':bool(count_mask&(1<<i)),'restart':bool(restart_mask&(1<<i)),'actualStart':0 if i%2==0 else 5} for i,level in enumerate(shape)]})
-request=''.join(str(len(c['items']))+' '+' '.join(map(str,c['starts']))+' '+ ' '.join(f'{item["level"]} {int(item["counted"])} {int(item["restart"])} {item["actualStart"]}' for item in c['items'])+'\n' for c in cases)
+ordered=[]
+for case in cases:
+ for order in [list(range(len(case['items']))),list(reversed(range(len(case['items'])))),list(range(1,len(case['items']),2))+list(range(0,len(case['items']),2))]:
+  ordered.append(dict(case,order=order))
+cases=ordered
+request=''.join(str(len(c['items']))+' '+' '.join(map(str,c['starts']))+' '+ ' '.join(f'{item["level"]} {int(item["counted"])} {int(item["restart"])} {item["actualStart"]}' for item in c['items'])+' '+' '.join(map(str,c['order']))+'\n' for c in cases)
 binary=root/'native-hierarchical-oracle'
 subprocess.run(['clang++','-std=c++20',str(root/'native-hierarchical-oracle.cxx'),'-o',str(binary)],check=True)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink()
