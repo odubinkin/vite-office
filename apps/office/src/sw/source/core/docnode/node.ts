@@ -182,17 +182,21 @@ export abstract class SwContentNode extends SwNode {
     return changed;
   }
 
-  /** Clears one direct item and releases an empty auto-attribute set. @param which - Cleared WhichId. @returns True when removed. */
-  public ResetAttr(which: number): boolean {
+  /** Clears direct items by inclusive range or ordered vector. @param which - First WhichId or vector. @param end - Inclusive range end. @returns Whether items were removed. */
+  public ResetAttr(which: number | readonly number[], end = 0): boolean {
     if (this.attributeSet === undefined) return false;
-    const removed = this.attributeSet.ClearItem(which) !== 0;
+    let count = 0;
+    if (typeof which === "number")
+      for (let id = which; id <= Math.max(which, end); id++)
+        count += this.attributeSet.ClearItem(id);
+    else for (const id of which) count += this.attributeSet.ClearItem(id);
     if (this.attributeSet.Count() === 0) this.attributeSet = undefined;
-    if (removed)
+    if (count > 0)
       this.GetDoc().NotifyModelChange({
         kind: "attribute-set-changed",
         nodeIndex: this.GetNodes().indexOfOrUndefined(this),
       });
-    return removed;
+    return count > 0;
   }
 
   /** Clears every direct node item and releases the auto-attribute set. @returns Removed item count. */

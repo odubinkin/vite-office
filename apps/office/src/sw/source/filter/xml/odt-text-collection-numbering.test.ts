@@ -1,5 +1,6 @@
 /** @fileoverview Exercises collection numbering transitions after real ODT import, through Worker graph transfer, undo and ODT reopen. */
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
+import { SwNumRuleType } from "../../core/doc/number";
 import { SwDoc } from "../../core/doc/doc";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -11,6 +12,7 @@ import {
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import { writeOdtDocument } from "./wrtxml";
+import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
 
 /** Returns the required fixture paragraph. @param document - Fixture graph. @returns First text node. */
@@ -223,4 +225,64 @@ it("retains assigned heading and direct unsigned outline attributes in existing 
   expect(paragraph.GetAttrListLevel()).toBe(3);
   expect(paragraph.GetAttrOutlineLevel()).toBe(5);
   expect(restored.GetTextFormatColl("heading-4").GetAttrOutlineLevel()).toBe(4);
+});
+
+it("preserves explicit rule type through Worker16 without inferring the reserved name", /** Verifies typed metadata, cloned rules and absent legacy classification independently of ODT outline factories. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  const chapter = doc.EnsureNumRule("Chapter", "numbered");
+  chapter.SetRuleType(SwNumRuleType.OUTLINE_RULE);
+  const named = doc.EnsureNumRule("Outline", "numbered");
+  expect(named.IsOutlineRule()).toBe(false);
+  const node = firstParagraph(doc);
+  node.SetNumRule("Chapter");
+  node.SetAttrOutlineLevel(2);
+  const record = encodeWriterDocument(doc);
+  const restored = decodeWriterDocument(record);
+  expect(restored.FindNumRulePtr("Chapter")?.GetRuleType()).toBe(SwNumRuleType.OUTLINE_RULE);
+  expect(restored.FindNumRulePtr("Outline")?.GetRuleType()).toBe(SwNumRuleType.NUM_RULE);
+  expect(restored.nodes.GetOutLineNds().entries()).toEqual([firstParagraph(restored)]);
+  expect(encodeWriterDocument(restored)).toEqual(record);
+  const explicitNormal = {
+    ...record,
+    numRules: record.numRules.map(
+      /** Exercises valid explicit normal classification at the boundary. @param rule - Stored rule. @returns Explicit normal record. */
+      (rule) => ({ ...rule, ruleType: SwNumRuleType.NUM_RULE }),
+    ),
+  };
+  expect(decodeWriterDocument(explicitNormal).FindNumRulePtr("Chapter")?.IsOutlineRule()).toBe(
+    false,
+  );
+  expect(
+    /** Rejects unknown classification without inventing a native factory. @returns Restored document if unexpectedly accepted. */
+    () =>
+      decodeWriterDocument({
+        ...record,
+        numRules: record.numRules.map(
+          /** Supplies malformed primitive metadata. @param rule - Stored rule. @returns Invalid test record. */
+          (rule) => ({ ...rule, ruleType: -1 }),
+        ),
+      }),
+  ).toThrow("numbering rule type is invalid");
+});
+
+it("restores native reading state after successful import and malformed content", /** Verifies the same document phase brackets both import exits while preserving existing package semantics. @returns Completion. */ async () => {
+  const zip = new ZipFile(writeOdtDocument(new SwDoc(), { title: "Reading" }));
+  const styles = await zip.readTextEntry("styles.xml"),
+    content = await zip.readTextEntry("content.xml");
+  const phase = vi.spyOn(SwDoc.prototype, "SetInReading");
+  try {
+    const imported = importWriterXml(styles, content, { title: "Reading" });
+    expect(imported.document.IsInReading()).toBe(false);
+    expect(phase.mock.calls).toEqual([[true], [false]]);
+    phase.mockClear();
+    expect(
+      /** Supplies malformed XML during the same native reading phase. @returns Import if unexpectedly accepted. */
+      () => importWriterXml(styles, "<malformed", { title: "Reading" }),
+    ).toThrow();
+    expect(phase.mock.calls).toEqual([[true], [false]]);
+    expect(phase.mock.contexts[0]).toBe(phase.mock.contexts[1]);
+    expect((phase.mock.contexts[0] as SwDoc).IsInReading()).toBe(false);
+  } finally {
+    phase.mockRestore();
+  }
 });

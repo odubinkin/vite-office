@@ -119,7 +119,7 @@ it("retains native first uncounted descendant and nested sibling rules", /** Ver
     ],
     [
       [{ level: 0, counted: false }, { level: 1, counted: false }, { level: 2 }, { level: 0 }],
-      [0, 0, 0, 1],
+      [-1, 0, 0, 0],
     ],
     [
       [{ level: 0 }, { level: 1 }, { level: 1 }, { level: 0 }, { level: 1 }],

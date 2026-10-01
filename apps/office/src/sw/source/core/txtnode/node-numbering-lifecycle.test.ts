@@ -7,7 +7,7 @@ import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "./ndtxt";
 
-it("owns records in text nodes and leaves an unrelated tail unvalidated", /** Checks literal native owner, prefix, detached-rule and readd states. @returns Nothing. */ () => {
+it("owns records in text nodes and validates insertion notifications before prefix reads", /** Checks literal native owner, prefix, detached-rule and readd states. @returns Nothing. */ () => {
   const doc = createWriterDocument();
   const first = doc.paragraphs[0] as SwTextNode;
   const tail = doc.nodes.MakeTextNode();
@@ -29,12 +29,12 @@ it("owns records in text nodes and leaves an unrelated tail unvalidated", /** Ch
   const record = tail.GetNum() as SwNodeNum;
   const firstRecord = first.GetNum();
   expect(record.GetNumRule()).toBe(rule);
-  expect(record.GetNumber(false)).toBe(0);
+  expect(record.GetNumber(false)).toBe(8);
   expect(first.GetListItemNumber()).toBe(7);
-  expect(record.GetNumber(false)).toBe(0);
+  expect(record.GetNumber(false)).toBe(8);
   expect(first.GetNumberVector()).toEqual([7]);
   expect(first.GetListLabel()).toBe("7.");
-  expect(record.GetNumber(false)).toBe(0);
+  expect(record.GetNumber(false)).toBe(8);
   expect(tail.GetNumberVector()).toEqual([8]);
   first.AddToList();
   expect(first.GetNum()).toBe(firstRecord);
@@ -171,7 +171,7 @@ it("restricts automatic ownership to connected document nodes and retains orphan
   doc.GetDocumentListsManager().GetListByName("A")?.InsertListItem(record, 0);
   node.RemoveFromList();
   node.SetNumRule("unknown");
-  expect(node.IsInList()).toBe(true);
+  expect(node.IsInList()).toBe(false);
   expect(node.GetNum()?.GetNumRule()).toBeUndefined();
   expect(node.HasNumber()).toBe(false);
   expect(node.GetListLabel()).toBeUndefined();

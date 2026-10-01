@@ -1,5 +1,6 @@
 /** @fileoverview Supplies Writer text-node policy to the source-owned hierarchical number tree. */
 
+import type { SwDoc } from "../doc/doc";
 import type { SwNumRule } from "../doc/number";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwNumberTreeNode } from "./SwNumberTree";
@@ -43,6 +44,20 @@ export class SwNodeNum extends SwNumberTreeNode {
       this.mpNumRule?.RemoveTextNode(this.textNode);
     }
     this.mpNumRule = undefined;
+  }
+  /** Reads existing shown-node notification policy. @param document - Native operation context. @returns Whether notification is enabled. */
+  protected IsNotifiable(document?: SwDoc): boolean {
+    return this.IsNotificationEnabled(document);
+  }
+  /** Checks the native reading flag; dtor and temporary native client blockers remain outside this bounded lifetime. @param document - Native operation context, absent for diagnostic roots. @returns Whether enabled. */
+  protected IsNotificationEnabled(document?: SwDoc): boolean {
+    const owner = this.textNode?.GetDoc() ?? document;
+    return owner === undefined || !owner.IsInReading();
+  }
+  /** Validates the prefix before notifying the paragraph. @returns Nothing. */
+  protected NotifyNode(): void {
+    this.ValidateMe();
+    this.textNode?.NumRuleChgd();
   }
   /** Creates a no-text record retaining the current rule. @returns Root/phantom factory record. */
   protected Create(): SwNodeNum {

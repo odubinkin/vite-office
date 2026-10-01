@@ -2,6 +2,7 @@
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
 
+import { SwOutlineNodes } from "./ndnum";
 import type { SwDoc } from "../doc/doc";
 import { SwEndNode, SwStartNode, SwTableBoxStartNode, SwTableNode, type SwNode } from "./node";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -17,6 +18,7 @@ import {
 /** Owns every Writer model node and the fixed non-content/content section sentinels. */
 export class SwNodes {
   private readonly nodeArray: SwNode[] = [];
+  private readonly m_aOutlineNodes = new SwOutlineNodes();
   private readonly endOfPostIts: SwEndNode;
   private readonly endOfInserts: SwEndNode;
   private readonly endOfAutotext: SwEndNode;
@@ -43,6 +45,33 @@ export class SwNodes {
     return this === this.document.GetNodes();
   }
 
+  /** Returns the source-owned sorted outline index. @returns Outline index. */
+  public GetOutLineNds(): SwOutlineNodes {
+    return this.m_aOutlineNodes;
+  }
+  /** Reconciles the native outline transition for a connected document node. @param node - Candidate model node. @returns Nothing. */
+  public UpdateOutlineNode(node: SwNode): void {
+    // Detached clones and non-document arrays have no native outline-index lifetime.
+    if (
+      !this.IsDocNodes() ||
+      this.indexOfOrUndefined(node) === undefined ||
+      !(node instanceof SwTextNode) ||
+      !node.IsOutlineStateChanged()
+    )
+      return;
+    const found = this.m_aOutlineNodes.contains(node);
+    if (node.IsOutline()) {
+      if (!found && node.GetNodes() === this) this.m_aOutlineNodes.insert(node);
+    } else if (found) this.m_aOutlineNodes.erase(node);
+    node.UpdateOutlineState();
+    // Native Chapter field propagation remains outside the implemented fields profile.
+  }
+  /** Registers outline membership after insertion establishes native array lifetime. @param node - Inserted paragraph. @returns Nothing. */
+  private InsertOutlineNode(node: SwTextNode): void {
+    if (!this.IsDocNodes()) return;
+    if (node.IsOutline()) this.m_aOutlineNodes.insert(node);
+    node.UpdateOutlineState();
+  }
   /** Returns the current node count, including fixed sentinels. @returns Total node count. */
   public Count(): number {
     return this.nodeArray.length;
@@ -150,6 +179,7 @@ export class SwNodes {
       const end = new SwEndNode(this, start);
       start.setEndOfSection(end);
       this.nodeArray.splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, paragraph, end);
+      this.InsertOutlineNode(paragraph);
       const box = new SwTableBox(start, boxFormats[column]);
       box.AddParagraph(paragraph);
       line.AddBox(box);
@@ -166,6 +196,7 @@ export class SwNodes {
       throw new Error("Writer table cell belongs to another document.");
     const paragraph = new SwTextNode(this, start, this.document.GetDfltTextFormatColl());
     this.nodeArray.splice(start.EndOfSectionNode().GetIndex(), 0, paragraph);
+    this.InsertOutlineNode(paragraph);
     box.AddParagraph(paragraph);
     this.document.NotifyModelChange({ index: paragraph.GetIndex(), kind: "node-inserted" });
     return paragraph;
@@ -180,6 +211,7 @@ export class SwNodes {
       text,
     );
     this.nodeArray.splice(this.endOfContent.GetIndex(), 0, node);
+    this.InsertOutlineNode(node);
     this.document.NotifyModelChange({ index: node.GetIndex(), kind: "node-inserted" });
     return node;
   }
@@ -190,6 +222,7 @@ export class SwNodes {
       throw new Error("SwTextNode belongs to another SwNodes array.");
     this.nodeArray.splice(source.GetIndex() + 1, 0, node);
     node.AddToList();
+    this.InsertOutlineNode(node);
     this.document.NotifyModelChange({
       index: node.GetIndex(),
       kind: "node-inserted",
@@ -208,6 +241,7 @@ export class SwNodes {
     if (next !== undefined) node.CollapseContentIndicesTo(next, 0);
     else node.CollapseContentIndicesTo(previous as SwTextNode, (previous as SwTextNode).Len());
     const nodeIndex = node.GetIndex();
+    this.m_aOutlineNodes.erase(node);
     node.RemoveFromList();
     this.nodeArray.splice(nodeIndex, 1);
     this.document.NotifyModelChange({ index: nodeIndex, kind: "node-removed" });
@@ -220,10 +254,12 @@ export class SwNodes {
     if (this.indexOfOrUndefined(replacement) !== undefined)
       throw new Error("Replacement SwTextNode already belongs to body content.");
     const index = node.GetIndex();
+    this.m_aOutlineNodes.erase(node);
     node.MoveAllContentIndicesTo(replacement);
     node.RemoveFromList();
     this.nodeArray[index] = replacement;
     replacement.AddToList();
+    this.InsertOutlineNode(replacement);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
     this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
@@ -240,10 +276,14 @@ export class SwNodes {
     const currentIndex = node.GetIndex();
     const otherIndex = other.GetIndex();
     const lists = this.document.GetDocumentListsManager();
-    for (const item of [node, other]) item.GetNum()?.RemoveMe();
+    for (const item of [node, other]) {
+      this.m_aOutlineNodes.erase(item);
+      item.GetNum()?.RemoveMe(this.document);
+    }
     this.nodeArray[currentIndex] = other;
     this.nodeArray[otherIndex] = node;
     for (const item of [node, other]) {
+      this.InsertOutlineNode(item);
       const record = item.GetNum();
       if (record !== undefined)
         lists.GetListByName(item.GetListId())?.InsertListItem(record, item.GetAttrListLevel());
@@ -266,6 +306,7 @@ export class SwNodes {
         const clone = node.CloneTo(this);
         this.nodeArray.splice(this.endOfContent.GetIndex(), 0, clone);
         clone.AddToList();
+        this.InsertOutlineNode(clone);
       },
     );
   }

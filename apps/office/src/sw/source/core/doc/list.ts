@@ -61,11 +61,11 @@ export class SwList {
   public InsertListItem(node: SwNodeNum, level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwList level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    this.root.AddChild(node, level);
+    this.root.AddChild(node, level, node.GetTextNode()?.GetDoc());
   }
   /** Detaches a text-owned record from its list. @param node - Number record. @returns Nothing. */
   public static RemoveListItem(node: SwNodeNum): void {
-    node.RemoveMe();
+    node.RemoveMe(node.GetTextNode()?.GetDoc());
   }
   /** Invalidates counters after document ordering or level changes. @returns Nothing. */
   public InvalidateListTree(): void {

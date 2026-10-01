@@ -1,5 +1,7 @@
 /** @fileoverview Owns Writer hierarchical counters and phantom ancestors for skipped list levels. */
 
+import type { SwDoc } from "../doc/doc";
+
 /** Native number-tree state independent of Writer text-node count/restart/start policy. */
 export abstract class SwNumberTreeNode {
   private children: SwNumberTreeNode[] = [];
@@ -30,8 +32,50 @@ export abstract class SwNumberTreeNode {
   /** Reads descendant numbering policy. @returns Whether a descendant contributes numbering. */
   public abstract HasCountedChildren(): boolean;
 
-  /** Inserts an orphan at its requested depth, constructing skipped ancestors and relocating later descendants. @param child - Orphan record. @param depth - Remaining list depth. @returns Nothing. */
-  public AddChild(child: SwNumberTreeNode, depth: number): void {
+  /** Reads normal-document notification policy for existing shown records. @param document - Native operation context. @returns Whether notification is enabled. */
+  protected abstract IsNotifiable(document?: SwDoc): boolean;
+  /** Reads source insertion notification enablement. @param document - Native operation context, absent for diagnostic roots. @returns Whether enabled. */
+  protected abstract IsNotificationEnabled(document?: SwDoc): boolean;
+  /** Validates and notifies one concrete policy record. @returns Nothing. */
+  protected abstract NotifyNode(): void;
+  /** Invalidates this record's parent prefix. @returns Nothing. */
+  public InvalidateMe(): void {
+    this.parent?.Invalidate(this);
+  }
+  /** Validates this record's parent prefix. @returns Nothing. */
+  public ValidateMe(): void {
+    this.parent?.Validate(this);
+  }
+  /** Traverses native notification order, skipping phantom self notifications. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
+  public Notify(document?: SwDoc): void {
+    if (!this.IsNotifiable(document)) return;
+    if (!this.IsPhantom()) this.NotifyNode();
+    for (const child of this.children) child.Notify(document);
+  }
+  /** Notifies the invalid prefix suffix and following uncounted subtree. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
+  public NotifyInvalidChildren(document?: SwDoc): void {
+    if (!this.IsNotifiable(document)) return;
+    let position = this.lastValid === undefined ? 0 : this.children.indexOf(this.lastValid) + 1;
+    while (position < this.children.length)
+      (this.children[position++] as SwNumberTreeNode).Notify(document);
+    const siblings = this.parent?.children;
+    const next = siblings?.[siblings.indexOf(this) + 1];
+    if (next !== undefined && !next.IsCounted()) next.NotifyInvalidChildren(document);
+  }
+  /** Notifies this record's affected siblings. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
+  public NotifyInvalidSiblings(document?: SwDoc): void {
+    this.parent?.NotifyInvalidChildren(document);
+  }
+  /** Invalidates and notifies every record in the attached root. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
+  public InvalidateAndNotifyTree(document?: SwDoc): void {
+    const root = this.GetRoot();
+    if (root !== undefined) {
+      root.InvalidateTree();
+      root.Notify(document);
+    }
+  }
+  /** Inserts an orphan at its requested depth, constructing skipped ancestors and relocating later descendants. @param child - Orphan record. @param depth - Remaining list depth. @param document - Native operation context. @returns Nothing. */
+  public AddChild(child: SwNumberTreeNode, depth: number, document?: SwDoc): void {
     if (depth < 0 || child.parent !== undefined || child.children.length > 0) return;
     const greater = this.children.findIndex(
       /** Finds the first greater sibling. @param sibling - Existing record. @returns Ordering. */
@@ -41,7 +85,7 @@ export abstract class SwNumberTreeNode {
     if (depth > 0) {
       const parent = position === 0 ? this.CreatePhantom() : this.children[position - 1];
       if (position === 0) this.SetLastValid(undefined);
-      parent?.AddChild(child, depth - 1);
+      parent?.AddChild(child, depth - 1, document);
       return;
     }
     child.PreAdd();
@@ -62,7 +106,13 @@ export abstract class SwNumberTreeNode {
     const predecessor = this.children[position - 1];
     if (predecessor === undefined || this.IsValid(predecessor)) this.SetLastValid(predecessor);
     this.ClearObsoletePhantoms();
-    if (!this.IsCounted()) this.parent?.Invalidate(this);
+    if (child.IsNotificationEnabled(document)) {
+      if (!this.IsCounted()) {
+        this.InvalidateMe();
+        this.NotifyInvalidSiblings(document);
+      }
+      this.NotifyInvalidChildren(document);
+    }
   }
   /** Retains an existing destination phantom or constructs one for descendant relocation. @returns Destination record. */
   protected GetDestinationPhantom(): SwNumberTreeNode | undefined {
@@ -248,8 +298,8 @@ export abstract class SwNumberTreeNode {
     this.children = [];
     this.lastValid = undefined;
   }
-  /** Removes a real child, retaining its descendants under a predecessor or phantom. @param child - Owned real child. @returns Nothing. */
-  public RemoveChild(child: SwNumberTreeNode): void {
+  /** Removes a real child, retaining its descendants under a predecessor or phantom. @param child - Owned real child. @param document - Native operation context. @returns Nothing. */
+  public RemoveChild(child: SwNumberTreeNode, document?: SwDoc): void {
     if (child.IsPhantom()) return;
     let position = this.children.indexOf(child);
     if (position < 0) {
@@ -265,26 +315,28 @@ export abstract class SwNumberTreeNode {
     if (child.children.length > 0 && predecessor !== undefined) {
       child.MoveChildren(predecessor);
       predecessor.InvalidateTree();
+      predecessor.NotifyInvalidChildren(document);
     }
     this.SetLastValid(predecessor?.IsPhantom() ? undefined : predecessor);
     this.children.splice(position, 1);
+    this.NotifyInvalidChildren(document);
     child.PostRemove();
   }
-  /** Detaches an item and clears obsolete phantom chains without rebuilding the root. @returns Nothing. */
-  public RemoveMe(): void {
+  /** Detaches an item and clears obsolete phantom chains without rebuilding the root. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
+  public RemoveMe(document?: SwDoc): void {
     let savedParent = this.parent;
     if (savedParent === undefined) return;
-    savedParent.RemoveChild(this);
+    savedParent.RemoveChild(this, document);
     while (savedParent?.IsPhantom() && savedParent.HasOnlyPhantoms())
       savedParent = savedParent.parent;
     savedParent?.ClearObsoletePhantoms();
   }
-  /** Reparents an attached item through native removal and insertion. @param level - New non-negative level. @returns Nothing. */
-  public SetLevelInListTree(level: number): void {
+  /** Reparents an attached item through native removal and insertion. @param level - New non-negative level. @param document - Native operation context. @returns Nothing. */
+  public SetLevelInListTree(level: number, document?: SwDoc): void {
     if (level < 0 || this.parent === undefined || level === this.GetLevelInListTree()) return;
     const root = this.GetRoot() as SwNumberTreeNode;
-    this.RemoveMe();
-    root.AddChild(this, level);
+    this.RemoveMe(document);
+    root.AddChild(this, level, document);
   }
   /** Returns counters from real and phantom ancestors. @returns Root-to-item vector. */
   public GetNumberVector(): readonly number[] {

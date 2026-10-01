@@ -46,6 +46,15 @@ export interface WriterEmbeddedFont {
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  private mbInReading = false;
+  /** Reports the native document reading phase. @returns Reading flag. */
+  public IsInReading(): boolean {
+    return this.mbInReading;
+  }
+  /** Sets the native reading phase around document import. @param reading - New flag. @returns Nothing. */
+  public SetInReading(reading: boolean): void {
+    this.mbInReading = reading;
+  }
   private readonly attrPool: SwAttrPool;
   private readonly contentOperationsManager: DocumentContentOperationsManager;
   private readonly markAccess: DocumentMarkAccess;

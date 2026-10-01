@@ -35,6 +35,12 @@ import {
   type WriterParagraphListKind,
 } from "../doc/list";
 import { SwTextFormatColl, type SwFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
+import {
+  HandleSetAttrAtTextNode,
+  HandleResetAttrAtTextNode,
+  IsOutlineAtTextNode,
+} from "./ndtxt-attribute-handlers";
+import { SfxItemState } from "../../../../svl/source/items/itemset";
 import { HandleModifyAtTextNodeFormatChange } from "./ndtxt-format-change";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
@@ -94,15 +100,6 @@ export interface SwTextFragment {
   readonly hints: SwpHints;
 }
 
-/** Effective attributes used to reconcile one text node with its document list tree. */
-interface SwTextNodeListState {
-  readonly id: string;
-  readonly level: number;
-  readonly restart: boolean;
-  readonly restartValue: number | undefined;
-  readonly counted: boolean;
-}
-
 /** Enumerates the bounded paragraph alignments represented by RES_PARATR_ADJUST. */
 export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
 
@@ -120,6 +117,8 @@ export class SwTextNode extends SwContentNode {
   private listGeometryWins = false;
   private mpNodeNum: SwNodeNum | undefined;
   private mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
+  private mbInSetOrResetAttr = false;
+  private m_bLastOutlineState = false;
 
   /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
   public constructor(
@@ -230,7 +229,7 @@ export class SwTextNode extends SwContentNode {
     const previous = this.GetTextFormatColl();
     if (collection !== previous) {
       super.ChgFormatColl(collection);
-      HandleModifyAtTextNodeFormatChange(this);
+      if (!this.mbInSetOrResetAttr) HandleModifyAtTextNodeFormatChange(this);
     }
     if (this.GetNodes().IsDocNodes()) this.ChgTextCollUpdateNum(previous, collection, setListLevel);
     return previous;
@@ -246,6 +245,7 @@ export class SwTextNode extends SwContentNode {
       ? collection.GetAssignedOutlineStyleLevel()
       : 10;
     if (level !== 10 && level !== -1 && setListLevel) this.SetAttrListLevel(level);
+    this.GetNodes().UpdateOutlineNode(this);
   }
 
   /** Reads the pooled paragraph outline attribute without inline-frame resolution. @returns Outline level. */
@@ -359,48 +359,88 @@ export class SwTextNode extends SwContentNode {
     else this.SetAttr(new SwNumRuleItem(ruleName));
   }
 
-  /** Reconciles direct list attributes like pinned HandleSetAttrAtTextNode. @param itemOrSet - Direct pooled item or set. @returns Whether an item changed. */
+  /** Applies direct items through the native pre/post lifecycle. @param itemOrSet - Direct item or batch. @returns Whether raw items changed. */
   public override SetAttr(itemOrSet: SfxPoolItem | SfxItemSet): boolean {
-    const before = this.CaptureEffectiveListState();
-    const ruleItem =
-      itemOrSet instanceof SfxItemSet
-        ? itemOrSet.GetItemIfSet(RES_PARATR_NUMRULE, false)
-        : itemOrSet.Which() === RES_PARATR_NUMRULE
-          ? itemOrSet
-          : undefined;
-    const listItem =
-      itemOrSet instanceof SfxItemSet
-        ? itemOrSet.GetItemIfSet(RES_PARATR_LIST_ID, false)
-        : itemOrSet.Which() === RES_PARATR_LIST_ID
-          ? itemOrSet
-          : undefined;
-    const reattach =
-      ruleItem !== undefined ||
-      (listItem !== undefined && (listItem as SfxStringItem).GetValue() !== before.id);
-    if (reattach) this.RemoveFromList();
-    const changed = super.SetAttr(itemOrSet);
-    if (reattach) this.AddToList();
-    else if (changed) this.ReconcileListState(before);
+    const old = this.mbInSetOrResetAttr;
+    this.mbInSetOrResetAttr = true;
+    let handler: HandleSetAttrAtTextNode;
+    let changed: boolean;
+    try {
+      handler = new HandleSetAttrAtTextNode(this, itemOrSet);
+      changed = super.SetAttr(itemOrSet);
+      if (changed) this.GetNodes().UpdateOutlineNode(this);
+    } finally {
+      this.mbInSetOrResetAttr = old;
+    }
+    handler.finish();
     return changed;
   }
-
-  /** Reconciles a cleared direct list attribute. @param which - Direct WhichId. @returns Whether an item was removed. */
-  public override ResetAttr(which: number): boolean {
-    const before = this.CaptureEffectiveListState();
-    const reattach = which === RES_PARATR_NUMRULE || which === RES_PARATR_LIST_ID;
-    if (reattach) this.RemoveFromList();
-    const changed = super.ResetAttr(which);
-    if (reattach) this.AddToList();
-    else if (changed) this.ReconcileListState(before);
+  /** Clears direct items through the native range/vector lifecycle. @param which - Range start or ordered WhichIds. @param end - Inclusive end. @returns Whether raw items changed. */
+  public override ResetAttr(which: number | readonly number[], end = 0): boolean {
+    const old = this.mbInSetOrResetAttr;
+    this.mbInSetOrResetAttr = true;
+    let handler: HandleResetAttrAtTextNode;
+    let changed: boolean;
+    try {
+      handler = new HandleResetAttrAtTextNode(this, which, end);
+      changed = super.ResetAttr(which, end);
+      if (changed) this.GetNodes().UpdateOutlineNode(this);
+    } finally {
+      this.mbInSetOrResetAttr = old;
+    }
+    handler.finish();
     return changed;
   }
-
-  /** Reconciles every list attribute after a full direct reset. @returns Number of removed items. */
+  /** Clears all direct items with native suppression/remembership ordering. @returns Raw removed count. */
   public override ResetAllAttr(): number {
-    this.RemoveFromList();
-    const removed = super.ResetAllAttr();
-    this.AddToList();
+    const old = this.mbInSetOrResetAttr;
+    this.mbInSetOrResetAttr = true;
+    let handler: HandleResetAttrAtTextNode;
+    let removed: number;
+    try {
+      handler = new HandleResetAttrAtTextNode(this);
+      removed = super.ResetAllAttr();
+      if (removed > 0) this.GetNodes().UpdateOutlineNode(this);
+    } finally {
+      this.mbInSetOrResetAttr = old;
+    }
+    handler.finish();
     return removed;
+  }
+  /** Reports direct list-level ownership. @returns Whether a direct item exists. */
+  public HasAttrListLevel(): boolean {
+    return this.GetpSwAttrSet()?.GetItemState(RES_PARATR_LIST_LEVEL, false) === SfxItemState.SET;
+  }
+  /** Applies one native operation to the existing shown record. @param operation - Record operation. @returns Nothing. */
+  public DoNum(operation: (record: SwNodeNum) => void): void {
+    if (this.mpNodeNum === undefined)
+      throw new Error("SwTextNode DoNum requires an owned number record.");
+    operation(this.mpNodeNum);
+  }
+  /** Rebinds numbering clients and emits the existing model invalidation adapter. @returns Nothing. */
+  public NumRuleChgd(): void {
+    if (this.IsInList()) {
+      const rule = this.GetNumRule();
+      if (rule !== undefined && rule !== this.mpNodeNum?.GetNumRule())
+        this.mpNodeNum?.ChangeNumRule(rule);
+    }
+    const index = this.GetNodes().indexOfOrUndefined(this);
+    this.GetDoc().NotifyModelChange({
+      kind: "numbering-changed",
+      ...(index === undefined ? {} : { nodeIndex: index }),
+    });
+  }
+  /** Reads outline membership independent of rule name. @returns Outline state for connected normal-document paragraphs. */
+  public IsOutline(): boolean {
+    return IsOutlineAtTextNode(this);
+  }
+  /** Detects a native outline membership transition. @returns Whether last state differs. */
+  public IsOutlineStateChanged(): boolean {
+    return this.IsOutline() !== this.m_bLastOutlineState;
+  }
+  /** Retains the current outline state after index reconciliation. @returns Nothing. */
+  public UpdateOutlineState(): void {
+    this.m_bLastOutlineState = this.IsOutline();
   }
 
   /** Returns the shown number record owned by this paragraph. @returns Owned record. */
@@ -471,32 +511,6 @@ export class SwTextNode extends SwContentNode {
     if (!this.IsInList()) return;
     SwList.RemoveListItem(this.mpNodeNum as SwNodeNum);
     this.mpNodeNum = undefined;
-  }
-
-  /** Captures effective list attributes before one node mutation. @returns List transition state. */
-  private CaptureEffectiveListState(): SwTextNodeListState {
-    return {
-      id: this.GetListId(),
-      level: this.GetAttrListLevel(),
-      restart: this.IsListRestart(),
-      restartValue: this.HasAttrListRestartValue() ? this.GetAttrListRestartValue() : undefined,
-      counted: this.IsCountedInList(),
-    };
-  }
-
-  /** Updates registered number-tree nodes after direct item-set mutation. @param before - Effective attributes before the mutation. @returns Nothing. */
-  private ReconcileListState(before: SwTextNodeListState): void {
-    if (this.GetNodes().indexOfOrUndefined(this) === undefined) return;
-    const after = this.CaptureEffectiveListState();
-    const lists = this.GetDoc().GetDocumentListsManager();
-    const list = lists.GetListByName(after.id);
-    if (before.level !== after.level) this.mpNodeNum?.SetLevelInListTree(after.level);
-    else if (
-      before.restart !== after.restart ||
-      before.restartValue !== after.restartValue ||
-      before.counted !== after.counted
-    )
-      list?.InvalidateListTree();
   }
 
   /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */

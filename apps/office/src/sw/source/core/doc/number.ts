@@ -73,6 +73,13 @@ export class SwNumFormat extends SvxNumberFormat {
   }
 }
 
+/** Native numbering-rule classification, independent of the reserved name. */
+export enum SwNumRuleType {
+  OUTLINE_RULE = 0,
+  NUM_RULE = 1,
+  RULE_END = 2,
+}
+
 /** Document-owned numbering rule referenced by paragraph item sets. */
 export class SwNumRule {
   /** Returns Writer's reserved outline numbering rule identity. @returns Outline rule name. */
@@ -104,6 +111,20 @@ export class SwNumRule {
   private readonly formats: SwNumFormat[];
   private readonly textNodes: SwTextNode[] = [];
   private invalidRuleFlag = true;
+  private meRuleType = SwNumRuleType.NUM_RULE;
+  /** Returns native rule classification. @returns Stored type. */
+  public GetRuleType(): SwNumRuleType {
+    return this.meRuleType;
+  }
+  /** Assigns classification and invalidates the rule, preserving supplied formats. @param type - Native type. @returns Nothing. */
+  public SetRuleType(type: SwNumRuleType): void {
+    this.meRuleType = type;
+    this.invalidRuleFlag = true;
+  }
+  /** Reports outline rule classification. @returns Whether explicitly typed outline. */
+  public IsOutlineRule(): boolean {
+    return this.meRuleType === SwNumRuleType.OUTLINE_RULE;
+  }
 
   /** Copies insertion-ordered rule clients into caller-owned storage. @param output - Output clients. @returns Nothing. */
   public GetTextNodeList(output: SwTextNode[]): void {
@@ -245,7 +266,9 @@ export class SwNumRule {
 
   /** Creates an independent numbering rule. @returns Cloned rule. */
   public clone(): SwNumRule {
-    return new SwNumRule(this.name, this.formats, this.defaultListId, this.automatic);
+    const clone = new SwNumRule(this.name, this.formats, this.defaultListId, this.automatic);
+    clone.SetRuleType(this.meRuleType);
+    return clone;
   }
 }
 

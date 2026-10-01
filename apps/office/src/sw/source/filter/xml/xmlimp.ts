@@ -177,15 +177,20 @@ export function importWriterXml(
         : { defaultFontDevice: options.defaultFontDevice }),
     }),
   );
-  xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
-  xmlImport.finishNamedStyles();
-  xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
-  xmlImport.finishContent();
-  if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
-  return {
-    document: xmlImport.document,
-    title: xmlImport.title ?? metadata.title,
-  };
+  xmlImport.document.SetInReading(true);
+  try {
+    xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
+    xmlImport.finishNamedStyles();
+    xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
+    xmlImport.finishContent();
+    if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+    return {
+      document: xmlImport.document,
+      title: xmlImport.title ?? metadata.title,
+    };
+  } finally {
+    xmlImport.document.SetInReading(false);
+  }
 }
 
 /** Writer import coordinator matching upstream SwXMLImport context ownership. */

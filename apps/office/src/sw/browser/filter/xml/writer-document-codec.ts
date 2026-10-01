@@ -18,10 +18,14 @@ import {
   SwTextFormatColl,
   type WriterParagraphStyle,
 } from "../../../source/core/doc/fmtcol";
-import { SwNumFormat, SwNumRule } from "../../../source/core/doc/number";
+import { SwNumFormat, SwNumRule, SwNumRuleType } from "../../../source/core/doc/number";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../../source/core/doc/list";
-import { RES_PARATR_OUTLINELEVEL, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import {
+  RES_PARATR_OUTLINELEVEL,
+  WRITER_CHARACTER_WHICH_RANGES,
+  WRITER_TEXT_NODE_WHICH_RANGES,
+} from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
 import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
 import { SwFormatAutoFormat, SwTextAttr } from "../../../source/core/txtnode/txatbase";
@@ -51,6 +55,7 @@ interface WriterNumberFormatRecord {
 
 /** Primitive graph record for one document numbering rule. */
 interface WriterNumberRuleRecord {
+  readonly ruleType?: SwNumRuleType;
   readonly automatic: boolean;
   readonly formats: readonly WriterNumberFormatRecord[];
   readonly listId: string;
@@ -154,6 +159,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         rule,
       ) => ({
         automatic: rule.IsAutoRule(),
+        ...(rule.GetRuleType() === SwNumRuleType.NUM_RULE ? {} : { ruleType: rule.GetRuleType() }),
         formats: Array.from(
           { length: 10 },
           /** Encodes one rule level. @param _unused - Array placeholder. @param level - Numbering level. @returns Primitive level record. */ (
@@ -415,35 +421,42 @@ export function decodeWriterDocument(
       style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
     );
   }
-  for (const rule of record.numRules)
-    document.AddNumRule(
-      new SwNumRule(
-        rule.name,
-        rule.formats.map(
-          /** Decodes one numbering level. @param format - Primitive format record. @returns Model format. */ (
-            format,
-          ) =>
-            new SwNumFormat(format.kind, format.bulletChar, {
-              absLSpace: format.absLSpace ?? 0,
-              firstLineOffset: format.firstLineOffset ?? 0,
-              charTextDistance: format.charTextDistance ?? 0,
-              bulletFont: format.bulletFont,
-              firstLineIndent: format.firstLineIndent,
-              indentAt: format.indentAt,
-              includeUpperLevels: format.includeUpperLevels,
-              labelFollowedBy: format.labelFollowedBy,
-              listTabPosition: format.listTabPosition,
-              positionAndSpaceMode: format.positionAndSpaceMode,
-              ...(format.listFormat === undefined ? {} : { listFormat: format.listFormat }),
-              prefix: format.prefix,
-              start: format.start,
-              suffix: format.suffix,
-            }),
-        ),
-        rule.listId,
-        rule.automatic,
+  for (const rule of record.numRules) {
+    if (
+      rule.ruleType !== undefined &&
+      rule.ruleType !== SwNumRuleType.NUM_RULE &&
+      rule.ruleType !== SwNumRuleType.OUTLINE_RULE
+    )
+      throw new Error("Stored Writer numbering rule type is invalid.");
+    const restoredRule = new SwNumRule(
+      rule.name,
+      rule.formats.map(
+        /** Decodes one numbering level. @param format - Primitive format record. @returns Model format. */ (
+          format,
+        ) =>
+          new SwNumFormat(format.kind, format.bulletChar, {
+            absLSpace: format.absLSpace ?? 0,
+            firstLineOffset: format.firstLineOffset ?? 0,
+            charTextDistance: format.charTextDistance ?? 0,
+            bulletFont: format.bulletFont,
+            firstLineIndent: format.firstLineIndent,
+            indentAt: format.indentAt,
+            includeUpperLevels: format.includeUpperLevels,
+            labelFollowedBy: format.labelFollowedBy,
+            listTabPosition: format.listTabPosition,
+            positionAndSpaceMode: format.positionAndSpaceMode,
+            ...(format.listFormat === undefined ? {} : { listFormat: format.listFormat }),
+            prefix: format.prefix,
+            start: format.start,
+            suffix: format.suffix,
+          }),
       ),
+      rule.listId,
+      rule.automatic,
     );
+    restoredRule.SetRuleType(rule.ruleType ?? SwNumRuleType.NUM_RULE);
+    document.AddNumRule(restoredRule);
+  }
   if (record.textNodes.length === 0)
     throw new Error("Stored Writer document has no body text node.");
   const order =
@@ -516,8 +529,9 @@ export function decodeWriterDocument(
   node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId), false);
   node.ResetAllAttr();
   node.SetListGeometryWins(nodeRecord.listGeometryWins === true);
-  for (const item of nodeRecord.autoAttributes)
-    node.SetAttr(document.GetAttrPool().CreateItem(item));
+  const direct = new SfxItemSet(document.GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES);
+  for (const item of nodeRecord.autoAttributes) direct.Put(document.GetAttrPool().CreateItem(item));
+  node.SetAttr(direct);
   if (nodeRecord.emptyListStyle === true) node.SetEmptyListStyleDueToSetOutlineLevelAttr();
   const hints = nodeRecord.hints.map(
     /** Restores one canonical text attribute. @param hint - Primitive hint record. @returns Writer hint. */ (

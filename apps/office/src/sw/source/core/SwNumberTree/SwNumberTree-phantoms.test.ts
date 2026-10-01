@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native phantom insertion, descendant relocation and orphan guards. */
+import nativeTiming from "../../../../test/writer-native-phantom-timing.json";
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
@@ -44,7 +45,7 @@ function orders(indexes: readonly number[]): number[][] {
   );
 }
 it("preserves native phantom topology through sorted insertion", /** Verifies literal compiled-native vectors for ordered, reverse and interleaved insertion. @returns Nothing. */ () => {
-  // Literal snapshots from pinned AddChild/CreatePhantom/ValidateHierarchical, with eager group validation.
+  // Literal snapshots from pinned AddChild/CreatePhantom/ValidateHierarchical, with unchanged native notification timing compared before explicit full invalidation.
   const cases = [
     {
       levels: [2, 2, 0, 2],
@@ -218,7 +219,7 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
       /** Builds document positions. @param _node - Item. @param index - Position. @returns Position. */
       (_node, index) => index,
     );
-    for (const order of orders(indexes)) {
+    for (const [orderIndex, order] of orders(indexes).entries()) {
       const root = new SwNodeNum(undefined, rule);
       const records = nodes.map(
         /** Creates independent native insertion records. @param node - Canonical item. @param index - Position. @returns Orphan. */
@@ -231,6 +232,14 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
       for (const index of order)
         root.AddChild(records[index] as SwNodeNum, test.levels[index] as number);
       root.ValidateHierarchical();
+      const native = nativeTiming[cases.indexOf(test)];
+      expect(
+        records.map(
+          /** Reads insertion-time counters before explicit invalidation. @param record - Native record. @returns Vector. */
+          (record) => record.GetNumberVector(),
+        ),
+      ).toEqual(native?.expected[orderIndex]);
+      root.InvalidateTree();
       expect(
         records.map(
           /** Reads the complete native vector. @param record - Tree item. @returns Counters. */
