@@ -220,6 +220,7 @@ class XMLStyleContext extends SvXMLImportContext {
         XMLToken.STYLE_NEXT_STYLE_NAME,
         XMLToken.STYLE_PARENT_STYLE_NAME,
         XMLToken.STYLE_LIST_STYLE_NAME,
+        XMLToken.STYLE_DEFAULT_OUTLINE_LEVEL,
         XMLToken.STYLE_MASTER_PAGE_NAME,
       ],
       "style",
@@ -231,12 +232,16 @@ class XMLStyleContext extends SvXMLImportContext {
     const nextStyleName = attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? undefined;
     const parentStyleName = attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME) ?? undefined;
     const listStyleName = attributes.get(XMLToken.STYLE_LIST_STYLE_NAME) ?? undefined;
+    const rawOutline = attributes.get(XMLToken.STYLE_DEFAULT_OUTLINE_LEVEL);
+    const outlineLevel =
+      rawOutline !== null && /^[+-]?\d+$/.test(rawOutline.trim()) ? Number(rawOutline) : -1;
     this.definition = {
       ...(displayName === undefined ? {} : { displayName }),
       family: this.supported ? (family as "paragraph" | "text") : "text",
       ...(nextStyleName === undefined ? {} : { nextStyleName }),
       ...(parentStyleName === undefined ? {} : { parentStyleName }),
       ...(listStyleName === undefined ? {} : { listStyleName }),
+      ...(outlineLevel < 0 || outlineLevel > 10 ? {} : { outlineLevel }),
     };
   }
 

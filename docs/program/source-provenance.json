@@ -27,6 +27,11 @@
       "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
       "rationale": "The resource generator combines pinned menu, toolbar, accelerator and XCU inputs into one typed TypeScript loader for browser command metadata; no single upstream XML file contains this composite.",
       "stackNecessity": "generated-resource-boundary"
+    },
+    {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+      "rationale": "The anonymous-namespace numbering helpers are split from the text-node class so its source-owned style transition remains within the unchanged mandatory 1000-line module limit. Both modules retain ndtxt.cxx as their source owner.",
+      "stackNecessity": "responsibility-split"
     }
   ],
   "entries": [
@@ -1429,26 +1434,74 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/svl/source/items/cintitem.ts",
+            "marker": "CntUInt16Item"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/svl/source/items/cintitem.cxx",
+            "marker": "CntUInt16Item::Clone"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svl/source/items/cintitem.cxx",
+            "marker": "CntUInt16Item::QueryValue"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/items/cintitem.ts",
+      "localSymbols": [
+        "CntUInt16Item"
+      ],
+      "omittedResponsibilities": [
+        "Native UNO mutation,presentation,hashing,mutable pooling and refcount lifetime are not implemented by this immutable browser adapter."
+      ],
+      "preservedResponsibilities": [
+        "Bounded CntUInt16Item owns immutable unsigned values,scalar QueryValue,concrete-type equality and base cloning;SfxUInt16Item retains native zero constructor defaults and concrete subclass cloning. Native UNO PutValue,mutable refcount policy,presentation,hashing and pool lifetime remain separately unverified."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/items/cintitem.cxx",
+      "upstreamSymbols": [
+        "CntUInt16Item::Clone",
+        "CntUInt16Item::QueryValue"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SfxInt16Item",
             "path": "apps/office/src/svl/source/items/intitem.ts"
+          },
+          {
+            "path": "apps/office/src/svl/source/items/intitem.ts",
+            "marker": "SfxUInt16Item"
           }
         ],
         "upstream": [
           {
             "marker": "SfxInt16Item::Clone",
             "path": "vendor/libreoffice-reference/svl/source/items/intitem.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/include/svl/intitem.hxx",
+            "marker": "class SVL_DLLPUBLIC SfxUInt16Item"
           }
         ]
       },
       "localPath": "apps/office/src/svl/source/items/intitem.ts",
       "localSymbols": [
-        "SfxInt16Item"
+        "SfxInt16Item",
+        "SfxUInt16Item"
       ],
       "omittedResponsibilities": [
-        "Native pooling, UNO mutation and presentation paths outside the bounded SfxInt16Item value contract remain unimplemented."
+        "Native pooling, UNO mutation and presentation paths outside the bounded SfxInt16Item value contract remain unimplemented.",
+        "Native unsigned UNO signed-width coercion and mutable refcount/pool lifetime remain unverified."
       ],
       "preservedResponsibilities": [
-        "Implements bounded SfxInt16Item construction, value, equality and clone behavior at the pinned svl/source/items/intitem.cxx owner."
+        "Implements bounded SfxInt16Item construction, value, equality and clone behavior at the pinned svl/source/items/intitem.cxx owner.",
+        "Bounded CntUInt16Item owns immutable unsigned values,scalar QueryValue,concrete-type equality and base cloning;SfxUInt16Item retains native zero constructor defaults and concrete subclass cloning. Native UNO PutValue,mutable refcount policy,presentation,hashing and pool lifetime remain separately unverified."
       ],
       "status": "mapped",
       "upstreamPath": "svl/source/items/intitem.cxx",
@@ -2196,7 +2249,8 @@
       "responsibilities": [
         "Encodes and decodes the Writer graph for the ODT Worker message boundary.",
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
-        "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified."
+        "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified.",
+        "Iteration37 preserves explicit outline assignment independently from direct outline items through an optional boolean field in graph v16. Absent legacy assignment retains pool-factory heading defaults only when the direct item is absent; explicit false, zero and assigned-without-item snapshots remain exact. Paragraph restore suppresses collection defaults before replacing direct items. Iteration37 preserves the model-owned synthesized empty-list marker with an optional true-only emptyListStyle field in existing graph v16. False is omitted;older absent records remain false,so explicitly empty rule items are not heuristically converted into synthesized intent. CloneTo copies the actual marker independently;tests verify subsequent numbered style transitions,Worker restore and legacy records. This browser transfer state does not claim native serialization/copy callback parity or full attribute/history lifetime;registered IO settings are unchanged."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -2902,10 +2956,12 @@
         "RES_CHRATR_CJK_WEIGHT"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT and the bounded RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE contract remain intentionally omitted."
+        "Upstream obligations outside RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT and the bounded RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE contract remain intentionally omitted.",
+        "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
       ],
       "preservedResponsibilities": [
-        "Declares the bounded Writer WhichIds used by the TypeScript core, matching pinned `sw/inc/hintids.hxx` numeric identities."
+        "Declares the bounded Writer WhichIds used by the TypeScript core, matching pinned `sw/inc/hintids.hxx` numeric identities.",
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/inc/hintids.hxx",
@@ -3562,10 +3618,12 @@
         "SwAttrSet"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwAttrPool, SwAttrSet, SwAttrPool::SwAttrPool, o3tl::convert and the bounded SwAttrPool, SwAttrSet contract remain intentionally omitted."
+        "Upstream obligations outside SwAttrPool, SwAttrSet, SwAttrPool::SwAttrPool, o3tl::convert and the bounded SwAttrPool, SwAttrSet contract remain intentionally omitted.",
+        "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
       ],
       "preservedResponsibilities": [
-        "Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`."
+        "Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.",
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/attr/swatrset.cxx",
@@ -4255,10 +4313,12 @@
         "isWriterParagraphStyle"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwFormatColl, SwTextFormatColl, SwTextFormatColl::SwTextFormatColl, SwTextFormatColl::~SwTextFormatColl and the bounded WRITER_PARAGRAPH_STYLES, WriterParagraphStyle, SwTextFormatCollSnapshot contract remain intentionally omitted."
+        "Upstream obligations outside SwFormatColl, SwTextFormatColl, SwTextFormatColl::SwTextFormatColl, SwTextFormatColl::~SwTextFormatColl and the bounded WRITER_PARAGRAPH_STYLES, WriterParagraphStyle, SwTextFormatCollSnapshot contract remain intentionally omitted.",
+        "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
       ],
       "preservedResponsibilities": [
-        "Reimplements bounded SwFormatColl and SwTextFormatColl hierarchy from pinned `sw/source/core/doc/fmtcol.cxx`."
+        "Reimplements bounded SwFormatColl and SwTextFormatColl hierarchy from pinned `sw/source/core/doc/fmtcol.cxx`.",
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/fmtcol.cxx",
@@ -4616,10 +4676,12 @@
         "SwNumRule"
       ],
       "omittedResponsibilities": [
-        "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
+        "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified.",
+        "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
       ],
       "preservedResponsibilities": [
-        "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged."
+        "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
@@ -5290,6 +5352,53 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+            "marker": "HandleApplyTextNodeFormatChange"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+            "marker": "HandleModifyAtTextNodeFormatChange"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "HandleApplyTextNodeFormatChange"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "HandleModifyAtTextNodeFormatChange"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "lcl_ResetParAttrs"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+      "localSymbols": [
+        "HandleApplyTextNodeFormatChange",
+        "HandleModifyAtTextNodeFormatChange"
+      ],
+      "omittedResponsibilities": [
+        "SwDoc ResetAttrs event/history machinery and general live format/attribute callback lifetimes remain separate obligations."
+      ],
+      "preservedResponsibilities": [
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "HandleApplyTextNodeFormatChange",
+        "HandleModifyAtTextNodeFormatChange",
+        "lcl_ResetParAttrs"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SwTextNode",
             "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts"
           },
@@ -5398,6 +5507,18 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
             "marker": "DocumentListItemsManager::getNumItems("
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::ChgFormatColl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::ChgTextCollUpdateNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetNumRule"
           }
         ]
       },
@@ -5411,10 +5532,12 @@
         "projectWriterTextRuns"
       ],
       "omittedResponsibilities": [
-        "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
+        "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified.",
+        "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
       ],
       "preservedResponsibilities": [
-        "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged."
+        "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
@@ -5673,10 +5796,12 @@
         "SwUndoFormatColl"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwUndoFormatColl, SwUndoFormatColl::SwUndoFormatColl, SwUndoFormatColl::~SwUndoFormatColl, SwUndoFormatColl::UndoImpl and the bounded SwUndoFormatColl contract remain intentionally omitted."
+        "Upstream obligations outside SwUndoFormatColl, SwUndoFormatColl::SwUndoFormatColl, SwUndoFormatColl::~SwUndoFormatColl, SwUndoFormatColl::UndoImpl and the bounded SwUndoFormatColl contract remain intentionally omitted.",
+        "Collection switch parity is bounded to the existing shown/list/heading slice;derived-style assignment cleanup iterators,native outline index,footnote/conditional/inline styles,live format callbacks,full history and factories remain unverified."
       ],
       "preservedResponsibilities": [
-        "Implements paragraph style collection undo from pinned LibreOffice unfmco.cxx."
+        "Implements paragraph style collection undo from pinned LibreOffice unfmco.cxx.",
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unfmco.cxx",
@@ -6333,6 +6458,10 @@
           {
             "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextListBlockContext.cxx",
             "marker": "XMLTextListBlockContext::endFastElement"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+            "marker": "XMLTextStyleContext::SetAttribute"
           }
         ]
       },
@@ -6352,7 +6481,8 @@
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
         "ODF marker transport preserves raw affixes, native byte-int start/display normalization, ordered style/loext ListFormat aliases (including empty strings), generated available-level clamp and final UNO SetListFormat compatibility overwrite for existing Arabic/bullet levels. Standard ODF 1.3 export is owned by SvxXMLNumRuleExport and coherent per-level records, with nonempty affixes, signed StartWith narrowing and clamped display omission; raw patterns retain native standard-format approximation on reopen. Sixteen literal common/automatic cases plus signed start/zero parent projection verify state, visible labels, owned clones, Worker v16, selected XML and reopen. A bounded compiled oracle matches 144 declarations, 144 applied states and 144 export attribute sets from unmodified pinned excerpts. ASCII string shims, modern/no-build-id input, Arabic/bullet and standard ODF only; ancient OOo suffix correction depends on absent generator/build-id metadata APIs and remains unresolved. Full native build, wider numbering families/fonts/legal/outline/continuous/NONE/bitmap, extended output, complete list-style/UNO ownership and wider defaults/contracts remain unverified. No whole-module parity promotion or save/open/recovery policy change.",
         "Existing SwTextNode counted state now crosses ODT projection/application. Native XMLTextListsHelper owns the block/item marker stack; ordinary item markers are consumed after the first paragraph and restored outer markers are cleared after sublists. Header start values are ignored, subsequent item paragraphs are unnumbered, and Writer applies RES_PARATR_LIST_ISCOUNTED=false. Export retains actual opened list-item/header tags: skipped ancestors use list-item, a newly opened final unnumbered level uses list-header, and unnumbered same/decreasing-level paragraphs continue the current item after deeper lists close. Restart/start projection is gated on numbered paragraphs as pinned XMLTextNumRuleInfo::Set does. Compiled unmodified exportListChange and item-stack bodies match368 export event sequences with explicit OUString/export/numbered-metadata/identity/no-continuation shims; no full native or UNO build. Genuine common/automatic header, nested/multiple-paragraph, skipped-level and bullet ODT assertions verify literal state, labels/vectors, independent rule/item copies, Worker16, selected XML and reopen; uncounted restart omission is explicitly native rather than invented retention. List style overrides, repeated-sublist restart, numbered-paragraph, full helper identity/UNO/lifecycle and wider contracts remain separately unverified. No whole-module promotion or registered save/open/recovery change.",
-        "XMLTextNumRuleInfo now owns independent numbered/restart/direct-start/format-start metadata with native absent-1 and Reset retention. Writer projects direct start only when restart and the direct item exist; actual format start no longer substitutes for absence. Same/decreasing nested implicit restart closes/reopens text:list without item start; root restart and newly opened/re-entered levels follow native conditional fallback, while first unprocessed root can omit restart. Uncounted restart/start are omitted. Unmodified pinned exportListChange and metadata excerpts match 2403 structural/start sequences and 288 metadata states with explicit typed-property/platform/string/export/identity/style adapters; 12 valid Writer projections match the primary raw getter against 48 normative native states. Fifty-two genuine common/automatic numbered/bullet ODT scenarios and thirty-two repeated-sublist cases assert literal state, vectors/labels, owned copies, Worker16, selected XML and manually specified native reopen omissions/gains. Full UNO Set/lifetimes, processed-list identity/continue-numbering/style overrides, missing-rule factories, numbered-paragraph and wider architecture/defaults remain unverified. No whole-module promotion or registered save/open/recovery change."
+        "XMLTextNumRuleInfo now owns independent numbered/restart/direct-start/format-start metadata with native absent-1 and Reset retention. Writer projects direct start only when restart and the direct item exist; actual format start no longer substitutes for absence. Same/decreasing nested implicit restart closes/reopens text:list without item start; root restart and newly opened/re-entered levels follow native conditional fallback, while first unprocessed root can omit restart. Uncounted restart/start are omitted. Unmodified pinned exportListChange and metadata excerpts match 2403 structural/start sequences and 288 metadata states with explicit typed-property/platform/string/export/identity/style adapters; 12 valid Writer projections match the primary raw getter against 48 normative native states. Fifty-two genuine common/automatic numbered/bullet ODT scenarios and thirty-two repeated-sublist cases assert literal state, vectors/labels, owned copies, Worker16, selected XML and manually specified native reopen omissions/gains. Full UNO Set/lifetimes, processed-list identity/continue-numbering/style overrides, missing-rule factories, numbered-paragraph and wider architecture/defaults remain unverified. No whole-module promotion or registered save/open/recovery change.",
+        "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
@@ -6642,6 +6772,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
             "marker": "pRule->GetDefaultListId()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+            "marker": "XMLTextStyleContext::SetAttribute"
           }
         ]
       },
@@ -6667,7 +6801,8 @@
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
         "ODF marker transport preserves raw affixes, native byte-int start/display normalization, ordered style/loext ListFormat aliases (including empty strings), generated available-level clamp and final UNO SetListFormat compatibility overwrite for existing Arabic/bullet levels. Standard ODF 1.3 export is owned by SvxXMLNumRuleExport and coherent per-level records, with nonempty affixes, signed StartWith narrowing and clamped display omission; raw patterns retain native standard-format approximation on reopen. Sixteen literal common/automatic cases plus signed start/zero parent projection verify state, visible labels, owned clones, Worker v16, selected XML and reopen. A bounded compiled oracle matches 144 declarations, 144 applied states and 144 export attribute sets from unmodified pinned excerpts. ASCII string shims, modern/no-build-id input, Arabic/bullet and standard ODF only; ancient OOo suffix correction depends on absent generator/build-id metadata APIs and remains unresolved. Full native build, wider numbering families/fonts/legal/outline/continuous/NONE/bitmap, extended output, complete list-style/UNO ownership and wider defaults/contracts remain unverified. No whole-module parity promotion or save/open/recovery policy change.",
         "Existing SwTextNode counted state now crosses ODT projection/application. Native XMLTextListsHelper owns the block/item marker stack; ordinary item markers are consumed after the first paragraph and restored outer markers are cleared after sublists. Header start values are ignored, subsequent item paragraphs are unnumbered, and Writer applies RES_PARATR_LIST_ISCOUNTED=false. Export retains actual opened list-item/header tags: skipped ancestors use list-item, a newly opened final unnumbered level uses list-header, and unnumbered same/decreasing-level paragraphs continue the current item after deeper lists close. Restart/start projection is gated on numbered paragraphs as pinned XMLTextNumRuleInfo::Set does. Compiled unmodified exportListChange and item-stack bodies match368 export event sequences with explicit OUString/export/numbered-metadata/identity/no-continuation shims; no full native or UNO build. Genuine common/automatic header, nested/multiple-paragraph, skipped-level and bullet ODT assertions verify literal state, labels/vectors, independent rule/item copies, Worker16, selected XML and reopen; uncounted restart omission is explicitly native rather than invented retention. List style overrides, repeated-sublist restart, numbered-paragraph, full helper identity/UNO/lifecycle and wider contracts remain separately unverified. No whole-module promotion or registered save/open/recovery change.",
-        "Source-owned XMLTextListsHelper replaces stream aliases and rule-counter IDs with processed root style/continuation records, last-root/per-style state, first-style DefaultListId mapping and native paragraph identity projection. Block contexts retain independent own/master IDs, inherit them at nested levels and accept identity attributes only at root. Exact true continue-numbering overrides pending restart at every level; modern root implicit continuation selects only the last matching raw style/different ID. Unknown targets clear, known chains resolve to the master and duplicate roots retain prior records. Writer exposes its existing SwNumRule.GetDefaultListId through the typed import bridge. Native time/date/random list IDs and processed collision suffixes use JS Date milliseconds and uniform31bit browser RNG adapters. Unmodified pinned block constructor/end/getters and processed/default/generator bodies match3082 actual context sequences/15392 raw/effective identity/restart/query states,including fixed RNG1/INT_MAX. Explicit ASCII/string/platform/raw-reference/typed-property/resolved-rule/modern-no-build-id/no-MSO/fixed-clock-RNG adapters;no full native/UNO/factory/legacy/MSO/stable-environment build or lifetime claim.112 genuine common/automatic Arabic/bullet package scenarios assert literal states,counters/vectors/labels,owned rules/items,Worker16,selected XML and independent native reopen projections. Existing source-stale literal identities now follow first-style default mapping. Complete export helper identity/style overrides,missing-rule factories,old build-id/MSO defaults,numbered-paragraph/full UNO/native ownership and deferred SwList insertion/validation architecture remain unverified. No whole-module/default promotion or registered save/open/recovery change."
+        "Source-owned XMLTextListsHelper replaces stream aliases and rule-counter IDs with processed root style/continuation records, last-root/per-style state, first-style DefaultListId mapping and native paragraph identity projection. Block contexts retain independent own/master IDs, inherit them at nested levels and accept identity attributes only at root. Exact true continue-numbering overrides pending restart at every level; modern root implicit continuation selects only the last matching raw style/different ID. Unknown targets clear, known chains resolve to the master and duplicate roots retain prior records. Writer exposes its existing SwNumRule.GetDefaultListId through the typed import bridge. Native time/date/random list IDs and processed collision suffixes use JS Date milliseconds and uniform31bit browser RNG adapters. Unmodified pinned block constructor/end/getters and processed/default/generator bodies match3082 actual context sequences/15392 raw/effective identity/restart/query states,including fixed RNG1/INT_MAX. Explicit ASCII/string/platform/raw-reference/typed-property/resolved-rule/modern-no-build-id/no-MSO/fixed-clock-RNG adapters;no full native/UNO/factory/legacy/MSO/stable-environment build or lifetime claim.112 genuine common/automatic Arabic/bullet package scenarios assert literal states,counters/vectors/labels,owned rules/items,Worker16,selected XML and independent native reopen projections. Existing source-stale literal identities now follow first-style default mapping. Complete export helper identity/style overrides,missing-rule factories,old build-id/MSO defaults,numbered-paragraph/full UNO/native ownership and deferred SwList insertion/validation architecture remain unverified. No whole-module/default promotion or registered save/open/recovery change.",
+        "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
@@ -7791,6 +7926,44 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/xmloff/source/style/styleexp.ts",
+            "marker": "exportParagraphStyleNumberingAttributes"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/styleexp.cxx",
+            "marker": "XML_DEFAULT_OUTLINE_LEVEL"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/style/styleexp.cxx",
+            "marker": "XML_LIST_STYLE_NAME"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/style/styleexp.ts",
+      "localSymbols": [
+        "exportParagraphStyleNumberingAttributes"
+      ],
+      "omittedResponsibilities": [
+        "Full UNO/native style export,inheritance fallback,normal-outline export,special style-name encoding and lifetime machinery remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/style/styleexp.cxx",
+      "upstreamSymbols": [
+        "XMLStyleExport",
+        "XML_DEFAULT_OUTLINE_LEVEL",
+        "XML_LIST_STYLE_NAME"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "path": "apps/office/src/xmloff/source/style/xmlnume.ts",
             "marker": "exportListLevelLayout"
           },
@@ -8271,6 +8444,10 @@
           {
             "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumi.cxx",
             "marker": "SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+            "marker": "XMLTextStyleContext::SetAttribute"
           }
         ]
       },
@@ -8286,7 +8463,8 @@
         "Creates style child contexts and publishes completed style definitions before document references.",
         "XMLStylesContext retains style leaf references per container; Writer retains independent common and active automatic references and replaces the automatic context when a new container is encountered. Direct lookup checks the active automatic family/name first; automatic and common parents resolve only through common definitions. Found automatic deltas survive missing parents; missing paragraph references keep the default paragraph. Context ownership assertions and fifteen literal real ODT cases verify legal common/automatic collisions, same-name parents, independent families, named-only chains, empty/missing parents, stream replacement and common-only default publication through export/reimport. The previously source-invalid automatic-parent list export chain now puts its inherited base in common styles; exact pinned tdf114287 geometry remains unchanged across package cycles. This export bridge and broader named document-model ownership still require separate architecture audit; no whole-module parity promotion.",
         "For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. The MM100 import port now carries both independent native geometry groups; the earlier legacy-to-alignment Twip emulation is removed. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
-        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion."
+        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
+        "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/style/xmlstyle.cxx",
@@ -9396,6 +9574,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx",
             "marker": "pRule->GetDefaultListId()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+            "marker": "XMLTextStyleContext::SetAttribute"
           }
         ]
       },
@@ -9424,7 +9606,8 @@
         "Existing SwTextNode counted state now crosses ODT projection/application. Native XMLTextListsHelper owns the block/item marker stack; ordinary item markers are consumed after the first paragraph and restored outer markers are cleared after sublists. Header start values are ignored, subsequent item paragraphs are unnumbered, and Writer applies RES_PARATR_LIST_ISCOUNTED=false. Export retains actual opened list-item/header tags: skipped ancestors use list-item, a newly opened final unnumbered level uses list-header, and unnumbered same/decreasing-level paragraphs continue the current item after deeper lists close. Restart/start projection is gated on numbered paragraphs as pinned XMLTextNumRuleInfo::Set does. Compiled unmodified exportListChange and item-stack bodies match368 export event sequences with explicit OUString/export/numbered-metadata/identity/no-continuation shims; no full native or UNO build. Genuine common/automatic header, nested/multiple-paragraph, skipped-level and bullet ODT assertions verify literal state, labels/vectors, independent rule/item copies, Worker16, selected XML and reopen; uncounted restart omission is explicitly native rather than invented retention. List style overrides, repeated-sublist restart, numbered-paragraph, full helper identity/UNO/lifecycle and wider contracts remain separately unverified. No whole-module promotion or registered save/open/recovery change.",
         "Shared FastAttributeList.getAsInteger now owns the bounded decimal byte-view conversion formerly private to list-style import. Nullable absence adapts native getAsInteger bool/out-value; declaration consumers preserve absent defaults and index/start/display normalization. Ordinary item import accepts converted0..32767, ignores negative/out-of-range values and retains native zero on no digits/int32 overflow; headers never convert start. Signed zero is canonical integer0. Compiled unmodified rtl/o3tl integer bodies and exact native item range branch match115 conversions/170 real ordinary/header SAX contexts with platform/view/iterator adapters. Twenty-two literal start spellings in common/automatic numbered/bullet ODT packages verify text,count,levels,restarts,starts,counters,vectors,labels,independent rule/item copies,Worker16,conditional XML and reopen. Complete native scalar/radix/UTF16/token/container/UNO ownership and repeated-sublist restart remain separately unverified; the local FastAttributeList is still an xmloff adapter rather than a native sax-owned class. No whole-module parity promotion or registered save/open/recovery change.",
         "Source-owned XMLTextListBlockContext and XMLTextListItemContext now hold actual parent/helper block references, per-item sublist counts and pending restart inheritance/consumption/return. Existing resolved-rule nested lists restart on the second/later sublist; the first paragraph consumes the flag even when uncounted, and empty lists return it to their parent. Compiled unmodified pinned item child factory, block inheritance/end/getter/reset and txtimp restart-consumption bodies match1536 actual SAX trees/10752 paragraph states with explicit platform/token/reference/helper/property adapters. Thirty-two genuine numbered/bullet common/automatic ODT packages verify literal text,count,levels,restart,direct/effective starts,counters,vectors,labels,owned rule/item copies,Worker16 and bounded reopen. Native conditional implicit-restart export is now bounded by independent metadata and selected structural/start evidence. Native uncounted restart omission is retained. Continue-numbering/processed root identity, missing-rule MakeNumRule defaults, style overrides, numbered-paragraph and full UNO/helper/native architecture remain unverified; no whole-module promotion or registered save/open/recovery change.",
-        "Source-owned XMLTextListsHelper replaces stream aliases and rule-counter IDs with processed root style/continuation records, last-root/per-style state, first-style DefaultListId mapping and native paragraph identity projection. Block contexts retain independent own/master IDs, inherit them at nested levels and accept identity attributes only at root. Exact true continue-numbering overrides pending restart at every level; modern root implicit continuation selects only the last matching raw style/different ID. Unknown targets clear, known chains resolve to the master and duplicate roots retain prior records. Writer exposes its existing SwNumRule.GetDefaultListId through the typed import bridge. Native time/date/random list IDs and processed collision suffixes use JS Date milliseconds and uniform31bit browser RNG adapters. Unmodified pinned block constructor/end/getters and processed/default/generator bodies match3082 actual context sequences/15392 raw/effective identity/restart/query states,including fixed RNG1/INT_MAX. Explicit ASCII/string/platform/raw-reference/typed-property/resolved-rule/modern-no-build-id/no-MSO/fixed-clock-RNG adapters;no full native/UNO/factory/legacy/MSO/stable-environment build or lifetime claim.112 genuine common/automatic Arabic/bullet package scenarios assert literal states,counters/vectors/labels,owned rules/items,Worker16,selected XML and independent native reopen projections. Existing source-stale literal identities now follow first-style default mapping. Complete export helper identity/style overrides,missing-rule factories,old build-id/MSO defaults,numbered-paragraph/full UNO/native ownership and deferred SwList insertion/validation architecture remain unverified. No whole-module/default promotion or registered save/open/recovery change."
+        "Source-owned XMLTextListsHelper replaces stream aliases and rule-counter IDs with processed root style/continuation records, last-root/per-style state, first-style DefaultListId mapping and native paragraph identity projection. Block contexts retain independent own/master IDs, inherit them at nested levels and accept identity attributes only at root. Exact true continue-numbering overrides pending restart at every level; modern root implicit continuation selects only the last matching raw style/different ID. Unknown targets clear, known chains resolve to the master and duplicate roots retain prior records. Writer exposes its existing SwNumRule.GetDefaultListId through the typed import bridge. Native time/date/random list IDs and processed collision suffixes use JS Date milliseconds and uniform31bit browser RNG adapters. Unmodified pinned block constructor/end/getters and processed/default/generator bodies match3082 actual context sequences/15392 raw/effective identity/restart/query states,including fixed RNG1/INT_MAX. Explicit ASCII/string/platform/raw-reference/typed-property/resolved-rule/modern-no-build-id/no-MSO/fixed-clock-RNG adapters;no full native/UNO/factory/legacy/MSO/stable-environment build or lifetime claim.112 genuine common/automatic Arabic/bullet package scenarios assert literal states,counters/vectors/labels,owned rules/items,Worker16,selected XML and independent native reopen projections. Existing source-stale literal identities now follow first-style default mapping. Complete export helper identity/style overrides,missing-rule factories,old build-id/MSO defaults,numbered-paragraph/full UNO/native ownership and deferred SwList insertion/validation architecture remain unverified. No whole-module/default promotion or registered save/open/recovery change.",
+        "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "xmloff/source/text/txtparai.cxx",

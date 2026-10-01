@@ -5,6 +5,35 @@ import { FastAttributeList } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import { XMLStylesContext, type XMLStyleImportTarget } from "./xmlstyle";
 
+it("preserves native bounded outline attributes and leaves invalid or empty values unset", /** Verifies XMLTextStyleContext SetAttribute outline conversion and explicit empty list-style presence. @returns Nothing. */ () => {
+  for (const [raw, level] of [
+    ["0", 0],
+    ["3", 3],
+    [" +10 ", 10],
+    ["", undefined],
+    ["-1", undefined],
+    ["11", undefined],
+    ["2.5", undefined],
+    ["bad", undefined],
+  ] as const) {
+    const named = new XMLStylesContext(target());
+    named.createFastChildContext(
+      XMLToken.STYLE_STYLE,
+      attributes({
+        name: "Heading",
+        family: "paragraph",
+        "default-outline-level": raw,
+        "list-style-name": "",
+      }),
+    );
+    expect(named.GetStyleDefinitions("paragraph").get("Heading")).toEqual({
+      family: "paragraph",
+      listStyleName: "",
+      ...(level === undefined ? {} : { outlineLevel: level }),
+    });
+  }
+});
+
 /** Builds namespace-resolved source attributes. @param values - Local style attributes. @param namespace - Attribute namespace. @returns Tokenized attributes. */
 function attributes(
   values: Record<string, string>,

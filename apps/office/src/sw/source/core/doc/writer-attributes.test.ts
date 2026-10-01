@@ -154,7 +154,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(node.GetpSwAttrSet()?.GetParent()).toBe(heading.GetAttrSet());
     expect(node.GetAttr(RES_PARATR_ADJUST)).toMatchObject({});
     expect(node.GetParagraphAlignment()).toBe("right");
-    expect(node.ResetAttr(RES_PARATR_LIST_LEVEL)).toBe(false);
+    expect(node.ResetAttr(RES_PARATR_LIST_LEVEL)).toBe(true);
     expect(node.ResetAttr(RES_PARATR_ADJUST)).toBe(true);
     expect(node.HasSwAttrSet()).toBe(false);
     expect(node.GetParagraphAlignment()).toBe("center");

@@ -2,7 +2,13 @@
  * @fileoverview Reimplements bounded SwFormatColl and SwTextFormatColl hierarchy from pinned `sw/source/core/doc/fmtcol.cxx`.
  */
 
-import { WRITER_TEXT_FORMAT_COLL_WHICH_RANGES } from "../../../inc/hintids";
+import {
+  RES_PARATR_NUMRULE,
+  RES_PARATR_OUTLINELEVEL,
+  WRITER_TEXT_FORMAT_COLL_WHICH_RANGES,
+} from "../../../inc/hintids";
+import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import type { SwNumRuleItem } from "../para/paratr";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
 import {
@@ -32,7 +38,7 @@ export class SwFormatColl extends SwFormat {
 /** Identity-bearing Writer paragraph style with follow-style linkage. */
 export class SwTextFormatColl extends SwFormatColl {
   private nextTextFormatColl: SwTextFormatColl;
-  private assignedOutlineLevel: number | undefined;
+  private mbAssignedToOutlineStyle = false;
 
   /** Creates a paragraph style. @param pool - Owning Writer pool. @param id - Programmatic identity. @param name - UI name. @param parent - Optional parent style. @param poolId - Built-in pool ID. @param group - Built-in group. @returns Nothing. */
   public constructor(
@@ -61,12 +67,41 @@ export class SwTextFormatColl extends SwFormatColl {
   public AssignToListLevelOfOutlineStyle(level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > 9)
       throw new Error("Writer outline level is outside 0-9.");
-    this.assignedOutlineLevel = level;
+    this.mbAssignedToOutlineStyle = true;
+    this.SetAttrOutlineLevel(level + 1);
   }
 
-  /** Returns the assigned outline level. @returns Zero-based level when assigned. */
-  public GetAssignedOutlineStyleLevel(): number | undefined {
-    return this.assignedOutlineLevel;
+  /** Reports assignment to the outline rule. @returns Assignment flag. */
+  public IsAssignedToListLevelOfOutlineStyle(): boolean {
+    return this.mbAssignedToOutlineStyle;
+  }
+
+  /** Reads the pooled outline attribute. @returns One-based outline level or zero. */
+  public GetAttrOutlineLevel(): number {
+    return (this.GetAttrSet().Get(RES_PARATR_OUTLINELEVEL) as SfxUInt16Item).GetValue();
+  }
+
+  /** Stores an outline attribute. @param level - Level from zero through ten. @returns Nothing. */
+  public SetAttrOutlineLevel(level: number): void {
+    if (!Number.isInteger(level) || level < 0 || level > 10)
+      throw new Error("Writer outline level is outside 0-10.");
+    this.SetFormatAttr(new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, level));
+  }
+
+  /** Returns the outline rule's zero-based level. @returns Attribute value minus one. */
+  public GetAssignedOutlineStyleLevel(): number {
+    return this.GetAttrOutlineLevel() - 1;
+  }
+
+  /** Removes outline assignment and its direct attribute. @returns Nothing. */
+  public DeleteAssignmentToListLevelOfOutlineStyle(): void {
+    this.mbAssignedToOutlineStyle = false;
+    this.ResetFormatAttr(RES_PARATR_OUTLINELEVEL);
+  }
+
+  /** Reads the style's numbering item. @param inParent - Whether parent styles participate. @returns Rule item. */
+  public GetNumRule(inParent = true): SwNumRuleItem {
+    return this.GetAttrSet().Get(RES_PARATR_NUMRULE, inParent) as SwNumRuleItem;
   }
 }
 

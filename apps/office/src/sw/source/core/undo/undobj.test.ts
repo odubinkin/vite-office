@@ -539,7 +539,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       numbering.GetPayloadSize(),
       split.GetPayloadSize(),
       joined.GetPayloadSize(),
-    ]).toEqual([1, 1, 6, 6, 2, 2, 2, 6, 1, expect.any(Number)]);
+    ]).toEqual([1, 1, 6, 6, 2, 2, 3, 6, 1, expect.any(Number)]);
     expect(insert.Merge(deletion)).toBe(false);
     expect(
       deletion.Merge(

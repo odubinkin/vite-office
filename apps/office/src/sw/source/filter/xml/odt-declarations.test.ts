@@ -67,12 +67,12 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
     expect(diagnostics).toEqual([]);
   });
 
-  it("keeps invalid outline and font metadata explicit for later semantic phases", /** Checks non-metadata attributes remain diagnostic. @returns Nothing. */ () => {
+  it("ignores invalid native outline values while retaining font metadata diagnostics", /** Checks source outline conversion and independent unsupported font attributes. @returns Nothing. */ () => {
     const diagnostics: OdfXmlDiagnostic[] = [];
     const malformed = styles(
       '<style:style style:name="Heading_20_1" style:family="paragraph" style:default-outline-level="bad"><style:text-properties style:font-family-generic="invalid" style:font-pitch="invalid"/></style:style>',
     );
-    importWriterXml(
+    const imported = importWriterXml(
       malformed,
       content("<text:p>Sample</text:p>"),
       { title: "fixture" },
@@ -87,11 +87,6 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
       expect.arrayContaining([
         expect.objectContaining({
           kind: "unsupported-attribute",
-          name: "style:default-outline-level",
-          stream: "styles.xml",
-        }),
-        expect.objectContaining({
-          kind: "unsupported-attribute",
           name: "style:font-family-generic",
           stream: "styles.xml",
         }),
@@ -102,6 +97,10 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
         }),
       ]),
     );
+    expect(diagnostics).not.toContainEqual(
+      expect.objectContaining({ name: "style:default-outline-level" }),
+    );
+    expect(imported.document.GetTextFormatColl("heading-1").GetAttrOutlineLevel()).toBe(1);
   });
 
   it("maps page-style references and number restarts to Writer's page descriptor item", /** Verifies source-backed page semantics are represented canonically. @returns Nothing. */ () => {

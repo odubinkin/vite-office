@@ -10,7 +10,7 @@ import {
 } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
-import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -26,6 +26,7 @@ import {
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
+  RES_PARATR_OUTLINELEVEL,
 } from "../../../inc/hintids";
 import {
   SwList,
@@ -33,10 +34,11 @@ import {
   WRITER_MAX_LIST_LEVEL,
   type WriterParagraphListKind,
 } from "../doc/list";
-import { type SwTextFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
+import { SwTextFormatColl, type SwFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
+import { HandleModifyAtTextNodeFormatChange } from "./ndtxt-format-change";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
-import { type SwNumRule } from "../doc/number";
+import { SwNumRule } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
@@ -117,6 +119,7 @@ export class SwTextNode extends SwContentNode {
   private pSwpHints: SwpHints | undefined;
   private listGeometryWins = false;
   private mpNodeNum: SwNodeNum | undefined;
+  private mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
 
   /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
   public constructor(
@@ -206,10 +209,76 @@ export class SwTextNode extends SwContentNode {
     return (this.GetAttr(RES_PARATR_NUMRULE) as SwNumRuleItem).GetValue();
   }
 
-  /** Resolves the paragraph's SwNumRuleItem through the owning document table. @returns Document-owned rule, when valid. */
-  public GetNumRule(): SwNumRule | undefined {
-    const ruleName = this.GetNumRuleName();
-    return ruleName.length === 0 ? undefined : this.GetDoc().FindNumRulePtr(ruleName);
+  /** Resolves the numbering rule with Writer's inherited-outline exclusion. @param inParent - Whether parent attributes participate. @returns Document-owned rule, when valid. */
+  public GetNumRule(inParent = true): SwNumRule | undefined {
+    const ruleName = (this.GetAttr(RES_PARATR_NUMRULE, inParent) as SwNumRuleItem).GetValue();
+    const rule = ruleName.length === 0 ? undefined : this.GetDoc().FindNumRulePtr(ruleName);
+    if (
+      rule !== undefined &&
+      rule.GetName() === SwNumRule.GetOutlineRuleName() &&
+      this.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) === undefined &&
+      this.GetTextFormatColl().GetNumRule(false).GetValue().length === 0
+    )
+      return undefined;
+    return rule;
+  }
+
+  /** Changes collection and reconciles numbering before applying assigned heading levels. @param collection - New paragraph collection. @param setListLevel - Whether to apply the assigned heading level. @returns Previous collection. */
+  public override ChgFormatColl(collection: SwFormatColl, setListLevel = true): SwTextFormatColl {
+    if (!(collection instanceof SwTextFormatColl))
+      throw new Error("Writer text node requires a text format collection.");
+    const previous = this.GetTextFormatColl();
+    if (collection !== previous) {
+      super.ChgFormatColl(collection);
+      HandleModifyAtTextNodeFormatChange(this);
+    }
+    if (this.GetNodes().IsDocNodes()) this.ChgTextCollUpdateNum(previous, collection, setListLevel);
+    return previous;
+  }
+
+  /** Applies the existing collection assignment in the bounded outline slice. @param _oldCollection - Former collection retained at the native helper contract. @param collection - New paragraph collection. @param setListLevel - Whether to set the level. @returns Nothing. */
+  private ChgTextCollUpdateNum(
+    _oldCollection: SwTextFormatColl,
+    collection: SwTextFormatColl,
+    setListLevel: boolean,
+  ): void {
+    const level = collection.IsAssignedToListLevelOfOutlineStyle()
+      ? collection.GetAssignedOutlineStyleLevel()
+      : 10;
+    if (level !== 10 && level !== -1 && setListLevel) this.SetAttrListLevel(level);
+  }
+
+  /** Reads the pooled paragraph outline attribute without inline-frame resolution. @returns Outline level. */
+  public GetAttrOutlineLevel(): number {
+    return (this.GetAttr(RES_PARATR_OUTLINELEVEL) as SfxUInt16Item).GetValue();
+  }
+
+  /** Stores a bounded outline attribute. @param level - Level from zero through ten. @returns Nothing. */
+  public SetAttrOutlineLevel(level: number): void {
+    if (!Number.isInteger(level) || level < 0 || level > 10)
+      throw new Error("Writer outline level is outside 0-10.");
+    this.SetAttr(new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, level));
+  }
+
+  /** Reports the source's synthesized empty-list-style marker. @returns Marker state. */
+  public IsEmptyListStyleDueToSetOutlineLevelAttr(): boolean {
+    return this.mbEmptyListStyleSetDueToSetOutlineLevelAttr;
+  }
+
+  /** Suppresses inherited numbering for a directly outlined paragraph. @returns Nothing. */
+  public SetEmptyListStyleDueToSetOutlineLevelAttr(): void {
+    if (!this.mbEmptyListStyleSetDueToSetOutlineLevelAttr) {
+      this.SetAttr(new SwNumRuleItem());
+      this.mbEmptyListStyleSetDueToSetOutlineLevelAttr = true;
+    }
+  }
+
+  /** Clears only a synthesized empty-list-style attribute. @returns Nothing. */
+  public ResetEmptyListStyleDueToResetOutlineLevelAttr(): void {
+    if (this.mbEmptyListStyleSetDueToSetOutlineLevelAttr) {
+      this.ResetAttr(RES_PARATR_NUMRULE);
+      this.mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
+    }
   }
 
   /** Returns the zero-based RES_PARATR_LIST_LEVEL value. @returns List level. */
@@ -221,8 +290,7 @@ export class SwTextNode extends SwContentNode {
   public SetAttrListLevel(level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`Writer list level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    if (level === 0) this.ResetAttr(RES_PARATR_LIST_LEVEL);
-    else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, level));
+    this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, level));
   }
 
   /** Sets Writer's direct list restart attributes. @param restart - Whether this item restarts. @param value - Optional explicit start value. @returns Nothing. */
@@ -726,6 +794,8 @@ export class SwTextNode extends SwContentNode {
     clone.SetText(this.mText);
     if (this.pSwpHints !== undefined) clone.SetTextHints(this.pSwpHints);
     clone.SetListGeometryWins(this.listGeometryWins);
+    clone.mbEmptyListStyleSetDueToSetOutlineLevelAttr =
+      this.mbEmptyListStyleSetDueToSetOutlineLevelAttr;
     return clone;
   }
 

@@ -1,6 +1,20 @@
 /** @fileoverview Implements SfxInt16Item from pinned svl/source/items/intitem.cxx. */
 
 import { SfxPoolItem } from "./poolitem";
+import { CntUInt16Item } from "./cintitem";
+
+/** Native unsigned item subclass with the zero-valued SfxUInt16Item constructor defaults. */
+export class SfxUInt16Item extends CntUInt16Item {
+  /** Creates an unsigned item. @param which - Item identity. @param value - Unsigned value. @returns Nothing. */
+  public constructor(which = 0, value = 0) {
+    super(which, value);
+  }
+
+  /** Preserves the concrete unsigned item type when cloning. @returns Independent item. */
+  public override Clone(): SfxUInt16Item {
+    return new SfxUInt16Item(this.Which(), this.GetValue());
+  }
+}
 
 /** Signed-16-bit SfxPoolItem counterpart used by Writer list levels. */
 export class SfxInt16Item extends SfxPoolItem {

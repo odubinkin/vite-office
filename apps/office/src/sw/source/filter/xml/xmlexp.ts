@@ -25,6 +25,11 @@ import {
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import type { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import type { SwNumRule } from "../../core/doc/number";
+import { SvxXMLNumRuleExport } from "../../../../xmloff/source/style/xmlnume";
+import type { SwNumRuleItem } from "../../core/para/paratr";
+import { exportParagraphStyleNumberingAttributes } from "../../../../xmloff/source/style/styleexp";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
@@ -39,6 +44,7 @@ import {
   type OdfParagraphAlignment,
   type OdfParagraphProperties,
   type XMLTextParagraphSource,
+  type XMLTextListRuleSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
   RES_CHRATR_CJK_POSTURE,
@@ -73,6 +79,7 @@ import {
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
+  RES_PARATR_OUTLINELEVEL,
   RES_UL_SPACE,
   RES_KEEP,
   RES_LINENUMBER,
@@ -99,10 +106,38 @@ export function exportStylesXml(document: SwDoc): string {
     /** Registers a font used by an inherited list base. @param family - Font family. @param generic - Generic family. @returns Face name. */
     (family, generic) => fonts.Add(family, generic),
   ).namedStyles;
+  const namedRules = new Map<string, SwNumRule>();
   const styles = document.GetTextFormatColls().map(
     /** Emits one named Writer paragraph style. @param collection - Style collection. @returns Style XML. */
     (collection) => {
-      assertSupportedItems(collection.GetAttrSet().entries(), `paragraph style ${collection.id}`);
+      assertSupportedItems(
+        collection.GetAttrSet().entries(),
+        `paragraph style ${collection.id}`,
+        false,
+        true,
+      );
+      const ruleItem = collection.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) as
+        SwNumRuleItem | undefined;
+      if (
+        ruleItem !== undefined &&
+        ruleItem.GetValue() !== "" &&
+        ruleItem.GetValue() !== "Outline"
+      ) {
+        const rule = document.FindNumRulePtr(ruleItem.GetValue());
+        if (rule === undefined)
+          throw new Error(`ODT export cannot resolve style numbering rule ${ruleItem.GetValue()}.`);
+        namedRules.set(rule.GetName(), rule);
+      }
+      const numberingAttributes = exportParagraphStyleNumberingAttributes(
+        (
+          collection.GetAttrSet().GetItemIfSet(RES_PARATR_OUTLINELEVEL, false) as
+            SfxUInt16Item | undefined
+        )?.GetValue(),
+        (
+          collection.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) as
+            SwNumRuleItem | undefined
+        )?.GetValue(),
+      );
       const alignment = getDirectAlignment(
         collection.GetAttrSet().GetItemIfSet(RES_PARATR_ADJUST, false),
       );
@@ -141,7 +176,7 @@ export function exportStylesXml(document: SwDoc): string {
             )}/>`;
       const nextName = getWriterOdfStyleName(collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
-      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${next}${parent}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
+      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${next}${parent}${masterPage}${numberingAttributes}>${paragraphProperties}${textProperties}</style:style>`;
     },
   );
   const pageLayouts: string[] = [];
@@ -162,6 +197,19 @@ export function exportStylesXml(document: SwDoc): string {
       `<style:master-page style:name="${escapeXml(descriptor.GetName())}" style:page-layout-name="${layoutName}"${follow}/>`,
     );
   }
+  const exporter = new SvxXMLNumRuleExport(escapeXml);
+  const numberingStyles = [...namedRules.values()]
+    .map(
+      /** Emits the referenced named numbering definition, including rules absent from the current body. @param rule - Owned rule. @returns Definition XML. */
+      (rule) =>
+        `<text:list-style style:name="${escapeXml(rule.GetName())}">${projectNumberingRule(rule)
+          .levels.map(
+            /** Emits one supported native level. @param properties - Level properties. @param level - Level index. @returns XML. */
+            (properties, level) => exporter.exportLevelStyle(level, properties),
+          )
+          .join("")}</text:list-style>`,
+    )
+    .join("");
   const lineInfo = document.GetLineNumberInfo().QueryValue();
   const lineNumbering = exportLineNumberingConfiguration({
     ...lineInfo,
@@ -174,7 +222,7 @@ export function exportStylesXml(document: SwDoc): string {
             ? "outside"
             : "left",
   });
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}${inheritedStyles}${lineNumbering}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}${numberingStyles}${inheritedStyles}${lineNumbering}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
 }
 
 /** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */
@@ -265,7 +313,11 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
     throw new Error(`ODT export cannot resolve SwNumRule ${ruleName} on node ${node.GetIndex()}.`);
   const listId = node.GetListId();
   const level = node.GetAttrListLevel();
-  if (rule === undefined && (listId.length > 0 || level !== 0))
+  if (
+    rule === undefined &&
+    (listId.length > 0 ||
+      (level !== 0 && !node.GetTextFormatColl().IsAssignedToListLevelOfOutlineStyle()))
+  )
     throw new Error(
       `ODT export found list id or level without SwNumRule on node ${node.GetIndex()}.`,
     );
@@ -330,25 +382,7 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
             ...(node.IsListRestart() && node.HasAttrListRestartValue()
               ? { startValue: node.GetAttrListRestartValue() }
               : {}),
-            rule: {
-              levels: Array.from(
-                { length: WRITER_MAX_LIST_LEVEL + 1 },
-                /** Projects one native numbering property sequence, including signed UNO StartWith. @param _unused - Array slot. @param index - Writer list level. @returns Level properties. */
-                (_unused, index) => {
-                  const format = rule.GetNumFormat(index);
-                  return {
-                    ...numberingPositionToMM100(format.GetPositionProperties()),
-                    kind: format.GetKind(),
-                    bulletChar: format.GetBulletChar(),
-                    prefix: format.GetPrefix(),
-                    suffix: format.GetSuffix(),
-                    startWith: (format.GetStart() << 16) >> 16,
-                    parentNumbering: format.GetIncludeUpperLevels(),
-                  };
-                },
-              ),
-              name: rule.GetName(),
-            },
+            rule: projectNumberingRule(rule),
           },
         }),
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
@@ -365,11 +399,35 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
   };
 }
 
-/** Rejects paragraph items outside this ODT slice. @param items - Direct items. @param owner - Error identity. @param allowListItems - Whether paragraph list items are valid. @returns Nothing. */
+/** Projects an owned numbering rule for common and automatic ODF definitions. @param rule - Native rule. @returns Neutral per-level properties. */
+function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
+  return {
+    levels: Array.from(
+      { length: WRITER_MAX_LIST_LEVEL + 1 },
+      /** Projects one native numbering property sequence, including signed UNO StartWith. @param _unused - Array slot. @param index - Writer list level. @returns Level properties. */
+      (_unused, index) => {
+        const format = rule.GetNumFormat(index);
+        return {
+          ...numberingPositionToMM100(format.GetPositionProperties()),
+          kind: format.GetKind(),
+          bulletChar: format.GetBulletChar(),
+          prefix: format.GetPrefix(),
+          suffix: format.GetSuffix(),
+          startWith: (format.GetStart() << 16) >> 16,
+          parentNumbering: format.GetIncludeUpperLevels(),
+        };
+      },
+    ),
+    name: rule.GetName(),
+  };
+}
+
+/** Rejects paragraph items outside this ODT slice. @param items - Direct items. @param owner - Error identity. @param allowListItems - Whether paragraph list items are valid. @param allowStyleNumbering - Whether named numbering style items are emitted. @returns Nothing. */
 function assertSupportedItems(
   items: readonly { Which(): number }[],
   owner: string,
   allowListItems = false,
+  allowStyleNumbering = false,
 ): void {
   const supported = new Set<number>([
     RES_CHRATR_POSTURE,
@@ -412,6 +470,10 @@ function assertSupportedItems(
       RES_PARATR_NUMRULE,
     ])
       supported.add(which);
+  if (allowStyleNumbering) {
+    supported.add(RES_PARATR_NUMRULE);
+    supported.add(RES_PARATR_OUTLINELEVEL);
+  }
   const unsupported = items.find(
     /** Finds a non-alignment item. @param item - Direct pool item. @returns Whether unsupported. */
     (item) => !supported.has(item.Which()),

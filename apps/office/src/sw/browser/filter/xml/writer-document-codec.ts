@@ -21,7 +21,7 @@ import {
 import { SwNumFormat, SwNumRule } from "../../../source/core/doc/number";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../../source/core/doc/list";
-import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import { RES_PARATR_OUTLINELEVEL, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
 import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
 import { SwFormatAutoFormat, SwTextAttr } from "../../../source/core/txtnode/txatbase";
@@ -59,6 +59,8 @@ interface WriterNumberRuleRecord {
 
 /** Primitive graph record for one paragraph-style collection. */
 interface WriterStyleRecord {
+  /** Actual collection assignment, distinct from its direct outline-level item; absent only in legacy graph v16 records. */
+  readonly outlineAssignment?: boolean;
   readonly followId: WriterParagraphStyle;
   readonly group: WriterParagraphStyleGroup;
   readonly id: WriterParagraphStyle;
@@ -74,6 +76,8 @@ interface WriterTextNodeRecord {
   readonly formatCollId: WriterParagraphStyle;
   readonly hints: readonly WriterTextHintRecord[];
   readonly listGeometryWins?: boolean;
+  /** True only for the model's synthesized empty numbering item; absence keeps legacy explicit items distinct. */
+  readonly emptyListStyle?: true;
   readonly softPageBreaks?: readonly number[];
   readonly text: string;
 }
@@ -203,6 +207,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
           group: collection.group,
           id: collection.id,
           items: encodeSfxItemSet(collection.GetAttrSet()),
+          outlineAssignment: collection.IsAssignedToListLevelOfOutlineStyle(),
           name: collection.GetName(),
           ...(parent instanceof SwTextFormatColl ? { parentId: parent.id } : {}),
           poolId: collection.poolId,
@@ -265,6 +270,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
     autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
     formatCollId: node.GetTextFormatColl().id,
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
+    ...(node.IsEmptyListStyleDueToSetOutlineLevelAttr() ? { emptyListStyle: true as const } : {}),
     ...(document
       .GetIDocumentMarkAccess()
       .GetSoftPageBreaks()
@@ -382,9 +388,25 @@ export function decodeWriterDocument(
   for (const style of record.textFormatCollections) {
     if (!isWriterParagraphStyle(style.id)) throw new Error("Stored Writer style is invalid.");
     const collection = document.GetTextFormatColl(style.id);
+    const factoryOutlineLevel = collection.GetAttrOutlineLevel();
+    const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
+    if (style.outlineAssignment !== undefined && typeof style.outlineAssignment !== "boolean")
+      throw new Error("Stored Writer outline assignment is invalid.");
+    if (style.outlineAssignment === false) collection.DeleteAssignmentToListLevelOfOutlineStyle();
+    else if (style.outlineAssignment === true && !factoryAssignment)
+      collection.AssignToListLevelOfOutlineStyle(0);
     collection.SetFormatName(style.name);
     collection.ResetAllFormatAttr();
     decodeSfxItemSet(collection.GetAttrSet(), style.items);
+    if (
+      style.outlineAssignment === undefined &&
+      factoryAssignment &&
+      !style.items.some(
+        /** Detects the source-owned outline item already retained by the legacy graph. @param item - Stored item. @returns Whether outline. */
+        (item) => item.which === RES_PARATR_OUTLINELEVEL,
+      )
+    )
+      collection.SetAttrOutlineLevel(factoryOutlineLevel);
   }
   for (const style of record.textFormatCollections) {
     const collection = document.GetTextFormatColl(style.id);
@@ -491,10 +513,12 @@ export function decodeWriterDocument(
 ): void {
   if (!isWriterParagraphStyle(nodeRecord.formatCollId))
     throw new Error("Stored Writer paragraph style is invalid.");
-  node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId));
+  node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId), false);
+  node.ResetAllAttr();
   node.SetListGeometryWins(nodeRecord.listGeometryWins === true);
   for (const item of nodeRecord.autoAttributes)
     node.SetAttr(document.GetAttrPool().CreateItem(item));
+  if (nodeRecord.emptyListStyle === true) node.SetEmptyListStyleDueToSetOutlineLevelAttr();
   const hints = nodeRecord.hints.map(
     /** Restores one canonical text attribute. @param hint - Primitive hint record. @returns Writer hint. */ (
       hint,

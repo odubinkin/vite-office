@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { RES_CHRATR_WEIGHT, RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { createWriterDocument } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -35,6 +35,15 @@ describe("ODT canonical state validation", /** Registers current-schema rejectio
       /** Exports an unresolved numbering rule. @returns Content XML when validation unexpectedly succeeds. */ () =>
         exportContentXml(unknownRule),
     ).toThrow("cannot resolve SwNumRule Missing");
+    const directOutline = createWriterDocument();
+    const outlinedParagraph = directOutline.paragraphs[0];
+    if (outlinedParagraph === undefined) throw new Error("Outline fixture has no paragraph.");
+    outlinedParagraph.SetAttrOutlineLevel(4);
+    expect(
+      /** Rejects a direct outline item beyond the named-style export slice. @returns Content XML when validation unexpectedly succeeds. */ () =>
+        exportContentXml(directOutline),
+    ).toThrow("ODT export does not support WhichId 80 on paragraph at node");
+    expect(outlinedParagraph.GetAttrOutlineLevel()).toBe(4);
     const invalidCharacter = createWriterDocument();
     const invalidCharacterSet = invalidCharacter
       .GetDfltTextFormatColl()
@@ -55,8 +64,8 @@ describe("ODT canonical state validation", /** Registers current-schema rejectio
     const styleItem = createWriterDocument();
     styleItem.GetTextFormatColl("heading-1").SetFormatAttr(new SwNumRuleItem("Rule"));
     expect(
-      /** Exports an unsupported style item. @returns Styles XML when validation unexpectedly succeeds. */ () =>
+      /** Exports an unresolved supported style rule. @returns Styles XML when validation unexpectedly succeeds. */ () =>
         exportStylesXml(styleItem),
-    ).toThrow(`WhichId ${RES_PARATR_NUMRULE}`);
+    ).toThrow("cannot resolve style numbering rule Rule");
   });
 });

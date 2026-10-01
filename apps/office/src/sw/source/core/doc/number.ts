@@ -75,6 +75,10 @@ export class SwNumFormat extends SvxNumberFormat {
 
 /** Document-owned numbering rule referenced by paragraph item sets. */
 export class SwNumRule {
+  /** Returns Writer's reserved outline numbering rule identity. @returns Outline rule name. */
+  public static GetOutlineRuleName(): string {
+    return "Outline";
+  }
   /** Creates one bounded numbering rule. @param name - Document-unique rule name. @param kind - Bullet or numbering marker family. @param defaultListId - Default list identity. @param automatic - Whether Writer may reuse the rule. @returns Nothing. */
   public constructor(
     private readonly name: string,

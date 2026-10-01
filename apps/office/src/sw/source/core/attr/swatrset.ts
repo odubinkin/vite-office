@@ -28,7 +28,7 @@ import {
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_CJK_POSTURE,
@@ -63,6 +63,7 @@ import {
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
+  RES_PARATR_OUTLINELEVEL,
   RES_KEEP,
   RES_LINENUMBER,
 } from "../../../inc/hintids";
@@ -77,6 +78,11 @@ export class SwAttrPool extends SfxItemPool {
   public constructor(private readonly document: SwDoc) {
     super();
     const device = document.GetDefaultFontDevice();
+    this.RegisterDefaultItem(
+      new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, 0),
+      /** Restores the pooled outline attribute. @param value - Persisted scalar. @returns Unsigned outline item. */
+      (value) => new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, Number(value)),
+    );
     const locale = document.GetLocale();
     const defaults = new Map([
       [

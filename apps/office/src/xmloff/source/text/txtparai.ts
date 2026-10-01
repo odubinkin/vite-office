@@ -33,6 +33,8 @@ export interface OdfStyleDefinition {
   /** Direct text-left margin imported from paragraph properties, in twips. */
   readonly leftMargin?: number;
   readonly listStyleName?: string;
+  /** Direct default outline level parsed by the paragraph style context. */
+  readonly outlineLevel?: number;
   readonly paragraphProperties?: XMLParagraphImportProperties;
   readonly nextStyleName?: string;
   readonly parentStyleName?: string;

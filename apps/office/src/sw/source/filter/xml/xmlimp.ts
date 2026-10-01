@@ -30,6 +30,7 @@ import {
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SwNumRuleItem } from "../../core/para/paratr";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { createWriterCharacterItemSet } from "../../core/txtnode/txatbase";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
@@ -773,6 +774,10 @@ function applyNamedParagraphStyles(
         (item) => collection.SetFormatAttr(item),
       );
     if (definition.displayName !== undefined) collection.SetFormatName(definition.displayName);
+    if (definition.outlineLevel !== undefined)
+      collection.SetAttrOutlineLevel(definition.outlineLevel);
+    if (definition.listStyleName !== undefined)
+      collection.SetFormatAttr(new SwNumRuleItem(definition.listStyleName));
     if (definition.alignment !== undefined)
       collection.SetFormatAttr(
         new SvxAdjustItem(toSvxAdjust(definition.alignment), RES_PARATR_ADJUST),
