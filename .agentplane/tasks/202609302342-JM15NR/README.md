@@ -4,7 +4,7 @@ title: "Restore native ODF numbering marker parameter transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore native ODF marker parameter transport and source-owned per-level export under the continuing parity goal."
 doc_version: 3
-doc_updated_at: "2026-09-30T23:50:22.641Z"
+doc_updated_at: "2026-09-30T23:55:14.212Z"
 doc_updated_by: "CODER"
 description: "Preserve native prefix/suffix/start/display and ListFormat properties through XML declaration, Writer UNO application and ODF 1.3 export; refactor rule export into source-owned per-level property records."
 sections:
@@ -59,6 +59,10 @@ sections:
     - Observation: Focused run passes 49 tests and fails the prior literal expectation that a closing-parenthesis suffix is unsupported. Pinned xmlnumi stores arbitrary suffixes and native SetListFormat applies them.
       Impact: The old rejection expectation conflicts with source behavior and must become concrete state/visible-label evidence.
       Resolution: Assert imported suffix and actual paragraph marker for the same literal fixture; add genuine ODT parameter and native probe coverage, then rerun full gates.
+
+    - Observation: Focused run passes the migrated exporter/context/UNO and old suffix fixture checks; all three new package fixtures fail before semantic assertions because readOdtDocument requires a metadata argument.
+      Impact: The new fixture helper call contract is wrong; no marker behavior mismatch is inferred.
+      Resolution: Use the existing reader metadata contract and rerun these fixtures, preserving planned source assertions and full gates.
 id_source: "generated"
 ---
 ## Summary
@@ -96,3 +100,7 @@ Previous turn is progress: iteration26 child 202609302319-9KTM99 DONE, implement
 - Observation: Focused run passes 49 tests and fails the prior literal expectation that a closing-parenthesis suffix is unsupported. Pinned xmlnumi stores arbitrary suffixes and native SetListFormat applies them.
   Impact: The old rejection expectation conflicts with source behavior and must become concrete state/visible-label evidence.
   Resolution: Assert imported suffix and actual paragraph marker for the same literal fixture; add genuine ODT parameter and native probe coverage, then rerun full gates.
+
+- Observation: Focused run passes the migrated exporter/context/UNO and old suffix fixture checks; all three new package fixtures fail before semantic assertions because readOdtDocument requires a metadata argument.
+  Impact: The new fixture helper call contract is wrong; no marker behavior mismatch is inferred.
+  Resolution: Use the existing reader metadata contract and rerun these fixtures, preserving planned source assertions and full gates.
