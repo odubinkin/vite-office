@@ -4,7 +4,7 @@ title: "Restore Writer numbering transitions on paragraph style changes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved persistent parity goal;restore native numbering transitions on explicit paragraph style switches,pooled outline dependencies and exact affected undo state;preserve IO exceptions and all verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T07:04:26.932Z"
+doc_updated_at: "2026-10-01T07:11:24.661Z"
 doc_updated_by: "CODER"
 description: "Iteration37 of approved persistent parity goal:implement native ChgFormatColl/HandleModifyAtTextNodeFormatChange/HandleApplyTextNodeFormatChange and existing assigned-heading level updates;restore owned rule/list state,outline suppression attributes and exact undo. Preserve registered document IO deviations and unchanged gates."
 sections:
@@ -54,6 +54,8 @@ sections:
     Command: npm run verify (verify-final.log); Result: fail; Evidence: 681/682 tests pass,153 files; unchanged WriterMenuBar accessible-menu test exceeds existing30000ms timeout (36800ms),no failed semantic assertion; Scope: full app stage,downstream coverage/inventory/browser/static not reached. Command: npx vitest run src/sw/browser/presentation/WriterMenuBar.test.tsx (menu-isolated.log); Result: pass9 tests; Evidence:26.25s total,20.69s tests with unchanged source/assertions/config; Scope: bounded reproduction only,root cause of full-run timeout unproven. Full unchanged verification will be repeated;no gate waiver. CLI route/verify guidance initially attempted from apps/office rejected E_GIT;recomputed route and ran exact guidance from repository root.
 
     Command: npm run verify (verify-rerun.log); Result: app tests pass682/682 in153 files,coverage gate fail; Evidence:10330/10331 statements,7827/7828 branches,2827/2827 functions,9490/9491 lines. Single uncovered xmlexp unsupported-direct-item rejection remained after named NUMRULE/OUTLINE support replaced the old unsupported named-rule fixture. Added real direct paragraph outline level4 rejection and state-retention assertions;general direct-outline ODT export remains an explicit residual rather than silently dropping the item. Focused canonical-state test first had imprecise error owner substring;corrected to existing paragraph-at-node context,then passes. No production or gate changes after latest full app pass;complete unchanged verify pending.
+
+    Command: npm run verify (verify-complete.log);Result:fail679/682 app tests;Evidence:unchanged Desktop ODT/TXT browser-list waits cannot find imported names;Save As title remains Untitled during5000ms wait;152/153 files pass;Scope:global app check,not a proven core cause. Command:npx vitest run src/framework/browser/app/desktop.test.tsx (desktop-isolated.log);Result:pass11/11 with unchanged source/config/assertions;Evidence:14.52s total,11.99s tests. These asynchronous UI failures and the earlier menu timeout remain unexplained;isolated passes do not establish causation. No IO policy/assertion/timeout/gate changes;complete unchanged verification rerun required.
 id_source: "generated"
 ---
 ## Summary
@@ -89,3 +91,5 @@ Full verify-full.log failed 4 of 680 tests: three obsolete unsupported-attribute
 Command: npm run verify (verify-final.log); Result: fail; Evidence: 681/682 tests pass,153 files; unchanged WriterMenuBar accessible-menu test exceeds existing30000ms timeout (36800ms),no failed semantic assertion; Scope: full app stage,downstream coverage/inventory/browser/static not reached. Command: npx vitest run src/sw/browser/presentation/WriterMenuBar.test.tsx (menu-isolated.log); Result: pass9 tests; Evidence:26.25s total,20.69s tests with unchanged source/assertions/config; Scope: bounded reproduction only,root cause of full-run timeout unproven. Full unchanged verification will be repeated;no gate waiver. CLI route/verify guidance initially attempted from apps/office rejected E_GIT;recomputed route and ran exact guidance from repository root.
 
 Command: npm run verify (verify-rerun.log); Result: app tests pass682/682 in153 files,coverage gate fail; Evidence:10330/10331 statements,7827/7828 branches,2827/2827 functions,9490/9491 lines. Single uncovered xmlexp unsupported-direct-item rejection remained after named NUMRULE/OUTLINE support replaced the old unsupported named-rule fixture. Added real direct paragraph outline level4 rejection and state-retention assertions;general direct-outline ODT export remains an explicit residual rather than silently dropping the item. Focused canonical-state test first had imprecise error owner substring;corrected to existing paragraph-at-node context,then passes. No production or gate changes after latest full app pass;complete unchanged verify pending.
+
+Command: npm run verify (verify-complete.log);Result:fail679/682 app tests;Evidence:unchanged Desktop ODT/TXT browser-list waits cannot find imported names;Save As title remains Untitled during5000ms wait;152/153 files pass;Scope:global app check,not a proven core cause. Command:npx vitest run src/framework/browser/app/desktop.test.tsx (desktop-isolated.log);Result:pass11/11 with unchanged source/config/assertions;Evidence:14.52s total,11.99s tests. These asynchronous UI failures and the earlier menu timeout remain unexplained;isolated passes do not establish causation. No IO policy/assertion/timeout/gate changes;complete unchanged verification rerun required.
