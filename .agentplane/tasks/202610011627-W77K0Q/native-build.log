@@ -1,0 +1,28 @@
+.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:1001:26: error: no matching member function for call to 'insert'
+ 1001 |         pDest->mChildren.insert(mChildren);
+      |         ~~~~~~~~~~~~~~~~~^~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:741:46: note: candidate function not viable: no known conversion from 'tSwNumberTreeChildren' (aka 'set<SwNumberTreeNode *, compSwNumberTreeNodeLessThan>') to 'const value_type' (aka 'SwNumberTreeNode *const') for 1st argument
+  741 |   _LIBCPP_HIDE_FROM_ABI pair<iterator, bool> insert(const value_type& __v) { return __tree_.__emplace_unique(__v); }
+      |                                              ^      ~~~~~~~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:759:46: note: candidate function not viable: no known conversion from 'tSwNumberTreeChildren' (aka 'set<SwNumberTreeNode *, compSwNumberTreeNodeLessThan>') to 'value_type' (aka 'SwNumberTreeNode *') for 1st argument
+  759 |   _LIBCPP_HIDE_FROM_ABI pair<iterator, bool> insert(value_type&& __v) {
+      |                                              ^      ~~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:767:30: note: candidate function not viable: no known conversion from 'tSwNumberTreeChildren' (aka 'set<SwNumberTreeNode *, compSwNumberTreeNodeLessThan>') to 'initializer_list<value_type>' (aka 'initializer_list<SwNumberTreeNode *>') for 1st argument
+  767 |   _LIBCPP_HIDE_FROM_ABI void insert(initializer_list<value_type> __il) { insert(__il.begin(), __il.end()); }
+      |                              ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:776:44: note: candidate function not viable: no known conversion from 'tSwNumberTreeChildren' (aka 'set<SwNumberTreeNode *, compSwNumberTreeNodeLessThan>') to 'node_type' (aka '__basic_node_handle<__tree_node<SwNumberTreeNode *, void *>, std::allocator<SwNumberTreeNode *>, __set_node_handle_specifics>') for 1st argument
+  776 |   _LIBCPP_HIDE_FROM_ABI insert_return_type insert(node_type&& __nh) {
+      |                                            ^      ~~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:742:34: note: candidate function not viable: requires 2 arguments, but 1 was provided
+  742 |   _LIBCPP_HIDE_FROM_ABI iterator insert(const_iterator __p, const value_type& __v) {
+      |                                  ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:763:34: note: candidate function not viable: requires 2 arguments, but 1 was provided
+  763 |   _LIBCPP_HIDE_FROM_ABI iterator insert(const_iterator __p, value_type&& __v) {
+      |                                  ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:781:34: note: candidate function not viable: requires 2 arguments, but 1 was provided
+  781 |   _LIBCPP_HIDE_FROM_ABI iterator insert(const_iterator __hint, node_type&& __nh) {
+      |                                  ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/set:747:30: note: candidate function template not viable: requires 2 arguments, but 1 was provided
+  747 |   _LIBCPP_HIDE_FROM_ABI void insert(_InputIterator __first, _InputIterator __last) {
+      |                              ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.

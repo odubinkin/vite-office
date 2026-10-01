@@ -4,7 +4,7 @@ title: "Restore protected explicit-target numbering validation contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore protected explicit-target native numbering validation contracts under the persistent user goal, preserving all original assertions and upstream-independent tests; no source copies or registered IO/recovery changes."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:28:24.071Z"
+doc_updated_at: "2026-10-01T16:37:00.578Z"
 doc_updated_by: "CODER"
 description: "Iteration49 of the active implemented-runtime parity goal: remove the nonnative public eager no-argument hierarchical validation bridge, require explicit nullable targets on both protected validators, preserve original assertion meaning using source-shaped access, and compare native prefix/cache/null/foreign-target observations from manual local probes. Project tests must neither read nor compile nor invoke pinned upstream; native source must only exist in ignored scratch, never canonical Agentplane artifacts. Registered IO/recovery deviations remain untouched."
 sections:
@@ -64,7 +64,12 @@ sections:
     4. Record actual post-bookkeeping CODE SHA and exact semantic/artifact path counts. Separate canonical verify, same-actor EVALUATOR quality phase and leaf close; no independent-agent review claim. Final tracked/untracked state clean. Parent/full goal stay active; retain bounded native alias/lifetime gaps and next measured mismatch.
   Verification: "Pending baseline/native differential, implementation, focused isolation and full unchanged gates. No whole-module or goal completion claim."
   Rollback Plan: "Revert only this leaf implementation commit and its eight intentional semantic paths via a follow-up task if required. Preserve task history, source hashes and literal results; never restore upstream source copies into artifacts or rewrite Git history."
-  Findings: "Fresh inspection confirms native header methods are protected and require explicit pointer arguments. Native hierarchical GetIterator(nullptr) resolves no child and returns without mutation; current local undefined-target overload instead validates recursively. Current production calls are owned-child only; three legacy diagnostic tests still rely on public/no-argument access. Prior iteration 48 completed with native 960 sequences/69120 states and unchanged full verification. Existing native result fixtures remain independent local test inputs."
+  Findings: |-
+    Fresh inspection confirms native header methods are protected and require explicit pointer arguments. Native hierarchical GetIterator(nullptr) resolves no child and returns without mutation; current local undefined-target overload instead validates recursively. Current production calls are owned-child only; three legacy diagnostic tests still rely on public/no-argument access. Prior iteration 48 completed with native 960 sequences/69120 states and unchanged full verification. Existing native result fixtures remain independent local test inputs.
+
+    - Observation: Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py. Result: fail at native compilation; the std::set child-container adapter lacked sorted_vector bulk insert(container), used by unchanged MoveChildren. No project code changed.
+      Impact: The manual oracle cannot run until its explicit container adapter is complete; native source bodies must not be patched to compensate.
+      Resolution: Retain native-build.log as the failed first attempt, add only the adapter bulk-insert overload, recompute/persist route and rerun the manual probe. Canonical artifacts contain generator/logs only; all generated Cxx remains ignored scratch.
 id_source: "generated"
 ---
 ## Summary
@@ -109,3 +114,7 @@ Revert only this leaf implementation commit and its eight intentional semantic p
 ## Findings
 
 Fresh inspection confirms native header methods are protected and require explicit pointer arguments. Native hierarchical GetIterator(nullptr) resolves no child and returns without mutation; current local undefined-target overload instead validates recursively. Current production calls are owned-child only; three legacy diagnostic tests still rely on public/no-argument access. Prior iteration 48 completed with native 960 sequences/69120 states and unchanged full verification. Existing native result fixtures remain independent local test inputs.
+
+- Observation: Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py. Result: fail at native compilation; the std::set child-container adapter lacked sorted_vector bulk insert(container), used by unchanged MoveChildren. No project code changed.
+  Impact: The manual oracle cannot run until its explicit container adapter is complete; native source bodies must not be patched to compensate.
+  Resolution: Retain native-build.log as the failed first attempt, add only the adapter bulk-insert overload, recompute/persist route and rerun the manual probe. Canonical artifacts contain generator/logs only; all generated Cxx remains ignored scratch.
