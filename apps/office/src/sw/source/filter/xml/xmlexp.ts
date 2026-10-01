@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 
 import {
   SvxAdjust,
@@ -409,8 +410,8 @@ function projectNumberingRule(rule: SwNumRule): XMLTextListRuleSource {
         const format = rule.Get(index);
         return {
           ...numberingPositionToMM100(format.GetPositionProperties()),
-          kind: format.GetKind(),
-          bulletChar: format.GetBulletChar(),
+          kind: getWriterNumFormatKind(format),
+          bulletChar: getWriterNumFormatBullet(format),
           prefix: format.GetPrefix(),
           suffix: format.GetSuffix(),
           startWith: (format.GetStart() << 16) >> 16,

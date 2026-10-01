@@ -1,4 +1,6 @@
 /** @fileoverview Ports pinned ndtxt.cxx direct list attribute pre/post handlers for the registered Writer items. */
+import { SvxNumType, SwNumRule } from "../doc/number";
+
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { SfxStringItem } from "../../../../svl/source/items/stritem";
@@ -14,7 +16,6 @@ import {
   RES_PARATR_OUTLINELEVEL,
 } from "../../../inc/hintids";
 import type { SwNumRuleItem } from "../para/paratr";
-import { SwNumRule } from "../doc/number";
 import type { SwTextNode } from "./ndtxt";
 
 /** Retains independent native set flags across raw item mutation. */
@@ -203,7 +204,10 @@ export class HandleResetAttrAtTextNode {
 /** Reads source enumeration repaint policy for the existing Arabic/bullet formats. @param node - Paragraph. @returns Whether counting changes need tree notification. */
 export function HasNumberingWhichNeedsLayoutUpdate(node: SwTextNode): boolean {
   const rule = node.GetNum()?.GetNumRule();
-  return rule !== undefined && rule.Get(node.GetAttrListLevel()).GetNumberingType() === "arabic";
+  return (
+    rule !== undefined &&
+    rule.Get(node.GetAttrListLevel()).GetNumberingType() === SvxNumType.SVX_NUM_ARABIC
+  );
 }
 
 /** Reads the native normal-document outline policy. @param node - Paragraph. @returns Outline membership state. */

@@ -1,6 +1,5 @@
 /** @fileoverview Owns supported numbering position property conversion from pinned SwXNumberingRules in unosett.cxx. */
-
-import { SwNumFormat, type SwNumRule } from "../doc/number";
+import { createWriterNumFormat, getWriterNumFormatBullet, type SwNumRule } from "../doc/number";
 
 import type { NumberingPositionProperties } from "../../../../editeng/source/items/numitem";
 
@@ -89,16 +88,18 @@ export class SwXNumberingRules {
     const converted = numberingPositionToTwips(properties);
     if ((properties.charTextDistance ?? 0) < 0 || (converted.listTabPosition ?? 0) < 0)
       throw new NumberingRulePropertyError("Invalid numbering position property.");
-    const applied = new SwNumFormat(
+    const applied = createWriterNumFormat(
       properties.kind,
-      properties.bulletChar ?? previous.GetBulletChar(),
+      properties.bulletChar ?? getWriterNumFormatBullet(previous),
       {
         ...previous.GetPositionProperties(),
         ...converted,
-        bulletFont: previous.GetBulletFont(),
+        bulletFont: previous.GetBulletFont()?.GetFamilyName() ?? "",
         ...previous.GetMarkerProperties(),
       },
     );
+    applied.SetBulletFont(previous.GetBulletFont());
+    applied.SetShowSymbol(previous.IsShowSymbol());
     if (properties.prefix !== undefined) applied.SetPrefix(properties.prefix);
     applied.SetSuffix(properties.suffix);
     if (properties.startWith !== undefined) applied.SetStart(properties.startWith);

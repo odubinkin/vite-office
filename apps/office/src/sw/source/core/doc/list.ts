@@ -1,6 +1,7 @@
 /**
  * @fileoverview Defines the browser projection and command-boundary normalization for Writer list state at LibreOffice's `sw/source/core/doc/list.cxx` ownership boundary.
  */
+import { getWriterNumFormatKind } from "./number";
 
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -195,7 +196,7 @@ export function projectWriterParagraphList(node: SwTextNode): WriterParagraphLis
   const restart = node.IsListRestart();
   const startValue = node.HasAttrListRestartValue() ? node.GetAttrListRestartValue() : undefined;
   return {
-    kind: rule.Get(level).GetKind(),
+    kind: getWriterNumFormatKind(rule.Get(level)),
     level,
     ...(rule.IsAutoRule() ? {} : { styleId: ruleName }),
     ...(restart ? { restart: true } : {}),
@@ -221,7 +222,7 @@ export function createWriterListItemSet(node: SwTextNode, value: unknown): SfxIt
     ruleName =
       previousRule?.IsAutoRule() === true &&
       previous !== undefined &&
-      previousRule.Get(previous.GetAttrListLevel()).GetKind() === normalized.kind
+      getWriterNumFormatKind(previousRule.Get(previous.GetAttrListLevel())) === normalized.kind
         ? previousRule.GetName()
         : node.GetDoc().GetDocumentListsManager().CreateAutomaticNumRule(normalized.kind).GetName();
   }
@@ -229,7 +230,7 @@ export function createWriterListItemSet(node: SwTextNode, value: unknown): SfxIt
   if (
     normalized.styleId !== undefined &&
     namedRule !== undefined &&
-    namedRule.Get(normalized.level).GetKind() !== normalized.kind
+    getWriterNumFormatKind(namedRule.Get(normalized.level)) !== normalized.kind
   )
     ruleName = node
       .GetDoc()

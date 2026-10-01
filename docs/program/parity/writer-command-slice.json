@@ -11094,7 +11094,7 @@
         "implementation": [
           {
             "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
-            "marker": "SwNumFormat"
+            "marker": "SetNumberingRuleByIndex"
           }
         ],
         "tests": [
@@ -11143,7 +11143,7 @@
         "contract": {
           "local": {
             "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
-            "marker": "SwNumFormat"
+            "marker": "SetNumberingRuleByIndex"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0143 contract resolves to the mapped local and pinned upstream symbols.",
@@ -11156,7 +11156,7 @@
         "ownership": {
           "local": {
             "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
-            "marker": "SwNumFormat"
+            "marker": "SetNumberingRuleByIndex"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0143 owner is checked at the mapped filter implementation boundary.",

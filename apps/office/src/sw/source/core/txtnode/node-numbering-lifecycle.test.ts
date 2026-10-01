@@ -1,8 +1,9 @@
 /** @fileoverview Verifies source-owned shown numbering records, lazy reads and rule-client transitions. */
+import { createWriterNumFormat, type SwNumRule } from "../doc/number";
+
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
 import { applyWriterParagraphList, SwList } from "../doc/list";
-import { type SwNumRule, SwNumFormat } from "../doc/number";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "./ndtxt";
@@ -106,7 +107,7 @@ it("removes old clients before changing list attributes and preserves native reg
   expect(rule.IsInvalidRule()).toBe(true);
   rule.Validate();
   expect(rule.IsInvalidRule()).toBe(false);
-  rule.Set(0, new SwNumFormat("numbered", "", { start: 4 }));
+  rule.Set(0, createWriterNumFormat("numbered", "", { start: 4 }));
   expect(rule.IsInvalidRule()).toBe(true);
   rule.Validate();
   expect(first.GetNumberVector()).toEqual([4]);

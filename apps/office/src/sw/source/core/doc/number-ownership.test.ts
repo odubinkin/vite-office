@@ -1,8 +1,17 @@
 /** @fileoverview Compares optional rule formats, base tables and reference Set with literal unchanged pinned native results. */
+import {
+  createWriterNumFormat,
+  getWriterNumFormatBullet,
+  SvxNumType,
+  SwNumFormat,
+  SwNumRule,
+  SwNumRuleType,
+  type ConstSwNumFormat,
+} from "./number";
+
 import { expect, it } from "vitest";
 import native from "./number-ownership-native.json";
 import none from "./number-none-native.json";
-import { SwNumFormat, SwNumRule, SwNumRuleType, type ConstSwNumFormat } from "./number";
 import type { SvxNumPositionAndSpaceMode } from "../../../../editeng/source/items/numitem";
 import { createWriterDocument } from "./doc";
 import {
@@ -14,10 +23,14 @@ import {
 function state(format: ConstSwNumFormat) {
   const p = format.GetPositionProperties();
   return [
-    ["arabic", "char-special", "none"].indexOf(format.GetNumberingType()),
+    [
+      SvxNumType.SVX_NUM_ARABIC,
+      SvxNumType.SVX_NUM_CHAR_SPECIAL,
+      SvxNumType.SVX_NUM_NUMBER_NONE,
+    ].indexOf(format.GetNumberingType()),
     format.GetStart(),
     format.GetIncludeUpperLevels(),
-    format.GetBulletChar().codePointAt(0),
+    getWriterNumFormatBullet(format).codePointAt(0),
     p.absLSpace,
     p.firstLineOffset,
     p.charTextDistance,
@@ -117,45 +130,49 @@ it("matches native reference Set identity, equality, invalidation and sparse cop
         input.SetListFormat();
         break;
       case 7:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           absLSpace: 11,
         });
         break;
       case 8:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           firstLineOffset: -11,
         });
         break;
       case 9:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           charTextDistance: 11,
         });
         break;
       case 10:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           firstLineIndent: -11,
         });
         break;
       case 11:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), { ...p, ...m, indentAt: 11 });
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
+          ...p,
+          ...m,
+          indentAt: 11,
+        });
         break;
       case 12:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           listTabPosition: 11,
         });
         break;
       case 13:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           labelFollowedBy: "nothing",
@@ -165,20 +182,24 @@ it("matches native reference Set identity, equality, invalidation and sparse cop
         input.SetPositionAndSpaceMode("label-width-and-position");
         break;
       case 15:
-        input = new SwNumFormat("bullet", original.GetBulletChar(), { ...p, ...m, bulletFont: "" });
+        input = createWriterNumFormat("bullet", getWriterNumFormatBullet(original), {
+          ...p,
+          ...m,
+          bulletFont: "",
+        });
         break;
       case 16:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           numberingType: "none",
         });
         break;
       case 17:
-        input = new SwNumFormat("numbered", "●", { ...p, ...m });
+        input = createWriterNumFormat("numbered", "●", { ...p, ...m });
         break;
       case 18:
-        input = new SwNumFormat("numbered", original.GetBulletChar(), {
+        input = createWriterNumFormat("numbered", getWriterNumFormatBullet(original), {
           ...p,
           ...m,
           bulletFont: "Alternate",
@@ -215,8 +236,8 @@ it("matches native reference Set identity, equality, invalidation and sparse cop
     expect(rule.Get(2).GetStart()).not.toBe(99);
     expect(copy.IsInvalidRule()).toBe(true);
   }
-  const same = new SwNumFormat("numbered", "•", { bulletFont: "", listFormat: "" });
-  const absent = new SwNumFormat("numbered", "•", { bulletFont: "" });
+  const same = createWriterNumFormat("numbered", "•", { bulletFont: "", listFormat: "" });
+  const absent = createWriterNumFormat("numbered", "•", { bulletFont: "" });
   expect(same.Equals(absent)).toBe(false);
 });
 
@@ -234,7 +255,7 @@ it("retains sparse ownership and default selectors in Worker graph v16 with lega
   for (const rule of copy.GetNumRuleTable()) {
     expect(rule.GetNumFormat(0)).toBeUndefined();
     expect(rule.GetNumFormat(4)).toBeDefined();
-    expect(rule.Get(0).GetNumberingType()).toBe("none");
+    expect(rule.Get(0).GetNumberingType()).toBe(SvxNumType.SVX_NUM_NUMBER_NONE);
     expect(rule.GetDefaultNumberFormatPositionAndSpaceMode()).toBe(rule.GetName());
     expect(rule.GetDefaultListId()).toBe(rule.GetName());
     expect(rule.IsAutoRule()).toBe(false);
@@ -247,7 +268,7 @@ it("retains sparse ownership and default selectors in Worker graph v16 with lega
   }
   for (const rule of decodeWriterDocument(legacy).GetNumRuleTable()) {
     expect(rule.GetNumFormat(0)).toBeDefined();
-    expect(rule.Get(0).GetNumberingType()).toBe("arabic");
+    expect(rule.Get(0).GetNumberingType()).toBe(SvxNumType.SVX_NUM_ARABIC);
   }
   for (const mutation of [
     { ownedLevels: [] },
@@ -277,7 +298,7 @@ it("matches native disabled numbering in valid patterns and legacy joining", /**
     for (let level = 0; level < 3; level++)
       rule.Set(
         level,
-        new SwNumFormat("numbered", "", {
+        createWriterNumFormat("numbered", "", {
           numberingType: row.types[level] === 2 ? "none" : "arabic",
           includeUpperLevels: 3,
           prefix: "(",
@@ -291,8 +312,8 @@ it("matches native disabled numbering in valid patterns and legacy joining", /**
 
 it("rejects the measured native non-progress NONE placeholder profile at the browser boundary", /** Checks the explicit browser guard for the unchanged native timeout input. @returns Nothing. */ () => {
   const rule = new SwNumRule("Non-progress profile", "label-alignment");
-  rule.Set(0, new SwNumFormat("numbered", "", { numberingType: "none" }));
-  rule.Set(2, new SwNumFormat("numbered", "", { listFormat: "%1%" }));
+  rule.Set(0, createWriterNumFormat("numbered", "", { numberingType: "none" }));
+  rule.Set(2, createWriterNumFormat("numbered", "", { listFormat: "%1%" }));
   expect(
     /** Rejects an unsupported non-progress pattern. @returns Marker. */ () =>
       rule.MakeNumString([2, 3, 4], 2),

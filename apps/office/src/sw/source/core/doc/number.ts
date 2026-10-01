@@ -7,84 +7,91 @@ import {
   type NumberingPositionProperties,
   type NumberingMarkerProperties,
   type SvxNumPositionAndSpaceMode,
+  type ConstSvxNumberFormat,
 } from "../../../../editeng/source/items/numitem";
+
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+export { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { SwClient, type SwModify } from "../../../inc/calbck";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwList, WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
-/** Numbering format owned by one level of a SwNumRule. */
+/** Numbering format owned by one level of a SwNumRule, with native base defaults and null client registration. */
 export class SwNumFormat extends SvxNumberFormat {
-  private readonly bulletFont: string;
-  private readonly numberingType: "arabic" | "char-special" | "none";
-  /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @param options - Upstream-compatible spacing, prefix, suffix, and start options. @returns Nothing. */
-  public constructor(
-    private readonly kind: Exclude<WriterParagraphListKind, "none">,
-    private readonly bulletChar = kind === "bullet" ? "•" : "",
-    options: NumberingPositionProperties &
-      NumberingMarkerProperties &
-      Readonly<{ bulletFont?: string; numberingType?: "arabic" | "char-special" | "none" }> = {},
-  ) {
-    super(options);
-    if (kind !== "bullet" && kind !== "numbered")
-      throw new Error("SwNumFormat kind must be bullet or numbered.");
-    if (kind === "bullet" && [...bulletChar].length > 1)
-      throw new Error("SwNumFormat bullet character must contain at most one Unicode code point.");
-    this.numberingType = options.numberingType ?? (kind === "bullet" ? "char-special" : "arabic");
-    this.bulletFont = options.bulletFont ?? (kind === "bullet" ? "OpenSymbol" : "");
-    if (
-      options.start !== undefined &&
-      (options.start < 0 || options.start > 65535 || !Number.isInteger(options.start))
-    )
-      throw new Error("SwNumFormat start value is invalid.");
-    if (
-      options.includeUpperLevels !== undefined &&
-      (!Number.isInteger(options.includeUpperLevels) ||
-        options.includeUpperLevels < 0 ||
-        options.includeUpperLevels > 255)
-    )
-      throw new Error("SwNumFormat included upper-level count is invalid.");
-    if (options.listFormat !== undefined && typeof options.listFormat !== "string")
-      throw new Error("SwNumFormat ListFormat is invalid.");
+  private readonly client = new SwClient();
+  /** Initializes native defaults or copies a const base format. @param format - Optional source format. @returns Nothing. */
+  public constructor(format?: ConstSvxNumberFormat) {
+    super(format ?? SvxNumType.SVX_NUM_ARABIC);
   }
-
-  /** Returns the marker family for this list level. @returns Bullet or numbered kind. */
-  public GetKind(): Exclude<WriterParagraphListKind, "none"> {
-    return this.kind;
+  /** Reads the composed native SwClient registration; JS has one base class. @returns Registered source, initially undefined. */
+  public GetRegisteredIn(): SwModify | undefined {
+    return this.client.GetRegisteredIn();
   }
-
-  /** Returns the character-special marker stored by this level. @returns Bullet character or an empty string. */
-  public GetBulletChar(): string {
-    return this.bulletChar;
-  }
-
-  /** Returns the bullet font family. @returns Bullet family or empty for numbering. */
-  public GetBulletFont(): string {
-    return this.bulletFont;
-  }
-  /** Returns the upstream numbering type represented by this bounded format. @returns Arabic, character-special or disabled numbering. */
-  public GetNumberingType(): "arabic" | "char-special" | "none" {
-    return this.numberingType;
-  }
-  /** Compares every implemented native format field, including inactive geometry and optional patterns. @param other - Const format. @returns Whether the implemented values are equal. */
+  /** Compares implemented base fields and native client registration. @param other - Const Writer format. @returns Equality. */
   public override Equals(other: ConstSwNumFormat): boolean {
-    return (
-      super.Equals(other) &&
-      this.GetNumberingType() === other.GetNumberingType() &&
-      this.bulletChar === other.GetBulletChar() &&
-      this.bulletFont === other.GetBulletFont()
-    );
+    return super.Equals(other) && this.GetRegisteredIn() === other.GetRegisteredIn();
   }
-
-  /** Creates an independent format record. @returns Cloned format. */
+  /** Copies a format independently while preserving optional font and raw marker fields. @returns Format. */
   public clone(): SwNumFormat {
-    return new SwNumFormat(this.kind, this.bulletChar, {
-      ...this.GetPositionProperties(),
-      bulletFont: this.bulletFont,
-      numberingType: this.numberingType,
-      ...this.GetMarkerProperties(),
-    });
+    return new SwNumFormat(this);
   }
+}
+
+/** Assembles the browser's existing supported format properties using the source-shaped base copy constructor. @param kind - Browser marker family. @param bulletChar - Optional glyph. @param options - Raw transfer/command fields. @returns Native format. */
+export function createWriterNumFormat(
+  kind: Exclude<WriterParagraphListKind, "none">,
+  bulletChar = kind === "bullet" ? "•" : "",
+  options: NumberingPositionProperties &
+    NumberingMarkerProperties &
+    Readonly<{ bulletFont?: string; numberingType?: "arabic" | "char-special" | "none" }> = {},
+): SwNumFormat {
+  if (kind !== "bullet" && kind !== "numbered")
+    throw new Error("SwNumFormat kind must be bullet or numbered.");
+  if ([...bulletChar].length > 1)
+    throw new Error("SwNumFormat bullet character must contain at most one Unicode code point.");
+  if (
+    options.start !== undefined &&
+    (!Number.isInteger(options.start) || options.start < 0 || options.start > 65535)
+  )
+    throw new Error("SwNumFormat start value is invalid.");
+  if (
+    options.includeUpperLevels !== undefined &&
+    (!Number.isInteger(options.includeUpperLevels) ||
+      options.includeUpperLevels < 0 ||
+      options.includeUpperLevels > 255)
+  )
+    throw new Error("SwNumFormat included upper-level count is invalid.");
+  if (options.listFormat !== undefined && typeof options.listFormat !== "string")
+    throw new Error("SwNumFormat ListFormat is invalid.");
+  const type =
+    options.numberingType === "none"
+      ? SvxNumType.SVX_NUM_NUMBER_NONE
+      : options.numberingType === "char-special" ||
+          (options.numberingType === undefined && kind === "bullet")
+        ? SvxNumType.SVX_NUM_CHAR_SPECIAL
+        : SvxNumType.SVX_NUM_ARABIC;
+  const base = SvxNumberFormat.FromProperties(
+    { ...options, bulletFont: options.bulletFont ?? (kind === "bullet" ? "OpenSymbol" : "") },
+    type,
+  );
+  base.SetBulletChar(bulletChar.codePointAt(0) ?? 0);
+  return new SwNumFormat(base);
+}
+/** Projects the existing browser marker family from native type state. @param format - Const format. @returns Browser family. */
+export function getWriterNumFormatKind(format: ConstSwNumFormat): "bullet" | "numbered" {
+  return format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL ? "bullet" : "numbered";
+}
+/** Converts supported Unicode glyphs at the browser/XML boundary, retaining the historical empty inactive marker. @param format - Const format. @returns Marker string. */
+export function getWriterNumFormatBullet(format: ConstSwNumFormat): string;
+/** Projects an optional browser format reference. @param format - Const optional reference. @returns Glyph or undefined. */
+export function getWriterNumFormatBullet(format: ConstSwNumFormat | undefined): string | undefined;
+/** Converts an optional native reference without allocating a format. @param format - Const optional reference. @returns Glyph or undefined. */
+export function getWriterNumFormatBullet(format: ConstSwNumFormat | undefined): string | undefined {
+  if (format === undefined) return undefined;
+  const glyph = format.GetBulletChar();
+  return glyph === 0 ? "" : String.fromCodePoint(glyph);
 }
 
 /** Const format reference: callers clone before changing an owned or shared level. */
@@ -181,7 +188,7 @@ export class SwNumRule {
 
   /** Returns the browser-supported marker family. @returns Bullet or numbered kind. */
   public GetKind(): Exclude<WriterParagraphListKind, "none"> {
-    return this.Get(0).GetKind();
+    return getWriterNumFormatKind(this.Get(0));
   }
 
   /** Returns the effective const format, selecting the shared table when no owned level exists. @param level - Native level. @returns Effective format. */
@@ -238,7 +245,8 @@ export class SwNumRule {
     const format = this.Get(level);
     if (numbers.length <= level || numbers[level] === undefined)
       throw new Error("SwNumRule number vector does not contain the requested level.");
-    if (format.GetNumberingType() === "none") return format.GetPrefix() + format.GetSuffix();
+    if (format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE)
+      return format.GetPrefix() + format.GetSuffix();
     if (format.HasListFormat()) {
       let pattern = format.GetListFormat();
       for (let position = 0; position < pattern.length - 2;) {
@@ -266,7 +274,7 @@ export class SwNumRule {
           position = endPosition;
           continue;
         }
-        if (this.Get(replaceLevel).GetNumberingType() === "none") {
+        if (this.Get(replaceLevel).GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE) {
           const next = pattern.indexOf("%", endPosition);
           if (next === -1)
             throw new Error("SwNumRule disabled level has no following placeholder.");
@@ -274,12 +282,7 @@ export class SwNumRule {
           continue;
         }
         const value = numbers[replaceLevel] as number;
-        const replacement =
-          value === 0
-            ? "0"
-            : this.Get(replaceLevel).GetNumberingType() === "char-special"
-              ? ""
-              : String(value);
+        const replacement = value === 0 ? "0" : this.Get(replaceLevel).GetNumStr(value);
         pattern = pattern.slice(0, position) + replacement + pattern.slice(endPosition);
         position += replacement.length;
       }
@@ -288,17 +291,12 @@ export class SwNumRule {
     const first = Math.max(0, level + 1 - Math.max(1, format.GetIncludeUpperLevels()));
     let marker = "";
     for (let index = first; index <= level; index++) {
-      if (this.Get(index).GetNumberingType() === "none") continue;
+      if (this.Get(index).GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE) continue;
       const value = numbers[index] as number;
-      marker +=
-        value === 0
-          ? "0"
-          : this.Get(index).GetNumberingType() === "char-special"
-            ? ""
-            : String(value);
+      marker += value === 0 ? "0" : this.Get(index).GetNumStr(value);
       if (index !== level && marker.length !== 0) marker += ".";
     }
-    return format.GetNumberingType() === "char-special"
+    return format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
       ? marker
       : `${format.GetPrefix()}${marker}${format.GetSuffix()}`;
   }
@@ -327,7 +325,7 @@ function createBaseFormats(
     (_unused, level) => {
       const indent = 720 + level * 360;
       return Object.freeze(
-        new SwNumFormat("numbered", ["•", "◦", "▪"][level % 3], {
+        createWriterNumFormat("numbered", ["•", "◦", "▪"][level % 3], {
           bulletFont: "",
           numberingType: outline ? "none" : "arabic",
           includeUpperLevels: outline ? 10 : 1,
@@ -405,7 +403,9 @@ export function getWriterParagraphListMarker(
     return undefined;
   if (paragraph.listMarker !== undefined) return paragraph.listMarker;
   if (kind === "bullet")
-    return paragraph.bulletChar ?? paragraph.GetNumRule?.()?.Get(level).GetBulletChar() ?? "•";
+    return (
+      paragraph.bulletChar ?? getWriterNumFormatBullet(paragraph.GetNumRule?.()?.Get(level)) ?? "•"
+    );
   const documentNumber = paragraph.GetListItemNumber?.();
   if (documentNumber !== undefined) return `${documentNumber}.`;
   return undefined;

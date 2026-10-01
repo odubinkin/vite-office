@@ -1,7 +1,13 @@
 /** @fileoverview Implements the bounded list manager from pinned LibreOffice `sw/source/core/doc/DocumentListsManager.cxx`. */
+import {
+  createWriterNumFormat,
+  getWriterNumFormatKind,
+  getWriterNumFormatBullet,
+  SwNumRule,
+  SwNumFormat,
+} from "./number";
 
 import type { DocumentStateManager } from "./DocumentStateManager";
-import { SwNumRule, SwNumFormat } from "./number";
 import { SwList } from "./list";
 
 /** Owns the numbering-rule table required by the supported Writer slice. */
@@ -89,7 +95,7 @@ export class DocumentListsManager {
   public EnsureNumRule(name: string, kind: "bullet" | "numbered", level = 0): SwNumRule {
     const existing = this.FindNumRulePtr(name);
     if (existing !== undefined) {
-      if (existing.Get(level).GetKind() !== kind)
+      if (getWriterNumFormatKind(existing.Get(level)) !== kind)
         throw new Error(`SwNumRule ${name} has a different format at level ${level}.`);
       return existing;
     }
@@ -118,11 +124,15 @@ export function createWriterNumRule(
     for (let level = 0; level < 10; level++)
       rule.Set(
         level,
-        new SwNumFormat(format, format === "bullet" ? rule.Get(level).GetBulletChar() : "", {
-          ...rule.Get(level).GetPositionProperties(),
-          bulletFont: format === "bullet" ? "OpenSymbol" : "",
-          suffix: format === "numbered" ? "." : "",
-        }),
+        createWriterNumFormat(
+          format,
+          format === "bullet" ? getWriterNumFormatBullet(rule.Get(level)) : "",
+          {
+            ...rule.Get(level).GetPositionProperties(),
+            bulletFont: format === "bullet" ? "OpenSymbol" : "",
+            suffix: format === "numbered" ? "." : "",
+          },
+        ),
       );
   }
   return rule;

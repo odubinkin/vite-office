@@ -1,8 +1,10 @@
 /** @fileoverview Verifies inner Writer responsibility boundaries independently of repository paths. */
 
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 import {
+  isForbiddenModuleEdge,
   getProtectedBrowserGlobalReferences,
   getProtectedOwnershipReferences,
   getRuntimeOwnershipLayer,
@@ -148,4 +150,19 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
     ]);
     expect(getProtectedOwnershipReferences("sw/browser/workflows/io.ts", source)).toEqual([]);
   });
+});
+
+it("permits the pinned editeng vcl font dependency while retaining reverse and browser gates", /** Compares the one added edge to the native Library_editeng declaration. @returns Nothing. */ () => {
+  const native = readFileSync("vendor/libreoffice-reference/editeng/Library_editeng.mk", "utf8");
+  expect(native).toMatch(/gb_Library_use_libraries,editeng,[\s\S]*?\bvcl\b/u);
+  expect(isForbiddenModuleEdge("editeng", "vcl")).toBe(false);
+  expect(isForbiddenModuleEdge("vcl", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "editeng/source/items/numitem.ts",
+      "vcl/browser/font-list.ts",
+      "../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
 });

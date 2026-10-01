@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native optional list-level defaults and index parsing through literal ODT packages. */
+import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
+
 import { expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
@@ -135,9 +137,9 @@ it("retains native declaration defaults and skips invalid indices before reading
         const applied = level === testCase.applied,
           format = rule.Get(level);
         const kind = applied && testCase.bullet !== undefined ? "bullet" : "numbered";
-        expect(format.GetKind(), testCase.source).toBe(kind);
+        expect(getWriterNumFormatKind(format), testCase.source).toBe(kind);
         expect(format.GetSuffix()).toBe(applied ? "" : ".");
-        expect(format.GetBulletChar()).toBe(
+        expect(getWriterNumFormatBullet(format)).toBe(
           kind === "bullet" ? testCase.bullet : ["•", "◦", "▪"][level % 3],
         );
         const position = {
@@ -153,7 +155,9 @@ it("retains native declaration defaults and skips invalid indices before reading
         expect(format.GetPositionProperties()).toEqual(position);
         expect(copied.Get(level).GetPositionProperties()).toEqual(position);
         expect(restored.Get(level).GetPositionProperties()).toEqual(position);
-        expect(restored.Get(level).GetBulletChar()).toBe(format.GetBulletChar());
+        expect(getWriterNumFormatBullet(restored.Get(level))).toBe(
+          getWriterNumFormatBullet(format),
+        );
       }
       expect(
         document.paragraphs.map(
@@ -175,8 +179,12 @@ it("retains native declaration defaults and skips invalid indices before reading
       ).document.FindNumRulePtr("Defaults");
       if (reopened === undefined) throw new Error("Reopen lost its rule");
       for (let level = 0; level < 10; level += 1) {
-        expect(reopened.Get(level).GetKind()).toBe(rule.Get(level).GetKind());
-        expect(reopened.Get(level).GetBulletChar()).toBe(rule.Get(level).GetBulletChar());
+        expect(getWriterNumFormatKind(reopened.Get(level))).toBe(
+          getWriterNumFormatKind(rule.Get(level)),
+        );
+        expect(getWriterNumFormatBullet(reopened.Get(level))).toBe(
+          getWriterNumFormatBullet(rule.Get(level)),
+        );
         expect(reopened.Get(level).GetPositionProperties()).toEqual(
           rule.Get(level).GetPositionProperties(),
         );

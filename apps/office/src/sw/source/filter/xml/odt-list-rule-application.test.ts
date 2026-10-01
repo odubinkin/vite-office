@@ -1,9 +1,14 @@
 /** @fileoverview Verifies native ordered list replacement, base defaults and failure retention in genuine ODT cycles. */
+import {
+  getWriterNumFormatKind,
+  getWriterNumFormatBullet,
+  type ConstSwNumFormat,
+} from "../../core/doc/number";
+
 import { expect, it, vi } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createWriterDocument } from "../../core/doc/doc";
-import { type ConstSwNumFormat } from "../../core/doc/number";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
@@ -66,9 +71,9 @@ function applied(level: number, bullet?: string) {
 /** Projects the fields under audit without calling a production default factory. @param format - Writer format. @returns Audited state. */
 function state(format: ConstSwNumFormat) {
   return {
-    kind: format.GetKind(),
-    bullet: format.GetBulletChar(),
-    font: format.GetBulletFont(),
+    kind: getWriterNumFormatKind(format),
+    bullet: getWriterNumFormatBullet(format),
+    font: format.GetBulletFont()?.GetFamilyName() ?? "",
     suffix: format.GetSuffix(),
     position: format.GetPositionProperties(),
   };

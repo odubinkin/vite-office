@@ -34,7 +34,7 @@ it("switches native legacy getters without rewriting either geometry group", /**
     listTabPosition: 1296,
     positionAndSpaceMode: "label-width-and-position",
   } as const;
-  const format = new SvxNumberFormat(values);
+  const format = SvxNumberFormat.FromProperties(values);
   expect(format.GetAbsLSpace()).toBe(720);
   expect(format.GetFirstLineOffset()).toBe(-288);
   expect(format.GetCharTextDistance()).toBe(144);
@@ -60,7 +60,7 @@ it("retains native signed getter widths at integer boundaries", /** Checks sal_I
     [-2147483648, -1, 2147483647],
     [4294967295, 0, -1],
   ] as const) {
-    const format = new SvxNumberFormat({
+    const format = SvxNumberFormat.FromProperties({
       positionAndSpaceMode: "label-alignment",
       firstLineIndent,
       indentAt,
@@ -68,8 +68,12 @@ it("retains native signed getter widths at integer boundaries", /** Checks sal_I
     expect(format.GetAbsLSpace()).toBe(expected);
     expect(format.GetFirstLineOffset()).toBe(firstLineIndent | 0);
   }
-  expect(new SvxNumberFormat({ charTextDistance: 40000 }).GetCharTextDistance()).toBe(-25536);
-  expect(new SvxNumberFormat({ charTextDistance: -40000 }).GetCharTextDistance()).toBe(25536);
+  expect(SvxNumberFormat.FromProperties({ charTextDistance: 40000 }).GetCharTextDistance()).toBe(
+    -25536,
+  );
+  expect(SvxNumberFormat.FromProperties({ charTextDistance: -40000 }).GetCharTextDistance()).toBe(
+    25536,
+  );
 });
 
 it("owns native marker defaults, unsigned values and ListFormat invalidation", /** Checks raw shared state and setter ownership. @returns Nothing. */ () => {
@@ -95,7 +99,7 @@ it("owns native marker defaults, unsigned values and ListFormat invalidation", /
   expect(format.GetListFormat(false)).toBe("%1%/%3%");
   format.SetIncludeUpperLevels(7);
   expect(format.GetListFormat()).toBe("(%1%/%3%)");
-  const copy = new SvxNumberFormat(format.GetMarkerProperties());
+  const copy = SvxNumberFormat.FromProperties(format.GetMarkerProperties());
   expect(copy.GetIncludeUpperLevels()).toBe(7);
   expect(copy.GetListFormat()).toBe("(%1%/%3%)");
   format.SetPrefix("P");

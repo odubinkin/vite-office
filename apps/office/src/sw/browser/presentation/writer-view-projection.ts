@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { getWriterNumFormatBullet } from "../../source/core/doc/number";
 
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwLineNumberInfoValue } from "../../inc/lineinfo";
@@ -173,7 +174,9 @@ export class WriterViewProjection {
       ) => {
         const list = projectWriterParagraphList(node);
         const bulletChar =
-          list.kind === "bullet" ? node.GetNumRule()?.Get(list.level).GetBulletChar() : undefined;
+          list.kind === "bullet"
+            ? getWriterNumFormatBullet(node.GetNumRule()?.Get(list.level))
+            : undefined;
         const listMarker = node.GetListLabel();
         const listFormat = list.kind === "none" ? undefined : node.GetNumRule()?.Get(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;

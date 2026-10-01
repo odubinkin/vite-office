@@ -1,8 +1,15 @@
 /** @fileoverview Verifies browser-visible Writer list marker calculation at the `number.cxx`-derived document boundary. */
+import {
+  SvxNumType,
+  createWriterNumFormat,
+  getWriterNumFormatBullet,
+  getWriterNumFormatKind,
+  getWriterParagraphListMarker,
+  type WriterNumberingParagraph,
+} from "./number";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { getWriterParagraphListMarker, SwNumFormat, type WriterNumberingParagraph } from "./number";
 import { createWriterNumRule } from "./DocumentListsManager";
 import { createWriterDocument } from "./doc";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
@@ -61,7 +68,7 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
           Array.from(
             { length: 10 },
             /** Creates one circle-bullet level. @returns Bullet format. */ () =>
-              new SwNumFormat("bullet", "●"),
+              createWriterNumFormat("bullet", "●"),
           ),
         ),
       testId: "circle",
@@ -108,11 +115,11 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
   it("validates complete per-level rule snapshots" /** Covers current-schema invariants without compatibility fallbacks. @returns Nothing. */, function validatesRules(): void {
     expect(
       /** Rejects a runtime-invalid numbering kind. @returns Invalid format. */ () =>
-        new SwNumFormat("none" as never),
+        createWriterNumFormat("none" as never),
     ).toThrow("must be bullet or numbered");
     expect(
       /** Constructs an incomplete rule. @returns Invalid rule. */ () =>
-        createWriterNumRule("short", [new SwNumFormat("bullet")]),
+        createWriterNumRule("short", [createWriterNumFormat("bullet")]),
     ).toThrow("define every supported list level");
     const rule = createWriterNumRule("levels", "numbered");
     for (const level of [-1, 0.5, 10])
@@ -121,34 +128,34 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       ).toThrow("outside 0-9");
     expect(
       /** Creates a multi-character bullet marker. @returns Invalid format. */ () =>
-        new SwNumFormat("bullet", "ab"),
+        createWriterNumFormat("bullet", "ab"),
     ).toThrow("at most one Unicode code point");
-    const bullet = new SwNumFormat("bullet", "●");
-    expect(bullet.GetBulletChar()).toBe("●");
-    expect(bullet.GetBulletFont()).toBe("OpenSymbol");
+    const bullet = createWriterNumFormat("bullet", "●");
+    expect(getWriterNumFormatBullet(bullet)).toBe("●");
+    expect(bullet.GetBulletFont()?.GetFamilyName() ?? "").toBe("OpenSymbol");
     expect(bullet.GetFirstLineIndent()).toBe(0);
     expect(bullet.GetIndentAt()).toBe(0);
     expect(bullet.GetIncludeUpperLevels()).toBe(1);
     expect(bullet.GetLabelFollowedBy()).toBe("listtab");
     expect(bullet.GetListtabPos()).toBe(0);
-    expect(bullet.GetNumberingType()).toBe("char-special");
+    expect(bullet.GetNumberingType()).toBe(SvxNumType.SVX_NUM_CHAR_SPECIAL);
     expect(bullet.GetPositionAndSpaceMode()).toBe("label-width-and-position");
     expect(bullet.GetPrefix()).toBe("");
     expect(bullet.GetStart()).toBe(1);
     expect(bullet.GetSuffix()).toBe("");
     expect(
       /** Creates an invalid negative list start. @returns Invalid format. */ () =>
-        new SwNumFormat("numbered", "", { start: -1 }),
+        createWriterNumFormat("numbered", "", { start: -1 }),
     ).toThrow("start value");
     const dots = createWriterNumRule("dots", [
       bullet,
       ...Array.from(
         { length: 9 },
         /** Creates one default bullet level. @returns Bullet format. */ () =>
-          new SwNumFormat("bullet"),
+          createWriterNumFormat("bullet"),
       ),
     ]);
-    expect(dots.clone().Get(0).GetBulletChar()).toBe("●");
+    expect(getWriterNumFormatBullet(dots.clone().Get(0))).toBe("●");
     expect(dots.MakeNumString([1], 0)).toBe("");
     const multilevel = createWriterNumRule(
       "multilevel",
@@ -156,14 +163,14 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
         { length: 10 },
         /** Creates one numbered level with its complete ancestor range. @param _unused - Array placeholder. @param level - Zero-based level. @returns Number format. */
         (_unused, level) =>
-          new SwNumFormat("numbered", "", {
+          createWriterNumFormat("numbered", "", {
             includeUpperLevels: level + 1,
             prefix: "(",
             suffix: ")",
           }),
       ),
     );
-    expect(multilevel.Get(1).GetNumberingType()).toBe("arabic");
+    expect(multilevel.Get(1).GetNumberingType()).toBe(SvxNumType.SVX_NUM_ARABIC);
     expect(multilevel.MakeNumString([2, 3], 1)).toBe("(2.3)");
     expect(
       /** Formats a missing level. @returns Invalid marker. */ () =>
@@ -171,7 +178,7 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     ).toThrow("does not contain");
     expect(
       /** Rejects an impossible upper-level count. @returns Invalid format. */ () =>
-        new SwNumFormat("numbered", "", { includeUpperLevels: 256 }),
+        createWriterNumFormat("numbered", "", { includeUpperLevels: 256 }),
     ).toThrow("upper-level count");
   });
 
@@ -253,9 +260,9 @@ it("constructs modern Writer base levels and copies only a successful replacemen
   const rule = createWriterNumRule("base");
   for (let level = 0; level < 10; level += 1) {
     const format = rule.Get(level);
-    expect(format.GetKind()).toBe("numbered");
-    expect(format.GetBulletChar()).toBe(["•", "◦", "▪"][level % 3]);
-    expect(format.GetBulletFont()).toBe("");
+    expect(getWriterNumFormatKind(format)).toBe("numbered");
+    expect(getWriterNumFormatBullet(format)).toBe(["•", "◦", "▪"][level % 3]);
+    expect(format.GetBulletFont()?.GetFamilyName() ?? "").toBe("");
     expect(format.GetIncludeUpperLevels()).toBe(1);
     expect(format.GetStart()).toBe(1);
     expect(format.GetPrefix()).toBe("");
@@ -284,12 +291,12 @@ it("constructs modern Writer base levels and copies only a successful replacemen
     ).toBe(`${level + 1}.`);
   }
   const copy = rule.clone();
-  const supplied = new SwNumFormat("bullet", "●");
+  const supplied = createWriterNumFormat("bullet", "●");
   rule.Set(1, supplied);
   expect(rule.Get(1)).not.toBe(supplied);
   supplied.SetPositionAndSpaceMode("label-alignment");
   expect(rule.Get(1).GetPositionAndSpaceMode()).toBe("label-width-and-position");
-  expect(copy.Get(1).GetKind()).toBe("numbered");
+  expect(getWriterNumFormatKind(copy.Get(1))).toBe("numbered");
   expect(
     /** Rejects an out-of-range replacement. @returns Never. */ () => rule.Set(10, supplied),
   ).toThrow("outside 0-9");

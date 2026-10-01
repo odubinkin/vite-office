@@ -1,6 +1,7 @@
 /**
  * @fileoverview Verifies the source-shaped Writer ODF package and XML filter slice.
  */
+import { getWriterNumFormatBullet } from "../../core/doc/number";
 
 import { describe, expect, it, vi } from "vitest";
 
@@ -396,7 +397,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         text: "gamma",
       },
     ]);
-    expect(imported.document.FindNumRulePtr("L2")?.Get(1).GetBulletChar()).toBe("◦");
+    expect(getWriterNumFormatBullet(imported.document.FindNumRulePtr("L2")?.Get(1))).toBe("◦");
     const roundTripped = await readOdtDocument(
       writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
       metadata(),
@@ -422,7 +423,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         }),
       ),
     );
-    expect(roundTripped.document.FindNumRulePtr("L2")?.Get(1).GetBulletChar()).toBe("◦");
+    expect(getWriterNumFormatBullet(roundTripped.document.FindNumRulePtr("L2")?.Get(1))).toBe("◦");
     const restarted = importWriterXml(
       styles,
       content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
@@ -478,12 +479,13 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           metadata(),
         );
     expect(
-      importWithListStyle(
-        '<text:list-style style:name="Blank"><text:list-level-style-bullet text:level="1" text:bullet-char=""/></text:list-style>',
-      )
-        .document.FindNumRulePtr("Blank")
-        ?.Get(0)
-        .GetBulletChar(),
+      getWriterNumFormatBullet(
+        importWithListStyle(
+          '<text:list-style style:name="Blank"><text:list-level-style-bullet text:level="1" text:bullet-char=""/></text:list-style>',
+        )
+          .document.FindNumRulePtr("Blank")
+          ?.Get(0),
+      ),
     ).toBe("");
     for (const [fragment, message] of [
       [

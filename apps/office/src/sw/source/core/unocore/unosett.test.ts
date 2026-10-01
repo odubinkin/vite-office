@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native signed integer numbering-property conversion at the UNO/Writer boundary. */
+import { getWriterNumFormatBullet } from "../doc/number";
+
 import { expect, it } from "vitest";
 import { createWriterNumRule } from "../doc/DocumentListsManager";
 import {
@@ -74,7 +76,7 @@ it("validates the native numbering properties before committing one complete lev
   expect(rule.Get(2).GetCharTextDistance()).toBe(18577);
   expect(rule.Get(2).GetAbsLSpace()).toBe(-1);
   expect(rule.Get(2).GetFirstLineOffset()).toBe(1);
-  expect(rule.Get(2).GetBulletFont()).toBe("");
+  expect(rule.Get(2).GetBulletFont()?.GetFamilyName() ?? "").toBe("");
   const applied = rule.Get(2);
   for (const positionAndSpaceMode of ["label-alignment", "label-width-and-position"] as const)
     for (const invalid of [
@@ -96,7 +98,7 @@ it("validates the native numbering properties before committing one complete lev
       expect(rule.Get(2)).toBe(applied);
     }
   service.replaceByIndex(2, { kind: "numbered", suffix: "." });
-  expect(rule.Get(2).GetBulletChar()).toBe("●");
+  expect(getWriterNumFormatBullet(rule.Get(2))).toBe("●");
   expect(rule.Get(2).GetCharTextDistance()).toBe(18577);
 });
 

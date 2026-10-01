@@ -1,5 +1,66 @@
 /** @fileoverview Owns implemented numbering marker and independent position state from pinned SvxNumberFormat. */
 
+import { SvxNumType } from "../../inc/svxenum";
+import { Font, type ConstFont } from "../../../vcl/source/font/font";
+/** Native initial glyph, independent of configured list-rule bullets. */
+export const SVX_DEF_BULLET = 0xf000 + 149;
+/** Native type and show-symbol ownership; formatting is bounded to the existing decimal/bullet/disabled families. */
+export class SvxNumberType {
+  private nNumType: SvxNumType;
+  private bShowSymbol: boolean;
+  /** Initializes or copies native type state. @param type - Native type or const source. @returns Nothing. */
+  public constructor(
+    type:
+      | SvxNumType
+      | Pick<SvxNumberType, "GetNumberingType" | "IsShowSymbol"> = SvxNumType.SVX_NUM_ARABIC,
+  ) {
+    this.nNumType = typeof type === "number" ? type : type.GetNumberingType();
+    this.bShowSymbol = typeof type === "number" ? true : type.IsShowSymbol();
+  }
+  /** Assigns the native type without changing the glyph. @param type - Type. @returns Nothing. */
+  public SetNumberingType(type: SvxNumType): void {
+    this.nNumType = type;
+  }
+  /** Returns the native numbering identifier. @returns Type. */
+  public GetNumberingType(): SvxNumType {
+    return this.nNumType;
+  }
+  /** Changes native symbol visibility. @param show - Flag. @returns Nothing. */
+  public SetShowSymbol(show: boolean): void {
+    this.bShowSymbol = show;
+  }
+  /** Reads native symbol visibility. @returns Flag. */
+  public IsShowSymbol(): boolean {
+    return this.bShowSymbol;
+  }
+  /** Classifies native text numbering independently of visibility. @returns Text-format flag. */
+  public IsTextFormat(): boolean {
+    return (
+      this.nNumType !== SvxNumType.SVX_NUM_NUMBER_NONE &&
+      this.nNumType !== SvxNumType.SVX_NUM_CHAR_SPECIAL &&
+      this.nNumType !== SvxNumType.SVX_NUM_BITMAP
+    );
+  }
+  /** Formats the existing numbering families through the browser's bounded native-provider adapter. @param number - Native signed32 value. @param locale - Locale, irrelevant to decimal provider output. @param legal - Legal-numbering coercion. @returns Number string. */
+  public GetNumStr(number: number, locale = "en-US", legal = false): string {
+    void locale; // The bounded native decimal provider has locale-independent output.
+    const value = number | 0;
+    if (
+      !this.bShowSymbol ||
+      this.nNumType === SvxNumType.SVX_NUM_CHAR_SPECIAL ||
+      this.nNumType === SvxNumType.SVX_NUM_BITMAP
+    )
+      return "";
+    if (this.nNumType === SvxNumType.SVX_NUM_ARABIC && value === 0) return "0";
+    if (value <= 0) return ""; // Native provider rejects nonpositive values; GetNumStr catches the exception.
+    const type =
+      !legal || this.nNumType === SvxNumType.SVX_NUM_ARABIC
+        ? this.nNumType
+        : SvxNumType.SVX_NUM_ARABIC;
+    return type === SvxNumType.SVX_NUM_ARABIC ? String(value) : "";
+  }
+}
+
 /** Native position-and-space selection. */
 export type SvxNumPositionAndSpaceMode = "label-width-and-position" | "label-alignment";
 
@@ -25,15 +86,22 @@ export interface NumberingMarkerProperties {
 }
 
 /** Retains both native geometry groups independently; the active mode determines legacy getter results. */
-export class SvxNumberFormat {
+export class SvxNumberFormat extends SvxNumberType {
+  private cBullet = SVX_DEF_BULLET;
+  private pBulletFont: ConstFont | undefined;
   private position: Required<NumberingPositionProperties>;
   private includeUpperLevels: number;
   private prefix: string;
   private start: number;
   private suffix: string;
   private listFormat: string | undefined;
-  /** Initializes the native zero geometry and legacy mode. @param properties - Explicit field overrides. @returns Format. */
-  public constructor(properties: NumberingPositionProperties & NumberingMarkerProperties = {}) {
+  /** Initializes or copies the implemented native format fields. @param format - Native type or const source. @returns Nothing. */
+  public constructor(format: SvxNumType | ConstSvxNumberFormat = SvxNumType.SVX_NUM_ARABIC) {
+    super(format);
+    const properties: NumberingPositionProperties & NumberingMarkerProperties =
+      typeof format === "number"
+        ? {}
+        : { ...format.GetPositionProperties(), ...format.GetMarkerProperties() };
     this.includeUpperLevels = (properties.includeUpperLevels ?? 1) & 255;
     this.prefix = properties.prefix ?? "";
     this.start = (properties.start ?? 1) & 65535;
@@ -49,16 +117,73 @@ export class SvxNumberFormat {
       listTabPosition: properties.listTabPosition ?? 0,
       positionAndSpaceMode: properties.positionAndSpaceMode ?? "label-width-and-position",
     };
+    if (typeof format !== "number") {
+      this.cBullet = format.GetBulletChar();
+      const font = format.GetBulletFont();
+      this.pBulletFont = font === undefined ? undefined : Object.freeze(new Font(font));
+    }
+  }
+  /** Decodes the existing raw position/marker record without re-deriving inactive fields or ListFormat compatibility state. This is a browser transfer/assembly adapter, not a native constructor. @param properties - Raw fields. @param type - Native type. @returns Format. */
+  public static FromProperties(
+    properties: NumberingPositionProperties &
+      NumberingMarkerProperties &
+      Readonly<{ bulletFont?: string }>,
+    type = SvxNumType.SVX_NUM_ARABIC,
+  ): SvxNumberFormat {
+    const format = new SvxNumberFormat(type);
+    format.includeUpperLevels = (properties.includeUpperLevels ?? 1) & 255;
+    format.prefix = properties.prefix ?? "";
+    format.start = (properties.start ?? 1) & 65535;
+    format.suffix = properties.suffix ?? "";
+    format.listFormat = properties.listFormat;
+    format.position = {
+      absLSpace: (properties.absLSpace ?? 0) | 0,
+      firstLineOffset: (properties.firstLineOffset ?? 0) | 0,
+      charTextDistance: ((properties.charTextDistance ?? 0) << 16) >> 16,
+      firstLineIndent: properties.firstLineIndent ?? 0,
+      indentAt: properties.indentAt ?? 0,
+      labelFollowedBy: properties.labelFollowedBy ?? "listtab",
+      listTabPosition: properties.listTabPosition ?? 0,
+      positionAndSpaceMode: properties.positionAndSpaceMode ?? "label-width-and-position",
+    };
+    if (properties.bulletFont) {
+      const font = new Font();
+      font.SetFamilyName(properties.bulletFont);
+      format.SetBulletFont(font);
+    }
+    return format;
+  }
+  /** Reads the raw unsigned32 marker. @returns Code point. */
+  public GetBulletChar(): number {
+    return this.cBullet;
+  }
+  /** Stores the native unsigned32 marker independently of numbering type. @param glyph - Code point. @returns Nothing. */
+  public SetBulletChar(glyph: number): void {
+    this.cBullet = glyph >>> 0;
+  }
+  /** Reads the optional const font value. @returns Font or native null as undefined. */
+  public GetBulletFont(): ConstFont | undefined {
+    return this.pBulletFont;
+  }
+  /** Copies the supplied font or resets optional ownership. @param font - Optional source font. @returns Nothing. */
+  public SetBulletFont(font: ConstFont | undefined): void {
+    this.pBulletFont = font === undefined ? undefined : Object.freeze(new Font(font));
   }
   /** Compares all implemented base-format marker and position fields without conflating active geometry or optional patterns. @param other - Const base format. @returns Implemented value equality. */
-  public Equals(
-    other: Pick<SvxNumberFormat, "GetPositionProperties" | "GetMarkerProperties">,
-  ): boolean {
+  public Equals(other: ConstSvxNumberFormat): boolean {
     const position = this.GetPositionProperties(),
       otherPosition = other.GetPositionProperties();
     const marker = this.GetMarkerProperties(),
       otherMarker = other.GetMarkerProperties();
+    const font = this.pBulletFont,
+      otherFont = other.GetBulletFont();
     return (
+      this.GetNumberingType() === other.GetNumberingType() &&
+      this.IsShowSymbol() === other.IsShowSymbol() &&
+      this.cBullet === other.GetBulletChar() &&
+      (font === undefined
+        ? otherFont === undefined
+        : otherFont !== undefined && font.Equals(otherFont)) &&
       (Object.keys(position) as (keyof typeof position)[]).every(
         /** Compares one independently stored geometry field. @param key - Field. @returns Equality. */
         (key) => position[key] === otherPosition[key],
@@ -214,3 +339,6 @@ export class SvxNumberFormat {
     return { ...this.position };
   }
 }
+
+/** Const reference to implemented base format fields. */
+export type ConstSvxNumberFormat = Omit<SvxNumberFormat, `Set${string}`>;

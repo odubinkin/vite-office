@@ -2,6 +2,7 @@
  * @fileoverview Prepares a bounded Writer transfer document from SwPaM, mirroring
  * LibreOffice `sw/source/uibase/dochdl/swdtflvr.cxx` ownership.
  */
+import { getWriterNumFormatBullet } from "../../core/doc/number";
 
 import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
@@ -163,7 +164,7 @@ export class SwTransferable {
         const number = listKind === "numbered" ? paragraph.GetListItemNumber() : undefined;
         const marker =
           listKind === "bullet"
-            ? paragraph.GetNumRule()?.Get(paragraph.GetAttrListLevel()).GetBulletChar()
+            ? getWriterNumFormatBullet(paragraph.GetNumRule()?.Get(paragraph.GetAttrListLevel()))
             : number === undefined
               ? undefined
               : `${number}.`;

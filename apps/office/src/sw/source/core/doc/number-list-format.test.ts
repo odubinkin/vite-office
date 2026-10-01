@@ -1,7 +1,8 @@
 /** @fileoverview Verifies the pinned Writer decimal ListFormat mechanism and raw copies across the Worker graph. */
+import { createWriterNumFormat, SwNumRule } from "./number";
+
 import { expect, it } from "vitest";
 import type { SwTextNode } from "../txtnode/ndtxt";
-import { SwNumFormat, SwNumRule } from "./number";
 import { createWriterNumRule } from "./DocumentListsManager";
 import { createWriterDocument } from "./doc";
 import { applyWriterParagraphList } from "./list";
@@ -12,7 +13,7 @@ import {
 import { SwXNumberingRules } from "../unocore/unosett";
 
 it("uses native empty standalone suffix and level-specific base ListFormat", /** Checks constructor defaults separately from rule initialization. @returns Nothing. */ () => {
-  expect(new SwNumFormat("numbered").GetSuffix()).toBe("");
+  expect(createWriterNumFormat("numbered").GetSuffix()).toBe("");
   const rule = createWriterNumRule("base");
   for (let level = 0; level < 10; level++)
     expect(rule.Get(level).GetListFormat()).toBe(`%${level + 1}%.`);
@@ -25,10 +26,10 @@ it("uses native empty standalone suffix and level-specific base ListFormat", /**
   ])
     expect(
       /** Rejects a value outside the structural copy contract. @returns Never. */ () =>
-        new SwNumFormat("numbered", "", options),
+        createWriterNumFormat("numbered", "", options),
     ).toThrow("invalid");
   expect(
-    new SwNumFormat("numbered", "", { start: 65535, includeUpperLevels: 255 }).GetStart(),
+    createWriterNumFormat("numbered", "", { start: 65535, includeUpperLevels: 255 }).GetStart(),
   ).toBe(65535);
 });
 
@@ -66,14 +67,14 @@ it("substitutes requested Arabic levels literally and retains unavailable placeh
   format.SetIncludeUpperLevels(3);
   rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("[2.3.4]");
-  rule.Set(0, new SwNumFormat("bullet", "•"));
+  rule.Set(0, createWriterNumFormat("bullet", "•"));
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("[3.4]");
   expect(rule.MakeNumString([0, 3, 4], 2)).toBe("[0.3.4]");
   format.SetListFormat("%1%/%2%/%3%");
   rule.Set(2, format);
   expect(rule.MakeNumString([2, 3, 4], 2)).toBe("/3/4");
   expect(rule.MakeNumString([0, 3, 4], 2)).toBe("0/3/4");
-  const bullet = new SwNumFormat("bullet", "•", {
+  const bullet = createWriterNumFormat("bullet", "•", {
     includeUpperLevels: 3,
     prefix: "[",
     suffix: "]",

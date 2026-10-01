@@ -180,3 +180,8 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/browser/editor/writer-selection.ts` | Browser-only | DOM selection and collapsed-caret mapping |
 | `sw/browser/presentation/WriterFormattingToolbar.tsx` | Browser-only | Generic formatting-toolbar presenter |
 | `sw/browser/presentation/WriterPropertiesPanel.tsx` | Browser-only | Binding-backed paragraph command panel plus immutable current-value projection |
+
+The standalone numbering hierarchy now uses `editeng/inc/svxenum.ts` against
+`include/editeng/svxenum.hxx` and `vcl/source/font/font.ts` against
+`vcl/source/font/font.cxx`. The represented Font value is bounded to family
+name and copy-on-write handles; full native font attributes remain unverified.

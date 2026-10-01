@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
+import { createWriterNumFormat, getWriterNumFormatKind, SwNumRule } from "./number";
 
 import { describe, expect, it } from "vitest";
 import { encodeSfxItemSet, encodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
@@ -60,7 +61,6 @@ import type { SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatColl } from "./fmtcol";
-import { SwNumFormat, SwNumRule } from "./number";
 import { createWriterNumRule } from "./DocumentListsManager";
 import { createSwFormatAutoFormat, SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
 import { SwpHints } from "../txtnode/ndhints";
@@ -566,11 +566,11 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const mixedFormats = Array.from(
       { length: 10 },
       /** Creates a per-level numbering format. @param _unused - Unused array slot. @param level - Zero-based level. @returns Numbering format. */
-      (_unused, level) => new SwNumFormat(level === 1 ? "bullet" : "numbered"),
+      (_unused, level) => createWriterNumFormat(level === 1 ? "bullet" : "numbered"),
     );
     const mixedRule = createWriterNumRule("Mixed", mixedFormats, "mixed-id");
-    expect(mixedRule.Get(0).GetKind()).toBe("numbered");
-    expect(mixedRule.Get(1).GetKind()).toBe("bullet");
+    expect(getWriterNumFormatKind(mixedRule.Get(0))).toBe("numbered");
+    expect(getWriterNumFormatKind(mixedRule.Get(1))).toBe("bullet");
     expect(
       throwing(
         /** Reads a format beyond Writer's level table. @returns Invalid format. */ () =>

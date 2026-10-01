@@ -1,5 +1,14 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 
+import {
+  SvxNumType,
+  createWriterNumFormat,
+  getWriterNumFormatBullet,
+  getWriterNumFormatKind,
+  SwNumRule,
+  SwNumRuleType,
+} from "../../../source/core/doc/number";
+import { Font } from "../../../../vcl/source/font/font";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition } from "../../../source/core/crsr/pam";
@@ -18,7 +27,6 @@ import {
   SwTextFormatColl,
   type WriterParagraphStyle,
 } from "../../../source/core/doc/fmtcol";
-import { SwNumFormat, SwNumRule, SwNumRuleType } from "../../../source/core/doc/number";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../../source/core/doc/list";
 import {
@@ -36,6 +44,9 @@ import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 /** Primitive graph record for one numbering level. */
 interface WriterNumberFormatRecord {
   readonly bulletFont: string;
+  readonly bulletFontPresent?: boolean;
+  readonly bulletGlyph?: number;
+  readonly showSymbol?: boolean;
   readonly numberingType?: "arabic" | "char-special" | "none";
   readonly bulletChar?: string;
   readonly firstLineIndent: number;
@@ -178,14 +189,23 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
             const format = rule.Get(level);
             return {
               ...format.GetPositionProperties(),
-              bulletFont: format.GetBulletFont(),
-              numberingType: format.GetNumberingType(),
-              bulletChar: format.GetBulletChar(),
+              bulletFont: format.GetBulletFont()?.GetFamilyName() ?? "",
+              numberingType:
+                format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE
+                  ? "none"
+                  : format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
+                    ? "char-special"
+                    : "arabic",
+              bulletFontPresent: format.GetBulletFont() !== undefined,
+              bulletGlyph: format.GetBulletChar(),
+              showSymbol: format.IsShowSymbol(),
+              bulletChar:
+                format.GetBulletChar() <= 0x10ffff ? getWriterNumFormatBullet(format) : "",
               firstLineIndent: format.GetFirstLineIndent(),
               indentAt: format.GetIndentAt(),
               includeUpperLevels: format.GetIncludeUpperLevels(),
               ...(format.HasListFormat() ? { listFormat: format.GetListFormat() } : {}),
-              kind: format.GetKind(),
+              kind: getWriterNumFormatKind(format),
               labelFollowedBy: format.GetLabelFollowedBy(),
               listTabPosition: format.GetListtabPos(),
               positionAndSpaceMode: format.GetPositionAndSpaceMode(),
@@ -461,7 +481,16 @@ export function decodeWriterDocument(
         !["arabic", "char-special", "none"].includes(format.numberingType)
       )
         throw new Error("Stored Writer numbering format type is invalid.");
-      const decoded = new SwNumFormat(format.kind, format.bulletChar, {
+      if (
+        (format.bulletFontPresent !== undefined && typeof format.bulletFontPresent !== "boolean") ||
+        (format.showSymbol !== undefined && typeof format.showSymbol !== "boolean") ||
+        (format.bulletGlyph !== undefined &&
+          (!Number.isInteger(format.bulletGlyph) ||
+            format.bulletGlyph < 0 ||
+            format.bulletGlyph > 0xffffffff))
+      )
+        throw new Error("Stored Writer numbering marker ownership is invalid.");
+      const decoded = createWriterNumFormat(format.kind, format.bulletChar, {
         absLSpace: format.absLSpace ?? 0,
         firstLineOffset: format.firstLineOffset ?? 0,
         charTextDistance: format.charTextDistance ?? 0,
@@ -478,6 +507,13 @@ export function decodeWriterDocument(
         start: format.start,
         suffix: format.suffix,
       });
+      if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
+      if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
+      if (format.bulletFontPresent === true) {
+        const font = new Font();
+        font.SetFamilyName(format.bulletFont);
+        decoded.SetBulletFont(font);
+      } else if (format.bulletFontPresent === false) decoded.SetBulletFont(undefined);
       if (rule.ownedLevels === undefined || rule.ownedLevels[level])
         restoredRule.Set(level, decoded);
     }

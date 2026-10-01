@@ -21,7 +21,7 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
-  ["editeng", new Set(["svl"])],
+  ["editeng", new Set(["svl", "vcl"])],
   ["framework", new Set(["sfx2", "svl"])],
   ["package", new Set()],
   ["sax", new Set()],
@@ -31,6 +31,10 @@ const allowedEdges = new Map([
   ["vcl", new Set(["svl"])],
   ["xmloff", new Set(["sax"])],
 ]);
+/** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
+export function isForbiddenModuleEdge(sourceModule, targetModule) {
+  return !allowedEdges.get(sourceModule)?.has(targetModule);
+}
 const suiteModules = new Set(["sw"]);
 const browserPackageImports = ["lucide-react", "react", "react-dom"];
 const protectedBrowserGlobalSymbols = new Set([
@@ -303,7 +307,7 @@ for (const sourceFile of runtimeSources) {
       );
       continue;
     }
-    if (!allowedEdges.get(sourceModule)?.has(targetModule))
+    if (isForbiddenModuleEdge(sourceModule, targetModule))
       failures.push(
         `${displayPath(sourceFile)}: non-allowlisted module edge ${sourceModule} -> ${targetModule}`,
       );

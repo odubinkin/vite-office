@@ -1,7 +1,12 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
-
+import {
+  getWriterNumFormatKind,
+  SvxNumType,
+  getWriterNumFormatBullet,
+  SwNumRule,
+} from "../doc/number";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
   SvxFirstLineIndentItem,
@@ -43,7 +48,6 @@ import {
 import { HandleModifyAtTextNodeFormatChange } from "./ndtxt-format-change";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
-import { SwNumRule } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
@@ -199,7 +203,7 @@ export class SwTextNode extends SwContentNode {
   /** Returns the effective list family from the paragraph's SwNumRule. @returns List kind. */
   public GetListKind(): WriterParagraphListKind {
     const rule = this.GetNumRule();
-    return rule === undefined ? "none" : rule.Get(this.GetAttrListLevel()).GetKind();
+    return rule === undefined ? "none" : getWriterNumFormatKind(rule.Get(this.GetAttrListLevel()));
   }
 
   /** Returns the SwNumRuleItem value applied to this text node. @returns Rule name, or an empty string. */
@@ -464,21 +468,16 @@ export class SwTextNode extends SwContentNode {
   }
   /** Reports enumeration using the bound rule and actual level. @returns Number presence. */
   public HasNumber(): boolean {
-    return (
-      this.mpNodeNum
-        ?.GetNumRule()
-        ?.Get(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
-        .GetNumberingType() === "arabic"
-    );
+    return this.GetActualNumberingType() === SvxNumType.SVX_NUM_ARABIC;
   }
   /** Reports character-special numbering using the bound rule. @returns Bullet presence. */
   public HasBullet(): boolean {
-    return (
-      this.mpNodeNum
-        ?.GetNumRule()
-        ?.Get(Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel())))
-        .GetNumberingType() === "char-special"
-    );
+    return this.GetActualNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL;
+  }
+  /** Reads the actual level's native type through the bound optional rule. @returns Type or undefined. */
+  private GetActualNumberingType(): SvxNumType | undefined {
+    const level = Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel()));
+    return this.mpNodeNum?.GetNumRule()?.Get(level).GetNumberingType();
   }
   /** Returns the document's shown numbered-item registry. @returns Registry. */
   public getIDocumentListItems(): DocumentListItemsManager {
@@ -582,7 +581,8 @@ export class SwTextNode extends SwContentNode {
     if (rule === undefined || !this.IsCountedInList()) return undefined;
     const level = this.GetActualListLevel();
     const format = rule.Get(level);
-    if (format.GetNumberingType() === "char-special") return format.GetBulletChar();
+    if (format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL)
+      return getWriterNumFormatBullet(format);
     return rule.MakeNumString(this.GetNumberVector(), level);
   }
 

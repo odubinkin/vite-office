@@ -50,6 +50,42 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/editeng/inc/svxenum.ts",
+            "marker": "SvxNumType"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+            "marker": "matches native standalone defaults and unsigned glyph copies"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/include/editeng/svxenum.hxx",
+            "marker": "SvxNumType"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/editeng/inc/svxenum.ts",
+      "localSymbols": [
+        "SvxNumType"
+      ],
+      "omittedResponsibilities": [
+        "Only existing numeric family IDs (ARABIC4, NONE5, CHAR_SPECIAL6 and bitmap8 predicate) are represented; wider native enum families remain unimplemented."
+      ],
+      "preservedResponsibilities": [
+        "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged."
+      ],
+      "status": "mapped",
+      "upstreamPath": "include/editeng/svxenum.hxx",
+      "upstreamSymbols": [
+        "SvxNumType"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SvxTextLeftMarginItem",
             "path": "apps/office/src/editeng/source/items/frmitems.ts"
           },
@@ -138,6 +174,10 @@
           {
             "path": "apps/office/src/editeng/source/items/numitem.ts",
             "marker": "SetListFormat"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+            "marker": "matches native NumberType formatting visibility legal coercion and signed32 input"
           }
         ],
         "upstream": [
@@ -184,7 +224,9 @@
         "SvxNumberFormat",
         "SvxNumPositionAndSpaceMode",
         "NumberingPositionProperties",
-        "NumberingMarkerProperties"
+        "NumberingMarkerProperties",
+        "SvxNumberType",
+        "SVX_DEF_BULLET"
       ],
       "omittedResponsibilities": [
         "Full native numbering/graphic/font/units/value/copy contracts beyond positional fields remain unimplemented or individually unverified. GetPositionProperties is the browser structural copy/snapshot port for raw fields, not a native UNO API claim."
@@ -192,7 +234,8 @@
       "preservedResponsibilities": [
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
         "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified.",
-        "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged."
+        "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged.",
+        "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "editeng/source/items/numitem.cxx",
@@ -205,7 +248,10 @@
         "SvxNumberFormat::SetPrefix",
         "SvxNumberFormat::SetSuffix",
         "SvxNumberFormat::SetListFormat",
-        "SvxNumberFormat::GetListFormat"
+        "SvxNumberFormat::GetListFormat",
+        "SvxNumberType::SvxNumberType",
+        "SvxNumberType::GetNumStr",
+        "SvxNumberFormat::SetBulletFont"
       ]
     },
     {
@@ -2254,6 +2300,10 @@
           {
             "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
             "marker": "exports only the native legacy group with nonzero and positive attribute predicates"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+            "marker": "matches native NumberType formatting visibility legal coercion and signed32 input"
           }
         ]
       },
@@ -2264,7 +2314,8 @@
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
         "The shared marker fields and both native SetListFormat overloads now belong to SvxNumberFormat. Native optional/empty state, compatibility percent scanning, affix invalidation and unsigned widths are preserved. Writer standalone suffix is empty; base rule patterns are level-specific. Pinned MakeNumString pattern replacement and legacy fallback are covered for Arabic/character-special levels, zeros, repeated/noncontiguous/tenth/future references. SwTextNode separately projects visible bullet glyphs. Owned clones and Worker graph v16 preserve raw patterns and independently changed compatibility fields. A bounded extracted C++ oracle compares 188 states/labels and 83 clone labels; native full build, other number families/fonts, continuous/outline/NONE/bitmap rules, formatter variants and XML marker attributes remain unverified.",
         "Iteration37 preserves explicit outline assignment independently from direct outline items through an optional boolean field in graph v16. Absent legacy assignment retains pool-factory heading defaults only when the direct item is absent; explicit false, zero and assigned-without-item snapshots remain exact. Paragraph restore suppresses collection defaults before replacing direct items. Iteration37 preserves the model-owned synthesized empty-list marker with an optional true-only emptyListStyle field in existing graph v16. False is omitted;older absent records remain false,so explicitly empty rule items are not heuristically converted into synthesized intent. CloneTo copies the actual marker independently;tests verify subsequent numbered style transitions,Worker restore and legacy records. This browser transfer state does not claim native serialization/copy callback parity or full attribute/history lifetime;registered IO settings are unchanged.",
-        "Iteration38 restores native document reading suppression for the existing shown-list notification path. SwDoc owns mbInReading=false and native IsInReading/SetInReading accessors; SwXMLImport brackets the existing parse lifetime and clears the flag on success or failure. List/tree operations propagate the actual document context. Worker graph16 restores direct text-node items in one complete text-node-range batch before attachment, retaining counted/restart/list identity and explicit rule type. Forty unchanged added native definitions compare60 sequences/2130 states including true/false reading, raw caches and notifications; literal genuine ODT/Worker/reopen expectations remain intact. Full native destructor/temporary notification blockers/layout/UNO/history/fields/live-style/serialization lifetime remain unverified; no whole-module promotion or registered IO change."
+        "Iteration38 restores native document reading suppression for the existing shown-list notification path. SwDoc owns mbInReading=false and native IsInReading/SetInReading accessors; SwXMLImport brackets the existing parse lifetime and clears the flag on success or failure. List/tree operations propagate the actual document context. Worker graph16 restores direct text-node items in one complete text-node-range batch before attachment, retaining counted/restart/list identity and explicit rule type. Forty unchanged added native definitions compare60 sequences/2130 states including true/false reading, raw caches and notifications; literal genuine ODT/Worker/reopen expectations remain intact. Full native destructor/temporary notification blockers/layout/UNO/history/fields/live-style/serialization lifetime remain unverified; no whole-module promotion or registered IO change.",
+        "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -4622,6 +4673,10 @@
           {
             "path": "apps/office/src/sw/source/core/doc/number-ownership.test.ts",
             "marker": "matches all four shared native default tables and optional owned levels"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+            "marker": "matches native NumberType formatting visibility legal coercion and signed32 input"
           }
         ],
         "upstream": [
@@ -4740,7 +4795,8 @@
         "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
         "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
-        "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged."
+        "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged.",
+        "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
@@ -4791,6 +4847,43 @@
         "DocumentStylePoolManager::GetTextCollFromPool",
         "lcl_SetHeadline",
         "lcl_SetDfltFont"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndnum.ts",
+            "marker": "SwOutlineNodes"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndnum.cxx",
+            "marker": "SwOutlineNodes::Seek_Entry"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndnum.cxx",
+            "marker": "CompareSwOutlineNodes::operator()"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/docnode/ndnum.ts",
+      "localSymbols": [
+        "SwOutlineNodes"
+      ],
+      "omittedResponsibilities": [
+        "Full native fields/inline-heading/platform lifetime and unregistered background/fill or live-style callbacks remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/docnode/ndnum.cxx",
+      "upstreamSymbols": [
+        "SwOutlineNodes::Seek_Entry",
+        "CompareSwOutlineNodes::operator()"
       ]
     },
     {
@@ -5460,6 +5553,58 @@
         "CompareSwpHtWhichStart::operator",
         "CompareSwpHtEnd::operator",
         "SwpHints::Insert"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+            "marker": "HandleSetAttrAtTextNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+            "marker": "HandleResetAttrAtTextNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+            "marker": "HasNumberingWhichNeedsLayoutUpdate"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "HandleSetAttrAtTextNode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "HandleResetAttrAtTextNode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "HasNumberingWhichNeedsLayoutUpdate"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+      "localSymbols": [
+        "HandleSetAttrAtTextNode",
+        "HandleResetAttrAtTextNode",
+        "HasNumberingWhichNeedsLayoutUpdate"
+      ],
+      "omittedResponsibilities": [
+        "Full native fields/inline-heading/platform lifetime and unregistered background/fill or live-style callbacks remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "HandleSetAttrAtTextNode",
+        "HandleResetAttrAtTextNode",
+        "HasNumberingWhichNeedsLayoutUpdate"
       ]
     },
     {
@@ -7765,6 +7910,45 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/vcl/source/font/font.ts",
+            "marker": "Font"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
+            "marker": "matches native standalone defaults and unsigned glyph copies"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/vcl/source/font/font.cxx",
+            "marker": "Font::Font"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/vcl/source/font/font.ts",
+      "localSymbols": [
+        "Font",
+        "ConstFont"
+      ],
+      "omittedResponsibilities": [
+        "Only the existing font-family scalar, default-empty, copy/COW and family equality adapter are represented. Native full Font attributes/equality/metrics/global lifetime remain unimplemented or unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged."
+      ],
+      "status": "mapped",
+      "upstreamPath": "vcl/source/font/font.cxx",
+      "upstreamSymbols": [
+        "Font::Font",
+        "Font::SetFamilyName",
+        "Font::GetFamilyName"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "parseOdfXmlStream",
             "path": "apps/office/src/xmloff/source/core/xmlimp.ts"
           }
@@ -9793,95 +9977,6 @@
         "XMLImpSpanContext_Impl::XMLImpSpanContext_Impl",
         "XMLImpSpanContext_Impl::characters",
         "XMLImpSpanContext_Impl::createFastChildContext"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
-            "marker": "HandleSetAttrAtTextNode"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
-            "marker": "HandleResetAttrAtTextNode"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
-            "marker": "HasNumberingWhichNeedsLayoutUpdate"
-          }
-        ],
-        "upstream": [
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
-            "marker": "HandleSetAttrAtTextNode"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
-            "marker": "HandleResetAttrAtTextNode"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
-            "marker": "HasNumberingWhichNeedsLayoutUpdate"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
-      "localSymbols": [
-        "HandleSetAttrAtTextNode",
-        "HandleResetAttrAtTextNode",
-        "HasNumberingWhichNeedsLayoutUpdate"
-      ],
-      "omittedResponsibilities": [
-        "Full native fields/inline-heading/platform lifetime and unregistered background/fill or live-style callbacks remain unverified."
-      ],
-      "preservedResponsibilities": [
-        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
-      "upstreamSymbols": [
-        "HandleSetAttrAtTextNode",
-        "HandleResetAttrAtTextNode",
-        "HasNumberingWhichNeedsLayoutUpdate"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "path": "apps/office/src/sw/source/core/docnode/ndnum.ts",
-            "marker": "SwOutlineNodes"
-          }
-        ],
-        "upstream": [
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndnum.cxx",
-            "marker": "SwOutlineNodes::Seek_Entry"
-          },
-          {
-            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndnum.cxx",
-            "marker": "CompareSwOutlineNodes::operator()"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/docnode/ndnum.ts",
-      "localSymbols": [
-        "SwOutlineNodes"
-      ],
-      "omittedResponsibilities": [
-        "Full native fields/inline-heading/platform lifetime and unregistered background/fill or live-style callbacks remain unverified."
-      ],
-      "preservedResponsibilities": [
-        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/docnode/ndnum.cxx",
-      "upstreamSymbols": [
-        "SwOutlineNodes::Seek_Entry",
-        "CompareSwOutlineNodes::operator()"
       ]
     }
   ]

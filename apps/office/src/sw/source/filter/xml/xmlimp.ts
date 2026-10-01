@@ -1,4 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 
 import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
@@ -390,11 +391,11 @@ class SwXMLImport
         const previous = existing.Get(level),
           applied = imported.Get(level);
         if (
-          previous.GetKind() !== applied.GetKind() ||
+          getWriterNumFormatKind(previous) !== getWriterNumFormatKind(applied) ||
           JSON.stringify(previous.GetMarkerProperties()) !==
             JSON.stringify(applied.GetMarkerProperties()) ||
-          (applied.GetKind() === "bullet" &&
-            previous.GetBulletChar() !== applied.GetBulletChar()) ||
+          (getWriterNumFormatKind(applied) === "bullet" &&
+            getWriterNumFormatBullet(previous) !== getWriterNumFormatBullet(applied)) ||
           JSON.stringify(previous.GetPositionProperties()) !==
             JSON.stringify(applied.GetPositionProperties())
         )
