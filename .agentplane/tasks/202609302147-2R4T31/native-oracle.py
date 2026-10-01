@@ -2,6 +2,9 @@
 import json
 import subprocess
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 root=Path('.agentplane/tasks/202609302147-2R4T31')
 number=Path('vendor/libreoffice-reference/sw/source/core/doc/number.cxx').read_text()
 uno=Path('vendor/libreoffice-reference/sw/source/core/unocore/unosett.cxx').read_text()
@@ -113,9 +116,9 @@ for(const auto& f:port.rule.formats)std::cout<<f.kind<<' '<<f.bullet<<' '<<f.suf
 '''
 # Property type's member matches native spelling; avoid the C++ type/member ambiguity in the adapter.
 cpp=cpp.replace('struct Value {','struct PropertyValueAny {').replace('std::string Name;Value Value;','std::string Name;PropertyValueAny Value;')
-root.joinpath('native-rule-oracle.cxx').write_text(cpp)
+probe_source(root.joinpath('native-rule-oracle.cxx')).write_text(cpp)
 binary=root/'native-rule-oracle'
-subprocess.run(['clang++','-std=c++20',str(root/'native-rule-oracle.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-rule-oracle.cxx')),'-o',str(binary)],check=True)
 def decl(level=0,kind=1,bullet=0x25cf,distance=0,mode=0,left=0,offset=0,first=0,indent=0,tab=0,suffix=0):
  return [level,kind,bullet,distance,mode,left,offset,first,indent,tab,suffix]
 cases=[[],[decl()],[decl(level=2,bullet=0x25a0),decl(kind=0)],
@@ -129,5 +132,5 @@ output=subprocess.check_output([str(binary)],input=text,text=True)
 binary.unlink()
 rows=[list(map(int,line.split())) for line in output.splitlines()]
 assert len(rows)==len(cases)*10
-root.joinpath('native-results.json').write_text(json.dumps([{'declarations':case,'expected':rows[i*10:(i+1)*10]} for i,case in enumerate(cases)],indent=2)+'\n')
+root.joinpath('native-results.json').write_text(identity_json([{'declarations':case,'expected':rows[i*10:(i+1)*10]} for i,case in enumerate(cases)],indent=2)+'\n')
 print(f'Compiled pinned base initialization, validation branches and XML replacement loop; {len(cases)} ordered cases / {len(rows)} levels.')

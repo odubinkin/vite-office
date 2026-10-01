@@ -5,6 +5,9 @@ input, a FastAttributeIter integer port, no token container/UNO construction.
 No full native build or other radix/UTF-16/attribute ownership claim.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json
 import subprocess
 
@@ -74,7 +77,7 @@ source += body('sal/rtl/string.cxx', 'sal_Int64 SAL_CALL rtl_str_toInt64_WithLen
 source += '\nnamespace o3tl {\n' + body(view, 'inline sal_Int32 toInt32(std::string_view') + '\n}\n'
 source += 'struct FastAttributeIter {sal_Int32 value; sal_Int32 toInt32(){return value;}};\nsal_Int16 itemStart(sal_Int32 value,bool bIsHeader){sal_Int16 nStartValue=-1; FastAttributeIter aIter{value};if(!bIsHeader){\n' + range_branch + '\n}return nStartValue;}\n'
 source += 'int main(){std::vector<std::string> inputs={\n' + strings + '\n};for(auto &input:inputs){auto n=o3tl::toInt32(std::string_view(input));std::cout<<n<<","<<itemStart(n,false)<<","<<itemStart(n,true)<<"\\n";}}\n'
-file = task / 'native-start.cxx'
+file = probe_source(task / 'native-start.cxx')
 file.write_text(source)
 binary = task / 'native-start'
 subprocess.run(['clang++', '-std=c++20', '-O0', str(file), '-o', str(binary)], check=True)
@@ -84,5 +87,5 @@ rows = []
 for value, line in zip(values, output, strict=True):
     number, start, header = map(int, line.split(','))
     rows.append(dict(value=value, number=number, start=start, header=header))
-(task / 'native-results.json').write_text(json.dumps(rows, ensure_ascii=True, indent=2)+'\n')
+(task / 'native-results.json').write_text(identity_json(rows, ensure_ascii=True, indent=2)+'\n')
 print(f'Compiled unmodified rtl/o3tl integer and native item range bodies for {len(rows)} byte-view cases.')

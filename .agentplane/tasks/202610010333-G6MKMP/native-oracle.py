@@ -6,6 +6,9 @@ with stable-export getenv disabled. Does not claim factories, full native build,
 UNO/reference lifetimes, legacy/MSO APIs or stable-export environment behavior.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import itertools,json,subprocess
 root=Path(__file__).resolve().parents[3];task=Path(__file__).resolve().parent;up=root/'vendor/libreoffice-reference'
 def body(text,marker):
@@ -72,7 +75,7 @@ int main(){int cases;std::cin>>cases;for(int c=0;c<cases;++c){XMLTextListsHelper
 # Signature-only class/namespace aliases adapt types; no native body is rewritten.
 source=source.replace('const OUString&=EMPTY_OUSTRING','const OUString& value=EMPTY_OUSTRING')
 source=source.replace('namespace beans{','namespace beans{').replace('struct XPropertySetInfo:XPropertySet{};','using XPropertySetInfo=XPropertySet;')
-(task/'native-import.cxx').write_text(source)
+(probe_source(task/'native-import.cxx')).write_text(source)
 base=123456789000000+20261001;generated='list'+str(base)
 def start(attrs,signal=False):return dict(op=0,signal=signal,attrs=attrs)
 end=dict(op=2);consume=dict(op=1)
@@ -93,13 +96,13 @@ for case in cases:
  request+=str(int(case['defaults']))+' '+str(case.get('rng',0))+' '+str(len(case['actions']))+'\n'
  for a in case['actions']:
   request+=str(a['op'])
-  if a['op']==0:request+=' '+str(int(a['signal']))+' '+str(len(a['attrs']))+' '+' '.join(str(token)+' '+json.dumps(value) for token,value in a['attrs'])
-  if a['op']==3:request+=' '+json.dumps(a['id'])
+  if a['op']==0:request+=' '+str(int(a['signal']))+' '+str(len(a['attrs']))+' '+' '.join(str(token)+' '+identity_json(value) for token,value in a['attrs'])
+  if a['op']==3:request+=' '+identity_json(a['id'])
   request+='\n'
-binary=task/'native-import';subprocess.run(['clang++','-std=c++20','-O0',str(task/'native-import.cxx'),'-o',str(binary)],check=True)
+binary=task/'native-import';subprocess.run(['clang++','-std=c++20','-O0',str(probe_source(task/'native-import.cxx')),'-o',str(binary)],check=True)
 try:lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines()
 finally:binary.unlink()
 assert len(lines)==len(cases)
 for case,line in zip(cases,lines,strict=True):case['expected']=line
-(task/'native-results.json').write_text(json.dumps(dict(clock=dict(year=2026,month=10,day=1,hour=12,minute=34,second=56,millisecond=789),cases=cases),separators=(',',':'))+'\n')
+(task/'native-results.json').write_text(identity_json(dict(clock=dict(year=2026,month=10,day=1,hour=12,minute=34,second=56,millisecond=789),cases=cases),separators=(',',':'))+'\n')
 print(f'Unmodified native block constructor/helper/default projection/generator matched-output evidence: {len(cases)} sequences;explicit adapters,no full native/UNO/legacy/MSO/stable-env claim.')

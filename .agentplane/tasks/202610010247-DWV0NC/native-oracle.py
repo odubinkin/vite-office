@@ -6,6 +6,9 @@ no continuation-subtree/text-number export. Identity/style attributes and full
 UNO/default factories/native lifetime/build are not covered by this probe.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import itertools
 import json
 import subprocess
@@ -75,7 +78,7 @@ int main(){int mode,count;while(std::cin>>mode>>count){
  else {for(int i=0;i<count;++i){int present,rule,restart,direct,start;std::cin>>present>>rule>>restart>>direct>>start;SwTextNode node{bool(rule),bool(restart),bool(direct),start};SwPaM pam{{present?&node:nullptr}};PropertyState state=PropertyState_DIRECT_VALUE;std::cout<<IsNodeNumStart(pam,state)<<","<<state<<";";}std::cout<<"\n";}
 }}
 '''
-file = task/'native-export.cxx';file.write_text(source)
+file = probe_source(task/'native-export.cxx');file.write_text(source)
 shapes=[[0,0,0],[2,2,0,2],[0,2,0,2],[0,1,2,1,0],[0,1,0,1],[2,1,2,0,2],[1,3,1,3],[0,1,1,0,1],[9,9,0,9],[0,-1,0],[1,-1,1]]
 cases=[]
 for shape in shapes:
@@ -105,5 +108,5 @@ for case,line in zip(cases,lines[:len(cases)],strict=True):case['expected']=line
 meta=[]
 for inputs,line in zip(metadata_cases,lines[len(cases):-1],strict=True):meta.append(dict(inputs=inputs,expected=[[int(v) for v in p.split(',')] for p in line.split(';') if p]))
 getters=[[int(v) for v in p.split(',')] for p in lines[-1].split(';') if p]
-(task/'native-results.json').write_text(json.dumps(dict(exports=cases,metadata=meta,getters=dict(inputs=getters_cases,expected=getters)),separators=(',',':'))+'\n')
+(task/'native-results.json').write_text(identity_json(dict(exports=cases,metadata=meta,getters=dict(inputs=getters_cases,expected=getters)),separators=(',',':'))+'\n')
 print(f'Compiled native exportListChange,metadata constructor/reset/getters/numbered/format-start and IsNodeNumStart: {len(cases)} export sequences/{len(meta)*3} metadata states/{len(getters)} raw Writer getter states. Explicit adapters;no full native build.')

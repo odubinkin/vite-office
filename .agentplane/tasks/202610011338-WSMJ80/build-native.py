@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib,json
 out=Path('.agentplane/tasks/202610011338-WSMJ80');root=Path('vendor/libreoffice-reference');ids=[]
 def body(path,sig):
@@ -6,7 +9,7 @@ def body(path,sig):
  while depth:
   depth+=(source[i]=='{')-(source[i]=='}');i+=1
  value=source[a:i];ids.append({'path':path,'signature':sig,'sha256':hashlib.sha256(value.encode()).hexdigest()});return value
-profile=Path('.agentplane/tasks/202610011207-TR9DSM/native-format-values.cxx').read_text().split('void state(')[0]
+profile=probe_source(Path('.agentplane/tasks/202610011207-TR9DSM/native-format-values.cxx')).read_text().split('void state(')[0]
 # Complete existing constructor/copy/get/ref Set/default/assignment bodies remain unchanged.
 for path,sig in [('editeng/source/items/numitem.cxx','SvxNumberFormat::SvxNumberFormat( SvxNumType eType )'),('editeng/source/items/numitem.cxx','SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat)'),('editeng/source/items/numitem.cxx','SvxNumberFormat& SvxNumberFormat::operator=('),('sw/source/core/doc/number.cxx','SwNumFormat& SwNumFormat::operator=('),('sw/source/core/doc/number.cxx','SwNumFormat::SwNumFormat( const SwNumFormat&'),('sw/source/core/doc/number.cxx','SwNumRule::SwNumRule( UIName'),('sw/source/core/doc/number.cxx','const SwNumFormat& SwNumRule::Get('),('sw/source/core/doc/number.cxx','const SwNumFormat* SwNumRule::GetNumFormat('),('sw/source/core/doc/number.cxx','void SwNumRule::Set( sal_uInt16 i, const SwNumFormat&'),('sw/source/core/doc/number.cxx','SwNumRule::SwNumRule( const SwNumRule&')]:
  assert body(path,sig) in profile,sig
@@ -39,5 +42,5 @@ std::cout<<"],\"assignment\":[";first=true;for(int variant=0;variant<23;variant+
 std::cout<<"],\"registration\":[";SwModify a,b;SwClient firstSource(&a),secondSource(&b),empty(nullptr),client(nullptr);bool comma=false;for(auto*source:{&empty,&firstSource,&firstSource,&secondSource,&empty,&client}){client.StartListeningToSameModifyAs(*source);if(comma)std::cout<<",";comma=true;std::cout<<"["<<(client.GetRegisteredIn()==&a?1:client.GetRegisteredIn()==&b?2:0)<<","<<a.clients.size()<<","<<b.clients.size()<<"]";}
 std::cout<<"],\"formatRegistration\":[";SwNumFormat src;src.StartListeningToSameModifyAs(firstSource);SwNumFormat copied(src),assigned;assigned=src;std::cout<<"[";boolout(copied.GetRegisteredIn()==&a);std::cout<<",";boolout(assigned.GetRegisteredIn()==&a);std::cout<<"]";assigned=SwNumFormat();std::cout<<",[";boolout(assigned.GetRegisteredIn()==nullptr);std::cout<<"]]}";}
 '''
-(out/'native-pointer.cxx').write_text(profile)
-(out/'native-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':ids,'priorProfile':'.agentplane/tasks/202610011207-TR9DSM/native-source-identities.json','profileSha256':hashlib.sha256(profile.encode()).hexdigest(),'scope':'Complete unchanged pointer/ref Set,base/Writer assignment/copy/rule-get/default and same-modify transfer bodies. Native SwModify Add/Remove registration container,platform/Font family-only/COW/graphics/null-style/global-service aliases explicitly limit this proof. Local Validate corresponds to a direct native invalid-flag input adapter; native complete tree validation/default global/destructor lifetime is not certified.'},indent=2)+'\n')
+(probe_source(out/'native-pointer.cxx')).write_text(profile)
+(out/'native-identities.json').write_text(identity_json({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':ids,'priorProfile':'.agentplane/tasks/202610011207-TR9DSM/native-source-identities.json','profileSha256':hashlib.sha256(profile.encode()).hexdigest(),'scope':'Complete unchanged pointer/ref Set,base/Writer assignment/copy/rule-get/default and same-modify transfer bodies. Native SwModify Add/Remove registration container,platform/Font family-only/COW/graphics/null-style/global-service aliases explicitly limit this proof. Local Validate corresponds to a direct native invalid-flag input adapter; native complete tree validation/default global/destructor lifetime is not certified.'},indent=2)+'\n')

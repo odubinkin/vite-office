@@ -1,11 +1,14 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json,subprocess,hashlib
 root=Path('.agentplane/tasks/202610011035-VZ3MGM');s=Path('vendor/libreoffice-reference/sw/source/core/doc/number.cxx').read_text();records=[]
 for marker in ['const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const','const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const','void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )']:
  a=s.index(marker);b=s.index('{',a);i=b+1;d=1
  while d:d+=(s[i]=='{')-(s[i]=='}');i+=1
  value=s[a:i];records.append({'source':'sw/source/core/doc/number.cxx','marker':marker,'sha256':hashlib.sha256(value.encode()).hexdigest(),'text':value})
-(root/'followup-native-format-accessors-identity.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','scope':'three unchanged accessor/reference-Set bodies; named static-base/type/format scalar equality adapters; not full native constructor/factory/format-copy proof','definitions':records},indent=2)+'\n')
+(root/'followup-native-format-accessors-identity.json').write_text(identity_json({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','scope':'three unchanged accessor/reference-Set bodies; named static-base/type/format scalar equality adapters; not full native constructor/factory/format-copy proof','definitions':records},indent=2)+'\n')
 pre=r'''
 #include <cassert>
 #include <memory>
@@ -23,9 +26,9 @@ struct SwNumRule{std::unique_ptr<SwNumFormat> maFormats[MAXLEVEL];int meRuleType
 main=r'''
 int main(){SwNumRule::saLabelAlignmentBaseFormats[0][0]=&SwNumRule::base;SwNumRule rule;std::cout<<"{\"freshRawPresent\":"<<(rule.GetNumFormat(0)?"true":"false")<<",\"effectiveIsSharedBase\":"<<(&rule.Get(0)==&SwNumRule::base?"true":"false");rule.Set(0,rule.Get(0));auto* first=rule.GetNumFormat(0);rule.mbInvalidRuleFlag=false;rule.Set(0,*first);std::cout<<",\"setCreatesOwnedClone\":"<<(first!=&SwNumRule::base?"true":"false")<<",\"equalSetRetainsIdentity\":"<<(rule.GetNumFormat(0)==first?"true":"false")<<",\"equalSetInvalidates\":"<<(rule.mbInvalidRuleFlag?"true":"false")<<"}\n";}
 '''
-(root/'followup-native-formats.cxx').write_text(pre+'\n'.join(r['text'] for r in records)+main)
+(probe_source(root/'followup-native-formats.cxx')).write_text(pre+'\n'.join(r['text'] for r in records)+main)
 binary=root/'followup-native-formats'
 try:
- subprocess.run(['clang++','-std=c++20','-fsanitize=address,undefined',str(root/'followup-native-formats.cxx'),'-o',str(binary)],check=True)
- result=json.loads(subprocess.check_output([str(binary)],text=True));(root/'followup-native-format-accessors-result.json').write_text(json.dumps(result,indent=2)+'\n');print('PASS:'+json.dumps(result))
+ subprocess.run(['clang++','-std=c++20','-fsanitize=address,undefined',str(probe_source(root/'followup-native-formats.cxx')),'-o',str(binary)],check=True)
+ result=json.loads(subprocess.check_output([str(binary)],text=True));(root/'followup-native-format-accessors-result.json').write_text(identity_json(result,indent=2)+'\n');print('PASS:'+identity_json(result))
 finally:binary.unlink(missing_ok=True)

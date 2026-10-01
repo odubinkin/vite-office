@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib,json,subprocess
 root=Path('.agentplane/tasks/202610011035-VZ3MGM')
 records=[]
@@ -20,7 +23,7 @@ def macro(path,name):
  value='\n'.join(values);records.append({'source':path,'marker':'#define '+name,'sha256':hashlib.sha256(value.encode()).hexdigest(),'text':value});return value
 macros=[macro('include/osl/diagnose.h','OSL_ENSURE'),macro('include/sal/detail/log.h','SAL_DETAIL_LOG_FORMAT'),macro('include/sal/detail/log.h','SAL_DETAIL_WARN_IF_FORMAT')]
 s=read('include/sal/detail/log.h');a=s.index('#if defined SAL_LOG_WARN\n');warnbuild=s[a:s.index('#endif',a)+len('#endif')];records.append({'source':'include/sal/detail/log.h','marker':'SAL_LOG_WARN build gate','text':warnbuild,'sha256':hashlib.sha256(warnbuild.encode()).hexdigest()})
-(root/'native-source-identity.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':records,'adapters':['platform scalar aliases and TypedWhichId/base Which ownership','map typed direct attrs/pool default1 with real native GetSwAttrSet/GetAttr owner bodies; no style-parent86','sal_detail_logFormat sink captures area/message; native diagnostic macros and build gate unchanged; platform filter/location/backtrace omitted','driver scalar item setup/reset; only getter semantics certified; not full native attribute callbacks/style pool/client lifetime']},indent=2)+'\n')
+(root/'native-source-identity.json').write_text(identity_json({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':records,'adapters':['platform scalar aliases and TypedWhichId/base Which ownership','map typed direct attrs/pool default1 with real native GetSwAttrSet/GetAttr owner bodies; no style-parent86','sal_detail_logFormat sink captures area/message; native diagnostic macros and build gate unchanged; platform filter/location/backtrace omitted','driver scalar item setup/reset; only getter semantics certified; not full native attribute callbacks/style pool/client lifetime']},indent=2)+'\n')
 operations=[['set',84,0],['set',85,1],['set',86,0],['set',85,0],['set',86,7],['set',86,-32768],['set',86,-1],['set',86,32767],['clear',86,0],['clear',84,0],['clear',85,0]]
 pre=r'''
 #include <cstdint>
@@ -68,15 +71,15 @@ struct SwTextNode:SwContentNode {bool HasAttrListRestartValue()const;SwNumberTre
 main='int main(){SwTextNode n;std::cout<<"[";n.Print();\n'
 for op,w,v in operations:main+=f'n.{"Set" if op=="set" else "Clear"}({w}{","+str(v) if op=="set" else ""});std::cout<<",";n.Print();\n'
 main+='std::cout<<"]\\n";}\n'
-(root/'native-getter.cxx').write_text(pre+'\n'+setget+'\n'+attrget+'\n'+has+'\n'+get+'\n'+main)
+(probe_source(root/'native-getter.cxx')).write_text(pre+'\n'+setget+'\n'+attrget+'\n'+has+'\n'+get+'\n'+main)
 profiles=[];binary=root/'native-getter'
 try:
  for enabled in [False,True]:
-  cmd=['clang++','-std=c++20','-fsanitize=address,undefined','-fno-omit-frame-pointer']+(['-DSAL_LOG_WARN'] if enabled else [])+[str(root/'native-getter.cxx'),'-o',str(binary)]
+  cmd=['clang++','-std=c++20','-fsanitize=address,undefined','-fno-omit-frame-pointer']+(['-DSAL_LOG_WARN'] if enabled else [])+[str(probe_source(root/'native-getter.cxx')),'-o',str(binary)]
   subprocess.run(cmd,check=True);states=json.loads(subprocess.check_output([str(binary)],text=True));profiles.append({'warnings':enabled,'states':states})
  fixture={'pin':'9bc445578031fecf56086729d8e4940c77e14d65','scope':'unchanged native getter/Has/effective attribute owners and OSL/SAL warning chain; explicit item/default/log sink adapters; warning-enabled browser console adaptation','operations':operations,'profiles':profiles}
- (root/'native-result.json').write_text(json.dumps(fixture,indent=2)+'\n')
- Path('apps/office/src/test/writer-native-restart-getter.json').write_text(json.dumps(fixture,indent=2)+'\n')
+ (root/'native-result.json').write_text(identity_json(fixture,indent=2)+'\n')
+ Path('apps/office/src/test/writer-native-restart-getter.json').write_text(identity_json(fixture,indent=2)+'\n')
  assert [x['value'] for x in profiles[0]['states']]==[x['value'] for x in profiles[1]['states']]
  print(f'PASS: {len(records)} unchanged bodies/macros/build definitions; {len(profiles)} warning profiles; {sum(len(p["states"]) for p in profiles)} states; ASan/UBSan')
 finally:binary.unlink(missing_ok=True)

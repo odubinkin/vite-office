@@ -1,5 +1,8 @@
 """Unmodified pinned tree lifecycle with explicit platform/container/range adapters."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import ast,itertools,json,subprocess
 root=Path('.agentplane/tasks/202610010418-7548FA')
 source=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx').read_text()
@@ -66,7 +69,7 @@ int main(){int count;while(std::cin>>count){
  }
 }}
 '''
-root.joinpath('native-lifecycle.cxx').write_text(cpp)
+probe_source(root.joinpath('native-lifecycle.cxx')).write_text(cpp)
 for definition in functions:assert definition in cpp
 cases=[]
 for shape in [[0,1,2,0],[2,2,0,2],[0,3,1,3],[3,0,3,0],[9,0,9],[0,0,0]]:
@@ -86,7 +89,7 @@ for case in cases:
 cases=extended
 request=''.join(str(len(c['items']))+' '+' '.join(map(str,c['starts']))+' '+' '.join(f'{int(i["counted"])} {int(i["restart"])} {i["actualStart"]}' for i in c['items'])+' '+str(len(c['ops']))+' '+' '.join(' '.join(map(str,o)) for o in c['ops'])+'\n' for c in cases)
 binary=root/'native-lifecycle'
-subprocess.run(['clang++','-std=c++20',str(root/'native-lifecycle.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-lifecycle.cxx')),'-o',str(binary)],check=True)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink()
 offset=0
 for case in cases:
@@ -99,5 +102,5 @@ for case in cases:
   snapshots.append(list(reversed(rows)))
  case['expected']=snapshots
 assert offset==len(lines)
-root.joinpath('native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,separators=(',',':'))+'\n')
 print(f'{len(functions)} unmodified native definitions;{len(cases)} lifecycle sequences/{offset} item states. Single shown range/ASCII rule/text/std::set/enabled insertion invalidation,stub notification delivery and debug adapters;native full constructor/lifetimes/redline/continuous policy not claimed.')

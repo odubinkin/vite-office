@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib,json
 out=Path('.agentplane/tasks/202610011419-EHEH05');root=Path('vendor/libreoffice-reference');ids=[]
 def body(path,sig):
@@ -6,7 +9,7 @@ def body(path,sig):
  while depth:
   depth+=(source[i]=='{')-(source[i]=='}');i+=1
  value=source[a:i];ids.append({'path':path,'signature':sig,'sha256':hashlib.sha256(value.encode()).hexdigest()});return value
-profile=Path('.agentplane/tasks/202610011338-WSMJ80/native-pointer.cxx').read_text().split('void boolout(')[0]
+profile=probe_source(Path('.agentplane/tasks/202610011338-WSMJ80/native-pointer.cxx')).read_text().split('void boolout(')[0]
 profile=profile.replace('using sal_Int32=int32_t;','using sal_uInt32=uint32_t;using sal_Int32=int32_t;')
 profile=profile.replace('namespace SwPoolFormatId {constexpr int UNKNOWN=0;}','enum class SwPoolFormatId:sal_uInt16 {UNKNOWN=USHRT_MAX};')
 source=(root/'sw/inc/poolfmt.hxx').read_text();assert 'UNKNOWN = USHRT_MAX' in source
@@ -18,7 +21,7 @@ for sig in ['SwNumRule::SwNumRule( UIName','SwNumRule::SwNumRule( const SwNumRul
  assert body('sw/source/core/doc/number.cxx',sig) in profile
 for sig in ['SwNumRule& SwNumRule::operator=(', 'void SwNumRule::Reset(', 'bool SwNumRule::operator==(', 'void SwNumRule::SetCountPhantoms(']:
  profile+=body('sw/source/core/doc/number.cxx',sig)+'\n'
-prior=Path('.agentplane/tasks/202610011338-WSMJ80/native-pointer.cxx').read_text();profile+=prior[prior.index('void boolout('):prior.index('void change(')]
+prior=probe_source(Path('.agentplane/tasks/202610011338-WSMJ80/native-pointer.cxx')).read_text();profile+=prior[prior.index('void boolout('):prior.index('void change(')]
 profile+=r'''
 void scalar(SwNumRule&r,int n){r.SetAutoRule(n%2==0);r.SetContinusNum(n%2);r.SetAbsSpaces(n%3);r.SetHidden(n%2);r.SetCountPhantoms(n%2==0);r.SetUsedByRedline(n%2);r.SetPoolFormatId(static_cast<SwPoolFormatId>(60000+n));r.SetPoolHelpId(65530+n);r.SetPoolHlpFileId(250+n);}
 void seed(SwNumRule&r,int mask,int offset){for(int n=0;n<MAXLEVEL;n++)if(mask&(1<<n)){SwNumFormat f(r.Get(n));f.SetStart(offset+n);f.SetPrefix("[");r.Set(n,f);}}
@@ -32,5 +35,5 @@ int main(){std::cout<<"{\"traces\":[";bool comma=false;for(int mode:{0,1})for(in
  std::cout<<"],\"narrowing\":[";comma=false;for(int n:{-1,0,255,256,65535,65536,70001}){SwNumRule r("narrow",SvxNumberFormat::LABEL_ALIGNMENT);r.mbInvalidRuleFlag=false;r.SetPoolFormatId(static_cast<SwPoolFormatId>(n));r.SetPoolHelpId(n);r.SetPoolHlpFileId(n);if(comma)std::cout<<",";comma=true;std::cout<<"["<<n<<","<<int(r.GetPoolFormatId())<<","<<r.GetPoolHelpId()<<","<<int(r.GetPoolHlpFileId())<<",";boolout(r.IsInvalidRule());std::cout<<"]";}std::cout<<"],\"default\":";SwNumRule d("default",SvxNumberFormat::LABEL_ALIGNMENT);rule(d);std::cout<<"}";
 }
 '''
-(out/'native-rule.cxx').write_text(profile)
-(out/'native-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':ids,'priorProfiles':['.agentplane/tasks/202610011338-WSMJ80/native-identities.json','.agentplane/tasks/202610011207-TR9DSM/native-source-identities.json'],'profileSha256':hashlib.sha256(profile.encode()).hexdigest(),'scope':'Complete unchanged native rule ctor/copy/operator=/Reset/operator==/ref Set/pointer Set/Get bodies and exact scalar inline contracts; native UNKNOWN65535 and native ushort/byte field types. Named source client-container sizes (input vectors),invalid flag direct input,ASCII UIName,Font family/COW,platform/global service/graphics/null-style adapters. Complete native clients/styles/name map/grf links/GrabBag/Font/graphics/destructor/service lifetime and nondefault continuous/phantom consumers are not certified.'},indent=2)+'\n')
+(probe_source(out/'native-rule.cxx')).write_text(profile)
+(out/'native-identities.json').write_text(identity_json({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':ids,'priorProfiles':['.agentplane/tasks/202610011338-WSMJ80/native-identities.json','.agentplane/tasks/202610011207-TR9DSM/native-source-identities.json'],'profileSha256':hashlib.sha256(profile.encode()).hexdigest(),'scope':'Complete unchanged native rule ctor/copy/operator=/Reset/operator==/ref Set/pointer Set/Get bodies and exact scalar inline contracts; native UNKNOWN65535 and native ushort/byte field types. Named source client-container sizes (input vectors),invalid flag direct input,ASCII UIName,Font family/COW,platform/global service/graphics/null-style adapters. Complete native clients/styles/name map/grf links/GrabBag/Font/graphics/destructor/service lifetime and nondefault continuous/phantom consumers are not certified.'},indent=2)+'\n')

@@ -3,6 +3,9 @@ Dependencies use eagerly ordered no-phantom trees, Arabic/bullet numbering-prese
 text nodes and signed counters. This is not a native full build or phantom audit.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json, subprocess
 root=Path('.agentplane/tasks/202610010014-X0PFNS')
 source=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx').read_text()
@@ -78,7 +81,7 @@ int main(){int count;while(std::cin>>count){
  for(auto& n:nodes){SwNumberTree::tNumberVector vector;n->GetNumberVector_(vector,false);std::cout<<n->mnNumber<<' '<<n->mbContinueingPreviousSubTree<<' '<<vector.size();for(auto number:vector)std::cout<<' '<<number;std::cout<<'\n';}
 }}
 '''
-root.joinpath('native-hierarchical-oracle.cxx').write_text(cpp)
+probe_source(root.joinpath('native-hierarchical-oracle.cxx')).write_text(cpp)
 shapes=[[0,0,0],[0,1,1,0,1],[0,1,0,1],[0,1,2,1,0],[0,1,0,0,1],[0,1,1,0,1,1]]
 cases=[]
 for shape in shapes:
@@ -91,7 +94,7 @@ for shape in shapes:
     cases.append({'starts':starts,'items':[{'level':level,'counted':bool(count_mask&(1<<i)),'restart':bool(restart_mask&(1<<i)),'actualStart':0 if i%2==0 else 5} for i,level in enumerate(shape)]})
 request=''.join(str(len(c['items']))+' '+' '.join(map(str,c['starts']))+' '+ ' '.join(f'{item["level"]} {int(item["counted"])} {int(item["restart"])} {item["actualStart"]}' for item in c['items'])+'\n' for c in cases)
 binary=root/'native-hierarchical-oracle'
-subprocess.run(['clang++','-std=c++20',str(root/'native-hierarchical-oracle.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-hierarchical-oracle.cxx')),'-o',str(binary)],check=True)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink()
 offset=0
 for case in cases:
@@ -101,5 +104,5 @@ for case in cases:
   rows.append({'number':values[0],'continuation':bool(values[1]),'vector':values[3:]})
  case['expected']=rows
 assert offset==len(lines)
-root.joinpath('native-results.json').write_text(json.dumps(cases,ensure_ascii=True,separators=(',',':'))+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,ensure_ascii=True,separators=(',',':'))+'\n')
 print(f'Compiled unmodified pinned ValidateHierarchical, node counted/restart/start/descendant policies, GetLevelInListTree and GetNumberVector_; {len(cases)} complete no-phantom cases, {offset} item states. Eager getters/ordered tree construction are explicit bounded shims; no full native build.')

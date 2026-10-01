@@ -1,5 +1,8 @@
 """Unchanged pinned Writer attribute lifecycles; named dependency adapters only."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib,json,subprocess,itertools
 root=Path('.agentplane/tasks/202610010735-THRTCH')
 text=Path('vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx').read_text()
@@ -12,7 +15,7 @@ def block(s,m):
  start=s.index(m);b=s.index('{',start);i=b+1;depth=1
  while depth:depth+=(s[i]=='{')-(s[i]=='}');i+=1
  return s[start:i]
-base=Path('.agentplane/tasks/202610010536-95XQFH/native-style.cxx').read_text().split('int main(){',1)[0]
+base=probe_source(Path('.agentplane/tasks/202610010536-95XQFH/native-style.cxx')).read_text().split('int main(){',1)[0]
 base=base.replace('int GetIndex()const{return index;}','int GetIndex()const override{return index;}')
 base=base.replace('#include <vector>','#include <vector>\n#include <functional>\n#define COVERITY_NOEXCEPT_FALSE')
 base=base.replace('bool isEmpty()const{return empty();}', 'bool isEmpty()const{return empty();}int getLength()const{return size();}')
@@ -99,10 +102,10 @@ int main(){int count;while(std::cin>>count){
 identities=classes+helpers+wrappers+extra[:-1]+[inline]+[block(docheader,m)for m in ['bool IsInReading()','void SetInReading(']]+[block(header,m) for m in ['SwNumRuleType GetRuleType()','void SetRuleType(','bool IsOutlineRule()']]
 for body in identities:
  if body!=inline:assert body in base
-root.joinpath('native-attributes.cxx').write_text(base)
-root.joinpath('native-source-identity.json').write_text(json.dumps([{'signature':s.split('{')[0].strip(),'bytes':len(s.encode()),'sha256':hashlib.sha256(s.encode()).hexdigest()}for s in identities],indent=2)+'\n')
+probe_source(root.joinpath('native-attributes.cxx')).write_text(base)
+root.joinpath('native-source-identity.json').write_text(identity_json([{'signature':s.split('{')[0].strip(),'bytes':len(s.encode()),'sha256':hashlib.sha256(s.encode()).hexdigest()}for s in identities],indent=2)+'\n')
 binary=root/'native-attributes'
-subprocess.run(['clang++','-std=c++20',str(root/'native-attributes.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-attributes.cxx')),'-o',str(binary)],check=True)
 cases=[]
 for rule,level in itertools.product([1,2,3],range(10)):
  cases.append({'count':3,'ops':[[1,i,rule]for i in range(3)]+[[2,0,level],[4,0,1],[8,0,7],[5,0,0],[10,0,(level+1)%10],[7,0,85],[7,0,86],[11,0,0],[12,0,0],[3,0,1],[7,0,83],[7,0,83],[9,0,0],[9,0,0]]})
@@ -126,5 +129,5 @@ for c in cases:
   for row in rows:row['vector']=list(map(int,lines[offset].split()))[1:];offset+=1
   c['expected'].append(dict(nodes=rows,events=events,outline=memberships[0],rules=memberships[1:4],registry=memberships[4]))
 assert offset==len(lines)
-root.joinpath('native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,separators=(',',':'))+'\n')
 print(f'{len(identities)} unchanged added definitions;{len(cases)} sequences/{states} states. Adapters: pool ownership/equality; native reading flag; normal-doc dtor/redline/fuzz adapters; shown-only hidden/orig; raw direct attribute callback; layout/wordcount event capture; chapter field no-op; unsupported background/fill declarations. No full native pool/platform/layout/field/redline/fill/live-style lifetime claim.')

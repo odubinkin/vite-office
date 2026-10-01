@@ -1,5 +1,8 @@
 """Compile unchanged implemented UInt16 bodies and constructor defaults with typed adapters."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib,json,subprocess
 root=Path('.agentplane/tasks/202610010536-95XQFH')
 def block(text,marker):
@@ -34,9 +37,9 @@ int main(){SfxUInt16Item d;std::cout<<d.Which()<<' '<<d.GetValue()<<'\n';
  std::unique_ptr<SfxPoolItem> factory(SfxUInt16Item::CreateDefault());std::cout<<factory->Which()<<' '<<static_cast<SfxUInt16Item*>(factory.get())->GetValue()<<'\n';}
 '''
 for f in [ctor,get,sfxctor,sfxclone]+functions:assert f in source
-root.joinpath('unsigned-native.cxx').write_text(source)
-binary=root/'unsigned-native';subprocess.run(['clang++','-std=c++20',str(root/'unsigned-native.cxx'),'-o',str(binary)],check=True)
+probe_source(root.joinpath('unsigned-native.cxx')).write_text(source)
+binary=root/'unsigned-native';subprocess.run(['clang++','-std=c++20',str(probe_source(root/'unsigned-native.cxx')),'-o',str(binary)],check=True)
 rows=subprocess.check_output([str(binary)],text=True).splitlines();binary.unlink()
 assert rows==['0 0']+[f'80 {n} {n} 1 1 1 1 1' for n in [0,1,32768,65535]]+['0 0']
-root.joinpath('unsigned-native-results.json').write_text(json.dumps({'definitions':8,'rows':rows,'pass':True,'identity':[{'signature':f.split('{',1)[0].strip(),'sha256':hashlib.sha256(f.encode()).hexdigest()} for f in [ctor,get,sfxctor,sfxclone]+functions],'profile':'Native unsigned ctor/value/query/clones/equality/default factory;explicit Which/type/UNO Any scalar adapters. JS rejects values that typed sal_uInt16 cannot represent;full mutation/hash/presentation/pooling not claimed.'},indent=2)+'\n')
+root.joinpath('unsigned-native-results.json').write_text(identity_json({'definitions':8,'rows':rows,'pass':True,'identity':[{'signature':f.split('{',1)[0].strip(),'sha256':hashlib.sha256(f.encode()).hexdigest()} for f in [ctor,get,sfxctor,sfxclone]+functions],'profile':'Native unsigned ctor/value/query/clones/equality/default factory;explicit Which/type/UNO Any scalar adapters. JS rejects values that typed sal_uInt16 cannot represent;full mutation/hash/presentation/pooling not claimed.'},indent=2)+'\n')
 print('8 unchanged UInt16 native constructor/value/query/clone/equality/default definitions passed literal width and owned-copy checks.')

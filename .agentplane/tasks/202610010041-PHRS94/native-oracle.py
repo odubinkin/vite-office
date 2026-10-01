@@ -3,6 +3,9 @@ Dependencies use a std::set ordered container, eager group validation, Arabic/bu
 text/rule stubs and disabled notifications. This is not a full native build.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json, subprocess, itertools
 root=Path('.agentplane/tasks/202610010041-PHRS94')
 source=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx').read_text()
@@ -93,7 +96,7 @@ int main(){int count;while(std::cin>>count){
  for(auto& n:nodes){SwNumberTree::tNumberVector vector;n->GetNumberVector_(vector,false);std::cout<<n->mnNumber<<' '<<n->mbContinueingPreviousSubTree<<' '<<vector.size();for(auto number:vector)std::cout<<' '<<number;std::cout<<' '<<vector.size();std::vector<bool> phantoms;for(auto p=n.get();p->GetParent();p=static_cast<SwNodeNum*>(p->GetParent()))phantoms.push_back(p->IsPhantom());for(auto p=phantoms.rbegin();p!=phantoms.rend();p++)std::cout<<' '<<*p;std::cout<<'\n';}
 }}
 '''
-root.joinpath('native-hierarchical-oracle.cxx').write_text(cpp)
+probe_source(root.joinpath('native-hierarchical-oracle.cxx')).write_text(cpp)
 shapes=[[2,2,0,2],[2,1,2,0,2],[0,2,2,0,2],[0,3,1,3,0],[2,2,1,2],[9,9,0,9],[0,1,3,1,3],[3,0,3,0,3],[1,3,1,3],[0,0,0]]
 cases=[]
 for shape in shapes:
@@ -114,7 +117,7 @@ for shape in [[0,3,0,1,3],[0,4,0,2,3],[0,1,3,1,3],[3,0,3,0,3],[2,2,1,2],[0,2,0,2
 cases=ordered
 request=''.join(str(len(c['items']))+' '+' '.join(map(str,c['starts']))+' '+ ' '.join(f'{item["level"]} {int(item["counted"])} {int(item["restart"])} {item["actualStart"]}' for item in c['items'])+' '+' '.join(map(str,c['order']))+'\n' for c in cases)
 binary=root/'native-hierarchical-oracle'
-subprocess.run(['clang++','-std=c++20',str(root/'native-hierarchical-oracle.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-hierarchical-oracle.cxx')),'-o',str(binary)],check=True)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink()
 offset=0
 for case in cases:
@@ -124,5 +127,5 @@ for case in cases:
   rows.append({'number':values[0],'continuation':bool(values[1]),'vector':values[3:3+values[2]],'phantoms':[bool(x) for x in values[4+values[2]:]]})
  case['expected']=rows
 assert offset==len(lines)
-root.joinpath('native-results.json').write_text(json.dumps(cases,ensure_ascii=True,separators=(',',':'))+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,ensure_ascii=True,separators=(',',':'))+'\n')
 print(f'Compiled unmodified pinned ValidateHierarchical, node counted/restart/start/descendant policies, GetLevelInListTree and GetNumberVector_; {len(cases)} phantom-enabled cases, {offset} item states. Eager getters, rule/text stubs, std::set ordering and disabled notifications are explicit bounded shims; no full native build.')

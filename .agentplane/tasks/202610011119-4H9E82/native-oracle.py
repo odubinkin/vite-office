@@ -1,10 +1,13 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json,hashlib,subprocess
 root=Path('.agentplane/tasks/202610011119-4H9E82');sw=Path('vendor/libreoffice-reference/sw/source/core/doc/number.cxx').read_text();svx=Path('vendor/libreoffice-reference/editeng/source/items/numitem.cxx').read_text();records=[]
 def extract(source,path,marker):
  a=source.index(marker);b=source.index('\n}\n',a)+3;value=source[a:b];records.append(dict(source=path,marker=marker,sha256=hashlib.sha256(value.encode()).hexdigest(),text=value));return value
 # Named string/Unicode adapter: ASCII ListFormat profiles, native bullet values emitted as code points.
-previous=Path('.agentplane/tasks/202609302319-9KTM99/native-marker-oracle.cxx').read_text()
+previous=probe_source(Path('.agentplane/tasks/202609302319-9KTM99/native-marker-oracle.cxx')).read_text()
 a=previous.index('struct OUString {');b=previous.index('namespace css::lang',a)
 strings=previous[a:b].replace(' char operator[]',' char operator[]')
 strings+='\nbool operator==(const OUString&a,const OUString&b){return a.value==b.value;}\nOUString operator""_ustr(const char16_t* s,size_t){return OUString(s);}\nusing UIName=OUString;\n'
@@ -102,12 +105,12 @@ int main(){std::cout<<"{\"defaults\":[";bool first=true;
 }
 '''
 cpp=pre+strings+classes+constants+'\n'.join(definitions)+main
-root.joinpath('native-rule-formats.cxx').write_text(cpp)
-root.joinpath('native-source-identity.json').write_text(json.dumps(dict(pin='9bc445578031fecf56086729d8e4940c77e14d65',definitions=records,adapters=['ASCII OUString/ListFormat and numeric Unicode codepoints; valid rule enums and default Twip conversions','SwClient registration is null; fonts use scalar family values; no live graphics','primitive inline setters/platform constants are declaration adapters; source factory/format/rule constructor/copy/equality/Get/Set bodies unchanged','native full static destructor/refcount release, map/graphic link/client/style/font/color/locale lifetimes are not certified']),indent=2)+'\n')
+probe_source(root.joinpath('native-rule-formats.cxx')).write_text(cpp)
+root.joinpath('native-source-identity.json').write_text(identity_json(dict(pin='9bc445578031fecf56086729d8e4940c77e14d65',definitions=records,adapters=['ASCII OUString/ListFormat and numeric Unicode codepoints; valid rule enums and default Twip conversions','SwClient registration is null; fonts use scalar family values; no live graphics','primitive inline setters/platform constants are declaration adapters; source factory/format/rule constructor/copy/equality/Get/Set bodies unchanged','native full static destructor/refcount release, map/graphic link/client/style/font/color/locale lifetimes are not certified']),indent=2)+'\n')
 binary=root/'native-rule-formats'
 try:
- subprocess.run(['clang++','-std=c++20','-fsanitize=address,undefined',str(root/'native-rule-formats.cxx'),'-o',str(binary)],check=True)
- result=json.loads(subprocess.check_output([str(binary)],text=True));root.joinpath('native-results.json').write_text(json.dumps(result,indent=2)+'\n')
- fixture=Path('apps/office/src/sw/source/core/doc/number-ownership-native.json');fixture.write_text(json.dumps(result,indent=2)+'\n')
+ subprocess.run(['clang++','-std=c++20','-fsanitize=address,undefined',str(probe_source(root/'native-rule-formats.cxx')),'-o',str(binary)],check=True)
+ result=json.loads(subprocess.check_output([str(binary)],text=True));root.joinpath('native-results.json').write_text(identity_json(result,indent=2)+'\n')
+ fixture=Path('apps/office/src/sw/source/core/doc/number-ownership-native.json');fixture.write_text(identity_json(result,indent=2)+'\n')
  print('PASS',len(records),'unchanged definitions/constants;',len(result['defaults']),'base states;',len(result['ownership']),'ownership/equality states; ASan/UBSan')
 finally:binary.unlink(missing_ok=True)

@@ -1,5 +1,8 @@
 """Compile pinned dispatch suffixes with inert namespace/error/reference dependency shims."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json,subprocess
 root=Path('.agentplane/tasks/202609302242-6RBX14')
 source=Path('vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx').read_text()
@@ -65,14 +68,14 @@ struct SvXMLImport {
 };
 int main(){SvXMLImport importer;char op;std::string a,b;while(std::cin>>op>>a){if(op=='K')importer.startFastElement(std::stoi(a),{});else if(op=='E')importer.endFastElement(std::stoi(a));else if(op=='U'){std::cin>>b;importer.startUnknownElement(a,b,{});}else if(op=='V'){std::cin>>b;importer.endUnknownElement(a,b);}else importer.maContexts.top()->characters(a);}for(const auto& event:events)std::cout<<event<<'\n';}
 '''
-root.joinpath('native-dispatch.cxx').write_text(cpp)
+probe_source(root.joinpath('native-dispatch.cxx')).write_text(cpp)
 binary=root/'native-dispatch'
-subprocess.run(['clang++','-std=c++20',str(root/'native-dispatch.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-dispatch.cxx')),'-o',str(binary)],check=True)
 cases=[
 'K 0\nK 2\nT hidden\nU urn:foreign wrapper\nK 1\nT hidden\nE 1\nV urn:foreign wrapper\nE 2\nU urn:foreign wrapper\nT A\nU urn:foreign nested\nT B\nV urn:foreign nested\nK 1\nT C\nE 1\nT D\nV urn:foreign wrapper\nK 1\nT E\nE 1\nE 0\n',
 'U urn:foreign root\nU urn:foreign owned\nT A\nV urn:foreign owned\nT B\nV urn:foreign root\n',
 'K 0\nU urn:foreign wrapper\nU urn:foreign owned\nK 2\nT hidden\nE 2\nV urn:foreign owned\nT tail\nV urn:foreign wrapper\nE 0\n']
 rows=[{'input':case,'events':subprocess.check_output([str(binary)],input=case,text=True).splitlines()} for case in cases]
 binary.unlink()
-root.joinpath('native-traces.json').write_text(json.dumps(rows,indent=2)+'\n')
+root.joinpath('native-traces.json').write_text(identity_json(rows,indent=2)+'\n')
 print('Compiled unmodified pinned child/reference dispatch and end bodies; 3 traces / '+str(sum(len(row['events']) for row in rows))+' events.')

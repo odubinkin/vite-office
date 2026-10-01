@@ -4,38 +4,32 @@
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "void SwTextNode::SetListRestart(",
-      "sha256": "605ff0b8b26228cb31a8572519c0affc09337fb14afe27e20b3d1fafe0d02631",
-      "text": "void SwTextNode::SetListRestart( bool bRestart )\n{\n    if ( !bRestart )\n    {\n        // attribute not contained in paragraph style's attribute set. Thus,\n        // it can be reset to the attribute pool default by resetting the attribute.\n        ResetAttr( RES_PARATR_LIST_ISRESTART );\n    }\n    else\n    {\n        SfxBoolItem aNewIsRestartItem( RES_PARATR_LIST_ISRESTART,\n                                       true );\n        SetAttr( aNewIsRestartItem );\n    }\n}"
+      "sha256": "605ff0b8b26228cb31a8572519c0affc09337fb14afe27e20b3d1fafe0d02631"
     },
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "bool SwTextNode::IsListRestart()",
-      "sha256": "4d015d297a68eda4d601cf72e38ba66cb6cfd82239cbf45d400d17286532d486",
-      "text": "bool SwTextNode::IsListRestart() const\n{\n    const SfxBoolItem& aIsRestartItem = GetAttr( RES_PARATR_LIST_ISRESTART );\n\n    return aIsRestartItem.GetValue();\n}"
+      "sha256": "4d015d297a68eda4d601cf72e38ba66cb6cfd82239cbf45d400d17286532d486"
     },
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "void SwTextNode::SetAttrListRestartValue(",
-      "sha256": "f600463843e9e1109b8ed3e568a47a633932e5682c8a496a522a28d7c20bc41c",
-      "text": "void SwTextNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber )\n{\n    const bool bChanged( HasAttrListRestartValue()\n                         ? GetAttrListRestartValue() != nNumber\n                         : nNumber != USHRT_MAX );\n\n    if ( !bChanged && HasAttrListRestartValue() )\n        return;\n\n    if ( nNumber == USHRT_MAX )\n    {\n        ResetAttr( RES_PARATR_LIST_RESTARTVALUE );\n    }\n    else\n    {\n        SfxInt16Item aNewListRestartValueItem( RES_PARATR_LIST_RESTARTVALUE,\n                                               static_cast<sal_Int16>(nNumber) );\n        SetAttr( aNewListRestartValueItem );\n    }\n}"
+      "sha256": "f600463843e9e1109b8ed3e568a47a633932e5682c8a496a522a28d7c20bc41c"
     },
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "bool SwTextNode::HasAttrListRestartValue()",
-      "sha256": "e43d74952dd48176892a643f18d4cefd85cc8a77f9d1430bcaab473c0b25d025",
-      "text": "bool SwTextNode::HasAttrListRestartValue() const\n{\n    return GetpSwAttrSet() &&\n           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, false ) == SfxItemState::SET;\n}"
+      "sha256": "e43d74952dd48176892a643f18d4cefd85cc8a77f9d1430bcaab473c0b25d025"
     },
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "SwNumberTree::tSwNumTreeNumber SwTextNode::GetAttrListRestartValue()",
-      "sha256": "1bcd0cc4270cf0fd14920323681fb223dcdfe78b6e01724292dcf243890cb841",
-      "text": "SwNumberTree::tSwNumTreeNumber SwTextNode::GetAttrListRestartValue() const\n{\n    OSL_ENSURE( HasAttrListRestartValue(),\n            \"<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node.\" );\n\n    const SfxInt16Item& aListRestartValueItem =\n        GetAttr( RES_PARATR_LIST_RESTARTVALUE );\n    return static_cast<SwNumberTree::tSwNumTreeNumber>(aListRestartValueItem.GetValue());\n}"
+      "sha256": "1bcd0cc4270cf0fd14920323681fb223dcdfe78b6e01724292dcf243890cb841"
     },
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "SwNumberTree::tSwNumTreeNumber SwTextNode::GetActualListStartValue()",
-      "sha256": "f08a94bb009bdd9c10f5bcd0055d27797bc9e8e7216978f2bb3d04968a7de8dc",
-      "text": "SwNumberTree::tSwNumTreeNumber SwTextNode::GetActualListStartValue() const\n{\n    SwNumberTree::tSwNumTreeNumber nListRestartValue = 1;\n\n    if ( IsListRestart() && HasAttrListRestartValue() )\n    {\n        nListRestartValue = GetAttrListRestartValue();\n    }\n    else\n    {\n        SwNumRule* pRule = GetNumRule();\n        if ( pRule )\n        {\n            const SwNumFormat* pFormat =\n                    pRule->GetNumFormat( o3tl::narrowing<sal_uInt16>(GetAttrListLevel()) );\n            if ( pFormat )\n            {\n                nListRestartValue = pFormat->GetStart();\n            }\n        }\n    }\n\n    return nListRestartValue;\n}"
+      "sha256": "f08a94bb009bdd9c10f5bcd0055d27797bc9e8e7216978f2bb3d04968a7de8dc"
     }
   ],
   "adapters": [

@@ -1,5 +1,8 @@
 """Compile unmodified pinned integer bodies and native list-level normalization."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json,subprocess
 root=Path('.agentplane/tasks/202609302219-BJJJBT')
 rtl=Path('vendor/libreoffice-reference/sal/rtl/strtmpl.hxx').read_text()
@@ -47,13 +50,13 @@ int main(){int present;std::string hex;while(std::cin>>present>>hex){std::string
 if(hex!="-")for(size_t i=0;i<hex.size();i+=2)value+=static_cast<char>(std::stoi(hex.substr(i,2),nullptr,16));
 std::cout<<(present?level(value):-1)<<'\n';}}
 '''
-root.joinpath('native-level-oracle.cxx').write_text(cpp)
+probe_source(root.joinpath('native-level-oracle.cxx')).write_text(cpp)
 binary=root/'native-level-oracle'
-subprocess.run(['clang++','-std=c++20',str(root/'native-level-oracle.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-level-oracle.cxx')),'-o',str(binary)],check=True)
 cases=[None,'',' \t','invalid','0','-0','-7','1.5','2junk','+2',' 2','\t3tail','10','11','2147483647','2147483648','-2147483648','-2147483649','9223372036854775807','9223372036854775808','-9223372036854775809','\u20032','\u00002','0002','1e2','0x2','+','-','--2',' + 2',' \n 9x','123456789012345678901234567890','1\u00002','\u001f2']
 request=''.join(('0 -' if value is None else '1 '+(value.encode().hex() or '-'))+'\n' for value in cases)
 output=subprocess.check_output([str(binary)],input=request,text=True)
 binary.unlink()
 rows=[{'value':value,'level':int(level)} for value,level in zip(cases,output.splitlines(),strict=True)]
-root.joinpath('native-results.json').write_text(json.dumps(rows,indent=2,ensure_ascii=True)+'\n')
+root.joinpath('native-results.json').write_text(identity_json(rows,indent=2,ensure_ascii=True)+'\n')
 print(f'Compiled actual rtl/o3tl integer bodies and xmlnumi normalization; {len(rows)} cases.')

@@ -2,9 +2,12 @@
 import json
 import subprocess
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 
 root = Path(".agentplane/tasks/202609302034-1CZ8BR")
-previous = Path(".agentplane/tasks/202609301734-F5X9J6/native-measure-oracle.cxx").read_text()
+previous = probe_source(Path(".agentplane/tasks/202609301734-F5X9J6/native-measure-oracle.cxx")).read_text()
 previous = previous[:previous.index("int main(")]
 source = Path("vendor/libreoffice-reference/sax/source/tools/converter.cxx").read_text()
 start = source.index("void Converter::convertMeasure( OUStringBuffer&")
@@ -67,10 +70,10 @@ int main() {
 }
 """
 cpp = previous + preamble + muldiv + platform + export + main
-root.joinpath("native-list-measure-oracle.cxx").write_text(cpp)
+probe_source(root.joinpath("native-list-measure-oracle.cxx")).write_text(cpp)
 # Binaries are temporary evidence-generation outputs and are removed after execution.
 binary = root / "native-list-measure-oracle"
-subprocess.run(["clang++", "-std=c++20", str(root / "native-list-measure-oracle.cxx"), "-o", str(binary)], check=True)
+subprocess.run(["clang++", "-std=c++20", str(probe_source(root / "native-list-measure-oracle.cxx")), "-o", str(binary)], check=True)
 cases=[]
 for unit in ["mm100","twip"]:
     for value in [0,1,-1,2,-2,72,-72,127,-127,250,-250,1000,1008,-1008,1134,32767,-32768,2147483647,-2147483648]:
@@ -87,5 +90,5 @@ finally:
 assert len(output)==len(cases)
 for case,result in zip(cases,output):
     case["expected"]=result
-root.joinpath("native-results.json").write_text(json.dumps(cases,indent=2)+"\n")
+root.joinpath("native-results.json").write_text(identity_json(cases,indent=2)+"\n")
 print(f"Generated {len(cases)} results using unmodified pinned SAX export/parser and o3tl integer bodies.")

@@ -20,6 +20,13 @@
 .agentplane/by-tag
 .agentplane/by-owner
 .agentplane/tasks/*/handoff
+# Extracted upstream/native probe sources belong only in ignored scratch storage.
+.agentplane/tasks/**/*.c
+.agentplane/tasks/**/*.cpp
+.agentplane/tasks/**/*.cxx
+.agentplane/tasks/**/*.h
+.agentplane/tasks/**/*.hpp
+.agentplane/tasks/**/*.hxx
 AGENTS.md.bak-*
 CLAUDE.md.bak-*
 .agentplane/agents/*.bak-*

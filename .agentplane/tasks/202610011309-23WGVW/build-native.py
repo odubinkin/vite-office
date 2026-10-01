@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib,json
 root=Path('vendor/libreoffice-reference');out=Path('.agentplane/tasks/202610011309-23WGVW');ids=[]
 def body(path,sig):
@@ -7,7 +10,7 @@ def body(path,sig):
   depth+=(s[i]=='{')-(s[i]=='}');i+=1
  result=s[a:i];ids.append({'path':path,'signature':sig,'sha256':hashlib.sha256(result.encode()).hexdigest()});return result
 # Reuse the previous verified complete constructor/copy/owned Get/effective Get/ref Set/default-table profile.
-text=Path('.agentplane/tasks/202610011207-TR9DSM/native-format-values.cxx').read_text().split('void state(')[0]
+text=probe_source(Path('.agentplane/tasks/202610011207-TR9DSM/native-format-values.cxx')).read_text().split('void state(')[0]
 text=text.replace('SVX_NUM_NUMBER_NONE=5','SVX_NUM_NUMBER_NONE=5,SVX_NUM_BITMAP=8')
 text=text.replace('#include <string>','#include <algorithm>\n#include <string>')
 text=text.replace('SwNumFormat();SwNumFormat(const SwNumFormat&);','bool IsItemize()const;bool IsEnumeration()const;SwNumFormat();SwNumFormat(const SwNumFormat&);')
@@ -48,6 +51,6 @@ std::cout<<"],\\\"registry\\\":[";first=true;for(int mask=0;mask<16;mask++) {
  if(!first)std::cout<<",";first=false;std::cout<<"["<<mask<<",[";bool comma=false;for(auto*p:filtered){if(comma)std::cout<<",";comma=true;std::cout<<(p-records);}std::cout<<"]]";
 }std::cout<<"]}";}
 '''
-(out/'native-classification.cxx').write_text(text)
+(probe_source(out/'native-classification.cxx')).write_text(text)
 # Native enum and source owner/profile identities, including the previous full format/rule profile.
-(out/'native-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':ids,'previousProfile':'.agentplane/tasks/202610011207-TR9DSM/native-source-identities.json','profileSha256':hashlib.sha256(text.encode()).hexdigest(),'scope':'Complete unchanged native predicates/bound-level/counting/registry and actual native rule constructor/Get/GetNumFormat/Set/default tables. Named shown-record/null-layout/count/phantom/already-ordered-container/platform/font/style/graphics aliases are explicit. Native full tree counter algorithm, layout/redline/graphics/Font/service/global lifetimes are not certified; bitmap is scalar classification only.'},indent=2)+'\n')
+(out/'native-identities.json').write_text(identity_json({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':ids,'previousProfile':'.agentplane/tasks/202610011207-TR9DSM/native-source-identities.json','profileSha256':hashlib.sha256(text.encode()).hexdigest(),'scope':'Complete unchanged native predicates/bound-level/counting/registry and actual native rule constructor/Get/GetNumFormat/Set/default tables. Named shown-record/null-layout/count/phantom/already-ordered-container/platform/font/style/graphics aliases are explicit. Native full tree counter algorithm, layout/redline/graphics/Font/service/global lifetimes are not certified; bitmap is scalar classification only.'},indent=2)+'\n')

@@ -5,20 +5,17 @@
     {
       "source": "sw/source/core/doc/number.cxx",
       "marker": "const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const",
-      "sha256": "a033938c7fa0311e0de3ec46929023090bc87fe5154f3b8d07ed42f7a9084a5a",
-      "text": "const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const\n{\n    assert( i < MAXLEVEL && meRuleType < RULE_END );\n    return maFormats[ i ]\n           ? *maFormats[ i ]\n           : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION\n               ? *saBaseFormats[ meRuleType ][ i ]\n               : *saLabelAlignmentBaseFormats[ meRuleType ][ i ] );\n}"
+      "sha256": "a033938c7fa0311e0de3ec46929023090bc87fe5154f3b8d07ed42f7a9084a5a"
     },
     {
       "source": "sw/source/core/doc/number.cxx",
       "marker": "const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const",
-      "sha256": "b0abb2f8738fd5807b1e8168265742ae3ca39c96b5e9628e6f5e2f1e4a9f3c58",
-      "text": "const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const\n{\n    const SwNumFormat * pResult = nullptr;\n\n    assert( i < MAXLEVEL && meRuleType < RULE_END );\n    if ( i < MAXLEVEL && meRuleType < RULE_END)\n    {\n        pResult = maFormats[ i ].get();\n    }\n\n    return pResult;\n}"
+      "sha256": "b0abb2f8738fd5807b1e8168265742ae3ca39c96b5e9628e6f5e2f1e4a9f3c58"
     },
     {
       "source": "sw/source/core/doc/number.cxx",
       "marker": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )",
-      "sha256": "deac40378c23d3c416a24561ce652aff3848dd138763934f047d2b60b5fbd594",
-      "text": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )\n{\n    OSL_ENSURE( i < MAXLEVEL, \"Serious defect\" );\n    if( i < MAXLEVEL )\n    {\n        if( !maFormats[ i ] || (rNumFormat != Get( i )) )\n        {\n            maFormats[ i ].reset(new SwNumFormat( rNumFormat ));\n            mbInvalidRuleFlag = true;\n        }\n    }\n}"
+      "sha256": "deac40378c23d3c416a24561ce652aff3848dd138763934f047d2b60b5fbd594"
     }
   ]
 }

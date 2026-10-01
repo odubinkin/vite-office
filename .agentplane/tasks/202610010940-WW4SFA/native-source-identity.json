@@ -6,29 +6,25 @@
       "source": "sw/source/core/bastyp/init.cxx",
       "marker": "RES_PARATR_LIST_RESTARTVALUE initializer",
       "bytes": 111,
-      "sha256": "4938cc7a8093ee7a59234ef6f7fa1ba5a53fd1979168ca30d3ac6b9c05f40291",
-      "text": "{ RES_PARATR_LIST_RESTARTVALUE, new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 ), 0, SFX_ITEMINFOFLAG_NONE }"
+      "sha256": "4938cc7a8093ee7a59234ef6f7fa1ba5a53fd1979168ca30d3ac6b9c05f40291"
     },
     {
       "source": "include/svl/intitem.hxx",
       "marker": "SfxInt16Item constructor",
       "bytes": 124,
-      "sha256": "31a677f4356073b35f5623cc347e9d2fb0d0fb2aac55b004e1ac82d7ed9bb827",
-      "text": "explicit SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0):\n        SfxPoolItem(which), m_nValue(nTheValue)\n    {}"
+      "sha256": "31a677f4356073b35f5623cc347e9d2fb0d0fb2aac55b004e1ac82d7ed9bb827"
     },
     {
       "source": "include/svl/intitem.hxx",
       "marker": "GetValue",
       "bytes": 47,
-      "sha256": "e4b3f880d7bfa7efd2f96336f8b1416547502c532a7e8a791b8cab2e557a5f70",
-      "text": "sal_Int16 GetValue() const { return m_nValue; }"
+      "sha256": "e4b3f880d7bfa7efd2f96336f8b1416547502c532a7e8a791b8cab2e557a5f70"
     },
     {
       "source": "svl/source/items/intitem.cxx",
       "marker": "Clone",
       "bytes": 94,
-      "sha256": "15a4a51b7f5f6e835df6de57f19a4832f0e1accc5d635839c2db0b3d50a1e3f8",
-      "text": "SfxInt16Item* SfxInt16Item::Clone(SfxItemPool *) const\n{\n    return new SfxInt16Item(*this);\n}"
+      "sha256": "15a4a51b7f5f6e835df6de57f19a4832f0e1accc5d635839c2db0b3d50a1e3f8"
     }
   ]
 }

@@ -1,5 +1,8 @@
 """Build and execute the pinned native measure functions against the source-derived TS cases."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json, subprocess
 root=Path.cwd(); task=root/'.agentplane/tasks/202609301734-F5X9J6'
 s=(root/'vendor/libreoffice-reference/sax/source/tools/converter.cxx').read_text()
@@ -46,7 +49,7 @@ int main() {
  }
 }
 '''
-source=task/'native-measure-oracle.cxx';source.write_text(preamble+functions+main)
+source=probe_source(task/'native-measure-oracle.cxx');source.write_text(preamble+functions+main)
 # A repository-local AST reader extracts literal input cases; expected numbers come from the compiled native functions.
 node=r'''
 const fs=require('fs'),ts=require('typescript');
@@ -66,6 +69,6 @@ try:
  data=''.join(f"{r['target']} {r['min']} {r['max']} {r['value'].encode().hex() or '-'}\n" for r in rows)
  output=subprocess.check_output([str(binary)],input=data,text=True).splitlines()
  for row,native in zip(rows,output,strict=True):row['native']=None if native=='null' else int(native)
- (task/'native-results.json').write_text(json.dumps(rows,indent=2)+'\n')
+ (task/'native-results.json').write_text(identity_json(rows,indent=2)+'\n')
 finally:binary.unlink(missing_ok=True)
 print(f'Compiled unmodified pinned parser and measure functions; {len(rows)} native cases recorded. Native o3tl conversion ratios supplied for the two implemented targets.')

@@ -4,67 +4,56 @@
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "SwNumberTree::tSwNumTreeNumber SwTextNode::GetAttrListRestartValue()",
-      "sha256": "1bcd0cc4270cf0fd14920323681fb223dcdfe78b6e01724292dcf243890cb841",
-      "text": "SwNumberTree::tSwNumTreeNumber SwTextNode::GetAttrListRestartValue() const\n{\n    OSL_ENSURE( HasAttrListRestartValue(),\n            \"<SwTextNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node.\" );\n\n    const SfxInt16Item& aListRestartValueItem =\n        GetAttr( RES_PARATR_LIST_RESTARTVALUE );\n    return static_cast<SwNumberTree::tSwNumTreeNumber>(aListRestartValueItem.GetValue());\n}"
+      "sha256": "1bcd0cc4270cf0fd14920323681fb223dcdfe78b6e01724292dcf243890cb841"
     },
     {
       "source": "sw/source/core/txtnode/ndtxt.cxx",
       "marker": "bool SwTextNode::HasAttrListRestartValue()",
-      "sha256": "e43d74952dd48176892a643f18d4cefd85cc8a77f9d1430bcaab473c0b25d025",
-      "text": "bool SwTextNode::HasAttrListRestartValue() const\n{\n    return GetpSwAttrSet() &&\n           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, false ) == SfxItemState::SET;\n}"
+      "sha256": "e43d74952dd48176892a643f18d4cefd85cc8a77f9d1430bcaab473c0b25d025"
     },
     {
       "source": "sw/inc/node.hxx",
       "marker": "inline const SwAttrSet& SwContentNode::GetSwAttrSet()",
-      "sha256": "6ecfbaf45c5671a2d8908cfce58a8ab0ef6106ae7e3980cf0ec7a6d4a4a1d8c5",
-      "text": "inline const SwAttrSet& SwContentNode::GetSwAttrSet() const\n{\n    return mpAttrSet ? *GetpSwAttrSet() : GetAnyFormatColl().GetAttrSet();\n}"
+      "sha256": "6ecfbaf45c5671a2d8908cfce58a8ab0ef6106ae7e3980cf0ec7a6d4a4a1d8c5"
     },
     {
       "source": "sw/inc/node.hxx",
       "marker": "inline const SfxPoolItem& SwContentNode::GetAttr(",
-      "sha256": "3f8e07bfc65bbbcab9836235866bbc807b65ec886e330090c3b2962b4aa0c279",
-      "text": "inline const SfxPoolItem& SwContentNode::GetAttr( sal_uInt16 nWhich,\n                                                bool bInParents ) const\n{\n    return GetSwAttrSet().Get( nWhich, bInParents );\n}"
+      "sha256": "3f8e07bfc65bbbcab9836235866bbc807b65ec886e330090c3b2962b4aa0c279"
     },
     {
       "source": "sw/inc/node.hxx",
       "marker": "    template<class T>\n    const T& GetAttr( TypedWhichId<T>",
-      "sha256": "ec83c5a270e6c0bc247dbe64f3ee8c28a960820ef910c91013210e2aca38eeff",
-      "text": "    template<class T>\n    const T& GetAttr( TypedWhichId<T> nWhich, bool bInParent=true ) const\n    { return static_cast<const T&>(GetAttr(sal_uInt16(nWhich), bInParent)); }"
+      "sha256": "ec83c5a270e6c0bc247dbe64f3ee8c28a960820ef910c91013210e2aca38eeff"
     },
     {
       "source": "include/svl/intitem.hxx",
       "marker": "explicit SfxInt16Item(",
-      "sha256": "31a677f4356073b35f5623cc347e9d2fb0d0fb2aac55b004e1ac82d7ed9bb827",
-      "text": "explicit SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0):\n        SfxPoolItem(which), m_nValue(nTheValue)\n    {}"
+      "sha256": "31a677f4356073b35f5623cc347e9d2fb0d0fb2aac55b004e1ac82d7ed9bb827"
     },
     {
       "source": "include/svl/intitem.hxx",
       "marker": "sal_Int16 GetValue() const",
-      "sha256": "e4b3f880d7bfa7efd2f96336f8b1416547502c532a7e8a791b8cab2e557a5f70",
-      "text": "sal_Int16 GetValue() const { return m_nValue; }"
+      "sha256": "e4b3f880d7bfa7efd2f96336f8b1416547502c532a7e8a791b8cab2e557a5f70"
     },
     {
       "source": "include/osl/diagnose.h",
       "marker": "#define OSL_ENSURE",
-      "sha256": "6eadece4b29025ca7c87e5cd1facf87f8c26c42389da76adb72b6a9c69d0f683",
-      "text": "#define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), \"legacy.osl\", \"%s\", m)"
+      "sha256": "6eadece4b29025ca7c87e5cd1facf87f8c26c42389da76adb72b6a9c69d0f683"
     },
     {
       "source": "include/sal/detail/log.h",
       "marker": "#define SAL_DETAIL_LOG_FORMAT",
-      "sha256": "62a892a04a5afcb035f2823e663d7e9783d3851875ba373686de5f83533a9198",
-      "text": "#define SAL_DETAIL_LOG_FORMAT(condition, level, area, where, ...) \\\n    do { \\\n        if (condition) { \\\n            sal_detail_logFormat((level), (area), (where), __VA_ARGS__); \\\n        } \\\n    } while (SAL_LOG_FALSE)"
+      "sha256": "62a892a04a5afcb035f2823e663d7e9783d3851875ba373686de5f83533a9198"
     },
     {
       "source": "include/sal/detail/log.h",
       "marker": "#define SAL_DETAIL_WARN_IF_FORMAT",
-      "sha256": "600d2baf1af8bf002f86c23eda7f553b1751d1be1842b27984717fc2622f55ff",
-      "text": "#define SAL_DETAIL_WARN_IF_FORMAT(condition, area, ...) \\\n    SAL_DETAIL_LOG_FORMAT( \\\n        SAL_DETAIL_ENABLE_LOG_WARN && (condition), SAL_DETAIL_LOG_LEVEL_WARN, \\\n        area, SAL_DETAIL_WHERE, __VA_ARGS__)"
+      "sha256": "600d2baf1af8bf002f86c23eda7f553b1751d1be1842b27984717fc2622f55ff"
     },
     {
       "source": "include/sal/detail/log.h",
       "marker": "SAL_LOG_WARN build gate",
-      "text": "#if defined SAL_LOG_WARN\n#define SAL_DETAIL_ENABLE_LOG_WARN SAL_LOG_TRUE\n#else\n#define SAL_DETAIL_ENABLE_LOG_WARN SAL_LOG_FALSE\n#endif",
       "sha256": "48a633cbb0c8c1d702289c1f99a5c4532f771df503c239adebd4225a65e69e52"
     }
   ],

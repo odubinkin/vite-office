@@ -6,6 +6,9 @@ normalized and UNO restart property sink. No MakeNumRule/default factory,
 continue-numbering/processed identity/UNO/native build claim.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import itertools
 import json
 import subprocess
@@ -110,7 +113,7 @@ else if(event=='P'){auto*p=static_cast<XMLTextListItemContext*>(active.back())->
 else {auto*p=active.back();p->endFastElement(0);active.pop_back();delete p;}}
 for(auto&state:trace)std::cout<<state.level<<","<<state.counted<<","<<state.restart<<","<<state.start<<";";std::cout<<"\\n";}}
 '''
-file = task / 'native-sublist.cxx'
+file = probe_source(task / 'native-sublist.cxx')
 file.write_text(source)
 binary = task / 'native-sublist'
 subprocess.run(['clang++','-std=c++20','-O0',str(file),'-o',str(binary)],check=True)
@@ -118,5 +121,5 @@ output = subprocess.check_output([str(binary)],text=True).splitlines()
 binary.unlink()
 for row,line in zip(rows,output,strict=True):
     row['expected']=[dict(level=l,counted=bool(c),restart=bool(r),start=s) for l,c,r,s in (map(int,part.split(',')) for part in line.split(';') if part)]
-(task / 'native-results.json').write_text(json.dumps(rows,indent=2)+'\n')
+(task / 'native-results.json').write_text(identity_json(rows,indent=2)+'\n')
 print(f'Compiled native item/block/paragraph restart excerpts for {len(rows)} input trees/{sum(len(r["expected"]) for r in rows)} paragraph states.')

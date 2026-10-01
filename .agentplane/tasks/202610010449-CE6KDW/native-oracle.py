@@ -1,8 +1,11 @@
 """Compile full pinned shown numbering lifecycle with explicit platform dependencies."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json,subprocess,itertools
 root=Path('.agentplane/tasks/202610010449-CE6KDW')
-base=Path('.agentplane/tasks/202610010418-7548FA/native-lifecycle.cxx').read_text().split('int main(){',1)[0]
+base=probe_source(Path('.agentplane/tasks/202610010418-7548FA/native-lifecycle.cxx')).read_text().split('int main(){',1)[0]
 textsrc=Path('vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx').read_text()
 nodesrc=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx').read_text()
 rulesrc=Path('vendor/libreoffice-reference/sw/source/core/doc/number.cxx').read_text()
@@ -121,7 +124,7 @@ int main(){int count;while(std::cin>>count){
 '''
 # No native method body is rewritten; adapter declarations may change types/representation only.
 for f in functions:assert f in base
-root.joinpath('native-owner.cxx').write_text(base)
+probe_source(root.joinpath('native-owner.cxx')).write_text(base)
 cases=[]
 for shape in [[0,1,2,0],[2,2,0,2],[0,0,0],[3,0,3]]:
  n=len(shape)
@@ -131,7 +134,7 @@ for shape in [[0,1,2,0],[2,2,0,2],[0,0,0],[3,0,3]]:
    cases.append({'starts':[start,5,3,2,4,6,8,9,10,11],'items':[{'level':l,'counted':True,'restart':False,'actualStart':0} for l in shape],'ops':ops})
 request=''.join(str(len(c['items']))+' '+' '.join(map(str,c['starts']))+' '+' '.join(f'{i["level"]} {int(i["counted"])} {int(i["restart"])} {i["actualStart"]}' for i in c['items'])+' '+str(len(c['ops']))+' '+' '.join(' '.join(map(str,o)) for o in c['ops'])+'\n' for c in cases)
 binary=root/'native-owner'
-subprocess.run(['clang++','-std=c++20',str(root/'native-owner.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-owner.cxx')),'-o',str(binary)],check=True)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink()
 offset=0;states=0
 for case in cases:
@@ -146,5 +149,5 @@ for case in cases:
   snapshots.append({'raw':raw,'nodes':list(reversed(rows)),'rules':memberships[:2],'registry':memberships[2]})
  case['expected']=snapshots
 assert offset==len(lines)
-root.joinpath('native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,separators=(',',':'))+'\n')
 print(f'{len(functions)} additional unmodified owner/registration definitions;{len(cases)} sequences/{states} owner states. Single shown/doc-node/no layout/no redline iterator/ASCII rule/platform/debug/normal-mode adapters;not full native build/callback/lifetime machinery.')

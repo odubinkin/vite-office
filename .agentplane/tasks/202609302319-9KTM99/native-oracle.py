@@ -2,6 +2,9 @@
 import json
 import subprocess
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 
 root = Path('.agentplane/tasks/202609302319-9KTM99')
 num = Path('vendor/libreoffice-reference/editeng/source/items/numitem.cxx').read_text()
@@ -84,7 +87,7 @@ cases.append(dict(kind='marker',pattern='%10%/%1%',types=[0]*10,values=list(rang
 cases.append(dict(kind='marker',pattern=None,types=[0]*3,values=[2,3,4],count=0,level=2,prefix='(',suffix=')'))
 main = ['int main(){']
 for case in cases:
-    literal = lambda x: json.dumps(x)
+    literal = lambda x: identity_json(x)
     if case['kind']=='marker':
         main += ['{SwNumRule rule;',f'rule.formats[{case["level"]}].nInclUpperLevels={case["count"]};',f'rule.formats[{case["level"]}].sPrefix={literal(case["prefix"])};',f'rule.formats[{case["level"]}].sSuffix={literal(case["suffix"])};']
         if case['pattern'] is not None:main += [f'rule.formats[{case["level"]}].SetListFormat(OUString({literal(case["pattern"])}));']
@@ -102,12 +105,12 @@ if(format.HasListFormat())std::cout<<std::quoted(format.GetListFormat().value);e
 std::cout<<"]\n";}''']
 main += ['}']
 cpp += '\n'.join(main)
-root.joinpath('native-marker-oracle.cxx').write_text(cpp)
+probe_source(root.joinpath('native-marker-oracle.cxx')).write_text(cpp)
 binary=root/'native-marker-oracle'
-subprocess.run(['clang++','-std=c++20',str(root/'native-marker-oracle.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-marker-oracle.cxx')),'-o',str(binary)],check=True)
 try:results=subprocess.check_output([str(binary)],text=True).splitlines()
 finally:binary.unlink(missing_ok=True)
 assert len(cases)==len(results)
 for case,result in zip(cases,results):case['expected']=json.loads(result)
-root.joinpath('native-results.json').write_text(json.dumps(cases,indent=2)+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,indent=2)+'\n')
 print(f'{len(cases)} native states/labels from extracted unmodified setter and Writer formatter bodies; ASCII/Arabic dependency shims, no native full build claim.')

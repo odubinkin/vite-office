@@ -3,6 +3,9 @@ Dependencies model ASCII OUString, byte integer input, modern/no-build-id docume
 Arabic/bullet families and standard ODF 1.3 only; this is not a native full build.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json, re, subprocess
 root = Path('.agentplane/tasks/202609302342-JM15NR')
 up = Path('vendor/libreoffice-reference')
@@ -26,8 +29,8 @@ export_affix='\n'.join(block(exp, f'        if (!s{name}.isEmpty())') for name i
 export_start=block(exp,'        if( nStartValue != 1 )')
 export_display=block(exp,'        if( nDisplayLevels > 1 && NumberingType::NUMBER_NONE != eType )')
 export_clamp=block(exp,'        else if( rProp.Name == "ParentNumbering" )')
-integer=Path('.agentplane/tasks/202609302219-BJJJBT/native-level-oracle.cxx').read_text().split('struct Attribute')[0]
-marker=Path('.agentplane/tasks/202609302319-9KTM99/native-marker-oracle.cxx').read_text().split('void StripNonDelimiter')[0]
+integer=probe_source(Path('.agentplane/tasks/202609302219-BJJJBT/native-level-oracle.cxx')).read_text().split('struct Attribute')[0]
+marker=probe_source(Path('.agentplane/tasks/202609302319-9KTM99/native-marker-oracle.cxx')).read_text().split('void StripNonDelimiter')[0]
 marker=re.sub(r'using sal_Int32=.*?; using LanguageType=int;', 'using sal_uInt8=uint8_t;using sal_uInt16=uint16_t;using LanguageType=int;',marker)
 marker=marker.replace('OUString makeStringAndClear(){return value;}', 'void append(sal_Int32 n){value+=OUString::number(n);} OUString makeStringAndClear(){auto out=value;value.clear();return out;}')
 marker=marker.replace('char operator[](int32_t n)const', 'sal_Int32 iterateCodePoints(sal_Int32* n)const{return static_cast<unsigned char>(value.at((*n)++));}\n char operator[](int32_t n)const')
@@ -101,7 +104,7 @@ apply=r'''
 }}
 '''
 cpp=integer+marker+preamble+attrs+'\n'+generate+apply
-root.joinpath('native-marker-transport.cxx').write_text(cpp)
+probe_source(root.joinpath('native-marker-transport.cxx')).write_text(cpp)
 # Attribute token order is retained; all affix/pattern strings are ASCII in this shim.
 map_tokens={'text:start-value':('TEXT','XML_START_VALUE'),'text:display-levels':('TEXT','XML_DISPLAY_LEVELS'),'style:num-prefix':('STYLE','XML_NUM_PREFIX'),'style:num-suffix':('STYLE','XML_NUM_SUFFIX'),'style:num-list-format':('STYLE','XML_NUM_LIST_FORMAT'),'loext:num-list-format':('LO_EXT','XML_NUM_LIST_FORMAT')}
 ns={'TEXT':1,'STYLE':2,'LO_EXT':4}
@@ -114,7 +117,7 @@ attrs_sets += [[('style:num-list-format','ignored'),('loext:num-list-format','[%
 cases=[{'kind':'numbered' if kind==0 else 'bullet','level':level,'attributes':attrs} for kind in range(2) for level in [0,1,9] for attrs in attrs_sets]
 request=''.join(f'{int(c["kind"]=="bullet")} {c["level"]} {len(c["attributes"])} '+ ' '.join(f'{token_map[k]} {v.encode().hex() or "-"}' for k,v in c['attributes'])+'\n' for c in cases)
 binary=root/'native-marker-transport'
-subprocess.run(['clang++','-std=c++20',str(root/'native-marker-transport.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-marker-transport.cxx')),'-o',str(binary)],check=True)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink()
 def state(line):
     prefix,suffix,start,parent,pattern=line.split();decode=lambda h: '' if h=='-' else bytes.fromhex(h).decode()
@@ -122,5 +125,5 @@ def state(line):
 reverse={value:key for key,value in token_map.items()}
 for i,c in enumerate(cases):
     c['declaration']=state(lines[3*i]);c['applied']=state(lines[3*i+1]);out=lines[3*i+2].split();c['exportAttributes']={reverse[int(out[j])]:('' if out[j+1]=='-' else bytes.fromhex(out[j+1]).decode()) for j in range(1,len(out),2)}
-root.joinpath('native-results.json').write_text(json.dumps(cases,indent=2,ensure_ascii=True)+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,indent=2,ensure_ascii=True)+'\n')
 print(f'Compiled unmodified pinned attribute loop, generated format, property publication/application and export predicates; {len(cases)} cases. ASCII strings; byte integer parsing includes UTF-8 whitespace; modern/no-build-id, Arabic/bullet and standard ODF 1.3 only.')

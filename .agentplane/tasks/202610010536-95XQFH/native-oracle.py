@@ -1,5 +1,8 @@
 """Compile unchanged native format-collection transitions with explicit dependencies."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib, itertools, json, subprocess
 
 root = Path('.agentplane/tasks/202610010536-95XQFH')
@@ -12,7 +15,7 @@ def block(text, marker):
         depth += (text[end] == '{') - (text[end] == '}'); end += 1
     return text[start:end]
 
-base = Path('.agentplane/tasks/202610010449-CE6KDW/native-owner.cxx').read_text().split('int main(){', 1)[0]
+base = probe_source(Path('.agentplane/tasks/202610010449-CE6KDW/native-owner.cxx')).read_text().split('int main(){', 1)[0]
 deps = r'''
 using sal_Int16=int16_t;struct SwNumRule;struct SwPaM;
 template<class T>struct TypedWhichId {int id;constexpr operator int()const{return id;}};
@@ -137,10 +140,10 @@ int main(){int count,foreignCase;while(std::cin>>count>>foreignCase){
 }}
 '''
 for body in functions+methods: assert body in base
-root.joinpath('native-style.cxx').write_text(base)
-root.joinpath('native-source-identity.json').write_text(json.dumps([{'signature':f.split('{',1)[0].strip(),'sha256':hashlib.sha256(f.encode()).hexdigest(),'bytes':len(f.encode())} for f in functions+methods],indent=2)+'\n')
+probe_source(root.joinpath('native-style.cxx')).write_text(base)
+root.joinpath('native-source-identity.json').write_text(identity_json([{'signature':f.split('{',1)[0].strip(),'sha256':hashlib.sha256(f.encode()).hexdigest(),'bytes':len(f.encode())} for f in functions+methods],indent=2)+'\n')
 binary=root/'native-style'
-subprocess.run(['clang++','-std=c++20',str(root/'native-style.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-style.cxx')),'-o',str(binary)],check=True)
 cases=[]
 for a,b in itertools.product(range(16),repeat=2):
     cases.append({'count':3,'ops':[[0,0,a],[0,1,a],[3,0,1],[2,0,2],[4,0,7],[5,0,0],[0,0,b],[0,2,b],[8,2,0],[0,2,b],[9,0,a],[0,0,b],[0,0,0]]})
@@ -160,5 +163,5 @@ for c in cases:
         for _ in range(4):memberships.append(list(map(int,lines[offset].split()))[1:]);offset+=1
         c['expected'].append({'nodes':rows,'rules':memberships[:3],'registry':memberships[3]})
 assert offset==len(lines)
-root.joinpath('native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,separators=(',',':'))+'\n')
 print(f'{len(functions+methods)} additional unchanged native definitions;{len(cases)} sequences/{states} states. Reused complete shown tree/owner bodies;no native build/footnotes/conditional or inline styles/outline index/platform cache/live format callbacks/full attribute/history lifetime coverage. Attribute APIs are explicit boundary adapters.')

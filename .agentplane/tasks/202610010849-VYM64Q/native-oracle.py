@@ -1,5 +1,8 @@
 """Compile unchanged native mutation/delta bodies with named dependency adapters."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import hashlib,json,subprocess,random
 root=Path('.agentplane/tasks/202610010849-VYM64Q')
 sources={k:Path('vendor/libreoffice-reference/'+v).read_text() for k,v in {
@@ -103,8 +106,8 @@ int main(){int count;while(std::cin>>count){SwContentNode node;std::cout<<'[';fo
  if(kind==7){SfxItemSet empty(node.pool,0);result=node.SetAttr(empty);}if(kind==8)node.format.attrs.Put(SfxPoolItem{x[0],x[1]});if(kind==9)node.pending=x;
  if(at)std::cout<<',';std::cout<<"{\"result\":"<<result<<",\"same\":"<<(before==node.mpAttrSet?"true":"false")<<",\"current\":";print(node.mpAttrSet.get());std::cout<<",\"retained\":";print(before.get());std::cout<<",\"events\":[";for(int i=0;i<node.events.size();i++){if(i)std::cout<<',';auto e=node.events[i];std::cout<<'['<<e[0]<<','<<e[1]<<','<<e[2]<<']';}std::cout<<"]}";}std::cout<<"]\n";}}
 '''
-(root/'native-attributes.cxx').write_text(base)
-binary=root/'native-attributes';subprocess.run(['clang++','-std=c++20',str(root/'native-attributes.cxx'),'-o',str(binary)],check=True)
+(probe_source(root/'native-attributes.cxx')).write_text(base)
+binary=root/'native-attributes';subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-attributes.cxx')),'-o',str(binary)],check=True)
 cases=[]
 for kind in [2,3,4]:
  for state in [[],[[7]],[[0,84,4]],[[0,84,4],[0,86,7]],[[5,85]],[[6,87]],[[0,84,4],[5,85],[6,87]]]:
@@ -132,11 +135,11 @@ except subprocess.CalledProcessError:
   one=str(len(c['ops']))+' '+' '.join(str(o[0])+' '+str(len(o)-1)+' '+' '.join(map(str,o[1:])) for o in c['ops'])+'\n'
   r=subprocess.run([str(binary)],input=one,text=True,capture_output=True)
   if r.returncode:
-   (root/'native-crash-case.json').write_text(json.dumps({'case':i,**c},indent=2)+'\n')
+   (root/'native-crash-case.json').write_text(identity_json({'case':i,**c},indent=2)+'\n')
    print('Native dependency adapter crash case',i,c,flush=True);break
  raise
 finally:binary.unlink()
 assert len(lines)==len(cases)
 for c,l in zip(cases,lines):c['expected']=json.loads(l)
-(root/'native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n');(root/'native-source-identity.json').write_text(json.dumps(defs,indent=2)+'\n')
+(root/'native-results.json').write_text(identity_json(cases,separators=(',',':'))+'\n');(root/'native-source-identity.json').write_text(identity_json(defs,indent=2)+'\n')
 print(f'{len(defs)} unchanged definitions;{len(cases)} sequences/{sum(len(c["ops"]) for c in cases)} states. Fresh-handle style-access/raw-pool/unlocked model-observer/no-platform-cache adapters;no full native autostyle pool/refcount/surrogate/modify-lock/conditional/auto-style/fill/client lifetime claim.')

@@ -4,6 +4,9 @@ restart and explicit-start inputs follow XMLTextNumRuleInfo::Set's numbered gate
 this does not compile UNO or a full native import/export build.
 """
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json, subprocess
 root=Path('.agentplane/tasks/202610010112-M2EDTZ')
 def block(text,marker):
@@ -54,7 +57,7 @@ int main(){
  XMLTextNumRuleInfo end;e.exportListChange(previous,end);for(const auto& event:e.output.events)std::cout<<event<<' ';std::cout<<'\n';
  }}
 '''
-root.joinpath('native-list-transport.cxx').write_text(cpp)
+probe_source(root.joinpath('native-list-transport.cxx')).write_text(cpp)
 shapes=[[0,0,0],[2,2,0,2],[0,2,0,2],[0,1,2,1,0],[0,1,0,1],[2,1,2,0,2],[1,3,1,3],[0,1,1,0,1],[9,9,0,9]]
 cases=[]
 for shape in shapes:
@@ -63,9 +66,9 @@ for shape in shapes:
    cases.append({'items':[{'level':level,'counted':bool(mask&(1<<i)),'restart':bool(restart_mask&(1<<i)),'start':0 if i%2==0 else 5} for i,level in enumerate(shape)]})
 request=''.join(str(len(c['items']))+' '+' '.join(f'{i["level"]} {int(i["counted"])} {int(i["restart"])} {i["start"] if i["restart"] else -1}' for i in c['items'])+'\n' for c in cases)
 binary=root/'native-list-transport'
-subprocess.run(['clang++','-std=c++20',str(root/'native-list-transport.cxx'),'-o',str(binary)],check=True)
+subprocess.run(['clang++','-std=c++20',str(probe_source(root/'native-list-transport.cxx')),'-o',str(binary)],check=True)
 lines=subprocess.check_output([str(binary)],input=request,text=True).splitlines();binary.unlink()
 assert len(lines)==len(cases)
 for case,line in zip(cases,lines):case['expected']=line.split()
-root.joinpath('native-results.json').write_text(json.dumps(cases,separators=(',',':'))+'\n')
+root.joinpath('native-results.json').write_text(identity_json(cases,separators=(',',':'))+'\n')
 print(f'Compiled unmodified exportListChange and item-stack methods; {len(cases)} export event sequences. Explicit OUString/export/metadata/identity/continuation shims, no full native build.')

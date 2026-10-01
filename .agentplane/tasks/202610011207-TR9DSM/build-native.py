@@ -1,4 +1,7 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path.cwd() / "scripts"))
+from native_probe_storage import probe_source, identity_json
 import json,hashlib
 root=Path('vendor/libreoffice-reference');out=Path('.agentplane/tasks/202610011207-TR9DSM')
 manifest=[]
@@ -8,7 +11,7 @@ def body(path,signature):
   d+=(s[i]=='{')-(s[i]=='}');i+=1
  text=s[start:i];manifest.append({'path':path,'signature':signature,'sha256':hashlib.sha256(text.encode()).hexdigest()});return text
 num='editeng/source/items/numitem.cxx';font='vcl/source/font/font.cxx'
-old=Path('.agentplane/tasks/202610011119-4H9E82/native-rule-formats.cxx').read_text().split('void dump(')[0]
+old=probe_source(Path('.agentplane/tasks/202610011119-4H9E82/native-rule-formats.cxx')).read_text().split('void dump(')[0]
 # Native enum constants now use the pinned UNO values rather than the old trace's normalized type indices.
 old=old.replace('SVX_NUM_ARABIC=0,SVX_NUM_CHAR_SPECIAL=1,SVX_NUM_NUMBER_NONE=2','SVX_NUM_ARABIC=4,SVX_NUM_CHAR_SPECIAL=6,SVX_NUM_NUMBER_NONE=5')
 a=old.index('struct SvxNumberType');b=old.index('struct SvxBrushItem',a);old=old[:a]+old[b:]
@@ -43,7 +46,7 @@ glyphSetter=body(header,'    void            SetBulletChar(').strip()
 old=old.replace('void SetBulletChar(int n){cBullet=n;}',glyphSetter)
 old=old.replace('SvxNumberFormat(SvxNumType);',body(header,'    const std::optional<vcl::Font>& GetBulletFont()').strip()+'\n'+body(header,'    sal_UCS4        GetBulletChar()').strip()+'\n SvxNumberFormat(SvxNumType);')
 old=old.replace('<<f.cBullet<<','<<f.GetBulletChar()<<').replace('f.pBulletFont','f.GetBulletFont()')
-(out/'native-format-values.cxx').write_text(old)
+(probe_source(out/'native-format-values.cxx')).write_text(old)
 # Complete native NumberType bodies with a named bounded provider, no UNO service initialization equivalence claim.
 preamble=r'''
 #include <string>
@@ -79,8 +82,8 @@ start=preamble.index('void SetNumberingType(SvxNumType nSet){nNumType=nSet;}')
 end=preamble.index('};',start)
 isText=body(header,'    bool            IsTextFormat() const').strip()
 preamble=preamble[:start]+'\n'+'\n'.join(inline)+'\n'+isText+preamble[end:]
-(out/'native-number-type.cxx').write_text(preamble)
-(out/'native-source-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':manifest,'scope':'Complete native bodies unchanged. Named platform adapters bound to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. No native global lifetime, other Font attributes/equality, graphics, style registrations or wider numbering family equivalence.'},indent=2)+'\n')
+(probe_source(out/'native-number-type.cxx')).write_text(preamble)
+(out/'native-source-identities.json').write_text(identity_json({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':manifest,'scope':'Complete native bodies unchanged. Named platform adapters bound to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. No native global lifetime, other Font attributes/equality, graphics, style registrations or wider numbering family equivalence.'},indent=2)+'\n')
 
 # Previously extracted format/Writer bodies must still exactly match their pinned complete source definitions.
 for path, signatures in [
@@ -95,4 +98,4 @@ for path,markers in [('i18npool/source/defaultnumberingprovider/defaultnumbering
  for marker in markers:
   assert marker in contents, marker
  manifest.append({'path':path,'markers':markers,'fileSha256':hashlib.sha256(contents.encode()).hexdigest()})
-(out/'native-source-identities.json').write_text(json.dumps({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':manifest,'scope':'Complete native bodies unchanged. Named platform adapters bounded to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. Inline header getters/setters are represented in profile declarations; full UNO provider/initialization/global lifetime/Font attributes/equality/graphics/style registrations and wider numbering families remain unverified.'},indent=2)+'\n')
+(out/'native-source-identities.json').write_text(identity_json({'pin':'9bc445578031fecf56086729d8e4940c77e14d65','definitions':manifest,'scope':'Complete native bodies unchanged. Named platform adapters bounded to available decimal provider, null Writer clients, family-only Font/COW, and previously supported format fields. Inline header getters/setters are represented in profile declarations; full UNO provider/initialization/global lifetime/Font attributes/equality/graphics/style registrations and wider numbering families remain unverified.'},indent=2)+'\n')
