@@ -1,0 +1,9 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+No test files found, exiting with code 1
+
+filter: src/sw/source/core/doc/number-pointer.test.ts
+include: **/*.{test,spec}.?(c|m)[jt]s?(x)
+exclude:  e2e/**, node_modules/**, dist/**
+

@@ -1,0 +1,63 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "definitions": [
+    {
+      "path": "editeng/source/items/numitem.cxx",
+      "signature": "SvxNumberFormat& SvxNumberFormat::operator=(",
+      "sha256": "ae5367708e2a7d68343eb502b9af2e4f8f55b9534ad29ed33f04958203d038a8"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumFormat& SwNumFormat::operator=(",
+      "sha256": "a1ea726396bb292ff231a5d36fae401eca063171323c51e65e87581c6277b9d0"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumFormat::SwNumFormat( const SwNumFormat&",
+      "sha256": "072939049928faf9ea9c164fd3fe535706ec8fd0b7fefb7021147d0f36e0f508"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumRule::SwNumRule( UIName",
+      "sha256": "503694c67d459629e125f6a359ab3a19ff73129f8267fb22cd03d8eab37d40f5"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "const SwNumFormat& SwNumRule::Get(",
+      "sha256": "a033938c7fa0311e0de3ec46929023090bc87fe5154f3b8d07ed42f7a9084a5a"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "const SwNumFormat* SwNumRule::GetNumFormat(",
+      "sha256": "b0abb2f8738fd5807b1e8168265742ae3ca39c96b5e9628e6f5e2f1e4a9f3c58"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat&",
+      "sha256": "deac40378c23d3c416a24561ce652aff3848dd138763934f047d2b60b5fbd594"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "SwNumRule::SwNumRule( const SwNumRule&",
+      "sha256": "3ef6c5ed8428508e35a2a6f352dc0a488baa26c9acfedb03743864bfbcbdbbf6"
+    },
+    {
+      "path": "sw/source/core/attr/calbck.cxx",
+      "signature": "template<typename T>\nvoid sw::ClientBase<T>::StartListeningToSameModifyAs(",
+      "sha256": "a8812873f75b03fc68f07658e071713af9037520075e4d657603b106e26e0e33"
+    },
+    {
+      "path": "sw/source/core/attr/calbck.cxx",
+      "signature": "template<typename T>\nvoid sw::ClientBase<T>::EndListeningAll()",
+      "sha256": "fee15d8610aabf6a5c5f01f3a097b0939e7f02bbac10dc732fb82af12b5d8d3f"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "signature": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat*",
+      "sha256": "dffb9b10078c4938ab773da6486fdb1e60897218487a95ccc0aca82d58bbf6a7"
+    }
+  ],
+  "priorProfile": ".agentplane/tasks/202610011207-TR9DSM/native-source-identities.json",
+  "profileSha256": "6ffdd863595e47a112780f1c7a6c7a6780461f961f183506a445325b3b2379db",
+  "scope": "Complete unchanged pointer/ref Set,base/Writer assignment/copy/rule-get/default and same-modify transfer bodies. Native SwModify Add/Remove registration container,platform/Font family-only/COW/graphics/null-style/global-service aliases explicitly limit this proof. Local Validate corresponds to a direct native invalid-flag input adapter; native complete tree validation/default global/destructor lifetime is not certified."
+}

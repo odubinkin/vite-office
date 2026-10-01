@@ -4,7 +4,7 @@ title: "Restore native numbering pointer Set and in-place format assignment owne
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the approved single iteration46 native pointer Set/assignment ownership correction under persistent user goal authorization; preserve reference semantics,registered IO exceptions and all gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:39:29.598Z"
+doc_updated_at: "2026-10-01T13:47:28.766Z"
 doc_updated_by: "CODER"
 description: "Iteration46: restore the complete SwNumRule pointer overload alongside unchanged reference replacement,source-owned base/Writer format assignment and same-modify registration transfer. Replace frozen owned values with mutable native owners and stable protected const references at the JS boundary. Differentially prove raw/default/identity/validity/copy/alias behavior and every already implemented format field. Preserve registered IO/recovery exceptions and all original gates; broader native platform/graphics/style/lifetime remain unverified."
 sections:
@@ -54,7 +54,12 @@ sections:
     4. Actual CODE SHA separate from artifact/quality/close commits,canonical verification and separate EVALUATOR phase pass; close this leaf only with clean final tracked/untracked status. Parent/full goal active with next measured gap; no blanket module equivalence or registered exception changes.
   Verification: "Pending: no implementation or completed acceptance checks claimed. Record source/profile limits,actual commands/results and CODE SHA before closure."
   Rollback Plan: "Use a new executable task to revert reviewed CODE locally and rerun the same verification if rollback is required. Do not rewrite history or alter immutable DONE leaves. Preserve native/failure evidence,parent/full objective and registered IO exceptions."
-  Findings: "Previous goal turn is PROGRESS: iteration45 actual CODE6d3f9de7b879 verified and closed,parent982dba555f2d progress,clean main. Native pointer Set follows distinct native assignment semantics; existing ref Set is already correct. Six retained45 ASan/UBSan states prove changed-pointer identity retained versus changed-reference replaced; actual local null input throws and frozen ownership prevents assignment. Native base assignment copies raw fields rather than re-deriving pattern; same-modify transfer detaches when source has no registration. Four matched policy modules loaded,no user-instructions file,no outside-repo/network authorization. Parent residual obligations exceed this single leaf."
+  Findings: |-
+    Previous goal turn is PROGRESS: iteration45 actual CODE6d3f9de7b879 verified and closed,parent982dba555f2d progress,clean main. Native pointer Set follows distinct native assignment semantics; existing ref Set is already correct. Six retained45 ASan/UBSan states prove changed-pointer identity retained versus changed-reference replaced; actual local null input throws and frozen ownership prevents assignment. Native base assignment copies raw fields rather than re-deriving pattern; same-modify transfer detaches when source has no registration. Four matched policy modules loaded,no user-instructions file,no outside-repo/network authorization. Parent residual obligations exceed this single leaf.
+
+    - Observation: Native profile639 states pass ASan/UBSan; fresh local baseline confirms pointer and assignment APIs absent. First regression command used a repository-relative write path while cwd was apps/office, so no test file was created and Vitest found no files.
+      Impact: That harness invocation is not behavior evidence and must be retained separately from the actual red/green comparison.
+      Resolution: Correct the working-directory write path,retain regression-before.log as invocation failure,and execute actual tests before production edits.
 id_source: "generated"
 ---
 ## Summary
@@ -90,3 +95,7 @@ Use a new executable task to revert reviewed CODE locally and rerun the same ver
 ## Findings
 
 Previous goal turn is PROGRESS: iteration45 actual CODE6d3f9de7b879 verified and closed,parent982dba555f2d progress,clean main. Native pointer Set follows distinct native assignment semantics; existing ref Set is already correct. Six retained45 ASan/UBSan states prove changed-pointer identity retained versus changed-reference replaced; actual local null input throws and frozen ownership prevents assignment. Native base assignment copies raw fields rather than re-deriving pattern; same-modify transfer detaches when source has no registration. Four matched policy modules loaded,no user-instructions file,no outside-repo/network authorization. Parent residual obligations exceed this single leaf.
+
+- Observation: Native profile639 states pass ASan/UBSan; fresh local baseline confirms pointer and assignment APIs absent. First regression command used a repository-relative write path while cwd was apps/office, so no test file was created and Vitest found no files.
+  Impact: That harness invocation is not behavior evidence and must be retained separately from the actual red/green comparison.
+  Resolution: Correct the working-directory write path,retain regression-before.log as invocation failure,and execute actual tests before production edits.
