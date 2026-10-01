@@ -4,7 +4,7 @@ title: "Restore native phantom ancestors for skipped list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned phantom ancestors and counting under the persistent approved upstream goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T00:49:37.522Z"
+doc_updated_at: "2026-10-01T01:00:29.845Z"
 doc_updated_by: "CODER"
 description: "Iteration29 of persistent upstream goal: replace bounded missing-level groups with source-owned phantom construction and native hierarchical phantom counting for existing Arabic/bullet lists. Preserve registered save/open/recovery deviations."
 sections:
@@ -68,6 +68,26 @@ sections:
     - Observation: Documentation gate reports missing JSDoc for new test callbacks and the phantom fixture parameter.
       Impact: Required authored-function documentation is incomplete; runtime/core and genuine ODT checks pass.
       Resolution: Add precise test callback/parameter documentation; rerun unchanged documentation and full mandatory gates.
+
+    - Observation: All 641 application tests pass, but the initial coverage probe exits1: 99.92 statements /99.86 branches /100 functions /99.96 lines.
+      Impact: Native insertion relocation and malformed/orphan guards lack permanent regression assertions; mandatory 100% gates prevent closure.
+      Resolution: Add source-derived shuffled insertion, phantom counted-parent and orphan/equivalence guard assertions. Keep all thresholds unchanged and rerun full verification.
+
+    - Observation: Typecheck exits2: concrete base IsCounted requires override in SwNodeNum, and recursive destination inference needs an explicit child-record type.
+      Impact: Focused tests and source provenance pass, but declared static validation cannot pass until typing matches repository strict settings.
+      Resolution: Add override and explicit SwNumberTreeNode child annotation; preserve semantics and rerun unchanged full gates.
+
+    - Observation: Focused tree coverage now passes all statements/functions/lines; two branches remain (destination real-child phantom creation, counted phantom increment on previous-subtree continuation).
+      Impact: These native branches require literal sorted-insertion and uncounted-parent cases absent from the current permanent fixtures.
+      Resolution: Add precise compiled-source cases without changing coverage thresholds; rerun focused and full validation.
+
+    - Observation: Exhaustive added insertion orders match 5736 trees/25560 states. The remaining branch is reuse of a destination phantom in native AddChild; normal orphan insertion fixtures create fresh destinations. Strict typecheck also rejects optional fixture counted undefined.
+      Impact: The native destination selection contract is retained but not directly exercised through an existing phantom; no coverage exclusion or threshold change is justified.
+      Resolution: Extract the native first-phantom-or-create selection into a protected helper and assert its existing/new phantom contract directly; narrow fixture indexed counted to boolean. Preserve native behavior and rerun mandatory checks.
+
+    - Observation: Full verify session29507 exits1 after 643 application /109 inventory tests and both100% coverage suites pass: responsive-sidebar browser test times out on Paragraph menu click after viewport resize (html intercepts pointer; element detaches). Other18 browser tests pass.
+      Impact: Remaining full gates did not run; closure is not allowed. Failure occurs in responsive menu interaction outside list counter code.
+      Resolution: Inspect captured browser evidence and run the unchanged failing test once as a bounded diagnostic. If transient, rerun full verify unchanged; if reproducible, preserve failure and route a separate correction without altering this leaf verification contract.
 id_source: "generated"
 ---
 ## Summary
@@ -117,3 +137,23 @@ Preflight: clean main/direct; only parent 202609240501-C9TN6M DOING. Previous tu
 - Observation: Documentation gate reports missing JSDoc for new test callbacks and the phantom fixture parameter.
   Impact: Required authored-function documentation is incomplete; runtime/core and genuine ODT checks pass.
   Resolution: Add precise test callback/parameter documentation; rerun unchanged documentation and full mandatory gates.
+
+- Observation: All 641 application tests pass, but the initial coverage probe exits1: 99.92 statements /99.86 branches /100 functions /99.96 lines.
+  Impact: Native insertion relocation and malformed/orphan guards lack permanent regression assertions; mandatory 100% gates prevent closure.
+  Resolution: Add source-derived shuffled insertion, phantom counted-parent and orphan/equivalence guard assertions. Keep all thresholds unchanged and rerun full verification.
+
+- Observation: Typecheck exits2: concrete base IsCounted requires override in SwNodeNum, and recursive destination inference needs an explicit child-record type.
+  Impact: Focused tests and source provenance pass, but declared static validation cannot pass until typing matches repository strict settings.
+  Resolution: Add override and explicit SwNumberTreeNode child annotation; preserve semantics and rerun unchanged full gates.
+
+- Observation: Focused tree coverage now passes all statements/functions/lines; two branches remain (destination real-child phantom creation, counted phantom increment on previous-subtree continuation).
+  Impact: These native branches require literal sorted-insertion and uncounted-parent cases absent from the current permanent fixtures.
+  Resolution: Add precise compiled-source cases without changing coverage thresholds; rerun focused and full validation.
+
+- Observation: Exhaustive added insertion orders match 5736 trees/25560 states. The remaining branch is reuse of a destination phantom in native AddChild; normal orphan insertion fixtures create fresh destinations. Strict typecheck also rejects optional fixture counted undefined.
+  Impact: The native destination selection contract is retained but not directly exercised through an existing phantom; no coverage exclusion or threshold change is justified.
+  Resolution: Extract the native first-phantom-or-create selection into a protected helper and assert its existing/new phantom contract directly; narrow fixture indexed counted to boolean. Preserve native behavior and rerun mandatory checks.
+
+- Observation: Full verify session29507 exits1 after 643 application /109 inventory tests and both100% coverage suites pass: responsive-sidebar browser test times out on Paragraph menu click after viewport resize (html intercepts pointer; element detaches). Other18 browser tests pass.
+  Impact: Remaining full gates did not run; closure is not allowed. Failure occurs in responsive menu interaction outside list counter code.
+  Resolution: Inspect captured browser evidence and run the unchanged failing test once as a bounded diagnostic. If transient, rerun full verify unchanged; if reproducible, preserve failure and route a separate correction without altering this leaf verification contract.

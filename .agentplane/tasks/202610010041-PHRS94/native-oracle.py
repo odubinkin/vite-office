@@ -3,7 +3,7 @@ Dependencies use a std::set ordered container, eager group validation, Arabic/bu
 text/rule stubs and disabled notifications. This is not a full native build.
 """
 from pathlib import Path
-import json, subprocess
+import json, subprocess, itertools
 root=Path('.agentplane/tasks/202610010041-PHRS94')
 source=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx').read_text()
 node=Path('vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx').read_text()
@@ -108,6 +108,9 @@ ordered=[]
 for case in cases:
  for order in [list(range(len(case['items']))),list(reversed(range(len(case['items'])))),list(range(1,len(case['items']),2))+list(range(0,len(case['items']),2))]:
   ordered.append(dict(case,order=order))
+for shape in [[0,3,0,1,3],[0,4,0,2,3],[0,1,3,1,3],[3,0,3,0,3],[2,2,1,2],[0,2,0,2]]:
+ for order in itertools.permutations(range(len(shape))):
+  ordered.append({'starts':[7,5,3,2,4,6,8,9,10,11], 'order':list(order), 'items':[{'level':level,'counted':i!=2,'restart':False,'actualStart':0} for i,level in enumerate(shape)]})
 cases=ordered
 request=''.join(str(len(c['items']))+' '+' '.join(map(str,c['starts']))+' '+ ' '.join(f'{item["level"]} {int(item["counted"])} {int(item["restart"])} {item["actualStart"]}' for item in c['items'])+' '+' '.join(map(str,c['order']))+'\n' for c in cases)
 binary=root/'native-hierarchical-oracle'
