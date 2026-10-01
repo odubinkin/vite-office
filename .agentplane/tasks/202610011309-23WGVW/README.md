@@ -4,7 +4,7 @@ title: "Restore native Writer numbering classification and layout-update predica
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved single iteration45 native Writer classification/raw-layout predicate task under the persistent user goal authorization; preserve registered I/O/recovery deviations and unchanged source/coverage gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T13:20:54.418Z"
+doc_updated_at: "2026-10-01T13:28:42.710Z"
 doc_updated_by: "CODER"
 description: "Iteration45 of the active parity audit: restore source-owned SwNumFormat.IsItemize/IsEnumeration and actual SwTextNode HasNumber/HasBullet reads, including NONE enumeration and scalar bitmap classification. Restore the distinct raw-owned HasNumberingWhichNeedsLayoutUpdate contract, without equating it to enumeration. Validate actual SwNodeNum counting and DocumentListItemsManager filtering against complete unchanged pinned native bodies and real local graphs. Preserve existing UI/ODT/Worker contracts, registered I/O/recovery deviations and the native malformed-NONE browser guard; broader bitmap graphics/layout/redline/native lifetimes remain unverified."
 sections:
@@ -60,6 +60,14 @@ sections:
     - Observation: Fresh baseline reproduces NONE classification/counting/registry loss and sparse effective-format repaint mismatch. Native ASan/UBSan harness emits1032 cases (4 format,1008 node,4 root,16 registry) without diagnostics. Initial regression-before confirms missing native predicates and raw-layout mismatch; its registry fixture also applies a default-counted list after setting the counted input, overwriting that supplied input.
       Impact: Implementation errors are measured, but the fixture must supply counted policy after list assembly so native/local profile inputs match.
       Resolution: Preserve regression-before.log. Correct only fixture counted-input timing; restore source-owned native format predicates/effective const read and distinct raw-owned layout helper. Keep original expected native output and all existing tests/gates.
+
+    - Observation: Focused22 tests pass; initial typecheck rejects test-only PolicyRoot phantom field colliding with inherited private state.
+      Impact: The diagnostic adapter must remain type-safe without weakening production contracts.
+      Resolution: Rename the adapter field to profilePhantom; retain the initial failure log and rerun typecheck in the full canonical suite.
+
+    - Observation: Initial full verify passes formatting but rejects five forbidden test-only non-null assertions.
+      Impact: The regression fixture must comply with the unchanged strict lint gate.
+      Resolution: Use an explicit required-member guard that fails on a missing real graph owner/record; rerun the full suite without changing lint or coverage criteria.
 id_source: "generated"
 ---
 ## Summary
@@ -99,3 +107,11 @@ Read-only preflight confirms direct main78353b0aebea, clean tracked/untracked st
 - Observation: Fresh baseline reproduces NONE classification/counting/registry loss and sparse effective-format repaint mismatch. Native ASan/UBSan harness emits1032 cases (4 format,1008 node,4 root,16 registry) without diagnostics. Initial regression-before confirms missing native predicates and raw-layout mismatch; its registry fixture also applies a default-counted list after setting the counted input, overwriting that supplied input.
   Impact: Implementation errors are measured, but the fixture must supply counted policy after list assembly so native/local profile inputs match.
   Resolution: Preserve regression-before.log. Correct only fixture counted-input timing; restore source-owned native format predicates/effective const read and distinct raw-owned layout helper. Keep original expected native output and all existing tests/gates.
+
+- Observation: Focused22 tests pass; initial typecheck rejects test-only PolicyRoot phantom field colliding with inherited private state.
+  Impact: The diagnostic adapter must remain type-safe without weakening production contracts.
+  Resolution: Rename the adapter field to profilePhantom; retain the initial failure log and rerun typecheck in the full canonical suite.
+
+- Observation: Initial full verify passes formatting but rejects five forbidden test-only non-null assertions.
+  Impact: The regression fixture must comply with the unchanged strict lint gate.
+  Resolution: Use an explicit required-member guard that fails on a missing real graph owner/record; rerun the full suite without changing lint or coverage criteria.
