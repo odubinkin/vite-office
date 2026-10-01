@@ -110,17 +110,19 @@ int main() {
         std::vector<std::unique_ptr<ProbeNode>> nodes;
         for(int i=0;i<4;i++){int level;std::cin>>level;nodes.push_back(std::make_unique<ProbeNode>(i,true,&policy));root.AddChild(nodes.back().get(),level,doc);}
         if(outer)std::cout<<",";outer=true;std::cout<<"[";
-        for(int step=0;step<13;step++) {
+        auto* firstChild=static_cast<const ProbeNode*>(*root.children().begin()); ProbeNode equivalent(firstChild->index,firstChild->real,&policy);
+        for(int step=0;step<14;step++) {
             doc.events.clear(); SwNumberTree::tNumberVector read; bool hasRead=false;
-            if(step==1 || step==11) root.hierarchical(nullptr);
-            if(step==2 || step==12) root.hierarchical(&foreign);
-            if(step==3) root.hierarchical(*root.children().begin());
-            if(step==4) root.hierarchical(*root.children().rbegin());
-            if(step==5) for(auto& node:nodes) if(!node->children().empty()) node->hierarchical(*node->children().rbegin());
-            if(step==6 || step==7){read=nodes[step==6?0:3]->GetNumberVector();hasRead=true;}
-            if(step==8) root.InvalidateTree();
-            if(step==9) root.NotifyInvalidChildren(doc);
-            if(step==10){doc.reading=false;root.NotifyInvalidChildren(doc);}
+            if(step==1 || step==12) root.hierarchical(nullptr);
+            if(step==2 || step==13) root.hierarchical(&foreign);
+            if(step==3) root.hierarchical(&equivalent);
+            if(step==4) root.hierarchical(*root.children().begin());
+            if(step==5) root.hierarchical(*root.children().rbegin());
+            if(step==6) for(auto& node:nodes) if(!node->children().empty()) node->hierarchical(*node->children().rbegin());
+            if(step==7 || step==8){read=nodes[step==7?0:3]->GetNumberVector();hasRead=true;}
+            if(step==9) root.InvalidateTree();
+            if(step==10) root.NotifyInvalidChildren(doc);
+            if(step==11){doc.reading=false;root.NotifyInvalidChildren(doc);}
             if(step)std::cout<<",";snapshot(root,nodes,doc,hasRead?&read:nullptr);
         }
         std::cout<<"]";doc.reading=true;for(auto i=nodes.rbegin();i!=nodes.rend();++i)(*i)->RemoveMe(doc);
@@ -151,8 +153,8 @@ with (out / 'native-run.log').open('w') as log:
     run = subprocess.run([str(binary.resolve())], input=request, stdout=subprocess.PIPE, stderr=log, text=True)
 assert run.returncode == 0, 'Native execution failed; see native-run.log'
 observations = json.loads(run.stdout)
-assert len(observations) == len(profiles) and all(len(p)==13 for p in observations)
+assert len(observations) == len(profiles) and all(len(p)==14 for p in observations)
 for profile, expected in zip(profiles,observations): profile['expected'] = expected
 (out / 'native-output.json').write_text(identity_json(profiles,separators=(',',':'))+'\n')
-(out / 'native-identities.json').write_text(identity_json({'pin':pin,'files':identities,'definitions':definitions,'sourceProfileSha256':hashlib.sha256(source.encode()).hexdigest(),'profileCount':len(profiles),'snapshots':len(profiles)*13,'recordStates':len(profiles)*13*4,'compileContracts':negative,'adapters':'Complete native header/type declarations and all core implementation bodies; include dependencies are replaced by std::set ordered-child adapter, tools::Long=long, sal pointer-width alias, nonfatal diagnostic/logging macros and fixture policy hooks. Policy input supplies Arabic numbering presence, explicit owned level starts/count/restart/phantom flags, numeric document ordering, reading suppression and validating notification event capture. PreAdd/PostRemove omit owner registration; native SwNodeNum/doc/style/layout/service/global lifetime is not certified by this core-only probe. Existing complete owner/lifecycle fixtures are unchanged and remain separate evidence.'},indent=2)+'\n')
-print(len(profiles),'profiles',len(profiles)*13,'snapshots',len(profiles)*13*4,'record states; four native compile contract failures confirmed')
+(out / 'native-identities.json').write_text(identity_json({'pin':pin,'files':identities,'definitions':definitions,'sourceProfileSha256':hashlib.sha256(source.encode()).hexdigest(),'profileCount':len(profiles),'snapshots':len(profiles)*14,'recordStates':len(profiles)*14*4,'compileContracts':negative,'adapters':'Complete native header/type declarations and all core implementation bodies; include dependencies are replaced by std::set ordered-child adapter, tools::Long=long, sal pointer-width alias, nonfatal diagnostic/logging macros and fixture policy hooks. Policy input supplies Arabic numbering presence, explicit owned level starts/count/restart/phantom flags, numeric document ordering, reading suppression and validating notification event capture. PreAdd/PostRemove omit owner registration; native SwNodeNum/doc/style/layout/service/global lifetime is not certified by this core-only probe. Existing complete owner/lifecycle fixtures are unchanged and remain separate evidence.'},indent=2)+'\n')
+print(len(profiles),'profiles',len(profiles)*14,'snapshots',len(profiles)*14*4,'record states; four native compile contract failures confirmed')

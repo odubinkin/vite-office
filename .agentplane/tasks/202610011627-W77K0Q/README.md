@@ -4,7 +4,7 @@ title: "Restore protected explicit-target numbering validation contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -13,7 +13,7 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-01T16:28:23.630Z"
+  updated_at: "2026-10-01T16:50:08.863Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -27,6 +27,9 @@ comments:
   -
     author: "CODER"
     body: "Start: restore protected explicit-target native numbering validation contracts under the persistent user goal, preserving all original assertions and upstream-independent tests; no source copies or registered IO/recovery changes."
+  -
+    author: "CODER"
+    body: "Start: refined same eight-file leaf now includes source ordered-child equivalence for explicit hierarchical target lookup; persistent user goal authorizes this native contract repair, with all original expected values and upstream-independent project tests preserved."
 events:
   -
     type: "status"
@@ -35,8 +38,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore protected explicit-target native numbering validation contracts under the persistent user goal, preserving all original assertions and upstream-independent tests; no source copies or registered IO/recovery changes."
+  -
+    type: "status"
+    at: "2026-10-01T16:50:09.515Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: refined same eight-file leaf now includes source ordered-child equivalence for explicit hierarchical target lookup; persistent user goal authorizes this native contract repair, with all original expected values and upstream-independent project tests preserved."
 doc_version: 3
-doc_updated_at: "2026-10-01T16:37:00.578Z"
+doc_updated_at: "2026-10-01T16:50:09.515Z"
 doc_updated_by: "CODER"
 description: "Iteration49 of the active implemented-runtime parity goal: remove the nonnative public eager no-argument hierarchical validation bridge, require explicit nullable targets on both protected validators, preserve original assertion meaning using source-shaped access, and compare native prefix/cache/null/foreign-target observations from manual local probes. Project tests must neither read nor compile nor invoke pinned upstream; native source must only exist in ignored scratch, never canonical Agentplane artifacts. Registered IO/recovery deviations remain untouched."
 sections:
@@ -54,14 +64,14 @@ sections:
 
     Task-owned evidence/scripts/lifecycle are included. Source pin: 9bc445578031fecf56086729d8e4940c77e14d65. No other implementation, registered save/open/recovery deviations, dependency, policy, gate or completion status changes.
   Plan: |-
-    Restore the complete selected protected explicit-target validation contract: both validators require an explicitly supplied SwNumberTreeNode or undefined (native nullptr); hierarchical undefined/foreign targets are no-ops, owned child targets validate only their prefix, and public getters/notifications retain native deferred descendant validation. Remove eager no-argument recursion and public exposure. Preserve every original expected vector/state while adapting test access/setup to source-shaped calls. Add literal manually generated native cache observations and compile-time visibility/argument assertions. Scope is exactly eight semantic paths: SwNumberTree.ts, existing phantom/lifecycle/policy tests, new SwNumberTree-contract.test.ts and SwNumberTree-contract-native.json, source-provenance.json and runtime-inventory.json. Evidence-only metadata changes; no status promotion. Native probes use complete unchanged pinned bodies and named aliases in ignored scratch only, never project tests or source artifacts. Full unchanged verification, isolated focused tests without upstream, CODE/quality/close traceability, clean final state, parent/goal active.
+    Restore selected native protected explicit-target validation contracts and ordered-child lookup: both validators require an explicitly supplied SwNumberTreeNode or undefined (native nullptr); hierarchical null and distinct-key foreign targets are no-ops, comparator-equivalent nonmember targets resolve the stored child through protected GetIterator, and owned targets validate only their prefix. Remove public eager no-argument recursion. Preserve original assertion values using source-shaped demand validation/diagnostic access. Add literal native raw prefix/descendant/equivalent-target observations and compile-time visibility/argument assertions. Exactly the same eight approved semantic paths; evidence-only metadata, no completion promotion. Complete native header/types/core bodies are generated only in ignored scratch with named container/policy/diagnostic/registration aliases; project tests consume local literal output only. Unchanged full verify and both100% coverages, focused upstream-unavailable tests, actual CODE/quality/close traceability, clean state; parent/full goal active.
 
-    Execute as current-actor CODER after sequential ORCHESTRATOR approval/start. No delegation, network or outside-repository access. Preserve all original expectation values; diagnostic access to protected methods exists only in tests. No public replacement eager helper.
+    Current-actor CODER executes after sequential ORCHESTRATOR approval/start. No delegation, network or outside-repository access. Original expectation values remain unchanged; protected diagnostic access exists only in tests. Native ordered-child lookup is an array-index adapter with comparator-equivalent search and -1 end sentinel.
   Verify Steps: |-
-    1. Inspect exact pinned complete ValidateHierarchical, ValidateContinuous, Validate, GetIterator, child comparator and header access/signature contracts. Fresh hashes and complete unchanged native manual probe bodies produce literal null/foreign/owned-prefix/raw-cache and descendant observations with ASan/UBSan, using explicit retained source-shaped adapters. Source is generated only under ignored .agentplane/tmp/upstream-probes; canonical evidence stores hashes/results/generator/logs, never source copies. Project tests do not read/compile/invoke upstream.
-    2. Focused RED for eager undefined-target behavior and compile-time public/optional argument contracts, then GREEN. Both validators are protected with required explicit nullable target. Hierarchical absent/foreign targets leave cache unchanged; owned target validates only its child prefix without eager descendant recursion; normal getters/notifications and continuous sentinel behavior retain all prior native expectations. Preserve original assertion meaning and actual owner/tree observations.
-    3. Focused suites with vendor/libreoffice-reference temporarily unavailable and restored in finally pass. Unchanged full npm run verify passes every format/lint/tools/app type/dependency/resource/app/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gate with both 100% coverages. ap doctor, policy routing, git diff --check and exact eight-file semantic scope pass. No exclusions or gate weakening.
-    4. Record actual post-bookkeeping CODE SHA and exact semantic/artifact path counts. Separate canonical verify, same-actor EVALUATOR quality phase and leaf close; no independent-agent review claim. Final tracked/untracked state clean. Parent/full goal stay active; retain bounded native alias/lifetime gaps and next measured mismatch.
+    1. Exact pinned complete native header/type declarations and all SwNumberTree implementation bodies generate manual ASan/UBSan results for null, distinct-key foreign, comparator-equivalent nonmember, owned-prefix, raw-cache and deferred descendant operations. Four expected native compiler failures prove both methods are protected and require explicit pointer arguments. Fresh file/body hashes and named std::set/bulk-insert,Long/pointer,diagnostic,Arabic policy,reading/notification and omitted registration adapters bound evidence. Cxx only in ignored scratch; canonical artifacts store hashes/results/generator/logs; project tests never read/compile/invoke upstream.
+    2. Preserve planned RED runtime and exact three type-contract failures, then GREEN. Both validators are protected with required explicit nullable targets; protected GetIterator finds comparator-equivalent child or end sentinel. Hierarchical null/distinct-key foreign targets do not mutate; equivalent or owned targets validate only the native prefix, with no eager descendants. Continuous sentinel behavior and every original expected vector/state remain unchanged; legacy tests use demand/explicit diagnostic access.
+    3. Focused suites with upstream path temporarily unavailable and restored in finally pass. Unchanged full npm run verify passes every format/lint/tools/app type/dependency/resource/app/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gate, both100% coverages. Doctor,policy routing,diff and exact eight semantic files pass;no exclusions or weakened gates.
+    4. Record actual post-bookkeeping CODE SHA and semantic/artifact counts; separate canonical verify, same-actor EVALUATOR quality phase and leaf close. Final tracked/untracked state clean; parent/full goal active, no whole-module/status promotion. Preserve native alias/lifetime and remaining implemented-contract gaps.
   Verification: "Pending baseline/native differential, implementation, focused isolation and full unchanged gates. No whole-module or goal completion claim."
   Rollback Plan: "Revert only this leaf implementation commit and its eight intentional semantic paths via a follow-up task if required. Preserve task history, source hashes and literal results; never restore upstream source copies into artifacts or rewrite Git history."
   Findings: |-
@@ -70,6 +80,10 @@ sections:
     - Observation: Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py. Result: fail at native compilation; the std::set child-container adapter lacked sorted_vector bulk insert(container), used by unchanged MoveChildren. No project code changed.
       Impact: The manual oracle cannot run until its explicit container adapter is complete; native source bodies must not be patched to compensate.
       Resolution: Retain native-build.log as the failed first attempt, add only the adapter bulk-insert overload, recompute/persist route and rerun the manual probe. Canonical artifacts contain generator/logs only; all generated Cxx remains ignored scratch.
+
+    - Observation: Planned RED confirms profile0 step1: local hierarchical undefined-target recursively changes raw0 counters to-1 and last-valid pointers, unlike literal native no-op. Typecheck reports exactly3 expected true-to-false contract failures: public hierarchical visibility and optional target tuple on both methods. Native GetIterator uses ordered-container equivalence, so a distinct foreign key is a no-op but an equivalent nonmember object resolves the stored child; plain identity indexOf is also nonnative for this target contract.
+      Impact: Restoring only visibility/argument count would leave an observable selected-contract mismatch. The approved eight semantic paths still suffice.
+      Resolution: Refine the same leaf to restore protected explicit-target GetIterator semantics for hierarchical lookup and add a fresh equivalent-object native snapshot before first-prefix validation. Preserve all original expected values and existing gates; reapprove refined verification under the persistent full parity goal before production edits.
 id_source: "generated"
 ---
 ## Summary
@@ -92,16 +106,16 @@ Task-owned evidence/scripts/lifecycle are included. Source pin: 9bc445578031fecf
 
 ## Plan
 
-Restore the complete selected protected explicit-target validation contract: both validators require an explicitly supplied SwNumberTreeNode or undefined (native nullptr); hierarchical undefined/foreign targets are no-ops, owned child targets validate only their prefix, and public getters/notifications retain native deferred descendant validation. Remove eager no-argument recursion and public exposure. Preserve every original expected vector/state while adapting test access/setup to source-shaped calls. Add literal manually generated native cache observations and compile-time visibility/argument assertions. Scope is exactly eight semantic paths: SwNumberTree.ts, existing phantom/lifecycle/policy tests, new SwNumberTree-contract.test.ts and SwNumberTree-contract-native.json, source-provenance.json and runtime-inventory.json. Evidence-only metadata changes; no status promotion. Native probes use complete unchanged pinned bodies and named aliases in ignored scratch only, never project tests or source artifacts. Full unchanged verification, isolated focused tests without upstream, CODE/quality/close traceability, clean final state, parent/goal active.
+Restore selected native protected explicit-target validation contracts and ordered-child lookup: both validators require an explicitly supplied SwNumberTreeNode or undefined (native nullptr); hierarchical null and distinct-key foreign targets are no-ops, comparator-equivalent nonmember targets resolve the stored child through protected GetIterator, and owned targets validate only their prefix. Remove public eager no-argument recursion. Preserve original assertion values using source-shaped demand validation/diagnostic access. Add literal native raw prefix/descendant/equivalent-target observations and compile-time visibility/argument assertions. Exactly the same eight approved semantic paths; evidence-only metadata, no completion promotion. Complete native header/types/core bodies are generated only in ignored scratch with named container/policy/diagnostic/registration aliases; project tests consume local literal output only. Unchanged full verify and both100% coverages, focused upstream-unavailable tests, actual CODE/quality/close traceability, clean state; parent/full goal active.
 
-Execute as current-actor CODER after sequential ORCHESTRATOR approval/start. No delegation, network or outside-repository access. Preserve all original expectation values; diagnostic access to protected methods exists only in tests. No public replacement eager helper.
+Current-actor CODER executes after sequential ORCHESTRATOR approval/start. No delegation, network or outside-repository access. Original expectation values remain unchanged; protected diagnostic access exists only in tests. Native ordered-child lookup is an array-index adapter with comparator-equivalent search and -1 end sentinel.
 
 ## Verify Steps
 
-1. Inspect exact pinned complete ValidateHierarchical, ValidateContinuous, Validate, GetIterator, child comparator and header access/signature contracts. Fresh hashes and complete unchanged native manual probe bodies produce literal null/foreign/owned-prefix/raw-cache and descendant observations with ASan/UBSan, using explicit retained source-shaped adapters. Source is generated only under ignored .agentplane/tmp/upstream-probes; canonical evidence stores hashes/results/generator/logs, never source copies. Project tests do not read/compile/invoke upstream.
-2. Focused RED for eager undefined-target behavior and compile-time public/optional argument contracts, then GREEN. Both validators are protected with required explicit nullable target. Hierarchical absent/foreign targets leave cache unchanged; owned target validates only its child prefix without eager descendant recursion; normal getters/notifications and continuous sentinel behavior retain all prior native expectations. Preserve original assertion meaning and actual owner/tree observations.
-3. Focused suites with vendor/libreoffice-reference temporarily unavailable and restored in finally pass. Unchanged full npm run verify passes every format/lint/tools/app type/dependency/resource/app/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gate with both 100% coverages. ap doctor, policy routing, git diff --check and exact eight-file semantic scope pass. No exclusions or gate weakening.
-4. Record actual post-bookkeeping CODE SHA and exact semantic/artifact path counts. Separate canonical verify, same-actor EVALUATOR quality phase and leaf close; no independent-agent review claim. Final tracked/untracked state clean. Parent/full goal stay active; retain bounded native alias/lifetime gaps and next measured mismatch.
+1. Exact pinned complete native header/type declarations and all SwNumberTree implementation bodies generate manual ASan/UBSan results for null, distinct-key foreign, comparator-equivalent nonmember, owned-prefix, raw-cache and deferred descendant operations. Four expected native compiler failures prove both methods are protected and require explicit pointer arguments. Fresh file/body hashes and named std::set/bulk-insert,Long/pointer,diagnostic,Arabic policy,reading/notification and omitted registration adapters bound evidence. Cxx only in ignored scratch; canonical artifacts store hashes/results/generator/logs; project tests never read/compile/invoke upstream.
+2. Preserve planned RED runtime and exact three type-contract failures, then GREEN. Both validators are protected with required explicit nullable targets; protected GetIterator finds comparator-equivalent child or end sentinel. Hierarchical null/distinct-key foreign targets do not mutate; equivalent or owned targets validate only the native prefix, with no eager descendants. Continuous sentinel behavior and every original expected vector/state remain unchanged; legacy tests use demand/explicit diagnostic access.
+3. Focused suites with upstream path temporarily unavailable and restored in finally pass. Unchanged full npm run verify passes every format/lint/tools/app type/dependency/resource/app/inventory/browser/build/static/JSDoc/size/source-tree/provenance/invariant/parity gate, both100% coverages. Doctor,policy routing,diff and exact eight semantic files pass;no exclusions or weakened gates.
+4. Record actual post-bookkeeping CODE SHA and semantic/artifact counts; separate canonical verify, same-actor EVALUATOR quality phase and leaf close. Final tracked/untracked state clean; parent/full goal active, no whole-module/status promotion. Preserve native alias/lifetime and remaining implemented-contract gaps.
 
 ## Verification
 
@@ -118,3 +132,7 @@ Fresh inspection confirms native header methods are protected and require explic
 - Observation: Command: PYTHONDONTWRITEBYTECODE=1 python3 build-contract-probe.py. Result: fail at native compilation; the std::set child-container adapter lacked sorted_vector bulk insert(container), used by unchanged MoveChildren. No project code changed.
   Impact: The manual oracle cannot run until its explicit container adapter is complete; native source bodies must not be patched to compensate.
   Resolution: Retain native-build.log as the failed first attempt, add only the adapter bulk-insert overload, recompute/persist route and rerun the manual probe. Canonical artifacts contain generator/logs only; all generated Cxx remains ignored scratch.
+
+- Observation: Planned RED confirms profile0 step1: local hierarchical undefined-target recursively changes raw0 counters to-1 and last-valid pointers, unlike literal native no-op. Typecheck reports exactly3 expected true-to-false contract failures: public hierarchical visibility and optional target tuple on both methods. Native GetIterator uses ordered-container equivalence, so a distinct foreign key is a no-op but an equivalent nonmember object resolves the stored child; plain identity indexOf is also nonnative for this target contract.
+  Impact: Restoring only visibility/argument count would leave an observable selected-contract mismatch. The approved eight semantic paths still suffice.
+  Resolution: Refine the same leaf to restore protected explicit-target GetIterator semantics for hierarchical lookup and add a fresh equivalent-object native snapshot before first-prefix validation. Preserve all original expected values and existing gates; reapprove refined verification under the persistent full parity goal before production edits.
