@@ -1,0 +1,29 @@
+{
+  "effectiveAccessorExists": false,
+  "rawGetterReturnsOwnedDefault": true,
+  "firstStart": 1,
+  "eagerLevels": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "cloneLevels": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ]
+}
