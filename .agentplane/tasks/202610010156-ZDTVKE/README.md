@@ -4,7 +4,7 @@ title: "Restore native repeated-sublist restart ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned repeated-sublist count and pending block restart inheritance,consumption and return under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T01:58:14.868Z"
+doc_updated_at: "2026-10-01T02:02:41.044Z"
 doc_updated_by: "CODER"
 description: "Iteration32: source-owned list item/block contexts retain repeated-sublist count and inherited,consumed,returned block restart state. Preserve intentional save/open/recovery differences."
 sections:
@@ -46,7 +46,12 @@ sections:
   Verify Steps: "Reproduce the existing two-sublist7./7.5./7.6. result without restart. Compile unmodified pinned XMLTextListItemContext::createFastChildContext, XMLTextListBlockContext parent-inheritance/end bodies and IsRestartNumbering/ResetRestartNumbering plus txtimp restart consumption with explicit platform/token/UNO/helper/property shims; compare actual SAX paragraph counted/restart/start/level traces for repeated/empty/third/deep/sibling/header/paragraph-before-and-after-nesting/explicit0 and other start sequences, including parent pending-flag return. Verify moved ownership and no change to unrelated style/list identities. Genuine common/automatic numbered/bullet ODT packages must assert literal text,count,levels,restart/explicit/effective start,number,vectors,labels,independent owned rule/item copies,Worker16,selected restart XML and reopen. Retain native uncounted restart omission rather than inventing lossless unsupported retention. Run npm run verify unchanged with both100% coverage suites and all browser/resource/static/source/provenance/invariant gates;ap doctor,routing validator,git diff --check. Record actual implementation hash,quality review and final clean tracked state. No gate/schema changes or whole-module/full-goal promotion."
   Verification: "Pending implementation and declared checks. No mandatory gate skipped."
   Rollback Plan: "If needed revert scoped implementation through a new executable task, keeping immutable DONE evidence and the full parent goal active."
-  Findings: "Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent user goal authorizes safe local iterations; no network/outside access/delegation. Prior goal turn is progress: childZRYS74 DONE,actual code218b25bd8e27e82ac85819a8436a6bbaae6b58ff,qualityf331a35e39206a2ce491c9f2c69b9b5491f62220,close3836f01a7a3ae60dfc9481353a11b6b5ebad4ac4,parent473f8562a6bd40c4ad786ffd8ed56867286f057d. Native pinlibreoffice-26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Actual genuine ODT probe of two sublists under one item yields7.,7.5.,7.6. and all restartfalse. Pinned item child factory passes mnSubListCount>1,block constructor inherits parent restart OR this flag,txtimp consumes/reset at first paragraph and block end transfers remaining flag back. These coupled states are absent locally. Native MakeNumRule can clear restart when constructing a new unresolved rule; only existing found styles are in this task. text:continue-numbering overrides also affect root last-processed identities and need a separate complete contract rather than a partial new token. Full list/default/UNO/style/UI obligations remain open."
+  Findings: |-
+    Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent user goal authorizes safe local iterations; no network/outside access/delegation. Prior goal turn is progress: childZRYS74 DONE,actual code218b25bd8e27e82ac85819a8436a6bbaae6b58ff,qualityf331a35e39206a2ce491c9f2c69b9b5491f62220,close3836f01a7a3ae60dfc9481353a11b6b5ebad4ac4,parent473f8562a6bd40c4ad786ffd8ed56867286f057d. Native pinlibreoffice-26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Actual genuine ODT probe of two sublists under one item yields7.,7.5.,7.6. and all restartfalse. Pinned item child factory passes mnSubListCount>1,block constructor inherits parent restart OR this flag,txtimp consumes/reset at first paragraph and block end transfers remaining flag back. These coupled states are absent locally. Native MakeNumRule can clear restart when constructing a new unresolved rule; only existing found styles are in this task. text:continue-numbering overrides also affect root last-processed identities and need a separate complete contract rather than a partial new token. Full list/default/UNO/style/UI obligations remain open.
+
+    - Observation: Native harness compile exits1: the extracted parent-inheritance snippet needs its native sParentListStyleName local,and token shims lacked XML_ aliases used by the unmodified child factory.
+      Impact: Only harness adapters fail; no differential result is established yet.
+      Resolution: Supply the native local and matching token aliases outside primary bodies,persist active artifacts and rerun unchanged evidence contract.
 id_source: "generated"
 ---
 ## Summary
@@ -76,3 +81,7 @@ If needed revert scoped implementation through a new executable task, keeping im
 ## Findings
 
 Preflight clean main/direct,parent202609240501-C9TN6M only active. Persistent user goal authorizes safe local iterations; no network/outside access/delegation. Prior goal turn is progress: childZRYS74 DONE,actual code218b25bd8e27e82ac85819a8436a6bbaae6b58ff,qualityf331a35e39206a2ce491c9f2c69b9b5491f62220,close3836f01a7a3ae60dfc9481353a11b6b5ebad4ac4,parent473f8562a6bd40c4ad786ffd8ed56867286f057d. Native pinlibreoffice-26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Actual genuine ODT probe of two sublists under one item yields7.,7.5.,7.6. and all restartfalse. Pinned item child factory passes mnSubListCount>1,block constructor inherits parent restart OR this flag,txtimp consumes/reset at first paragraph and block end transfers remaining flag back. These coupled states are absent locally. Native MakeNumRule can clear restart when constructing a new unresolved rule; only existing found styles are in this task. text:continue-numbering overrides also affect root last-processed identities and need a separate complete contract rather than a partial new token. Full list/default/UNO/style/UI obligations remain open.
+
+- Observation: Native harness compile exits1: the extracted parent-inheritance snippet needs its native sParentListStyleName local,and token shims lacked XML_ aliases used by the unmodified child factory.
+  Impact: Only harness adapters fail; no differential result is established yet.
+  Resolution: Supply the native local and matching token aliases outside primary bodies,persist active artifacts and rerun unchanged evidence contract.
