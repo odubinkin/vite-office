@@ -4,7 +4,7 @@ title: "Restore native numbering tree continuous and phantom policy dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute approved48 complete selected native continuous/phantom tree policy,validation,predecessor,cache/notification and actual document list entry under persistent user goal authorization;preserve all gates and registered IO/recovery exceptions."
 doc_version: 3
-doc_updated_at: "2026-10-01T14:58:26.772Z"
+doc_updated_at: "2026-10-01T15:06:11.652Z"
 doc_updated_by: "CODER"
 description: "Iteration48: replace default-only SwNodeNum phantom policy and hierarchical-only tree dispatch with complete source-owned continuous validation,predecessor traversal,cache invalidation and notification responsibilities. Use native rule flags and native SwList validation entry;existing label fallback respects continuous mode. Verify exact pinned native mixed topology/cache/notification/counter outputs and actual document/Worker owners without broad parity promotion or changing registered IO/recovery exceptions."
 sections:
@@ -54,7 +54,12 @@ sections:
     4. Actual post-bookkeeping CODE SHA recorded with exact semantic/artifact counts,separate canonical verification/quality/close;same-actor EVALUATOR review only,no independent-agent claim. Close leaf clean tracked/untracked,parent/full goal active with measured next gap;do not promote completion from green tests/metadata.
   Verification: "Pending: baseline/native proof,implementation and all acceptance evidence must be recorded before canonical verify. Full goal is not achieved."
   Rollback Plan: "If rollback is necessary,use a new task to revert reviewed implementation and rerun identical checks. Preserve immutable DONE tasks/native/failure evidence;do not rewrite history or alter registered IO exceptions."
-  Findings: "Preflight clean/direct,ORCHESTRATOR then PLANNER,four matched modules loaded,user-instructions absent. Native phantom predicate differs3/5 from actual current method as measured47;complete source continuous path is also omitted:ValidateContinuous,GetPred/GetLastDescendant,continuous SetLastValid cache propagation and upward NotifyInvalidChildren. SwList native validation calls NotifyInvalidChildren;local explicitly recursively validates hierarchical groups. Full selected responsibility will be restored together.47 commit grammar/attribution failures inform strict sequential exit checks and actual HEAD capture;do not reuse artifact SHA as CODE."
+  Findings: |-
+    Preflight clean/direct,ORCHESTRATOR then PLANNER,four matched modules loaded,user-instructions absent. Native phantom predicate differs3/5 from actual current method as measured47;complete source continuous path is also omitted:ValidateContinuous,GetPred/GetLastDescendant,continuous SetLastValid cache propagation and upward NotifyInvalidChildren. SwList native validation calls NotifyInvalidChildren;local explicitly recursively validates hierarchical groups. Full selected responsibility will be restored together.47 commit grammar/attribution failures inform strict sequential exit checks and actual HEAD capture;do not reuse artifact SHA as CODE.
+
+    - Observation: Initial native generator failed before generation/compilation with a Python syntax error:node signature comprehension had a mismatched closing parenthesis at line18.
+      Impact: No native output or implementation change claimed. This is an evidence-generator typo inside approved task scope;no scope/risk/gate drift.
+      Resolution: Fix the comprehension closing bracket,then generate and compile unchanged native source profiles. Preserve this failure in Findings and sequentially stop after every nonzero mutation;full acceptance criteria unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -90,3 +95,7 @@ If rollback is necessary,use a new task to revert reviewed implementation and re
 ## Findings
 
 Preflight clean/direct,ORCHESTRATOR then PLANNER,four matched modules loaded,user-instructions absent. Native phantom predicate differs3/5 from actual current method as measured47;complete source continuous path is also omitted:ValidateContinuous,GetPred/GetLastDescendant,continuous SetLastValid cache propagation and upward NotifyInvalidChildren. SwList native validation calls NotifyInvalidChildren;local explicitly recursively validates hierarchical groups. Full selected responsibility will be restored together.47 commit grammar/attribution failures inform strict sequential exit checks and actual HEAD capture;do not reuse artifact SHA as CODE.
+
+- Observation: Initial native generator failed before generation/compilation with a Python syntax error:node signature comprehension had a mismatched closing parenthesis at line18.
+  Impact: No native output or implementation change claimed. This is an evidence-generator typo inside approved task scope;no scope/risk/gate drift.
+  Resolution: Fix the comprehension closing bracket,then generate and compile unchanged native source profiles. Preserve this failure in Findings and sequentially stop after every nonzero mutation;full acceptance criteria unchanged.
