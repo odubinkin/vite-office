@@ -71,7 +71,9 @@ public:
  bool HasCountedChildren()const override;bool IsCountedForNumbering()const override;
 };
 ''' + 'bool Compare::operator()(const SwNumberTreeNode* a,const SwNumberTreeNode* b)const{return a->LessThan(*b);}' + '\n\n'.join(functions)+r'''
+// Discard insertion validity state before complete eager validation; native lazy getter/notification lifecycle is outside this probe.
 void validate(SwNumberTreeNode& parent){
+ parent.mpLastValid=nullptr;
  if(parent.mChildren.empty())return;
  parent.ValidateHierarchical(*parent.mChildren.rbegin());
  for(auto child:parent.mChildren)validate(*child);

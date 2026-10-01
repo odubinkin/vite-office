@@ -1,0 +1,43 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  137 passed (137)
+      Tests  641 passed (641)
+   Start at  07:48:33
+   Duration  71.69s (transform 2.33s, setup 10.32s, import 9.10s, tests 53.60s, environment 49.58s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.92 |    99.86 |     100 |   99.96 |                   
+ ...e/SwNumberTree |    94.3 |    90.74 |     100 |   97.22 |                   
+  SwNumberTree.ts  |   93.26 |     87.8 |     100 |   96.66 | 94-96             
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.92% ( 9913/9920 )
+Branches     : 99.86% ( 7473/7483 )
+Functions    : 100% ( 2733/2733 )
+Lines        : 99.96% ( 9119/9122 )
+================================================================================
+ERROR: Coverage for lines (99.96%) does not meet global threshold (100%)
+ERROR: Coverage for statements (99.92%) does not meet global threshold (100%)
+ERROR: Coverage for branches (99.86%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage

@@ -587,7 +587,9 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
 
     return aResult;
 }
+// Discard insertion validity state before complete eager validation; native lazy getter/notification lifecycle is outside this probe.
 void validate(SwNumberTreeNode& parent){
+ parent.mpLastValid=nullptr;
  if(parent.mChildren.empty())return;
  parent.ValidateHierarchical(*parent.mChildren.rbegin());
  for(auto child:parent.mChildren)validate(*child);

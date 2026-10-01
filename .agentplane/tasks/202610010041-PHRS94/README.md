@@ -4,7 +4,7 @@ title: "Restore native phantom ancestors for skipped list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned phantom ancestors and counting under the persistent approved upstream goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T00:47:56.765Z"
+doc_updated_at: "2026-10-01T00:49:37.522Z"
 doc_updated_by: "CODER"
 description: "Iteration29 of persistent upstream goal: replace bounded missing-level groups with source-owned phantom construction and native hierarchical phantom counting for existing Arabic/bullet lists. Preserve registered save/open/recovery deviations."
 sections:
@@ -60,6 +60,14 @@ sections:
     - Observation: ODT focused check reaches correct [7,5,3] labels/copy/Worker/export, then fails an assertion that assumed adjacent XML attribute order.
       Impact: Selected declaration contains the expected values with num-suffix between attributes; semantic transport is not failing.
       Resolution: Assert each value inside the selected level declaration independently and rerun genuine package roundtrips.
+
+    - Observation: Expanded native oracle to reverse/interleaved insertion; comparison fails at uncounted case2 because the eager harness retains native AddChild last-valid pointers without native lazy getter validation.
+      Impact: This is a harness validity mismatch: counters preceding last-valid retain initial0. Runtime tree/counting topology remains consistent.
+      Resolution: Explicitly reset group validity before eager validation in the bounded native harness, matching the canonical full-rebuild validation contract; then rerun all native states and runtime tests.
+
+    - Observation: Documentation gate reports missing JSDoc for new test callbacks and the phantom fixture parameter.
+      Impact: Required authored-function documentation is incomplete; runtime/core and genuine ODT checks pass.
+      Resolution: Add precise test callback/parameter documentation; rerun unchanged documentation and full mandatory gates.
 id_source: "generated"
 ---
 ## Summary
@@ -101,3 +109,11 @@ Preflight: clean main/direct; only parent 202609240501-C9TN6M DOING. Previous tu
 - Observation: ODT focused check reaches correct [7,5,3] labels/copy/Worker/export, then fails an assertion that assumed adjacent XML attribute order.
   Impact: Selected declaration contains the expected values with num-suffix between attributes; semantic transport is not failing.
   Resolution: Assert each value inside the selected level declaration independently and rerun genuine package roundtrips.
+
+- Observation: Expanded native oracle to reverse/interleaved insertion; comparison fails at uncounted case2 because the eager harness retains native AddChild last-valid pointers without native lazy getter validation.
+  Impact: This is a harness validity mismatch: counters preceding last-valid retain initial0. Runtime tree/counting topology remains consistent.
+  Resolution: Explicitly reset group validity before eager validation in the bounded native harness, matching the canonical full-rebuild validation contract; then rerun all native states and runtime tests.
+
+- Observation: Documentation gate reports missing JSDoc for new test callbacks and the phantom fixture parameter.
+  Impact: Required authored-function documentation is incomplete; runtime/core and genuine ODT checks pass.
+  Resolution: Add precise test callback/parameter documentation; rerun unchanged documentation and full mandatory gates.
