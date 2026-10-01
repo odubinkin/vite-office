@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 50
+revision: 51
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-01T15:48:01.661Z"
+doc_updated_at: "2026-10-01T16:21:57.084Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -192,6 +192,10 @@ sections:
     - Observation: User clarified: do not persist upstream source copies in Agentplane artifacts;project tests must not read,compile or invoke pinned upstream. Cleanup CODE581224c02406a2b6c00126fea6b6220a0636e130 removed41trackedCxx files,3untracked sources and51embedded source bodies. Test isolation CODEa775dd325398baa23db153f0c6d13b21f2b769e4 removes12test dependencies using authored fixtures.
       Impact: All120tooling,727application,109inventory and19browser tests pass with vendor unavailable;both coverage suites remain100percent. Static provenance/resource/inventory source audits may still read vendor. Manual native development probes use ignored scratch and retained literal results/hashes only. This is progress,not complete runtime/UI upstream parity.
       Resolution: Both cleanup/test-isolation leaves are verified DONE. Preserve this user constraint for every future iteration. Resume existing task202610011456-DA9C87 full continuous/phantom tree dispatch correction;its native result fixture and uncommitted source-generator work remain separate. Parent and overall goal stay active.
+
+    - Observation: Iteration48 leaf202610011456-DA9C87 is DONE. Actual CODE294493d03fcd31a1da8362acc6a87a5b9af4e910 (8 semantic+2 task artifacts);close3cba2b6c285e. Selected native continuous/phantom dispatch,traversal/cache/upward notification,SwList context validation and legacy continuous markers now match42 complete pinned definitions with960 sequences/69120 states/5 policies/64 markers. Final verify app732/inventory109/browser19, both coverages100%,all gates pass. New fixture tests also pass with pinned upstream absent. Source cleanup remains separate CODE581224c02406a2b6c00126fea6b6220a0636e130;test isolation separate CODEa775dd325398baa23db153f0c6d13b21f2b769e4.
+      Impact: Bounded behavior evidence only;no module/status/goal promotion. Project tests must not read,compile or invoke pinned upstream;static source audits/manual comparisons remain separate. Upstream source copies must never be persisted in Agentplane artifacts.
+      Resolution: Parent and full goal remain DOING/active. Next measured architecture gap: SwNumberTree.ts still exposes public optional-target ValidateHierarchical with eager no-argument descendant recursion, while pinned sw/inc/SwNumberTree.hxx:508 uses a protected required-target method. Production now calls it only with owned children;legacy diagnostic tests still call no-argument/foreign-target paths. Audit and refactor in a new one-correction leaf with source contracts and preserved assertion meaning;do not infer full parity from green gates.
 id_source: "generated"
 ---
 ## Summary
@@ -357,3 +361,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: User clarified: do not persist upstream source copies in Agentplane artifacts;project tests must not read,compile or invoke pinned upstream. Cleanup CODE581224c02406a2b6c00126fea6b6220a0636e130 removed41trackedCxx files,3untracked sources and51embedded source bodies. Test isolation CODEa775dd325398baa23db153f0c6d13b21f2b769e4 removes12test dependencies using authored fixtures.
   Impact: All120tooling,727application,109inventory and19browser tests pass with vendor unavailable;both coverage suites remain100percent. Static provenance/resource/inventory source audits may still read vendor. Manual native development probes use ignored scratch and retained literal results/hashes only. This is progress,not complete runtime/UI upstream parity.
   Resolution: Both cleanup/test-isolation leaves are verified DONE. Preserve this user constraint for every future iteration. Resume existing task202610011456-DA9C87 full continuous/phantom tree dispatch correction;its native result fixture and uncommitted source-generator work remain separate. Parent and overall goal stay active.
+
+- Observation: Iteration48 leaf202610011456-DA9C87 is DONE. Actual CODE294493d03fcd31a1da8362acc6a87a5b9af4e910 (8 semantic+2 task artifacts);close3cba2b6c285e. Selected native continuous/phantom dispatch,traversal/cache/upward notification,SwList context validation and legacy continuous markers now match42 complete pinned definitions with960 sequences/69120 states/5 policies/64 markers. Final verify app732/inventory109/browser19, both coverages100%,all gates pass. New fixture tests also pass with pinned upstream absent. Source cleanup remains separate CODE581224c02406a2b6c00126fea6b6220a0636e130;test isolation separate CODEa775dd325398baa23db153f0c6d13b21f2b769e4.
+  Impact: Bounded behavior evidence only;no module/status/goal promotion. Project tests must not read,compile or invoke pinned upstream;static source audits/manual comparisons remain separate. Upstream source copies must never be persisted in Agentplane artifacts.
+  Resolution: Parent and full goal remain DOING/active. Next measured architecture gap: SwNumberTree.ts still exposes public optional-target ValidateHierarchical with eager no-argument descendant recursion, while pinned sw/inc/SwNumberTree.hxx:508 uses a protected required-target method. Production now calls it only with owned children;legacy diagnostic tests still call no-argument/foreign-target paths. Audit and refactor in a new one-correction leaf with source contracts and preserved assertion meaning;do not infer full parity from green gates.
