@@ -25,6 +25,20 @@ export class SwNumFormat extends SvxNumberFormat {
   public constructor(format?: ConstSvxNumberFormat) {
     super(format ?? SvxNumType.SVX_NUM_ARABIC);
   }
+  /** Classifies native character-special and bitmap itemization independently of symbol visibility. @returns Itemize flag. */
+  public IsItemize(): boolean {
+    switch (this.GetNumberingType()) {
+      case SvxNumType.SVX_NUM_CHAR_SPECIAL:
+      case SvxNumType.SVX_NUM_BITMAP:
+        return true;
+      default:
+        return false;
+    }
+  }
+  /** Uses native enumeration policy, including NUMBER_NONE. @returns Enumeration flag. */
+  public IsEnumeration(): boolean {
+    return !this.IsItemize();
+  }
   /** Reads the composed native SwClient registration; JS has one base class. @returns Registered source, initially undefined. */
   public GetRegisteredIn(): SwModify | undefined {
     return this.client.GetRegisteredIn();

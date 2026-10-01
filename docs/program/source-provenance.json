@@ -3264,6 +3264,22 @@
           {
             "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
             "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native format enumeration itemize copy and type-change predicates"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches all native effective classification raw-layout counting and registry profiles"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native root phantom and counted numbered-registry filtering"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "retains existing supported classifications and sparse ownership through Worker16"
           }
         ],
         "upstream": [
@@ -3394,7 +3410,8 @@
       ],
       "preservedResponsibilities": [
         "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
-        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change."
+        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
+        "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
@@ -3845,6 +3862,22 @@
           {
             "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
             "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native format enumeration itemize copy and type-change predicates"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches all native effective classification raw-layout counting and registry profiles"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native root phantom and counted numbered-registry filtering"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "retains existing supported classifications and sparse ownership through Worker16"
           }
         ],
         "upstream": [
@@ -3922,7 +3955,8 @@
         "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
       ],
       "preservedResponsibilities": [
-        "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged."
+        "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
+        "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/DocumentListItemsManager.cxx",
@@ -4677,6 +4711,22 @@
           {
             "path": "apps/office/src/sw/source/core/doc/number-format.test.ts",
             "marker": "matches native NumberType formatting visibility legal coercion and signed32 input"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native format enumeration itemize copy and type-change predicates"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches all native effective classification raw-layout counting and registry profiles"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native root phantom and counted numbered-registry filtering"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "retains existing supported classifications and sparse ownership through Worker16"
           }
         ],
         "upstream": [
@@ -4779,6 +4829,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
             "marker": "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+            "marker": "SwNumFormat::IsEnumeration"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+            "marker": "SwNumFormat::IsItemize"
           }
         ]
       },
@@ -4796,14 +4854,17 @@
         "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
         "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
         "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged.",
-        "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged."
+        "Iteration44 restores SvxNumberType -> SvxNumberFormat -> SwNumFormat constructor/copy/state ownership, native numeric type IDs, standalone SVX_DEF_BULLET U+F095, unsigned32 glyph, show-symbol state and optional copied const Font family values. SwClient is composed because JavaScript has one superclass; the currently exposed registration remains null. Explicit browser format assembly/projection replaces kind/string-glyph constructor overloads. Worker graph16 preserves font presence (including present-empty), raw glyph and visibility with historical omissions supported. Complete unchanged native bodies compare 21 format-value states and144 type/format traces under ASan/UBSan, using named null-client, family-only Font/COW, decimal-provider, string/property/locale/platform adapters. Full native service initialization/static destruction, registered style clients, other Font attributes/equality, graphics, legal-rule state and wider numbering families remain unverified. No whole-module/status or goal promotion; registered I/O deviations unchanged.",
+        "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
       "upstreamSymbols": [
         "SwNumFormat::SwNumFormat",
         "SwNumRule::MakeNumString",
-        "SwNumRule::SwNumRule"
+        "SwNumRule::SwNumRule",
+        "SwNumFormat::IsEnumeration",
+        "SwNumFormat::IsItemize"
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -5570,6 +5631,22 @@
           {
             "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
             "marker": "HasNumberingWhichNeedsLayoutUpdate"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native format enumeration itemize copy and type-change predicates"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches all native effective classification raw-layout counting and registry profiles"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native root phantom and counted numbered-registry filtering"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "retains existing supported classifications and sparse ownership through Worker16"
           }
         ],
         "upstream": [
@@ -5584,6 +5661,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
             "marker": "HasNumberingWhichNeedsLayoutUpdate"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode)"
           }
         ]
       },
@@ -5597,7 +5678,8 @@
         "Full native fields/inline-heading/platform lifetime and unregistered background/fill or live-style callbacks remain unverified."
       ],
       "preservedResponsibilities": [
-        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change."
+        "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
+        "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
@@ -5705,6 +5787,22 @@
           {
             "path": "apps/office/src/sw/source/core/txtnode/list-restart-getter.test.ts",
             "marker": "matches unchanged native absent/direct getter values and nonfatal diagnostics without mutation"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native format enumeration itemize copy and type-change predicates"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches all native effective classification raw-layout counting and registry profiles"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "matches native root phantom and counted numbered-registry filtering"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+            "marker": "retains existing supported classifications and sparse ownership through Worker16"
           }
         ],
         "upstream": [
@@ -5840,7 +5938,8 @@
         "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
         "Iteration38 restores independent source set/reset pre/post flags, native prefix notification/validation ordering, direct outline suppression/return and normal-document sorted outline ownership.40 unchanged added native definitions compare60 sequences/2130 actual pre-vector cache,notification,item,rule,registry and outline-index states. Explicit dependency adapters retain source reading flag/shown/pool/raw-callback/layout-event/field boundaries;full native platform lifetime,dtor/redline/inline/fields/background/fill/live-style/default factories remain separate unverified obligations. No whole-module/default/goal promotion or IO change.",
         "Iteration41 restores separate SetListRestart(bool) flag-only mutation and SetAttrListRestartValue(number) equality/sentinel/signed-Int16 conversion. Six complete unchanged pinned native definitions produce42 literal states, compared against84 actual normal/reading document states with setter/reset attempts. Existing ODT import explicitly calls both native setters; actual list counters, undo and Worker16 preserve inactive explicit zero/seven through reactivation. Exact integer-input setter slice only; absent getter diagnostic behavior, full defaults, clients and shared style lifetime remain unverified.",
-        "Iteration42 restores GetAttrListRestartValue nonfatal missing-direct diagnostic and effective GetAttr fallback. Seven complete unchanged native getter/item/attribute-owner definitions plus four unchanged OSL/SAL macros/build definitions compare24 warning-enabled/disabled native states and24 actual normal/reading states with no item/handle/notification mutation. Missing/cleared86 returns pool1 independently of rule start9; direct signed16 values ignore the restart flag. Existing console.warn is the browser sink for the native warning-enabled diagnostic profile; native disabled-warning builds have the same returns. Full native logging filter/location/backtrace, sentinel-invalid typed reads, defaults/registry/clients/style lifetime remain unverified; no whole-module status or IO promotion."
+        "Iteration42 restores GetAttrListRestartValue nonfatal missing-direct diagnostic and effective GetAttr fallback. Seven complete unchanged native getter/item/attribute-owner definitions plus four unchanged OSL/SAL macros/build definitions compare24 warning-enabled/disabled native states and24 actual normal/reading states with no item/handle/notification mutation. Missing/cleared86 returns pool1 independently of rule start9; direct signed16 values ignore the restart flag. Existing console.warn is the browser sink for the native warning-enabled diagnostic profile; native disabled-warning builds have the same returns. Full native logging filter/location/backtrace, sentinel-invalid typed reads, defaults/registry/clients/style lifetime remain unverified; no whole-module status or IO promotion.",
+        "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

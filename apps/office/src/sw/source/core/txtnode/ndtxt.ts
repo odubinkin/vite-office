@@ -468,16 +468,16 @@ export class SwTextNode extends SwContentNode {
   }
   /** Reports enumeration using the bound rule and actual level. @returns Number presence. */
   public HasNumber(): boolean {
-    return this.GetActualNumberingType() === SvxNumType.SVX_NUM_ARABIC;
+    return this.GetActualNumFormat()?.IsEnumeration() ?? false;
   }
-  /** Reports character-special numbering using the bound rule. @returns Bullet presence. */
+  /** Reports native itemization using the bound rule. @returns Bullet presence. */
   public HasBullet(): boolean {
-    return this.GetActualNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL;
+    return this.GetActualNumFormat()?.IsItemize() ?? false;
   }
-  /** Reads the actual level's native type through the bound optional rule. @returns Type or undefined. */
-  private GetActualNumberingType(): SvxNumType | undefined {
+  /** Reads the actual level's effective const format through the bound optional rule. @returns Format or undefined. */
+  private GetActualNumFormat(): ReturnType<SwNumRule["Get"]> | undefined {
     const level = Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel()));
-    return this.mpNodeNum?.GetNumRule()?.Get(level).GetNumberingType();
+    return this.mpNodeNum?.GetNumRule()?.Get(level);
   }
   /** Returns the document's shown numbered-item registry. @returns Registry. */
   public getIDocumentListItems(): DocumentListItemsManager {

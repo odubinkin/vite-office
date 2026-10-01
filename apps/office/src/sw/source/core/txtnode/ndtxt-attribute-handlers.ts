@@ -201,13 +201,18 @@ export class HandleResetAttrAtTextNode {
   }
 }
 
-/** Reads source enumeration repaint policy for the existing Arabic/bullet formats. @param node - Paragraph. @returns Whether counting changes need tree notification. */
+/** Reads source repaint policy for explicitly owned formats, independently of enumeration. @param node - Paragraph. @returns Whether counting changes need tree notification. */
 export function HasNumberingWhichNeedsLayoutUpdate(node: SwTextNode): boolean {
-  const rule = node.GetNum()?.GetNumRule();
-  return (
-    rule !== undefined &&
-    rule.Get(node.GetAttrListLevel()).GetNumberingType() === SvxNumType.SVX_NUM_ARABIC
-  );
+  const format = node.GetNum()?.GetNumRule()?.GetNumFormat(node.GetAttrListLevel());
+  if (format === undefined) return false;
+  switch (format.GetNumberingType()) {
+    case SvxNumType.SVX_NUM_NUMBER_NONE:
+    case SvxNumType.SVX_NUM_CHAR_SPECIAL:
+    case SvxNumType.SVX_NUM_BITMAP:
+      return false;
+    default:
+      return true;
+  }
 }
 
 /** Reads the native normal-document outline policy. @param node - Paragraph. @returns Outline membership state. */
