@@ -1,0 +1,22 @@
+
+> vite-office@0.1.0 check:source-provenance
+> tsx scripts/check-source-provenance.ts
+
+node:internal/fs/promises:637
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOENT: no such file or directory, open '/Users/odubinkin/Projects/vite-office/vendor/libreoffice-reference/xmloff/inc/XMLTextNumRuleInfo.hxx'
+    at async open (node:internal/fs/promises:637:25)
+    at async readFile (node:internal/fs/promises:1269:14)
+    at async validateEvidence (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:404:22)
+    at async validateSourceProvenanceManifest (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:157:7)
+    at async main (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:681:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:698:57) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/odubinkin/Projects/vite-office/vendor/libreoffice-reference/xmloff/inc/XMLTextNumRuleInfo.hxx'
+}
+
+Node.js v24.13.1

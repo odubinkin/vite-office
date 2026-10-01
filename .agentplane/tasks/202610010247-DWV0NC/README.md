@@ -4,7 +4,7 @@ title: "Restore native implicit list restart export ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned implicit/direct restart metadata and native conditional list transitions under the persistent approved goal."
 doc_version: 3
-doc_updated_at: "2026-10-01T03:09:46.542Z"
+doc_updated_at: "2026-10-01T03:19:42.494Z"
 doc_updated_by: "CODER"
 description: "Iteration33: preserve independent numbered,restart,direct-start and format-start metadata under XMLTextNumRuleInfo and export native implicit-restart list transitions. Preserve registered save/open/recovery differences."
 sections:
@@ -56,6 +56,14 @@ sections:
     - Observation: Focused test session61437 terminal exit1:metadata2 tests pass;existing repeated-sublist transport test fails because it expects every counted implicit restart to gain an explicit5. Actual same-level reopened sublists now retain no direct start while restarttrue,matching compiled native split branches.
       Impact: This is the documented former export limitation assertion becoming stale after the approved correction;complete verification is still pending.
       Resolution: Persist active artifacts,replace only the former bounded projection assertion with source-derived explicit per-fixture reopen gains/retention and exact body item-start checks. Add independent genuine root/open/decreasing/re-entry/header/default/zero cases. Keep prior DONE task artifacts immutable and all mandatory gates unchanged.
+
+    - Observation: The existing-test edit script asserted a six-space marker while the source uses eight spaces;the Python assertion failed before any edit. A following formatter returned0,so the shell terminal code alone masked that failure.
+      Impact: The stale test is unchanged;no claimed passing test or source mutation resulted from the failed edit.
+      Resolution: Inspect exact source indentation and apply a bounded structural replacement. Keep subsequent dependent commands conditional on actual success and inspect each tool result.
+
+    - Observation: Focused genuine ODT session84490 passed all52 package scenarios. The first provenance check failed ENOENT because new evidence referenced xmloff/inc/XMLTextNumRuleInfo.hxx; the actual pinned header is xmloff/source/text/XMLTextNumRuleInfo.hxx. An initial documentation search also used nonexistent docs/writer-odt-format.md; bounded rg --files located docs/program/writer-odt-format.md.
+      Impact: Runtime tests pass, but the evidence path must be corrected before full verification. No validator or gate change is required.
+      Resolution: Use the actual source/text header and its inline Reset marker, repeat focused provenance/parity checks, retain the failed log and the bounded native scope.
 id_source: "generated"
 ---
 ## Summary
@@ -93,3 +101,11 @@ Preflight clean main/direct,parent202609240501-C9TN6M only active. Previous goal
 - Observation: Focused test session61437 terminal exit1:metadata2 tests pass;existing repeated-sublist transport test fails because it expects every counted implicit restart to gain an explicit5. Actual same-level reopened sublists now retain no direct start while restarttrue,matching compiled native split branches.
   Impact: This is the documented former export limitation assertion becoming stale after the approved correction;complete verification is still pending.
   Resolution: Persist active artifacts,replace only the former bounded projection assertion with source-derived explicit per-fixture reopen gains/retention and exact body item-start checks. Add independent genuine root/open/decreasing/re-entry/header/default/zero cases. Keep prior DONE task artifacts immutable and all mandatory gates unchanged.
+
+- Observation: The existing-test edit script asserted a six-space marker while the source uses eight spaces;the Python assertion failed before any edit. A following formatter returned0,so the shell terminal code alone masked that failure.
+  Impact: The stale test is unchanged;no claimed passing test or source mutation resulted from the failed edit.
+  Resolution: Inspect exact source indentation and apply a bounded structural replacement. Keep subsequent dependent commands conditional on actual success and inspect each tool result.
+
+- Observation: Focused genuine ODT session84490 passed all52 package scenarios. The first provenance check failed ENOENT because new evidence referenced xmloff/inc/XMLTextNumRuleInfo.hxx; the actual pinned header is xmloff/source/text/XMLTextNumRuleInfo.hxx. An initial documentation search also used nonexistent docs/writer-odt-format.md; bounded rg --files located docs/program/writer-odt-format.md.
+  Impact: Runtime tests pass, but the evidence path must be corrected before full verification. No validator or gate change is required.
+  Resolution: Use the actual source/text header and its inline Reset marker, repeat focused provenance/parity checks, retain the failed log and the bounded native scope.
