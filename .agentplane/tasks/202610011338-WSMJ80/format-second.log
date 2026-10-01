@@ -1,0 +1,5 @@
+apps/office/src/sw/source/core/doc/number.ts 79ms (unchanged)
+apps/office/src/editeng/source/items/numitem.ts 25ms (unchanged)
+apps/office/src/sw/inc/calbck.ts 10ms (unchanged)
+apps/office/src/sw/source/core/doc/number-pointer.test.ts 26ms
+apps/office/src/sw/source/core/doc/number-pointer-native.json 157ms (unchanged)
