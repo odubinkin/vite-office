@@ -4,7 +4,7 @@ title: "Restore Writer attribute handle mutation lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -22,9 +22,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-01T09:33:29.840Z"
+  updated_at: "2026-10-01T09:35:57.148Z"
   updated_by: "CODER"
-  note: "Unchanged full npm run verify passed697 app/109 inventory/19 browser,both100% all4 categories;24 unchanged native definitions/300 sequences/1815 real states plus literal lifecycle/delta assertions. Doctor0errors2knownwarnings,routing/diff pass. Registered-item fresh-handle/unlocked observer profile only;full native pool/default/client lifetime and86 native1/local0 remain explicit follow-ups."
+  note: "Verified: unchanged full npm run verify exit0;697app109inventory19browser,both100% all4 metrics,24 unchanged pinned definitions/300 sequences1815 real states,doctor0errors2knownwarnings,routing and clean code state. Actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef EVALUATOR pass. Re-record canonical blueprint evidence after CLI Verification section update replaced its generated verification block;no source/test or acceptance change."
   attempts: 0
 quality_review:
   state: "pass"
@@ -71,8 +71,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Unchanged full npm run verify passed697 app/109 inventory/19 browser,both100% all4 categories;24 unchanged native definitions/300 sequences/1815 real states plus literal lifecycle/delta assertions. Doctor0errors2knownwarnings,routing/diff pass. Registered-item fresh-handle/unlocked observer profile only;full native pool/default/client lifetime and86 native1/local0 remain explicit follow-ups."
+  -
+    type: "verify"
+    at: "2026-10-01T09:35:57.148Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: unchanged full npm run verify exit0;697app109inventory19browser,both100% all4 metrics,24 unchanged pinned definitions/300 sequences1815 real states,doctor0errors2knownwarnings,routing and clean code state. Actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef EVALUATOR pass. Re-record canonical blueprint evidence after CLI Verification section update replaced its generated verification block;no source/test or acceptance change."
 doc_version: 3
-doc_updated_at: "2026-10-01T09:35:14.392Z"
+doc_updated_at: "2026-10-01T09:35:57.238Z"
 doc_updated_by: "CODER"
 description: "Iteration39: replace in-place SwContentNode attribute mutation with source-owned copy/commit handle helpers,restore native clear-delta callbacks and notification-before-release/no-op contracts. SetAttr participates in the same handle lifecycle so nested notification writes cannot mutate retained old sets. Existing registered items/unlocked observer path only;full native autostyle cache/refcount/modify-lock/lifetime remains explicit. Preserve IO deviations and active parent audit."
 sections:
@@ -88,6 +94,39 @@ sections:
     Command: ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check. Result: pass. Evidence:doctor0errors,two unchanged warnings(oldmanagedhook readiness,oldDONEF1JT8K implementation SHA points to close);routingOK,diff clean. Full verify terminal padding alone was normalized for textual diff hygiene,without removing warning/error/assertion lines. Scope: repository diagnostics and unchanged policy budgets.
 
     Quality:actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef reviewed with EVALUATOR pass;quality/20261001-093438699-recovery-context/quality-report.json binds that SHA,nonempty findings,evidence and explicit residual obligations. Tracked/untracked state clean after implementation commit;quality artifacts alone remain to persist before finish. Parent audit/unlimited goal remain active. No network/outside-repo access,subagents,registered save/open/recovery changes,status promotion or native full-lifetime claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-01T09:35:57.148Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: unchanged full npm run verify exit0;697app109inventory19browser,both100% all4 metrics,24 unchanged pinned definitions/300 sequences1815 real states,doctor0errors2knownwarnings,routing and clean code state. Actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef EVALUATOR pass. Re-record canonical blueprint evidence after CLI Verification section update replaced its generated verification block;no source/test or acceptance change.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T09:35:14.392Z, excerpt_hash=sha256:4b1cef2699125c2c9ce85799e5ea2baf3ec83f0b4e8f515a1d8fe06c16a81ed2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010849-VYM64Q/blueprint/resolved-snapshot.json
+    - old_digest: 2b939437574ec5b2141cc1c6ad05005c94c3532b7b96674d5733f785299c4dce
+    - current_digest: 2b939437574ec5b2141cc1c6ad05005c94c3532b7b96674d5733f785299c4dce
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610010849-VYM64Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610010849-VYM64Q --result verified-202610010849-VYM64Q --commit 7c361daf69a4a847b4a63bc8b6c403fc06831500
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the actual iteration39 implementation commit if required,preserving all task evidence and prior DONE artifacts. No history rewriting or registered IO changes."
   Findings: |-
     Preflight clean main/direct;only parent audit DOING. Pinned node.cxx1699-1799 retains cleared direct handles during client notifications and differs between changed/no-op single/range/vector/all release. AttrSetHandleHelper source comment explicitly prohibits direct mutation and clones before committing a new handle. Necessary SetAttr correction belongs to the same ownership lifecycle to preserve retained handles during nested writes. Native SwAttrSet Changed skips invalid/disabled and uses parent or pool defaults for clear delta;ResetAllAttr returns new delta count. SfxItemPool static IsWhich classifies nonzero IDs through4999,while the existing local instance method incorrectly means registered defaults and has no production callers. No native full autostyle cache/shared pool/refcount/modify-lock/cache/platform claim. Prior unexplained UI failures remain unproven.
@@ -128,6 +167,39 @@ Command: native-oracle.py and byte-identity/result-fixture assertions. Result: p
 Command: ap doctor;node .agentplane/policy/check-routing.mjs;git diff --check. Result: pass. Evidence:doctor0errors,two unchanged warnings(oldmanagedhook readiness,oldDONEF1JT8K implementation SHA points to close);routingOK,diff clean. Full verify terminal padding alone was normalized for textual diff hygiene,without removing warning/error/assertion lines. Scope: repository diagnostics and unchanged policy budgets.
 
 Quality:actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef reviewed with EVALUATOR pass;quality/20261001-093438699-recovery-context/quality-report.json binds that SHA,nonempty findings,evidence and explicit residual obligations. Tracked/untracked state clean after implementation commit;quality artifacts alone remain to persist before finish. Parent audit/unlimited goal remain active. No network/outside-repo access,subagents,registered save/open/recovery changes,status promotion or native full-lifetime claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-01T09:35:57.148Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: unchanged full npm run verify exit0;697app109inventory19browser,both100% all4 metrics,24 unchanged pinned definitions/300 sequences1815 real states,doctor0errors2knownwarnings,routing and clean code state. Actual implementation83e10770fa8b34cc851c7bd88275935040bac0ef EVALUATOR pass. Re-record canonical blueprint evidence after CLI Verification section update replaced its generated verification block;no source/test or acceptance change.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-01T09:35:14.392Z, excerpt_hash=sha256:4b1cef2699125c2c9ce85799e5ea2baf3ec83f0b4e8f515a1d8fe06c16a81ed2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610010849-VYM64Q/blueprint/resolved-snapshot.json
+- old_digest: 2b939437574ec5b2141cc1c6ad05005c94c3532b7b96674d5733f785299c4dce
+- current_digest: 2b939437574ec5b2141cc1c6ad05005c94c3532b7b96674d5733f785299c4dce
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610010849-VYM64Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610010849-VYM64Q --result verified-202610010849-VYM64Q --commit 7c361daf69a4a847b4a63bc8b6c403fc06831500
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
