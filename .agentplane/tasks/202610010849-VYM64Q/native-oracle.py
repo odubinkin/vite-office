@@ -35,7 +35,7 @@ constexpr TypedWhichId<SfxStringItem> RES_FRMATR_STYLE_NAME{701};constexpr int R
 enum class SfxItemState{DEFAULT,SET};
 struct WhichRangesContainer{template<class T>WhichRangesContainer(T){}};
 namespace svl{template<int...>constexpr int Items=0;}
-struct SfxItemPool{std::deque<SfxPoolItem> arena;template<class T>void unregisterItemSet(const T&){}static constexpr int SFX_WHICH_MAX=4999;static bool IsWhich(sal_uInt16);const SfxPoolItem& GetUserOrPoolDefaultItem(int id)const{static std::map<int,SfxPoolItem> items;auto [at,added]=items.emplace(id,SfxPoolItem{id,id==86?65535:id==87?1:0});return at->second;}};
+struct SfxItemPool{std::deque<SfxPoolItem> arena;template<class T>void unregisterItemSet(const T&){}static constexpr int SFX_WHICH_MAX=4999;static bool IsWhich(sal_uInt16);const SfxPoolItem& GetUserOrPoolDefaultItem(int id)const{static std::map<int,SfxPoolItem> items;auto [at,added]=items.emplace(id,SfxPoolItem{id,id==86?1:id==87?1:0});return at->second;}};
 const SfxPoolItem* implCreateItemEntry(SfxItemPool& p,const SfxPoolItem* x,bool){p.arena.push_back(*x);return &p.arena.back();}void implCleanupItemEntry(const SfxPoolItem*){}
 struct SfxItemSet{
  using PoolItemMap=std::map<int,const SfxPoolItem*>;PoolItemMap m_aPoolItemMap;int m_nRegister=0;SfxItemPool* pool;const SfxItemSet* parent=nullptr;
