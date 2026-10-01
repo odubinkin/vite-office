@@ -1,10 +1,11 @@
 ---
 id: "202610011521-7VY65K"
 title: "Remove duplicated upstream sources from Agentplane artifacts"
-status: "DOING"
+result_summary: "Removed41trackedCxxAnd51embeddedBodies;manualProbesUseIgnoredScratch;projectCodeAndFixturesUnchanged"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "581224c02406a2b6c00126fea6b6220a0636e130"
   findings:
     - "Exact87 implementation paths reviewed;41 tracked source deletions,8 source-text-only identity JSON changes,36 native generator storage updates,.gitignore and one manual-probe helper. Three additional untracked current sources removed. Zero task artifact C/C++ files,51 embedded bodies removed. Current task48 generator changes remain separately owned and excluded. No independent reviewer claim."
-commit: null
+commit:
+  hash: "581224c02406a2b6c00126fea6b6220a0636e130"
+  message: "🧹 7VY65K code: remove duplicated upstream source artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: Execute user-authorized isolated cleanup of duplicated upstream sources and prevent source persistence in Agentplane artifacts."
+  -
+    author: "CODER"
+    body: "Verified: Removed all persisted upstream source copies in an isolated cleanup commit; retained native hashes/results, redirected manual generators to ignored scratch, and passed focused storage verification, doctor and routing."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS cleanup CODE 581224c02406a2b6c00126fea6b6220a0636e130 exact87paths: zero source files in Agentplane task artifacts; 51 source text fields removed, all hashes/metadata/results unchanged;36 committed generators syntax-valid and scratch source paths consistent; representative default/188marker/42restart native probes reproduce baseline sources/results in ignored scratch;doctor zero errors/two pre-existing warnings,routing/diff pass.No production,test,vendor,fixture changes. task48 working generator preserved separately. Project runtime tests do not invoke upstream;one existing tooling test reads vendor and will be fixed separately."
+  -
+    type: "status"
+    at: "2026-10-01T15:29:34.156Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Removed all persisted upstream source copies in an isolated cleanup commit; retained native hashes/results, redirected manual generators to ignored scratch, and passed focused storage verification, doctor and routing."
 doc_version: 3
-doc_updated_at: "2026-10-01T15:28:54.722Z"
+doc_updated_at: "2026-10-01T15:29:34.158Z"
 doc_updated_by: "CODER"
 description: "User-authorized separate cleanup commit removing every persisted upstream C/C++ source copy and embedded source body from Agentplane artifacts. Preserve vendor pin, hashes, native output fixtures and logs; prevent generators from persisting new source copies. Keep in-progress runtime task separate."
 sections:
@@ -113,6 +126,10 @@ sections:
     - Observation: The cleanup implementation commit was created as 581224c02406a2b6c00126fea6b6220a0636e130, then ap commit returned E_GIT Working tree is dirty during post-commit bookkeeping because task48 has separately owned generator edits.
       Impact: Source deletion is committed, but command success and lifecycle bookkeeping must not be inferred from partial completion.
       Resolution: Recomputed route and inspected actual HEAD scope. Temporarily preserve task48 generator working bytes in ignored repository scratch, restore its committed baseline for cleanup lifecycle checks, and restore task48 work after cleanup closure. No history rewrite or inclusion of task48 implementation in cleanup.
+extensions:
+  implementation_commit:
+    hash: "581224c02406a2b6c00126fea6b6220a0636e130"
+    message: "🧹 7VY65K code: remove duplicated upstream source artifacts"
 id_source: "generated"
 ---
 ## Summary
