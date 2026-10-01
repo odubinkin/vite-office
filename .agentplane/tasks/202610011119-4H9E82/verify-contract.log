@@ -1,0 +1,30 @@
+1. Record the actual pre-edit eager ownership and equal-Set mismatch. Extract complete unchanged pinned Get/GetNumFormat/reference-Set and constructor/copy/equality definitions; execute native differential traces under ASan/UBSan with named adapters for unsupported platform/client/font/graphic state, retaining identities and limitations.
+2. Compare all ten levels in four native default families; raw absence, shared identity, explicit ownership, equal owned Set identity/no invalidation, unequal Set copying/invalidation, caller-copy isolation and sparse clone ownership. Exercise every implemented equality field including inactive geometry and absent versus empty ListFormat. Getter surfaces must not expose setters.
+3. Preserve existing list/restart/UNO/ODT assertions while migrating mutations to clone-and-Set. Worker transfer must preserve absence and default selection; legacy graph v16 records without ownership metadata must retain existing explicit levels. Verify malformed boundary rejection.
+4. Run focused new and migrated tests and npm run verify unchanged, including both 100% suites, lint/types, browser, genuine ODT fixtures, inventory/provenance/source paths, static build and authored-file sizes. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check.
+5. Record actual CODE SHA, verification and independent quality-phase review, finish only this leaf and leave the parent and goal active. Final tracked state must be clean.
+
+Blueprint expected evidence
+blueprint_id: code.direct
+blueprint_version: 1
+workflow_mode: direct
+workflow_git: implementation_commit_location=current_checkout finish_commit_source=explicit_hash_or_comment_commit close_tail_required=no lifecycle_comment_commit_location=current_checkout finish_commit_from_comment=yes
+route: intake -> scope -> approval_gate -> context_resolve -> work_unit -> deterministic_check -> verify_record -> quality_gate -> finish
+selection_reasons: task kind resolved to code; task intent kind: code; workflow mode: direct; task intent mutation scope: code
+policy_modules: .agentplane/policy/dod.code.md, .agentplane/policy/dod.core.md, .agentplane/policy/security.must.md, .agentplane/policy/workflow.direct.md
+allowed_commands: agentplane evaluator run <task-id> --verdict pass|rework|blocked|human_review; agentplane finish <task-id>; agentplane task verify-show <task-id>; agentplane verify <task-id> --ok|--rework; project focused checks
+context_budget: max_policy_modules=4 max_prompt_blocks=12
+context_manifest: 0
+required_evidence: changed_paths, check_result, commit, quality_report
+accepted_recipe_extensions: 0
+rejected_recipe_extensions: 0
+stop_reasons: none
+sgr_decision: blueprint_route_decision selected=code.direct
+Blueprint snapshot evidence
+snapshot_state: current
+snapshot_path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610011119-4H9E82/blueprint/resolved-snapshot.json
+snapshot_digest: 47a434a2f20a92510d4c341b4fe47663ba76bc979d8dc71bc22e832a71715f64
+snapshot_current_digest: 47a434a2f20a92510d4c341b4fe47663ba76bc979d8dc71bc22e832a71715f64
+snapshot_route_changed: no
+snapshot_required_evidence: code_direct.paths, code_direct.check, code_direct.commit, code_direct.quality
+snapshot_safe_command: agentplane blueprint snapshot 202610011119-4H9E82

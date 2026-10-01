@@ -1,0 +1,10 @@
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+apps/office/src/sw/source/core/doc/number.ts(189,40): error TS2532: Object is possibly 'undefined'.
+apps/office/src/sw/source/filter/xml/xmlimp.ts(73,1): error TS6133: 'SwNumRule' is declared but its value is never read.

@@ -4,7 +4,7 @@ title: "Restore Writer numbering format ownership and access contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -40,7 +40,7 @@ events:
     to: "DOING"
     note: "Start: user-authorized iteration 43 restores optional owned formats and shared effective defaults, with consumer and Worker migration and unchanged verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-01T11:20:53.353Z"
+doc_updated_at: "2026-10-01T11:25:28.749Z"
 doc_updated_by: "CODER"
 description: "Iteration 43: separate optional owned levels from shared effective defaults, preserve source-equivalent Set no-op and copy ownership, and migrate existing consumers and Worker serialization without changing registered I/O deviations."
 sections:
@@ -59,7 +59,12 @@ sections:
     5. Record actual CODE SHA, verification and independent quality-phase review, finish only this leaf and leave the parent and goal active. Final tracked state must be clean.
   Verification: "Pending implementation and checks. No module-level parity promotion is authorized."
   Rollback Plan: "Revert only the eventual implementation commit through a new executable task; retain immutable native observations and failed attempts."
-  Findings: "Baseline from immutable iteration 42: effective Get absent; ten eager owned slots; equal Set replaces identity and invalidates. Native accessor/ref-Set proof has empty raw slots, shared Get defaults and equal owned no-op. Native pointer Set overload, full style/client/font/graphic ownership and static destruction lifetime remain outside the currently implemented reference overload and must not be claimed certified. Direct workflow remains local. Parent goal has not achieved whole-project parity."
+  Findings: |-
+    Baseline from immutable iteration 42: effective Get absent; ten eager owned slots; equal Set replaces identity and invalidates. Native accessor/ref-Set proof has empty raw slots, shared Get defaults and equal owned no-op. Native pointer Set overload, full style/client/font/graphic ownership and static destruction lifetime remain outside the currently implemented reference overload and must not be claimed certified. Direct workflow remains local. Parent goal has not achieved whole-project parity.
+
+    - Observation: Initial typecheck caught the optional shared-table array access and a now-unused XML class import after constructor migration; discovery also had a shell glob miss for docs JSON. Logs retained.
+      Impact: No verification contract change; no network or outside-repository access.
+      Resolution: Use explicit validated table indexing and actual import inventory, then rerun typecheck and unchanged checks.
 id_source: "generated"
 ---
 ## Summary
@@ -96,3 +101,7 @@ Revert only the eventual implementation commit through a new executable task; re
 ## Findings
 
 Baseline from immutable iteration 42: effective Get absent; ten eager owned slots; equal Set replaces identity and invalidates. Native accessor/ref-Set proof has empty raw slots, shared Get defaults and equal owned no-op. Native pointer Set overload, full style/client/font/graphic ownership and static destruction lifetime remain outside the currently implemented reference overload and must not be claimed certified. Direct workflow remains local. Parent goal has not achieved whole-project parity.
+
+- Observation: Initial typecheck caught the optional shared-table array access and a now-unused XML class import after constructor migration; discovery also had a shell glob miss for docs JSON. Logs retained.
+  Impact: No verification contract change; no network or outside-repository access.
+  Resolution: Use explicit validated table indexing and actual import inventory, then rerun typecheck and unchanged checks.
