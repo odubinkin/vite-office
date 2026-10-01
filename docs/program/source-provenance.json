@@ -37,6 +37,11 @@
       "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
       "rationale": "The native anonymous-namespace direct item lifecycle helpers are split from SwTextNode to retain the mandatory1000-line limit and ndtxt.cxx ownership.",
       "stackNecessity": "responsibility-split"
+    },
+    {
+      "localPath": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts",
+      "rationale": "Ports the native AttrSetHandleHelper namespace as a separate source-owner module so stable by-reference handles and copy/commit mutation remain distinct from node structure in TypeScript. Both retain node.cxx ownership;the browser adapter still lacks native automatic-style pooling and full client lifetime.",
+      "stackNecessity": "responsibility-split"
     }
   ],
   "entries": [
@@ -1540,7 +1545,8 @@
         "Upstream obligations outside SfxItemPool, ScDocument::UpdateFontCharSet, ScDocument::GetDocColors, SwDoc::GetDocColors and the bounded SfxPoolItemFactory, SfxItemPool contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`."
+        "Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`.",
+        "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations."
       ],
       "status": "mapped",
       "upstreamPath": "svl/source/items/itempool.cxx",
@@ -1591,7 +1597,8 @@
       ],
       "preservedResponsibilities": [
         "Reimplements bounded SfxItemSet delta storage, parent lookup, and item state from pinned `svl/source/items/itemset.cxx`.",
-        "Stores ordinary values and distinct INVALID/DISABLED singleton pointers in one native-style PoolItemMap keyed by WhichId; state transitions follow DisableOrInvalidateItem_ForWhichID."
+        "Stores ordinary values and distinct INVALID/DISABLED singleton pointers in one native-style PoolItemMap keyed by WhichId; state transitions follow DisableOrInvalidateItem_ForWhichID.",
+        "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations."
       ],
       "status": "mapped",
       "upstreamPath": "svl/source/items/itemset.cxx",
@@ -3631,7 +3638,8 @@
       ],
       "preservedResponsibilities": [
         "Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.",
-        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
+        "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/attr/swatrset.cxx",
@@ -4754,6 +4762,42 @@
       "evidence": {
         "local": [
           {
+            "marker": "AttrSetHandleHelper",
+            "path": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "namespace AttrSetHandleHelper",
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts",
+      "localSymbols": [
+        "SwAttrSetHandle",
+        "AttrSetHandleHelper"
+      ],
+      "omittedResponsibilities": [
+        "Native shared automatic-style pooling,modify locks,cache,refcount,surrogates,conditional/style-name/RES_AUTO_STYLE and full client lifetime remain unimplemented or unverified."
+      ],
+      "preservedResponsibilities": [
+        "Ports registered-item native AttrSetHandleHelper copy-before-write and commit-only-on-change ownership using the existing fresh-handle browser style-access adapter."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/docnode/node.cxx",
+      "upstreamSymbols": [
+        "AttrSetHandleHelper",
+        "GetNewAutoStyle",
+        "Put_BC",
+        "ClearItem_BC"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SwNodeType",
             "path": "apps/office/src/sw/source/core/docnode/node.ts"
           }
@@ -4771,13 +4815,17 @@
         "SwNode",
         "SwStartNode",
         "SwEndNode",
-        "SwContentNode"
+        "SwContentNode",
+        "SetAttr",
+        "ResetAttr",
+        "ResetAllAttr"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwNodeType, SwNode, SwStartNode, SwEndNode and the bounded SwNodeType, SwNode, SwStartNode contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements Writer document model nodes from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary."
+        "Implements Writer document model nodes from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary.",
+        "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/docnode/node.cxx",
@@ -4785,7 +4833,10 @@
         "SwNodeType",
         "SwNode",
         "SwStartNode",
-        "SwEndNode"
+        "SwEndNode",
+        "SwContentNode::SetAttr",
+        "SwContentNode::ResetAttr",
+        "SwContentNode::ResetAllAttr"
       ]
     },
     {

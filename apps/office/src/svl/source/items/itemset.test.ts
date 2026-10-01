@@ -200,8 +200,8 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
 describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, and delta-state tests. @returns Nothing; Vitest registers tests. */, function defineItemSetTests(): void {
   it("owns defaults and restores registered items through WhichId factories" /** Covers pool lookup and rejection paths. @returns Nothing; assertions inspect registry behavior. */, function verifiesItemPool(): void {
     const pool = createPool();
-    expect(pool.IsWhich(1)).toBe(true);
-    expect(pool.IsWhich(9)).toBe(false);
+    expect(SfxItemPool.IsWhich(1)).toBe(true);
+    expect(SfxItemPool.IsWhich(9)).toBe(true);
     expect(pool.GetUserOrPoolDefaultItem(1)).toMatchObject({});
     expect(encodeSfxPoolItem(pool.CreateItem({ value: "saved", which: 1 }))).toEqual({
       value: "saved",

@@ -27,6 +27,11 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
+import {
+  IsDisabledItem,
+  IsInvalidItem,
+  type SfxPoolItem,
+} from "../../../../svl/source/items/poolitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
@@ -289,6 +294,70 @@ export class SwAttrPool extends SfxItemPool {
 
 /** Writer-specialized item set with typed paragraph accessors. */
 export class SwAttrSet extends SfxItemSet {
+  private m_pOldSet: SwAttrSet | undefined;
+  private m_pNewSet: SwAttrSet | undefined;
+
+  /** Records effective old and new values for native broadcast deltas. @param oldItem - Previous direct entry. @param newItem - Replacement entry. @returns Nothing. */
+  protected override Changed(
+    oldItem: SfxPoolItem | undefined,
+    newItem: SfxPoolItem | undefined,
+  ): void {
+    if (this.m_pOldSet === undefined && this.m_pNewSet === undefined) return;
+    if (
+      IsInvalidItem(oldItem) ||
+      IsDisabledItem(oldItem) ||
+      IsInvalidItem(newItem) ||
+      IsDisabledItem(newItem)
+    )
+      return;
+    const which = (oldItem ?? (newItem as SfxPoolItem)).Which();
+    if (!SfxItemPool.IsWhich(which)) return;
+    if (this.m_pOldSet !== undefined)
+      this.m_pOldSet.Put(
+        oldItem ?? this.GetParent()?.Get(which) ?? this.GetPool().GetUserOrPoolDefaultItem(which),
+      );
+    if (this.m_pNewSet !== undefined)
+      this.m_pNewSet.Put(
+        newItem ?? this.GetParent()?.Get(which) ?? this.GetPool().GetUserOrPoolDefaultItem(which),
+      );
+  }
+
+  /** Stores an item or set while collecting native old/new broadcast deltas. @param itemOrSet - Source item or set. @param oldSet - Optional old-state receiver. @param newSet - Optional new-state receiver. @returns Whether direct storage changed. */
+  public Put_BC(
+    itemOrSet: SfxPoolItem | SfxItemSet,
+    oldSet?: SwAttrSet,
+    newSet?: SwAttrSet,
+  ): boolean {
+    this.m_pOldSet = oldSet;
+    this.m_pNewSet = newSet;
+    const changed =
+      "Which" in itemOrSet ? super.Put(itemOrSet) !== undefined : super.PutSet(itemOrSet);
+    this.m_pOldSet = this.m_pNewSet = undefined;
+    return changed;
+  }
+
+  /** Clears one WhichId with broadcast deltas. @param which - Item identity, or zero for all. @param oldSet - Optional old-state receiver. @param newSet - Optional new-state receiver. @returns Removed entry count. */
+  public ClearItem_BC(which: number, oldSet?: SwAttrSet, newSet?: SwAttrSet): number;
+  /** Clears an inclusive range with broadcast deltas. @param first - First identity. @param last - Last identity. @param oldSet - Optional old-state receiver. @param newSet - Optional new-state receiver. @returns Removed entry count. */
+  public ClearItem_BC(first: number, last: number, oldSet?: SwAttrSet, newSet?: SwAttrSet): number;
+  /** Implements the native single and range clear overloads. @param first - First WhichId. @param lastOrOld - Last WhichId or old-state receiver. @param oldOrNew - Old-state or new-state receiver. @param newSet - Range new-state receiver. @returns Removed entry count. */
+  public ClearItem_BC(
+    first: number,
+    lastOrOld?: number | SwAttrSet,
+    oldOrNew?: SwAttrSet,
+    newSet?: SwAttrSet,
+  ): number {
+    const range = typeof lastOrOld === "number";
+    this.m_pOldSet = range ? oldOrNew : lastOrOld;
+    this.m_pNewSet = range ? newSet : oldOrNew;
+    let count = 0;
+    if (range) {
+      for (let which = first; which <= lastOrOld; which++) count += super.ClearItem(which);
+    } else count = super.ClearItem(first);
+    this.m_pOldSet = this.m_pNewSet = undefined;
+    return count;
+  }
+
   /** Creates a Writer attribute set. @param pool - Owning Writer pool. @param ranges - Accepted WhichId ranges. @param parent - Optional inherited set. @returns Nothing. */
   public constructor(pool: SwAttrPool, ranges: WhichRangesContainer, parent?: SfxItemSet) {
     super(pool, ranges, parent);

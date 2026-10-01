@@ -116,6 +116,7 @@ export class SfxItemSet {
     )
       return undefined;
     const stored = item.Clone() as SfxPoolItem;
+    this.Changed(current, stored);
     this.poolItemMap.set(stored.Which(), stored);
     return stored;
   }
@@ -137,10 +138,15 @@ export class SfxItemSet {
   public ClearItem(which = 0): number {
     if (which === 0) {
       const count = this.poolItemMap.size;
+      for (const item of this.poolItemMap.values()) this.Changed(item, undefined);
       this.poolItemMap.clear();
       return count;
     }
-    return this.poolItemMap.delete(which) ? 1 : 0;
+    const item = this.poolItemMap.get(which);
+    if (item === undefined) return 0;
+    this.Changed(item, undefined);
+    this.poolItemMap.delete(which);
+    return 1;
   }
 
   /** Marks one accepted WhichId invalid, matching INVALID_POOL_ITEM state. @param which - Item identity. @returns Nothing. */
@@ -162,6 +168,12 @@ export class SfxItemSet {
     );
     if (includeItems) this.CopyItemsTo(clone, pool === this.pool);
     return clone;
+  }
+
+  /** Receives old and new entries before storage changes, as in the native virtual hook. @param oldItem - Previous direct entry. @param newItem - Replacement entry. @returns Nothing. */
+  protected Changed(oldItem: SfxPoolItem | undefined, newItem: SfxPoolItem | undefined): void {
+    void oldItem;
+    void newItem;
   }
 
   /** Translates the copy constructor's direct item entries independently of PutSet semantics. @param target - Fresh clone. @param includeStates - Whether INVALID/DISABLED entries belong to this clone. @returns Nothing. */

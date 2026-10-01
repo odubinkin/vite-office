@@ -36,8 +36,8 @@ export class SfxItemPool {
     return item;
   }
 
-  /** Reports whether a WhichId has a registered pool default. @param which - Candidate item identity. @returns True when registered. */
-  public IsWhich(which: number): boolean {
-    return this.defaults.has(which);
+  /** Classifies the native WhichId category independently of registered defaults. @param which - Candidate item identity. @returns True for nonzero IDs through SFX_WHICH_MAX. */
+  public static IsWhich(which: number): boolean {
+    return which !== 0 && which <= 4999;
   }
 }

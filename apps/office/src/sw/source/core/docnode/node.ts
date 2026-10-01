@@ -9,6 +9,7 @@ import { SwAttrSet } from "../attr/swatrset";
 import { SwContentIndexRegistry } from "../bastyp/index";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
+import { AttrSetHandleHelper, type SwAttrSetHandle } from "./node-attribute-handle";
 import type { SwTable } from "../table/swtable";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
@@ -134,7 +135,7 @@ export class SwEndNode extends SwNode {
 
 /** Base class for nodes that own indexable content. */
 export abstract class SwContentNode extends SwNode {
-  private attributeSet: SwAttrSet | undefined;
+  private readonly mpAttrSet: SwAttrSetHandle = { value: undefined };
 
   /** Creates a content node in one Writer section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */
   protected constructor(
@@ -157,59 +158,75 @@ export abstract class SwContentNode extends SwNode {
 
   /** Returns the direct auto-attribute set or the current collection set when absent. @returns Effective Writer attribute set. */
   public GetSwAttrSet(): SwAttrSet {
-    return this.attributeSet ?? this.formatColl.GetAttrSet();
+    return this.mpAttrSet.value ?? this.formatColl.GetAttrSet();
   }
 
   /** Returns the optional direct auto-attribute set. @returns Direct Writer attributes, when allocated. */
   public GetpSwAttrSet(): SwAttrSet | undefined {
-    return this.attributeSet;
+    return this.mpAttrSet.value;
   }
 
   /** Reports whether direct auto attributes have been allocated. @returns True when a direct set exists. */
   public HasSwAttrSet(): boolean {
-    return this.attributeSet !== undefined;
+    return this.mpAttrSet.value !== undefined;
   }
 
   /** Stores one item or set as direct node attributes. @param itemOrSet - Direct item or item set. @returns True when at least one delta changed. */
   public SetAttr(itemOrSet: SfxPoolItem | SfxItemSet): boolean {
     const set = this.GetOrCreateSwAttrSet();
-    const changed = "Which" in itemOrSet ? set.Put(itemOrSet) !== undefined : set.PutSet(itemOrSet);
-    if (changed)
-      this.GetDoc().NotifyModelChange({
-        kind: "attribute-set-changed",
-        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-      });
+    const oldSet = new SwAttrSet(set.GetPool(), set.GetRanges());
+    const newSet = new SwAttrSet(set.GetPool(), set.GetRanges());
+    const changed = AttrSetHandleHelper.Put_BC(this.mpAttrSet, itemOrSet, oldSet, newSet);
+    if (changed) this.NotifyAttrChange();
     return changed;
   }
 
   /** Clears direct items by inclusive range or ordered vector. @param which - First WhichId or vector. @param end - Inclusive range end. @returns Whether items were removed. */
   public ResetAttr(which: number | readonly number[], end = 0): boolean {
-    if (this.attributeSet === undefined) return false;
+    const set = this.GetpSwAttrSet();
+    if (set === undefined) return false;
+    const oldSet = new SwAttrSet(set.GetPool(), set.GetRanges());
+    const newSet = new SwAttrSet(set.GetPool(), set.GetRanges());
+    if (typeof which === "number") {
+      const last = end === 0 || end < which ? which : end;
+      const changed =
+        AttrSetHandleHelper.ClearItem_BC(this.mpAttrSet, which, last, oldSet, newSet) !== 0;
+      if (changed) {
+        this.NotifyAttrChange();
+        if ((this.mpAttrSet.value as SwAttrSet).Count() === 0) this.mpAttrSet.value = undefined;
+      }
+      return changed;
+    }
     let count = 0;
-    if (typeof which === "number")
-      for (let id = which; id <= Math.max(which, end); id++)
-        count += this.attributeSet.ClearItem(id);
-    else for (const id of which) count += this.attributeSet.ClearItem(id);
-    if (this.attributeSet.Count() === 0) this.attributeSet = undefined;
-    if (count > 0)
-      this.GetDoc().NotifyModelChange({
-        kind: "attribute-set-changed",
-        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-      });
-    return count > 0;
+    for (const id of which)
+      if (AttrSetHandleHelper.ClearItem_BC(this.mpAttrSet, id, undefined, oldSet, newSet) !== 0)
+        count++;
+    if (count !== 0) this.NotifyAttrChange();
+    if ((this.mpAttrSet.value as SwAttrSet).Count() === 0) this.mpAttrSet.value = undefined;
+    return count !== 0;
   }
 
-  /** Clears every direct node item and releases the auto-attribute set. @returns Removed item count. */
+  /** Clears all direct items, broadcasts while the changed set is owned and returns semantic new-delta count. @returns Broadcast new-item count, excluding INVALID/DISABLED and slot entries. */
   public ResetAllAttr(): number {
-    if (this.attributeSet === undefined) return 0;
-    const removed = this.attributeSet.ClearItem();
-    this.attributeSet = undefined;
-    if (removed > 0)
-      this.GetDoc().NotifyModelChange({
-        kind: "attribute-set-changed",
-        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
-      });
-    return removed;
+    const set = this.GetpSwAttrSet();
+    if (set === undefined) return 0;
+    const oldSet = new SwAttrSet(set.GetPool(), set.GetRanges());
+    const newSet = new SwAttrSet(set.GetPool(), set.GetRanges());
+    const changed =
+      AttrSetHandleHelper.ClearItem_BC(this.mpAttrSet, 0, undefined, oldSet, newSet) !== 0;
+    if (changed) {
+      this.NotifyAttrChange();
+      if ((this.mpAttrSet.value as SwAttrSet).Count() === 0) this.mpAttrSet.value = undefined;
+    }
+    return newSet.Count();
+  }
+
+  /** Sends the existing model observer adapter after handle commit and before empty-handle release. @returns Nothing. */
+  private NotifyAttrChange(): void {
+    this.GetDoc().NotifyModelChange({
+      kind: "attribute-set-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
   }
 
   /** Changes the registered format collection and reparents direct attributes. @param formatColl - New document-owned collection. @returns Previous collection. */
@@ -219,7 +236,7 @@ export abstract class SwContentNode extends SwNode {
     const previous = this.formatColl;
     if (previous !== formatColl) {
       this.formatColl = formatColl;
-      this.attributeSet?.SetParent(formatColl.GetAttrSet());
+      this.mpAttrSet.value?.SetParent(formatColl.GetAttrSet());
       this.GetDoc().NotifyModelChange({
         formatId: formatColl.GetName(),
         kind: "format-inheritance-changed",
@@ -243,11 +260,11 @@ export abstract class SwContentNode extends SwNode {
 
   /** Creates the node's direct Writer attribute set on first mutation. @returns Direct auto-attribute set. */
   private GetOrCreateSwAttrSet(): SwAttrSet {
-    this.attributeSet ??= new SwAttrSet(
+    this.mpAttrSet.value ??= new SwAttrSet(
       this.GetDoc().GetAttrPool(),
       WRITER_TEXT_NODE_WHICH_RANGES,
       this.formatColl.GetAttrSet(),
     );
-    return this.attributeSet;
+    return this.mpAttrSet.value;
   }
 }
