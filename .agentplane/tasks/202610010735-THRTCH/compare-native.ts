@@ -56,5 +56,5 @@ for (const [index, test] of cases.entries()) {
     if(!isDeepStrictEqual(actual,test.expected[step])){writeFileSync(path+'comparison-failure.json',JSON.stringify({index,step,ops:test.ops.slice(0,step+1),actual,expected:test.expected[step]},null,2)+'\n');throw new Error(`Native comparison mismatch at sequence ${index} step ${step}`);}
   }
 }
-writeFileSync(path+'comparison.json',JSON.stringify({sequences:cases.length,states,definitions:35,pass:true,profile:'Shown Arabic/bullet/Outline rules, real collection/item/node/list ownership, canonical and foreign arrays; explicit dependency adapters, no full native build,live-style/history/footnote/layout/fields/redline/background lifetime claim'},null,2)+'\n');
+writeFileSync(path+'comparison.json',JSON.stringify({sequences:cases.length,states,definitions:35,pass:true,profile:'Canonical shown Arabic/bullet and independently typed outline rules, actual collection/item/node/list/index ownership, nested guards and raw cache/notification timing; explicit dependency adapters, no full native build,live-style/history/footnote/layout/fields/redline/background lifetime claim'},null,2)+'\n');
 console.log(`Compared ${cases.length} sequences/${states} actual pre-read cache/notification/outline/rule/node/list/item states to unchanged native source.`);
