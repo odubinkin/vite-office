@@ -37,6 +37,6 @@
   ],
   "unchangedOldMatcherCalls": 127,
   "otherOldTestFilesByteUnchanged": 210,
-  "allOtherProductionFilesScope": "Only SwNumberTree.ts differs; semantic scope check final pending",
+  "allOtherProductionFilesScope": "Final exact9semantic-path audit proves only SwNumberTree.ts production code differs; other8paths are6test files and2one-row metadata updates.",
   "limits": "Identifier mapping normalizes only5native field names; whole diagnostic AST equality additionally proves preserved expected arguments and literal fixture imports"
 }
