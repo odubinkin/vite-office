@@ -1,0 +1,27 @@
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(18,12): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(30,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(32,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(34,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(36,12): error TS2551: Property 'dispose' does not exist on type 'SwDoc'. Did you mean 'Dispose'?
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(66,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(67,18): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(68,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(71,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(72,18): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(73,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(90,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(93,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(94,15): error TS2445: Property 'IsNotificationEnabled' is protected and only accessible within class 'SwNodeNum' and its subclasses.
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(96,12): error TS2551: Property 'dispose' does not exist on type 'SwDoc'. Did you mean 'Dispose'?
+src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts(97,11): error TS2551: Property 'dispose' does not exist on type 'SwDoc'. Did you mean 'Dispose'?
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit

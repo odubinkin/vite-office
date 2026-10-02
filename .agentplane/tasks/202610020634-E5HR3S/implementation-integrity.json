@@ -1,0 +1,11 @@
+{
+  "productionMethodBodiesUnchanged": 55,
+  "runtimeChange": "protected to public override only; original optional context and body byte-identical",
+  "oldTestFilesChanged": 0,
+  "metadataRows": {
+    "docs/program/source-provenance.json": 1,
+    "docs/program/parity/runtime-inventory.json": 1
+  },
+  "referencePin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceFileHashesUnchanged": true
+}

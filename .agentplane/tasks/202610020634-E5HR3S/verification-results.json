@@ -1,0 +1,55 @@
+{
+  "finalImplementationCommit": null,
+  "semanticPaths": 4,
+  "sourceAudit": {
+    "fileHashes": 4,
+    "declarationBodyHashes": 4,
+    "mode": "fresh manual source inspection only",
+    "compiledNativeClaim": false
+  },
+  "productionMethodBodiesUnchanged": 55,
+  "oldTestFilesChanged": 0,
+  "newTests": 2,
+  "baseline": "One public-key type2322 and12protected access2445 errors after fixing new fixture SwDoc.Dispose spelling; initial logs retained.",
+  "vendorAbsent": {
+    "files": 17,
+    "tests": 74,
+    "exitCode": 0,
+    "restored": true
+  },
+  "fullVerify": {
+    "command": "npm run verify",
+    "exitCode": 0,
+    "application": {
+      "files": 172,
+      "tests": 763,
+      "statements": 10930,
+      "branches": 8275,
+      "functions": 2937,
+      "lines": 10026,
+      "coveragePercent": 100
+    },
+    "inventory": {
+      "files": 36,
+      "tests": 109,
+      "statements": 1523,
+      "branches": 1080,
+      "functions": 384,
+      "lines": 1464,
+      "coveragePercent": 100
+    },
+    "browserTests": 19
+  },
+  "metadataRows": 1,
+  "artifactInventory": {
+    "pythonOrBytecodeFiles": 0,
+    "nativeSourceFilesInTasks": 0
+  },
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false,
+  "limits": [
+    "Visibility correction only; native required const SwDoc& versus local optional context is separately unverified.",
+    "No complete native dtor/client/notifiable/redline/layout/lifetime certification.",
+    "Parent/full goal remains active; no whole-module/status/default/deviation/gate promotion."
+  ]
+}

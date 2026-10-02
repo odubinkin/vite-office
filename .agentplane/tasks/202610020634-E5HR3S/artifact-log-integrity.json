@@ -1,0 +1,44 @@
+[
+  {
+    "path": ".agentplane/tasks/202610020634-E5HR3S/green-runtime.log",
+    "originalBytes": 237,
+    "originalSha256": "ba9fc21399ce49f7e19dea937e15e706f4b9ecf1311498708f53519e6979a85c",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020634-E5HR3S/green-types.log",
+    "originalBytes": 55,
+    "originalSha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020634-E5HR3S/red-types-first.log",
+    "originalBytes": 3496,
+    "originalSha256": "fbb0a5a3929908ec0ba4e9ac0fde4b1833bed334d9cf1031d207ebce8750bc11",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020634-E5HR3S/red-types-second.log",
+    "originalBytes": 3156,
+    "originalSha256": "f6391317719bc3de166a4fae928b5207eec1693baa774d590205f898e13af9c1",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020634-E5HR3S/red-types.log",
+    "originalBytes": 2986,
+    "originalSha256": "058db0a0713f55bf515d4400da1e39364d7ad249a40953e3d6fe5bc32072a7eb",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020634-E5HR3S/vendor-absent.log",
+    "originalBytes": 244,
+    "originalSha256": "86b002b81337e564b695aa2834a95cab880d15a72f3f22304d23f6960e571920",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020634-E5HR3S/verify-final.log",
+    "originalBytes": 856276,
+    "originalSha256": "3ed99f7e07c630ea1f598a250d3c77eea6bb4618a9688ec7a26000a2da113e18",
+    "normalization": "retain complete command/check output before final parity JSON and scalar parity totals; omit repetitive inventory rows, trim trailing whitespace"
+  }
+]

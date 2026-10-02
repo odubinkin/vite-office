@@ -1,0 +1,63 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "fresh manual native declaration/body inspection only; no compiled native execution",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "sha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d",
+      "symbols": [
+        {
+          "symbol": "IsNotificationEnabled",
+          "kind": "declaration",
+          "line": 357,
+          "sha256": "7daf259c86164998bdb10b8629ce86cde41a1b2b470689d7aeb8df3542a2fd79",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+      "sha256": "15e6a7b96816bbcc848c83605b8c1b187cadd59914ac81a33f631217a8a25e28",
+      "symbols": [
+        {
+          "symbol": "IsNotificationEnabled",
+          "kind": "declaration",
+          "line": 40,
+          "sha256": "2165438005352ed326f362365f59e9932ec592d048786b021c895f9e6f8a00f7",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae",
+      "symbols": [
+        {
+          "symbol": "SwNodeNum::IsNotificationEnabled",
+          "kind": "body",
+          "line": 137,
+          "sha256": "e1601c9031be9e3a96ab3411c01b0c18f278cecbd198247c50106b2806ca9b41"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+      "symbols": [
+        {
+          "symbol": "SwTextNode::IsNotificationEnabled",
+          "kind": "body",
+          "line": 4543,
+          "sha256": "df10bd3077da9bf3fdd28db3277aef9e1ff6c39b5d05605f7c64a6efe05d1b99"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "Base virtual policy is protected; Writer override is public. Local derived protected visibility is the measured mismatch.",
+    "Native text-backed policy delegates to text IsNotificationEnabled (owning document reading/dtor); no-text policy uses supplied document reading/dtor. Current local reading and text-owner precedence stay unchanged; dtor predicate absent.",
+    "Native requires const SwDoc&; local optional diagnostic context remains an unverified adapter, no required-parameter parity claim."
+  ],
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false
+}

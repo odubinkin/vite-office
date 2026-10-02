@@ -4,7 +4,7 @@ title: "Restore public Writer notification policy access"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore native public Writer notification-policy visibility under continuing user goal authorization, preserving all production bodies and registered IO/recovery deviations."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:35:34.594Z"
+doc_updated_at: "2026-10-02T06:38:03.919Z"
 doc_updated_by: "CODER"
 description: "Iteration55 restores native public SwNodeNum.IsNotificationEnabled visibility while retaining protected base policy and existing implementation/optional document behavior. Add public signature and actual owner/root/phantom dispatch checks; wider required-document/lifetime contracts remain separate."
 sections:
@@ -50,7 +50,12 @@ sections:
     4. Canonical verification and same-actor EVALUATOR on actual semantic HEAD; record implementation/evaluated SHA, clean leaf close. Parent/full goal remains active with explicit source/native lifetime/required-parameter limitations.
   Verification: "Pending."
   Rollback Plan: "Revert only actual semantic implementation commit if requested; do not restore forbidden helpers/source copies or change reference pin."
-  Findings: "Fresh declarations show SwNodeNum.hxx:40 public IsNotificationEnabled, while SwNumberTree.hxx:357 protected pure virtual. Local derived visibility is protected. Bodies currently use text-owner document before explicit context and allow absent diagnostic context; native requires const SwDoc& and checks text notification policy or reading/dtor. This leaf fixes visibility only; required context and native wider predicates/ownership need separate architecture audit. User expressly forbids helper/native source storage in Agentplane and upstream access from project tests."
+  Findings: |-
+    Fresh declarations show SwNodeNum.hxx:40 public IsNotificationEnabled, while SwNumberTree.hxx:357 protected pure virtual. Local derived visibility is protected. Bodies currently use text-owner document before explicit context and allow absent diagnostic context; native requires const SwDoc& and checks text notification policy or reading/dtor. This leaf fixes visibility only; required context and native wider predicates/ownership need separate architecture audit. User expressly forbids helper/native source storage in Agentplane and upstream access from project tests.
+
+    - Observation: Initial new type fixture used lowercase dispose on raw SwDoc; compiler reports3TS2551 alongside valid prior protected-access diagnostics.
+      Impact: Only new fixture cleanup spelling is incorrect; no production/oldtest behavior changed and visibility failure is independently present.
+      Resolution: Use native-style SwDoc.Dispose for all documents; createWriterDocument also returns SwDoc, and lowercase disposal belongs to unrelated facades, retain initial log and rerun baseline to isolate visibility diagnostics.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +88,7 @@ Revert only actual semantic implementation commit if requested; do not restore f
 ## Findings
 
 Fresh declarations show SwNodeNum.hxx:40 public IsNotificationEnabled, while SwNumberTree.hxx:357 protected pure virtual. Local derived visibility is protected. Bodies currently use text-owner document before explicit context and allow absent diagnostic context; native requires const SwDoc& and checks text notification policy or reading/dtor. This leaf fixes visibility only; required context and native wider predicates/ownership need separate architecture audit. User expressly forbids helper/native source storage in Agentplane and upstream access from project tests.
+
+- Observation: Initial new type fixture used lowercase dispose on raw SwDoc; compiler reports3TS2551 alongside valid prior protected-access diagnostics.
+  Impact: Only new fixture cleanup spelling is incorrect; no production/oldtest behavior changed and visibility failure is independently present.
+  Resolution: Use native-style SwDoc.Dispose for all documents; createWriterDocument also returns SwDoc, and lowercase disposal belongs to unrelated facades, retain initial log and rerun baseline to isolate visibility diagnostics.
