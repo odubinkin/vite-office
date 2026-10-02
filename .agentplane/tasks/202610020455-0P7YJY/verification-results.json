@@ -1,0 +1,41 @@
+{
+  "fullVerifyExit": 0,
+  "appFiles": 168,
+  "appTests": 753,
+  "appCoverage": {
+    "statements": [
+      10925,
+      10925
+    ],
+    "branches": [
+      8274,
+      8274
+    ],
+    "functions": [
+      2937,
+      2937
+    ],
+    "lines": [
+      10021,
+      10021
+    ]
+  },
+  "inventoryFiles": 36,
+  "inventoryTests": 109,
+  "inventoryCoveragePercent": 100,
+  "browserTests": 19,
+  "focusedFiles": 7,
+  "focusedTests": 40,
+  "focusedUpstreamUnavailable": true,
+  "nativeEvidence": "2file/1declaration/3symbol hashes and manual source inspection only",
+  "sourceBodiesOrHelperScriptsStored": false,
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "routing": "pass",
+  "doctorErrors": 0,
+  "existingDoctorWarnings": 2
+}

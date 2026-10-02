@@ -1,0 +1,45 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "fresh pinned source inspection; no compiled native execution",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "fileSha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d",
+      "declarationSha256": "b028bd22ea015bf6f027191f28478a30b806f420cd6340bbfa316d2dbf155749",
+      "declarationLine": 417,
+      "visibility": "protected",
+      "optionalValidationDefault": true
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "fileSha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741",
+      "symbols": [
+        {
+          "symbol": "SwNumberTreeNode::GetNumberVector_",
+          "line": 295,
+          "sha256": "28abf7570e0068926d7921c707f746346971a072cbff19c4d0649277b50ed6f4"
+        },
+        {
+          "symbol": "SwNumberTreeNode::GetNumberVector",
+          "line": 667,
+          "sha256": "33a96c8e74c46362a8c836a0692b96508e85959f719d4619bca59b82d7332937"
+        },
+        {
+          "symbol": "SwNumberTreeNode::GetNumber",
+          "line": 657,
+          "sha256": "910a17a46523dc47ecfbd123716c672d9443710a63bb37d10aabcec59a2ad008"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "Protected helper appends to the supplied vector without clearing it.",
+    "Default bValidate is true in the header declaration.",
+    "If mpParent is null no element is appended.",
+    "With a parent the same bValidate is recursively forwarded, then GetNumber(bValidate) is appended.",
+    "GetNumber(false) returns mnNumber without parent Validate; public GetNumberVector uses the default true."
+  ],
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false,
+  "limits": "This source-contract inspection and local actual-owner tests do not certify new compiled native lifetime or owner parity."
+}

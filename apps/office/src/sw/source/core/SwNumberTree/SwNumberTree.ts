@@ -403,11 +403,11 @@ export abstract class SwNumberTreeNode {
     this.GetNumberVector_(numbers);
     return numbers;
   }
-  /** Appends ancestral counters using native parent-first recursion. @param numbers - Counter vector. @returns Nothing. */
-  protected GetNumberVector_(numbers: number[]): void {
+  /** Appends ancestral counters using native parent-first recursion and the requested validation policy. @param numbers - Counter vector. @param validate - Whether counters validate, true by default. @returns Nothing. */
+  protected GetNumberVector_(numbers: number[], validate = true): void {
     if (this.parent !== undefined) {
-      this.parent.GetNumberVector_(numbers);
-      numbers.push(this.GetNumber());
+      this.parent.GetNumberVector_(numbers, validate);
+      numbers.push(this.GetNumber(validate));
     }
   }
 }
