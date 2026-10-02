@@ -1,0 +1,28 @@
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(11,32): error TS2339: Property 'GetChildCount' does not exist on type 'ChildContract'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(13,32): error TS2339: Property 'mChildren' does not exist on type 'ChildContract'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(24,6): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(24,12): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(61,16): error TS2554: Expected 1-2 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(63,15): error TS2339: Property 'GetChildCount' does not exist on type 'ChildContract'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(79,15): error TS2339: Property 'GetChildCount' does not exist on type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(80,22): error TS2339: Property 'GetChildCount' does not exist on type 'SwNodeNum'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(81,23): error TS2339: Property 'GetChildCount' does not exist on type 'SwNodeNum'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(82,21): error TS2339: Property 'GetChildCount' does not exist on type 'SwNodeNum'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(88,20): error TS2339: Property 'GetChildCount' does not exist on type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(96,22): error TS2339: Property 'GetChildCount' does not exist on type 'SwNodeNum'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(97,15): error TS2339: Property 'GetChildCount' does not exist on type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(99,23): error TS2339: Property 'GetChildCount' does not exist on type 'SwNodeNum'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(100,15): error TS2339: Property 'GetChildCount' does not exist on type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(102,15): error TS2339: Property 'GetChildCount' does not exist on type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(108,16): error TS2554: Expected 1-2 arguments, but got 0.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit

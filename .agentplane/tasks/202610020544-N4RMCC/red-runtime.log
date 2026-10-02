@@ -1,0 +1,56 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts (3 tests | 3 failed) 28ms
+   × keeps child storage protected and exposes only the native direct count contract 9ms
+   × counts direct owned children including skipped phantoms through removal without validating counters 15ms
+   × ignores non-Writer children under the native counted-descendant type guard 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts > keeps child storage protected and exposes only the native direct count contract
+TypeError: Cannot read properties of undefined (reading 'bind')
+ ❯ ChildContract.<instance_members_initializer> src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts:11:46
+      9| class ChildContract extends SwNodeNum {
+     10|   /** Binds the native count method for exact type inspection. */
+     11|   public readonly count = this.GetChildCount.bind(this);
+       |                                              ^
+     12|   /** Observes the subclass-owned container without a production acces…
+     13|   public readonly owned = this.mChildren;
+ ❯ new ChildContract src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts:9:1
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts:61:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts > counts direct owned children including skipped phantoms through removal without validating counters
+TypeError: root.GetChildCount is not a function
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts:79:15
+     77|   const root = required(firstRecord.GetParent());
+     78|   const list = required(document.GetDocumentListsManager().GetListByNa…
+     79|   expect(root.GetChildCount()).toBe(2);
+       |               ^
+     80|   expect(firstRecord.GetChildCount()).toBe(1);
+     81|   expect(nestedRecord.GetChildCount()).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts > ignores non-Writer children under the native counted-descendant type guard
+TypeError: child.IsCountedForNumbering is not a function
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum.ts:89:39
+     87|     return this.GetChildren().some(
+     88|       /** Examines one native Writer child. @param child - Child recor…
+     89|       (child) => (child as SwNodeNum).IsCountedForNumbering() || child…
+       |                                       ^
+     90|     );
+     91|   }
+ ❯ SwNodeNum.HasCountedChildren src/sw/source/core/SwNumberTree/SwNodeNum.ts:87:31
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts:111:15
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  12:47:11
+   Duration  2.83s (transform 689ms, setup 294ms, import 795ms, tests 28ms, environment 1.43s)
+

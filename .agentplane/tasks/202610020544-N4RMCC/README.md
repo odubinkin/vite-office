@@ -4,7 +4,7 @@ title: "Restore native number-tree child container and count contract"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: restore the measured native child-container/count interface under the existing iterative user authorization; preserve prior expectations and all registered IO/recovery deviations."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:45:43.015Z"
+doc_updated_at: "2026-10-02T05:48:58.986Z"
 doc_updated_by: "CODER"
 description: "Replace invented public GetChildren with protected mChildren and native public GetChildCount, adapt SwNodeNum counted-child traversal and SwList.HasNodes, preserve existing diagnostic expected values via test-only observers, verify synthetic/actual owner states independently of upstream."
 sections:
@@ -53,7 +53,12 @@ sections:
     4. Actual semantic implementation SHA and distinct committed review snapshot SHA recorded, canonical verification and same-actor EVALUATOR phase recorded, leaf DONE with clean tracked checkout. Parent/full goal remains active; visibility of policy overrides, ordered-set architecture and wider native lifetimes remain separately unverified.
   Verification: "Pending bounded implementation and checks."
   Rollback Plan: "Revert this task's actual semantic implementation commit if requested; never restore source/helper copies to Agentplane artifacts or change pinned reference."
-  Findings: "Previous goal turn is progress: iteration52 restored protected root access and cleanup removed Python helper artifacts. Fresh audit measures native GetChildCount/public and mChildren/protected versus local GetChildren/public and children/private. Native HasCountedChildren override is private while local is public; its callable visibility is a separate leaf, this task aligns storage and native guarded traversal only. Native multi-root section/redline ownership remains unverified."
+  Findings: |-
+    Previous goal turn is progress: iteration52 restored protected root access and cleanup removed Python helper artifacts. Fresh audit measures native GetChildCount/public and mChildren/protected versus local GetChildren/public and children/private. Native HasCountedChildren override is private while local is public; its callable visibility is a separate leaf, this task aligns storage and native guarded traversal only. Native multi-root section/redline ownership remains unverified.
+
+    - Observation: Baseline3new runtime tests expose missing GetChildCount and unsafe foreign-child call. Baseline type diagnostics include2new-fixture constructor arity errors, distinct from15actual contract mismatches.
+      Impact: First changed-code typecheck retains only the2fixture errors; runtime3tests pass. Production constructor contract is outside this leaf.
+      Resolution: Pass explicit undefined to diagnostic root constructors in the new suite. No old expected values or production constructors changed. Preserve both logs, then rerun typecheck.
 id_source: "generated"
 ---
 ## Summary
@@ -86,3 +91,7 @@ Revert this task's actual semantic implementation commit if requested; never res
 ## Findings
 
 Previous goal turn is progress: iteration52 restored protected root access and cleanup removed Python helper artifacts. Fresh audit measures native GetChildCount/public and mChildren/protected versus local GetChildren/public and children/private. Native HasCountedChildren override is private while local is public; its callable visibility is a separate leaf, this task aligns storage and native guarded traversal only. Native multi-root section/redline ownership remains unverified.
+
+- Observation: Baseline3new runtime tests expose missing GetChildCount and unsafe foreign-child call. Baseline type diagnostics include2new-fixture constructor arity errors, distinct from15actual contract mismatches.
+  Impact: First changed-code typecheck retains only the2fixture errors; runtime3tests pass. Production constructor contract is outside this leaf.
+  Resolution: Pass explicit undefined to diagnostic root constructors in the new suite. No old expected values or production constructors changed. Preserve both logs, then rerun typecheck.
