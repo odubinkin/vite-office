@@ -77,7 +77,7 @@ function identity(node: SwNumberTreeNode, texts: SwTextNode[]): number {
 }
 /** Observes all raw child prefixes without causing validation. @param node - Native record. @param texts - Connected paragraphs. @returns Tree state. */
 function state(node: SwNumberTreeNode, texts: SwTextNode[]): State {
-  const valid = (node as unknown as { lastValid?: SwNumberTreeNode }).lastValid;
+  const valid = (node as unknown as { mpLastValid?: SwNumberTreeNode }).mpLastValid;
   return [
     identity(node, texts),
     node.GetNumber(false),

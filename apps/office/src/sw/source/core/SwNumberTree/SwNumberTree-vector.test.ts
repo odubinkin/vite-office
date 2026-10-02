@@ -39,7 +39,7 @@ function append(node: SwNumberTreeNode, output: number[], validate?: boolean): v
 type Cache = [number, number | null, boolean, Cache[]];
 /** Captures raw values and prefix identities without validating. @param node - Root or record. @param texts - Canonical paragraph identities. @returns Complete cache snapshot. */
 function cache(node: SwNumberTreeNode, texts: SwTextNode[]): Cache {
-  const valid = (node as unknown as { lastValid?: SwNodeNum }).lastValid;
+  const valid = (node as unknown as { mpLastValid?: SwNodeNum }).mpLastValid;
   return [
     node.GetNumber(false),
     valid === undefined

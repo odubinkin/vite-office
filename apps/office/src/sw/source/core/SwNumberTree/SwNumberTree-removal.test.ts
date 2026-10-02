@@ -127,7 +127,7 @@ for (const equivalent of [true, false]) {
           expect(getNumberTreeChildren(argument)).toEqual([extra]);
           expect(extra.GetParent()).toBe(argument);
         }
-        const lastValid = (root as unknown as { lastValid?: SwNodeNum }).lastValid;
+        const lastValid = (root as unknown as { mpLastValid?: SwNodeNum }).mpLastValid;
         expect(lastValid).toBe(
           profile.target === 5
             ? records[3]

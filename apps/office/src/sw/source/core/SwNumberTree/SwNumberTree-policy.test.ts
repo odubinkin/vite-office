@@ -49,7 +49,7 @@ interface Case {
 /** Test-only observer for native protected traversal and validation diagnostics. */
 interface TreeDiagnostic {
   /** Native validated child pointer. */
-  readonly lastValid?: SwNumberTreeNode;
+  readonly mpLastValid?: SwNumberTreeNode;
   /** Reads native protected traversal. @returns Last descendant. */
   GetLastDescendant(): SwNumberTreeNode | undefined;
   /** Invokes native protected continuous validation. @param target - Requested child. @returns Nothing. */
@@ -77,7 +77,7 @@ function tree(node: SwNumberTreeNode, texts: SwTextNode[]): TreeState {
   return [
     id(node, texts),
     node.GetNumber(false),
-    id((node as unknown as { lastValid?: SwNumberTreeNode }).lastValid, texts),
+    id((node as unknown as { mpLastValid?: SwNumberTreeNode }).mpLastValid, texts),
     node.IsPhantom(),
     node.IsCounted(),
     node.IsContinuous(),
@@ -173,7 +173,7 @@ it("retains native empty and end sentinel validation with protected traversal", 
   const root = new SwNodeNum(undefined, rule),
     probe = root as unknown as TreeDiagnostic;
   probe.ValidateContinuous(undefined);
-  expect(probe.lastValid).toBeUndefined();
+  expect(probe.mpLastValid).toBeUndefined();
   expect(probe.GetLastDescendant()).toBeUndefined();
   const child = new SwNodeNum(undefined, rule),
     foreign = new SwNodeNum(undefined, rule),
@@ -182,12 +182,12 @@ it("retains native empty and end sentinel validation with protected traversal", 
   root.AddChild(child, 0, doc);
   probe.ValidateContinuous(foreign);
   expect(child.GetNumber(false)).toBe(1);
-  expect(probe.lastValid).toBeUndefined();
+  expect(probe.mpLastValid).toBeUndefined();
   expect(probe.GetLastDescendant()).toBe(child);
   probe.ValidateContinuous(child);
-  expect(probe.lastValid).toBe(child);
+  expect(probe.mpLastValid).toBe(child);
   probe.ValidateContinuous(undefined);
-  expect(probe.lastValid).toBeUndefined();
+  expect(probe.mpLastValid).toBeUndefined();
   const skippedRoot = new SwNodeNum(undefined, rule),
     descendant = new SwNodeNum(undefined, rule);
   skippedRoot.AddChild(descendant, 1, doc);

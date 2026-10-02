@@ -8,7 +8,7 @@ import type { SwNumberTreeNode } from "./SwNumberTree";
 /** Observes protected native storage and transfer methods only within tests. */
 interface TransferDiagnostic {
   readonly mChildren: Iterable<SwNumberTreeNode>;
-  readonly lastValid?: SwNumberTreeNode;
+  readonly mpLastValid?: SwNumberTreeNode;
   /** Moves all children. @param destination - Destination. @returns Nothing. */
   MoveChildren(destination: SwNumberTreeNode): void;
   /** Moves the later suffix. @param compare - Boundary. @param destination - Destination. @returns Nothing. */
@@ -85,7 +85,7 @@ it("merges children in comparator order and retains destination identity for equ
         record.GetParent(),
     ),
   ).toEqual([destination, destination, destination, destination]);
-  expect(probe(source).lastValid).toBeUndefined();
+  expect(probe(source).mpLastValid).toBeUndefined();
   probe(source).MoveGreaterChildren(required(records[0]), destination);
   document.Dispose();
 });
@@ -127,7 +127,7 @@ it("inserts transferred suffix records uniquely into an existing destination", /
         record.GetNumber(false),
     ),
   ).toEqual([0, 1, 0, 2]);
-  expect(probe(source).lastValid).toBeUndefined();
+  expect(probe(source).mpLastValid).toBeUndefined();
   document.Dispose();
 });
 
