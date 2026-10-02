@@ -4,7 +4,7 @@ title: "Restore protected number-tree validity overloads"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore both protected validity overloads and native boundary lookup under continuing goal authorization, without source helpers or upstream test invocation."
 doc_version: 3
-doc_updated_at: "2026-10-02T08:06:07.481Z"
+doc_updated_at: "2026-10-02T08:17:45.169Z"
 doc_updated_by: "CODER"
 description: "Iteration58 restores both native protected IsValid overloads, explicit nullable child dispatch, self-parent delegation and sorted-container cache-boundary lookup, plus source-equivalent self calls in insertion/invalidation. Owned type/document regressions and manual source hashes prove this correction without upstream test access or saved helpers."
 sections:
@@ -48,7 +48,7 @@ sections:
     2. Baseline owned tests/typecheck expose missing protected self overload/private child access and missing boundary-container lookup. Final4tests cover exact zero/required-nullable-child boolean signatures, subclass access/public absence, root/orphan/null/foreign/owned prefixes, raw-cache reading/default behavior, real restart/removal/invalidation and continuous phantom chains. Cache lookup occurs only after native guards and resolves the saved owned boundary. Exactly3runtime method bodies changed/52others unchanged and all old test files byte unchanged.
     3. Focused validity/tree/o3tl/list/lifecycle and boundary tests pass with vendor absent/restored, final types/lint and unchanged npm run verify pass all gates/both100%coverage. Exact4semantic paths/1metadata row evidence/responsibility each with status/default/divergence/sourceResponsibility enum preserved. Pin/hash integrity, zero Python/native/helper artifacts, diff/routing/doctor pass without new errors.
     4. Record canonical verification and distinct same-actor EVALUATOR on actual implementation SHA, close only leaf with clean tracked state. Parent/full goal active; wider protected helper/state/context/dtor/notifiable/client/redline/layout/range/iterator/UI/lifetime obligations remain individually unverified.
-  Verification: "Pending."
+  Verification: "Command: unchanged npm run verify. Result: pass exit0. Evidence:779app tests/176files,109inventory/36files,19browser scenarios; app11001statements/8303branches/2948functions/10092lines and inventory1523/1080/384/1464 all100%. All format/lint/types/dependency/resources/build/static/docs/file-size/source-tree/provenance/invariant/parity gates pass. Bounded mapping output retains raw digest/bytes and totals. Command: final focused types/ESLint and vendor-absent app/gate tests restored in finally. Result: pass. Evidence:4new tests,73app/17files and7gate/1file without vendor; baseline3regressions and TypeScript diagnostics prove preceding missing overload/access/lookup defects. New post-removal expectation corrected using native invalid-rule client-removal source; all214old test files unchanged. Command: scope/native manual integrity checks. Result: pass. Evidence:exact4semantic paths,3changed method bodies/52others unchanged,1base evidence/responsibility row each manifest with all statuses/defaults/divergences/enums intact.5pinned file hashes/9declaration or symbol span hashes fresh and revalidated; no compiled native execution or full lifetime certification. Explicit nullable pointer maps to ECMAScript undefined; required overload declarations preserved via narrow documented unified-signatures annotations, retained-boundary invariant via non-null assertion with no invented fallback. Command: git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass,0errors and1pre-existing hook warning. Zero Python/bytecode/native sources in ignored-inclusive Agentplane storage; no helpers/source bodies saved. Parent/full goal active; wider state/helper/context/dtor/notifiable/client/redline/layout/range/iterator/UI/lifetime individually unverified."
   Rollback Plan: "Revert only the actual semantic implementation commit if requested. Keep forbidden source/helper cleanup and pinned vendor unchanged."
   Findings: |-
     Preflight main/direct and clean. Pin9bc445578031fecf56086729d8e4940c77e14d65 freshly validated. Native header remains protected from line338; child and self declarations at482/490. Core self body652 delegates parent; child body676 guards saved boundary,nonnull child/exact parent and finds stored boundary before LessThan. Native insertion531 and invalidation1025 call self overload. Local has private child-only IsValid and direct saved-pointer comparison; insertion/invalidation use parent-child predicate. This is one measured contract/helper correction. No full module/status/default/goal promotion and registered save/open/recovery deviations unchanged.
@@ -87,7 +87,7 @@ Make both IsValid() and IsValid(child: SwNumberTreeNode|undefined) protected ove
 
 ## Verification
 
-Pending.
+Command: unchanged npm run verify. Result: pass exit0. Evidence:779app tests/176files,109inventory/36files,19browser scenarios; app11001statements/8303branches/2948functions/10092lines and inventory1523/1080/384/1464 all100%. All format/lint/types/dependency/resources/build/static/docs/file-size/source-tree/provenance/invariant/parity gates pass. Bounded mapping output retains raw digest/bytes and totals. Command: final focused types/ESLint and vendor-absent app/gate tests restored in finally. Result: pass. Evidence:4new tests,73app/17files and7gate/1file without vendor; baseline3regressions and TypeScript diagnostics prove preceding missing overload/access/lookup defects. New post-removal expectation corrected using native invalid-rule client-removal source; all214old test files unchanged. Command: scope/native manual integrity checks. Result: pass. Evidence:exact4semantic paths,3changed method bodies/52others unchanged,1base evidence/responsibility row each manifest with all statuses/defaults/divergences/enums intact.5pinned file hashes/9declaration or symbol span hashes fresh and revalidated; no compiled native execution or full lifetime certification. Explicit nullable pointer maps to ECMAScript undefined; required overload declarations preserved via narrow documented unified-signatures annotations, retained-boundary invariant via non-null assertion with no invented fallback. Command: git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass,0errors and1pre-existing hook warning. Zero Python/bytecode/native sources in ignored-inclusive Agentplane storage; no helpers/source bodies saved. Parent/full goal active; wider state/helper/context/dtor/notifiable/client/redline/layout/range/iterator/UI/lifetime individually unverified.
 
 ## Rollback Plan
 
