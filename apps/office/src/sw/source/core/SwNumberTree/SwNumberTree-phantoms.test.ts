@@ -310,5 +310,5 @@ function updateRuleStart(rule: SwNumRule | undefined, level: number, start: numb
 
 /** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
 function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
-  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
+  return [...(node as unknown as { mChildren: Iterable<SwNumberTreeNode> }).mChildren];
 }

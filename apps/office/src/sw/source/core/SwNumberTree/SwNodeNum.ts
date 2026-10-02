@@ -84,11 +84,13 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Finds counted descendants with the Writer numbering-present policy. @returns Whether a descendant contributes numbering. */
   protected override HasCountedChildren(): boolean {
-    return this.mChildren.some(
-      /** Examines one native Writer child. @param child - Child record. @returns Whether counted here or below. */
-      (child) =>
-        child instanceof SwNodeNum && (child.IsCountedForNumbering() || child.HasCountedChildren()),
-    );
+    for (const child of this.mChildren)
+      if (
+        child instanceof SwNodeNum &&
+        (child.IsCountedForNumbering() || child.HasCountedChildren())
+      )
+        return true;
+    return false;
   }
   /** Reads numbered/bullet presence for the supported rule families. @returns Counted numbering policy. */
   protected override IsCountedForNumbering(): boolean {

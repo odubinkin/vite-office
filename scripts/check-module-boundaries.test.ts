@@ -11,6 +11,23 @@ import {
 } from "./check-module-boundaries.mjs";
 
 describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
+  it("classifies native o3tl utilities and restricts the Writer container dependency", /** Checks the precise source utility edge and browser isolation. @returns Nothing. */ () => {
+    expect(getRuntimeOwnershipLayer("o3tl/inc/sorted_vector.ts")).toBe("upstream-mechanism");
+    expect(isForbiddenModuleEdge("sw", "o3tl")).toBe(false);
+    expect(isForbiddenModuleEdge("o3tl", "sw")).toBe(true);
+    expect(isForbiddenModuleEdge("o3tl", "vcl")).toBe(true);
+    expect(isForbiddenModuleEdge("framework", "o3tl")).toBe(true);
+    expect(getRuntimeOwnershipViolation("o3tl/inc/sorted_vector.ts", "", "react")).toMatch(
+      /browser presentation package/u,
+    );
+    expect(
+      getRuntimeOwnershipViolation(
+        "o3tl/inc/sorted_vector.ts",
+        "sw/browser/editor/writer",
+        "../../sw/browser/editor/writer",
+      ),
+    ).toMatch(/browser adapters/u);
+  });
   it("classifies the enforced Writer layers", /** Verifies stable path-to-layer routing. @returns Nothing. */ function classifiesWriterLayers(): void {
     expect(getRuntimeOwnershipLayer("sw/source/core/doc/doc.ts")).toBe("writer-core");
     expect(getRuntimeOwnershipLayer("sw/source/filter/xml/swxml.ts")).toBe("writer-filter");

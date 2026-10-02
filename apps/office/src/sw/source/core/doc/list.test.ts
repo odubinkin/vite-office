@@ -120,5 +120,7 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
 function getNumberTreeChildren(
   node: SwNumberTreeNode | undefined,
 ): readonly SwNumberTreeNode[] | undefined {
-  return (node as unknown as { mChildren: SwNumberTreeNode[] } | undefined)?.mChildren;
+  return node === undefined
+    ? undefined
+    : [...(node as unknown as { mChildren: Iterable<SwNumberTreeNode> }).mChildren];
 }

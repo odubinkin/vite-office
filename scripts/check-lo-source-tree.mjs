@@ -11,6 +11,7 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Files that prove every currently instantiated LibreOffice-derived source area remains present. */
 const requiredFiles = [
+  "apps/office/src/o3tl/inc/sorted_vector.ts",
   "apps/office/src/editeng/inc/svxenum.ts",
   "apps/office/src/vcl/source/font/font.ts",
   "apps/office/src/framework/browser/app/SuiteCard.tsx",

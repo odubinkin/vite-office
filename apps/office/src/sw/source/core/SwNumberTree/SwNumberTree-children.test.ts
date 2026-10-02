@@ -9,8 +9,10 @@ import { SwNumberTreeNode } from "./SwNumberTree";
 class ChildContract extends SwNodeNum {
   /** Binds the native count method for exact type inspection. */
   public readonly count = this.GetChildCount.bind(this);
-  /** Observes the subclass-owned container without a production accessor. */
-  public readonly owned = this.mChildren;
+  /** Observes the subclass-owned container without a production accessor. @returns Children. */
+  public get owned(): readonly SwNumberTreeNode[] {
+    return [...this.mChildren];
+  }
 }
 /** Reports exact type equality. */
 type Same<A, B> =

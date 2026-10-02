@@ -222,7 +222,7 @@ function updateRuleStart(rule: SwNumRule | undefined, level: number, start: numb
 
 /** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
 function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
-  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
+  return [...(node as unknown as { mChildren: Iterable<SwNumberTreeNode> }).mChildren];
 }
 
 /** Observes the protected IsCountedForNumbering policy solely in tests. @param node - Optional owned record. @returns Native policy flag. */
