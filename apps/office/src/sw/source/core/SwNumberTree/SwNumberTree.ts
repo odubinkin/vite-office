@@ -88,8 +88,8 @@ export abstract class SwNumberTreeNode {
   /** Inserts an orphan at its requested depth, constructing skipped ancestors and relocating later descendants. @param child - Orphan record. @param depth - Remaining list depth. @param document - Native operation context. @returns Nothing. */
   public AddChild(child: SwNumberTreeNode, depth: number, document?: SwDoc): void {
     if (depth < 0 || child.parent !== undefined || child.mChildren.size() > 0) return;
-    let position = this.mChildren.upper_bound(child);
     if (depth > 0) {
+      const position = this.mChildren.upper_bound(child);
       const parent = position === 0 ? this.CreatePhantom() : this.mChildren.at(position - 1);
       if (position === 0) this.SetLastValid(undefined);
       parent?.AddChild(child, depth - 1, document);
@@ -98,21 +98,26 @@ export abstract class SwNumberTreeNode {
     child.PreAdd();
     const inserted = this.mChildren.insert(child);
     if (!inserted[1]) return;
-    position = inserted[0];
+    const position = inserted[0];
     child.parent = this;
-    let previous = this.mChildren.at(position - 1);
-    let destination: SwNumberTreeNode | undefined = child;
-    while (destination !== undefined && previous !== undefined && previous.mChildren.size() > 0) {
-      previous.MoveGreaterChildren(child, destination);
-      if (previous.mChildren.size() === 0) break;
-      previous = previous.mChildren.back();
-      destination = destination.GetDestinationPhantom();
-    }
-    child.ClearObsoletePhantoms();
-    const predecessor = this.mChildren.at(position - 1);
-    if (predecessor === undefined || this.IsValid(predecessor)) this.SetLastValid(predecessor);
+    const notification = child.IsNotificationEnabled(document);
+    if (position > 0) {
+      // Successful sorted insertion at a positive position guarantees a predecessor.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const predecessor = this.mChildren.at(position - 1)!;
+      let previous: SwNumberTreeNode | undefined = predecessor;
+      let destination: SwNumberTreeNode | undefined = child;
+      while (destination !== undefined && previous !== undefined && previous.mChildren.size() > 0) {
+        previous.MoveGreaterChildren(child, destination);
+        if (previous.mChildren.size() === 0) break;
+        previous = previous.mChildren.back();
+        destination = destination.GetDestinationPhantom();
+      }
+      child.ClearObsoletePhantoms();
+      if (this.IsValid(predecessor)) this.SetLastValid(predecessor);
+    } else this.SetLastValid(undefined);
     this.ClearObsoletePhantoms();
-    if (child.IsNotificationEnabled(document)) {
+    if (notification) {
       if (!this.IsCounted()) {
         this.InvalidateMe();
         this.NotifyInvalidSiblings(document);
