@@ -1,10 +1,11 @@
 ---
 id: "202610020438-HRK7Q8"
 title: "Match comparator-equivalent child removal and callback ownership"
-status: "DOING"
+result_summary: "Iteration50: equivalent stored-child removal and supplied callback ownership restored;747 app/109 inventory/19 browser and34 upstream-independent tree tests pass. Actual implementation bc64c84231eccc61857a755c7227e98999f75fb9; full goal remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Reviewed four semantic paths and source audit: stored versus supplied argument distinction, GetIterator recomputation after phantom insertion, predecessor transfer, prefix and notification ordering, and callback on misses/phantom no-op match the selected native bodies. Existing registry implementation remains unchanged. Thirteen new tests include identity controls and source-derived literal observations; all34 tree tests pass with reference unavailable."
     - "Full verification747 app/109 inventory/19 browser, both100% coverage and unchanged gates. Native four file/nine symbol hashes revalidated; metadata changes limited to two rows without status/deviation promotion; no helper/native source bodies in Agentplane artifacts. Final changed scope is four semantic plus task evidence paths."
-commit: null
+commit:
+  hash: "bc64c84231eccc61857a755c7227e98999f75fb9"
+  message: "🔧 HRK7Q8 code: remove equivalent stored numbering child"
 comments:
   -
     author: "CODER"
     body: "Start: Correct comparator-equivalent stored-child removal with supplied-argument callback; validate actual document ownership, topology and notifications without upstream access in tests or source artifacts."
+  -
+    author: "CODER"
+    body: "Verified: Comparator-equivalent RemoveChild now detaches and transfers the stored record while PostRemove belongs to supplied argument. Full unchanged checks and upstream-independent tree tests pass with both100% coverages; bounded source/quality evidence recorded."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation bc64c84231eccc61857a755c7227e98999f75fb9 (four semantic plus seven task artifact paths): GetIterator-based stored-child removal with supplied-argument PostRemove. Thirteen RED/GREEN ownership/topology/callback tests; all34 tree tests pass without upstream; full verify747 app/109 inventory/19 browser, both100% coverage and unchanged gates. Four pinned native file/nine symbol hashes support bounded manual source audit only; no compiled-native execution claimed or helper/native source bodies stored. Routing/diff pass; doctor zero errors/two pre-existing warnings; no status/deviation promotion."
+  -
+    type: "status"
+    at: "2026-10-02T04:53:14.108Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Comparator-equivalent RemoveChild now detaches and transfers the stored record while PostRemove belongs to supplied argument. Full unchanged checks and upstream-independent tree tests pass with both100% coverages; bounded source/quality evidence recorded."
 doc_version: 3
-doc_updated_at: "2026-10-02T04:53:09.029Z"
+doc_updated_at: "2026-10-02T04:53:14.110Z"
 doc_updated_by: "CODER"
 description: "Iteration 50: match pinned SwNumberTree RemoveChild selection, stored-node detachment/descendant transfer and supplied-argument PostRemove semantics. Keep existing document registry equivalence unchanged; cover actual document rule/registry ownership and retained topology with tests that never access upstream. No comparison helper sources in Agentplane artifacts; preserve deliberate deviations and avoid broad parity promotion."
 sections:
