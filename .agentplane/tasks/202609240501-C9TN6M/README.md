@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 52
+revision: 53
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-01T17:21:12.360Z"
+doc_updated_at: "2026-10-02T04:53:37.897Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -200,6 +200,10 @@ sections:
     - Observation: Iteration49 leaf202610011627-W77K0Q DONE;actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (8 semantic+3 task artifacts),close4ac6924cbd61. Protected mandatory nullable-target validators,comparator-equivalent GetIterator and nonrecursive prefix semantics restored. Native complete header/types/core produce128 profiles/1792 snapshots/7168 raw states,with four native compile contract rejections and preceding three local type errors now resolved. Every original expected value preserved. Full unchanged verify app734/inventory109/browser19,both100% coverages;focused21 tests pass while upstream absent;source copies absent and temporary native source/binary removed.
       Impact: Bounded selected-contract proof only;no whole-module/status/full-goal promotion. Parent and goal remain active;registered IO/recovery deviations untouched. Tests must not read,compile or invoke pinned upstream;manual comparison/static audits remain separate and must not persist source copies.
       Resolution: Next measured source mismatch: native RemoveChild at sw/source/core/SwNumberTree/SwNumberTree.cxx:578 selects the stored comparator-equivalent pRemove and detaches/moves its actual descendants,then calls PostRemove on the supplied pChild. Local SwNumberTree.ts still identity-searches and operates directly on supplied child. Open one new leaf to measure equivalent/distinct/owned removal including raw prefix/topology/notifications and actual document/rule/registry ownership before repair;current core-only policy adapter omits registration and cannot certify those owner effects. Wider native API/lookup/lifetime/UI gaps remain;do not mark parent complete from green gates.
+
+    - Observation: Iteration50 completed in DONE leaf 202610020438-HRK7Q8. Actual implementation bc64c84231eccc61857a755c7227e98999f75fb9 restores comparator-equivalent RemoveChild stored-node detachment/descendant transfer, iterator recomputation after phantom insertion and supplied-argument PostRemove ownership. No registry implementation or original expectation changes.
+      Impact: Thirteen new owner/topology/callback tests pass; all34 tree tests pass with reference unavailable. Full unchanged verify747 app/109 inventory/19 browser and both100% coverages; four pinned file/nine symbol hashes support manual source audit only, without claiming fresh compiled native owner parity. No helper/source bodies in task artifacts, registered IO deviations preserved and no whole-module/status promotion.
+      Resolution: Parent/full goal remains open. Next measured contract correction is protected GetNumberVector_(vector,bool bValidate=true): native forwards explicit false through recursive ancestry and GetNumber; local helper currently omits that argument and always validates. Use a separate leaf with raw-cache/default/type evidence and upstream-independent tests.
 id_source: "generated"
 ---
 ## Summary
@@ -373,3 +377,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: Iteration49 leaf202610011627-W77K0Q DONE;actual CODE c36b910aa271ecab1515f81e4df2032282c32c4a (8 semantic+3 task artifacts),close4ac6924cbd61. Protected mandatory nullable-target validators,comparator-equivalent GetIterator and nonrecursive prefix semantics restored. Native complete header/types/core produce128 profiles/1792 snapshots/7168 raw states,with four native compile contract rejections and preceding three local type errors now resolved. Every original expected value preserved. Full unchanged verify app734/inventory109/browser19,both100% coverages;focused21 tests pass while upstream absent;source copies absent and temporary native source/binary removed.
   Impact: Bounded selected-contract proof only;no whole-module/status/full-goal promotion. Parent and goal remain active;registered IO/recovery deviations untouched. Tests must not read,compile or invoke pinned upstream;manual comparison/static audits remain separate and must not persist source copies.
   Resolution: Next measured source mismatch: native RemoveChild at sw/source/core/SwNumberTree/SwNumberTree.cxx:578 selects the stored comparator-equivalent pRemove and detaches/moves its actual descendants,then calls PostRemove on the supplied pChild. Local SwNumberTree.ts still identity-searches and operates directly on supplied child. Open one new leaf to measure equivalent/distinct/owned removal including raw prefix/topology/notifications and actual document/rule/registry ownership before repair;current core-only policy adapter omits registration and cannot certify those owner effects. Wider native API/lookup/lifetime/UI gaps remain;do not mark parent complete from green gates.
+
+- Observation: Iteration50 completed in DONE leaf 202610020438-HRK7Q8. Actual implementation bc64c84231eccc61857a755c7227e98999f75fb9 restores comparator-equivalent RemoveChild stored-node detachment/descendant transfer, iterator recomputation after phantom insertion and supplied-argument PostRemove ownership. No registry implementation or original expectation changes.
+  Impact: Thirteen new owner/topology/callback tests pass; all34 tree tests pass with reference unavailable. Full unchanged verify747 app/109 inventory/19 browser and both100% coverages; four pinned file/nine symbol hashes support manual source audit only, without claiming fresh compiled native owner parity. No helper/source bodies in task artifacts, registered IO deviations preserved and no whole-module/status promotion.
+  Resolution: Parent/full goal remains open. Next measured contract correction is protected GetNumberVector_(vector,bool bValidate=true): native forwards explicit false through recursive ancestry and GetNumber; local helper currently omits that argument and always validates. Use a separate leaf with raw-cache/default/type evidence and upstream-independent tests.
