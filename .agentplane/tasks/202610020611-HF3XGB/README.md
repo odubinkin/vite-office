@@ -1,10 +1,11 @@
 ---
 id: "202610020611-HF3XGB"
 title: "Restore protected number-tree counting policy contracts"
-status: "DOING"
+result_summary: "iteration54-progress-protected-counting-contracts"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Reviewed all11semantic paths:3protected abstract base policies, protected derived overrides,6diagnostic suites with15test-only observers,3new exact type/dispatch/default/cache tests,2metadata rows only.55oldproduction method bodies and249matcher arguments unchanged after equivalent observation normalization."
     - "Fresh manual4native file/12symbol hashes; no compiled-native claim. Owned virtual TypeScript diagnostics prove private narrowing2415 and required abstract policy2515; protected is closest legal inherited access, not identical C++private."
     - "Full verify exit0:761application/109inventory/19browser tests,both100%coverage.72focused tests pass with vendor unavailable and restored. No project test reads/compiles/invokes upstream. Agentplane Python/bytecode0 and task native-source0."
-commit: null
+commit:
+  hash: "57235bd930aa541071aa1b24f8534ffdb0a2e7b9"
+  message: "🧩 HF3XGB code: restore protected counting policies"
 comments:
   -
     author: "CODER"
     body: "Start: restore native counting-policy visibility and mandatory abstract contract under existing user authorization, preserving all policy logic, expected values and registered IO/recovery deviations."
+  -
+    author: "CODER"
+    body: "Verified: protected mandatory counting policies, unchanged55bodies/249expected records, all declared checks and same-actor EVALUATOR pass on actual implementation57235bd930aa."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared checks pass on actual implementation57235bd930aa541071aa1b24f8534ffdb0a2e7b9;761application/109inventory/19browser tests,both100%;72focused tests vendor absent;manual4file12symbol hashes and55unchanged bodies/249preserved expected records. TypeScript protected/private limit explicit;zero helper/source artifacts."
+  -
+    type: "status"
+    at: "2026-10-02T06:33:00.875Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: protected mandatory counting policies, unchanged55bodies/249expected records, all declared checks and same-actor EVALUATOR pass on actual implementation57235bd930aa."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:32:23.453Z"
+doc_updated_at: "2026-10-02T06:33:00.877Z"
 doc_updated_by: "CODER"
 description: "Restore protected abstract HasCountedChildren/IsCountedForNumbering/IsCountPhantoms in the native base and closest TypeScript protected SwNodeNum overrides. Keep existing policy bodies, adapt six diagnostic suites and complete foreign subclass obligation, verify exact types/defaults/virtual dispatch without invoking upstream from tests."
 sections:
