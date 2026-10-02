@@ -1,10 +1,16 @@
 
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
 
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts (4 tests | 3 failed) 16ms
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts (4 tests | 3 failed) 17ms
    × observes owned prefixes through restart and removal without validating raw caches 9ms
-   × looks up the stored valid boundary only for guarded owned children 2ms
+   × looks up the stored valid boundary only for guarded owned children 3ms
    × retains hierarchical and continuous phantom validity across reading and invalidation 2ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  15:05:19
+   Duration  1.36s (transform 286ms, setup 160ms, import 326ms, tests 17ms, environment 713ms)
+
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -24,15 +30,14 @@ TypeError: Cannot read properties of undefined (reading 'parent')
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
 
  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts > looks up the stored valid boundary only for guarded owned children
-TypeError: Cannot read properties of undefined (reading 'parent')
- ❯ SwNodeNum.IsValid src/sw/source/core/SwNumberTree/SwNumberTree.ts:213:50
-    211|   /** Tests whether a child is inside this parent's validated prefix. …
-    212|   private IsValid(child: SwNumberTreeNode): boolean {
-    213|     return this.lastValid !== undefined && child.parent === this && !t…
-       |                                                  ^
-    214|   }
-    215|   /** Retains a validated prefix or invalidates it and the next uncoun…
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:145:19
+AssertionError: expected "find" to be called 2 times, but got 0 times
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:153:20
+    151|     const lookup = vi.spyOn(probe(root).mChildren, "find");
+    152|     expect([probe(root).IsValid(first), probe(root).IsValid(second)]).…
+    153|     expect(lookup).toHaveBeenCalledTimes(2);
+       |                    ^
+    154|     expect(
+    155|       lookup.mock.calls.map(
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
 
@@ -47,13 +52,7 @@ TypeError: Cannot read properties of undefined (reading 'parent')
     215|   /** Retains a validated prefix or invalidates it and the next uncoun…
  ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:69:27
  ❯ validity src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:67:16
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:185:14
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:193:14
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
-
-
- Test Files  1 failed (1)
-      Tests  3 failed | 1 passed (4)
-   Start at  15:01:04
-   Duration  1.38s (transform 288ms, setup 159ms, import 332ms, tests 16ms, environment 731ms)
 

@@ -4,7 +4,7 @@ title: "Restore protected number-tree validity overloads"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore both protected validity overloads and native boundary lookup under continuing goal authorization, without source helpers or upstream test invocation."
 doc_version: 3
-doc_updated_at: "2026-10-02T07:57:49.565Z"
+doc_updated_at: "2026-10-02T08:06:07.481Z"
 doc_updated_by: "CODER"
 description: "Iteration58 restores both native protected IsValid overloads, explicit nullable child dispatch, self-parent delegation and sorted-container cache-boundary lookup, plus source-equivalent self calls in insertion/invalidation. Owned type/document regressions and manual source hashes prove this correction without upstream test access or saved helpers."
 sections:
@@ -56,6 +56,14 @@ sections:
     - Observation: Fresh local execution read confirms the existing invalidation helper is named Invalidate, not InvalidateChild as the planning prose called it.
       Impact: No scope or behavior expansion; the approved native self-validity call concerns this same existing child-invalidation operation.
       Resolution: Use the actual Invalidate method name in implementation evidence and integrity checks; selected3changed bodies are AddChild,IsValid,Invalidate. All52other existing bodies remain unchanged.
+
+    - Observation: Baseline3owned tests fail for missing self dispatch and missing container lookup; baseline TypeScript rejects private subclass access, nullable argument and zero-argument overload. Initial final test expectation after removal assumed the preceding prefix stays valid.
+      Impact: Fresh SwNumRule::RemoveTextNode source shows removal from a still-invalid rule invalidates the whole remaining list, so that new fixture expectation was incorrect; raw counters stay cached.
+      Resolution: Assert the actual rule remains invalid, then literal all-false post-removal validity and retained[0,1,7,0]raw counters; validate the preceding item again to prove prefix recovery. Correct only this new expectation based on fresh native client-removal source; production and every old test remain unchanged outside the3approved method bodies.
+
+    - Observation: Focused ESLint suggests unifying the two native overloads into an optional-argument signature.
+      Impact: An optional signature erases the exact required nullable-child overload contract, and omitted versus explicit undefined intentionally dispatch to different source queries.
+      Resolution: Retain native overload declarations and narrowly document the unified-signatures exception at the two declarations in production/test diagnostics. No lint configuration/gate changes; preserve actual arity types and distinct dispatch. Cached boundary non-null assertion documents the native retained-container invariant rather than adding fabricated fallback behavior.
 id_source: "generated"
 ---
 ## Summary
@@ -92,3 +100,11 @@ Preflight main/direct and clean. Pin9bc445578031fecf56086729d8e4940c77e14d65 fre
 - Observation: Fresh local execution read confirms the existing invalidation helper is named Invalidate, not InvalidateChild as the planning prose called it.
   Impact: No scope or behavior expansion; the approved native self-validity call concerns this same existing child-invalidation operation.
   Resolution: Use the actual Invalidate method name in implementation evidence and integrity checks; selected3changed bodies are AddChild,IsValid,Invalidate. All52other existing bodies remain unchanged.
+
+- Observation: Baseline3owned tests fail for missing self dispatch and missing container lookup; baseline TypeScript rejects private subclass access, nullable argument and zero-argument overload. Initial final test expectation after removal assumed the preceding prefix stays valid.
+  Impact: Fresh SwNumRule::RemoveTextNode source shows removal from a still-invalid rule invalidates the whole remaining list, so that new fixture expectation was incorrect; raw counters stay cached.
+  Resolution: Assert the actual rule remains invalid, then literal all-false post-removal validity and retained[0,1,7,0]raw counters; validate the preceding item again to prove prefix recovery. Correct only this new expectation based on fresh native client-removal source; production and every old test remain unchanged outside the3approved method bodies.
+
+- Observation: Focused ESLint suggests unifying the two native overloads into an optional-argument signature.
+  Impact: An optional signature erases the exact required nullable-child overload contract, and omitted versus explicit undefined intentionally dispatch to different source queries.
+  Resolution: Retain native overload declarations and narrowly document the unified-signatures exception at the two declarations in production/test diagnostics. No lint configuration/gate changes; preserve actual arity types and distinct dispatch. Cached boundary non-null assertion documents the native retained-container invariant rather than adding fabricated fallback behavior.

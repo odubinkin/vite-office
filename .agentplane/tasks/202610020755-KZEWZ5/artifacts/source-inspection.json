@@ -1,0 +1,103 @@
+{
+  "kind": "Manual source inspection, hashes/conclusions only",
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "sw/inc/SwNumberTree.hxx",
+      "sha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "sha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741"
+    },
+    {
+      "path": "include/o3tl/sorted_vector.hxx",
+      "sha256": "4ef74875a7b188cd80b5267bc0a43d6b30fb5a2ef6017650e8b596067ff4aaa2"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "sha256": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129"
+    }
+  ],
+  "symbols": [
+    {
+      "path": "sw/inc/SwNumberTree.hxx",
+      "symbol": "IsValid child declaration",
+      "start": 482,
+      "end": 482,
+      "sha256": "62a5308cec7752a64040d14c7c24088bd158941bdd9d14a77021e852cfb11dd8"
+    },
+    {
+      "path": "sw/inc/SwNumberTree.hxx",
+      "symbol": "IsValid self declaration",
+      "start": 490,
+      "end": 490,
+      "sha256": "d12a6695c692a6a1221aff50f304ac21520260c3046d3af3bd79d670e5587a1b"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "symbol": "IsValid self",
+      "start": 652,
+      "end": 655,
+      "sha256": "8334a4fcd313949a919bd313c6fc570bf59c55a49bf6a6940aa10bcbaa186351"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "symbol": "IsValid child",
+      "start": 676,
+      "end": 691,
+      "sha256": "ca5e124c773cf9c277287a0a81fabef73dd69f9d1bcdf5fe1f9a2047199a58d4"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "symbol": "AddChild self-call site",
+      "start": 529,
+      "end": 535,
+      "sha256": "99a48c887552840715d7965fb1e9552cf43bb562a56908fca5309a5c983710d6"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "symbol": "Invalidate",
+      "start": 1023,
+      "end": 1037,
+      "sha256": "342e362c77c5493f0febd689c66873c763b1e5daabb5b5c608d122dea2b11018"
+    },
+    {
+      "path": "include/o3tl/sorted_vector.hxx",
+      "symbol": "sorted_vector::find",
+      "start": 218,
+      "end": 222,
+      "sha256": "9822d3ae7c621c868c5a52a01143b1234616ebecd579238492459c5e274fe925"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "symbol": "PostRemove",
+      "start": 103,
+      "end": 123,
+      "sha256": "3e03126a4d3075ec1f93f5dedc79244e6c6b8291aed015281fd98e58f5f7da19"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "symbol": "RemoveTextNode",
+      "start": 158,
+      "end": 179,
+      "sha256": "be5632125952ff0d9da4d941966946ad55069d4e27ac7d894abde27cb68ffcdf"
+    }
+  ],
+  "conclusions": [
+    "Both validity overloads are protected",
+    "Self query delegates to the parent; root/orphan false",
+    "Explicit nullable child query checks retained cache,nonnull child and exact parent before sorted lookup/comparison",
+    "AddChild and Invalidate use self validity at native call sites",
+    "Removing a client from an invalid rule invalidates the remaining list prefix while retaining raw counters"
+  ],
+  "limits": [
+    "No compiled native probe",
+    "No native invalid-cache UB, full layout/redline/dtor/context/client/lifetime certification",
+    "ECMAScript undefined represents the nullable native pointer; overload dispatch preserves explicit-null versus omitted-self meaning"
+  ]
+}
