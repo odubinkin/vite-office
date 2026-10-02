@@ -1,10 +1,11 @@
 ---
 id: "202610020828-V0NKAX"
 title: "Restore native protected number-tree state"
-status: "DOING"
+result_summary: "Restore native protected state with unchanged method logic and literal regressions; selected scope passes all gates."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Actual commit contains exact9approved semantic paths;5protected native declarations/order/defaults share actual owner state, with no production compatibility storage. Fresh2file/9span hashes remain valid and approved ECMAScript representations are explicit."
     - "55method bodies normalized unchanged;5old diagnostic ASTs preserve127matcher calls and210other old test files are unchanged. Baseline3new tests/typecheck fail prior code and actual owned final states cover both modes, prefix lifecycle, continuation and restart."
     - "Unchanged full verify exit0 at782app/109inventory/19browser and both100%coverage;76app+7gate focused tests pass vendor absent with exact pin restored. Metadata1row permanifest changes evidence/description only; pin/log/scope hashes verified on current semantic commit. No Python/bytecode/native-source/helper artifacts; no IO/recovery/gate promotion."
-commit: null
+commit:
+  hash: "9ce4ad1115edf76304adc1d73ea5a01a5c2697f9"
+  message: "🛠 V0NKAX code: restore native protected number-tree state"
 comments:
   -
     author: "CODER"
     body: "Start: restore native protected state names/order/defaults under continuing goal authorization, preserving normalized method logic and old expected values."
+  -
+    author: "CODER"
+    body: "Verified: selected5native protected state names/order/defaults and shared storage restored;55runtime bodies normalized unchanged and127old diagnostic matchers/210other old tests retained. Full unchanged verify782app/109inventory/19browser,both100%;76app+7boundary tests vendor absent/restored. Same-actor EVALUATOR passes actual semantic SHA9ce4ad1115edf76304adc1d73ea5a01a5c2697f9. No helper/native/Python sources in Agentplane; registered IO/recovery intact and parent/full goal active."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Selected native protected state contract verified on semantic 9ce4ad1115edf76304adc1d73ea5a01a5c2697f9; unchanged full verify and vendor-absent focused tests pass, normalization/metadata/source integrity hold. Wider parent/goal obligations remain active."
+  -
+    type: "status"
+    at: "2026-10-02T08:50:36.549Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: selected5native protected state names/order/defaults and shared storage restored;55runtime bodies normalized unchanged and127old diagnostic matchers/210other old tests retained. Full unchanged verify782app/109inventory/19browser,both100%;76app+7boundary tests vendor absent/restored. Same-actor EVALUATOR passes actual semantic SHA9ce4ad1115edf76304adc1d73ea5a01a5c2697f9. No helper/native/Python sources in Agentplane; registered IO/recovery intact and parent/full goal active."
 doc_version: 3
-doc_updated_at: "2026-10-02T08:49:26.751Z"
+doc_updated_at: "2026-10-02T08:50:36.551Z"
 doc_updated_by: "CODER"
 description: "Iteration59 replaces5privately renamed core fields with protected native names/order/defaults and rewires existing methods plus5test-only cache observers without changing logic or expected values. Owned type/state/continuation tests and normalization evidence prove the complete selected state contract; no upstream project test access or saved helpers."
 sections:
