@@ -4,7 +4,7 @@ title: "Remove remaining Python helpers from Agentplane scratch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -21,10 +21,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-02T05:33:10.163Z"
+  updated_by: "CODER"
+  note: "Three ignored scripts removed. cleanup-results.json records byte counts and hashes only; tracked and filesystem Python/bytecode inventories are empty. Application changes excluded. Ignore extension moved to 4N8JF2 per enforcement. Routing and doctor passed. No source artifacts or network/upstream access."
   attempts: 0
 commit: null
 comments:
@@ -59,8 +59,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: persist only removal evidence for the three ignored scripts; route the configuration extension separately to a code task."
+  -
+    type: "verify"
+    at: "2026-10-02T05:33:10.163Z"
+    author: "CODER"
+    state: "ok"
+    note: "Three ignored scripts removed. cleanup-results.json records byte counts and hashes only; tracked and filesystem Python/bytecode inventories are empty. Application changes excluded. Ignore extension moved to 4N8JF2 per enforcement. Routing and doctor passed. No source artifacts or network/upstream access."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:29:35.277Z"
+doc_updated_at: "2026-10-02T05:33:10.281Z"
 doc_updated_by: "CODER"
 description: "User explicitly forbids Python helper sources in Agentplane artifacts. Remove the three ignored leftover scripts under .agentplane/tmp/upstream-cleanup, expand Python artifact ignore rules, record bounded evidence and a separate commit. No implementation or upstream access."
 sections:
@@ -68,7 +74,41 @@ sections:
   Scope: "Delete exactly the three ignored Python helper files under .agentplane/tmp/upstream-cleanup and record their hashes, zero remaining inventory, and a separate cleanup evidence commit. No tracked application/configuration changes. The .gitignore extension requires a separate code task because explicit blueprint intent is immutable in installed CLI."
   Plan: "Remove three ignored Python helper files and record only bounded cleanup evidence. The attempted .gitignore extension is excluded from this docs task per enforcement and will be handled through a code task. No implementation source changes."
   Verify Steps: "1. Three ignored leftover scripts are inventoried with byte counts and hashes then removed. Filesystem and git inventories contain zero Python/bytecode paths under .agentplane. 2. Routing, doctor and diff check pass without new errors. Commit scope contains only this cleanup task evidence; no helper source saved. 3. Existing HGKX68 application changes and .gitignore are excluded from this commit. Ignore extension is routed to a separate code task; close this leaf after tracked semantic changes are persisted."
-  Verification: "Pending scoped verification."
+  Verification: |-
+    Command: scoped inventories, git check-ignore, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: Three ignored scripts removed. cleanup-results.json records byte counts and hashes only; tracked and filesystem Python/bytecode inventories are empty. Application changes excluded. Ignore extension moved to 4N8JF2 per enforcement. Routing OK; doctor zero errors, one pre-existing hook readiness warning. Implementation commit cea5d14c1d73376eee8b598face9a021f55df373. Closure deferred until HGKX68 tracked changes are persisted; no skipped scope checks.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-02T05:33:10.163Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Three ignored scripts removed. cleanup-results.json records byte counts and hashes only; tracked and filesystem Python/bytecode inventories are empty. Application changes excluded. Ignore extension moved to 4N8JF2 per enforcement. Routing and doctor passed. No source artifacts or network/upstream access.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-02T05:33:09.269Z, excerpt_hash=sha256:957fd440c773a98a214cb764a4852a8ef0709f021ccc0e3a1ea5b5b12bd17859
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610020526-VTGES9/blueprint/resolved-snapshot.json
+    - old_digest: 990b171f85a39ba7e6b299befe49833e2a8de24e33cccda0c613156854218095
+    - current_digest: 990b171f85a39ba7e6b299befe49833e2a8de24e33cccda0c613156854218095
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610020526-VTGES9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610020526-VTGES9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the .gitignore cleanup commit if requested. Do not restore Python scripts into Agentplane artifacts; the user explicitly prohibited them."
   Findings: |-
     The three remaining scripts are ignored and have never been tracked at their current paths. Their deletion therefore cannot appear as git file deletions; the separate commit records the artifact exclusion and verified local cleanup.
@@ -96,7 +136,40 @@ Remove three ignored Python helper files and record only bounded cleanup evidenc
 
 ## Verification
 
-Pending scoped verification.
+Command: scoped inventories, git check-ignore, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: Three ignored scripts removed. cleanup-results.json records byte counts and hashes only; tracked and filesystem Python/bytecode inventories are empty. Application changes excluded. Ignore extension moved to 4N8JF2 per enforcement. Routing OK; doctor zero errors, one pre-existing hook readiness warning. Implementation commit cea5d14c1d73376eee8b598face9a021f55df373. Closure deferred until HGKX68 tracked changes are persisted; no skipped scope checks.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-02T05:33:10.163Z — VERIFY — ok
+
+By: CODER
+
+Note: Three ignored scripts removed. cleanup-results.json records byte counts and hashes only; tracked and filesystem Python/bytecode inventories are empty. Application changes excluded. Ignore extension moved to 4N8JF2 per enforcement. Routing and doctor passed. No source artifacts or network/upstream access.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-02T05:33:09.269Z, excerpt_hash=sha256:957fd440c773a98a214cb764a4852a8ef0709f021ccc0e3a1ea5b5b12bd17859
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610020526-VTGES9/blueprint/resolved-snapshot.json
+- old_digest: 990b171f85a39ba7e6b299befe49833e2a8de24e33cccda0c613156854218095
+- current_digest: 990b171f85a39ba7e6b299befe49833e2a8de24e33cccda0c613156854218095
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610020526-VTGES9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610020526-VTGES9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
