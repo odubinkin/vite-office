@@ -1,10 +1,11 @@
 ---
 id: "202610020526-VTGES9"
 title: "Remove remaining Python helpers from Agentplane scratch"
-status: "DOING"
+result_summary: "Removed leftover helper sources. Cleanup implementation cea5d14c1d73376eee8b598face9a021f55df373 is included in reviewed snapshot a5ae916fd31daf94cf87cc05a9738da57ea43135; explicit cleanup and review SHAs distinguished."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -43,7 +44,9 @@ quality_review:
     - ".agentplane/tasks/202610020526-VTGES9/cleanup-results.json"
   findings:
     - "No application changes, network, upstream invocation or helper source storage. Explicit .gitignore exclusion is separately committed by 4N8JF2. This is not an independent-agent evaluation."
-commit: null
+commit:
+  hash: "a5ae916fd31daf94cf87cc05a9738da57ea43135"
+  message: "🧩 HGKX68 code: restore protected number-tree root access"
 comments:
   -
     author: "CODER"
@@ -54,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Start: persist only removal evidence for the three ignored scripts; route the configuration extension separately to a code task."
+  -
+    author: "CODER"
+    body: "Verified: three ignored Python helpers removed, zero remaining Python/bytecode paths; bounded separate cleanup commit cea5d14c and quality review of the containing snapshot a5ae916f recorded."
 events:
   -
     type: "status"
@@ -82,8 +88,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Three ignored scripts removed. cleanup-results.json records byte counts and hashes only; tracked and filesystem Python/bytecode inventories are empty. Application changes excluded. Ignore extension moved to 4N8JF2 per enforcement. Routing and doctor passed. No source artifacts or network/upstream access."
+  -
+    type: "status"
+    at: "2026-10-02T05:36:25.902Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: three ignored Python helpers removed, zero remaining Python/bytecode paths; bounded separate cleanup commit cea5d14c and quality review of the containing snapshot a5ae916f recorded."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:33:10.281Z"
+doc_updated_at: "2026-10-02T05:36:25.906Z"
 doc_updated_by: "CODER"
 description: "User explicitly forbids Python helper sources in Agentplane artifacts. Remove the three ignored leftover scripts under .agentplane/tmp/upstream-cleanup, expand Python artifact ignore rules, record bounded evidence and a separate commit. No implementation or upstream access."
 sections:
