@@ -1,0 +1,37 @@
+{
+  "base": "c2f0a2284586",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "semanticPathCount": 9,
+  "metadata": [
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "changedRows": 1,
+      "permittedFields": [
+        "semantic.evidence",
+        "semantic.justification"
+      ],
+      "allOtherMetadataUnchanged": true
+    },
+    {
+      "file": "docs/program/source-provenance.json",
+      "changedRows": 1,
+      "permittedFields": [
+        "evidence.local",
+        "preservedResponsibilities"
+      ],
+      "allOtherMetadataUnchanged": true
+    }
+  ],
+  "legacyProductionPropertyAliases": 0,
+  "ignoredInclusiveForbiddenArtifacts": 0
+}
