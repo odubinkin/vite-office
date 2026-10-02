@@ -49,7 +49,7 @@ it("owns records in text nodes and validates insertion notifications before pref
   expect(tail.GetNum()).toBeUndefined();
   expect(record.GetNumRule()).toBeUndefined();
   expect(record.GetStartValue()).toBe(1);
-  expect(record.IsCountedForNumbering()).toBe(false);
+  expect(observeNumberingCount(record)).toBe(false);
   expect(tail.GetListLabel()).toBeUndefined();
   tail.RemoveFromList();
   tail.AddToList();
@@ -223,4 +223,15 @@ function updateRuleStart(rule: SwNumRule | undefined, level: number, start: numb
 /** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
 function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
   return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
+}
+
+/** Observes the protected IsCountedForNumbering policy solely in tests. @param node - Optional owned record. @returns Native policy flag. */
+function observeNumberingCount(node: SwNumberTreeNode | undefined): boolean | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the native protected policy. @returns Flag. */ IsCountedForNumbering(): boolean;
+        }
+      | undefined
+  )?.IsCountedForNumbering();
 }

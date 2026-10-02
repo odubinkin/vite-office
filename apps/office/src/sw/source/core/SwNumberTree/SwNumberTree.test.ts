@@ -250,10 +250,10 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
   const node = new SwNodeNum(document.paragraphs[0] as SwTextNode);
   const root = new SwNodeNum(undefined);
   expect(node.GetStartValue()).toBe(1);
-  expect(node.IsCountedForNumbering()).toBe(false);
+  expect(observeNumberingCount(node)).toBe(false);
   root.AddChild(node, 1);
-  expect(root.HasCountedChildren()).toBe(false);
-  expect(root.IsCountedForNumbering()).toBe(true);
+  expect(observeCountedChildren(root)).toBe(false);
+  expect(observeNumberingCount(root)).toBe(true);
   expect(root.GetStartValue()).toBe(1);
   const rule = document.EnsureNumRule("Levels", "numbered", 0);
   updateRuleStart(rule, 0, 7);
@@ -267,7 +267,7 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
   expect(node.GetStartValue()).toBe(1);
   root.AddChild(node, 1);
   expect(node.GetStartValue()).toBe(3);
-  expect(root.HasCountedChildren()).toBe(true);
+  expect(observeCountedChildren(root)).toBe(true);
 });
 
 it("constructs rule-start phantom chains and retains them through removal", /** Verifies actual labels, derived depth, phantom topology and reinsertion. @returns Nothing. */ () => {
@@ -323,4 +323,24 @@ function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode
         }
       | undefined
   )?.GetRoot();
+}
+
+/** Observes the protected IsCountedForNumbering policy solely in tests. @param node - Optional owned record. @returns Native policy flag. */
+function observeNumberingCount(node: SwNumberTreeNode | undefined): boolean | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the native protected policy. @returns Flag. */ IsCountedForNumbering(): boolean;
+        }
+      | undefined
+  )?.IsCountedForNumbering();
+}
+
+/** Observes the protected HasCountedChildren policy solely in tests. @param node - Owned record. @returns Native policy flag. */
+function observeCountedChildren(node: SwNumberTreeNode): boolean {
+  return (
+    node as unknown as {
+      /** Reads the native protected policy. @returns Flag. */ HasCountedChildren(): boolean;
+    }
+  ).HasCountedChildren();
 }

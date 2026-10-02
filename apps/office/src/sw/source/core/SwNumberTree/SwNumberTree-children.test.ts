@@ -26,7 +26,7 @@ const contract: [
 /** Models a non-Writer native base node for the dynamic child-type guard. */
 class ForeignNode extends SwNumberTreeNode {
   /** Enables phantom counting. @returns Policy. */
-  public IsCountPhantoms(): boolean {
+  protected IsCountPhantoms(): boolean {
     return true;
   }
   /** Uses hierarchical numbering. @returns Policy. */
@@ -54,8 +54,12 @@ class ForeignNode extends SwNumberTreeNode {
     return 1;
   }
   /** Has no counted descendants. @returns Policy. */
-  public HasCountedChildren(): boolean {
+  protected HasCountedChildren(): boolean {
     return false;
+  }
+  /** Supplies this non-Writer subtype's mandatory numbered policy. @returns Counted flag. */
+  protected IsCountedForNumbering(): boolean {
+    return true;
   }
   /** Suppresses fixture notifications. @returns Policy. */
   protected IsNotifiable(): boolean {
@@ -139,7 +143,16 @@ it("ignores non-Writer children under the native counted-descendant type guard",
   const root = new SwNodeNum(undefined);
   const foreign = new ForeignNode();
   root.AddChild(foreign, 0);
-  expect(root.HasCountedChildren()).toBe(false);
+  expect(observeCountedChildren(root)).toBe(false);
   root.RemoveChild(foreign);
   expect(foreign.GetParent()).toBeUndefined();
 });
+
+/** Observes the protected HasCountedChildren policy solely in tests. @param node - Owned record. @returns Native policy flag. */
+function observeCountedChildren(node: SwNumberTreeNode): boolean {
+  return (
+    node as unknown as {
+      /** Reads the native protected policy. @returns Flag. */ HasCountedChildren(): boolean;
+    }
+  ).HasCountedChildren();
+}

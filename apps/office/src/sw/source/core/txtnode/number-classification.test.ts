@@ -1,5 +1,6 @@
 /** @fileoverview Compares Writer classification and distinct raw-owned layout predicates with complete unchanged pinned native output. */
 import { expect, it } from "vitest";
+import type { SwNumberTreeNode } from "../SwNumberTree/SwNumberTree";
 import native from "./number-classification-native.json";
 import { createWriterDocument } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
@@ -105,7 +106,7 @@ it("matches all native effective classification raw-layout counting and registry
     expect(node.HasNumber()).toBe(number);
     expect(node.HasBullet()).toBe(bullet);
     expect(HasNumberingWhichNeedsLayoutUpdate(node)).toBe(layout);
-    expect(record.IsCountedForNumbering()).toBe(countedNumbering);
+    expect(observeNumberingCount(record)).toBe(countedNumbering);
     const registry = new DocumentListItemsManager(),
       output: SwNodeNum[] = [];
     registry.addListItem(record);
@@ -142,7 +143,7 @@ it("matches native root phantom and counted numbered-registry filtering", /** Ch
     const root = new PolicyRoot(counted as boolean, phantom as boolean),
       registry = new DocumentListItemsManager(),
       output: SwNodeNum[] = [];
-    expect(root.IsCountedForNumbering()).toBe(expected);
+    expect(observeNumberingCount(root)).toBe(expected);
     registry.addListItem(root);
     registry.getNumItems(output);
     expect(output.length).toBe(included);
@@ -192,7 +193,7 @@ it("retains existing supported classifications and sparse ownership through Work
       expect(HasNumberingWhichNeedsLayoutUpdate(copy)).toBe(
         HasNumberingWhichNeedsLayoutUpdate(node),
       );
-      expect(copy.GetNum()?.IsCountedForNumbering()).toBe(node.GetNum()?.IsCountedForNumbering());
+      expect(observeNumberingCount(copy.GetNum())).toBe(observeNumberingCount(node.GetNum()));
       const expected: SwNodeNum[] = [],
         output: SwNodeNum[] = [];
       doc.getIDocumentListItems().getNumItems(expected);
@@ -202,3 +203,14 @@ it("retains existing supported classifications and sparse ownership through Work
       restored.Dispose();
     }
 });
+
+/** Observes the protected IsCountedForNumbering policy solely in tests. @param node - Optional owned record. @returns Native policy flag. */
+function observeNumberingCount(node: SwNumberTreeNode | undefined): boolean | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the native protected policy. @returns Flag. */ IsCountedForNumbering(): boolean;
+        }
+      | undefined
+  )?.IsCountedForNumbering();
+}

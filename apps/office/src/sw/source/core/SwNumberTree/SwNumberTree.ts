@@ -17,7 +17,7 @@ export abstract class SwNumberTreeNode {
     return !this.IsPhantom() || (this.IsCountPhantoms() && this.HasCountedChildren());
   }
   /** Reads phantom counting policy. @returns Whether phantom ancestors contribute. */
-  public abstract IsCountPhantoms(): boolean;
+  protected abstract IsCountPhantoms(): boolean;
   /** Reads continuous numbering policy. @returns Whether counters advance in depth-first order. */
   public abstract IsContinuous(): boolean;
   /** Creates an unattached node retaining the numbering rule. @returns Node. */
@@ -33,7 +33,9 @@ export abstract class SwNumberTreeNode {
   /** Reads the rule or explicit restart value. @returns Counter start. */
   public abstract GetStartValue(): number;
   /** Reads descendant numbering policy. @returns Whether a descendant contributes numbering. */
-  public abstract HasCountedChildren(): boolean;
+  protected abstract HasCountedChildren(): boolean;
+  /** Reads numbered or bullet presence for this concrete policy. @returns Counted numbering flag. */
+  protected abstract IsCountedForNumbering(): boolean;
 
   /** Reads normal-document notification policy for existing shown records. @param document - Native operation context. @returns Whether notification is enabled. */
   protected abstract IsNotifiable(document?: SwDoc): boolean;

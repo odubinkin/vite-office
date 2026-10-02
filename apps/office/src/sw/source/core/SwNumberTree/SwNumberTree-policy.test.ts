@@ -81,7 +81,7 @@ function tree(node: SwNumberTreeNode, texts: SwTextNode[]): TreeState {
     node.IsPhantom(),
     node.IsCounted(),
     node.IsContinuous(),
-    node.IsCountPhantoms(),
+    observePhantomCounting(node),
     getNumberTreeChildren(node).map(
       /** Observes each child without validation. @param child - Child. @returns State. */ (
         child,
@@ -150,7 +150,7 @@ it("matches native bound orphan and inherited continuous phantom policies", /** 
     const [continuous, phantoms] = row;
     if (continuous === null) {
       const orphan = new SwNodeNum(undefined);
-      expect([orphan.IsContinuous(), orphan.IsCountPhantoms()]).toEqual(row.slice(2));
+      expect([orphan.IsContinuous(), observePhantomCounting(orphan)]).toEqual(row.slice(2));
       continue;
     }
     const rule = new SwNumRule("policy", "label-alignment");
@@ -161,9 +161,9 @@ it("matches native bound orphan and inherited continuous phantom policies", /** 
     root.AddChild(child, 0);
     expect([
       root.IsContinuous(),
-      root.IsCountPhantoms(),
+      observePhantomCounting(root),
       child.IsContinuous(),
-      child.IsCountPhantoms(),
+      observePhantomCounting(child),
     ]).toEqual(row.slice(2));
   }
 });
@@ -398,4 +398,13 @@ function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode
 /** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
 function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
   return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
+}
+
+/** Observes the protected IsCountPhantoms policy solely in tests. @param node - Owned record. @returns Native policy flag. */
+function observePhantomCounting(node: SwNumberTreeNode): boolean {
+  return (
+    node as unknown as {
+      /** Reads the native protected policy. @returns Flag. */ IsCountPhantoms(): boolean;
+    }
+  ).IsCountPhantoms();
 }

@@ -68,7 +68,7 @@ export class SwNodeNum extends SwNumberTreeNode {
     return this.GetNumRule()?.IsContinusNum() ?? this.GetParent()?.IsContinuous() ?? false;
   }
   /** Reads native phantom policy independently of parent inheritance. @returns Whether phantoms count, true without a bound rule. */
-  public IsCountPhantoms(): boolean {
+  protected override IsCountPhantoms(): boolean {
     const rule = this.GetNumRule();
     return rule === undefined || (!rule.IsContinusNum() && rule.IsCountPhantoms());
   }
@@ -83,7 +83,7 @@ export class SwNodeNum extends SwNumberTreeNode {
     return this.textNode?.IsCountedInList() ?? super.IsCounted();
   }
   /** Finds counted descendants with the Writer numbering-present policy. @returns Whether a descendant contributes numbering. */
-  public HasCountedChildren(): boolean {
+  protected override HasCountedChildren(): boolean {
     return this.mChildren.some(
       /** Examines one native Writer child. @param child - Child record. @returns Whether counted here or below. */
       (child) =>
@@ -91,7 +91,7 @@ export class SwNodeNum extends SwNumberTreeNode {
     );
   }
   /** Reads numbered/bullet presence for the supported rule families. @returns Counted numbering policy. */
-  public IsCountedForNumbering(): boolean {
+  protected override IsCountedForNumbering(): boolean {
     return (
       this.IsCounted() &&
       (this.IsPhantom() ||

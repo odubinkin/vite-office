@@ -1,5 +1,6 @@
 /** @fileoverview Differentially verifies complete native pointer/reference Set and implemented-field assignment ownership against pinned native output. */
 import { expect, it } from "vitest";
+import type { SwNumberTreeNode } from "../SwNumberTree/SwNumberTree";
 import native from "./number-pointer-native.json";
 import { SwNumFormat, SwNumRule, SwNumRuleType, SvxNumType, type ConstSwNumFormat } from "./number";
 import {
@@ -299,7 +300,7 @@ it("keeps pointer assigned live rule reads and sparse ownership through actual d
   expect(rule.Get(0)).toBe(held);
   expect(node.HasNumber()).toBe(true);
   expect(node.HasBullet()).toBe(false);
-  expect(node.GetNum()?.IsCountedForNumbering()).toBe(true);
+  expect(observeNumberingCount(node.GetNum())).toBe(true);
   const items: SwNodeNum[] = [];
   doc.getIDocumentListItems().getNumItems(items);
   expect(items).toHaveLength(1);
@@ -327,3 +328,14 @@ it("keeps pointer assigned live rule reads and sparse ownership through actual d
   reopened.document.Dispose();
   doc.Dispose();
 });
+
+/** Observes the protected IsCountedForNumbering policy solely in tests. @param node - Optional owned record. @returns Native policy flag. */
+function observeNumberingCount(node: SwNumberTreeNode | undefined): boolean | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the native protected policy. @returns Flag. */ IsCountedForNumbering(): boolean;
+        }
+      | undefined
+  )?.IsCountedForNumbering();
+}
