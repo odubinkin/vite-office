@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 54
+revision: 55
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:09:56.944Z"
+doc_updated_at: "2026-10-02T05:43:07.918Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -208,6 +208,10 @@ sections:
     - Observation: Iteration51 completed in DONE leaf 202610020455-0P7YJY. Actual implementation d59c1a90787823d5173de388db226cf17fb3c8fd restores protected GetNumberVector_ optional true-default policy and forwards false through every parent recursion and GetNumber. Six new project-owned cache/default/type tests pass without changing existing expectations.
       Impact: Full unchanged verify753 app/109 inventory/19 browser, both100% coverages, and all40 tree tests pass with upstream unavailable. Two native file/one declaration/three symbol hashes support bounded manual source inspection only; no source/helper artifact bodies or new compiled lifetime parity claim. Exact type-oracle undefined normalization and first full failure retained; no status/deviation promotion.
       Resolution: Parent/full goal remains open. Next measured gap is GetRoot visibility: pinned SwNumberTree.hxx:349 protected, local public; one external implementation consumer SwList.GetListItem and six diagnostic test files. Next separate leaf must restore access and reconcile existing list lookup without public surrogate or changed root/list ownership behavior. Registered IO/recovery deviations remain untouched.
+
+    - Observation: Iteration52 HGKX68 DONE restores protected GetRoot while preserving its body and exact zero-argument nullable type. Existing browser SwList lookup walks public parents to exact highest root;177 prior matcher arguments remain unchanged,2new root/type/list tests. User artifact correction found3ignored leftovers and removed them; all44previously tracked Python generators had already been deleted by53373dff.
+      Impact: Measured core contract gap closed, actual implementation a5ae916fd31daf94cf87cc05a9738da57ea43135, reviewed containing snapshot23938a4e7bbfba0019862ae908952379f8bd9dcf and closed dc5f5aaa8b9e. Full verify app755/169,inventory109/36,browser19,both100%coverage;53focusedtree/list tests pass without vendor. Fresh4file/7declaration-body hashes support manual inspection only. Cleanup cea5d14c1d73 and .gitignore exclusion0fc6ce650343 separate; zero Python/bytecode throughout .agentplane and zero saved native source files in task artifacts.
+      Resolution: PROGRESS only: parent/full goal remains active, no module/status/default/deviation/gate promotion. Next measured architectural gap: native protected mChildren and public GetChildCount versus local private children/public GetChildren; SwList.HasNodes and SwNodeNum.HasCountedChildren consumers require fresh separate leaf audit. Native full range/redline/lifetime and remaining browser UI obligations remain unverified. No helper/source copies will be stored in Agentplane artifacts.
 id_source: "generated"
 ---
 ## Summary
@@ -389,3 +393,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: Iteration51 completed in DONE leaf 202610020455-0P7YJY. Actual implementation d59c1a90787823d5173de388db226cf17fb3c8fd restores protected GetNumberVector_ optional true-default policy and forwards false through every parent recursion and GetNumber. Six new project-owned cache/default/type tests pass without changing existing expectations.
   Impact: Full unchanged verify753 app/109 inventory/19 browser, both100% coverages, and all40 tree tests pass with upstream unavailable. Two native file/one declaration/three symbol hashes support bounded manual source inspection only; no source/helper artifact bodies or new compiled lifetime parity claim. Exact type-oracle undefined normalization and first full failure retained; no status/deviation promotion.
   Resolution: Parent/full goal remains open. Next measured gap is GetRoot visibility: pinned SwNumberTree.hxx:349 protected, local public; one external implementation consumer SwList.GetListItem and six diagnostic test files. Next separate leaf must restore access and reconcile existing list lookup without public surrogate or changed root/list ownership behavior. Registered IO/recovery deviations remain untouched.
+
+- Observation: Iteration52 HGKX68 DONE restores protected GetRoot while preserving its body and exact zero-argument nullable type. Existing browser SwList lookup walks public parents to exact highest root;177 prior matcher arguments remain unchanged,2new root/type/list tests. User artifact correction found3ignored leftovers and removed them; all44previously tracked Python generators had already been deleted by53373dff.
+  Impact: Measured core contract gap closed, actual implementation a5ae916fd31daf94cf87cc05a9738da57ea43135, reviewed containing snapshot23938a4e7bbfba0019862ae908952379f8bd9dcf and closed dc5f5aaa8b9e. Full verify app755/169,inventory109/36,browser19,both100%coverage;53focusedtree/list tests pass without vendor. Fresh4file/7declaration-body hashes support manual inspection only. Cleanup cea5d14c1d73 and .gitignore exclusion0fc6ce650343 separate; zero Python/bytecode throughout .agentplane and zero saved native source files in task artifacts.
+  Resolution: PROGRESS only: parent/full goal remains active, no module/status/default/deviation/gate promotion. Next measured architectural gap: native protected mChildren and public GetChildCount versus local private children/public GetChildren; SwList.HasNodes and SwNodeNum.HasCountedChildren consumers require fresh separate leaf audit. Native full range/redline/lifetime and remaining browser UI obligations remain unverified. No helper/source copies will be stored in Agentplane artifacts.
