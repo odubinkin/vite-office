@@ -1,0 +1,24 @@
+{
+  "removed": [
+    {
+      "path": ".agentplane/tmp/upstream-cleanup/check-browser-without-vendor.py",
+      "bytes": 1652,
+      "sha256": "bb5188318d18d327de123a6f6268619924c700e95b8627736ae3f006e8330b8f",
+      "tracked": false
+    },
+    {
+      "path": ".agentplane/tmp/upstream-cleanup/task48-working.py",
+      "bytes": 13108,
+      "sha256": "49f21732aea334df4f2e850f0266c4ef121d29993bd321cbf89bc798eb57696c",
+      "tracked": false
+    },
+    {
+      "path": ".agentplane/tmp/upstream-cleanup/check-without-vendor.py",
+      "bytes": 1883,
+      "sha256": "901a52057ce6c5c8ace82a78d2e77b3fa1a2c0be3e457862c2ae15424f3bf0fa",
+      "tracked": false
+    }
+  ],
+  "remaining_python_paths": [],
+  "tracked_python_paths": []
+}
