@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 55
+revision: 56
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:43:07.918Z"
+doc_updated_at: "2026-10-02T06:08:36.587Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -212,6 +212,10 @@ sections:
     - Observation: Iteration52 HGKX68 DONE restores protected GetRoot while preserving its body and exact zero-argument nullable type. Existing browser SwList lookup walks public parents to exact highest root;177 prior matcher arguments remain unchanged,2new root/type/list tests. User artifact correction found3ignored leftovers and removed them; all44previously tracked Python generators had already been deleted by53373dff.
       Impact: Measured core contract gap closed, actual implementation a5ae916fd31daf94cf87cc05a9738da57ea43135, reviewed containing snapshot23938a4e7bbfba0019862ae908952379f8bd9dcf and closed dc5f5aaa8b9e. Full verify app755/169,inventory109/36,browser19,both100%coverage;53focusedtree/list tests pass without vendor. Fresh4file/7declaration-body hashes support manual inspection only. Cleanup cea5d14c1d73 and .gitignore exclusion0fc6ce650343 separate; zero Python/bytecode throughout .agentplane and zero saved native source files in task artifacts.
       Resolution: PROGRESS only: parent/full goal remains active, no module/status/default/deviation/gate promotion. Next measured architectural gap: native protected mChildren and public GetChildCount versus local private children/public GetChildren; SwList.HasNodes and SwNodeNum.HasCountedChildren consumers require fresh separate leaf audit. Native full range/redline/lifetime and remaining browser UI obligations remain unverified. No helper/source copies will be stored in Agentplane artifacts.
+
+    - Observation: Iteration53 N4RMCC DONE restores protected mChildren and public zero-argument numeric GetChildCount, removes invented public GetChildren, uses count in SwList.HasNodes and native guarded Writer child traversal.32test-only observations in8existing suites preserve249matcher argument AST records;49other tree method ASTs unchanged after field rename.3newtests exercise direct counts/phantom removal/subclass visibility/non-Writer child rejection.
+      Impact: Core implementation127ada3f47601590e057934371deeb0219cc9734, final corrected evidence implementation6552c9aa4c770935046676fc3a686f5d477514a0, close5a5171ab68a5. Full unchanged verify758app/170files,109inventory/36files,19browser and both100%coverage.60focusedtests/13files pass without vendor, reference restored at exactpin.5file/6declaration-body hashes support manual source inspection only;14semantic paths,3boundedmetadata rows, no source/helper artifacts. Initial new metadata string/object mistake fixed and all gates rerun; no existing expectation or gate weakened.
+      Resolution: PROGRESS only; parent/full goal remains active, no module/status/default/deviation promotion. Next native declaration gap: protected base HasCountedChildren and IsCountedForNumbering, private SwNodeNum overrides; local HasCountedChildren is public and base IsCountedForNumbering contract is missing. TypeScript override visibility constraints require an explicit closest-source design in a separate leaf, including diagnostic foreign subclasses. Ordered std::set versus current ordered array storage and full native section/redline/lifetime/UI obligations remain separately unverified. Registered IO/recovery settings preserved; no helper/native source copies stored in Agentplane.
 id_source: "generated"
 ---
 ## Summary
@@ -397,3 +401,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: Iteration52 HGKX68 DONE restores protected GetRoot while preserving its body and exact zero-argument nullable type. Existing browser SwList lookup walks public parents to exact highest root;177 prior matcher arguments remain unchanged,2new root/type/list tests. User artifact correction found3ignored leftovers and removed them; all44previously tracked Python generators had already been deleted by53373dff.
   Impact: Measured core contract gap closed, actual implementation a5ae916fd31daf94cf87cc05a9738da57ea43135, reviewed containing snapshot23938a4e7bbfba0019862ae908952379f8bd9dcf and closed dc5f5aaa8b9e. Full verify app755/169,inventory109/36,browser19,both100%coverage;53focusedtree/list tests pass without vendor. Fresh4file/7declaration-body hashes support manual inspection only. Cleanup cea5d14c1d73 and .gitignore exclusion0fc6ce650343 separate; zero Python/bytecode throughout .agentplane and zero saved native source files in task artifacts.
   Resolution: PROGRESS only: parent/full goal remains active, no module/status/default/deviation/gate promotion. Next measured architectural gap: native protected mChildren and public GetChildCount versus local private children/public GetChildren; SwList.HasNodes and SwNodeNum.HasCountedChildren consumers require fresh separate leaf audit. Native full range/redline/lifetime and remaining browser UI obligations remain unverified. No helper/source copies will be stored in Agentplane artifacts.
+
+- Observation: Iteration53 N4RMCC DONE restores protected mChildren and public zero-argument numeric GetChildCount, removes invented public GetChildren, uses count in SwList.HasNodes and native guarded Writer child traversal.32test-only observations in8existing suites preserve249matcher argument AST records;49other tree method ASTs unchanged after field rename.3newtests exercise direct counts/phantom removal/subclass visibility/non-Writer child rejection.
+  Impact: Core implementation127ada3f47601590e057934371deeb0219cc9734, final corrected evidence implementation6552c9aa4c770935046676fc3a686f5d477514a0, close5a5171ab68a5. Full unchanged verify758app/170files,109inventory/36files,19browser and both100%coverage.60focusedtests/13files pass without vendor, reference restored at exactpin.5file/6declaration-body hashes support manual source inspection only;14semantic paths,3boundedmetadata rows, no source/helper artifacts. Initial new metadata string/object mistake fixed and all gates rerun; no existing expectation or gate weakened.
+  Resolution: PROGRESS only; parent/full goal remains active, no module/status/default/deviation promotion. Next native declaration gap: protected base HasCountedChildren and IsCountedForNumbering, private SwNodeNum overrides; local HasCountedChildren is public and base IsCountedForNumbering contract is missing. TypeScript override visibility constraints require an explicit closest-source design in a separate leaf, including diagnostic foreign subclasses. Ordered std::set versus current ordered array storage and full native section/redline/lifetime/UI obligations remain separately unverified. Registered IO/recovery settings preserved; no helper/native source copies stored in Agentplane.
