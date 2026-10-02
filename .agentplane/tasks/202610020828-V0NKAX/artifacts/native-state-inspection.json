@@ -1,0 +1,83 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Fresh manual pinned source inspection; hash-only evidence, no saved source bodies or generated helpers.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "sha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d",
+      "bytes": 16274
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "sha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741",
+      "bytes": 31418
+    }
+  ],
+  "inspectedSpans": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "firstLine": 338,
+      "lastLine": 405,
+      "responsibility": "protected state declarations and order",
+      "sha256": "ca0275606d28e86c4341d4bec730f294d2bbb97d9f23cde315dcfea2d9db9950"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "firstLine": 148,
+      "lastLine": 159,
+      "responsibility": "parent number and continuation getter declarations",
+      "sha256": "3f8ffd147032261e75306cc9a8e81787cbabb75ca319804105caf0958ee3b066"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "firstLine": 220,
+      "lastLine": 220,
+      "responsibility": "phantom inline getter",
+      "sha256": "af8bf039079338d9ffe037bc07b4777a28a31f9541618c174fde8bc99c70c5bf"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 30,
+      "lastLine": 36,
+      "responsibility": "constructor explicit defaults",
+      "sha256": "5e9c8614658d74d1da22c670eebb33b8112550e61091a82acdec5e6292da295b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 62,
+      "lastLine": 77,
+      "responsibility": "factory parent and phantom shared state",
+      "sha256": "95461e274fab29648dca691773bae92c8b9a55aa823e11e65ed2b768263da4d8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 175,
+      "lastLine": 213,
+      "responsibility": "hierarchical continuation true and later false",
+      "sha256": "a6cb1e70f5edcfbd547b80a8b258d2b8bf2cf7c01b273ded715633259b862d22"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 652,
+      "lastLine": 665,
+      "responsibility": "self validity and raw counter getter",
+      "sha256": "74cf1ca8793d10158cc7cf20db9f8de3a430dfc26fd2e5226b0c515ee5962931"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 959,
+      "lastLine": 1012,
+      "responsibility": "retained prefix updates",
+      "sha256": "860b40e70d1a6c6105c28e2ae78cf63386a6187adcdff0389d3b1d789414c982"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 1014,
+      "lastLine": 1021,
+      "responsibility": "recursive prefix invalidation",
+      "sha256": "89f7fff000da080a932dcaeba2df7783128c4e484e67c4cbb171bfd500c05f18"
+    }
+  ],
+  "conclusion": "All five native fields are protected, in the restored order, with parent-null/number-zero/continuation-false/phantom-false/last-valid-null defaults. Constructor, factory, getter, validation and invalidation consumers share actual storage.",
+  "limits": "Existing ECMAScript undefined/number/reference representation retained; no compiled native execution or complete pointer/integer/const-mutable/destructor/lifetime certification."
+}
