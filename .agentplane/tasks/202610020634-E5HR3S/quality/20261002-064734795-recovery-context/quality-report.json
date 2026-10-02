@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610020634-E5HR3S",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-02T06:47:34.795Z",
+  "verdict": "pass",
+  "summary": "Distinct same-actor review on actual semantic HEADdfced3f59691: restores native public Writer notification-policy access, preserves protected base and existing logic. All approved visibility checks pass, broader signature/lifetime not certified.",
+  "evaluated_sha": "dfced3f596919f0a2b3915abb1c45e848f8c43d0",
+  "blueprint_digest": "a2fa3af8fc47fb9d19adf972430c09a272b0d95992c907cc8631e731f86a2735",
+  "findings": [
+    "Reviewed four semantic paths and exact one-line production modifier change.55production method bodies and every old test file unchanged, two new owned tests public type/supplied-document/result/reading/context/root/phantom/detached/raw-cache behavior. Metadata only1row evidence/responsibilities.",
+    "Fresh4file4symbol native hashes and pinned manual inspection; no compiled-native evidence claim. Native mandatory SwDoc& and dtor/client/notifiable/redline/layout predicates remain separate unverified obligations.",
+    "Unchanged full verify exit0:763app/109inventory/19browser,both100%coverage.74focusedtests/17files pass with vendor absent and restored. Baseline protected-access diagnostics isolated after fixture Dispose correction. Source/helper bodies absent and Python/bytecode0 across Agentplane."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610020634-E5HR3S/README.md",
+    ".agentplane/tasks/202610020634-E5HR3S/verification-results.json",
+    ".agentplane/tasks/202610020634-E5HR3S/implementation-integrity.json",
+    ".agentplane/tasks/202610020634-E5HR3S/source-audit.json",
+    ".agentplane/tasks/202610020634-E5HR3S/verify-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Visibility only; optional local context versus native required document, wider lifetime/redline/layout/client predicates and remaining container/API/UI obligations unverified. Parent/full goal active; no whole-module/status/default/deviation/gate promotion."
+  ]
+}
