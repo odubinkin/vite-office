@@ -1,10 +1,11 @@
 ---
 id: "202610020455-0P7YJY"
 title: "Restore optional validation policy for protected number vectors"
-status: "DOING"
+result_summary: "Iteration51 restored protected vector validation flag/default/recursive contract;753 app/109 inventory/19 browser, both100% coverage,40 upstream-independent tree tests pass. Implementation d59c1a90787823d5173de388db226cf17fb3c8fd; parent/full goal remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Four semantic paths reviewed. Six tests include exact protected optional boolean|undefined tuple, append ownership, root/orphan behavior, hierarchical/continuous/skipped level9 vectors and raw prefix/value/continuation snapshots before/after restart invalidation. Planned RED proves old helper eagerly validates false; exact type-oracle normalization preserves missing-argument detection. Existing expectations unchanged."
     - "Full verify753 app/109 inventory/19 browser and both100% coverage; all40 tree tests pass with upstream unavailable. Two pinned file/one declaration/three symbol hashes revalidated. Only bounded evidence rows changed, no status/deviation promotion or helper/native source artifact bodies; no new compiled native execution claim."
-commit: null
+commit:
+  hash: "d59c1a90787823d5173de388db226cf17fb3c8fd"
+  message: "🔧 0P7YJY code: forward number vector validation policy"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native optional validation flag for protected ancestor vectors with actual document cache/phantom tests, no upstream test access or source/helper task artifacts."
+  -
+    author: "CODER"
+    body: "Verified: Protected vector helper restores optional true-default validation and recursively forwards false without modifying ancestor caches. Full unchanged gates and all40 upstream-independent tree tests pass; bounded source and same-actor quality evidence recorded."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual implementation d59c1a90787823d5173de388db226cf17fb3c8fd: optional true-default vector validation flag recursively forwarded. Four semantic/nine artifact paths. Planned RED4runtime/argument type then GREEN6new tests; all40 tree tests pass without upstream; unchanged full verify753 app/109 inventory/19 browser and both100% coverages. Type-oracle optional undefined correction preserves exact contract and behavior; first failure retained. Fresh2file/1declaration/3symbol hashes support manual inspection only. No artifact sources or status/deviation promotion; routing/diff pass, doctor zero errors/two existing warnings."
+  -
+    type: "status"
+    at: "2026-10-02T05:09:35.380Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Protected vector helper restores optional true-default validation and recursively forwards false without modifying ancestor caches. Full unchanged gates and all40 upstream-independent tree tests pass; bounded source and same-actor quality evidence recorded."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:09:29.189Z"
+doc_updated_at: "2026-10-02T05:09:35.382Z"
 doc_updated_by: "CODER"
 description: "Iteration51: restore protected GetNumberVector_(numbers,bValidate=true) signature and recursively forward the selected validation policy. Test raw-cache reads, defaults, explicit true/false, appended output and phantom/ancestor paths with actual project-owned documents. No source/helper scripts in task artifacts, no upstream access from tests, no registered deviation or broad parity promotion."
 sections:
