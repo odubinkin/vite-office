@@ -1,0 +1,142 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts (3 tests | 3 failed) 20ms
+   × retains protected mutable native field types, declaration order and constructor defaults without aliases 8ms
+   × shares native parent counter phantom and prefix fields through actual hierarchical and continuous list lifecycles 8ms
+   × retains the native continuation flag through invalidation and clears it for an explicit restart 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts > retains protected mutable native field types, declaration order and constructor defaults without aliases
+AssertionError: expected [] to deeply equal [ 'mpParent', 'mnNumber', …(3) ]
+
+- Expected
++ Received
+
+- [
+-   "mpParent",
+-   "mnNumber",
+-   "mbContinueingPreviousSubTree",
+-   "mbPhantom",
+-   "mpLastValid",
+- ]
++ []
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts:123:5
+    121|       (name) => names.includes(name),
+    122|     ),
+    123|   ).toEqual(names);
+       |     ^
+    124|   expect(
+    125|     ["parent", "value", "continuingPreviousSubTree", "phantom", "lastV…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts > shares native parent counter phantom and prefix fields through actual hierarchical and continuous list lifecycles
+AssertionError: expected [ [ null, undefined, …(3) ], …(4) ] to deeply equal [ …(5) ]
+
+- Expected
++ Received
+
+  [
+    [
+      null,
+-     0,
+-     false,
+-     false,
++     undefined,
++     undefined,
++     undefined,
+      null,
+    ],
+    [
+-     0,
+-     0,
+-     false,
+-     false,
+      null,
++     undefined,
++     undefined,
++     undefined,
++     null,
+    ],
+    [
+-     1,
+-     0,
+-     false,
+-     true,
++     null,
++     undefined,
++     undefined,
++     undefined,
+      null,
+    ],
+    [
+-     2,
+-     0,
+-     false,
+-     false,
++     null,
++     undefined,
++     undefined,
++     undefined,
+      null,
+    ],
+    [
+-     0,
+-     0,
+-     false,
+-     false,
++     null,
++     undefined,
++     undefined,
++     undefined,
+      null,
+    ],
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts:152:27
+    150|     const nodes = [root, first, phantom, nested, tail];
+    151|     try {
+    152|       expect(rows(nodes)).toEqual([
+       |                           ^
+    153|         [null, 0, false, false, null],
+    154|         [0, 0, false, false, null],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts > retains the native continuation flag through invalidation and clears it for an explicit restart
+AssertionError: expected [ false, undefined, undefined, …(2) ] to deeply equal [ true, 2, true, true, true ]
+
+- Expected
++ Received
+
+  [
+-   true,
+-   2,
+-   true,
+-   true,
++   false,
++   undefined,
++   undefined,
+    true,
++   false,
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts:207:8
+    205|       child.IsContinueingPreviousSubTree(),
+    206|       probe(parent).mpLastValid === child,
+    207|     ]).toEqual([true, 2, true, true, true]);
+       |        ^
+    208|     root.InvalidateTree();
+    209|     expect([
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  15:32:10
+   Duration  1.36s (transform 289ms, setup 158ms, import 329ms, tests 20ms, environment 713ms)
+
