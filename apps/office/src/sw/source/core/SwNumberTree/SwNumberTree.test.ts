@@ -294,8 +294,8 @@ it("constructs rule-start phantom chains and retains them through removal", /** 
   expect(item.GetParent()?.IsPhantom()).toBe(true);
   expect(item.GetParent()?.GetParent()?.IsPhantom()).toBe(true);
   expect(item.HasPhantomCountedParent()).toBe(false);
-  const root = item.GetRoot() as SwNodeNum;
-  expect(root.GetRoot()).toBeUndefined();
+  const root = getNumberTreeRoot(item) as SwNodeNum;
+  expect(getNumberTreeRoot(root)).toBeUndefined();
   expect(root.GetLevelInListTree()).toBe(-1);
   expect(root.IsPhantom()).toBe(false);
   (nodes[2] as SwTextNode).RemoveFromList();
@@ -311,4 +311,16 @@ function updateRuleStart(rule: SwNumRule | undefined, level: number, start: numb
   const format = (rule as SwNumRule).Get(level).clone();
   format.SetStart(start);
   (rule as SwNumRule).Set(level, format);
+}
+
+/** Observes native protected root identity only in tests. @param node - Diagnostic record, absent for an empty fixture. @returns Root pointer or null equivalent. */
+function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the protected root. @returns Root pointer or null equivalent. */
+          GetRoot(): SwNumberTreeNode | undefined;
+        }
+      | undefined
+  )?.GetRoot();
 }

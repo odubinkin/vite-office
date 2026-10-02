@@ -90,7 +90,13 @@ export class SwList {
   /** Returns the retained number-tree node. @param node - Canonical text node. @returns Tree record. */
   public GetListItem(node: SwTextNode): SwNodeNum | undefined {
     const item = node.GetNum();
-    return item?.GetRoot() === this.root ? item : undefined;
+    let root = item?.GetParent();
+    let parent = root?.GetParent();
+    while (parent !== undefined) {
+      root = parent;
+      parent = root.GetParent();
+    }
+    return root === this.root ? item : undefined;
   }
   /** Reports whether this list has registered items. @returns True when non-empty. */
   public HasNodes(): boolean {

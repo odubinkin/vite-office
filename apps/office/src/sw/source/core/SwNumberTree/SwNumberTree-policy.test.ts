@@ -103,13 +103,14 @@ function snapshot(
       /** Reads raw cache only. @param p - Paragraph. @returns Cache. */ (p) =>
         p.GetNum()?.GetNumber(false) ?? null,
     ),
-    root = texts
-      .find(
-        /** Finds an attached record. @param p - Paragraph. @returns Attachment. */ (p) =>
-          p.GetNum() !== undefined,
-      )
-      ?.GetNum()
-      ?.GetRoot(),
+    root = getNumberTreeRoot(
+      texts
+        .find(
+          /** Finds an attached record. @param p - Paragraph. @returns Attachment. */ (p) =>
+            p.GetNum() !== undefined,
+        )
+        ?.GetNum(),
+    ),
     rawTree = root === undefined ? null : tree(root, texts),
     vectors: number[][] = Array.from({ length: texts.length });
   for (let k = 0; k < texts.length; k++) {
@@ -383,3 +384,15 @@ it("retains continuous and phantom policy on real Worker document owners and nat
   copied.Dispose();
   doc.Dispose();
 });
+
+/** Observes native protected root identity only in tests. @param node - Diagnostic record, absent for an empty fixture. @returns Root pointer or null equivalent. */
+function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the protected root. @returns Root pointer or null equivalent. */
+          GetRoot(): SwNumberTreeNode | undefined;
+        }
+      | undefined
+  )?.GetRoot();
+}

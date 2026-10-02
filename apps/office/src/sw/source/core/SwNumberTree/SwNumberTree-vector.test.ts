@@ -121,7 +121,7 @@ it.each(profiles)(
       },
     );
     const target = required(required(texts[profile.target]).GetNum());
-    const root = required(target.GetRoot());
+    const root = required(getNumberTreeRoot(target));
     const fresh = cache(root, texts);
     const raw = [99];
     append(target, raw, false);
@@ -171,3 +171,15 @@ it("preserves prefilled output and raw state for an unattached record", /** An o
   expect(orphan.GetNumberVector()).toEqual([]);
   document.Dispose();
 });
+
+/** Observes native protected root identity only in tests. @param node - Diagnostic record, absent for an empty fixture. @returns Root pointer or null equivalent. */
+function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the protected root. @returns Root pointer or null equivalent. */
+          GetRoot(): SwNumberTreeNode | undefined;
+        }
+      | undefined
+  )?.GetRoot();
+}

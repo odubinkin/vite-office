@@ -173,7 +173,7 @@ export abstract class SwNumberTreeNode {
     return this.parent;
   }
   /** Returns the root of an attached node, absent for a root itself. @returns Root. */
-  public GetRoot(): SwNumberTreeNode | undefined {
+  protected GetRoot(): SwNumberTreeNode | undefined {
     let root = this.parent;
     while (root?.parent !== undefined) root = root.parent;
     return root;

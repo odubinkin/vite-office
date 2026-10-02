@@ -138,7 +138,7 @@ it("matches native null foreign owned-prefix and deferred descendant cache obser
           text,
         ) => required(text.GetNum()),
       ),
-      root = required(required(records[0]).GetRoot()),
+      root = required(getNumberTreeRoot(required(records[0]))),
       foreign = new SwNodeNum(doc.nodes.MakeTextNode(), rule),
       events: number[] = [],
       notify = doc.NotifyModelChange.bind(doc);
@@ -199,3 +199,15 @@ it("matches native null foreign owned-prefix and deferred descendant cache obser
   }
   expect(observations).toBe(1792);
 });
+
+/** Observes native protected root identity only in tests. @param node - Diagnostic record, absent for an empty fixture. @returns Root pointer or null equivalent. */
+function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the protected root. @returns Root pointer or null equivalent. */
+          GetRoot(): SwNumberTreeNode | undefined;
+        }
+      | undefined
+  )?.GetRoot();
+}

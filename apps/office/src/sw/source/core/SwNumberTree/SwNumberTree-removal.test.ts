@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native ordered-child removal, stored-node topology and supplied-argument callback ownership using project-owned documents. */
+import type { SwNumberTreeNode } from "./SwNumberTree";
 import { expect, it, vi } from "vitest";
 import { createWriterDocument } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
@@ -51,7 +52,7 @@ function fixture() {
     rule,
     texts,
     records,
-    root: required(required(records[0]).GetRoot()),
+    root: required(getNumberTreeRoot(required(records[0]))),
     list: required(document.GetDocumentListsManager().GetListByName("removal")),
   };
 }
@@ -212,3 +213,15 @@ it("releases only the supplied missing record and leaves phantom arguments untou
   vi.restoreAllMocks();
   document.Dispose();
 });
+
+/** Observes native protected root identity only in tests. @param node - Diagnostic record, absent for an empty fixture. @returns Root pointer or null equivalent. */
+function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the protected root. @returns Root pointer or null equivalent. */
+          GetRoot(): SwNumberTreeNode | undefined;
+        }
+      | undefined
+  )?.GetRoot();
+}

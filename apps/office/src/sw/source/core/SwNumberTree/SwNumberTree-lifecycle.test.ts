@@ -1,4 +1,5 @@
 /** @fileoverview Verifies retained Writer list topology and native validating reads across document mutations. */
+import type { SwNumberTreeNode } from "./SwNumberTree";
 import type { SwNumRule } from "../doc/number";
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
@@ -33,12 +34,12 @@ it("attaches items at insertion and validates reverse-order reads without replac
     /** Reads the retained item. @param node - Paragraph. @returns Record. */ (node) =>
       required(list.GetListItem(node)),
   );
-  const root = required(records[0]).GetRoot();
+  const root = getNumberTreeRoot(required(records[0]));
   expect(
     records.every(
       /** Checks the root identity before validation. @param item - Record. @returns Ownership equality. */ (
         item,
-      ) => item.GetRoot() === root,
+      ) => getNumberTreeRoot(item) === root,
     ),
   ).toBe(true);
   expect(required(records[2]).GetParent()).toBe(records[1]);
@@ -53,7 +54,7 @@ it("attaches items at insertion and validates reverse-order reads without replac
   expect(list.GetListItemNumberVector(required(nodes[3]))).toEqual([1]);
   list.ValidateListTree();
   list.ValidateListTree();
-  expect(required(records[0]).GetRoot()).toBe(root);
+  expect(getNumberTreeRoot(required(records[0]))).toBe(root);
   expect(list.GetListItem(required(nodes[2]))).toBe(records[2]);
 });
 it("reparents retained items and moves descendants through native predecessor phantoms", /** Checks level transitions, parent deletion and phantom cleanup with literal vectors. @returns Nothing. */ () => {
@@ -62,7 +63,7 @@ it("reparents retained items and moves descendants through native predecessor ph
     /** Captures an owned record. @param node - Paragraph. @returns Record. */ (node) =>
       required(list.GetListItem(node)),
   );
-  const root = required(records[0]).GetRoot();
+  const root = getNumberTreeRoot(required(records[0]));
   required(nodes[1]).SetAttrListLevel(0);
   expect(list.GetListItem(required(nodes[1]))).toBe(records[1]);
   expect(list.GetListItemNumberVector(required(nodes[2]))).toEqual([8, 5, 3]);
@@ -75,7 +76,7 @@ it("reparents retained items and moves descendants through native predecessor ph
   expect(list.GetListItemNumberVector(required(nodes[2]))).toEqual([7, 5, 3]);
   expect(required(records[1]).GetParent()?.IsPhantom()).toBe(true);
   required(nodes[0]).AddToList();
-  expect(required(records[2]).GetRoot()).toBe(root);
+  expect(getNumberTreeRoot(required(records[2]))).toBe(root);
   required(nodes[1]).AddToList();
   expect(list.GetListItem(required(nodes[1]))).toBe(records[1]);
   expect(list.GetListItemNumberVector(required(nodes[2]))).toEqual([7, 5, 3]);
@@ -88,11 +89,11 @@ it("moves canonical paragraphs with retained list records and independent copied
   const { document, nodes, list } = fixture([0, 1, 0]);
   const item = required(list.GetListItem(required(nodes[2])));
   const nested = required(list.GetListItem(required(nodes[1])));
-  const root = item.GetRoot();
+  const root = getNumberTreeRoot(item);
   document.nodes.moveTextNode(required(nodes[2]), -1);
   expect(list.GetListItem(required(nodes[2]))).toBe(item);
   expect(list.GetListItem(required(nodes[1]))).toBe(nested);
-  expect(item.GetRoot()).toBe(root);
+  expect(getNumberTreeRoot(item)).toBe(root);
   expect(list.GetListItemNumberVector(required(nodes[1]))).toEqual([8, 5]);
   expect(nested.GetParent()).toBe(item);
   document.nodes.removeTextNode(required(nodes[2]));
@@ -108,7 +109,7 @@ it("moves canonical paragraphs with retained list records and independent copied
   const copiedList = required(copy.GetDocumentListsManager().GetListByName(copied.GetListId()));
   expect(copiedList.GetListItemNumberVector(copied)).toEqual([7, 5]);
   expect(copiedList.GetListItem(copied)).not.toBe(nested);
-  expect(required(copiedList.GetListItem(copied)).GetRoot()).not.toBe(root);
+  expect(getNumberTreeRoot(required(copiedList.GetListItem(copied)))).not.toBe(root);
 });
 it("keeps native orphan and invalid removal contracts bounded", /** Checks source no-op branches and an empty retained root. @returns Nothing. */ () => {
   const root = new SwNodeNum(undefined);
@@ -182,4 +183,16 @@ function updateRuleStart(rule: SwNumRule | undefined, level: number, start: numb
   const format = (rule as SwNumRule).Get(level).clone();
   format.SetStart(start);
   (rule as SwNumRule).Set(level, format);
+}
+
+/** Observes native protected root identity only in tests. @param node - Diagnostic record, absent for an empty fixture. @returns Root pointer or null equivalent. */
+function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode | undefined {
+  return (
+    node as unknown as
+      | {
+          /** Reads the protected root. @returns Root pointer or null equivalent. */
+          GetRoot(): SwNumberTreeNode | undefined;
+        }
+      | undefined
+  )?.GetRoot();
 }
