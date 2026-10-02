@@ -1,0 +1,24 @@
+{
+  "base": "93c43d48e390",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "semanticPathCount": 4,
+  "metadata": [
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "changedRows": 1,
+      "allOtherMetadataUnchanged": true
+    },
+    {
+      "file": "docs/program/source-provenance.json",
+      "changedRows": 1,
+      "allOtherMetadataUnchanged": true
+    }
+  ],
+  "ignoredInclusiveForbiddenSourceArtifacts": 0,
+  "nativeFileHashesUnchanged": 2
+}
