@@ -1,0 +1,18 @@
+{
+  "base": "a28334b52f3e",
+  "unchangedProductionMethods": 54,
+  "changedProductionMethods": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts#AddChild"
+  ],
+  "unchangedOldTestFiles": 213,
+  "metadata": {
+    "docs/program/source-provenance.json": {
+      "changedRows": 1,
+      "statusDefaultDeviationPreserved": true
+    },
+    "docs/program/parity/runtime-inventory.json": {
+      "changedRows": 1,
+      "statusDefaultDeviationPreserved": true
+    }
+  }
+}

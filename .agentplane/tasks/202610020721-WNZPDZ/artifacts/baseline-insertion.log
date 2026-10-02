@@ -1,11 +1,17 @@
 
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
 
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts (4 tests | 4 failed) 23ms
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts (4 tests | 4 failed) 20ms
    × uses direct unique insertion and skips first-child cleanup, duplicate policies and invalid guards 14ms
    × captures the bound sibling policy before descendant transfer and child cleanup 3ms
    × retains both captured notification decisions when reading changes during suffix comparison 2ms
    × reserves upper-bound lookup for deeper insertion and binds a first child below its phantom 1ms
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  14:31:37
+   Duration  1.35s (transform 304ms, setup 143ms, import 357ms, tests 20ms, environment 686ms)
+
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
 
@@ -23,18 +29,43 @@ AssertionError: expected [ 'upper', 'pre', 'lower', …(2) ] to deeply equal [ '
     "policy",
   ]
 
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:131:26
-    129|     expect(first.events).toEqual([]);
-    130|     root.AddChild(child, 0, document);
-    131|     expect(first.events).toEqual(["pre", "lower", "policy"]);
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:135:26
+    133|     expect(first.events).toEqual([]);
+    134|     root.AddChild(child, 0, document);
+    135|     expect(first.events).toEqual(["pre", "lower", "policy"]);
        |                          ^
-    132|     expect(first.policies).toEqual(policy(true));
-    133|     expect(first.notification).not.toHaveBeenCalled();
+    136|     expect(first.policies).toEqual(policy(true));
+    137|     expect(first.notification).not.toHaveBeenCalled();
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
 
  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts > captures the bound sibling policy before descendant transfer and child cleanup
-AssertionError: expected [ 'upper', 'pre', 'lower', …(3) ] to deeply equal [ 'pre', 'lower', 'policy', …(1) ]
+AssertionError: expected [ 'upper', 'pre', 'lower', …(2) ] to deeply equal [ 'pre', 'lower', 'policy', …(1) ]
+
+- Expected
++ Received
+
+  [
++   "upper",
+    "pre",
+    "lower",
++   "child-clear",
+    "policy",
+-   "child-clear",
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:164:26
+    162|     const trace = observe(root, child, document);
+    163|     root.AddChild(child, 0, document);
+    164|     expect(trace.events).toEqual(["pre", "lower", "policy", "child-cle…
+       |                          ^
+    165|     expect(trace.policies).toEqual(policy(true));
+    166|     expect([...probe(root).mChildren]).toEqual([first, child]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts > retains both captured notification decisions when reading changes during suffix comparison
+AssertionError: expected [ 'upper', 'pre', 'lower', …(4) ] to deeply equal [ 'pre', 'lower', 'policy', …(2) ]
 
 - Expected
 + Received
@@ -44,51 +75,19 @@ AssertionError: expected [ 'upper', 'pre', 'lower', …(3) ] to deeply equal [ '
     "pre",
     "lower",
 -   "policy",
-+   "lower",
+    "flip",
     "child-clear",
 +   "policy",
-  ]
-
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:160:26
-    158|     const trace = observe(root, child, document);
-    159|     root.AddChild(child, 0, document);
-    160|     expect(trace.events).toEqual(["pre", "lower", "policy", "child-cle…
-       |                          ^
-    161|     expect(trace.policies).toEqual(policy(true));
-    162|     expect([...probe(root).mChildren]).toEqual([first, child]);
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
-
- FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts > retains both captured notification decisions when reading changes during suffix comparison
-AssertionError: expected [ 'upper', 'pre', 'flip', …(9) ] to deeply equal [ 'pre', 'lower', 'policy', …(2) ]
-
-- Expected
-+ Received
-
-  [
-+   "upper",
-    "pre",
-+   "flip",
-    "lower",
-+   "lower",
-+   "child-clear",
-    "policy",
--   "flip",
--   "child-clear",
-+   "lower",
 +   "policy",
-+   "lower",
-+   "lower",
-+   "lower",
   ]
 
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:194:28
-    192|       );
-    193|       root.AddChild(child, 0, document);
-    194|       expect(trace.events).toEqual(["pre", "lower", "policy", "flip", …
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:212:28
+    210|       );
+    211|       root.AddChild(child, 0, document);
+    212|       expect(trace.events).toEqual(["pre", "lower", "policy", "flip", …
        |                            ^
-    195|       expect(trace.policies).toEqual(policy(reading));
-    196|       expect(trace.notification).toHaveBeenCalledTimes(reading ? 0 : 1…
+    213|       expect(trace.policies).toEqual(policy(reading));
+    214|       expect(trace.notification).toHaveBeenCalledTimes(reading ? 0 : 1…
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
 
@@ -107,19 +106,13 @@ AssertionError: expected [ 'upper', 'lower', 'pre', …(3) ] to deeply equal [ '
     "policy",
   ]
 
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:215:26
-    213|     const trace = observe(root, child, document);
-    214|     root.AddChild(child, 1, document);
-    215|     expect(trace.events).toEqual(["upper", "lower", "pre", "policy"]);
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts:233:26
+    231|     const trace = observe(root, child, document);
+    232|     root.AddChild(child, 1, document);
+    233|     expect(trace.events).toEqual(["upper", "lower", "pre", "policy"]);
        |                          ^
-    216|     expect(trace.policies).toEqual(policy(true));
-    217|     const phantom = required(child.GetParent());
+    234|     expect(trace.policies).toEqual(policy(true));
+    235|     const phantom = required(child.GetParent());
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
-
-
- Test Files  1 failed (1)
-      Tests  4 failed (4)
-   Start at  14:29:50
-   Duration  1.40s (transform 300ms, setup 158ms, import 344ms, tests 23ms, environment 726ms)
 

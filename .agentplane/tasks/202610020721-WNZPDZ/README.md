@@ -4,7 +4,7 @@ title: "Restore number-tree insertion evaluation order"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore pinned insertion branch and policy-capture evaluation order under continuing goal authorization, preserving all prior results and registered IO/recovery deviations."
 doc_version: 3
-doc_updated_at: "2026-10-02T07:22:58.654Z"
+doc_updated_at: "2026-10-02T07:33:42.549Z"
 doc_updated_by: "CODER"
 description: "Iteration57 restores source AddChild branch/evaluation order: upper-bound only for deeper insertion, successful parent binding then single notification-policy capture before suffix transfer, sibling-only child cleanup. Owned document callback traces/read-state transitions and prior literal results verify the bounded correction without upstream test access."
 sections:
@@ -50,7 +50,7 @@ sections:
     4. Record canonical verification and same-actor EVALUATOR on actual semantic implementation SHA, close only leaf with clean checkout. Parent/full goal active; broader native protected helper/state/required-context/array/redline/layout/lifetime/UI obligations remain separately unverified.
   Verification: "Pending."
   Rollback Plan: "Revert only the actual semantic implementation commit if requested; preserve source/helper cleanup and reference pin."
-  Findings: "Iteration56 restored source-owned used sorted_vector child storage, all gates passed; broader goal remains open. Fresh native AddChild uses upper_bound only in nDepth>0 branch; direct branch PreAdd->insert->parent->IsNotificationEnabled capture precedes transfer/cleanup; child cleanup only when inserted sibling has predecessor. Current local queries upper_bound before both branches, reads policy after transfer and unconditionally cleans child. This is one measured insertion ordering correction. Existing reading/lifetime predicate adapters remain unchanged and unverified outside the bounded source-backed policy."
+  Findings: "Measured baseline: all4final owned trace tests fail against the unchanged prior production body. Direct paths perform extra upper_bound, first-child cleanup is unconditional and sibling policy capture follows transfer. Test instrumentation filters unrelated prefix lookups and restricts the reading-mode change to the real source-container upper-bound transfer, excluding rule/registry comparisons; no expected value was weakened. Initial typecheck identifies nullable indexed predecessor at a positive successful insertion position. Native predecessor iterator is guaranteed here; a local non-null assertion with documented sorted-insertion invariant preserves that contract without a synthetic branch, production proxy or cast. Wider context/dtor/layout/redline/lifetime obligations remain unverified."
 id_source: "generated"
 ---
 ## Summary
@@ -82,4 +82,4 @@ Revert only the actual semantic implementation commit if requested; preserve sou
 
 ## Findings
 
-Iteration56 restored source-owned used sorted_vector child storage, all gates passed; broader goal remains open. Fresh native AddChild uses upper_bound only in nDepth>0 branch; direct branch PreAdd->insert->parent->IsNotificationEnabled capture precedes transfer/cleanup; child cleanup only when inserted sibling has predecessor. Current local queries upper_bound before both branches, reads policy after transfer and unconditionally cleans child. This is one measured insertion ordering correction. Existing reading/lifetime predicate adapters remain unchanged and unverified outside the bounded source-backed policy.
+Measured baseline: all4final owned trace tests fail against the unchanged prior production body. Direct paths perform extra upper_bound, first-child cleanup is unconditional and sibling policy capture follows transfer. Test instrumentation filters unrelated prefix lookups and restricts the reading-mode change to the real source-container upper-bound transfer, excluding rule/registry comparisons; no expected value was weakened. Initial typecheck identifies nullable indexed predecessor at a positive successful insertion position. Native predecessor iterator is guaranteed here; a local non-null assertion with documented sorted-insertion invariant preserves that contract without a synthetic branch, production proxy or cast. Wider context/dtor/layout/redline/lifetime obligations remain unverified.
