@@ -1,0 +1,83 @@
+{
+  "implementationCommit": "a5ae916fd31daf94cf87cc05a9738da57ea43135",
+  "fullVerify": {
+    "command": "npm run verify",
+    "exitCode": 0,
+    "application": {
+      "files": 169,
+      "tests": 755,
+      "coverage": {
+        "statements": 10930,
+        "branches": 8274,
+        "functions": 2937,
+        "lines": 10026,
+        "percent": 100
+      }
+    },
+    "inventory": {
+      "files": 36,
+      "tests": 109,
+      "coverage": {
+        "statements": 1523,
+        "branches": 1080,
+        "functions": 384,
+        "lines": 1464,
+        "percent": 100
+      }
+    },
+    "browserTests": 19,
+    "initialFailure": "Unchanged mobile Paragraph menu click timeout; focused and subsequent full reruns passed without test changes."
+  },
+  "focusedVendorAbsent": {
+    "exitCode": 0,
+    "vendorRestored": true,
+    "command": "cd apps/office && npx vitest run src/sw/source/core/SwNumberTree src/sw/source/core/doc/list.test.ts src/sw/source/core/doc/list-invariants.test.ts src/sw/source/core/doc/number-list-format.test.ts"
+  },
+  "existingMatcherArgumentRecordsUnchanged": 177,
+  "existingObserverFiles": 6,
+  "semanticPaths": 11,
+  "metadataRows": 2,
+  "sourceAudit": "4 file and 7 declaration/body hashes, manual inspection only",
+  "noFreshCompiledNativeClaim": true,
+  "noHelperSourcesStored": true,
+  "noUpstreamBodiesStored": true,
+  "logNormalization": [
+    {
+      "path": ".agentplane/tasks/202610020512-HGKX68/verify-final.log",
+      "originalBytes": 848704,
+      "originalSha256": "35f0efca83e13cc807a6417f86727fd9147c08d157dc9363e4d11d75bb540310",
+      "change": "trailing whitespace and blank EOF only"
+    },
+    {
+      "path": ".agentplane/tasks/202610020512-HGKX68/green-types-final.log",
+      "originalBytes": 55,
+      "originalSha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+      "change": "trailing whitespace and blank EOF only"
+    },
+    {
+      "path": ".agentplane/tasks/202610020512-HGKX68/green-final.log",
+      "originalBytes": 237,
+      "originalSha256": "e284cdf9c386519a8688deea81ce2f58b509addc2ded63f23409d12b3f3c0682",
+      "change": "trailing whitespace and blank EOF only"
+    },
+    {
+      "path": ".agentplane/tasks/202610020512-HGKX68/browser-recheck.log",
+      "originalBytes": 1623,
+      "originalSha256": "de82f2d74ef2f3995d90d8b0d1cd3cecf3e4646f339eb5ad33c049ce6d778460",
+      "change": "trailing whitespace and blank EOF only"
+    },
+    {
+      "path": ".agentplane/tasks/202610020512-HGKX68/vendor-absent.log",
+      "originalBytes": 244,
+      "originalSha256": "41ed7d79cb59523b407c27d10c6dde03e90eb53e956c981a30a528ed01a3e894",
+      "change": "trailing whitespace and blank EOF only"
+    },
+    {
+      "path": ".agentplane/tasks/202610020512-HGKX68/verify-first.log",
+      "originalBytes": 11205,
+      "originalSha256": "fae59ec565adb9b5d1314c28ec1152a8cce38b15e4e4e4f1ee0b3970f9d8d5a5",
+      "change": "trailing whitespace and blank EOF only"
+    }
+  ],
+  "fullGoal": "active; no whole-module promotion"
+}

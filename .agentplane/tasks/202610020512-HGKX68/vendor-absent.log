@@ -1,7 +1,8 @@
-npm error Lifecycle script `test` failed with error:
-npm error workspace @vite-office/office@0.1.0
-npm error location /Users/odubinkin/Projects/vite-office/apps/office
-npm error Missing script: "test"
-npm error
-npm error To see a list of scripts, run:
-npm error   npm run --workspace=@vite-office/office@0.1.0
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  11 passed (11)
+      Tests  53 passed (53)
+   Start at  12:40:53
+   Duration  10.54s (transform 1.60s, setup 1.97s, import 2.89s, tests 2.13s, environment 11.13s)
