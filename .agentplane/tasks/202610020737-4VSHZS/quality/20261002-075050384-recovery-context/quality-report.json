@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610020737-4VSHZS",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-02T07:50:50.384Z",
+  "verdict": "pass",
+  "summary": "Distinct same-actor EVALUATOR phase passes requested ignored source cleanup at actual evidence SHA90ae8b7d65690f41ffda1c443a305c4ebd250f05.",
+  "evaluated_sha": "90ae8b7d65690f41ffda1c443a305c4ebd250f05",
+  "blueprint_digest": "a43136b932e4218c65cc43be2fde3dd5d6e3d218a5e84704bcd3edecdfc9321e",
+  "findings": [
+    "Exactly3historical ignored/untracked C++ probe sources totaling90242bytes were removed; path/size/hash evidence contains no source bodies. Fresh evaluator inspection confirms all3paths absent and recursive ignored-inclusive Python/bytecode/native source inventory remains zero throughout Agentplane.",
+    "Actual cleanup commit changes only own README/blueprint/result/check evidence; runtime/tests/policy and pinned vendor untouched, history preserved. Diff/routing/doctor pass with0errors and1pre-existing managed shim warning. Runtime tests are inapplicable to this ignored-file cleanup."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610020737-4VSHZS/README.md",
+    ".agentplane/tasks/202610020737-4VSHZS/artifacts/source-removal.json",
+    ".agentplane/tasks/202610020737-4VSHZS/artifacts/checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Deleted files were ignored and untracked, so Git records removal evidence rather than tracked source deletions. Source bodies are deliberately not retained. Continuing parity parent and full goal remain active; this is same-actor review."
+  ]
+}
