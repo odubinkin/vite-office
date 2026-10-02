@@ -1,0 +1,30 @@
+{
+  "command": "npm run verify",
+  "exit": 0,
+  "rawBytes": 863372,
+  "rawSha256": "9862ff3cc82d8b6a7c912b045837e90f1f2b6e4fbbf512142647dc1bb812e796",
+  "storedBytes": 13603,
+  "storedSha256": "715ce84c8e3bb88b17b54d3073e1b0265449f914e2e64a30e0613504026eb1ff",
+  "omission": "Repeated parity mapping rows replaced by scalar and row-count summary; all preceding gates retained",
+  "app": {
+    "tests": 775,
+    "files": 175,
+    "statements": 10995,
+    "branches": 8297,
+    "functions": 2948,
+    "lines": 10088,
+    "coveragePercent": 100
+  },
+  "inventory": {
+    "tests": 109,
+    "files": 36,
+    "statements": 1523,
+    "branches": 1080,
+    "functions": 384,
+    "lines": 1464,
+    "coveragePercent": 100
+  },
+  "browser": {
+    "tests": 19
+  }
+}

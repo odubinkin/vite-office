@@ -12,7 +12,12 @@
     },
     "docs/program/parity/runtime-inventory.json": {
       "changedRows": 1,
-      "statusDefaultDeviationPreserved": true
+      "statusDefaultDeviationPreserved": true,
+      "sourceResponsibilityEnumPreserved": true,
+      "changedFields": [
+        "semantic.evidence",
+        "semantic.justification"
+      ]
     }
   }
 }
