@@ -1,10 +1,11 @@
 ---
 id: "202610020512-HGKX68"
 title: "Restore protected number-tree root access"
-status: "DOING"
+result_summary: "Iteration52 complete: protected root contract and browser list membership restored. Actual implementation a5ae916fd31daf94cf87cc05a9738da57ea43135; reviewed containing verification snapshot23938a4e7bbfba0019862ae908952379f8bd9dcf. No full-module/goal promotion, upstream or helper source artifacts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610020512-HGKX68/vendor-absent.log"
   findings:
     - "Exact11 semantic paths;4file/7declaration-body hashes manual only;177 prior expectations unchanged;2new type/root/list tests. Full unchanged verify passes app755/inventory109/browser19 with both100%coverage. Vendor-absent53 tests pass and reference restored. Source/helper artifacts absent; metadata only2 evidence/responsibility rows, no status or deviation promotion."
-commit: null
+commit:
+  hash: "23938a4e7bbfba0019862ae908952379f8bd9dcf"
+  message: "📋 HGKX68 task: record complete bounded verification"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native protected GetRoot access, preserve list membership via public parents and adapt only test diagnostics; eleven semantic paths, no public surrogate or upstream/helper artifact sources."
+  -
+    author: "CODER"
+    body: "Verified: protected GetRoot and exact-parent list membership restored; actual implementation a5ae916fd31d, reviewed containing snapshot23938a4e7bbf; app755/inventory109/browser19 and both100%coverage, vendor-absent53tests passed."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All approved bounded checks passed: full unchanged verify, app755/inventory109/browser19 and both100%coverage; vendor-absent53tests;4file/7symbolhashes manual only;177 unchanged existing expectations; exact11 semantic paths; no forbidden source artifacts."
+  -
+    type: "status"
+    at: "2026-10-02T05:42:40.952Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: protected GetRoot and exact-parent list membership restored; actual implementation a5ae916fd31d, reviewed containing snapshot23938a4e7bbf; app755/inventory109/browser19 and both100%coverage, vendor-absent53tests passed."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:41:58.351Z"
+doc_updated_at: "2026-10-02T05:42:40.955Z"
 doc_updated_by: "CODER"
 description: "Iteration52: restore native protected GetRoot access; adapt the existing browser SwList item lookup to public parent ownership links without an exported surrogate. Preserve all diagnostic assertion values through a test-only protected-method helper and cover owned/foreign/orphan/phantom root identity and visibility. No helper/native sources in Agentplane artifacts or upstream access in tests; full gates remain unchanged."
 sections:
