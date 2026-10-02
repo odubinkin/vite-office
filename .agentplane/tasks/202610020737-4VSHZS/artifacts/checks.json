@@ -1,0 +1,32 @@
+{
+  "checks": [
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "policy routing OK"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "errors": 0,
+      "preExistingWarnings": 1
+    },
+    {
+      "command": "Recursive ignored-inclusive source/bytecode inventory",
+      "result": "pass",
+      "remaining": 0
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "result": "pass",
+      "scope": "Only own task README, blueprint and removal evidence changed"
+    }
+  ],
+  "runtimeAndTestsUnchanged": true,
+  "historyRewritten": false,
+  "noSourceOrHelperBodiesRetained": true
+}

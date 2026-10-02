@@ -1,0 +1,47 @@
+{
+  "kind": "Historical ignored source deletion; no source text retained",
+  "removed": [
+    {
+      "path": ".agentplane/tmp/upstream-probes/202609302319-9KTM99/native-marker-oracle.cxx",
+      "bytes": 80996,
+      "sha256": "ef9afd15790f7deea8efd54c2241d9dd1d42bdff4177986b5c3a4b861162e435",
+      "ignored": true,
+      "tracked": false
+    },
+    {
+      "path": ".agentplane/tmp/upstream-probes/202610010940-WW4SFA/native-default.cxx",
+      "bytes": 1203,
+      "sha256": "7c55ad65ac383229f3d961c77df86e9400ffda1986b307313a1d3660c08a1f60",
+      "ignored": true,
+      "tracked": false
+    },
+    {
+      "path": ".agentplane/tmp/upstream-probes/202610011012-HMMTBX/native-restart.cxx",
+      "bytes": 8043,
+      "sha256": "63a30563776e5694ec7f23c05537f2065fbf0ddf8035aa850bedf03cc9f79146",
+      "ignored": true,
+      "tracked": false
+    }
+  ],
+  "removedCount": 3,
+  "removedBytes": 90242,
+  "after": {
+    "ignoredInclusive": true,
+    "root": ".agentplane",
+    "extensions": [
+      "py",
+      "pyc",
+      "pyo",
+      "c",
+      "cc",
+      "cpp",
+      "cxx",
+      "h",
+      "hpp",
+      "hxx"
+    ],
+    "remaining": []
+  },
+  "runtimeTests": "Not applicable: ignored source files and task evidence only; no runtime/test/policy mutation",
+  "pinnedVendorUnchanged": "9bc445578031fecf56086729d8e4940c77e14d65"
+}
