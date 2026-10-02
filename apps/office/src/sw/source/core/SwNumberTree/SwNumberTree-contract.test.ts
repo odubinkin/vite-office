@@ -84,7 +84,7 @@ function state(node: SwNumberTreeNode, texts: SwTextNode[]): State {
     valid === undefined ? null : identity(valid, texts),
     node.IsContinueingPreviousSubTree(),
     node.IsPhantom(),
-    node.GetChildren().map(
+    getNumberTreeChildren(node).map(
       /** Observes one child recursively without validating it. @param child - Child. @returns State. */
       (child) => state(child, texts),
     ),
@@ -164,13 +164,16 @@ it("matches native null foreign owned-prefix and deferred descendant cache obser
       if (step === 3)
         hierarchical(
           root,
-          new SwNodeNum((required(root.GetChildren()[0]) as SwNodeNum).GetTextNode(), rule),
+          new SwNodeNum(
+            (required(getNumberTreeChildren(root)[0]) as SwNodeNum).GetTextNode(),
+            rule,
+          ),
         );
-      if (step === 4) hierarchical(root, required(root.GetChildren()[0]));
-      if (step === 5) hierarchical(root, required(root.GetChildren().at(-1)));
+      if (step === 4) hierarchical(root, required(getNumberTreeChildren(root)[0]));
+      if (step === 5) hierarchical(root, required(getNumberTreeChildren(root).at(-1)));
       if (step === 6)
         for (const record of records) {
-          const child = record.GetChildren().at(-1);
+          const child = getNumberTreeChildren(record).at(-1);
           if (child !== undefined) hierarchical(record, child);
         }
       if (step === 7 || step === 8)
@@ -210,4 +213,9 @@ function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode
         }
       | undefined
   )?.GetRoot();
+}
+
+/** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
 }

@@ -102,8 +102,8 @@ for (const equivalent of [true, false]) {
             /** Observes topology and registry ordering before membership release. @returns Nothing. */
             () => {
               expect(stored.GetParent()).toBeUndefined();
-              expect(stored.GetChildren()).toEqual([]);
-              expect(root.GetChildren()).not.toContain(stored);
+              expect(getNumberTreeChildren(stored)).toEqual([]);
+              expect(getNumberTreeChildren(root)).not.toContain(stored);
               const registered: SwNodeNum[] = [];
               document.getIDocumentListItems().getNumItems(registered);
               expect(registered).toContain(stored);
@@ -124,7 +124,7 @@ for (const equivalent of [true, false]) {
         expect(stored.GetNumRule()).toBe(equivalent ? rule : undefined);
         if (equivalent) {
           expect(argument.GetParent()).toBe(argumentRoot);
-          expect(argument.GetChildren()).toEqual([extra]);
+          expect(getNumberTreeChildren(argument)).toEqual([extra]);
           expect(extra.GetParent()).toBe(argument);
         }
         const lastValid = (root as unknown as { lastValid?: SwNodeNum }).lastValid;
@@ -160,20 +160,24 @@ for (const equivalent of [true, false]) {
           ),
         );
         if (profile.target === 0) {
-          const phantom = required(root.GetChildren()[0]);
+          const phantom = required(getNumberTreeChildren(root)[0]);
           expect(phantom.IsPhantom()).toBe(true);
-          expect(phantom.GetChildren()).toEqual([records[1], records[2]]);
+          expect(getNumberTreeChildren(phantom)).toEqual([records[1], records[2]]);
           expect(required(records[1]).GetParent()).toBe(phantom);
           expect(required(records[2]).GetParent()).toBe(phantom);
           expect(required(records[2]).GetNumberVector()).toEqual([7, 6]);
           expect(required(records[5]).GetNumberVector()).toEqual([9]);
         } else if (profile.target === 3) {
-          expect(required(records[0]).GetChildren()).toEqual([records[1], records[2], records[4]]);
+          expect(getNumberTreeChildren(required(records[0]))).toEqual([
+            records[1],
+            records[2],
+            records[4],
+          ]);
           expect(required(records[4]).GetParent()).toBe(records[0]);
           expect(required(records[4]).GetNumberVector()).toEqual([7, 7]);
           expect(required(records[5]).GetNumberVector()).toEqual([8]);
         } else {
-          expect(root.GetChildren()).toEqual([records[0], records[3]]);
+          expect(getNumberTreeChildren(root)).toEqual([records[0], records[3]]);
           expect(required(records[4]).GetNumberVector()).toEqual([8, 5]);
         }
         vi.restoreAllMocks();
@@ -189,13 +193,13 @@ it("releases only the supplied missing record and leaves phantom arguments untou
   const foreign = new SwNodeNum(foreignText, rule);
   const foreignRoot = new SwNodeNum(undefined, rule);
   foreignRoot.AddChild(foreign, 0, document);
-  const before = [...root.GetChildren()];
+  const before = [...getNumberTreeChildren(root)];
   const callback = vi.spyOn(foreign as unknown as RemovalDiagnostic, "PostRemove");
   root.RemoveChild(foreign, document);
   expect(callback).toHaveBeenCalledTimes(1);
   expect(foreign.GetParent()).toBe(foreignRoot);
   expect(foreign.GetNumRule()).toBeUndefined();
-  expect(root.GetChildren()).toEqual(before);
+  expect(getNumberTreeChildren(root)).toEqual(before);
   const clients: SwTextNode[] = [];
   rule.GetTextNodeList(clients);
   expect(clients).toEqual(texts);
@@ -203,13 +207,13 @@ it("releases only the supplied missing record and leaves phantom arguments untou
   document.getIDocumentListItems().getNumItems(registered);
   expect(registered).toEqual(records);
   root.RemoveChild(new SwNodeNum(required(texts[0]), rule), document);
-  const phantom = required(root.GetChildren()[0]);
+  const phantom = required(getNumberTreeChildren(root)[0]);
   const phantomCallback = vi.spyOn(phantom as unknown as RemovalDiagnostic, "PostRemove");
-  const phantomChildren = [...phantom.GetChildren()];
+  const phantomChildren = [...getNumberTreeChildren(phantom)];
   root.RemoveChild(phantom, document);
   expect(phantomCallback).not.toHaveBeenCalled();
   expect(phantom.GetParent()).toBe(root);
-  expect(phantom.GetChildren()).toEqual(phantomChildren);
+  expect(getNumberTreeChildren(phantom)).toEqual(phantomChildren);
   vi.restoreAllMocks();
   document.Dispose();
 });
@@ -224,4 +228,9 @@ function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode
         }
       | undefined
   )?.GetRoot();
+}
+
+/** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
 }

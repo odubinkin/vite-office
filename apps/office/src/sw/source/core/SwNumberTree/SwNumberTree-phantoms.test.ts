@@ -232,7 +232,7 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
       );
       for (const index of order)
         root.AddChild(records[index] as SwNodeNum, test.levels[index] as number);
-      const lastChild = root.GetChildren().at(-1);
+      const lastChild = getNumberTreeChildren(root).at(-1);
       if (lastChild !== undefined)
         (
           root as unknown as {
@@ -285,20 +285,20 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   const root = new PhantomRoot(undefined);
   const orphan = new SwNodeNum(text);
   root.AddChild(orphan, -1);
-  expect(root.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(root)).toEqual([]);
   const phantom = root.destinationPhantom() as SwNumberTreeNode;
   expect(root.destinationPhantom()).toBe(phantom);
   expect(root.createPhantom()).toBeUndefined();
   root.clearPhantoms();
-  expect(root.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(root)).toEqual([]);
   expect(phantom.HasPhantomCountedParent()).toBe(false);
   root.AddChild(orphan, 0);
   const another = new PhantomRoot(undefined);
   another.AddChild(orphan, 0);
   another.AddChild(root, 0);
-  expect(another.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(another)).toEqual([]);
   root.AddChild(new SwNodeNum(text), 0);
-  expect(root.GetChildren()).toEqual([orphan]);
+  expect(getNumberTreeChildren(root)).toEqual([orphan]);
 });
 
 /** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
@@ -306,4 +306,9 @@ function updateRuleStart(rule: SwNumRule | undefined, level: number, start: numb
   const format = (rule as SwNumRule).Get(level).clone();
   format.SetStart(start);
   (rule as SwNumRule).Set(level, format);
+}
+
+/** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
 }

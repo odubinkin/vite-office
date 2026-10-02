@@ -1,6 +1,7 @@
 /** @fileoverview Verifies Writer list projection normalization at the `list.cxx`-derived document boundary. */
 
 import { describe, expect, it } from "vitest";
+import type { SwNumberTreeNode } from "../SwNumberTree/SwNumberTree";
 
 import {
   applyWriterParagraphList,
@@ -105,7 +106,7 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     expect((list.GetListItem(nested)?.GetParent() as SwNodeNum | undefined)?.GetTextNode()).toBe(
       first,
     );
-    expect(list.GetListItem(first)?.GetChildren()).toEqual([list.GetListItem(nested)]);
+    expect(getNumberTreeChildren(list.GetListItem(first))).toEqual([list.GetListItem(nested)]);
     expect(list.HasNodes()).toBe(true);
     list.InvalidateListTree();
     nested.RemoveFromList();
@@ -114,3 +115,10 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     expect(list.GetListItemNumber(nested)).toBeUndefined();
   });
 });
+
+/** Observes protected child storage solely for diagnostics. @param node - Optional owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(
+  node: SwNumberTreeNode | undefined,
+): readonly SwNumberTreeNode[] | undefined {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] } | undefined)?.mChildren;
+}

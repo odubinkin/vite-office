@@ -1,5 +1,6 @@
 /** @fileoverview Verifies source-owned shown numbering records, lazy reads and rule-client transitions. */
 import { createWriterNumFormat, type SwNumRule } from "../doc/number";
+import type { SwNumberTreeNode } from "../SwNumberTree/SwNumberTree";
 
 import { expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
@@ -188,7 +189,7 @@ it("keeps native registration guards for absent text and non-document records", 
   expect(absent.GetNumRule()).toBeUndefined();
   expect(absent.GetParent()).toBe(root);
   absent.RemoveMe();
-  expect(root.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(root)).toEqual([]);
   const foreign = new SwNodes(doc).MakeTextNode();
   applyWriterParagraphList(foreign, {
     kind: "numbered",
@@ -209,7 +210,7 @@ it("keeps native registration guards for absent text and non-document records", 
   expect(record.GetNumRule()).toBeUndefined();
   rule.GetTextNodeList(clients);
   expect(clients).toEqual([]);
-  expect(root.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(root)).toEqual([]);
 });
 
 /** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
@@ -217,4 +218,9 @@ function updateRuleStart(rule: SwNumRule | undefined, level: number, start: numb
   const format = (rule as SwNumRule).Get(level).clone();
   format.SetStart(start);
   (rule as SwNumRule).Set(level, format);
+}
+
+/** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
 }

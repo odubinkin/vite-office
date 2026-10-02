@@ -48,7 +48,7 @@ function cache(node: SwNumberTreeNode, texts: SwTextNode[]): Cache {
         ? -100 - valid.GetLevelInListTree()
         : texts.indexOf(required(valid.GetTextNode())),
     node.IsContinueingPreviousSubTree(),
-    node.GetChildren().map(
+    getNumberTreeChildren(node).map(
       /** Captures one descendant. @param child - Child. @returns Raw snapshot. */
       (child) => cache(child, texts),
     ),
@@ -182,4 +182,9 @@ function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode
         }
       | undefined
   )?.GetRoot();
+}
+
+/** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
 }

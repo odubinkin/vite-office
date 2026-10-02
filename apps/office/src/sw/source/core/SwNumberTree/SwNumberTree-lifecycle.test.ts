@@ -83,7 +83,7 @@ it("reparents retained items and moves descendants through native predecessor ph
   required(nodes[2]).RemoveFromList();
   required(nodes[1]).RemoveFromList();
   expect(list.GetListItemNumberVector(required(nodes[3]))).toEqual([8]);
-  expect((root as SwNodeNum).GetChildren().length).toBe(2);
+  expect(getNumberTreeChildren(root as SwNodeNum).length).toBe(2);
 });
 it("moves canonical paragraphs with retained list records and independent copied trees", /** Checks document position transitions, deletion and copy ownership without manual validation. @returns Nothing. */ () => {
   const { document, nodes, list } = fixture([0, 1, 0]);
@@ -132,7 +132,7 @@ it("keeps native orphan and invalid removal contracts bounded", /** Checks sourc
   node.SetLevelInListTree(-1);
   node.SetLevelInListTree(2);
   node.RemoveMe();
-  expect(root.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(root)).toEqual([]);
   expect(node.GetNumberVector()).toEqual([]);
   diagnostic.ValidateHierarchical(missing);
 });
@@ -173,9 +173,9 @@ it("removes a real item with an empty phantom descendant without leaving root ch
   root.AddChild(item, 0);
   item.createEmptyPhantom();
   item.RemoveMe();
-  expect(root.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(root)).toEqual([]);
   expect(item.GetParent()).toBeUndefined();
-  expect(item.GetChildren()).toEqual([]);
+  expect(getNumberTreeChildren(item)).toEqual([]);
 });
 
 /** Changes an independent level and applies it through native Set ownership. @param rule - Rule. @param level - Native level. @param start - Starting value. @returns Nothing. */
@@ -195,4 +195,9 @@ function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode
         }
       | undefined
   )?.GetRoot();
+}
+
+/** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
 }

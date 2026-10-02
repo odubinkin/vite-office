@@ -82,13 +82,11 @@ function tree(node: SwNumberTreeNode, texts: SwTextNode[]): TreeState {
     node.IsCounted(),
     node.IsContinuous(),
     node.IsCountPhantoms(),
-    node
-      .GetChildren()
-      .map(
-        /** Observes each child without validation. @param child - Child. @returns State. */ (
-          child,
-        ) => tree(child, texts),
-      ),
+    getNumberTreeChildren(node).map(
+      /** Observes each child without validation. @param child - Child. @returns State. */ (
+        child,
+      ) => tree(child, texts),
+    ),
   ];
 }
 /** Captures raw state before chosen-order reads and registry state afterwards. @param doc - Actual document. @param rule - Stored owner. @param texts - Actual nodes. @param events - Nonvalidating event capture. @param readOrder - Native read order. @returns Snapshot. */
@@ -194,7 +192,7 @@ it("retains native empty and end sentinel validation with protected traversal", 
     descendant = new SwNodeNum(undefined, rule);
   skippedRoot.AddChild(descendant, 1, doc);
   (skippedRoot as unknown as TreeDiagnostic).ValidateContinuous(undefined);
-  const phantom = required(skippedRoot.GetChildren()[0]);
+  const phantom = required(getNumberTreeChildren(skippedRoot)[0]);
   expect(phantom.IsCounted()).toBe(false);
   expect(phantom.GetPred()).toBeUndefined();
   expect(phantom.GetNumber(false)).toBe(0);
@@ -395,4 +393,9 @@ function getNumberTreeRoot(node: SwNumberTreeNode | undefined): SwNumberTreeNode
         }
       | undefined
   )?.GetRoot();
+}
+
+/** Observes protected child storage solely for diagnostics. @param node - Owned tree record. @returns Direct children in native order. */
+function getNumberTreeChildren(node: SwNumberTreeNode): readonly SwNumberTreeNode[] {
+  return (node as unknown as { mChildren: SwNumberTreeNode[] }).mChildren;
 }

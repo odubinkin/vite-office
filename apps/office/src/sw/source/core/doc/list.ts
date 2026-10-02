@@ -100,7 +100,7 @@ export class SwList {
   }
   /** Reports whether this list has registered items. @returns True when non-empty. */
   public HasNodes(): boolean {
-    return this.root.GetChildren().length > 0;
+    return this.root.GetChildCount() !== 0;
   }
 }
 
