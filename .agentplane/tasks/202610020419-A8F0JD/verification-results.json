@@ -1,0 +1,10 @@
+{
+  "result": "pass",
+  "deletedSources": 44,
+  "remainingTaskPythonSourcesOrBytecode": 0,
+  "semanticPaths": 45,
+  "externalConsumers": 0,
+  "ignoreRuleWorks": true,
+  "upstreamExecuted": false,
+  "resultsAndHashesPreserved": true
+}

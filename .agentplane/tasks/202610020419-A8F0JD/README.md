@@ -4,7 +4,7 @@ title: "Remove one-off Python sources from Agentplane artifacts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: User-authorized separate cleanup of 44 Python artifact sources and targeted ignore rule; preserve results and historical DONE documentation, with no upstream execution."
 doc_version: 3
-doc_updated_at: "2026-10-02T04:19:39.567Z"
+doc_updated_at: "2026-10-02T04:20:49.396Z"
 doc_updated_by: "CODER"
 description: "User-directed cleanup: delete all 44 tracked Python generator/edit helper sources under .agentplane/tasks in a separate commit; add a targeted ignore rule preventing future task artifact Python sources. Retain historical results and hash evidence, do not run upstream or change implementation/test code, and do not rewrite completed task documentation or Git history."
 sections:
@@ -48,7 +48,7 @@ sections:
     2. git diff --name-status contains exactly the 44 inventoried deletions plus .gitignore and active task bookkeeping. git check-ignore --no-index matches nested task Python paths and does not ignore retained JSON result evidence.
     3. node .agentplane/policy/check-routing.mjs passes; ap doctor has no errors and any existing warnings are recorded. git diff --check passes. This source-artifact-only cleanup requires no upstream execution or application regression run.
     4. Canonical verification records the separate cleanup implementation SHA; task finishes DONE and git status --short --untracked-files=all is clean.
-  Verification: "Pending execution."
+  Verification: "Command: exact manifest-based Python inventory and diff assertions; git check-ignore --no-index; fixed-string rg consumer scan over package.json/scripts/docs/.gitignore; git diff --check. Result: pass. Evidence: 44 Python source deletions, zero remaining task Python sources or bytecode, no consumers outside historical artifacts, exactly 45 semantic paths, ignore rule matches Python helpers and preserves JSON result evidence. Scope: the exact deleted-paths.json manifest and .gitignore. Links: verification-results.json and deleted-paths.json. Command: node .agentplane/policy/check-routing.mjs. Result: pass (policy routing OK). Command: ap doctor. Result: pass, zero errors; two pre-existing warnings (managed shim readiness and historical F1JT8K close-commit reference). No upstream execution or application regression test is needed for deletion of unreferenced artifact sources. Separate cleanup commit and canonical verification follow."
   Rollback Plan: "If needed, revert this cleanup commit after explicit user authorization to restore artifact sources; no history rewrite is required."
   Findings: "The previous cleanup removed extracted native sources but retained generator and edit helper Python sources for reproducibility. The user has explicitly prohibited these artifact sources too. Historical references document checks already performed; they are not executable test dependencies. All 44 current on-disk Python files match the tracked set; no extra bytecode was discovered."
 id_source: "generated"
@@ -74,7 +74,7 @@ Delete the exact 44 tracked Python source scripts under .agentplane/tasks and ad
 
 ## Verification
 
-Pending execution.
+Command: exact manifest-based Python inventory and diff assertions; git check-ignore --no-index; fixed-string rg consumer scan over package.json/scripts/docs/.gitignore; git diff --check. Result: pass. Evidence: 44 Python source deletions, zero remaining task Python sources or bytecode, no consumers outside historical artifacts, exactly 45 semantic paths, ignore rule matches Python helpers and preserves JSON result evidence. Scope: the exact deleted-paths.json manifest and .gitignore. Links: verification-results.json and deleted-paths.json. Command: node .agentplane/policy/check-routing.mjs. Result: pass (policy routing OK). Command: ap doctor. Result: pass, zero errors; two pre-existing warnings (managed shim readiness and historical F1JT8K close-commit reference). No upstream execution or application regression test is needed for deletion of unreferenced artifact sources. Separate cleanup commit and canonical verification follow.
 
 ## Rollback Plan
 

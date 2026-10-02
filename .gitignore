@@ -27,6 +27,8 @@
 .agentplane/tasks/**/*.h
 .agentplane/tasks/**/*.hpp
 .agentplane/tasks/**/*.hxx
+# One-off Python generators and edit helpers are not task artifacts.
+.agentplane/tasks/**/*.py
 AGENTS.md.bak-*
 CLAUDE.md.bak-*
 .agentplane/agents/*.bak-*
