@@ -1,10 +1,11 @@
 ---
 id: "202610020755-KZEWZ5"
 title: "Restore protected number-tree validity overloads"
-status: "DOING"
+result_summary: "Restore complete selected protected self/nullable-child validity contract and guarded stored-boundary lookup with source self-call sites. Exactly4semantic paths; only3method bodies change, all gates pass, no helpers/upstream sources or project upstream test access. Wider parent/full parity goal remains active and unverified; registered IO/recovery deviations untouched."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Both protected overload declarations and dispatch match native meaning: omitted self delegates to parent, explicit nullable child is guarded separately, retained boundary resolves through sorted-container find. Source insertion/invalidation self-call sites restored. Four owned tests and compile-time signatures cover root/orphan/foreign/owned/null/prefix/reading/restart/client-removal/continuous phantom behavior; baseline3runtime regressions and type diagnostics prove old defects."
     - "Full unchanged verify exit0:779app/109inventory/19browser,both100%;73app+7gate tests vendor absent/restored. Exactly4semantic paths,3method bodies changed and52others/214old tests untouched;1metadata row evidence/responsibility each, statuses/defaults/divergences/enums intact. Final log digest verified;5manual pinned file9span hashes support source inspection only."
     - "New removal expectation corrected from fresh native invalid-rule client-removal source, with retained raw values and revalidation proved; no old expected values weakened. Narrow unified-signatures annotations preserve exact overload arity and distinct explicit-null meaning without changing gates. No source/helper/Python/native artifacts anywhere in ignored-inclusive Agentplane storage."
-commit: null
+commit:
+  hash: "3505807f3932238c7993077c109d1c92a1ef15f9"
+  message: "🛠 KZEWZ5 code: restore protected number-tree validity overloads"
 comments:
   -
     author: "CODER"
     body: "Start: restore both protected validity overloads and native boundary lookup under continuing goal authorization, without source helpers or upstream test invocation."
+  -
+    author: "CODER"
+    body: "Verified: both protected validity overloads/native self calls/container cache lookup restored;4owned tests/types and full779app/109inventory/19browser,both100%pass.73app+7gate tests vendor absent/restored;52other methods/214old tests unchanged. EVALUATOR passes actual semantic SHA."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Both protected validity overloads and native self-call/cache lookup restored.4new owned tests/types pass; baseline3regressions and typecheck fail old body. Full779app/109inventory/19browser,both100%,73app+7gate vendor absent/restored.52other bodies/214old test files unchanged,exact4semantic paths/1metadata row each.5manualfile9span hashes,zero Python/native/helper sources,broader goal active."
+  -
+    type: "status"
+    at: "2026-10-02T08:20:56.751Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: both protected validity overloads/native self calls/container cache lookup restored;4owned tests/types and full779app/109inventory/19browser,both100%pass.73app+7gate tests vendor absent/restored;52other methods/214old tests unchanged. EVALUATOR passes actual semantic SHA."
 doc_version: 3
-doc_updated_at: "2026-10-02T08:19:27.607Z"
+doc_updated_at: "2026-10-02T08:20:56.753Z"
 doc_updated_by: "CODER"
 description: "Iteration58 restores both native protected IsValid overloads, explicit nullable child dispatch, self-parent delegation and sorted-container cache-boundary lookup, plus source-equivalent self calls in insertion/invalidation. Owned type/document regressions and manual source hashes prove this correction without upstream test access or saved helpers."
 sections:
