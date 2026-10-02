@@ -114,7 +114,7 @@ export abstract class SwNumberTreeNode {
         destination = destination.GetDestinationPhantom();
       }
       child.ClearObsoletePhantoms();
-      if (this.IsValid(predecessor)) this.SetLastValid(predecessor);
+      if (predecessor.IsValid()) this.SetLastValid(predecessor);
     } else this.SetLastValid(undefined);
     this.ClearObsoletePhantoms();
     if (notification) {
@@ -208,9 +208,20 @@ export abstract class SwNumberTreeNode {
   public GetChildCount(): number {
     return this.mChildren.size();
   }
-  /** Tests whether a child is inside this parent's validated prefix. @param child - Owned child. @returns Prefix validity. */
-  private IsValid(child: SwNumberTreeNode): boolean {
-    return this.lastValid !== undefined && child.parent === this && !this.lastValid.LessThan(child);
+  /** Tests this node through its parent's validated prefix. @returns Self validity. */
+  protected IsValid(): boolean;
+  /** Tests an explicitly supplied nullable child against this parent's validated prefix. @param child - Candidate child. @returns Prefix validity. */
+  // eslint-disable-next-line @typescript-eslint/unified-signatures -- Omitted self and explicit null-child queries are distinct native overloads.
+  protected IsValid(child: SwNumberTreeNode | undefined): boolean;
+  /** Dispatches the native self and nullable-child overloads without validating counters. @param args - Omitted self query or explicit child query. @returns Validity. */
+  protected IsValid(...args: [] | [child: SwNumberTreeNode | undefined]): boolean {
+    if (args.length === 0) return this.parent !== undefined && this.parent.IsValid(this);
+    const [child] = args;
+    if (this.lastValid === undefined || child === undefined || child.parent !== this) return false;
+    // Native prefix boundaries always refer to an element retained in the child container.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const boundary = this.mChildren.at(this.mChildren.find(this.lastValid))!;
+    return !boundary.LessThan(child);
   }
   /** Retains a validated prefix or invalidates it and the next uncounted subtree. @param node - Last valid child. @param validating - Whether validation advances the prefix. @returns Nothing. */
   private SetLastValid(node: SwNumberTreeNode | undefined, validating = false): void {
@@ -233,7 +244,7 @@ export abstract class SwNumberTreeNode {
   }
   /** Invalidates a counted prefix from one changed child onward. @param child - Changed child. @returns Nothing. */
   private Invalidate(child: SwNumberTreeNode): void {
-    if (this.IsValid(child)) this.SetLastValid(this.mChildren.at(this.mChildren.find(child) - 1));
+    if (child.IsValid()) this.SetLastValid(this.mChildren.at(this.mChildren.find(child) - 1));
   }
   /** Invalidates every descendant prefix without changing topology. @returns Nothing. */
   public InvalidateTree(): void {
