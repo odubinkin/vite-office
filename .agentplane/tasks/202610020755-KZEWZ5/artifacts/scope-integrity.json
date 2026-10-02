@@ -1,0 +1,24 @@
+{
+  "base": "fc1bf18306ea",
+  "unchangedProductionMethods": 52,
+  "changedProductionMethods": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts#AddChild",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts#IsValid",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts#Invalidate"
+  ],
+  "unchangedOldTestFiles": 214,
+  "metadata": {
+    "docs/program/source-provenance.json": {
+      "changedRows": 1,
+      "statusDefaultDivergenceAndEnumsPreserved": true
+    },
+    "docs/program/parity/runtime-inventory.json": {
+      "changedRows": 1,
+      "statusDefaultDivergenceAndEnumsPreserved": true
+    }
+  },
+  "forbiddenSourcesAndBytecode": {
+    "ignoredInclusive": true,
+    "remaining": 0
+  }
+}
