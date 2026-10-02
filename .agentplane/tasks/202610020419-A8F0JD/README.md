@@ -1,10 +1,11 @@
 ---
 id: "202610020419-A8F0JD"
 title: "Remove one-off Python sources from Agentplane artifacts"
-status: "DOING"
+result_summary: "Removed 44 Python artifact sources in separate commit 53373dff355ccf058a9917bc5ec613ccd3f51b83; task artifact Python inventory zero and ignore rule verified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "Policy routing OK; doctor zero errors/two pre-existing warnings; diff clean; source/bytecode inventory zero"
   findings:
     - "Reviewed exact manifest, commit diff and consumer scan: 44 source deletions plus targeted .gitignore change; historical result and hash files unchanged. No implementation, test, policy or Git history changes."
-commit: null
+commit:
+  hash: "53373dff355ccf058a9917bc5ec613ccd3f51b83"
+  message: "🧹 A8F0JD docs: remove Python sources from task artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: User-authorized separate cleanup of 44 Python artifact sources and targeted ignore rule; preserve results and historical DONE documentation, with no upstream execution."
+  -
+    author: "CODER"
+    body: "Verified: Removed all 44 Python task artifact sources, added targeted ignore protection and preserved result/hash evidence. Inventory, consumer, diff, routing and doctor checks pass; no upstream executed."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610020419-A8F0JD"
+  -
+    type: "status"
+    at: "2026-10-02T04:21:40.788Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Removed all 44 Python task artifact sources, added targeted ignore protection and preserved result/hash evidence. Inventory, consumer, diff, routing and doctor checks pass; no upstream executed."
 doc_version: 3
-doc_updated_at: "2026-10-02T04:21:37.335Z"
+doc_updated_at: "2026-10-02T04:21:40.790Z"
 doc_updated_by: "CODER"
 description: "User-directed cleanup: delete all 44 tracked Python generator/edit helper sources under .agentplane/tasks in a separate commit; add a targeted ignore rule preventing future task artifact Python sources. Retain historical results and hash evidence, do not run upstream or change implementation/test code, and do not rewrite completed task documentation or Git history."
 sections:
