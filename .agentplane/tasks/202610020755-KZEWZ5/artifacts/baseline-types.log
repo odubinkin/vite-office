@@ -1,0 +1,16 @@
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts(12,32): error TS2341: Property 'IsValid' is private and only accessible within class 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts(22,18): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts(84,16): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts(84,36): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts(84,75): error TS2554: Expected 1 arguments, but got 0.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit

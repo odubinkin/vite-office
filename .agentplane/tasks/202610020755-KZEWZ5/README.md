@@ -4,7 +4,7 @@ title: "Restore protected number-tree validity overloads"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore both protected validity overloads and native boundary lookup under continuing goal authorization, without source helpers or upstream test invocation."
 doc_version: 3
-doc_updated_at: "2026-10-02T07:56:10.716Z"
+doc_updated_at: "2026-10-02T07:57:49.565Z"
 doc_updated_by: "CODER"
 description: "Iteration58 restores both native protected IsValid overloads, explicit nullable child dispatch, self-parent delegation and sorted-container cache-boundary lookup, plus source-equivalent self calls in insertion/invalidation. Owned type/document regressions and manual source hashes prove this correction without upstream test access or saved helpers."
 sections:
@@ -50,7 +50,12 @@ sections:
     4. Record canonical verification and distinct same-actor EVALUATOR on actual implementation SHA, close only leaf with clean tracked state. Parent/full goal active; wider protected helper/state/context/dtor/notifiable/client/redline/layout/range/iterator/UI/lifetime obligations remain individually unverified.
   Verification: "Pending."
   Rollback Plan: "Revert only the actual semantic implementation commit if requested. Keep forbidden source/helper cleanup and pinned vendor unchanged."
-  Findings: "Preflight main/direct and clean. Pin9bc445578031fecf56086729d8e4940c77e14d65 freshly validated. Native header remains protected from line338; child and self declarations at482/490. Core self body652 delegates parent; child body676 guards saved boundary,nonnull child/exact parent and finds stored boundary before LessThan. Native insertion531 and invalidation1025 call self overload. Local has private child-only IsValid and direct saved-pointer comparison; insertion/invalidation use parent-child predicate. This is one measured contract/helper correction. No full module/status/default/goal promotion and registered save/open/recovery deviations unchanged."
+  Findings: |-
+    Preflight main/direct and clean. Pin9bc445578031fecf56086729d8e4940c77e14d65 freshly validated. Native header remains protected from line338; child and self declarations at482/490. Core self body652 delegates parent; child body676 guards saved boundary,nonnull child/exact parent and finds stored boundary before LessThan. Native insertion531 and invalidation1025 call self overload. Local has private child-only IsValid and direct saved-pointer comparison; insertion/invalidation use parent-child predicate. This is one measured contract/helper correction. No full module/status/default/goal promotion and registered save/open/recovery deviations unchanged.
+
+    - Observation: Fresh local execution read confirms the existing invalidation helper is named Invalidate, not InvalidateChild as the planning prose called it.
+      Impact: No scope or behavior expansion; the approved native self-validity call concerns this same existing child-invalidation operation.
+      Resolution: Use the actual Invalidate method name in implementation evidence and integrity checks; selected3changed bodies are AddChild,IsValid,Invalidate. All52other existing bodies remain unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +88,7 @@ Revert only the actual semantic implementation commit if requested. Keep forbidd
 ## Findings
 
 Preflight main/direct and clean. Pin9bc445578031fecf56086729d8e4940c77e14d65 freshly validated. Native header remains protected from line338; child and self declarations at482/490. Core self body652 delegates parent; child body676 guards saved boundary,nonnull child/exact parent and finds stored boundary before LessThan. Native insertion531 and invalidation1025 call self overload. Local has private child-only IsValid and direct saved-pointer comparison; insertion/invalidation use parent-child predicate. This is one measured contract/helper correction. No full module/status/default/goal promotion and registered save/open/recovery deviations unchanged.
+
+- Observation: Fresh local execution read confirms the existing invalidation helper is named Invalidate, not InvalidateChild as the planning prose called it.
+  Impact: No scope or behavior expansion; the approved native self-validity call concerns this same existing child-invalidation operation.
+  Resolution: Use the actual Invalidate method name in implementation evidence and integrity checks; selected3changed bodies are AddChild,IsValid,Invalidate. All52other existing bodies remain unchanged.

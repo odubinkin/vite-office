@@ -1,0 +1,59 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts (4 tests | 3 failed) 16ms
+   × observes owned prefixes through restart and removal without validating raw caches 9ms
+   × looks up the stored valid boundary only for guarded owned children 2ms
+   × retains hierarchical and continuous phantom validity across reading and invalidation 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts > observes owned prefixes through restart and removal without validating raw caches
+TypeError: Cannot read properties of undefined (reading 'parent')
+ ❯ SwNodeNum.IsValid src/sw/source/core/SwNumberTree/SwNumberTree.ts:213:50
+    211|   /** Tests whether a child is inside this parent's validated prefix. …
+    212|   private IsValid(child: SwNumberTreeNode): boolean {
+    213|     return this.lastValid !== undefined && child.parent === this && !t…
+       |                                                  ^
+    214|   }
+    215|   /** Retains a validated prefix or invalidates it and the next uncoun…
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:69:27
+ ❯ validity src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:67:16
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:101:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts > looks up the stored valid boundary only for guarded owned children
+TypeError: Cannot read properties of undefined (reading 'parent')
+ ❯ SwNodeNum.IsValid src/sw/source/core/SwNumberTree/SwNumberTree.ts:213:50
+    211|   /** Tests whether a child is inside this parent's validated prefix. …
+    212|   private IsValid(child: SwNumberTreeNode): boolean {
+    213|     return this.lastValid !== undefined && child.parent === this && !t…
+       |                                                  ^
+    214|   }
+    215|   /** Retains a validated prefix or invalidates it and the next uncoun…
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:145:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts > retains hierarchical and continuous phantom validity across reading and invalidation
+TypeError: Cannot read properties of undefined (reading 'parent')
+ ❯ SwNodeNum.IsValid src/sw/source/core/SwNumberTree/SwNumberTree.ts:213:50
+    211|   /** Tests whether a child is inside this parent's validated prefix. …
+    212|   private IsValid(child: SwNumberTreeNode): boolean {
+    213|     return this.lastValid !== undefined && child.parent === this && !t…
+       |                                                  ^
+    214|   }
+    215|   /** Retains a validated prefix or invalidates it and the next uncoun…
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:69:27
+ ❯ validity src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:67:16
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts:185:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  15:01:04
+   Duration  1.38s (transform 288ms, setup 159ms, import 332ms, tests 16ms, environment 731ms)
+
