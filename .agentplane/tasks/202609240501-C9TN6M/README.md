@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 53
+revision: 54
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-02T04:53:37.897Z"
+doc_updated_at: "2026-10-02T05:09:56.944Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -204,6 +204,10 @@ sections:
     - Observation: Iteration50 completed in DONE leaf 202610020438-HRK7Q8. Actual implementation bc64c84231eccc61857a755c7227e98999f75fb9 restores comparator-equivalent RemoveChild stored-node detachment/descendant transfer, iterator recomputation after phantom insertion and supplied-argument PostRemove ownership. No registry implementation or original expectation changes.
       Impact: Thirteen new owner/topology/callback tests pass; all34 tree tests pass with reference unavailable. Full unchanged verify747 app/109 inventory/19 browser and both100% coverages; four pinned file/nine symbol hashes support manual source audit only, without claiming fresh compiled native owner parity. No helper/source bodies in task artifacts, registered IO deviations preserved and no whole-module/status promotion.
       Resolution: Parent/full goal remains open. Next measured contract correction is protected GetNumberVector_(vector,bool bValidate=true): native forwards explicit false through recursive ancestry and GetNumber; local helper currently omits that argument and always validates. Use a separate leaf with raw-cache/default/type evidence and upstream-independent tests.
+
+    - Observation: Iteration51 completed in DONE leaf 202610020455-0P7YJY. Actual implementation d59c1a90787823d5173de388db226cf17fb3c8fd restores protected GetNumberVector_ optional true-default policy and forwards false through every parent recursion and GetNumber. Six new project-owned cache/default/type tests pass without changing existing expectations.
+      Impact: Full unchanged verify753 app/109 inventory/19 browser, both100% coverages, and all40 tree tests pass with upstream unavailable. Two native file/one declaration/three symbol hashes support bounded manual source inspection only; no source/helper artifact bodies or new compiled lifetime parity claim. Exact type-oracle undefined normalization and first full failure retained; no status/deviation promotion.
+      Resolution: Parent/full goal remains open. Next measured gap is GetRoot visibility: pinned SwNumberTree.hxx:349 protected, local public; one external implementation consumer SwList.GetListItem and six diagnostic test files. Next separate leaf must restore access and reconcile existing list lookup without public surrogate or changed root/list ownership behavior. Registered IO/recovery deviations remain untouched.
 id_source: "generated"
 ---
 ## Summary
@@ -381,3 +385,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: Iteration50 completed in DONE leaf 202610020438-HRK7Q8. Actual implementation bc64c84231eccc61857a755c7227e98999f75fb9 restores comparator-equivalent RemoveChild stored-node detachment/descendant transfer, iterator recomputation after phantom insertion and supplied-argument PostRemove ownership. No registry implementation or original expectation changes.
   Impact: Thirteen new owner/topology/callback tests pass; all34 tree tests pass with reference unavailable. Full unchanged verify747 app/109 inventory/19 browser and both100% coverages; four pinned file/nine symbol hashes support manual source audit only, without claiming fresh compiled native owner parity. No helper/source bodies in task artifacts, registered IO deviations preserved and no whole-module/status promotion.
   Resolution: Parent/full goal remains open. Next measured contract correction is protected GetNumberVector_(vector,bool bValidate=true): native forwards explicit false through recursive ancestry and GetNumber; local helper currently omits that argument and always validates. Use a separate leaf with raw-cache/default/type evidence and upstream-independent tests.
+
+- Observation: Iteration51 completed in DONE leaf 202610020455-0P7YJY. Actual implementation d59c1a90787823d5173de388db226cf17fb3c8fd restores protected GetNumberVector_ optional true-default policy and forwards false through every parent recursion and GetNumber. Six new project-owned cache/default/type tests pass without changing existing expectations.
+  Impact: Full unchanged verify753 app/109 inventory/19 browser, both100% coverages, and all40 tree tests pass with upstream unavailable. Two native file/one declaration/three symbol hashes support bounded manual source inspection only; no source/helper artifact bodies or new compiled lifetime parity claim. Exact type-oracle undefined normalization and first full failure retained; no status/deviation promotion.
+  Resolution: Parent/full goal remains open. Next measured gap is GetRoot visibility: pinned SwNumberTree.hxx:349 protected, local public; one external implementation consumer SwList.GetListItem and six diagnostic test files. Next separate leaf must restore access and reconcile existing list lookup without public surrogate or changed root/list ownership behavior. Registered IO/recovery deviations remain untouched.
