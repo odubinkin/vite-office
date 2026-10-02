@@ -4,7 +4,7 @@ title: "Exclude Python sources throughout Agentplane storage"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -27,11 +27,16 @@ verification:
   updated_by: "CODER"
   note: "Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing and doctor passed. No source artifacts or network/upstream access."
   attempts: 0
-commit: null
+commit:
+  hash: "0fc6ce65034318bd5b5349fff9a106956c8c11b1"
+  message: "🧹 4N8JF2 code: exclude Python throughout Agentplane storage"
 comments:
   -
     author: "CODER"
     body: "Start: apply the explicitly authorized exclusion of Python source and bytecode throughout Agentplane storage, with a separate configuration-only commit."
+  -
+    author: "CODER"
+    body: "Recorded: actual separate configuration implementation SHA for evaluator targeting; status remains DOING."
 events:
   -
     type: "status"
@@ -46,8 +51,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing and doctor passed. No source artifacts or network/upstream access."
+  -
+    type: "status"
+    at: "2026-10-02T05:37:07.276Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Recorded: actual separate configuration implementation SHA for evaluator targeting; status remains DOING."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:33:12.277Z"
+doc_updated_at: "2026-10-02T05:37:07.276Z"
 doc_updated_by: "CODER"
 description: "Extend the user-requested Python artifact exclusion from task directories to the entire Agentplane subtree, including bytecode. Configuration-only follow-up to VTGES9 cleanup; separate .gitignore commit, no application or source changes."
 sections:
