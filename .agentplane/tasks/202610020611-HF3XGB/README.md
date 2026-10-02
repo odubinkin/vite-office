@@ -4,7 +4,7 @@ title: "Restore protected number-tree counting policy contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -20,11 +20,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-02T06:32:23.380Z"
+  updated_by: "CODER"
+  note: "All declared checks pass on actual implementation57235bd930aa541071aa1b24f8534ffdb0a2e7b9;761application/109inventory/19browser tests,both100%;72focused tests vendor absent;manual4file12symbol hashes and55unchanged bodies/249preserved expected records. TypeScript protected/private limit explicit;zero helper/source artifacts."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-02T06:32:47.284Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor distinct review: actual implementation57235bd930aa restores mandatory protected counting policies without changing runtime bodies or prior expected values. All declared gates pass; no full-module claim."
+  evaluated_sha: "57235bd930aa541071aa1b24f8534ffdb0a2e7b9"
+  blueprint_digest: "e6f0d9c37f50d20f331a46b75aaad54169cd8b4f87f1e32f473b0adfb4f59fd5"
+  evidence_refs:
+    - ".agentplane/tasks/202610020611-HF3XGB/README.md"
+    - ".agentplane/tasks/202610020611-HF3XGB/quality/20261002-063247284-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610020611-HF3XGB/quality/20261002-063247284-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610020611-HF3XGB/quality/20261002-063247284-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610020611-HF3XGB/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610020611-HF3XGB/verification-results.json"
+    - ".agentplane/tasks/202610020611-HF3XGB/source-audit.json"
+    - ".agentplane/tasks/202610020611-HF3XGB/typescript-visibility.json"
+    - ".agentplane/tasks/202610020611-HF3XGB/verify-final.log"
+  findings:
+    - "Reviewed all11semantic paths:3protected abstract base policies, protected derived overrides,6diagnostic suites with15test-only observers,3new exact type/dispatch/default/cache tests,2metadata rows only.55oldproduction method bodies and249matcher arguments unchanged after equivalent observation normalization."
+    - "Fresh manual4native file/12symbol hashes; no compiled-native claim. Owned virtual TypeScript diagnostics prove private narrowing2415 and required abstract policy2515; protected is closest legal inherited access, not identical C++private."
+    - "Full verify exit0:761application/109inventory/19browser tests,both100%coverage.72focused tests pass with vendor unavailable and restored. No project test reads/compiles/invokes upstream. Agentplane Python/bytecode0 and task native-source0."
 commit: null
 comments:
   -
@@ -38,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore native counting-policy visibility and mandatory abstract contract under existing user authorization, preserving all policy logic, expected values and registered IO/recovery deviations."
+  -
+    type: "verify"
+    at: "2026-10-02T06:32:23.380Z"
+    author: "CODER"
+    state: "ok"
+    note: "All declared checks pass on actual implementation57235bd930aa541071aa1b24f8534ffdb0a2e7b9;761application/109inventory/19browser tests,both100%;72focused tests vendor absent;manual4file12symbol hashes and55unchanged bodies/249preserved expected records. TypeScript protected/private limit explicit;zero helper/source artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:24:42.627Z"
+doc_updated_at: "2026-10-02T06:32:23.453Z"
 doc_updated_by: "CODER"
 description: "Restore protected abstract HasCountedChildren/IsCountedForNumbering/IsCountPhantoms in the native base and closest TypeScript protected SwNodeNum overrides. Keep existing policy bodies, adapt six diagnostic suites and complete foreign subclass obligation, verify exact types/defaults/virtual dispatch without invoking upstream from tests."
 sections:
@@ -51,7 +78,47 @@ sections:
     2. Baseline exact public-key/type/mandatory-abstract assertions expose preceding mismatch. Final exact zero-argument boolean signatures compile through a test subclass, all3policies absent from public base/derived surface, missing numbered policy is a compile error. Owned connected/unattached/phantom policies and a complete non-Writer subtype verify virtual dispatch, native defaults/counting and raw caches. Preserve all old literal and dynamic expected values across6diagnostic suites, including numbering classification/roundtrip/native-result matrices; method bodies unchanged, no production public proxies/casts.
     3. Focused tree/list/counting/lifecycle/classification tests pass with vendor absent and restored in finally. Full unchanged npm run verify passes all gates and both100%coverage. Metadata changes only2affected rows evidence/responsibilities; no status/default/deviation/gate promotions. Exact11semantic paths, reference pin/hash integrity, zero source/helper artifacts, routing/diff/doctor pass without new errors.
     4. Record actual implementation SHA and EVALUATOR-reviewed SHA, canonical verification and distinct same-actor review. Leaf DONE and checkout clean; parent/full goal stays active. TypeScript protected versus C++private narrowing limitation and native ordered-set/range/redline/lifetime/API gaps remain explicit, no new intentional-deviation registration.
-  Verification: "Pending."
+  Verification: |-
+    Command: npm run verify. Result: pass, exit0. Evidence: application761tests/171files, inventory109tests/36files, browser19tests; both coverage gates100% (application10930statements/8275branches/2937functions/10026lines; inventory1523/1080/384/1464). Scope: unchanged complete repository gates and eleven semantic paths. Earlier missing-JSDoc lint attempt retained; corrected new class only.
+
+    Command: focused owned tree/list/counting/lifecycle/classification suites with vendor unavailable and restored in finally. Result: pass. Evidence:72tests/16files; no project test reads/compiles/invokes upstream. Final typecheck and3new runtime tests pass; owned in-memory compiler validates private narrowing2415, protected acceptance, mandatory abstract numbered policy2515.
+
+    Command: fresh manual pinned-source declaration/body hash audit and owned AST comparison. Result: pass. Evidence:4file/12symbol hashes, unchanged pin9bc445578031fecf56086729d8e4940c77e14d65;55production bodies unchanged,249old matcher argument records across6suites preserved after equivalent observation normalization,15test-only observer adaptations. Metadata affects only2rows evidence/responsibilities. Source bodies/helpers stored:false; Python/bytecode files across Agentplane0, native source files in task artifacts0. No fresh compiled native execution or C++private equivalence claim.
+
+    Command: git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass. Evidence: routingOK, doctor0errors/1pre-existing managed-hook warning/2info. Scope: local repository security/traceability/gates. Actual implementation 57235bd930aa541071aa1b24f8534ffdb0a2e7b9; EVALUATOR phase follows on this exact HEAD. Parent/full goal remains active; native ordered-set and broader range/redline/lifetime/API/UI obligations stay open, registered IO/recovery deviations unchanged.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-02T06:32:23.380Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All declared checks pass on actual implementation57235bd930aa541071aa1b24f8534ffdb0a2e7b9;761application/109inventory/19browser tests,both100%;72focused tests vendor absent;manual4file12symbol hashes and55unchanged bodies/249preserved expected records. TypeScript protected/private limit explicit;zero helper/source artifacts.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-02T06:32:22.780Z, excerpt_hash=sha256:aa427d4da931a7113db0d4bc38655aa18780cc80ebe06c3272c57784b8d921ac
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610020611-HF3XGB/blueprint/resolved-snapshot.json
+    - old_digest: e6f0d9c37f50d20f331a46b75aaad54169cd8b4f87f1e32f473b0adfb4f59fd5
+    - current_digest: e6f0d9c37f50d20f331a46b75aaad54169cd8b4f87f1e32f473b0adfb4f59fd5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610020611-HF3XGB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610020611-HF3XGB
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf's actual implementation commit if requested; do not restore forbidden source/helper artifact copies or alter reference pin."
   Findings: |-
     Previous turn classified progress: native child-container/count restored, full gates passed. Fresh base declares IsCountedForNumbering pure virtual protected, local lacks it; HasCountedChildren and IsCountPhantoms are currently public. Native derived overrides private, a narrowing TypeScript disallows; protected overrides retain inherited polymorphism and remove public access without bridge architecture. No runtime external consumer of these node policies exists; similarly named SwNumRule API remains public and untouched.
@@ -86,7 +153,46 @@ Restore protected abstract HasCountedChildren, IsCountedForNumbering and IsCount
 
 ## Verification
 
-Pending.
+Command: npm run verify. Result: pass, exit0. Evidence: application761tests/171files, inventory109tests/36files, browser19tests; both coverage gates100% (application10930statements/8275branches/2937functions/10026lines; inventory1523/1080/384/1464). Scope: unchanged complete repository gates and eleven semantic paths. Earlier missing-JSDoc lint attempt retained; corrected new class only.
+
+Command: focused owned tree/list/counting/lifecycle/classification suites with vendor unavailable and restored in finally. Result: pass. Evidence:72tests/16files; no project test reads/compiles/invokes upstream. Final typecheck and3new runtime tests pass; owned in-memory compiler validates private narrowing2415, protected acceptance, mandatory abstract numbered policy2515.
+
+Command: fresh manual pinned-source declaration/body hash audit and owned AST comparison. Result: pass. Evidence:4file/12symbol hashes, unchanged pin9bc445578031fecf56086729d8e4940c77e14d65;55production bodies unchanged,249old matcher argument records across6suites preserved after equivalent observation normalization,15test-only observer adaptations. Metadata affects only2rows evidence/responsibilities. Source bodies/helpers stored:false; Python/bytecode files across Agentplane0, native source files in task artifacts0. No fresh compiled native execution or C++private equivalence claim.
+
+Command: git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass. Evidence: routingOK, doctor0errors/1pre-existing managed-hook warning/2info. Scope: local repository security/traceability/gates. Actual implementation 57235bd930aa541071aa1b24f8534ffdb0a2e7b9; EVALUATOR phase follows on this exact HEAD. Parent/full goal remains active; native ordered-set and broader range/redline/lifetime/API/UI obligations stay open, registered IO/recovery deviations unchanged.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-02T06:32:23.380Z — VERIFY — ok
+
+By: CODER
+
+Note: All declared checks pass on actual implementation57235bd930aa541071aa1b24f8534ffdb0a2e7b9;761application/109inventory/19browser tests,both100%;72focused tests vendor absent;manual4file12symbol hashes and55unchanged bodies/249preserved expected records. TypeScript protected/private limit explicit;zero helper/source artifacts.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-02T06:32:22.780Z, excerpt_hash=sha256:aa427d4da931a7113db0d4bc38655aa18780cc80ebe06c3272c57784b8d921ac
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610020611-HF3XGB/blueprint/resolved-snapshot.json
+- old_digest: e6f0d9c37f50d20f331a46b75aaad54169cd8b4f87f1e32f473b0adfb4f59fd5
+- current_digest: e6f0d9c37f50d20f331a46b75aaad54169cd8b4f87f1e32f473b0adfb4f59fd5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610020611-HF3XGB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610020611-HF3XGB
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
