@@ -1,0 +1,90 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "fresh pinned source inspection and manual control-flow audit; no new compiled native execution",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "fileSha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741",
+      "symbols": [
+        {
+          "symbol": "SwNumberTreeNode::RemoveChild",
+          "line": 558,
+          "sha256": "139a8e0dd9f76d4f628b48d82ecdac89f2dbecf5baf5f6175d54cfccc8535c06"
+        },
+        {
+          "symbol": "SwNumberTreeNode::GetIterator",
+          "line": 882,
+          "sha256": "655834351b343347ae98643ea3b9c081ac7e4f36463d873cde8c14f7ff5f4c33"
+        },
+        {
+          "symbol": "SwNumberTreeNode::MoveChildren",
+          "line": 362,
+          "sha256": "1783d69bce04628700d21fc501a06e70a5b928eed3485ff74ab88c700ae4e209"
+        },
+        {
+          "symbol": "SwNumberTreeNode::SetLastValid",
+          "line": 959,
+          "sha256": "71a2794d6c90dd19a582c7f8e13eecd0c8ba486bd45999c64e34ff2612057f61"
+        },
+        {
+          "symbol": "SwNumberTreeNode::NotifyInvalidChildren",
+          "line": 1063,
+          "sha256": "e6d77afb68fe3084e56048a9fb37988f103475aa3a80339bc265ce10f5b8d097"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "fileSha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae",
+      "symbols": [
+        {
+          "symbol": "SwNodeNum::PostRemove",
+          "line": 103,
+          "sha256": "d069d5024c1bc9fc5d74d27dfa695dbfaf3a830b35803c6571829df4a6296ba3"
+        },
+        {
+          "symbol": "SwNodeNum::LessThan",
+          "line": 216,
+          "sha256": "d5b1b2b6b4879fa04ac77d829e8075a1fbdeb0bc9980da727d1c76cf2b88c25c"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+      "fileSha256": "cbf3301f1bd940d7b7591b39c7580cb43a298e79995a55ab4aa12eda6fcf5a24",
+      "symbols": [
+        {
+          "symbol": "DocumentListItemsManager::removeListItem",
+          "line": 53,
+          "sha256": "e77a75de8a0718ba279b12047e5bbdacdaf364df9035dd3d8ef27b75766bf611"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+      "fileSha256": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129",
+      "symbols": [
+        {
+          "symbol": "SwNumRule::RemoveTextNode",
+          "line": 158,
+          "sha256": "84a9f76487d98070d080420d04efef84a97925959dc22dbfacd03a22d3ea62d4"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "GetIterator resolves comparator-equivalent stored child, including a distinct object with the same text-node index.",
+    "RemoveChild rejects phantom arguments before lookup or callback.",
+    "Successful lookup detaches pRemove, moves its descendants to predecessor or first phantom, invalidates and notifies transferred subtree, adjusts last-valid before erase and then notifies root suffix.",
+    "After phantom creation the lookup iterator is recomputed using the supplied argument.",
+    "PostRemove is invoked on pChild, not pRemove, after successful removal or a real-argument miss.",
+    "Shown SwNodeNum PostRemove removes comparator-equivalent document registry membership, removes its bound-rule text client and clears only its own bound rule.",
+    "Document registry already uses equivalence locally; no registry implementation change required.",
+    "Native RemoveTextNode may invalidate the owning list when the rule remains invalid; tests validate the rule before measuring removal callback order."
+  ],
+  "sourceBodiesStored": false,
+  "helperSourcesStored": false,
+  "limitations": [
+    "Source inspection and actual local-owner regression tests do not establish compiled native owner/layout/destructor/redline lifetime parity."
+  ]
+}

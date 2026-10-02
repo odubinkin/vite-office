@@ -356,22 +356,23 @@ export abstract class SwNumberTreeNode {
     this.children = [];
     this.lastValid = undefined;
   }
-  /** Removes a real child, retaining its descendants under a predecessor or phantom. @param child - Owned real child. @param document - Native operation context. @returns Nothing. */
+  /** Removes the equivalent stored child, retaining its descendants and releasing the supplied record's membership. @param child - Real lookup and callback argument. @param document - Native operation context. @returns Nothing. */
   public RemoveChild(child: SwNumberTreeNode, document?: SwDoc): void {
     if (child.IsPhantom()) return;
-    let position = this.children.indexOf(child);
+    let position = this.GetIterator(child);
     if (position < 0) {
       child.PostRemove();
       return;
     }
-    child.parent = undefined;
+    const removed = this.children[position] as SwNumberTreeNode;
+    removed.parent = undefined;
     let predecessor = this.children[position - 1];
-    if (position === 0 && child.children.length > 0) {
+    if (position === 0 && removed.children.length > 0) {
       predecessor = this.CreatePhantom();
-      position = this.children.indexOf(child);
+      position = this.GetIterator(child);
     }
-    if (child.children.length > 0 && predecessor !== undefined) {
-      child.MoveChildren(predecessor);
+    if (removed.children.length > 0 && predecessor !== undefined) {
+      removed.MoveChildren(predecessor);
       predecessor.InvalidateTree();
       predecessor.NotifyInvalidChildren(document);
     }

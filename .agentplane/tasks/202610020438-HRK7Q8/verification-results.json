@@ -1,0 +1,45 @@
+{
+  "fullVerifyExit": 0,
+  "app": {
+    "files": 167,
+    "tests": 747,
+    "coverage": {
+      "statements": [
+        10925,
+        10925
+      ],
+      "branches": [
+        8273,
+        8273
+      ],
+      "functions": [
+        2937,
+        2937
+      ],
+      "lines": [
+        10021,
+        10021
+      ]
+    }
+  },
+  "inventory": {
+    "files": 36,
+    "tests": 109,
+    "coveragePercent": 100
+  },
+  "browserTests": 19,
+  "newRemovalTests": 13,
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "policyRouting": "pass",
+  "doctor": {
+    "errors": 0,
+    "existingWarnings": 2
+  },
+  "manualNativeExecution": false,
+  "sourceAndHelperArtifactBodies": false
+}
