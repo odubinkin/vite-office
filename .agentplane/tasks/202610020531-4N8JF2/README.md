@@ -4,7 +4,7 @@ title: "Exclude Python sources throughout Agentplane storage"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,10 +22,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-02T05:33:12.136Z"
+  updated_by: "CODER"
+  note: "Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing and doctor passed. No source artifacts or network/upstream access."
   attempts: 0
 commit: null
 comments:
@@ -40,8 +40,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: apply the explicitly authorized exclusion of Python source and bytecode throughout Agentplane storage, with a separate configuration-only commit."
+  -
+    type: "verify"
+    at: "2026-10-02T05:33:12.136Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing and doctor passed. No source artifacts or network/upstream access."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:31:47.105Z"
+doc_updated_at: "2026-10-02T05:33:12.277Z"
 doc_updated_by: "CODER"
 description: "Extend the user-requested Python artifact exclusion from task directories to the entire Agentplane subtree, including bytecode. Configuration-only follow-up to VTGES9 cleanup; separate .gitignore commit, no application or source changes."
 sections:
@@ -52,7 +58,41 @@ sections:
     1. git check-ignore confirms py/pyc/pyo paths under task directories and scratch are excluded. Filesystem and tracked inventory under .agentplane contain zero such files. No Python helper source saved.
     2. Exact semantic diff is .gitignore only; git diff --check, policy routing and doctor pass without new errors. No application or upstream tests required for artifact exclusion.
     3. Separate actual implementation SHA, canonical verification and quality evidence recorded. No unrelated changes staged; finish with clean tracked state once HGKX68 is committed.
-  Verification: "Pending local scoped checks."
+  Verification: |-
+    Command: scoped inventories, git check-ignore, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing OK; doctor zero errors, one pre-existing hook readiness warning. Implementation commit 0fc6ce65034318bd5b5349fff9a106956c8c11b1. Closure deferred until HGKX68 tracked changes are persisted; no skipped scope checks.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-02T05:33:12.136Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing and doctor passed. No source artifacts or network/upstream access.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-02T05:33:11.117Z, excerpt_hash=sha256:a12c530892c4b950c12c0244833d7ff51e82be3f59701632d3e1b13c202146e0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610020531-4N8JF2/blueprint/resolved-snapshot.json
+    - old_digest: 712014c3d5bdba92347324d19ca050d507e6c9bc8dc9cbda31f3af74ad44bdfc
+    - current_digest: 712014c3d5bdba92347324d19ca050d507e6c9bc8dc9cbda31f3af74ad44bdfc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610020531-4N8JF2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610020531-4N8JF2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this .gitignore commit if requested; do not restore forbidden helpers to Agentplane artifacts."
   Findings: "The earlier docs task could record ignored local file removal but enforcement requires code intent for .gitignore mutations. No hook bypass or scope expansion."
 id_source: "generated"
@@ -77,7 +117,40 @@ Extend the existing task-only Python ignore pattern to .agentplane/**/*.py and a
 
 ## Verification
 
-Pending local scoped checks.
+Command: scoped inventories, git check-ignore, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing OK; doctor zero errors, one pre-existing hook readiness warning. Implementation commit 0fc6ce65034318bd5b5349fff9a106956c8c11b1. Closure deferred until HGKX68 tracked changes are persisted; no skipped scope checks.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-02T05:33:12.136Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact implementation diff is .gitignore only. git check-ignore covers all six representative task/scratch Python and bytecode paths; both inventories zero. No application/test/upstream source changes. Routing and doctor passed. No source artifacts or network/upstream access.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-02T05:33:11.117Z, excerpt_hash=sha256:a12c530892c4b950c12c0244833d7ff51e82be3f59701632d3e1b13c202146e0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610020531-4N8JF2/blueprint/resolved-snapshot.json
+- old_digest: 712014c3d5bdba92347324d19ca050d507e6c9bc8dc9cbda31f3af74ad44bdfc
+- current_digest: 712014c3d5bdba92347324d19ca050d507e6c9bc8dc9cbda31f3af74ad44bdfc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610020531-4N8JF2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610020531-4N8JF2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
