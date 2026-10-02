@@ -34,5 +34,11 @@
     "originalBytes": 13093,
     "originalSha256": "ca9f0bdc20dcbb9fdf7c731e334674ff4ddb9b0f7ca9d7934f745e15a7d43d73",
     "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020544-N4RMCC/verify-final.log",
+    "originalBytes": 852169,
+    "originalSha256": "7314375d238fca7d71b491dfa4adcef722bcc2bd784fe906de0297e7eff4f64f",
+    "normalization": "retain complete command/check output before final parity JSON and scalar parity totals; omit repetitive inventory rows, trim trailing whitespace"
   }
 ]

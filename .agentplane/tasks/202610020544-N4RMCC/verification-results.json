@@ -1,0 +1,50 @@
+{
+  "semanticImplementationCommit": "127ada3f47601590e057934371deeb0219cc9734",
+  "finalImplementationCommit": "6552c9aa4c770935046676fc3a686f5d477514a0",
+  "semanticPaths": 14,
+  "sourceAudit": {
+    "fileHashes": 5,
+    "declarationBodyHashes": 6,
+    "mode": "manual source inspection only",
+    "compiledNativeClaim": false
+  },
+  "priorMatcherArgumentAstRecordsUnchanged": 249,
+  "priorObserverSuites": 8,
+  "testOnlyChildObservationsAdapted": 32,
+  "otherTreeMethodAstRecordsUnchangedAfterFieldRename": 49,
+  "newTests": 3,
+  "vendorAbsent": {
+    "files": 13,
+    "tests": 60,
+    "exitCode": 0,
+    "restored": true
+  },
+  "fullVerify": {
+    "command": "npm run verify",
+    "exitCode": 0,
+    "application": {
+      "files": 170,
+      "tests": 758,
+      "statements": 10930,
+      "branches": 8275,
+      "functions": 2937,
+      "lines": 10026,
+      "coveragePercent": 100
+    },
+    "inventory": {
+      "files": 36,
+      "tests": 109,
+      "statements": 1523,
+      "branches": 1080,
+      "functions": 384,
+      "lines": 1464,
+      "coveragePercent": 100
+    },
+    "browserTests": 19,
+    "firstAttempt": "Runtime/coverage/browser gates passed; rejected task-added provenance strings. Corrected only3new path/marker entries, all targeted and full gates pass."
+  },
+  "metadataRows": 3,
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false,
+  "fullGoal": "active; no whole-module/status/default/deviation promotion"
+}
