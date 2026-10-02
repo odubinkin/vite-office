@@ -1,0 +1,34 @@
+{
+  "fullVerifyExitCode": 0,
+  "rawFullLogBytes": 869549,
+  "rawFullLogSha256": "3df2f232dd6bd27992594c6c1079f87fe0eb421067d85741dcd7c8ae54fdd9ea",
+  "logs": [
+    {
+      "file": "baseline-prefix.log",
+      "bytes": 4049,
+      "sha256": "2bffe4a73a6f9e17bab001bc182da1599637289850c9171484b3c9f4131ae8da"
+    },
+    {
+      "file": "baseline-types.log",
+      "bytes": 818,
+      "sha256": "880f2e9e70eef71f8434d15447224b3af39c0e781a06a2a6caf69dbab4b3ff4c"
+    },
+    {
+      "file": "full-verify.log",
+      "bytes": 13805,
+      "sha256": "c5748e1a0230ac42e8c26f87bf855d5ba02ebd38161dfa0d7bc88028a41b410d"
+    },
+    {
+      "file": "offline-app.log",
+      "bytes": 244,
+      "sha256": "14e04cdb42c7d40feb6d7eaad401d1e2f62928ca8b6d8ad8afbcbfe7cd2f0baf"
+    },
+    {
+      "file": "offline-boundaries.log",
+      "bytes": 219,
+      "sha256": "a935e5ab68d4076c446cf93653589abaf896bc1a493798aa270e9c8a872bf410"
+    }
+  ],
+  "helperFilesGenerated": 0,
+  "sourceBodiesSaved": 0
+}

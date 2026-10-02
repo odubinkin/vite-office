@@ -4,7 +4,7 @@ title: "Restore native number-tree prefix invalidation API"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore complete native protected prefix invalidation API and positional callers under continuing goal authorization; preserve old assertions and IO deviations."
 doc_version: 3
-doc_updated_at: "2026-10-02T08:55:04.932Z"
+doc_updated_at: "2026-10-02T09:06:07.053Z"
 doc_updated_by: "CODER"
 description: "Iteration60 restores complete selected protected prefix API: required iterator-position SetLastValid with false-default validation, zero-argument InvalidateChildren and protected required-child Invalidate, adapting all existing callers to native positions/end. Owned regression tests and fresh manual source evidence; no upstream test access or saved helper/source copies."
 sections:
@@ -50,7 +50,10 @@ sections:
     4. Canonical verify and distinct same-actor EVALUATOR reviewed actual semantic SHA; clean leaf close, parent/full goal active. Wider helper access/context/client/dtor/notifiable/redline/layout/range/full iterator/browser/lifetime remain unverified.
   Verification: "Pending."
   Rollback Plan: "Revert only actual semantic commit if requested; preserve source/helper cleanup and pinned vendor. No history rewrite."
-  Findings: "Preflight main/direct clean at93c43d48e39097ead8f6aac2fffcef94af9c4fc5. Previous goal turn PROGRESS: iteration59 closed, native protected state restored. Fresh header433..445 and core959..1035 show selected3protected methods and iterator contract; local SetLastValid is private pointer API and next-uncounted code bypasses absent InvalidateChildren. Local GetIterator and sorted-vector find already use numeric positions/-1 end.12call sites require conversion; no old tests invoke these helpers directly. Native invalid iterator UB and C++const/mutable/destructor are outside selected defined-input contract."
+  Findings: |-
+    Preflight main/direct clean at93c43d48e39097ead8f6aac2fffcef94af9c4fc5. Previous goal turn PROGRESS: iteration59 closed, native protected state restored. Fresh header433..445 and core959..1035 show selected3protected methods and iterator contract; local SetLastValid is private pointer API and next-uncounted code bypasses absent InvalidateChildren. Local GetIterator and sorted-vector find already use numeric positions/-1 end.12call sites require conversion; no old tests invoke these helpers directly. Native invalid iterator UB and C++const/mutable/destructor are outside selected defined-input contract.
+
+    Implementation evidence:9existing prefix/positional-caller bodies change,46other base/derived method bodies remain unchanged and InvalidateChildren is the sole added runtime method. All216old test files remain byte-identical. Final focused81app/19files and7boundary tests pass vendor absent/restored; new5tests all pass. Initial authored optional-tuple type assertion omitted the explicit undefined allowed by TypeScript optional parameters; corrected only the new tuple and bound inherited methods directly for exact signature inspection, then reran final authored tests/typecheck against the unchanged baseline in memory with production restored in finally. Final baseline4runtime regressions and protected/missing/type errors remain; final types/lint pass. No old expected values or gates changed. Native2file/16span hashes unchanged, exact4semantic paths and1metadata evidence/description row each, zero forbidden source/helper artifacts. Full verify is running on live session54060; no completion claim yet.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +86,5 @@ Revert only actual semantic commit if requested; preserve source/helper cleanup 
 ## Findings
 
 Preflight main/direct clean at93c43d48e39097ead8f6aac2fffcef94af9c4fc5. Previous goal turn PROGRESS: iteration59 closed, native protected state restored. Fresh header433..445 and core959..1035 show selected3protected methods and iterator contract; local SetLastValid is private pointer API and next-uncounted code bypasses absent InvalidateChildren. Local GetIterator and sorted-vector find already use numeric positions/-1 end.12call sites require conversion; no old tests invoke these helpers directly. Native invalid iterator UB and C++const/mutable/destructor are outside selected defined-input contract.
+
+Implementation evidence:9existing prefix/positional-caller bodies change,46other base/derived method bodies remain unchanged and InvalidateChildren is the sole added runtime method. All216old test files remain byte-identical. Final focused81app/19files and7boundary tests pass vendor absent/restored; new5tests all pass. Initial authored optional-tuple type assertion omitted the explicit undefined allowed by TypeScript optional parameters; corrected only the new tuple and bound inherited methods directly for exact signature inspection, then reran final authored tests/typecheck against the unchanged baseline in memory with production restored in finally. Final baseline4runtime regressions and protected/missing/type errors remain; final types/lint pass. No old expected values or gates changed. Native2file/16span hashes unchanged, exact4semantic paths and1metadata evidence/description row each, zero forbidden source/helper artifacts. Full verify is running on live session54060; no completion claim yet.
