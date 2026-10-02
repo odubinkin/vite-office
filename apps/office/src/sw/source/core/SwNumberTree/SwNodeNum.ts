@@ -50,7 +50,7 @@ export class SwNodeNum extends SwNumberTreeNode {
     return this.IsNotificationEnabled(document);
   }
   /** Checks the native reading flag; dtor and temporary native client blockers remain outside this bounded lifetime. @param document - Native operation context, absent for diagnostic roots. @returns Whether enabled. */
-  protected IsNotificationEnabled(document?: SwDoc): boolean {
+  public override IsNotificationEnabled(document?: SwDoc): boolean {
     const owner = this.textNode?.GetDoc() ?? document;
     return owner === undefined || !owner.IsInReading();
   }
