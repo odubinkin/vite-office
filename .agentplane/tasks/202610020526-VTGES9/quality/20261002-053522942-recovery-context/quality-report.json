@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610020526-VTGES9",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-02T05:35:22.942Z",
+  "verdict": "pass",
+  "summary": "Same-actor distinct quality phase: removed three ignored Python helpers, verified zero source/bytecode inventory, committed bounded cleanup results only.",
+  "evaluated_sha": "a5ae916fd31daf94cf87cc05a9738da57ea43135",
+  "blueprint_digest": "990b171f85a39ba7e6b299befe49833e2a8de24e33cccda0c613156854218095",
+  "findings": [
+    "No application changes, network, upstream invocation or helper source storage. Explicit .gitignore exclusion is separately committed by 4N8JF2. This is not an independent-agent evaluation."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610020526-VTGES9/README.md",
+    "cea5d14c1d73376eee8b598face9a021f55df373",
+    ".agentplane/tasks/202610020526-VTGES9/cleanup-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Ignore rules prevent tracking, not creation; user prohibition remains binding on future work."
+  ]
+}
