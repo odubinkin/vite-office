@@ -1,30 +1,31 @@
 
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
 
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts (5 tests | 4 failed) 19ms
-   × provides protected required-position prefix and child invalidation contracts without public exports 5ms
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts (5 tests | 4 failed) 18ms
+   × provides protected required-position prefix and child invalidation contracts without public exports 4ms
    × retains native false-default prefix guards rewind validation and end semantics without counter reads 7ms
    × dispatches the native following-uncounted invalidation helper while retaining hierarchical counters and later prefixes 2ms
    × invalidates continuous suffixes and propagates parent iterator positions without changing raw counters 2ms
 
  Test Files  1 failed (1)
       Tests  4 failed | 1 passed (5)
-   Start at  15:57:52
-   Duration  1.43s (transform 292ms, setup 162ms, import 343ms, tests 19ms, environment 769ms)
+   Start at  16:00:48
+   Duration  1.30s (transform 272ms, setup 148ms, import 311ms, tests 18ms, environment 684ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts > provides protected required-position prefix and child invalidation contracts without public exports
-TypeError: this.InvalidateChildren is not a function
- ❯ PrefixContract.clearPrefix src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:16:10
-     14|   /** Forwards native child invalidation. @returns Nothing. */
-     15|   public clearPrefix(): void {
-     16|     this.InvalidateChildren();
-       |          ^
-     17|   }
-     18|   /** Forwards the required child contract. @param child - Changed chi…
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:96:8
+TypeError: Cannot read properties of undefined (reading 'bind')
+ ❯ PrefixContract.<instance_members_initializer> src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:13:57
+     11|   public readonly setPrefix = this.SetLastValid.bind(this);
+     12|   /** Retains native zero-argument child invalidation. */
+     13|   public readonly clearPrefix = this.InvalidateChildren.bind(this);
+       |                                                         ^
+     14|   /** Retains the inherited required-child contract. */
+     15|   public readonly invalidateChild = this.Invalidate.bind(this);
+ ❯ new PrefixContract src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:9:1
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:86:16
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
 
@@ -37,31 +38,31 @@ TypeError: node.LessThan is not a function
        |                                               ^
     239|     ) {
     240|       this.mpLastValid = node;
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:121:11
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:115:11
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
 
  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts > dispatches the native following-uncounted invalidation helper while retaining hierarchical counters and later prefixes
 Error: The property "InvalidateChildren" is not defined on the object.
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:154:29
-    152|     expect(required(records[5]).GetNumberVector()).toEqual([2, 1]);
-    153|     const raw = counters(records);
-    154|     const invalidation = vi.spyOn(probe(next), "InvalidateChildren");
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:148:29
+    146|     expect(required(records[5]).GetNumberVector()).toEqual([2, 1]);
+    147|     const raw = counters(records);
+    148|     const invalidation = vi.spyOn(probe(next), "InvalidateChildren");
        |                             ^
-    155|     probe(first).SetLastValid(-1);
-    156|     expect(invalidation).toHaveBeenCalledExactlyOnceWith();
+    149|     probe(first).SetLastValid(-1);
+    150|     expect(invalidation).toHaveBeenCalledExactlyOnceWith();
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
 
  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts > invalidates continuous suffixes and propagates parent iterator positions without changing raw counters
 TypeError: probe(...).InvalidateChildren is not a function
- ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:180:18
-    178|     expect(counters(records)).toEqual([1, 2, 3, 4, 5, 6]);
-    179|     const forwarded = vi.spyOn(probe(root), "SetLastValid");
-    180|     probe(first).InvalidateChildren();
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts:174:18
+    172|     expect(counters(records)).toEqual([1, 2, 3, 4, 5, 6]);
+    173|     const forwarded = vi.spyOn(probe(root), "SetLastValid");
+    174|     probe(first).InvalidateChildren();
        |                  ^
-    181|     expect(forwarded).toHaveBeenCalledExactlyOnceWith(0, false);
-    182|     expect([
+    175|     expect(forwarded).toHaveBeenCalledExactlyOnceWith(0, false);
+    176|     expect([
 
 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
 

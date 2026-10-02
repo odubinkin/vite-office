@@ -1,0 +1,129 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "sha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "sha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741"
+    }
+  ],
+  "inspectedSpans": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "firstLine": 418,
+      "lastLine": 445,
+      "responsibility": "protected prefix invalidation declarations and false-default",
+      "sha256": "e5cd3228c0a33a04d8079bd7a2c699194f7a097dc9372c28cf027ddc9aa33380"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 959,
+      "lastLine": 1012,
+      "responsibility": "position guard stored-boundary lookup assignment following-node dispatch continuous suffix and upward propagation",
+      "sha256": "860b40e70d1a6c6105c28e2ae78cf63386a6187adcdff0389d3b1d789414c982"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 1023,
+      "lastLine": 1037,
+      "responsibility": "child validity and predecessor/end position",
+      "sha256": "80d6a702dc2fb83d521c180c7edc6d7d599c22828b3491613fc6362519083404"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 115,
+      "lastLine": 119,
+      "responsibility": "native iterator call-site",
+      "sha256": "fa3a45fd70194af3f39a9fc4d57a4a8a04383a08bdab00a0b091fcb905fd19fb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 222,
+      "lastLine": 226,
+      "responsibility": "native iterator call-site",
+      "sha256": "740bfbf19c4223fa8ab2d75d01efe6878ab6c4f49598e9af619f7cc1ef8f7bf9"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 279,
+      "lastLine": 283,
+      "responsibility": "native iterator call-site",
+      "sha256": "d9d80ef0948aafbe7d8e71e2befab8cba33fe64881afb765888edffcc33774f7"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 338,
+      "lastLine": 342,
+      "responsibility": "native iterator call-site",
+      "sha256": "bc80bd35240a50d53bd05fd3d59614b2105540f7f47a315605e3ebf40505677d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 350,
+      "lastLine": 354,
+      "responsibility": "native iterator call-site",
+      "sha256": "c0f3130b8e048ad1f8eab8132642e5b3143fd21735c553bc3d5629cac40474ab"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 371,
+      "lastLine": 375,
+      "responsibility": "native iterator call-site",
+      "sha256": "6e58eef7504f2bf09bb6c99b8c22b5808bab980d6067dfe8984f8c96a4f36ab7"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 458,
+      "lastLine": 462,
+      "responsibility": "native iterator call-site",
+      "sha256": "01a348fd8e2afa076b8e9978fb73afa9473ccda40ad1ecbb489d8ebc0c7043aa"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 530,
+      "lastLine": 534,
+      "responsibility": "native iterator call-site",
+      "sha256": "6afa79602cdc428b9bac23bcda9cc20c413221f9513bcc893275542592be0681"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 533,
+      "lastLine": 537,
+      "responsibility": "native iterator call-site",
+      "sha256": "7cc3c5d9a037ad4d0e258c65a729826404247690dbf4241f5b6fab6ce58af479"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 613,
+      "lastLine": 617,
+      "responsibility": "native iterator call-site",
+      "sha256": "4b849b8cf855f01c879a4c3ee45eb942a7b56c4b665ab8533f4fd2d48c739206"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 615,
+      "lastLine": 619,
+      "responsibility": "native iterator call-site",
+      "sha256": "92d014598cdac05ded1b69e618fa4db2f0d3e6df1719784657e82bec4db4b151"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 1007,
+      "lastLine": 1011,
+      "responsibility": "native iterator call-site",
+      "sha256": "4aec87e8bd23367c317c12330023b2d23adc24bd6a734597c79ac162c81555ff"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "firstLine": 1032,
+      "lastLine": 1036,
+      "responsibility": "native iterator call-site",
+      "sha256": "1ddd1b3e71d4ad88773ecdafc2ee22e215332c94bb4411333577b8d93a552c6f"
+    }
+  ],
+  "method": "Fresh manual declaration/body/call-site inspection; hashes only, no saved native/helper bodies or compiled native execution.",
+  "limits": "Defined owned iterator positions and end only; existing numeric index/-1 end/undefined-pointer representation retained. Invalid native iterator UB, C++const/mutable/reference/platform/destructor/context lifetime not certified."
+}

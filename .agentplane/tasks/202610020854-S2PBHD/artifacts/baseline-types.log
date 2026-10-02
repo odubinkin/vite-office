@@ -1,5 +1,5 @@
-src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(12,10): error TS2341: Property 'SetLastValid' is private and only accessible within class 'SwNumberTreeNode'.
-src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(12,23): error TS2345: Argument of type 'number' is not assignable to parameter of type 'SwNumberTreeNode'.
-src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(16,10): error TS2551: Property 'InvalidateChildren' does not exist on type 'PrefixContract'. Did you mean 'invalidateChild'?
-src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(20,10): error TS2341: Property 'Invalidate' is private and only accessible within class 'SwNumberTreeNode'.
-src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(38,6): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(11,36): error TS2341: Property 'SetLastValid' is private and only accessible within class 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(13,38): error TS2551: Property 'InvalidateChildren' does not exist on type 'PrefixContract'. Did you mean 'invalidateChild'?
+src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(15,42): error TS2341: Property 'Invalidate' is private and only accessible within class 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(32,6): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts(87,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'SwNumberTreeNode'.

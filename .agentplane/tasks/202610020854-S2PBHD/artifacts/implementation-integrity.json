@@ -1,0 +1,22 @@
+{
+  "base": "93c43d48e390",
+  "oldMethodBodies": 55,
+  "changedPrefixAndPositionalCallerBodies": [
+    "AddChild",
+    "ClearObsoletePhantoms",
+    "Invalidate",
+    "MoveChildren",
+    "MoveGreaterChildren",
+    "RemoveChild",
+    "SetLastValid",
+    "ValidateContinuous",
+    "ValidateHierarchical"
+  ],
+  "unchangedMethodBodies": 46,
+  "addedMethod": [
+    "InvalidateChildren"
+  ],
+  "allOldTestFilesByteUnchanged": 216,
+  "baseClassMethodBodies": 38,
+  "derivedMethodBodiesByteUnchanged": 17
+}
