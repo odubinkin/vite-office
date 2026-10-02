@@ -96,7 +96,7 @@ export abstract class SwNumberTreeNode {
     if (depth > 0) {
       const position = this.mChildren.upper_bound(child);
       const parent = position === 0 ? this.CreatePhantom() : this.mChildren.at(position - 1);
-      if (position === 0) this.SetLastValid(undefined);
+      if (position === 0) this.SetLastValid(-1);
       parent?.AddChild(child, depth - 1, document);
       return;
     }
@@ -119,8 +119,8 @@ export abstract class SwNumberTreeNode {
         destination = destination.GetDestinationPhantom();
       }
       child.ClearObsoletePhantoms();
-      if (predecessor.IsValid()) this.SetLastValid(predecessor);
-    } else this.SetLastValid(undefined);
+      if (predecessor.IsValid()) this.SetLastValid(position - 1);
+    } else this.SetLastValid(-1);
     this.ClearObsoletePhantoms();
     if (notification) {
       if (!this.IsCounted()) {
@@ -153,7 +153,7 @@ export abstract class SwNumberTreeNode {
     if (first?.IsPhantom()) {
       first.ClearObsoletePhantoms();
       if (first.mChildren.size() === 0) {
-        this.SetLastValid(undefined);
+        this.SetLastValid(-1);
         this.mChildren.erase_at(0);
         first.mpParent = undefined;
       }
@@ -174,14 +174,14 @@ export abstract class SwNumberTreeNode {
         ? 0
         : this.mChildren.upper_bound(compare);
     if (from === this.mChildren.size()) return;
-    this.SetLastValid(undefined);
+    this.SetLastValid(-1);
     while (from < this.mChildren.size()) {
       const child = this.mChildren.at(from) as SwNumberTreeNode;
       child.mpParent = destination;
       destination.mChildren.insert(child);
       this.mChildren.erase_at(from);
     }
-    if (!this.mChildren.empty()) this.SetLastValid(this.mChildren.back());
+    if (!this.mChildren.empty()) this.SetLastValid(this.mChildren.size() - 1);
   }
   /** Returns the owning number-tree node. @returns Parent, including root. */
   public GetParent(): SwNumberTreeNode | undefined {
@@ -230,29 +230,36 @@ export abstract class SwNumberTreeNode {
     const boundary = this.mChildren.at(this.mChildren.find(this.mpLastValid))!;
     return !boundary.LessThan(child);
   }
-  /** Retains a validated prefix or invalidates it and the next uncounted subtree. @param node - Last valid child. @param validating - Whether validation advances the prefix. @returns Nothing. */
-  private SetLastValid(node: SwNumberTreeNode | undefined, validating = false): void {
+  /** Invalidates all children through the native end position. @returns Nothing. */
+  protected InvalidateChildren(): void {
+    this.SetLastValid(-1);
+  }
+  /** Retains a validated prefix or invalidates it and the next uncounted subtree. @param index - Owned child position, minus one for native end. @param validating - Whether validation advances the prefix. @returns Nothing. */
+  protected SetLastValid(index: number, validating = false): void {
     if (
       validating ||
-      node === undefined ||
-      (this.mpLastValid !== undefined && node.LessThan(this.mpLastValid))
+      index === -1 ||
+      (this.mpLastValid !== undefined &&
+        (this.mChildren.at(index) as SwNumberTreeNode).LessThan(
+          this.mChildren.at(this.mChildren.find(this.mpLastValid)) as SwNumberTreeNode,
+        ))
     ) {
-      this.mpLastValid = node;
+      this.mpLastValid = index === -1 ? undefined : this.mChildren.at(index);
       const siblings = this.mpParent?.mChildren;
       const next = siblings?.at(siblings.find(this) + 1);
-      if (next !== undefined && !next.IsCounted()) next.SetLastValid(undefined);
+      if (next !== undefined && !next.IsCounted()) next.InvalidateChildren();
     }
     if (this.IsContinuous()) {
       const position =
         this.mpLastValid === undefined ? 0 : this.mChildren.find(this.mpLastValid) + 1;
       for (let index = position; index < this.mChildren.size(); index++)
         (this.mChildren.at(index) as SwNumberTreeNode).InvalidateTree();
-      this.mpParent?.SetLastValid(this, validating);
+      this.mpParent?.SetLastValid(this.mpParent.GetIterator(this), validating);
     }
   }
   /** Invalidates a counted prefix from one changed child onward. @param child - Changed child. @returns Nothing. */
-  private Invalidate(child: SwNumberTreeNode): void {
-    if (child.IsValid()) this.SetLastValid(this.mChildren.at(this.mChildren.find(child) - 1));
+  protected Invalidate(child: SwNumberTreeNode): void {
+    if (child.IsValid()) this.SetLastValid(this.GetIterator(child) - 1);
   }
   /** Invalidates every descendant prefix without changing topology. @returns Nothing. */
   public InvalidateTree(): void {
@@ -302,7 +309,7 @@ export abstract class SwNumberTreeNode {
         }
       }
     } while (child !== undefined && child !== target);
-    this.SetLastValid(child, true);
+    this.SetLastValid(child === undefined ? -1 : position, true);
   }
   /** Returns the signed counter, validating its parent prefix by default. @param validate - Whether to validate. @returns Counter. */
   public GetNumber(validate = true): number {
@@ -353,7 +360,7 @@ export abstract class SwNumberTreeNode {
       if (child.IsCounted()) number = child.IsRestart() ? child.GetStartValue() : number + 1;
       child.mnNumber = number;
     }
-    this.SetLastValid(this.mChildren.at(current), true);
+    this.SetLastValid(current, true);
   }
   /** Reports an empty subtree or a chain containing only phantoms. @returns Phantom-only flag. */
   private HasOnlyPhantoms(): boolean {
@@ -368,7 +375,7 @@ export abstract class SwNumberTreeNode {
   private MoveChildren(destination: SwNumberTreeNode): void {
     const first = this.mChildren.front();
     if (first === undefined) return;
-    this.SetLastValid(undefined);
+    this.SetLastValid(-1);
     if (first.IsPhantom()) {
       const last = destination.mChildren.back() ?? destination.CreatePhantom();
       first.MoveChildren(last as SwNumberTreeNode);
@@ -400,7 +407,7 @@ export abstract class SwNumberTreeNode {
       predecessor.InvalidateTree();
       predecessor.NotifyInvalidChildren(document);
     }
-    this.SetLastValid(predecessor?.IsPhantom() ? undefined : predecessor);
+    this.SetLastValid(predecessor === undefined || predecessor.IsPhantom() ? -1 : position - 1);
     this.mChildren.erase_at(position);
     this.NotifyInvalidChildren(document);
     child.PostRemove();
