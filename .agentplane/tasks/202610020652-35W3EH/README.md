@@ -4,7 +4,7 @@ title: "Restore source-owned sorted number-tree child storage"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned sorted unique number-tree child container and transfer semantics under continuing user goal authorization, preserving registered IO/recovery deviations and prohibiting helper/source artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:54:04.974Z"
+doc_updated_at: "2026-10-02T07:03:40.751Z"
 doc_updated_by: "CODER"
 description: "Iteration56 replaces raw child arrays and push-based merges with the used native o3tl sorted_vector operations, preserving Writer ordering/equivalence/cache/ownership sequencing. Add mapped generic container and exact module classification, owned merge/type tests, adapt existing diagnostic snapshots without changing expected values; no upstream invocation in tests or source/helper artifacts."
 sections:
@@ -50,7 +50,12 @@ sections:
     4. Canonical verification and distinct same-actor EVALUATOR on actual semantic implementation SHA, leaf DONE and checkout clean. Parent/full goal active, partial-order policy/initializer-list/copy/native iterator/const/lifetime and broader tree API/document/range/redline/UI obligations explicitly unverified.
   Verification: "Pending."
   Rollback Plan: "Revert only this leaf actual semantic commit if requested, restoring its preceding container implementation without forbidden source/helper artifacts or changing the reference pin."
-  Findings: "Previous iteration55 is PROGRESS, not completion. Fresh upstream SwNumberTree.hxx uses o3tl::sorted_vector (earlier std::set was probe adapter wording). Native MoveGreaterChildren uses unique sorted single insert and MoveChildren uses bulk union; current local push bypasses both. This leaf replaces the emulation with native-owned used container operations, rather than retaining an array facade or adding a tree-local merge patch. Native missing iterator adapted to index-1 for prior diagnostic contract; unimplemented header overloads/copy/const/lifetime remain explicit."
+  Findings: |-
+    Previous iteration55 is PROGRESS, not completion. Fresh upstream SwNumberTree.hxx uses o3tl::sorted_vector (earlier std::set was probe adapter wording). Native MoveGreaterChildren uses unique sorted single insert and MoveChildren uses bulk union; current local push bypasses both. This leaf replaces the emulation with native-owned used container operations, rather than retaining an array facade or adding a tree-local merge patch. Native missing iterator adapted to index-1 for prior diagnostic contract; unimplemented header overloads/copy/const/lifetime remain explicit.
+
+    - Observation: First changed typecheck found one remaining optional numeric siblings access in SetLastValid; tree tests exposed one continuous suffix cache mismatch, other57tests passed.
+      Impact: Missed container access bypassed the following-sibling invalidation branch. Old compiled-result expectation identified it; no expectation will be changed.
+      Resolution: Replace the remaining optional indexed access with container.at, preserve logs and rerun focused types/runtime. Restore existing metadata row order after new entry placement, keeping changes to exactly2oldrows plus1newrow.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +88,7 @@ Revert only this leaf actual semantic commit if requested, restoring its precedi
 ## Findings
 
 Previous iteration55 is PROGRESS, not completion. Fresh upstream SwNumberTree.hxx uses o3tl::sorted_vector (earlier std::set was probe adapter wording). Native MoveGreaterChildren uses unique sorted single insert and MoveChildren uses bulk union; current local push bypasses both. This leaf replaces the emulation with native-owned used container operations, rather than retaining an array facade or adding a tree-local merge patch. Native missing iterator adapted to index-1 for prior diagnostic contract; unimplemented header overloads/copy/const/lifetime remain explicit.
+
+- Observation: First changed typecheck found one remaining optional numeric siblings access in SetLastValid; tree tests exposed one continuous suffix cache mismatch, other57tests passed.
+  Impact: Missed container access bypassed the following-sibling invalidation branch. Old compiled-result expectation identified it; no expectation will be changed.
+  Resolution: Replace the remaining optional indexed access with container.at, preserve logs and rerun focused types/runtime. Restore existing metadata row order after new entry placement, keeping changes to exactly2oldrows plus1newrow.

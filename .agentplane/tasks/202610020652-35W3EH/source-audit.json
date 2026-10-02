@@ -1,0 +1,92 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "fresh manual native source inspection only; no fresh compiled native execution",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/include/o3tl/sorted_vector.hxx",
+      "sha256": "4ef74875a7b188cd80b5267bc0a43d6b30fb5a2ef6017650e8b596067ff4aaa2",
+      "symbols": [
+        {
+          "symbol": "find_unique",
+          "kind": "body",
+          "line": 26,
+          "sha256": "32b318bbc92aa3ef1e90b5ecb5375c7cbae46b574d53a407eb5304f6c8fc94c6"
+        },
+        {
+          "symbol": "sorted_vector",
+          "kind": "body",
+          "line": 46,
+          "sha256": "ad781cc0a442d3e70d293d67a790b0d7234deb75f6e3db55628561b58062e94a"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "sha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d",
+      "symbols": [
+        {
+          "symbol": "tSwNumberTreeChildren",
+          "kind": "declaration",
+          "line": 115,
+          "sha256": "4dac25b24452970275903ac5b7fab22e58ae97e46682ec4ce06f56880ab34c02"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "sha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741",
+      "symbols": [
+        {
+          "symbol": "SwNumberTreeNode::CreatePhantom",
+          "kind": "body",
+          "line": 62,
+          "sha256": "b5bf95d99124e99e5eff2be39c9058ebe4dd1a74130e7a4803197498ee188118"
+        },
+        {
+          "symbol": "SwNumberTreeNode::AddChild",
+          "kind": "body",
+          "line": 408,
+          "sha256": "7a41385efbe79a1094fb6f6aca5903bc1879ed2030c07fb8ebe541a98e9f816c"
+        },
+        {
+          "symbol": "SwNumberTreeNode::MoveGreaterChildren",
+          "kind": "body",
+          "line": 316,
+          "sha256": "d72c23c5120fcd59777dd96666b7fbd932cd45ffca8087a91031a4a2235ab59e"
+        },
+        {
+          "symbol": "SwNumberTreeNode::MoveChildren",
+          "kind": "body",
+          "line": 362,
+          "sha256": "a2dd25f24503d64ba568cf18160b99c4329b1ee26f89bff27a95d17ed229f19e"
+        },
+        {
+          "symbol": "SwNumberTreeNode::GetIterator",
+          "kind": "body",
+          "line": 882,
+          "sha256": "655834351b343347ae98643ea3b9c081ac7e4f36463d873cde8c14f7ff5f4c33"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae",
+      "symbols": [
+        {
+          "symbol": "SwNodeNum::HasCountedChildren",
+          "kind": "body",
+          "line": 187,
+          "sha256": "a6d87da70551ce2121ce34269a144e3d7daf123cdb7e29339f3c292ef4165512"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "Native strict-unique sorted_vector owns sorted vector storage, comparator-equivalent lower-bound lookup/single insertion, and bulk std::set_union retaining destination identity on equivalence.",
+    "Native tree owns protected tSwNumberTreeChildren storage; CreatePhantom and suffix movement insert uniquely, MoveChildren assigns source parents before bulk union and clears storage. Native container object remains the same after clear.",
+    "Used ECMAScript representation binds template comparator to an injected function, const iteration to Iterable and missing native iterator to numeric-1; indexed missing value returns undefined. No whole-header/native iterator/copy/partial-order/lifetime equivalence claim.",
+    "Native AddChild captures notification enablement before suffix transfer; the prior local callback timing remains a separate unverified contract, not changed or certified by this container correction."
+  ],
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false
+}

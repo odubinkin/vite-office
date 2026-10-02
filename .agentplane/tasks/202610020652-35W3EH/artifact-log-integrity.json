@@ -1,0 +1,62 @@
+[
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/gate-tests.log",
+    "originalBytes": 219,
+    "originalSha256": "7421ed9f82c1461a2c5e4dac36e08e4628efeaf5e412f74af3cd665202bf1a54",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/gate-vendor-absent.log",
+    "originalBytes": 219,
+    "originalSha256": "0bfca32cd76ded0078fb29c9ef28776f7fc33a7465d6806e4fddbaa6f9a68563",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/green-runtime-final.log",
+    "originalBytes": 244,
+    "originalSha256": "b3b014e3f0416946a712e461db10bdc7a52609bb73ee04b92d62df6066491023",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/green-runtime.log",
+    "originalBytes": 1283,
+    "originalSha256": "0b4c8f141c9130fe350d5c7c15e655e238f7ec26611e568e5ed3776a361e1b20",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/green-types-final.log",
+    "originalBytes": 55,
+    "originalSha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/green-types.log",
+    "originalBytes": 685,
+    "originalSha256": "87e2e3b4ae2d8562a0a46db4faad6e72a8e0927bf483b6788271523cdb52fffe",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/provenance-check.log",
+    "originalBytes": 205,
+    "originalSha256": "6a181edada9501d6ff9107e16ba6e70ca80f19fb147f5d901a42741733bf987b",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/red-runtime.log",
+    "originalBytes": 514032,
+    "originalSha256": "28f47fcc45d2604a77fb53b994c50aa64e597d917289be95c7abf1232596c7d0",
+    "normalization": "retain run header, exact failures/assertion summaries/source locations and result totals with original line numbers; omit huge owned object graph diffs"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/vendor-absent.log",
+    "originalBytes": 244,
+    "originalSha256": "a0ab26cb4e7e97f8e85bed46565afeaa8fd79978dc4246942f10be220bb61eee",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020652-35W3EH/verify-final.log",
+    "originalBytes": 861693,
+    "originalSha256": "3aed4bb8d4a19d075f51cddb9d1a7748f57f595bdc5316650444fa9cb67e9a5a",
+    "normalization": "retain complete command/check output before final parity JSON and scalar parity totals; omit repetitive inventory rows, trim trailing whitespace"
+  }
+]

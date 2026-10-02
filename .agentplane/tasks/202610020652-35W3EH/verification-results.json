@@ -1,0 +1,95 @@
+{
+  "finalImplementationCommit": null,
+  "semanticPaths": [
+    "apps/office/src/o3tl/inc/sorted_vector.test.ts",
+    "apps/office/src/o3tl/inc/sorted_vector.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "apps/office/src/sw/source/core/doc/list.test.ts",
+    "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "scripts/check-lo-source-tree.mjs",
+    "scripts/check-module-boundaries.mjs",
+    "scripts/check-module-boundaries.test.ts"
+  ],
+  "sourceAudit": {
+    "fileHashes": 4,
+    "declarationBodyHashes": 9,
+    "mode": "fresh manual native source inspection only; no fresh compiled native execution",
+    "compiledNativeClaim": false
+  },
+  "priorMatcherArgumentAstRecordsUnchanged": 269,
+  "priorObserverSuites": 9,
+  "existingGateTestsUnchanged": true,
+  "newTests": {
+    "generic": 4,
+    "tree": 4,
+    "moduleGate": 1
+  },
+  "ownedUnionCombinations": 1024,
+  "baseline": {
+    "tests": 3,
+    "failed": 3,
+    "reason": "Old push transfers break ordering/equivalence and replace cleared container identity; bounded original failure summaries retained with raw digest."
+  },
+  "vendorAbsent": {
+    "applicationFiles": 19,
+    "applicationTests": 82,
+    "moduleGateFiles": 1,
+    "moduleGateTests": 7,
+    "exitCodes": [
+      0,
+      0
+    ],
+    "restored": true
+  },
+  "fullVerify": {
+    "command": "npm run verify",
+    "exitCode": 0,
+    "application": {
+      "files": 174,
+      "tests": 771,
+      "statements": 10992,
+      "branches": 8297,
+      "functions": 2948,
+      "lines": 10085,
+      "coveragePercent": 100
+    },
+    "inventory": {
+      "files": 36,
+      "tests": 109,
+      "statements": 1523,
+      "branches": 1080,
+      "functions": 384,
+      "lines": 1464,
+      "coveragePercent": 100
+    },
+    "browserTests": 19
+  },
+  "metadata": {
+    "oldRowsChangedPerManifest": 2,
+    "newUnverifiedRowsPerManifest": 1,
+    "oldRowOrderUnchanged": true
+  },
+  "artifactInventory": {
+    "pythonOrBytecodeFiles": 0,
+    "nativeSourceFilesInTasks": 0
+  },
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false,
+  "limits": [
+    "Used strict-unique o3tl container subset only; injected comparator/index-minus-one/Iterable/nullable missing-index representation explicitly bounds proof.",
+    "Unused initializer/copy/partial-order/native iterator/const/destructor/full-header and full Writer lifetime/range/redline/UI remain unverified.",
+    "Native insertion notification capture timing and required document reference remain separate measured obligations; no whole-module/status/default/deviation/goal promotion."
+  ],
+  "fullGoal": "active"
+}

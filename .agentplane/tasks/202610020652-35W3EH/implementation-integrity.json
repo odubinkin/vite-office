@@ -1,0 +1,41 @@
+{
+  "priorMatcherArgumentAstRecordsUnchanged": 269,
+  "priorObserverSuites": 9,
+  "existingGateTestsUnchanged": true,
+  "newGateTestCount": 1,
+  "sourceFileHashes": 4,
+  "declarationBodyHashes": 9,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "semanticScopeExpected": 19,
+  "metadataExpected": "2old rows evidence/responsibilities plus1new unverified container row per manifest",
+  "notes": [
+    "No raw array facade or public child accessor. All prior literal/dynamic expected arguments unchanged.",
+    "Source-owned used container subset only; no native full-header/lifetime or broader goal promotion."
+  ],
+  "metadata": {
+    "docs/program/source-provenance.json": {
+      "changedExistingRows": [
+        "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts"
+      ],
+      "newRows": [
+        "apps/office/src/o3tl/inc/sorted_vector.ts"
+      ],
+      "oldRowOrderUnchanged": true
+    },
+    "docs/program/parity/runtime-inventory.json": {
+      "changedExistingRows": [
+        "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+        "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts"
+      ],
+      "newRows": [
+        "apps/office/src/o3tl/inc/sorted_vector.ts"
+      ],
+      "oldRowOrderUnchanged": true
+    }
+  },
+  "artifactInventory": {
+    "pythonOrBytecodeFiles": 0,
+    "nativeSourceFilesInTasks": 0
+  }
+}

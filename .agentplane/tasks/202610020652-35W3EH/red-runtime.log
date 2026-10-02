@@ -1,0 +1,26 @@
+[original line 1]
+[original line 2]  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+[original line 3]
+[original line 4]  ❯ src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts (3 tests | 3 failed) 1066ms
+[original line 5]    × merges children in comparator order and retains destination identity for equivalent keys 875ms
+[original line 6]    × inserts transferred suffix records uniquely into an existing destination 188ms
+[original line 7]    × merges leading phantom chains into the retained destination tail without replacing containers 2ms
+[original line 8]
+[original line 9] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+[original line 10]
+[original line 11]  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts > merges children in comparator order and retains destination identity for equivalent keys
+[original line 12] AssertionError: expected [ …(5) ] to deeply equal [ …(4) ]
+[original line 8818]  ❯ src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts:67:45
+[original line 8828]  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts > inserts transferred suffix records uniquely into an existing destination
+[original line 8829] AssertionError: expected [ …(5) ] to deeply equal [ …(4) ]
+[original line 8843]  ❯ src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts:90:45
+[original line 8853]  FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts > merges leading phantom chains into the retained destination tail without replacing containers
+[original line 8854] AssertionError: expected [] to be [] // Object.is equality
+[original line 8858] Expected: []
+[original line 8859] Received: serializes to the same string
+[original line 8862] Compared values have no visual difference.
+[original line 8864]  ❯ src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts:115:35
+[original line 8875]  Test Files  1 failed (1)
+[original line 8876]       Tests  3 failed (3)
+[original line 8877]    Start at  13:56:51
+[original line 8878]    Duration  2.49s (transform 300ms, setup 157ms, import 342ms, tests 1.07s, environment 752ms)
