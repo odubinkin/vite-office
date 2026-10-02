@@ -1,10 +1,11 @@
 ---
 id: "202610020652-35W3EH"
 title: "Restore source-owned sorted number-tree child storage"
-status: "DOING"
+result_summary: "iteration56-progress-source-owned-sorted-children"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Reviewed19semantic paths: used o3tl container subset and every core child consumer,9diagnostic suites preserving269matcher arguments,4generic+4tree+1gate tests.1024owned union combinations confirm sorted unique identity preference; real record suffix/bulk/phantom/factory cases expose preceding bugs. Existing6gate tests retained, precise sw->o3tl classification and browser isolation, new required source path."
     - "Metadata only2old rows evidence/responsibilities plus1new unverified container row permanifest, old order/status/default/deviation fields unchanged. Fresh4file9symbol pinned hashes support manual source inspection; no fresh compiled-native/full-header/copy/partial-order/iterator/const/lifetime claim. Numeric-end-minus-one/Iterable/injected comparator/missing-index representation explicit."
     - "Unchanged full verify exit0:771app/109inventory/19browser,both100%.82focused app tests/19files and7gate tests pass with vendor unavailable and restored. First changed missing optional siblings access caught by type and old continuous expectation, corrected without weakening tests. No source/helper artifacts or Python/bytecode files in Agentplane."
-commit: null
+commit:
+  hash: "5c01702a424b7f6ff36eb1c4bfd9e0ef2a31f219"
+  message: "🧩 35W3EH code: restore sorted number-tree child storage"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned sorted unique number-tree child container and transfer semantics under continuing user goal authorization, preserving registered IO/recovery deviations and prohibiting helper/source artifacts."
+  -
+    author: "CODER"
+    body: "Verified: source-owned sorted unique child storage and native transfers,269prior expected records,1024union combinations; all checks and same-actor EVALUATOR pass on actual semantic implementation."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared checks pass:771app/109inventory/19browser,both100%;82app+7gate tests vendor absent;1024owned unions,269old expected records preserved. Source-owned sorted storage replaces arrays/push.4manualfile9symbol hashes,exact19semanticpaths,explicit representation/lifetime limits,zero source/helper artifacts."
+  -
+    type: "status"
+    at: "2026-10-02T07:16:58.815Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source-owned sorted unique child storage and native transfers,269prior expected records,1024union combinations; all checks and same-actor EVALUATOR pass on actual semantic implementation."
 doc_version: 3
-doc_updated_at: "2026-10-02T07:16:11.877Z"
+doc_updated_at: "2026-10-02T07:16:58.816Z"
 doc_updated_by: "CODER"
 description: "Iteration56 replaces raw child arrays and push-based merges with the used native o3tl sorted_vector operations, preserving Writer ordering/equivalence/cache/ownership sequencing. Add mapped generic container and exact module classification, owned merge/type tests, adapt existing diagnostic snapshots without changing expected values; no upstream invocation in tests or source/helper artifacts."
 sections:
