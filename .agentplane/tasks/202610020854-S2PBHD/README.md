@@ -1,10 +1,11 @@
 ---
 id: "202610020854-S2PBHD"
 title: "Restore native number-tree prefix invalidation API"
-status: "DOING"
+result_summary: "Restore complete selected native prefix invalidation API and positional call sites; all unchanged gates pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Actual semantic commit contains exact4approved paths; native protected iterator-position/false-default/zero-arg/required-child contracts match inspected declarations and bodies. Retained-boundary find/next-uncounted helper and parent GetIterator forwarding are source-shaped. Existing -1 end/undefined pointer adapter explicit."
     - "5owned tests cover exact inherited signature/public absence and connected hierarchical/continuous prefix transitions, raw counters/continuation, helper dispatch and direct predecessor invalidation. Final baseline4runtime fails/type errors and final pass establish regression.9prefix/caller bodies changed,46others unchanged,216old test files/literals byte-identical."
     - "Unchanged full verify787app/109inventory/19browser,both100%;81app+7boundary tests vendor absent/restored. Commit/scope/log/native hashes verified,1metadata evidence/description row each only,zero forbidden artifacts,IO/recovery/gates intact. Close selected leaf only."
-commit: null
+commit:
+  hash: "b99b68cd6b9a6fe6afc6f09bb49bebc3118b48d7"
+  message: "🛠 S2PBHD code: restore native prefix invalidation API"
 comments:
   -
     author: "CODER"
     body: "Start: restore complete native protected prefix invalidation API and positional callers under continuing goal authorization; preserve old assertions and IO deviations."
+  -
+    author: "CODER"
+    body: "Verified: complete selected protected SetLastValid positional/false-default, InvalidateChildren zero-arg/end and Invalidate required-child API restored with every native positional caller.5owned tests and216old test files/literals preserved; full verify787app/109inventory/19browser,both100%,81app+7boundary vendor-absent tests pass. Same-actor EVALUATOR binds actual semantic b99b68cd6b9a6fe6afc6f09bb49bebc3118b48d7. No source/helper/Python artifacts; registered IO/recovery intact, parent/full goal active."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Selected native protected prefix API verified on semantic b99b68cd6b9a6fe6afc6f09bb49bebc3118b48d7; unchanged full gates/100%coverage, vendor-absent focused tests and old-test/source/scope integrity pass. Parent/full goal remain active."
+  -
+    type: "status"
+    at: "2026-10-02T09:12:15.110Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete selected protected SetLastValid positional/false-default, InvalidateChildren zero-arg/end and Invalidate required-child API restored with every native positional caller.5owned tests and216old test files/literals preserved; full verify787app/109inventory/19browser,both100%,81app+7boundary vendor-absent tests pass. Same-actor EVALUATOR binds actual semantic b99b68cd6b9a6fe6afc6f09bb49bebc3118b48d7. No source/helper/Python artifacts; registered IO/recovery intact, parent/full goal active."
 doc_version: 3
-doc_updated_at: "2026-10-02T09:11:42.536Z"
+doc_updated_at: "2026-10-02T09:12:15.112Z"
 doc_updated_by: "CODER"
 description: "Iteration60 restores complete selected protected prefix API: required iterator-position SetLastValid with false-default validation, zero-argument InvalidateChildren and protected required-child Invalidate, adapting all existing callers to native positions/end. Owned regression tests and fresh manual source evidence; no upstream test access or saved helper/source copies."
 sections:
