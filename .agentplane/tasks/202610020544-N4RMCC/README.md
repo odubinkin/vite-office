@@ -1,10 +1,11 @@
 ---
 id: "202610020544-N4RMCC"
 title: "Restore native number-tree child container and count contract"
-status: "DOING"
+result_summary: "Iteration53 complete: native child storage/count contract and Writer guard restored. Core implementation127ada3f47601590e057934371deeb0219cc9734; final metadata-corrected implementation6552c9aa4c770935046676fc3a686f5d477514a0. No parent/full goal promotion or registered IO/recovery changes."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - ".agentplane/tasks/202610020544-N4RMCC/vendor-absent.log"
   findings:
     - "Exact14 semantic paths;3newtests and249oldmatcher AST records retained across8suites;49other tree methods unchanged after field rename. Full unchanged verify758app/109inventory/19browser and both100%coverage;60focused vendor-absenttests, vendor restored.5file/6symbolhash manual source evidence, no native/helper source artifacts. Initial3provenance reference errors corrected only in same task metadata; all gates passed."
-commit: null
+commit:
+  hash: "6552c9aa4c770935046676fc3a686f5d477514a0"
+  message: "🧩 N4RMCC code: correct provenance evidence reference objects"
 comments:
   -
     author: "CODER"
     body: "Start: restore the measured native child-container/count interface under the existing iterative user authorization; preserve prior expectations and all registered IO/recovery deviations."
+  -
+    author: "CODER"
+    body: "Verified: protected mChildren/native GetChildCount and guarded Writer child traversal restored; final implementation6552c9aa4c77, full758app/109inventory/19browser and both100%coverage,60vendor-absenttests passed;249prior expectations retained."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved bounded contract verified: app758/inventory109/browser19, both100%coverage; vendor-absent60;5file/6symbolhashes manual only;249old expected AST records and49other methods unchanged; exact14paths/3boundedmetadata rows, no forbidden source/helper artifacts."
+  -
+    type: "status"
+    at: "2026-10-02T06:07:57.811Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: protected mChildren/native GetChildCount and guarded Writer child traversal restored; final implementation6552c9aa4c77, full758app/109inventory/19browser and both100%coverage,60vendor-absenttests passed;249prior expectations retained."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:07:29.376Z"
+doc_updated_at: "2026-10-02T06:07:57.812Z"
 doc_updated_by: "CODER"
 description: "Replace invented public GetChildren with protected mChildren and native public GetChildCount, adapt SwNodeNum counted-child traversal and SwList.HasNodes, preserve existing diagnostic expected values via test-only observers, verify synthetic/actual owner states independently of upstream."
 sections:
