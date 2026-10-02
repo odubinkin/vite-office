@@ -1,10 +1,11 @@
 ---
 id: "202610020737-4VSHZS"
 title: "Remove remaining ignored upstream probe sources"
-status: "DOING"
+result_summary: "Complete the requested ignored source-file cleanup separately: all3source paths absent, zero Python/bytecode/native sources including ignored Agentplane storage, no helper body retained. Runtime/tests/policy/pin/history untouched; broader parity goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Exactly3historical ignored/untracked C++ probe sources totaling90242bytes were removed; path/size/hash evidence contains no source bodies. Fresh evaluator inspection confirms all3paths absent and recursive ignored-inclusive Python/bytecode/native source inventory remains zero throughout Agentplane."
     - "Actual cleanup commit changes only own README/blueprint/result/check evidence; runtime/tests/policy and pinned vendor untouched, history preserved. Diff/routing/doctor pass with0errors and1pre-existing managed shim warning. Runtime tests are inapplicable to this ignored-file cleanup."
-commit: null
+commit:
+  hash: "90ae8b7d65690f41ffda1c443a305c4ebd250f05"
+  message: "🧩 4VSHZS task: persist canonical task artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: exact3ignored historical C++ probes removed,90242bytes; recursive Agentplane inventory has zero Python/bytecode/native sources. Only bounded metadata evidence committed, checks pass and same-actor EVALUATOR binds actual cleanup SHA."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Removed exact3ignored historical C++ source probes,90242bytes; metadata/hashes only. Ignored-inclusive Agentplane inventory zero Python/bytecode/native source files. Runtime/tests/policy/history unchanged; diff/routing/doctor pass0errors/1pre-existing warning; pinned vendor unchanged."
+  -
+    type: "status"
+    at: "2026-10-02T07:50:54.261Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: exact3ignored historical C++ probes removed,90242bytes; recursive Agentplane inventory has zero Python/bytecode/native sources. Only bounded metadata evidence committed, checks pass and same-actor EVALUATOR binds actual cleanup SHA."
 doc_version: 3
-doc_updated_at: "2026-10-02T07:50:07.476Z"
+doc_updated_at: "2026-10-02T07:50:54.263Z"
 doc_updated_by: "CODER"
 description: "Complete the explicit user source-artifact cleanup by deleting3historical ignored C++ probe files under .agentplane/tmp/upstream-probes, retaining only bounded path/hash/removal evidence in a separate commit. No runtime/test/policy change or generated helpers."
 sections:
