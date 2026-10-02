@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610020531-4N8JF2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-02T05:37:14.607Z",
+  "verdict": "pass",
+  "summary": "Same-actor distinct quality review of the actual exclusion implementation 0fc6ce650343: scope exactly .gitignore, behavior matches explicit user request.",
+  "evaluated_sha": "02b64c3f06e24e7acbcddc82975772278c10d0e5",
+  "blueprint_digest": "712014c3d5bdba92347324d19ca050d507e6c9bc8dc9cbda31f3af74ad44bdfc",
+  "findings": [
+    "Six task/scratch Python and bytecode paths excluded; no such files on disk or tracked in .agentplane. No source helper saved or application/upstream change. No independent-agent claim."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610020531-4N8JF2/README.md",
+    "0fc6ce65034318bd5b5349fff9a106956c8c11b1",
+    ".gitignore"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Git ignore cannot prevent creation; the user prohibition remains binding on future workflow."
+  ]
+}
