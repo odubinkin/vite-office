@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 57
+revision: 58
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:33:32.891Z"
+doc_updated_at: "2026-10-02T06:48:14.923Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -220,6 +220,10 @@ sections:
     - Observation: Iteration54 HF3XGB DONE restores protected abstract HasCountedChildren/IsCountedForNumbering/IsCountPhantoms and protected SwNodeNum overrides, removing public exposure.55production method bodies unchanged;6old suites preserve249matcher argument records after equivalent protected-observation normalization through15test-only observers.3newtests prove exact types, mandatory numbered override, virtual dispatch and owned connected/root/phantom/detached policies.
       Impact: Actual implementation and same-actor EVALUATOR reviewed SHA57235bd930aa541071aa1b24f8534ffdb0a2e7b9, closeeb66d5b4cb10. Full verify761app/171files,109inventory/36files,19browser,both100%coverage;72focusedtests/16files pass without vendor and restore exactpin.4file/12symbol hashes support manual inspection only. TypeScript private-narrowing error2415 and mandatory-method error2515 verified using owned in-memory fixtures; no helpers/source bodies saved, Python/bytecode across Agentplane0 and native source task artifacts0.
       Resolution: PROGRESS only; parent/full goal remains active, no module/status/default/deviation/gate promotion. TypeScript protected overrides are narrowest valid inherited access, C++private equivalence not claimed or registered as a new intentional deviation. Next fresh native visibility audit should inspect SwNodeNum.IsNotificationEnabled (native public, local protected); ordered std::set architecture and full section/range/redline/lifetime/UI obligations remain unverified. Registered IO/recovery settings unchanged.
+
+    - Observation: Iteration55 E5HR3S DONE restores public override SwNodeNum.IsNotificationEnabled, retaining protected base. Actual runtime diff is one modifier line;55production bodies and all old test files unchanged.2new owned tests verify public keys/supplied-document type/boolean result and item/root/phantom/detached reading/context dispatch, raw caches/topology untouched.
+      Impact: Actual implementation and same-actor EVALUATOR SHA dfced3f596919f0a2b3915abb1c45e848f8c43d0, close022e65541c87. Full verify763app/172files,109inventory/36files,19browser,both100%coverage.74focusedtests/17files pass without vendor and restore exactpin;4file/4symbol hashes manual inspection only.4semantic paths,1row per metadata file evidence/responsibilities only. New fixture Dispose spelling corrected before isolated red oracle; no old expectation/gate weakened. Python/bytecode across Agentplane0, native source task artifacts0.
+      Resolution: PROGRESS only, parent/full goal active. Native required SwDoc reference and wider dtor/client/notifiable/redline/layout/lifetime remain separately unverified. Fresh header inspection corrects preceding container wording: pinned SwNumberTree.hxx:115 defines o3tl::sorted_vector, not std::set; old probe std::set was an adapter, not native container certification. Current MoveChildren uses array push; native uses sorted-vector bulk insert/union, requiring separate merge/order/equivalence audit. Protected native state mpParent/mnNumber/mpLastValid/mbPhantom/mbContinueingPreviousSubTree and several protected mutation helper accesses still differ locally. Registered IO/recovery deviations preserved, no whole-module/status/default/goal promotion or source/helper storage.
 id_source: "generated"
 ---
 ## Summary
@@ -413,3 +417,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 - Observation: Iteration54 HF3XGB DONE restores protected abstract HasCountedChildren/IsCountedForNumbering/IsCountPhantoms and protected SwNodeNum overrides, removing public exposure.55production method bodies unchanged;6old suites preserve249matcher argument records after equivalent protected-observation normalization through15test-only observers.3newtests prove exact types, mandatory numbered override, virtual dispatch and owned connected/root/phantom/detached policies.
   Impact: Actual implementation and same-actor EVALUATOR reviewed SHA57235bd930aa541071aa1b24f8534ffdb0a2e7b9, closeeb66d5b4cb10. Full verify761app/171files,109inventory/36files,19browser,both100%coverage;72focusedtests/16files pass without vendor and restore exactpin.4file/12symbol hashes support manual inspection only. TypeScript private-narrowing error2415 and mandatory-method error2515 verified using owned in-memory fixtures; no helpers/source bodies saved, Python/bytecode across Agentplane0 and native source task artifacts0.
   Resolution: PROGRESS only; parent/full goal remains active, no module/status/default/deviation/gate promotion. TypeScript protected overrides are narrowest valid inherited access, C++private equivalence not claimed or registered as a new intentional deviation. Next fresh native visibility audit should inspect SwNodeNum.IsNotificationEnabled (native public, local protected); ordered std::set architecture and full section/range/redline/lifetime/UI obligations remain unverified. Registered IO/recovery settings unchanged.
+
+- Observation: Iteration55 E5HR3S DONE restores public override SwNodeNum.IsNotificationEnabled, retaining protected base. Actual runtime diff is one modifier line;55production bodies and all old test files unchanged.2new owned tests verify public keys/supplied-document type/boolean result and item/root/phantom/detached reading/context dispatch, raw caches/topology untouched.
+  Impact: Actual implementation and same-actor EVALUATOR SHA dfced3f596919f0a2b3915abb1c45e848f8c43d0, close022e65541c87. Full verify763app/172files,109inventory/36files,19browser,both100%coverage.74focusedtests/17files pass without vendor and restore exactpin;4file/4symbol hashes manual inspection only.4semantic paths,1row per metadata file evidence/responsibilities only. New fixture Dispose spelling corrected before isolated red oracle; no old expectation/gate weakened. Python/bytecode across Agentplane0, native source task artifacts0.
+  Resolution: PROGRESS only, parent/full goal active. Native required SwDoc reference and wider dtor/client/notifiable/redline/layout/lifetime remain separately unverified. Fresh header inspection corrects preceding container wording: pinned SwNumberTree.hxx:115 defines o3tl::sorted_vector, not std::set; old probe std::set was an adapter, not native container certification. Current MoveChildren uses array push; native uses sorted-vector bulk insert/union, requiring separate merge/order/equivalence audit. Protected native state mpParent/mnNumber/mpLastValid/mbPhantom/mbContinueingPreviousSubTree and several protected mutation helper accesses still differ locally. Registered IO/recovery deviations preserved, no whole-module/status/default/goal promotion or source/helper storage.
