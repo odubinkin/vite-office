@@ -1,10 +1,11 @@
 ---
 id: "202610020531-4N8JF2"
 title: "Exclude Python sources throughout Agentplane storage"
-status: "DOING"
+result_summary: "Excluded Python/bytecode throughout .agentplane. Implementation SHA 0fc6ce65034318bd5b5349fff9a106956c8c11b1; distinct containing quality snapshot 02b64c3f06e24e7acbcddc82975772278c10d0e5."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -45,8 +46,8 @@ quality_review:
   findings:
     - "Six task/scratch Python and bytecode paths excluded; no such files on disk or tracked in .agentplane. No source helper saved or application/upstream change. No independent-agent claim."
 commit:
-  hash: "0fc6ce65034318bd5b5349fff9a106956c8c11b1"
-  message: "🧹 4N8JF2 code: exclude Python throughout Agentplane storage"
+  hash: "02b64c3f06e24e7acbcddc82975772278c10d0e5"
+  message: "📋 4N8JF2 task: pin actual implementation review target"
 comments:
   -
     author: "CODER"
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Recorded: actual separate configuration implementation SHA for evaluator targeting; status remains DOING."
+  -
+    author: "CODER"
+    body: "Verified: actual configuration implementation 0fc6ce650343 excludes Python and bytecode throughout Agentplane; quality reviewed containing snapshot 02b64c3f06e2, all scoped checks passed."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Recorded: actual separate configuration implementation SHA for evaluator targeting; status remains DOING."
+  -
+    type: "status"
+    at: "2026-10-02T05:37:40.381Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual configuration implementation 0fc6ce650343 excludes Python and bytecode throughout Agentplane; quality reviewed containing snapshot 02b64c3f06e2, all scoped checks passed."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:37:07.276Z"
+doc_updated_at: "2026-10-02T05:37:40.385Z"
 doc_updated_by: "CODER"
 description: "Extend the user-requested Python artifact exclusion from task directories to the entire Agentplane subtree, including bytecode. Configuration-only follow-up to VTGES9 cleanup; separate .gitignore commit, no application or source changes."
 sections:
