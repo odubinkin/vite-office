@@ -1,10 +1,11 @@
 ---
 id: "202610020721-WNZPDZ"
 title: "Restore number-tree insertion evaluation order"
-status: "DOING"
+result_summary: "Restore direct/deeper lookup and parent-policy-transfer-cleanup notification order, preserving captured true/false decisions across reading transitions. Exact4semantic paths; manual source hashes only, no source helpers generated. Wider parent/full goal unverified and active; separate requested ignored source cleanup next."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Only AddChild changes runtime behavior across exactly4semantic paths. Native depth/direct branch ordering and captured notification gate match fresh manual source inspection.4owned regressions fail old body and pass final, including true/false mode flips during transfer."
     - "Full unchanged verify exit0:775app/109inventory/19browser,both100%;69app+7gate tests vendor absent/restored.54other method bodies and213old test files unchanged;1metadata row per manifest retains statuses/defaults/deviations and sourceResponsibility enum. Initial invalid metadata enum is corrected and all gates rerun."
     - "No new native/helper source or Python files generated. Source evidence is hashes/conclusions only.3historical ignored C++ scratch files are transparently scheduled in the separately approved cleanup task4VSHZS; canonical task artifacts contain no source helpers."
-commit: null
+commit:
+  hash: "02ba17af4f7b3bc1375c594dce82107bb54df377"
+  message: "🛠 WNZPDZ code: restore number-tree insertion evaluation order"
 comments:
   -
     author: "CODER"
     body: "Start: restore pinned insertion branch and policy-capture evaluation order under continuing goal authorization, preserving all prior results and registered IO/recovery deviations."
+  -
+    author: "CODER"
+    body: "Verified: source insertion evaluation order restored;4owned regressions and full775app/109inventory/19browser,both100%pass;69app+7gate tests vendor absent/restored.54other methods/213old tests unchanged; same-actor EVALUATOR passes actual semantic SHA."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source-backed insertion order restored. All4regressions fail on old body and pass final;775app/109inventory/19browser,both100%;69app+7gate tests pass vendor absent/restored.54other methods and213old test files unchanged,exact4semantic paths. Metadata enum correction verified; manual5file7symbol hashes only, no source/helpers persisted or full native lifetime claim."
+  -
+    type: "status"
+    at: "2026-10-02T07:48:13.482Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source insertion evaluation order restored;4owned regressions and full775app/109inventory/19browser,both100%pass;69app+7gate tests vendor absent/restored.54other methods/213old tests unchanged; same-actor EVALUATOR passes actual semantic SHA."
 doc_version: 3
-doc_updated_at: "2026-10-02T07:47:27.321Z"
+doc_updated_at: "2026-10-02T07:48:13.484Z"
 doc_updated_by: "CODER"
 description: "Iteration57 restores source AddChild branch/evaluation order: upper-bound only for deeper insertion, successful parent binding then single notification-policy capture before suffix transfer, sibling-only child cleanup. Owned document callback traces/read-state transitions and prior literal results verify the bounded correction without upstream test access."
 sections:
