@@ -1,0 +1,42 @@
+
+> vite-office@0.1.0 inventory:parity
+> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference
+
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "behaviorParityCount": 43,
+  "classifiedDivergenceCount": 105,
+  "contractParityCount": 43,
+  "defaultParityCount": 43,
+  "differentialParityCount": 43,
+  "exceptionCount": 2,
+  "exceptions": [
+    {
+      "exception": {
+        "approvedBy": "User decision reaffirming 202609221113-N9GZ47",
+        "disposition": "not-implementable",
+        "reason": "browser-runtime-inapplicable",
+        "rationale": "Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow."
+      },
+      "id": "LO-WRITER-0122",
+      "scope": "capability"
+    },
+    {
+      "exception": {
+        "approvedBy": "User decision reaffirming 202609221113-N9GZ47",
+        "disposition": "not-implementable",
+        "reason": "browser-runtime-inapplicable",
+        "rationale": "Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow."
+      },
+      "id": "LO-WRITER-0133",
+      "scope": "capability"
+    }
+  ],
+  "gapCount": 2,
+  "implementedCount": 43,
+  "parityReady": true,
+  "ownershipParityCount": 43,
+  "closureEvidence": [
+    {
+
+Full command completed successfully; repetitive inventory rows omitted. Original output byte count and hash recorded in artifact-log-integrity.json.

@@ -53,4 +53,3 @@ TypeError: child.IsCountedForNumbering is not a function
       Tests  3 failed (3)
    Start at  12:47:11
    Duration  2.83s (transform 689ms, setup 294ms, import 795ms, tests 28ms, environment 1.43s)
-

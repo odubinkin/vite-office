@@ -1,0 +1,5 @@
+
+> vite-office@0.1.0 inventory:invariants
+> tsx scripts/libreoffice-inventory/invariants-cli.ts
+
+{"invariantCount":34,"status":"valid"}

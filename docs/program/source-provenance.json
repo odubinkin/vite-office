@@ -3416,7 +3416,10 @@
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
             "marker": "retains native empty and end sentinel validation with protected traversal"
           },
-          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts"
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+            "marker": "ignores non-Writer children under the native counted-descendant type guard"
+          }
         ],
         "upstream": [
           {
@@ -3688,7 +3691,10 @@
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts",
             "marker": "keeps native root access protected without a public subclass re-export"
           },
-          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts"
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+            "marker": "keeps child storage protected and exposes only the native direct count contract"
+          }
         ],
         "upstream": [
           {
@@ -4803,7 +4809,10 @@
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts",
             "marker": "keeps native root access protected without a public subclass re-export"
           },
-          "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts"
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+            "marker": "counts direct owned children including skipped phantoms through removal without validating counters"
+          }
         ],
         "upstream": [
           {

@@ -4,7 +4,7 @@ title: "Restore native number-tree child container and count contract"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: restore the measured native child-container/count interface under the existing iterative user authorization; preserve prior expectations and all registered IO/recovery deviations."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:48:58.986Z"
+doc_updated_at: "2026-10-02T05:59:20.378Z"
 doc_updated_by: "CODER"
 description: "Replace invented public GetChildren with protected mChildren and native public GetChildCount, adapt SwNodeNum counted-child traversal and SwList.HasNodes, preserve existing diagnostic expected values via test-only observers, verify synthetic/actual owner states independently of upstream."
 sections:
@@ -59,6 +59,10 @@ sections:
     - Observation: Baseline3new runtime tests expose missing GetChildCount and unsafe foreign-child call. Baseline type diagnostics include2new-fixture constructor arity errors, distinct from15actual contract mismatches.
       Impact: First changed-code typecheck retains only the2fixture errors; runtime3tests pass. Production constructor contract is outside this leaf.
       Resolution: Pass explicit undefined to diagnostic root constructors in the new suite. No old expected values or production constructors changed. Preserve both logs, then rerun typecheck.
+
+    - Observation: First full verify passed758app/109inventory/19browser tests and both100%coverages, then rejected3new provenance evidence entries because they were strings rather than required path/marker objects.
+      Impact: Metadata serialization mistake in this task, no runtime or existing test failure. First full log retained; no gates or expectations weakened.
+      Resolution: Convert only3new provenance entries to exact path/marker objects pointing at the corresponding new tests. Rerun targeted provenance/inventory gates, commit same-scope metadata correction and rerun unchanged full verify.
 id_source: "generated"
 ---
 ## Summary
@@ -95,3 +99,7 @@ Previous goal turn is progress: iteration52 restored protected root access and c
 - Observation: Baseline3new runtime tests expose missing GetChildCount and unsafe foreign-child call. Baseline type diagnostics include2new-fixture constructor arity errors, distinct from15actual contract mismatches.
   Impact: First changed-code typecheck retains only the2fixture errors; runtime3tests pass. Production constructor contract is outside this leaf.
   Resolution: Pass explicit undefined to diagnostic root constructors in the new suite. No old expected values or production constructors changed. Preserve both logs, then rerun typecheck.
+
+- Observation: First full verify passed758app/109inventory/19browser tests and both100%coverages, then rejected3new provenance evidence entries because they were strings rather than required path/marker objects.
+  Impact: Metadata serialization mistake in this task, no runtime or existing test failure. First full log retained; no gates or expectations weakened.
+  Resolution: Convert only3new provenance entries to exact path/marker objects pointing at the corresponding new tests. Rerun targeted provenance/inventory gates, commit same-scope metadata correction and rerun unchanged full verify.
