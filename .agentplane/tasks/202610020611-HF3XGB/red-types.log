@@ -1,0 +1,22 @@
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(31,6): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(31,12): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(34,16): error TS2415: Class 'OtherPolicies' incorrectly extends base class 'SwNumberTreeNode'.
+  Property 'IsCountPhantoms' is protected in type 'OtherPolicies' but public in type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(40,42): error TS2322: Type 'CompletePolicy' is not assignable to type 'SwNumberTreeNode'.
+  Property 'IsCountPhantoms' is protected in type 'CompletePolicy' but public in type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(60,1): error TS2578: Unused '@ts-expect-error' directive.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(99,19): error TS2345: Argument of type 'CompletePolicy' is not assignable to parameter of type 'SwNumberTreeNode'.
+  Property 'IsCountPhantoms' is protected in type 'CompletePolicy' but public in type 'SwNumberTreeNode'.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(102,22): error TS2345: Argument of type 'CompletePolicy' is not assignable to parameter of type 'SwNumberTreeNode'.
+  Property 'IsCountPhantoms' is protected in type 'CompletePolicy' but public in type 'SwNumberTreeNode'.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit

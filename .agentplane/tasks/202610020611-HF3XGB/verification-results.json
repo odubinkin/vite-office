@@ -1,0 +1,54 @@
+{
+  "finalImplementationCommit": null,
+  "semanticPaths": 11,
+  "sourceAudit": {
+    "fileHashes": 4,
+    "declarationBodyHashes": 12,
+    "mode": "fresh manual native source declaration/body inspection; no new compiled native execution",
+    "compiledNativeClaim": false
+  },
+  "productionMethodBodiesUnchanged": 55,
+  "priorMatcherArgumentAstRecordsUnchangedAfterEquivalentObservationNormalization": 249,
+  "priorObserverSuites": 6,
+  "testOnlyProtectedObservationsAdapted": 15,
+  "newTests": 3,
+  "vendorAbsent": {
+    "files": 16,
+    "tests": 72,
+    "exitCode": 0,
+    "restored": true
+  },
+  "fullVerify": {
+    "command": "npm run verify",
+    "exitCode": 0,
+    "application": {
+      "files": 171,
+      "tests": 761,
+      "statements": 10930,
+      "branches": 8275,
+      "functions": 2937,
+      "lines": 10026,
+      "coveragePercent": 100
+    },
+    "inventory": {
+      "files": 36,
+      "tests": 109,
+      "statements": 1523,
+      "branches": 1080,
+      "functions": 384,
+      "lines": 1464,
+      "coveragePercent": 100
+    },
+    "browserTests": 19,
+    "firstAttempt": "Stopped at missing JSDoc on new deliberately incomplete diagnostic class; added documentation, all gates pass on unchanged rerun."
+  },
+  "metadataRows": 2,
+  "artifactInventory": {
+    "pythonOrBytecodeFiles": 0,
+    "nativeSourceFilesInTasks": 0
+  },
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false,
+  "typeScriptAccessLimit": "Protected overrides are narrowest valid inherited access; C++ private narrowing is not representable. Owned compiler proves2415 and mandatory base obligation2515.",
+  "fullGoal": "active; no whole-module/status/default/deviation promotion"
+}

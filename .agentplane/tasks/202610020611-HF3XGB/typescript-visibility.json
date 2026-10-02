@@ -1,0 +1,28 @@
+{
+  "typescriptVersion": "6.0.3",
+  "records": [
+    {
+      "access": "private",
+      "ownedVirtualFixtureSha256": "8c4d11cc55333d400a5c97aa0d842d3b41e42fafa07ba54b54464f3b7da7f40b",
+      "diagnostics": [
+        {
+          "code": 2415,
+          "message": "Class 'Child' incorrectly extends base class 'Base'.   Property 'count' is private in type 'Child' but not in type 'Base'."
+        }
+      ]
+    },
+    {
+      "access": "protected",
+      "ownedVirtualFixtureSha256": "26ec63cddcab590bd5f1e28ef78206253577101173e8fe23a0cea84fb739ead9",
+      "diagnostics": []
+    }
+  ],
+  "sourceStored": false,
+  "mandatoryPolicyWithoutExpectedErrorDirective": [
+    {
+      "code": 2515,
+      "message": "Non-abstract class 'MissingNumberingPolicy' does not implement inherited abstract member IsCountedForNumbering from class 'OtherPolicies'."
+    }
+  ],
+  "projectFixtureSourceStored": false
+}

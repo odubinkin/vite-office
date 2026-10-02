@@ -1,0 +1,56 @@
+[
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/baseline-runtime.log",
+    "originalBytes": 1351,
+    "originalSha256": "0cc7e9d9d3a81c07dbbfa99c1430113755b7c94ec29c564c80af781bbe41e320",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/green-runtime-final.log",
+    "originalBytes": 237,
+    "originalSha256": "8de491c73953533b7f795a12721e104f5e9908c3c9a100a9cf771296b7748646",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/green-runtime.log",
+    "originalBytes": 1302,
+    "originalSha256": "9d878fbf7b13f8fdb5ac8e5bb68be12007c3a58168de241c07a73a4b01480c78",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/green-types-final.log",
+    "originalBytes": 55,
+    "originalSha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/green-types.log",
+    "originalBytes": 563,
+    "originalSha256": "b142b39d2c2deeecdbceeff1056d4f417c6abfaf109207975b00e27384b9359c",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/red-types.log",
+    "originalBytes": 1903,
+    "originalSha256": "fc3001390221f2bcd7d2312cadce2d2283f7ea71236253670317181651dffdd1",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/vendor-absent.log",
+    "originalBytes": 243,
+    "originalSha256": "54d0a730a65cc51923247e895d85391d5865f5ba29e8fdd46e5e616b930b6c7e",
+    "normalization": "trailing whitespace/blank EOF only"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/verify-final.log",
+    "originalBytes": 855265,
+    "originalSha256": "86c38abca985cb059edc1d1dbe4e10f3e82f7db5ab950e854068fbdadfa2b3c3",
+    "normalization": "retain complete command/check output before final parity JSON and scalar parity totals; omit repetitive inventory rows, trim trailing whitespace"
+  },
+  {
+    "path": ".agentplane/tasks/202610020611-HF3XGB/verify-first.log",
+    "originalBytes": 824,
+    "originalSha256": "70015ebc6b2d01b2167f871fbfa1df99a31d64349f5089b3fdb9ef3bbf30c9be",
+    "normalization": "trailing whitespace/blank EOF only"
+  }
+]

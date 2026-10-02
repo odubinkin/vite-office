@@ -1,0 +1,36 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts (3 tests | 1 failed) 20ms
+   × preserves connected counted-descendant phantom and orphan policies without validating raw caches 15ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts > preserves connected counted-descendant phantom and orphan policies without validating raw caches
+AssertionError: expected [ false, false, true ] to deeply equal [ true, false, true ]
+
+- Expected
++ Received
+
+  [
+-   true,
++   false,
+    false,
+    true,
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts:138:33
+    136|   expect([firstRecord.GetNumber(false), nestedRecord.GetNumber(false),…
+    137|   nested.RemoveFromList();
+    138|   expect(observe(nestedRecord)).toEqual([true, false, true]);
+       |                                 ^
+    139|   expect(observe(root)).toEqual([true, false, false]);
+    140|   document.Dispose();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  13:15:43
+   Duration  2.20s (transform 451ms, setup 212ms, import 520ms, tests 20ms, environment 1.17s)

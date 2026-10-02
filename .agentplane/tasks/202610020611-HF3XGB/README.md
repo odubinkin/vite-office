@@ -4,7 +4,7 @@ title: "Restore protected number-tree counting policy contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: restore native counting-policy visibility and mandatory abstract contract under existing user authorization, preserving all policy logic, expected values and registered IO/recovery deviations."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:12:31.345Z"
+doc_updated_at: "2026-10-02T06:24:42.627Z"
 doc_updated_by: "CODER"
 description: "Restore protected abstract HasCountedChildren/IsCountedForNumbering/IsCountPhantoms in the native base and closest TypeScript protected SwNodeNum overrides. Keep existing policy bodies, adapt six diagnostic suites and complete foreign subclass obligation, verify exact types/defaults/virtual dispatch without invoking upstream from tests."
 sections:
@@ -53,7 +53,16 @@ sections:
     4. Record actual implementation SHA and EVALUATOR-reviewed SHA, canonical verification and distinct same-actor review. Leaf DONE and checkout clean; parent/full goal stays active. TypeScript protected versus C++private narrowing limitation and native ordered-set/range/redline/lifetime/API gaps remain explicit, no new intentional-deviation registration.
   Verification: "Pending."
   Rollback Plan: "Revert only this leaf's actual implementation commit if requested; do not restore forbidden source/helper artifact copies or alter reference pin."
-  Findings: "Previous turn classified progress: native child-container/count restored, full gates passed. Fresh base declares IsCountedForNumbering pure virtual protected, local lacks it; HasCountedChildren and IsCountPhantoms are currently public. Native derived overrides private, a narrowing TypeScript disallows; protected overrides retain inherited polymorphism and remove public access without bridge architecture. No runtime external consumer of these node policies exists; similarly named SwNumRule API remains public and untouched."
+  Findings: |-
+    Previous turn classified progress: native child-container/count restored, full gates passed. Fresh base declares IsCountedForNumbering pure virtual protected, local lacks it; HasCountedChildren and IsCountPhantoms are currently public. Native derived overrides private, a narrowing TypeScript disallows; protected overrides retain inherited polymorphism and remove public access without bridge architecture. No runtime external consumer of these node policies exists; similarly named SwNumRule API remains public and untouched.
+
+    - Observation: New connected policy fixture incorrectly expected numbering after explicit removal; both baseline and changed runtime returnfalse. Native HasNumber depends on retained GetNum and RemoveFromList resets it. Initial type rewrite also missed one diagnostic PolicyRoot subclass call.
+      Impact: No production regression or old expected-value change. Baseline type mismatches remain valid; first changed typecheck found only the missed test-only call.
+      Resolution: Correct only the new detached numbering expectation tofalse using fresh native evidence; adapt the diagnostic subclass call through the same protected observer.15observer calls total. Preserve failure logs, rerun type and new runtime tests.
+
+    - Observation: First full verify stopped at lint: the deliberately incomplete compile-error test class lacked JSDoc.
+      Impact: No runtime/type/coverage gate was executed in this attempt; no production source or old expected value changes required.
+      Resolution: Add JSDoc to the new diagnostic class, preserve first log, run focused lint and restart unchanged full verification. Same approved scope and acceptance criteria.
 id_source: "generated"
 ---
 ## Summary
@@ -86,3 +95,11 @@ Revert only this leaf's actual implementation commit if requested; do not restor
 ## Findings
 
 Previous turn classified progress: native child-container/count restored, full gates passed. Fresh base declares IsCountedForNumbering pure virtual protected, local lacks it; HasCountedChildren and IsCountPhantoms are currently public. Native derived overrides private, a narrowing TypeScript disallows; protected overrides retain inherited polymorphism and remove public access without bridge architecture. No runtime external consumer of these node policies exists; similarly named SwNumRule API remains public and untouched.
+
+- Observation: New connected policy fixture incorrectly expected numbering after explicit removal; both baseline and changed runtime returnfalse. Native HasNumber depends on retained GetNum and RemoveFromList resets it. Initial type rewrite also missed one diagnostic PolicyRoot subclass call.
+  Impact: No production regression or old expected-value change. Baseline type mismatches remain valid; first changed typecheck found only the missed test-only call.
+  Resolution: Correct only the new detached numbering expectation tofalse using fresh native evidence; adapt the diagnostic subclass call through the same protected observer.15observer calls total. Preserve failure logs, rerun type and new runtime tests.
+
+- Observation: First full verify stopped at lint: the deliberately incomplete compile-error test class lacked JSDoc.
+  Impact: No runtime/type/coverage gate was executed in this attempt; no production source or old expected value changes required.
+  Resolution: Add JSDoc to the new diagnostic class, preserve first log, run focused lint and restart unchanged full verification. Same approved scope and acceptance criteria.

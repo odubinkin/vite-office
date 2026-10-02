@@ -1,0 +1,119 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "fresh manual native source declaration/body inspection; no new compiled native execution",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "sha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d",
+      "symbols": [
+        {
+          "symbol": "HasCountedChildren",
+          "kind": "declaration",
+          "line": 360,
+          "sha256": "8c16e824b36470ae8964a3828a386fc899316ab0f89ed1342d84453c2fb2d458",
+          "visibility": "protected"
+        },
+        {
+          "symbol": "IsCountedForNumbering",
+          "kind": "declaration",
+          "line": 363,
+          "sha256": "4926d3563df369e430af8c1280239e3336861f57642b34822d275f5b287db077",
+          "visibility": "protected"
+        },
+        {
+          "symbol": "IsCountPhantoms",
+          "kind": "declaration",
+          "line": 536,
+          "sha256": "4f2e66a8d8879e066b3a706fe154fc101660ef9251af391c8d0c3479816329fd",
+          "visibility": "protected"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+      "sha256": "15e6a7b96816bbcc848c83605b8c1b187cadd59914ac81a33f631217a8a25e28",
+      "symbols": [
+        {
+          "symbol": "HasCountedChildren",
+          "kind": "declaration",
+          "line": 73,
+          "sha256": "40ff9698b1909432790d3c8804d83d340117311d84f7967e7654690d5fedb937",
+          "visibility": "private"
+        },
+        {
+          "symbol": "IsCountedForNumbering",
+          "kind": "declaration",
+          "line": 74,
+          "sha256": "b9cb821c5cf9ed99b6465271c06592a8a5062779ce6afd940bf744c0542cd4e8",
+          "visibility": "private"
+        },
+        {
+          "symbol": "IsCountPhantoms",
+          "kind": "declaration",
+          "line": 90,
+          "sha256": "86348aeb185f78a4f16fb0d55fa99fc93aaa1f3eff9140fa581a8b0436c0bf51",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae",
+      "symbols": [
+        {
+          "symbol": "SwNodeNum::HasCountedChildren",
+          "kind": "body",
+          "line": 187,
+          "sha256": "42c2cbaca32e6d682e5ae542344754a191a4a52f36cd3f96932b8b5457c54988"
+        },
+        {
+          "symbol": "SwNodeNum::IsCountedForNumbering",
+          "kind": "body",
+          "line": 197,
+          "sha256": "853113f85f35c4ffed77ab5929119fdea7b284c806388af63d5c094eddcfa8a2"
+        },
+        {
+          "symbol": "SwNodeNum::IsCountPhantoms",
+          "kind": "body",
+          "line": 245,
+          "sha256": "d7241eed7ba95690a4439965eaf9789583d8ab6e5b74c7b34ef70b75b6cbb388"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+      "symbols": [
+        {
+          "symbol": "SwTextNode::HasNumber",
+          "kind": "body",
+          "line": 3317,
+          "sha256": "30d1e6f3eceea8df02d72ecc7e118fc49f78495b86c598726c141828ed6709e1"
+        },
+        {
+          "symbol": "SwTextNode::HasBullet",
+          "kind": "body",
+          "line": 3333,
+          "sha256": "2701fe3b8bed889e8f0bdde23e440f130373ce998909db20d734aeee24b4a06f"
+        },
+        {
+          "symbol": "SwTextNode::RemoveFromList",
+          "kind": "body",
+          "line": 4691,
+          "sha256": "e91a86a9f1155b51493c2e8811452c1b68382b7bdf1b535fcecbe32c86ad9084"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "All3base counting policies are protected pure virtual; SwNodeNum overrides are private. Local TypeScript protected overrides are the narrowest valid inherited access; owned compiler fixture rejects private with2415. No private-C++ equivalence claim.",
+    "All local production policy bodies and default/read/cache behavior remain unchanged.",
+    "Native HasNumber and HasBullet require retained number owner and bound rule; RemoveFromList resets the number owner, so detached text numbering policy isfalse.",
+    "Mandatory base numbering policy is restored; complete foreign subtype supplies its own true policy, Writer dynamic-type guard still rejects it."
+  ],
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false,
+  "limits": [
+    "No fresh compiled native lifetime/redline/range certification. Native private-override access cannot be represented identically by TypeScript inheritance."
+  ]
+}
