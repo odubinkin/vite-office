@@ -1,0 +1,42 @@
+{
+  "base": "c2f0a2284586",
+  "normalizedProductionMethodBodies": 55,
+  "fieldRenameMap": {
+    "mpParent": "parent",
+    "mnNumber": "value",
+    "mbContinueingPreviousSubTree": "continuingPreviousSubTree",
+    "mbPhantom": "phantom",
+    "mpLastValid": "lastValid"
+  },
+  "adaptedDiagnostics": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+      "matcherCalls": 35,
+      "normalizedWholeFileUnchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+      "matcherCalls": 31,
+      "normalizedWholeFileUnchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+      "matcherCalls": 4,
+      "normalizedWholeFileUnchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+      "matcherCalls": 40,
+      "normalizedWholeFileUnchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+      "matcherCalls": 17,
+      "normalizedWholeFileUnchanged": true
+    }
+  ],
+  "unchangedOldMatcherCalls": 127,
+  "otherOldTestFilesByteUnchanged": 210,
+  "allOtherProductionFilesScope": "Only SwNumberTree.ts differs; semantic scope check final pending",
+  "limits": "Identifier mapping normalizes only5native field names; whole diagnostic AST equality additionally proves preserved expected arguments and literal fixture imports"
+}
