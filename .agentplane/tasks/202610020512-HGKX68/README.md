@@ -4,7 +4,7 @@ title: "Restore protected number-tree root access"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Restore native protected GetRoot access, preserve list membership via public parents and adapt only test diagnostics; eleven semantic paths, no public surrogate or upstream/helper artifact sources."
 doc_version: 3
-doc_updated_at: "2026-10-02T05:15:25.538Z"
+doc_updated_at: "2026-10-02T05:34:21.780Z"
 doc_updated_by: "CODER"
 description: "Iteration52: restore native protected GetRoot access; adapt the existing browser SwList item lookup to public parent ownership links without an exported surrogate. Preserve all diagnostic assertion values through a test-only protected-method helper and cover owned/foreign/orphan/phantom root identity and visibility. No helper/native sources in Agentplane artifacts or upstream access in tests; full gates remain unchanged."
 sections:
@@ -58,7 +58,20 @@ sections:
     4. Actual implementation SHA, canonical verification and separate same-actor quality evidence are recorded. Leaf DONE with clean checkout; broader parent/full goal and other measured existing-contract gaps remain open.
   Verification: "Pending execution."
   Rollback Plan: "Revert the implementation commit if required; retain result/hash evidence and source-artifact prohibition."
-  Findings: "Current native SwNumberTree.hxx:349 declares protected GetRoot, while local method is public. SwNodeNum does not re-export it. One external implementation consumer is the existing browser SwList.GetListItem; six tree diagnostic test files also call it. Root behavior already matches and must remain unchanged. Prior iteration51 completion is concrete progress."
+  Findings: |-
+    Current native SwNumberTree.hxx:349 declares protected GetRoot, while local method is public. SwNodeNum does not re-export it. One external implementation consumer is the existing browser SwList.GetListItem; six tree diagnostic test files also call it. Root behavior already matches and must remain unchanged. Prior iteration51 completion is concrete progress.
+
+    - Observation: New baseline runtime test incorrectly expected identity retention across explicit RemoveFromList/AddToList; both baseline and changed code reject this. Fresh pinned ndtxt.cxx resets mpNodeNum on removal and allocates a new shown record on AddToList. First diagnostic rewrite also duplicated the policy test type import due quote-style matching.
+      Impact: These are new test/adaptation defects, not regressions or expanded implementation scope. Large failure output was synthetic document serialization; bounded failure summaries and original byte hashes are retained.
+      Resolution: Correct only the new test to observe replacement and subsequent actual membership; leave all existing assertion values unchanged. Remove the duplicate type import. Source audit includes native reset/allocation evidence; no production ownership changes.
+
+    - Observation: First full verify passed 755 application tests and both 100% coverage gates but mobile Paragraph menu click timed out; unchanged focused recheck passed in 1.7s. Offline focused attempt returned nonzero; inspect command before retry.
+      Impact: Full acceptance is pending; no existing expectations or application code were changed to hide the failure.
+      Resolution: Preserve first full log, run unchanged full verify again after focused browser recheck, diagnose offline command and record restored vendor state.
+
+    - Observation: Fresh TypeScript AST comparison records 177 unchanged existing matcher/argument records across six observer files; the preliminary count175 omitted two negated matchers.
+      Impact: No existing expected value changed. Only new iteration52 metadata prose count is corrected to177.
+      Resolution: Final evidence records177 using complete call-expression traversal. Two affected metadata rows change evidence/responsibilities only; all status/default/deviation/gate fields are unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -98,3 +111,15 @@ Revert the implementation commit if required; retain result/hash evidence and so
 ## Findings
 
 Current native SwNumberTree.hxx:349 declares protected GetRoot, while local method is public. SwNodeNum does not re-export it. One external implementation consumer is the existing browser SwList.GetListItem; six tree diagnostic test files also call it. Root behavior already matches and must remain unchanged. Prior iteration51 completion is concrete progress.
+
+- Observation: New baseline runtime test incorrectly expected identity retention across explicit RemoveFromList/AddToList; both baseline and changed code reject this. Fresh pinned ndtxt.cxx resets mpNodeNum on removal and allocates a new shown record on AddToList. First diagnostic rewrite also duplicated the policy test type import due quote-style matching.
+  Impact: These are new test/adaptation defects, not regressions or expanded implementation scope. Large failure output was synthetic document serialization; bounded failure summaries and original byte hashes are retained.
+  Resolution: Correct only the new test to observe replacement and subsequent actual membership; leave all existing assertion values unchanged. Remove the duplicate type import. Source audit includes native reset/allocation evidence; no production ownership changes.
+
+- Observation: First full verify passed 755 application tests and both 100% coverage gates but mobile Paragraph menu click timed out; unchanged focused recheck passed in 1.7s. Offline focused attempt returned nonzero; inspect command before retry.
+  Impact: Full acceptance is pending; no existing expectations or application code were changed to hide the failure.
+  Resolution: Preserve first full log, run unchanged full verify again after focused browser recheck, diagnose offline command and record restored vendor state.
+
+- Observation: Fresh TypeScript AST comparison records 177 unchanged existing matcher/argument records across six observer files; the preliminary count175 omitted two negated matchers.
+  Impact: No existing expected value changed. Only new iteration52 metadata prose count is corrected to177.
+  Resolution: Final evidence records177 using complete call-expression traversal. Two affected metadata rows change evidence/responsibilities only; all status/default/deviation/gate fields are unchanged.

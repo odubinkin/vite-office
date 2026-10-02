@@ -1,0 +1,10 @@
+Synthetic document serialization omitted from this failure log. Original output bytes: 1829056; SHA256: ddf0a47a91eba564038d5490cfae5e6533f82cccae3de071913b74b39fd01f2b
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts (2 tests | 1 failed) 19243ms
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts > retains exact roots and list membership across phantoms orphans foreign documents and list moves
+AssertionError: expected SwNodeNum{ children: [], …(7) } to be SwNodeNum{ children: [], …(7) } // Object.is equality
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts:96:33
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  12:16:58
+   Duration  22.80s (transform 949ms, setup 493ms, import 1.08s, tests 19.24s, environment 1.59s)

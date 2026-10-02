@@ -1,0 +1,78 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "fresh source declaration/body inspection only; no compiled native execution",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+      "fileSha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d",
+      "symbols": [
+        {
+          "symbol": "GetRoot",
+          "visibility": "protected",
+          "line": 349,
+          "sha256": "4ab1c443e2d4199fd817699d8f542bf1826c1cc85edbe0974d9515aa4687212f"
+        },
+        {
+          "symbol": "GetParent",
+          "visibility": "public",
+          "line": 148,
+          "sha256": "1ad2b3e31bbf572df03da69b4da09fbab2aef66fc6fa1d055a3f96d62916979a"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "fileSha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741",
+      "symbols": [
+        {
+          "symbol": "SwNumberTreeNode::GetRoot",
+          "line": 91,
+          "sha256": "14e37e230a4c09fa87812ad0f245d2035ac6cacfb015cb1b99eb79cb07905db5"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx",
+      "fileSha256": "71f5c095d18cb04452f23ed4eedb8f53d0fd2baf77054d6cc32dff43cbfc2922",
+      "symbols": [
+        {
+          "symbol": "SwList::InsertListItem",
+          "line": 84,
+          "sha256": "de799840de54845ee258e427f35561e6d21e0c2f1fba6d03fabc9f7df2431848"
+        },
+        {
+          "symbol": "SwList::RemoveListItem",
+          "line": 109,
+          "sha256": "93d0a8319988910658e6e0cb1af9ed4c176c22e26b895d59f6ec1a1882fd1610"
+        }
+      ]
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "fileSha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+      "symbols": [
+        {
+          "symbol": "SwTextNode::AddToList",
+          "line": 4588,
+          "sha256": "7b2b58ec2af1e18360817d42da3e95d83b75ca8d31d2963a2f5b92ae2744b08e"
+        },
+        {
+          "symbol": "SwTextNode::RemoveFromList",
+          "line": 4691,
+          "sha256": "e91a86a9f1155b51493c2e8811452c1b68382b7bdf1b535fcecbe32c86ad9084"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "GetRoot is protected and SwNodeNum does not publicly re-export it; GetParent is public.",
+    "GetRoot starts from mpParent and walks to the highest parent, returning null for root/orphan itself without reading numbering caches.",
+    "Native SwList owns shown/hidden/original roots for document sections; GetListItem is an existing browser getter, not a native accessor. Existing single shown-root lookup can use public parent links without exposing a new root API.",
+    "Explicit SwTextNode RemoveFromList detaches then resets mpNodeNum; subsequent AddToList allocates a new shown SwNodeNum before insertion."
+  ],
+  "sourceBodiesStored": false,
+  "helperScriptsStored": false,
+  "limits": [
+    "No new compiled native range/redline/owner/destructor lifetime certification."
+  ]
+}

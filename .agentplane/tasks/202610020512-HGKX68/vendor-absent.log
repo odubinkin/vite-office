@@ -1,0 +1,7 @@
+npm error Lifecycle script `test` failed with error:
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error Missing script: "test"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run --workspace=@vite-office/office@0.1.0

@@ -1,0 +1,37 @@
+
+> vite-office@0.1.0 test:e2e
+> npm run build && playwright test --config apps/office/playwright.config.ts --grep the page stays within the viewport
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2Ktransforming...✓ 2003 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.56 kB │ gzip:   0.35 kB
+dist/assets/odt-worker-q2iVkfpY.js    284.02 kB
+dist/assets/index-C6eeDUe_.css         58.68 kB │ gzip:   9.59 kB
+dist/assets/index-oK_jPYaH.js       1,155.89 kB │ gzip: 278.42 kB
+
+✓ built in 1.99s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:94461) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:94497) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (1.7s)
+
+  1 passed (6.1s)
