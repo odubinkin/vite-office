@@ -1,10 +1,11 @@
 ---
 id: "202610020634-E5HR3S"
 title: "Restore public Writer notification policy access"
-status: "DOING"
+result_summary: "iteration55-progress-public-notification-access"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Reviewed four semantic paths and exact one-line production modifier change.55production method bodies and every old test file unchanged, two new owned tests public type/supplied-document/result/reading/context/root/phantom/detached/raw-cache behavior. Metadata only1row evidence/responsibilities."
     - "Fresh4file4symbol native hashes and pinned manual inspection; no compiled-native evidence claim. Native mandatory SwDoc& and dtor/client/notifiable/redline/layout predicates remain separate unverified obligations."
     - "Unchanged full verify exit0:763app/109inventory/19browser,both100%coverage.74focusedtests/17files pass with vendor absent and restored. Baseline protected-access diagnostics isolated after fixture Dispose correction. Source/helper bodies absent and Python/bytecode0 across Agentplane."
-commit: null
+commit:
+  hash: "dfced3f596919f0a2b3915abb1c45e848f8c43d0"
+  message: "🧩 E5HR3S code: expose Writer notification policy"
 comments:
   -
     author: "CODER"
     body: "Start: restore native public Writer notification-policy visibility under continuing user goal authorization, preserving all production bodies and registered IO/recovery deviations."
+  -
+    author: "CODER"
+    body: "Verified: native public notification policy visibility,55unchanged production bodies and all old tests unchanged; full gates and same-actor EVALUATOR pass on actual implementationdfced3f59691."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared checks pass on actual implementationdfced3f596919f0a2b3915abb1c45e848f8c43d0;763app/109inventory/19browser,both100%;74focusedtests vendor absent;55unchanged bodies and old test files unchanged;4manualfile4symbol hashes,explicit signature/lifetime limits,zero helper/source artifacts."
+  -
+    type: "status"
+    at: "2026-10-02T06:48:11.594Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native public notification policy visibility,55unchanged production bodies and all old tests unchanged; full gates and same-actor EVALUATOR pass on actual implementationdfced3f59691."
 doc_version: 3
-doc_updated_at: "2026-10-02T06:47:33.994Z"
+doc_updated_at: "2026-10-02T06:48:11.596Z"
 doc_updated_by: "CODER"
 description: "Iteration55 restores native public SwNodeNum.IsNotificationEnabled visibility while retaining protected base policy and existing implementation/optional document behavior. Add public signature and actual owner/root/phantom dispatch checks; wider required-document/lifetime contracts remain separate."
 sections:
