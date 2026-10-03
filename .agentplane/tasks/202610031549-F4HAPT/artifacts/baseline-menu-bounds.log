@@ -8,7 +8,7 @@ Running 1 test using 1 worker
   ✘  1 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable (506ms)
 
 
-  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
+  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable
 
     Error: expect(received).toEqual(expected) // deep equality
 
@@ -46,4 +46,4 @@ Running 1 test using 1 worker
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
   1 failed
-    apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
+    apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable

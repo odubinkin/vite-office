@@ -19,7 +19,7 @@ Running 6 tests using 3 workers
   ✓  3 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (3.4s)
 
 
-  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
+  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable
 
     Error: expect(received).toEqual(expected) // deep equality
 
@@ -56,5 +56,5 @@ Running 6 tests using 3 workers
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
   1 failed
-    apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
+    apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable
   5 passed (4.4s)

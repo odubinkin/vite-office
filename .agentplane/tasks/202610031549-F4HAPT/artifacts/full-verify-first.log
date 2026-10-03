@@ -62,7 +62,7 @@ Module boundary check passed: 213 runtime sources, 887 relative imports, 14 allo
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
 -------------------|---------|----------|---------|---------|-------------------
 
@@ -88,7 +88,7 @@ Lines        : 100% ( 10126/10126 )
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
 -------------------|---------|----------|---------|---------|-------------------
 
@@ -120,7 +120,7 @@ dist/assets/index-wY4M25Dk.css         58.87 kB │ gzip:   9.58 kB
 dist/assets/index-Dmr0Mu8C.js       1,158.58 kB │ gzip: 279.25 kB
 
 ✓ built in 635ms
-[plugin builtin:vite-reporter] 
+[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
@@ -182,7 +182,7 @@ dist/assets/index-wY4M25Dk.css         58.87 kB │ gzip:   9.58 kB
 dist/assets/index-Dmr0Mu8C.js       1,158.58 kB │ gzip: 279.25 kB
 
 ✓ built in 582ms
-[plugin builtin:vite-reporter] 
+[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting

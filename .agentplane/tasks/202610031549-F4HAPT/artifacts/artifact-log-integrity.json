@@ -1,0 +1,68 @@
+{
+  "logs": [
+    {
+      "path": "baseline-menu-bounds.log",
+      "bytes": 2935,
+      "sha256": "8e4086443255addcf86a74d49a0ab2be774e7a5e829d67a8ed0c0197b723274f"
+    },
+    {
+      "path": "baseline-owned-geometry.log",
+      "bytes": 2180,
+      "sha256": "d00fc0a82d8366c4fda4e4c6959e24aab4a32a338a6512319131871eed64b4af"
+    },
+    {
+      "path": "focused-browser-final.log",
+      "bytes": 1589,
+      "sha256": "37d16fac9756852557eb5492a5fdde5962bb354c54c09a0dba913e6f894e0bca"
+    },
+    {
+      "path": "focused-browser.log",
+      "bytes": 4130,
+      "sha256": "bb9b18f0475bb5e636af4c7b7c8e393cdd6e31b9d80bcd9f2fa67fa171389843"
+    },
+    {
+      "path": "full-verify-first.log",
+      "bytes": 9679,
+      "sha256": "840e761cbea1aab0cd9f3e8b9f8db6b16906e839862fe89b2391b8af066a5bab"
+    },
+    {
+      "path": "full-verify.log",
+      "bytes": 13545,
+      "sha256": "b9527456cfa30c958cf20d985637aaf56027a4eb9792de14dc81faa45dfd282b"
+    },
+    {
+      "path": "offline-owned-tests.log",
+      "bytes": 240,
+      "sha256": "d7dce4f09ed704e29c7858427bcf8ed5f35ea7dc63a0d60dba3db6fb493b2b14"
+    }
+  ],
+  "fullVerifyExitCode": 0,
+  "app": {
+    "files": 179,
+    "tests": 792,
+    "coverage": [
+      100,
+      100,
+      100,
+      100
+    ]
+  },
+  "inventory": {
+    "files": 36,
+    "tests": 109,
+    "coverage": [
+      100,
+      100,
+      100,
+      100
+    ]
+  },
+  "browserTests": 20,
+  "doctor": {
+    "errors": 0,
+    "preexistingWarnings": 1
+  },
+  "routing": "pass",
+  "forbiddenSourcesAtRest": 0,
+  "observation": "Concurrent inventory fixture creates transient owned source_0.cxx under Agentplane; separate cleanup task will relocate test scratch, no upstream source/helper copies."
+}
