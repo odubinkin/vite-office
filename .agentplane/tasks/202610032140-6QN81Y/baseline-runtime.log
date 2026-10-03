@@ -1,0 +1,23 @@
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+ ❯ src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx (9 tests | 7 failed) 186ms
+     × executes a nested action once with "Enter" 86ms
+     × executes a nested action once with " " 13ms
+     × executes a nested check once with "Enter" 11ms
+     × executes a nested check once with " " 13ms
+     × executes a nested radio once with "Enter" 12ms
+     × executes a nested radio once with " " 10ms
+     × appends each nested typeahead key once 13ms
+ Test Files  1 failed (1)
+      Tests  7 failed | 2 passed (9)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx > popup keyboard ownership > executes a nested action once with "Enter"
+ FAIL  src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx > popup keyboard ownership > executes a nested action once with " "
+ FAIL  src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx > popup keyboard ownership > executes a nested check once with "Enter"
+ FAIL  src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx > popup keyboard ownership > executes a nested check once with " "
+ FAIL  src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx > popup keyboard ownership > executes a nested radio once with "Enter"
+ FAIL  src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx > popup keyboard ownership > executes a nested radio once with " "
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ FAIL  src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx > popup keyboard ownership > appends each nested typeahead key once
+Error: expect(element).toHaveFocus()
+Expected element with focus:
+Received element with focus:

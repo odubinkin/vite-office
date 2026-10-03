@@ -1,0 +1,63 @@
+{
+  "base": "5a435527a70ec08f7d641e0d92acb36de7ccfa1a",
+  "productionOnlyOneOwnerGuard": true,
+  "priorTests": 243,
+  "priorTestsUnchanged": true,
+  "manifests": [
+    {
+      "file": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changedRows": 1,
+      "evidenceAppendOnly": true,
+      "otherFieldsUnchanged": true
+    },
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changedRows": 1,
+      "evidenceAppendOnly": true,
+      "otherFieldsUnchanged": true
+    }
+  ],
+  "changed": [
+    ".agentplane/tasks/202610032140-6QN81Y/README.md",
+    ".agentplane/tasks/202610032140-6QN81Y/blueprint/resolved-snapshot.json",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "artifactFiles": 2559,
+  "ignoredInclusive": true,
+  "sourceHelperPythonFiles": [],
+  "executableArtifacts": [],
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "inspectedSourceHashesMatch": true,
+  "finalChangedPaths": [
+    ".agentplane/tasks/202610032140-6QN81Y/README.md",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    ".agentplane/tasks/202610032140-6QN81Y/auxiliary-checks.json",
+    ".agentplane/tasks/202610032140-6QN81Y/baseline-browser.json",
+    ".agentplane/tasks/202610032140-6QN81Y/baseline-browser.log",
+    ".agentplane/tasks/202610032140-6QN81Y/baseline-runtime.json",
+    ".agentplane/tasks/202610032140-6QN81Y/baseline-runtime.log",
+    ".agentplane/tasks/202610032140-6QN81Y/corrected-runtime.json",
+    ".agentplane/tasks/202610032140-6QN81Y/corrected-runtime.log",
+    ".agentplane/tasks/202610032140-6QN81Y/corrected-types.json",
+    ".agentplane/tasks/202610032140-6QN81Y/corrected-types.log",
+    ".agentplane/tasks/202610032140-6QN81Y/focused-lint.json",
+    ".agentplane/tasks/202610032140-6QN81Y/focused-lint.log",
+    ".agentplane/tasks/202610032140-6QN81Y/full-verify-summary.json",
+    ".agentplane/tasks/202610032140-6QN81Y/full-verify.log",
+    ".agentplane/tasks/202610032140-6QN81Y/offline-browser.log",
+    ".agentplane/tasks/202610032140-6QN81Y/offline-results.json",
+    ".agentplane/tasks/202610032140-6QN81Y/offline-scripts.log",
+    ".agentplane/tasks/202610032140-6QN81Y/offline-unit.log",
+    ".agentplane/tasks/202610032140-6QN81Y/scope-integrity.json",
+    ".agentplane/tasks/202610032140-6QN81Y/source-inspection.json",
+    "apps/office/e2e/writer-submenu-keyboard.spec.ts",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx"
+  ],
+  "finalChecksTerminal": true
+}

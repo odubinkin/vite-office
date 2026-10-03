@@ -1,0 +1,20 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only source inspection; no native compilation/execution or copied source.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml",
+      "sha256": "5960200bd627fd19abe7cec701540400ddcde20d26243e7c3f43b986ef3e3bcb"
+    }
+  ],
+  "conclusions": [
+    "KEY_RETURN in the owning native popup opens a submenu or calls EndExecute once for an enabled leaf; EndExecute invokes ImplSelect once after stopping popup execution.",
+    "Arrow traversal and nested Escape/Left operate on the current native popup; forwarding occurs only in specified branches.",
+    "Writer View resource contains RulerMenu/Ruler/VRuler; existing browser Rulers composition preserved.",
+    "Existing browser Space activation and accumulated prefix typeahead are adapter contracts, not full native mnemonic equivalence."
+  ]
+}

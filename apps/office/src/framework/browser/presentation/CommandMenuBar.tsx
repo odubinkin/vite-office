@@ -188,6 +188,7 @@ export function CommandMenuBar({
     const menu = target.closest<HTMLElement>('[role="menu"]');
     /* v8 ignore next -- This handler is installed only on elements inside a rendered menu. */
     if (menu === null) return;
+    if (menu !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu")

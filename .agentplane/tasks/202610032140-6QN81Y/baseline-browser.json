@@ -1,0 +1,8 @@
+{
+  "command": "node_modules/.bin/playwright test --config apps/office/playwright.config.ts writer-submenu-keyboard.spec.ts",
+  "exitCode": 1,
+  "sha256": "9a4c6bb02143211b99ce86c1e4bde8ff9b5f47427924d4b25afee41d02698788",
+  "bytes": 5968,
+  "summary": "Running 2 tests using 1 worker\n  ✘  1 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (5.5s)\n  ✘  2 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (5.5s)\n  1) apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter \n    Error: expect(locator).toHaveCount(expected) failed\n    Locator:  getByLabel('Writer horizontal ruler')\n    Expected: 0\n    Received: 1\n    Timeout:  5000ms\n  2) apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space \n    Error: expect(locator).toHaveCount(expected) failed\n    Locator:  getByLabel('Writer horizontal ruler')\n    Expected: 0\n    Received: 1\n    Timeout:  5000ms\n  2 failed",
+  "note": "Bounded browser failure conclusions only; original output hash/size retained. Playwright failure screenshots/traces remain in ordinary ignored test-results, not Agentplane."
+}

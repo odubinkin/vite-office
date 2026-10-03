@@ -1,0 +1,48 @@
+{
+  "vendorUnavailableDuringTests": true,
+  "testsDoNotInvokeUpstream": true,
+  "sequence": [
+    {
+      "command": "npm run test",
+      "exitCode": 0,
+      "sha256": "64c0db22b9b9365253c7cc68777ebcb17616eaf18b605eb2a4c1009b6fe3bc33",
+      "bytes": 2217,
+      "summary": [
+        " Test Files  193 passed (193)",
+        "      Tests  880 passed (880)",
+        "Statements   : 100% ( 11101/11101 )",
+        "Branches     : 100% ( 8379/8379 )",
+        "Functions    : 100% ( 2955/2955 )",
+        "Lines        : 100% ( 10188/10188 )",
+        " Test Files  36 passed (36)",
+        "      Tests  109 passed (109)",
+        "Statements   : 100% ( 1523/1523 )",
+        "Branches     : 100% ( 1080/1080 )",
+        "Functions    : 100% ( 384/384 )",
+        "Lines        : 100% ( 1464/1464 )"
+      ]
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-source-provenance.test.ts",
+      "exitCode": 0,
+      "sha256": "cdafe4faf62e452f2e63c8651a68a1ac123f20205259fa67c22e0265ec713e8c",
+      "bytes": 223,
+      "summary": [
+        " Test Files  3 passed (3)",
+        "      Tests  12 passed (12)"
+      ]
+    },
+    {
+      "command": "npm run test:e2e",
+      "exitCode": 0,
+      "sha256": "c99d75e628790ca793c50046d8dbfe1ae49970656a4d9f3f65590687a02f6c54",
+      "bytes": 4711,
+      "summary": [
+        "Running 22 tests using 4 workers",
+        "  22 passed (9.3s)"
+      ]
+    }
+  ],
+  "restored": true,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65"
+}

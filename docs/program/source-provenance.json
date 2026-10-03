@@ -599,6 +599,18 @@
           {
             "marker": "CommandMenuPopup",
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+          },
+          {
+            "marker": "activatesNestedOnce",
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx"
+          },
+          {
+            "marker": "consumesNestedPrefixOnce",
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx"
+          },
+          {
+            "marker": "nested Writer ruler toggles once",
+            "path": "apps/office/e2e/writer-submenu-keyboard.spec.ts"
           }
         ]
       },
@@ -612,7 +624,8 @@
       "responsibilities": [
         "Renders the bounded Writer Format popup and pinned Bullets and Numbering submenu at the LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` ownership boundary.",
         "Renders the implemented Writer commands in their pinned LibreOffice menu locations without copying native menu visuals.",
-        "Keeps top-level and nested command popups inside the browser viewport, with internal scrolling, above/below placement and submenu edge flipping following inspected VCL screen-bounded behavior; browser geometry does not certify native timers, scroller visuals or full menu parity."
+        "Keeps top-level and nested command popups inside the browser viewport, with internal scrolling, above/below placement and submenu edge flipping following inspected VCL screen-bounded behavior; browser geometry does not certify native timers, scroller visuals or full menu parity.",
+        "Existing nested popup consumes keyboard input only in the nearest owning popup: one Enter/Space dispatch and one prefix append per key. Owned regression and real Chromium Writer ruler toggle evidence cover this bounded adapter contract; complete native menu/mnemonic behavior remains unverified."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",

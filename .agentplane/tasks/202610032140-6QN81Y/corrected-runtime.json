@@ -1,0 +1,8 @@
+{
+  "command": "../../node_modules/.bin/vitest run src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx",
+  "cwd": "apps/office",
+  "exitCode": 0,
+  "sha256": "695accdaa82103cb9abf31daaf2bf68c37de6448ee6b3c7510a4159f0b61954d",
+  "bytes": 235,
+  "summary": "\n RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office\n\n\n Test Files  1 passed (1)\n      Tests  9 passed (9)\n   Start at  04:48:32\n   Duration  674ms (transform 34ms, setup 64ms, import 30ms, tests 196ms, environment 304ms)\n\n"
+}

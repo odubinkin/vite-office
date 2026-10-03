@@ -1,0 +1,16 @@
+Running 2 tests using 1 worker
+  ✘  1 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (5.5s)
+  ✘  2 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (5.5s)
+  1) apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter 
+    Error: expect(locator).toHaveCount(expected) failed
+    Locator:  getByLabel('Writer horizontal ruler')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+  2) apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space 
+    Error: expect(locator).toHaveCount(expected) failed
+    Locator:  getByLabel('Writer horizontal ruler')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+  2 failed

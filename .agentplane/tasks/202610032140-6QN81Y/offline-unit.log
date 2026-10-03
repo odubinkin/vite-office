@@ -1,0 +1,74 @@
+
+> vite-office@0.1.0 test
+> npm run test:coverage && npm run test:inventory:coverage
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with v8
+
+
+ Test Files  193 passed (193)
+      Tests  880 passed (880)
+   Start at  04:52:02
+   Duration  87.81s (transform 2.61s, setup 13.25s, import 11.63s, tests 59.44s, environment 64.47s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 11101/11101 )
+Branches     : 100% ( 8379/8379 )
+Functions    : 100% ( 2955/2955 )
+Lines        : 100% ( 10188/10188 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+
+ Test Files  36 passed (36)
+      Tests  109 passed (109)
+   Start at  04:53:30
+   Duration  21.06s (transform 636ms, setup 0ms, import 1.57s, tests 16.28s, environment 2ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1523/1523 )
+Branches     : 100% ( 1080/1080 )
+Functions    : 100% ( 384/384 )
+Lines        : 100% ( 1464/1464 )
+================================================================================
+
+--- terminal summaries ---
+ Test Files  193 passed (193)
+      Tests  880 passed (880)
+Statements   : 100% ( 11101/11101 )
+Branches     : 100% ( 8379/8379 )
+Functions    : 100% ( 2955/2955 )
+Lines        : 100% ( 10188/10188 )
+ Test Files  36 passed (36)
+      Tests  109 passed (109)
+Statements   : 100% ( 1523/1523 )
+Branches     : 100% ( 1080/1080 )
+Functions    : 100% ( 384/384 )
+Lines        : 100% ( 1464/1464 )
