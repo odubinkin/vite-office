@@ -4,7 +4,7 @@ title: "Restore native inline descendant destination selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -22,7 +22,9 @@ verification:
   updated_by: "CODER"
   note: "Complete selected AddChild inline destination scope at910775c2b7a5 verified unchanged at combined semantic 3a555d74af410d90c6ba9aaeaeda59a40b460650;full792/109/20 both100%,offline84+7,oldexpectations/gates and deviations intact."
   attempts: 0
-commit: null
+commit:
+  hash: "910775c2b7a54393c68eb08a75c6f8bc24ad88ff"
+  message: "🧩 RD0HQY code: restore inline descendant destination selection"
 comments:
   -
     author: "CODER"
@@ -33,6 +35,12 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Start: bind already committed core implementation910775c2b7a5 as explicit review target after blocked-task resume; no source changes or new execution, full final evidence retained."
+  -
+    author: "CODER"
+    body: "Start: record full forty-character existing semantic SHA as review target; current source and verified final outcomes unchanged."
 events:
   -
     type: "status"
@@ -61,8 +69,22 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete selected AddChild inline destination scope at910775c2b7a5 verified unchanged at combined semantic 3a555d74af410d90c6ba9aaeaeda59a40b460650;full792/109/20 both100%,offline84+7,oldexpectations/gates and deviations intact."
+  -
+    type: "status"
+    at: "2026-10-03T16:20:42.206Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: bind already committed core implementation910775c2b7a5 as explicit review target after blocked-task resume; no source changes or new execution, full final evidence retained."
+  -
+    type: "status"
+    at: "2026-10-03T16:21:03.258Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: record full forty-character existing semantic SHA as review target; current source and verified final outcomes unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:18:52.624Z"
+doc_updated_at: "2026-10-03T16:21:03.258Z"
 doc_updated_by: "CODER"
 description: "Iteration61 removes invented protected GetDestinationPhantom and restores complete source-owned AddChild inline count/first-child/parent-factory branches. Preserve old matcher expectations through one test-only helper removal; owned deep-transfer traces and topology, no upstream access by tests or saved helper/source files."
 sections:
