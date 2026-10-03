@@ -1,7 +1,7 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
 
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import type { ReactNode, RefObject } from "react";
 import { createPortal } from "react-dom";
 import { WriterRulerLaneContext } from "../presentation/writer-ruler-lane-context";
 
@@ -27,6 +27,7 @@ export interface WriterPlainTextEditorProps {
   readonly activeParagraphId: string;
   readonly cursorSelection: WriterCursorSelection;
   readonly editWindow: SwEditWin;
+  readonly editingHostRef?: RefObject<HTMLElement | null>;
   readonly layout?: SwRootFrame;
   readonly paragraphs: readonly WriterParagraph[];
   readonly pageDescriptor: WriterPageDescriptorValue;
@@ -43,7 +44,8 @@ export interface WriterPlainTextEditorProps {
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
 export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.JSX.Element {
   const rulerLane = useContext(WriterRulerLaneContext);
-  const rootElement = useRef<HTMLElement | null>(null);
+  const localRootElement = useRef<HTMLElement | null>(null);
+  const rootElement = props.editingHostRef ?? localRootElement;
   const measurementHost = useRef<HTMLDivElement | null>(null);
   const measurementRootRef = useRef<ShadowRoot | null>(null);
   const [measurementRoot, setMeasurementRoot] = useState<ShadowRoot | null>(null);
@@ -260,7 +262,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       if (rootElement.current?.querySelector("[data-writer-table-cell]:focus") !== null) return;
       controller.RestoreSelection(props.cursorSelection);
     },
-    [controller, measuredLines, props.cursorSelection, props.paragraphs],
+    [controller, measuredLines, props.cursorSelection, props.paragraphs, rootElement],
   );
 
   useEffect(
@@ -268,7 +270,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     function subscribeEditWindow(): () => void {
       return controller.Subscribe(rootElement.current as HTMLElement);
     },
-    [controller],
+    [controller, rootElement],
   );
 
   return (

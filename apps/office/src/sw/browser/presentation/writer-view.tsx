@@ -1,6 +1,6 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
-import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { TableProperties } from "lucide-react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
@@ -81,6 +81,7 @@ export function WriterWorkbench({
   autosave,
 }: WriterWorkbenchProps): React.JSX.Element {
   const localization = useBrowserLocalization();
+  const editingHostRef = useRef<HTMLElement | null>(null);
   const [presentationStore] = useState(
     /** Reuses the session store or owns one browser-local store for an injected view. @returns Presentation store. */ () =>
       viewStore ?? new WriterViewStore(view),
@@ -412,6 +413,10 @@ export function WriterWorkbench({
                 fallback,
               ) => localization.GetText(`writer.menu.${id}.label`, fallback)
             }
+            focusDocument={
+              /** Focuses this Writer frame's mounted client. @returns Nothing. */ () =>
+                (editingHostRef.current as HTMLElement).focus()
+            }
             idPrefix="writer"
             menus={writerMenuPlacements}
             resolveArguments={resolveCommandArguments}
@@ -500,6 +505,7 @@ export function WriterWorkbench({
           activeParagraphId={snapshot.activeParagraph.id}
           cursorSelection={snapshot.cursorSelection}
           editWindow={view.GetEditWin()}
+          editingHostRef={editingHostRef}
           layout={view.GetLayout()}
           pageDescriptor={snapshot.pageDescriptor}
           pageDescriptors={snapshot.pageDescriptors}

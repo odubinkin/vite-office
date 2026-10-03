@@ -32,6 +32,7 @@ export interface CommandMenuPlacement {
 /** Inputs for one shared generated-resource menubar presenter. */
 export interface CommandMenuBarProps extends BrowserCommandSurfaceProps {
   readonly ariaLabel: string;
+  readonly focusDocument?: () => void;
   readonly getCommandResource: (commandUrl: string) => MenuCommandResource;
   readonly getMenuLabel?: (id: string, fallback: string) => string;
   readonly idPrefix: string;
@@ -47,6 +48,7 @@ function useFallbackMenuLabel(_id: string, fallback: string): string {
 export function CommandMenuBar({
   ariaLabel,
   commandSource,
+  focusDocument,
   getCommandResource,
   getMenuLabel = useFallbackMenuLabel,
   idPrefix,
@@ -76,8 +78,8 @@ export function CommandMenuBar({
       savedFocus.current = target;
   }
 
-  /** Closes all popups before restoring the saved owner. @param restoreFocus - Whether focus still belongs to this menu cycle. @returns Nothing. */
-  function closeMenu(restoreFocus = true): void {
+  /** Closes all popups before restoring the saved owner. @param restoreFocus - Whether focus still belongs to this menu cycle. @param defaultToDocument - Whether menubar deactivation permits frame-client fallback. @returns Nothing. */
+  function closeMenu(restoreFocus = true, defaultToDocument = false): void {
     const index = openMenuIndex;
     const previousFocus = savedFocus.current;
     savedFocus.current = undefined;
@@ -86,6 +88,7 @@ export function CommandMenuBar({
     setOpenMenuIndex(undefined);
     if (restoreFocus) {
       if (previousFocus?.isConnected === true) previousFocus.focus();
+      else if (defaultToDocument && focusDocument !== undefined) focusDocument();
       else if (index !== undefined) triggerRefs.current[index]?.focus();
     }
   }
@@ -216,7 +219,7 @@ export function CommandMenuBar({
       const next = event.key === "Home" ? 0 : menus.length - 1;
       setActiveTriggerIndex(next);
       triggerRefs.current[next]?.focus();
-    } else if (event.key === "Escape") closeMenu(true);
+    } else if (event.key === "Escape") closeMenu(true, openMenuIndex === undefined);
   }
 
   /** Applies popup keyboard navigation. @param event - Menu event. @param menuIndex - Owning menu index. @returns Nothing. */
