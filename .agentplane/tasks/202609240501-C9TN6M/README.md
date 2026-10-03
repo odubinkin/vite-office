@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 64
+revision: 65
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:28:55.126Z"
+doc_updated_at: "2026-10-03T16:44:27.467Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -248,6 +248,10 @@ sections:
     Iteration61 PROGRESS: RD0HQY DONE,semantic910775c2b7a5,closee7f8ed6bf7ec. Native inline AddChild destination count/retained-child/parent-factory branches restored and invented helper removed;54other method bodies,10old matcher args,216other old test files unchanged in own commit.3new baseline failures,focused84app+7boundary pass vendor absent/restored,3nativefiles/8spans hashed only. No native source/helper generation. Separate browser correctionF4HAPT DONE semantic2d2ccc6eb5ec,closeec1a6d2ce04d:owned fixed viewport-bounded internally scrolling menus/submenus;2new owned unit tests and1browser scenario,all3old unit/3old responsive bodies unchanged. Full unchanged verify792app/179files,109inventory/36files,20browser,both100%,allgates passed. Separate source-storage correctionJKV7Z1 DONE semantic3a555d74af41,close1107e3b745c0:owned inventory scratch moved from Agentplane to ignored test-results,stale exclusion comment clarified;109inventory/both100% passes vendor absent/restored,source count0 during actual fixture lifetime and afterward. Previously deleted Python/helper/native sources remain absent. Core exact-SHA evaluator required temporary read-only review checkout910775c2b7a5 with only own result artifacts restored from memory,then main restoredunchanged; no history rewrite/force/gate bypass. All leaf quality phases same actor,not independent-agent/full-module/goal proof.
 
     Parent remains DOING/full goal ACTIVE. Next bounded candidate: native protected helper API ownership/access (Validate,HasOnlyPhantoms,HasPhantomCountedParent,GetFirstNonPhantomChild,MoveChildren,MoveGreaterChildren) versus localprivate/public contracts; fresh declaration/use/nullable-valid-domain audit required before leaf creation. Native full iterator/final-class/reentrant/context/client/layout/redline/range/destructor lifetime and remaining browser UI/residual operation audit still open. Never infer parent/module/goal completion from narrow green gates.
+
+    - Observation: User reaffirmed that Python and other executable helper/source artifacts must not be kept in Agentplane. Complete ignored-inclusive inventory exposed 50 historical TS/MTS/MJS helpers, five ignored TS sources/helpers, 15 obsolete native executable probes and three debug bundles; Python/native source files were already absent.
+      Impact: Old artifacts and the obsolete scripts/native_probe_storage.py contradicted the storage restriction despite not being project tests. Product sources, project tests, metadata and vendor contents remain unchanged.
+      Resolution: Canonical cleanup task 202610031642-HHGTQ2 DONE at semantic 4bf67a647e07cc952f89683da917e5adae419837, quality pass on that SHA and close bd34fdb4da73. Removed all identified code/executable residue and obsolete storage helper; all declared format/lint/types/docs/provenance/parity and policy checks pass. Initial docs-intent task 202610031635-2Z3962 closed duplicate after commit hook correctly required a code task; no hook bypass or history rewrite. Only bounded outcomes, hashes and logs retained; no project test invokes pinned upstream. Parent functionality parity remains open; next pending audit is native protected numbering helper contracts.
 id_source: "generated"
 ---
 ## Summary
@@ -469,3 +473,7 @@ Next iteration43 should restore SwNumRule format accessor and ownership architec
 Iteration61 PROGRESS: RD0HQY DONE,semantic910775c2b7a5,closee7f8ed6bf7ec. Native inline AddChild destination count/retained-child/parent-factory branches restored and invented helper removed;54other method bodies,10old matcher args,216other old test files unchanged in own commit.3new baseline failures,focused84app+7boundary pass vendor absent/restored,3nativefiles/8spans hashed only. No native source/helper generation. Separate browser correctionF4HAPT DONE semantic2d2ccc6eb5ec,closeec1a6d2ce04d:owned fixed viewport-bounded internally scrolling menus/submenus;2new owned unit tests and1browser scenario,all3old unit/3old responsive bodies unchanged. Full unchanged verify792app/179files,109inventory/36files,20browser,both100%,allgates passed. Separate source-storage correctionJKV7Z1 DONE semantic3a555d74af41,close1107e3b745c0:owned inventory scratch moved from Agentplane to ignored test-results,stale exclusion comment clarified;109inventory/both100% passes vendor absent/restored,source count0 during actual fixture lifetime and afterward. Previously deleted Python/helper/native sources remain absent. Core exact-SHA evaluator required temporary read-only review checkout910775c2b7a5 with only own result artifacts restored from memory,then main restoredunchanged; no history rewrite/force/gate bypass. All leaf quality phases same actor,not independent-agent/full-module/goal proof.
 
 Parent remains DOING/full goal ACTIVE. Next bounded candidate: native protected helper API ownership/access (Validate,HasOnlyPhantoms,HasPhantomCountedParent,GetFirstNonPhantomChild,MoveChildren,MoveGreaterChildren) versus localprivate/public contracts; fresh declaration/use/nullable-valid-domain audit required before leaf creation. Native full iterator/final-class/reentrant/context/client/layout/redline/range/destructor lifetime and remaining browser UI/residual operation audit still open. Never infer parent/module/goal completion from narrow green gates.
+
+- Observation: User reaffirmed that Python and other executable helper/source artifacts must not be kept in Agentplane. Complete ignored-inclusive inventory exposed 50 historical TS/MTS/MJS helpers, five ignored TS sources/helpers, 15 obsolete native executable probes and three debug bundles; Python/native source files were already absent.
+  Impact: Old artifacts and the obsolete scripts/native_probe_storage.py contradicted the storage restriction despite not being project tests. Product sources, project tests, metadata and vendor contents remain unchanged.
+  Resolution: Canonical cleanup task 202610031642-HHGTQ2 DONE at semantic 4bf67a647e07cc952f89683da917e5adae419837, quality pass on that SHA and close bd34fdb4da73. Removed all identified code/executable residue and obsolete storage helper; all declared format/lint/types/docs/provenance/parity and policy checks pass. Initial docs-intent task 202610031635-2Z3962 closed duplicate after commit hook correctly required a code task; no hook bypass or history rewrite. Only bounded outcomes, hashes and logs retained; no project test invokes pinned upstream. Parent functionality parity remains open; next pending audit is native protected numbering helper contracts.
