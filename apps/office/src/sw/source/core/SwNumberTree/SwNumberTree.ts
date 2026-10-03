@@ -345,22 +345,23 @@ export abstract class SwNumberTreeNode {
   protected ValidateHierarchical(target: SwNumberTreeNode | undefined): void {
     const end = this.GetIterator(target);
     if (end < 0) return;
-    const first = this.mChildren.front() as SwNumberTreeNode;
     let current = this.mpLastValid === undefined ? -1 : this.mChildren.find(this.mpLastValid);
-    let number = current < 0 ? 0 : (this.mChildren.at(current) as SwNumberTreeNode).mnNumber;
-    if (current < 0) {
+    let number: number;
+    if (current >= 0) number = (this.mChildren.at(current) as SwNumberTreeNode).mnNumber;
+    else {
       current = 0;
+      const first = this.mChildren.at(current) as SwNumberTreeNode;
+      first.mbContinueingPreviousSubTree = false;
       number = first.GetStartValue();
       if (!first.IsCounted() && (!first.HasCountedChildren() || first.IsPhantom())) number--;
-      first.mbContinueingPreviousSubTree = false;
       const parentCounted =
         this.IsCounted() && (!this.IsPhantom() || this.HasPhantomCountedParent());
-      if (!first.IsRestart() && this.mpParent !== undefined && !parentCounted) {
-        const siblings = this.mpParent.mChildren;
-        let previous = siblings.find(this);
+      if (!first.IsRestart() && this.GetParent() !== undefined && !parentCounted) {
+        const parent = this.GetParent() as SwNumberTreeNode;
+        let previous = parent.GetIterator(this);
         while (previous > 0) {
-          const preceding = siblings.at(--previous) as SwNumberTreeNode;
-          if (preceding.mChildren.size() > 0) {
+          const preceding = parent.mChildren.at(--previous) as SwNumberTreeNode;
+          if (preceding.GetChildCount() > 0) {
             first.mbContinueingPreviousSubTree = true;
             number = (preceding.mChildren.back() as SwNumberTreeNode).GetNumber();
             if (first.IsCounted() && (!first.IsPhantom() || first.HasPhantomCountedParent()))
