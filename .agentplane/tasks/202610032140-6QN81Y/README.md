@@ -1,10 +1,11 @@
 ---
 id: "202610032140-6QN81Y"
 title: "Handle Writer submenu keyboard events once"
-status: "DOING"
+result_summary: "Corrected single keyboard activation and typeahead ownership in existing Writer submenus"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - ".agentplane/tasks/202610032140-6QN81Y/auxiliary-checks.json"
   findings:
     - "One production ownership guard handles nested events only in the nearest popup without stopping normal document bubbling. Six command-kind/key cases and multi-key prefix fail before correction and pass after; root/pointer/disabled controls retained. Both baseline Chromium ruler toggle cases fail; corrected two-direction Enter/Space toggles pass.243prior tests/spec and all production outside guard unchanged; both215-row manifests append-only evidence with original statuses/defaults/ownership intact. Fullverify880app109inventory22browser2resources100%coverage0semantic and sequential vendor-absent880app109inventory12scripts22browser pass. Exact pin restored and source hashes rechecked. No source/helper/Python/executable task artifacts."
-commit: null
+commit:
+  hash: "8c9cc72a5cd528f598de66ee29ffc6386321a70f"
+  message: "🛠️ 6QN81Y code: handle nested Writer popup keyboard input once"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce nested Writer popup keyboard ownership under standing goal authorization; no scripts or upstream sources stored in artifacts."
+  -
+    author: "CODER"
+    body: "Verified: existing Writer submenu keyboard input is consumed only by the nearest owning popup; one Enter/Space dispatch and one prefix append per key. Nine owned cases and real Chromium toggles pass after seven owned/two browser baseline failures. Fullverify and sequential vendor-absent suites pass. Same-actor separate EVALUATOR phase passes exact semantic8c9cc72a. Source/helper/Python/executable artifacts absent; parent/goal remain active."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "One nearest-popup ownership guard fixes six duplicate nested Enter/Space dispatch cases and one repeated-prefix case; corrected9owned pass after7baseline failures. Both baseline Chromium ruler cases reproduced double toggle; fullverify880app109inventory22browser2resources100%coverage0semantic passes. Sequential vendor-absent880app109inventory12scripts22browser pass,pin restored.243prior test/spec files and all production outside one guard unchanged,append-only evidence rows,0source/helper/Python/executable artifacts. Complete native menu/default/parent/goal remain unverified."
+  -
+    type: "status"
+    at: "2026-10-03T21:56:16.948Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: existing Writer submenu keyboard input is consumed only by the nearest owning popup; one Enter/Space dispatch and one prefix append per key. Nine owned cases and real Chromium toggles pass after seven owned/two browser baseline failures. Fullverify and sequential vendor-absent suites pass. Same-actor separate EVALUATOR phase passes exact semantic8c9cc72a. Source/helper/Python/executable artifacts absent; parent/goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-03T21:55:26.209Z"
+doc_updated_at: "2026-10-03T21:56:16.949Z"
 doc_updated_by: "CODER"
 description: "Iteration75 under C9TN6M: reproduce and correct duplicate nested popup keyboard handling for existing Writer menu commands/typeahead, preserving native single activation, menu composition and registered I/O exceptions. Owned unit/browser regression tests never access upstream; outcome-only artifacts."
 sections:
@@ -112,6 +125,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task semantic commit if necessary; preserve history and registered exceptions. No network/outside-repo access. Temporary vendor rename restored in finally."
   Findings: "Reproduction: correctly scoped owned Vitest has 7 failures/2 passes. All six nested Enter/Space action/check/radio cases call Execute twice; nested two-key prefix repeats each key and leaves focus on Beta instead of Bravo. Root/pointer and disabled navigation controls pass. Initial root-cwd invocation failed before test discovery due to app-relative setup path; corrected app-cwd baseline is the actual reproduction, not a product failure. Browser baseline pending terminal result. Native KeyInput/EndExecute inspected manually and two source hashes recorded; no native execution or source/helper storage. Browser baseline also fails both Enter/Space cases: ruler remains visible after two toggles. One closest-popup/currentTarget guard corrects all 9 owned cases; full verify passes app880/inventory109/browser22/resources2 and all 100% coverage gates, semantic violations0. The existing root/pointer/disabled traversal controls are bounded browser regression controls, not certification of native disabled traversal defaults. Separate next candidate discovered by read-only inspection before vendor-absent run: pinned StyleSettings defaults SkipDisabledInMenus=false, and native popup traversal/keyboard preselection honor it; local menus always skip disabled items. Pointer opening also currently preselects the first submenu item while native HighlightChanged passes preselect only for keyboard. Reproduce and scope either obligation in a new single task, not this ownership correction. Source-provenance stale local symbol names remain separate metadata debt; no promotion or unrelated edit. Sequential vendor-absent app/inventory/scripts/browser all pass; restored pin and both inspected hashes rechecked. Storage scan includes ignored files and contains no helper/source/Python/executable task artifacts. Cleanup4bf67a64 already satisfies deletion request; no redundant cleanup or history rewrite. Exact semantic quality review pending."
+extensions:
+  implementation_commit:
+    hash: "8c9cc72a5cd528f598de66ee29ffc6386321a70f"
+    message: "🛠️ 6QN81Y code: handle nested Writer popup keyboard input once"
 id_source: "generated"
 ---
 ## Summary
