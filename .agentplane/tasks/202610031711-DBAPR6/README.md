@@ -1,10 +1,11 @@
 ---
 id: "202610031711-DBAPR6"
 title: "Restore required numbering operation document context"
-status: "DOING"
+result_summary: "Restored required numbering operation documents and protected traversal; all scoped verification passes, wider parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Reviewed24semantic paths against task scope and actual commit manifest; mandatory documents forwarded through rule/list/tree and native GetDoc callers, no optional or first-client operation fallback and no public Notify bridge. Raw topology/counters/prefix and foreign-reading behavior are owned application assertions."
     - "All required gates pass:803app,109inventory,20browser,both100% coverage, static/source/resource/parity. Three baseline runtime regressions and16type/access mismatches pass final;15old test files preserve629matcher arguments,165other old application files unchanged. Six rows per metadata manifest append narrow evidence only; classification/status/default/divergence/known violation/omitted fields preserved."
     - "193app plus9boundary/resource tests pass with vendor absent and exact pin restored; project tests do not invoke upstream. Fresh pinned manual file hashes are intact, no native compilation/execution. Ignored-inclusive Agentplane helper/source/executable count0; only bounded logs/hash/outcomes stored. Policy routing and diff check pass; doctor has0errors and2documented unrelated warnings."
-commit: null
+commit:
+  hash: "1599894a66a2a9c93569f59c1c0e249dd0ed54e7"
+  message: "🧩 DBAPR6 code: require numbering operation document context"
 comments:
   -
     author: "CODER"
     body: "Start: restore complete required operation document forwarding through numbering APIs and protected traversal using owned tests and preserved existing expectations."
+  -
+    author: "CODER"
+    body: "Verified: required document context and protected Notify at1599894a66a2; full803app/109inventory/20browser,both100%,offline193app+9boundary,old629matcher arguments retained,zero source/helper artifacts. Exact-SHA quality pass20261003-173401069. Parent and wider native/browser audit remain open."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Required operation-document contracts and protected traversal verified at1599894a66a2a9c93569f59c1c0e249dd0ed54e7. Full npm run verify exit0:803app,109inventory,20browser,both100%;193app+9boundary/resource pass vendor absent/restored.16type requirements,3baseline failures,629old matcher arguments retained,24semantic paths,zero artifact code. Native dtor/client/range/redline/layout/browser obligations and parent/full goal remain unverified; doctor errors0/warnings2."
+  -
+    type: "status"
+    at: "2026-10-03T17:35:10.334Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: required document context and protected Notify at1599894a66a2; full803app/109inventory/20browser,both100%,offline193app+9boundary,old629matcher arguments retained,zero source/helper artifacts. Exact-SHA quality pass20261003-173401069. Parent and wider native/browser audit remain open."
 doc_version: 3
-doc_updated_at: "2026-10-03T17:34:39.684Z"
+doc_updated_at: "2026-10-03T17:35:10.335Z"
 doc_updated_by: "CODER"
 description: "Iteration63: restore required SwDoc arguments across numbering mutation/notification APIs, SwList insert/remove/validate and SwNumRule.Validate; remove hidden text/client context fallback and restore protected Notify access. Thread explicit documents through production and owned test callers preserving expectations. Test foreign reading context through actual owned lists/rules. Native destruction/client blockers and redline/range machinery remain separately unverified; no registered IO/recovery changes."
 sections:
