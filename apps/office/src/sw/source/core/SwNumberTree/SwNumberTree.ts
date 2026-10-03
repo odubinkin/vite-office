@@ -310,20 +310,23 @@ export abstract class SwNumberTreeNode {
     do {
       child = this.mChildren.at(++position);
       if (child !== undefined) {
+        let number: number;
         const predecessor = child.GetPred();
         if (predecessor !== undefined) {
-          child.mnNumber = !child.IsCounted()
-            ? predecessor.GetNumber(predecessor.mpParent !== child.mpParent)
-            : child.IsRestart()
-              ? child.GetStartValue()
-              : predecessor.GetNumber(predecessor.mpParent !== child.mpParent) + 1;
+          if (!child.IsCounted())
+            number = predecessor.GetNumber(predecessor.GetParent() !== child.GetParent());
+          else {
+            if (child.IsRestart()) number = child.GetStartValue();
+            else number = predecessor.GetNumber(predecessor.GetParent() !== child.GetParent()) + 1;
+          }
         } else {
-          child.mnNumber = !child.IsCounted()
-            ? this.GetStartValue() - 1
-            : child.IsRestart()
-              ? child.GetStartValue()
-              : this.GetStartValue();
+          if (!child.IsCounted()) number = this.GetStartValue() - 1;
+          else {
+            if (child.IsRestart()) number = child.GetStartValue();
+            else number = this.GetStartValue();
+          }
         }
+        child.mnNumber = number;
       }
     } while (child !== undefined && child !== target);
     this.SetLastValid(child === undefined ? -1 : position, true);
