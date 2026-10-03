@@ -17,10 +17,10 @@
   "inspectedSpans": [
     {
       "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
-      "firstLine": 440,
+      "firstLine": 432,
       "lastLine": 550,
       "responsibility": "AddChild orphan/count guard and complete inline destination loop/cleanup/notifications",
-      "sha256": "93dd8137d614f631fc3f5f8decc44a1cf35f0dc787f822516355678ade33d59d"
+      "sha256": "796e96599f4ae48923fbbd4a5de4f414deba13f8e166d2053c790b02263e5afe"
     },
     {
       "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",

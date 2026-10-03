@@ -1,0 +1,15 @@
+{
+  "vendorAbsentDuringTests": true,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "restored": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "results": [
+    {
+      "name": "offline-app.log",
+      "status": 0
+    },
+    {
+      "name": "offline-boundaries.log",
+      "status": 0
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "base": "18fb89e67262",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "semanticPathCount": 5,
+  "metadata": [
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "changedRows": 1,
+      "allOtherMetadataUnchanged": true
+    },
+    {
+      "file": "docs/program/source-provenance.json",
+      "changedRows": 1,
+      "allOtherMetadataUnchanged": true
+    }
+  ],
+  "nativeHashesUnchanged": 3,
+  "ignoredInclusiveForbiddenSourceArtifacts": 0,
+  "productionInventedHelperRemoved": true
+}
