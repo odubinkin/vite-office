@@ -1,0 +1,85 @@
+{
+  "command": "npm run verify",
+  "terminalExitCode": 0,
+  "processSession": 64666,
+  "application": {
+    "tests": 821,
+    "files": 184
+  },
+  "inventory": {
+    "tests": 109,
+    "files": 36
+  },
+  "browser": {
+    "tests": 20
+  },
+  "resources": {
+    "tests": 2
+  },
+  "coverage": {
+    "application": [
+      11057,
+      8342,
+      2955,
+      10148
+    ],
+    "inventory": [
+      1523,
+      1080,
+      384,
+      1464
+    ],
+    "allFourMetrics100Percent": true
+  },
+  "completeOutputSha256": "c05448c3fdfe12b395ffc88a1283587ce261beaf7610de6d7dddc0d52b370b65",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  184 passed (184)",
+    "      Tests  821 passed (821)",
+    "Statements   : 100% ( 11057/11057 )",
+    "Branches     : 100% ( 8342/8342 )",
+    "Functions    : 100% ( 2955/2955 )",
+    "Lines        : 100% ( 10148/10148 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )",
+    "Running 20 tests using 4 workers",
+    "  20 passed (9.4s)",
+    "    \"semanticViolationCount\": 0,"
+  ],
+  "semanticPaths": [
+    "apps/office/src/sw/inc/SwNumberTreeTypes.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/doc/list.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "earlierFullAttempt": {
+    "session": 60146,
+    "exitCode": 2,
+    "reason": "New exact-parameter tuple omitted explicit undefined; fixed fixture without production algorithm change"
+  },
+  "offlineEvidence": "offline-test-results.json",
+  "integrityEvidence": "scope-integrity.json",
+  "nativeEvidence": "native-vector-inspection.json",
+  "doctor": {
+    "errors": 0,
+    "warnings": 2,
+    "info": 2,
+    "existingWarnings": [
+      "legacy hook readiness",
+      "closed duplicate cleanup task missing own semantic commit"
+    ]
+  },
+  "limits": [
+    "Selected shown/no-layout vector result ownership only; no full layout/redline selector or native long precision/allocator/lifetime proof",
+    "No native execution or source/helper/Python artifacts; tests never access pinned upstream",
+    "Wider module/default/const/final/client/destructor/browser/full goal obligations remain open"
+  ]
+}

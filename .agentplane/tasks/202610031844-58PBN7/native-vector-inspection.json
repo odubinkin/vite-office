@@ -1,0 +1,31 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "mode": "manual inspection/hash only; no native execution",
+  "files": [
+    {
+      "path": "sw/inc/SwNumberTreeTypes.hxx",
+      "sha256": "06a05ccea699f333af3e6fa2c0c0f04615701ddbfc641151a602e569c78e83b0"
+    },
+    {
+      "path": "sw/inc/SwNumberTree.hxx",
+      "sha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "sha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741"
+    },
+    {
+      "path": "sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    }
+  ],
+  "conclusions": [
+    "Iteration66 restores source-owned tSwNumTreeNumber/tNumberVector aliases and mutable by-value results for existing shown number-tree/text getters and SwList adapter. Tree recursion/counter bodies remain unchanged; text getter obtains its record via native GetNum delegation. Four owned cases/ten exact type checks and12rule/depth/restart profiles cover root/orphan/no-record arrays, independent result mutation,phantom depth9,hierarchical/continuous/restart0/nonzero/reading transitions and unchanged raw caches/clients/topology. Baseline rejects mutable assignments and getter contracts, and one owned delegation trace fails; corrected runtime and typechecks pass. Fresh pinned manual hashes/inspection only, no native execution or source/helper artifacts, no upstream project test access. Native machine integer precision,full layout/redline selector contracts,allocator/const/final/destructor/client/browser lifetimes remain individually unverified. No broader module/status/default/goal or registered IO/recovery promotion.",
+    "Const getters return nonconst by-value vector; returned storage is separate from child container and prefix state.",
+    "Text layout/redline default parameters remain omitted by the shown/no-layout implementation, unverified rather than silently certified."
+  ]
+}

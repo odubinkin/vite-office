@@ -1,0 +1,92 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "restored": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "projectTestsHadVendor": false,
+  "newTestSha256": "64b1fef7d6cd8184174cd35b7782bd6dc5864bb60949dfa4e6babad051660ac7",
+  "results": [
+    {
+      "label": "baseline-vendor-absent",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 1,
+      "summary": [
+        " Test Files  1 failed (1)",
+        "      Tests  1 failed | 3 passed (4)",
+        "   Duration  906ms (transform 199ms, setup 114ms, import 219ms, tests 15ms, environment 471ms)"
+      ]
+    },
+    {
+      "label": "baseline-types-final",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 2,
+      "summary": [
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(3,54): error TS2307: Cannot find module '../../../inc/SwNumberTreeTypes' or its corresponding type declarations.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(32,6): error TS2322: Type 'true' is not assignable to type 'false'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(32,12): error TS2322: Type 'true' is not assignable to type 'false'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(32,24): error TS2322: Type 'true' is not assignable to type 'false'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(32,36): error TS2322: Type 'true' is not assignable to type 'false'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(32,48): error TS2322: Type 'true' is not assignable to type 'false'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(32,54): error TS2322: Type 'true' is not assignable to type 'false'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(101,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(102,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(103,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(104,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(105,7): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(127,11): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(167,13): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(168,13): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(169,13): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(170,13): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts(197,15): error TS4104: The type 'readonly number[]' is 'readonly' and cannot be assigned to the mutable type 'number[]'."
+      ]
+    },
+    {
+      "label": "offline-app",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "src/sw/source/core/SwNumberTree",
+        "src/sw/source/core/doc",
+        "src/sw/source/core/txtnode",
+        "src/sw/source/core/docnode"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "summary": [
+        " Test Files  47 passed (47)",
+        "      Tests  211 passed (211)",
+        "   Duration  13.25s (transform 1.14s, setup 2.86s, import 2.94s, tests 1.43s, environment 15.46s)"
+      ]
+    },
+    {
+      "label": "offline-boundary",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/writer-ui-resource-model.test.ts"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "summary": [
+        " Test Files  2 passed (2)",
+        "      Tests  9 passed (9)",
+        "   Duration  696ms (transform 87ms, setup 0ms, import 642ms, tests 6ms, environment 0ms)"
+      ]
+    }
+  ]
+}

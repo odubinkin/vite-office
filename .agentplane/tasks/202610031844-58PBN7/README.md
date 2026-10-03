@@ -4,7 +4,7 @@ title: "Restore caller-owned mutable numbering vector contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned mutable numbering vector contracts and text getter delegation under standing iterative goal; retain all source/test artifact restrictions."
 doc_version: 3
-doc_updated_at: "2026-10-03T18:46:32.041Z"
+doc_updated_at: "2026-10-03T18:56:38.095Z"
 doc_updated_by: "CODER"
 description: "Iteration66 of C9TN6M: restore native SwNumberTreeTypes aliases and mutable by-value GetNumberVector results across tree, shown text getter and existing SwList adapter. Preserve validation logic/defaults, root exclusion, IO/recovery deviations and unsupported layout/redline limits; no upstream test access or helper/source artifacts."
 sections:
@@ -48,9 +48,14 @@ sections:
     2. Assert native type aliases,zero-argument mutable tree/text vector results,existing list optional mutable result/required text arg,and protected append mutable output/default bool. Actual owned results are distinct arrays;push/splice/clear/sort/reverse mutations never change other results,raw counters/prefix/parent/rule/client topology. Cover root/orphan/no-record empty vectors,actual text getter forwarding,depth9 phantom chains,hierarchical/continuous,restart0/nonzero and reading transitions. Existing tests and all other bodies unchanged; selected recursive/counter bodies unchanged,only text GetNum dispatch changes. Exactly three existing metadata rows plus one new type module each; all old non-evidence classifications/defaults/deviations preserved.
     3. Focused core numbering/doc/text tests plus boundary/resource tests pass with vendor/libreoffice-reference absent,finally restored exact pin. Ignored-inclusive Agentplane tasks/tmp prohibited source/helper/Python/executable files0.
     4. npm run verify passes all gates and both100percent coverage. ap doctor within existing0error/2warning baseline,policy routing and diffcheck pass. Canonical verification,actual semantic-SHA EVALUATOR review and clean leaf closure recorded; parent/full module/goal remain open.
-  Verification: "Pending final authored baseline,implementation and terminal verification. No broader module/default/type-domain/layout/redline claim."
+  Verification: "Command:npm run verify. Result:pass terminalexit0/session64666. Evidence:821app/184files109inventory/36files20browser2resource,both100percent coverage(app11057/8342/2955/10148;inventory1523/1080/384/1464),all static,type,lint,docs,215-module source-tree/provenance/inventory gates pass;semanticViolationCount0. Final authored baseline runtime1fail/3pass and typeexit2 readonly/alias rejections; corrected4runtime cases/10type checks and12owned rule/depth/restart profiles pass.211focusedapp/47files+9boundary/resource/2files pass vendor absent,restoredexactpin.234prior tests and134existing method bodies unchanged,only text vector GetNum delegation body changes. Three narrow existing rows+one new alias module each manifest,211other existing rows each and all non-evidence status/default/deviation fields/relative order preserved. Five pinned files manually inspected/hashed only;no native compilation/execution or helper/source/Python artifacts. Doctor0errors/2existing warnings,routing/diff pass. Limits:shown/no-layout mutable vector ownership only;native machine precision/allocator/layout/redline/final/const/destructor/browser remain unverified. Semantic commit and exact-SHA quality/closure pending;parent/goal active."
   Rollback Plan: "Revert only the semantic implementation commit from this leaf; keep task evidence and prior iterations. No history rewriting."
-  Findings: "Preflight clean main/direct at5067b674896891f06a134eba7f82216509812d32. Previous goal turn progress:iteration65 semantic1c3981fb and leaf closure,parent evidence complete. Standing user iterative goal authorizes this safe local repair. Native const getters return mutable std::vector values; local runtime already constructs fresh arrays but tree/text/list signatures artificially expose readonly number[]. Type aliases absent. Native text getter calls GetNum then record getter; local getter reads private mpNodeNum directly. Native layout/redline selectors and machine integer precision remain separate unverified obligations."
+  Findings: |-
+    Preflight clean main/direct at5067b674896891f06a134eba7f82216509812d32. Previous goal turn progress:iteration65 semantic1c3981fb and leaf closure,parent evidence complete. Standing user iterative goal authorizes this safe local repair. Native const getters return mutable std::vector values; local runtime already constructs fresh arrays but tree/text/list signatures artificially expose readonly number[]. Type aliases absent. Native text getter calls GetNum then record getter; local getter reads private mpNodeNum directly. Native layout/redline selectors and machine integer precision remain separate unverified obligations.
+
+    - Observation: Initial new continuous-depth9 expected vector omitted the counted final real-item increment; corrected against existing literal profile before product edits. First full attempt60146 stopped on new protected parameter equality fixture omitting explicit undefined under exactOptionalPropertyTypes.
+      Impact: Neither is an upstream product mismatch. Native recursive/counter algorithms and existing tests were unchanged. Runtime final four cases pass; prior claim of final type pass was premature and superseded.
+      Resolution: Use the existing exact protected tuple validate?:boolean|undefined, preserve original metadata row ordering, rerun final authored baseline/type/runtime checks and full gates without changing acceptance criteria. Store only bounded outcomes/logs/hashes.
 id_source: "generated"
 ---
 ## Summary
@@ -74,7 +79,7 @@ Seven semantic paths: new apps/office/src/sw/inc/SwNumberTreeTypes.ts; apps/offi
 
 ## Verification
 
-Pending final authored baseline,implementation and terminal verification. No broader module/default/type-domain/layout/redline claim.
+Command:npm run verify. Result:pass terminalexit0/session64666. Evidence:821app/184files109inventory/36files20browser2resource,both100percent coverage(app11057/8342/2955/10148;inventory1523/1080/384/1464),all static,type,lint,docs,215-module source-tree/provenance/inventory gates pass;semanticViolationCount0. Final authored baseline runtime1fail/3pass and typeexit2 readonly/alias rejections; corrected4runtime cases/10type checks and12owned rule/depth/restart profiles pass.211focusedapp/47files+9boundary/resource/2files pass vendor absent,restoredexactpin.234prior tests and134existing method bodies unchanged,only text vector GetNum delegation body changes. Three narrow existing rows+one new alias module each manifest,211other existing rows each and all non-evidence status/default/deviation fields/relative order preserved. Five pinned files manually inspected/hashed only;no native compilation/execution or helper/source/Python artifacts. Doctor0errors/2existing warnings,routing/diff pass. Limits:shown/no-layout mutable vector ownership only;native machine precision/allocator/layout/redline/final/const/destructor/browser remain unverified. Semantic commit and exact-SHA quality/closure pending;parent/goal active.
 
 ## Rollback Plan
 
@@ -83,3 +88,7 @@ Revert only the semantic implementation commit from this leaf; keep task evidenc
 ## Findings
 
 Preflight clean main/direct at5067b674896891f06a134eba7f82216509812d32. Previous goal turn progress:iteration65 semantic1c3981fb and leaf closure,parent evidence complete. Standing user iterative goal authorizes this safe local repair. Native const getters return mutable std::vector values; local runtime already constructs fresh arrays but tree/text/list signatures artificially expose readonly number[]. Type aliases absent. Native text getter calls GetNum then record getter; local getter reads private mpNodeNum directly. Native layout/redline selectors and machine integer precision remain separate unverified obligations.
+
+- Observation: Initial new continuous-depth9 expected vector omitted the counted final real-item increment; corrected against existing literal profile before product edits. First full attempt60146 stopped on new protected parameter equality fixture omitting explicit undefined under exactOptionalPropertyTypes.
+  Impact: Neither is an upstream product mismatch. Native recursive/counter algorithms and existing tests were unchanged. Runtime final four cases pass; prior claim of final type pass was premature and superseded.
+  Resolution: Use the existing exact protected tuple validate?:boolean|undefined, preserve original metadata row ordering, rerun final authored baseline/type/runtime checks and full gates without changing acceptance criteria. Store only bounded outcomes/logs/hashes.
