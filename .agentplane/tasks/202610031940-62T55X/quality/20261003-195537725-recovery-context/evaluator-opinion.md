@@ -1,0 +1,26 @@
+# EVALUATOR opinion: pass
+
+Exact semantic HEADe4be73d1 restores complete selected hierarchical validator state/policy ordering and owner traversal;required evidence satisfies leaf scope only.
+
+## Findings
+- Reviewed foursemantic paths against complete pinned ValidateHierarchical body/declaration and actual SwNodeNum policies. First-child continuation resets before virtual start/count/descendant policies,cache-retained path skips those policies,and native parent/preceding child-count helpers replace raw storage bypass. Null/end/equivalent targets,signed starts,restarts,counted barriers,uncounted skips,phantoms,prefixes and default predecessor validation retained. Native begin0 uses index0;unused temporary initializer removed to satisfy existing lint without branch behavior change.
+- Six final authored cases/four exact types/13actual-owner profiles:4baseline runtime failures include stale pre-policy continuation true and missing helper dispatch;corrected cases/typespass. All237prior test/spec files and50other tree methods byte-identical. Both215-row manifests changeonenarrow existing tree evidence row only;214others andall non-evidence/status/default/deviation/order data preserved. No whole-module/default/goal certification.
+- Fullverify terminal0:839app/109inventory/20browser/2resource,both100coverage/all215rowgates. Vendor-absent229core+9boundary cases pass with exact pin restored in finally. Manual3nativefilehashes only,no source/helper/native execution;ignored-inclusive Python/source/helper/executable0. Doctor0errors/2knownwarnings,routing/diffclean. Same actor performs separate evaluator phase,no independent agent claimed.
+
+## Evidence
+- .agentplane/tasks/202610031940-62T55X/README.md
+- .agentplane/tasks/202610031940-62T55X/source-inspection.json
+- .agentplane/tasks/202610031940-62T55X/baseline-summary.json
+- .agentplane/tasks/202610031940-62T55X/scope-integrity.json
+- .agentplane/tasks/202610031940-62T55X/full-verify-summary.json
+- .agentplane/tasks/202610031940-62T55X/offline-results.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Native nonvirtual helper traces show source architecture,not ABI. Invalid iterator/debug,full machine integer/allocator/const/final/destructor/client/redline/layout/browser lifetimes and other method contracts remain individually unverified;parent goal staysactive.
+- Unchanged hook-readiness and historical duplicate cleanup commit-record doctor warnings are outside scope.
