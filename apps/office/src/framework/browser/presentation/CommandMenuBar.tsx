@@ -1,5 +1,6 @@
 /** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 
 import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
 
@@ -61,15 +62,32 @@ export function CommandMenuBar({
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pendingMenuPreselection = useRef<boolean | undefined>(undefined);
   const preselectSubmenuFirst = useRef(false);
-  const restoreTriggerFocus = useRef<number | undefined>(undefined);
+  const savedFocus = useRef<HTMLElement | undefined>(undefined);
 
-  /** Closes all popups. @param restoreFocus - Whether to focus the trigger. @returns Nothing. */
-  function closeMenu(restoreFocus = false): void {
+  /** Retains one external owner for the active menu cycle. @param target - Previous focus target. @returns Nothing. */
+  function saveFocus(target: EventTarget | null): void {
+    if (
+      savedFocus.current === undefined &&
+      target instanceof HTMLElement &&
+      target !== document.body &&
+      target.isConnected &&
+      rootRef.current?.contains(target) !== true
+    )
+      savedFocus.current = target;
+  }
+
+  /** Closes all popups before restoring the saved owner. @param restoreFocus - Whether focus still belongs to this menu cycle. @returns Nothing. */
+  function closeMenu(restoreFocus = true): void {
     const index = openMenuIndex;
+    const previousFocus = savedFocus.current;
+    savedFocus.current = undefined;
     pendingMenuPreselection.current = undefined;
     setOpenSubmenuId(undefined);
     setOpenMenuIndex(undefined);
-    if (restoreFocus && index !== undefined) restoreTriggerFocus.current = index;
+    if (restoreFocus) {
+      if (previousFocus?.isConnected === true) previousFocus.focus();
+      else if (index !== undefined) triggerRefs.current[index]?.focus();
+    }
   }
 
   /** Opens a child popup with origin-specific preselection. @param id - Submenu identity. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
@@ -114,6 +132,7 @@ export function CommandMenuBar({
   /** Opens one popup with origin-specific preselection. @param index - Menu index. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
   function openMenu(index: number, preSelectFirst = false): void {
     if (openMenuIndex === index) return;
+    saveFocus(document.activeElement);
     setActiveTriggerIndex(index);
     setOpenSubmenuId(undefined);
     pendingMenuPreselection.current = preSelectFirst;
@@ -146,16 +165,6 @@ export function CommandMenuBar({
   );
 
   useEffect(
-    /** Restores focus after React unmounts a closed popup. @returns Nothing. */
-    function focusClosedMenuTrigger(): void {
-      if (openMenuIndex !== undefined || restoreTriggerFocus.current === undefined) return;
-      triggerRefs.current[restoreTriggerFocus.current]?.focus();
-      restoreTriggerFocus.current = undefined;
-    },
-    [openMenuIndex],
-  );
-
-  useEffect(
     /** Focuses a mounted popup and preselects its first item only for keyboard opening. @returns Nothing. */
     function focusOpenedSubmenu(): void {
       if (openSubmenuId === undefined) return;
@@ -174,7 +183,8 @@ export function CommandMenuBar({
     /** Installs document-level outside-pointer dismissal. @returns Listener cleanup. */ function installOutsideDismissal(): () => void {
       /** Handles an outside pointer action. @param event - Document event. @returns Nothing. */
       function dismiss(event: PointerEvent): void {
-        if (rootRef.current?.contains(event.target as Node) !== true) closeMenu();
+        if (rootRef.current?.contains(event.target as Node) !== true)
+          closeMenu(rootRef.current?.contains(document.activeElement) === true);
       }
       document.addEventListener("pointerdown", dismiss);
       return /** Removes the outside-pointer listener. @returns Nothing. */ () =>
@@ -364,7 +374,24 @@ export function CommandMenuBar({
   }
 
   return (
-    <div aria-label={ariaLabel} className="flex items-center gap-1" ref={rootRef} role="menubar">
+    <div
+      aria-label={ariaLabel}
+      className="flex items-center gap-1"
+      onBlurCapture={
+        /** Cancels a cycle after focus transfers outside without restoring it. @param event - Focus transfer. @returns Nothing. */ (
+          event,
+        ) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) closeMenu(false);
+        }
+      }
+      onFocusCapture={
+        /** Saves the external owner before trigger focus activates the menubar. @param event - Focus entry. @returns Nothing. */ (
+          event,
+        ) => saveFocus(event.relatedTarget)
+      }
+      ref={rootRef}
+      role="menubar"
+    >
       {menus.map(
         /** Renders one top-level menu resource. @param menu - Menu placement. @param index - Menu index. @returns Menubar entry. */ (
           menu,
@@ -522,9 +549,9 @@ function BindingsMenuCommand({
       className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
       disabled={!presentation.enabled}
       onClick={
-        /** Dispatches this command and dismisses the popup. @returns Nothing. */ () => {
+        /** Unmounts the popup and restores focus before dispatching this command. @returns Nothing. */ () => {
+          flushSync(closeMenu);
           commandSource.Execute(item.commandId, resolveArguments(item.commandId));
-          closeMenu();
         }
       }
       role={role}

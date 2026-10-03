@@ -30,6 +30,8 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   const writerMenuBar = page.getByRole("menubar", { name: "Writer menu bar" });
   await expect(writerMenuBar).toBeVisible();
   await expect(writerMenuBar).toHaveCSS("overflow-x", "visible");
+  await page.getByRole("textbox", { name: "Writer document text" }).focus();
+  await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();
   const fileMenuButton = page.getByRole("button", { name: "File" });
   await fileMenuButton.focus();
   await fileMenuButton.press("ArrowRight");
@@ -39,7 +41,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await page.getByRole("menuitem", { name: "Cut" }).press("End");
   await expect(page.getByRole("menuitem", { name: "Select All" })).toBeFocused();
   await page.getByRole("menuitem", { name: "Select All" }).press("Escape");
-  await expect(page.getByRole("button", { exact: true, name: "Edit" })).toBeFocused();
+  await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();
   await page.getByRole("button", { name: "File" }).click();
   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
   await page.getByRole("button", { name: "File" }).press("Escape");

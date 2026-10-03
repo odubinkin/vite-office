@@ -547,7 +547,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "Select All" }), { key: "p" });
     expect(screen.getByRole("menuitem", { name: "Paste" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "Paste" }), { key: "Escape" });
-    expect(edit).toHaveFocus();
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveFocus();
     expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
@@ -621,7 +621,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const firstViewItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
       expect(firstViewItem).toHaveFocus();
       fireEvent.keyDown(firstViewItem, { key: "Escape" });
-      expect(view).toHaveFocus();
+      expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveFocus();
 
       const insert = screen.getByRole("button", { name: "Insert" });
       fireEvent.keyDown(insert, { key: "ArrowDown" });
