@@ -1,0 +1,82 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts (6 tests | 3 failed) 16ms
+   × queries one child before the empty case and recursively dispatches through phantom owners 4ms
+   × checks a real parent phantom flag before counted policy including the uncounted branch 1ms
+   × recurses through counted phantom parents after their phantom branch and stops at the root or uncounted policy 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts > queries one child before the empty case and recursively dispatches through phantom owners
+AssertionError: expected [] to deeply equal [ 'root', 'root' ]
+
+- Expected
++ Received
+
+- [
+-   "root",
+-   "root",
+- ]
++ []
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts:177:19
+    175|     traceCount(source, "root", trace);
+    176|     expect(source.onlyPhantoms()).toBe(true);
+    177|     expect(trace).toEqual(["root", "root"]);
+       |                   ^
+    178|     const phantom = required(probe(source).CreatePhantom());
+    179|     const nested = required(probe(phantom).CreatePhantom());
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts > checks a real parent phantom flag before counted policy including the uncounted branch
+AssertionError: expected [ 'counted', 'phantom' ] to deeply equal [ 'phantom', 'counted' ]
+
+- Expected
++ Received
+
+  [
+-   "phantom",
+    "counted",
++   "phantom",
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts:219:19
+    217|     });
+    218|     expect(probe(phantom).HasPhantomCountedParent()).toBe(true);
+    219|     expect(trace).toEqual(["phantom", "counted"]);
+       |                   ^
+    220|     required(texts[0]).SetCountedInList(false);
+    221|     trace.length = 0;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts > recurses through counted phantom parents after their phantom branch and stops at the root or uncounted policy
+AssertionError: expected [ 'counted', 'phantom' ] to deeply equal [ 'phantom', 'counted' ]
+
+- Expected
++ Received
+
+  [
+-   "phantom",
+    "counted",
++   "phantom",
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts:251:31
+    249|     const ancestor = vi.spyOn(probe(parent), "HasPhantomCountedParent"…
+    250|     expect(probe(child).HasPhantomCountedParent()).toBe(true);
+    251|     expect(trace.slice(0, 2)).toEqual(["phantom", "counted"]);
+       |                               ^
+    252|     expect(ancestor).toHaveBeenCalledExactlyOnceWith();
+    253|     ancestor.mockClear();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+   Start at  23:52:19
+   Duration  1.15s (transform 250ms, setup 136ms, import 280ms, tests 16ms, environment 617ms)
+

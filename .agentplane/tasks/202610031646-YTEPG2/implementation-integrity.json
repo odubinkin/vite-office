@@ -1,0 +1,44 @@
+{
+  "base": "f32eb1221fcf3bf3f4631b69d27cfb47c6914ef9",
+  "semanticPaths": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+      "sha256": "3be0c87e355391b010002dae06f36fb47063e46508d0adf7472c4f04d5919602"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+      "sha256": "079e6232bbaa0f6d18f6de85ef4c7d12d1d44711352bd128dc35b327d2985da5"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "sha256": "4e717cc689af21fcc01319e3b274918177f79901961532f0af4d51a4dfb6ed22"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "16a188e9b70edc9a5dca4612908010f539de9f0867db9ac7cfb5604e1c25b21b"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "862f37baec9829151a77a013c9aad010faa5b03a3f91fa8485fb6d70bc1c6ed5"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+      "sha256": "67cf121c88f1a49feaacafd0bfeabc7e1aeed66fa595ccc732fb215731b2aad3"
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "otherRowsUnchanged": true,
+      "statusesAndDeviationsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "otherRowsUnchanged": true,
+      "statusesAndDeviationsUnchanged": true
+    }
+  ],
+  "forbiddenArtifactCode": [],
+  "policyAndGateFilesUnchanged": true,
+  "registeredIORecoveryDeviationsUnchanged": true
+}

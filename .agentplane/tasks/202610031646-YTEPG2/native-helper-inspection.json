@@ -1,0 +1,76 @@
+{
+  "sha": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "sw/inc/SwNumberTree.hxx",
+      "spans": [
+        {
+          "from": 338,
+          "to": 339,
+          "sha256": "a785998a92ccc3a3e6e5aa4adb46d2ac31ddbb5e73a07da211a18cc535cf7b64"
+        },
+        {
+          "from": 491,
+          "to": 499,
+          "sha256": "62ab803188f006157fa8a326bc9e5d971e05074484c9620f6deec93f3063ba9e"
+        },
+        {
+          "from": 538,
+          "to": 550,
+          "sha256": "f865a2c740b81e5a6fbb20ba817ce4413a0fbaca3fb9b8be5c778a2e95f5a3b1"
+        },
+        {
+          "from": 558,
+          "to": 583,
+          "sha256": "698fc5b05d0dafe767d20ec605cb6059f9ae0741483e1a93217bae3aba0c7a58"
+        }
+      ],
+      "fileSha256": "1b5ef4646f3180261106b33dc554b1ff09be4addc473b13d304d8612a2351c9d"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "spans": [
+        {
+          "from": 284,
+          "to": 293,
+          "sha256": "3a7afead31a117ce03cd569878f1785c8ec225517ce5a8eaab607b61ba7f474a"
+        },
+        {
+          "from": 305,
+          "to": 311,
+          "sha256": "bd4304c3cb0826cf27462fc81288ea8e5149d8ba0831bc71f12c5a26151a5c48"
+        },
+        {
+          "from": 316,
+          "to": 360,
+          "sha256": "d72c23c5120fcd59777dd96666b7fbd932cd45ffca8087a91031a4a2235ab59e"
+        },
+        {
+          "from": 362,
+          "to": 407,
+          "sha256": "c200e27a87ec5377df369902ae39d1eb1d392d6c87318fc958dbc65992443016"
+        },
+        {
+          "from": 693,
+          "to": 706,
+          "sha256": "96ba76d553bab4d149a6aec9a67f0325eee876b8a4d1e8b101c31567c7a8230d"
+        },
+        {
+          "from": 715,
+          "to": 738,
+          "sha256": "7e4e455b495bcc867db86402c99f60dc672b5d0955e4c71fbe56d14b74ea340b"
+        }
+      ],
+      "fileSha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741"
+    }
+  ],
+  "conclusions": [
+    "All six selected declarations are protected. Validate and MoveChildren take required pointers, not default or optional arguments.",
+    "HasOnlyPhantoms dispatches through GetChildCount, checking one child before empty; descendant recursion only for a phantom.",
+    "Counted-parent dispatch checks parent IsPhantom before its counted policy; direct root ancestors return true without parent policy reads.",
+    "MoveChildren selects an empty destination factory or existing tail; a null destination is untouched only on the empty-source release body. DBG_UTIL sanity still dereferences destination.",
+    "Native empty phantom lookup and nonempty-null transfer are outside valid domain; no fallback or tests for undefined behavior."
+  ],
+  "nativeCodeExecuted": false,
+  "sourceCopiesSaved": false
+}

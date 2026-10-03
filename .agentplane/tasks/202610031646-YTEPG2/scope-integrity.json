@@ -1,0 +1,409 @@
+{
+  "base": "f32eb1221fcf3bf3f4631b69d27cfb47c6914ef9",
+  "selectedMethodBodiesChanged": [
+    "SwNumberTreeNode.HasPhantomCountedParent",
+    "SwNumberTreeNode.HasOnlyPhantoms",
+    "SwNumberTreeNode.MoveChildren"
+  ],
+  "otherCoreMethodBodiesUnchanged": 52,
+  "methodBodyHashes": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.IsCounted",
+      "unchanged": true,
+      "baselineSha256": "4e35382614258a7f22891847fcae1a255d07da0cee4c97029f73b7a72600e6ee",
+      "finalSha256": "4e35382614258a7f22891847fcae1a255d07da0cee4c97029f73b7a72600e6ee"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.InvalidateMe",
+      "unchanged": true,
+      "baselineSha256": "420e33ca40b196e053a88121c0162d1e76d89d2fab8f88dece7b4c632688d66b",
+      "finalSha256": "420e33ca40b196e053a88121c0162d1e76d89d2fab8f88dece7b4c632688d66b"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.ValidateMe",
+      "unchanged": true,
+      "baselineSha256": "014d3fa3f7ed5b779b8a83d8b6d163e28b88c2cb0282fe7356734db9d3424698",
+      "finalSha256": "014d3fa3f7ed5b779b8a83d8b6d163e28b88c2cb0282fe7356734db9d3424698"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.Notify",
+      "unchanged": true,
+      "baselineSha256": "93a5f98f70d140a2171cd137dcec1f34d8b77c902d975d0a41426a357f537c0f",
+      "finalSha256": "93a5f98f70d140a2171cd137dcec1f34d8b77c902d975d0a41426a357f537c0f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.NotifyInvalidChildren",
+      "unchanged": true,
+      "baselineSha256": "65426077cef14922d52608bef9e88e614abeb939f1a0ebf44b485ed84b737e88",
+      "finalSha256": "65426077cef14922d52608bef9e88e614abeb939f1a0ebf44b485ed84b737e88"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.NotifyInvalidSiblings",
+      "unchanged": true,
+      "baselineSha256": "2c090d5edf9f4f4642fb774c65de0b610898b9c78013cfb7d009576c87614e54",
+      "finalSha256": "2c090d5edf9f4f4642fb774c65de0b610898b9c78013cfb7d009576c87614e54"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.InvalidateAndNotifyTree",
+      "unchanged": true,
+      "baselineSha256": "aed5d34d7cb5a9c4664193557cb9826cd57630908685368101451df27a68f154",
+      "finalSha256": "aed5d34d7cb5a9c4664193557cb9826cd57630908685368101451df27a68f154"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.AddChild",
+      "unchanged": true,
+      "baselineSha256": "3fd16355ad358883f2642c57e711aff131883ef0e26798aa1d4122c7c3328d62",
+      "finalSha256": "3fd16355ad358883f2642c57e711aff131883ef0e26798aa1d4122c7c3328d62"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.CreatePhantom",
+      "unchanged": true,
+      "baselineSha256": "bc46ccf84af77c25c66d38325ffaaa0fae5a0143c3263d6dbc16510274ae0408",
+      "finalSha256": "bc46ccf84af77c25c66d38325ffaaa0fae5a0143c3263d6dbc16510274ae0408"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.ClearObsoletePhantoms",
+      "unchanged": true,
+      "baselineSha256": "bf7d71e21002a547c4d3325f0531ffe4362ba87cd1acc77088a32dfc962afe00",
+      "finalSha256": "bf7d71e21002a547c4d3325f0531ffe4362ba87cd1acc77088a32dfc962afe00"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetFirstNonPhantomChild",
+      "unchanged": true,
+      "baselineSha256": "7b8f46fc2a04c0f7b8be7f6767d9ad79b0a9dd3fc8a15a1bd85b98015aaa8041",
+      "finalSha256": "7b8f46fc2a04c0f7b8be7f6767d9ad79b0a9dd3fc8a15a1bd85b98015aaa8041"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.MoveGreaterChildren",
+      "unchanged": true,
+      "baselineSha256": "a105033384e730b36cc29a469a6ccd54b4d830c5342bb9321e819ae33f51f80f",
+      "finalSha256": "a105033384e730b36cc29a469a6ccd54b4d830c5342bb9321e819ae33f51f80f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetParent",
+      "unchanged": true,
+      "baselineSha256": "17dd199b6d4c1a72870f08e0dcdcfce0844963e92fb7cc8d42615005ac7df4e1",
+      "finalSha256": "17dd199b6d4c1a72870f08e0dcdcfce0844963e92fb7cc8d42615005ac7df4e1"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetRoot",
+      "unchanged": true,
+      "baselineSha256": "73d2bb28f1893a66b2a49b4d274c76165c6f2ca8c681909a60b78f945731c83e",
+      "finalSha256": "73d2bb28f1893a66b2a49b4d274c76165c6f2ca8c681909a60b78f945731c83e"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetLevelInListTree",
+      "unchanged": true,
+      "baselineSha256": "975d800cb9755e1cb748b3fd71c9ed5496cd221bec63526b86ebe2154390d353",
+      "finalSha256": "975d800cb9755e1cb748b3fd71c9ed5496cd221bec63526b86ebe2154390d353"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.IsPhantom",
+      "unchanged": true,
+      "baselineSha256": "8d701b6aeabd0e1af2538cc1342e6eb5c3b9c737cce728fe2f79fbd27a66c3e5",
+      "finalSha256": "8d701b6aeabd0e1af2538cc1342e6eb5c3b9c737cce728fe2f79fbd27a66c3e5"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.HasPhantomCountedParent",
+      "unchanged": false,
+      "baselineSha256": "0f094a98a7062280dfa55928c2b0d96525d99f21160197c25e246a1de8576339",
+      "finalSha256": "858c44afd4924f4765e5ec3e09d899b7a48c0b0caca71ba1468559b66652c651"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetChildCount",
+      "unchanged": true,
+      "baselineSha256": "4f58d41f29328c222b5cc9078c18bada2049402a0e3febdaf8b2a78cc7905b2a",
+      "finalSha256": "4f58d41f29328c222b5cc9078c18bada2049402a0e3febdaf8b2a78cc7905b2a"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.IsValid",
+      "unchanged": true,
+      "baselineSha256": "bf80af30f803e61ce71db7df0b893e8eea9c7486670c276a137f276eb4cbe83b",
+      "finalSha256": "bf80af30f803e61ce71db7df0b893e8eea9c7486670c276a137f276eb4cbe83b"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.InvalidateChildren",
+      "unchanged": true,
+      "baselineSha256": "67cb152617592b75bb0f31f754241571195727097b8b8f6471ffab747211c0ab",
+      "finalSha256": "67cb152617592b75bb0f31f754241571195727097b8b8f6471ffab747211c0ab"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.SetLastValid",
+      "unchanged": true,
+      "baselineSha256": "eab47e3f2814d57f532bec7ce3b7f79b65335bac13dee6a17a52b1fed8fc8452",
+      "finalSha256": "eab47e3f2814d57f532bec7ce3b7f79b65335bac13dee6a17a52b1fed8fc8452"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.Invalidate",
+      "unchanged": true,
+      "baselineSha256": "13a7441437f3271fa70c46bd6d51a1b600624afea9ed508ce3102a4394e1a819",
+      "finalSha256": "13a7441437f3271fa70c46bd6d51a1b600624afea9ed508ce3102a4394e1a819"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.InvalidateTree",
+      "unchanged": true,
+      "baselineSha256": "54f2ffc4e20ff61de68cb7644e13e357681bb955c52cf95c81bd857f65295ce1",
+      "finalSha256": "54f2ffc4e20ff61de68cb7644e13e357681bb955c52cf95c81bd857f65295ce1"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.Validate",
+      "unchanged": true,
+      "baselineSha256": "74f2c69f8e91cd210ce5fed2df36427d564bebba2a8fc9ed46a897355469f622",
+      "finalSha256": "74f2c69f8e91cd210ce5fed2df36427d564bebba2a8fc9ed46a897355469f622"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetLastDescendant",
+      "unchanged": true,
+      "baselineSha256": "167046326d9135e7552bd870c4a269a9ad93a28d979bd6ca8184b8b9ff8cf545",
+      "finalSha256": "167046326d9135e7552bd870c4a269a9ad93a28d979bd6ca8184b8b9ff8cf545"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetPred",
+      "unchanged": true,
+      "baselineSha256": "112ee5569c8aabca7c40fa5d4ebba3f7d0a01e7b7ce4cd1567b1cfa2073203b3",
+      "finalSha256": "112ee5569c8aabca7c40fa5d4ebba3f7d0a01e7b7ce4cd1567b1cfa2073203b3"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.ValidateContinuous",
+      "unchanged": true,
+      "baselineSha256": "962353d6681fa67c9570a9cca9e7962b0200e595f713b52205424a6edd3ce566",
+      "finalSha256": "962353d6681fa67c9570a9cca9e7962b0200e595f713b52205424a6edd3ce566"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetNumber",
+      "unchanged": true,
+      "baselineSha256": "7c14373305b8f222349a6d1d8d07df71ce6872a4566203a12f1be73d79d5b5d3",
+      "finalSha256": "7c14373305b8f222349a6d1d8d07df71ce6872a4566203a12f1be73d79d5b5d3"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.IsContinueingPreviousSubTree",
+      "unchanged": true,
+      "baselineSha256": "8ee9f3873b89739ea6860e1089350cfa29b89384dabc352a35b734ed611739b0",
+      "finalSha256": "8ee9f3873b89739ea6860e1089350cfa29b89384dabc352a35b734ed611739b0"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetIterator",
+      "unchanged": true,
+      "baselineSha256": "120da4fe48bf1407052d0208c17c0f75d2413664a420838701b128a1aa615943",
+      "finalSha256": "120da4fe48bf1407052d0208c17c0f75d2413664a420838701b128a1aa615943"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.ValidateHierarchical",
+      "unchanged": true,
+      "baselineSha256": "ddffda9bd5bcb7c61be01aa644e451fdbacc401f08e9acdfdf3cbf0a8f28708c",
+      "finalSha256": "ddffda9bd5bcb7c61be01aa644e451fdbacc401f08e9acdfdf3cbf0a8f28708c"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.HasOnlyPhantoms",
+      "unchanged": false,
+      "baselineSha256": "4b8c128693796e1e72fbb895a1387150834e8b336c216be573ccb86d5b6c34b7",
+      "finalSha256": "90af1fd5ceb4f17fbff99d744468049b9d618273d3cdd4eb7a59c4eda986b9df"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.MoveChildren",
+      "unchanged": false,
+      "baselineSha256": "ca205be1965b5d0275537b8351754d94b55c65e7f33551d6377132d543519623",
+      "finalSha256": "d20a683242aaab5c1192815bbad03bcba5c8e68b5d2f114909af89f29e00ea16"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.RemoveChild",
+      "unchanged": true,
+      "baselineSha256": "115378f6186e333d17ae1f805850c0fcecd0b85b6492a4dd18f701c1a6ade0c7",
+      "finalSha256": "115378f6186e333d17ae1f805850c0fcecd0b85b6492a4dd18f701c1a6ade0c7"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.RemoveMe",
+      "unchanged": true,
+      "baselineSha256": "8543261a637de1ca17c9b993411eaf877677c3424e864c815d29018c536fea0f",
+      "finalSha256": "8543261a637de1ca17c9b993411eaf877677c3424e864c815d29018c536fea0f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.SetLevelInListTree",
+      "unchanged": true,
+      "baselineSha256": "6dbedff2913bef1ac41e12f2179d049f5091c10bb0debb28ae8e23270f1afd6b",
+      "finalSha256": "6dbedff2913bef1ac41e12f2179d049f5091c10bb0debb28ae8e23270f1afd6b"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetNumberVector",
+      "unchanged": true,
+      "baselineSha256": "49f6fcdc557292cf511a9616cdf5ac7eb856637ff7d5d2af4f5f60defd3d2d5f",
+      "finalSha256": "49f6fcdc557292cf511a9616cdf5ac7eb856637ff7d5d2af4f5f60defd3d2d5f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "name": "SwNumberTreeNode.GetNumberVector_",
+      "unchanged": true,
+      "baselineSha256": "4e13119a2b0d732fa2e1195f8fabdd91ce0ddc63d9fa859e4d4a45dbf8110108",
+      "finalSha256": "4e13119a2b0d732fa2e1195f8fabdd91ce0ddc63d9fa859e4d4a45dbf8110108"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.GetTextNode",
+      "unchanged": true,
+      "baselineSha256": "47b31669a2dc43f9653cf1206341b06f2596e6235967ac1304c58b5b4c1c8713",
+      "finalSha256": "47b31669a2dc43f9653cf1206341b06f2596e6235967ac1304c58b5b4c1c8713"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.GetNumRule",
+      "unchanged": true,
+      "baselineSha256": "28b4fe9777068147e3cd633dcb5eba43502b30a90a8b2f8125105ac864e52401",
+      "finalSha256": "28b4fe9777068147e3cd633dcb5eba43502b30a90a8b2f8125105ac864e52401"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.ChangeNumRule",
+      "unchanged": true,
+      "baselineSha256": "9a5cd619483cdfdeace6a0a48855df025eeec21c8b3cde7fef3642e568fdfd95",
+      "finalSha256": "9a5cd619483cdfdeace6a0a48855df025eeec21c8b3cde7fef3642e568fdfd95"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.PreAdd",
+      "unchanged": true,
+      "baselineSha256": "de692e1bce7c44ba047809f545c11ec1378af16657bb49cfb5977e79621d1a07",
+      "finalSha256": "de692e1bce7c44ba047809f545c11ec1378af16657bb49cfb5977e79621d1a07"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.PostRemove",
+      "unchanged": true,
+      "baselineSha256": "da199fda154d9fba0313108f473e1d86ca740003c29e6af147b5f22a29d93dd1",
+      "finalSha256": "da199fda154d9fba0313108f473e1d86ca740003c29e6af147b5f22a29d93dd1"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.IsNotifiable",
+      "unchanged": true,
+      "baselineSha256": "e182bd754e8aa946fbc6e79907c025c20cef4fca7d9310bf29527cfde6e6eafe",
+      "finalSha256": "e182bd754e8aa946fbc6e79907c025c20cef4fca7d9310bf29527cfde6e6eafe"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.IsNotificationEnabled",
+      "unchanged": true,
+      "baselineSha256": "d1c40f25e1f0e36525f2536126935a7f771f199a4c86981b4eb37f74b172a4ac",
+      "finalSha256": "d1c40f25e1f0e36525f2536126935a7f771f199a4c86981b4eb37f74b172a4ac"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.NotifyNode",
+      "unchanged": true,
+      "baselineSha256": "bb8451a44349ace7ca4fa59bfa955f3f9d3591740278ddd90d3cc8f3c3156a30",
+      "finalSha256": "bb8451a44349ace7ca4fa59bfa955f3f9d3591740278ddd90d3cc8f3c3156a30"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.Create",
+      "unchanged": true,
+      "baselineSha256": "3bd0751009710eedf1423c50ebbc35e736bb4af98e19dfac1af5427d7c0dccc3",
+      "finalSha256": "3bd0751009710eedf1423c50ebbc35e736bb4af98e19dfac1af5427d7c0dccc3"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.IsContinuous",
+      "unchanged": true,
+      "baselineSha256": "792b6525fc00ae8b1d8c48c11982f06b81015e103c31ade643c6924f9f2a5bb9",
+      "finalSha256": "792b6525fc00ae8b1d8c48c11982f06b81015e103c31ade643c6924f9f2a5bb9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.IsCountPhantoms",
+      "unchanged": true,
+      "baselineSha256": "59f9f73a7827bc25f9e16529a4bd33209f4fc16ad4ac90bc84531bb8a71cbe7d",
+      "finalSha256": "59f9f73a7827bc25f9e16529a4bd33209f4fc16ad4ac90bc84531bb8a71cbe7d"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.LessThan",
+      "unchanged": true,
+      "baselineSha256": "e23a05c2fb8341d8b4e5e07bbf46ff148db1a999f7b7fd56ef4b88bcf8e89feb",
+      "finalSha256": "e23a05c2fb8341d8b4e5e07bbf46ff148db1a999f7b7fd56ef4b88bcf8e89feb"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.IsCounted",
+      "unchanged": true,
+      "baselineSha256": "0f161eccc2484a5b0ddee6b7b82b39e68274db5f474d8e77c909d38b23eb4ff0",
+      "finalSha256": "0f161eccc2484a5b0ddee6b7b82b39e68274db5f474d8e77c909d38b23eb4ff0"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.HasCountedChildren",
+      "unchanged": true,
+      "baselineSha256": "3f191a4d19cfb58ddbfb4c741dae9332b6f2a4d1ffabfb6482c2dab4623ba540",
+      "finalSha256": "3f191a4d19cfb58ddbfb4c741dae9332b6f2a4d1ffabfb6482c2dab4623ba540"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.IsCountedForNumbering",
+      "unchanged": true,
+      "baselineSha256": "af47a8efc21aaa7cdc4741a27dbf2f3218ecbe77498043d33283d57766f81afc",
+      "finalSha256": "af47a8efc21aaa7cdc4741a27dbf2f3218ecbe77498043d33283d57766f81afc"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.IsRestart",
+      "unchanged": true,
+      "baselineSha256": "85d853a7da09275af68922e37b96cd58a19fe1dfc8da4d6e67018ec4d7d4bb23",
+      "finalSha256": "85d853a7da09275af68922e37b96cd58a19fe1dfc8da4d6e67018ec4d7d4bb23"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "name": "SwNodeNum.GetStartValue",
+      "unchanged": true,
+      "baselineSha256": "9e58eda6d0f7b2dabfa2080ff26a30645c2e33fd7a4cc7488ca335e609b624f9",
+      "finalSha256": "9e58eda6d0f7b2dabfa2080ff26a30645c2e33fd7a4cc7488ca335e609b624f9"
+    }
+  ],
+  "oldMatcherArguments": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+      "unchanged": true
+    }
+  ],
+  "otherOldTestFilesUnchanged": 216,
+  "changedOldTestFiles": [],
+  "sourceCopiesSaved": false
+}

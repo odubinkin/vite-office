@@ -1,0 +1,31 @@
+{
+  "before": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "after": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "restored": true,
+  "results": [
+    {
+      "name": "offline-numbering",
+      "args": [
+        "run",
+        "src/sw/source/core/SwNumberTree",
+        "src/sw/source/core/doc/list.test.ts",
+        "src/sw/source/core/doc/number.test.ts",
+        "src/sw/source/core/txtnode/ndtxt.test.ts",
+        "src/sw/source/core/doc/writer-boundaries.test.ts"
+      ],
+      "vendorAbsent": true,
+      "exitCode": 0
+    },
+    {
+      "name": "offline-boundaries",
+      "args": [
+        "run",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/writer-ui-resource-model.test.ts"
+      ],
+      "vendorAbsent": true,
+      "exitCode": 0
+    }
+  ],
+  "nativeCodeInvoked": false
+}
