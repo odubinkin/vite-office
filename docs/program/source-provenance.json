@@ -3688,6 +3688,30 @@
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
             "marker": "keeps the first comparator-equivalent identity in the actual sorted container"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+            "marker": "retains the required public rule reference and void transfer contract"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+            "marker": "removes the old client before rebinding and appends it after new rule guard lookups"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+            "marker": "retains same-rule removal and reappend order without duplicate clients"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+            "marker": "short circuits absent old rule then registers the retained detached text after assignment"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+            "marker": "retains bound and unbound no-text root and actual phantom release guard paths"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+            "marker": "uses the same explicit client transfer for a bound hidden record without altering shown ownership"
           }
         ],
         "upstream": [
@@ -3902,6 +3926,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
             "marker": "virtual bool LessThan"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+            "marker": "SwNodeNum::ChangeNumRule"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+            "marker": "void ChangeNumRule"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+            "marker": "SwNumRule::AddTextNode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+            "marker": "SwNumRule::RemoveTextNode"
           }
         ]
       },
@@ -3925,7 +3965,8 @@
         "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion.",
         "Iteration67 restores the required nullable text-pointer plus hidden-redlines boolean constructor and the distinct required nullable rule-pointer constructor. Text records start unbound; roots and factory records have false mode. PreAdd binds the text rule, registers shown rule clients before document items, and suppresses both registrations for hidden records. PostRemove releases shown document items before rule clients and clears the bound rule; ChangeNumRule retains its existing flag-independent policy. SwTextNode uses explicit false mode and SwList/factory use rule-only construction. Six project-owned cases cover overload/private contracts, shown/hidden insertion/removal, no-rule/no-text/non-document branches, factory defaults, counters/topology and independent ChangeNumRule behavior. Existing constructor fixtures preserve their expected values. Manual pinned inspection/hashes only; no native execution, source/helper artifacts or upstream access by project tests. Full redline/original root selection, undo-array/debug diagnostics, native pointer/destructor/client/layout/final/const/browser lifetimes remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
         "Iteration72 restores complete existing IsContinuous/IsCounted/IsRestart/IsCountedForNumbering policy source branches and owner accessor paths. Bound-rule false stays authoritative; unbound parent guard/delegation calls GetParent twice, absent parent returns false. Real counted/restart policies use GetTextNode guard/delegation, no-text counted delegates to base, no-text restart remains false. Presence preserves counted/phantom/null-text/number/bullet short circuits, including native NUMBER_NONE enumeration=true and absent-bound-format=false. Eight owned cases/ten exact local nullary boolean/access types cover actual root/phantom/number/bullet/disabled/detached and release fallback profiles with membership/identity/raw caches preserved. Six final baseline cases fail only on missing helpers; corrected runtime/types pass. Prior tests and13 other methods unchanged; no source/helper/Python artifacts, native execution or upstream access by tests. Native accessors are nonvirtual; release fallback fixture does not certify ordinary creation/debug lifetimes. Native final/private-derived/const differences and machine integer/allocator/destructor/redline/layout/browser obligations remain individually unverified; local protected access unchanged. No whole-module/default/status/goal promotion; registered IO/recovery exceptions preserved.",
-        "Iteration73 restores complete IsCountPhantoms and LessThan private owner-reference branches: default true when unbound, bound continuous suppression/count flag short circuit; default false ordering, null-text before real and strict actual document index comparison. Five owned cases/five exact local protected/public types cover real roots/source-created phantoms/text/detached records, all four bound flag profiles,25 pointer/index pairs, distinct equal-index identity and sorted container equivalence/retention. Four baseline failures expose added GetNumRule/GetTextNode paths; corrected runtime/types pass without existing test changes. Native helpers are nonvirtual; getter spies evidence source architecture only. Complete source outside two methods and15 other methods unchanged. Manual pinned source/hashes only, no native execution or source/helper/Python artifacts; tests never access upstream. Native final/private-derived/const/debug/allocator/destructor/redline/layout/browser and generic base address ordering remain individually unverified. No module/default/status/goal or registered IO/recovery promotion."
+        "Iteration73 restores complete IsCountPhantoms and LessThan private owner-reference branches: default true when unbound, bound continuous suppression/count flag short circuit; default false ordering, null-text before real and strict actual document index comparison. Five owned cases/five exact local protected/public types cover real roots/source-created phantoms/text/detached records, all four bound flag profiles,25 pointer/index pairs, distinct equal-index identity and sorted container equivalence/retention. Four baseline failures expose added GetNumRule/GetTextNode paths; corrected runtime/types pass without existing test changes. Native helpers are nonvirtual; getter spies evidence source architecture only. Complete source outside two methods and15 other methods unchanged. Manual pinned source/hashes only, no native execution or source/helper/Python artifacts; tests never access upstream. Native final/private-derived/const/debug/allocator/destructor/redline/layout/browser and generic base address ordering remain individually unverified. No module/default/status/goal or registered IO/recovery promotion.",
+        "Iteration74 restores complete existing ChangeNumRule guarded owner-helper transfer: old guard/action through GetNumRule/GetTextNode, private binding assignment, new guard/action through the same helpers; public required rule/void contract and hidden-flag independence retained. Six owned cases/four exact local types cover actual old/new clients, same-rule removal/reappend ordinal, detached retained-text no-old-rule, bound/unbound no-text roots/source-created phantom release branches and explicit hidden transfer without changing shown owner/registry/topology/raw counters. Five baseline failures expose missing source helper paths; corrected runtime/types pass, previous tests and16 other methods unchanged. Manual pinned complete method/client dependency hashes only; no native execution/source/helper/Python artifacts or upstream access by project tests. Native release guards/helper spies do not certify debug creation, final/private/const/nonvirtual extension ABI, destructor/redline/layout/browser lifetimes. No whole-module/default/status/goal or registered IO/recovery promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",

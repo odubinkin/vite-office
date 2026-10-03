@@ -38,9 +38,11 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Rebinds a record while transferring rule membership. @param rule - New rule. @returns Nothing. */
   public ChangeNumRule(rule: SwNumRule): void {
-    if (this.textNode !== undefined) this.mpNumRule?.RemoveTextNode(this.textNode);
+    if (this.GetNumRule() !== undefined && this.GetTextNode() !== undefined)
+      (this.GetNumRule() as SwNumRule).RemoveTextNode(this.GetTextNode() as SwTextNode);
     this.mpNumRule = rule;
-    if (this.textNode !== undefined) rule.AddTextNode(this.textNode);
+    if (this.GetNumRule() !== undefined && this.GetTextNode() !== undefined)
+      (this.GetNumRule() as SwNumRule).AddTextNode(this.GetTextNode() as SwTextNode);
   }
   /** Binds the rule and registers shown document items before insertion. @returns Nothing. */
   protected PreAdd(): void {
