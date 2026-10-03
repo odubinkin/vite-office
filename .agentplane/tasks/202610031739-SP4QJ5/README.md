@@ -1,10 +1,11 @@
 ---
 id: "202610031739-SP4QJ5"
 title: "Restore text-owned numbering notification and destruction policy"
-status: "DOING"
+result_summary: "Restored text-owned notification and destruction policy; 811 application, 109 inventory and 20 browser tests pass, both coverage gates remain 100 percent. Vendor-absent focused tests pass. Wider parity audit remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -47,7 +48,9 @@ quality_review:
     - "Eight final-authored owned cases fail original production baseline and pass final,typechecking rejects missing APIs. Independent ownership/foreign context,blocker short circuit,actual traversal/prefix/topology and real teardown/defaults are checked. All232old test/spec files,three grapheme helper bodies and10editing method bodies unchanged. Required975-line text-node decomposition moves unchanged helpers to sole caller privately,without shim or formatting/threshold workaround. Four metadata rows each update precise evidence/ownership only;statuses/defaults/classifications/deviations/omissions preserved."
     - "Final full npm run verify session71042 exit0:811app/109inventory/20browser,both100%,all format/lint/types/dependency/resources/build/static/docs/size/tree/provenance/invariant/parity gates,semanticViolationCount0.232app+9boundary/resource pass with vendor absent/restoredexactpin. Eight manually inspected source files/span hashes match the pinned commit. No native compilation/execution,source/helper artifacts or upstream calls by project tests. Routing/diff pass,doctor0errors/2documented unrelated warnings."
     - "Earlier two coverage gate failures and one file-size failure are resolved through new direct source-contract assertions and necessary unchanged owner decomposition; no check skipped or relaxed. Existing single-owner task plan re-approved under the user standing refactor goal before extra owner edit."
-commit: null
+commit:
+  hash: "83873745b2dc6c5f5b0b2ab5f746ae55c2e90843"
+  message: "🧩 SP4QJ5 code: restore text-owned numbering notifications"
 comments:
   -
     author: "CODER"
@@ -55,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved notification correction with required unchanged helper decomposition to the sole editing consumer; preserve gates,old tests and IO/recovery decisions."
+  -
+    author: "CODER"
+    body: "Verified: text-owned notification predicates and document destruction suppression; full verification passes with unchanged prior tests and no upstream or helper sources in Agentplane."
 events:
   -
     type: "status"
@@ -76,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native text-owned predicates/private defaults and destruction suppression verified on seven scoped paths. Full verify session71042 exit0:811app/109inventory/20browser,both100%,allgates;232app+9boundary pass vendor absent/restored. Eight final authored baseline cases fail original and pass final;232old test/spec files and three helper/ten editing bodies unchanged. Required text-node decomposition resolves1009-line gate without relaxing checks;four narrow metadata rows each,zero helper/source artifacts. Wider constructor/dtor/client/layout/redline/range/final-private/grapheme/browser lifetimes remain unverified; parent/full goal active."
+  -
+    type: "status"
+    at: "2026-10-03T18:25:45.272Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: text-owned notification predicates and document destruction suppression; full verification passes with unchanged prior tests and no upstream or helper sources in Agentplane."
 doc_version: 3
-doc_updated_at: "2026-10-03T18:22:24.397Z"
+doc_updated_at: "2026-10-03T18:25:45.273Z"
 doc_updated_by: "CODER"
 description: "Iteration64: restore SwTextNode-owned IsNotifiable/IsNotificationEnabled and private true-default blocker, delegate real SwNodeNum records to text policy, and add native false-default SwDoc.mbDtor/IsInDtor set before existing document list teardown. Roots/phantoms retain caller-context reading/dtor checks. Owned tests cover defaults, exact APIs, real traversal/blocker and actual Dispose ordering/suppression; broader constructor suppressor/dtor/range/redline/final-class lifetimes remain unverified. No upstream invocation/source-helper artifacts or registered IO/recovery changes."
 sections:
