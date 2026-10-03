@@ -1,0 +1,303 @@
+{
+  "base": "ae82562e16cf1945cfb61a7dffcedff4bd3bf5ed",
+  "trackedTaskScriptsRemoved": 50,
+  "ignoredSourceOrHelperFilesRemoved": 5,
+  "ignoredNativeExecutablesRemoved": 15,
+  "ignoredDebugBundlesRemoved": [
+    ".agentplane/tmp/numbering44/native-format-values.dSYM",
+    ".agentplane/tmp/numbering44/native-number-type.dSYM",
+    ".agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.dSYM"
+  ],
+  "obsoleteStorageHelperRemoved": "scripts/native_probe_storage.py",
+  "removedFiles": [
+    {
+      "path": ".agentplane/tasks/202609301734-F5X9J6/compare-native.mjs",
+      "sha256": "cf5e9e4f94cd8c0088f0b8bac0ed8e1bd2c6d052c96eb28a7b0b7f78de9c902d"
+    },
+    {
+      "path": ".agentplane/tasks/202609301804-02N2JC/architecture.mjs",
+      "sha256": "98bfb37ddd2621a8b23b234bd7465da02191758520556648cf410a36663dfdb5"
+    },
+    {
+      "path": ".agentplane/tasks/202609301904-Z2G4HN/test-decomposition.mjs",
+      "sha256": "fb993224e483f2041111962e437c86a8e59d992efa26793aa57762855aaba338"
+    },
+    {
+      "path": ".agentplane/tasks/202609301937-HTNKEB/export-decomposition.mjs",
+      "sha256": "5dc3895b9fbfeb270134aabbc7feb31f43f9eb980d1cd98eebdc9fd89ad20c6b"
+    },
+    {
+      "path": ".agentplane/tasks/202609302034-1CZ8BR/compare-native.mjs",
+      "sha256": "794362139f73bbe1ad58e50ac659013f9cb5297443dccf7122e16e34a02a5ac1"
+    },
+    {
+      "path": ".agentplane/tasks/202609302034-1CZ8BR/diagnostic-evidence.mjs",
+      "sha256": "45785f005265ad1285a1b8a4ca281f40c808637100cdf09888dcc6d3ba5ebb39"
+    },
+    {
+      "path": ".agentplane/tasks/202609302111-EA56QR/compare-native.mjs",
+      "sha256": "d0aff7863c62b0b41908fad4b20887e2588ec995cf5264bf64f61f453f7baa51"
+    },
+    {
+      "path": ".agentplane/tasks/202609302147-2R4T31/compare-native.mts",
+      "sha256": "880ea9cfa2a04e9110e0d9b39e1096233537000ce4ea2d28f3a411eaf4e6b41c"
+    },
+    {
+      "path": ".agentplane/tasks/202609302219-BJJJBT/compare-native.mts",
+      "sha256": "515b4f36ad88cf451950118cb4ca4d586bcb73e81013f5dab2a8bc84ca829e96"
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/compare-native.mts",
+      "sha256": "429cc02e3901afe436e2864fa7d19a39638a8db02b57767c4193a0a7f2361050"
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/inspect-diagnostics.mts",
+      "sha256": "12be7ce5dcb191973f6321a27dbeabb7b489ba536e4395032cb9557079abb54a"
+    },
+    {
+      "path": ".agentplane/tasks/202609302319-9KTM99/compare-native.mts",
+      "sha256": "fbbc1e71bef843ced96d9ee4bd91dcf39e8241b8387e27c7e9a6005290ac24fa"
+    },
+    {
+      "path": ".agentplane/tasks/202609302342-JM15NR/compare-native.ts",
+      "sha256": "9f4613aa3cc646077aff45e11083331b1ca2df0ac9fc96878b0c19b3969f226c"
+    },
+    {
+      "path": ".agentplane/tasks/202610010014-X0PFNS/compare-native.ts",
+      "sha256": "f3f645702d229baf0d72d1f390bd8c3bd24fcdacf87530c2160f1027843bc35c"
+    },
+    {
+      "path": ".agentplane/tasks/202610010041-PHRS94/compare-native.ts",
+      "sha256": "94a13b01e15932cfd9c3483638faac15ba3091929494ea098aed78f4af5ec483"
+    },
+    {
+      "path": ".agentplane/tasks/202610010112-M2EDTZ/compare-native.ts",
+      "sha256": "c10a008776c5cd100a38811305690a26e67d71878cd9fa286273f2f812280fea"
+    },
+    {
+      "path": ".agentplane/tasks/202610010138-ZRYS74/compare-native.ts",
+      "sha256": "66ebc01987f2ff43f060ca84b6d06f5e0c0ed2ed616624fff171826d18efed94"
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/compare-native.ts",
+      "sha256": "34d9bc047f40f1159d082af2321bf6bd9ea6c0cef033c1e5f22680be517579d1"
+    },
+    {
+      "path": ".agentplane/tasks/202610010247-DWV0NC/baseline-txtparae.ts",
+      "sha256": "40deccf8d9049a1232a6cc5265e31edd18ce6276b78a9950966069f3843f7e6c"
+    },
+    {
+      "path": ".agentplane/tasks/202610010247-DWV0NC/baseline-xmlexp.ts",
+      "sha256": "aea5463f518b5f386c269c25717eba51751991d2c9ca44a8f05f133313170e56"
+    },
+    {
+      "path": ".agentplane/tasks/202610010247-DWV0NC/baseline.ts",
+      "sha256": "5d8c304c1785ded0502dfd23c18b4fbf7fceb278e3b11344921f2c929a1c0b40"
+    },
+    {
+      "path": ".agentplane/tasks/202610010247-DWV0NC/compare-native.ts",
+      "sha256": "f5f345fad6d42927374a2585513e11131ef08d80477d2a4a4b17a10e61736753"
+    },
+    {
+      "path": ".agentplane/tasks/202610010333-G6MKMP/baseline.ts",
+      "sha256": "9d5361132dcfc494129c8abc399d745b5e90fec2029c97767fc928059412fe92"
+    },
+    {
+      "path": ".agentplane/tasks/202610010333-G6MKMP/compare-native.ts",
+      "sha256": "69ebf3287d98da14980ef9bda26171971ba478c21d8b2e90b949f2338ee84d90"
+    },
+    {
+      "path": ".agentplane/tasks/202610010418-7548FA/baseline.ts",
+      "sha256": "d1ce1244241222b54ff640a8163fe6ca4d4ace5f787d1aad818ca593833d8cdb"
+    },
+    {
+      "path": ".agentplane/tasks/202610010418-7548FA/compare-native.ts",
+      "sha256": "a296f2c405a1b8791dd44927b35304c0c456261e24b6d0bc6f7be040436ea28a"
+    },
+    {
+      "path": ".agentplane/tasks/202610010449-CE6KDW/baseline.ts",
+      "sha256": "65fddee5232d3ad4ae84dfaff3a87a215d864b18b60270f45d074b4fd4458bb1"
+    },
+    {
+      "path": ".agentplane/tasks/202610010449-CE6KDW/compare-native.ts",
+      "sha256": "4092e8ad13210732608eff5a3f689720c09353ad8729acdc570a3b0002b1b443"
+    },
+    {
+      "path": ".agentplane/tasks/202610010536-95XQFH/baseline.ts",
+      "sha256": "b1da8cf702a241319062c4061f14842104bd67beb3243e2105dcb5bc15187238"
+    },
+    {
+      "path": ".agentplane/tasks/202610010536-95XQFH/compare-native.ts",
+      "sha256": "9cb434aa3e9316d063271d236c26bdcd0d1c75d66832bc4532e6eaa02bfe3ac0"
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/baseline.ts",
+      "sha256": "ea1a7e85be85627ee2f578f04f0992fed2f88f936998fee52844abcd14b82b69"
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/compare-native.ts",
+      "sha256": "ac36734039457d99e0d7db08b7dc5402e4fcceb6bd1e47eced3b0af9d98efc56"
+    },
+    {
+      "path": ".agentplane/tasks/202610010849-VYM64Q/baseline.ts",
+      "sha256": "f9987c53d565fe9e1d3ed18528d0feffb96bee42cc9ccc66c43c295362efb6db"
+    },
+    {
+      "path": ".agentplane/tasks/202610010940-WW4SFA/baseline.ts",
+      "sha256": "40f2e769953568b845c9312ee875b713e41eb4fd3d36f6254803b937d2b70fab"
+    },
+    {
+      "path": ".agentplane/tasks/202610011012-HMMTBX/baseline.ts",
+      "sha256": "65b6f95ca5b24b4f70ec190ad493d14755e1cd2b0a44eb8afe4280608983ee61"
+    },
+    {
+      "path": ".agentplane/tasks/202610011012-HMMTBX/followup-getter.ts",
+      "sha256": "7cd6a7510e9afa7cd2507fbf40ff5262874aef9c004185c777020eafdb0d301c"
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/baseline.ts",
+      "sha256": "9223fa6456ba5203620c5a1fe06737ac70f785fdd739d6d0191507331de9a6eb"
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/followup-rule-formats.ts",
+      "sha256": "b2910e493495bacdd5f165c2eb23e6b50890b0aa108e18590acecd6e046013bc"
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/baseline.ts",
+      "sha256": "b2910e493495bacdd5f165c2eb23e6b50890b0aa108e18590acecd6e046013bc"
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/followup-local-format-default.ts",
+      "sha256": "8ca8c803f6556477ddc84a1b17292d52d73f4cbaaa077b760e790b85e5b09566"
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/baseline.ts",
+      "sha256": "3c642d3acd65ec7dcc933d8d028bfb58661990ea8f4ddace6676c0c4d85c700d"
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/followup-local-classification.ts",
+      "sha256": "0f8625797403075c84ca0368c4349c233ea96169e5f85d6a15c694a01e937535"
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/migrate.mjs",
+      "sha256": "ab0ec1a05920eeeb9b4b2f8e138fc0a888053429b8575546e822a807ac65e568"
+    },
+    {
+      "path": ".agentplane/tasks/202610011309-23WGVW/baseline.ts",
+      "sha256": "49527c2c5874979d07c26cead739a89482aa9e6c7daeb80d75211bef5d38a804"
+    },
+    {
+      "path": ".agentplane/tasks/202610011309-23WGVW/followup-pointer-local.ts",
+      "sha256": "94e4e01fbd735d3d2986ac465eea08c9bb2956d17f35c7f02c60e3d73f5cfc96"
+    },
+    {
+      "path": ".agentplane/tasks/202610011338-WSMJ80/baseline.ts",
+      "sha256": "0ea7574694d932cae8f6512e9ed233baebab48ceb32c494fddfcb2e75e69600c"
+    },
+    {
+      "path": ".agentplane/tasks/202610011338-WSMJ80/followup-rule-local.ts",
+      "sha256": "693bd0028e664d82b13ac53d98204384ad6da89b60106c1dd1d761f1d9bb895c"
+    },
+    {
+      "path": ".agentplane/tasks/202610011419-EHEH05/baseline.ts",
+      "sha256": "158f5719af517c41fbe63602080d3e8f83dc7daf84ee7be2850982fe6c381fb5"
+    },
+    {
+      "path": ".agentplane/tasks/202610011419-EHEH05/followup-local.ts",
+      "sha256": "3218f258ebe2ad4b5705455450ccb04f2f6b2984be52cdc85baa9ef217ad3e7d"
+    },
+    {
+      "path": ".agentplane/tasks/202610011456-DA9C87/baseline.ts",
+      "sha256": "2e7550c7b470c59be44274f1b744fa8f812d6a5390e36be8916c5f00607f584f"
+    },
+    {
+      "path": ".agentplane/tmp/check-phase4.ts",
+      "sha256": "0f1a84a9c96d22669429ca14ec8257c00527973d1291c2a4d8c4f33e24a507a1"
+    },
+    {
+      "path": ".agentplane/tmp/numbering44/followup-native-classification",
+      "sha256": "17f07ed7adaf0148523068407a42d3897edcdb94a1f0e754ac0d63e43d2c0ec3"
+    },
+    {
+      "path": ".agentplane/tmp/numbering44/native-format-values",
+      "sha256": "98e92ab1d4783d1c755652fbba32dbe3a95cce76f3e4632695790dbfe53f5a33"
+    },
+    {
+      "path": ".agentplane/tmp/numbering44/native-format-values-checked",
+      "sha256": "459957f21e407b075ffee6182172d03a24d90b8bf25b1c0a46ac2fe1b6a2f6b5"
+    },
+    {
+      "path": ".agentplane/tmp/numbering44/native-format-values-final",
+      "sha256": "4def98383e5a8be51102da68b42b4f7ab970457625eb624bb4f6258214860035"
+    },
+    {
+      "path": ".agentplane/tmp/numbering44/native-number-type",
+      "sha256": "44184d0beeaf4865ea8610fca30f060e94a0b131811fd1eae2d05bb8e21b4fe6"
+    },
+    {
+      "path": ".agentplane/tmp/numbering44/native-number-type-final",
+      "sha256": "33f1d3467e8deb085532d887aabd7f343b227e13a09518e0c047715ef9768aec"
+    },
+    {
+      "path": ".agentplane/tmp/numbering45/followup-pointer-set",
+      "sha256": "3b7b012faab2d200527564eaf21868291e23b16fa2357b7102f84a81c6da8c52"
+    },
+    {
+      "path": ".agentplane/tmp/numbering45/native-classification",
+      "sha256": "b79d7c4bb7ee1c37b9807496f0e532e529918164e8a2453f8a0a791f02a6591e"
+    },
+    {
+      "path": ".agentplane/tmp/numbering46/followup-rule",
+      "sha256": "e608b0cd25625057ec320010a4cb772d50879e0cb84ae93b124f3c0ad449e682"
+    },
+    {
+      "path": ".agentplane/tmp/numbering46/native-pointer",
+      "sha256": "1359999732162dcbf3aedbd4f7fbceed5655b584d609cd85f0d6deb77a53eac0"
+    },
+    {
+      "path": ".agentplane/tmp/numbering47/followup-phantoms",
+      "sha256": "2e6aed195e1f84a0eb87d0a2403e45d0727faa2e9838ccd126dc77645e7f301b"
+    },
+    {
+      "path": ".agentplane/tmp/numbering47/native-rule",
+      "sha256": "839f16940a9466fe025b10d7dea078ecf0e1df07350b3a00de0102ff021e574f"
+    },
+    {
+      "path": ".agentplane/tmp/numbering48/native-markers",
+      "sha256": "9df8f5c79258f4a8ba2b60077fbdadee321ee63467f7bec3fc51ff409297cce2"
+    },
+    {
+      "path": ".agentplane/tmp/numbering48/native-policy",
+      "sha256": "26d9f1ff8146125cb33fb0994eb25c7fff70cbe39da4c250da7823959ab6541c"
+    },
+    {
+      "path": ".agentplane/tmp/numbering48/native-tree",
+      "sha256": "918daf5bdad31fcfaa560684f677572306683cf81e936ef4d8d7996d51faba3d"
+    },
+    {
+      "path": ".agentplane/tmp/task48-working-save/apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "sha256": "3fffe9817df06a9630c8855e1978f519180ddedcedc31ad79cf6c6e2fe7a57c5"
+    },
+    {
+      "path": ".agentplane/tmp/task48-working-save/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "sha256": "68f0d3c189da91b6a1aa26d84767537da9fdd2ad259f1f222a26f0a923eb5f92"
+    },
+    {
+      "path": ".agentplane/tmp/task48-working-save/apps/office/src/sw/source/core/doc/list.ts",
+      "sha256": "23a601343ebbd2410d0b1882cdd524c812cced88665a5599a8ec7e05e8a62b57"
+    },
+    {
+      "path": ".agentplane/tmp/task48-working-save/apps/office/src/sw/source/core/doc/number.ts",
+      "sha256": "aa992810e7990000d7f130dca4449960cf4eebef13ce2549ff1088fc7719bf1a"
+    },
+    {
+      "path": "scripts/native_probe_storage.py",
+      "sha256": "da03ee5e436f5fa040809028ed2838e02d6db0017b1a5679f266ffbd444e675f"
+    }
+  ],
+  "remainingArtifactCode": [],
+  "policyRoutingToolPreserved": true,
+  "projectAndTestSourcesUnchanged": true,
+  "vendorAccessed": false,
+  "historyRewritten": false
+}

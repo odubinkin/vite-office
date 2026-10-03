@@ -1,0 +1,55 @@
+{
+  "checks": [
+    {
+      "path": ".agentplane/tasks/202610031635-2Z3962/format-check.log",
+      "exitCode": 0,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+    },
+    {
+      "path": ".agentplane/tasks/202610031635-2Z3962/lint.log",
+      "exitCode": 0,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+    },
+    {
+      "path": ".agentplane/tasks/202610031635-2Z3962/typecheck-tools.log",
+      "exitCode": 0,
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": ".agentplane/tasks/202610031635-2Z3962/check-docs.log",
+      "exitCode": 0,
+      "sha256": "a51883d17879abe2c8f65c7234b8ea789a772a5c58a8bd312dc9c9d722867656"
+    },
+    {
+      "path": ".agentplane/tasks/202610031635-2Z3962/source-provenance.log",
+      "exitCode": 0,
+      "sha256": "6a181edada9501d6ff9107e16ba6e70ca80f19fb147f5d901a42741733bf987b"
+    },
+    {
+      "path": ".agentplane/tasks/202610031635-2Z3962/inventory-parity.log",
+      "exitCode": 0,
+      "sha256": "62dc59e69ff43a4c538e32ecfb807d6a7ce2e50c97ca4ba2e8043ebda4b4f165"
+    }
+  ],
+  "policyRouting": {
+    "exitCode": 0,
+    "result": "policy routing OK"
+  },
+  "doctor": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 1,
+    "info": 2,
+    "warning": "Pre-existing managed hook readiness warning; no hook installation requested."
+  },
+  "diffCheck": {
+    "exitCode": 0
+  },
+  "productAndProjectTestsUnchanged": true,
+  "projectTestsExecuted": false,
+  "nativeCodeInvoked": false,
+  "sourceAuditOnly": [
+    "npm run check:source-provenance",
+    "npm run inventory:parity"
+  ]
+}
