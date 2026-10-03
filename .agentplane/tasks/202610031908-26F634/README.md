@@ -1,10 +1,11 @@
 ---
 id: "202610031908-26F634"
 title: "Restore numbering record constructor and registration policy"
-status: "DOING"
+result_summary: "Restored selected numbering constructor/default/registration contracts;broader redline/layout/lifetime and upstream parity goal remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Reviewed25semantic paths against approved scope and pinned constructor/PreAdd/PostRemove/Create contracts. Required text+boolean and rule-only overloads,private flag,false root/factory default and initially unbound text rule match. Hidden registration suppression and native shown release order preserve flag-independent ChangeNumRule. No compatibility bridge or unrelated runtime edits."
     - "Six final authored cases fail baseline and corrected827app/109inventory/20browser/2resource plus both100percent coverage gates pass. Vendor-absent217core+9boundary cases prove selected project tests independent of pin; restoration exact.19prior test adaptations retain matcher/literal arguments and216other test/spec files are unchanged. Metadata3rows each preserves status/default/deviation boundaries."
     - "Ignored-inclusive Agentplane artifact scan has0Python/helper/source/executable files; source evidence contains hashes/conclusions only. Same actor performed this separate evaluator phase; no independent agent claimed. Doctor0errors/2knownwarnings,policy routing and diffcheck pass."
-commit: null
+commit:
+  hash: "84ee2979d26df8a2b85afff42934c3a511501a31"
+  message: "🛠️ 26F634 code: restore native numbering constructor and registration modes"
 comments:
   -
     author: "CODER"
     body: "Start: restore complete selected native constructor family and hidden registration lifecycle, adapting existing callers while preserving assertions and artifact/test restrictions."
+  -
+    author: "CODER"
+    body: "Verified: restored native numbering constructor families,private hidden mode defaults and shown/hidden registration lifecycle at84ee2979d26df8a2b85afff42934c3a511501a31. Full verify827app/109inventory/20browser/2resource,both100coverage;vendor-absent217core+9boundary pass and exact pin restored. Old assertions/other bodies/statuses unchanged,artifact Python/helper/source0,quality exact semanticSHA pass. Parent goal remains active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full verify exit0:827app/109inventory/20browser/2resource, both coverage100percent. Vendor-absent217core+9boundary pass with exact pin restored;types/old matcher-body-metadata integrity/storage0/doctor-routing-diff pass. Selected contracts only;full goal remains open."
+  -
+    type: "status"
+    at: "2026-10-03T19:25:06.840Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored native numbering constructor families,private hidden mode defaults and shown/hidden registration lifecycle at84ee2979d26df8a2b85afff42934c3a511501a31. Full verify827app/109inventory/20browser/2resource,both100coverage;vendor-absent217core+9boundary pass and exact pin restored. Old assertions/other bodies/statuses unchanged,artifact Python/helper/source0,quality exact semanticSHA pass. Parent goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-03T19:24:19.619Z"
+doc_updated_at: "2026-10-03T19:25:06.841Z"
 doc_updated_by: "CODER"
 description: "Iteration67 under C9TN6M: replace merged text/optional-rule SwNodeNum constructor with native text-pointer+required hidden bool and independent rule-pointer overload; preserve null initial text rule, root hidden=false, private flag, factory and complete selected PreAdd/PostRemove suppression. Adapt all existing callers and owned tests without old matcher/literal changes. No upstream tests/source/helper artifacts or IO/recovery changes."
 sections:
