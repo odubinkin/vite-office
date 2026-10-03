@@ -22,11 +22,17 @@
   ],
   "storage": {
     "ignoredIncluded": true,
-    "files": 2637,
+    "files": 2652,
     "codeFiles": [],
     "executableFiles": []
   },
   "newTestsUseOwnedImplementationFixturesOnly": true,
   "productionSha256": "dca33f567c57eb6e659260e91c2951e4d5c5be62cfc51c7f13ed5649ef1340e0",
-  "oldFoundationExactOwnerPreconditionAndOneAssertionReplacement": true
+  "oldFoundationExactOwnerPreconditionAndOneAssertionReplacement": true,
+  "pinnedSourceHashesUnchanged": true,
+  "offlineVendorRestored": {
+    "vendorRestored": true,
+    "temporaryPathAbsent": true,
+    "allExecutedPassed": true
+  }
 }

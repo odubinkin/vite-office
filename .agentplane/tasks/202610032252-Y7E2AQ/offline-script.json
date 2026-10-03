@@ -1,0 +1,13 @@
+{
+  "command": "npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+  "vendorAbsent": true,
+  "exit": 0,
+  "signal": null,
+  "bytes": 223,
+  "sha256": "555fea7b8c5f2124825e1ecb915f2485e3642e0e9a4b052768dc2808be77ffaa",
+  "summary": [
+    " Test Files  3 passed (3)",
+    "      Tests  12 passed (12)"
+  ],
+  "tail": []
+}
