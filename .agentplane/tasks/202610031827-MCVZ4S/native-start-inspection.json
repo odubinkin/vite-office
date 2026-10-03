@@ -1,0 +1,36 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "mode": "manual inspection only; no native compilation/execution",
+  "files": [
+    {
+      "path": "sw/inc/SwNodeNum.hxx",
+      "sha256": "15e6a7b96816bbcc848c83605b8c1b187cadd59914ac81a33f631217a8a25e28"
+    },
+    {
+      "path": "sw/inc/swtypes.hxx",
+      "sha256": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361"
+    },
+    {
+      "path": "sw/inc/numrule.hxx",
+      "sha256": "8a0da865e8c8135f508921e4f249a0018facc7b6f50e8e7a0dbf5daa86a4a8d4"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "sha256": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    }
+  ],
+  "conclusions": [
+    "Iteration65 restores the complete selected SwNodeNum.GetStartValue getter: explicit text restart precedence including zero, bound-rule-first parent/depth evaluation, root level zero, native0<=level<MAXLEVEL10 bounds, optional raw owned-format start and default1. Six owned tests/two exact type checks cover actual depth9/10/11 and phantom/root records, detached and missing rules, negative diagnostic levels, ordered lookups, restart bypass and missing raw format; three genuine baseline cases fail before correction. Existing method bodies and tests remain unchanged. Manual pinned inspection/hashes only; no upstream test calls, native execution or helper/source artifacts. Browser/list/rule input guards and registered IO/recovery deviations remain unchanged. No broader module/status/default/lifetime/goal promotion.",
+    "SwTextNode.GetActualListStartValue reads restart direct attribute or raw owned format using paragraph attribute level; retained unchanged.",
+    "SwNumRule.GetNumFormat returns raw owned format pointer while Get selects effective shared default; selected getter must use raw lookup.",
+    "Native final/private/const, integer domain, full node lifetime and browser UI obligations remain unverified."
+  ]
+}

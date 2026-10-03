@@ -4,7 +4,7 @@ title: "Restore numbering start getter bounds and evaluation order"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement complete selected native start getter contracts under the standing iterative goal; no upstream test dependencies or helper artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-03T18:28:49.201Z"
+doc_updated_at: "2026-10-03T18:39:59.246Z"
 doc_updated_by: "CODER"
 description: "Iteration65 of C9TN6M: align the complete selected SwNodeNum.GetStartValue getter with pinned restart precedence, bound-rule-first level lookup, root level zero, MAXLEVEL bounds and optional owned-format default one. Preserve browser input guards and registered document IO/recovery deviations; no upstream access in tests or helper/source files in Agentplane."
 sections:
@@ -48,9 +48,14 @@ sections:
     2. Assert zero-argument number contract, actual depth9 versus10, root level0, detached/unbound rule-first short circuit, restart0 and nonzero bypass, no-text restart fallback, owned-format absence default1, negative-level guard via test-only getter observation, call order and raw counters/topology unchanged. Existing test files and all other production method bodies remain byte-identical; metadata changes exactly one row each without status/default/omission/deviation promotion.
     3. Focused core number tree/doc/text tests and boundary/resource tests pass with vendor/libreoffice-reference absent, restored exact pin in finally. Ignored-inclusive Agentplane tasks/tmp source/helper/executable/Python count0.
     4. npm run verify passes every gate including both100% coverage and browser tests. ap doctor, policy routing and git diff --check pass within existing doctor warning baseline. Record canonical verification and actual semantic-SHA evaluator verdict, finish leaf with clean tracked/untracked status; wider parent and goal remain active.
-  Verification: "Pending implementation and actual terminal check evidence. No claim of wider module or full goal completion."
+  Verification: "Command: npm run verify. Result: pass, terminal exit0/session10181. Evidence:817app/183files,109inventory/36files,20browser,2resource,both100percent coverage;all remaining static/provenance/inventory/type/lint/docs/size/build gates pass and semanticViolationCount0. Scope: complete selected GetStartValue repair and unchanged project gates. Final authored baseline with vendor absent:3fail/3pass; final vendor-absent207app/46files+9boundary/resource/2files pass and exactpin restored.16other method bodies and233prior test/spec files unchanged; one narrow metadata row changed each,213other rows each unchanged and all non-evidence classifications preserved. Six native files manually inspected/hashed; no native execution or source/helper artifacts. Doctor0errors/2existing warnings,policy routing/diffcheck pass. Evidence:verification-results.json,offline-test-results.json,scope-integrity.json,native-start-inspection.json. Semantic commit and exact-SHA review pending; parent/full goal remain active."
   Rollback Plan: "Revert only this task semantic commit; preserve task evidence and previously completed iterations. No history rewriting."
-  Findings: "Preflight clean main/direct at a1869782e659. Previous goal turn made progress: iteration64 leaf closed and parent evidence committed. Standing explicit iterative goal authorizes this safe local repair. Native cxx262..289 guards0<=level<MAXLEVEL after rule lookup; current local getter reads level before rule and passes depth10 into throwing SwNumRule guard. No native source execution or source/helper artifact storage authorized."
+  Findings: |-
+    Preflight clean main/direct at a1869782e659. Previous goal turn made progress: iteration64 leaf closed and parent evidence committed. Standing explicit iterative goal authorizes this safe local repair. Native cxx262..289 guards0<=level<MAXLEVEL after rule lookup; current local getter reads level before rule and passes depth10 into throwing SwNumRule guard. No native source execution or source/helper artifact storage authorized.
+
+    - Observation: Baseline final six owned tests fail three genuine cases: depth10 throws, absent rule still queries parent, and rule/level evaluation order is reversed. Initial fixture mistakes were corrected before production changes.
+      Impact: The repaired getter passes all six cases; first full verification passed817app/109inventory/20browser and both100percent coverage but failed check:docs on two new-test callbacks lacking JSDoc.
+      Resolution: Add documentation to the two callbacks without changing expectations or implementation; rerun exact authored baseline and focused tests with vendor absent, then full verification. No criteria drift, threshold waiver or old test changes.
 id_source: "generated"
 ---
 ## Summary
@@ -74,7 +79,7 @@ Semantic paths: apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts; new ap
 
 ## Verification
 
-Pending implementation and actual terminal check evidence. No claim of wider module or full goal completion.
+Command: npm run verify. Result: pass, terminal exit0/session10181. Evidence:817app/183files,109inventory/36files,20browser,2resource,both100percent coverage;all remaining static/provenance/inventory/type/lint/docs/size/build gates pass and semanticViolationCount0. Scope: complete selected GetStartValue repair and unchanged project gates. Final authored baseline with vendor absent:3fail/3pass; final vendor-absent207app/46files+9boundary/resource/2files pass and exactpin restored.16other method bodies and233prior test/spec files unchanged; one narrow metadata row changed each,213other rows each unchanged and all non-evidence classifications preserved. Six native files manually inspected/hashed; no native execution or source/helper artifacts. Doctor0errors/2existing warnings,policy routing/diffcheck pass. Evidence:verification-results.json,offline-test-results.json,scope-integrity.json,native-start-inspection.json. Semantic commit and exact-SHA review pending; parent/full goal remain active.
 
 ## Rollback Plan
 
@@ -83,3 +88,7 @@ Revert only this task semantic commit; preserve task evidence and previously com
 ## Findings
 
 Preflight clean main/direct at a1869782e659. Previous goal turn made progress: iteration64 leaf closed and parent evidence committed. Standing explicit iterative goal authorizes this safe local repair. Native cxx262..289 guards0<=level<MAXLEVEL after rule lookup; current local getter reads level before rule and passes depth10 into throwing SwNumRule guard. No native source execution or source/helper artifact storage authorized.
+
+- Observation: Baseline final six owned tests fail three genuine cases: depth10 throws, absent rule still queries parent, and rule/level evaluation order is reversed. Initial fixture mistakes were corrected before production changes.
+  Impact: The repaired getter passes all six cases; first full verification passed817app/109inventory/20browser and both100percent coverage but failed check:docs on two new-test callbacks lacking JSDoc.
+  Resolution: Add documentation to the two callbacks without changing expectations or implementation; rerun exact authored baseline and focused tests with vendor absent, then full verification. No criteria drift, threshold waiver or old test changes.

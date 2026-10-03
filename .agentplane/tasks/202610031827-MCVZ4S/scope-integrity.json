@@ -1,0 +1,27 @@
+{
+  "base": "a1869782e659",
+  "source": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+  "changedMethods": [
+    "GetStartValue"
+  ],
+  "unchangedMethods": 16,
+  "priorTestFiles": 233,
+  "changedTests": [],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "changedRows": 1,
+      "unchangedRows": 213,
+      "nonEvidenceFieldsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "changedRows": 1,
+      "unchangedRows": 213,
+      "nonEvidenceFieldsUnchanged": true
+    }
+  ],
+  "artifactFileCount": 2409,
+  "prohibitedArtifactFiles": [],
+  "newTestSha256": "a2b68531f314d84e8217ac076af53dc9e7fc66193659217a4860d218df02eafa"
+}

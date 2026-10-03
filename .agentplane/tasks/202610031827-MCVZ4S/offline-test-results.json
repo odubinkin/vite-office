@@ -1,0 +1,64 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "restored": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "projectTestsHadVendor": false,
+  "testSha256": "a2b68531f314d84e8217ac076af53dc9e7fc66193659217a4860d218df02eafa",
+  "results": [
+    {
+      "label": "baseline-vendor-absent",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 1,
+      "summary": [
+        " Test Files  1 failed (1)",
+        "      Tests  3 failed | 3 passed (6)",
+        "   Duration  899ms (transform 189ms, setup 105ms, import 220ms, tests 15ms, environment 471ms)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯"
+      ]
+    },
+    {
+      "label": "offline-app",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "src/sw/source/core/SwNumberTree",
+        "src/sw/source/core/doc",
+        "src/sw/source/core/txtnode",
+        "src/sw/source/core/docnode"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "summary": [
+        " Test Files  46 passed (46)",
+        "      Tests  207 passed (207)",
+        "   Duration  13.39s (transform 1.22s, setup 2.88s, import 3.03s, tests 1.44s, environment 15.42s)"
+      ]
+    },
+    {
+      "label": "offline-boundary",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/writer-ui-resource-model.test.ts"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "summary": [
+        " Test Files  2 passed (2)",
+        "      Tests  9 passed (9)",
+        "   Duration  713ms (transform 92ms, setup 0ms, import 655ms, tests 7ms, environment 0ms)"
+      ]
+    }
+  ]
+}

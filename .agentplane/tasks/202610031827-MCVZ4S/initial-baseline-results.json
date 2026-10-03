@@ -1,0 +1,12 @@
+{
+  "exitCode": 1,
+  "tests": 6,
+  "failed": 4,
+  "realMismatch": "depth10 throws",
+  "fixtureErrors": [
+    "orphan removal is a no-op",
+    "const format cannot be spied directly",
+    "document EnsureNumRule owns all ten formats"
+  ],
+  "completeLogSha256": "0b34048e52ab393fdeefd8ead1fe4d180731154c05325b6d390dc1ca01b0cabb"
+}

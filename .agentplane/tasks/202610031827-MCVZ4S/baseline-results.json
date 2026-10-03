@@ -1,0 +1,15 @@
+{
+  "exitCode": 1,
+  "tests": 6,
+  "failed": 3,
+  "passed": 3,
+  "testSha256": "a2b68531f314d84e8217ac076af53dc9e7fc66193659217a4860d218df02eafa",
+  "failures": [
+    "actual depth10 throws",
+    "missing rule still reads parent",
+    "parent/level evaluation precedes rule"
+  ],
+  "initialFixtureErrorsCorrected": true,
+  "exactFinalAuthoredBaseline": "baseline-vendor-absent.log",
+  "exactFinalAuthoredBaselineExitCode": 1
+}

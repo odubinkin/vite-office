@@ -1,0 +1,31 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts (6 tests | 4 failed) 17ms
+   × returns owned starts through depth nine and defaults beyond the format range without validation 7ms
+   × short-circuits missing rules before parent and level lookup and uses level zero for detached bound records 6ms
+   × reads restart before rule, then parent, level, optional owned format and start 1ms
+   × defaults to one for absent owned formats even when effective format defaults differ 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts > returns owned starts through depth nine and defaults beyond the format range without validation
+Error: SwNumRule level is outside 0-9.
+ ❯ SwNumRule.CheckLevel src/sw/source/core/doc/number.ts:345:13
+    343|   private CheckLevel(level: number): void {
+    344|     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LI…
+    345|       throw new Error(`SwNumRule level is outside 0-${WRITER_MAX_LIST_…
+       |             ^
+    346|   }
+    347|   /** Copies a changed reference format; equal owned values preserve i…
+ ❯ SwNumRule.GetNumFormat src/sw/source/core/doc/number.ts:338:10
+ ❯ SwNodeNum.GetStartValue src/sw/source/core/SwNumberTree/SwNodeNum.ts:116:31
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts:61:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts > short-circuits missing rules before parent and level lookup and uses level zero for detached bound records
+AssertionError: expected SwNumRule{ name: 'StartPolicy', …(15) } to be undefined
+
+- Expected:
+undefined

@@ -1,0 +1,78 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts (6 tests | 3 failed) 15ms
+   × returns owned starts through depth nine and defaults beyond the format range without validation 7ms
+   × short-circuits missing rules before parent and level lookup and uses level zero for detached bound records 2ms
+   × reads restart before rule, then parent, level, optional owned format and start 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts > returns owned starts through depth nine and defaults beyond the format range without validation
+Error: SwNumRule level is outside 0-9.
+ ❯ SwNumRule.CheckLevel src/sw/source/core/doc/number.ts:345:13
+    343|   private CheckLevel(level: number): void {
+    344|     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LI…
+    345|       throw new Error(`SwNumRule level is outside 0-${WRITER_MAX_LIST_…
+       |             ^
+    346|   }
+    347|   /** Copies a changed reference format; equal owned values preserve i…
+ ❯ SwNumRule.GetNumFormat src/sw/source/core/doc/number.ts:338:10
+ ❯ SwNodeNum.GetStartValue src/sw/source/core/SwNumberTree/SwNodeNum.ts:116:31
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts:61:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts > short-circuits missing rules before parent and level lookup and uses level zero for detached bound records
+AssertionError: expected "GetParent" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st GetParent call:
+
+    Array []
+
+
+Number of calls: 1
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts:94:24
+     92|     parent.mockClear();
+     93|     expect(record.GetStartValue()).toBe(1);
+     94|     expect(parent).not.toHaveBeenCalled();
+       |                        ^
+     95|     expect(level).not.toHaveBeenCalled();
+     96|     expect(new SwNodeNum(undefined).GetStartValue()).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts > reads restart before rule, then parent, level, optional owned format and start
+AssertionError: expected [ 'restart', 'parent', 'level', …(3) ] to deeply equal [ 'restart', 'rule', 'parent', …(3) ]
+
+- Expected
++ Received
+
+  [
+    "restart",
+-   "rule",
+    "parent",
+    "level",
++   "rule",
+    "format:9",
+    "start",
+  ]
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts:148:19
+    146|     );
+    147|     expect(record.GetStartValue()).toBe(29);
+    148|     expect(trace).toEqual(["restart", "rule", "parent", "level", "form…
+       |                   ^
+    149|     trace.length = 0;
+    150|     lookup.mockReturnValue(undefined);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+   Start at  01:31:27
+   Duration  982ms (transform 198ms, setup 112ms, import 231ms, tests 15ms, environment 522ms)
