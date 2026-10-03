@@ -54,7 +54,7 @@ export interface InventoryCliFixture {
 
 /** Creates unique repository-local scratch storage. @returns A temporary directory owned by one test. */
 async function createDirectory(): Promise<string> {
-  const scratch = path.resolve(".agentplane/tmp/inventory-test-fixtures");
+  const scratch = path.resolve("test-results/inventory-fixtures");
   await mkdir(scratch, { recursive: true });
   return mkdtemp(path.join(scratch, "case-"));
 }

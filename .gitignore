@@ -20,7 +20,7 @@
 .agentplane/by-tag
 .agentplane/by-owner
 .agentplane/tasks/*/handoff
-# Extracted upstream/native probe sources belong only in ignored scratch storage.
+# Exclusion guards do not permit saving upstream/native sources in Agentplane.
 .agentplane/tasks/**/*.c
 .agentplane/tasks/**/*.cpp
 .agentplane/tasks/**/*.cxx
