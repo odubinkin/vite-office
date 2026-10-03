@@ -1,0 +1,11 @@
+Running 9 tests using 3 workers
+  ✓  3 apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command (766ms)
+  ✓  1 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (859ms)
+  ✓  2 apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (1.0s)
+  ✓  4 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle (501ms)
+  ✓  5 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (696ms)
+  ✓  6 apps/office/e2e/writer-submenu-preselection.spec.ts:35:1 › keyboard opening still preselects and executes one Writer command (727ms)
+  ✓  7 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle (498ms)
+  ✓  8 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle (374ms)
+  ✓  9 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle (346ms)
+  9 passed (3.5s)

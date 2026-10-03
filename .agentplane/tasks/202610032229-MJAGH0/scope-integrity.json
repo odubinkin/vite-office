@@ -1,0 +1,30 @@
+{
+  "base": "8037e4bf6fbbde9d7d7afbcc76eac43cb4a2c274",
+  "productionOutsideRootOpeningChangesIdentical": true,
+  "priorTests": 247,
+  "byteIdenticalPriorTests": 246,
+  "oldWriterTestExactThreeLineReplacement": true,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changedRows": 1,
+      "evidenceOnly": true,
+      "statusesDefaultsOwnershipPriorConclusionsPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changedRows": 1,
+      "evidenceOnly": true,
+      "statusesDefaultsOwnershipPriorConclusionsPreserved": true
+    }
+  ],
+  "storage": {
+    "ignoredIncluded": true,
+    "files": 2606,
+    "codeFiles": [],
+    "executableFiles": []
+  },
+  "testsUseOwnedFixturesOnly": true
+}

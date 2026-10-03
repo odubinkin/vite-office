@@ -1,0 +1,22 @@
+Running 5 tests using 1 worker
+  ✘  1 apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command (5.5s)
+  ✘  2 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle (5.4s)
+  ✘  3 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle (5.3s)
+  ✘  4 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle (5.4s)
+  ✘  5 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle (5.4s)
+  1) apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command 
+    Error: expect(locator).toBeFocused() failed
+  2) apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle 
+    Error: expect(locator).toBeFocused() failed
+  3) apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle 
+    Error: expect(locator).toBeFocused() failed
+  4) apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle 
+    Error: expect(locator).toBeFocused() failed
+  5) apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle 
+    Error: expect(locator).toBeFocused() failed
+  5 failed
+    apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command 
+    apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle 
+    apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle 
+    apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle 
+    apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle 

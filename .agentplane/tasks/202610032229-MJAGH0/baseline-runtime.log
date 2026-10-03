@@ -1,0 +1,20 @@
+ Test Files  1 failed (1)
+      Tests  10 failed | 7 passed (17)
+⎯⎯⎯⎯⎯⎯ Failed Tests 10 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > gives a pointer popup focus without selecting or executing an item
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > transfers pointer focus to a neighboring root without preselection
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > preselects the first root command on "ArrowUp" and executes it once
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > preselects the first root command on "Enter" and executes it once
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > preselects the first root command on " " and executes it once
+TestingLibraryElementError: Unable to find an accessible element with the role "menuitem" and name "Alpha"
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > preserves a selected child on a repeated active root ArrowDown
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > preserves a selected child on a repeated active root ArrowUp
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > resets opening origin after keyboard dismissal and pointer toggle
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > closes the active popup from its trigger with "Enter"
+ FAIL  src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx > root popup opening > closes the active popup from its trigger with " "
+Error: expect(element).not.toBeInTheDocument()

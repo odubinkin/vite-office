@@ -1,0 +1,40 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only inspection of relevant complete functions; no upstream copying, native compilation or execution.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.hxx",
+      "sha256": "8cc86f855c8390a6bb50958266a873850d8a414e13819c80118e19cb7c58f26b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.cxx",
+      "sha256": "fd2028b1bc48249fab735c0df7809abb91061031dd952885981183f5aa757375"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+      "sha256": "dacf0d685add44c79f4a62bef9810b77fb36f42ca5e4af34d1e200069bf0e3e2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/floatwin.cxx",
+      "sha256": "435f5e0e9ad650ae2a646d75b2e830eb2e2f5446ae3c57d4180be6efdc49e188"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml",
+      "sha256": "5960200bd627fd19abe7cec701540400ddcde20d26243e7c3f43b986ef3e3bcb"
+    }
+  ],
+  "conclusions": [
+    "MenuBarWindow header defaults bFromMenu to true; KeyInput forwards with that default.",
+    "MouseButtonDown and MouseMove change root highlight with preselect false.",
+    "ImplCreatePopup refuses to recreate the already active popup.",
+    "HandleKeyEvent Up and Down both request first-entry preselection, as does Return when opening; Return on active popup closes it.",
+    "Popup ImplExecute always requests GrabFocus; Run and StartPopupMode focus the popup independently of first-entry preselection.",
+    "Invalid popup highlight navigates to first on Down and last on Up; Home and End use boundaries.",
+    "Status Bar is first in the currently implemented View subset, not the complete upstream View menu; composition is unchanged.",
+    "Native Space, full saved-document focus, disabled style defaults, mnemonics and mouse timing remain outside this opening correction."
+  ]
+}
