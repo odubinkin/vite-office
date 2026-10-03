@@ -1,10 +1,11 @@
 ---
 id: "202610032015-DGDMZA"
 title: "Restore attached removal and level change owner traversal"
-status: "DOING"
+result_summary: "Iteration71 restored RemoveMe and SetLevelInListTree release branch architecture and GetParent paths. Seven owned cases/types and required full/offline checks pass; no source/helper/Python artifacts. Parent/goal stay active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -48,11 +49,16 @@ quality_review:
     - "RemoveMe guards the raw initial owner, performs actual RemoveChild, ascends phantom-only owners through GetParent and conditionally clears obsolete phantoms. SetLevelInListTree retains negative release guard, GetParent-before-level comparison, saved-root-before-detach and same-record insertion. Required public document and void contracts, valid-domain topology/ownership/order and reading/normal notifications preserved."
     - "Final seven owned cases/four exact types pass after five baseline helper failures. First full verify uncovered one defensive null-parent exit; the isolated boundary case checks that guard without weakening coverage or production branches. Final npmverify exit0:852app/109tools/20browser/2resource, both coverage suites100%. All app/tool tests and9boundary/resource cases also pass vendor-absent, pin restoredfinally."
     - "Only four approved semantic paths changed. All239prior tests/spec and49other methods, entire source outside selected methods and non-evidence manifest fields unchanged; one tree evidence row per215rowmanifest. Ignored-inclusive Python/helper/source/executable artifact counts zero. No native execution/source copies/upstream test access. Doctor and routing pass with existing warnings."
-commit: null
+commit:
+  hash: "92309f8ae2b87e7589804c80e70a4faf4fc72403"
+  message: "🛠️ DGDMZA code: restore attached removal and level change owner traversal"
 comments:
   -
     author: "CODER"
     body: "Start: restore attached removal and level-change native owner traversal under standing iterative parity authorization; owned tests and bounded outcome-only artifacts."
+  -
+    author: "CODER"
+    body: "Verified: restored complete attached removal and level change owner traversal; full verification and all app/tool tests vendor-absent pass with unchanged prior tests, native contracts and registered deviations."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete RemoveMe/SetLevelInListTree release branches and native GetParent paths restored. Seven owned cases/types pass after five baseline helper failures. Final npm verify passes852app/109tool/20browser with100%coverage; all app/tool tests and9boundary/resource cases also pass vendor-absent. Prior239tests and49other methods unchanged; metadata evidence only; no source/helper/Python artifacts or native execution."
+  -
+    type: "status"
+    at: "2026-10-03T20:34:10.002Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored complete attached removal and level change owner traversal; full verification and all app/tool tests vendor-absent pass with unchanged prior tests, native contracts and registered deviations."
 doc_version: 3
-doc_updated_at: "2026-10-03T20:33:22.149Z"
+doc_updated_at: "2026-10-03T20:34:10.003Z"
 doc_updated_by: "CODER"
 description: "Iteration71 under C9TN6M: restore complete existing RemoveMe and SetLevelInListTree native release branches and GetParent helper traversal. Owned tests, no upstream test access/native execution or source/helper artifacts. Preserve registered IO/recovery deviations."
 sections:
