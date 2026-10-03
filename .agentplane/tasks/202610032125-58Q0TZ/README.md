@@ -1,10 +1,11 @@
 ---
 id: "202610032125-58Q0TZ"
 title: "Restore Writer numbering rule transfer owner branches"
-status: "DOING"
+result_summary: "Restored complete Writer numbering rule transfer owner guards and client registration paths"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - ".agentplane/tasks/202610032125-58Q0TZ/auxiliary-checks.json"
   findings:
     - "One production body only restores both native guard/action owner helper paths around private binding assignment, required rule/public void contract retained.6owned cases/4types pass after5baseline failures, including real different/same-rule client order, retained detached text, no-text roots/source phantom release guards and hidden-independent client transfer.242prior tests/16othermethods and all remaining source unchanged; both215-row manifests one evidence-only row. Fullverify and all sequential vendor-absent app/inventory/scripts/browser exit0, pin restored, four native hashes rechecked, no source/helper/Python/executable artifacts."
-commit: null
+commit:
+  hash: "da301a3514480d1b2d878e479d4321cc1687f192"
+  message: "🛠️ 58Q0TZ code: restore Writer numbering rule transfer owner branches"
 comments:
   -
     author: "CODER"
     body: "Start: restore complete ChangeNumRule owner-helper branches under standing parity goal authorization, with actual client-order evidence and outcome-only artifacts."
+  -
+    author: "CODER"
+    body: "Verified: restored complete ChangeNumRule native guarded owner transfer; six owned cases and four exact types pass, fullverify and sequential vendor-absent unit/script/browser suites pass, prior tests and source outside selected body unchanged. Same-actor separate EVALUATOR phase passes exact semanticda301a35. Outcome-only artifacts contain no source/helper/Python/executables; parent and goal remain active."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete ChangeNumRule native guarded getter paths restored around private binding assignment. Baseline5fail/1pass; corrected6owned/4typespass. Fullverify871app109inventory20browser2resources100%coverage0semantic; vendorabsent871app109inventory12scripts20browser pass,exactpin restored.242prior tests/16othermethods/allsource outside onebody unchanged,evidence-only rows,0helper/source/Python/executable artifacts. No parent/default/module/goal or I/O promotion."
+  -
+    type: "status"
+    at: "2026-10-03T21:38:44.949Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored complete ChangeNumRule native guarded owner transfer; six owned cases and four exact types pass, fullverify and sequential vendor-absent unit/script/browser suites pass, prior tests and source outside selected body unchanged. Same-actor separate EVALUATOR phase passes exact semanticda301a35. Outcome-only artifacts contain no source/helper/Python/executables; parent and goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-03T21:38:08.288Z"
+doc_updated_at: "2026-10-03T21:38:44.951Z"
 doc_updated_by: "CODER"
 description: "Iteration74 under C9TN6M: restore complete existing ChangeNumRule guarded owner-helper transfer branches and retain client order/identity, hidden-independent registration, release no-rule/no-text behavior. Tests never access upstream; outcome-only artifacts and registered I/O exceptions preserved."
 sections:
@@ -115,6 +128,10 @@ sections:
     Six corrected owned cases and four exact type/access assertions pass after five baseline helper-path failures. Actual old/new and same-rule client order, detached retained text, root/phantom release guards and hidden transfer retain expected registry/topology/raw counters. Native getter source paths are nonvirtual/final-class observations, not extension ABI evidence. No new debug/native lifetime claim or changed I/O criteria.
 
     Fullverify and all sequential vendor-absent suites pass, exact pin restored. Base tree header inspection confirms all local abstract policies except LessThan are native pure virtual; do not invent concrete base defaults/factories. LessThan native address-order default remains separate unresolved representation obligation. GetLevelInListTree/GetRoot/GetNumberVector/IsCounted/private parent paths match inspected source dependencies; avoid speculative getters. Next browser candidate from local inspection: both submenu and ancestor popup install the same KeyDown handler, so submenu Enter/Space may invoke Execute twice via bubbling; current geometry test covers Escape and pointer command only. Existing rendered menus depth2 include Format Text/Spacing/Lists, Insert More Breaks and View Rulers; deeper arbitrary menu support is not yet required by that graph. Pinned MenuFloatingWindow.KeyInput KEY_RETURN performs one enabled-item selection/EndExecute and KEY_RIGHT delegates once. Reproduce actual keyboard activation with owned regression tests before correction; no I/O UI changes.
+extensions:
+  implementation_commit:
+    hash: "da301a3514480d1b2d878e479d4321cc1687f192"
+    message: "🛠️ 58Q0TZ code: restore Writer numbering rule transfer owner branches"
 id_source: "generated"
 ---
 ## Summary
