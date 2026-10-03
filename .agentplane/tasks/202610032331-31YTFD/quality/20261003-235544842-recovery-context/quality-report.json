@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "task_id": "202610032331-31YTFD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-03T23:55:44.842Z",
+  "verdict": "pass",
+  "summary": "Same-actor separate EVALUATOR at exact semantic b2902b94e5d7c33a5d940dca7e2da1593cfdd534: no-popup Writer menubar default-to-document branch and artifact compliance satisfy approved leaf; parent not complete.",
+  "evaluated_sha": "b2902b94e5d7c33a5d940dca7e2da1593cfdd534",
+  "blueprint_digest": "73bf9e8f3a05a4aa6f48a4bfd905ff033014329d77a28c7efedf68a4534b8227",
+  "findings": [
+    "Native default true versus PopupClosed false inspected at exact pin/7file hashes. No-popup Escape prefers valid saved owner, else own Writer client through injected editing-host reference.9new owned cases include actual Desktop/Writer focus-beforeinput and separate frames;2new Chromium cases prove actual focus/input and saved-toolbar precedence. No DOM core dependency or global selector.",
+    "Fullverify939app109inventory35browser2resources100%coverage0semantic and sequential vendor-absent939+109+12+35 pass. Implementation and test hashes unchanged thereafter. Final metadata-only restoration of existing C++ evidence prefix was followed by passing provenance/invariants/parity0semantic/format on final manifests; no skipped gates or source-dependent tests.",
+    "251prior test/spec files byte-identical; exact bounded3production transforms; both215row manifests3evidence-only append rows and5newmarkers each preserve all old evidence/status/default/ownership/priorconclusions.2678ignored-inclusive task files0source/helper/executable/archive, all Agentplane Python0. Legacy source-bearing Playwright trace archive removed in separately approved cleanup commit b23c4f18c359 preserving screenshot/error context; no source bodies retained in cleanup evidence. No independent-agent review claimed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610032331-31YTFD/README.md",
+    ".agentplane/tasks/202610032331-31YTFD/source-inspection.json",
+    ".agentplane/tasks/202610032331-31YTFD/scope-integrity.json",
+    ".agentplane/tasks/202610032331-31YTFD/full-verify-summary.json",
+    ".agentplane/tasks/202610032331-31YTFD/final-manifest-checks.json",
+    ".agentplane/tasks/202610032331-31YTFD/corrected-runtime.json",
+    ".agentplane/tasks/202610032331-31YTFD/corrected-browser.json",
+    ".agentplane/tasks/202610032331-31YTFD/offline-unit.json",
+    ".agentplane/tasks/202610032331-31YTFD/offline-script.json",
+    ".agentplane/tasks/202610032331-31YTFD/offline-browser.json",
+    ".agentplane/tasks/202610032331-31YTFD/archive-cleanup.json",
+    ".agentplane/tasks/202610032331-31YTFD/auxiliary-checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Only no-popup activated menubar Escape default-to-document branch proven; native other deactivation inputs, no-valid-owner popup cleanup/fallback, platform/frame/global focus graph/lifetimes, F10/Alt/mnemonics/disabled defaults/timers/native Space and full menu composition remain open.",
+    "DOM reference models owning Writer frame client; no complete native ABI/default/core/module/UI parity or new registered deviations claimed. Detached browser menu without document owner retains existing adapter behavior as unverified."
+  ]
+}

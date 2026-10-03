@@ -4,7 +4,7 @@ title: "Focus Writer document when inactive popup menu has no saved owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,34 @@ verification:
   updated_by: "CODER"
   note: "Iteration79 no-popup document fallback verified:939app109inventory35browser2resources100%coverage0semantic; vendor-absent939+109+12+35 allpass; final static manifests pass;251prior tests unchanged; separate source archive cleanup; no-owner popup/frame/global and parent remain open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-03T23:55:44.842Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR at exact semantic b2902b94e5d7c33a5d940dca7e2da1593cfdd534: no-popup Writer menubar default-to-document branch and artifact compliance satisfy approved leaf; parent not complete."
+  evaluated_sha: "b2902b94e5d7c33a5d940dca7e2da1593cfdd534"
+  blueprint_digest: "73bf9e8f3a05a4aa6f48a4bfd905ff033014329d77a28c7efedf68a4534b8227"
+  evidence_refs:
+    - ".agentplane/tasks/202610032331-31YTFD/README.md"
+    - ".agentplane/tasks/202610032331-31YTFD/quality/20261003-235544842-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610032331-31YTFD/quality/20261003-235544842-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610032331-31YTFD/quality/20261003-235544842-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610032331-31YTFD/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610032331-31YTFD/source-inspection.json"
+    - ".agentplane/tasks/202610032331-31YTFD/scope-integrity.json"
+    - ".agentplane/tasks/202610032331-31YTFD/full-verify-summary.json"
+    - ".agentplane/tasks/202610032331-31YTFD/final-manifest-checks.json"
+    - ".agentplane/tasks/202610032331-31YTFD/corrected-runtime.json"
+    - ".agentplane/tasks/202610032331-31YTFD/corrected-browser.json"
+    - ".agentplane/tasks/202610032331-31YTFD/offline-unit.json"
+    - ".agentplane/tasks/202610032331-31YTFD/offline-script.json"
+    - ".agentplane/tasks/202610032331-31YTFD/offline-browser.json"
+    - ".agentplane/tasks/202610032331-31YTFD/archive-cleanup.json"
+    - ".agentplane/tasks/202610032331-31YTFD/auxiliary-checks.json"
+  findings:
+    - "Native default true versus PopupClosed false inspected at exact pin/7file hashes. No-popup Escape prefers valid saved owner, else own Writer client through injected editing-host reference.9new owned cases include actual Desktop/Writer focus-beforeinput and separate frames;2new Chromium cases prove actual focus/input and saved-toolbar precedence. No DOM core dependency or global selector."
+    - "Fullverify939app109inventory35browser2resources100%coverage0semantic and sequential vendor-absent939+109+12+35 pass. Implementation and test hashes unchanged thereafter. Final metadata-only restoration of existing C++ evidence prefix was followed by passing provenance/invariants/parity0semantic/format on final manifests; no skipped gates or source-dependent tests."
+    - "251prior test/spec files byte-identical; exact bounded3production transforms; both215row manifests3evidence-only append rows and5newmarkers each preserve all old evidence/status/default/ownership/priorconclusions.2678ignored-inclusive task files0source/helper/executable/archive, all Agentplane Python0. Legacy source-bearing Playwright trace archive removed in separately approved cleanup commit b23c4f18c359 preserving screenshot/error context; no source bodies retained in cleanup evidence. No independent-agent review claimed."
 commit: null
 comments:
   -
