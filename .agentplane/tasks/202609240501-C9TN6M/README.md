@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 65
+revision: 66
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:44:27.467Z"
+doc_updated_at: "2026-10-03T17:03:37.329Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -252,6 +252,10 @@ sections:
     - Observation: User reaffirmed that Python and other executable helper/source artifacts must not be kept in Agentplane. Complete ignored-inclusive inventory exposed 50 historical TS/MTS/MJS helpers, five ignored TS sources/helpers, 15 obsolete native executable probes and three debug bundles; Python/native source files were already absent.
       Impact: Old artifacts and the obsolete scripts/native_probe_storage.py contradicted the storage restriction despite not being project tests. Product sources, project tests, metadata and vendor contents remain unchanged.
       Resolution: Canonical cleanup task 202610031642-HHGTQ2 DONE at semantic 4bf67a647e07cc952f89683da917e5adae419837, quality pass on that SHA and close bd34fdb4da73. Removed all identified code/executable residue and obsolete storage helper; all declared format/lint/types/docs/provenance/parity and policy checks pass. Initial docs-intent task 202610031635-2Z3962 closed duplicate after commit hook correctly required a code task; no hook bypass or history rewrite. Only bounded outcomes, hashes and logs retained; no project test invokes pinned upstream. Parent functionality parity remains open; next pending audit is native protected numbering helper contracts.
+
+    - Observation: Iteration62 completed native protected validation/phantom/transfer helper family. Fresh pinned header/body inspection confirms six access declarations, required nullable Validate/MoveChildren pointer contracts, GetChildCount one-child/empty ordering, parent phantom-before-count policy and MoveChildren factory/tail selection.
+      Impact: Six semantic paths corrected at 224bce74a50b7812485e7bfeab9c45ff85870711;3body changes/52other bodies unchanged; two old tests now use protected diagnostics with all matcher arguments retained and216other old tests byte-identical. Narrow evidence does not prove full context/notification/lifetime/layout/redline/range/browser parity.
+      Resolution: Task202610031646-YTEPG2 DONE, EVALUATOR pass on exact224bce74. Six owned tests/type checks baselinefail/finalpass; vendor-absent92numbering+9boundary/resource tests pass and pin restored. Full verify exit0:798application/109inventory/20browser, both100% coverage and all static/source gates. Only hashes/conclusions/bounded logs retained; Agentplane artifact code count0; no test reads/invokes upstream or registered IO/recovery/gate/status change. Next source audit: Notify protected access and required SwDoc mutation/notification context; wider lifecycle and browser obligations remain open. Doctor exit0 with legacy hook warning plus closed duplicate cleanup bookkeeping warning; canonical cleanup semantic recorded, DONE route forbids unrelated mutation.
 id_source: "generated"
 ---
 ## Summary
@@ -477,3 +481,7 @@ Parent remains DOING/full goal ACTIVE. Next bounded candidate: native protected 
 - Observation: User reaffirmed that Python and other executable helper/source artifacts must not be kept in Agentplane. Complete ignored-inclusive inventory exposed 50 historical TS/MTS/MJS helpers, five ignored TS sources/helpers, 15 obsolete native executable probes and three debug bundles; Python/native source files were already absent.
   Impact: Old artifacts and the obsolete scripts/native_probe_storage.py contradicted the storage restriction despite not being project tests. Product sources, project tests, metadata and vendor contents remain unchanged.
   Resolution: Canonical cleanup task 202610031642-HHGTQ2 DONE at semantic 4bf67a647e07cc952f89683da917e5adae419837, quality pass on that SHA and close bd34fdb4da73. Removed all identified code/executable residue and obsolete storage helper; all declared format/lint/types/docs/provenance/parity and policy checks pass. Initial docs-intent task 202610031635-2Z3962 closed duplicate after commit hook correctly required a code task; no hook bypass or history rewrite. Only bounded outcomes, hashes and logs retained; no project test invokes pinned upstream. Parent functionality parity remains open; next pending audit is native protected numbering helper contracts.
+
+- Observation: Iteration62 completed native protected validation/phantom/transfer helper family. Fresh pinned header/body inspection confirms six access declarations, required nullable Validate/MoveChildren pointer contracts, GetChildCount one-child/empty ordering, parent phantom-before-count policy and MoveChildren factory/tail selection.
+  Impact: Six semantic paths corrected at 224bce74a50b7812485e7bfeab9c45ff85870711;3body changes/52other bodies unchanged; two old tests now use protected diagnostics with all matcher arguments retained and216other old tests byte-identical. Narrow evidence does not prove full context/notification/lifetime/layout/redline/range/browser parity.
+  Resolution: Task202610031646-YTEPG2 DONE, EVALUATOR pass on exact224bce74. Six owned tests/type checks baselinefail/finalpass; vendor-absent92numbering+9boundary/resource tests pass and pin restored. Full verify exit0:798application/109inventory/20browser, both100% coverage and all static/source gates. Only hashes/conclusions/bounded logs retained; Agentplane artifact code count0; no test reads/invokes upstream or registered IO/recovery/gate/status change. Next source audit: Notify protected access and required SwDoc mutation/notification context; wider lifecycle and browser obligations remain open. Doctor exit0 with legacy hook warning plus closed duplicate cleanup bookkeeping warning; canonical cleanup semantic recorded, DONE route forbids unrelated mutation.
