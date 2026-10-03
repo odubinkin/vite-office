@@ -1,10 +1,11 @@
 ---
 id: "202610032201-ZPY6ZB"
 title: "Preserve pointer-opened Writer submenu preselection"
-status: "DOING"
+result_summary: "Restored pointer and keyboard Writer submenu preselection with correct popup focus restoration"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -51,11 +52,16 @@ quality_review:
     - ".agentplane/tasks/202610032201-ZPY6ZB/auxiliary-checks.json"
   findings:
     - "Opening origin is preserved through mounted submenu focus: pointer focuses the popup without selecting a command, keyboard retains first-item preselection, repeated active-popup hover does not reset selection. Native invalid-highlight boundary behavior and current-popup no-command Enter/Escape/Left/pointer-removal restore parent without dispatch.6initial owned failures and1pointer-close failure become15new+14existing targeted passes; both baseline Chromium focus scenarios fail and corrected4targeted/24full browser pass, including actual Bold state and retained single Enter/Space dispatch.245prior tests and production outside declared focus paths unchanged, inverse normalization restores entire base file; both215-row manifests one append-only existing evidence row. Fullverify895app109inventory24browser2resource100%coverage0semantic and all sequential vendor-absent app/inventory/scripts/browser pass, pin/four hashes match. Task artifacts source/helper/Python/executables0."
-commit: null
+commit:
+  hash: "2b175b44b97c3c5867edeb9a1d18ea52425b8edd"
+  message: "🛠️ ZPY6ZB code: distinguish pointer and keyboard submenu preselection"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce native pointer/keyboard submenu preselection distinction and resulting unselected popup contracts under standing goal authorization; outcome-only artifacts and upstream-independent tests."
+  -
+    author: "CODER"
+    body: "Verified: pointer-opened Writer submenu focuses its unselected popup; keyboard opening retains first-item preselection. Native invalid-highlight boundary and no-command/current-popup/pointer removal dismissal restore parent without dispatch. Fifteen new and fourteen existing targeted cases plus actual Chromium pass after initial six and pointer-close failure evidence. Fullverify and all sequential vendor-absent suites pass. Same-actor separate EVALUATOR phase passes exact semantic2b175b44; outcome-only artifacts, registered I/O preserved, parent/goal remain active."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pointer submenu focuses its unselected popup, keyboard preselects first eligible command; invalid-highlight Up/Down boundaries and no-command/current-popup/pointer removal close restore parent. Baseline6fail/8pass plus focused pointer-close1fail/14pass; corrected15new+14existing targeted menu cases and4focused Chromium pass. Fullverify895app109inventory24browser2resources100%coverage0semantic; sequential vendor-absent895app109inventory12scripts24browser pass,pin/fourhashes restored/rechecked.245prior tests and all production outside declared focus paths unchanged,evidence-only rows,0source/helper/Python/executables. Native broad style/mnemonic/window-lifetime/menu/parent/goal remain unverified."
+  -
+    type: "status"
+    at: "2026-10-03T22:24:47.553Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pointer-opened Writer submenu focuses its unselected popup; keyboard opening retains first-item preselection. Native invalid-highlight boundary and no-command/current-popup/pointer removal dismissal restore parent without dispatch. Fifteen new and fourteen existing targeted cases plus actual Chromium pass after initial six and pointer-close failure evidence. Fullverify and all sequential vendor-absent suites pass. Same-actor separate EVALUATOR phase passes exact semantic2b175b44; outcome-only artifacts, registered I/O preserved, parent/goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-03T22:24:01.063Z"
+doc_updated_at: "2026-10-03T22:24:47.554Z"
 doc_updated_by: "CODER"
 description: "Iteration76 under C9TN6M: restore native distinction between pointer submenu popup focus without first-item preselection and keyboard opening with first-item preselection; cover unselected popup navigation and no-command dismissal. Existing menu composition and registered I/O exceptions preserved; tests never invoke upstream; outcome-only artifacts."
 sections:
@@ -116,6 +129,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task semantic commit if necessary; preserve history and registered I/O exceptions. No network or outside-repo access. Vendor rename restored in finally."
   Findings: "Preflight main/direct clean at6eea8575520d5db895306225c25320b96226a651. Previous goal turn classified progress: iteration75 semantic8c9cc72a fixes duplicate nested keyboard consumption, leaf DONE with terminal full/offline evidence. Native HighlightChanged passes preselect=pTimer==nullptr; ImplExecute always sets GrabFocus and Run highlights first only ifpreselect. FloatingWindow StartPopupMode grabs popup window focus independently. Therefore retaining parent DOM focus would miss native popup keyboard ownership; pointer must focus an unselected popup container. Native invalid-highlight ArrowUp selects last, ArrowDown first; Return has no selected command and StopExecute closes current nested popup through PopupEnd/ClosePopup, restores parent focus. Local unconditional first-item focus and unselected predecessor index are candidate defects to reproduce. Disabled traversal defaults/timers/mnemonic algorithms/stale provenance symbols remain separate obligations, registered I/O unchanged. Reproduction has6owned failures/8passes and both Chromium cases fail because the hovered popup is inactive while the first command holds focus. Initial build exposed a fixture-only unchecked tuple label type; readonly tuple annotation fixes it, no production change or scope/criteria drift. Fresh baseline build and terminal rerun follow before correction. Fresh baseline confirms6fail/8pass and two browser failures. Initial correction passes14owned plus14existing menu cases; adding a pointer-removal restoration control reveals1failure/14passes: focused popup unmount leaves DOM focus outside menu. This belongs to approved current-popup focus restoration; onMouseLeave now reuses the same closePopup path as keyboard/no-selection dismissal. No new path, command, risk or verification criterion change; existing native pointer timers and disabled policy remain separate. Corrected owned15cases plus14previous targeted cases pass; app types/lint pass. First corrected Chromium run has3pass/1fixture locator failure: menu label is Single Underline, toolbar label Underline. Actual generated resource and browser accessibility snapshot confirm it; only owned locator corrected, no production/resource change or weakened assertion. Rerun allfour focused browser cases follows. Further next-obligation inspection refines disabled traversal: generic StyleSettings defaults SkipDisabledInMenus=false, while Qt and GTK platform setup explicitly override true; native traversal and initial selection consume the style setting, whereas mnemonic SearchItem always excludes disabled entries. Do not claim browser hard-coded true differs from every platform, or remove disabled filtering from mnemonic search. Browser style policy/default remains individually unverified and needs a separate scoped decision based on source contracts, not an unrelated change here. Fullverify and all sequential vendor-absent suites pass; exact pin restored, four source hashes rechecked, production hash unchanged after checks. No artifacts contain source/helper/Python/executables. Next coherent candidate is top-level popup focus: MenuBarWindow pointer path passes preselectfalse to ImplExecute, which still grabs popup focus; local root openMenu(pointer defaultnone) skips all focus. Keyboard ArrowDown after pointer-clicking the same top menu may leave focus on its trigger because openMenuIndex stays unchanged and the focus effect does not rerun. Reproduce before next correction, inspect full MenuBarWindow saved-focus and repeated-open contracts; top-level focus is not certified by this child-popup correction. Existing native disabled styles have Qt/GTK overrides and mnemonic disabled filtering; broad defaults remain separate."
+extensions:
+  implementation_commit:
+    hash: "2b175b44b97c3c5867edeb9a1d18ea52425b8edd"
+    message: "🛠️ ZPY6ZB code: distinguish pointer and keyboard submenu preselection"
 id_source: "generated"
 ---
 ## Summary
