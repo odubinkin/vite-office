@@ -4,7 +4,7 @@ title: "Restore native inline descendant destination selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "Complete selected AddChild inline destination scope at910775c2b7a5 verified unchanged at combined semantic 3a555d74af410d90c6ba9aaeaeda59a40b460650;full792/109/20 both100%,offline84+7,oldexpectations/gates and deviations intact."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-03T16:22:08.296Z"
+  updated_by: "EVALUATOR"
+  note: "Review explicit core semantic910775c2b7a5 with source blobs unchanged through separate browser/scratch corrections; same-actor quality phase only."
+  evaluated_sha: "b82c76d7aa8fa369486a9961186e3b58f260271c"
+  blueprint_digest: "41593b2d5b67efd3ff0f05ab6f46787cfac66da0202ebfb0df776b3006f2ff9b"
+  evidence_refs:
+    - ".agentplane/tasks/202610031438-RD0HQY/README.md"
+    - ".agentplane/tasks/202610031438-RD0HQY/quality/20261003-162208296-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610031438-RD0HQY/quality/20261003-162208296-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610031438-RD0HQY/quality/20261003-162208296-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610031438-RD0HQY/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610031438-RD0HQY/artifacts/artifact-log-integrity.json"
+  findings:
+    - "Native3files/8spans and exact5core paths,54unchanged methods,old matcher/test integrity checked. Full792app/109inventory/20browser allgates both100%;source artifacts0 and upstream-independent owned tests pass."
 commit:
   hash: "910775c2b7a54393c68eb08a75c6f8bc24ad88ff"
   message: "🧩 RD0HQY code: restore inline descendant destination selection"
@@ -84,7 +100,7 @@ events:
     to: "DOING"
     note: "Start: record full forty-character existing semantic SHA as review target; current source and verified final outcomes unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:21:03.258Z"
+doc_updated_at: "2026-10-03T16:22:42.759Z"
 doc_updated_by: "CODER"
 description: "Iteration61 removes invented protected GetDestinationPhantom and restores complete source-owned AddChild inline count/first-child/parent-factory branches. Preserve old matcher expectations through one test-only helper removal; owned deep-transfer traces and topology, no upstream access by tests or saved helper/source files."
 sections:
@@ -146,6 +162,8 @@ sections:
     Resolved: separate browser leafF4HAPT commit2d2ccc6eb5ec closed after unchanged full npm run verify792app/109inventory/20browser,both100%,allstatic/provenance/parity gates. Separate scratch-only leafJKV7Z1 current semantic 3a555d74af410d90c6ba9aaeaeda59a40b460650 moves synthetic test input outside Agentplane; inventory109/both100% rerun vendor absent/restored, no production logic change. Core implementation910775c2b7a5 and its3code/test paths remain byte-identical; exact5original core semantic paths reviewed separately from approved browser metadata row. Core old216other test files unchanged in own commit; new browser tests append to2other files without changing old bodies. Final ignored-inclusive Agentplane Python/bytecode/native/helper sources0. Combined semantic SHA is closure/evaluator evidence; --implementation-commit retains actual core commit910775c2b7a5. No source/helper copies, no native compiled probes, no full-module/goal promotion.
 
     Lifecycle recovery: first EVALUATOR recording rejected dirty cleanup-task README outside current subtree; no quality pass was recorded. Cleanup finish then rejected normalized core log tracked changes outside its own subtree. Persist core log evidence, close cleanup, then record core review serially as required by CLI enforcement. Evaluate actual core implementation910775c2b7a5 and combined semantic3a555d74af41 through exact blob hashes at the current closure snapshot; report evaluated_sha truthfully rather than calling a bookkeeping HEAD semantic. No scope,logic,expected values or pass criteria changed.
+
+    Recovery resolved without changing implementation: task set-status DOING --commit910775c2b7a5 records the actual existing review target, then its task README must be persisted before EVALUATOR recording. After persistence, quality pass recorded; no evaluator guard bypass, no force, no empty/invented code commit and no history rewrite. Finish retains actual core semantic910775c2b7a5; later browser/scratch results remain linked independent evidence.
 id_source: "generated"
 ---
 ## Summary
@@ -223,3 +241,5 @@ Command: npx playwright test --config apps/office/playwright.config.ts apps/offi
 Resolved: separate browser leafF4HAPT commit2d2ccc6eb5ec closed after unchanged full npm run verify792app/109inventory/20browser,both100%,allstatic/provenance/parity gates. Separate scratch-only leafJKV7Z1 current semantic 3a555d74af410d90c6ba9aaeaeda59a40b460650 moves synthetic test input outside Agentplane; inventory109/both100% rerun vendor absent/restored, no production logic change. Core implementation910775c2b7a5 and its3code/test paths remain byte-identical; exact5original core semantic paths reviewed separately from approved browser metadata row. Core old216other test files unchanged in own commit; new browser tests append to2other files without changing old bodies. Final ignored-inclusive Agentplane Python/bytecode/native/helper sources0. Combined semantic SHA is closure/evaluator evidence; --implementation-commit retains actual core commit910775c2b7a5. No source/helper copies, no native compiled probes, no full-module/goal promotion.
 
 Lifecycle recovery: first EVALUATOR recording rejected dirty cleanup-task README outside current subtree; no quality pass was recorded. Cleanup finish then rejected normalized core log tracked changes outside its own subtree. Persist core log evidence, close cleanup, then record core review serially as required by CLI enforcement. Evaluate actual core implementation910775c2b7a5 and combined semantic3a555d74af41 through exact blob hashes at the current closure snapshot; report evaluated_sha truthfully rather than calling a bookkeeping HEAD semantic. No scope,logic,expected values or pass criteria changed.
+
+Recovery resolved without changing implementation: task set-status DOING --commit910775c2b7a5 records the actual existing review target, then its task README must be persisted before EVALUATOR recording. After persistence, quality pass recorded; no evaluator guard bypass, no force, no empty/invented code commit and no history rewrite. Finish retains actual core semantic910775c2b7a5; later browser/scratch results remain linked independent evidence.

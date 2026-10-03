@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610031438-RD0HQY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-03T16:22:08.296Z",
+  "verdict": "pass",
+  "summary": "Review explicit core semantic910775c2b7a5 with source blobs unchanged through separate browser/scratch corrections; same-actor quality phase only.",
+  "evaluated_sha": "b82c76d7aa8fa369486a9961186e3b58f260271c",
+  "blueprint_digest": "41593b2d5b67efd3ff0f05ab6f46787cfac66da0202ebfb0df776b3006f2ff9b",
+  "findings": [
+    "Native3files/8spans and exact5core paths,54unchanged methods,old matcher/test integrity checked. Full792app/109inventory/20browser allgates both100%;source artifacts0 and upstream-independent owned tests pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610031438-RD0HQY/README.md",
+    ".agentplane/tasks/202610031438-RD0HQY/artifacts/artifact-log-integrity.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Complete parent/module/goal parity remains unverified."
+  ]
+}
