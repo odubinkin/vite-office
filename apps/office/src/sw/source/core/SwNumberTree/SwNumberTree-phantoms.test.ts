@@ -7,6 +7,14 @@ import { applyWriterParagraphList } from "../doc/list";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwNodeNum } from "./SwNodeNum";
 import { SwNumberTreeNode } from "./SwNumberTree";
+/** Queries protected ancestry only in test diagnostics. @param node - Actual record. @returns Policy result. */
+function hasPhantomCountedParent(node: SwNumberTreeNode): boolean {
+  const diagnostic = node as unknown as {
+    /** Reads protected counted ancestry. @returns Policy result. */
+    HasPhantomCountedParent(): boolean;
+  };
+  return diagnostic.HasPhantomCountedParent();
+}
 /** Literal counted-list policy. */
 interface Item {
   readonly level: number;
@@ -287,7 +295,7 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   expect(root.createPhantom()).toBeUndefined();
   root.clearPhantoms();
   expect(getNumberTreeChildren(root)).toEqual([]);
-  expect(phantom.HasPhantomCountedParent()).toBe(false);
+  expect(hasPhantomCountedParent(phantom)).toBe(false);
   root.AddChild(orphan, 0);
   const another = new PhantomRoot(undefined);
   another.AddChild(orphan, 0);

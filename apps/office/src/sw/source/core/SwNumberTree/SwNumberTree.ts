@@ -165,13 +165,13 @@ export abstract class SwNumberTreeNode {
     }
   }
   /** Finds the first real descendant for native ordering. @returns Real record. */
-  private GetFirstNonPhantomChild(): SwNumberTreeNode {
+  protected GetFirstNonPhantomChild(): SwNumberTreeNode {
     return this.IsPhantom()
       ? (this.mChildren.front() as SwNumberTreeNode).GetFirstNonPhantomChild()
       : this;
   }
   /** Moves later descendants into an inserted predecessor's new sibling. @param compare - Insertion record. @param destination - New parent. @returns Nothing. */
-  private MoveGreaterChildren(compare: SwNumberTreeNode, destination: SwNumberTreeNode): void {
+  protected MoveGreaterChildren(compare: SwNumberTreeNode, destination: SwNumberTreeNode): void {
     const first = this.mChildren.front();
     if (first === undefined) return;
     const from =
@@ -207,13 +207,14 @@ export abstract class SwNumberTreeNode {
     return this.mbPhantom;
   }
   /** Applies native counted-ancestor policy to a phantom. @returns Whether its ancestor chain counts. */
-  public HasPhantomCountedParent(): boolean {
-    if (!this.IsPhantom() || this.mpParent === undefined) return false;
-    if (this.mpParent === this.GetRoot()) return true;
-    return (
-      this.mpParent.IsCounted() &&
-      (!this.mpParent.IsPhantom() || this.mpParent.HasPhantomCountedParent())
-    );
+  protected HasPhantomCountedParent(): boolean {
+    let result = false;
+    if (this.IsPhantom() && this.mpParent !== undefined) {
+      if (this.mpParent === this.GetRoot()) result = true;
+      else if (!this.mpParent.IsPhantom()) result = this.mpParent.IsCounted();
+      else result = this.mpParent.IsCounted() && this.mpParent.HasPhantomCountedParent();
+    }
+    return result;
   }
   /** Returns the number of direct children, including phantoms. @returns Child count. */
   public GetChildCount(): number {
@@ -271,8 +272,8 @@ export abstract class SwNumberTreeNode {
     this.mpLastValid = undefined;
     for (const child of this.mChildren) child.InvalidateTree();
   }
-  /** Validates this parent's prefix through one child. @param child - Owned child. @returns Nothing. */
-  private Validate(child: SwNumberTreeNode): void {
+  /** Dispatches validation for an explicit child pointer, including the native null target. @param child - Required nullable child. @returns Nothing. */
+  protected Validate(child: SwNumberTreeNode | undefined): void {
     if (!this.IsValid(child)) {
       if (this.IsContinuous()) this.ValidateContinuous(child);
       else this.ValidateHierarchical(child);
@@ -368,27 +369,29 @@ export abstract class SwNumberTreeNode {
     this.SetLastValid(current, true);
   }
   /** Reports an empty subtree or a chain containing only phantoms. @returns Phantom-only flag. */
-  private HasOnlyPhantoms(): boolean {
-    return (
-      this.mChildren.size() === 0 ||
-      (this.mChildren.size() === 1 &&
-        (this.mChildren.front() as SwNumberTreeNode).IsPhantom() &&
-        (this.mChildren.front() as SwNumberTreeNode).HasOnlyPhantoms())
-    );
+  protected HasOnlyPhantoms(): boolean {
+    let result = false;
+    if (this.GetChildCount() === 1) {
+      const child = this.mChildren.front() as SwNumberTreeNode;
+      result = child.IsPhantom() && child.HasOnlyPhantoms();
+    } else if (this.GetChildCount() === 0) result = true;
+    return result;
   }
-  /** Moves descendants to a predecessor, merging a leading phantom into its last child. @param destination - Predecessor. @returns Nothing. */
-  private MoveChildren(destination: SwNumberTreeNode): void {
+  /** Moves descendants to a predecessor, merging a leading phantom into its last child. @param destination - Required pointer; native release-body null is valid only for an empty source. @returns Nothing. */
+  protected MoveChildren(destination: SwNumberTreeNode | undefined): void {
     const first = this.mChildren.front();
     if (first === undefined) return;
+    // A nonempty source requires an owned destination, as in the native pointer domain.
+    const parent = destination as SwNumberTreeNode;
     this.SetLastValid(-1);
     if (first.IsPhantom()) {
-      const last = destination.mChildren.back() ?? destination.CreatePhantom();
-      first.MoveChildren(last as SwNumberTreeNode);
+      const last = parent.mChildren.empty() ? parent.CreatePhantom() : parent.mChildren.back();
+      first.MoveChildren(last);
       this.mChildren.erase_at(0);
       first.mpParent = undefined;
     }
-    for (const child of this.mChildren) child.mpParent = destination;
-    destination.mChildren.insert(this.mChildren);
+    for (const child of this.mChildren) child.mpParent = parent;
+    parent.mChildren.insert(this.mChildren);
     this.mChildren.clear();
     this.mpLastValid = undefined;
   }

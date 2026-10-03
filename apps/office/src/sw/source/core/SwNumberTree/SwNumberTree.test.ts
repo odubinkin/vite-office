@@ -7,6 +7,15 @@ import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwNodeNum } from "./SwNodeNum";
 import { SwNumberTreeNode } from "./SwNumberTree";
 
+/** Queries protected ancestry only in test diagnostics. @param node - Actual record. @returns Policy result. */
+function hasPhantomCountedParent(node: SwNumberTreeNode): boolean {
+  const diagnostic = node as unknown as {
+    /** Reads protected counted ancestry. @returns Policy result. */
+    HasPhantomCountedParent(): boolean;
+  };
+  return diagnostic.HasPhantomCountedParent();
+}
+
 /** Literal source-derived list item policy. */
 interface Item {
   readonly level: number;
@@ -293,7 +302,7 @@ it("constructs rule-start phantom chains and retains them through removal", /** 
   expect(item.GetLevelInListTree()).toBe(2);
   expect(item.GetParent()?.IsPhantom()).toBe(true);
   expect(item.GetParent()?.GetParent()?.IsPhantom()).toBe(true);
-  expect(item.HasPhantomCountedParent()).toBe(false);
+  expect(hasPhantomCountedParent(item)).toBe(false);
   const root = getNumberTreeRoot(item) as SwNodeNum;
   expect(getNumberTreeRoot(root)).toBeUndefined();
   expect(root.GetLevelInListTree()).toBe(-1);
