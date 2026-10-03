@@ -1,0 +1,26 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae",
+      "matchesPin": true
+    },
+    {
+      "path": "sw/inc/SwNodeNum.hxx",
+      "sha256": "15e6a7b96816bbcc848c83605b8c1b187cadd59914ac81a33f631217a8a25e28",
+      "matchesPin": true
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "sha256": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129",
+      "matchesPin": true
+    },
+    {
+      "path": "sw/inc/numrule.hxx",
+      "sha256": "8a0da865e8c8135f508921e4f249a0018facc7b6f50e8e7a0dbf5daa86a4a8d4",
+      "matchesPin": true
+    }
+  ],
+  "scope": "Complete ChangeNumRule guards/actions/private assignment, required nonvirtual public reference-to-rule/void declaration, client identity/append/remove/list invalidation dependencies inspected manually. Release no-rule/no-text and hidden-explicit client transfer do not certify debug/normal redline creation or lifetime; no native execution/source copies. Native final/const/private/destructor/redline/layout/browser obligations remain separate."
+}

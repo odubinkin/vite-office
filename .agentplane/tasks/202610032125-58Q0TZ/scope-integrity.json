@@ -1,0 +1,30 @@
+{
+  "base": "a5d6dbbd5b04",
+  "unchangedPriorTests": 242,
+  "changedPriorTests": [],
+  "changedMethods": [
+    "ChangeNumRule"
+  ],
+  "unchangedOtherMethods": 16,
+  "completeSourceOutsideSelectedBodyUnchanged": true,
+  "manifests": [
+    {
+      "file": "docs/program/source-provenance.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true,
+      "priorConclusionsUnchanged": true
+    },
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true,
+      "priorConclusionsUnchanged": true
+    }
+  ],
+  "storage": {
+    "includesIgnored": true,
+    "pythonSourceHelperExecutableFiles": []
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "command": "../../node_modules/.bin/vitest run src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+  "cwd": "apps/office",
+  "exitCode": 0,
+  "originalBytes": 236,
+  "sha256": "df28f6011ff6357891d45ff22142a9fe388dd694cbe61b18d63aca8dbbe58372",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  6 passed (6)"
+  ]
+}

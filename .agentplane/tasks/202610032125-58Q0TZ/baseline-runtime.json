@@ -1,0 +1,27 @@
+{
+  "command": "../../node_modules/.bin/vitest run src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts",
+  "cwd": "apps/office",
+  "exitCode": 1,
+  "originalBytes": 5108,
+  "sha256": "381b7ce0fec87facfca53306fe70fd40a0977ef96150502986257ef8f6a6fd62",
+  "summary": [
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts (6 tests | 5 failed) 14ms",
+    " Test Files  1 failed (1)",
+    "      Tests  5 failed | 1 passed (6)",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts > removes the old client before rebinding and appends it after new rule guard lookups",
+    "AssertionError: expected [ 'remove:old', 'add:new' ] to deeply equal [ Array(10) ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts:149:19",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts > retains same-rule removal and reappend order without duplicate clients",
+    "AssertionError: expected [ 'remove:old', 'add:old' ] to deeply equal [ Array(10) ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts:167:19",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts > short circuits absent old rule then registers the retained detached text after assignment",
+    "AssertionError: expected [ 'add:new' ] to deeply equal [ 'rule:none', 'rule:new', …(4) ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts:192:19",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts > retains bound and unbound no-text root and actual phantom release guard paths",
+    "AssertionError: expected [] to deeply equal [ 'rule:none', 'rule:new', 'text' ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts:214:21",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts > uses the same explicit client transfer for a bound hidden record without altering shown ownership",
+    "AssertionError: expected [ 'remove:old', 'add:new' ] to deeply equal [ Array(10) ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-rule-transfer.test.ts:241:19"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "vendorAbsentDuringAllRuns": true,
+  "sequential": true,
+  "restoredPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "results": [
+    {
+      "command": "npm run test",
+      "exitCode": 0,
+      "signal": null,
+      "log": "offline-all-tests.log",
+      "originalBytes": 2217,
+      "sha256": "6165e8152c0fb13551425ff5fa5a048a3de10af2b4b8eeb302580c8c823ac1e4",
+      "summaries": [
+        " Test Files  192 passed (192)",
+        "      Tests  871 passed (871)",
+        "Statements   : 100% ( 11099/11099 )",
+        "Branches     : 100% ( 8377/8377 )",
+        "Functions    : 100% ( 2955/2955 )",
+        "Lines        : 100% ( 10187/10187 )",
+        " Test Files  36 passed (36)",
+        "      Tests  109 passed (109)",
+        "Statements   : 100% ( 1523/1523 )",
+        "Branches     : 100% ( 1080/1080 )",
+        "Functions    : 100% ( 384/384 )",
+        "Lines        : 100% ( 1464/1464 )"
+      ]
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-source-provenance.test.ts",
+      "exitCode": 0,
+      "signal": null,
+      "log": "offline-script-tests.log",
+      "originalBytes": 223,
+      "sha256": "bb95bfc2866e30e5734afd56d0416ed8bafba338234eb69bc3b9c4f4534dd972",
+      "summaries": [
+        " Test Files  3 passed (3)",
+        "      Tests  12 passed (12)"
+      ]
+    },
+    {
+      "command": "npm run test:e2e",
+      "exitCode": 0,
+      "signal": null,
+      "log": "offline-browser-tests.log",
+      "originalBytes": 4485,
+      "sha256": "594a47056f95e24ff84090fbabf36ebe8b38f1d41fad8fb82f78d8ed54599684",
+      "summaries": [
+        "Running 20 tests using 4 workers",
+        "  20 passed (9.2s)"
+      ]
+    }
+  ],
+  "error": null
+}
