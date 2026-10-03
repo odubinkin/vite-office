@@ -1,0 +1,118 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts (6 tests | 6 failed) 12ms
+   × keeps distinct required native constructors and private mode defaults 7ms
+   × binds hidden records while preserving the actual shown client and numbered registry 2ms
+   × creates shown production records and registers rule before registry, removing in reverse order 1ms
+   × uses the rule-only factory with false mode for roots and records of either text mode 1ms
+   × retains native no-rule, no-text and non-document registration branches 0ms
+   × leaves existing ChangeNumRule policy independent of the hidden constructor flag 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts > keeps distinct required native constructors and private mode defaults
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts:86:49
+     84|       const record = new construction(text, mode);
+     85|       expect(record.GetTextNode()).toBe(text);
+     86|       expect(record.GetNumRule() === undefined).toBe(true);
+       |                                                 ^
+     87|       expect(hiddenFlag(record)).toBe(mode);
+     88|       expect(record.GetParent()).toBeUndefined();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts > binds hidden records while preserving the actual shown client and numbered registry
+TypeError: this.mpNumRule?.AddTextNode is not a function
+ ❯ SwNodeNum.PreAdd src/sw/source/core/SwNumberTree/SwNodeNum.ts:36:23
+     34|     if (this.mpNumRule === undefined) this.mpNumRule = this.textNode?.…
+     35|     if (this.textNode !== undefined) {
+     36|       this.mpNumRule?.AddTextNode(this.textNode);
+       |                       ^
+     37|       if (this.textNode.GetNodes().IsDocNodes())
+     38|         this.textNode.getIDocumentListItems().addListItem(this);
+ ❯ SwNodeNum.AddChild src/sw/source/core/SwNumberTree/SwNumberTree.ts:104:11
+ ❯ SwNodeNum.AddChild src/sw/source/core/SwNumberTree/SwNumberTree.ts:101:15
+ ❯ SwNodeNum.AddChild src/sw/source/core/SwNumberTree/SwNumberTree.ts:101:15
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts:117:10
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts > creates shown production records and registers rule before registry, removing in reverse order
+AssertionError: expected undefined to be false // Object.is equality
+
+- Expected:
+false
+
++ Received:
+undefined
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts:183:32
+    181|     text.AddToList();
+    182|     const record = required(text.GetNum());
+    183|     expect(hiddenFlag(record)).toBe(false);
+       |                                ^
+    184|     expect(record.GetNumRule()).toBe(rule);
+    185|     expect(trace).toEqual(["rule-add", "registry-add"]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts > uses the rule-only factory with false mode for roots and records of either text mode
+AssertionError: expected false to be undefined
+
+- Expected:
+undefined
+
++ Received:
+false
+
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts:203:36
+    201|       const unbound = create(record);
+    202|       expect(unbound.GetTextNode() === undefined).toBe(true);
+    203|       expect(unbound.GetNumRule()).toBeUndefined();
+       |                                    ^
+    204|       expect(hiddenFlag(unbound)).toBe(false);
+    205|       lifecycle(record).PreAdd();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts > retains native no-rule, no-text and non-document registration branches
+TypeError: this.mpNumRule?.AddTextNode is not a function
+ ❯ SwNodeNum.PreAdd src/sw/source/core/SwNumberTree/SwNodeNum.ts:36:23
+     34|     if (this.mpNumRule === undefined) this.mpNumRule = this.textNode?.…
+     35|     if (this.textNode !== undefined) {
+     36|       this.mpNumRule?.AddTextNode(this.textNode);
+       |                       ^
+     37|       if (this.textNode.GetNodes().IsDocNodes())
+     38|         this.textNode.getIDocumentListItems().addListItem(this);
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts:230:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts > leaves existing ChangeNumRule policy independent of the hidden constructor flag
+TypeError: this.mpNumRule?.AddTextNode is not a function
+ ❯ SwNodeNum.PreAdd src/sw/source/core/SwNumberTree/SwNodeNum.ts:36:23
+     34|     if (this.mpNumRule === undefined) this.mpNumRule = this.textNode?.…
+     35|     if (this.textNode !== undefined) {
+     36|       this.mpNumRule?.AddTextNode(this.textNode);
+       |                       ^
+     37|       if (this.textNode.GetNodes().IsDocNodes())
+     38|         this.textNode.getIDocumentListItems().addListItem(this);
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-construction.test.ts:271:23
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  02:12:31
+   Duration  922ms (transform 193ms, setup 106ms, import 227ms, tests 12ms, environment 488ms)
+
