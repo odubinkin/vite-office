@@ -4,7 +4,7 @@ title: "Restore numbering record constructor and registration policy"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-03T19:24:19.562Z"
+  updated_by: "CODER"
+  note: "Full verify exit0:827app/109inventory/20browser/2resource, both coverage100percent. Vendor-absent217core+9boundary pass with exact pin restored;types/old matcher-body-metadata integrity/storage0/doctor-routing-diff pass. Selected contracts only;full goal remains open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-03T19:24:48.151Z"
+  updated_by: "EVALUATOR"
+  note: "Exact semantic HEAD84ee2979 restores selected native numbering constructor/default/registration contracts with complete required evidence; leaf only, no broader parity promotion."
+  evaluated_sha: "84ee2979d26df8a2b85afff42934c3a511501a31"
+  blueprint_digest: "5d1f05d0de2eb0b12b6771ac53ffe15ab835120f5c3dab04ddb46f7331b91de2"
+  evidence_refs:
+    - ".agentplane/tasks/202610031908-26F634/README.md"
+    - ".agentplane/tasks/202610031908-26F634/quality/20261003-192448151-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610031908-26F634/quality/20261003-192448151-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610031908-26F634/quality/20261003-192448151-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610031908-26F634/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610031908-26F634/full-verify-summary.json"
+    - ".agentplane/tasks/202610031908-26F634/offline-results.json"
+    - ".agentplane/tasks/202610031908-26F634/scope-integrity.json"
+    - ".agentplane/tasks/202610031908-26F634/artifact-storage.json"
+    - ".agentplane/tasks/202610031908-26F634/source-inspection.json"
+  findings:
+    - "Reviewed25semantic paths against approved scope and pinned constructor/PreAdd/PostRemove/Create contracts. Required text+boolean and rule-only overloads,private flag,false root/factory default and initially unbound text rule match. Hidden registration suppression and native shown release order preserve flag-independent ChangeNumRule. No compatibility bridge or unrelated runtime edits."
+    - "Six final authored cases fail baseline and corrected827app/109inventory/20browser/2resource plus both100percent coverage gates pass. Vendor-absent217core+9boundary cases prove selected project tests independent of pin; restoration exact.19prior test adaptations retain matcher/literal arguments and216other test/spec files are unchanged. Metadata3rows each preserves status/default/deviation boundaries."
+    - "Ignored-inclusive Agentplane artifact scan has0Python/helper/source/executable files; source evidence contains hashes/conclusions only. Same actor performed this separate evaluator phase; no independent agent claimed. Doctor0errors/2knownwarnings,policy routing and diffcheck pass."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore complete selected native constructor family and hidden registration lifecycle, adapting existing callers while preserving assertions and artifact/test restrictions."
+  -
+    type: "verify"
+    at: "2026-10-03T19:24:19.562Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full verify exit0:827app/109inventory/20browser/2resource, both coverage100percent. Vendor-absent217core+9boundary pass with exact pin restored;types/old matcher-body-metadata integrity/storage0/doctor-routing-diff pass. Selected contracts only;full goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-03T19:24:00.647Z"
+doc_updated_at: "2026-10-03T19:24:19.619Z"
 doc_updated_by: "CODER"
 description: "Iteration67 under C9TN6M: replace merged text/optional-rule SwNodeNum constructor with native text-pointer+required hidden bool and independent rule-pointer overload; preserve null initial text rule, root hidden=false, private flag, factory and complete selected PreAdd/PostRemove suppression. Adapt all existing callers and owned tests without old matcher/literal changes. No upstream tests/source/helper artifacts or IO/recovery changes."
 sections:
@@ -53,6 +81,39 @@ sections:
     Command: vendor-absent focused core and boundary/resource tests (see offline-results.json exact commands). Result: pass,terminal exits0,217core cases/48files and9boundary/resource cases;pin restored in finally to9bc445578031fecf56086729d8e4940c77e14d65. Scope:project tests execute without reading/compiling/invoking upstream. Static provenance/resource inventory CLI audit phases in full verify may read pinned inputs.
     Command: app typechecking and focused core Vitest. Result: pass. Evidence:final six authored baseline cases all fail before implementation; baseline constructor assignment and old-bridge rejection also fail typecheck,corrected types and217core cases pass.
     Command: AST/hash integrity,ignored-inclusive storage scan,ap doctor,node .agentplane/policy/check-routing.mjs,git diff --check. Result:pass. Evidence:19old test files constructor-adapted,all prior matcher arguments preserved,216other old test/spec files byte-identical;14+85+11other owner-method bodies unchanged. Each manifest changes3rows with212otherrows and all non-evidence/status/default/deviation fields preserved. Python/helper/source/executable artifact count0. Doctor0errors/2existingwarnings/2info,routingOK,diffclean. No native code compiled/invoked and no scripts/source saved in Agentplane. Exact semantic-SHA quality and leaf closure follow; parent goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-03T19:24:19.562Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full verify exit0:827app/109inventory/20browser/2resource, both coverage100percent. Vendor-absent217core+9boundary pass with exact pin restored;types/old matcher-body-metadata integrity/storage0/doctor-routing-diff pass. Selected contracts only;full goal remains open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-03T19:24:00.647Z, excerpt_hash=sha256:3e90dcfa0862bfea56eab72eb80594a28c3ec10dd1093ba9d42414060db45951
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610031908-26F634/blueprint/resolved-snapshot.json
+    - old_digest: 5d1f05d0de2eb0b12b6771ac53ffe15ab835120f5c3dab04ddb46f7331b91de2
+    - current_digest: 5d1f05d0de2eb0b12b6771ac53ffe15ab835120f5c3dab04ddb46f7331b91de2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610031908-26F634
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610031908-26F634
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic commit;retain task evidence and prior iterations. No history rewriting."
   Findings: "Pinned native manual inspection confirms distinct required constructor families, null initial text rule, false no-text flag, PreAdd binding before shown rule/registry membership and hidden suppression, PostRemove registry-before-client removal and rule clearing. ChangeNumRule body remains byte-identical and flag-independent. Exact owner-call inventory is77 calls in29files after excluding PolicyRoot, which has its own explicit unrelated constructor; the initial78 count included that subclass and is corrected by constructor-call-inventory.json. Six new final authored cases fail baseline; baseline typechecking rejects overload assignment and old bridges. Corrected217 focused core tests/types pass.19prior tests adapt constructor arguments; all prior matcher arguments and literal expectations preserved. Extra/foreign removal fixture texts resolve the supplied rule via controlled actual text getters, and the missing equivalent removal argument binds through unchanged ChangeNumRule without altering identity-deduplicated clients.14other SwNodeNum methods,85other SwTextNode methods and11SwList methods remain unchanged. Metadata exactly3existing rows each,all non-evidence fields/order preserved. User storage restriction audited ignored-inclusive: Python0,prohibited helper/source/executable artifact0. Historical removal already recorded by4bf67a64; no redundant deletion commit because no such files remain. Full native redline/original arrays,layout,debug diagnostics,destructor/client/final/const/browser obligations and goal remain open. Project tests never access upstream; only static source/resource CLI audits may read pin. No native compilation/probes this iteration."
 id_source: "generated"
@@ -82,6 +143,39 @@ Command: npm run verify. Result: pass,terminal exit0. Evidence:827application te
 Command: vendor-absent focused core and boundary/resource tests (see offline-results.json exact commands). Result: pass,terminal exits0,217core cases/48files and9boundary/resource cases;pin restored in finally to9bc445578031fecf56086729d8e4940c77e14d65. Scope:project tests execute without reading/compiling/invoking upstream. Static provenance/resource inventory CLI audit phases in full verify may read pinned inputs.
 Command: app typechecking and focused core Vitest. Result: pass. Evidence:final six authored baseline cases all fail before implementation; baseline constructor assignment and old-bridge rejection also fail typecheck,corrected types and217core cases pass.
 Command: AST/hash integrity,ignored-inclusive storage scan,ap doctor,node .agentplane/policy/check-routing.mjs,git diff --check. Result:pass. Evidence:19old test files constructor-adapted,all prior matcher arguments preserved,216other old test/spec files byte-identical;14+85+11other owner-method bodies unchanged. Each manifest changes3rows with212otherrows and all non-evidence/status/default/deviation fields preserved. Python/helper/source/executable artifact count0. Doctor0errors/2existingwarnings/2info,routingOK,diffclean. No native code compiled/invoked and no scripts/source saved in Agentplane. Exact semantic-SHA quality and leaf closure follow; parent goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-03T19:24:19.562Z — VERIFY — ok
+
+By: CODER
+
+Note: Full verify exit0:827app/109inventory/20browser/2resource, both coverage100percent. Vendor-absent217core+9boundary pass with exact pin restored;types/old matcher-body-metadata integrity/storage0/doctor-routing-diff pass. Selected contracts only;full goal remains open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-03T19:24:00.647Z, excerpt_hash=sha256:3e90dcfa0862bfea56eab72eb80594a28c3ec10dd1093ba9d42414060db45951
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610031908-26F634/blueprint/resolved-snapshot.json
+- old_digest: 5d1f05d0de2eb0b12b6771ac53ffe15ab835120f5c3dab04ddb46f7331b91de2
+- current_digest: 5d1f05d0de2eb0b12b6771ac53ffe15ab835120f5c3dab04ddb46f7331b91de2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610031908-26F634
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610031908-26F634
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
