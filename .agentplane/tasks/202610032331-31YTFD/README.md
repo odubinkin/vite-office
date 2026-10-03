@@ -4,7 +4,7 @@ title: "Focus Writer document when inactive popup menu has no saved owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved iteration79 document focus fallback on unopened Writer menubar Escape under persistent user parity authorization; no upstream test dependency or source/helper artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-03T23:50:35.357Z"
+doc_updated_at: "2026-10-03T23:53:28.731Z"
 doc_updated_by: "CODER"
 description: "Iteration79 under C9TN6M: restore native default-to-document behavior for Escape on activated menubar without popup when no live saved owner, through active Writer editing-host reference. Preserve saved-owner precedence and popup/submenu/command paths. No upstream source/helper artifacts or test dependency."
 sections:
@@ -52,6 +52,7 @@ sections:
     Second fullverify938cases/197files allpass and100%branches; required coverage gate exposed actual Writer client callback line418 only exercised in Chromium, not owned unit suite (statement/line99.99%,function99.96%). Added actual Desktop/Writer client focus-and-beforeinput integration case to existing new test file, preserving251prior tests, no threshold relaxation or production changes. This exercises true view ref wiring rather than duplicating generic callback fixture. Failed gate retained as writer-callback-coverage-full-verify-summary.json.
     Actual Writer integration focus passed immediately; JSDOM does not create a native caret on editing-host focus, so input assertion initially failed. Set an explicit owned paragraph Range before beforeinput, as other owned editor tests do; Chromium already validates actual native caret/input behavior. Corrected final87cases/7files pass; earlier fixture outcome retained as writer-selection-fixture-runtime.json. All production paths unchanged after effect-dependency correction.
     Third fullverify939app/197files109inventory/36files35browser2resources allpass100%coverage; static provenance failed because new local evidence used strings instead of required path/marker objects. Corrected only new evidence formatting to source objects/runtime #markers and appended actual routesWriterClient integration marker, preserving old evidence/status/default/ownership. Outcome retained as evidence-schema-full-verify-summary.json.
+    Final exact-prefix integrity check caught accidental replacement of an existing native C++ :: marker while formatting new runtime evidence. Restored all existing runtime evidence prefixes byte-for-byte from base ea68a548bd7d, keeping only5new #markers per changed row. Final static manifest gates rechecked after correction; production/tests unchanged from fullverify and vendor-absent passing hashes. Legacy Playwright archive held one owned test source member; source-bearing archive removed separately at b23c4f18c359, failure context/screenshot preserved, cleanup hash/member summary in archive-cleanup.json.
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +86,4 @@ Owned baseline corrected missing QueryCommand descriptor fixture: initial4fail i
 Second fullverify938cases/197files allpass and100%branches; required coverage gate exposed actual Writer client callback line418 only exercised in Chromium, not owned unit suite (statement/line99.99%,function99.96%). Added actual Desktop/Writer client focus-and-beforeinput integration case to existing new test file, preserving251prior tests, no threshold relaxation or production changes. This exercises true view ref wiring rather than duplicating generic callback fixture. Failed gate retained as writer-callback-coverage-full-verify-summary.json.
 Actual Writer integration focus passed immediately; JSDOM does not create a native caret on editing-host focus, so input assertion initially failed. Set an explicit owned paragraph Range before beforeinput, as other owned editor tests do; Chromium already validates actual native caret/input behavior. Corrected final87cases/7files pass; earlier fixture outcome retained as writer-selection-fixture-runtime.json. All production paths unchanged after effect-dependency correction.
 Third fullverify939app/197files109inventory/36files35browser2resources allpass100%coverage; static provenance failed because new local evidence used strings instead of required path/marker objects. Corrected only new evidence formatting to source objects/runtime #markers and appended actual routesWriterClient integration marker, preserving old evidence/status/default/ownership. Outcome retained as evidence-schema-full-verify-summary.json.
+Final exact-prefix integrity check caught accidental replacement of an existing native C++ :: marker while formatting new runtime evidence. Restored all existing runtime evidence prefixes byte-for-byte from base ea68a548bd7d, keeping only5new #markers per changed row. Final static manifest gates rechecked after correction; production/tests unchanged from fullverify and vendor-absent passing hashes. Legacy Playwright archive held one owned test source member; source-bearing archive removed separately at b23c4f18c359, failure context/screenshot preserved, cleanup hash/member summary in archive-cleanup.json.

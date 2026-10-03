@@ -32,5 +32,20 @@
       "sha256": "b051a196b63eb5c2d56ebbf73bd8dd057480ef1f8f96edccd9c1ab0a264477e1"
     }
   ],
-  "productionOutsideDocumentFocusAndHostReferenceIdentical": true
+  "productionOutsideDocumentFocusAndHostReferenceIdentical": true,
+  "storage": {
+    "ignoredIncluded": true,
+    "files": 2678,
+    "codeFiles": [],
+    "executableFiles": [],
+    "archives": [],
+    "allAgentplanePython": []
+  },
+  "pinAndSevenSourceHashesUnchanged": true,
+  "offlineVendorRestored": {
+    "vendorRestored": true,
+    "temporaryPathAbsent": true,
+    "allExecutedPassed": true
+  },
+  "separateLegacySourceArchiveCleanupCommit": "b23c4f18c359ea6a97b0682bfb48a00c6c07085a"
 }

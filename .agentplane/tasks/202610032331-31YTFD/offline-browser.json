@@ -1,0 +1,13 @@
+{
+  "command": "npm run test:e2e",
+  "vendorAbsent": true,
+  "exit": 0,
+  "signal": null,
+  "bytes": 6571,
+  "sha256": "487aba94c409b66191c0fa9bb9531b28b7cb4cefa5b882415f518a5172cff000",
+  "summary": [
+    "Running 35 tests using 4 workers",
+    "  35 passed (11.8s)"
+  ],
+  "tail": []
+}
