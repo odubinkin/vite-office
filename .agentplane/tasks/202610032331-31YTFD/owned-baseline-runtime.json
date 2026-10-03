@@ -1,0 +1,13 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+  "exit": 1,
+  "sha256": "442bf973c172bf1859b38aec8f2482c23616065c878f282b2d5e58b14c71b1d7",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  3 failed | 5 passed (8)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx > menubar document fallback > focuses the document on unopened Escape when no owner was saved",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx > menubar document fallback > defaults to the document when the saved owner is disconnected",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx > menubar document fallback > routes fallback to the active menu's own frame client"
+  ]
+}

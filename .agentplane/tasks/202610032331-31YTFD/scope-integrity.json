@@ -1,0 +1,35 @@
+{
+  "base": "ea68a548bd7d",
+  "priorTests": 251,
+  "byteIdenticalPriorTests": 251,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changedRows": 3,
+      "evidenceOnly": true,
+      "statusesDefaultsOwnershipPriorConclusionsPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changedRows": 3,
+      "evidenceOnly": true,
+      "statusesDefaultsOwnershipPriorConclusionsPreserved": true
+    }
+  ],
+  "productionHashes": [
+    {
+      "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+      "sha256": "d37f5a9637f61efb63c2dbee56d04b5a656142d443b6981d86d996434f9cfb9c"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "4262a294467dab0b95a8d8965d8a766dc8e37e333f5754b0049af0d5530ac920"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+      "sha256": "6681ad7dea902c175430c6c360083fb45fe01767e70465e1df172f83d5dfeaab"
+    }
+  ]
+}

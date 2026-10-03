@@ -1,0 +1,10 @@
+{
+  "command": "npm run build && node_modules/.bin/playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-menu-document-focus.spec.ts apps/office/e2e/writer-menu-saved-focus.spec.ts",
+  "exit": 0,
+  "sha256": "f1d86d9ad1743b3f42e6bc1450c62cac4da7e5d308ee226f0d940b4c9f91bd8b",
+  "summary": [
+    "Running 6 tests using 2 workers",
+    "  6 passed (2.9s)"
+  ],
+  "tail": []
+}
