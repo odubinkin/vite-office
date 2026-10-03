@@ -1,0 +1,87 @@
+{
+  "logs": [
+    {
+      "path": "baseline-destination.log",
+      "bytes": 3466,
+      "sha256": "06927bf5c7ad8bb505ad4a16caf896ca0633bf281535bfcd857ac3a7e7c8f9ec"
+    },
+    {
+      "path": "full-verify-first.log",
+      "bytes": 7223,
+      "sha256": "7c8a115918e193b2841a5465f88e0816424d17ddc0df9fefe6067485f5a47a0f"
+    },
+    {
+      "path": "full-verify-second.log",
+      "bytes": 11013,
+      "sha256": "e71886a99a0c72e3439db88869f01b473156202793e2e771651b1ecb732cf722"
+    },
+    {
+      "path": "isolated-responsive.log",
+      "bytes": 4203,
+      "sha256": "285f4ee11261e95a84dee874d945f2825f836070e31b9005cea9c3b52c8fb5a8"
+    },
+    {
+      "path": "isolated-worker-retry.log",
+      "bytes": 238,
+      "sha256": "52cc07209d565082bb748830ead3978c86a67156ea65c7c74da6e24d7882a6f4"
+    },
+    {
+      "path": "offline-app.log",
+      "bytes": 242,
+      "sha256": "79700336b082a0c284ee94826b4adf670c0aec505d8b58dbf3a0162bd5bdb4fb"
+    },
+    {
+      "path": "offline-boundaries.log",
+      "bytes": 219,
+      "sha256": "73a4da5847931cd92bf32fc6947dfe8da784f6b48e6ac7963694e5841ce87959"
+    }
+  ],
+  "implementationCommit": "910775c2b7a5",
+  "combinedEvidenceCommit": "3a555d74af410d90c6ba9aaeaeda59a40b460650",
+  "corePathsByteIdenticalSinceImplementation": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts"
+  ],
+  "sharedFullVerify": {
+    "path": ".agentplane/tasks/202610031549-F4HAPT/artifacts/full-verify.log",
+    "sha256": "b9527456cfa30c958cf20d985637aaf56027a4eb9792de14dc81faa45dfd282b",
+    "exitCode": 0,
+    "app": {
+      "files": 179,
+      "tests": 792,
+      "coverage": [
+        100,
+        100,
+        100,
+        100
+      ]
+    },
+    "inventory": {
+      "files": 36,
+      "tests": 109,
+      "coverage": [
+        100,
+        100,
+        100,
+        100
+      ]
+    },
+    "browser": 20
+  },
+  "separateBrowserCommit": "2d2ccc6eb5ec",
+  "separateScratchCommit": "3a555d74af410d90c6ba9aaeaeda59a40b460650",
+  "finalInventory": {
+    "tests": 109,
+    "coverage": [
+      100,
+      100,
+      100,
+      100
+    ],
+    "vendorAbsent": true
+  },
+  "nativeFilesUnchanged": 3,
+  "sourceArtifacts": 0,
+  "limits": "Core implementation scope evaluated at910775c2b7a5; combined current semantic HEAD includes separate browser/scratch fixes. Old216other test files unchanged in core commit; separately approved browser adds tests without changing old bodies."
+}

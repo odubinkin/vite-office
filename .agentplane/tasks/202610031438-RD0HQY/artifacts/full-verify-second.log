@@ -62,7 +62,7 @@ Module boundary check passed: 213 runtime sources, 887 relative imports, 14 allo
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
 -------------------|---------|----------|---------|---------|-------------------
 
@@ -88,7 +88,7 @@ Lines        : 100% ( 10099/10099 )
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
-File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
 -------------------|---------|----------|---------|---------|-------------------
 
@@ -120,7 +120,7 @@ dist/assets/index-vK6WJH0x.css         58.93 kB │ gzip:   9.59 kB
 dist/assets/index-h9lC6hRf.js       1,157.77 kB │ gzip: 278.93 kB
 
 ✓ built in 585ms
-[plugin builtin:vite-reporter] 
+[plugin builtin:vite-reporter]
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
@@ -161,7 +161,7 @@ Running 19 tests using 4 workers
   ✓  19 apps/office/e2e/writer-responsive-sidebar.spec.ts:76:1 › the mobile table grid dismisses outside and More Options opens the full dialog (616ms)
 
 
-  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll 
+  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll
 
     Test timeout of 30000ms exceeded.
 
@@ -201,5 +201,5 @@ Running 19 tests using 4 workers
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
   1 failed
-    apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll 
+    apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll
   18 passed (39.1s)
