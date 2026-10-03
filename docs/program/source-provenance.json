@@ -3498,6 +3498,38 @@
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
             "marker": "passes the operation context through protected root and phantom traversal before text-owner notification"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "owns zero-argument text policies and destruction query with native private defaults"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "checks reading before destruction for text and caller-context root policy"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "delegates the two real-record predicates independently to the text owner"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "keeps the private temporary blocker independent of global notification enablement"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "skips a blocked owned paragraph notification while preserving validated prefix and topology"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "suppresses numbering callbacks and counter validation during actual document disposal"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "sets destruction before list removal and retains existing undo and state disposal order"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "uses destruction context for roots and phantoms while real records retain their live owner"
           }
         ],
         "upstream": [
@@ -3648,6 +3680,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
             "marker": "SwNumRule::MakeNumString("
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+            "marker": "SwNodeNum::IsNotifiable"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+            "marker": "SwNodeNum::IsNotificationEnabled"
           }
         ]
       },
@@ -3667,7 +3707,8 @@
         "Iteration54 restores protected abstract HasCountedChildren, IsCountedForNumbering and IsCountPhantoms in the base, and removes all three from the public SwNodeNum surface. Concrete overrides stay protected because TypeScript rejects private narrowing of an inherited protected method; an owned virtual compiler fixture proves2415 for private and no diagnostics for protected, with no helper/source file saved. This is the narrowest valid inherited TypeScript contract, no private-C++ equivalence or new registered deviation claim. All55production method bodies are unchanged; six old suites retain249literal/dynamic matcher argument AST records through15test-only protected observations, normalizing only equivalent observation syntax. ForeignNode now fulfills the mandatory numbered-policy contract with true while Writer type rejection remains false. Three new tests cover exact zero-argument boolean signatures/public keys, required abstract numbered override, subtype virtual dispatch and real connected root/phantom/descendant/orphan policies with raw caches unchanged. Fresh pinned declaration/body hashes support manual inspection only; no fresh compiled native/platform lifetime claim. Project tests never access upstream; no helper/native source bodies in task artifacts; no whole-module/status/default/goal, registered IO/recovery or gate promotion. Ordered-container and other native API/lifetime obligations remain separately unverified.",
         "Iteration55 restores native public SwNodeNum.IsNotificationEnabled access while preserving the protected base contract and all55production method bodies. Two project-owned tests verify public keys, supplied SwDoc parameter type, boolean result and actual item/root/phantom normal-reading dispatch, text-owner precedence over foreign context, retained detached owner and nonvalidating raw counters/topology. All old test files are unchanged. Four fresh pinned file hashes and four declaration/body hashes support manual source inspection only; no new compiled native or lifetime certification. Native mandatory document reference and dtor/client/notifiable/redline/layout predicates remain separately unverified; no signature/default/full-module claim. Project tests never access upstream; no helper/source bodies in Agentplane. One metadata row only, no status/default/goal/deviation/IO/recovery/gate promotion.",
         "Iteration56 replaces raw child arrays and push-based transfers with a source-owned o3tl SortedVector using private vector storage, injected strict ordering, binary lower/upper bounds, comparator-equivalent lookup/single insert and destination-preserving sorted bulk union. Core creation/insertion/suffix transfer/removal/lookup/traversal use the container; MoveChildren clears it without replacing identity. Writer counted-child traversal uses native iteration and dynamic type guard. Nine existing diagnostic suites observe iterable snapshots with prior expected values retained. Owned generic union matrices and actual document-record tests cover ordering/equivalence, retained destination object, native parent assignment before duplicate rejection, phantom recursion, raw counters and factory rejection. Fresh native manual file/symbol hashes only; no compiled native or whole-header certification. Numeric index/end-minus-one, nullable out-of-range read and injected comparator bind the ECMAScript container representation. Unused initializer/copy/partial-order policies/native iterator-const/destructor/lifetime and wider tree API/context/range/redline/UI obligations stay unverified. No project test accesses upstream; no helper/source bodies in Agentplane; no whole-module/status/default/deviation/IO/recovery/coverage promotion.",
-        "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion."
+        "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
+        "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
@@ -4780,6 +4821,38 @@
           {
             "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
             "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "owns zero-argument text policies and destruction query with native private defaults"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "checks reading before destruction for text and caller-context root policy"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "delegates the two real-record predicates independently to the text owner"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "keeps the private temporary blocker independent of global notification enablement"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "skips a blocked owned paragraph notification while preserving validated prefix and topology"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "suppresses numbering callbacks and counter validation during actual document disposal"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "sets destruction before list removal and retains existing undo and state disposal order"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "uses destruction context for roots and phantoms while real records retain their live owner"
           }
         ],
         "upstream": [
@@ -4846,6 +4919,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/inc/doc.hxx",
             "marker": "void SetInReading("
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/doc.hxx",
+            "marker": "IsInDtor() const"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
+            "marker": "mbDtor = true;"
           }
         ]
       },
@@ -4859,7 +4940,8 @@
       ],
       "preservedResponsibilities": [
         "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
-        "Iteration38 restores native document reading suppression for the existing shown-list notification path. SwDoc owns mbInReading=false and native IsInReading/SetInReading accessors; SwXMLImport brackets the existing parse lifetime and clears the flag on success or failure. List/tree operations propagate the actual document context. Worker graph16 restores direct text-node items in one complete text-node-range batch before attachment, retaining counted/restart/list identity and explicit rule type. Forty unchanged added native definitions compare60 sequences/2130 states including true/false reading, raw caches and notifications; literal genuine ODT/Worker/reopen expectations remain intact. Full native destructor/temporary notification blockers/layout/UNO/history/fields/live-style/serialization lifetime remain unverified; no whole-module promotion or registered IO change."
+        "Iteration38 restores native document reading suppression for the existing shown-list notification path. SwDoc owns mbInReading=false and native IsInReading/SetInReading accessors; SwXMLImport brackets the existing parse lifetime and clears the flag on success or failure. List/tree operations propagate the actual document context. Worker graph16 restores direct text-node items in one complete text-node-range batch before attachment, retaining counted/restart/list identity and explicit rule type. Forty unchanged added native definitions compare60 sequences/2130 states including true/false reading, raw caches and notifications; literal genuine ODT/Worker/reopen expectations remain intact. Full native destructor/temporary notification blockers/layout/UNO/history/fields/live-style/serialization lifetime remain unverified; no whole-module promotion or registered IO change.",
+        "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -6603,6 +6685,38 @@
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
             "marker": "passes the operation context through protected root and phantom traversal before text-owner notification"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "owns zero-argument text policies and destruction query with native private defaults"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "checks reading before destruction for text and caller-context root policy"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "delegates the two real-record predicates independently to the text owner"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "keeps the private temporary blocker independent of global notification enablement"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "skips a blocked owned paragraph notification while preserving validated prefix and topology"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "suppresses numbering callbacks and counter validation during actual document disposal"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "sets destruction before list removal and retains existing undo and state disposal order"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+            "marker": "uses destruction context for roots and phantoms while real records retain their live owner"
           }
         ],
         "upstream": [
@@ -6717,6 +6831,14 @@
           {
             "path": "vendor/libreoffice-reference/include/sal/detail/log.h",
             "marker": "#define SAL_DETAIL_WARN_IF_FORMAT"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::IsNotifiable"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::IsNotificationEnabled"
           }
         ]
       },
@@ -6740,7 +6862,9 @@
         "Iteration41 restores separate SetListRestart(bool) flag-only mutation and SetAttrListRestartValue(number) equality/sentinel/signed-Int16 conversion. Six complete unchanged pinned native definitions produce42 literal states, compared against84 actual normal/reading document states with setter/reset attempts. Existing ODT import explicitly calls both native setters; actual list counters, undo and Worker16 preserve inactive explicit zero/seven through reactivation. Exact integer-input setter slice only; absent getter diagnostic behavior, full defaults, clients and shared style lifetime remain unverified.",
         "Iteration42 restores GetAttrListRestartValue nonfatal missing-direct diagnostic and effective GetAttr fallback. Seven complete unchanged native getter/item/attribute-owner definitions plus four unchanged OSL/SAL macros/build definitions compare24 warning-enabled/disabled native states and24 actual normal/reading states with no item/handle/notification mutation. Missing/cleared86 returns pool1 independently of rule start9; direct signed16 values ignore the restart flag. Existing console.warn is the browser sink for the native warning-enabled diagnostic profile; native disabled-warning builds have the same returns. Full native logging filter/location/backtrace, sentinel-invalid typed reads, defaults/registry/clients/style lifetime remain unverified; no whole-module status or IO promotion.",
         "Iteration45 restores native SwNumFormat.IsItemize (CHAR_SPECIAL/BITMAP) and IsEnumeration (!IsItemize, including NONE), and actual SwTextNode HasNumber/HasBullet use of the bounded effective const format. The distinct ndtxt.cxx layout-update predicate reads raw owned GetNumFormat and rejects absent/NONE/CHAR_SPECIAL/BITMAP formats. Native source bodies plus actual native rule constructor/Get/GetNumFormat/Set/default profile execute1032 cases under ASan/UBSan:4 format classifications/copies,1008 node/ownership/count/registry profiles,4 root/phantom cases and16 registry masks. Real local document/record/registry methods match the literal results; diagnostic record, bounded actual-level, counted/phantom, null-layout, ordered-container and platform/font/graphics aliases are named. Scalar bitmap classification is not bitmap rendering or wider formatting support. Native full layout/redline/graphics/style/font/service/global lifetimes and full counter algorithm profiles remain individually unverified. Existing Worker16 classification/ownership survives for ARABIC/NONE/CHAR_SPECIAL; original numbering/UNO/ODT/browser assertions and the measured malformed-NONE browser guard are preserved. No module/status or goal promotion and no registered I/O/recovery deviation changes.",
-        "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion."
+        "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
+        "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion.",
+        "Required iteration64 decomposition moves the three unchanged browser grapheme boundary helpers from SwTextNode into their sole SwWrtShell editing consumer as private functions. The core no longer exports unrelated editing helpers and no forwarding/re-export shim is retained. All helper bodies,existing editing method bodies and prior test/spec files are unchanged; native notification ownership remains in SwTextNode. This resolves the enforced1000-line text-node limit without changing any limit,grapheme behavior,registered IO/recovery decision or semantic status/default. Existing browser Intl/code-point adapter behavior is retained; complete native cursor/grapheme lifetime is not newly certified."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
@@ -8397,6 +8521,18 @@
           {
             "marker": "SwWrtShellEditingOperations",
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+            "marker": "getWriterPreviousGraphemeBoundary"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+            "marker": "getWriterNextGraphemeBoundary"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+            "marker": "getWriterGraphemeBoundaries"
           }
         ],
         "upstream": [
@@ -8409,13 +8545,17 @@
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
       "localSymbols": [
         "SwWrtShellEditingPort",
-        "SwWrtShellEditingOperations"
+        "SwWrtShellEditingOperations",
+        "getWriterPreviousGraphemeBoundary",
+        "getWriterNextGraphemeBoundary",
+        "getWriterGraphemeBoundaries"
       ],
       "omittedResponsibilities": [
         "Native layout, table, object, and multi-selection edit modes outside the bounded browser text shell remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Separates Writer text, range, paste, split, and join algorithms from the SwWrtShell cursor identity and undo-notification orchestration boundary."
+        "Separates Writer text, range, paste, split, and join algorithms from the SwWrtShell cursor identity and undo-notification orchestration boundary.",
+        "Required iteration64 decomposition moves the three unchanged browser grapheme boundary helpers from SwTextNode into their sole SwWrtShell editing consumer as private functions. The core no longer exports unrelated editing helpers and no forwarding/re-export shim is retained. All helper bodies,existing editing method bodies and prior test/spec files are unchanged; native notification ownership remains in SwTextNode. This resolves the enforced1000-line text-node limit without changing any limit,grapheme behavior,registered IO/recovery decision or semantic status/default. Existing browser Intl/code-point adapter behavior is retained; complete native cursor/grapheme lifetime is not newly certified."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",

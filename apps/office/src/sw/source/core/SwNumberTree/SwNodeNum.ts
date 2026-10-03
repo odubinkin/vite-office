@@ -45,14 +45,16 @@ export class SwNodeNum extends SwNumberTreeNode {
     }
     this.mpNumRule = undefined;
   }
-  /** Reads existing shown-node notification policy. @param document - Native operation context. @returns Whether notification is enabled. */
+  /** Reads the text-owned blocker policy or no-text global policy. @param document - Native operation context. @returns Whether the record can be notified. */
   protected IsNotifiable(document: SwDoc): boolean {
-    return this.IsNotificationEnabled(document);
+    const textNode = this.GetTextNode();
+    return textNode === undefined ? this.IsNotificationEnabled(document) : textNode.IsNotifiable();
   }
-  /** Checks the native reading flag; dtor and temporary native client blockers remain outside this bounded lifetime. @param document - Required native operation context for no-text records. @returns Whether enabled. */
+  /** Delegates real records to text policy and checks the operation document for no-text records. @param document - Required native operation context for no-text records. @returns Whether enabled. */
   public override IsNotificationEnabled(document: SwDoc): boolean {
-    const owner = this.textNode?.GetDoc() ?? document;
-    return !owner.IsInReading();
+    const textNode = this.GetTextNode();
+    if (textNode !== undefined) return textNode.IsNotificationEnabled();
+    return !document.IsInReading() && !document.IsInDtor();
   }
   /** Validates the prefix before notifying the paragraph. @returns Nothing. */
   protected NotifyNode(): void {

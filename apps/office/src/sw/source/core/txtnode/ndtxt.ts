@@ -53,40 +53,6 @@ import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
 import type { WriterHyperlink } from "./fmtatr2";
 
-/** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
-export function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
-  const boundaries = getWriterGraphemeBoundaries(text);
-  let previous = 0;
-  for (const boundary of boundaries) {
-    if (boundary >= offset) return previous;
-    previous = boundary;
-  }
-  /* v8 ignore next -- Boundary enumeration includes text.length for a valid cursor offset. */
-  return previous;
-}
-
-/** Finds the grapheme end immediately after a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Next grapheme boundary. */
-export function getWriterNextGraphemeBoundary(text: string, offset: number): number {
-  for (const boundary of getWriterGraphemeBoundaries(text)) if (boundary > offset) return boundary;
-  /* v8 ignore next -- Callers handle the text-end cursor before requesting a boundary. */
-  return text.length;
-}
-
-/** Enumerates UTF-16 grapheme boundaries with a code-point fallback. @param text - Paragraph text. @returns Ordered boundaries including zero and text length. */
-function getWriterGraphemeBoundaries(text: string): readonly number[] {
-  const boundaries = [0];
-  if (typeof Intl.Segmenter === "function") {
-    const segments = new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text);
-    for (const segment of segments) boundaries.push(segment.index + segment.segment.length);
-    return boundaries;
-  }
-  let offset = 0;
-  for (const character of text) {
-    offset += character.length;
-    boundaries.push(offset);
-  }
-  return boundaries;
-}
 import { SwNumRuleItem } from "../para/paratr";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
@@ -122,6 +88,7 @@ export class SwTextNode extends SwContentNode {
   private mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
   private mbInSetOrResetAttr = false;
   private m_bLastOutlineState = false;
+  private m_bNotifiable = true;
 
   /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
   public constructor(
@@ -413,6 +380,15 @@ export class SwTextNode extends SwContentNode {
     }
     handler.finish();
     return removed;
+  }
+  /** Checks the text-owned temporary blocker before global notification policy. @returns Whether the paragraph can be notified. */
+  public IsNotifiable(): boolean {
+    return this.m_bNotifiable && this.IsNotificationEnabled();
+  }
+  /** Checks the owning document reading and destruction phases. @returns Whether notifications are globally enabled. */
+  public IsNotificationEnabled(): boolean {
+    const document = this.GetDoc();
+    return !document.IsInReading() && !document.IsInDtor();
   }
   /** Reports direct list-level ownership. @returns Whether a direct item exists. */
   public HasAttrListLevel(): boolean {

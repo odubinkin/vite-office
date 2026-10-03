@@ -46,7 +46,12 @@ export interface WriterEmbeddedFont {
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  private mbDtor = false;
   private mbInReading = false;
+  /** Reports the native document destruction phase. @returns Destruction flag. */
+  public IsInDtor(): boolean {
+    return this.mbDtor;
+  }
   /** Reports the native document reading phase. @returns Reading flag. */
   public IsInReading(): boolean {
     return this.mbInReading;
@@ -297,6 +302,7 @@ export class SwDoc {
   }
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
+    this.mbDtor = true;
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
     this.undoManager.Dispose();
     this.stateManager.Dispose();

@@ -5,12 +5,7 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition, type SwPaM, type WriterTextRange } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import { createWriterListItemSet } from "../../core/doc/list";
-import {
-  getWriterNextGraphemeBoundary,
-  getWriterPreviousGraphemeBoundary,
-  type SwTextFragment,
-  type SwTextNode as WriterParagraph,
-} from "../../core/txtnode/ndtxt";
+import type { SwTextFragment, SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
 import {
   SwUndoDelete,
   SwUndoJoinParagraphs,
@@ -29,6 +24,40 @@ import {
   type WriterPasteParagraph,
 } from "../dochdl/swdtflvr";
 
+/** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
+function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
+  const boundaries = getWriterGraphemeBoundaries(text);
+  let previous = 0;
+  for (const boundary of boundaries) {
+    if (boundary >= offset) return previous;
+    previous = boundary;
+  }
+  /* v8 ignore next -- Boundary enumeration includes text.length for a valid cursor offset. */
+  return previous;
+}
+
+/** Finds the grapheme end immediately after a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Next grapheme boundary. */
+function getWriterNextGraphemeBoundary(text: string, offset: number): number {
+  for (const boundary of getWriterGraphemeBoundaries(text)) if (boundary > offset) return boundary;
+  /* v8 ignore next -- Callers handle the text-end cursor before requesting a boundary. */
+  return text.length;
+}
+
+/** Enumerates UTF-16 grapheme boundaries with a code-point fallback. @param text - Paragraph text. @returns Ordered boundaries including zero and text length. */
+function getWriterGraphemeBoundaries(text: string): readonly number[] {
+  const boundaries = [0];
+  if (typeof Intl.Segmenter === "function") {
+    const segments = new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text);
+    for (const segment of segments) boundaries.push(segment.index + segment.segment.length);
+    return boundaries;
+  }
+  let offset = 0;
+  for (const character of text) {
+    offset += character.length;
+    boundaries.push(offset);
+  }
+  return boundaries;
+}
 /** Cursor, history, and notification operations retained by SwWrtShell. */
 export interface SwWrtShellEditingPort {
   readonly applyAction: (action: SfxUndoAction<SwUndoRedoContext>, tryMerge?: boolean) => boolean;
