@@ -1,0 +1,18 @@
+{
+  "results": [
+    {
+      "name": "offline-core",
+      "exitCode": 0,
+      "command": "../../node_modules/.bin/vitest run src/sw/source/core/SwNumberTree src/sw/source/core/txtnode src/sw/source/core/doc",
+      "vendorAbsent": true
+    },
+    {
+      "name": "offline-boundaries",
+      "exitCode": 0,
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/writer-ui-resource-model.test.ts",
+      "vendorAbsent": true
+    }
+  ],
+  "vendorRestored": true,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65"
+}

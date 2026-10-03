@@ -1,0 +1,35 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "sw/inc/SwNodeNum.hxx",
+      "sha256": "15e6a7b96816bbcc848c83605b8c1b187cadd59914ac81a33f631217a8a25e28"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "sw/source/core/doc/list.cxx",
+      "sha256": "71f5c095d18cb04452f23ed4eedb8f53d0fd2baf77054d6cc32dff43cbfc2922"
+    },
+    {
+      "path": "sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    }
+  ],
+  "conclusion": "Iteration67 restores the required nullable text-pointer plus hidden-redlines boolean constructor and the distinct required nullable rule-pointer constructor. Text records start unbound; roots and factory records have false mode. PreAdd binds the text rule, registers shown rule clients before document items, and suppresses both registrations for hidden records. PostRemove releases shown document items before rule clients and clears the bound rule; ChangeNumRule retains its existing flag-independent policy. SwTextNode uses explicit false mode and SwList/factory use rule-only construction. Six project-owned cases cover overload/private contracts, shown/hidden insertion/removal, no-rule/no-text/non-document branches, factory defaults, counters/topology and independent ChangeNumRule behavior. Existing constructor fixtures preserve their expected values. Manual pinned inspection/hashes only; no native execution, source/helper artifacts or upstream access by project tests. Full redline/original root selection, undo-array/debug diagnostics, native pointer/destructor/client/layout/final/const/browser lifetimes remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
+  "execution": "No pinned native code compiled or invoked. No source bodies or helper scripts stored.",
+  "newTestMarkers": [
+    "keeps distinct required native constructors and private mode defaults",
+    "binds hidden records while preserving the actual shown client and numbered registry",
+    "creates shown production records and registers rule before registry, removing in reverse order",
+    "uses the rule-only factory with false mode for roots and records of either text mode",
+    "retains native no-rule, no-text and non-document registration branches",
+    "leaves existing ChangeNumRule policy independent of the hidden constructor flag"
+  ]
+}

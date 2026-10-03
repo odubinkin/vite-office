@@ -1,0 +1,67 @@
+{
+  "oldTestCount": 184,
+  "changedTests": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+    "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+    "apps/office/src/sw/source/core/doc/list.test.ts",
+    "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+    "apps/office/src/sw/source/core/txtnode/number-classification.test.ts"
+  ],
+  "byteIdenticalTests": 165,
+  "allOldMatcherArgumentsPreserved": true,
+  "ownerMethods": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "total": 17,
+      "changed": [
+        "PreAdd",
+        "PostRemove",
+        "Create"
+      ],
+      "unchanged": 14
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "total": 86,
+      "changed": [
+        "AddToList"
+      ],
+      "unchanged": 85
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/list.ts",
+      "total": 11,
+      "changed": [],
+      "unchanged": 11
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changedRows": 3,
+      "nonEvidencePreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changedRows": 3,
+      "nonEvidencePreserved": true
+    }
+  ],
+  "fixtureAdaptations": "Removal extra/foreign records resolve the actual rule through controlled text getter; equivalent missing removal argument explicitly binds through unchanged ChangeNumRule. No expected values changed."
+}

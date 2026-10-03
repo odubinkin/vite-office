@@ -1,0 +1,123 @@
+{
+  "beforeCommit": "19f003f68735",
+  "calls": 77,
+  "files": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+      "count": 5
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+      "count": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+      "count": 5
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+      "count": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts",
+      "count": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+      "count": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+      "count": 4
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+      "count": 5
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-notification-access.test.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+      "count": 5
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+      "count": 8
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-prefix.test.ts",
+      "count": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+      "count": 6
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-state.test.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+      "count": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+      "count": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+      "count": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+      "count": 4
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/list.test.ts",
+      "count": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/list.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+      "count": 4
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/number-classification.test.ts",
+      "count": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+      "count": 1
+    }
+  ],
+  "excludesExplicitSubclassConstructors": true
+}

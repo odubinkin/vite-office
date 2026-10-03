@@ -115,4 +115,3 @@ TypeError: this.mpNumRule?.AddTextNode is not a function
       Tests  6 failed (6)
    Start at  02:12:31
    Duration  922ms (transform 193ms, setup 106ms, import 227ms, tests 12ms, environment 488ms)
-

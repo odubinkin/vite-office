@@ -1,0 +1,30 @@
+{
+  "ignoredInclusive": true,
+  "totalFiles": 2523,
+  "pythonFiles": [],
+  "prohibitedArtifactFiles": [],
+  "allTrackedPriorTestAndSpecFiles": 235,
+  "changedPriorTests": [
+    "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-container.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-helper-contracts.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-insertion-order.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-root.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-validity.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector-ownership.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-vector.test.ts",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+    "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
+    "apps/office/src/sw/source/core/doc/list.test.ts",
+    "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+    "apps/office/src/sw/source/core/txtnode/number-classification.test.ts"
+  ],
+  "otherTrackedTestsAndSpecsUnchanged": 216,
+  "cleanupCommit": "4bf67a647e07cc952f89683da917e5adae419837"
+}

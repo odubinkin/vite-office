@@ -1,0 +1,26 @@
+{
+  "command": "npm run verify",
+  "exitCode": 0,
+  "originalBytes": 917197,
+  "sha256": "9062e0f993c74c335dc5e6f5f78b161dcb1c50d7385fdd9d7a643a36824dbd5b",
+  "gateSummary": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  185 passed (185)",
+    "      Tests  827 passed (827)",
+    "Statements   : 100% ( 11065/11065 )",
+    "Branches     : 100% ( 8361/8361 )",
+    "Functions    : 100% ( 2955/2955 )",
+    "Lines        : 100% ( 10157/10157 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )",
+    "Running 20 tests using 4 workers",
+    "  20 passed (9.5s)",
+    "    \"semanticViolationCount\": 0,"
+  ],
+  "upstreamAccess": "Static provenance/resource/inventory CLI audits read pinned inputs. Project test suites do not read, compile or invoke the pin."
+}
