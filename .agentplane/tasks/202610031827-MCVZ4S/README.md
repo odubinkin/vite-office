@@ -1,10 +1,11 @@
 ---
 id: "202610031827-MCVZ4S"
 title: "Restore numbering start getter bounds and evaluation order"
-status: "DOING"
+result_summary: "Restored native numbering start bounds and evaluation order at exact semantic1c3981fbe984ee29cb871964bd7925ea65ac0c9b.817application109inventory20browser and both100percent coverage;207vendor-absentapp+9boundary tests pass,existing tests unchanged. Full parent and goal remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Exact four-path commit and final authored test hash match verification/offline/integrity evidence. Six cases/two type contracts cover bound depth9/10/11,root/phantom/unbound/negative/order/raw absence/restart0. Three final baseline failures and207vendor-absentapp+9boundary passes confirm repair without upstream tests."
     - "Fresh manual six-file pinned hash checks support source sequence and MAXLEVEL10.16other bodies and233prior test files unchanged; one metadata row each,213untouched each,all non-evidence statuses/defaults/omissions/deviations preserved. Full exit0/session10181:817app109inventory20browser,both100percent and every gate;doctor0errors2existingwarnings,policy/diff pass."
-commit: null
+commit:
+  hash: "1c3981fbe984ee29cb871964bd7925ea65ac0c9b"
+  message: "🧩 MCVZ4S code: restore native numbering start bounds and lookup order"
 comments:
   -
     author: "CODER"
     body: "Start: implement complete selected native start getter contracts under the standing iterative goal; no upstream test dependencies or helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: complete selected numbering start getter follows pinned restart, rule-first, bounded owned format and default-one contracts; all full and vendor-absent checks pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete selected start getter verified:817app/109inventory/20browser,all full gates and both100percent coverage; exact final baseline3fail and vendor-absent207app+9boundary pass, restoredpin.16other bodies/233old tests unchanged,one narrow metadata row each,zero helper/source artifacts. Wider parent/goal remain active."
+  -
+    type: "status"
+    at: "2026-10-03T18:42:13.488Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete selected numbering start getter follows pinned restart, rule-first, bounded owned format and default-one contracts; all full and vendor-absent checks pass."
 doc_version: 3
-doc_updated_at: "2026-10-03T18:42:01.942Z"
+doc_updated_at: "2026-10-03T18:42:13.489Z"
 doc_updated_by: "CODER"
 description: "Iteration65 of C9TN6M: align the complete selected SwNodeNum.GetStartValue getter with pinned restart precedence, bound-rule-first level lookup, root level zero, MAXLEVEL bounds and optional owned-format default one. Preserve browser input guards and registered document IO/recovery deviations; no upstream access in tests or helper/source files in Agentplane."
 sections:
