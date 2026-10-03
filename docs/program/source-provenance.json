@@ -4161,6 +4161,34 @@
           {
             "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
             "marker": "retains genuine hierarchical continuation when continuous policy revalidates the subtree"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+            "marker": "requires explicit void contracts and retains negative and unattached no-op branches"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+            "marker": "checks attached parent before same-level comparison without removal or root lookup"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+            "marker": "climbs every phantom owner through GetParent after removal and before cleanup"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+            "marker": "stops at a real owner and preserves its remaining child and list membership"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+            "marker": "captures root before removal and reinserts the same record after phantom cleanup"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+            "marker": "retains reading suppression and normal notifications through text-owned level changes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+            "marker": "terminates the nullable parent release boundary without invoking cleanup"
           }
         ],
         "upstream": [
@@ -4379,6 +4407,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
             "marker": "void ValidateContinuous"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+            "marker": "void RemoveMe"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/SwNumberTree.hxx",
+            "marker": "void SetLevelInListTree"
           }
         ]
       },
@@ -4409,7 +4445,8 @@
         "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
         "Iteration68 restores the native parent GetIterator/GetParent paths in the complete existing GetPred,NotifyInvalidChildren and SetLastValid bodies. Predecessor lookup retains root exclusion,first nested parent,optional sibling false default,deepest descendant and ordered equivalent-key identity. Shown notification and accepted prefix updates obtain the following sibling through parent helpers before counted policy;continuous prefix invalidation preserves native upward iterator forwarding. Six owned cases/seven exact type checks cover all selected helper traces,counter/topology/client/registry preservation,reading suppression,next counted and uncounted notifications,prefix no-op/validation/rollback/end and continuous suffix invalidation. Five final authored cases fail baseline only on missing source helper paths;existing signatures and observed counter values are retained. Existing tests and unrelated method bodies unchanged. Manual pinned hashes/inspection only,no native execution/source/helper artifacts or upstream access by project tests. Native helper methods are nonvirtual;test spies observe source call paths and do not certify an extension ABI. Native missing parent-child iterator domain,debug diagnostics,full allocator/integer/const/final/destructor/client/redline/layout/browser lifetimes and other method architecture remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
         "Iteration69 restores the complete existing ValidateHierarchical first-child state and native policy ordering. Retained continuation is reset before virtual GetStartValue/IsCounted/HasCountedChildren/IsPhantom calls,then may be established after finding a preceding subtree. Existing cached-prefix state bypasses first-child policies. Special start traversal uses parent GetParent/GetIterator and preceding GetChildCount,while default GetNumber validation,empty uncounted skips,counted barriers,first/restart/counted-parent short circuits,signed zero starts,restarts,phantom and ordered-equivalent target behavior remain intact. Six owned cases/four exact types and13profiles cover stale pre-policy continuation,actual source call paths,prefix/caches/ownership/client/registry preservation and branch values. Four final authored baseline cases fail,including actual stale state before policies;corrected cases/types pass. All prior tests and50other tree methods unchanged. Manual pinned hashes/inspection only,no native execution/source/helper artifacts or upstream test access. Nonvirtual parent helper calls are source architecture evidence;the native constant begin position is represented by index0. Native invalid iterator/debug,full machine integer/allocator/const/final/destructor/client/redline/layout/browser and other method obligations remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
-        "Iteration70 restores the complete existing ValidateContinuous explicit counted/restart/no-predecessor branches, local counter assignment and predecessor/child GetParent comparison path. Six owned cases and four exact types cover shared/distinct/deepest predecessor owners, signed owner starts, ignored uncounted restarts, counted restart short circuits, retained prefixes, target identity/end clearing and genuine retained continuation after mode transition. Three baseline cases fail only on missing source helper paths; corrected runtime/types pass. Other tree methods and prior tests remain unchanged. Manual pin inspection/hashes only; no native execution or upstream access by tests and no source/helper artifacts. GetParent/GetNumber are nonvirtual native helpers, so spies evidence source paths rather than an extension ABI. Whole-module/default/status parity, machine integer/allocator/const/debug/destructor/layout/redline/browser obligations and other method architecture remain unverified. Registered IO/recovery deviations unchanged."
+        "Iteration70 restores the complete existing ValidateContinuous explicit counted/restart/no-predecessor branches, local counter assignment and predecessor/child GetParent comparison path. Six owned cases and four exact types cover shared/distinct/deepest predecessor owners, signed owner starts, ignored uncounted restarts, counted restart short circuits, retained prefixes, target identity/end clearing and genuine retained continuation after mode transition. Three baseline cases fail only on missing source helper paths; corrected runtime/types pass. Other tree methods and prior tests remain unchanged. Manual pin inspection/hashes only; no native execution or upstream access by tests and no source/helper artifacts. GetParent/GetNumber are nonvirtual native helpers, so spies evidence source paths rather than an extension ABI. Whole-module/default/status parity, machine integer/allocator/const/debug/destructor/layout/redline/browser obligations and other method architecture remain unverified. Registered IO/recovery deviations unchanged.",
+        "Iteration71 restores complete existing RemoveMe and SetLevelInListTree release branches: saved phantom ancestors ascend via GetParent after real RemoveChild and before cleanup; nonnegative attached level changes call GetParent before comparison, retain the root before removal and reinsert the same record. Seven owned cases/four exact public required void types cover negative/orphan/same-level no-ops, three-phantom ascent, real-owner stop, cleanup and identity/membership, root/remove/add order, reading suppression and normal paragraph notifications. Five final baseline cases fail only on missing source helper paths; corrected runtime/types pass. Rule client order follows native unregister/reappend, while numbered-item order/membership remain owned. All prior tests and49 other tree methods unchanged; no source/helper/Python artifacts, native execution or upstream access by tests. Nonvirtual helpers evidence source architecture, not an extension ABI; debug OSL extra calls, machine integer/allocator/const/destructor/redline/layout/browser obligations and other methods remain individually unverified. No whole-module/default/status/goal promotion; registered IO/recovery deviations preserved. The nullable-parent final guard is checked with an isolated owned phantom helper spy; this is release branch evidence, not a claim that ordinary Writer topology reaches a null phantom ancestor. Initial full verify found this uncovered branch; the 100% coverage gate was preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/SwNumberTree/SwNumberTree.cxx",

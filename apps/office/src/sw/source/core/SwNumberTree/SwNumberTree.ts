@@ -437,19 +437,23 @@ export abstract class SwNumberTreeNode {
   }
   /** Detaches an item and clears obsolete phantom chains without rebuilding the root. @param document - Required native operation context. @returns Nothing. */
   public RemoveMe(document: SwDoc): void {
-    let savedParent = this.mpParent;
-    if (savedParent === undefined) return;
+    if (this.mpParent === undefined) return;
+    let savedParent: SwNumberTreeNode | undefined = this.mpParent;
     savedParent.RemoveChild(this, document);
-    while (savedParent?.IsPhantom() && savedParent.HasOnlyPhantoms())
-      savedParent = savedParent.mpParent;
-    savedParent?.ClearObsoletePhantoms();
+    while (savedParent !== undefined && savedParent.IsPhantom() && savedParent.HasOnlyPhantoms())
+      savedParent = savedParent.GetParent();
+    if (savedParent !== undefined) savedParent.ClearObsoletePhantoms();
   }
   /** Reparents an attached item through native removal and insertion. @param level - New non-negative level. @param document - Native operation context. @returns Nothing. */
   public SetLevelInListTree(level: number, document: SwDoc): void {
-    if (level < 0 || this.mpParent === undefined || level === this.GetLevelInListTree()) return;
-    const root = this.GetRoot() as SwNumberTreeNode;
-    this.RemoveMe(document);
-    root.AddChild(this, level, document);
+    if (level < 0) return;
+    if (this.GetParent() !== undefined) {
+      if (level !== this.GetLevelInListTree()) {
+        const root = this.GetRoot() as SwNumberTreeNode;
+        this.RemoveMe(document);
+        root.AddChild(this, level, document);
+      }
+    }
   }
   /** Returns counters from real and phantom ancestors by value. @returns Mutable caller-owned root-to-item vector. */
   public GetNumberVector(): tNumberVector {
