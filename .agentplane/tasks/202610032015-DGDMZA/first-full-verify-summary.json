@@ -1,0 +1,18 @@
+{
+  "exitCode": 1,
+  "bytes": 3153,
+  "sha256": "5c9c3812b9737737c2ad66a1c6f8f296a5c257a58049e0c6c8a7c051ec47afff",
+  "summaries": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  189 passed (189)",
+    "      Tests  851 passed (851)",
+    "Statements   : 100% ( 11083/11083 )",
+    "Branches     : 99.98% ( 8366/8367 )",
+    "Functions    : 100% ( 2955/2955 )",
+    "Lines        : 100% ( 10170/10170 )",
+    "ERROR: Coverage for branches (99.98%) does not meet global threshold (100%)"
+  ],
+  "uncovered": "RemoveMe final savedParent !== undefined else path",
+  "resolution": "Add an owned isolated nullable-parent source release-boundary test; no lowered coverage, suppression or production guard removal."
+}

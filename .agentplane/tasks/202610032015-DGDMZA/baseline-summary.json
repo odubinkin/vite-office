@@ -1,0 +1,28 @@
+{
+  "exitCode": 1,
+  "sha256": "d31cf920642c8a9774412bdee0d61856b2ccf5fa8c8697afb7f9f15a5fa649a5",
+  "bytes": 34543,
+  "summary": [
+    " ❯ src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts (7 tests | 5 failed) 17ms",
+    " Test Files  1 failed (1)",
+    "      Tests  5 failed | 2 passed (7)",
+    "   Duration  686ms (transform 184ms, setup 68ms, import 211ms, tests 17ms, environment 304ms)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts > requires explicit void contracts and retains negative and unattached no-op branches",
+    "AssertionError: expected [] to deeply equal [ [] ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts:89:31",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts > checks attached parent before same-level comparison without removal or root lookup",
+    "AssertionError: expected [ 'level' ] to deeply equal [ 'parent', 'level' ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts:129:19",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts > climbs every phantom owner through GetParent after removal and before cleanup",
+    "AssertionError: expected [ 'removed', 'cleanup' ] to deeply equal [ 'removed', 'parent:0', …(3) ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts:187:19",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts > terminates the nullable parent release boundary without invoking cleanup",
+    "AssertionError: expected \"GetParent\" to return with: undefined at least once",
+    " ❯ src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts:226:20",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts > captures root before removal and reinserts the same record after phantom cleanup",
+    "AssertionError: expected [ 'level', 'root', 'remove', 'add' ] to deeply equal [ 'parent', 'level', 'root', …(2) ]",
+    " ❯ src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts:321:19"
+  ],
+  "baselineSourceRestoredInFinally": true
+}

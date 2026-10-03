@@ -1,0 +1,33 @@
+{
+  "base": "6ccd4650edfe7642072288b69ef40a527460fb95",
+  "unchangedPriorTests": 239,
+  "changedPriorTests": [],
+  "changedMethods": [
+    "RemoveMe",
+    "SetLevelInListTree"
+  ],
+  "unchangedOtherMethods": 49,
+  "manifestResults": [
+    {
+      "file": "docs/program/source-provenance.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true
+    },
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true
+    }
+  ],
+  "storage": {
+    "pythonFiles": [],
+    "helperSourceFiles": [],
+    "executableArtifactFiles": [],
+    "includesIgnored": true
+  },
+  "newOwnedTest": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-reparent-policy.test.ts",
+  "completeSourceOutsideSelectedMethodsUnchanged": true,
+  "finalEvidenceRowsRecheckedAfterNullBoundary": true
+}

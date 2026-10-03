@@ -1,0 +1,24 @@
+{
+  "exitCode": 0,
+  "originalBytes": 928212,
+  "sha256": "0e56d314b381d2672f4a4cc8f953e7178901c49f6e2dcb9ccf3a268cb8e10f33",
+  "summaries": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  189 passed (189)",
+    "      Tests  852 passed (852)",
+    "Statements   : 100% ( 11083/11083 )",
+    "Branches     : 100% ( 8367/8367 )",
+    "Functions    : 100% ( 2955/2955 )",
+    "Lines        : 100% ( 10170/10170 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )",
+    "Running 20 tests using 4 workers",
+    "  20 passed (9.5s)",
+    "    \"semanticViolationCount\": 0,"
+  ]
+}
