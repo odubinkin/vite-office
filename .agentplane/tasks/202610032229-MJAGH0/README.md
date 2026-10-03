@@ -1,10 +1,11 @@
 ---
 id: "202610032229-MJAGH0"
 title: "Restore Writer root popup opening focus contracts"
-status: "DOING"
+result_summary: "Restored Writer root popup opening focus and keyboard first-entry contracts with owned and real-browser evidence"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -48,11 +49,16 @@ quality_review:
     - "Manual pinned VCL header/callers/active-popup guard/popup focus establish pointer popup focus without selection and both-arrow/Return first-entry opening; actual production diff implements that contract while preserving child logic."
     - "Baseline10of17owned and5of5browser failures corrected;55focused and9browser pass; full912app109inventory29browser2resources100%coverage0semantic. Sequential upstream-absent912app109inventory12scripts29browser pass and pin restored."
     - "Exact six semantic paths;246prior tests byte-identical and one exact3line native-contradicting expectation corrected. Both215row manifests append bounded evidence only; statuses/defaults/ownership and exceptions preserved. Artifact storage has0source/helpers/Python/executables including ignored files."
-commit: null
+commit:
+  hash: "ef2b2a1f85e127dbd32618f0732ca4a0b9602ab6"
+  message: "🎯 MJAGH0 code: restore root popup focus and keyboard preselection"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce and restore root menu pointer focus and native keyboard first-entry contracts under standing parity goal authorization, preserving registered I/O and outcome-only artifact storage."
+  -
+    author: "CODER"
+    body: "Verified: restored root pointer popup focus, both-arrow and Return first-entry preselection, one-shot opening requests and active popup reuse. Full and sequential upstream-absent tests pass; exact semantic quality review preserves bounded scope and registered I/O deviations."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full verify912app109inventory29browser2resources100%coverage and0semantic violations; sequential upstream-absent912app109inventory12scripts29browser pass with pin restored;55focused9browser; exact six-path scope and0source/helper/Python artifacts. Full menubar parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-03T22:48:19.545Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored root pointer popup focus, both-arrow and Return first-entry preselection, one-shot opening requests and active popup reuse. Full and sequential upstream-absent tests pass; exact semantic quality review preserves bounded scope and registered I/O deviations."
 doc_version: 3
-doc_updated_at: "2026-10-03T22:48:16.659Z"
+doc_updated_at: "2026-10-03T22:48:19.547Z"
 doc_updated_by: "CODER"
 description: "Iteration77 under C9TN6M: restore native root popup focus for pointer opening, first-entry keyboard preselection for both arrows/Return, consumed opening requests and active popup reuse; preserve generated composition and registered I/O. Owned tests never invoke upstream; artifacts outcomes only."
 sections:
@@ -120,6 +133,10 @@ sections:
     Final offline run terminal:912app109inventory12scripts29browser all pass sequentially with vendor absent; finally restored exact pin and6hashes. Coverage totals recollected after terminal completion; artifact audit ignored-inclusive0source/helpers/Python/executables. Next bounded candidate is native root saved-document focus lifecycle; this iteration changes opening only. No scope drift or approval skips.
 
     Semantic commit ef2b2a1f85e127dbd32618f0732ca4a0b9602ab6; same-actor separate EVALUATOR phase reviewed exact semantic HEAD and recorded pass in quality/20261003-224751623-recovery-context/quality-report.json. Commit hook rejected the initial subject scope fix (expected code/task/close/integrate); retried the same intentional staged paths using permitted code scope, without changing implementation or verification. Route oracle generic complete points at latest artifact HEAD; canonical gateway finish with explicit actual implementation hash is used to preserve implementation traceability and descriptive close subject.
+extensions:
+  implementation_commit:
+    hash: "ef2b2a1f85e127dbd32618f0732ca4a0b9602ab6"
+    message: "🎯 MJAGH0 code: restore root popup focus and keyboard preselection"
 id_source: "generated"
 ---
 ## Summary
