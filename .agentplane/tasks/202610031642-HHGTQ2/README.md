@@ -1,10 +1,11 @@
 ---
 id: "202610031642-HHGTQ2"
 title: "Clean obsolete executable artifact storage"
-status: "DOING"
+result_summary: "Artifact task/tmp code residue zero; dedicated cleanup commit 4bf67a647e07; no upstream execution or history rewrite."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Ignored-inclusive task/tmp source/helper/executable residue is zero; tracked deletion set contains exactly 50 artifact helpers and scripts/native_probe_storage.py, plus bounded evidence only."
     - "All six declared project static/format/lint/type/documentation checks exit zero; policy routing and doctor exit zero, with only the existing hook readiness warning. No test assertions changed and no native upstream code was invoked."
     - "Code.direct replacement preserves the approved scope after the docs intent hook rejection. No enforcement bypass, source storage helper recreation, Git history rewrite or upstream parity status promotion."
-commit: null
+commit:
+  hash: "4bf67a647e07cc952f89683da917e5adae419837"
+  message: "🧹 HHGTQ2 task: remove executable artifact helpers and obsolete probe storage"
 comments:
   -
     author: "CODER"
     body: "Start: adopt exact authorized artifact cleanup and completed checks under the required implementation-capable route; preserve all project behavior and tests."
+  -
+    author: "CODER"
+    body: "Verified: removed 50 historical task helper scripts, ignored copied sources and executable/debug probes, and obsolete Python storage shim; all declared checks pass and product/test sources are unchanged."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared cleanup checks exit 0; 50 tracked task helpers and obsolete Python storage shim removed, ignored source/executable/debug residue cleared, task/tmp artifact code count zero, application and project tests unchanged. Evidence in 202610031635-2Z3962 cleanup-results.json and verification-results.json; static provenance/parity only, no native execution. Dedicated semantic SHA 4bf67a647e07cc952f89683da917e5adae419837."
+  -
+    type: "status"
+    at: "2026-10-03T16:44:03.792Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: removed 50 historical task helper scripts, ignored copied sources and executable/debug probes, and obsolete Python storage shim; all declared checks pass and product/test sources are unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:43:40.411Z"
+doc_updated_at: "2026-10-03T16:44:03.794Z"
 doc_updated_by: "CODER"
 description: "Execute the already authorized removal of all remaining historical Agentplane helper scripts, temporary copied implementation files, native executable/debug probes and obsolete scripts/native_probe_storage.py. This code-routed replacement of 202610031635-2Z3962 is required by the commit hook because deleting the external storage helper counts as implementation mutation. No product behavior, project tests, vendor contents or Git history changes."
 sections:
