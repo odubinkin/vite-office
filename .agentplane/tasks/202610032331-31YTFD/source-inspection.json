@@ -1,0 +1,42 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only complete relevant function inspection; no copies/helpers/native compilation or execution.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.cxx",
+      "sha256": "fd2028b1bc48249fab735c0df7809abb91061031dd952885981183f5aa757375"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.hxx",
+      "sha256": "8cc86f855c8390a6bb50958266a873850d8a414e13819c80118e19cb7c58f26b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/mouse.cxx",
+      "sha256": "10a9993f3636425339b63d2a96da94383b0ba28303288de520ab78680e0d8215"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/window.cxx",
+      "sha256": "2b5baaa2d77411ced7a3b25d0792d1123b2b6ae47d6be8d7ef62f128e628e8ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/window2.cxx",
+      "sha256": "69d5a219053a01f535c2f1afa1fe99ddfd181abb1b94ffaefa4ed9dd945f2975"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/floatwin.cxx",
+      "sha256": "435f5e0e9ad650ae2a646d75b2e830eb2e2f5446ae3c57d4180be6efdc49e188"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    }
+  ],
+  "conclusions": [
+    "ChangeHighlightItem defaults allowRestoreFocus=true/defaultToDocument=true; on deactivation consumes saved non-disposed Window, prefers saved owner, else GrabFocusToDocument only if enabled.",
+    "GetFocus activates menubar without popup; no-popup KEY_ESCAPE deactivates with default arguments.",
+    "PopupClosed explicitly disables defaultToDocument, LoseFocus disables restoration; open-popup paths are distinct and not promoted by this leaf.",
+    "Window GrabFocusToDocument forwards NONE flags to ImplGrabFocusToDocument which ascends to enclosing frame and grabs frame client focus.",
+    "Window EndSaveFocus skips null/disposed target.",
+    "Only unopened activated menubar Escape document fallback is corrected; native platform/frame/global lifetimes and no-owner popup behavior remain unverified."
+  ]
+}
