@@ -22,9 +22,76 @@
   ],
   "storage": {
     "ignoredIncluded": true,
-    "files": 2606,
+    "files": 2613,
     "codeFiles": [],
     "executableFiles": []
   },
-  "testsUseOwnedFixturesOnly": true
+  "testsUseOwnedFixturesOnly": true,
+  "vendorRestoredAndSixSourceHashesUnchanged": true,
+  "coverageTotals": {
+    "apps/office/coverage/coverage-summary.json": {
+      "lines": {
+        "total": 10202,
+        "covered": 10202,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 11118,
+        "covered": 11118,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2957,
+        "covered": 2957,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 8393,
+        "covered": 8393,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "coverage/coverage-summary.json": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  }
 }

@@ -618,9 +618,9 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
 
       const view = screen.getByRole("button", { name: "View" });
       fireEvent.keyDown(view, { key: "ArrowUp" });
-      const sidebar = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
-      expect(sidebar).toHaveFocus();
-      fireEvent.keyDown(sidebar, { key: "Escape" });
+      const firstViewItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
+      expect(firstViewItem).toHaveFocus();
+      fireEvent.keyDown(firstViewItem, { key: "Escape" });
       expect(view).toHaveFocus();
 
       const insert = screen.getByRole("button", { name: "Insert" });

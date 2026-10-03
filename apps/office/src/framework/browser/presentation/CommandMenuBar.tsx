@@ -59,13 +59,14 @@ export function CommandMenuBar({
   const triggerRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const typeahead = useRef("");
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const pendingMenuFocus = useRef<"first" | "last" | "none">("none");
+  const pendingMenuPreselection = useRef<boolean | undefined>(undefined);
   const preselectSubmenuFirst = useRef(false);
   const restoreTriggerFocus = useRef<number | undefined>(undefined);
 
   /** Closes all popups. @param restoreFocus - Whether to focus the trigger. @returns Nothing. */
   function closeMenu(restoreFocus = false): void {
     const index = openMenuIndex;
+    pendingMenuPreselection.current = undefined;
     setOpenSubmenuId(undefined);
     setOpenMenuIndex(undefined);
     if (restoreFocus && index !== undefined) restoreTriggerFocus.current = index;
@@ -110,23 +111,27 @@ export function CommandMenuBar({
     items[index]?.focus();
   }
 
-  /** Opens one popup. @param index - Menu index. @param focus - Initial focus. @returns Nothing. */
-  function openMenu(index: number, focus: "first" | "last" | "none" = "none"): void {
+  /** Opens one popup with origin-specific preselection. @param index - Menu index. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
+  function openMenu(index: number, preSelectFirst = false): void {
+    if (openMenuIndex === index) return;
     setActiveTriggerIndex(index);
     setOpenSubmenuId(undefined);
-    pendingMenuFocus.current = focus;
+    pendingMenuPreselection.current = preSelectFirst;
     setOpenMenuIndex(index);
   }
 
   useEffect(
     /** Applies the requested initial focus after React mounts a popup. @returns Nothing. */
     function restoreRequestedMenuFocus(): void {
-      if (openMenuIndex === undefined || pendingMenuFocus.current === "none") return;
+      if (openMenuIndex === undefined || pendingMenuPreselection.current === undefined) return;
       const menu = rootRef.current?.querySelector<HTMLElement>(
         `#${idPrefix}-${menus[openMenuIndex]?.id}-menu`,
       );
-      if (menu !== null && menu !== undefined) focusMenuItem(menu, pendingMenuFocus.current);
-      pendingMenuFocus.current = "none";
+      if (menu !== null && menu !== undefined) {
+        if (pendingMenuPreselection.current) focusMenuItem(menu, "first");
+        else menu.focus();
+      }
+      pendingMenuPreselection.current = undefined;
     },
     [idPrefix, menus, openMenuIndex],
   );
@@ -188,10 +193,14 @@ export function CommandMenuBar({
       const next = (index + delta + menus.length) % menus.length;
       setActiveTriggerIndex(next);
       triggerRefs.current[next]?.focus();
-      if (openMenuIndex !== undefined) openMenu(next, "first");
+      if (openMenuIndex !== undefined) openMenu(next, true);
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      openMenu(index, event.key === "ArrowDown" ? "first" : "last");
+      openMenu(index, true);
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      if (openMenuIndex === index) closeMenu(true);
+      else openMenu(index, true);
     } else if (event.key === "Home" || event.key === "End") {
       event.preventDefault();
       const next = event.key === "Home" ? 0 : menus.length - 1;
@@ -238,11 +247,11 @@ export function CommandMenuBar({
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu") {
         openSubmenu(target.dataset.submenuTrigger, true);
-      } else openMenu((menuIndex + 1) % menus.length, "first");
+      } else openMenu((menuIndex + 1) % menus.length, true);
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
       if (menu.dataset.submenu !== undefined) closePopup(menu);
-      else openMenu((menuIndex - 1 + menus.length) % menus.length, "first");
+      else openMenu((menuIndex - 1 + menus.length) % menus.length, true);
     } else if (event.key.length === 1 && /\S/.test(event.key)) {
       typeahead.current += event.key.toLocaleLowerCase();
       if (typeaheadTimer.current !== undefined) clearTimeout(typeaheadTimer.current);
