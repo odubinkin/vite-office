@@ -8,12 +8,25 @@ import { SwNumberTreeNode } from "./SwNumberTree";
 
 /** Registered list item, root or phantom retaining the owning numbering rule. */
 export class SwNodeNum extends SwNumberTreeNode {
-  /** Creates a text or root record. @param textNode - Canonical text node, absent for a root. @param mpNumRule - Root rule reference without a text node. @returns Node. */
-  public constructor(
-    private readonly textNode: SwTextNode | undefined,
-    private mpNumRule?: SwNumRule,
-  ) {
+  private readonly textNode: SwTextNode | undefined;
+  private mpNumRule: SwNumRule | undefined;
+  private m_isHiddenRedlines: boolean;
+  /** Creates an initially unbound text record. @param textNode - Nullable canonical text node. @param isHiddenRedlines - Required hidden redline mode. @returns Node. */
+  public constructor(textNode: SwTextNode | undefined, isHiddenRedlines: boolean);
+  /** Creates a root or phantom retaining its rule. @param rule - Nullable rule pointer. @returns Node. */
+  public constructor(rule: SwNumRule | undefined);
+  /** Initializes the selected native constructor family. @param owner - Text or rule pointer. @param isHiddenRedlines - Present only for text construction. @returns Node. */
+  public constructor(owner: SwTextNode | SwNumRule | undefined, isHiddenRedlines?: boolean) {
     super();
+    if (isHiddenRedlines !== undefined) {
+      this.textNode = owner as SwTextNode | undefined;
+      this.mpNumRule = undefined;
+      this.m_isHiddenRedlines = isHiddenRedlines;
+    } else {
+      this.textNode = undefined;
+      this.mpNumRule = owner as SwNumRule | undefined;
+      this.m_isHiddenRedlines = false;
+    }
   }
   /** Returns the canonical list item. @returns Text node, absent for a root. */
   public GetTextNode(): SwTextNode | undefined {
@@ -31,20 +44,33 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Binds the rule and registers shown document items before insertion. @returns Nothing. */
   protected PreAdd(): void {
-    if (this.mpNumRule === undefined) this.mpNumRule = this.textNode?.GetNumRule();
-    if (this.textNode !== undefined) {
-      this.mpNumRule?.AddTextNode(this.textNode);
-      if (this.textNode.GetNodes().IsDocNodes())
-        this.textNode.getIDocumentListItems().addListItem(this);
+    if (this.GetNumRule() === undefined && this.GetTextNode() !== undefined)
+      this.mpNumRule = (this.GetTextNode() as SwTextNode).GetNumRule();
+    if (
+      !this.m_isHiddenRedlines &&
+      this.GetNumRule() !== undefined &&
+      this.GetTextNode() !== undefined
+    ) {
+      (this.GetNumRule() as SwNumRule).AddTextNode(this.GetTextNode() as SwTextNode);
+    }
+    if (!this.m_isHiddenRedlines) {
+      if (
+        this.GetTextNode() !== undefined &&
+        (this.GetTextNode() as SwTextNode).GetNodes().IsDocNodes()
+      )
+        (this.GetTextNode() as SwTextNode).getIDocumentListItems().addListItem(this);
     }
   }
   /** Removes document and rule membership and clears the bound rule. @returns Nothing. */
   protected PostRemove(): void {
-    if (this.textNode !== undefined) {
-      this.textNode.getIDocumentListItems().removeListItem(this);
-      this.mpNumRule?.RemoveTextNode(this.textNode);
+    if (!this.m_isHiddenRedlines && this.GetTextNode() !== undefined) {
+      (this.GetTextNode() as SwTextNode).getIDocumentListItems().removeListItem(this);
     }
-    this.mpNumRule = undefined;
+    if (this.GetNumRule() !== undefined) {
+      if (!this.m_isHiddenRedlines && this.GetTextNode() !== undefined)
+        (this.GetNumRule() as SwNumRule).RemoveTextNode(this.GetTextNode() as SwTextNode);
+      this.mpNumRule = undefined;
+    }
   }
   /** Reads the text-owned blocker policy or no-text global policy. @param document - Native operation context. @returns Whether the record can be notified. */
   protected IsNotifiable(document: SwDoc): boolean {
@@ -64,7 +90,7 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Creates a no-text record retaining the current rule. @returns Root/phantom factory record. */
   protected Create(): SwNodeNum {
-    return new SwNodeNum(undefined, this.GetNumRule());
+    return new SwNodeNum(this.GetNumRule());
   }
   /** Reads bound-rule continuous policy or inherits it from a parent. @returns Continuous flag, false for an unbound orphan. */
   public IsContinuous(): boolean {

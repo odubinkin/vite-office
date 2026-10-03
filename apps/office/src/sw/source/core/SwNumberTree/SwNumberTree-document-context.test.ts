@@ -109,7 +109,7 @@ it("requires explicit document arguments across rule list and tree APIs and hide
   const document = new SwDoc(false);
   const rule = document.EnsureNumRule("Empty", "numbered");
   const list = document.GetDocumentListsManager().CreateList(rule.GetName(), "empty");
-  const root = new ContextRoot(undefined, rule);
+  const root = new ContextRoot(rule);
   try {
     document.SetInReading(true);
     expect(root.notifiable(document)).toBe(false);
@@ -211,7 +211,7 @@ it("forwards removal context without borrowing the text document and retains rem
 
 it("passes the operation context through protected root and phantom traversal before text-owner notification", /** Checks real owned descendants, phantom self exclusion and owner-context precedence. @returns Nothing. */ () => {
   const { document, operation, records, rule } = fixture();
-  const root = new ContextRoot(undefined, rule);
+  const root = new ContextRoot(rule);
   try {
     for (const record of records) {
       record.RemoveMe(document);

@@ -39,7 +39,7 @@ function fixture() {
   const record = required(text.GetNum());
   record.RemoveMe(document);
   record.ChangeNumRule(rule);
-  return { document, text, rule, record, root: new SwNodeNum(undefined, rule) };
+  return { document, text, rule, record, root: new SwNodeNum(rule) };
 }
 
 it("keeps the public zero-argument numeric start contract", /** Checks static arity/result. @returns Nothing. */ () => {
@@ -185,7 +185,7 @@ it("preserves zero and explicit restart ahead of tree-level bounds or rule looku
       expect(lookup).not.toHaveBeenCalled();
       expect(parent).not.toHaveBeenCalled();
     }
-    const noText = new SwNodeNum(undefined, rule);
+    const noText = new SwNodeNum(rule);
     vi.spyOn(noText, "IsRestart").mockReturnValue(true);
     expect(noText.GetStartValue()).toBe(17);
   } finally {
@@ -198,10 +198,10 @@ it("defaults to one for absent owned formats instead of querying effective forma
   const document = createWriterDocument();
   try {
     const rule = new SwNumRule("AbsentStart", "label-alignment");
-    const root = new SwNodeNum(undefined, rule);
+    const root = new SwNodeNum(rule);
     // Levels not explicitly owned keep the raw null-pointer fallback.
     expect(rule.GetNumFormat(9)).toBeUndefined();
-    const record = new SwNodeNum(undefined, rule);
+    const record = new SwNodeNum(rule);
     document.SetInReading(true);
     root.AddChild(record, 9, document);
     expect(record.GetStartValue()).toBe(1);

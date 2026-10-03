@@ -139,7 +139,7 @@ it("matches native null foreign owned-prefix and deferred descendant cache obser
         ) => required(text.GetNum()),
       ),
       root = required(getNumberTreeRoot(required(records[0]))),
-      foreign = new SwNodeNum(doc.nodes.MakeTextNode(), rule),
+      foreign = new SwNodeNum(doc.nodes.MakeTextNode(), false),
       events: number[] = [],
       notify = doc.NotifyModelChange.bind(doc);
     doc.NotifyModelChange =
@@ -166,7 +166,7 @@ it("matches native null foreign owned-prefix and deferred descendant cache obser
           root,
           new SwNodeNum(
             (required(getNumberTreeChildren(root)[0]) as SwNodeNum).GetTextNode(),
-            rule,
+            false,
           ),
         );
       if (step === 4) hierarchical(root, required(getNumberTreeChildren(root)[0]));

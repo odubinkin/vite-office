@@ -77,7 +77,7 @@ it("retains exact roots and list membership across phantoms orphans foreign docu
   expect(b.GetListItem(first)).toBeUndefined();
   const missing = document.nodes.MakeTextNode();
   expect(a.GetListItem(missing)).toBeUndefined();
-  expect(getNumberTreeRoot(new SwNodeNum(missing))).toBeUndefined();
+  expect(getNumberTreeRoot(new SwNodeNum(missing, false))).toBeUndefined();
   const foreignDocument = createWriterDocument();
   const foreign = required(foreignDocument.paragraphs[0]);
   applyWriterParagraphList(foreign, {

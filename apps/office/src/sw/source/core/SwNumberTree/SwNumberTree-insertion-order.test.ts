@@ -141,7 +141,7 @@ it("uses direct unique insertion and skips first-child cleanup, duplicate polici
     root.AddChild(child, 0, document);
     expect(first.events).toEqual([]);
     vi.restoreAllMocks();
-    const duplicate = new SwNodeNum(text);
+    const duplicate = new SwNodeNum(text, false);
     const rejected = observe(root, duplicate, document);
     root.AddChild(duplicate, 0, document);
     expect(rejected.events).toEqual(["pre", "lower"]);

@@ -183,7 +183,7 @@ it("restricts automatic ownership to connected document nodes and retains orphan
 it("keeps native registration guards for absent text and non-document records", /** Checks diagnostic no-text records and foreign-array clients without registering document items. @returns Nothing. */ () => {
   const doc = createWriterDocument();
   const rule = doc.EnsureNumRule("Counters", "numbered");
-  const root = new SwNodeNum(undefined, rule);
+  const root = new SwNodeNum(rule);
   const absent = new SwNodeNum(undefined);
   root.AddChild(absent, 0, doc);
   expect(absent.GetNumRule()).toBeUndefined();
@@ -197,7 +197,7 @@ it("keeps native registration guards for absent text and non-document records", 
     listId: "B",
     level: 0,
   });
-  const record = new SwNodeNum(foreign);
+  const record = new SwNodeNum(foreign, false);
   root.AddChild(record, 0, doc);
   expect(record.GetNumRule()).toBe(rule);
   const clients: SwTextNode[] = [];

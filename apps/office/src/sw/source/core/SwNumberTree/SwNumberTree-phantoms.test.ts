@@ -229,7 +229,7 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
       (_node, index) => index,
     );
     for (const [orderIndex, order] of orders(indexes).entries()) {
-      const root = new SwNodeNum(undefined, rule);
+      const root = new SwNodeNum(rule);
       const records = nodes.map(
         /** Creates independent native insertion records. @param node - Canonical item. @param index - Position. @returns Orphan. */
         (node) => {
@@ -287,7 +287,7 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   const document = createWriterDocument();
   const text = document.paragraphs[0] as SwTextNode;
   const root = new PhantomRoot(undefined);
-  const orphan = new SwNodeNum(text);
+  const orphan = new SwNodeNum(text, false);
   root.AddChild(orphan, -1, document);
   expect(getNumberTreeChildren(root)).toEqual([]);
   const phantom = root.createPhantom() as SwNumberTreeNode;
@@ -301,7 +301,7 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   another.AddChild(orphan, 0, document);
   another.AddChild(root, 0, document);
   expect(getNumberTreeChildren(another)).toEqual([]);
-  root.AddChild(new SwNodeNum(text), 0, document);
+  root.AddChild(new SwNodeNum(text, false), 0, document);
   expect(getNumberTreeChildren(root)).toEqual([orphan]);
 });
 

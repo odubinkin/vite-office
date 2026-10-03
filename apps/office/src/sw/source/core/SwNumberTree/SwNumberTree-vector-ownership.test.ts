@@ -96,7 +96,7 @@ it("returns separate mutable empty values for roots, orphans and paragraphs with
   try {
     const text = required(document.paragraphs[0]);
     const root = new SwNodeNum(undefined);
-    const orphan = new SwNodeNum(text);
+    const orphan = new SwNodeNum(text, false);
     const vectors: number[][] = [
       root.GetNumberVector(),
       root.GetNumberVector(),

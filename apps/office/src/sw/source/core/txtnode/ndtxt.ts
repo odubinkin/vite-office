@@ -482,7 +482,7 @@ export class SwTextNode extends SwContentNode {
       return;
     if (this.mpNodeNum !== undefined)
       throw new Error("SwTextNode already owns an orphan number record.");
-    this.mpNodeNum = new SwNodeNum(this);
+    this.mpNodeNum = new SwNodeNum(this, false);
     list.InsertListItem(this.mpNodeNum, this.GetAttrListLevel(), this.GetDoc());
   }
   /** Detaches and releases an attached shown record. @returns Nothing. */

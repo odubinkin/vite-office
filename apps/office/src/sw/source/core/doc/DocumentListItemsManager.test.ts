@@ -33,11 +33,11 @@ it("sorts independent of insertion order, suppresses equivalent positions and fi
   const registry = new DocumentListItemsManager();
   for (const index of [3, 1, 2, 0]) registry.addListItem(records[index] as SwNodeNum);
   registry.addListItem(records[0] as SwNodeNum);
-  registry.addListItem(new SwNodeNum(nodes[0]));
+  registry.addListItem(new SwNodeNum(nodes[0], false));
   const output: SwNodeNum[] = [records[2] as SwNodeNum];
   registry.getNumItems(output);
   expect(output).toEqual([records[0], records[3]]);
-  registry.removeListItem(new SwNodeNum(nodes[0]));
+  registry.removeListItem(new SwNodeNum(nodes[0], false));
   registry.removeListItem(records[0] as SwNodeNum);
   registry.getNumItems(output);
   expect(output).toEqual([records[3]]);

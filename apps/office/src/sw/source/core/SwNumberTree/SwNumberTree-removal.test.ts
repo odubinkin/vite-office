@@ -73,10 +73,11 @@ for (const equivalent of [true, false]) {
       (profile) => {
         const { document, rule, texts, records, root, list } = fixture();
         const stored = required(records[profile.target]);
-        const argument = equivalent ? new SwNodeNum(stored.GetTextNode(), rule) : stored;
-        const argumentRoot = new SwNodeNum(undefined, rule);
+        const argument = equivalent ? new SwNodeNum(stored.GetTextNode(), false) : stored;
+        const argumentRoot = new SwNodeNum(rule);
         const extraText = document.nodes.MakeTextNode();
-        const extra = new SwNodeNum(extraText, rule);
+        vi.spyOn(extraText, "GetNumRule").mockReturnValue(rule);
+        const extra = new SwNodeNum(extraText, false);
         if (equivalent) {
           argumentRoot.AddChild(argument, 0, document);
           argument.AddChild(extra, 0, document);
@@ -190,8 +191,9 @@ for (const equivalent of [true, false]) {
 it("releases only the supplied missing record and leaves phantom arguments untouched", /** Checks miss callback ownership, rule clients, registry and phantom no-op without upstream access. @returns Nothing. */ () => {
   const { document, rule, root, records, texts } = fixture();
   const foreignText = document.nodes.MakeTextNode();
-  const foreign = new SwNodeNum(foreignText, rule);
-  const foreignRoot = new SwNodeNum(undefined, rule);
+  vi.spyOn(foreignText, "GetNumRule").mockReturnValue(rule);
+  const foreign = new SwNodeNum(foreignText, false);
+  const foreignRoot = new SwNodeNum(rule);
   foreignRoot.AddChild(foreign, 0, document);
   const before = [...getNumberTreeChildren(root)];
   const callback = vi.spyOn(foreign as unknown as RemovalDiagnostic, "PostRemove");
@@ -206,7 +208,9 @@ it("releases only the supplied missing record and leaves phantom arguments untou
   const registered: SwNodeNum[] = [];
   document.getIDocumentListItems().getNumItems(registered);
   expect(registered).toEqual(records);
-  root.RemoveChild(new SwNodeNum(required(texts[0]), rule), document);
+  const equivalentRecord = new SwNodeNum(required(texts[0]), false);
+  equivalentRecord.ChangeNumRule(rule);
+  root.RemoveChild(equivalentRecord, document);
   const phantom = required(getNumberTreeChildren(root)[0]);
   const phantomCallback = vi.spyOn(phantom as unknown as RemovalDiagnostic, "PostRemove");
   const phantomChildren = [...getNumberTreeChildren(phantom)];

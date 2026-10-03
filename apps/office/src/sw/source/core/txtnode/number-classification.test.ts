@@ -47,7 +47,7 @@ function graph(
     });
     record = requireMember(node.GetNum());
   } else {
-    record = new SwNodeNum(node);
+    record = new SwNodeNum(node, false);
     if (attachment === 1)
       node.GetNum =
         /** Supplies an actual diagnostic record with no bound rule. @returns Record. */ () =>

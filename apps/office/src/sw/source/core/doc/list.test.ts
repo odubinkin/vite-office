@@ -85,7 +85,7 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     expect(list.GetDefaultListStyleName()).toBe("Numbering 2");
     expect(
       /** Inserts an invalid level. @returns Nothing. */ () =>
-        list.InsertListItem(new SwNodeNum(first), 10, document),
+        list.InsertListItem(new SwNodeNum(first, false), 10, document),
     ).toThrow("outside 0-9");
     applyWriterParagraphList(first, {
       kind: "numbered",
@@ -110,7 +110,7 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     expect(list.HasNodes()).toBe(true);
     list.InvalidateListTree();
     nested.RemoveFromList();
-    SwList.RemoveListItem(new SwNodeNum(missing), document);
+    SwList.RemoveListItem(new SwNodeNum(missing, false), document);
     list.ValidateListTree(document);
     expect(list.GetListItemNumber(nested)).toBeUndefined();
   });

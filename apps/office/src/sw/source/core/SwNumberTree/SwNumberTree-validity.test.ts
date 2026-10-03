@@ -137,7 +137,7 @@ it("looks up the stored valid boundary only for guarded owned children", /** Che
   const { document, texts, records, root } = fixture();
   const first = required(records[0]);
   const second = required(records[1]);
-  const orphan = new SwNodeNum(required(texts[0]));
+  const orphan = new SwNodeNum(required(texts[0]), false);
   const foreignText = document.nodes.MakeTextNode();
   applyWriterParagraphList(foreignText, {
     kind: "numbered",

@@ -157,7 +157,7 @@ it("matches native bound orphan and inherited continuous phantom policies", /** 
     const rule = new SwNumRule("policy", "label-alignment");
     rule.SetContinusNum(continuous as boolean);
     rule.SetCountPhantoms(phantoms as boolean);
-    const root = new SwNodeNum(undefined, rule),
+    const root = new SwNodeNum(rule),
       child = new SwNodeNum(undefined);
     root.AddChild(child, 0, operationDocument);
     expect([
@@ -173,13 +173,13 @@ it("matches native bound orphan and inherited continuous phantom policies", /** 
 it("retains native empty and end sentinel validation with protected traversal", /** Exercises source sentinel boundaries independently of paragraph insertion traces. @returns Nothing. */ () => {
   const rule = new SwNumRule("sentinel", "label-alignment");
   rule.SetContinusNum(true);
-  const root = new SwNodeNum(undefined, rule),
+  const root = new SwNodeNum(rule),
     probe = root as unknown as TreeDiagnostic;
   probe.ValidateContinuous(undefined);
   expect(probe.mpLastValid).toBeUndefined();
   expect(probe.GetLastDescendant()).toBeUndefined();
-  const child = new SwNodeNum(undefined, rule),
-    foreign = new SwNodeNum(undefined, rule),
+  const child = new SwNodeNum(rule),
+    foreign = new SwNodeNum(rule),
     doc = new SwDoc(false);
   doc.SetInReading(true);
   root.AddChild(child, 0, doc);
@@ -191,8 +191,8 @@ it("retains native empty and end sentinel validation with protected traversal", 
   expect(probe.mpLastValid).toBe(child);
   probe.ValidateContinuous(undefined);
   expect(probe.mpLastValid).toBeUndefined();
-  const skippedRoot = new SwNodeNum(undefined, rule),
-    descendant = new SwNodeNum(undefined, rule);
+  const skippedRoot = new SwNodeNum(rule),
+    descendant = new SwNodeNum(rule);
   skippedRoot.AddChild(descendant, 1, doc);
   (skippedRoot as unknown as TreeDiagnostic).ValidateContinuous(undefined);
   const phantom = required(getNumberTreeChildren(skippedRoot)[0]);

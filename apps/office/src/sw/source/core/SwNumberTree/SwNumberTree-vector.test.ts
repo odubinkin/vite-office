@@ -161,7 +161,7 @@ it.each(profiles)(
 
 it("preserves prefilled output and raw state for an unattached record", /** An orphan has no ancestor path regardless of validation selection. @returns Nothing. */ () => {
   const document = createWriterDocument();
-  const orphan = new SwNodeNum(document.paragraphs[0]);
+  const orphan = new SwNodeNum(document.paragraphs[0], false);
   const output = [99];
   append(orphan, output, false);
   append(orphan, output, true);

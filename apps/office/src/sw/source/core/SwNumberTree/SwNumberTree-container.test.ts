@@ -50,14 +50,14 @@ function fixture() {
     document,
     texts,
     records,
-    source: new SwNodeNum(undefined, rule),
-    destination: new SwNodeNum(undefined, rule),
+    source: new SwNodeNum(rule),
+    destination: new SwNodeNum(rule),
   };
 }
 
 it("merges children in comparator order and retains destination identity for equivalent keys", /** Checks native bulk sorted union and source-parent updates before rejected equality. @returns Nothing. */ () => {
   const { document, texts, records, source, destination } = fixture();
-  const duplicate = new SwNodeNum(required(texts[1]));
+  const duplicate = new SwNodeNum(required(texts[1]), false);
   destination.AddChild(required(records[1]), 0, document);
   destination.AddChild(required(records[3]), 0, document);
   source.AddChild(required(records[0]), 0, document);
@@ -104,7 +104,7 @@ it("rejects a phantom factory result equivalent to an existing no-text record", 
 
 it("inserts transferred suffix records uniquely into an existing destination", /** Checks source upper-bound transfer, destination identity and unchanged stored counters. @returns Nothing. */ () => {
   const { document, texts, records, source, destination } = fixture();
-  const duplicate = new SwNodeNum(required(texts[3]));
+  const duplicate = new SwNodeNum(required(texts[3]), false);
   source.AddChild(required(records[1]), 0, document);
   source.AddChild(required(records[3]), 0, document);
   destination.AddChild(required(records[0]), 0, document);

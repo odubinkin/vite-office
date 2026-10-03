@@ -256,7 +256,7 @@ it("revalidates zero restarts, counted changes and phantom ancestors", /** Verif
 
 it("retains native root and unattached node numbering policy", /** Verifies no-text roots, missing rules and numbering-present descendant policy. @returns Nothing. */ () => {
   const document = createWriterDocument();
-  const node = new SwNodeNum(document.paragraphs[0] as SwTextNode);
+  const node = new SwNodeNum(document.paragraphs[0] as SwTextNode, false);
   const root = new SwNodeNum(undefined);
   expect(node.GetStartValue()).toBe(1);
   expect(observeNumberingCount(node)).toBe(false);

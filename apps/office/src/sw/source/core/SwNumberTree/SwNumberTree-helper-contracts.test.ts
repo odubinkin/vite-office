@@ -105,8 +105,8 @@ function fixture(continuous = false) {
     rule,
     texts,
     records,
-    source: new HelperContract(undefined, rule),
-    destination: new HelperContract(undefined, rule),
+    source: new HelperContract(rule),
+    destination: new HelperContract(rule),
   };
 }
 /** Reads cached values without validation. @param records - Actual records. @returns Counters. */

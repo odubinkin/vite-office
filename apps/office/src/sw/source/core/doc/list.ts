@@ -45,7 +45,7 @@ export class SwList {
     defaultListStyle: SwNumRule,
   ) {
     this.defaultListStyleName = defaultListStyle.GetName();
-    this.root = new SwNodeNum(undefined, defaultListStyle);
+    this.root = new SwNodeNum(defaultListStyle);
   }
 
   /** Returns the persistent list identity. @returns List identity. */

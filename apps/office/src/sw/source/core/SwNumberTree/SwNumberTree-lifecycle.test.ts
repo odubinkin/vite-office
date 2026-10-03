@@ -118,8 +118,8 @@ it("keeps native orphan and invalid removal contracts bounded", /** Checks sourc
     ValidateHierarchical(target: SwNodeNum): void;
   };
   const document = createWriterDocument();
-  const node = new SwNodeNum(document.paragraphs[0]);
-  const missing = new SwNodeNum(document.nodes.MakeTextNode());
+  const node = new SwNodeNum(document.paragraphs[0], false);
+  const missing = new SwNodeNum(document.nodes.MakeTextNode(), false);
   node.SetLevelInListTree(-1, document);
   node.SetLevelInListTree(1, document);
   node.RemoveMe(document);
@@ -169,7 +169,7 @@ class EmptyPhantomItem extends SwNodeNum {
 it("removes a real item with an empty phantom descendant without leaving root children", /** Verifies MoveChildren handles the empty nested phantom created before cleanup. @returns Nothing. */ () => {
   const document = createWriterDocument();
   const root = new SwNodeNum(undefined);
-  const item = new EmptyPhantomItem(document.paragraphs[0]);
+  const item = new EmptyPhantomItem(document.paragraphs[0], false);
   root.AddChild(item, 0, document);
   item.createEmptyPhantom();
   item.RemoveMe(document);
