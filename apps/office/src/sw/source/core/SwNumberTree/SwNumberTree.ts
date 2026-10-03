@@ -73,9 +73,14 @@ export abstract class SwNumberTreeNode {
       let position = this.mpLastValid === undefined ? 0 : this.mChildren.find(this.mpLastValid) + 1;
       while (position < this.mChildren.size())
         (this.mChildren.at(position++) as SwNumberTreeNode).Notify(document);
-      const siblings = this.mpParent?.mChildren;
-      const next = siblings?.at(siblings.find(this) + 1);
-      if (next !== undefined && !next.IsCounted()) next.NotifyInvalidChildren(document);
+      if (this.GetParent() !== undefined) {
+        const parent = this.GetParent() as SwNumberTreeNode;
+        const position = parent.GetIterator(this) + 1;
+        if (position !== (this.GetParent() as SwNumberTreeNode).mChildren.size()) {
+          const next = parent.mChildren.at(position) as SwNumberTreeNode;
+          if (!next.IsCounted()) next.NotifyInvalidChildren(document);
+        }
+      }
     }
     if (this.IsContinuous()) this.mpParent?.NotifyInvalidChildren(document);
   }
@@ -252,9 +257,14 @@ export abstract class SwNumberTreeNode {
         ))
     ) {
       this.mpLastValid = index === -1 ? undefined : this.mChildren.at(index);
-      const siblings = this.mpParent?.mChildren;
-      const next = siblings?.at(siblings.find(this) + 1);
-      if (next !== undefined && !next.IsCounted()) next.InvalidateChildren();
+      if (this.GetParent() !== undefined) {
+        const parent = this.GetParent() as SwNumberTreeNode;
+        const position = parent.GetIterator(this) + 1;
+        if (position !== (this.GetParent() as SwNumberTreeNode).mChildren.size()) {
+          const next = parent.mChildren.at(position) as SwNumberTreeNode;
+          if (!next.IsCounted()) next.InvalidateChildren();
+        }
+      }
     }
     if (this.IsContinuous()) {
       const position =
@@ -288,8 +298,8 @@ export abstract class SwNumberTreeNode {
   /** Finds the depth-first predecessor or direct previous sibling, excluding the root. @param sibling - Whether to omit preceding sibling descendants. @returns Predecessor. */
   public GetPred(sibling = false): SwNumberTreeNode | undefined {
     if (this.mpParent === undefined) return undefined;
-    const position = this.mpParent.mChildren.find(this);
-    if (position === 0) return this.mpParent.mpParent === undefined ? undefined : this.mpParent;
+    const position = this.mpParent.GetIterator(this);
+    if (position === 0) return this.mpParent.GetParent() === undefined ? undefined : this.mpParent;
     const previous = this.mpParent.mChildren.at(position - 1) as SwNumberTreeNode;
     return sibling ? previous : (previous.GetLastDescendant() ?? previous);
   }

@@ -4089,6 +4089,30 @@
           {
             "path": "apps/office/src/sw/inc/SwNumberTreeTypes.ts",
             "marker": "tNumberVector"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+            "marker": "retains public predecessor defaults and protected nullable lookup and prefix contracts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+            "marker": "looks up predecessors through parent helpers while retaining root exclusion and deepest descendants"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+            "marker": "retains comparator-equivalent lookup after an actual unique child transfer"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+            "marker": "queries parent helpers after children and before the following uncounted notification subtree"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+            "marker": "looks up the next uncounted subtree only when the selected prefix guard changes its boundary"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts",
+            "marker": "retains continuous parent propagation after helper lookup and invalidates suffix prefixes only"
           }
         ],
         "upstream": [
@@ -4279,6 +4303,18 @@
           {
             "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
             "marker": "SwNumberTreeNode::MoveGreaterChildren"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::GetPred"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::NotifyInvalidChildren"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+            "marker": "SwNumberTreeNode::SetLastValid"
           }
         ]
       },
@@ -4306,7 +4342,8 @@
         "Iteration60 restores complete selected protected prefix API: SetLastValid takes a required child-container position and optional false-default validation flag, InvalidateChildren forwards native end with omitted validation, and Invalidate retains a required child. Existing numeric index/-1 end representation maps native iterators; all insertion/cleanup/transfer/validation/removal callers now forward their corresponding positions. Retained-boundary comparison resolves saved storage through find, following uncounted nodes receive InvalidateChildren, and continuous invalidation propagates parent GetIterator positions. Five owned type/document tests cover exact inherited access/arity/void/defaults, guards/rewinds/forward validation/end/empty, following-uncounted helper dispatch, continuous suffix/upward propagation and direct first/middle/last invalidation. Old tests and literals remain unchanged. Fresh pinned manual declaration/body/call-site hashes only; no compiled native/full iterator/const/dtor/context lifetime certification. No project test reads, compiles or invokes upstream; Agentplane contains no helper/source copies. Other helper/context/client/redline/layout/range/browser/lifetime obligations remain separately unverified. No module/status/default/goal, registered IO/recovery or gate promotion.",
         "Iteration61 removes invented protected GetDestinationPhantom and restores source-owned inline AddChild destination selection. Orphan/count guards and predecessor/destination child-count reads follow native contracts; transfer retains last predecessor child, reuses a first phantom or invokes its parent factory, creates under empty destinations and stops immediately after predecessor exhaustion. Earlier notification capture, prefix updates and cleanup order remain intact. Three owned trace tests cover real/empty/retained-phantom destinations, exact count/transfer/factory order, deep topology/raw caches, both reading notification gates, removed-helper absence and transfer stop. Existing-phantom branch uses explicit comparator-bound diagnostic insertion of an actual factory phantom, not certified native Writer final-class reentrancy. One old test now creates/observes phantom directly with expected matcher arguments unchanged; all other old tests/literals and54other core method bodies unchanged. Fresh pinned manual source hashes only, no compiled native/full iterator/context/layout/redline/dtor lifetime claim. No project test accesses upstream and no helper/source files are stored in Agentplane. Other native topology/helper/Validate/Notify access and required context/client/range/browser/lifetime remain unverified. No module/status/default/goal, registered IO/recovery or gate promotion.",
         "Iteration62 restores all six selected native protected helpers: Validate, HasOnlyPhantoms, HasPhantomCountedParent, GetFirstNonPhantomChild, MoveChildren and MoveGreaterChildren. Validate and MoveChildren retain required nullable pointer arguments; transfer comparison/destination references remain required and nonnullable. HasOnlyPhantoms calls GetChildCount for one-child then empty branches, counted phantom ancestry checks parent phantom policy before counting and recursion, and MoveChildren selects an empty destination factory or retained tail. Six owned inherited-type/trace/document tests cover exact arity/returns/public absence, null hierarchical versus continuous engine dispatch and raw prefix/counters, actual phantom-only recursion, real/phantom parent call order and short circuit, first real descendant identity and transfer ownership/factory/tail/storage. Three new runtime traces and inherited type checks fail before correction and pass afterward. Two old tests use protected diagnostics with matcher arguments unchanged; other old tests unchanged. Fresh manual pinned declaration/body hashes only; no compiled native evidence, const/debug destructor/empty-phantom or nonempty-null undefined-behavior certification. Empty-source null transfer follows native release body only; DBG_UTIL sanity still requires a destination. No project test reads, compiles or invokes upstream, and no helper/source copies are saved in Agentplane. Remaining full context/client/range/layout/redline/browser/lifetime and other access contracts stay unverified; no module/status/default/goal, registered IO/recovery or gate promotion.",
-        "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion."
+        "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
+        "Iteration68 restores the native parent GetIterator/GetParent paths in the complete existing GetPred,NotifyInvalidChildren and SetLastValid bodies. Predecessor lookup retains root exclusion,first nested parent,optional sibling false default,deepest descendant and ordered equivalent-key identity. Shown notification and accepted prefix updates obtain the following sibling through parent helpers before counted policy;continuous prefix invalidation preserves native upward iterator forwarding. Six owned cases/seven exact type checks cover all selected helper traces,counter/topology/client/registry preservation,reading suppression,next counted and uncounted notifications,prefix no-op/validation/rollback/end and continuous suffix invalidation. Five final authored cases fail baseline only on missing source helper paths;existing signatures and observed counter values are retained. Existing tests and unrelated method bodies unchanged. Manual pinned hashes/inspection only,no native execution/source/helper artifacts or upstream access by project tests. Native helper methods are nonvirtual;test spies observe source call paths and do not certify an extension ABI. Native missing parent-child iterator domain,debug diagnostics,full allocator/integer/const/final/destructor/client/redline/layout/browser lifetimes and other method architecture remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
