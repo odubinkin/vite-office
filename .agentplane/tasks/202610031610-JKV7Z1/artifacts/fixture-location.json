@@ -1,0 +1,7 @@
+{
+  "scratch": "test-results/inventory-fixtures",
+  "sourceOutsideAgentplane": true,
+  "ignored": true,
+  "agentplaneSourceCountDuringFixtureLifetime": 0,
+  "ownedFixtureBodiesUnchanged": true
+}

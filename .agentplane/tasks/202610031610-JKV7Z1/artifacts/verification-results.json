@@ -1,0 +1,27 @@
+{
+  "fixtureBodyUnchangedExceptScratch": true,
+  "fixtureLifetimeSourceCount": 0,
+  "finalAgentplaneSourceCount": 0,
+  "inventory": {
+    "files": 36,
+    "tests": 109,
+    "coverage": [
+      100,
+      100,
+      100,
+      100
+    ]
+  },
+  "checks": {
+    "format": "pass",
+    "lint": "pass",
+    "toolsTypes": "pass",
+    "docs": "pass"
+  },
+  "logSha256": "f0448ce20bb7727eb9583ebdb24aac25579fca0b9e8c2fa68daa799b7d0d55a0",
+  "scope": [
+    "scripts/test-fixtures/inventory-reference.ts",
+    ".gitignore"
+  ],
+  "existingFullVerify": ".agentplane/tasks/202610031549-F4HAPT/artifacts/full-verify.log"
+}
