@@ -4,7 +4,7 @@ title: "Restore native inline descendant destination selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned inline destination selection and remove invented helper under continuing goal authorization; preserve all old expected results and IO deviations."
 doc_version: 3
-doc_updated_at: "2026-10-03T15:45:53.113Z"
+doc_updated_at: "2026-10-03T15:47:16.024Z"
 doc_updated_by: "CODER"
 description: "Iteration61 removes invented protected GetDestinationPhantom and restores complete source-owned AddChild inline count/first-child/parent-factory branches. Preserve old matcher expectations through one test-only helper removal; owned deep-transfer traces and topology, no upstream access by tests or saved helper/source files."
 sections:
@@ -58,6 +58,8 @@ sections:
     Command:npm run verify. Result:first attempt fail/exit1, actual live session25932 terminal. Evidence:175app files/783tests passed,4Vitest fork workers failed to start before pool-runner response timeout:CommandToolbar.test.tsx,direct-attribute-native.test.ts,writer-boundaries.test.ts,SwNumberTree-notification-access.test.ts. Tests in those files did not execute; coverage incomplete99.79/99.73/99.86/99.84%, not a proven regression or accepted result. Preserve full-verify-first.log,run these4files isolated then unchanged full verify again. No production/test/gate/config changes; do not restart solely on observation timeout, the original process is verified terminal. Whole leaf remains unverified until all declared gates pass. A mistaken vitest.config.ts read found no file; bounded lookup unnecessary for unchanged retry.
 
     Command: isolated unchanged four-worker suites. Result: pass,4files/7tests; isolated-worker-retry.log. Command: npm run verify second attempt. Result: fail/exit1, terminal46252. Evidence: all790app tests/179files and109inventory tests pass with both100% coverage; browser18pass/1fail, responsive Paragraph menu item detached after scrolling and Styles menu visible. full-verify-second.log preserved. Scope: unchanged five-path core implementation; no numbering action precedes failure, no causal claim or gate weakening. Investigate and run unchanged responsive suite once isolated; reproducible UI remediation requires a separate correction task. Agentplane ignored-inclusive Python/bytecode/native source scan0 at fresh startup.
+
+    Command: npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-responsive-sidebar.spec.ts. Result: fail/exit1 terminal21582,2pass/1fail same Paragraph detached/intercepted after scroll. Evidence: isolated-responsive.log; screenshot confirms Styles open on390x340. Scope: reproducible existing short-viewport menu defect requires separate browser task; core semantic implementation may be committed for review but remains unverified until unchanged full gates pass. No old test/gate changes.
 id_source: "generated"
 ---
 ## Summary
@@ -96,3 +98,5 @@ Implementation: all3new tests fail baseline call traces and pass final unchanged
 Command:npm run verify. Result:first attempt fail/exit1, actual live session25932 terminal. Evidence:175app files/783tests passed,4Vitest fork workers failed to start before pool-runner response timeout:CommandToolbar.test.tsx,direct-attribute-native.test.ts,writer-boundaries.test.ts,SwNumberTree-notification-access.test.ts. Tests in those files did not execute; coverage incomplete99.79/99.73/99.86/99.84%, not a proven regression or accepted result. Preserve full-verify-first.log,run these4files isolated then unchanged full verify again. No production/test/gate/config changes; do not restart solely on observation timeout, the original process is verified terminal. Whole leaf remains unverified until all declared gates pass. A mistaken vitest.config.ts read found no file; bounded lookup unnecessary for unchanged retry.
 
 Command: isolated unchanged four-worker suites. Result: pass,4files/7tests; isolated-worker-retry.log. Command: npm run verify second attempt. Result: fail/exit1, terminal46252. Evidence: all790app tests/179files and109inventory tests pass with both100% coverage; browser18pass/1fail, responsive Paragraph menu item detached after scrolling and Styles menu visible. full-verify-second.log preserved. Scope: unchanged five-path core implementation; no numbering action precedes failure, no causal claim or gate weakening. Investigate and run unchanged responsive suite once isolated; reproducible UI remediation requires a separate correction task. Agentplane ignored-inclusive Python/bytecode/native source scan0 at fresh startup.
+
+Command: npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-responsive-sidebar.spec.ts. Result: fail/exit1 terminal21582,2pass/1fail same Paragraph detached/intercepted after scroll. Evidence: isolated-responsive.log; screenshot confirms Styles open on390x340. Scope: reproducible existing short-viewport menu defect requires separate browser task; core semantic implementation may be committed for review but remains unverified until unchanged full gates pass. No old test/gate changes.

@@ -1,0 +1,60 @@
+[WebServer] (node:68024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:68025) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport (746ms)
+  ✘  2 apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll (30.1s)
+(node:68055) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 apps/office/e2e/writer-responsive-sidebar.spec.ts:76:1 › the mobile table grid dismisses outside and More Options opens the full dialog (722ms)
+
+
+  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('menuitem', { name: 'Paragraph…' })
+        - locator resolved to <button tabindex="-1" type="button" role="menuitem" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - performing click action
+        - <html lang="en">…</html> intercepts pointer events
+      - retrying click action
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+
+
+      56 |   await page.setViewportSize({ width: 390, height: 340 });
+      57 |   await page.getByRole("button", { name: "Format" }).click();
+    > 58 |   await page.getByRole("menuitem", { name: "Paragraph…" }).click();
+         |                                                            ^
+      59 |   const panel = page.locator("[data-writer-modal-panel]");
+      60 |   await expect(panel).toBeVisible();
+      61 |   expect(
+        at /Users/odubinkin/Projects/vite-office/apps/office/e2e/writer-responsive-sidebar.spec.ts:58:60
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/writer-responsive-sidebar--cdfea-e-document-and-modal-scroll/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    apps/office/e2e/writer-responsive-sidebar.spec.ts:33:1 › the page stays within the viewport while the document and modal scroll 
+  2 passed (32.9s)
