@@ -102,14 +102,19 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Reads native phantom policy independently of parent inheritance. @returns Whether phantoms count, true without a bound rule. */
   protected override IsCountPhantoms(): boolean {
-    const rule = this.GetNumRule();
-    return rule === undefined || (!rule.IsContinusNum() && rule.IsCountPhantoms());
+    let result = true;
+    if (this.mpNumRule !== undefined)
+      result = !this.mpNumRule.IsContinusNum() && this.mpNumRule.IsCountPhantoms();
+    return result;
   }
   /** Compares phantom/root records before real text records, then document indexes. @param node - Compared record. @returns Native ordering. */
   public LessThan(node: SwNumberTreeNode): boolean {
-    const other = (node as SwNodeNum).GetTextNode();
-    if (this.textNode === undefined) return other !== undefined;
-    return other !== undefined && this.textNode.GetIndex() < other.GetIndex();
+    let result = false;
+    const other = node as SwNodeNum;
+    if (this.textNode === undefined && other.textNode !== undefined) result = true;
+    else if (this.textNode !== undefined && other.textNode !== undefined)
+      result = this.textNode.GetIndex() < other.textNode.GetIndex();
+    return result;
   }
   /** Reads native SwTextNode counted policy. @returns Counted flag including native phantom policy. */
   public override IsCounted(): boolean {
