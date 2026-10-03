@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610031844-58PBN7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-03T18:58:49.645Z",
+  "verdict": "pass",
+  "summary": "Same-actor separate quality phase passes exact semantic9318359f711724ccd2ac392b911d525ec4d3506d: selected mutable by-value vector ownership and source type contracts restored without broader promotion.",
+  "evaluated_sha": "9318359f711724ccd2ac392b911d525ec4d3506d",
+  "blueprint_digest": "ca83621204f8c69d3cfea8e4a9aacce4cf23e643a50d854d125762f6b9a7fb82",
+  "findings": [
+    "Seven semantic paths and final authored test hash match terminal full/offline/integrity reports. Four cases,ten exact type checks,12rule/depth/restart profiles cover independent mutable buffers,root/orphan/missing record,phantom9,continuous/hierarchical,restart0/11,reading transitions and native GetNum delegation. Final baseline runtime1fails/typeexit2;211vendor-absentapp+9boundary pass and exactpin restored.",
+    "134existing bodies and234prior tests unchanged; only text vector dispatch changes. Three existing evidence rows plus one native type module each manifest;211others each and all existing status/default/omission/deviation/order fields preserved. Full64666 terminal0:821app109inventory20browser,both100percent and all215-module/static gates;doctor0errors2existingwarnings,routing/diff pass. Five pinned manual file hash matches only,no native execution or forbidden artifact sources."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610031844-58PBN7/README.md",
+    ".agentplane/tasks/202610031844-58PBN7/verification-results.json",
+    ".agentplane/tasks/202610031844-58PBN7/offline-test-results.json",
+    ".agentplane/tasks/202610031844-58PBN7/scope-integrity.json",
+    ".agentplane/tasks/202610031844-58PBN7/native-vector-inspection.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native long precision/allocator,full layout/redline selectors,const/final/destructor/client and all remaining browser behavior remain unverified. Source primitive aliases do not certify those domains. Wider parent/goal must remain open."
+  ]
+}
