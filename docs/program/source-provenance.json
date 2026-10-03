@@ -3530,6 +3530,30 @@
           {
             "path": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
             "marker": "uses destruction context for roots and phantoms while real records retain their live owner"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+            "marker": "keeps the public zero-argument numeric start contract"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+            "marker": "returns owned starts through depth nine and defaults beyond the format range without validation"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+            "marker": "short-circuits missing rules before parent and level lookup and uses level zero for detached bound records"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+            "marker": "reads restart before rule, then parent, level, optional owned format and start"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+            "marker": "preserves zero and explicit restart ahead of tree-level bounds or rule lookup"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-start-value.test.ts",
+            "marker": "defaults to one for absent owned formats instead of querying effective formats"
           }
         ],
         "upstream": [
@@ -3688,6 +3712,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
             "marker": "SwNodeNum::IsNotificationEnabled"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+            "marker": "SwNodeNum::GetStartValue() const"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+            "marker": "constexpr sal_uInt8 MAXLEVEL = 10;"
           }
         ]
       },

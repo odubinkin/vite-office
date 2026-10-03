@@ -1,6 +1,7 @@
 /** @fileoverview Supplies Writer text-node policy to the source-owned hierarchical and continuous number tree. */
 
 import type { SwDoc } from "../doc/doc";
+import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
 import type { SwNumRule } from "../doc/number";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwNumberTreeNode } from "./SwNumberTree";
@@ -108,11 +109,21 @@ export class SwNodeNum extends SwNumberTreeNode {
   public IsRestart(): boolean {
     return this.textNode?.IsListRestart() ?? false;
   }
-  /** Reads explicit restart or the native level format start. @returns Start value, falling back to one without a rule. */
+  /** Reads explicit restart or the bounded owned level format start. @returns Start value, defaulting to one without a rule, valid level or owned format. */
   public GetStartValue(): number {
-    if (this.IsRestart() && this.textNode !== undefined)
-      return this.textNode.GetActualListStartValue();
-    const level = this.GetParent() === undefined ? 0 : this.GetLevelInListTree();
-    return this.GetNumRule()?.GetNumFormat(level)?.GetStart() ?? 1;
+    let result = 1;
+    if (this.IsRestart() && this.GetTextNode() !== undefined) {
+      result = (this.GetTextNode() as SwTextNode).GetActualListStartValue();
+    } else {
+      const rule = this.GetNumRule();
+      if (rule !== undefined) {
+        const level = this.GetParent() === undefined ? 0 : this.GetLevelInListTree();
+        if (level >= 0 && level <= WRITER_MAX_LIST_LEVEL) {
+          const format = rule.GetNumFormat(level);
+          if (format !== undefined) result = format.GetStart();
+        }
+      }
+    }
+    return result;
   }
 }
