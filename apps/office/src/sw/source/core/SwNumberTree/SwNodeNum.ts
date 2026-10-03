@@ -94,7 +94,11 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Reads bound-rule continuous policy or inherits it from a parent. @returns Continuous flag, false for an unbound orphan. */
   public IsContinuous(): boolean {
-    return this.GetNumRule()?.IsContinusNum() ?? this.GetParent()?.IsContinuous() ?? false;
+    let result = false;
+    if (this.GetNumRule() !== undefined) result = (this.mpNumRule as SwNumRule).IsContinusNum();
+    else if (this.GetParent() !== undefined)
+      result = (this.GetParent() as SwNumberTreeNode).IsContinuous();
+    return result;
   }
   /** Reads native phantom policy independently of parent inheritance. @returns Whether phantoms count, true without a bound rule. */
   protected override IsCountPhantoms(): boolean {
@@ -109,7 +113,11 @@ export class SwNodeNum extends SwNumberTreeNode {
   }
   /** Reads native SwTextNode counted policy. @returns Counted flag including native phantom policy. */
   public override IsCounted(): boolean {
-    return this.textNode?.IsCountedInList() ?? super.IsCounted();
+    let result: boolean;
+    if (this.GetTextNode() !== undefined)
+      result = (this.GetTextNode() as SwTextNode).IsCountedInList();
+    else result = super.IsCounted();
+    return result;
   }
   /** Finds counted descendants with the Writer numbering-present policy. @returns Whether a descendant contributes numbering. */
   protected override HasCountedChildren(): boolean {
@@ -126,14 +134,17 @@ export class SwNodeNum extends SwNumberTreeNode {
     return (
       this.IsCounted() &&
       (this.IsPhantom() ||
-        this.textNode === undefined ||
-        this.textNode.HasNumber() ||
-        this.textNode.HasBullet())
+        this.GetTextNode() === undefined ||
+        (this.GetTextNode() as SwTextNode).HasNumber() ||
+        (this.GetTextNode() as SwTextNode).HasBullet())
     );
   }
   /** Reads native SwTextNode restart policy. @returns Restart flag, false for a root. */
   public IsRestart(): boolean {
-    return this.textNode?.IsListRestart() ?? false;
+    let result = false;
+    if (this.GetTextNode() !== undefined)
+      result = (this.GetTextNode() as SwTextNode).IsListRestart();
+    return result;
   }
   /** Reads explicit restart or the bounded owned level format start. @returns Start value, defaulting to one without a rule, valid level or owned format. */
   public GetStartValue(): number {
