@@ -1,10 +1,11 @@
 ---
 id: "202610031610-JKV7Z1"
 title: "Move owned inventory test scratch outside Agentplane"
-status: "DOING"
+result_summary: "Owned test sources stay in ignored test-results; Agentplane source/helper artifacts remain absent."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Only scratch constant and stale gitignore comment change. All authored fixture bodies, Git adapters and existing expected results unchanged; synthetic source_0.cxx stays in ignored test-results and is removed in finally."
     - "109inventory tests/36files pass vendor absent/restored with100% allmetrics; format/lint/tools types/docs pass. Prior full792app/109inventory/20browser result remains unchanged production evidence; no broad rerun required for scratch/comment-only change."
-commit: null
+commit:
+  hash: "3a555d74af410d90c6ba9aaeaeda59a40b460650"
+  message: "🧹 JKV7Z1 code: keep test source fixtures outside Agentplane"
 comments:
   -
     author: "CODER"
     body: "Start: eliminate owned test-source storage under Agentplane, honoring explicit user restriction with one scratch path and stale exclusion-comment correction."
+  -
+    author: "CODER"
+    body: "Verified: test fixture scratch moved outside Agentplane with source count0 during lifetime,109inventory/36files both100% vendor absent/restored,format/lint/types/docs pass; fixture bodies and expectations unchanged."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Scratch path/comment-only correction verified: lifetime/source counts0,inventory109/36 both100% vendor absent/restored,format/lint/tools types/docs; source fixture bodies and assertions unchanged."
+  -
+    type: "status"
+    at: "2026-10-03T16:18:55.371Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: test fixture scratch moved outside Agentplane with source count0 during lifetime,109inventory/36files both100% vendor absent/restored,format/lint/types/docs pass; fixture bodies and expectations unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:15:03.925Z"
+doc_updated_at: "2026-10-03T16:18:55.372Z"
 doc_updated_by: "CODER"
 description: "Honor user source/helper artifact restriction by relocating repository-owned inventory fixture scratch from Agentplane to ignored test-results; fixtures and test assertions remain independent of pinned upstream."
 sections:
