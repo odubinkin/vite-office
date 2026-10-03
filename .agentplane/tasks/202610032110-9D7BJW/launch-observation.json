@@ -1,0 +1,6 @@
+{
+  "command": "node_modules/.bin/vitest run src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+  "cwd": "apps/office",
+  "exitCode": null,
+  "observation": "Binary path is rooted at repository, not workspace; test process never launched. Correct relative path ../../node_modules/.bin/vitest; no expectation/source/gate change."
+}

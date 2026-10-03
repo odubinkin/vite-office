@@ -1,0 +1,11 @@
+{
+  "exitCode": 0,
+  "command": "../../node_modules/.bin/vitest run src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+  "cwd": "apps/office",
+  "originalBytes": 236,
+  "sha256": "41ab7e3ec38b93972ae313b27a54dfe7a960a97be953aef25e092792760dfc9d",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  5 passed (5)"
+  ]
+}

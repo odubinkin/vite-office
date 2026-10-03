@@ -1,0 +1,31 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "files": [
+    {
+      "path": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "sha256": "5818684cbe1fc6f1b10d5895074d9ba678978fd0cd2593ee1e7777d1332370ae",
+      "matchesPin": true
+    },
+    {
+      "path": "sw/inc/SwNodeNum.hxx",
+      "sha256": "15e6a7b96816bbcc848c83605b8c1b187cadd59914ac81a33f631217a8a25e28",
+      "matchesPin": true
+    },
+    {
+      "path": "sw/inc/numrule.hxx",
+      "sha256": "8a0da865e8c8135f508921e4f249a0018facc7b6f50e8e7a0dbf5daa86a4a8d4",
+      "matchesPin": true
+    },
+    {
+      "path": "sw/inc/node.hxx",
+      "sha256": "92f1e375ba39481d1fcd231e58eebd9a57aa17840844db4ac31ccb6c309b9fea",
+      "matchesPin": true
+    },
+    {
+      "path": "include/o3tl/sorted_vector.hxx",
+      "sha256": "4ef74875a7b188cd80b5267bc0a43d6b30fb5a2ef6017650e8b596067ff4aaa2",
+      "matchesPin": true
+    }
+  ],
+  "scope": "Complete two method bodies and nullary/protected/required comparator contracts, actual rule bool helpers, document index getter and strict container comparison inspected manually. Private owner references/default true phantom policy/default false comparator restored; no source copies or native execution. Native final/private-derived/const/nonvirtual ABI/debug lifetime and generic base address ordering remain unverified."
+}

@@ -1,0 +1,24 @@
+{
+  "exitCode": 1,
+  "command": "../../node_modules/.bin/vitest run src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts",
+  "cwd": "apps/office",
+  "originalBytes": 4194,
+  "sha256": "3d75d15330bf4aeea242b563b2a637b1b13b299109fa4d95ae5ca63faec26e6b",
+  "summary": [
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts (5 tests | 4 failed) 13ms",
+    " Test Files  1 failed (1)",
+    "      Tests  4 failed | 1 passed (5)",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts > retains exact comparator and protected phantom contracts with the unbound true default",
+    "AssertionError: expected \"GetNumRule\" to not be called at all, but actually been called 1 times",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts:102:22",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts > reads bound private rules with continuous short circuit for actual roots phantoms and text",
+    "AssertionError: expected \"GetNumRule\" to not be called at all, but actually been called 1 times",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts:139:30",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts > retains the true unbound policy after real detachment without querying text or old rule",
+    "AssertionError: expected \"GetNumRule\" to not be called at all, but actually been called 1 times",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts:165:24",
+    " FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts > compares direct text pointers for every root phantom ordered text and equal-index pair",
+    "AssertionError: expected \"GetTextNode\" to not be called at all, but actually been called 5 times",
+    " ❯ src/sw/source/core/SwNumberTree/SwNodeNum-owner-references.test.ts:218:54"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "exitCode": 0,
+  "originalBytes": 55,
+  "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+  "summary": [
+    "> @vite-office/office@0.1.0 typecheck",
+    "> tsc --noEmit"
+  ]
+}

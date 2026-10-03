@@ -1,0 +1,19 @@
+{
+  "doctor": {
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 2,
+    "info": 2,
+    "knownWarnings": [
+      "Older managed hook readiness shim",
+      "Unrelated DONE duplicate202610031635-2Z3962 lacks own implementation hash; canonical cleanup4bf67a64 recorded elsewhere"
+    ]
+  },
+  "routing": {
+    "exitCode": 0,
+    "summary": "policy routing OK"
+  },
+  "diff": {
+    "exitCode": 0
+  }
+}
