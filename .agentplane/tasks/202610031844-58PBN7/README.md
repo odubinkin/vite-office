@@ -1,10 +1,11 @@
 ---
 id: "202610031844-58PBN7"
 title: "Restore caller-owned mutable numbering vector contracts"
-status: "DOING"
+result_summary: "Restored source-owned mutable numbering vector contracts at semantic9318359f711724ccd2ac392b911d525ec4d3506d.821app109inventory20browser,both100percent coverage;211vendor-absentapp+9boundary pass.234old tests and134other bodies unchanged. Wider parent and full goal remain active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Seven semantic paths and final authored test hash match terminal full/offline/integrity reports. Four cases,ten exact type checks,12rule/depth/restart profiles cover independent mutable buffers,root/orphan/missing record,phantom9,continuous/hierarchical,restart0/11,reading transitions and native GetNum delegation. Final baseline runtime1fails/typeexit2;211vendor-absentapp+9boundary pass and exactpin restored."
     - "134existing bodies and234prior tests unchanged; only text vector dispatch changes. Three existing evidence rows plus one native type module each manifest;211others each and all existing status/default/omission/deviation/order fields preserved. Full64666 terminal0:821app109inventory20browser,both100percent and all215-module/static gates;doctor0errors2existingwarnings,routing/diff pass. Five pinned manual file hash matches only,no native execution or forbidden artifact sources."
-commit: null
+commit:
+  hash: "9318359f711724ccd2ac392b911d525ec4d3506d"
+  message: "🧩 58PBN7 code: restore mutable caller-owned numbering vectors"
 comments:
   -
     author: "CODER"
     body: "Start: restore source-owned mutable numbering vector contracts and text getter delegation under standing iterative goal; retain all source/test artifact restrictions."
+  -
+    author: "CODER"
+    body: "Verified: native mutable caller-owned vector types and shown text GetNum delegation; all full/offline/type/ownership gates pass, exact semantic quality recorded."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Mutable caller-owned vector aliases/results and native text record delegation verified.821app109inventory20browser,all gates,both100percent;final baseline types fail and runtime delegation mismatch,211vendor-absentapp+9boundary pass restoredpin.134other bodies and234old tests unchanged;no prohibited artifact sources or broader promotion."
+  -
+    type: "status"
+    at: "2026-10-03T19:00:59.575Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native mutable caller-owned vector types and shown text GetNum delegation; all full/offline/type/ownership gates pass, exact semantic quality recorded."
 doc_version: 3
-doc_updated_at: "2026-10-03T19:00:28.539Z"
+doc_updated_at: "2026-10-03T19:00:59.576Z"
 doc_updated_by: "CODER"
 description: "Iteration66 of C9TN6M: restore native SwNumberTreeTypes aliases and mutable by-value GetNumberVector results across tree, shown text getter and existing SwList adapter. Preserve validation logic/defaults, root exclusion, IO/recovery deviations and unsupported layout/redline limits; no upstream test access or helper/source artifacts."
 sections:
