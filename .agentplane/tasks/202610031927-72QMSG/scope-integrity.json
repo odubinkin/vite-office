@@ -1,0 +1,31 @@
+{
+  "oldTestsAndSpecs": 236,
+  "allByteIdentical": true,
+  "changedMethods": [
+    "NotifyInvalidChildren",
+    "SetLastValid",
+    "GetPred"
+  ],
+  "unchangedMethods": 48,
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "total": 215,
+      "changedRows": 1,
+      "otherRowsUnchanged": 214,
+      "nonEvidenceAndOrderPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "total": 215,
+      "changedRows": 1,
+      "otherRowsUnchanged": 214,
+      "nonEvidenceAndOrderPreserved": true
+    }
+  ],
+  "ignoredInclusiveStorage": {
+    "files": 2543,
+    "python": 0,
+    "prohibitedSourceHelperExecutable": 0
+  }
+}

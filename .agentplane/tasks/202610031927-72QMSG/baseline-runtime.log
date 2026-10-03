@@ -1,0 +1,21 @@
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts (6 tests | 5 failed) 259ms
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts > looks up predecessors through parent helpers while retaining root exclusion and deepest descendants
+AssertionError: expected "GetIterator" to be called once with arguments: [ SwNodeNum{ …(9) } ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts:125:22
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts > retains comparator-equivalent lookup after an actual unique child transfer
+AssertionError: expected "GetIterator" to be called once with arguments: [ SwNodeNum{ …(9) } ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts:170:20
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts > queries parent helpers after children and before the following uncounted notification subtree
+AssertionError: expected [ 'child-first', 'child-next' ] to deeply equal [ 'child-first', 'parent', …(5) ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts:216:19
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts > looks up the next uncounted subtree only when the selected prefix guard changes its boundary
+AssertionError: expected [] to deeply equal [ [ SwNodeNum{ …(10) } ], …(1) ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts:263:31
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts > retains continuous parent propagation after helper lookup and invalidates suffix prefixes only
+AssertionError: expected [ [ SwNodeNum{ …(10) } ] ] to deeply equal [ [ SwNodeNum{ …(10) } ], …(1) ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-parent-lookup.test.ts:301:31
+ Test Files  1 failed (1)
+      Tests  5 failed | 1 passed (6)
+   Start at  02:32:09
+   Duration  974ms (transform 199ms, setup 67ms, import 234ms, tests 259ms, environment 306ms)

@@ -1,0 +1,10 @@
+{
+  "runtime": {
+    "cases": 6,
+    "passed": 1,
+    "failed": 5,
+    "originalBytes": 1066091,
+    "sha256": "4c7663507357966de121d79c1f3aefd0ea058362f733fbd71514efb5e0ec6737"
+  },
+  "types": "Existing native-compatible signatures pass; architecture-only runtime mismatch. Initial test annotation corrected to retain explicit undefined optional-argument type before final baseline."
+}
