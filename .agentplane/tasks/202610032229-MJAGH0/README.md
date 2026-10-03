@@ -4,7 +4,7 @@ title: "Restore Writer root popup opening focus contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,32 @@ verification:
   updated_by: "CODER"
   note: "Full verify912app109inventory29browser2resources100%coverage and0semantic violations; sequential upstream-absent912app109inventory12scripts29browser pass with pin restored;55focused9browser; exact six-path scope and0source/helper/Python artifacts. Full menubar parity remains unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-03T22:47:51.623Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR phase reviewed exact semantic ef2b2a1f85e127dbd32618f0732ca4a0b9602ab6; bounded root opening correction satisfies approved scope and terminal evidence."
+  evaluated_sha: "ef2b2a1f85e127dbd32618f0732ca4a0b9602ab6"
+  blueprint_digest: "c75d4d9e7b92d30184e8e0dd68a0d29b21277abe4c0c1a0043ac27a3a186e5d2"
+  evidence_refs:
+    - ".agentplane/tasks/202610032229-MJAGH0/README.md"
+    - ".agentplane/tasks/202610032229-MJAGH0/quality/20261003-224751623-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/quality/20261003-224751623-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610032229-MJAGH0/quality/20261003-224751623-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610032229-MJAGH0/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/source-inspection.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/baseline-runtime.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/baseline-browser.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/corrected-runtime.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/corrected-browser.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/full-verify-summary.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/offline-results.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/scope-integrity.json"
+    - ".agentplane/tasks/202610032229-MJAGH0/auxiliary-checks.json"
+  findings:
+    - "Manual pinned VCL header/callers/active-popup guard/popup focus establish pointer popup focus without selection and both-arrow/Return first-entry opening; actual production diff implements that contract while preserving child logic."
+    - "Baseline10of17owned and5of5browser failures corrected;55focused and9browser pass; full912app109inventory29browser2resources100%coverage0semantic. Sequential upstream-absent912app109inventory12scripts29browser pass and pin restored."
+    - "Exact six semantic paths;246prior tests byte-identical and one exact3line native-contradicting expectation corrected. Both215row manifests append bounded evidence only; statuses/defaults/ownership and exceptions preserved. Artifact storage has0source/helpers/Python/executables including ignored files."
 commit: null
 comments:
   -
@@ -42,7 +68,7 @@ events:
     state: "ok"
     note: "Full verify912app109inventory29browser2resources100%coverage and0semantic violations; sequential upstream-absent912app109inventory12scripts29browser pass with pin restored;55focused9browser; exact six-path scope and0source/helper/Python artifacts. Full menubar parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-03T22:46:44.357Z"
+doc_updated_at: "2026-10-03T22:48:16.659Z"
 doc_updated_by: "CODER"
 description: "Iteration77 under C9TN6M: restore native root popup focus for pointer opening, first-entry keyboard preselection for both arrows/Return, consumed opening requests and active popup reuse; preserve generated composition and registered I/O. Owned tests never invoke upstream; artifacts outcomes only."
 sections:
@@ -92,6 +118,8 @@ sections:
     Reproduction: 17 new owned cases produced10fail/7pass on baseline; all5 real Chromium opening/toggle scenarios failed. Corrected targeted5files/55cases and9browser cases all pass. Root opening enum replaced by consumed optional preselection boolean; pointer grabs popup focus, both initial arrows/Return select first, browser Space activation handled explicitly, active same-popup request preserves child state. Existing Writer View ArrowUp changes only3lines from last Sidebar to first currently implemented Status Bar; this is not certification of complete upstream View composition. Full npm run verify passes912app/195files,109inventory/36files,29browser,2resource cases; app/tools100% coverage and semantic violations0.246prior tests/spec byte-identical, exact old3line block, production outside scoped root opening unchanged and both215row manifests evidence-only append with statuses/defaults/ownership/prior conclusions preserved. Doctor0errors2known warnings; routing/diff/lint pass. Source inspection is manual exactpin and6hashes, with no native execution or source/helper artifacts. Sequential upstream-absent verification is in progress; final results and restoration will be recorded before verification. Read-only evidence collection briefly attempted coverage totals while the offline suite was regenerating coverage, observed ENOENT; full verification totals remain recorded, recollect only after the live suite is terminal. CLI show uses no JSON flag; bounded help corrected the read-only invocation.
 
     Final offline run terminal:912app109inventory12scripts29browser all pass sequentially with vendor absent; finally restored exact pin and6hashes. Coverage totals recollected after terminal completion; artifact audit ignored-inclusive0source/helpers/Python/executables. Next bounded candidate is native root saved-document focus lifecycle; this iteration changes opening only. No scope drift or approval skips.
+
+    Semantic commit ef2b2a1f85e127dbd32618f0732ca4a0b9602ab6; same-actor separate EVALUATOR phase reviewed exact semantic HEAD and recorded pass in quality/20261003-224751623-recovery-context/quality-report.json. Commit hook rejected the initial subject scope fix (expected code/task/close/integrate); retried the same intentional staged paths using permitted code scope, without changing implementation or verification. Route oracle generic complete points at latest artifact HEAD; canonical gateway finish with explicit actual implementation hash is used to preserve implementation traceability and descriptive close subject.
 id_source: "generated"
 ---
 ## Summary
@@ -158,3 +186,5 @@ Preflight main/direct clean at8037e4bf6fbbde9d7d7afbcc76eac43cb4a2c274. Previous
 Reproduction: 17 new owned cases produced10fail/7pass on baseline; all5 real Chromium opening/toggle scenarios failed. Corrected targeted5files/55cases and9browser cases all pass. Root opening enum replaced by consumed optional preselection boolean; pointer grabs popup focus, both initial arrows/Return select first, browser Space activation handled explicitly, active same-popup request preserves child state. Existing Writer View ArrowUp changes only3lines from last Sidebar to first currently implemented Status Bar; this is not certification of complete upstream View composition. Full npm run verify passes912app/195files,109inventory/36files,29browser,2resource cases; app/tools100% coverage and semantic violations0.246prior tests/spec byte-identical, exact old3line block, production outside scoped root opening unchanged and both215row manifests evidence-only append with statuses/defaults/ownership/prior conclusions preserved. Doctor0errors2known warnings; routing/diff/lint pass. Source inspection is manual exactpin and6hashes, with no native execution or source/helper artifacts. Sequential upstream-absent verification is in progress; final results and restoration will be recorded before verification. Read-only evidence collection briefly attempted coverage totals while the offline suite was regenerating coverage, observed ENOENT; full verification totals remain recorded, recollect only after the live suite is terminal. CLI show uses no JSON flag; bounded help corrected the read-only invocation.
 
 Final offline run terminal:912app109inventory12scripts29browser all pass sequentially with vendor absent; finally restored exact pin and6hashes. Coverage totals recollected after terminal completion; artifact audit ignored-inclusive0source/helpers/Python/executables. Next bounded candidate is native root saved-document focus lifecycle; this iteration changes opening only. No scope drift or approval skips.
+
+Semantic commit ef2b2a1f85e127dbd32618f0732ca4a0b9602ab6; same-actor separate EVALUATOR phase reviewed exact semantic HEAD and recorded pass in quality/20261003-224751623-recovery-context/quality-report.json. Commit hook rejected the initial subject scope fix (expected code/task/close/integrate); retried the same intentional staged paths using permitted code scope, without changing implementation or verification. Route oracle generic complete points at latest artifact HEAD; canonical gateway finish with explicit actual implementation hash is used to preserve implementation traceability and descriptive close subject.
