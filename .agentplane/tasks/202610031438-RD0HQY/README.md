@@ -1,10 +1,10 @@
 ---
 id: "202610031438-RD0HQY"
 title: "Restore native inline descendant destination selection"
-status: "DOING"
+status: "BLOCKED"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -27,6 +27,9 @@ comments:
   -
     author: "CODER"
     body: "Start: restore source-owned inline destination selection and remove invented helper under continuing goal authorization; preserve all old expected results and IO deviations."
+  -
+    author: "CODER"
+    body: "Blocked: unchanged full verification reproduces short-viewport browser popup overflow and menu detachment; core semantic correction committed for review but not verified. Resolve browser behavior in a separate correction task without changing gates or old expectations."
 events:
   -
     type: "status"
@@ -35,8 +38,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore source-owned inline destination selection and remove invented helper under continuing goal authorization; preserve all old expected results and IO deviations."
+  -
+    type: "status"
+    at: "2026-10-03T15:47:47.531Z"
+    author: "CODER"
+    from: "DOING"
+    to: "BLOCKED"
+    note: "Blocked: unchanged full verification reproduces short-viewport browser popup overflow and menu detachment; core semantic correction committed for review but not verified. Resolve browser behavior in a separate correction task without changing gates or old expectations."
 doc_version: 3
-doc_updated_at: "2026-10-03T15:47:16.024Z"
+doc_updated_at: "2026-10-03T15:47:47.531Z"
 doc_updated_by: "CODER"
 description: "Iteration61 removes invented protected GetDestinationPhantom and restores complete source-owned AddChild inline count/first-child/parent-factory branches. Preserve old matcher expectations through one test-only helper removal; owned deep-transfer traces and topology, no upstream access by tests or saved helper/source files."
 sections:
