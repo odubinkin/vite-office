@@ -1,10 +1,11 @@
 ---
 id: "202610031646-YTEPG2"
 title: "Restore native protected number-tree helper contracts"
-status: "DOING"
+result_summary: "Six protected helper contracts restored; required pointer/reference domains and source call order verified. Parent full upstream parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Six owned tests and inherited type checks directly cover contracts and valid domains; baseline three runtime trace failures and type mismatch become passes. Vendor-absent92numbering plus9boundary/resource tests pass with exact pin restored."
     - "Full verify exit0:798application,109inventory,20browser and2resource tests; application and inventory coverage remain100%. Six semantic paths only;3method bodies changed,52others and216oldtestfiles unchanged; two protected diagnostic adaptations preserve old matcher arguments. Other metadata rows, status/default/deviation fields and gates unchanged."
     - "Artifact source/helper/executable count is zero, source evidence is hashes/conclusions only and no project test reads or invokes upstream. Parent parity remains unverified; remaining notification/document-context, layout/redline/range/browser/native lifetime contracts are explicitly open."
-commit: null
+commit:
+  hash: "224bce74a50b7812485e7bfeab9c45ff85870711"
+  message: "🧩 YTEPG2 code: restore native protected numbering helper contracts"
 comments:
   -
     author: "CODER"
     body: "Start: restore selected native protected helper contracts and call order with owned evidence, preserving prior tests and registered IO deviations."
+  -
+    author: "CODER"
+    body: "Verified: restored six native protected helper contracts and source policy/transfer call order; full verify passes 798 application,109 inventory,20 browser tests with both100% gates; owned offline evidence and old expectations retained."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify exit0: 798 application/109 inventory/20 browser tests and both100% gates; selected six protected contracts restored, baseline3trace/type failures corrected, vendor-absent92+9 tests pass and pin restored. Six semantic paths only,3body changes/52unchanged methods,216other old test files and old matcher values retained. Hashes and bounded logs only; no upstream test access/native execution/whole-module promotion."
+  -
+    type: "status"
+    at: "2026-10-03T17:03:35.348Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored six native protected helper contracts and source policy/transfer call order; full verify passes 798 application,109 inventory,20 browser tests with both100% gates; owned offline evidence and old expectations retained."
 doc_version: 3
-doc_updated_at: "2026-10-03T17:03:00.970Z"
+doc_updated_at: "2026-10-03T17:03:35.349Z"
 doc_updated_by: "CODER"
 description: "Iteration62: restore protected access and required nullable pointer contracts for the six existing native number-tree validation/phantom/transfer helpers, source GetChildCount and phantom-parent dispatch order, and source destination selection in MoveChildren. Add owned type/trace/document tests without upstream access; adapt two existing tests to protected diagnostics preserving expected values. No IO/recovery/deviation or broad parity status changes."
 sections:
