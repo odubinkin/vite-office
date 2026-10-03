@@ -1,0 +1,38 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/editor/WriterPlainTextEditor.test.tsx src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx",
+  "exit": 1,
+  "sha256": "466a5d046137ded0cdb9b1897a119ec70476111954a637044ac396f90f588fd5",
+  "summary": [
+    " Test Files  1 failed | 6 passed (7)",
+    "      Tests  1 failed | 86 passed (87)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx > menubar document fallback > routes the actual Writer menu to its editing host and accepts input"
+  ],
+  "tail": [
+    "      Tests  1 failed | 86 passed (87)",
+    "   Start at  06:41:09",
+    "   Duration  11.37s (transform 1.31s, setup 422ms, import 2.20s, tests 15.84s, environment 2.41s)",
+    "",
+    "",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+    "",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx > menubar document fallback > routes the actual Writer menu to its editing host and accepts input",
+    "Error: expect(element).toHaveTextContent()",
+    "",
+    "Expected element to have text content:",
+    "  OwnedFallbackProof",
+    "Received:",
+    "  Paragraph style: Default Paragraph Style",
+    " ❯ routesWriterClient src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx:95:20",
+    "     93|       }),",
+    "     94|     );",
+    "     95|     expect(editor).toHaveTextContent(\"OwnedFallbackProof\");",
+    "       |                    ^",
+    "     96|   });",
+    "     97|",
+    "",
+    "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯",
+    "",
+    ""
+  ]
+}

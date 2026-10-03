@@ -4,7 +4,7 @@ title: "Focus Writer document when inactive popup menu has no saved owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved iteration79 document focus fallback on unopened Writer menubar Escape under persistent user parity authorization; no upstream test dependency or source/helper artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-03T23:37:59.993Z"
+doc_updated_at: "2026-10-03T23:42:26.409Z"
 doc_updated_by: "CODER"
 description: "Iteration79 under C9TN6M: restore native default-to-document behavior for Escape on activated menubar without popup when no live saved owner, through active Writer editing-host reference. Preserve saved-owner precedence and popup/submenu/command paths. No upstream source/helper artifacts or test dependency."
 sections:
@@ -49,6 +49,8 @@ sections:
   Findings: |-
     Preflight main/direct clean; only parent C9TN6M DOING. Prior turn progress: iteration78 completed saved-owner and close-before-dispatch leaf. Manual native inspection shows ChangeHighlightItem bDefaultToDocument=true by default, PopupClosed explicitlyfalse; GetFocus activates without popup and Escape deactivates with defaulttrue. ImplGrabFocusToDocument routes enclosing frame client. Browser closed-menubar Escape currently has no document fallback. No upstream source/helper artifact permitted. Read-only guessed nonexistent paths produced missing-file/glob errors with no mutation; actual native header discovered at vcl/source/window/menubarwindow.hxx.
     Owned baseline corrected missing QueryCommand descriptor fixture: initial4fail included1fixture issue; owned baseline3fail5pass exposes absent/disconnected/per-frame document fallback. Corrected86focused cases and6Chromium cases pass. First fullverify stopped at ESLint2missing rootElement dependencies after optional ref injection; add actual reference to selection/subscription effect dependencies within approved editing-host lifecycle scope. No pass criterion change or lint suppression. Failed full outcome retained.
+    Second fullverify938cases/197files allpass and100%branches; required coverage gate exposed actual Writer client callback line418 only exercised in Chromium, not owned unit suite (statement/line99.99%,function99.96%). Added actual Desktop/Writer client focus-and-beforeinput integration case to existing new test file, preserving251prior tests, no threshold relaxation or production changes. This exercises true view ref wiring rather than duplicating generic callback fixture. Failed gate retained as writer-callback-coverage-full-verify-summary.json.
+    Actual Writer integration focus passed immediately; JSDOM does not create a native caret on editing-host focus, so input assertion initially failed. Set an explicit owned paragraph Range before beforeinput, as other owned editor tests do; Chromium already validates actual native caret/input behavior. Corrected final87cases/7files pass; earlier fixture outcome retained as writer-selection-fixture-runtime.json. All production paths unchanged after effect-dependency correction.
 id_source: "generated"
 ---
 ## Summary
@@ -79,3 +81,5 @@ Revert only the semantic iteration79 commit through a separately authorized task
 
 Preflight main/direct clean; only parent C9TN6M DOING. Prior turn progress: iteration78 completed saved-owner and close-before-dispatch leaf. Manual native inspection shows ChangeHighlightItem bDefaultToDocument=true by default, PopupClosed explicitlyfalse; GetFocus activates without popup and Escape deactivates with defaulttrue. ImplGrabFocusToDocument routes enclosing frame client. Browser closed-menubar Escape currently has no document fallback. No upstream source/helper artifact permitted. Read-only guessed nonexistent paths produced missing-file/glob errors with no mutation; actual native header discovered at vcl/source/window/menubarwindow.hxx.
 Owned baseline corrected missing QueryCommand descriptor fixture: initial4fail included1fixture issue; owned baseline3fail5pass exposes absent/disconnected/per-frame document fallback. Corrected86focused cases and6Chromium cases pass. First fullverify stopped at ESLint2missing rootElement dependencies after optional ref injection; add actual reference to selection/subscription effect dependencies within approved editing-host lifecycle scope. No pass criterion change or lint suppression. Failed full outcome retained.
+Second fullverify938cases/197files allpass and100%branches; required coverage gate exposed actual Writer client callback line418 only exercised in Chromium, not owned unit suite (statement/line99.99%,function99.96%). Added actual Desktop/Writer client focus-and-beforeinput integration case to existing new test file, preserving251prior tests, no threshold relaxation or production changes. This exercises true view ref wiring rather than duplicating generic callback fixture. Failed gate retained as writer-callback-coverage-full-verify-summary.json.
+Actual Writer integration focus passed immediately; JSDOM does not create a native caret on editing-host focus, so input assertion initially failed. Set an explicit owned paragraph Range before beforeinput, as other owned editor tests do; Chromium already validates actual native caret/input behavior. Corrected final87cases/7files pass; earlier fixture outcome retained as writer-selection-fixture-runtime.json. All production paths unchanged after effect-dependency correction.
