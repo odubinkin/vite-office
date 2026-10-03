@@ -595,6 +595,10 @@
           {
             "marker": "CommandMenuBar",
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+          },
+          {
+            "marker": "CommandMenuPopup",
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
           }
         ]
       },
@@ -607,7 +611,8 @@
       "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
         "Renders the bounded Writer Format popup and pinned Bullets and Numbering submenu at the LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` ownership boundary.",
-        "Renders the implemented Writer commands in their pinned LibreOffice menu locations without copying native menu visuals."
+        "Renders the implemented Writer commands in their pinned LibreOffice menu locations without copying native menu visuals.",
+        "Keeps top-level and nested command popups inside the browser viewport, with internal scrolling, above/below placement and submenu edge flipping following inspected VCL screen-bounded behavior; browser geometry does not certify native timers, scroller visuals or full menu parity."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",

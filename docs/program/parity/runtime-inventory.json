@@ -518,9 +518,12 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx#CommandMenuBar"
+          "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx#CommandMenuBar",
+          "apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx#tracksMenuGeometry",
+          "apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx#tracksSubmenuGeometry",
+          "apps/office/e2e/writer-responsive-sidebar.spec.ts#long menus scroll inside the viewport and nested commands stay reachable"
         ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Viewport-bounded owned popup placement and scrolling are covered by geometry and responsive command reachability checks; complete native behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "CommandMenuBar"

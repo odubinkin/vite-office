@@ -1,5 +1,5 @@
 /** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
 
@@ -302,9 +302,8 @@ export function CommandMenuBar({
                 </span>
               </button>
               {isOpen ? (
-                <div
+                <CommandMenuPopup
                   aria-label={`${label} menu`}
-                  className="absolute left-full top-0 z-30 ml-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
                   data-submenu={item.id}
                   onKeyDown={
                     /** Routes submenu keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
@@ -312,9 +311,10 @@ export function CommandMenuBar({
                     ) => handleMenuKeyDown(event, menuIndex)
                   }
                   role="menu"
+                  submenu
                 >
                   {renderItems(item.items, menuIndex)}
-                </div>
+                </CommandMenuPopup>
               ) : null}
             </div>
           );
@@ -382,9 +382,8 @@ export function CommandMenuBar({
                 {label}
               </button>
               {openMenuIndex === index ? (
-                <div
+                <CommandMenuPopup
                   aria-label={`${label} menu`}
-                  className="absolute left-0 top-full z-20 mt-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
                   id={`${idPrefix}-${menu.id}-menu`}
                   onKeyDown={
                     /** Routes popup keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
@@ -394,13 +393,68 @@ export function CommandMenuBar({
                   role="menu"
                 >
                   {renderItems(menu.items, index)}
-                </div>
+                </CommandMenuPopup>
               ) : null}
             </div>
           );
         },
       )}
     </div>
+  );
+}
+
+/** Keeps an owned popup anchored and scrollable within the available viewport. @param props - Menu attributes and placement direction. @returns Floating menu. */
+function CommandMenuPopup({
+  submenu = false,
+  ...props
+}: Readonly<React.HTMLAttributes<HTMLDivElement> & { submenu?: boolean }>): React.JSX.Element {
+  const popupRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(
+    /** Tracks viewport and ancestor scrolling while the popup is mounted. @returns Listener cleanup. */ () => {
+      const popup = popupRef.current as HTMLDivElement;
+      const anchor = popup.previousElementSibling as HTMLElement;
+      /** Places the popup without scrolling or resizing the document. @returns Nothing. */
+      function updatePosition(): void {
+        const rect = anchor.getBoundingClientRect();
+        const margin = 8;
+        const gap = 4;
+        popup.style.maxWidth = `${Math.max(0, window.innerWidth - 2 * margin)}px`;
+        const below = window.innerHeight - rect.bottom - gap - margin;
+        const above = rect.top - gap - margin;
+        const placeAbove = !submenu && popup.scrollHeight > below && above > below;
+        const maxHeight = Math.max(
+          0,
+          submenu ? window.innerHeight - 2 * margin : placeAbove ? above : below,
+        );
+        const height = Math.min(popup.scrollHeight + 2, maxHeight);
+        const top = submenu
+          ? Math.max(margin, Math.min(rect.top, window.innerHeight - margin - height))
+          : placeAbove
+            ? rect.top - gap - height
+            : rect.bottom + gap;
+        let left = submenu ? rect.right + gap : rect.left;
+        if (submenu && left + popup.offsetWidth > window.innerWidth - margin)
+          left = rect.left - gap - popup.offsetWidth;
+        popup.style.left = `${Math.max(margin, Math.min(left, window.innerWidth - margin - popup.offsetWidth))}px`;
+        popup.style.top = `${top}px`;
+        popup.style.maxHeight = `${maxHeight}px`;
+      }
+      updatePosition();
+      window.addEventListener("resize", updatePosition);
+      document.addEventListener("scroll", updatePosition, true);
+      return /** Releases geometry listeners after dismissal. @returns Nothing. */ () => {
+        window.removeEventListener("resize", updatePosition);
+        document.removeEventListener("scroll", updatePosition, true);
+      };
+    },
+    [submenu],
+  );
+  return (
+    <div
+      {...props}
+      className={`fixed ${submenu ? "z-30" : "z-20"} w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg`}
+      ref={popupRef}
+    />
   );
 }
 

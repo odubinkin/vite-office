@@ -4,6 +4,60 @@ import { expect, test } from "@playwright/test";
 
 test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 
+test("long menus scroll inside the viewport and nested commands stay reachable", /** Checks popup containment and native command reachability. @param fixtures - Browser fixtures. @returns Nothing. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  await page.setViewportSize({ width: 390, height: 240 });
+  await page.getByRole("button", { name: "Format" }).click();
+  const menu = page.getByRole("menu", { name: "Format menu" });
+  expect(
+    await menu.evaluate(
+      /** Reads bounded popup geometry and overflow. @param element - Popup. @returns Containment facts. */ (
+        element,
+      ) => {
+        const bounds = element.getBoundingClientRect();
+        return {
+          within:
+            bounds.left >= 0 &&
+            bounds.top >= 0 &&
+            bounds.right <= innerWidth &&
+            bounds.bottom <= innerHeight,
+          scrolls: element.scrollHeight > element.clientHeight,
+        };
+      },
+    ),
+  ).toEqual({ within: true, scrolls: true });
+  const lists = page.getByRole("menuitem", { name: "Lists", exact: true });
+  await lists.press("ArrowRight");
+  const submenu = page.getByRole("menu", { name: "Lists menu" });
+  expect(
+    await submenu.evaluate(
+      /** Checks submenu viewport containment. @param element - Submenu. @returns Whether bounds fit. */ (
+        element,
+      ) => {
+        const bounds = element.getBoundingClientRect();
+        return (
+          bounds.left >= 0 &&
+          bounds.top >= 0 &&
+          bounds.right <= innerWidth &&
+          bounds.bottom <= innerHeight
+        );
+      },
+    ),
+  ).toBe(true);
+  await page.getByRole("menuitemradio", { name: "No List" }).click();
+  await expect(menu).toHaveCount(0);
+  expect(
+    await page.evaluate(
+      /** Checks document scroll after popup interaction. @returns Root scroll. */ () => ({
+        x: scrollX,
+        y: scrollY,
+      }),
+    ),
+  ).toEqual({ x: 0, y: 0 });
+});
+
 test("sidebar remains reachable and its checked state follows visibility on a touch viewport", /** Runs the focused test callback. @param argument1 - Input for this operation. @returns Operation result. */ async ({
   page,
 }): Promise<void> => {
