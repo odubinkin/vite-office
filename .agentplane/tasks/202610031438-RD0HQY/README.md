@@ -1,0 +1,85 @@
+---
+id: "202610031438-RD0HQY"
+title: "Restore native inline descendant destination selection"
+status: "DOING"
+priority: "med"
+owner: "CODER"
+revision: 11
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-03T14:41:07.165Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: restore source-owned inline destination selection and remove invented helper under continuing goal authorization; preserve all old expected results and IO deviations."
+events:
+  -
+    type: "status"
+    at: "2026-10-03T14:41:07.592Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: restore source-owned inline destination selection and remove invented helper under continuing goal authorization; preserve all old expected results and IO deviations."
+doc_version: 3
+doc_updated_at: "2026-10-03T14:41:07.592Z"
+doc_updated_by: "CODER"
+description: "Iteration61 removes invented protected GetDestinationPhantom and restores complete source-owned AddChild inline count/first-child/parent-factory branches. Preserve old matcher expectations through one test-only helper removal; owned deep-transfer traces and topology, no upstream access by tests or saved helper/source files."
+sections:
+  Summary: "Iteration61 removes a measured nonnative core helper and restores selected source-owned destination selection architecture. Previous goal turn PROGRESS: iteration60 prefix API closed; parent/full goal active."
+  Scope: "Exactly5semantic paths:apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts; apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts; apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts; docs/program/source-provenance.json; docs/program/parity/runtime-inventory.json. Own leaf/parent traceability only. No production compatibility helper, policy/dependency/gate/new deviations or registered save/open/recovery changes. No saved helper/upstream source files in Agentplane, including ignored scratch."
+  Plan: "Remove invented protected GetDestinationPhantom and restore source-owned inline AddChild selection: public orphan/count guard, predecessor GetChildCount before/after each transfer, retained last child, destination GetChildCount, first-child phantom reuse or its parent CreatePhantom, and empty destination CreatePhantom. Preserve source loop short-circuit/break and earlier notification capture/cleanup/cache ordering; no new fallback. Native positive-count/first-child-parent invariants bound narrow TypeScript assertions. Adapt old PhantomRoot test by removing helper wrapper and using CreatePhantom plus existing child observation, all matcher expected arguments/literal fixtures unchanged. Add3owned tests for deep real/empty destination source call order and final topology/raw caches/reading notification modes; diagnostic comparator-bound insertion of an actual phantom exercises existing-phantom reuse without claiming native Writer final-class reentrancy; empty source after transfer stops selection without extra factories. All tests reject surviving invented helper on runtime prototype. Fresh native body/declaration/use hashes only, no compiled native/helper/source copies. Update1metadata evidence/responsibility or justification row each, preserve statuses/defaults/deviations/enums. Baseline tests fail old code, final focused suites vendor absent/restored, types/lint/unchanged full verify all gates/both100%. Only AddChild body changes and invented method removed; remaining54core method bodies and216other old test files byte/AST unchanged, old phantom matchers preserved. Same-actor EVALUATOR actual semantic SHA, clean leaf close and parent/full goal active."
+  Verify Steps: |-
+    1. Fresh manual pinned core AddChild and protected declarations/factory/comparator use hashes establish complete selected inline destination/count/parent-factory branches and absence of native helper. Pin and file hashes unchanged; no compiled native/source/helper file generation, no full container/iterator/final-class/reentrant Writer/layout/redline/dtor/context lifetime claim.
+    2. Baseline3new owned tests fail previous code. Final literal source call ordering, orphan/count guard, real/empty/retained-phantom selection, transfer stop, cleanup/topology/raw counters/prefixes and reading/normal notification gates pass. Existing-phantom branch uses explicit comparator-bound diagnostic insertion of an actual native-owned phantom; test instrumentation is not certified native Writer reentrancy. Removed helper absent on production prototype. Only AddChild changes and helper removed;54other base/derived bodies unchanged. Old phantom expected matcher arguments/literals unchanged,216other old tests byte-identical.
+    3. Focused number-tree/o3tl/list/lifecycle/boundary suites pass with vendor absent/restored in finally; final types/lint/unchanged full npm run verify all gates/both100%. Exact5semantic paths and1metadata evidence/description row each, all statuses/defaults/deviations/enums preserved. Source/pin/log/scope integrity and zero ignored-inclusive Python/bytecode/native/helper source artifacts; diff/routing/doctor0newerrors.
+    4. Canonical verify and distinct same-actor EVALUATOR actual semantic SHA; clean leaf close, parent/full goal active. Other native topology/helper/Validate/Notify access and required context/client/layout/redline/range/full iterator/browser/lifetime remain separately unverified.
+  Verification: "Pending."
+  Rollback Plan: "Revert only actual semantic commit if requested; preserve source/helper cleanup, pin and history."
+  Findings: "Preflight main/direct clean at18fb89e67262f4a7d8abf70ddfa5ec8a7a6decf6. Native AddChild440..550 explicitly guards orphan/count and owns destination selection in its transfer loop. Local direct field/size accesses and GetDestinationPhantom bridge differ in architecture/call sequence. Fresh consumer search also finds one old PhantomRoot.destinationPhantom diagnostic wrapper; scope includes its removal/observation adaptation without changing expected values. Valid strict-unique transfer normally yields real or empty destination; existing-phantom branch is covered with explicit source-comparator boundary instrumentation, not claimed ordinary Writer reentrancy."
+id_source: "generated"
+---
+## Summary
+
+Iteration61 removes a measured nonnative core helper and restores selected source-owned destination selection architecture. Previous goal turn PROGRESS: iteration60 prefix API closed; parent/full goal active.
+
+## Scope
+
+Exactly5semantic paths:apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts; apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-destination.test.ts; apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts; docs/program/source-provenance.json; docs/program/parity/runtime-inventory.json. Own leaf/parent traceability only. No production compatibility helper, policy/dependency/gate/new deviations or registered save/open/recovery changes. No saved helper/upstream source files in Agentplane, including ignored scratch.
+
+## Plan
+
+Remove invented protected GetDestinationPhantom and restore source-owned inline AddChild selection: public orphan/count guard, predecessor GetChildCount before/after each transfer, retained last child, destination GetChildCount, first-child phantom reuse or its parent CreatePhantom, and empty destination CreatePhantom. Preserve source loop short-circuit/break and earlier notification capture/cleanup/cache ordering; no new fallback. Native positive-count/first-child-parent invariants bound narrow TypeScript assertions. Adapt old PhantomRoot test by removing helper wrapper and using CreatePhantom plus existing child observation, all matcher expected arguments/literal fixtures unchanged. Add3owned tests for deep real/empty destination source call order and final topology/raw caches/reading notification modes; diagnostic comparator-bound insertion of an actual phantom exercises existing-phantom reuse without claiming native Writer final-class reentrancy; empty source after transfer stops selection without extra factories. All tests reject surviving invented helper on runtime prototype. Fresh native body/declaration/use hashes only, no compiled native/helper/source copies. Update1metadata evidence/responsibility or justification row each, preserve statuses/defaults/deviations/enums. Baseline tests fail old code, final focused suites vendor absent/restored, types/lint/unchanged full verify all gates/both100%. Only AddChild body changes and invented method removed; remaining54core method bodies and216other old test files byte/AST unchanged, old phantom matchers preserved. Same-actor EVALUATOR actual semantic SHA, clean leaf close and parent/full goal active.
+
+## Verify Steps
+
+1. Fresh manual pinned core AddChild and protected declarations/factory/comparator use hashes establish complete selected inline destination/count/parent-factory branches and absence of native helper. Pin and file hashes unchanged; no compiled native/source/helper file generation, no full container/iterator/final-class/reentrant Writer/layout/redline/dtor/context lifetime claim.
+2. Baseline3new owned tests fail previous code. Final literal source call ordering, orphan/count guard, real/empty/retained-phantom selection, transfer stop, cleanup/topology/raw counters/prefixes and reading/normal notification gates pass. Existing-phantom branch uses explicit comparator-bound diagnostic insertion of an actual native-owned phantom; test instrumentation is not certified native Writer reentrancy. Removed helper absent on production prototype. Only AddChild changes and helper removed;54other base/derived bodies unchanged. Old phantom expected matcher arguments/literals unchanged,216other old tests byte-identical.
+3. Focused number-tree/o3tl/list/lifecycle/boundary suites pass with vendor absent/restored in finally; final types/lint/unchanged full npm run verify all gates/both100%. Exact5semantic paths and1metadata evidence/description row each, all statuses/defaults/deviations/enums preserved. Source/pin/log/scope integrity and zero ignored-inclusive Python/bytecode/native/helper source artifacts; diff/routing/doctor0newerrors.
+4. Canonical verify and distinct same-actor EVALUATOR actual semantic SHA; clean leaf close, parent/full goal active. Other native topology/helper/Validate/Notify access and required context/client/layout/redline/range/full iterator/browser/lifetime remain separately unverified.
+
+## Verification
+
+Pending.
+
+## Rollback Plan
+
+Revert only actual semantic commit if requested; preserve source/helper cleanup, pin and history.
+
+## Findings
+
+Preflight main/direct clean at18fb89e67262f4a7d8abf70ddfa5ec8a7a6decf6. Native AddChild440..550 explicitly guards orphan/count and owns destination selection in its transfer loop. Local direct field/size accesses and GetDestinationPhantom bridge differ in architecture/call sequence. Fresh consumer search also finds one old PhantomRoot.destinationPhantom diagnostic wrapper; scope includes its removal/observation adaptation without changing expected values. Valid strict-unique transfer normally yields real or empty destination; existing-phantom branch is covered with explicit source-comparator boundary instrumentation, not claimed ordinary Writer reentrancy.
