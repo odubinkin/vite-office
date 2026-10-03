@@ -4,7 +4,7 @@ title: "Restore native inline descendant destination selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore source-owned inline destination selection and remove invented helper under continuing goal authorization; preserve all old expected results and IO deviations."
 doc_version: 3
-doc_updated_at: "2026-10-03T14:41:07.592Z"
+doc_updated_at: "2026-10-03T15:37:26.596Z"
 doc_updated_by: "CODER"
 description: "Iteration61 removes invented protected GetDestinationPhantom and restores complete source-owned AddChild inline count/first-child/parent-factory branches. Preserve old matcher expectations through one test-only helper removal; owned deep-transfer traces and topology, no upstream access by tests or saved helper/source files."
 sections:
@@ -50,7 +50,12 @@ sections:
     4. Canonical verify and distinct same-actor EVALUATOR actual semantic SHA; clean leaf close, parent/full goal active. Other native topology/helper/Validate/Notify access and required context/client/layout/redline/range/full iterator/browser/lifetime remain separately unverified.
   Verification: "Pending."
   Rollback Plan: "Revert only actual semantic commit if requested; preserve source/helper cleanup, pin and history."
-  Findings: "Preflight main/direct clean at18fb89e67262f4a7d8abf70ddfa5ec8a7a6decf6. Native AddChild440..550 explicitly guards orphan/count and owns destination selection in its transfer loop. Local direct field/size accesses and GetDestinationPhantom bridge differ in architecture/call sequence. Fresh consumer search also finds one old PhantomRoot.destinationPhantom diagnostic wrapper; scope includes its removal/observation adaptation without changing expected values. Valid strict-unique transfer normally yields real or empty destination; existing-phantom branch is covered with explicit source-comparator boundary instrumentation, not claimed ordinary Writer reentrancy."
+  Findings: |-
+    Preflight main/direct clean at18fb89e67262f4a7d8abf70ddfa5ec8a7a6decf6. Native AddChild440..550 explicitly guards orphan/count and owns destination selection in its transfer loop. Local direct field/size accesses and GetDestinationPhantom bridge differ in architecture/call sequence. Fresh consumer search also finds one old PhantomRoot.destinationPhantom diagnostic wrapper; scope includes its removal/observation adaptation without changing expected values. Valid strict-unique transfer normally yields real or empty destination; existing-phantom branch is covered with explicit source-comparator boundary instrumentation, not claimed ordinary Writer reentrancy.
+
+    Implementation: all3new tests fail baseline call traces and pass final unchanged expectations. Actual core diff changes only AddChild and removes GetDestinationPhantom;54other method bodies unchanged. Old phantom diagnostic helper removed and reads native created child directly;all10matcher argument AST records retained,216other old test files byte-identical. Types/lint and focused84app/20files+7boundary tests pass vendor absent/restored;native3file/8span hashes unchanged,exact5semantic paths and1metadata evidence/description row each only,forbidden source artifacts0. Existing-phantom test injects actual factory creation at an explicit comparator diagnostic boundary; do not claim native Writer final-class reentrancy or general lifetime. Source child-count/owned-first-child invariants justify2narrow non-null annotations without new fallback/gate changes. Full verify running on live session25932; no completion claim yet.
+
+    Command:npm run verify. Result:first attempt fail/exit1, actual live session25932 terminal. Evidence:175app files/783tests passed,4Vitest fork workers failed to start before pool-runner response timeout:CommandToolbar.test.tsx,direct-attribute-native.test.ts,writer-boundaries.test.ts,SwNumberTree-notification-access.test.ts. Tests in those files did not execute; coverage incomplete99.79/99.73/99.86/99.84%, not a proven regression or accepted result. Preserve full-verify-first.log,run these4files isolated then unchanged full verify again. No production/test/gate/config changes; do not restart solely on observation timeout, the original process is verified terminal. Whole leaf remains unverified until all declared gates pass. A mistaken vitest.config.ts read found no file; bounded lookup unnecessary for unchanged retry.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +88,7 @@ Revert only actual semantic commit if requested; preserve source/helper cleanup,
 ## Findings
 
 Preflight main/direct clean at18fb89e67262f4a7d8abf70ddfa5ec8a7a6decf6. Native AddChild440..550 explicitly guards orphan/count and owns destination selection in its transfer loop. Local direct field/size accesses and GetDestinationPhantom bridge differ in architecture/call sequence. Fresh consumer search also finds one old PhantomRoot.destinationPhantom diagnostic wrapper; scope includes its removal/observation adaptation without changing expected values. Valid strict-unique transfer normally yields real or empty destination; existing-phantom branch is covered with explicit source-comparator boundary instrumentation, not claimed ordinary Writer reentrancy.
+
+Implementation: all3new tests fail baseline call traces and pass final unchanged expectations. Actual core diff changes only AddChild and removes GetDestinationPhantom;54other method bodies unchanged. Old phantom diagnostic helper removed and reads native created child directly;all10matcher argument AST records retained,216other old test files byte-identical. Types/lint and focused84app/20files+7boundary tests pass vendor absent/restored;native3file/8span hashes unchanged,exact5semantic paths and1metadata evidence/description row each only,forbidden source artifacts0. Existing-phantom test injects actual factory creation at an explicit comparator diagnostic boundary; do not claim native Writer final-class reentrancy or general lifetime. Source child-count/owned-first-child invariants justify2narrow non-null annotations without new fallback/gate changes. Full verify running on live session25932; no completion claim yet.
+
+Command:npm run verify. Result:first attempt fail/exit1, actual live session25932 terminal. Evidence:175app files/783tests passed,4Vitest fork workers failed to start before pool-runner response timeout:CommandToolbar.test.tsx,direct-attribute-native.test.ts,writer-boundaries.test.ts,SwNumberTree-notification-access.test.ts. Tests in those files did not execute; coverage incomplete99.79/99.73/99.86/99.84%, not a proven regression or accepted result. Preserve full-verify-first.log,run these4files isolated then unchanged full verify again. No production/test/gate/config changes; do not restart solely on observation timeout, the original process is verified terminal. Whole leaf remains unverified until all declared gates pass. A mistaken vitest.config.ts read found no file; bounded lookup unnecessary for unchanged retry.
