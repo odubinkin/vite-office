@@ -1,0 +1,26 @@
+{
+  "command": "npm run verify",
+  "exitCode": 0,
+  "originalBytes": 922943,
+  "sha256": "6194f64ee933976cc374a2bcb1e851bfc6b9f33c3c4e6220a3d719c262e0a7a9",
+  "gateSummary": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  187 passed (187)",
+    "      Tests  839 passed (839)",
+    "Statements   : 100% ( 11071/11071 )",
+    "Branches     : 100% ( 8363/8363 )",
+    "Functions    : 100% ( 2955/2955 )",
+    "Lines        : 100% ( 10162/10162 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )",
+    "Running 20 tests using 4 workers",
+    "  20 passed (9.4s)",
+    "    \"semanticViolationCount\": 0,"
+  ],
+  "upstreamAccess": "Only static source/resource/inventory CLI audit phases read pin;project tests never read,compile or invoke pinned source."
+}
