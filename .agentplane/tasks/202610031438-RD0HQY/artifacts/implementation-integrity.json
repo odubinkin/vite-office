@@ -1,0 +1,13 @@
+{
+  "base": "18fb89e67262",
+  "oldCoreMethodBodies": 56,
+  "changedMethod": [
+    "AddChild"
+  ],
+  "removedMethod": [
+    "GetDestinationPhantom"
+  ],
+  "otherCoreBodiesUnchanged": 54,
+  "oldPhantomMatcherArgumentsUnchanged": 10,
+  "otherOldTestFilesByteUnchanged": 216
+}
