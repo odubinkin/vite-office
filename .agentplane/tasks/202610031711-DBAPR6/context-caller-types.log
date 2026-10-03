@@ -1,0 +1,81 @@
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/doc/list-invariants.test.ts(69,11): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/list-invariants.test.ts(76,11): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/list.test.ts(88,14): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/doc/list.test.ts(102,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/list.test.ts(103,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/list.test.ts(113,12): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/doc/list.test.ts(114,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-ownership.test.ts(209,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-pointer.test.ts(153,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-pointer.test.ts(181,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(120,12): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(121,12): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(147,12): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(200,11): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(244,7): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(256,5): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(292,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number-rule-lifecycle.test.ts(321,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/doc/number.ts(299,29): error TS2304: Cannot find name 'SwDoc'.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(147,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts(149,8): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(122,10): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts(125,10): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-document-context.test.ts(50,3): error TS2322: Type 'true' is not assignable to type 'false'.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(55,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(56,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(123,8): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(124,8): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(125,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(126,8): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(127,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(130,33): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(132,8): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(133,8): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(134,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(173,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts(175,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts(237,18): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts(242,14): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts(291,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts(299,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts(301,11): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts(302,11): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts(304,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts(161,10): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts(280,28): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts(364,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts(48,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree.test.ts(245,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree.test.ts(263,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree.test.ts(275,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree.test.ts(277,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/SwNumberTree/SwNumberTree.test.ts(311,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/SwNumberTree/SwNumberTree.test.ts(314,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts(158,8): error TS2445: Property 'Notify' is protected and only accessible within class 'SwNumberTreeNode' and its subclasses.
+src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts(158,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts(159,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts(160,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts(163,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts(181,9): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(81,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(109,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(113,8): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(156,10): error TS2554: Expected 2 arguments, but got 1.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(173,53): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(188,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(191,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(201,8): error TS2554: Expected 3 arguments, but got 2.
+src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts(209,10): error TS2554: Expected 1 arguments, but got 0.
+src/sw/source/core/txtnode/text-collection-numbering.test.ts(216,10): error TS2554: Expected 1 arguments, but got 0.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit

@@ -1,0 +1,162 @@
+{
+  "base": "f1e839d8ed314477bb8730baf10e5e57d8947b59",
+  "adaptedOldTestFiles": 15,
+  "oldMatcherArgumentIntegrity": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-children.test.ts",
+      "matchers": 20,
+      "sha256": "3cf91ace7fd7d3731a0f97ea1b79ea5488da394f1e914aa344a6412cc798958d",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-counting-contract.test.ts",
+      "matchers": 22,
+      "sha256": "1f6ce2a5d883f69927edfaeadc97da42059d932a087dd4682596a2d7101d7397",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-lifecycle.test.ts",
+      "matchers": 41,
+      "sha256": "62a4a5beee3dd5cfa4efe5046b2b98a77a1d96df90d34ef22627a024deb26a36",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-phantoms.test.ts",
+      "matchers": 10,
+      "sha256": "36274964170d69863948266ad29f53e98d3dcbe16a5b16c8c3d3e9ef1611fcba",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+      "matchers": 35,
+      "sha256": "18cbdd866bf95f11dbca94761268b6dd067ce70ad8f974ab7f613fb28641712c",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-removal.test.ts",
+      "matchers": 40,
+      "sha256": "22e07c0951e93791881e143b6af6ecff9f528b1c2c3c73c247f17a6466e845d3",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.test.ts",
+      "matchers": 40,
+      "sha256": "c989f9d639aa830130ab4b0a70d8ca231f17b18d11c20de4e071516ee1ff0581",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/list-invariants.test.ts",
+      "matchers": 31,
+      "sha256": "2a503e09574cfe8d4e1c0536fc23567e9188ca7ccf70f0bfcbae99ec7007dc43",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/list.test.ts",
+      "matchers": 25,
+      "sha256": "3099094539c3dd91f34554d4f2b6b2e9bea3a73c03b2a25a0eff3922e96207a3",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/number-ownership.test.ts",
+      "matchers": 41,
+      "sha256": "b61a94c31d630d415aee3c7118ea0d6af9505a29c0106fb2f514641945f91cdc",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/number-pointer.test.ts",
+      "matchers": 53,
+      "sha256": "a2ec8316dcf5813848739486a690223b12ed3bed57fdd4aa6627471f3dedf395",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+      "matchers": 48,
+      "sha256": "d9b70338dc0b36cd908a88c2459a488cb4aa95ac63f73a28fe02be50e5e1bb65",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts",
+      "matchers": 58,
+      "sha256": "3c0b8f14c116c2315f2a49a2bf2adc43a8215991c9fb536dfc7daf708491944c",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/node-numbering-lifecycle.test.ts",
+      "matchers": 77,
+      "sha256": "d44ec5155fbd5106807f1d92f343652b2e318b1f10f7ebc1cae34507de2ba080",
+      "unchanged": true
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts",
+      "matchers": 88,
+      "sha256": "4d5e977bcd4d702315f39c3b0fbbad5d04be9d4e6bdfef0a103c402a612e6df6",
+      "unchanged": true
+    }
+  ],
+  "otherOldTestFilesByteUnchanged": 165,
+  "productionMethodBodies": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "unchangedBodies": 16,
+      "changedBodies": [
+        "IsNotificationEnabled"
+      ],
+      "addedBodies": []
+    },
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "unchangedBodies": 38,
+      "changedBodies": [],
+      "addedBodies": []
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/list.ts",
+      "unchangedBodies": 8,
+      "changedBodies": [
+        "InsertListItem",
+        "RemoveListItem",
+        "ValidateListTree"
+      ],
+      "addedBodies": []
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/number.ts",
+      "unchangedBodies": 47,
+      "changedBodies": [
+        "Validate"
+      ],
+      "addedBodies": []
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "unchangedBodies": 29,
+      "changedBodies": [
+        "moveTextNode"
+      ],
+      "addedBodies": []
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "unchangedBodies": 82,
+      "changedBodies": [
+        "AddToList",
+        "RemoveFromList"
+      ],
+      "addedBodies": []
+    }
+  ],
+  "metadataIntegrity": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "affectedRows": 6,
+      "unchangedRows": 208,
+      "statusesClassificationsDefaultsDivergencesKnownViolationsOmittedResponsibilitiesUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "affectedRows": 6,
+      "unchangedRows": 208,
+      "statusesClassificationsDefaultsDivergencesKnownViolationsOmittedResponsibilitiesUnchanged": true
+    }
+  ]
+}
