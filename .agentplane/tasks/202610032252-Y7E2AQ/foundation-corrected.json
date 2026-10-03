@@ -1,0 +1,11 @@
+{
+  "exit": 1,
+  "summary": [
+    "Running 1 test using 1 worker",
+    "  ✘  1 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (5.5s)",
+    "  1) apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome ",
+    "    Error: expect(locator).toBeFocused() failed",
+    "  1 failed",
+    "    apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome "
+  ]
+}

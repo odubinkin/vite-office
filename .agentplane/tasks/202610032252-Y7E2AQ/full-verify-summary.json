@@ -1,0 +1,27 @@
+{
+  "command": "npm run verify",
+  "exit": 0,
+  "signal": null,
+  "bytes": 941276,
+  "sha256": "e1f3467711ea4d321ce28b0e44e27b6dec54a69fb5000b085a78dccc83708464",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  196 passed (196)",
+    "      Tests  930 passed (930)",
+    "Statements   : 100% ( 11124/11124 )",
+    "Branches     : 100% ( 8400/8400 )",
+    "Functions    : 100% ( 2959/2959 )",
+    "Lines        : 100% ( 10208/10208 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )",
+    "Running 33 tests using 4 workers",
+    "  33 passed (10.9s)",
+    "    \"semanticViolationCount\": 0,"
+  ],
+  "tail": []
+}

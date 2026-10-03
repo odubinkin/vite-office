@@ -1,0 +1,21 @@
+{
+  "exit": 0,
+  "sha256": "eec265ca910d5bd731998036454f0e60b085d713116efa8ad31396829a04b27c",
+  "summary": [
+    "Running 13 tests using 4 workers",
+    "  ✓   2 apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor (863ms)",
+    "  ✓   1 apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command (948ms)",
+    "  ✓   4 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (1.1s)",
+    "  ✓   3 apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (1.2s)",
+    "  ✓   6 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle (609ms)",
+    "  ✓   5 apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch (949ms)",
+    "  ✓   7 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (894ms)",
+    "  ✓   8 apps/office/e2e/writer-submenu-preselection.spec.ts:35:1 › keyboard opening still preselects and executes one Writer command (871ms)",
+    "  ✓   9 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle (582ms)",
+    "  ✓  10 apps/office/e2e/writer-menu-saved-focus.spec.ts:38:1 › a menu command leaves focus in its newly opened Hyperlink dialog (551ms)",
+    "  ✓  11 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle (403ms)",
+    "  ✓  12 apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control (404ms)",
+    "  ✓  13 apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle (391ms)",
+    "  13 passed (4.1s)"
+  ]
+}

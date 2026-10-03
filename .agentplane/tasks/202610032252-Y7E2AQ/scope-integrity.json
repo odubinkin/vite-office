@@ -1,0 +1,32 @@
+{
+  "base": "32118bab155e5aaef2a716c4596968f2f4e7a430",
+  "productionOutsideSavedFocusAndDispatchChangesIdentical": true,
+  "priorTests": 249,
+  "byteIdenticalPriorTests": 247,
+  "oldWriterTestExactTwoAssertionReplacement": true,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changedRows": 1,
+      "evidenceOnly": true,
+      "statusesDefaultsOwnershipPriorConclusionsPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changedRows": 1,
+      "evidenceOnly": true,
+      "statusesDefaultsOwnershipPriorConclusionsPreserved": true
+    }
+  ],
+  "storage": {
+    "ignoredIncluded": true,
+    "files": 2637,
+    "codeFiles": [],
+    "executableFiles": []
+  },
+  "newTestsUseOwnedImplementationFixturesOnly": true,
+  "productionSha256": "dca33f567c57eb6e659260e91c2951e4d5c5be62cfc51c7f13ed5649ef1340e0",
+  "oldFoundationExactOwnerPreconditionAndOneAssertionReplacement": true
+}

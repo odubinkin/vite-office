@@ -1,0 +1,8 @@
+{
+  "exit": 0,
+  "summary": [
+    "Running 1 test using 1 worker",
+    "  ✓  1 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (2.6s)",
+    "  1 passed (3.5s)"
+  ]
+}

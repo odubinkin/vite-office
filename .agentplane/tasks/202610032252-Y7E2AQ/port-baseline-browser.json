@@ -1,0 +1,7 @@
+{
+  "exit": 1,
+  "sha256": "aa4a245b94a6ad9405887b15bf45cca1b6d003b4b82ab96a3bf01066c8702d05",
+  "summary": [
+    "Error: http://127.0.0.1:4173 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer."
+  ]
+}

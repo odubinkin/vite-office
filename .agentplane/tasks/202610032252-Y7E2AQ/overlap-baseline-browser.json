@@ -1,0 +1,22 @@
+{
+  "exit": 1,
+  "sha256": "f63493cc1afa6c5f39c1034f33488f547ebdade5d85007e2c079626fe3115a98",
+  "summary": [
+    "Running 4 tests using 1 worker",
+    "  ✘  1 apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor (5.4s)",
+    "  ✘  2 apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch (5.4s)",
+    "  ✓  3 apps/office/e2e/writer-menu-saved-focus.spec.ts:38:1 › a menu command leaves focus in its newly opened Hyperlink dialog (400ms)",
+    "  ✘  4 apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control (30.1s)",
+    "  1) apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor ",
+    "    Error: expect(locator).toBeFocused() failed",
+    "  2) apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch ",
+    "    Error: expect(locator).toBeFocused() failed",
+    "  3) apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control ",
+    "    Error: locator.click: Test timeout of 30000ms exceeded.",
+    "  3 failed",
+    "    apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor ",
+    "    apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch ",
+    "    apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control ",
+    "  1 passed (43.0s)"
+  ]
+}

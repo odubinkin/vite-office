@@ -1,0 +1,15 @@
+{
+  "exit": 1,
+  "sha256": "3acbe9180540b9e166e899c1322fd23a53cd30abdad2660bf386817d6b34d522",
+  "summary": [
+    " Test Files  2 failed | 4 passed (6)",
+    "      Tests  3 failed | 68 passed (71)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx > saved menu focus > dismisses on external focus transfer and starts a fresh saved cycle",
+    "Error: expect(element).not.toBeInTheDocument()",
+    " FAIL  src/sw/browser/presentation/WriterMenuBar.test.tsx > WriterMenuBar > implements roving, popup, submenu, typeahead, escape, and outside-click menu semantics",
+    "Error: expect(element).toHaveFocus()",
+    " FAIL  src/sw/browser/presentation/WriterMenuBar.test.tsx > WriterMenuBar > covers every keyboard entry and transition in the reusable menu state machine",
+    "Error: expect(element).toHaveFocus()"
+  ]
+}

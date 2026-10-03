@@ -1,0 +1,35 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only complete relevant function inspection; no source copy or native compilation/execution.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/window2.cxx",
+      "sha256": "69d5a219053a01f535c2f1afa1fe99ddfd181abb1b94ffaefa4ed9dd945f2975"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.cxx",
+      "sha256": "fd2028b1bc48249fab735c0df7809abb91061031dd952885981183f5aa757375"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/floatwin.cxx",
+      "sha256": "435f5e0e9ad650ae2a646d75b2e830eb2e2f5446ae3c57d4180be6efdc49e188"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+      "sha256": "dacf0d685add44c79f4a62bef9810b77fb36f42ca5e4af34d1e200069bf0e3e2"
+    }
+  ],
+  "conclusions": [
+    "Window SaveFocus retains current Window; EndSaveFocus restores only a non-disposed retained Window.",
+    "MenuBarWindow ChangeHighlightItem saves focus only on initial activation and clears on deactivation; allow-restore and default-to-document are separate flags.",
+    "MenuBarWindow GetFocus activates without popup; LoseFocus deactivates with restoration disabled.",
+    "MenuBarWindow PopupClosed forwards saved focus restoration with frame-focus gating and document fallback disabled.",
+    "Floating ImplEndPopupMode restores previous focus only while holding child-path focus; PopupEnd forwards root close through MenuBar::ClosePopup into PopupClosed.",
+    "MenuFloatingWindow EndExecute first stops popup execution/cleanup then calls ImplSelect, including child-command cleanup at root.",
+    "DOM connected external element maps to valid saved Window; browser no-owner document fallback and frame/global native flags remain separate unverified contracts."
+  ]
+}

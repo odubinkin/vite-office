@@ -1,0 +1,15 @@
+{
+  "exit": 1,
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  4 failed | 12 passed (16)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx > saved menu focus > restores external focus before a pointer command executes once",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx > saved menu focus > restores external focus before a keyboard command executes once",
+    "AssertionError: expected [ <div …(6)>…(2)</div> ] to deeply equal [ null ]",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx > saved menu focus > restores external focus before a nested command executes once",
+    "AssertionError: expected [ <div …(6)>…(2)</div> ] to deeply equal [ null ]",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx > saved menu focus > lets a dispatched command retain its new dialog focus",
+    "AssertionError: expected [ <div …(6)>…(2)</div> ] to deeply equal [ null ]"
+  ]
+}
