@@ -1,10 +1,11 @@
 ---
 id: "202610031549-F4HAPT"
 title: "Keep command menu popups reachable within the viewport"
-status: "DOING"
+result_summary: "Owned command popups stay reachable in selected short/narrow viewport and nested interactions; no full native menu parity claim."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Exactly5semantic paths: shared in-file fixed popup preserves DOM hierarchy and existing menu state machine; above/below size, nested edge flip and internal scroll follow inspected native screen constraints through browser geometry."
     - "Two new owned units fail old code,final14pass with vendor absent/restored;6focused browser scenarios and full792app/109inventory/20browser pass,both100%. All3old unit/3old responsive bodies unchanged and metadata evidence/responsibility only; no gate,IO or recovery change."
     - "Native3file/5span hashes and bounded log/scope integrity checked; zero Python/native/helper source artifacts at rest. Transient synthetic C++ test fixture under Agentplane identified for separate one-file cleanup, not upstream source."
-commit: null
+commit:
+  hash: "2d2ccc6eb5ec217ebe57adab8d2082e18f810def"
+  message: "🧩 F4HAPT code: constrain command popups to viewport"
 comments:
   -
     author: "CODER"
     body: "Start: restore viewport-bounded scrollable command popups under continuing goal authorization; preserve old menu expectations, gates and deliberate IO deviations."
+  -
+    author: "CODER"
+    body: "Verified: selected screen-bounded scrollable command popups pass unchanged full792app/109inventory/20browser,both100%,offline14 and source/scope integrity; old expectations and IO deviations retained. Parent/full goal remain active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete selected viewport popup correction verified on actual semantic 2d2ccc6eb5ec217ebe57adab8d2082e18f810def;792/109/20,both100%,offline14,old expectations/gates preserved. Whole menu and goal remain unverified."
+  -
+    type: "status"
+    at: "2026-10-03T16:09:55.222Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: selected screen-bounded scrollable command popups pass unchanged full792app/109inventory/20browser,both100%,offline14 and source/scope integrity; old expectations and IO deviations retained. Parent/full goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:09:51.672Z"
+doc_updated_at: "2026-10-03T16:09:55.223Z"
 doc_updated_by: "CODER"
 description: "Resolve reproducible short-viewport Writer menu overflow independently of committed iteration61 core change; native screen-bounded scrolling behavior through browser-owned popup placement, preserve existing menu and IO behavior."
 sections:
