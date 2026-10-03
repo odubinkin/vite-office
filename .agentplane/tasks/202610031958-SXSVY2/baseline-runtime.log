@@ -1,0 +1,14 @@
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts (6 tests | 3 failed) 16ms
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+   Duration  983ms (transform 197ms, setup 117ms, import 227ms, tests 16ms, environment 519ms)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts > uses parent helpers for shared-owner predecessor counters and skips them on counted restarts
+AssertionError: expected [] to deeply equal [ [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts:142:41
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts > validates predecessor owners when the first nested child has a different parent
+AssertionError: expected [] to deeply equal [ [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts:166:38
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts > uses the deepest predecessor and validates its distinct owner before incrementing
+AssertionError: expected [] to deeply equal [ [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts:189:31

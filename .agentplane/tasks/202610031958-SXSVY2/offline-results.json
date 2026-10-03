@@ -1,0 +1,38 @@
+{
+  "vendorAbsentDuringRuns": true,
+  "restoredPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "results": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "npm run test",
+        "exitCode": 0,
+        "signal": null,
+        "log": "offline-all-tests.log"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/writer-ui-resource-model.test.ts",
+        "exitCode": 0,
+        "signal": null,
+        "log": "offline-boundaries.log"
+      }
+    }
+  ],
+  "summaries": [
+    " Test Files  188 passed (188)",
+    "      Tests  845 passed (845)",
+    "Statements   : 100% ( 11080/11080 )",
+    "Branches     : 100% ( 8363/8363 )",
+    "Functions    : 100% ( 2955/2955 )",
+    "Lines        : 100% ( 10168/10168 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )"
+  ]
+}

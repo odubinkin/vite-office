@@ -1,0 +1,30 @@
+{
+  "base": "598ac651fb9b7898ddddcc7426840cf553d6da3a",
+  "unchangedPriorTests": 238,
+  "changedPriorTests": [],
+  "changedMethods": [
+    "ValidateContinuous"
+  ],
+  "unchangedOtherMethods": 50,
+  "manifestResults": [
+    {
+      "file": "docs/program/source-provenance.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true
+    },
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true
+    }
+  ],
+  "storage": {
+    "pythonFiles": [],
+    "helperSourceFiles": [],
+    "includesIgnored": true
+  },
+  "newOwnedTest": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree-continuous-policy.test.ts",
+  "noOtherSemanticScopeChangesClaimed": true
+}
