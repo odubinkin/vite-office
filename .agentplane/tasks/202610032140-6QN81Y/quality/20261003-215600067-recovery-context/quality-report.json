@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task_id": "202610032140-6QN81Y",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-03T21:56:00.067Z",
+  "verdict": "pass",
+  "summary": "Same-actor separate EVALUATOR phase reviewed exact semantic HEAD 8c9cc72a5cd528f598de66ee29ffc6386321a70f; nearest-popup keyboard ownership satisfies the bounded declared correction.",
+  "evaluated_sha": "8c9cc72a5cd528f598de66ee29ffc6386321a70f",
+  "blueprint_digest": "f764b77512cbc493c46de22643fab7fe836968d06bf1cba11bd4c42e7976d09f",
+  "findings": [
+    "One production ownership guard handles nested events only in the nearest popup without stopping normal document bubbling. Six command-kind/key cases and multi-key prefix fail before correction and pass after; root/pointer/disabled controls retained. Both baseline Chromium ruler toggle cases fail; corrected two-direction Enter/Space toggles pass.243prior tests/spec and all production outside guard unchanged; both215-row manifests append-only evidence with original statuses/defaults/ownership intact. Fullverify880app109inventory22browser2resources100%coverage0semantic and sequential vendor-absent880app109inventory12scripts22browser pass. Exact pin restored and source hashes rechecked. No source/helper/Python/executable task artifacts."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610032140-6QN81Y/README.md",
+    ".agentplane/tasks/202610032140-6QN81Y/source-inspection.json",
+    ".agentplane/tasks/202610032140-6QN81Y/baseline-runtime.json",
+    ".agentplane/tasks/202610032140-6QN81Y/baseline-browser.json",
+    ".agentplane/tasks/202610032140-6QN81Y/corrected-runtime.json",
+    ".agentplane/tasks/202610032140-6QN81Y/corrected-types.json",
+    ".agentplane/tasks/202610032140-6QN81Y/focused-lint.json",
+    ".agentplane/tasks/202610032140-6QN81Y/full-verify-summary.json",
+    ".agentplane/tasks/202610032140-6QN81Y/offline-results.json",
+    ".agentplane/tasks/202610032140-6QN81Y/scope-integrity.json",
+    ".agentplane/tasks/202610032140-6QN81Y/auxiliary-checks.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native mnemonic algorithms, disabled traversal defaults, pointer submenu preselection/timers, native menu lifetime and other broad menu responsibilities remain unverified and separately scoped; tests preserve existing browser Space/prefix contracts. Same actor separate role phase, no independent reviewer claim. Parent/goal and registered I/O exceptions unchanged."
+  ]
+}
