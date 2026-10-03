@@ -1,10 +1,11 @@
 ---
 id: "202610031958-SXSVY2"
 title: "Restore continuous validation owner policy branches"
-status: "DOING"
+result_summary: "Iteration70 restored continuous validation owner helper branch architecture. Six new owned cases, exact types, full verification and all app/tool tests vendor-absent pass; no source/helper artifacts. Parent/goal remain active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Every counted/restart/no-predecessor branch assigns a local counter before commit; shared and distinct owner comparisons call GetParent as in the pinned body. Native required nullable protected void contract, prefix/end/identity and continuation semantics preserved. No unread initializer or lint suppression added."
     - "Six owned cases/types pass after three source helper baseline failures. Full verify terminal exit 0: 845 app,109 tools,20 browser,2 resource; both coverage suites 100%. All 845 app and109 tool tests plus9 boundary/resource cases also pass while vendor path is absent; exact pin restored in finally."
     - "Exact semantic commit contains four approved paths only. Byte/AST/manifest checks preserve all238 prior tests,50 other methods and all non-evidence metadata/status/default/deviation fields. Ignored-inclusive storage scan has zero Python/source/helper artifacts. No native compilation/execution or upstream test dependency introduced."
-commit: null
+commit:
+  hash: "b2342ddfc1456982e0e9b11a8749c51d26539dc6"
+  message: "🛠️ SXSVY2 code: restore continuous validation owner policy branches"
 comments:
   -
     author: "CODER"
     body: "Start: restore the complete continuous validator owner helper branches under the standing iterative parity request; tests stay app-owned and artifacts contain outcomes only."
+  -
+    author: "CODER"
+    body: "Verified: restored complete continuous validation policy branches and owner helper comparisons; full checks and vendor-absent app/tool tests pass, with source/default/cache/continuation contracts and registered deviations preserved."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete continuous validator source branches and GetParent comparison paths restored. New six cases/types pass after three baseline helper failures; npm verify passes 845 app/109 tool/20 browser cases with full coverage; all app/tool tests and nine boundaries also pass vendor-absent. Prior 238 tests and 50 other methods unchanged; narrow metadata evidence only; no Python/source/helpers/native execution."
+  -
+    type: "status"
+    at: "2026-10-03T20:14:11.951Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored complete continuous validation policy branches and owner helper comparisons; full checks and vendor-absent app/tool tests pass, with source/default/cache/continuation contracts and registered deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-03T20:13:42.841Z"
+doc_updated_at: "2026-10-03T20:14:11.952Z"
 doc_updated_by: "CODER"
 description: "Iteration70 under C9TN6M: restore complete existing ValidateContinuous source branch structure and predecessor/child GetParent comparisons while preserving counter/default/cache/continuation contracts. Owned tests only,no pinned upstream test access/native execution or source/helper artifacts;registered IO/recovery deviations unchanged."
 sections:
