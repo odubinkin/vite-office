@@ -1,0 +1,60 @@
+[WebServer] (node:70203) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 3 workers
+
+(node:70216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:70217) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:70215) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable (743ms)
+  ✓  1 apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (854ms)
+(node:70451) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 apps/office/e2e/writer-responsive-sidebar.spec.ts:61:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport (580ms)
+  ✓  5 apps/office/e2e/writer-responsive-sidebar.spec.ts:87:1 › the page stays within the viewport while the document and modal scroll (514ms)
+  ✓  6 apps/office/e2e/writer-responsive-sidebar.spec.ts:130:1 › the mobile table grid dismisses outside and More Options opens the full dialog (714ms)
+  ✓  3 apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (3.4s)
+
+
+  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "scrolls": true,
+    +   "scrolls": false,
+        "within": true,
+      }
+
+      28 |       },
+      29 |     ),
+    > 30 |   ).toEqual({ within: true, scrolls: true });
+         |     ^
+      31 |   const lists = page.getByRole("menuitem", { name: "Lists", exact: true });
+      32 |   await lists.press("ArrowRight");
+      33 |   const submenu = page.getByRole("menu", { name: "Lists menu" });
+        at /Users/odubinkin/Projects/vite-office/apps/office/e2e/writer-responsive-sidebar.spec.ts:30:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
+  5 passed (4.4s)

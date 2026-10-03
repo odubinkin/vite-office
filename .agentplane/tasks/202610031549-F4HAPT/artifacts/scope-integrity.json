@@ -1,0 +1,35 @@
+{
+  "base": "910775c2b7a5",
+  "nativeFiles": 3,
+  "nativeSpans": 5,
+  "oldTests": [
+    {
+      "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx",
+      "oldTestBodiesUnchanged": 3,
+      "addedTests": 2
+    },
+    {
+      "path": "apps/office/e2e/writer-responsive-sidebar.spec.ts",
+      "oldTestBodiesUnchanged": 3,
+      "addedTests": 1
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "changedRows": [
+        "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+      ],
+      "otherFieldsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "changedRows": [
+        "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+      ],
+      "otherFieldsUnchanged": true
+    }
+  ],
+  "coreImplementationUnchanged": true,
+  "tests": "Owned fixtures/literals only; no native/vendor calls."
+}

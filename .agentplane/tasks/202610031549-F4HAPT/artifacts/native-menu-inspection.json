@@ -1,0 +1,55 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only inspection; hashes and conclusions only, no upstream copies or executable probes.",
+  "native": [
+    {
+      "path": "vcl/source/window/menu.cxx",
+      "sha256": "dacf0d685add44c79f4a62bef9810b77fb36f42ca5e4af34d1e200069bf0e3e2",
+      "spans": [
+        {
+          "start": 2938,
+          "end": 3002,
+          "sha256": "04679956dd4d458d2683df688ce685219e78083a162b69409e3bc03e31c777c9"
+        }
+      ]
+    },
+    {
+      "path": "vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351",
+      "spans": [
+        {
+          "start": 406,
+          "end": 411,
+          "sha256": "10c30cb1fa968a4a865173e7ed458c50bb18dca582e07389c6f901a9cbaf668f"
+        },
+        {
+          "start": 630,
+          "end": 699,
+          "sha256": "2a3e9b8235c0f7bc36ea6c07d64beb00e05f7d7ad258c39bf6c850c3363a687e"
+        },
+        {
+          "start": 965,
+          "end": 1033,
+          "sha256": "8d492b561d1f11bc0a080ca4863ba620a2b3ee786571ca3d3fcceb9284cc7668"
+        }
+      ]
+    },
+    {
+      "path": "vcl/source/window/floatwin.cxx",
+      "sha256": "435f5e0e9ad650ae2a646d75b2e830eb2e2f5446ae3c57d4180be6efdc49e188",
+      "spans": [
+        {
+          "start": 229,
+          "end": 449,
+          "sha256": "7d55f582a95e3c5fc58709605eac0be42a129f50423af95c537a80e7f151b479"
+        }
+      ]
+    }
+  ],
+  "conclusions": [
+    "PopupMenu sizes to screen and available above/below region, enables internal scrolling when too tall.",
+    "MenuFloatingWindow clips visible entries and scrolls keyboard selections into view.",
+    "FloatingWindow prefers requested direction then alternate directions and clamps screen edges.",
+    "Browser fixed DOM popups preserve owned hierarchy and use actual viewport bounds; no native desktop384 fallback, timers/scroller visual equivalence, full floating-window lifecycle or general menu parity claim."
+  ]
+}

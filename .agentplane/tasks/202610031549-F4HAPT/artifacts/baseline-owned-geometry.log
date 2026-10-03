@@ -1,0 +1,52 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/framework/browser/presentation/CommandMenuBar.test.tsx (5 tests | 2 failed | 3 skipped) 96ms
+     × keeps a long menu below or above its trigger and updates without document scrolling 80ms
+     × flips and clamps a submenu without losing keyboard focus or command dismissal 14ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 skipped (5)
+   Start at  22:57:31
+   Duration  576ms (transform 36ms, setup 63ms, import 33ms, tests 96ms, environment 300ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/framework/browser/presentation/CommandMenuBar.test.tsx > CommandMenuBar > keeps a long menu below or above its trigger and updates without document scrolling
+Error: expect(element).toHaveStyle()
+
+- Expected
+
+- left: 158px;
+- maxHeight: 258px;
+- maxWidth: 374px;
+- top: 74px;
+ ❯ tracksMenuGeometry src/framework/browser/presentation/CommandMenuBar.test.tsx:93:20
+     91|       fireEvent.click(screen.getByRole("button", { name: "Format" }));
+     92|       const menu = screen.getByRole("menu", { name: "Format menu" });
+     93|       expect(menu).toHaveStyle({
+       |                    ^
+     94|         left: "158px",
+     95|         top: "74px",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/framework/browser/presentation/CommandMenuBar.test.tsx > CommandMenuBar > flips and clamps a submenu without losing keyboard focus or command dismissal
+Error: expect(element).toHaveStyle()
+
+- Expected
+
+- left: 22px;
+- maxHeight: 324px;
+- top: 8px;
+ ❯ tracksSubmenuGeometry src/framework/browser/presentation/CommandMenuBar.test.tsx:140:23
+    138|       fireEvent.keyDown(trigger, { key: "ArrowRight" });
+    139|       const submenu = screen.getByRole("menu", { name: "Numbering menu…
+    140|       expect(submenu).toHaveStyle({ left: "22px", top: "8px", maxHeigh…
+       |                       ^
+    141|       expect(screen.getByRole("menuitem", { name: "Apply" })).toHaveFo…
+    142|       vi.stubGlobal("innerWidth", 900);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

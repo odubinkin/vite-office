@@ -1,0 +1,49 @@
+[WebServer] (node:69630) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:69632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable (506ms)
+
+
+  1) apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Object {
+    -   "scrolls": true,
+    -   "within": true,
+    +   "scrolls": false,
+    +   "within": false,
+      }
+
+      28 |       },
+      29 |     ),
+    > 30 |   ).toEqual({ within: true, scrolls: true });
+         |     ^
+      31 |   const lists = page.getByRole("menuitem", { name: "Lists", exact: true });
+      32 |   await lists.press("ArrowRight");
+      33 |   const submenu = page.getByRole("menu", { name: "Lists menu" });
+        at /Users/odubinkin/Projects/vite-office/apps/office/e2e/writer-responsive-sidebar.spec.ts:30:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/writer-responsive-sidebar--f1fd6-ted-commands-stay-reachable/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable 
