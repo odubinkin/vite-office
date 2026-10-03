@@ -1,10 +1,11 @@
 ---
 id: "202610032110-9D7BJW"
 title: "Restore direct Writer numbering owner reference branches"
-status: "DOING"
+result_summary: "Restored direct Writer numbering owner references with complete phantom policy and strict index comparator branches"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - ".agentplane/tasks/202610032110-9D7BJW/auxiliary-checks.json"
   findings:
     - "Two production method bodies only: IsCountPhantoms defaulttrue/private bound flags and continuous short circuit; LessThan defaultfalse/null-text ordering and direct private owner index comparison.5owned cases and5types pass after4baseline failures on extra helpers;25actual root/phantom/text/equal-index pairs and retained strict-container identity covered.241prior tests,15other methods/allremaining source unchanged; each215-row manifest one evidence-only row. Terminal fullverify and sequential vendor-absent app/inventory/script/browser checks pass; five pinned hashes revalidated and no helper/source/Python/executable artifacts."
-commit: null
+commit:
+  hash: "109dd5ce9b65481adc317885c13e4aec986879b7"
+  message: "🛠️ 9D7BJW code: restore direct Writer numbering owner reference branches"
 comments:
   -
     author: "CODER"
     body: "Start: restore complete direct private Writer numbering owner references under standing goal authorization; owned tests and outcome-only artifacts."
+  -
+    author: "CODER"
+    body: "Verified: restored complete IsCountPhantoms/LessThan direct private owner branches; five owned cases and exact types pass, full verification and sequential vendor-absent suites pass, prior tests/source outside scope unchanged. Same-actor separate EVALUATOR phase passed exact implementation109dd5ce. Outcome-only artifacts contain no helpers/source/Python; parent and goal remain active."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Two complete selected owner-reference branches restored. Baseline4fail/1pass; corrected5owned/5types pass. Fullverify865app109inventory20browser2resources100%coverage0semantic; vendorabsent865app109inventory12scripts20browser allpass,pin restored.241prior tests/15othermethods/allsource outside2 unchanged,evidenceonlyrows,Python/helper/source/executable artifacts0. No parent/module/default/goal or IO promotion."
+  -
+    type: "status"
+    at: "2026-10-03T21:23:44.226Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored complete IsCountPhantoms/LessThan direct private owner branches; five owned cases and exact types pass, full verification and sequential vendor-absent suites pass, prior tests/source outside scope unchanged. Same-actor separate EVALUATOR phase passed exact implementation109dd5ce. Outcome-only artifacts contain no helpers/source/Python; parent and goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-03T21:22:48.002Z"
+doc_updated_at: "2026-10-03T21:23:44.227Z"
 doc_updated_by: "CODER"
 description: "Iteration73 under C9TN6M: restore complete existing IsCountPhantoms and LessThan private owner-reference branches against pinned LibreOffice. Preserve values/defaults/contracts/registered I/O deviations; project tests never access upstream and artifacts contain outcomes/hashes/bounded logs only."
 sections:
@@ -115,6 +128,10 @@ sections:
     Initial focused runtime command referenced missing workspace binary and did not launch. Corrected relative repository binary path; no expectation/source/gate change. Baseline runtime results are from the actual corrected-path launch; typecheck already passed.
 
     All five corrected owned cases and five exact local signature/access types pass; final baseline4fail/1pass solely on added owner getters.241prior tests/spec,15other methods and complete source outside two bodies unchanged. Both215-row manifests one existing evidence row, previous conclusions/non-evidence untouched. Adjacent complete ChangeNumRule source inspection identifies next independent existing-method mismatch: native both pre/post transfer guards and actions use GetNumRule/GetTextNode, local reads fields and supplied parameter directly. Existing getters are nonvirtual and native class final; source-path tests cannot certify extension ABI/final/private/const. Do not modify matching single cached text helper policy in notification methods or invent new unsupported native operations.
+extensions:
+  implementation_commit:
+    hash: "109dd5ce9b65481adc317885c13e4aec986879b7"
+    message: "🛠️ 9D7BJW code: restore direct Writer numbering owner reference branches"
 id_source: "generated"
 ---
 ## Summary
