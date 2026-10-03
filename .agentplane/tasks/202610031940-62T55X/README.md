@@ -1,10 +1,11 @@
 ---
 id: "202610031940-62T55X"
 title: "Restore hierarchical validation state and policy order"
-status: "DOING"
+result_summary: "Restored hierarchical validator state/policy ordering and parent traversal;broader continuous/redline/layout/lifetime/browser obligations remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Reviewed foursemantic paths against complete pinned ValidateHierarchical body/declaration and actual SwNodeNum policies. First-child continuation resets before virtual start/count/descendant policies,cache-retained path skips those policies,and native parent/preceding child-count helpers replace raw storage bypass. Null/end/equivalent targets,signed starts,restarts,counted barriers,uncounted skips,phantoms,prefixes and default predecessor validation retained. Native begin0 uses index0;unused temporary initializer removed to satisfy existing lint without branch behavior change."
     - "Six final authored cases/four exact types/13actual-owner profiles:4baseline runtime failures include stale pre-policy continuation true and missing helper dispatch;corrected cases/typespass. All237prior test/spec files and50other tree methods byte-identical. Both215-row manifests changeonenarrow existing tree evidence row only;214others andall non-evidence/status/default/deviation/order data preserved. No whole-module/default/goal certification."
     - "Fullverify terminal0:839app/109inventory/20browser/2resource,both100coverage/all215rowgates. Vendor-absent229core+9boundary cases pass with exact pin restored in finally. Manual3nativefilehashes only,no source/helper/native execution;ignored-inclusive Python/source/helper/executable0. Doctor0errors/2knownwarnings,routing/diffclean. Same actor performs separate evaluator phase,no independent agent claimed."
-commit: null
+commit:
+  hash: "e4be73d1c593ee9c79908d4d10172552c8055585"
+  message: "🛠️ 62T55X code: restore hierarchical validation policy state order"
 comments:
   -
     author: "CODER"
     body: "Start: restore complete hierarchical validator state and source policy call order with owned baseline/branch evidence,unchanged existing assertions and strict artifact/upstream-test restrictions."
+  -
+    author: "CODER"
+    body: "Verified: restored complete selected ValidateHierarchical first-state/policy order and native owner/count traversal ate4be73d1c593ee9c79908d4d10172552c8055585. Six owned cases/4exacttypes/13profiles,four baseline state/helper failures;full839app/109inventory/20browser/2resource with both100coverage pass. Vendor-absent229core+9boundary pass,exact pin restored.237oldtests/50othermethods/statuses unchanged,storage Python/helper/source0,exact semantic-SHA qualitypass. Full goal remains active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Fullverify terminal0:839app/109inventory/20browser/2resource,both100coverage/all215rowgates. Six owned cases/4types/13profiles,4baseline state/helper failures;vendor-absent229core+9boundary pass with exact pin restored.237oldtests/50othermethods unchanged,oneevidence roweach/non-evidence preserved,storage Python/helper/source0,doctor/routing/diff pass. Full goal open."
+  -
+    type: "status"
+    at: "2026-10-03T19:56:25.371Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored complete selected ValidateHierarchical first-state/policy order and native owner/count traversal ate4be73d1c593ee9c79908d4d10172552c8055585. Six owned cases/4exacttypes/13profiles,four baseline state/helper failures;full839app/109inventory/20browser/2resource with both100coverage pass. Vendor-absent229core+9boundary pass,exact pin restored.237oldtests/50othermethods/statuses unchanged,storage Python/helper/source0,exact semantic-SHA qualitypass. Full goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-03T19:54:56.680Z"
+doc_updated_at: "2026-10-03T19:56:25.372Z"
 doc_updated_by: "CODER"
 description: "Iteration69 under C9TN6M: port complete existing ValidateHierarchical policy/state ordering and parent helper calls to pinned source, preserving nullable/protected contract,cache/continuation/counter profiles and all prior tests. Owned tests only,no upstream execution or source/helper artifacts,no registered IO/recovery changes."
 sections:
