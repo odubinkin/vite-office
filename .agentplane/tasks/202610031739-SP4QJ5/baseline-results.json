@@ -1,0 +1,25 @@
+{
+  "base": "ae825527ec689be8830173b6a55f4f2ad7c60fe9",
+  "finalAuthoredTestPath": "apps/office/src/sw/source/core/txtnode/numbering-notification-policy.test.ts",
+  "finalAuthoredTestSha256": "ed59169f63c3a11a36f896c89a909d237cf6207ecf6b2aaa6baca2dfbfeffce2",
+  "baselineProductionSourceLoadedInMemoryOnly": true,
+  "productionFilesRestored": true,
+  "results": [
+    {
+      "name": "runtime",
+      "exitCode": 1,
+      "outputSha256": "3c886e2be67a63dff82eaf41d432287a18bd1ca46f89c5a84b3bc3683dc6bc09",
+      "summary": [
+        " Test Files  1 failed (1)",
+        "      Tests  8 failed (8)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯"
+      ]
+    },
+    {
+      "name": "types",
+      "exitCode": 2,
+      "outputSha256": "85f7d8f48151f686304d23f2fa03517ad394c2e429ec3ba4b7f49cc19dd7de72",
+      "summary": []
+    }
+  ]
+}

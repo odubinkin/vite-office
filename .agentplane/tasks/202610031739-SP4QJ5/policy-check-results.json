@@ -1,16 +1,16 @@
 [
   {
-    "name": "policy-routing",
+    "command": "/Users/odubinkin/.nvm/versions/node/v24.13.1/bin/node .agentplane/policy/check-routing.mjs",
     "exitCode": 0,
     "outputSha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
   },
   {
-    "name": "doctor",
+    "command": "ap doctor",
     "exitCode": 0,
-    "outputSha256": "4f4ce726735e31d513c433e81897121df5b7422193d0e0051166a2954bb9a85f"
+    "outputSha256": "93b2768c751a1bd8c71fe36c4e1c923fe19ad020dacfc170890cafb4b7de3a83"
   },
   {
-    "name": "diff-check",
+    "command": "git diff --check",
     "exitCode": 0,
     "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   }

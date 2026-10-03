@@ -1,7 +1,6 @@
-Complete output sha256: ea47414c780af45d362437f95d72acb27cfecf7c36944f2754c5eaaef5b0c957
+Complete output sha256: 3c886e2be67a63dff82eaf41d432287a18bd1ca46f89c5a84b3bc3683dc6bc09
 Original lines: 158
-Final authored test baseline exit1; all8fail
-Bounded diagnostics:
+Terminal exit1
 
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
 
@@ -16,9 +15,11 @@ Bounded diagnostics:
    × uses destruction context for roots and phantoms while real records retain their live owner 1ms
 
  Test Files  1 failed (1)
+      Tests  8 failed (8)
+... bounded ...
  Test Files  1 failed (1)
       Tests  8 failed (8)
-   Duration  1.01s (transform 221ms, setup 118ms, import 262ms, tests 16ms, environment 516ms)
+   Duration  1.04s (transform 218ms, setup 134ms, import 248ms, tests 16ms, environment 531ms)
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
  FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > owns zero-argument text policies and destruction query with native private defaults
 TypeError: document.IsInDtor is not a function

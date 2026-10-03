@@ -29,20 +29,54 @@
       "addedBodies": [
         "IsInDtor"
       ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+      "unchangedBodies": 10,
+      "changedBodies": [],
+      "addedBodies": []
     }
   ],
   "metadata": [
     {
       "path": "docs/program/source-provenance.json",
-      "affectedRows": 3,
-      "unchangedRows": 211,
+      "affectedRows": 4,
+      "unchangedRows": 210,
       "statusesDefaultsClassificationsDivergencesKnownViolationsOmittedResponsibilitiesUnchanged": true
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
-      "affectedRows": 3,
-      "unchangedRows": 211,
+      "affectedRows": 4,
+      "unchangedRows": 210,
       "statusesDefaultsClassificationsDivergencesKnownViolationsOmittedResponsibilitiesUnchanged": true
     }
-  ]
+  ],
+  "requiredDecomposition": {
+    "from": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "to": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "helpers": [
+      {
+        "name": "getWriterPreviousGraphemeBoundary",
+        "bodySha256": "8352c0e9fe42783f314e7cde10d189ba468d8a8f24843fe8aa2a861a5a5ef667",
+        "bodyUnchanged": true,
+        "private": true
+      },
+      {
+        "name": "getWriterNextGraphemeBoundary",
+        "bodySha256": "58afd52ed6759cdfdaff75ccafcf42f8fc59217e71c8b6fbc746fe53b4194792",
+        "bodyUnchanged": true,
+        "private": true
+      },
+      {
+        "name": "getWriterGraphemeBoundaries",
+        "bodySha256": "e333080ead8e6ea99f97e5bb8b348b0a51fc717b5c646e9f903a311c0b5bb236",
+        "bodyUnchanged": true,
+        "private": true
+      }
+    ],
+    "noCoreExportOrReexport": true,
+    "editingMethodBodiesUnchanged": true,
+    "coreAuthoredLines": 975,
+    "editingAuthoredLines": 382
+  }
 }
