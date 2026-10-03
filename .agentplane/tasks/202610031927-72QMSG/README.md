@@ -1,10 +1,11 @@
 ---
 id: "202610031927-72QMSG"
 title: "Restore native parent lookup paths in numbering tree"
-status: "DOING"
+result_summary: "Restored native parent lookup architecture for three numbering methods;broader hierarchical/redline/layout/lifetime/browser obligations remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Reviewed foursemantic paths against approved scope and complete pinned GetPred,NotifyInvalidChildren,SetLastValid bodies/declarations. Parent iterator lookup and parent query order now match the native source path;root exclusion,deepest/sibling/default behavior,next uncounted notification and prefix invalidation,continuous upward forwarding preserve existing values and valid iterator domain. Existing API types unchanged."
     - "Five final authored baseline cases expose missing helper calls and corrected six cases/seven exact types pass. Actual record transfer,raw counters,prefixes,topology,clients and registry are covered. Notification boundary stub is explicitly scoped;unchanged existing suites cover full notification behavior.236prior test/spec files and48other tree methods are byte-identical;each215-rowmanifest changesoneevidence row with all non-evidence/order/status/default/deviation values preserved."
     - "Fullverify terminal0:833app/109inventory/20browser/2resource,both100coverage,all215rowgates. Vendor-absent223core+9boundary cases pass with exact pin restored in finally. Ignored-inclusive Python/helper/source/executable artifacts0;manual native hashes only. Doctor0errors/2existingwarnings,routing/diffclean. Same actor performs this separate evaluator phase;no independent subagent claimed."
-commit: null
+commit:
+  hash: "fa4ebd15371054669bd8f25de83fd5afd74e46de"
+  message: "🛠️ 72QMSG code: restore native numbering parent lookup paths"
 comments:
   -
     author: "CODER"
     body: "Start: restore native parent helper paths in three numbering methods with owned architecture and state evidence, preserving counters/contracts and storage/test restrictions."
+  -
+    author: "CODER"
+    body: "Verified: restored complete selected native GetPred,NotifyInvalidChildren,SetLastValid parent helper paths atfa4ebd15371054669bd8f25de83fd5afd74e46de. Six owned cases/seven exact types,five baseline trace failures;full833app/109inventory/20browser/2resource with both100coverage pass. Vendor-absent223core+9boundary pass,exact pin restored.236old tests/48othermethods/statuses unchanged,artifact Python/helper/source0;exact semantic-SHA qualitypass. Full goal remains active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full verify terminal0:833app/109inventory/20browser/2resource,both100coverage and215rowgates. Vendor-absent223core+9boundary pass,exact pin restored. Six owned cases/seven types,236oldtestfiles/48othermethods unchanged,one metadata roweach evidence-only,artifact Python/helper/source0,doctor/routing/diff pass. Full goal active."
+  -
+    type: "status"
+    at: "2026-10-03T19:39:23.140Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored complete selected native GetPred,NotifyInvalidChildren,SetLastValid parent helper paths atfa4ebd15371054669bd8f25de83fd5afd74e46de. Six owned cases/seven exact types,five baseline trace failures;full833app/109inventory/20browser/2resource with both100coverage pass. Vendor-absent223core+9boundary pass,exact pin restored.236old tests/48othermethods/statuses unchanged,artifact Python/helper/source0;exact semantic-SHA qualitypass. Full goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-03T19:38:08.346Z"
+doc_updated_at: "2026-10-03T19:39:23.141Z"
 doc_updated_by: "CODER"
 description: "Iteration68 under C9TN6M: restore complete selected GetPred,NotifyInvalidChildren,SetLastValid parent GetIterator/GetParent call paths from pinned source. Preserve existing counters,sentinels,notifications and contracts;owned trace/state tests only,no upstream test/helper/source artifacts,no IO/recovery changes."
 sections:
