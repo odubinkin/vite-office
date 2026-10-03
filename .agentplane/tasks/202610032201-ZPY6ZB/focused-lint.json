@@ -1,0 +1,8 @@
+{
+  "command": "node_modules/.bin/eslint apps/office/src/framework/browser/presentation/CommandMenuBar.tsx apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx apps/office/e2e/writer-submenu-preselection.spec.ts --max-warnings 0",
+  "cwd": ".",
+  "exitCode": 0,
+  "bytes": 0,
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "summary": ""
+}

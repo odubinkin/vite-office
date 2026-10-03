@@ -1,0 +1,15 @@
+
+Running 4 tests using 2 workers
+
+  ✓  1 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (638ms)
+  ✓  2 apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (783ms)
+  ✓  3 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (550ms)
+  ✓  4 apps/office/e2e/writer-submenu-preselection.spec.ts:35:1 › keyboard opening still preselects and executes one Writer command (492ms)
+
+  4 passed (2.1s)
+[WebServer] (node:3372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:3395) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

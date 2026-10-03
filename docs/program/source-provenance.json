@@ -611,6 +611,22 @@
           {
             "marker": "nested Writer ruler toggles once",
             "path": "apps/office/e2e/writer-submenu-keyboard.spec.ts"
+          },
+          {
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx",
+            "marker": "focusesUnselectedPopup"
+          },
+          {
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx",
+            "marker": "navigatesUnselectedPopup"
+          },
+          {
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx",
+            "marker": "dismissesUnselectedPopup"
+          },
+          {
+            "path": "apps/office/e2e/writer-submenu-preselection.spec.ts",
+            "marker": "pointer submenu owns focus"
           }
         ]
       },
@@ -625,7 +641,8 @@
         "Renders the bounded Writer Format popup and pinned Bullets and Numbering submenu at the LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` ownership boundary.",
         "Renders the implemented Writer commands in their pinned LibreOffice menu locations without copying native menu visuals.",
         "Keeps top-level and nested command popups inside the browser viewport, with internal scrolling, above/below placement and submenu edge flipping following inspected VCL screen-bounded behavior; browser geometry does not certify native timers, scroller visuals or full menu parity.",
-        "Existing nested popup consumes keyboard input only in the nearest owning popup: one Enter/Space dispatch and one prefix append per key. Owned regression and real Chromium Writer ruler toggle evidence cover this bounded adapter contract; complete native menu/mnemonic behavior remains unverified."
+        "Existing nested popup consumes keyboard input only in the nearest owning popup: one Enter/Space dispatch and one prefix append per key. Owned regression and real Chromium Writer ruler toggle evidence cover this bounded adapter contract; complete native menu/mnemonic behavior remains unverified.",
+        "Existing pointer submenu opening focuses its popup without item preselection; keyboard opening preselects the first item. Unselected popup boundary navigation and no-command Return dismissal are covered with owned cases and real Chromium Writer interaction. Native popup/window focus maps to DOM popup/item focus; full disabled traversal defaults, pointer timers and mnemonics remain unverified."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",

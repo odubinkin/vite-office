@@ -1,0 +1,31 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Complete relevant functions inspected manually read-only; no native probe, compilation, execution or source copy.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+      "sha256": "dacf0d685add44c79f4a62bef9810b77fb36f42ca5e4af34d1e200069bf0e3e2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/floatwin.cxx",
+      "sha256": "435f5e0e9ad650ae2a646d75b2e830eb2e2f5446ae3c57d4180be6efdc49e188"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml",
+      "sha256": "5960200bd627fd19abe7cec701540400ddcde20d26243e7c3f43b986ef3e3bcb"
+    }
+  ],
+  "conclusions": [
+    "HighlightChanged passes keyboard-only first preselection when its timer argument is absent; reopening the already active child returns without resetting its highlight.",
+    "Popup ImplExecute always enables GrabFocus; StartPopupMode grabs popup window focus independently of item selection.",
+    "Run preselects first item only when requested; new popup starts with invalid highlighted item.",
+    "ImplCursorUpDown from invalid highlight goes to first on Down and last on Up; Home/End select their boundaries.",
+    "KEY_RETURN with no enabled selected item calls StopExecute without ImplSelect; nested PopupEnd calls parent ClosePopup, which kills current child only.",
+    "Floating ImplEndPopupMode passes focus to the retained parent popup; browser parent trigger focus is the existing item-based focus adaptation.",
+    "Existing Writer Text/Rulers composition is preserved; native mouse delay, disabled traversal defaults, full mnemonics and broad lifetime remain separate unverified obligations."
+  ]
+}

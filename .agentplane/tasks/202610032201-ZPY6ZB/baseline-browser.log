@@ -1,0 +1,16 @@
+Running 2 tests using 1 worker
+  ✘  1 apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (5.6s)
+  ✘  2 apps/office/e2e/writer-submenu-preselection.spec.ts:30:1 › keyboard opening still preselects and executes one Writer command (5.4s)
+  1) apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command 
+    Error: expect(locator).toBeFocused() failed
+    Locator:  getByRole('menu', { name: 'Text menu' })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+  2) apps/office/e2e/writer-submenu-preselection.spec.ts:30:1 › keyboard opening still preselects and executes one Writer command 
+    Error: expect(locator).toBeFocused() failed
+    Locator:  getByRole('menu', { name: 'Text menu' })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+  2 failed

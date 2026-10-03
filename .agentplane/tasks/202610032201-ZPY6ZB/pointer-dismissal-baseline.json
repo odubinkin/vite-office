@@ -1,0 +1,10 @@
+{
+  "command": "../../node_modules/.bin/vitest run src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx",
+  "cwd": "apps/office",
+  "exitCode": 1,
+  "bytes": 4117,
+  "sha256": "a82c2c3553c8b6da69511f3a5b99aaa3c9e3dc35c4befc899c3100c1592eb410",
+  "productionSha256": "1337a7b1ec2f5980ed5446ae00d254a0ca1e2159549c75d307dfa2e9f00712e9",
+  "note": "After initial preselection correction, focused popup pointer removal still loses parent focus. This is inside approved current-popup restoration scope; no native execution or source copy.",
+  "summary": " RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office\n ❯ src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx (15 tests | 1 failed) 254ms\n     × restores parent focus when the pointer closes its child popup 13ms\n Test Files  1 failed (1)\n      Tests  1 failed | 14 passed (15)\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > restores parent focus when the pointer closes its child popup\nError: expect(element).toHaveFocus()"
+}

@@ -1,0 +1,7 @@
+{
+  "command": "node_modules/.bin/playwright test --config apps/office/playwright.config.ts writer-submenu-preselection.spec.ts writer-submenu-keyboard.spec.ts",
+  "exitCode": 0,
+  "bytes": 1082,
+  "sha256": "1bf5d47f4309015202dbb6c068282260450aaa9f1ef6a408cec9d7566da4081f",
+  "summary": "\nRunning 4 tests using 2 workers\n\n  ✓  1 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (638ms)\n  ✓  2 apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (783ms)\n  ✓  3 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (550ms)\n  ✓  4 apps/office/e2e/writer-submenu-preselection.spec.ts:35:1 › keyboard opening still preselects and executes one Writer command (492ms)\n\n  4 passed (2.1s)\n[WebServer] (node:3372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n(node:3395) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:3396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

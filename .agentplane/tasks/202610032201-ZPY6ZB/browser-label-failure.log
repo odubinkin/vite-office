@@ -1,0 +1,12 @@
+Running 4 tests using 2 workers
+  ✓  1 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (677ms)
+  ✓  3 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (450ms)
+  ✘  2 apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (5.8s)
+  ✓  4 apps/office/e2e/writer-submenu-preselection.spec.ts:35:1 › keyboard opening still preselects and executes one Writer command (499ms)
+    Error: expect(locator).toBeFocused() failed
+    Locator: getByRole('menuitemcheckbox', { name: 'Underline', exact: true })
+    Expected: focused
+    Timeout: 5000ms
+    Error: element(s) not found
+  1 failed
+  3 passed (7.6s)

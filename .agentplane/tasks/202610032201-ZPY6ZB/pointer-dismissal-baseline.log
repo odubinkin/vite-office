@@ -1,0 +1,8 @@
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+ ❯ src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx (15 tests | 1 failed) 254ms
+     × restores parent focus when the pointer closes its child popup 13ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 14 passed (15)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > restores parent focus when the pointer closes its child popup
+Error: expect(element).toHaveFocus()

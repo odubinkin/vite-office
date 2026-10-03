@@ -1,0 +1,23 @@
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+ ❯ src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx (14 tests | 6 failed) 239ms
+     × focuses a pointer-opened popup without preselecting a command 88ms
+     × selects Last from an unselected popup with ArrowUp 12ms
+     × closes only the unselected submenu with Enter 9ms
+     × preserves selection on repeated hover and resets opening origin after close 16ms
+     × focuses a newly hovered sibling popup without dispatch and retains pointer execution 13ms
+     × dismisses an unselected top-level popup without dispatch 8ms
+ Test Files  1 failed (1)
+      Tests  6 failed | 8 passed (14)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > focuses a pointer-opened popup without preselecting a command
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > selects Last from an unselected popup with ArrowUp
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > closes only the unselected submenu with Enter
+Error: expect(element).not.toBeInTheDocument()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > preserves selection on repeated hover and resets opening origin after close
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > focuses a newly hovered sibling popup without dispatch and retains pointer execution
+Error: expect(element).toHaveFocus()
+ FAIL  src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx > submenu preselection > dismisses an unselected top-level popup without dispatch
+AssertionError: expected [ <div …(5)>…(2)</div> ] to have a length of +0 but got 1

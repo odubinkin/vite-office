@@ -1,0 +1,8 @@
+{
+  "command": "../../node_modules/.bin/vitest run src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx src/framework/browser/presentation/CommandMenuBar.test.tsx",
+  "cwd": "apps/office",
+  "exitCode": 0,
+  "bytes": 238,
+  "sha256": "9ad42badb8cd7d32fb1b34fa87f610df358b591435eb700c50009eb38c5cea80",
+  "summary": "\n RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office\n\n\n Test Files  3 passed (3)\n      Tests  29 passed (29)\n   Start at  05:10:25\n   Duration  1.34s (transform 73ms, setup 199ms, import 84ms, tests 602ms, environment 1.02s)\n\n"
+}

@@ -60,6 +60,7 @@ export function CommandMenuBar({
   const typeahead = useRef("");
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pendingMenuFocus = useRef<"first" | "last" | "none">("none");
+  const preselectSubmenuFirst = useRef(false);
   const restoreTriggerFocus = useRef<number | undefined>(undefined);
 
   /** Closes all popups. @param restoreFocus - Whether to focus the trigger. @returns Nothing. */
@@ -68,6 +69,20 @@ export function CommandMenuBar({
     setOpenSubmenuId(undefined);
     setOpenMenuIndex(undefined);
     if (restoreFocus && index !== undefined) restoreTriggerFocus.current = index;
+  }
+
+  /** Opens a child popup with origin-specific preselection. @param id - Submenu identity. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
+  function openSubmenu(id: string | undefined, preSelectFirst: boolean): void {
+    preselectSubmenuFirst.current = preSelectFirst;
+    setOpenSubmenuId(id);
+  }
+
+  /** Closes the current popup and restores its parent focus. @param menu - Current popup. @returns Nothing. */
+  function closePopup(menu: HTMLElement): void {
+    if (menu.dataset.submenu !== undefined) {
+      setOpenSubmenuId(undefined);
+      menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
+    } else closeMenu(true);
   }
 
   /** Moves focus among enabled direct children. @param container - Active menu. @param direction - Requested move. @param current - Current item. @returns Nothing. */
@@ -91,7 +106,7 @@ export function CommandMenuBar({
           ? items.length - 1
           : direction === "next"
             ? (currentIndex + 1 + items.length) % items.length
-            : (currentIndex - 1 + items.length) % items.length;
+            : ((currentIndex < 0 ? 0 : currentIndex) - 1 + items.length) % items.length;
     items[index]?.focus();
   }
 
@@ -136,13 +151,16 @@ export function CommandMenuBar({
   );
 
   useEffect(
-    /** Focuses the first enabled item after a submenu mounts. @returns Nothing. */
+    /** Focuses a mounted popup and preselects its first item only for keyboard opening. @returns Nothing. */
     function focusOpenedSubmenu(): void {
       if (openSubmenuId === undefined) return;
       const submenu = rootRef.current?.querySelector<HTMLElement>(
         `[data-submenu="${openSubmenuId}"]`,
       );
-      if (submenu !== null && submenu !== undefined) focusMenuItem(submenu, "first");
+      if (submenu !== null && submenu !== undefined) {
+        if (preselectSubmenuFirst.current) focusMenuItem(submenu, "first");
+        else submenu.focus();
+      }
     },
     [openSubmenuId],
   );
@@ -191,8 +209,9 @@ export function CommandMenuBar({
     if (menu !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (target.getAttribute("aria-haspopup") === "menu")
-        setOpenSubmenuId(target.dataset.submenuTrigger);
+      if (target === menu) closePopup(menu);
+      else if (target.getAttribute("aria-haspopup") === "menu")
+        openSubmenu(target.dataset.submenuTrigger, true);
       else target.click();
     } else if (
       event.key === "ArrowDown" ||
@@ -214,21 +233,16 @@ export function CommandMenuBar({
       );
     } else if (event.key === "Escape") {
       event.preventDefault();
-      if (menu.dataset.submenu !== undefined) {
-        setOpenSubmenuId(undefined);
-        menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
-      } else closeMenu(true);
+      closePopup(menu);
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu") {
-        setOpenSubmenuId(target.dataset.submenuTrigger);
+        openSubmenu(target.dataset.submenuTrigger, true);
       } else openMenu((menuIndex + 1) % menus.length, "first");
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
-      if (menu.dataset.submenu !== undefined) {
-        setOpenSubmenuId(undefined);
-        menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
-      } else openMenu((menuIndex - 1 + menus.length) % menus.length, "first");
+      if (menu.dataset.submenu !== undefined) closePopup(menu);
+      else openMenu((menuIndex - 1 + menus.length) % menus.length, "first");
     } else if (event.key.length === 1 && /\S/.test(event.key)) {
       typeahead.current += event.key.toLocaleLowerCase();
       if (typeaheadTimer.current !== undefined) clearTimeout(typeaheadTimer.current);
@@ -279,11 +293,14 @@ export function CommandMenuBar({
               key={item.id}
               onMouseEnter={
                 /** Opens this submenu while the pointer is inside its trigger region. @returns Nothing. */ () =>
-                  setOpenSubmenuId(item.id)
+                  openSubmenu(item.id, false)
               }
               onMouseLeave={
-                /** Closes this submenu after the pointer leaves its trigger and popup region. @returns Nothing. */ () => {
-                  if (openSubmenuId === item.id) setOpenSubmenuId(undefined);
+                /** Closes this submenu and restores parent focus after the pointer leaves. @param event - Submenu region event. @returns Nothing. */ (
+                  event,
+                ) => {
+                  if (openSubmenuId === item.id)
+                    closePopup(event.currentTarget.lastElementChild as HTMLElement);
                 }
               }
             >
@@ -455,6 +472,7 @@ function CommandMenuPopup({
       {...props}
       className={`fixed ${submenu ? "z-30" : "z-20"} w-56 overscroll-contain overflow-auto rounded-lg border border-slate-200 bg-white p-1 shadow-lg`}
       ref={popupRef}
+      tabIndex={-1}
     />
   );
 }

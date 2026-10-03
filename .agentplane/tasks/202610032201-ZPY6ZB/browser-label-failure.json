@@ -1,0 +1,8 @@
+{
+  "command": "node_modules/.bin/playwright test --config apps/office/playwright.config.ts writer-submenu-preselection.spec.ts writer-submenu-keyboard.spec.ts",
+  "exitCode": 1,
+  "bytes": 3742,
+  "sha256": "a409a046eddbf88bb27235505ebae3131a1d641343942a8c235b4e3deaec3a91",
+  "summary": "Running 4 tests using 2 workers\n  ✓  1 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (677ms)\n  ✓  3 apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (450ms)\n  ✘  2 apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (5.8s)\n  ✓  4 apps/office/e2e/writer-submenu-preselection.spec.ts:35:1 › keyboard opening still preselects and executes one Writer command (499ms)\n    Error: expect(locator).toBeFocused() failed\n    Locator: getByRole('menuitemcheckbox', { name: 'Underline', exact: true })\n    Expected: focused\n    Timeout: 5000ms\n    Error: element(s) not found\n  1 failed\n  3 passed (7.6s)",
+  "note": "Fixture-only locator used toolbar label Underline instead of actual menu resource label Single Underline. Read generated resource and actual Chromium accessible snapshot, corrected owned E2E locator; production unchanged."
+}

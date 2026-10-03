@@ -1,0 +1,28 @@
+{
+  "checks": [
+    {
+      "command": "ap doctor",
+      "chunk_id": "75677d",
+      "wall_time_seconds": 1.040915875,
+      "exit_code": 0,
+      "original_token_count": 404,
+      "output": "doctor: checking workspace\ndoctor: checking branch_pr drift\ndoctor: checking runtime source\ndoctor: checking project-local blueprints\ndoctor: checking prompt graph\ndoctor: checking recent task archive\ndoctor: checking workflow contract\n{\"ts\":\"2026-10-03T22:14:51.728Z\",\"component\":\"workflow-runtime\",\"event\":\"workflow_doctor_check\",\"details\":{\"ok\":true,\"findings\":0}}\nwarning: doctor findings: errors=0 warnings=2 info=2\n- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches\nLikely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery\nNext action: agentplane hooks install (rewrite the shim with the current fallback chain)\nDetails: Shim path: .agentplane/bin/agentplane\n  - AGENTPLANE_HOOK_RUNNER fallback: present\n  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present\n  - Runner startup readiness: missing\n- [INFO] State: managed pre-push hook will use installed clean-project fallback checks\nLikely cause: this project does not ship a repository-local scripts/run-pre-push-hook.mjs\nNext action: add project-local package scripts such as format:check or test, or keep the installed fallback (make pre-push behavior explicit when the project needs stricter repository-specific checks)\nDetails: Missing repository script: scripts/run-pre-push-hook.mjs\n  - Fallback will consider declared scripts: build, format:check, test\n- [INFO] Project blueprint compatibility: compatible; trusted=0\n- [WARN] DONE task is missing implementation commit hash: 202610031635-2Z3962 (finish with --commit <hash>).\ndoctor (OK)\n"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "chunk_id": "a381b9",
+      "wall_time_seconds": 0.000015291,
+      "exit_code": 0,
+      "original_token_count": 5,
+      "output": "policy routing OK\n"
+    },
+    {
+      "command": "git diff --check",
+      "chunk_id": "e85bf3",
+      "wall_time_seconds": 0.00001025,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    }
+  ]
+}

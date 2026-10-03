@@ -1,0 +1,7 @@
+{
+  "command": "npm run build",
+  "exitCode": 0,
+  "bytes": 924,
+  "sha256": "a59160715f3564168b6640a47711c1e318e0c183dc11b453a89c33d641932f7b",
+  "summary": "\n> vite-office@0.1.0 build\n> npm run build --workspace @vite-office/office\n\n\n> @vite-office/office@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v8.2.1 building client environment for production...\n\u001b[2K\rtransforming...✓ 2004 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                         0.56 kB │ gzip:   0.35 kB\ndist/assets/odt-worker-DMY26PIz.js    287.24 kB\ndist/assets/index-wY4M25Dk.css         58.87 kB │ gzip:   9.58 kB\ndist/assets/index-BAd2-n-e.js       1,160.02 kB │ gzip: 279.53 kB\n\n✓ built in 603ms\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
+}
