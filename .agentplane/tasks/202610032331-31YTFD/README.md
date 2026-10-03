@@ -1,10 +1,11 @@
 ---
 id: "202610032331-31YTFD"
 title: "Focus Writer document when inactive popup menu has no saved owner"
-status: "DOING"
+result_summary: "Focus owning Writer editing host on unopened menubar Escape without live saved focus; all required gates pass and legacy source-bearing artifact archive removed separately."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -50,11 +51,16 @@ quality_review:
     - "Native default true versus PopupClosed false inspected at exact pin/7file hashes. No-popup Escape prefers valid saved owner, else own Writer client through injected editing-host reference.9new owned cases include actual Desktop/Writer focus-beforeinput and separate frames;2new Chromium cases prove actual focus/input and saved-toolbar precedence. No DOM core dependency or global selector."
     - "Fullverify939app109inventory35browser2resources100%coverage0semantic and sequential vendor-absent939+109+12+35 pass. Implementation and test hashes unchanged thereafter. Final metadata-only restoration of existing C++ evidence prefix was followed by passing provenance/invariants/parity0semantic/format on final manifests; no skipped gates or source-dependent tests."
     - "251prior test/spec files byte-identical; exact bounded3production transforms; both215row manifests3evidence-only append rows and5newmarkers each preserve all old evidence/status/default/ownership/priorconclusions.2678ignored-inclusive task files0source/helper/executable/archive, all Agentplane Python0. Legacy source-bearing Playwright trace archive removed in separately approved cleanup commit b23c4f18c359 preserving screenshot/error context; no source bodies retained in cleanup evidence. No independent-agent review claimed."
-commit: null
+commit:
+  hash: "b2902b94e5d7c33a5d940dca7e2da1593cfdd534"
+  message: "🎯 31YTFD code: focus Writer client on unopened menubar Escape"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved iteration79 document focus fallback on unopened Writer menubar Escape under persistent user parity authorization; no upstream test dependency or source/helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: unopened Writer menubar Escape defaults to owning document client when no live saved owner; saved owner takes precedence.939app109inventory35browser2resources100%coverage0semantic and vendor-absent939+109+12+35 pass; final metadata gates pass.251prior tests unchanged. Same-actor exact semantic EVALUATOR pass; legacy source-bearing trace removed separately b23c4f18c359. Broader menu/core/frame/native parity stays open."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Iteration79 no-popup document fallback verified:939app109inventory35browser2resources100%coverage0semantic; vendor-absent939+109+12+35 allpass; final static manifests pass;251prior tests unchanged; separate source archive cleanup; no-owner popup/frame/global and parent remain open."
+  -
+    type: "status"
+    at: "2026-10-03T23:56:11.273Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: unopened Writer menubar Escape defaults to owning document client when no live saved owner; saved owner takes precedence.939app109inventory35browser2resources100%coverage0semantic and vendor-absent939+109+12+35 pass; final metadata gates pass.251prior tests unchanged. Same-actor exact semantic EVALUATOR pass; legacy source-bearing trace removed separately b23c4f18c359. Broader menu/core/frame/native parity stays open."
 doc_version: 3
-doc_updated_at: "2026-10-03T23:55:07.740Z"
+doc_updated_at: "2026-10-03T23:56:11.275Z"
 doc_updated_by: "CODER"
 description: "Iteration79 under C9TN6M: restore native default-to-document behavior for Escape on activated menubar without popup when no live saved owner, through active Writer editing-host reference. Preserve saved-owner precedence and popup/submenu/command paths. No upstream source/helper artifacts or test dependency."
 sections:
@@ -127,6 +140,10 @@ sections:
     Final exact-prefix integrity check caught accidental replacement of an existing native C++ :: marker while formatting new runtime evidence. Restored all existing runtime evidence prefixes byte-for-byte from base ea68a548bd7d, keeping only5new #markers per changed row. Final static manifest gates rechecked after correction; production/tests unchanged from fullverify and vendor-absent passing hashes. Legacy Playwright archive held one owned test source member; source-bearing archive removed separately at b23c4f18c359, failure context/screenshot preserved, cleanup hash/member summary in archive-cleanup.json.
 
     Final iteration79: no-popup activated menubar Escape restores live saved owner, otherwise calls own Writer editing-host client. Optional detached frame has no default client; open-popup/command/submenu/external-transfer paths preserved, no native no-owner popup completion claim.9new owned cases (including actual Writer client reference plus beforeinput) and2new Chromium cases;87focused/7files and6browser passed. Fullverify939app/197files109inventory/36files35browser2resource cases100%coverage0semantic. Sequential vendor-absent939app109inventory12script35browser allpass; vendor restoredfinally and pin/7source hashes unchanged. Production and test hashes remain unchanged from both successful complete suites. Final restoration of old runtime evidence prefix after broad :: formatter mistake is metadata-only, followed by passing source-provenance/invariants/parity0semantic/format checks on final manifests. All251prior test/spec byte-identical; exact3production transformations outside new document focus callback/reference/lifecycle dependency wiring identical; both215row manifests3evidence-only append rows each, old evidence/status/default/ownership/priorconclusions preserved exactly.2678ignored-inclusive task files0source/helper/executable/archive; all Agentplane Python0. Legacy source-bearing trace removed separately b23c4f18c359 retaining context/screenshot. Doctor0errors2known unrelatedwarnings/routing/diff pass. No upstream source/native execution/test dependency. Native other menubar deactivation entry points, no-owner popup/frame/global native flags and full core/UI parity remain under active parent. Same-actor separate exact semantic EVALUATOR review and canonical finish follow.
+extensions:
+  implementation_commit:
+    hash: "b2902b94e5d7c33a5d940dca7e2da1593cfdd534"
+    message: "🎯 31YTFD code: focus Writer client on unopened menubar Escape"
 id_source: "generated"
 ---
 ## Summary
