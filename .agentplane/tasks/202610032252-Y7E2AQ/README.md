@@ -1,10 +1,11 @@
 ---
 id: "202610032252-Y7E2AQ"
 title: "Restore saved focus around Writer menu dismissal and dispatch"
-status: "DOING"
+result_summary: "Restore saved external focus on menu dismissal and unmount popups before command dispatch; all full and vendor-absent checks pass without source/helper artifacts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on: []
@@ -48,11 +49,16 @@ quality_review:
     - "Saved connected external owner captured once across menu cycle, consumed on close, external focus loss does not steal focus. Command callbacks observe popup absent and prior owner restored; newly opened dialog retains focus. Owned18new cases and4new Chromium scenarios cover these behaviors."
     - "Full gates930app109inventory33browser2resources100%coverage0semantic pass. Sequential vendor-absent930app109inventory12script33browser pass; vendor pin/5source hashes unchanged. Tests never invoke/read pinned upstream; static CLI audits separately may read it."
     - "Seven semantic paths within approved scope.247of249prior test/spec files byte-identical, old2files exact three root-Escape target assertions plus explicit known-owner foundation precondition. Both215row manifests append evidence only, preserving all statuses/defaults/ownership and old conclusions.2652ignored-inclusive task files contain0source/helper/Python/executable files. No independent-agent review claimed."
-commit: null
+commit:
+  hash: "d649dcb7382d0d8e06e81bcd0ca43926fbebac82"
+  message: "🎯 Y7E2AQ code: restore saved menu focus before command dispatch"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce saved external menu focus and close-before-dispatch contracts under standing parity authorization, preserve intentional I/O and outcome-only artifacts."
+  -
+    author: "CODER"
+    body: "Verified: saved external menu focus is restored and popup DOM removed before command dispatch; new dialog focus retained. Full930app109inventory33browser2resources100%coverage0semantic and sequential vendor-absent930+109+12+33 pass. Same-actor EVALUATOR reviewed exact semantic d649dcb7382d0d8e06e81bcd0ca43926fbebac82; no-owner document/frame/global native focus and parent parity remain open."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Saved focus/cleanup-before-dispatch leaf verified: full930app109inventory33browser2resources100%coverage0semantic; sequential vendor-absent930+109+12+33 all pass; scope/hashes/storage pass. Native no-owner/frame focus and parent parity remain unverified."
+  -
+    type: "status"
+    at: "2026-10-03T23:28:16.068Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: saved external menu focus is restored and popup DOM removed before command dispatch; new dialog focus retained. Full930app109inventory33browser2resources100%coverage0semantic and sequential vendor-absent930+109+12+33 pass. Same-actor EVALUATOR reviewed exact semantic d649dcb7382d0d8e06e81bcd0ca43926fbebac82; no-owner document/frame/global native focus and parent parity remain open."
 doc_version: 3
-doc_updated_at: "2026-10-03T23:27:22.166Z"
+doc_updated_at: "2026-10-03T23:28:16.069Z"
 doc_updated_by: "CODER"
 description: "Iteration78 under C9TN6M: retain prior connected external DOM focus for a menubar cycle, restore it before command dispatch or root dismissal, cancel without stealing transferred focus; keep submenu restoration, registered I/O and outcome-only artifacts. No complete native fallback/default claim."
 sections:
@@ -131,6 +144,10 @@ sections:
     Foundation targeted run and third full check show post-launcher default focus is not deterministically the paragraph expected by the new assertion. Stronger explicit precondition: focus and assert Writer document text before menubar keyboard navigation, then assert restoration to that known saved owner. This preserves every launcher/navigation/accessibility check and makes the return-focus contract observable rather than guessing prior focus. Production unchanged. Scope clarification adds only this2line precondition in already approved foundation path.
 
     Final iteration78 outcomes: focused owned73cases/6files and13browser/4specs passed. Final npm run verify passed930app/196files,109inventory/36files,33browser,2resource cases,100%app/inventory coverage and0semantic violations. All mandatory test commands repeated sequentially with vendor/libreoffice-reference absent: npm run test930app+109inventory100%coverage; all3noninventory script test files12cases; npm run test:e2e33browser; all exit0 and vendor restoredfinally. Exact pin and5source file hashes unchanged; production hash matches scope-integrity.json.249prior test/spec files:247byte-identical, only2oldWriter root Escape assertions plus foundation explicit saved-editor focus precondition and1root Escape assertion. Both215row manifests preserve all statuses/defaults/ownership and prior conclusions; one append-only evidence row each.2652ignored-inclusive task artifact files:0source/helper/Python/executable files. No native execution or upstream source copying. Earlier failed fixture/full attempts remain outcome evidence; final pass supersedes them. A read-only guessed local file lookup returned missing paths; no scope/code mutation resulted. No-owner document fallback/frame/global native focus behavior and whole-menu parity remain unverified, not accepted deviations or completed parent work.
+extensions:
+  implementation_commit:
+    hash: "d649dcb7382d0d8e06e81bcd0ca43926fbebac82"
+    message: "🎯 Y7E2AQ code: restore saved menu focus before command dispatch"
 id_source: "generated"
 ---
 ## Summary
