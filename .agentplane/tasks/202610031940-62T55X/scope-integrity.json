@@ -1,0 +1,29 @@
+{
+  "oldTestAndSpecCount": 237,
+  "allPriorTestsByteIdentical": true,
+  "changedMethods": [
+    "ValidateHierarchical"
+  ],
+  "unchangedMethods": 50,
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changedRows": 1,
+      "otherRowsUnchanged": 214,
+      "allNonEvidenceAndOrderPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changedRows": 1,
+      "otherRowsUnchanged": 214,
+      "allNonEvidenceAndOrderPreserved": true
+    }
+  ],
+  "ignoredInclusiveStorage": {
+    "files": 2562,
+    "python": 0,
+    "prohibitedSourceHelperExecutable": 0
+  }
+}

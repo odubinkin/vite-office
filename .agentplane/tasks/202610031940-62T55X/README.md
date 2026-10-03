@@ -4,7 +4,7 @@ title: "Restore hierarchical validation state and policy order"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore complete hierarchical validator state and source policy call order with owned baseline/branch evidence,unchanged existing assertions and strict artifact/upstream-test restrictions."
 doc_version: 3
-doc_updated_at: "2026-10-03T19:41:53.920Z"
+doc_updated_at: "2026-10-03T19:49:21.858Z"
 doc_updated_by: "CODER"
 description: "Iteration69 under C9TN6M: port complete existing ValidateHierarchical policy/state ordering and parent helper calls to pinned source, preserving nullable/protected contract,cache/continuation/counter profiles and all prior tests. Owned tests only,no upstream execution or source/helper artifacts,no registered IO/recovery changes."
 sections:
@@ -50,7 +50,9 @@ sections:
     4. Full npm run verify terminal0 with both100percent coverage and20browser tests,all source/resource/invariant/215rowgates. Doctor0errors/2knownwarnings,routing/diffclean. Record canonical verification,actual semantic-SHA separate EVALUATOR phase and clean leaf closure. Parent/full goal staysopen.
   Verification: "Pending final authored baseline,implementation and terminal checks. Native helper calls are nonvirtual;policy methods are native virtuals. No complete ABI/const/final/lifetime/whole-module promotion."
   Rollback Plan: "Revert this leaf semantic commit only,retain evidence and prior iterations. No history rewriting."
-  Findings: "Preflight clean main/direct at79a2fb6e665fa73a6d94e01b0b77dc06315e2f95. Previous goal turn made progress:iteration68 semanticfa4ebd15,leaf closed and parent recorded. Fresh manual body comparison confirms native clears mbContinueingPreviousSubTree before virtual GetStartValue/IsCounted/HasCountedChildren;ours cleared it afterward. Native special start queries GetParent/GetIterator and preceding.GetChildCount while ours accesses rawparent/storage. Standing user goal authorizes complete selected-method correction without additional approval. No network/outside-repo access or native source/helper storage."
+  Findings: |-
+    Preflight clean main/direct at79a2fb6e665fa73a6d94e01b0b77dc06315e2f95. Previous goal turn made progress:iteration68 semanticfa4ebd15,leaf closed and parent recorded. Fresh manual body comparison confirms native clears mbContinueingPreviousSubTree before virtual GetStartValue/IsCounted/HasCountedChildren;ours cleared it afterward. Native special start queries GetParent/GetIterator and preceding.GetChildCount while ours accesses rawparent/storage. Standing user goal authorizes complete selected-method correction without additional approval. No network/outside-repo access or native source/helper storage.
+    First full verification exited1 at lint:no-useless-assignment rejects native temporary number initialization0 because both selected branches assign before use. Remove the unused initializer without changing any branch/order/value or enforcement setting;local enforcement takes priority. Exact AST count is50other tree methods unchanged,correcting the initial49estimate. Scope and required gates unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +85,4 @@ Revert this leaf semantic commit only,retain evidence and prior iterations. No h
 ## Findings
 
 Preflight clean main/direct at79a2fb6e665fa73a6d94e01b0b77dc06315e2f95. Previous goal turn made progress:iteration68 semanticfa4ebd15,leaf closed and parent recorded. Fresh manual body comparison confirms native clears mbContinueingPreviousSubTree before virtual GetStartValue/IsCounted/HasCountedChildren;ours cleared it afterward. Native special start queries GetParent/GetIterator and preceding.GetChildCount while ours accesses rawparent/storage. Standing user goal authorizes complete selected-method correction without additional approval. No network/outside-repo access or native source/helper storage.
+First full verification exited1 at lint:no-useless-assignment rejects native temporary number initialization0 because both selected branches assign before use. Remove the unused initializer without changing any branch/order/value or enforcement setting;local enforcement takes priority. Exact AST count is50other tree methods unchanged,correcting the initial49estimate. Scope and required gates unchanged.

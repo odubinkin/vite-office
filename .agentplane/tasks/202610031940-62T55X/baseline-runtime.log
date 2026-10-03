@@ -1,0 +1,18 @@
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts (6 tests | 4 failed) 166ms
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts > clears actual retained continuation before virtual start counted and descendant policies
+AssertionError: expected [ 'start:true', 'counted:true', …(1) ] to deeply equal [ Array(3) ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts:176:21
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts > uses parent lookup and preceding child-count policy while skipping empty uncounted siblings
+AssertionError: expected [ 'policy-empty', 'number' ] to deeply equal [ 'parent', 'parent', …(5) ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts:266:53
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts > stops backward continuation at a counted empty sibling and retains the owned start
+AssertionError: expected "GetChildCount" to be called once with arguments: []
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts:300:19
+ FAIL  src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts > short-circuits previous lookup for restarted children counted parents and first-position parents
+AssertionError: expected [ [ SwNodeNum{ …(10) } ] ] to deeply equal [ [ SwNodeNum{ …(10) } ], …(1) ]
+ ❯ src/sw/source/core/SwNumberTree/SwNumberTree-hierarchical-policy.test.ts:333:57
+ Test Files  1 failed (1)
+      Tests  4 failed | 2 passed (6)
+   Start at  02:45:39
+   Duration  844ms (transform 181ms, setup 66ms, import 211ms, tests 166ms, environment 308ms)

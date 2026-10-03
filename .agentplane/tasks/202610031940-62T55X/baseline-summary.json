@@ -1,0 +1,9 @@
+{
+  "cases": 6,
+  "failed": 4,
+  "passed": 2,
+  "types": "pass;protected nullable contract unchanged",
+  "originalBytes": 4179,
+  "sha256": "a5824dce65a78dd2d5239c63b6c3c83f72b0298bb0529b8df4c71ba341d27da2",
+  "mismatch": "Stale continuation observed before virtual policy reset and bypassed native owner/count helper calls. No fabricated counter mismatch."
+}
