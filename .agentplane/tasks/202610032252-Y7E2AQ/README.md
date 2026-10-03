@@ -4,7 +4,7 @@ title: "Restore saved focus around Writer menu dismissal and dispatch"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 32
+revision: 33
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,32 @@ verification:
   updated_by: "CODER"
   note: "Saved focus/cleanup-before-dispatch leaf verified: full930app109inventory33browser2resources100%coverage0semantic; sequential vendor-absent930+109+12+33 all pass; scope/hashes/storage pass. Native no-owner/frame focus and parent parity remain unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-03T23:27:56.533Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR phase at d649dcb7382d0d8e06e81bcd0ca43926fbebac82: bounded saved external focus and cleanup-before-dispatch leaf meets approved contract; parent parity remains open."
+  evaluated_sha: "d649dcb7382d0d8e06e81bcd0ca43926fbebac82"
+  blueprint_digest: "b955edbdffbe568b02e5e6c5d379e6d875f0c02e3dc3aef586a53f7cc1665243"
+  evidence_refs:
+    - ".agentplane/tasks/202610032252-Y7E2AQ/README.md"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/quality/20261003-232756533-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/quality/20261003-232756533-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/quality/20261003-232756533-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/source-inspection.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/scope-integrity.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/corrected-runtime.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/corrected-browser.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/full-verify-summary.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/offline-unit.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/offline-script.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/offline-browser.json"
+    - ".agentplane/tasks/202610032252-Y7E2AQ/auxiliary-checks.json"
+  findings:
+    - "Saved connected external owner captured once across menu cycle, consumed on close, external focus loss does not steal focus. Command callbacks observe popup absent and prior owner restored; newly opened dialog retains focus. Owned18new cases and4new Chromium scenarios cover these behaviors."
+    - "Full gates930app109inventory33browser2resources100%coverage0semantic pass. Sequential vendor-absent930app109inventory12script33browser pass; vendor pin/5source hashes unchanged. Tests never invoke/read pinned upstream; static CLI audits separately may read it."
+    - "Seven semantic paths within approved scope.247of249prior test/spec files byte-identical, old2files exact three root-Escape target assertions plus explicit known-owner foundation precondition. Both215row manifests append evidence only, preserving all statuses/defaults/ownership and old conclusions.2652ignored-inclusive task files contain0source/helper/Python/executable files. No independent-agent review claimed."
 commit: null
 comments:
   -
