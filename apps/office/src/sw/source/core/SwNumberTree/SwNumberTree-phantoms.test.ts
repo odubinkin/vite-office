@@ -270,10 +270,6 @@ class PhantomRoot extends SwNodeNum {
   public createPhantom(): SwNumberTreeNode | undefined {
     return this.CreatePhantom();
   }
-  /** Selects the native destination phantom, retaining one already present. @returns Destination record. */
-  public destinationPhantom(): SwNumberTreeNode | undefined {
-    return this.GetDestinationPhantom();
-  }
   /** Clears a no-content phantom chain. @returns Nothing. */
   public clearPhantoms(): void {
     this.ClearObsoletePhantoms();
@@ -286,8 +282,8 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   const orphan = new SwNodeNum(text);
   root.AddChild(orphan, -1);
   expect(getNumberTreeChildren(root)).toEqual([]);
-  const phantom = root.destinationPhantom() as SwNumberTreeNode;
-  expect(root.destinationPhantom()).toBe(phantom);
+  const phantom = root.createPhantom() as SwNumberTreeNode;
+  expect(getNumberTreeChildren(root)[0]).toBe(phantom);
   expect(root.createPhantom()).toBeUndefined();
   root.clearPhantoms();
   expect(getNumberTreeChildren(root)).toEqual([]);

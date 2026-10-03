@@ -92,7 +92,7 @@ export abstract class SwNumberTreeNode {
   }
   /** Inserts an orphan at its requested depth, constructing skipped ancestors and relocating later descendants. @param child - Orphan record. @param depth - Remaining list depth. @param document - Native operation context. @returns Nothing. */
   public AddChild(child: SwNumberTreeNode, depth: number, document?: SwDoc): void {
-    if (depth < 0 || child.mpParent !== undefined || child.mChildren.size() > 0) return;
+    if (depth < 0 || child.GetParent() !== undefined || child.GetChildCount() > 0) return;
     if (depth > 0) {
       const position = this.mChildren.upper_bound(child);
       const parent = position === 0 ? this.CreatePhantom() : this.mChildren.at(position - 1);
@@ -112,11 +112,21 @@ export abstract class SwNumberTreeNode {
       const predecessor = this.mChildren.at(position - 1)!;
       let previous: SwNumberTreeNode | undefined = predecessor;
       let destination: SwNumberTreeNode | undefined = child;
-      while (destination !== undefined && previous !== undefined && previous.mChildren.size() > 0) {
+      while (destination !== undefined && previous !== undefined && previous.GetChildCount() > 0) {
         previous.MoveGreaterChildren(child, destination);
-        if (previous.mChildren.size() === 0) break;
-        previous = previous.mChildren.back();
-        destination = destination.GetDestinationPhantom();
+        if (previous.GetChildCount() > 0) {
+          previous = previous.mChildren.back();
+          if (destination.GetChildCount() > 0) {
+            // The native positive child-count guard guarantees an owned first child.
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            destination = destination.mChildren.front()!;
+            if (!destination.IsPhantom()) {
+              // A child retained in this container has the destination as its parent.
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              destination = destination.mpParent!.CreatePhantom();
+            }
+          } else destination = destination.CreatePhantom();
+        } else break;
       }
       child.ClearObsoletePhantoms();
       if (predecessor.IsValid()) this.SetLastValid(position - 1);
@@ -129,11 +139,6 @@ export abstract class SwNumberTreeNode {
       }
       this.NotifyInvalidChildren(document);
     }
-  }
-  /** Retains an existing destination phantom or constructs one for descendant relocation. @returns Destination record. */
-  protected GetDestinationPhantom(): SwNumberTreeNode | undefined {
-    const first = this.mChildren.front();
-    return first?.IsPhantom() ? first : this.CreatePhantom();
   }
   /** Creates the native first phantom child when none exists. @returns New phantom, absent when already present. */
   protected CreatePhantom(): SwNumberTreeNode | undefined {
