@@ -4,7 +4,7 @@ title: "Keep command menu popups reachable within the viewport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: restore viewport-bounded scrollable command popups under continuing goal authorization; preserve old menu expectations, gates and deliberate IO deviations."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:00:55.849Z"
+doc_updated_at: "2026-10-03T16:04:37.548Z"
 doc_updated_by: "CODER"
 description: "Resolve reproducible short-viewport Writer menu overflow independently of committed iteration61 core change; native screen-bounded scrolling behavior through browser-owned popup placement, preserve existing menu and IO behavior."
 sections:
@@ -56,6 +56,8 @@ sections:
     Implementation: one in-file fixed owned popup presenter handles screen bounds, internal scrolling, above/below placement, nested edge flip and resize/ancestor-scroll cleanup. Native3files/5spans manually inspected and hashed; no source/helper copies. Two added owned unit cases fail baseline and pass final,all3old unit and3old responsive test bodies byte-identical; one added responsive browser test establishes bounds/scroll/nested reachability. Baseline built old340px popup within=false/scrolls=false. An initial unchanged3browser rerun used olddist and passed, so intermittent old detachment is not claimed deterministic; new geometry assertion provides direct evidence. Initial new browser340 fixture incorrectly demanded internal scrolling although corrected five-item popup fits208px; new dedicated short240 fixture requires real internal overflow and passes. Two new unit fixture calculations and unsupported assertion spelling were corrected before final expectations; all old expectations retained. One mistaken root Vitest invocation lacked app DOM config; corrected app cwd, no config/gate changes.
 
     Command: app-cwd focused Vitest menu suites. Result: pass2files/14tests. Command: focused Playwright responsive/alignment/foundation. Result: pass6tests,focused-browser-final.log; earlier new-fixture failure retained focused-browser.log. Command: same owned menu suites with vendor absent and restored in finally. Result: pass14tests,offline-owned-tests.log/offline-results.json. Scope: current exact5semantic paths, only one metadata evidence/responsibility or justification row each, no status/default/deviation promotion. Fresh ignored-inclusive source artifact scan0; all tooling inline and unsaved. Full unchanged verification next; no completion claim.
+
+    Command: npm run verify first browser-leaf attempt. Result: fail/exit1 terminal7569 only at check:docs after792app/179files,109inventory/36files,both100%,20browser and static smoke pass. Evidence: full-verify-first.log; one new test mock TypeScript this parameter lacked @param documentation. Added @param this, check:docs now passes; no logic/expectation/gate changes. Run unchanged full command again; all remaining static gates still required.
 id_source: "generated"
 ---
 ## Summary
@@ -92,3 +94,5 @@ Continuing user goal authorizes safe local correction. Core leaf RD0HQY committe
 Implementation: one in-file fixed owned popup presenter handles screen bounds, internal scrolling, above/below placement, nested edge flip and resize/ancestor-scroll cleanup. Native3files/5spans manually inspected and hashed; no source/helper copies. Two added owned unit cases fail baseline and pass final,all3old unit and3old responsive test bodies byte-identical; one added responsive browser test establishes bounds/scroll/nested reachability. Baseline built old340px popup within=false/scrolls=false. An initial unchanged3browser rerun used olddist and passed, so intermittent old detachment is not claimed deterministic; new geometry assertion provides direct evidence. Initial new browser340 fixture incorrectly demanded internal scrolling although corrected five-item popup fits208px; new dedicated short240 fixture requires real internal overflow and passes. Two new unit fixture calculations and unsupported assertion spelling were corrected before final expectations; all old expectations retained. One mistaken root Vitest invocation lacked app DOM config; corrected app cwd, no config/gate changes.
 
 Command: app-cwd focused Vitest menu suites. Result: pass2files/14tests. Command: focused Playwright responsive/alignment/foundation. Result: pass6tests,focused-browser-final.log; earlier new-fixture failure retained focused-browser.log. Command: same owned menu suites with vendor absent and restored in finally. Result: pass14tests,offline-owned-tests.log/offline-results.json. Scope: current exact5semantic paths, only one metadata evidence/responsibility or justification row each, no status/default/deviation promotion. Fresh ignored-inclusive source artifact scan0; all tooling inline and unsaved. Full unchanged verification next; no completion claim.
+
+Command: npm run verify first browser-leaf attempt. Result: fail/exit1 terminal7569 only at check:docs after792app/179files,109inventory/36files,both100%,20browser and static smoke pass. Evidence: full-verify-first.log; one new test mock TypeScript this parameter lacked @param documentation. Added @param this, check:docs now passes; no logic/expectation/gate changes. Run unchanged full command again; all remaining static gates still required.
