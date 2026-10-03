@@ -29,7 +29,8 @@
     },
     {
       "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
-      "sha256": "6681ad7dea902c175430c6c360083fb45fe01767e70465e1df172f83d5dfeaab"
+      "sha256": "b051a196b63eb5c2d56ebbf73bd8dd057480ef1f8f96edccd9c1ab0a264477e1"
     }
-  ]
+  ],
+  "productionOutsideDocumentFocusAndHostReferenceIdentical": true
 }

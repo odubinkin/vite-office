@@ -4,7 +4,7 @@ title: "Focus Writer document when inactive popup menu has no saved owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved iteration79 document focus fallback on unopened Writer menubar Escape under persistent user parity authorization; no upstream test dependency or source/helper artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-03T23:32:16.697Z"
+doc_updated_at: "2026-10-03T23:37:59.993Z"
 doc_updated_by: "CODER"
 description: "Iteration79 under C9TN6M: restore native default-to-document behavior for Escape on activated menubar without popup when no live saved owner, through active Writer editing-host reference. Preserve saved-owner precedence and popup/submenu/command paths. No upstream source/helper artifacts or test dependency."
 sections:
@@ -46,7 +46,9 @@ sections:
   Verify Steps: "Manual exact-pin native complete relevant functions inspection, no native compilation/execution or source copying. Owned tests absent/connected/disconnected saved owner on unopened Escape, original owner precedence, opened popup fallback unchanged, outside focus no-steal and per-instance document target; actual Writer editing host focuses and accepts input after body blur plus trigger Escape without popup, valid toolbar owner wins. Focused cases and npm run verify all gates100%coverage0semantic violations. Sequential vendor root renamed/restoredfinally: npm run test; root vitest3script test files; npm run test:e2e, allpass.251prior test/spec byte-identical, seven semantic paths only and precise bounded focus/reference changes,215row manifests evidence-only preserving all statuses/defaults/ownership/prior conclusions, unchanged pinned hashes, ignored-inclusive0source/helper/Python/executable artifacts. Doctor/routing/diff pass, recorded terminal evidence, same-actor EVALUATOR at exact semantic HEAD, canonical finish and final cleantracked/untracked."
   Verification: "Pending before/after checks. All tests use owned runtime/fixtures and must pass with pinned upstream absent; static CLI provenance/resource/parity audits are separate source reads."
   Rollback Plan: "Revert only the semantic iteration79 commit through a separately authorized task if needed; preserve task outcomes and history. Do not modify registered save/open/recovery deviations."
-  Findings: "Preflight main/direct clean; only parent C9TN6M DOING. Prior turn progress: iteration78 completed saved-owner and close-before-dispatch leaf. Manual native inspection shows ChangeHighlightItem bDefaultToDocument=true by default, PopupClosed explicitlyfalse; GetFocus activates without popup and Escape deactivates with defaulttrue. ImplGrabFocusToDocument routes enclosing frame client. Browser closed-menubar Escape currently has no document fallback. No upstream source/helper artifact permitted. Read-only guessed nonexistent paths produced missing-file/glob errors with no mutation; actual native header discovered at vcl/source/window/menubarwindow.hxx."
+  Findings: |-
+    Preflight main/direct clean; only parent C9TN6M DOING. Prior turn progress: iteration78 completed saved-owner and close-before-dispatch leaf. Manual native inspection shows ChangeHighlightItem bDefaultToDocument=true by default, PopupClosed explicitlyfalse; GetFocus activates without popup and Escape deactivates with defaulttrue. ImplGrabFocusToDocument routes enclosing frame client. Browser closed-menubar Escape currently has no document fallback. No upstream source/helper artifact permitted. Read-only guessed nonexistent paths produced missing-file/glob errors with no mutation; actual native header discovered at vcl/source/window/menubarwindow.hxx.
+    Owned baseline corrected missing QueryCommand descriptor fixture: initial4fail included1fixture issue; owned baseline3fail5pass exposes absent/disconnected/per-frame document fallback. Corrected86focused cases and6Chromium cases pass. First fullverify stopped at ESLint2missing rootElement dependencies after optional ref injection; add actual reference to selection/subscription effect dependencies within approved editing-host lifecycle scope. No pass criterion change or lint suppression. Failed full outcome retained.
 id_source: "generated"
 ---
 ## Summary
@@ -76,3 +78,4 @@ Revert only the semantic iteration79 commit through a separately authorized task
 ## Findings
 
 Preflight main/direct clean; only parent C9TN6M DOING. Prior turn progress: iteration78 completed saved-owner and close-before-dispatch leaf. Manual native inspection shows ChangeHighlightItem bDefaultToDocument=true by default, PopupClosed explicitlyfalse; GetFocus activates without popup and Escape deactivates with defaulttrue. ImplGrabFocusToDocument routes enclosing frame client. Browser closed-menubar Escape currently has no document fallback. No upstream source/helper artifact permitted. Read-only guessed nonexistent paths produced missing-file/glob errors with no mutation; actual native header discovered at vcl/source/window/menubarwindow.hxx.
+Owned baseline corrected missing QueryCommand descriptor fixture: initial4fail included1fixture issue; owned baseline3fail5pass exposes absent/disconnected/per-frame document fallback. Corrected86focused cases and6Chromium cases pass. First fullverify stopped at ESLint2missing rootElement dependencies after optional ref injection; add actual reference to selection/subscription effect dependencies within approved editing-host lifecycle scope. No pass criterion change or lint suppression. Failed full outcome retained.
