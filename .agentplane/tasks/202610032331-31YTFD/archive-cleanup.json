@@ -1,0 +1,18 @@
+{
+  "archive": ".agentplane/tasks/202610010156-ZDTVKE/browser-failure/trace.zip",
+  "sha256": "282df10abbb47c36234b95c1ad25ba8a922df7c9f1807b507ced1a71eec9cef6",
+  "members": 19,
+  "embeddedOwnedSourceMembers": 1,
+  "sourceCopiedIntoEvidence": false,
+  "action": "Remove source-bearing archive under user artifact prohibition; preserve bounded failure context and screenshot.",
+  "preserved": [
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/browser-failure/error-context.md",
+      "sha256": "91f34dc71a0ee40290f275dce138663eacf01ad4f60873cd1e49de17e1b241a8"
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/browser-failure/test-failed-1.png",
+      "sha256": "b64bc9c389aff592d96a997316ad3b2f7b2fecfef1095d97a493c3fe70ed0aca"
+    }
+  ]
+}
