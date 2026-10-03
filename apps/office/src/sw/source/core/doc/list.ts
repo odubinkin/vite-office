@@ -20,6 +20,7 @@ import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { SwNumRuleItem } from "../para/paratr";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
+import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
 
 /** Enumerates list variants currently mapped to LibreOffice Writer's default bullet and numbering commands. */
 export const WRITER_PARAGRAPH_LIST_KINDS = ["none", "bullet", "numbered"] as const;
@@ -81,8 +82,8 @@ export class SwList {
   public GetListItemNumber(node: SwTextNode): number | undefined {
     return this.GetListItem(node)?.GetNumber();
   }
-  /** Returns the validating root-to-item number vector. @param node - Canonical text node. @returns Number vector when registered. */
-  public GetListItemNumberVector(node: SwTextNode): readonly number[] | undefined {
+  /** Returns the validating root-to-item number vector by value. @param node - Canonical text node. @returns Mutable caller-owned vector when registered. */
+  public GetListItemNumberVector(node: SwTextNode): tNumberVector | undefined {
     return this.GetListItem(node)?.GetNumberVector();
   }
   /** Returns the retained number-tree node. @param node - Canonical text node. @returns Tree record. */

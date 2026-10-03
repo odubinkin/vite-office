@@ -2,6 +2,7 @@
 
 import { SortedVector } from "../../../../o3tl/inc/sorted_vector";
 import type { SwDoc } from "../doc/doc";
+import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
 
 /** Native number-tree state independent of Writer text-node count/restart/start policy. */
 export abstract class SwNumberTreeNode {
@@ -436,14 +437,14 @@ export abstract class SwNumberTreeNode {
     this.RemoveMe(document);
     root.AddChild(this, level, document);
   }
-  /** Returns counters from real and phantom ancestors. @returns Root-to-item vector. */
-  public GetNumberVector(): readonly number[] {
+  /** Returns counters from real and phantom ancestors by value. @returns Mutable caller-owned root-to-item vector. */
+  public GetNumberVector(): tNumberVector {
     const numbers: number[] = [];
     this.GetNumberVector_(numbers);
     return numbers;
   }
   /** Appends ancestral counters using native parent-first recursion and the requested validation policy. @param numbers - Counter vector. @param validate - Whether counters validate, true by default. @returns Nothing. */
-  protected GetNumberVector_(numbers: number[], validate = true): void {
+  protected GetNumberVector_(numbers: tNumberVector, validate = true): void {
     if (this.mpParent !== undefined) {
       this.mpParent.GetNumberVector_(numbers, validate);
       numbers.push(this.GetNumber(validate));

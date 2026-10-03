@@ -47,6 +47,7 @@ import {
 } from "./ndtxt-attribute-handlers";
 import { HandleModifyAtTextNodeFormatChange } from "./ndtxt-format-change";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
+import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
@@ -430,9 +431,9 @@ export class SwTextNode extends SwContentNode {
   public GetNum(): SwNodeNum | undefined {
     return this.mpNodeNum;
   }
-  /** Returns the validating root-to-item number vector. @returns Counters or an empty vector. */
-  public GetNumberVector(): readonly number[] {
-    return this.mpNodeNum?.GetNumberVector() ?? [];
+  /** Returns the shown record's validating number vector by value. @returns Mutable caller-owned counters or an independent empty vector. */
+  public GetNumberVector(): tNumberVector {
+    return this.GetNum()?.GetNumberVector() ?? [];
   }
   /** Reports membership through the owned record's parent. @returns Whether attached to a list. */
   public IsInList(): boolean {
