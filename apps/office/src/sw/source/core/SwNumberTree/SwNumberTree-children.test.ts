@@ -142,12 +142,15 @@ it("counts direct owned children including skipped phantoms through removal with
 });
 
 it("ignores non-Writer children under the native counted-descendant type guard", /** Checks the native dynamic-cast failure boundary. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   const root = new SwNodeNum(undefined);
   const foreign = new ForeignNode();
-  root.AddChild(foreign, 0);
+  root.AddChild(foreign, 0, operationDocument);
   expect(observeCountedChildren(root)).toBe(false);
-  root.RemoveChild(foreign);
+  root.RemoveChild(foreign, operationDocument);
   expect(foreign.GetParent()).toBeUndefined();
+
+  operationDocument.Dispose();
 });
 
 /** Observes the protected HasCountedChildren policy solely in tests. @param node - Owned record. @returns Native policy flag. */

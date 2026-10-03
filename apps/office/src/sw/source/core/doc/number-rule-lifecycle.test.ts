@@ -108,6 +108,7 @@ function check(r: SwNumRule, expected: typeof native.native.default): void {
   ).toEqual(expected.values);
 }
 it("matches native constructors assignment self reset copy and all ten owned slots", /** Exercises 432 complete literal states with live references and independent copies. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   for (const row of native.native.traces) {
     const target = new SwNumRule("target", modeName(row.mode), row.type),
       source = new SwNumRule("source", modeName(1 - row.mode), 1 - row.type);
@@ -117,8 +118,8 @@ it("matches native constructors assignment self reset copy and all ten owned slo
     seed(source, row.mask, 7);
     scalar(target, row.scalar + 2);
     scalar(source, row.scalar);
-    target.Validate();
-    source.Validate();
+    target.Validate(operationDocument);
+    source.Validate(operationDocument);
     check(source, row.source);
     check(target, row.before);
     const held = Array.from(
@@ -144,7 +145,7 @@ it("matches native constructors assignment self reset copy and all ten owned slo
       ),
     ).toEqual(row.same);
     expect(target.Equals(source)).toBe(row.equal);
-    target.Validate();
+    target.Validate(operationDocument);
     expect(target.Assign(target)).toBe(target);
     check(target, row.self);
     target.Assign(source);
@@ -163,8 +164,11 @@ it("matches native constructors assignment self reset copy and all ten owned slo
         expect(formatState(copy.Get(n))).toEqual(row.copy.values[n]);
       }
   }
+
+  operationDocument.Dispose();
 });
 it("matches complete native rule equality selected and ignored fields", /** Checks 18 source-shaped equality branches and effective defaults despite raw ownership or different modes. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   for (const [variant, result] of native.native.equality.entries()) {
     const a = new SwNumRule("equal", "label-alignment"),
       b = new SwNumRule(a);
@@ -197,7 +201,7 @@ it("matches complete native rule equality selected and ignored fields", /** Chec
         b.SetHidden(true);
         break;
       case 10:
-        b.Validate();
+        b.Validate(operationDocument);
         break;
       case 11:
         b.SetCountPhantoms(false);
@@ -235,13 +239,16 @@ it("matches complete native rule equality selected and ignored fields", /** Chec
     expect(a.Equals(b)).toBe(result);
     expect(b.Equals(a)).toBe(result);
   }
+
+  operationDocument.Dispose();
 });
 it("matches native unknown default and exact ushort byte narrowing without invalidation", /** Checks all selected defaults and seven native overflow boundaries. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   expect(SwPoolFormatId.UNKNOWN).toBe(65535);
   check(new SwNumRule("default", "label-alignment"), native.native.default);
   for (const [input, pool, help, file, invalid] of native.native.narrowing) {
     const r = new SwNumRule("narrow", "label-alignment");
-    r.Validate();
+    r.Validate(operationDocument);
     r.SetPoolFormatId(input as SwPoolFormatId);
     r.SetPoolHelpId(input as number);
     r.SetPoolHlpFileId(input as number);
@@ -253,9 +260,11 @@ it("matches native unknown default and exact ushort byte narrowing without inval
     ]).toEqual([pool, help, file, invalid]);
   }
   const r = new SwNumRule("flags", "label-alignment");
-  r.Validate();
+  r.Validate(operationDocument);
   scalar(r, 1);
   expect(r.IsInvalidRule()).toBe(false);
+
+  operationDocument.Dispose();
 });
 it("retains actual document clients list and registry across same name assignment and reset", /** Uses real attached nodes and the stored owner; ODT retains its already supported format fields. @returns Completion. */ async () => {
   const doc = createWriterDocument(),
@@ -289,7 +298,7 @@ it("retains actual document clients list and registry across same name assignmen
   expect(node.GetNum()).toBe(counter);
   expect(node.GetNum()?.GetNumRule()).toBe(rule);
   expect(doc.GetDocumentListsManager().GetListByName("list")).toBe(list);
-  rule.Validate();
+  rule.Validate(doc);
   expect(rule.MakeNumString([1], 0)).toBe("1)");
   const items: SwNodeNum[] = [];
   doc.getIDocumentListItems().getNumItems(items);
@@ -318,7 +327,7 @@ it("retains actual document clients list and registry across same name assignmen
   expect(rule.GetDefaultListId()).toBe("list");
   expect(rule.MakeNumString([1], 0)).toBe("1.");
   expect(doc.FindNumRulePtr("attached")).toBe(rule);
-  rule.Validate();
+  rule.Validate(doc);
   doc.getIDocumentListItems().getNumItems(items);
   expect(items).toEqual([counter]);
   doc.Dispose();

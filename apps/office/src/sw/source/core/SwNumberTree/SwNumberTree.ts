@@ -46,10 +46,10 @@ export abstract class SwNumberTreeNode {
   /** Reads numbered or bullet presence for this concrete policy. @returns Counted numbering flag. */
   protected abstract IsCountedForNumbering(): boolean;
 
-  /** Reads normal-document notification policy for existing shown records. @param document - Native operation context. @returns Whether notification is enabled. */
-  protected abstract IsNotifiable(document?: SwDoc): boolean;
-  /** Reads source insertion notification enablement. @param document - Native operation context, absent for diagnostic roots. @returns Whether enabled. */
-  protected abstract IsNotificationEnabled(document?: SwDoc): boolean;
+  /** Reads normal-document notification policy for existing shown records. @param document - Required native operation context. @returns Whether notification is enabled. */
+  protected abstract IsNotifiable(document: SwDoc): boolean;
+  /** Reads source insertion notification enablement. @param document - Required native operation context. @returns Whether enabled. */
+  protected abstract IsNotificationEnabled(document: SwDoc): boolean;
   /** Validates and notifies one concrete policy record. @returns Nothing. */
   protected abstract NotifyNode(): void;
   /** Invalidates this record's parent prefix. @returns Nothing. */
@@ -60,14 +60,14 @@ export abstract class SwNumberTreeNode {
   public ValidateMe(): void {
     this.mpParent?.Validate(this);
   }
-  /** Traverses native notification order, skipping phantom self notifications. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
-  public Notify(document?: SwDoc): void {
+  /** Traverses native notification order, skipping phantom self notifications. @param document - Required native operation context. @returns Nothing. */
+  protected Notify(document: SwDoc): void {
     if (!this.IsNotifiable(document)) return;
     if (!this.IsPhantom()) this.NotifyNode();
     for (const child of this.mChildren) child.Notify(document);
   }
-  /** Notifies the invalid prefix suffix and following uncounted subtree. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
-  public NotifyInvalidChildren(document?: SwDoc): void {
+  /** Notifies the invalid prefix suffix and following uncounted subtree. @param document - Required native operation context. @returns Nothing. */
+  public NotifyInvalidChildren(document: SwDoc): void {
     if (this.IsNotifiable(document)) {
       let position = this.mpLastValid === undefined ? 0 : this.mChildren.find(this.mpLastValid) + 1;
       while (position < this.mChildren.size())
@@ -78,12 +78,12 @@ export abstract class SwNumberTreeNode {
     }
     if (this.IsContinuous()) this.mpParent?.NotifyInvalidChildren(document);
   }
-  /** Notifies this record's affected siblings. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
-  public NotifyInvalidSiblings(document?: SwDoc): void {
+  /** Notifies this record's affected siblings. @param document - Required native operation context. @returns Nothing. */
+  public NotifyInvalidSiblings(document: SwDoc): void {
     this.mpParent?.NotifyInvalidChildren(document);
   }
-  /** Invalidates and notifies every record in the attached root. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
-  public InvalidateAndNotifyTree(document?: SwDoc): void {
+  /** Invalidates and notifies every record in the attached root. @param document - Required native operation context. @returns Nothing. */
+  public InvalidateAndNotifyTree(document: SwDoc): void {
     const root = this.GetRoot();
     if (root !== undefined) {
       root.InvalidateTree();
@@ -91,7 +91,7 @@ export abstract class SwNumberTreeNode {
     }
   }
   /** Inserts an orphan at its requested depth, constructing skipped ancestors and relocating later descendants. @param child - Orphan record. @param depth - Remaining list depth. @param document - Native operation context. @returns Nothing. */
-  public AddChild(child: SwNumberTreeNode, depth: number, document?: SwDoc): void {
+  public AddChild(child: SwNumberTreeNode, depth: number, document: SwDoc): void {
     if (depth < 0 || child.GetParent() !== undefined || child.GetChildCount() > 0) return;
     if (depth > 0) {
       const position = this.mChildren.upper_bound(child);
@@ -396,7 +396,7 @@ export abstract class SwNumberTreeNode {
     this.mpLastValid = undefined;
   }
   /** Removes the equivalent stored child, retaining its descendants and releasing the supplied record's membership. @param child - Real lookup and callback argument. @param document - Native operation context. @returns Nothing. */
-  public RemoveChild(child: SwNumberTreeNode, document?: SwDoc): void {
+  public RemoveChild(child: SwNumberTreeNode, document: SwDoc): void {
     if (child.IsPhantom()) return;
     let position = this.GetIterator(child);
     if (position < 0) {
@@ -420,8 +420,8 @@ export abstract class SwNumberTreeNode {
     this.NotifyInvalidChildren(document);
     child.PostRemove();
   }
-  /** Detaches an item and clears obsolete phantom chains without rebuilding the root. @param document - Native operation context, absent for diagnostic roots. @returns Nothing. */
-  public RemoveMe(document?: SwDoc): void {
+  /** Detaches an item and clears obsolete phantom chains without rebuilding the root. @param document - Required native operation context. @returns Nothing. */
+  public RemoveMe(document: SwDoc): void {
     let savedParent = this.mpParent;
     if (savedParent === undefined) return;
     savedParent.RemoveChild(this, document);
@@ -430,7 +430,7 @@ export abstract class SwNumberTreeNode {
     savedParent?.ClearObsoletePhantoms();
   }
   /** Reparents an attached item through native removal and insertion. @param level - New non-negative level. @param document - Native operation context. @returns Nothing. */
-  public SetLevelInListTree(level: number, document?: SwDoc): void {
+  public SetLevelInListTree(level: number, document: SwDoc): void {
     if (level < 0 || this.mpParent === undefined || level === this.GetLevelInListTree()) return;
     const root = this.GetRoot() as SwNumberTreeNode;
     this.RemoveMe(document);

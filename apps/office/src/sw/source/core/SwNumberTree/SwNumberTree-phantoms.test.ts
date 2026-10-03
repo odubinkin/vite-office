@@ -234,12 +234,12 @@ it("preserves native phantom topology through sorted insertion", /** Verifies li
         /** Creates independent native insertion records. @param node - Canonical item. @param index - Position. @returns Orphan. */
         (node) => {
           const record = node.GetNum() as SwNodeNum;
-          record.RemoveMe();
+          record.RemoveMe(document);
           return record;
         },
       );
       for (const index of order)
-        root.AddChild(records[index] as SwNodeNum, test.levels[index] as number);
+        root.AddChild(records[index] as SwNodeNum, test.levels[index] as number, document);
       const lastChild = getNumberTreeChildren(root).at(-1);
       if (lastChild !== undefined)
         (
@@ -288,7 +288,7 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   const text = document.paragraphs[0] as SwTextNode;
   const root = new PhantomRoot(undefined);
   const orphan = new SwNodeNum(text);
-  root.AddChild(orphan, -1);
+  root.AddChild(orphan, -1, document);
   expect(getNumberTreeChildren(root)).toEqual([]);
   const phantom = root.createPhantom() as SwNumberTreeNode;
   expect(getNumberTreeChildren(root)[0]).toBe(phantom);
@@ -296,12 +296,12 @@ it("rejects non-orphan insertion and duplicate phantom records", /** Verifies na
   root.clearPhantoms();
   expect(getNumberTreeChildren(root)).toEqual([]);
   expect(hasPhantomCountedParent(phantom)).toBe(false);
-  root.AddChild(orphan, 0);
+  root.AddChild(orphan, 0, document);
   const another = new PhantomRoot(undefined);
-  another.AddChild(orphan, 0);
-  another.AddChild(root, 0);
+  another.AddChild(orphan, 0, document);
+  another.AddChild(root, 0, document);
   expect(getNumberTreeChildren(another)).toEqual([]);
-  root.AddChild(new SwNodeNum(text), 0);
+  root.AddChild(new SwNodeNum(text), 0, document);
   expect(getNumberTreeChildren(root)).toEqual([orphan]);
 });
 

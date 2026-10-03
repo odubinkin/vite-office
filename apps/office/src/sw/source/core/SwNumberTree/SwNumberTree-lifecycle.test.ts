@@ -29,7 +29,7 @@ function fixture(levels: readonly number[]) {
   return { document, nodes, list };
 }
 it("attaches items at insertion and validates reverse-order reads without replacing their root", /** Checks immediate topology, native vectors and stable ownership across repeated validation. @returns Nothing. */ () => {
-  const { nodes, list } = fixture([0, 1, 2, 0]);
+  const { document, nodes, list } = fixture([0, 1, 2, 0]);
   const records = nodes.map(
     /** Reads the retained item. @param node - Paragraph. @returns Record. */ (node) =>
       required(list.GetListItem(node)),
@@ -52,8 +52,8 @@ it("attaches items at insertion and validates reverse-order reads without replac
   expect(list.GetListItemNumberVector(required(nodes[2]))).toEqual([0, 5, 3]);
   required(nodes[0]).SetCountedInList(false);
   expect(list.GetListItemNumberVector(required(nodes[3]))).toEqual([1]);
-  list.ValidateListTree();
-  list.ValidateListTree();
+  list.ValidateListTree(document);
+  list.ValidateListTree(document);
   expect(getNumberTreeRoot(required(records[0]))).toBe(root);
   expect(list.GetListItem(required(nodes[2]))).toBe(records[2]);
 });
@@ -120,18 +120,18 @@ it("keeps native orphan and invalid removal contracts bounded", /** Checks sourc
   const document = createWriterDocument();
   const node = new SwNodeNum(document.paragraphs[0]);
   const missing = new SwNodeNum(document.nodes.MakeTextNode());
-  node.SetLevelInListTree(-1);
-  node.SetLevelInListTree(1);
-  node.RemoveMe();
-  root.RemoveChild(missing);
-  root.AddChild(node, 2);
+  node.SetLevelInListTree(-1, document);
+  node.SetLevelInListTree(1, document);
+  node.RemoveMe(document);
+  root.RemoveChild(missing, document);
+  root.AddChild(node, 2, document);
   diagnostic.ValidateHierarchical(missing);
   const phantom = required(node.GetParent());
-  required(phantom.GetParent()).RemoveChild(phantom);
+  required(phantom.GetParent()).RemoveChild(phantom, document);
   expect(node.GetLevelInListTree()).toBe(2);
-  node.SetLevelInListTree(-1);
-  node.SetLevelInListTree(2);
-  node.RemoveMe();
+  node.SetLevelInListTree(-1, document);
+  node.SetLevelInListTree(2, document);
+  node.RemoveMe(document);
   expect(getNumberTreeChildren(root)).toEqual([]);
   expect(node.GetNumberVector()).toEqual([]);
   diagnostic.ValidateHierarchical(missing);
@@ -170,9 +170,9 @@ it("removes a real item with an empty phantom descendant without leaving root ch
   const document = createWriterDocument();
   const root = new SwNodeNum(undefined);
   const item = new EmptyPhantomItem(document.paragraphs[0]);
-  root.AddChild(item, 0);
+  root.AddChild(item, 0, document);
   item.createEmptyPhantom();
-  item.RemoveMe();
+  item.RemoveMe(document);
   expect(getNumberTreeChildren(root)).toEqual([]);
   expect(item.GetParent()).toBeUndefined();
   expect(getNumberTreeChildren(item)).toEqual([]);

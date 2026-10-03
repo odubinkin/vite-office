@@ -115,15 +115,18 @@ it("requires protected zero-argument boolean counting policies without public ex
 });
 
 it("requires a numbered-policy override for concrete base subtypes and retains guarded Writer dispatch", /** Checks complete unrelated subtypes with their own counted policy. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   expect(MissingNumberingPolicy.name).toBe("MissingNumberingPolicy");
   const foreign = new CompletePolicy();
   expect(foreign.readNumberingPolicy()).toBe(true);
   const writer = new SwNodeNum(undefined);
-  writer.AddChild(foreign, 0);
+  writer.AddChild(foreign, 0, operationDocument);
   expect(observe(writer)).toEqual([true, false, true]);
   expect(writer.GetChildCount()).toBe(1);
-  writer.RemoveChild(foreign);
+  writer.RemoveChild(foreign, operationDocument);
   expect(foreign.GetParent()).toBeUndefined();
+
+  operationDocument.Dispose();
 });
 
 it("preserves connected counted-descendant phantom and orphan policies without validating raw caches", /** Checks actual text owners through flags, count changes and removal. @returns Nothing. */ () => {

@@ -213,7 +213,7 @@ it("handles a cleared retained binding and the native upper outline-level guard"
   node.ChgFormatColl(first);
   const orphan = node.GetNum();
   if (orphan === undefined) throw new Error("Missing source-owned record.");
-  orphan.RemoveMe();
+  orphan.RemoveMe(doc);
   expect(orphan.GetNumRule()).toBeUndefined();
   node.ChgFormatColl(doc.GetDfltTextFormatColl());
   expect(node.GetNum()).toBe(orphan);

@@ -45,7 +45,7 @@ function fixture() {
     /** Captures text-owned numbering records. @param text - Paragraph. @returns Record. */
     (text) => required(text.GetNum()),
   );
-  rule.Validate();
+  rule.Validate(document);
   for (const record of records) record.GetNumberVector();
   return {
     document,

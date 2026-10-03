@@ -16,6 +16,7 @@ import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwDoc } from "./doc";
 import type { SwList, WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
@@ -295,8 +296,8 @@ export class SwNumRule {
   public Invalidate(): void {
     this.invalidRuleFlag = true;
   }
-  /** Invalidates then validates each distinct list referenced by clients. @returns Nothing. */
-  public Validate(): void {
+  /** Invalidates then validates each distinct list referenced by clients. @param document - Required operation context. @returns Nothing. */
+  public Validate(document: SwDoc): void {
     const lists = new Set<SwList>();
     for (const node of this.textNodes) {
       const list = node
@@ -306,7 +307,7 @@ export class SwNumRule {
       lists.add(list);
     }
     for (const list of lists) list.InvalidateListTree();
-    for (const list of lists) list.ValidateListTree(this.textNodes[0]?.GetDoc());
+    for (const list of lists) list.ValidateListTree(document);
     this.invalidRuleFlag = false;
   }
 

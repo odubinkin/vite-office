@@ -506,12 +506,12 @@ export class SwTextNode extends SwContentNode {
     if (this.mpNodeNum !== undefined)
       throw new Error("SwTextNode already owns an orphan number record.");
     this.mpNodeNum = new SwNodeNum(this);
-    list.InsertListItem(this.mpNodeNum, this.GetAttrListLevel());
+    list.InsertListItem(this.mpNodeNum, this.GetAttrListLevel(), this.GetDoc());
   }
   /** Detaches and releases an attached shown record. @returns Nothing. */
   public RemoveFromList(): void {
     if (!this.IsInList()) return;
-    SwList.RemoveListItem(this.mpNodeNum as SwNodeNum);
+    SwList.RemoveListItem(this.mpNodeNum as SwNodeNum, this.GetDoc());
     this.mpNodeNum = undefined;
   }
 

@@ -97,6 +97,7 @@ it("matches all four shared native default tables and optional owned levels", /*
 });
 
 it("matches native reference Set identity, equality, invalidation and sparse copy", /** Exercises each implemented equality field independently against 19 literal native traces. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   for (const row of native.ownership) {
     const rule = new SwNumRule("rule", "label-alignment");
     const other = new SwNumRule("other", "label-alignment");
@@ -206,7 +207,7 @@ it("matches native reference Set identity, equality, invalidation and sparse cop
         });
         break;
     }
-    rule.Validate();
+    rule.Validate(operationDocument);
     rule.Set(2, input);
     expect(rule.GetNumFormat(2) === owned).toBe(row.identityRetained);
     expect(rule.IsInvalidRule()).toBe(row.invalid);
@@ -239,6 +240,8 @@ it("matches native reference Set identity, equality, invalidation and sparse cop
   const same = createWriterNumFormat("numbered", "•", { bulletFont: "", listFormat: "" });
   const absent = createWriterNumFormat("numbered", "•", { bulletFont: "" });
   expect(same.Equals(absent)).toBe(false);
+
+  operationDocument.Dispose();
 });
 
 it("retains sparse ownership and default selectors in Worker graph v16 with legacy migration", /** Verifies read-only transfer and malformed record rejection while preserving historical explicit formats. @returns Nothing. */ () => {

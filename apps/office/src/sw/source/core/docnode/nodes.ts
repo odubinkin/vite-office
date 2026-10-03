@@ -286,7 +286,9 @@ export class SwNodes {
       this.InsertOutlineNode(item);
       const record = item.GetNum();
       if (record !== undefined)
-        lists.GetListByName(item.GetListId())?.InsertListItem(record, item.GetAttrListLevel());
+        lists
+          .GetListByName(item.GetListId())
+          ?.InsertListItem(record, item.GetAttrListLevel(), this.document);
     }
     this.document.NotifyModelChange({
       index: currentIndex,

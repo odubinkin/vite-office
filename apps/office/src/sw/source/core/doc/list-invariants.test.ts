@@ -66,14 +66,14 @@ describe("Writer list attribute invariants", /** Registers source-backed list te
     const list = document.GetDocumentListsManager().GetListByName(first.GetListId());
     expect(list?.GetListItemNumber(second)).toBe(2);
     second.SetAttrListLevel(1);
-    list?.ValidateListTree();
+    list?.ValidateListTree(document);
     expect(list?.GetListItem(second)?.GetLevelInListTree()).toBe(1);
     expect((list?.GetListItem(second)?.GetParent() as SwNodeNum | undefined)?.GetTextNode()).toBe(
       first,
     );
     expect(list?.GetListItemNumberVector(second)).toEqual([1, 1]);
     second.SetAttrListLevel(0);
-    list?.ValidateListTree();
+    list?.ValidateListTree(document);
     expect((list?.GetListItem(second)?.GetParent() as SwNodeNum).GetTextNode()).toBeUndefined();
     expect(list?.GetListItemNumber(second)).toBe(2);
   });

@@ -78,7 +78,7 @@ it("removes old clients before changing list attributes and preserves native reg
   rule.AddTextNode(second);
   expect(rule.GetTextNodeListSize()).toBe(3);
   expect(rule.IsInvalidRule()).toBe(true);
-  rule.Validate();
+  rule.Validate(doc);
   expect(rule.IsInvalidRule()).toBe(false);
   second.SetNumRule("Other");
   const clients: SwTextNode[] = [];
@@ -106,11 +106,11 @@ it("removes old clients before changing list attributes and preserves native reg
   bound.ChangeNumRule(rule);
   rule.Invalidate();
   expect(rule.IsInvalidRule()).toBe(true);
-  rule.Validate();
+  rule.Validate(doc);
   expect(rule.IsInvalidRule()).toBe(false);
   rule.Set(0, createWriterNumFormat("numbered", "", { start: 4 }));
   expect(rule.IsInvalidRule()).toBe(true);
-  rule.Validate();
+  rule.Validate(doc);
   expect(first.GetNumberVector()).toEqual([4]);
   expect(third.GetNumberVector()).toEqual([5]);
   const copy = rule.clone();
@@ -153,7 +153,7 @@ it("restricts automatic ownership to connected document nodes and retains orphan
   expect(extra.IsDocNodes()).toBe(false);
   expect(foreign.GetNum()).toBeUndefined();
   const record = node.GetNum() as SwNodeNum;
-  SwList.RemoveListItem(record);
+  SwList.RemoveListItem(record, doc);
   expect(node.GetNum()).toBe(record);
   expect(node.IsInList()).toBe(false);
   expect(node.GetNumberVector()).toEqual([]);
@@ -170,7 +170,7 @@ it("restricts automatic ownership to connected document nodes and retains orphan
   const root = new SwNodeNum(undefined);
   root.ChangeNumRule(other);
   expect(root.GetNumRule()).toBe(other);
-  doc.GetDocumentListsManager().GetListByName("A")?.InsertListItem(record, 0);
+  doc.GetDocumentListsManager().GetListByName("A")?.InsertListItem(record, 0, doc);
   node.RemoveFromList();
   node.SetNumRule("unknown");
   expect(node.IsInList()).toBe(false);
@@ -185,10 +185,10 @@ it("keeps native registration guards for absent text and non-document records", 
   const rule = doc.EnsureNumRule("Counters", "numbered");
   const root = new SwNodeNum(undefined, rule);
   const absent = new SwNodeNum(undefined);
-  root.AddChild(absent, 0);
+  root.AddChild(absent, 0, doc);
   expect(absent.GetNumRule()).toBeUndefined();
   expect(absent.GetParent()).toBe(root);
-  absent.RemoveMe();
+  absent.RemoveMe(doc);
   expect(getNumberTreeChildren(root)).toEqual([]);
   const foreign = new SwNodes(doc).MakeTextNode();
   applyWriterParagraphList(foreign, {
@@ -198,7 +198,7 @@ it("keeps native registration guards for absent text and non-document records", 
     level: 0,
   });
   const record = new SwNodeNum(foreign);
-  root.AddChild(record, 0);
+  root.AddChild(record, 0, doc);
   expect(record.GetNumRule()).toBe(rule);
   const clients: SwTextNode[] = [];
   rule.GetTextNodeList(clients);
@@ -206,7 +206,7 @@ it("keeps native registration guards for absent text and non-document records", 
   const output: SwNodeNum[] = [];
   doc.getIDocumentListItems().getNumItems(output);
   expect(output).toEqual([]);
-  record.RemoveMe();
+  record.RemoveMe(doc);
   expect(record.GetNumRule()).toBeUndefined();
   rule.GetTextNodeList(clients);
   expect(clients).toEqual([]);

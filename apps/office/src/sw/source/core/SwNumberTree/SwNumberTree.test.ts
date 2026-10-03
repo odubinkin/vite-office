@@ -230,7 +230,7 @@ it("continues a subtree only below native uncounted parents", /** Verifies prior
 });
 
 it("revalidates zero restarts, counted changes and phantom ancestors", /** Verifies invalidation, canonical reparenting/removal and source-owned skipped-level ancestors. @returns Nothing. */ () => {
-  const { nodes, list } = fixture([{ level: 0 }, { level: 0 }, { level: 0 }]);
+  const { document, nodes, list } = fixture([{ level: 0 }, { level: 0 }, { level: 0 }]);
   const middle = nodes[1] as SwTextNode;
   middle.SetListRestart(true);
   middle.SetAttrListRestartValue(0);
@@ -242,7 +242,7 @@ it("revalidates zero restarts, counted changes and phantom ancestors", /** Verif
   expect(middle.GetListLabel()).toBe("0.0.");
   expect(nodes[2]?.GetListLabel()).toBe("1.");
   middle.RemoveFromList();
-  list.ValidateListTree();
+  list.ValidateListTree(document);
   expect(list.GetListItemNumber(middle)).toBeUndefined();
   const missing = fixture([{ level: 2 }, { level: 2 }, { level: 0 }, { level: 2 }]);
   expect(
@@ -260,7 +260,7 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
   const root = new SwNodeNum(undefined);
   expect(node.GetStartValue()).toBe(1);
   expect(observeNumberingCount(node)).toBe(false);
-  root.AddChild(node, 1);
+  root.AddChild(node, 1, document);
   expect(observeCountedChildren(root)).toBe(false);
   expect(observeNumberingCount(root)).toBe(true);
   expect(root.GetStartValue()).toBe(1);
@@ -272,9 +272,9 @@ it("retains native root and unattached node numbering policy", /** Verifies no-t
     level: 0,
     styleId: "Levels",
   });
-  node.RemoveMe();
+  node.RemoveMe(document);
   expect(node.GetStartValue()).toBe(1);
-  root.AddChild(node, 1);
+  root.AddChild(node, 1, document);
   expect(node.GetStartValue()).toBe(3);
   expect(observeCountedChildren(root)).toBe(true);
 });
@@ -308,10 +308,10 @@ it("constructs rule-start phantom chains and retains them through removal", /** 
   expect(root.GetLevelInListTree()).toBe(-1);
   expect(root.IsPhantom()).toBe(false);
   (nodes[2] as SwTextNode).RemoveFromList();
-  list.ValidateListTree();
+  list.ValidateListTree(document);
   expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([7, 5, 5]);
   (nodes[2] as SwTextNode).AddToList();
-  list.ValidateListTree();
+  list.ValidateListTree(document);
   expect(list.GetListItemNumberVector(nodes[3] as SwTextNode)).toEqual([8, 5, 3]);
 });
 

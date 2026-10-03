@@ -59,25 +59,23 @@ export class SwList {
   public SetDefaultListStyleName(name: string): void {
     this.defaultListStyleName = name;
   }
-  /** Inserts a text-owned orphan into the retained tree. @param node - Number record owned by a text node. @param level - Bounded level. @returns Nothing. */
-  public InsertListItem(node: SwNodeNum, level: number): void {
+  /** Inserts a text-owned orphan into the retained tree. @param node - Number record owned by a text node. @param level - Bounded level. @param document - Required operation context. @returns Nothing. */
+  public InsertListItem(node: SwNodeNum, level: number, document: SwDoc): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwList level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    this.root.AddChild(node, level, node.GetTextNode()?.GetDoc());
+    this.root.AddChild(node, level, document);
   }
-  /** Detaches a text-owned record from its list. @param node - Number record. @returns Nothing. */
-  public static RemoveListItem(node: SwNodeNum): void {
-    node.RemoveMe(node.GetTextNode()?.GetDoc());
+  /** Detaches a text-owned record from its list. @param node - Number record. @param document - Required operation context. @returns Nothing. */
+  public static RemoveListItem(node: SwNodeNum, document: SwDoc): void {
+    node.RemoveMe(document);
   }
   /** Invalidates counters after document ordering or level changes. @returns Nothing. */
   public InvalidateListTree(): void {
     this.root.InvalidateTree();
   }
-  /** Validates by notifying the native invalid prefix under the actual document reading policy. @param document - Operation context, resolved from rule clients for legacy callers. @returns Nothing. */
-  public ValidateListTree(document?: SwDoc): void {
-    const clients: SwTextNode[] = [];
-    if (document === undefined) this.root.GetNumRule()?.GetTextNodeList(clients);
-    this.root.NotifyInvalidChildren(document ?? clients[0]?.GetDoc());
+  /** Validates by notifying the native invalid prefix under the supplied document reading policy. @param document - Required operation context. @returns Nothing. */
+  public ValidateListTree(document: SwDoc): void {
+    this.root.NotifyInvalidChildren(document);
   }
   /** Gets a calculated node counter. @param node - Canonical text node. @returns Counter when registered. */
   public GetListItemNumber(node: SwTextNode): number | undefined {

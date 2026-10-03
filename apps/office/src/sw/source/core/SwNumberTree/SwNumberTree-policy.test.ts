@@ -146,6 +146,7 @@ function snapshot(
   };
 }
 it("matches native bound orphan and inherited continuous phantom policies", /** Compares five literal source profiles,including native independent no-rule phantom fallback. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   for (const row of native.policy) {
     const [continuous, phantoms] = row;
     if (continuous === null) {
@@ -158,7 +159,7 @@ it("matches native bound orphan and inherited continuous phantom policies", /** 
     rule.SetCountPhantoms(phantoms as boolean);
     const root = new SwNodeNum(undefined, rule),
       child = new SwNodeNum(undefined);
-    root.AddChild(child, 0);
+    root.AddChild(child, 0, operationDocument);
     expect([
       root.IsContinuous(),
       observePhantomCounting(root),
@@ -166,6 +167,8 @@ it("matches native bound orphan and inherited continuous phantom policies", /** 
       observePhantomCounting(child),
     ]).toEqual(row.slice(2));
   }
+
+  operationDocument.Dispose();
 });
 it("retains native empty and end sentinel validation with protected traversal", /** Exercises source sentinel boundaries independently of paragraph insertion traces. @returns Nothing. */ () => {
   const rule = new SwNumRule("sentinel", "label-alignment");
@@ -277,7 +280,7 @@ it("matches native complete policy counter cache notification and traversal sequ
       }
       if (kind === 3) node.SetAttrListLevel(value);
       if (kind === 4) node.ResetAttr(73);
-      if (kind === 5) rule.Validate();
+      if (kind === 5) rule.Validate(doc);
       if (kind === 6) {
         rule.SetContinusNum(Boolean(value));
         doc.GetDocumentListsManager().GetListByName("A")?.InvalidateListTree();
@@ -361,7 +364,7 @@ it("retains continuous and phantom policy on real Worker document owners and nat
   rule.Reset("attached");
   expect(rule.IsContinusNum()).toBe(false);
   expect(rule.IsCountPhantoms()).toBe(false);
-  rule.Validate();
+  rule.Validate(doc);
   expect(
     texts.map(
       /** Reads hierarchical counters after native reset. @param p - Paragraph. @returns Counter. */ (

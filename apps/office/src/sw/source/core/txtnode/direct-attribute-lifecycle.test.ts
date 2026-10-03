@@ -138,6 +138,8 @@ it("maintains real sorted outline identity across move, clone, replacement, dele
 
 /** Exposes native notification suppression through number-tree policy, without claiming full document flags. */
 class SilentRoot extends SwNodeNum {
+  /** Exposes inherited protected traversal solely in tests. */
+  public readonly notify = this.Notify.bind(this);
   /** Supplies a suppressed policy. @returns Disabled. */
   protected override IsNotifiable(): boolean {
     return false;
@@ -155,12 +157,12 @@ it("retains shown record operation and notification policy boundaries", /** Veri
       ),
   ).toThrow("owned number record");
   const root = new SilentRoot(undefined);
-  root.Notify();
-  root.NotifyInvalidChildren();
-  root.InvalidateAndNotifyTree();
+  root.notify(doc);
+  root.NotifyInvalidChildren(doc);
+  root.InvalidateAndNotifyTree(doc);
   root.ValidateMe();
   root.InvalidateMe();
-  root.NotifyInvalidSiblings();
+  root.NotifyInvalidSiblings(doc);
   const rule = doc.EnsureNumRule("Counters", "numbered"),
     other = doc.EnsureNumRule("Other", "bullet");
   node.SetNumRule(rule.GetName());
@@ -175,16 +177,16 @@ it("retains shown record operation and notification policy boundaries", /** Veri
   node.ResetAttr([73, 84, 85, 86, 87]);
 });
 it("distinguishes explicit outline rule type from its reserved name and retains clone metadata", /** Verifies native setter invalidation and no name inference without adding outline factories. @returns Nothing. */ () => {
+  const { doc, node } = fixture();
   const named = createWriterNumRule("Outline");
   expect(named.GetRuleType()).toBe(SwNumRuleType.NUM_RULE);
   expect(named.IsOutlineRule()).toBe(false);
-  named.Validate();
+  named.Validate(doc);
   expect(named.IsInvalidRule()).toBe(false);
   named.SetRuleType(SwNumRuleType.OUTLINE_RULE);
   expect(named.IsInvalidRule()).toBe(true);
   expect(named.IsOutlineRule()).toBe(true);
   expect(named.clone().GetRuleType()).toBe(SwNumRuleType.OUTLINE_RULE);
-  const { doc, node } = fixture();
   const rule = doc.EnsureNumRule("Chapter", "numbered");
   rule.SetRuleType(SwNumRuleType.OUTLINE_RULE);
   node.SetNumRule("Chapter");

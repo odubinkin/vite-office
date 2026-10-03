@@ -133,6 +133,7 @@ function modeName(mode: number): SvxNumPositionAndSpaceMode {
   return ["label-width-and-position", "label-alignment"][mode] as SvxNumPositionAndSpaceMode;
 }
 it("matches native pointer and reference Set identity validity and every implemented field", /** Compares 600 literal traces without weakening original reference ownership tests. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   for (const row of native.native.traces) {
     const rule = new SwNumRule("profile", modeName(row.mode), row.ruleType),
       initial = rule.Get(2).clone();
@@ -150,7 +151,7 @@ it("matches native pointer and reference Set identity validity and every impleme
       /** A JS adapter method is not part of the native nonvirtual copy boundary. @returns Nothing. */ (): never => {
         throw new Error("Native Set must copy by construction");
       };
-    rule.Validate();
+    rule.Validate(operationDocument);
     if (row.change === 23) rule.SetByPointer(2, undefined);
     else if (row.change === 24) {
       if (row.pointer) rule.SetByPointer(2, held);
@@ -172,13 +173,16 @@ it("matches native pointer and reference Set identity validity and every impleme
     input.SetStart(99);
     expect(state(rule.Get(2))).toEqual(row.value);
   }
+
+  operationDocument.Dispose();
 });
 it("matches native absent pointer defaults and protects stable const references", /** Checks 8 literal sparse cases,const mutation guards and copied/default ownership. @returns Nothing. */ () => {
+  const operationDocument = createWriterDocument();
   for (const [mode, type, present, owned, same, invalid, value] of native.native.absent) {
     const rule = new SwNumRule("sparse", modeName(mode as number), type as SwNumRuleType),
       before = rule.Get(2),
       input = before.clone();
-    rule.Validate();
+    rule.Validate(operationDocument);
     rule.SetByPointer(2, present ? input : undefined);
     expect(rule.GetNumFormat(2) !== undefined).toBe(owned);
     expect(rule.Get(2) === before).toBe(same);
@@ -209,6 +213,8 @@ it("matches native absent pointer defaults and protects stable const references"
       /** Retains the existing browser invalid-level guard. @returns Nothing. */ () =>
         rule.SetByPointer(level, undefined),
     ).toThrow("outside");
+
+  operationDocument.Dispose();
 });
 it("matches native base Writer assignment self alias and optional font copies", /** Compares 23 complete field profiles through both source-owned operators and copy construction. @returns Nothing. */ () => {
   for (const [variant, value] of native.native.assignment.entries()) {
