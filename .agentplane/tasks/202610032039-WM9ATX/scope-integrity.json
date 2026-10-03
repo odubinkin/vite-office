@@ -1,0 +1,34 @@
+{
+  "base": "b3042906b0d2a4b15130582bc5fee4330e56818a",
+  "unchangedPriorTests": 240,
+  "changedPriorTests": [],
+  "changedMethods": [
+    "IsContinuous",
+    "IsCounted",
+    "IsCountedForNumbering",
+    "IsRestart"
+  ],
+  "unchangedOtherMethods": 13,
+  "completeSourceOutsideSelectedMethodsUnchanged": true,
+  "manifestResults": [
+    {
+      "file": "docs/program/source-provenance.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true
+    },
+    {
+      "file": "docs/program/parity/runtime-inventory.json",
+      "totalRows": 215,
+      "changedRows": 1,
+      "nonEvidenceFieldsUnchanged": true
+    }
+  ],
+  "storage": {
+    "pythonFiles": [],
+    "helperSourceFiles": [],
+    "executableArtifactFiles": [],
+    "includesIgnored": true
+  },
+  "newOwnedTest": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts"
+}

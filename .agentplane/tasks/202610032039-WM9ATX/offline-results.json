@@ -1,0 +1,72 @@
+{
+  "vendorAbsentDuringRuns": true,
+  "restoredPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "results": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "npm run test (alone, no simultaneous browser build/E2E)",
+        "exitCode": 0,
+        "signal": null,
+        "log": "offline-all-tests.log"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-source-provenance.test.ts",
+        "exitCode": 0,
+        "signal": null,
+        "log": "offline-script-tests.log"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "npm run test:e2e",
+        "exitCode": 0,
+        "signal": null,
+        "log": "offline-browser-tests.log"
+      }
+    }
+  ],
+  "scope": "All app and inventory unit test files plus all three non-inventory script test files and browser E2E suite; CLI source/resource/parity audits are distinct.",
+  "retryReason": "Existing async ODT import assertion failed under simultaneous suites; repeat exact app/tool suite alone, no changed expectations/production/gates. Browser/script successful absent-vendor evidence retained from original attempt.",
+  "offline-all-tests.log": {
+    "originalBytes": 2217,
+    "sha256": "a3edd15b18699cc614d628e65b2b8b95b06d1a176fc14d5765463e4730b55a46",
+    "summaries": [
+      " Test Files  190 passed (190)",
+      "      Tests  860 passed (860)",
+      "Statements   : 100% ( 11094/11094 )",
+      "Branches     : 100% ( 8368/8368 )",
+      "Functions    : 100% ( 2955/2955 )",
+      "Lines        : 100% ( 10180/10180 )",
+      " Test Files  36 passed (36)",
+      "      Tests  109 passed (109)",
+      "Statements   : 100% ( 1523/1523 )",
+      "Branches     : 100% ( 1080/1080 )",
+      "Functions    : 100% ( 384/384 )",
+      "Lines        : 100% ( 1464/1464 )"
+    ]
+  },
+  "offline-script-tests.log": {
+    "originalBytes": 223,
+    "sha256": "13db5dd08ca1744e9cb13efb63ccf93de377d48f534b9e2270a1f3fd851a5428",
+    "summaries": [
+      " Test Files  3 passed (3)",
+      "      Tests  12 passed (12)"
+    ]
+  },
+  "offline-browser-tests.log": {
+    "originalBytes": 4486,
+    "sha256": "120aca94b69b4cf504af65c91724363023bea1737a3d685a455159becce64068",
+    "summaries": [
+      "Running 20 tests using 4 workers",
+      "  20 passed (10.2s)"
+    ]
+  },
+  "initialAttempt": "first-offline-results.json",
+  "initialFailure": "first-offline-app-failure.json",
+  "timingCause": "Unproven inference; isolated unchanged retry passed. No expectations, timeouts, production I/O or gates changed."
+}

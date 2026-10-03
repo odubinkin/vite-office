@@ -1,0 +1,23 @@
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts (8 tests | 6 failed) 15ms
+ Test Files  1 failed (1)
+      Tests  6 failed | 2 passed (8)
+   Duration  697ms (transform 191ms, setup 68ms, import 221ms, tests 15ms, environment 308ms)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts > uses parent guard and delegation lookups for an attached unbound release record
+AssertionError: expected [ [] ] to deeply equal [ [], [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts:151:33
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts > queries text guard and counted delegation without invoking the base policy
+AssertionError: expected [] to deeply equal [ [], [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts:179:33
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts > delegates no-text roots and real phantoms to the complete base counted policy
+AssertionError: expected [] to deeply equal [ [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts:196:33
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts > uses text guard and restart delegation while keeping no-text restart false
+AssertionError: expected [] to deeply equal [ [], [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts:233:33
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts > retains counted number bullet and disabled-format short circuits through text helpers
+AssertionError: expected [ 'counted', 'phantom', 'number' ] to deeply equal [ 'counted', 'text', 'text', …(4) ]
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts:312:21
+ FAIL  src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts > retains null-text root and counted phantom presence short circuits
+AssertionError: expected [] to deeply equal [ [], [] ]
+ ❯ src/sw/source/core/SwNumberTree/SwNodeNum-policy-branches.test.ts:326:33

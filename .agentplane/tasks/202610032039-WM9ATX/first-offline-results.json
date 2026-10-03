@@ -1,0 +1,34 @@
+{
+  "vendorAbsentDuringRuns": true,
+  "restoredPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "results": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "npm run test",
+        "exitCode": 1,
+        "signal": null,
+        "log": "offline-all-tests.log"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/writer-ui-resource-model.test.ts scripts/check-source-provenance.test.ts",
+        "exitCode": 0,
+        "signal": null,
+        "log": "offline-script-tests.log"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "command": "npm run test:e2e",
+        "exitCode": 0,
+        "signal": null,
+        "log": "offline-browser-tests.log"
+      }
+    }
+  ],
+  "scope": "All app and inventory unit test files plus all three non-inventory script test files and browser E2E suite; CLI source/resource/parity audits are distinct."
+}
