@@ -1,10 +1,11 @@
 ---
 id: "202610031438-RD0HQY"
 title: "Restore native inline descendant destination selection"
-status: "DOING"
+result_summary: "Native inline descendant destination selection restored; invented helper removed, old expectations and IO deviations retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -62,6 +63,9 @@ comments:
   -
     author: "CODER"
     body: "Start: record full forty-character existing semantic SHA as review target; current source and verified final outcomes unchanged."
+  -
+    author: "CODER"
+    body: "Verified: actual semantic910775c2b7a5 reviewed at that exact SHA with unchanged final core blobs; separate browser/scratch fixes supply full792app/109inventory/20browser both100%,offline84+7 and source/scope integrity. Selected leaf only; parent/full goal active."
 events:
   -
     type: "status"
@@ -104,8 +108,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: record full forty-character existing semantic SHA as review target; current source and verified final outcomes unchanged."
+  -
+    type: "status"
+    at: "2026-10-03T16:27:28.022Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual semantic910775c2b7a5 reviewed at that exact SHA with unchanged final core blobs; separate browser/scratch fixes supply full792app/109inventory/20browser both100%,offline84+7 and source/scope integrity. Selected leaf only; parent/full goal active."
 doc_version: 3
-doc_updated_at: "2026-10-03T16:27:24.669Z"
+doc_updated_at: "2026-10-03T16:27:28.023Z"
 doc_updated_by: "CODER"
 description: "Iteration61 removes invented protected GetDestinationPhantom and restores complete source-owned AddChild inline count/first-child/parent-factory branches. Preserve old matcher expectations through one test-only helper removal; owned deep-transfer traces and topology, no upstream access by tests or saved helper/source files."
 sections:
