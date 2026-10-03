@@ -1,0 +1,36 @@
+Complete output sha256: ea47414c780af45d362437f95d72acb27cfecf7c36944f2754c5eaaef5b0c957
+Original lines: 158
+Final authored test baseline exit1; all8fail
+Bounded diagnostics:
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ src/sw/source/core/txtnode/numbering-notification-policy.test.ts (8 tests | 8 failed) 16ms
+   × owns zero-argument text policies and destruction query with native private defaults 5ms
+   × checks reading before destruction for text and caller-context root policy 1ms
+   × delegates the two real-record predicates independently to the text owner 4ms
+   × keeps the private temporary blocker independent of global notification enablement 1ms
+   × skips a blocked owned paragraph notification while preserving validated prefix and topology 2ms
+   × suppresses numbering callbacks and counter validation during actual document disposal 1ms
+   × sets destruction before list removal and retains existing undo and state disposal order 1ms
+   × uses destruction context for roots and phantoms while real records retain their live owner 1ms
+
+ Test Files  1 failed (1)
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Duration  1.01s (transform 221ms, setup 118ms, import 262ms, tests 16ms, environment 516ms)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > owns zero-argument text policies and destruction query with native private defaults
+TypeError: document.IsInDtor is not a function
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > checks reading before destruction for text and caller-context root policy
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > delegates the two real-record predicates independently to the text owner
+AssertionError: expected true to be false // Object.is equality
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > keeps the private temporary blocker independent of global notification enablement
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > skips a blocked owned paragraph notification while preserving validated prefix and topology
+AssertionError: expected [ +0, 1, 2 ] to deeply equal [ +0, 2 ]
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > suppresses numbering callbacks and counter validation during actual document disposal
+AssertionError: expected "NumRuleChgd" to not be called at all, but actually been called 1 times
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > sets destruction before list removal and retains existing undo and state disposal order
+TypeError: document.IsInDtor is not a function
+ FAIL  src/sw/source/core/txtnode/numbering-notification-policy.test.ts > uses destruction context for roots and phantoms while real records retain their live owner
+AssertionError: expected [ true, true ] to deeply equal [ false, false ]

@@ -1,0 +1,24 @@
+doctor (OK)
+doctor: checking workspace
+doctor: checking branch_pr drift
+doctor: checking runtime source
+doctor: checking project-local blueprints
+doctor: checking prompt graph
+doctor: checking recent task archive
+doctor: checking workflow contract
+{"ts":"2026-10-03T17:53:22.240Z","component":"workflow-runtime","event":"workflow_doctor_check","details":{"ok":true,"findings":0}}
+warning: doctor findings: errors=0 warnings=2 info=2
+- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches
+Likely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery
+Next action: agentplane hooks install (rewrite the shim with the current fallback chain)
+Details: Shim path: .agentplane/bin/agentplane
+  - AGENTPLANE_HOOK_RUNNER fallback: present
+  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present
+  - Runner startup readiness: missing
+- [INFO] State: managed pre-push hook will use installed clean-project fallback checks
+Likely cause: this project does not ship a repository-local scripts/run-pre-push-hook.mjs
+Next action: add project-local package scripts such as format:check or test, or keep the installed fallback (make pre-push behavior explicit when the project needs stricter repository-specific checks)
+Details: Missing repository script: scripts/run-pre-push-hook.mjs
+  - Fallback will consider declared scripts: build, format:check, test
+- [INFO] Project blueprint compatibility: compatible; trusted=0
+- [WARN] DONE task is missing implementation commit hash: 202610031635-2Z3962 (finish with --commit <hash>).

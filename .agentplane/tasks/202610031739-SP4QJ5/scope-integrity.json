@@ -1,0 +1,48 @@
+{
+  "base": "ae825527ec689be8830173b6a55f4f2ad7c60fe9",
+  "oldTestAndBrowserSpecFilesByteIdentical": 232,
+  "productionMethodBodies": [
+    {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "unchangedBodies": 15,
+      "changedBodies": [
+        "IsNotifiable",
+        "IsNotificationEnabled"
+      ],
+      "addedBodies": []
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "unchangedBodies": 84,
+      "changedBodies": [],
+      "addedBodies": [
+        "IsNotifiable",
+        "IsNotificationEnabled"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "unchangedBodies": 37,
+      "changedBodies": [
+        "Dispose"
+      ],
+      "addedBodies": [
+        "IsInDtor"
+      ]
+    }
+  ],
+  "metadata": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "affectedRows": 3,
+      "unchangedRows": 211,
+      "statusesDefaultsClassificationsDivergencesKnownViolationsOmittedResponsibilitiesUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "affectedRows": 3,
+      "unchangedRows": 211,
+      "statusesDefaultsClassificationsDivergencesKnownViolationsOmittedResponsibilitiesUnchanged": true
+    }
+  ]
+}

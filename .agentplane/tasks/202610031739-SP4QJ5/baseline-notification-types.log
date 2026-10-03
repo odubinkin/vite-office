@@ -1,0 +1,35 @@
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(13,30): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(14,30): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(15,30): error TS2339: Property 'IsNotificationEnabled' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(16,30): error TS2339: Property 'IsNotificationEnabled' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(17,25): error TS2339: Property 'IsInDtor' does not exist on type 'SwDoc'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(18,25): error TS2339: Property 'IsInDtor' does not exist on type 'SwDoc'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(91,21): error TS2339: Property 'IsInDtor' does not exist on type 'SwDoc'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(93,18): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(93,39): error TS2339: Property 'IsNotificationEnabled' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(99,18): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(99,39): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(125,24): error TS2345: Argument of type '"IsInDtor"' is not assignable to parameter of type '"Dispose" | "GetUndoManager" | "GetDefaultFontDevice" | "getIDocumentListItems" | "GetTextFormatColl" | "GetNodes" | "NotifyModelChange" | "IsInReading" | "SetInReading" | ... 28 more ... | "RunModelTransaction"'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(126,82): error TS2345: Argument of type '() => boolean' is not assignable to parameter of type '() => SwNodes | readonly SwTextNode[]'.
+  Type 'boolean' is not assignable to type 'SwNodes | readonly SwTextNode[]'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(132,19): error TS2339: Property 'IsNotificationEnabled' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(135,19): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(191,34): error TS2345: Argument of type '"IsNotificationEnabled"' is not assignable to parameter of type 'keyof SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(194,17): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(281,46): error TS2339: Property 'IsInDtor' does not exist on type 'SwDoc'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(283,16): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(284,16): error TS2339: Property 'IsNotificationEnabled' does not exist on type 'SwTextNode'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(298,36): error TS2339: Property 'IsInDtor' does not exist on type 'SwDoc'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(312,21): error TS2339: Property 'IsInDtor' does not exist on type 'SwDoc'.
+src/sw/source/core/txtnode/numbering-notification-policy.test.ts(343,31): error TS2339: Property 'IsNotifiable' does not exist on type 'SwTextNode'.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c tsc --noEmit

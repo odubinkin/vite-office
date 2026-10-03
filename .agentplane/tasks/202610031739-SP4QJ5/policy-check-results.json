@@ -1,0 +1,17 @@
+[
+  {
+    "name": "policy-routing",
+    "exitCode": 0,
+    "outputSha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  },
+  {
+    "name": "doctor",
+    "exitCode": 0,
+    "outputSha256": "4f4ce726735e31d513c433e81897121df5b7422193d0e0051166a2954bb9a85f"
+  },
+  {
+    "name": "diff-check",
+    "exitCode": 0,
+    "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

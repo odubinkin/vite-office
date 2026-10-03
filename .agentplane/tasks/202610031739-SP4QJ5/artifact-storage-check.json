@@ -1,0 +1,9 @@
+{
+  "roots": [
+    ".agentplane/tasks",
+    ".agentplane/tmp"
+  ],
+  "ignoredInclusiveFilesInspected": 2386,
+  "sourceHelperExecutableCount": 0,
+  "unexpectedPaths": []
+}

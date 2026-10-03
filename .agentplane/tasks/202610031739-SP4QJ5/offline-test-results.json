@@ -1,0 +1,31 @@
+{
+  "beforePin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "afterPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "restored": true,
+  "results": [
+    {
+      "name": "offline-notification-tests",
+      "command": "node ../../node_modules/vitest/vitest.mjs run src/sw/source/core/SwNumberTree src/sw/source/core/doc src/sw/source/core/txtnode src/sw/source/core/docnode (cwd apps/office)",
+      "exitCode": 0,
+      "vendorAbsent": true,
+      "outputSha256": "77912c4e7568db47d0cc02850aa78175a0bffaebf6c96675a8e3938dc206dd07",
+      "summary": [
+        " Test Files  45 passed (45)",
+        "      Tests  201 passed (201)",
+        "   Duration  12.78s (transform 1.20s, setup 2.72s, import 3.01s, tests 1.41s, environment 14.77s)"
+      ]
+    },
+    {
+      "name": "offline-boundary-resource-tests",
+      "command": "node node_modules/vitest/vitest.mjs run scripts/check-module-boundaries.test.ts scripts/writer-ui-resource-model.test.ts (cwd .)",
+      "exitCode": 0,
+      "vendorAbsent": true,
+      "outputSha256": "84f3e165fa3ec476f71e02f755f6d10c611a28a8ea1ba2f8f2cf65cc728693e0",
+      "summary": [
+        " Test Files  2 passed (2)",
+        "      Tests  9 passed (9)",
+        "   Duration  733ms (transform 86ms, setup 0ms, import 677ms, tests 6ms, environment 0ms)"
+      ]
+    }
+  ]
+}
