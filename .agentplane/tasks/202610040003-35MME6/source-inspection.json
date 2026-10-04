@@ -1,0 +1,47 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only complete relevant functions inspected; hashes/conclusions only, no source body/copy/helpers/native execution.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.cxx",
+      "sha256": "fd2028b1bc48249fab735c0df7809abb91061031dd952885981183f5aa757375"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.hxx",
+      "sha256": "8cc86f855c8390a6bb50958266a873850d8a414e13819c80118e19cb7c58f26b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+      "sha256": "dacf0d685add44c79f4a62bef9810b77fb36f42ca5e4af34d1e200069bf0e3e2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/syswin.cxx",
+      "sha256": "763492c745ad5fbfcd8446f12941f83997383f17dea3e86e57a292f9149f6ab5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/unx/gtk3/gtkframe.cxx",
+      "sha256": "b2fcf46ecd2a98a977f4842bcc0ef276d19c4bd894a3f571054524ee3b101366"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/unx/generic/window/salframe.cxx",
+      "sha256": "901830eaee1689e7d0177ea84d9b36b507caac5283f062feaf7b2687d1693023"
+    },
+    {
+      "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+      "sha256": "c1441749f6a4f52c6d64ff38f0f851a309659d4c2a0bc70d9630c86b5de5471f"
+    }
+  ],
+  "conclusions": [
+    "Backend F10 can alternate to KEY_MENU; native Ctrl-F10 assigned ControlCodes accelerator. This leaf routes bare F10 only and preserves modifier command/browser ownership.",
+    "MenuBar ImplHandleKeyEvent rejects invisible/native-owned/disabled/input-disabled/modal menu; SystemWindow routes eligible KEYINPUT to its own MenuBar.",
+    "MenuBarWindow KEY_MENU without Shift sets auto-popup=false; inactive highlighted item becomes first root and grabs focus without popup, active highlighted item deactivates and clears saved owner.",
+    "ChangeHighlightItem saves once on initial activation; deactivation restores live saved owner or default frame document; GetFocus activates without popup, LoseFocus deactivates without restore.",
+    "Popup KEY_MENU forwards to root MenuBarWindow; PopupClosed disables document fallback, all existing popup close/dispatch semantics retained.",
+    "Logical activation validity must be tracked independently of open popup and nullable saved focus; browser explicit cycle flag maps this validity without claiming complete native focus ABI/default parity.",
+    "Native Alt/F6/mnemonics/accelerator alternate precedence/platform menu/global/frame flags and complete no-owner popup behavior remain unverified."
+  ]
+}
