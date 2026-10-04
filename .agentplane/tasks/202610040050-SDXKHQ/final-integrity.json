@@ -1,0 +1,48 @@
+{
+  "pass": true,
+  "hashesUnchanged": true,
+  "sourceUnchanged": true,
+  "vendorRestored": true,
+  "coverage": {
+    "apps/office/coverage/coverage-summary.json": {
+      "lines": 100,
+      "statements": 100,
+      "functions": 100,
+      "branches": 100
+    },
+    "coverage/coverage-summary.json": {
+      "lines": 100,
+      "statements": 100,
+      "functions": 100,
+      "branches": 100
+    }
+  },
+  "artifact": {
+    "taskFiles": 2732,
+    "python": [],
+    "source": [],
+    "executable": [],
+    "archives": [],
+    "magic": [],
+    "embeddedSource": []
+  },
+  "checks": [
+    {
+      "name": "full-verify",
+      "exit": 0
+    },
+    {
+      "name": "vendor-absent-runtime",
+      "exit": 0
+    },
+    {
+      "name": "vendor-absent-scripts",
+      "exit": 0
+    },
+    {
+      "name": "vendor-absent-browser",
+      "exit": 0
+    }
+  ],
+  "diffCheck": 0
+}

@@ -1,0 +1,11 @@
+{
+  "command": "npm run test:e2e",
+  "exit": 0,
+  "signal": null,
+  "bytes": 7970,
+  "sha256": "37676eae2df81a57bcb82147b27a9c8413b3e55b02514d74db6950dfc67d7064",
+  "summary": [
+    "  45 passed (14.0s)"
+  ],
+  "errors": []
+}
