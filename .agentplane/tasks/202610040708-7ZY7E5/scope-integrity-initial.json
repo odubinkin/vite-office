@@ -6,7 +6,6 @@
     "apps/office/e2e/writer-ruler-tab-pixels.spec.ts",
     "apps/office/e2e/writer-ruler-tab-glyphs.spec.ts",
     "apps/office/e2e/writer-ruler-tab-identity.spec.ts",
-    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
     "docs/program/source-provenance.json",
     "docs/program/parity/runtime-inventory.json"
   ],
@@ -37,25 +36,20 @@
       "sha256": "78c3478a1843ee020a72a7e18d89f02274ebe8541c50e8fcbc8224666b26c2a7"
     },
     {
-      "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
-      "bytes": 31524,
-      "sha256": "121c9540f8c24ac03bf3d29ea63862968e43a43f6ee9fe7b7fbc0635cadafe9d"
-    },
-    {
       "path": "docs/program/source-provenance.json",
-      "bytes": 747789,
-      "sha256": "643c4b953c5a60e5f33c85b9200973d83415015f956a84faee1f9f1750fc3960"
+      "bytes": 747657,
+      "sha256": "912ef0d421d62b5dca364d3369a0f3e74d5641f8100e7bcbef08f5fdf46a22cf"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
-      "bytes": 729647,
-      "sha256": "5125940f7a63c84dd83e1c02fb61fb7ee43edc107539091e23b88685653cacea"
+      "bytes": 729515,
+      "sha256": "696f2147362851c1395472756f6b1a920b77cd332f457e7596e2701ae7376ce7"
     }
   ],
   "priorTestFiles": 292,
-  "priorTestFilesByteIdentical": 289,
-  "exactPriorAssertionReplacements": 7,
-  "priorModifiedTestFiles": 3,
+  "priorTestFilesByteIdentical": 290,
+  "exactPriorAssertionReplacements": 5,
+  "priorModifiedTestFiles": 2,
   "manifests": [
     {
       "path": "docs/program/source-provenance.json",
