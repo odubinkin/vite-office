@@ -4,7 +4,7 @@ title: "Restore native selective text hint reset decisions and no-op ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore the approved native selective hint reset contract with independent local regressions and one absent-only verification profile."
 doc_version: 3
-doc_updated_at: "2026-10-04T16:43:09.432Z"
+doc_updated_at: "2026-10-04T16:54:07.346Z"
 doc_updated_by: "CODER"
 description: "Continue approved existing-functionality parity goal with one bounded txtedt reset contract leaf. Preserve state markers, direct hint deletion, exact-range precedence and no-op identity against pinned LibreOffice; add independent local real-owner regressions and bounded metadata."
 sections:
@@ -54,7 +54,7 @@ sections:
     5. Exact four semantic paths;230 existing runtime rows retain all status/default/exception fields and only one bounded evidence appendix; source rows retain prior evidence. Ignored-inclusive Agentplane audit rejects stored source/scripts/Python/executables/archives/raw diffs/source frames. Same-actor EVALUATOR review binds semantic SHA; ap doctor and node .agentplane/policy/check-routing.mjs must pass. Recorded verification and distinct semantic/verification/close commits plus clean final tracked/untracked checkout required.
   Verification: "Pending execution. No source-dependent product tests are authorized. Passing gates will not be repeated."
   Rollback Plan: "Revert only the task semantic commit with a new commit if required; do not rewrite history. Restore upstream directory in finally on every absent-profile exit."
-  Findings: "Read-only pinned source discovery: accelerator dispatch sends an empty PropertyValue sequence, so no accelerator modifier change is warranted. Selective reset currently clears state markers and replaces unchanged hints. Native common-attribute helper requires direct SET and lazy cloning; exact reset bypasses deletion-set filtering. Full native field/mark/layout/redline and unsupported hint types remain unverified."
+  Findings: "Confirmed pinned full-node decision gap and repaired it without broad parity promotion. All static gates and all product assertions passed first execution:1571 app/241files,109 inventory/36files,5 scripts/2files,99 Chromium. Product suites ran once with upstream unavailable and restored afterward; app/inventory four required coverage metrics100%. All323 previous test/spec files are byte-identical; exact four semantic paths and230 unchanged runtime statuses/defaults/exceptions. Evidence-reader recovery only: ignored the optional zero-total branchesTrue coverage field; refined whole-tree source-body detection to distinguish symbol references and primitive assertion diffs from stored code. No product gate failed or was repeated. Complete native replacement flags, notification kinds and unsupported hint/field/mark/layout/redline/range/style-access contracts remain separately unverified. No network/outside-repo access, upstream source execution or Agentplane source/helper storage."
 id_source: "generated"
 ---
 ## Summary
@@ -87,4 +87,4 @@ Revert only the task semantic commit with a new commit if required; do not rewri
 
 ## Findings
 
-Read-only pinned source discovery: accelerator dispatch sends an empty PropertyValue sequence, so no accelerator modifier change is warranted. Selective reset currently clears state markers and replaces unchanged hints. Native common-attribute helper requires direct SET and lazy cloning; exact reset bypasses deletion-set filtering. Full native field/mark/layout/redline and unsupported hint types remain unverified.
+Confirmed pinned full-node decision gap and repaired it without broad parity promotion. All static gates and all product assertions passed first execution:1571 app/241files,109 inventory/36files,5 scripts/2files,99 Chromium. Product suites ran once with upstream unavailable and restored afterward; app/inventory four required coverage metrics100%. All323 previous test/spec files are byte-identical; exact four semantic paths and230 unchanged runtime statuses/defaults/exceptions. Evidence-reader recovery only: ignored the optional zero-total branchesTrue coverage field; refined whole-tree source-body detection to distinguish symbol references and primitive assertion diffs from stored code. No product gate failed or was repeated. Complete native replacement flags, notification kinds and unsupported hint/field/mark/layout/redline/range/style-access contracts remain separately unverified. No network/outside-repo access, upstream source execution or Agentplane source/helper storage.

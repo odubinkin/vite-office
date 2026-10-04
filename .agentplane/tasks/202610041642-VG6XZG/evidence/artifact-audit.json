@@ -1,0 +1,5 @@
+{
+  "scope": "complete ignored-inclusive Agentplane tree; canonical policy and managed CLI exempt from source-extension gate; symbol references and primitive assertion diffs are prose/data, not stored source",
+  "files": 3645,
+  "forbiddenCount": 0
+}
