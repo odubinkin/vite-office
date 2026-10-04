@@ -322,9 +322,9 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
     expect(remaining[0]).toMatchObject({
       start: 2,
       end: 5,
-      dontExpand: true,
-      dontExpandStart: true,
-      dontMoveAttr: true,
+      dontExpand: false,
+      dontExpandStart: false,
+      dontMoveAttr: false,
     });
     expect(remaining[1]?.format.QueryValue()).toEqual(original.entries()[1]?.format.QueryValue());
     const once = required(node.GetpSwpHints()).clone();

@@ -108,9 +108,9 @@ describe("native selective text hint reset", /** Tests registered native decisio
       expect(required(f.node.GetpSwpHints()).Get(0)).toMatchObject({
         start: 2,
         end: 5,
-        dontExpand: true,
-        dontExpandStart: true,
-        dontMoveAttr: true,
+        dontExpand: false,
+        dontExpandStart: false,
+        dontMoveAttr: false,
       });
       expect(required(f.node.GetpSwpHints()).Get(1).format.equals(f.link.format)).toBe(true);
       expect(notify).toHaveBeenCalledTimes(1);

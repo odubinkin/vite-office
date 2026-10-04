@@ -16,7 +16,7 @@ export function resetParagraphTextAttributes(
   if (!exactRange && resetSet !== undefined) {
     let changed = false;
     const retained = hints.entries().flatMap(
-      /** Removes only common automatic-style items as native pDelSet does, retaining internet hints and independent flags. @param hint - Original hint. @returns Remaining hint payload. */
+      /** Deletes selected hints or common direct SET values; fresh replacements use native constructor flags. @param hint - Original hint. @returns Remaining hint payload. */
       (hint) => {
         if (resetSet.GetItemState(hint.Which(), false) === SfxItemState.SET) {
           changed = true;
@@ -33,11 +33,7 @@ export function resetParagraphTextAttributes(
         if (style === undefined) return [hint];
         changed = true;
         if (style.Count() === 0) return [];
-        const replacement = new SwTextAttr(new SwFormatAutoFormat(style), hint.start, hint.end);
-        replacement.dontExpand = hint.dontExpand;
-        replacement.dontExpandStart = hint.dontExpandStart;
-        replacement.dontMoveAttr = hint.dontMoveAttr;
-        return [replacement];
+        return [new SwTextAttr(new SwFormatAutoFormat(style), hint.start, hint.end)];
       },
     );
     if (changed) node.SetTextHints(new SwpHints(node.GetDoc().GetAttrPool(), retained));
