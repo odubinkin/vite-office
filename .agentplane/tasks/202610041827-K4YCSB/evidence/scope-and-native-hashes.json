@@ -1,0 +1,90 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "apps/office/src/sw/source/core/txtnode/hint-pool-ownership.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 331,
+  "priorTestsByteIdentical": 331,
+  "newAppTests": 62,
+  "existingRuntimeRows": 234,
+  "allExistingRuntimeFieldsExceptThreeAppendedJustificationsUnchanged": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx",
+      "sha256": "e9cd6e67ef9f5f9bd02f0cea10543d41f0d03ace23e903841db38d894dc26dbe"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "sha256": "cfbc09c7a7413e29dc3320c46eac6b4c706e9f805f0b90436ec636f9bc2bdb08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+      "sha256": "16ac2f8916ab0e6b597502b84247ef283d4a0cbaa2a79f0dbc2f3aa7e8ad052e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx",
+      "sha256": "f21ad8f8f8615d648f068c27a52f8457828c180843f9917a4ba42c95dd203de3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/fmtinfmt.hxx",
+      "sha256": "85d4ad5ce3b8252f913c93301d11a9f2039ff5eb3505ac0c270ce3d020bb3bfb"
+    }
+  ],
+  "staticChecks": 6,
+  "absentBuildPass": true,
+  "app": {
+    "passedInitially": 1762,
+    "total": 1763,
+    "failedNewHelper": 1,
+    "recoveredFailedCase": 1,
+    "productionUnchangedAfterCoverage": true,
+    "coverage": {
+      "lines": 100,
+      "statements": 100,
+      "functions": 100,
+      "branches": 100
+    }
+  },
+  "inventory": {
+    "tests": 109,
+    "files": 36,
+    "coverage": {
+      "lines": 100,
+      "statements": 100,
+      "functions": 100,
+      "branches": 100
+    }
+  },
+  "scripts": {
+    "tests": 5,
+    "files": 2
+  },
+  "chromium": 99,
+  "repeats": "Failed new test case only; no repeated passing suite/build.",
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass"
+}
