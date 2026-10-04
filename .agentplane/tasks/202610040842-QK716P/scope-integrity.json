@@ -33,23 +33,23 @@
     },
     {
       "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
-      "bytes": 13541,
-      "sha256": "74c72e46a787a970289373b82eab3369b403af00d0fd240b4d2422c41ce2acb1"
+      "bytes": 13528,
+      "sha256": "e1ec746d28edbabec17aca9ef83b993c248427d0d522e8e74f97a70a5e187a83"
     },
     {
       "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
-      "bytes": 7203,
-      "sha256": "084cff3218eb70e943202c65dd4ee6577253cd1fef9ec1c07a9597bae066385a"
+      "bytes": 7177,
+      "sha256": "7a2287ee0274129fd18090d3fc484be5bc75327ce9f6eaf7dbd35164da753329"
     },
     {
       "path": "docs/program/source-provenance.json",
       "bytes": 782142,
-      "sha256": "1b7bf46809a0607efefcf7c2fe85509c193d9289cfa81b7b3fe2751e6f35488e"
+      "sha256": "b95476dfa500656ec2180025a58f1ca77eaa2bfcfac59a96a0e36f947934f225"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
       "bytes": 757896,
-      "sha256": "37aff003f4a45d5856ed1f4ecb35765a9c9d2b764cd7a327e0f18090d0a1368f"
+      "sha256": "729397322071dd5d1e623e9bbd7284e895f8dd3c79cccbb9e58a5a8a9f18c68d"
     }
   ],
   "priorTestFiles": 300,
