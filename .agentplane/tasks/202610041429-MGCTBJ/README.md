@@ -1,10 +1,11 @@
 ---
 id: "202610041429-MGCTBJ"
 title: "Restore ordinary StyleApply direct reset and native repeat history"
-status: "DOING"
+result_summary: "Restored ordinary StyleApply direct reset, exact whole AUTOFMT removal, native list decisions and repeated-request Undo/Redo."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on:
@@ -44,7 +45,9 @@ quality_review:
     - "Exact semantic b21f8aacbc352dd9b6d706893b7179a0ec066de7 replay:20paths,316prior tests/305byte-identical/11bounded native corrections,227oldrows four bounded appends and one unverified row; registered status/default/exception fields preserved."
     - "Seven static and four source-only checks pass; absent app1468, inventory109, scripts5, Chromium97; four-metric coverage100; only failed app gate recovered with production unchanged and no passing suite repeated."
     - "Direct saved-item reset, inherited list eligibility, exact whole AUTOFMT removal with partial/internet retention, repeat history and exact Undo/Redo match reviewed native source branches and actual core/ODT/browser assertions."
-commit: null
+commit:
+  hash: "47cc4a808f7e0919a8286f67b541a88f48ad62ae"
+  message: "🧩 MGCTBJ task: record verified ordinary style reset"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: recover failed first absent app gate by source-contradicted repeat-history/alignment expectations and effective inherited level1 assertion. Approved ordinary reset scope expanded by two bounded prior test paths; no production changes or passing test-suite repetition."
+  -
+    author: "CODER"
+    body: "Verified: ordinary native paragraph style reset and repeated range history; app1468/inventory109/scripts5/Chromium97 without upstream; exact implementation quality pass and committed verification. Registered deviations preserved, broader parent remains active."
 events:
   -
     type: "status"
@@ -73,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified semantic b21f8aacbc352dd9b6d706893b7179a0ec066de7 ordinary native style reset and repeat history: app1468, inventory109, scripts5, Chromium97 without upstream; coverage100 all four metrics. Seven static and four source-only gates;20paths/305unchanged prior files/11bounded updates/228zero violations; exact semantic same-actor quality pass. Initial failed app gate recovered only; no passing suite repeated. Upstream restored, forbidden AP sources/Python zero; deviations unchanged and parent active."
+  -
+    type: "status"
+    at: "2026-10-04T15:07:44.291Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ordinary native paragraph style reset and repeated range history; app1468/inventory109/scripts5/Chromium97 without upstream; exact implementation quality pass and committed verification. Registered deviations preserved, broader parent remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:07:23.855Z"
+doc_updated_at: "2026-10-04T15:07:44.292Z"
 doc_updated_by: "CODER"
 description: "Close native ordinary paragraph style reset/list/whole-node auto-format and repeated-request history across existing range owners with exact reversible history and real browser ODT evidence; preserve registered deviations and exclude absent modifier/ring/layout/redline subsystems."
 sections:
@@ -158,6 +171,10 @@ sections:
     Strict scope:20semantic paths;316prior test files,305byte-identical and11 exact replayed native-expectation updates preserving unrelated assertions.227old mapping rows preserve status/default/exception fields; four bounded description/evidence appends and one new unverified txtedt row give228modules/zero violations. Ten native hashes, ignored-inclusive artifact audit3552files/zero forbidden findings. Native execution/compilation/source copies absent. Screenshots at1280/390 show whole and partial formatting, internet link and unchanged neighbors; toolbar follows active untouched neighbor after typing undo, while preceding browser assertions verify style/sidebar/focus/export.
 
     Modifier/full-char reset, rings/read-only/layout/redlines/inline headings, absent native direction/style-name fields and pointer semantics, full history/callback architecture and native global defaults remain unverified. Registered save/open/recovery deviations unchanged. Doctor0errors/two pre-existing warnings. Evidence: final-integrity.json, scope-integrity.json, source-comparison.json, artifact-audit.json and bounded gate records.
+extensions:
+  implementation_commit:
+    hash: "b21f8aacbc352dd9b6d706893b7179a0ec066de7"
+    message: "🧩 MGCTBJ code: restore native paragraph style reset and repeat history"
 id_source: "generated"
 ---
 ## Summary
