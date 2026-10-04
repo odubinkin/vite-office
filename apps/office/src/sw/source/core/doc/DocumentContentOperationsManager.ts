@@ -124,16 +124,16 @@ export class DocumentContentOperationsManager {
     const targetOffset = target.GetContentIndex();
     if (targetNode === node && targetOffset >= start && targetOffset <= end)
       throw new Error("Writer cannot move a range into itself.");
+    if (targetNode !== node) {
+      const fragment = node.CutTextFragment(start, end);
+      targetNode.ReplaceRange(targetOffset, targetOffset, fragment, true);
+      return new SwPosition(targetNode, targetOffset + fragment.text.length);
+    }
     const fragment = node.CaptureTextFragment(start, end);
-    const sourceHints = node.GetpSwpHints();
-    const moved =
-      targetNode !== node && sourceHints !== undefined
-        ? { text: fragment.text, hints: sourceHints.sliceForCut(start, end) }
-        : fragment;
     node.EraseText(start, end - start);
     const adjustedOffset =
       targetNode === node && targetOffset > end ? targetOffset - (end - start) : targetOffset;
-    targetNode.ReplaceRange(adjustedOffset, adjustedOffset, moved);
+    targetNode.ReplaceRange(adjustedOffset, adjustedOffset, fragment);
     return new SwPosition(targetNode, adjustedOffset + fragment.text.length);
   }
 

@@ -598,24 +598,33 @@ export class SwTextNode extends SwContentNode {
     this.assertRange(start, end);
     const removedLength = end - start;
     if (removedLength === 0) return;
-    const hints = this.GetTextHints().replaceRange(
-      this.mText.length,
-      start,
-      end,
-      new SwpHints(this.GetDoc().GetAttrPool()),
-      0,
-    );
+    this.ReplaceRange(start, end, { text: "", hints: new SwpHints(this.GetDoc().GetAttrPool()) });
+  }
+
+  /** Cuts text and transfers its owned hints without turning them into historical snapshots. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Consumable native fragment. */
+  public CutTextFragment(start: number, end: number): SwTextFragment {
+    this.assertRange(start, end);
+    if (start === end) return this.CaptureTextFragment(start, end);
+    const text = this.mText.slice(start, end);
+    const remaining = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
+    const hints = remaining.Cut(start, end);
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
-    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
-    this.UpdateContentIndices(start, removedLength, SwContentIndexUpdateMode.Negative);
+    this.pSwpHints = remaining.Count() === 0 ? undefined : remaining;
+    this.UpdateContentIndices(start, end - start, SwContentIndexUpdateMode.Negative);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
     });
+    return { text, hints };
   }
 
-  /** Replaces one text range with caller-normalized direct-format runs. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacementRuns - Replacement content. @returns Nothing. */
-  public ReplaceRange(start: number, end: number, replacement: SwTextFragment): void {
+  /** Replaces one text range with a native fragment. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement content. @param transferHints - Whether to consume same-pool owned hints instead of copying snapshots. @returns Nothing. */
+  public ReplaceRange(
+    start: number,
+    end: number,
+    replacement: SwTextFragment,
+    transferHints = false,
+  ): void {
     this.assertRange(start, end);
     const replacementText = replacement.text;
     const removedLength = end - start;
@@ -625,6 +634,7 @@ export class SwTextNode extends SwContentNode {
       end,
       replacement.hints,
       replacementText.length,
+      transferHints,
     );
     this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
     this.pSwpHints = hints.Count() === 0 ? undefined : hints;

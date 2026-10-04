@@ -83,8 +83,7 @@ export class SwpHints {
 
   /** Clips snapshot or cut attributes without changing the source container. @param start - Inclusive offset. @param end - Exclusive offset. @param cut - Whether native CutImpl construction applies. @returns Independent rebased attributes. */
   private sliceRange(start: number, end: number, cut: boolean): SwpHints {
-    if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start)
-      throw new Error("Writer hint slice is invalid.");
+    assertHintSlice(start, end);
     return new SwpHints(
       this.pool,
       this.hintsByStart.flatMap(
@@ -104,6 +103,40 @@ export class SwpHints {
         },
       ),
     );
+  }
+
+  /** Removes a range, transferring strictly interior owned attributes and reconstructing split attributes. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Consumable same-pool hint fragment. */
+  public Cut(start: number, end: number): SwpHints {
+    assertHintSlice(start, end);
+    const fragment = new SwpHints(this.pool);
+    const length = end - start;
+    if (length === 0) return fragment;
+    const moved: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+    const remaining: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+    for (const hint of this.hintsByStart) {
+      if (hint.start < end && hint.end > start) {
+        if (hint.start >= start && hint.end < end) {
+          hint.start -= start;
+          hint.SetEnd(hint.end - start);
+          moved.push(hint);
+          continue;
+        }
+        moved.push(
+          MakeTextAttr(
+            this.pool.GetDoc(),
+            hint.format,
+            Math.max(start, hint.start) - start,
+            Math.min(end, hint.end) - start,
+          ),
+        );
+      }
+      if (hint.start > start) hint.start = Math.max(start, hint.start - length);
+      if (hint.end > start) hint.SetEnd(Math.max(start, hint.end - length));
+      remaining.push(hint);
+    }
+    this.assignOwned(remaining);
+    fragment.assignOwned(moved);
+    return fragment;
   }
 
   /** Returns an independent copy with every range shifted by the supplied offset. @param offset - Signed range delta. @returns Shifted hints. */
@@ -129,20 +162,38 @@ export class SwpHints {
     ]);
   }
 
-  /** Replaces a text range's hints with a native hint fragment. @param textLength - Original text length. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement hints. @param replacementLength - Replacement text length. @returns Rebased combined hints. */
+  /** Replaces a text range's hints with a native hint fragment. @param textLength - Original text length. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement hints. @param replacementLength - Replacement text length. @param transferHints - Whether to consume owned same-pool hints. @returns Rebased combined hints. */
   public replaceRange(
     textLength: number,
     start: number,
     end: number,
     replacement: SwpHints,
     replacementLength: number,
+    transferHints = false,
   ): SwpHints {
+    if (transferHints && replacement.pool !== this.pool)
+      throw new Error("Writer hint transfer requires the same document pool.");
     const trailing = this.slice(end, textLength).shifted(start + replacementLength);
-    return new SwpHints(this.pool, [
-      ...this.slice(0, start).entries(),
-      ...replacement.clone(this.pool).shifted(start).entries(),
-      ...trailing.entries(),
-    ]);
+    const prefix = this.slice(0, start);
+    const middle = transferHints
+      ? replacement.takeOwned(start)
+      : replacement.clone(this.pool).shifted(start).entries();
+    const hints = [...prefix.entries(), ...middle, ...trailing.entries()];
+    const result = new SwpHints(this.pool);
+    if (transferHints) result.assignOwned(hints);
+    else result.replace(hints);
+    return result;
+  }
+
+  /** Consumes an owned fragment while rebasing its actual attributes. @param offset - Destination offset. @returns Transferred owned objects. */
+  private takeOwned(offset: number): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
+    const owned = this.hintsByStart;
+    this.hintsByStart = [];
+    for (const hint of owned) {
+      hint.start += offset;
+      hint.SetEnd(hint.end + offset);
+    }
+    return owned;
   }
 
   /** Builds native hints for newly inserted text without constructing a run projection. @param length - Inserted text length. @param attributes - Effective inserted character state. @param inherited - Node/style items used to retain only direct deltas. @param hyperlink - Optional inserted hyperlink. @returns Independent native hint fragment. */
@@ -332,15 +383,20 @@ export class SwpHints {
 
   /** Replaces all hints, removing empty item sets and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */
   public replace(hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]): void {
+    const copies = hints.map(
+      /** Binds foreign automatic handles before testing their converted contents. @param hint - Caller-owned hint. @returns Destination-owned hint or same-pool snapshot. */
+      (hint) =>
+        hint.format instanceof SwFormatAutoFormat &&
+        hint.format.GetStyleHandle().GetPool() !== this.pool
+          ? MakeTextAttr(this.pool.GetDoc(), hint.format, hint.start, hint.end)
+          : hint.clone(),
+    );
+    this.assignOwned(copies);
+  }
+
+  /** Normalizes already owned objects without replacing their identities. @param hints - Owned ranged attributes. @returns Nothing. */
+  private assignOwned(hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]): void {
     const sorted = hints
-      .map(
-        /** Binds foreign automatic handles before testing their converted contents. @param hint - Caller-owned hint. @returns Destination-owned hint or same-pool snapshot. */
-        (hint) =>
-          hint.format instanceof SwFormatAutoFormat &&
-          hint.format.GetStyleHandle().GetPool() !== this.pool
-            ? MakeTextAttr(this.pool.GetDoc(), hint.format, hint.start, hint.end)
-            : hint.clone(),
-      )
       .filter(
         /** Keeps only non-empty supported hints. @param hint - Candidate attribute. @returns Whether meaningful. */
         (hint) =>
@@ -680,4 +736,10 @@ function equalAttributes(
     left.italic === right.italic &&
     left.underline === right.underline
   );
+}
+
+/** Validates bounded hint slice/cut offsets. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
+function assertHintSlice(start: number, end: number): void {
+  if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start)
+    throw new Error("Writer hint slice is invalid.");
 }
