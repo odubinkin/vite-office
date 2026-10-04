@@ -1,0 +1,37 @@
+{
+  "pinnedCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svtools/source/control/ruler.cxx",
+      "sha256": "3d311b4b4fdfa0c05651bb7aa169c2b2a39def6023059b9dd1ffdb29f80bd413"
+    }
+  ],
+  "sourceRefs": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+      "marker": "SwView::StateTabWin"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "marker": "SvxRuler::UpdatePara"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svtools/source/control/ruler.cxx",
+      "marker": "Ruler::ImplDrawIndents"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svtools/source/control/ruler.cxx",
+      "marker": "Ruler::ImplHitTest"
+    }
+  ],
+  "nativeExecution": false,
+  "conclusion": "Writer transfers effective automatic mode into the ruler paragraph item; first-line invisibility is set from that mode and invisible indents are excluded from drawing and hit testing. Browser was missing that transfer and visibility predicate. Automatic model mutation metadata needs a separate audit."
+}
