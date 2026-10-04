@@ -1,0 +1,7 @@
+{
+  "command": "npm run inventory:invariants",
+  "profile": "restored-source audit only",
+  "exitCode": 0,
+  "bytes": 136,
+  "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe"
+}

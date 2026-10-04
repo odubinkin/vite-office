@@ -1,0 +1,32 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/txtedt.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-replacement.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts",
+    "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "byteIdenticalPriorTestFiles": 322,
+  "correctedPriorFiles": 2,
+  "correctedFlagLiterals": 6,
+  "unchangedRuntimeRows": 230,
+  "boundedExistingRuntimeAppendices": 1,
+  "sourceAppendices": 1,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeHashes": [
+    {
+      "path": "sw/source/core/txtnode/txtedt.cxx",
+      "sha256": "900413bc482204a05a6bc74a7a3b2b89824335f0f849a531afde833793f083f1"
+    },
+    {
+      "path": "sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    }
+  ],
+  "registeredDeviationsUnchanged": true
+}

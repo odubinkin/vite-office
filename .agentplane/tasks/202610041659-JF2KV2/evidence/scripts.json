@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+  "profile": "upstream unavailable",
+  "exitCode": 0,
+  "bytes": 218,
+  "sha256": "d23aec603c0ee3eee1649de30792c41d9fa7459a64fe023d37a5ad5237832776"
+}

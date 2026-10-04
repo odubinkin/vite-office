@@ -4,7 +4,7 @@ title: "Restore native fresh flags for selectively replaced automatic hints"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore native fresh automatic replacement flags within approved six-path scope, correct obsolete expectations and verify once absent-only."
 doc_version: 3
-doc_updated_at: "2026-10-04T17:00:36.754Z"
+doc_updated_at: "2026-10-04T17:08:52.546Z"
 doc_updated_by: "CODER"
 description: "One existing-contract leaf: remove inherited expansion/movement flags from selective automatic hint replacement and restore constructor defaults proven by native MakeTextAttr/NOHINTADJUST. Correct two obsolete flag expectations, add real-owner/history regressions, preserve unrelated/no-op hints and registered deviations."
 sections:
@@ -54,7 +54,7 @@ sections:
     5. Exact six semantic paths,230 existing runtime rows unchanged statuses/defaults/exceptions with one bounded evidence appendix; provenance preserves prior evidence and clearly supersedes old copied-flag claim. Ignored-inclusive Agentplane audit rejects source/helpers/Python/executables/source frames/raw source diffs. Exact-SHA same-actor EVALUATOR pass, ap doctor zero errors and node .agentplane/policy/check-routing.mjs pass. Canonical recorded verification, distinct semantic/verification/close commits and clean tracked/untracked final checkout required.
   Verification: "Pending execution. Every product suite is authorized once with upstream unavailable; passing suites will not be repeated."
   Rollback Plan: "Revert task semantic commit with a new commit if needed; no history rewrite. Always restore vendor directory in finally."
-  Findings: "Pinned source discovery shows full-node selective RstTextAttr creates fresh MakeTextAttr replacements. SwTextAttr constructor initializes the three locally registered flags false; NOHINTADJUST insertion does not copy the removed flags. The current helper and two previous assertions instead preserve old flags. Full style-access interning and other flags/ranges/notification/hint/native/UI contracts remain unverified."
+  Findings: "Native fresh replacement flags confirmed from pinned RstTextAttr, MakeTextAttr, SwTextAttr constructor and NOHINTADJUST insertion. Removed three copied flags and corrected six obsolete assertion literals in two prior files.40 new actual-model/frame/history assertions cover eight input masks, replacement/retention/deletion/exact behavior and three history cycles. Six static gates, absent static build,1611app/242files,109inventory/36files,5scripts/2files and99Chromium all pass first execution; four required app/inventory metrics100%. Restored-only resource/source-tree/provenance/invariants/parity audits pass with zero semantic violations. Exact six semantic paths;322 prior tests/specs byte-identical, two changed only six flag literals;230 runtime statuses/defaults/exceptions retained with one bounded evidence appendix. Three native hashes bind pin; full ignored-inclusive AP audit3671files forbidden0. Product suites ran once without upstream and directory restored in finally. No network/outside-repo access, source execution, source/helper storage or registered I/O/recovery change. Other native flags/style-access interning/notification/range/hint/field/mark/layout/redline and full UI parity remain unverified; broad goal active."
 id_source: "generated"
 ---
 ## Summary
@@ -87,4 +87,4 @@ Revert task semantic commit with a new commit if needed; no history rewrite. Alw
 
 ## Findings
 
-Pinned source discovery shows full-node selective RstTextAttr creates fresh MakeTextAttr replacements. SwTextAttr constructor initializes the three locally registered flags false; NOHINTADJUST insertion does not copy the removed flags. The current helper and two previous assertions instead preserve old flags. Full style-access interning and other flags/ranges/notification/hint/native/UI contracts remain unverified.
+Native fresh replacement flags confirmed from pinned RstTextAttr, MakeTextAttr, SwTextAttr constructor and NOHINTADJUST insertion. Removed three copied flags and corrected six obsolete assertion literals in two prior files.40 new actual-model/frame/history assertions cover eight input masks, replacement/retention/deletion/exact behavior and three history cycles. Six static gates, absent static build,1611app/242files,109inventory/36files,5scripts/2files and99Chromium all pass first execution; four required app/inventory metrics100%. Restored-only resource/source-tree/provenance/invariants/parity audits pass with zero semantic violations. Exact six semantic paths;322 prior tests/specs byte-identical, two changed only six flag literals;230 runtime statuses/defaults/exceptions retained with one bounded evidence appendix. Three native hashes bind pin; full ignored-inclusive AP audit3671files forbidden0. Product suites ran once without upstream and directory restored in finally. No network/outside-repo access, source execution, source/helper storage or registered I/O/recovery change. Other native flags/style-access interning/notification/range/hint/field/mark/layout/redline and full UI parity remain unverified; broad goal active.

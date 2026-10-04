@@ -1,0 +1,11 @@
+{
+  "command": "npm run inventory:parity",
+  "profile": "restored-source audit only",
+  "exitCode": 0,
+  "bytes": 1131680,
+  "sha256": "139ec29d4d7f3277146abab9229839119e75a32380ca8b418273ec6eb4e2dcc8",
+  "semanticViolationCounts": [
+    0
+  ],
+  "runtimeModuleCount": 230
+}
