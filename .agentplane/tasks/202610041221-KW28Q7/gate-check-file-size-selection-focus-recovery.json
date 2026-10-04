@@ -1,0 +1,7 @@
+{
+  "command": "npm run check:file-size",
+  "exitCode": 0,
+  "outputBytes": 2742,
+  "outputSha256": "cc00cd09c54dd86e0dfeb69a53bd1f8ad025a3f15b2872e5ce905c8f1d0feacd",
+  "summary": []
+}
