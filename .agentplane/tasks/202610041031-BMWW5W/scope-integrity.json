@@ -15,7 +15,9 @@
     "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
     "apps/office/e2e/writer-named-style-history.spec.ts",
     "docs/program/source-provenance.json",
-    "docs/program/parity/runtime-inventory.json"
+    "docs/program/parity/runtime-inventory.json",
+    "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+    "docs/program/parity/writer-command-slice.json"
   ],
   "fileIdentities": [
     {
@@ -60,7 +62,7 @@
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
-      "sha256": "790105e0c4bf73e050911b6a4abd25cd5b612d1dd106bc84017c50d42b21f1c9"
+      "sha256": "dfc08f10f4823113faba45f5d443e927b567ea2dd867ec9c69b2ae83a5c5a51c"
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
@@ -72,16 +74,29 @@
     },
     {
       "path": "docs/program/source-provenance.json",
-      "sha256": "c0c7eb83a313d5d4ec2e31159048f3d70c0cde9ecf225dff1578c62e05b1e02c"
+      "sha256": "49498cd73e320d65fc342efe0d3d7c5fcfe5fa4e396bae960315e480630eab5d"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
-      "sha256": "97234cfb7302a0f8c1a3ff7dd3cb505e12cf12d347b627f13d54e8e16384ab90"
+      "sha256": "28893c30f998e2cb51d48f22ee059ca7e142cfb89b5accf7da4128c38ba85b0f"
+    },
+    {
+      "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+      "sha256": "158ba26aa869657d766487b6317d81d29827b198856c1b02bab3d0df4b250ca8"
+    },
+    {
+      "path": "docs/program/parity/writer-command-slice.json",
+      "sha256": "effb06992088063687ee31c9b8e9f7a1bee77e761a7199b5222e53ad8da6f6d9"
     }
   ],
   "priorTestFiles": 305,
-  "priorTestFilesByteIdentical": 304,
-  "priorTestWithOnlyCommonXmlStreamAssertionUpdated": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+  "priorTestFilesByteIdentical": 303,
+  "priorTestsWithBoundedOwnershipAssertionsUpdated": [
+    "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+    "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts"
+  ],
+  "ownedMarkerPathsRelocated": 3,
+  "driverSymbolRelocated": 1,
   "manifests": [
     {
       "path": "docs/program/source-provenance.json",

@@ -4,7 +4,7 @@ title: "Preserve document-owned named paragraph style hierarchy through ODT and 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on:
@@ -67,7 +67,7 @@ events:
     to: "DOING"
     note: "Start: correct only actual custom fixture ownership and three relocated local markers; passing app suite will not be repeated."
 doc_version: 3
-doc_updated_at: "2026-10-04T11:24:26.489Z"
+doc_updated_at: "2026-10-04T11:27:07.858Z"
 doc_updated_by: "CODER"
 description: "Iteration102 replaces flattening of imported named paragraph styles with document-owned SwTextFormatColl collections, retaining direct automatic deltas and exact parent/follow/item ownership through ODT, graph/history and destination copying. Native independent list-indent applicability must agree with real imported hierarchy; existing consumers and registered I/O/recovery deviations remain unchanged until the next consumer migration."
 sections:
@@ -104,7 +104,7 @@ sections:
     4. Read-only pinned source hashes and restored resources--check/source-tree/provenance/invariants/parity audits pass; exact17semantic paths and all303other prior tests byte-identical; one bounded XML stream assertion and one actual custom fixture identity/parent assertion changed; exactly3owned marker paths relocated, existing mapping statuses/defaults/exceptions unchanged with bounded evidence/new helper ownership. Whole ignored-inclusive AP forbidden0, routing/doctor and exact-SHA same-actor read-only EVALUATOR pass, final clean tracked leaf and parent progress.
   Verification: "Pending implementation; no baseline or pre-fix tests. Previous leaf101 is DONE with native independent core masks; initial consumer regressions from flattened custom styles justify this prerequisite correction."
   Rollback Plan: "Revert the scoped implementation commit if actual named/automatic ownership or transport contracts are disproved; no history rewrite/reset, coverage relaxation or registered deviation changes."
-  Findings: "Initial absent app gate:1325passed/5failed in229files; coverage below100%. Vendor restored in finally. Failures identify native list display-name lookup, invalid/cyclic parent detachment, composite paragraph-item inheritance, and direct empty numbering suppression. The old content-stream spacing assertion conflicts with named common ownership; review its stream boundary against native before adapting that single assertion. No present-directory tests or native execution. Remaining inventory/scripts/Chromium not started."
+  Findings: "App1331/229 passes100%four metrics absent and is not repeated. Initial inventory failed2 then1: fixture identity/parent and three marker paths corrected; move applyNamedParagraphStyles out of the old driver localSymbols into its actual helper ownership. Restored resources/source-tree/provenance/invariants and parity223modules/0violations pass. Inline scope replay fixed a duplicate const name; exact17paths,303of305old tests byte-identical, two bounded assertion updates and3marker moves verified. No production change after app pass. Repeat only failed inventory, then first scripts and Chromium absent."
 id_source: "generated"
 ---
 ## Summary
@@ -157,4 +157,4 @@ Revert the scoped implementation commit if actual named/automatic ownership or t
 
 ## Findings
 
-Initial absent app gate:1325passed/5failed in229files; coverage below100%. Vendor restored in finally. Failures identify native list display-name lookup, invalid/cyclic parent detachment, composite paragraph-item inheritance, and direct empty numbering suppression. The old content-stream spacing assertion conflicts with named common ownership; review its stream boundary against native before adapting that single assertion. No present-directory tests or native execution. Remaining inventory/scripts/Chromium not started.
+App1331/229 passes100%four metrics absent and is not repeated. Initial inventory failed2 then1: fixture identity/parent and three marker paths corrected; move applyNamedParagraphStyles out of the old driver localSymbols into its actual helper ownership. Restored resources/source-tree/provenance/invariants and parity223modules/0violations pass. Inline scope replay fixed a duplicate const name; exact17paths,303of305old tests byte-identical, two bounded assertion updates and3marker moves verified. No production change after app pass. Repeat only failed inventory, then first scripts and Chromium absent.
