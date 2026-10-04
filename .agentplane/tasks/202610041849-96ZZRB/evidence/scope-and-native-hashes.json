@@ -1,0 +1,87 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 333,
+  "priorTestsByteIdentical": 332,
+  "priorChangedTest": "Only text-hint-copy.test.ts eight-mask exact-end expectation, title and comment corrected from native strict inequality.",
+  "newAppCases": 125,
+  "existingRuntimeRows": 234,
+  "allExistingRuntimeFieldsExceptTwoAppendedJustificationsUnchanged": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+      "sha256": "00ed4be35d90fd8921927b767c09d2d6ba6ae352e08fec9f291d5ac21e836a0b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "sha256": "cfbc09c7a7413e29dc3320c46eac6b4c706e9f805f0b90436ec636f9bc2bdb08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+      "sha256": "16ac2f8916ab0e6b597502b84247ef283d4a0cbaa2a79f0dbc2f3aa7e8ad052e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx",
+      "sha256": "e9cd6e67ef9f5f9bd02f0cea10543d41f0d03ace23e903841db38d894dc26dbe"
+    }
+  ],
+  "staticChecks": 6,
+  "lintRecovery": "Two missing JSDoc comments on new test type declarations corrected; only failed lint gate repeated.",
+  "absentProfile": {
+    "build": 1,
+    "app": {
+      "tests": 1888,
+      "files": 251,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "inventory": {
+      "tests": 109,
+      "files": 36,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "scripts": {
+      "tests": 5,
+      "files": 2
+    },
+    "chromium": 99,
+    "allPassedFirstAttempt": true
+  },
+  "passingSuitesRepeated": false,
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass"
+}
