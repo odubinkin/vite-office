@@ -1,0 +1,7 @@
+{
+  "command": "npm run format:check",
+  "exitCode": 1,
+  "outputBytes": 286,
+  "outputSha256": "ea4567f2632952e87dd616ca19cd062f845741641657b4c1a2814ef278daf3ca",
+  "summary": []
+}
