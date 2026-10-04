@@ -4,7 +4,7 @@ title: "Restore native independent list-indent core contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -24,27 +24,23 @@ verification:
   attempts: 0
 quality_review:
   state: "pass"
-  updated_at: "2026-10-04T10:16:52.904Z"
+  updated_at: "2026-10-04T10:18:37.275Z"
   updated_by: "EVALUATOR"
-  note: "Same-actor read-only EVALUATOR review of a89b8333d4a2b8c50398de7d9a00a7d3b97ee742: bounded core independent-mask and selected-alignment contracts pass. Existing consumers preserved pending separate imported-style hierarchy correction."
-  evaluated_sha: "a89b8333d4a2b8c50398de7d9a00a7d3b97ee742"
+  note: "Same-actor read-only review of refreshed blueprint at742da889d1bc; source identities match reviewed implementation a89b8333, bounded core scope passes unchanged final evidence."
+  evaluated_sha: "7c0e6452b0277de239548655e4423f69c2b7525f"
   blueprint_digest: "6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524"
   evidence_refs:
     - ".agentplane/tasks/202610040949-DSEN0S/README.md"
-    - ".agentplane/tasks/202610040949-DSEN0S/quality/20261004-101652904-recovery-context/quality-report.json"
-    - ".agentplane/tasks/202610040949-DSEN0S/quality/20261004-101652904-recovery-context/evaluator-prompt.md"
-    - ".agentplane/tasks/202610040949-DSEN0S/quality/20261004-101652904-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040949-DSEN0S/quality/20261004-101837275-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040949-DSEN0S/quality/20261004-101837275-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040949-DSEN0S/quality/20261004-101837275-recovery-context/evaluator-opinion.md"
     - ".agentplane/tasks/202610040949-DSEN0S/blueprint/resolved-snapshot.json"
-    - ".agentplane/tasks/202610040949-DSEN0S/scope-integrity.json"
     - ".agentplane/tasks/202610040949-DSEN0S/final-integrity.json"
-    - ".agentplane/tasks/202610040949-DSEN0S/source-comparison.json"
-    - ".agentplane/tasks/202610040949-DSEN0S/vendor-absent-runtime-initial.json"
+    - ".agentplane/tasks/202610040949-DSEN0S/quality/20261004-101652904-recovery-context/quality-report.json"
     - "a89b8333d4a2b8c50398de7d9a00a7d3b97ee742"
   findings:
-    - "Native actual bound-rule admission, direct per-axis margin priority, style indent-before-rule traversal and root true fallback match read-only pinned source. Native enum and selected counted/ignore/signed16 alignment literals are covered through real node and history ownership."
-    - "Six semantic paths only; all304prior tests and existing consumers byte-identical;222mapping rows preserve221old order and only two existing evidence append rows plus one source-owned helper split. Status/default/exception fields unchanged."
-    - "Corrected failed app gate1306 and all remaining inventory109/scripts5/browser85 gates pass only absent. Both coverage outputs100%four metrics; seven static gates and restored four source audits/parity pass. No passing full suite repeated; first failed consumer attempt remains bounded evidence."
-    - "No source/helper/native binary/raw diagnostic/code diff AP artifacts; ignored-inclusive scan forbidden0 with five historical prose-only diffs. Source3hashes and semantic identities match the evaluated SHA; vendor restored."
+    - "Refreshed snapshot digest6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524 matches final narrowed title/description and current Verify Steps; no route or acceptance change after successful tests."
+    - "Six semantic paths and three native hashes unchanged, all304prior tests and consumers preserved; app1306/inventory109/scripts5/browser85 pass absent with both coverages100%; seven static gates/four source audits/parity222 and AP forbidden0 pass."
 commit: null
 comments:
   -
@@ -81,7 +77,7 @@ events:
     state: "ok"
     note: "Refreshed blueprint snapshot after final task title/description narrowed to reviewed core scope. Existing final evidence and semantic identities unchanged; app1306/inventory109/scripts5/browser85 pass absent, both coverage100%, all source/static/audit checks pass. No tests rerun; pinned semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742."
 doc_version: 3
-doc_updated_at: "2026-10-04T10:18:12.465Z"
+doc_updated_at: "2026-10-04T10:19:04.467Z"
 doc_updated_by: "CODER"
 description: "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion."
 sections:
@@ -143,6 +139,7 @@ sections:
   Findings: |-
     Initial consumer migration caused existing exact listLayout DTO assertion to receive an extra field and tdf114287 imported style print bound2268 instead of357. Existing ODT named custom styles flatten inherited items into direct node items, so full style hierarchy restoration is a prerequisite for native per-axis consumer migration. Restore current consumers and defer integration to the next coherent task rather than introduce a sideband invalidation shortcut or weaken prior tests. All initial native ownership cases passed. No full module/default/contract/parent parity promotion.
     Final bounded core implementation: all1306app/109inventory/5scripts/85browser cases pass absent; both coverage outputs100%, all304oldtests and all consumer files unchanged. Source hashes3, manifests222, forbidden AP findings0. Same-actor read-only EVALUATOR passes exact semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742. First local commit message scope core was rejected by commit-msg; corrected to code after doctor passed, no implementation or tests changed/repeated. Remaining prerequisite: restore actual named/imported style hierarchy and graph persistence before per-axis consumers, then remove static sideband when exact transport ownership is proven. Goal and parent remain active; full parity is not asserted.
+    The first finish attempt rejected a stale blueprint after title/description narrowing. Refreshed the snapshot, re-recorded verification from unchanged evidence without rerunning tests, and repeated only the read-only quality phase at742da889d1bc. Current snapshot digest6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524; refreshed quality report .agentplane/tasks/202610040949-DSEN0S/quality/20261004-101837275-recovery-context/quality-report.json.
 id_source: "generated"
 ---
 ## Summary
@@ -218,3 +215,4 @@ Revert scoped semantic commit if native mask or selected alignment contract is d
 
 Initial consumer migration caused existing exact listLayout DTO assertion to receive an extra field and tdf114287 imported style print bound2268 instead of357. Existing ODT named custom styles flatten inherited items into direct node items, so full style hierarchy restoration is a prerequisite for native per-axis consumer migration. Restore current consumers and defer integration to the next coherent task rather than introduce a sideband invalidation shortcut or weaken prior tests. All initial native ownership cases passed. No full module/default/contract/parent parity promotion.
 Final bounded core implementation: all1306app/109inventory/5scripts/85browser cases pass absent; both coverage outputs100%, all304oldtests and all consumer files unchanged. Source hashes3, manifests222, forbidden AP findings0. Same-actor read-only EVALUATOR passes exact semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742. First local commit message scope core was rejected by commit-msg; corrected to code after doctor passed, no implementation or tests changed/repeated. Remaining prerequisite: restore actual named/imported style hierarchy and graph persistence before per-axis consumers, then remove static sideband when exact transport ownership is proven. Goal and parent remain active; full parity is not asserted.
+The first finish attempt rejected a stale blueprint after title/description narrowing. Refreshed the snapshot, re-recorded verification from unchanged evidence without rerunning tests, and repeated only the read-only quality phase at742da889d1bc. Current snapshot digest6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524; refreshed quality report .agentplane/tasks/202610040949-DSEN0S/quality/20261004-101837275-recovery-context/quality-report.json.
