@@ -1,0 +1,101 @@
+{
+  "base": "5c4b084b1ff9f527cd01caa0a1839c3bac3673f4",
+  "semanticPaths": 10,
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedHashesUnchanged": 10,
+  "priorTestFiles": 314,
+  "byteIdenticalPriorTests": 313,
+  "boundedConstructorFixtureUpdates": 1,
+  "priorAssertionsUnchanged": true,
+  "oldMappingRows": 226,
+  "descriptionAppends": 4,
+  "newUnverifiedOwnerRows": 1,
+  "runtimeModuleCount": 227,
+  "statusDefaultExceptionFieldsUnchanged": true,
+  "staticChecksPassed": 7,
+  "routingPassed": true,
+  "sourceChecksPassed": 4,
+  "appCasesPassed": 1431,
+  "newRangeCases": 10,
+  "inventoryCasesPassed": 109,
+  "scriptCasesPassed": 5,
+  "browserCasesPassed": 95,
+  "newBrowserCases": 2,
+  "firstProductAttemptsPassed": true,
+  "staticRecovery": "Initial newly added test typecheck found two unsupported test APIs; corrected item-set comparison to actual entries and awaited ODT import metadata before any product test execution. Seven final static checks pass.",
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10662,
+      "covered": 10662,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11648,
+      "covered": 11648,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3067,
+      "covered": 3067,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8888,
+      "covered": 8888,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "agentplaneForbiddenFindings": 0,
+  "nativeExecution": false,
+  "nativeCompilation": false,
+  "sourceCopies": false,
+  "passingFullSuitesRepeated": false,
+  "visualReview": "Desktop/mobile screenshots confirm retained toolbar style and desktop sidebar; document text is scrolled outside captured viewport after caret/history editing. Actual browser assertions independently check all paragraph styles/text, unchanged neighbors, typing/history and exported ODT ownership.",
+  "doctor": {
+    "errors": 0,
+    "existingWarnings": 2
+  }
+}

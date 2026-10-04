@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/edit/edfcol.cxx",
+      "marker": "SwEditShell::SetTextFormatColl",
+      "sha256": "36ebd01cb4debf30d908e5e5058cc0e9b83813ed8f1fc01acc24796eb4abba2f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx",
+      "marker": "SwDoc::SetTextFormatColl",
+      "sha256": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unfmco.cxx",
+      "marker": "SwUndoFormatColl::DoSetFormatColl",
+      "sha256": "b74cf639a6b928c1e86528cf655c9c5256624554ef37713d231dd0dbaa89b684"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/editsh.hxx",
+      "marker": "SetTextFormatColl",
+      "sha256": "b928e3ad82ba7a7391afacbcc32ae3a44d3fbcd6039ec05d17b18eb075429f1f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/doc.hxx",
+      "marker": "SetTextFormatColl",
+      "sha256": "e1607dcbe67d2e53c8e2100b2a23c9cb2ea78fe24317c6c288112170d0b759d0"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "marker": "SwWrtShell::NoEdit",
+      "sha256": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+      "marker": "SwTextShell::Execute",
+      "sha256": "ff294d3cc9b7cdb11af4aca02c44987e7b506488a6bbaa84781c3227019a8f0d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/app/docst.cxx",
+      "marker": "SwDocShell::ApplyStyles",
+      "sha256": "587d8d8fe1ead83d0f63f0796164698ee9f8dc41e894e4a1cfa58144b9aadbc3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx",
+      "marker": "rReq.IsDone()",
+      "sha256": "ee9bab4418d2f8c4813486f6977c1678a18f6389d3016b9a873bd34fdcd044e1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+      "marker": "SvxStyleBox_Base::Select",
+      "sha256": "42aaeb42ad2b38421f8775af673f1cb7916f9d70dd5d56bedabf2ec116577c58"
+    }
+  ],
+  "nativeExecution": false,
+  "nativeCompilation": false,
+  "sourceCopies": false,
+  "comparison": "Readonly source comparison of inclusive start..end+1 text-node traversal, core editing ownership, one range collection undo owner, per-node original list history and redo lookup by captured display name. Actual native repeated-request history and direct attribute/full-node hint/list/modifier reset, selection rings/read-only/layout/redline/inline-heading and full native contracts remain unverified."
+}

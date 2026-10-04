@@ -1,0 +1,57 @@
+{
+  "base": "5c4b084b1ff9f527cd01caa0a1839c3bac3673f4",
+  "semanticPaths": 10,
+  "priorTestFiles": 314,
+  "byteIdenticalPriorTests": 313,
+  "boundedOldTestUpdates": 1,
+  "priorTestAssertionsUnchanged": true,
+  "productionTextShellOnlyStylePrimitiveRemoved": true,
+  "priorDocfmtAlgorithmsUnchanged": true,
+  "oldMappingRows": 226,
+  "descriptionAppends": 4,
+  "newUnverifiedOwnerRows": 1,
+  "runtimeModuleCount": 227,
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+      "sha256": "495abcec35107b9ae8528ab062db18711321976c2e96b6ccf5e9e0ccb780f989"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "sha256": "f3b88f1fa86f5c6a3f5a6071dc0bea265d31b08739bef945bbeb6db0fb3b22fb"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+      "sha256": "ec2a0fbbe5c47f30f9d7028717d9f70ff4872ace74d94ff61e7bbe315807d24a"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "sha256": "81808784ca65783741790d9f1d745abc4cb929f3c2783d2426e13a6dd91a476d"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+      "sha256": "aa6048669da29f07010f9783f51dbf51b4c0909bb7fd79b9e2bb0316b421f518"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+      "sha256": "460bebb6d39edefa836b277348e0155a1e0ca171625570b4b95c0ceeda8ee4d2"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+      "sha256": "f329d9f802597c7e2c1dd0fc3523117cfae1c256bcba8140ce4b0ecf1d3b561e"
+    },
+    {
+      "path": "apps/office/e2e/writer-style-selection.spec.ts",
+      "sha256": "0fbeab14c6bade73d0f234e5dd5e9511a98a0733b1d9787fb2b8898419baa3f2"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "71b2e3b10c3dfc05934f209bce49895e2811b629d87b48232eba4525eca2eb93"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "352ac0673d135379b35cf0b1c3501e4d412fd532812d114fe030896116ccac8a"
+    }
+  ],
+  "registeredDeviationFieldsUnchanged": true
+}
