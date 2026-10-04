@@ -1,0 +1,23 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+      "marker": "SvxStyleBox_Base::ReleaseFocus",
+      "sha256": "42aaeb42ad2b38421f8775af673f1cb7916f9d70dd5d56bedabf2ec116577c58"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/app/salvtables.cxx",
+      "marker": "changed_by_direct_pick",
+      "sha256": "7d622137ba0b72bd3bac044b194915236e60c4124d4ff779d4803312ad85bde9"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/unx/gtk3/gtkinst.cxx",
+      "marker": "signalKeyPress",
+      "sha256": "77cd858cbb02688c7a6ef5d68561900853567654d609a09baa7da57c425fd9e8"
+    }
+  ],
+  "comparison": "Bounded ordinary SvxStyleBox acceptance: resolve actual entry/name before focus-before-dispatch; Enter accepts, travel is tentative and bounded, Tab suppresses focus release while normal navigation continues, Escape restores saved binding and returns toolbar focus to client. Browser DOM selection projects canonical commands while preserving toolbar fields; another editing client defers restoration. Existing source command payload and save/open/recovery deviations unchanged. Editable/new styles, Clear/More, previews/contextmenus, full native popup/platform and wider parity remain unverified.",
+  "nativeExecution": false,
+  "sourceCopies": false
+}

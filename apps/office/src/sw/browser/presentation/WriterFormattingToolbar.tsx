@@ -21,6 +21,7 @@ import {
   useBrowserCommandPresentation,
 } from "../../../framework/browser/presentation/command-surface";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { StyleToolboxSelect } from "../../../svx/browser/tbxctrls/StyleToolboxSelect";
 import type { WriterParagraphStyleOption } from "./writer-view-projection";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -44,6 +45,8 @@ const icons = new Map<string, CommandIcon>([
 /** Inputs shared by the complete Writer text formatting toolbar. */
 export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
+  readonly focusDocument?: () => void;
+  readonly isInputEnabled?: boolean;
   readonly advancedControls?: React.ReactNode;
   readonly embeddedFontFamilies?: readonly string[];
   readonly fontAvailability?: Readonly<Record<string, boolean>>;
@@ -53,6 +56,8 @@ export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps
 export function WriterFormattingToolbar({
   commandSource,
   paragraphStyleOptions,
+  focusDocument,
+  isInputEnabled = true,
   resolveArguments,
   advancedControls,
   embeddedFontFamilies = [],
@@ -94,6 +99,8 @@ export function WriterFormattingToolbar({
               commandSource,
               getCommandResource,
               paragraphStyleOptions,
+              focusDocument,
+              isInputEnabled,
               resolveArguments,
               embeddedFontFamilies,
               fontAvailability,
@@ -136,7 +143,7 @@ function getWriterButtonContent(commandUrl: string): React.ReactNode {
   return undefined;
 }
 
-/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param paragraphStyleOptions - Binding-backed style selector options. @param resolveArguments - Browser argument adapter. @param embeddedFontFamilies - Package font families. @param fontAvailability - Browser load status. @returns Rendered special item. */
+/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param paragraphStyleOptions - Binding-backed style selector options. @param focusDocument - Owning document client port. @param isInputEnabled - Active frame eligibility. @param resolveArguments - Browser argument adapter. @param embeddedFontFamilies - Package font families. @param fontAvailability - Browser load status. @returns Rendered special item. */
 function renderSpecialToolbarItem(
   placement: Extract<
     WriterToolbarItemPlacement,
@@ -145,6 +152,8 @@ function renderSpecialToolbarItem(
   commandSource: BrowserCommandSurfaceProps["commandSource"],
   getCommandResource: (commandUrl: string) => WriterCommandResource,
   paragraphStyleOptions: readonly WriterParagraphStyleOption[],
+  focusDocument: (() => void) | undefined,
+  isInputEnabled: boolean,
   resolveArguments: BrowserCommandSurfaceProps["resolveArguments"],
   embeddedFontFamilies: readonly string[],
   fontAvailability: Readonly<Record<string, boolean>>,
@@ -180,6 +189,8 @@ function renderSpecialToolbarItem(
       getCommandResource={getCommandResource}
       key={item.label}
       paragraphStyleOptions={paragraphStyleOptions}
+      {...(focusDocument === undefined ? {} : { focusDocument })}
+      isInputEnabled={isInputEnabled}
     />
   );
 }
@@ -189,55 +200,44 @@ function ParagraphStyleSelect({
   commandSource,
   getCommandResource,
   paragraphStyleOptions,
+  focusDocument,
+  isInputEnabled,
 }: Readonly<{
   commandSource: BrowserCommandSurfaceProps["commandSource"];
   getCommandResource: (commandUrl: string) => WriterCommandResource;
   paragraphStyleOptions: readonly WriterParagraphStyleOption[];
+  focusDocument?: () => void;
+  isInputEnabled: boolean;
 }>): React.JSX.Element {
   const presentation = useBrowserCommandPresentation(
     commandSource,
     WRITER_COMMAND_IDS.styleApply,
     getCommandResource,
   );
-  const selected = String(presentation.selectedValue ?? "");
-  const label = getCommandResource(WRITER_COMMAND_IDS.styleApply).controlLabel;
   return (
-    <label className="contents">
-      <span className="sr-only">{label}</span>
-      <select
-        aria-label={label}
-        disabled={!presentation.enabled}
-        className="h-8 min-w-44 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
-        onChange={
-          /** Applies the actual native name. @param event - Select change. @returns Nothing. */
-          (event) => {
-            const style = paragraphStyleOptions.find(
-              /** Matches the rendered identity. @param candidate - Entry. @returns Match. */
-              (candidate) => candidate.id === event.target.value,
-            );
-            /* v8 ignore next -- Native select changes are constrained to rendered options. */
-            if (style !== undefined)
-              commandSource.Execute(WRITER_COMMAND_IDS.styleApply, {
-                Style: style.name,
-                FamilyName: "ParagraphStyles",
-              });
-          }
+    <StyleToolboxSelect
+      options={paragraphStyleOptions}
+      value={String(presentation.selectedValue ?? "")}
+      enabled={presentation.enabled && isInputEnabled}
+      label={getCommandResource(WRITER_COMMAND_IDS.styleApply).controlLabel}
+      {...(focusDocument === undefined ? {} : { focusDocument })}
+      getLabel={
+        /** Localizes unchanged pool entries while retaining actual native names. @param style - Detached entry. @returns Label. */ (
+          style,
+        ) =>
+          style.resourceId === undefined ? style.name : getCommandResource(style.resourceId).label
+      }
+      applyStyle={
+        /** Dispatches the accepted native name through the owning Sfx frame. @param style - Accepted entry. @returns Nothing. */ (
+          style,
+        ) => {
+          commandSource.Execute(WRITER_COMMAND_IDS.styleApply, {
+            Style: style.name,
+            FamilyName: "ParagraphStyles",
+          });
         }
-        value={selected}
-      >
-        {selected === "" && <option value="" />}
-        {paragraphStyleOptions.map(
-          /** Renders one flat native entry. @param style - Entry. @returns Option. */
-          (style) => (
-            <option key={style.id} value={style.id}>
-              {style.resourceId === undefined
-                ? style.name
-                : getCommandResource(style.resourceId).label}
-            </option>
-          ),
-        )}
-      </select>
-    </label>
+      }
+    />
   );
 }
 

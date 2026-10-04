@@ -128,7 +128,9 @@ export function restoreWriterDomSelection(
     cursor.point.offset - Number(pointParagraph.dataset.writerFragmentStart ?? 0),
   );
   if (cursor.mark === undefined || markParagraph === undefined) {
-    pointParagraph.focus();
+    const editingHost = pointParagraph.closest("[data-writer-editing-host]");
+    if (editingHost === null || editingHost !== pointParagraph.ownerDocument.activeElement)
+      pointParagraph.focus();
     const range = pointParagraph.ownerDocument.createRange();
     range.setStart(point.node, point.offset);
     range.collapse(true);

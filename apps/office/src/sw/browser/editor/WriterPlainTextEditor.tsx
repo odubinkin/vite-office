@@ -46,6 +46,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const rulerLane = useContext(WriterRulerLaneContext);
   const localRootElement = useRef<HTMLElement | null>(null);
   const rootElement = props.editingHostRef ?? localRootElement;
+  const selectionRestorePending = useRef(false);
   const measurementHost = useRef<HTMLDivElement | null>(null);
   const measurementRootRef = useRef<ShadowRoot | null>(null);
   const [measurementRoot, setMeasurementRoot] = useState<ShadowRoot | null>(null);
@@ -258,9 +259,23 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   useLayoutEffect(
     /** Restores the shell-owned selection after canonical paragraph projection. @returns Nothing. */
     function restoreCanonicalSelection(): void {
+      const root = rootElement.current as HTMLElement;
+      const focused = root.ownerDocument.activeElement;
+      const outside =
+        focused instanceof HTMLElement &&
+        focused !== root.ownerDocument.body &&
+        !root.contains(focused);
+      if (outside && focused.closest("[data-writer-editing-host]") !== null) {
+        selectionRestorePending.current = true;
+        return;
+      }
+      selectionRestorePending.current = false;
       /* c8 ignore next -- Chromium table editing verifies native focus retention. */
       if (rootElement.current?.querySelector("[data-writer-table-cell]:focus") !== null) return;
       controller.RestoreSelection(props.cursorSelection);
+      // Selection APIs may focus the contenteditable host. Keep toolbar navigation
+      // intact while still projecting commands such as Select All into the DOM.
+      if (outside) focused.focus();
     },
     [controller, measuredLines, props.cursorSelection, props.paragraphs, rootElement],
   );
@@ -406,7 +421,17 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         onDragOver={controller.HandleDragOver}
         onDragStart={controller.HandleDragStart}
         onDrop={controller.HandleDrop}
-        onFocus={controller.HandleFocus}
+        onFocus={
+          /** Restores the retained shell cursor when the owning client explicitly regains focus. @param event - Host or paragraph focus. @returns Nothing. */ (
+            event,
+          ) => {
+            controller.HandleFocus(event);
+            if (event.target === event.currentTarget && selectionRestorePending.current) {
+              selectionRestorePending.current = false;
+              controller.RestoreSelection(props.cursorSelection);
+            }
+          }
+        }
         onKeyDown={controller.HandleKeyDown}
         onMouseDown={controller.HandlePointerDown}
         onMouseMove={controller.HandlePointerMove}

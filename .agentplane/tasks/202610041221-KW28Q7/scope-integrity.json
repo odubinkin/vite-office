@@ -1,0 +1,64 @@
+{
+  "base": "11afcc06f26cc88e865cfe3dd391c6840e175d84",
+  "semanticPaths": [
+    "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+    "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+    "apps/office/src/sw/browser/editor/writer-selection.ts",
+    "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+    "apps/office/e2e/writer-style-focus.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+      "sha256": "807452c0910cf75cb4b64871caa4744dfc9f13b5cb97a261389552acb8190fb7"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+      "sha256": "3b3bfd9f00c5732a757b3ca2ec7f7e84d4dd98420e13fe779509295d930a27e3"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "fb9712ab8bf662044e03a6424e95e5980254d24602f5bcc767e43bc33569ae8c"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+      "sha256": "cb9c999b16fdf0dbadaca3e5ab3cf6a4af35ca820c547fbbb733266c31ba8d16"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+      "sha256": "39dee3c648750629c0491ba1a422d1a4da9c73212ffe07e8948658e6f496c1fd"
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+      "sha256": "682ac6b1522b190f114df151cd686479fad912add518ec5ee2e049fcca28626a"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+      "sha256": "d7505e8e13257ceb21df107452724cab665353560939b58632232daeab1be6bb"
+    },
+    {
+      "path": "apps/office/e2e/writer-style-focus.spec.ts",
+      "sha256": "07e3cfd8875df83e7b8974391a54faeda28d6bd76f069234abd2632977736f71"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "4248e5485ecb84a5974e77728750d5c2aa314f9ab5ef128a507c247f65611327"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "137f8173c42fb3c86b950ea15c2740edad22a83070b331a8f229adbd63e76f06"
+    }
+  ],
+  "priorTestFiles": 310,
+  "priorTestFilesByteIdentical": 310,
+  "oldRows": 224,
+  "mappingRows": 225,
+  "existingRowsAppended": 4,
+  "newRows": 1,
+  "statusDefaultExceptionFieldsUnchanged": true
+}

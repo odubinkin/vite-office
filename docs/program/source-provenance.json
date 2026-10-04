@@ -2507,6 +2507,53 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+            "marker": "StyleToolboxSelect"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+            "marker": "native style-box acceptance"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+            "marker": "Writer style-box focus"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-focus.spec.ts",
+            "marker": "Writer keyboard style choice focus"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+            "marker": "SvxStyleBox_Base::ReleaseFocus"
+          },
+          {
+            "path": "vendor/libreoffice-reference/vcl/source/app/salvtables.cxx",
+            "marker": "changed_by_direct_pick"
+          },
+          {
+            "path": "vendor/libreoffice-reference/vcl/unx/gtk3/gtkinst.cxx",
+            "marker": "signalKeyPress"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+      "rationale": "Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+      "responsibilities": [
+        "Tentative keyboard travel, native ordinary acceptance and owning client focus ports."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser primitives replace the native welded style box presentation; source-owned frame retains command dispatch and actual style ownership."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
             "marker": "populateStyleToolbox"
           },
@@ -2706,11 +2753,15 @@
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
             "marker": "routesWriterClient"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+            "marker": "Writer style-box focus"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
-      "rationale": "Binds exactly one stable BrowserWriterEditWindow to immutable React paragraph projections and one logical contenteditable host.",
+      "rationale": "Binds exactly one stable BrowserWriterEditWindow to immutable React paragraph projections and one logical contenteditable host. Iteration104 projects canonical DOM selection while preserving toolbar field focus, defers restoration while another editing client owns focus, and restores that deferred selection when this host regains focus. This prevents Tab style acceptance from stealing toolbar focus; source cursor and paragraph ownership stay unchanged. Owned real-frame and ODT keyboard focus/history cases cover the bounded correction. Full native/widget and wider parity remain unverified.",
       "responsibilities": [
         "Renders Writer paragraphs, supplies DOM line geometry and device revision to the view-owned core layout root, and forwards DOM events without constructing Writer mutation closures.",
         "Unopened activated menubar Escape defaults to its Writer frame client when no connected external owner is saved; a live saved owner takes precedence. The browser view supplies its own mounted editing-host reference, keeping DOM out of core and avoiding document-wide selectors. Owned per-frame/disconnected-owner cases and Chromium focus-plus-editing checks cover this branch only; no-owner popup cleanup, frame/global native flags and full menu parity remain unverified."
@@ -2854,11 +2905,15 @@
           {
             "marker": "getWriterDomSelection",
             "path": "apps/office/src/sw/browser/editor/writer-selection.ts"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+            "marker": "Writer style-box focus"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/writer-selection.ts",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Iteration104 preserves focus of the editing host itself when restoring a collapsed DOM selection; paragraph-focused editing still follows the target paragraph, including Enter into an adjacent node. This keeps explicit document-container focus contracts and canonical cursor offsets while toolbar Tab remains outside the client. Source cursor ownership remains unchanged; full native/widget and wider parity remain unverified.",
       "responsibilities": [
         "Converts browser DOM selections and collapsed carets to and from Writer model positions."
       ],
@@ -3243,11 +3298,27 @@
           {
             "path": "apps/office/e2e/writer-style-selector.spec.ts",
             "marker": "Writer live style selector width"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+            "marker": "StyleToolboxSelect"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+            "marker": "native style-box acceptance"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+            "marker": "Writer style-box focus"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-focus.spec.ts",
+            "marker": "Writer keyboard style choice focus"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged. Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
       "responsibilities": [
         "Renders the browser Writer paragraph-formatting toolbar."
       ],
@@ -4251,11 +4322,27 @@
           {
             "path": "apps/office/e2e/writer-sidebar-escape.spec.ts",
             "marker": "Paragraph panel Escape returns to title then document"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.tsx",
+            "marker": "StyleToolboxSelect"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/StyleToolboxSelect.test.tsx",
+            "marker": "native style-box acceptance"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+            "marker": "Writer style-box focus"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-focus.spec.ts",
+            "marker": "Writer keyboard style choice focus"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/writer-view.tsx",
-      "rationale": "Renders the persistent SwView as a browser React projection and submits primitive paragraph drafts and ruler gestures to Writer shell methods. No native LibreOffice source file is claimed as its owner.",
+      "rationale": "Renders the persistent SwView as a browser React projection and submits primitive paragraph drafts and ruler gestures to Writer shell methods. No native LibreOffice source file is claimed as its owner. Iteration104 adapts the bounded ordinary SvxStyleBox client acceptance contract: direct picks and Enter resolve actual entries then focus the owning active Writer document before existing StyleApply dispatch; closed Arrow/Page travel is tentative, Tab accepts without focus release, Escape cancels and releases focus, and blur or replaced bindings/options invalidate drafts. Actual frame cursor/mark, raw custom names, history/no-op, document replacement and modal/inactive eligibility are covered by independent owned widget/frame tests and desktop/mobile ODT scenarios. Editable/new style creation, Clear/More actions, previews/context menus, full popup/platform behavior and wider native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
       "responsibilities": [
         "Renders the Writer view as a browser-owned React projection of the upstream-shaped SwView shell.",
         "Unopened activated menubar Escape defaults to its Writer frame client when no connected external owner is saved; a live saved owner takes precedence. The browser view supplies its own mounted editing-host reference, keeping DOM out of core and avoiding document-wide selectors. Owned per-frame/disconnected-owner cases and Chromium focus-plus-editing checks cover this branch only; no-owner popup cleanup, frame/global native flags and full menu parity remain unverified.",

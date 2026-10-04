@@ -390,6 +390,11 @@ export function WriterWorkbench({
         documentTitle={snapshot.documentState.title}
         formattingToolbar={
           <WriterFormattingToolbar
+            isInputEnabled={isInputEnabled}
+            focusDocument={
+              /** Releases accepted style-box focus to this mounted Writer frame. @returns Nothing. */ () =>
+                (editingHostRef.current as HTMLElement).focus()
+            }
             embeddedFontFamilies={activeDocument
               .GetEmbeddedFonts()
               .map(
