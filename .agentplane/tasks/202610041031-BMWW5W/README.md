@@ -4,7 +4,7 @@ title: "Preserve document-owned named paragraph style hierarchy through ODT and 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -47,7 +47,7 @@ events:
     to: "DOING"
     note: "Start: Continue named style ownership across graph/import/export/copy and admit registered styles through existing shell and StyleApply history."
 doc_version: 3
-doc_updated_at: "2026-10-04T11:07:09.214Z"
+doc_updated_at: "2026-10-04T11:11:44.856Z"
 doc_updated_by: "CODER"
 description: "Iteration102 replaces flattening of imported named paragraph styles with document-owned SwTextFormatColl collections, retaining direct automatic deltas and exact parent/follow/item ownership through ODT, graph/history and destination copying. Native independent list-indent applicability must agree with real imported hierarchy; existing consumers and registered I/O/recovery deviations remain unchanged until the next consumer migration."
 sections:
@@ -80,7 +80,7 @@ sections:
     4. Read-only pinned source hashes and restored resources--check/source-tree/provenance/invariants/parity audits pass; exact14semantic paths and all305prior tests byte-identical, existing mapping statuses/defaults/exceptions unchanged with bounded evidence/new helper ownership. Whole ignored-inclusive AP forbidden0, routing/doctor and exact-SHA same-actor read-only EVALUATOR pass, final clean tracked leaf and parent progress.
   Verification: "Pending implementation; no baseline or pre-fix tests. Previous leaf101 is DONE with native independent core masks; initial consumer regressions from flattened custom styles justify this prerequisite correction."
   Rollback Plan: "Revert the scoped implementation commit if actual named/automatic ownership or transport contracts are disproved; no history rewrite/reset, coverage relaxation or registered deviation changes."
-  Findings: "Initial static gates found unused imports and an obsolete alignment converter after the approved common-style split, plus formatting in the new E2E. Dependencies, documentation and file-size gates passed. Correct only those diagnostics and rerun the four failed static gates; no app, inventory, scripts or Chromium test has run."
+  Findings: "Initial absent app gate:1325passed/5failed in229files; coverage below100%. Vendor restored in finally. Failures identify native list display-name lookup, invalid/cyclic parent detachment, composite paragraph-item inheritance, and direct empty numbering suppression. The old content-stream spacing assertion conflicts with named common ownership; review its stream boundary against native before adapting that single assertion. No present-directory tests or native execution. Remaining inventory/scripts/Chromium not started."
 id_source: "generated"
 ---
 ## Summary
@@ -129,4 +129,4 @@ Revert the scoped implementation commit if actual named/automatic ownership or t
 
 ## Findings
 
-Initial static gates found unused imports and an obsolete alignment converter after the approved common-style split, plus formatting in the new E2E. Dependencies, documentation and file-size gates passed. Correct only those diagnostics and rerun the four failed static gates; no app, inventory, scripts or Chromium test has run.
+Initial absent app gate:1325passed/5failed in229files; coverage below100%. Vendor restored in finally. Failures identify native list display-name lookup, invalid/cyclic parent detachment, composite paragraph-item inheritance, and direct empty numbering suppression. The old content-stream spacing assertion conflicts with named common ownership; review its stream boundary against native before adapting that single assertion. No present-directory tests or native execution. Remaining inventory/scripts/Chromium not started.
