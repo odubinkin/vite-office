@@ -4,7 +4,7 @@ title: "Restore native paired paragraph-style reset history and redo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T15:37:12.518Z"
+  updated_by: "CODER"
+  note: "Verified semantic c4a864bf826f4efd68822238af138b9ac6b62ad0 native ordered collection/reset history, distinct initial exact versus non-exact redo and original ordered Undo/expanded Redo selection. Absent app1482/inventory109/scripts5/Chromium99; coverage100 four metrics; seven static/four source-only gates,15paths/313unchanged prior tests/five bounded corrections/228zero violations. Exact semantic same-actor quality pass; initial failed app recovered only, production unchanged and no passing suite repeated. Vendor restored; AP forbidden source/Python0; registered deviations unchanged and parent active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -67,8 +67,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: recover failed absent app gate with bounded native redo endpoint expectations and valid independent hint fixture; amended15paths authorized by standing goal, production unchanged."
+  -
+    type: "verify"
+    at: "2026-10-04T15:37:12.518Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified semantic c4a864bf826f4efd68822238af138b9ac6b62ad0 native ordered collection/reset history, distinct initial exact versus non-exact redo and original ordered Undo/expanded Redo selection. Absent app1482/inventory109/scripts5/Chromium99; coverage100 four metrics; seven static/four source-only gates,15paths/313unchanged prior tests/five bounded corrections/228zero violations. Exact semantic same-actor quality pass; initial failed app recovered only, production unchanged and no passing suite repeated. Vendor restored; AP forbidden source/Python0; registered deviations unchanged and parent active."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:35:23.461Z"
+doc_updated_at: "2026-10-04T15:37:12.578Z"
 doc_updated_by: "CODER"
 description: "Iteration108: replace fused paragraph-style/reset history with native ordered SwUndoFormatColl plus SwUndoResetAttr in one Sfx list action. Separate initial exact full-node cleanup from default non-exact reset redo, including partial AUTOFMT/internet removal and expanded redo selection; native sorted style undo. Current registered single-PaM profile only. Preserve registered save/open/recovery deviations and all inventory status/default/exception fields. Strict15semanticpaths/five bounded prior test files;318prior files/313unchanged. All product tests once without upstream, failed-gate recovery only; no native execution/compilation/copies/AP helpers. Parent remains active."
 sections:
@@ -101,7 +107,41 @@ sections:
     1. Ordinary initial application changes all inclusive selected text nodes, preserves partial AUTOFMT/internet and removes only exact whole AUTOFMT; creates one SfxListUndoAction with native ordered SwUndoFormatColl and SwUndoResetAttr, independent item/hint ownership. Standalone collection redo leaves hints untouched; missing captured-name no-op does not suppress separate reset redo.
     2. Undo reverses native pair and restores exact original items/hints/list suppression and ordered original selection or collapsed caret; redo forwards pair and runs non-exact RstTextAttrs across expanded full-node range, clearing supported partial/whole autoformat and internet hints, setting point at end/mark at start and retaining unselected neighbors. Repeat, empty/end-zero, forward/reverse, actual owned node guards, list/payload and three-cycle history. Actual browser desktop/mobile UI, selection, focus, continued typing, native style status and real ODT export assertions.
     3. Format/lint/type/dependency/JSDoc/file-size/routing/doctor, absent static build once, app --coverage.reportOnFailure/inventory/scripts/fullChromium once without pinned upstream (failed-gate recovery only); app/inventory100 all four metrics. Finallyrestore; four source-only checks/parity228zero; strict15semanticpaths/fivebounded prior updates/318prior313unchanged/228oldrows six bounded description/evidence appends only; native hashes and ignored-inclusive APforbidden0. Exact evaluated_sha quality pass, committed verify and clean closure.
-  Verification: "Pending approved implementation and one upstream-absent verification sequence. No product tests run yet."
+  Verification: |-
+    Pending approved implementation and one upstream-absent verification sequence. No product tests run yet.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T15:37:12.518Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified semantic c4a864bf826f4efd68822238af138b9ac6b62ad0 native ordered collection/reset history, distinct initial exact versus non-exact redo and original ordered Undo/expanded Redo selection. Absent app1482/inventory109/scripts5/Chromium99; coverage100 four metrics; seven static/four source-only gates,15paths/313unchanged prior tests/five bounded corrections/228zero violations. Exact semantic same-actor quality pass; initial failed app recovered only, production unchanged and no passing suite repeated. Vendor restored; AP forbidden source/Python0; registered deviations unchanged and parent active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T15:35:23.461Z, excerpt_hash=sha256:09d5bd2f7450b7e877d70e070a982874698b5f0011303c30f8c20d8fc38c8854
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041514-RRM1E4/blueprint/resolved-snapshot.json
+    - old_digest: ff9ed185103f845a12f1437f32ccef5a84605c30bc224d9c485c2bb7e62914d2
+    - current_digest: ff9ed185103f845a12f1437f32ccef5a84605c30bc224d9c485c2bb7e62914d2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610041514-RRM1E4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610041514-RRM1E4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task semantic commit through a new executable task if a demonstrated regression requires rollback. Preserve source pin, registered deviations, current histories and immutable prior task records; no history rewrite."
   Findings: |-
     Readonly source comparison: edfcol native StartUndo groups SwDoc::SetTextFormatColl followed by RstTextAttrs(...exact=true) on full-node range. docfmt appends distinct SwUndoFormatColl and SwUndoResetAttr. unfmco DoSetFormatColl redoes only native collection/reset flags; unattr RES_CHRFMT redo calls RstTextAttrs(rPam) with doc.hxx default bExactRange=false. txtedt default nWhich0/pSet-null processing removes supported ranged AUTOFMT and internet hints over full paragraph, unlike initial exact cleanup. SwUndRng stores sorted endpoints and restores point=end/mark=start on a noncollapsed range. Current local fused action incorrectly reuses initial exact cleanup and original directed cursor on redo. This task resolves this existing behavior and architecture before a later separate modifier path; actual native toolbar does not supply KeyModifier, so no invented Ctrl toolbar operation.
@@ -160,6 +200,39 @@ Plus canonical task metadata and bounded parent progress. No network/global/outs
 ## Verification
 
 Pending approved implementation and one upstream-absent verification sequence. No product tests run yet.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T15:37:12.518Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified semantic c4a864bf826f4efd68822238af138b9ac6b62ad0 native ordered collection/reset history, distinct initial exact versus non-exact redo and original ordered Undo/expanded Redo selection. Absent app1482/inventory109/scripts5/Chromium99; coverage100 four metrics; seven static/four source-only gates,15paths/313unchanged prior tests/five bounded corrections/228zero violations. Exact semantic same-actor quality pass; initial failed app recovered only, production unchanged and no passing suite repeated. Vendor restored; AP forbidden source/Python0; registered deviations unchanged and parent active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T15:35:23.461Z, excerpt_hash=sha256:09d5bd2f7450b7e877d70e070a982874698b5f0011303c30f8c20d8fc38c8854
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041514-RRM1E4/blueprint/resolved-snapshot.json
+- old_digest: ff9ed185103f845a12f1437f32ccef5a84605c30bc224d9c485c2bb7e62914d2
+- current_digest: ff9ed185103f845a12f1437f32ccef5a84605c30bc224d9c485c2bb7e62914d2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610041514-RRM1E4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610041514-RRM1E4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
