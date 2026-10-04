@@ -4,7 +4,7 @@ title: "Restore native text hint secondary maps"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T20:38:51.951Z"
+  updated_by: "CODER"
+  note: "Iteration120 approved scope passes: exact semantic SHA 40ecc6405df2bc24068380e618d8ac4533ff52e7 quality pass;75 new literal cases,prior339 tests unchanged. One absent build/app2199/inventory109/scripts5/Chromium99,all coverage100%,source audits semantic0,AP sourcefree/vendor restored. No broad parity promotion."
   attempts: 0
 quality_review:
   state: "pass"
@@ -59,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: execute approved iteration120 secondary hint maps and indexed existing-family reads under the standing goal authorization; no upstream-dependent tests or AP helpers."
+  -
+    type: "verify"
+    at: "2026-10-04T20:38:51.951Z"
+    author: "CODER"
+    state: "ok"
+    note: "Iteration120 approved scope passes: exact semantic SHA 40ecc6405df2bc24068380e618d8ac4533ff52e7 quality pass;75 new literal cases,prior339 tests unchanged. One absent build/app2199/inventory109/scripts5/Chromium99,all coverage100%,source audits semantic0,AP sourcefree/vendor restored. No broad parity promotion."
 doc_version: 3
-doc_updated_at: "2026-10-04T20:38:26.233Z"
+doc_updated_at: "2026-10-04T20:38:52.007Z"
 doc_updated_by: "CODER"
 description: "Iteration120 restores the missing end and Which/start maps on the existing SwpHints container, using the same actual owned attributes and native notification/sort/binary lookup contracts for supported automatic and internet ranges. Replace current whole-primary-map family scans with the existing-family indexed lookup; preserve public projection values,prior tests and registered I/O/recovery deviations. One upstream-absent product profile only."
 sections:
@@ -80,9 +86,48 @@ sections:
     4. After restoration npm exec -- tsx scripts/generate-writer-ui-resources.ts --check;npm run check:source-tree;npm run check:source-provenance;npm run inventory:invariants;npm run inventory:parity. All pass,semantic violations0.
     5. Audit five semantic paths,all339previous tests byte-identical,234runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,provenance only one bounded appendix,native hashes,ignored-inclusive AP source/helper-free. Run ap doctor,node .agentplane/policy/check-routing.mjs; no new errors.
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass; CODER verify/finish separate commit hashes; clean main/vendor restored;parent/goal active. No broad native/core/UI promotion.
-  Verification: "Verified declared iteration120 scope. Six static gates first pass;one absent build/app2199/258/inventory109/36/scripts5/2/Chromium99 pass,all four app/inventory coverage metrics100%. Vendor restored in finally before five source audits semantic0. No passing test/build reruns.339 prior tests byte-identical,five semantic paths,234 runtime fields/statuses/defaults/exceptions unchanged except one justification/provenance appendix,six native hashes. AP ignored-inclusive scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Metadata authoring repair and later two comment-only edits passed focused format/JSDoc; runtime code unchanged after profile. Same-actor read-only exact semantic SHA 40ecc6405df2bc24068380e618d8ac4533ff52e7 quality pass;no independent-agent claim or broad parity promotion. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json;quality/20261004-203756379-recovery-context/quality-report.json. Documented native ABI/pointer/debug assertions/full Insert/Delete/history/refcount/listener/hierarchy and broader core/UI gaps remain unverified."
+  Verification: |-
+    Verified declared iteration120 scope. Six static gates first pass;one absent build/app2199/258/inventory109/36/scripts5/2/Chromium99 pass,all four app/inventory coverage metrics100%. Vendor restored in finally before five source audits semantic0. No passing test/build reruns.339 prior tests byte-identical,five semantic paths,234 runtime fields/statuses/defaults/exceptions unchanged except one justification/provenance appendix,six native hashes. AP ignored-inclusive scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Metadata authoring repair and later two comment-only edits passed focused format/JSDoc; runtime code unchanged after profile. Same-actor read-only exact semantic SHA 40ecc6405df2bc24068380e618d8ac4533ff52e7 quality pass;no independent-agent claim or broad parity promotion. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json;quality/20261004-203756379-recovery-context/quality-report.json. Documented native ABI/pointer/debug assertions/full Insert/Delete/history/refcount/listener/hierarchy and broader core/UI gaps remain unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T20:38:51.951Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Iteration120 approved scope passes: exact semantic SHA 40ecc6405df2bc24068380e618d8ac4533ff52e7 quality pass;75 new literal cases,prior339 tests unchanged. One absent build/app2199/inventory109/scripts5/Chromium99,all coverage100%,source audits semantic0,AP sourcefree/vendor restored. No broad parity promotion.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T20:38:26.233Z, excerpt_hash=sha256:4fa311121ec215fa2abbad1ade7a83030a2d6bd96a8f17c677cb464be27416cd
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042020-VSS64R/blueprint/resolved-snapshot.json
+    - old_digest: e5157c35ba225c2413521a565a9eb0c34710b641e8f6c68084f284ca41893a37
+    - current_digest: e5157c35ba225c2413521a565a9eb0c34710b641e8f6c68084f284ca41893a37
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042020-VSS64R
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610042020-VSS64R
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the semantic commit for this leaf through a new scoped task; preserve task history and other changes. Never rewrite Git history."
-  Findings: "Iteration120 restores native secondary maps for existing ranged hints. Same actual objects populate start/end/Which maps with synchronized owner release/adoption. End sorting/end queries and Which/start sorting/lower-family queries use native comparator priorities and independent clean/full/partial dirty intervals; current projection/caret/segment family reads use the Which map.75 literal cases pass. Exactly five semantic paths;all339 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one bounded justification appendix,one provenance appendix,six native hashes. Six static gates first pass;ndhints960 physical lines. One upstream-absent build/app2199/258,inventory109/36,scripts5/2,Chromium99 passed;both coverage summaries100%all four metrics. Vendor restored before five source audits allpass,semantic0. No test/build repeats. Two comment-only clarifications after tests passed focused format/JSDoc. Initial provenance metadata lookup used path rather than localPath and exited without modifying provenance; only missing appendix repaired with focused JSON format check,inventory not duplicated. Ignored-inclusive AP3781 files forbidden0;doctor0 errors/two unchanged warnings,routingpass. Exact-SHA same-actor read-only quality pass at 40ecc6405df2bc24068380e618d8ac4533ff52e7;quality/20261004-203756379-recovery-context/quality-report.json. No independent-agent review or broad parity promotion. Portable numeric failure sentinel is not C++ABI parity;pointer/debug iteration assertions/full Insert/Delete/nesting/history/refcounts/destruction/listeners/hierarchy/friend visibility,empty hints/destination adjustment/same-node split-join and broad core/UI parity remain unverified. Registered I/O/recovery deviations untouched."
+  Findings: |-
+    Iteration120 restores native secondary maps for existing ranged hints. Same actual objects populate start/end/Which maps with synchronized owner release/adoption. End sorting/end queries and Which/start sorting/lower-family queries use native comparator priorities and independent clean/full/partial dirty intervals; current projection/caret/segment family reads use the Which map.75 literal cases pass. Exactly five semantic paths;all339 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one bounded justification appendix,one provenance appendix,six native hashes. Six static gates first pass;ndhints960 physical lines. One upstream-absent build/app2199/258,inventory109/36,scripts5/2,Chromium99 passed;both coverage summaries100%all four metrics. Vendor restored before five source audits allpass,semantic0. No test/build repeats. Two comment-only clarifications after tests passed focused format/JSDoc. Initial provenance metadata lookup used path rather than localPath and exited without modifying provenance; only missing appendix repaired with focused JSON format check,inventory not duplicated. Ignored-inclusive AP3781 files forbidden0;doctor0 errors/two unchanged warnings,routingpass. Exact-SHA same-actor read-only quality pass at 40ecc6405df2bc24068380e618d8ac4533ff52e7;quality/20261004-203756379-recovery-context/quality-report.json. No independent-agent review or broad parity promotion. Portable numeric failure sentinel is not C++ABI parity;pointer/debug iteration assertions/full Insert/Delete/nesting/history/refcounts/destruction/listeners/hierarchy/friend visibility,empty hints/destination adjustment/same-node split-join and broad core/UI parity remain unverified. Registered I/O/recovery deviations untouched.
+
+    - Observation: Supported SwpHints lacked native end and Which/start maps and ignored their owner dirty intervals.
+      Impact: Existing family reads scanned primary map instead of using the native index; secondary native lookup/sort contracts were missing.
+      Resolution: Three shared actual-object maps and independent native lazy sorting/binary queries restored; existing family reads indexed;75 cases prove orders,owned transfer/snapshots/undo and boundaries. All gates pass.
 id_source: "generated"
 ---
 ## Summary
@@ -115,6 +160,39 @@ Restore native m_HintsByEnd and m_HintsByWhichAndStart actual-object maps alongs
 
 Verified declared iteration120 scope. Six static gates first pass;one absent build/app2199/258/inventory109/36/scripts5/2/Chromium99 pass,all four app/inventory coverage metrics100%. Vendor restored in finally before five source audits semantic0. No passing test/build reruns.339 prior tests byte-identical,five semantic paths,234 runtime fields/statuses/defaults/exceptions unchanged except one justification/provenance appendix,six native hashes. AP ignored-inclusive scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Metadata authoring repair and later two comment-only edits passed focused format/JSDoc; runtime code unchanged after profile. Same-actor read-only exact semantic SHA 40ecc6405df2bc24068380e618d8ac4533ff52e7 quality pass;no independent-agent claim or broad parity promotion. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json;quality/20261004-203756379-recovery-context/quality-report.json. Documented native ABI/pointer/debug assertions/full Insert/Delete/history/refcount/listener/hierarchy and broader core/UI gaps remain unverified.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T20:38:51.951Z — VERIFY — ok
+
+By: CODER
+
+Note: Iteration120 approved scope passes: exact semantic SHA 40ecc6405df2bc24068380e618d8ac4533ff52e7 quality pass;75 new literal cases,prior339 tests unchanged. One absent build/app2199/inventory109/scripts5/Chromium99,all coverage100%,source audits semantic0,AP sourcefree/vendor restored. No broad parity promotion.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T20:38:26.233Z, excerpt_hash=sha256:4fa311121ec215fa2abbad1ade7a83030a2d6bd96a8f17c677cb464be27416cd
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042020-VSS64R/blueprint/resolved-snapshot.json
+- old_digest: e5157c35ba225c2413521a565a9eb0c34710b641e8f6c68084f284ca41893a37
+- current_digest: e5157c35ba225c2413521a565a9eb0c34710b641e8f6c68084f284ca41893a37
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042020-VSS64R
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610042020-VSS64R
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the semantic commit for this leaf through a new scoped task; preserve task history and other changes. Never rewrite Git history.
@@ -122,3 +200,7 @@ Revert only the semantic commit for this leaf through a new scoped task; preserv
 ## Findings
 
 Iteration120 restores native secondary maps for existing ranged hints. Same actual objects populate start/end/Which maps with synchronized owner release/adoption. End sorting/end queries and Which/start sorting/lower-family queries use native comparator priorities and independent clean/full/partial dirty intervals; current projection/caret/segment family reads use the Which map.75 literal cases pass. Exactly five semantic paths;all339 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one bounded justification appendix,one provenance appendix,six native hashes. Six static gates first pass;ndhints960 physical lines. One upstream-absent build/app2199/258,inventory109/36,scripts5/2,Chromium99 passed;both coverage summaries100%all four metrics. Vendor restored before five source audits allpass,semantic0. No test/build repeats. Two comment-only clarifications after tests passed focused format/JSDoc. Initial provenance metadata lookup used path rather than localPath and exited without modifying provenance; only missing appendix repaired with focused JSON format check,inventory not duplicated. Ignored-inclusive AP3781 files forbidden0;doctor0 errors/two unchanged warnings,routingpass. Exact-SHA same-actor read-only quality pass at 40ecc6405df2bc24068380e618d8ac4533ff52e7;quality/20261004-203756379-recovery-context/quality-report.json. No independent-agent review or broad parity promotion. Portable numeric failure sentinel is not C++ABI parity;pointer/debug iteration assertions/full Insert/Delete/nesting/history/refcounts/destruction/listeners/hierarchy/friend visibility,empty hints/destination adjustment/same-node split-join and broad core/UI parity remain unverified. Registered I/O/recovery deviations untouched.
+
+- Observation: Supported SwpHints lacked native end and Which/start maps and ignored their owner dirty intervals.
+  Impact: Existing family reads scanned primary map instead of using the native index; secondary native lookup/sort contracts were missing.
+  Resolution: Three shared actual-object maps and independent native lazy sorting/binary queries restored; existing family reads indexed;75 cases prove orders,owned transfer/snapshots/undo and boundaries. All gates pass.
