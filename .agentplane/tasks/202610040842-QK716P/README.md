@@ -4,7 +4,7 @@ title: "Resolve automatic first-line layout separately from authored ruler value
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,35 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T09:14:13.209Z"
+  updated_at: "2026-10-04T09:16:43.324Z"
   updated_by: "CODER"
-  note: "Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending."
+  note: "Final exact-SHA5da774b16e4199bfdd76738136d9e4747aaa5a74 same-actor EVALUATOR PASS. Rechecked source/scope/AP hashes without tests. One app1241/100%, corrected failed inventory109/100%, scripts5,81distinct browser passes and4accepted screenshots absent; controlled compatibility graph boundary explicit, ODT flag transport unverified. Parent remains DOING/goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T09:15:48.904Z"
+  updated_by: "EVALUATOR"
+  note: "Same actor, separate read-only quality phase reviewed exact semantic SHA5da774b16e4199bfdd76738136d9e4747aaa5a74. Approved automatic layout boundary meets native-literal core and actual browser contracts; no full layout/parent or ODT flag persistence claim."
+  evaluated_sha: "5da774b16e4199bfdd76738136d9e4747aaa5a74"
+  blueprint_digest: "42c1e94b903880cb028f34250380860f9d9d541b70698b9eb23415f1e06d2c26"
+  evidence_refs:
+    - ".agentplane/tasks/202610040842-QK716P/README.md"
+    - ".agentplane/tasks/202610040842-QK716P/quality/20261004-091548904-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040842-QK716P/quality/20261004-091548904-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040842-QK716P/quality/20261004-091548904-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040842-QK716P/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040842-QK716P/scope-integrity.json"
+    - ".agentplane/tasks/202610040842-QK716P/source-comparison.json"
+    - ".agentplane/tasks/202610040842-QK716P/final-integrity.json"
+    - ".agentplane/tasks/202610040842-QK716P/screenshots.json"
+    - ".agentplane/tasks/202610040842-QK716P/vendor-absent-runtime-initial.json"
+    - ".agentplane/tasks/202610040842-QK716P/vendor-absent-browser-initial.json"
+    - ".agentplane/tasks/202610040842-QK716P/vendor-absent-browser-transport-initial.json"
+    - ".agentplane/tasks/202610040842-QK716P/vendor-absent-browser.json"
+  findings:
+    - "Source-owned itrcrsr resolver reuses canonical items and existing default-true setting, supports native proportional/fixed/minimum/leading compatibility rules and numbered bypass. Raw ruler/dialog primitive remains unchanged; separate frozen resolved value governs shared measured/visible text and follows use zero indent. All1241 application cases pass once, four metrics100%; four production hashes match pre-run checkpoint."
+    - "Inventory ordering corrected after one failed gate, final109/100%; owned scripts5once. Browser81distinct pass:77prior,2real ODT defaults,2explicit existing decoded Worker graph-setting fixtures before canonical restore. No passing suites or default pair repeated, no false-setting ODT transport certification. Four accepted screenshots inspected, two occluded mobile crops replaced only by capture retry outside AP."
+    - "Exact scope8, all300 old tests byte-identical,221rows retain220existing rows with3evidence-only updates and1ordered unverified mechanism row; five pinned hashes unchanged. Source audits/semantic violations0/AP forbidden0/routing/doctor pass; vendor restored."
 commit: null
 comments:
   -
@@ -51,8 +76,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending."
+  -
+    type: "verify"
+    at: "2026-10-04T09:16:43.324Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final exact-SHA5da774b16e4199bfdd76738136d9e4747aaa5a74 same-actor EVALUATOR PASS. Rechecked source/scope/AP hashes without tests. One app1241/100%, corrected failed inventory109/100%, scripts5,81distinct browser passes and4accepted screenshots absent; controlled compatibility graph boundary explicit, ODT flag transport unverified. Parent remains DOING/goal active."
 doc_version: 3
-doc_updated_at: "2026-10-04T09:14:13.264Z"
+doc_updated_at: "2026-10-04T09:16:43.375Z"
 doc_updated_by: "CODER"
 description: "Iteration99 of the standing iterative upstream goal: source-owned automatic first-line layout calculation for existing Western/font/line-spacing/list paths, distinct immutable resolved layout projection and real body rendering, preserving raw ruler/dialog/Undo contracts and registered I/O/recovery deviations."
 sections:
@@ -74,17 +105,17 @@ sections:
     Read ap task verify-show and bounded pinned hashes/markers. No baseline/focused pre-fix test runs, native execution or source/helper artifacts. Static format:check/lint/typecheck/check:dependencies/test:static(build only)/check:docs/check:file-size. Rename vendor/libreoffice-reference inside vendor, run npm run test once, npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts once, and npm run test:e2e once; restore finally. Never run tests with upstream present or repeat passing suites; repeat only failed corrected gates/cases absent. Require100%four app/inventory coverage metrics. Owned evidence uses independent literal expected twips/font/spacing, complete raw-auto QueryValue and direct/inherited state, frozen retained DTO, actual visible/measurement CSS and follow frames, native numbered bypass, detached raw DTO fallback, default ignores spacing and compatibility applies it, actual font/dialog history. Chromium1280/390 product-authored automatic ODT checks glyph Range offset vs paragraph origin/first-line indent CSS, independent untouched paragraph, preserved authored raw dialog/ruler state, formatting/Undo/Redo and later text input; inspect actual screenshots outside Agentplane. After restoration run resource generator--check/source-tree/provenance/invariants/parity CLI with zero semantic violations; scope8paths/all300 prior tests identical/220existing rows preserved3append-only updates+1explicit new unverified row. Pinned source hashes stable; ignored-inclusive AP scan zero forbidden source/helper/Python/native executable/archive/source-frame/code-diff with only5historical prose refs. Routing/doctor required; exact-SHA same-actor EVALUATOR pass, clean finish, parent DOING/goal active.
     Distinct browser proof: default=true pair uses real product ODT and passed unchanged; default=false pair injects only the supported false boolean into the existing decoded Worker graph input before canonical restore, asserts admission and tests real model/CSS/Range/dialog/history/editing. No false-setting ODT persistence claim. Only those two failed cases repeat next; preserve77 prior and2 default pass evidence. Existing failures and vendor restores remain recorded. This refines the fixture boundary, not the required native calculation or browser behavior.
   Verification: |-
-    Iteration99 verified at the approved automatic-layout boundary. Seven split static gates pass; final lint/type/docs/format include the explicit browser fixture, and the only later edit changes screenshot capture plus JSDoc. The sole full application invocation passed1241cases/226files with100% statements/functions/branches/lines; four production file hashes remain identical to the pre-run scope checkpoint063106db5545. No passing application suite repeated. Initial inventory gate failed one CLI case because the new row was unordered (108passed); only that failed gate repeated after insertion,109cases/36files and four metrics100%. Owned scripts5/2files ran once. Initial rebuilt Chromium:77prior cases passed and4new fixture export failures; correct equal script font sizes and repeat only4new cases. Two default-mode ODT cases passed; two false-setting cases exposed missing current ODT compatibility transport. Approved explicit fixture admits only that supported boolean through the existing decoded Worker graph before canonical restore; only those2cases then passed, including actual CSS/first-glyph Range offsets, raw ruler/dialog values, history/untouched paragraph/later editing. Thus81distinct browser cases passed; no passing prior/default cases repeated, no clean full npm test or full Chromium exit0 claim. Existing ODT flag persistence remains unverified, product I/O unchanged. All tests and mobile capture ran absent; vendor restored in finally. Four actual desktop/mobile captures accepted after replacing2header-occluded mobile crops; screenshot-only capture retry corrected inline async/preview invocation without repeating tests or storing helpers. Post-restoration resource/tree/provenance/invariants and parity CLI pass with0semantic violations. Scope8paths/all300 prior tests byte-identical; both220existing rows retain all statuses/defaults/owners/exceptions/order,3append-only evidence updates plus1ordered explicit unverified mechanism row (221total). Five pinned source hashes unchanged; ignored-inclusive Agentplane forbidden artifacts0, only5historical prose diff refs. Routing OK; doctor0errors2knownwarnings2info. Exact-SHA same-actor evaluator and clean finish follow; full parent/goal stays active.
+    Iteration99 verified at the approved automatic-layout boundary. Seven split static gates pass; final lint/type/docs/format include the explicit browser fixture, and the only later edit changes screenshot capture plus JSDoc. The sole full application invocation passed1241cases/226files with100% statements/functions/branches/lines; four production file hashes remain identical to the pre-run scope checkpoint063106db5545. No passing application suite repeated. Initial inventory gate failed one CLI case because the new row was unordered (108passed); only that failed gate repeated after insertion,109cases/36files and four metrics100%. Owned scripts5/2files ran once. Initial rebuilt Chromium:77prior cases passed and4new fixture export failures; correct equal script font sizes and repeat only4new cases. Two default-mode ODT cases passed; two false-setting cases exposed missing current ODT compatibility transport. Approved explicit fixture admits only that supported boolean through the existing decoded Worker graph before canonical restore; only those2cases then passed, including actual CSS/first-glyph Range offsets, raw ruler/dialog values, history/untouched paragraph/later editing. Thus81distinct browser cases passed; no passing prior/default cases repeated, no clean full npm test or full Chromium exit0 claim. Existing ODT flag persistence remains unverified, product I/O unchanged. All tests and mobile capture ran absent; vendor restored in finally. Four actual desktop/mobile captures accepted after replacing2header-occluded mobile crops; screenshot-only capture retry corrected inline async/preview invocation without repeating tests or storing helpers. Post-restoration resource/tree/provenance/invariants and parity CLI pass with0semantic violations. Scope8paths/all300 prior tests byte-identical; both220existing rows retain all statuses/defaults/owners/exceptions/order,3append-only evidence updates plus1ordered explicit unverified mechanism row (221total). Five pinned source hashes unchanged; ignored-inclusive Agentplane forbidden artifacts0, only5historical prose diff refs. Routing OK; doctor0errors2knownwarnings2info. Exact-SHA same-actor EVALUATOR pass for 5da774b16e4199bfdd76738136d9e4747aaa5a74 recorded in .agentplane/tasks/202610040842-QK716P/quality/20261004-091548904-recovery-context/quality-report.json. No independent reviewer claimed. Source/scope hashes unchanged after quality; clean finish follows. Full parent/goal stays active.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-04T09:14:13.209Z — VERIFY — ok
+    ### 2026-10-04T09:16:43.324Z — VERIFY — ok
 
     By: CODER
 
-    Note: Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending.
+    Note: Final exact-SHA5da774b16e4199bfdd76738136d9e4747aaa5a74 same-actor EVALUATOR PASS. Rechecked source/scope/AP hashes without tests. One app1241/100%, corrected failed inventory109/100%, scripts5,81distinct browser passes and4accepted screenshots absent; controlled compatibility graph boundary explicit, ODT flag transport unverified. Parent remains DOING/goal active.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:14:11.103Z, excerpt_hash=sha256:5958e3ddec2f2d32d74fab3401798206dda2c80375b66d8ae440944342945802
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:16:41.254Z, excerpt_hash=sha256:5958e3ddec2f2d32d74fab3401798206dda2c80375b66d8ae440944342945802
 
     Details:
 
@@ -99,7 +130,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610040842-QK716P -m 🧩 QK716P task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610040842-QK716P --result verified-202610040842-QK716P --commit 5da774b16e4199bfdd76738136d9e4747aaa5a74
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -145,17 +176,17 @@ Distinct browser proof: default=true pair uses real product ODT and passed uncha
 
 ## Verification
 
-Iteration99 verified at the approved automatic-layout boundary. Seven split static gates pass; final lint/type/docs/format include the explicit browser fixture, and the only later edit changes screenshot capture plus JSDoc. The sole full application invocation passed1241cases/226files with100% statements/functions/branches/lines; four production file hashes remain identical to the pre-run scope checkpoint063106db5545. No passing application suite repeated. Initial inventory gate failed one CLI case because the new row was unordered (108passed); only that failed gate repeated after insertion,109cases/36files and four metrics100%. Owned scripts5/2files ran once. Initial rebuilt Chromium:77prior cases passed and4new fixture export failures; correct equal script font sizes and repeat only4new cases. Two default-mode ODT cases passed; two false-setting cases exposed missing current ODT compatibility transport. Approved explicit fixture admits only that supported boolean through the existing decoded Worker graph before canonical restore; only those2cases then passed, including actual CSS/first-glyph Range offsets, raw ruler/dialog values, history/untouched paragraph/later editing. Thus81distinct browser cases passed; no passing prior/default cases repeated, no clean full npm test or full Chromium exit0 claim. Existing ODT flag persistence remains unverified, product I/O unchanged. All tests and mobile capture ran absent; vendor restored in finally. Four actual desktop/mobile captures accepted after replacing2header-occluded mobile crops; screenshot-only capture retry corrected inline async/preview invocation without repeating tests or storing helpers. Post-restoration resource/tree/provenance/invariants and parity CLI pass with0semantic violations. Scope8paths/all300 prior tests byte-identical; both220existing rows retain all statuses/defaults/owners/exceptions/order,3append-only evidence updates plus1ordered explicit unverified mechanism row (221total). Five pinned source hashes unchanged; ignored-inclusive Agentplane forbidden artifacts0, only5historical prose diff refs. Routing OK; doctor0errors2knownwarnings2info. Exact-SHA same-actor evaluator and clean finish follow; full parent/goal stays active.
+Iteration99 verified at the approved automatic-layout boundary. Seven split static gates pass; final lint/type/docs/format include the explicit browser fixture, and the only later edit changes screenshot capture plus JSDoc. The sole full application invocation passed1241cases/226files with100% statements/functions/branches/lines; four production file hashes remain identical to the pre-run scope checkpoint063106db5545. No passing application suite repeated. Initial inventory gate failed one CLI case because the new row was unordered (108passed); only that failed gate repeated after insertion,109cases/36files and four metrics100%. Owned scripts5/2files ran once. Initial rebuilt Chromium:77prior cases passed and4new fixture export failures; correct equal script font sizes and repeat only4new cases. Two default-mode ODT cases passed; two false-setting cases exposed missing current ODT compatibility transport. Approved explicit fixture admits only that supported boolean through the existing decoded Worker graph before canonical restore; only those2cases then passed, including actual CSS/first-glyph Range offsets, raw ruler/dialog values, history/untouched paragraph/later editing. Thus81distinct browser cases passed; no passing prior/default cases repeated, no clean full npm test or full Chromium exit0 claim. Existing ODT flag persistence remains unverified, product I/O unchanged. All tests and mobile capture ran absent; vendor restored in finally. Four actual desktop/mobile captures accepted after replacing2header-occluded mobile crops; screenshot-only capture retry corrected inline async/preview invocation without repeating tests or storing helpers. Post-restoration resource/tree/provenance/invariants and parity CLI pass with0semantic violations. Scope8paths/all300 prior tests byte-identical; both220existing rows retain all statuses/defaults/owners/exceptions/order,3append-only evidence updates plus1ordered explicit unverified mechanism row (221total). Five pinned source hashes unchanged; ignored-inclusive Agentplane forbidden artifacts0, only5historical prose diff refs. Routing OK; doctor0errors2knownwarnings2info. Exact-SHA same-actor EVALUATOR pass for 5da774b16e4199bfdd76738136d9e4747aaa5a74 recorded in .agentplane/tasks/202610040842-QK716P/quality/20261004-091548904-recovery-context/quality-report.json. No independent reviewer claimed. Source/scope hashes unchanged after quality; clean finish follows. Full parent/goal stays active.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-04T09:14:13.209Z — VERIFY — ok
+### 2026-10-04T09:16:43.324Z — VERIFY — ok
 
 By: CODER
 
-Note: Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending.
+Note: Final exact-SHA5da774b16e4199bfdd76738136d9e4747aaa5a74 same-actor EVALUATOR PASS. Rechecked source/scope/AP hashes without tests. One app1241/100%, corrected failed inventory109/100%, scripts5,81distinct browser passes and4accepted screenshots absent; controlled compatibility graph boundary explicit, ODT flag transport unverified. Parent remains DOING/goal active.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:14:11.103Z, excerpt_hash=sha256:5958e3ddec2f2d32d74fab3401798206dda2c80375b66d8ae440944342945802
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:16:41.254Z, excerpt_hash=sha256:5958e3ddec2f2d32d74fab3401798206dda2c80375b66d8ae440944342945802
 
 Details:
 
@@ -170,7 +201,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610040842-QK716P -m 🧩 QK716P task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610040842-QK716P --result verified-202610040842-QK716P --commit 5da774b16e4199bfdd76738136d9e4747aaa5a74
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
