@@ -4,7 +4,7 @@ title: "Restore ordinary StyleApply direct reset and native repeat history"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T15:07:23.799Z"
+  updated_by: "CODER"
+  note: "Verified semantic b21f8aacbc352dd9b6d706893b7179a0ec066de7 ordinary native style reset and repeat history: app1468, inventory109, scripts5, Chromium97 without upstream; coverage100 all four metrics. Seven static and four source-only gates;20paths/305unchanged prior files/11bounded updates/228zero violations; exact semantic same-actor quality pass. Initial failed app gate recovered only; no passing suite repeated. Upstream restored, forbidden AP sources/Python zero; deviations unchanged and parent active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -67,8 +67,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: recover failed first absent app gate by source-contradicted repeat-history/alignment expectations and effective inherited level1 assertion. Approved ordinary reset scope expanded by two bounded prior test paths; no production changes or passing test-suite repetition."
+  -
+    type: "verify"
+    at: "2026-10-04T15:07:23.799Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified semantic b21f8aacbc352dd9b6d706893b7179a0ec066de7 ordinary native style reset and repeat history: app1468, inventory109, scripts5, Chromium97 without upstream; coverage100 all four metrics. Seven static and four source-only gates;20paths/305unchanged prior files/11bounded updates/228zero violations; exact semantic same-actor quality pass. Initial failed app gate recovered only; no passing suite repeated. Upstream restored, forbidden AP sources/Python zero; deviations unchanged and parent active."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:06:05.513Z"
+doc_updated_at: "2026-10-04T15:07:23.855Z"
 doc_updated_by: "CODER"
 description: "Close native ordinary paragraph style reset/list/whole-node auto-format and repeated-request history across existing range owners with exact reversible history and real browser ODT evidence; preserve registered deviations and exclude absent modifier/ring/layout/redline subsystems."
 sections:
@@ -104,7 +110,41 @@ sections:
     1. Ordinary actual StyleApply resets every current registered direct node item except saved nonempty numbering rule, list83..87, nonempty page descriptor and non-NONE break. Native list-reset eligibility resolves inherited SET state; changed style plus changed rule clears six direct list items, matching rule assigns requested style level, unchanged style retains list state. Exact full-paragraph AUTOFMT removed, partial auto-format and whole/partial internet hints untouched. No unselected node/style metadata mutation. Actual forward/reverse/empty/end-zero owners and literal item values, no browser model injection.
     2. Repeating any valid paragraph style records one native SwUndoFormatColl range action and retains native unsigned family completion. Each Undo restores original direct node items/hints/list/suppression/style/cursor orientation; redo performs the same native reset from captured display-name lookup, including missing-name no-op. Actual toolbar/sidebar/focus, consecutive repeated acceptance/UndoRedo, later typing and exported ODT prove visible behavior at1280/390. Bound existing11test file updates solely to source-contradicted expectations and fixture input shapes;305other prior tests byte-identical.
     3. Static format/lint/type/dependency/build/JSDoc/file-size and routing/doctor; first absent app reportOnFailure/inventory/scripts/fullChromium; app/inventory100percent all four metrics. No present/baseline/pre-fix tests or passing full suite repeat/concurrent source/scope/AP audits during absent product tests. Finally upstream restored; source-only4checks/parity228zero/strict20semanticpaths/227oldrows4appends1newunverified/316priorfiles305unchanged11bounded/native hashes/ignored-inclusive APforbidden0. Exact semantic quality evaluated_sha pass, committed verification/clean closure and parent remainsDOING.
-  Verification: "Pending approved implementation, deterministic evidence and exact-semantic read-only quality review."
+  Verification: |-
+    Pending approved implementation, deterministic evidence and exact-semantic read-only quality review.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T15:07:23.799Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified semantic b21f8aacbc352dd9b6d706893b7179a0ec066de7 ordinary native style reset and repeat history: app1468, inventory109, scripts5, Chromium97 without upstream; coverage100 all four metrics. Seven static and four source-only gates;20paths/305unchanged prior files/11bounded updates/228zero violations; exact semantic same-actor quality pass. Initial failed app gate recovered only; no passing suite repeated. Upstream restored, forbidden AP sources/Python zero; deviations unchanged and parent active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T15:06:05.513Z, excerpt_hash=sha256:ab7d3d09d1494e1dabd0c4539032ebc46ca6980f4cc0838b7563dd226bc3fb20
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041429-MGCTBJ/blueprint/resolved-snapshot.json
+    - old_digest: 8a1ccf700681d4a43c1755c447d3bc2f551616de33c55192be3f86860fd9ae49
+    - current_digest: 8a1ccf700681d4a43c1755c447d3bc2f551616de33c55192be3f86860fd9ae49
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610041429-MGCTBJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610041429-MGCTBJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commit in a new task if required; no history rewrite. Preserve completed prior tasks, product tests and registered deviations. Upstream rename is protected by finally restoration before any source audit."
   Findings: |-
     Readonly native lcl_RstAttr in docfmt.cxx saves list items83..87, nonempty NUMRULE, non-null PAGEDESC and non-NONE BREAK, then ResetAllAttr and restore saved items for ordinary bResetAll=true. SwDoc lcl_SetTextFormatColl conditionally resets six list items or assigns the requested style level; SwEditShell subsequently RstTextAttrs exact whole-node ranges. Native txtedt bExactRange removes AUTOFMT spanning exactly the paragraph and preserves other ranged hint types. SwDoc always appends SwUndoFormatColl before traversal, even on unchanged requested collection. Current local code changes collection only, snapshots list items only and returns no action on matching collection. This task repairs the ordinary operation as one coherent behavior/history boundary. Absent native modifiers/rings/layout/redlines/full defaults/API remain separate; no new registered deviations.
@@ -164,6 +204,39 @@ Task artifacts contain bounded English records/hashes/counts only. No native sou
 ## Verification
 
 Pending approved implementation, deterministic evidence and exact-semantic read-only quality review.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T15:07:23.799Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified semantic b21f8aacbc352dd9b6d706893b7179a0ec066de7 ordinary native style reset and repeat history: app1468, inventory109, scripts5, Chromium97 without upstream; coverage100 all four metrics. Seven static and four source-only gates;20paths/305unchanged prior files/11bounded updates/228zero violations; exact semantic same-actor quality pass. Initial failed app gate recovered only; no passing suite repeated. Upstream restored, forbidden AP sources/Python zero; deviations unchanged and parent active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T15:06:05.513Z, excerpt_hash=sha256:ab7d3d09d1494e1dabd0c4539032ebc46ca6980f4cc0838b7563dd226bc3fb20
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041429-MGCTBJ/blueprint/resolved-snapshot.json
+- old_digest: 8a1ccf700681d4a43c1755c447d3bc2f551616de33c55192be3f86860fd9ae49
+- current_digest: 8a1ccf700681d4a43c1755c447d3bc2f551616de33c55192be3f86860fd9ae49
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610041429-MGCTBJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610041429-MGCTBJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
