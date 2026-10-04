@@ -1,10 +1,11 @@
 ---
 id: "202610041031-BMWW5W"
 title: "Preserve document-owned named paragraph style hierarchy through ODT and history"
-status: "DOING"
+result_summary: "Preserved document-owned named paragraph styles through ODT, graph16, copy and Undo/Redo; all declared gates pass without upstream access."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 35
+revision: 36
 origin:
   system: "manual"
 depends_on:
@@ -49,7 +50,9 @@ quality_review:
   findings:
     - "Reviewed f115e972a18f58e18206db1f38c723791733bdb2 against all17semantic SHA256 identities; committed files equal tested workspace. Exact303old test files unchanged; two bounded native ownership assertions, three relocated marker paths and one relocated local symbol verified. All original222rows/order/status/default/exception fields retained; one helper is added."
     - "App1331/229and inventory109/36pass100%four metrics, scripts5and Chromium87pass only absent; successful full suites are never repeated. Both1280/390screenshots show stable inherited glyph indent and untouched paragraph/history. Native source hashes5, source/parity223/0, static gates and ignored-inclusive AP forbidden0 verified; no upstream execution or source/helper copies."
-commit: null
+commit:
+  hash: "0628552be68554afc0295580b3c297d40201e31a"
+  message: "🧩 BMWW5W task: record exact-SHA quality review"
 comments:
   -
     author: "CODER"
@@ -63,6 +66,9 @@ comments:
   -
     author: "CODER"
     body: "Start: correct only actual custom fixture ownership and three relocated local markers; passing app suite will not be repeated."
+  -
+    author: "CODER"
+    body: "Verified: exact-SHA named ownership implementation f115e972a18f; app1331 inventory109 scripts5 Chromium87 pass only absent, coverage100%four metrics,17paths/303unchanged prior tests, two bounded assertion updates, source/parity223/0 and AP forbidden0. Read-only same-actor quality review passes. Native lifetime/geometry and toolbar custom-style UI gaps remain recorded."
 events:
   -
     type: "status"
@@ -98,8 +104,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared local gates pass: app1331 inventory109 scripts5 Chromium87 only absent; coverage100%four metrics, source/parity223/0, exact17paths/303unchanged prior tests, two bounded assertion updates, AP forbidden0; next toolbar custom style gap and native residuals recorded."
+  -
+    type: "status"
+    at: "2026-10-04T11:32:43.113Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: exact-SHA named ownership implementation f115e972a18f; app1331 inventory109 scripts5 Chromium87 pass only absent, coverage100%four metrics,17paths/303unchanged prior tests, two bounded assertion updates, source/parity223/0 and AP forbidden0. Read-only same-actor quality review passes. Native lifetime/geometry and toolbar custom-style UI gaps remain recorded."
 doc_version: 3
-doc_updated_at: "2026-10-04T11:30:41.835Z"
+doc_updated_at: "2026-10-04T11:32:43.114Z"
 doc_updated_by: "CODER"
 description: "Iteration102 replaces flattening of imported named paragraph styles with document-owned SwTextFormatColl collections, retaining direct automatic deltas and exact parent/follow/item ownership through ODT, graph/history and destination copying. Native independent list-indent applicability must agree with real imported hierarchy; existing consumers and registered I/O/recovery deviations remain unchanged until the next consumer migration."
 sections:
@@ -176,6 +189,10 @@ sections:
     Command: npm run test:inventory:coverage. Result: initial2fail/107pass, then1fail/108pass, final109/36pass100%four metrics. Correct the project fixture's actual Custom_5f_Style/Text body ownership; relocate3local markers and one local symbol to their real helper. No native runtime used. Scripts5and Chromium87run once absent and pass; vendor restored each finally.
     Command: static gates and source/parity/scope/AP audits. Result: pass. The split initially exposed unused imports/converter and new E2E formatting; only those failed gates repeated, later scoped changes checked. Inline exact-scope replay had a duplicate const binding, corrected before final audit.17semantic paths;222old mapping rows retained in order plus one helper,9bounded descriptions/evidence appends, original statuses/defaults/exceptions unchanged. Two prior tests have precisely bounded ownership expectation changes;303prior tests unchanged. Whole ignored-inclusive AP has0forbidden source/helper/Python/binary/embedded source/source-frame/code-diff findings;5historical prose-only diff references retained.
     Scope: custom collection creation/name lookup, bounded CopyTextColl parent/follow/manual rules, exact common/direct paragraph ownership and supported history/graph/ODT/shell/browser paths. Tdf114287 masks0/0/3 and raw first values−567match independent ownership. Native complete global default pools, creation undo, pool/help IDs, conditional styles/collisions/UNO/fonts/full style UI and geometry/tab/RTL/redline/frame lifetime remain separately unverified. Builtin copy adapter, Standard default root and serialized sideband remain explicit residuals. Screenshot1280shows sidebar Owned child while the existing toolbar chooser displays its builtin fallback; fix document-owned custom style chooser behavior as the next separate iteration. Registered I/O/recovery deviations unchanged.
+extensions:
+  implementation_commit:
+    hash: "f115e972a18f58e18206db1f38c723791733bdb2"
+    message: "🧩 BMWW5W code: preserve document-owned named paragraph styles"
 id_source: "generated"
 ---
 ## Summary
