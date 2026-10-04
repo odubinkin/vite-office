@@ -38,6 +38,7 @@ import {
 import type { SwAttrPool } from "../attr/swatrset";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { SwFormatINetFormat } from "./fmtatr2";
+import type { SwpHints } from "./ndhints";
 
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
@@ -129,6 +130,10 @@ export class SwFormatAutoFormat extends SfxPoolItem {
 export class SwTextAttr<
   TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
 > {
+  private m_nStart: number;
+  private m_nEnd: number;
+  /** Internal friend-access storage assigned and released only by the owning SwpHints. */
+  public m_pHints: SwpHints | undefined;
   /** Prevents expansion at the end during insertion when enabled. */
   public dontExpand = false;
   /** Prevents expansion at the start during insertion when enabled. */
@@ -146,11 +151,33 @@ export class SwTextAttr<
    */
   public constructor(
     public readonly format: TFormat,
-    public start: number,
-    public end: number,
+    start: number,
+    end: number,
   ) {
     if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start)
       throw new Error("SwTextAttr range is invalid.");
+    this.m_nStart = start;
+    this.m_nEnd = end;
+  }
+
+  /** Exposes the existing start projection through the native range field. @returns Inclusive offset. */
+  public get start(): number {
+    return this.m_nStart;
+  }
+
+  /** Routes existing start writes through native owner notification. @param start - New inclusive offset. @returns Nothing. */
+  public set start(start: number) {
+    this.SetStart(start);
+  }
+
+  /** Exposes the existing end projection through the native range field. @returns Exclusive offset. */
+  public get end(): number {
+    return this.m_nEnd;
+  }
+
+  /** Routes existing end writes through native owner notification. @param end - New exclusive offset. @returns Nothing. */
+  public set end(end: number) {
+    this.SetEnd(end);
   }
 
   /** Returns the Writer pool identifier of this attribute. @returns Auto-format WhichId. */
@@ -160,18 +187,28 @@ export class SwTextAttr<
 
   /** Returns the inclusive start offset. @returns Inclusive UTF-16 offset. */
   public GetStart(): number {
-    return this.start;
+    return this.m_nStart;
+  }
+
+  /** Updates the start and always invalidates the owner's order, allowing temporary structural shifts. @param start - New inclusive offset. @returns Nothing. */
+  public SetStart(start: number): void {
+    this.m_nStart = start;
+    this.m_pHints?.StartPosChanged();
   }
 
   /** Returns the exclusive end offset. @returns Exclusive UTF-16 offset. */
   public GetEnd(): number {
-    return this.end;
+    return this.m_nEnd;
   }
 
   /** Changes the exclusive range end after validating Writer ordering. @param end - New exclusive offset. @returns Nothing. */
   public SetEnd(end: number): void {
     if (!Number.isInteger(end) || end < this.start) throw new Error("SwTextAttr end is invalid.");
-    this.end = end;
+    if (this.m_nEnd !== end) {
+      const oldEnd = this.m_nEnd;
+      this.m_nEnd = end;
+      this.m_pHints?.EndPosChanged(this.Which(), this.m_nStart, oldEnd, end);
+    }
   }
 
   /** Creates an independent attribute with the same item and flags. @param offset - Offset applied to the cloned range. @returns Independent attribute. */

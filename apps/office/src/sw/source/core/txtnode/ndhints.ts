@@ -22,7 +22,52 @@ import {
 
 /** Stores direct-format text portions in deterministic start/end/which order. */
 export class SwpHints {
-  private hintsByStart: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+  private m_HintsByStart: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+  private m_StartMapNeedsSortingRange: [number, number] = [0x7fffffff, -1];
+
+  /** Reads the current primary map after lazy native sorting. @returns Owned sorted attributes. */
+  private get hintsByStart(): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
+    this.ResortStartMap();
+    return this.m_HintsByStart;
+  }
+
+  /** Releases old owner links and binds the replacement map without copying attributes. @param hints - Already normalized owned objects. @returns Nothing. */
+  private set hintsByStart(hints: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]) {
+    for (const hint of this.m_HintsByStart) hint.m_pHints = undefined;
+    this.m_HintsByStart = hints;
+    for (const hint of hints) hint.m_pHints = this;
+    this.m_StartMapNeedsSortingRange = [0x7fffffff, -1];
+  }
+
+  /** Marks the whole primary map dirty after a start change. @returns Nothing. */
+  public StartPosChanged(): void {
+    this.m_StartMapNeedsSortingRange = [-1, -1];
+  }
+
+  /** Expands the primary start interval dirtied by an end change. @param positions - Native Which, start, previous end and new end values; the primary map consumes start. @returns Nothing. */
+  public EndPosChanged(
+    ...positions: [which: number, start: number, oldEnd: number, newEnd: number]
+  ): void {
+    const [, start] = positions;
+    this.m_StartMapNeedsSortingRange = [
+      Math.min(start, this.m_StartMapNeedsSortingRange[0]),
+      Math.max(start, this.m_StartMapNeedsSortingRange[1]),
+    ];
+  }
+
+  /** Restores native order for the whole dirty map or only its affected start interval. @returns Nothing. */
+  public ResortStartMap(): void {
+    const [first, last] = this.m_StartMapNeedsSortingRange;
+    if (first === 0x7fffffff) return;
+    if (first === -1) this.m_HintsByStart.sort(compareHints);
+    else {
+      const from = hintStartBound(this.m_HintsByStart, first, false),
+        to = hintStartBound(this.m_HintsByStart, last, true);
+      const ordered = this.m_HintsByStart.slice(from, to).sort(compareHints);
+      this.m_HintsByStart.splice(from, to - from, ...ordered);
+    }
+    this.m_StartMapNeedsSortingRange = [0x7fffffff, -1];
+  }
 
   /** Creates a hint container. @param pool - Owning document pool. @param hints - Initial ranged attributes. @returns Nothing. */
   public constructor(
@@ -34,12 +79,20 @@ export class SwpHints {
 
   /** Returns the number of ranged attributes. @returns Hint count. */
   public Count(): number {
-    return this.hintsByStart.length;
+    return this.m_HintsByStart.length;
   }
 
   /** Returns one attribute in start-sorted order. @param position - Sorted hint position. @returns Hint at position. */
   public Get(position: number): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
-    const hint = this.hintsByStart[position];
+    this.ResortStartMap();
+    return this.GetWithoutResorting(position);
+  }
+
+  /** Reads the stable raw map while a caller changes several owned ranges. @param position - Raw map position. @returns The actual attribute without sorting. */
+  public GetWithoutResorting(
+    position: number,
+  ): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+    const hint = this.m_HintsByStart[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints position: ${position}`);
     return hint;
   }
@@ -116,6 +169,7 @@ export class SwpHints {
     for (const hint of this.hintsByStart) {
       if (hint.start < end && hint.end > start) {
         if (hint.start >= start && hint.end < end) {
+          hint.m_pHints = undefined;
           hint.start -= start;
           hint.SetEnd(hint.end - start);
           moved.push(hint);
@@ -178,7 +232,11 @@ export class SwpHints {
     const middle = transferHints
       ? replacement.takeOwned(start)
       : replacement.clone(this.pool).shifted(start).entries();
-    const hints = [...prefix.entries(), ...middle, ...trailing.entries()];
+    const hints = [
+      ...(transferHints ? prefix.takeOwned(0) : prefix.entries()),
+      ...middle,
+      ...(transferHints ? trailing.takeOwned(0) : trailing.entries()),
+    ];
     const result = new SwpHints(this.pool);
     if (transferHints) result.assignOwned(hints);
     else result.replace(hints);
@@ -696,6 +754,23 @@ function compareHints(
   right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
 ): number {
   return left.start - right.start || right.end - left.end || right.Which() - left.Which();
+}
+
+/** Finds the native lower or upper start-position bound in an already start-ordered map. @param hints - Primary map. @param position - Start boundary. @param upper - Whether equal starts belong before the bound. @returns Insertion index. */
+function hintStartBound(
+  hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[],
+  position: number,
+  upper: boolean,
+): number {
+  let first = 0,
+    last = hints.length;
+  while (first < last) {
+    const middle = Math.floor((first + last) / 2);
+    const hint = hints[middle] as SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>;
+    if (hint.start < position || (upper && hint.start === position)) first = middle + 1;
+    else last = middle;
+  }
+  return first;
 }
 
 /** Copies and merges adjacent equal browser runs. @param runs - Generated runs. @returns Independent normalized runs. */
