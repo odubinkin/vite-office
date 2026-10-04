@@ -4,7 +4,7 @@ title: "Restore native paired paragraph-style reset history and redo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: restore native paired style/reset history and non-exact redo under the standing iterative goal, preserving registered deviations and vendor-absent single-pass checks."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:15:28.004Z"
+doc_updated_at: "2026-10-04T15:24:00.975Z"
 doc_updated_by: "CODER"
 description: "Iteration108: replace fused paragraph-style/reset history with native ordered SwUndoFormatColl plus SwUndoResetAttr in one Sfx list action. Separate initial exact full-node cleanup from default non-exact reset redo, including partial AUTOFMT/internet removal and expanded redo selection; native sorted style undo. Current registered single-PaM profile only. Preserve registered save/open/recovery deviations and all inventory status/default/exception fields. Strict14semanticpaths/four bounded prior test files;318prior files/314unchanged. All product tests once without upstream, failed-gate recovery only; no native execution/compilation/copies/AP helpers. Parent remains active."
 sections:
@@ -70,7 +70,10 @@ sections:
     3. Format/lint/type/dependency/JSDoc/file-size/routing/doctor, absent static build once, app --coverage.reportOnFailure/inventory/scripts/fullChromium once without pinned upstream (failed-gate recovery only); app/inventory100 all four metrics. Finallyrestore; four source-only checks/parity228zero; strict14semanticpaths/fourbounded prior updates/318prior314unchanged/228oldrows six bounded description/evidence appends only; native hashes and ignored-inclusive APforbidden0. Exact evaluated_sha quality pass, committed verify and clean closure.
   Verification: "Pending approved implementation and one upstream-absent verification sequence. No product tests run yet."
   Rollback Plan: "Revert only this task semantic commit through a new executable task if a demonstrated regression requires rollback. Preserve source pin, registered deviations, current histories and immutable prior task records; no history rewrite."
-  Findings: "Readonly source comparison: edfcol native StartUndo groups SwDoc::SetTextFormatColl followed by RstTextAttrs(...exact=true) on full-node range. docfmt appends distinct SwUndoFormatColl and SwUndoResetAttr. unfmco DoSetFormatColl redoes only native collection/reset flags; unattr RES_CHRFMT redo calls RstTextAttrs(rPam) with doc.hxx default bExactRange=false. txtedt default nWhich0/pSet-null processing removes supported ranged AUTOFMT and internet hints over full paragraph, unlike initial exact cleanup. SwUndRng stores sorted endpoints and restores point=end/mark=start on a noncollapsed range. Current local fused action incorrectly reuses initial exact cleanup and original directed cursor on redo. This task resolves this existing behavior and architecture before a later separate modifier path; actual native toolbar does not supply KeyModifier, so no invented Ctrl toolbar operation."
+  Findings: |-
+    Readonly source comparison: edfcol native StartUndo groups SwDoc::SetTextFormatColl followed by RstTextAttrs(...exact=true) on full-node range. docfmt appends distinct SwUndoFormatColl and SwUndoResetAttr. unfmco DoSetFormatColl redoes only native collection/reset flags; unattr RES_CHRFMT redo calls RstTextAttrs(rPam) with doc.hxx default bExactRange=false. txtedt default nWhich0/pSet-null processing removes supported ranged AUTOFMT and internet hints over full paragraph, unlike initial exact cleanup. SwUndRng stores sorted endpoints and restores point=end/mark=start on a noncollapsed range. Current local fused action incorrectly reuses initial exact cleanup and original directed cursor on redo. This task resolves this existing behavior and architecture before a later separate modifier path; actual native toolbar does not supply KeyModifier, so no invented Ctrl toolbar operation.
+
+    Pre-product static formatting gate exit1/outputsha199401e5da7cca140f2fcb0fbb9deb0934e321d7ad78ab69456307ded731593a: new browser test requires an additional formatter pass. Lint/type/dependency/JSDoc/file-size/routing pass. Bounded in-scope recovery; no product tests yet. No raw diagnostics/helpers saved in AP.
 id_source: "generated"
 ---
 ## Summary
@@ -120,3 +123,5 @@ Revert only this task semantic commit through a new executable task if a demonst
 ## Findings
 
 Readonly source comparison: edfcol native StartUndo groups SwDoc::SetTextFormatColl followed by RstTextAttrs(...exact=true) on full-node range. docfmt appends distinct SwUndoFormatColl and SwUndoResetAttr. unfmco DoSetFormatColl redoes only native collection/reset flags; unattr RES_CHRFMT redo calls RstTextAttrs(rPam) with doc.hxx default bExactRange=false. txtedt default nWhich0/pSet-null processing removes supported ranged AUTOFMT and internet hints over full paragraph, unlike initial exact cleanup. SwUndRng stores sorted endpoints and restores point=end/mark=start on a noncollapsed range. Current local fused action incorrectly reuses initial exact cleanup and original directed cursor on redo. This task resolves this existing behavior and architecture before a later separate modifier path; actual native toolbar does not supply KeyModifier, so no invented Ctrl toolbar operation.
+
+Pre-product static formatting gate exit1/outputsha199401e5da7cca140f2fcb0fbb9deb0934e321d7ad78ab69456307ded731593a: new browser test requires an additional formatter pass. Lint/type/dependency/JSDoc/file-size/routing pass. Bounded in-scope recovery; no product tests yet. No raw diagnostics/helpers saved in AP.
