@@ -4,7 +4,7 @@ title: "Restore native paired paragraph-style reset history and redo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -47,7 +47,7 @@ events:
     to: "DOING"
     note: "Start: recover failed absent app gate with bounded native redo endpoint expectations and valid independent hint fixture; amended15paths authorized by standing goal, production unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:28:48.408Z"
+doc_updated_at: "2026-10-04T15:35:23.461Z"
 doc_updated_by: "CODER"
 description: "Iteration108: replace fused paragraph-style/reset history with native ordered SwUndoFormatColl plus SwUndoResetAttr in one Sfx list action. Separate initial exact full-node cleanup from default non-exact reset redo, including partial AUTOFMT/internet removal and expanded redo selection; native sorted style undo. Current registered single-PaM profile only. Preserve registered save/open/recovery deviations and all inventory status/default/exception fields. Strict15semanticpaths/five bounded prior test files;318prior files/313unchanged. All product tests once without upstream, failed-gate recovery only; no native execution/compilation/copies/AP helpers. Parent remains active."
 sections:
@@ -90,6 +90,12 @@ sections:
     First absent app gate1480passed/2failed; coverage100 all four metrics. One native-contradicted prior document-shell expectation still retains4/1 after redo instead of expanded5/0; one new fixture overlaps whole/middle same-type AUTOFMT contrary to the registered graph. Reapprove one additional prior test file for bounded redo endpoints only;15paths/five prior files/313others byte-identical. Fix new fixture with independent whole AUTO and internet types. Production unchanged after first product run; repeat failed app only, then first remaining inventory/scripts/Chromium. Failure record outputsha87d7e79e678c1dde2c1c723fb1c37c80b17ea2fc9379831dbaaf48bb1071689f; vendor restored.
 
     Artifact-persistence attempt exit5 reported dirty working tree while final static records were still being produced. Recomputed route; all writers now terminal/pass. No semantic commit or test repetition involved; retry persistence only after all record writers complete.
+
+    Completed ordinary registered single-PaM history refactor: one SfxListUndoAction with collection then text-reset owners; reverse undo restores hints then direct items/styles/list suppression and sorted original cursor. Initial operation exact cleanup stays distinct from non-exact expanded full-node reset redo; partial AUTOFMT/internet survive initial application and are removed on redo. Collection redo never owns hints, and a missing display name does not suppress the separate reset. Empty redo retains native mark presence; no first-redo flag or full-document snapshot.
+
+    Final evidence: seven static gates, one absent static build, recovered app1482/237files, first inventory109/36files/scripts5/2files/Chromium99 all pass; app/inventory100 four metrics. Initial absent app1480/2failure preserved; only failed app gate repeated, production unchanged after first run. Vendor restored before four source-only checks and parity228zero. Strict15semanticpaths/318priorfiles313byte-identical/five bounded exact expectation replays; unchanged pre-existing character/paragraph undo algorithms.228oldrows six description/evidence appends only; statuses/defaults/exceptions unchanged. Ten native hashes; ignored-inclusive AP3585files/zero forbidden findings. No source copies/native execution/compilation. Initial artifact attempt created176c8716 before exit5; final bounded writer records persisted sequentially afterward.
+
+    Desktop/mobile screenshots show the complete target selected after redo, no partial bold or hyperlink, toolbar/sidebar History style B and unchanged neighbors. Actual DOM selection replacement typing, repeated undo/redo, initial partial/link preservation and native ODT export asserted. Bounded evidence final-integrity.json/scope-integrity.json/source-comparison.json/artifact-audit.json plus gate records. Native modifier/delete-set/fields/marks/rings/layout/read-only/redlines/inlineheading and wider defaults/API/history/UI remain unverified; registered save/open/recovery deviations unchanged. Parent remainsDOING. Doctor0errors/two existing warnings.
 id_source: "generated"
 ---
 ## Summary
@@ -147,3 +153,9 @@ Pre-product static formatting gate exit1/outputsha199401e5da7cca140f2fcb0fbb9deb
 First absent app gate1480passed/2failed; coverage100 all four metrics. One native-contradicted prior document-shell expectation still retains4/1 after redo instead of expanded5/0; one new fixture overlaps whole/middle same-type AUTOFMT contrary to the registered graph. Reapprove one additional prior test file for bounded redo endpoints only;15paths/five prior files/313others byte-identical. Fix new fixture with independent whole AUTO and internet types. Production unchanged after first product run; repeat failed app only, then first remaining inventory/scripts/Chromium. Failure record outputsha87d7e79e678c1dde2c1c723fb1c37c80b17ea2fc9379831dbaaf48bb1071689f; vendor restored.
 
 Artifact-persistence attempt exit5 reported dirty working tree while final static records were still being produced. Recomputed route; all writers now terminal/pass. No semantic commit or test repetition involved; retry persistence only after all record writers complete.
+
+Completed ordinary registered single-PaM history refactor: one SfxListUndoAction with collection then text-reset owners; reverse undo restores hints then direct items/styles/list suppression and sorted original cursor. Initial operation exact cleanup stays distinct from non-exact expanded full-node reset redo; partial AUTOFMT/internet survive initial application and are removed on redo. Collection redo never owns hints, and a missing display name does not suppress the separate reset. Empty redo retains native mark presence; no first-redo flag or full-document snapshot.
+
+Final evidence: seven static gates, one absent static build, recovered app1482/237files, first inventory109/36files/scripts5/2files/Chromium99 all pass; app/inventory100 four metrics. Initial absent app1480/2failure preserved; only failed app gate repeated, production unchanged after first run. Vendor restored before four source-only checks and parity228zero. Strict15semanticpaths/318priorfiles313byte-identical/five bounded exact expectation replays; unchanged pre-existing character/paragraph undo algorithms.228oldrows six description/evidence appends only; statuses/defaults/exceptions unchanged. Ten native hashes; ignored-inclusive AP3585files/zero forbidden findings. No source copies/native execution/compilation. Initial artifact attempt created176c8716 before exit5; final bounded writer records persisted sequentially afterward.
+
+Desktop/mobile screenshots show the complete target selected after redo, no partial bold or hyperlink, toolbar/sidebar History style B and unchanged neighbors. Actual DOM selection replacement typing, repeated undo/redo, initial partial/link preservation and native ODT export asserted. Bounded evidence final-integrity.json/scope-integrity.json/source-comparison.json/artifact-audit.json plus gate records. Native modifier/delete-set/fields/marks/rings/layout/read-only/redlines/inlineheading and wider defaults/API/history/UI remain unverified; registered save/open/recovery deviations unchanged. Parent remainsDOING. Doctor0errors/two existing warnings.

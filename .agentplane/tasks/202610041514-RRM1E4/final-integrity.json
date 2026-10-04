@@ -1,0 +1,102 @@
+{
+  "base": "5a5f10ad38c8bba67e1837c6a5c58639373385a8",
+  "semanticPaths": 15,
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedHashesUnchanged": 10,
+  "priorTestFiles": 318,
+  "byteIdenticalPriorTests": 313,
+  "boundedNativeExpectationUpdates": 5,
+  "unrelatedAssertionsPreserved": true,
+  "oldMappingRows": 228,
+  "descriptionAppends": 6,
+  "newUnverifiedOwnerRows": 0,
+  "runtimeModuleCount": 228,
+  "statusDefaultExceptionFieldsUnchanged": true,
+  "staticChecksPassed": 7,
+  "routingPassed": true,
+  "sourceChecksPassed": 4,
+  "appCasesPassed": 1482,
+  "newHistoryCases": 14,
+  "inventoryCasesPassed": 109,
+  "scriptCasesPassed": 5,
+  "browserCasesPassed": 99,
+  "newBrowserCases": 2,
+  "initialAppFailureCases": 2,
+  "failedGateRecovery": "Initial absent app1480passed/2failed found one old redo endpoint expectation and one invalid overlapping same-type hint fixture. Reapproved one additional prior file and corrected these bounded expectations, preserving every unrelated assertion. Production unchanged after first run; only failed app gate repeated.",
+  "staticRecovery": "New browser test required an additional formatter pass before any product tests. Four final recovered static gates and three other gates pass. Artifact persistence initially exited5 while static writers were active; committed partial metadata existed, then remaining bounded records were persisted after writers terminated.",
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10714,
+      "covered": 10714,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11711,
+      "covered": 11711,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3080,
+      "covered": 3080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8929,
+      "covered": 8929,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "agentplaneForbiddenFindings": 0,
+  "nativeExecution": false,
+  "nativeCompilation": false,
+  "sourceCopies": false,
+  "passingFullSuitesRepeated": false,
+  "visualReview": "Desktop/mobile screenshots show the target fully selected after native redo, cleared partial bold and internet link, unchanged neighboring paragraphs and retained toolbar/sidebar History style B. DOM selection, replacement typing/undo, initial versus redo hint behavior and exported ODT graph independently asserted.",
+  "doctor": {
+    "errors": 0,
+    "existingWarnings": 2
+  }
+}
