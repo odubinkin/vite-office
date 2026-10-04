@@ -1,10 +1,11 @@
 ---
 id: "202610040603-E1BQ72"
 title: "Match Writer ruler tab insertion replacement semantics"
-status: "DOING"
+result_summary: "Iteration92 bounded fresh ruler insertion replacement verified;intentional save/open/recovery deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202610040603-E1BQ72/vendor-absent-browser.json"
   findings:
     - "Diff is limited to5semantic paths:existing AddRulerTabStop validates selected input then Clone/Insert(fresh stop)/SetParagraphItem. All286prior tests byte-identical;220rows each preserved with2append-only updates and no status/default/exception promotion. Owned actual item/DOM/undo1142app+109inventory+5scripts pass once absent-upstream;63priorChromium pass and corrected2newcases pass absent-upstream. Four coverage metrics100%,static gates pass,0semantic violations;3source hashes unchanged,vendor restored,ignored-inclusive Agentplane forbidden0. Initial failures were confined to new fixture selectors/formatting and bounded hashes are retained."
-commit: null
+commit:
+  hash: "77c416a9dd35683ad7e7bcaca1c84aac75e75293"
+  message: "🎯 E1BQ72 code: replace occupied Writer ruler tabs with fresh stops"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved insertion replacement semantics under the standing iterative goal; one vendor-absent test pass and separate static source audits."
+  -
+    author: "CODER"
+    body: "Verified: fresh ruler tab replaces an occupied Default/explicit position and preserves unrelated fields. Single absent app1142+inventory109+scripts5,prior63browser plus corrected2pass;static gates/100%coverage/0semantic/286oldtests unchanged;exact semantic77c416a9 same-actor evaluator pass,vendor restored,AP forbidden0. Full native/parent goal remains open."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final documentation/evidence revision verified without rerunning passing suites. Same-actor EVALUATOR pass exact semantic77c416a9dd35683ad7e7bcaca1c84aac75e75293;5paths/286oldtests unchanged/220rows append-only/3sourcehashes/AP forbidden0;1142+109+5 and65Chromium cases verified absent-upstream,vendor restored,100%coverage,0semantic."
+  -
+    type: "status"
+    at: "2026-10-04T06:15:45.745Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: fresh ruler tab replaces an occupied Default/explicit position and preserves unrelated fields. Single absent app1142+inventory109+scripts5,prior63browser plus corrected2pass;static gates/100%coverage/0semantic/286oldtests unchanged;exact semantic77c416a9 same-actor evaluator pass,vendor restored,AP forbidden0. Full native/parent goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T06:15:33.072Z"
+doc_updated_at: "2026-10-04T06:15:45.746Z"
 doc_updated_by: "CODER"
 description: "Iteration 92: replace an occupied ruler tab position with a fresh Left tab stop, preserving unrelated stored stops and metadata. Keep general paragraph tab-list editing unchanged. Verify once with the pinned upstream directory unavailable; inspect upstream source separately without storing source bodies or helpers in Agentplane."
 sections:
@@ -134,6 +147,10 @@ sections:
     - Observation: Final insertion correction uses source-shaped Clone/Insert(new SvxTabStop)/SetParagraphItem and only selected-input validation. Four adjustment replacements, unrelated signed/large stops, equal-item history, general list-edit retention and actual DOM projection/Undo/Redo passed;rebuilt Chromium confirms hidden Default1200 becomes explicitLeft at both1280/390 widths.
       Impact: The bounded insertion gap is closed while full native ruler geometry/types/selector,RTL/snapping/capture,wide signed input and complete SwWrtShell/parent parity stay open. Existing save/open/recovery deviations unchanged.
       Resolution: Record single absent suite1142+109+5 and prior63browser plus two corrected new browser cases;no passing suite duplication,no source/native execution or Agentplane helpers. Evaluate actual isolated semantic commit then finish leaf and keep parent active.
+extensions:
+  implementation_commit:
+    hash: "77c416a9dd35683ad7e7bcaca1c84aac75e75293"
+    message: "🎯 E1BQ72 code: replace occupied Writer ruler tabs with fresh stops"
 id_source: "generated"
 ---
 ## Summary
