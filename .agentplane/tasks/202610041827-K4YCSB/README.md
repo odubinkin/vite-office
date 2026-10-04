@@ -4,7 +4,7 @@ title: "Restore destination-owned text hint copying"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: implement approved destination-owned copy boundaries under standing iterative goal."
 doc_version: 3
-doc_updated_at: "2026-10-04T18:40:15.360Z"
+doc_updated_at: "2026-10-04T18:43:44.922Z"
 doc_updated_by: "CODER"
 description: "Restore native MakeTextAttr copying at existing text-node/container/fragment copy boundaries, converting automatic handles into destination pools and resetting copied hint flags while retaining same-pool snapshot clones for undo."
 sections:
@@ -65,7 +65,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task's implementation and documentation commits through a new traceable task; restore vendor directory if interrupted. No history rewrite."
-  Findings: "Native copying reconstructs text attributes through MakeTextAttr/InsertItem(IS_COPY); same-pool historical snapshots retain attribute flags and shared handles. Initial absent build passed. Initial absent app coverage: 1762 passed, one new test helper failed because it assumed the first sorted hint was automatic after continued formatting; all four production coverage metrics are 100%. Production changes remain fixed. Correct the test helper to select WhichId53 and recover only the failed case, then run pending inventory/scripts/Chromium once without upstream. Partial MoveText split semantics, native holders/refcounts/character-style listeners and broad parity remain unverified."
+  Findings: "Iteration115 restores destination-owned automatic handles and constructor flags at actual CloneTo/CopyRange text copying via MakeTextAttr; same-pool historical clone/slice, state restoration and whole moves retain flags/shared handles. Foreign containers bind automatic and internet hints, including internet-only fragments; raw foreign automatic arrays convert before marker-only pruning. All 331 prior tests are byte-identical, 62 new app cases cover eight flag combinations, source isolation, pool separation/style reuse, parent/state exclusion, adjacent merging, real node/import/copy/move boundaries and later formatting/codec consumers. Six static gates passed. One upstream-absent build and app coverage run: 1762 initially passed, one new helper failed on its first-hint ordering assumption; the helper now selects WhichId53, and only that failed case was recovered absent. Production remained byte-identical after coverage; four app metrics100%. Inventory109/36 four metrics100%, scripts5/2, Chromium99 all first absent passes. No repeated passing suite/build. Vendor restored before five source audits; all passed with semantic violations0. Exact seven semantic paths, all234 runtime fields/statuses/defaults/exceptions unchanged except three appended justifications; nine native hashes only. Ignored-inclusive AP scan3734 files, forbidden0; doctor errors0 with two unchanged warnings; policy routing passed. Partial MoveText split semantics, native holder/refcount/client/character-style listener ownership, nullable automatic handles, unordered pool iteration and broader module/browser parity remain unverified. No broad goal/status promotion or registered I/O deviation changes."
 id_source: "generated"
 ---
 ## Summary
@@ -106,4 +106,4 @@ Revert this task's implementation and documentation commits through a new tracea
 
 ## Findings
 
-Native copying reconstructs text attributes through MakeTextAttr/InsertItem(IS_COPY); same-pool historical snapshots retain attribute flags and shared handles. Initial absent build passed. Initial absent app coverage: 1762 passed, one new test helper failed because it assumed the first sorted hint was automatic after continued formatting; all four production coverage metrics are 100%. Production changes remain fixed. Correct the test helper to select WhichId53 and recover only the failed case, then run pending inventory/scripts/Chromium once without upstream. Partial MoveText split semantics, native holders/refcounts/character-style listeners and broad parity remain unverified.
+Iteration115 restores destination-owned automatic handles and constructor flags at actual CloneTo/CopyRange text copying via MakeTextAttr; same-pool historical clone/slice, state restoration and whole moves retain flags/shared handles. Foreign containers bind automatic and internet hints, including internet-only fragments; raw foreign automatic arrays convert before marker-only pruning. All 331 prior tests are byte-identical, 62 new app cases cover eight flag combinations, source isolation, pool separation/style reuse, parent/state exclusion, adjacent merging, real node/import/copy/move boundaries and later formatting/codec consumers. Six static gates passed. One upstream-absent build and app coverage run: 1762 initially passed, one new helper failed on its first-hint ordering assumption; the helper now selects WhichId53, and only that failed case was recovered absent. Production remained byte-identical after coverage; four app metrics100%. Inventory109/36 four metrics100%, scripts5/2, Chromium99 all first absent passes. No repeated passing suite/build. Vendor restored before five source audits; all passed with semantic violations0. Exact seven semantic paths, all234 runtime fields/statuses/defaults/exceptions unchanged except three appended justifications; nine native hashes only. Ignored-inclusive AP scan3734 files, forbidden0; doctor errors0 with two unchanged warnings; policy routing passed. Partial MoveText split semantics, native holder/refcount/client/character-style listener ownership, nullable automatic handles, unordered pool iteration and broader module/browser parity remain unverified. No broad goal/status promotion or registered I/O deviation changes.

@@ -5,6 +5,7 @@
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
+import { MakeTextAttr } from "./thints";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
@@ -109,7 +110,10 @@ export class SwpHints {
 
   /** Concatenates another fragment's hints after a leading text length. @param other - Trailing hints. @param leadingLength - Leading text length. @returns Concatenated hints. */
   public concat(other: SwpHints, leadingLength: number): SwpHints {
-    return new SwpHints(this.pool, [...this.entries(), ...other.shifted(leadingLength).entries()]);
+    return new SwpHints(this.pool, [
+      ...this.entries(),
+      ...other.clone(this.pool).shifted(leadingLength).entries(),
+    ]);
   }
 
   /** Replaces a text range's hints with a native hint fragment. @param textLength - Original text length. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement hints. @param replacementLength - Replacement text length. @returns Rebased combined hints. */
@@ -123,7 +127,7 @@ export class SwpHints {
     const trailing = this.slice(end, textLength).shifted(start + replacementLength);
     return new SwpHints(this.pool, [
       ...this.slice(0, start).entries(),
-      ...replacement.shifted(start).entries(),
+      ...replacement.clone(this.pool).shifted(start).entries(),
       ...trailing.entries(),
     ]);
   }
@@ -316,6 +320,14 @@ export class SwpHints {
   /** Replaces all hints, removing empty item sets and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */
   public replace(hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]): void {
     const sorted = hints
+      .map(
+        /** Binds foreign automatic handles before testing their converted contents. @param hint - Caller-owned hint. @returns Destination-owned hint or same-pool snapshot. */
+        (hint) =>
+          hint.format instanceof SwFormatAutoFormat &&
+          hint.format.GetStyleHandle().GetPool() !== this.pool
+            ? MakeTextAttr(this.pool.GetDoc(), hint.format, hint.start, hint.end)
+            : hint.clone(),
+      )
       .filter(
         /** Keeps only non-empty supported hints. @param hint - Candidate attribute. @returns Whether meaningful. */
         (hint) =>
@@ -323,10 +335,6 @@ export class SwpHints {
           ((hint.format instanceof SwFormatAutoFormat &&
             hint.format.GetStyleHandle().Count() > 0) ||
             (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0)),
-      )
-      .map(
-        /** Clones caller-owned hints. @param hint - Source hint. @returns Independent hint. */
-        (hint) => hint.clone(),
       )
       .sort(compareHints);
     const normalized: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
@@ -463,9 +471,20 @@ export class SwpHints {
     return hint?.format instanceof SwFormatINetFormat ? hint.format.GetHyperlink() : undefined;
   }
 
-  /** Creates a deep copy safe for another text node in the same document. @returns Independent hints. */
-  public clone(): SwpHints {
-    return new SwpHints(this.pool, this.hintsByStart);
+  /** Captures same-pool state or converts a foreign container into copied attributes. @param pool - Requested owner, defaulting to the current pool. @returns Independent hints. */
+  public clone(pool: SwAttrPool = this.pool): SwpHints {
+    return pool === this.pool ? new SwpHints(pool, this.hintsByStart) : this.CopyTo(pool);
+  }
+
+  /** Copies text attributes through native construction, including same-document copies. @param pool - Destination document pool. @returns Fresh hints with constructor flags and destination-owned automatic handles. */
+  public CopyTo(pool: SwAttrPool): SwpHints {
+    return new SwpHints(
+      pool,
+      this.hintsByStart.map(
+        /** Reconstructs one copied attribute. @param hint - Source attribute. @returns Fresh destination attribute. */
+        (hint) => MakeTextAttr(pool.GetDoc(), hint.format, hint.start, hint.end),
+      ),
+    );
   }
 
   /** Projects inherited character defaults through the item model. @param inherited - Node/style set. @returns Browser properties. */

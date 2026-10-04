@@ -110,7 +110,10 @@ export class DocumentContentOperationsManager {
     const { end, node, start } = this.GetSameTextNodeRange(source, "copy");
     const targetNode = this.GetTextNode(target, "copy destination");
     const fragment = node.CaptureTextFragment(start, end);
-    targetNode.ReplaceRange(target.GetContentIndex(), target.GetContentIndex(), fragment);
+    targetNode.ReplaceRange(target.GetContentIndex(), target.GetContentIndex(), {
+      text: fragment.text,
+      hints: fragment.hints.CopyTo(this.document.GetAttrPool()),
+    });
     return fragment.text.length;
   }
 

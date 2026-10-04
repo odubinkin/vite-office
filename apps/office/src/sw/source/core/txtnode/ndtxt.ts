@@ -143,7 +143,7 @@ export class SwTextNode extends SwContentNode {
     for (const hint of hints.entries())
       if (hint.end > this.mText.length)
         throw new Error("Writer text hint is outside the text node.");
-    const replacement = hints.clone();
+    const replacement = hints.clone(this.GetDoc().GetAttrPool());
     this.pSwpHints = replacement.Count() === 0 ? undefined : replacement;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -788,7 +788,8 @@ export class SwTextNode extends SwContentNode {
     const direct = this.GetpSwAttrSet();
     if (direct !== undefined) clone.SetAttr(direct);
     clone.SetText(this.mText);
-    if (this.pSwpHints !== undefined) clone.SetTextHints(this.pSwpHints);
+    if (this.pSwpHints !== undefined)
+      clone.SetTextHints(this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool()));
     clone.SetListGeometryWins(this.listGeometryWins);
     clone.mbEmptyListStyleSetDueToSetOutlineLevelAttr =
       this.mbEmptyListStyleSetDueToSetOutlineLevelAttr;
