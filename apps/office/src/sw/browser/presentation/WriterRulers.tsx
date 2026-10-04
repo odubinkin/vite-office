@@ -193,7 +193,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
                   edge="bottom"
                   key={`${positionPt}-${index}`}
                   origin={props.page.leftMargin / TWIPS_PER_CSS_PIXEL}
-                  position={(tabOrigin + positionPt * 20) / TWIPS_PER_CSS_PIXEL}
+                  position={toRulerPixel(tabOrigin + positionPt * 20)}
                   onCommit={
                     /** Handles Writer formatting state. @param delta - Input value. @returns Callback result. */ (
                       delta,

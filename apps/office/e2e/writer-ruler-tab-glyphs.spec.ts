@@ -146,7 +146,7 @@ for (const width of [1280, 390]) {
           element,
         ) => Number.parseFloat(element.style.left),
       ),
-    ).toBeCloseTo((1800 + 1474) / 15, 3);
+    ).toBe(218);
     await editor.press("Control+z");
     expect(
       await right.evaluate(
@@ -162,7 +162,7 @@ for (const width of [1280, 390]) {
           element,
         ) => Number.parseFloat(element.style.left),
       ),
-    ).toBeCloseTo((1800 + 1474) / 15, 3);
+    ).toBe(218);
     await editor.press("Control+z");
     const surface = toolbar.locator(":scope > div");
     const box = await surface.boundingBox();

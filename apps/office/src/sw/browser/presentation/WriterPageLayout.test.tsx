@@ -197,7 +197,7 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
     const handle = screen.getByRole("button", { name: "Tab stop 1" });
     fireEvent.pointerDown(handle, { clientX: 100 });
     fireEvent.pointerUp(window, { clientX: 115 });
-    expect(onTabStopMove).toHaveBeenCalledWith(0, 237);
+    expect(onTabStopMove).toHaveBeenCalledWith(0, 231);
   });
 
   it("retains other tab stops when dragging a marker", /** Checks multi-stop ruler editing. @returns Nothing. */ () => {
@@ -225,7 +225,7 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
     const handle = screen.getByRole("button", { name: "Tab stop 1" });
     fireEvent.pointerDown(handle, { clientX: 100 });
     fireEvent.pointerUp(window, { clientX: 115 });
-    expect(onTabStopMove).toHaveBeenCalledWith(0, 237);
+    expect(onTabStopMove).toHaveBeenCalledWith(0, 231);
     rerender(
       <WriterRulers
         horizontalVisible

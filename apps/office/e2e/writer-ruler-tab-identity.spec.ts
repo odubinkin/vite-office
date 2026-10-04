@@ -47,7 +47,7 @@ for (const width of [1280, 390]) {
         /** Reads the moved explicit tab after model reprojection. @param element - Marker. @returns Coordinate. */
         (element) => Number.parseFloat(element.style.left),
       ),
-    ).toBeCloseTo(original + 274 / 15, 3);
+    ).toBe(218);
     await editor.press("Control+z");
     expect(
       await handle.evaluate(
@@ -62,7 +62,7 @@ for (const width of [1280, 390]) {
         /** Reads the reapplied explicit position. @param element - Marker. @returns Coordinate. */
         (element) => Number.parseFloat(element.style.left),
       ),
-    ).toBeCloseTo(original + 274 / 15, 3);
+    ).toBe(218);
     await begin();
     await page.keyboard.press("Escape");
     await page.mouse.up();
@@ -71,7 +71,7 @@ for (const width of [1280, 390]) {
         /** Reads the unchanged accepted position after cancellation. @param element - Marker. @returns Coordinate. */
         (element) => Number.parseFloat(element.style.left),
       ),
-    ).toBeCloseTo(original + 274 / 15, 3);
+    ).toBe(218);
     await editor.press("Control+z");
     expect(
       await handle.evaluate(
