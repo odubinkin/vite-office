@@ -14,6 +14,11 @@
       "stackNecessity": "responsibility-split"
     },
     {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+      "rationale": "Native text-node independent list-indent applicability and selected alignment inputs are split from SwTextNode to retain the mandatory1000-line limit and ndtxt.cxx source ownership.",
+      "stackNecessity": "responsibility-split"
+    },
+    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
       "rationale": "SwWrtShellEditingOperations operates through SwWrtShellEditingPort, so structural edit algorithms can use cursor and undo callbacks without importing the shell class and creating a static module cycle.",
       "stackNecessity": "responsibility-split"
@@ -7954,12 +7959,40 @@
           {
             "marker": "SwNumRuleItem",
             "path": "apps/office/src/sw/source/core/para/paratr.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+            "marker": "resolveSwListLevelIndents"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+            "marker": "resolveSwListParagraphIndents"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "selectsIndependentMask"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "tracksLiveMaskHistory"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "selectsStyleHierarchy"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/para/paratr.ts",
+            "marker": "ListLevelIndents"
           }
         ],
         "upstream": [
           {
             "marker": "SwNumRuleItem",
             "path": "vendor/libreoffice-reference/sw/source/core/para/paratr.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/paratr.hxx",
+            "marker": "enum class ListLevelIndents"
           }
         ]
       },
@@ -7971,7 +8004,8 @@
         "Upstream obligations outside SwNumRuleItem, SwFormatDrop::CreateDefault, SwRegisterItem::CreateDefault, SwNumRuleItem::CreateDefault and the bounded SwNumRuleItem contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded Writer paragraph pool items from pinned `sw/source/core/para/paratr.cxx`."
+        "Reimplements the bounded Writer paragraph pool items from pinned `sw/source/core/para/paratr.cxx`.",
+        "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/para/paratr.cxx",
@@ -8379,6 +8413,67 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+            "marker": "resolveSwListLevelIndents"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+            "marker": "resolveSwListParagraphIndents"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "selectsIndependentMask"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "tracksLiveMaskHistory"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "selectsStyleHierarchy"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::AreListLevelIndentsApplicable"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+            "marker": "AreListLevelIndentsApplicable"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/paratr.hxx",
+            "marker": "enum class ListLevelIndents"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+      "localSymbols": [
+        "resolveSwListLevelIndents",
+        "resolveSwListParagraphIndents",
+        "SwListParagraphIndents"
+      ],
+      "omittedResponsibilities": [
+        "Complete imported custom-style/sideband/legacy/tab/device/RTL/table/redline/frame layout and native const/out-parameter lifetime remain separately unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::AreListLevelIndentsApplicable",
+        "SwTextNode::AreListLevelIndentsApplicableImpl",
+        "SwTextNode::GetLeftMarginWithNum",
+        "SwTextNode::GetFirstLineOfsWithNum"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SwTextNode",
             "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts"
           },
@@ -8573,6 +8668,26 @@
           {
             "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
             "marker": "Writer automatic body layout"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+            "marker": "resolveSwListLevelIndents"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+            "marker": "resolveSwListParagraphIndents"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "selectsIndependentMask"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "tracksLiveMaskHistory"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+            "marker": "selectsStyleHierarchy"
           }
         ],
         "upstream": [
@@ -8750,7 +8865,8 @@
         "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion.",
         "Required iteration64 decomposition moves the three unchanged browser grapheme boundary helpers from SwTextNode into their sole SwWrtShell editing consumer as private functions. The core no longer exports unrelated editing helpers and no forwarding/re-export shim is retained. All helper bodies,existing editing method bodies and prior test/spec files are unchanged; native notification ownership remains in SwTextNode. This resolves the enforced1000-line text-node limit without changing any limit,grapheme behavior,registered IO/recovery decision or semantic status/default. Existing browser Intl/code-point adapter behavior is retained; complete native cursor/grapheme lifetime is not newly certified.",
         "Iteration67 restores the required nullable text-pointer plus hidden-redlines boolean constructor and the distinct required nullable rule-pointer constructor. Text records start unbound; roots and factory records have false mode. PreAdd binds the text rule, registers shown rule clients before document items, and suppresses both registrations for hidden records. PostRemove releases shown document items before rule clients and clears the bound rule; ChangeNumRule retains its existing flag-independent policy. SwTextNode uses explicit false mode and SwList/factory use rule-only construction. Six project-owned cases cover overload/private contracts, shown/hidden insertion/removal, no-rule/no-text/non-document branches, factory defaults, counters/topology and independent ChangeNumRule behavior. Existing constructor fixtures preserve their expected values. Manual pinned inspection/hashes only; no native execution, source/helper artifacts or upstream access by project tests. Full redline/original root selection, undo-array/debug diagnostics, native pointer/destructor/client/layout/final/const/browser lifetimes remain individually unverified. No whole-module/status/default/goal or registered IO/recovery promotion.",
-        "Iteration99 separates authored raw first-line item values from existing automatic paragraph layout. The font-height calculation moves from the text-node convenience getter to the native core text-margin responsibility itrcrsr, where supported Western automatic values obey the existing true-default disregard-line-space setting and false-compatibility proportional/fixed/minimum/leading rules, including zero percent, minimum50percent and integer truncation. Native rule-present numbering bypass keeps raw/list geometry separate. Frozen resolvedFirstLineIndentPt is populated on actual projections while firstLineIndentPt and automatic mode retain authored ruler/dialog contracts; older detached DTOs fall back to raw values. The shared visible/device-measurement paragraph component uses resolved text indentation for unnumbered master frames and zero on follow fragments, keeping existing list marker precedence intact. Owned actual-session evidence checks independent literal twips, direct/inherited raw item ownership, complete values, formatting/Undo/Redo/no-op, retained snapshots, follow/detached/ruler/dialog behavior; Chromium1280/390 product ODT default cases and explicitly controlled existing Worker graph-setting compatibility cases check actual first-glyph Range geometry, raw authoring, history, independent paragraph and later editing. No false-setting ODT persistence claim is made. All300 prior tests remain byte-identical. Native script/language/device font selection, combined rule groups outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain separately unverified. Registered save/open/recovery deviations unchanged; no promotion."
+        "Iteration99 separates authored raw first-line item values from existing automatic paragraph layout. The font-height calculation moves from the text-node convenience getter to the native core text-margin responsibility itrcrsr, where supported Western automatic values obey the existing true-default disregard-line-space setting and false-compatibility proportional/fixed/minimum/leading rules, including zero percent, minimum50percent and integer truncation. Native rule-present numbering bypass keeps raw/list geometry separate. Frozen resolvedFirstLineIndentPt is populated on actual projections while firstLineIndentPt and automatic mode retain authored ruler/dialog contracts; older detached DTOs fall back to raw values. The shared visible/device-measurement paragraph component uses resolved text indentation for unnumbered master frames and zero on follow fragments, keeping existing list marker precedence intact. Owned actual-session evidence checks independent literal twips, direct/inherited raw item ownership, complete values, formatting/Undo/Redo/no-op, retained snapshots, follow/detached/ruler/dialog behavior; Chromium1280/390 product ODT default cases and explicitly controlled existing Worker graph-setting compatibility cases check actual first-glyph Range geometry, raw authoring, history, independent paragraph and later editing. No false-setting ODT persistence claim is made. All300 prior tests remain byte-identical. Native script/language/device font selection, combined rule groups outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain separately unverified. Registered save/open/recovery deviations unchanged; no promotion.",
+        "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

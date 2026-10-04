@@ -53,7 +53,8 @@ import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
 import type { WriterHyperlink } from "./fmtatr2";
 
-import { SwNumRuleItem } from "../para/paratr";
+import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
+import { resolveSwListLevelIndents } from "./ndtxt-list-indent";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
 
@@ -109,6 +110,11 @@ export class SwTextNode extends SwContentNode {
   /** Reports whether a list style overrides paragraph indentation inherited from an ancestor style. @returns List precedence. */
   public DoesListGeometryWin(): boolean {
     return this.listGeometryWins;
+  }
+
+  /** Resolves native independent list-indent applicability from live items and styles. @returns Native flags. */
+  public AreListLevelIndentsApplicable(): ListLevelIndents {
+    return resolveSwListLevelIndents(this);
   }
 
   /** Stores the imported style cascade's list indentation precedence. @param value - List precedence. @returns Nothing. */

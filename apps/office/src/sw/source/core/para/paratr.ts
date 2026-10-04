@@ -6,6 +6,13 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 
+/** Native sw::ListLevelIndents flags from sw/inc/paratr.hxx. */
+export enum ListLevelIndents {
+  No = 0,
+  FirstLine = 1,
+  LeftMargin = 2,
+}
+
 /** Stores the name of the SwNumRule applied to a paragraph. */
 export class SwNumRuleItem extends SfxStringItem {
   /** Creates a numbering-rule item. @param ruleName - Writer numbering-rule name. @returns Nothing. */
