@@ -1304,6 +1304,30 @@
           {
             "path": "apps/office/e2e/writer-sidebar-navigation.spec.ts",
             "marker": "Sidebar managed Tab and arrow navigation"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+            "marker": "showPanel"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+            "marker": "GetPanelIndex"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+            "marker": "adjustsPanelExtent"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+            "marker": "adjusts only the panel and scrollport belonging to its own deck"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+            "marker": "showsWriterPanel"
+          },
+          {
+            "path": "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+            "marker": "Sidebar ShowPanel reveals an oversized Paragraph panel"
           }
         ]
       },
@@ -1311,7 +1335,8 @@
       "rationale": "React/DOM projection of the existing Sidebar Properties deck lifecycle inspected in pinned sfx2 sidebar sources; native window ownership, Help/settings/floating/other decks and complete focus graph remain unverified.",
       "responsibilities": [
         "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
-        "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified."
+        "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified.",
+        "Existing Deck ShowPanel now adjusts its owning browser scrollport after registered panel expansion/title focus, including managed content Escape through FocusPanel. Content-coordinate top comes from scoped DOM extents, border offset and current scroll; native closed Rectangle Bottom and the additional ShowPanel minus-one are preserved, fitting panels reveal bottom and oversized panels prioritize top. Nonoverflow browser viewport skips adjustment. Optional post-focus callback preserves existing standalone manager clients; opening browser visibility remains before DOM focus. Literal source-coordinate/empty/boundary/oversized/expansion/ownership tests, actual Writer no-dispatch/model tests and measured desktop/mobile DOM focus/scroll/editing cover this operation. Toolkit failed extents/scrollbar absence/DPI and rounding/full native sizing/context/F6/settings/other decks and complete Sidebar/native parity remain unverified."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1346,13 +1371,38 @@
           {
             "path": "apps/office/e2e/writer-sidebar-navigation.spec.ts",
             "marker": "Sidebar managed Tab and arrow navigation"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+            "marker": "showPanel"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+            "marker": "GetPanelIndex"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+            "marker": "adjustsPanelExtent"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+            "marker": "adjusts only the panel and scrollport belonging to its own deck"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+            "marker": "showsWriterPanel"
+          },
+          {
+            "path": "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+            "marker": "Sidebar ShowPanel reveals an oversized Paragraph panel"
           }
         ]
       },
       "localPath": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
       "rationale": "Owned React/DOM adaptation of inspected Sfx2 panel registration and the currently implemented focus graph; complete native focus parity remains unverified.",
       "responsibilities": [
-        "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified."
+        "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified.",
+        "Existing Deck ShowPanel now adjusts its owning browser scrollport after registered panel expansion/title focus, including managed content Escape through FocusPanel. Content-coordinate top comes from scoped DOM extents, border offset and current scroll; native closed Rectangle Bottom and the additional ShowPanel minus-one are preserved, fitting panels reveal bottom and oversized panels prioritize top. Nonoverflow browser viewport skips adjustment. Optional post-focus callback preserves existing standalone manager clients; opening browser visibility remains before DOM focus. Literal source-coordinate/empty/boundary/oversized/expansion/ownership tests, actual Writer no-dispatch/model tests and measured desktop/mobile DOM focus/scroll/editing cover this operation. Toolkit failed extents/scrollbar absence/DPI and rounding/full native sizing/context/F6/settings/other decks and complete Sidebar/native parity remain unverified."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1439,6 +1489,30 @@
           {
             "path": "apps/office/e2e/writer-sidebar-navigation.spec.ts",
             "marker": "Sidebar managed Tab and arrow navigation"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+            "marker": "showPanel"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+            "marker": "GetPanelIndex"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+            "marker": "adjustsPanelExtent"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+            "marker": "adjusts only the panel and scrollport belonging to its own deck"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+            "marker": "showsWriterPanel"
+          },
+          {
+            "path": "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+            "marker": "Sidebar ShowPanel reveals an oversized Paragraph panel"
           }
         ]
       },
@@ -1447,7 +1521,8 @@
       "responsibilities": [
         "Paragraph panel header follows inspected Panel::SetExpanded/PanelTitleBar and FocusManager Return: initial expanded state, collapse retains mounted content, More Options remains available and dispatches existing ParagraphDialog, and Return expands before first eligible content focus. Owned lifecycle/bindings/dialog/keyboard and rebuilt desktop/mobile checks cover this bounded contract. Complete panel/deck focus graph, F6, Help/settings/other panels, context/profile expansion persistence and native sizing remain open.",
         "Existing visible Paragraph panel Escape follows pinned FocusManager: unconsumed content cancellation focuses the expanded panel title; title/toolbar cancellation returns to its own document without closing or dispatch. Child-consumed keys remain owned by that child and a detached header without document ownership leaves Escape unconsumed. Owned retained-draft/controls/modifier/frame/model checks and rebuilt desktop/mobile focus-plus-editing cases cover this branch only. Full Tab/arrows/F6/other panels/hidden-title fallback/Help/settings/native sizing/context-profile persistence remain unverified.",
-        "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified."
+        "Managed traversal of the implemented deck toolbox, single Properties activation button and visible titled panels follows inspected FocusManager Tab/arrows/FocusPanel and SidebarController ShowPanel: forward title Tab enters existing toolbar before expanded content, toolbox Tab enters rail regardless of Shift, rail forward Tab enters/expands first panel and opens a closed deck, panel arrows traverse actual display order with toolbox/rail boundaries, rail vertical arrows wrap without activation. Registered DOM references and cleanup preserve deck ownership, keyed reorder/removal and isolated clients. Backward panel Tab, horizontal rail arrows and content keys retain child/browser ownership. Application and rebuilt desktop/mobile tests use only local code. Browser deck visibility must be flushed before DOM focus; native ShowPanel follows the focus request. Settings menu, other decks, F6, hidden/titleless fallbacks, native visibility/sensitivity and focus flags, scroll geometry, contexts and complete Sidebar/native parity remain unverified.",
+        "Existing Deck ShowPanel now adjusts its owning browser scrollport after registered panel expansion/title focus, including managed content Escape through FocusPanel. Content-coordinate top comes from scoped DOM extents, border offset and current scroll; native closed Rectangle Bottom and the additional ShowPanel minus-one are preserved, fitting panels reveal bottom and oversized panels prioritize top. Nonoverflow browser viewport skips adjustment. Optional post-focus callback preserves existing standalone manager clients; opening browser visibility remains before DOM focus. Literal source-coordinate/empty/boundary/oversized/expansion/ownership tests, actual Writer no-dispatch/model tests and measured desktop/mobile DOM focus/scroll/editing cover this operation. Toolkit failed extents/scrollbar absence/DPI and rounding/full native sizing/context/F6/settings/other decks and complete Sidebar/native parity remain unverified."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",

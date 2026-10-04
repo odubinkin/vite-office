@@ -1,0 +1,73 @@
+{
+  "base": "4a28a66c4db5554f3c95b204a92b158a88d8334d",
+  "semanticPaths": [
+    "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+    "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+    "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+    "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+    "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedSourceHashesUnchanged": 7,
+  "priorTestFilesByteIdentical": 271,
+  "manifests": {
+    "docs/program/source-provenance.json": {
+      "rows": 218,
+      "appendOnlyRows": [
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+        "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx"
+      ],
+      "statusDefaultOwnerExceptionsUnchanged": true
+    },
+    "docs/program/parity/runtime-inventory.json": {
+      "rows": 218,
+      "appendOnlyRows": [
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+        "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx"
+      ],
+      "statusDefaultOwnerExceptionsUnchanged": true
+    }
+  },
+  "fullVerifyExitCode": 0,
+  "vendorAbsentChecksPassed": 3,
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10356,
+      "covered": 10356,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11292,
+      "covered": 11292,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3006,
+      "covered": 3006,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8516,
+      "covered": 8516,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "artifactAudit": "artifact-audit.json",
+  "nativeExecution": false
+}

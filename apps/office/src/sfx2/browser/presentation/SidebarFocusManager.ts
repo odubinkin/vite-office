@@ -12,17 +12,25 @@ export class SidebarFocusManager {
   private readonly panels = new Map<HTMLElement, SidebarFocusPanel>();
   private focusDeckTitle!: () => void;
   private focusButton!: () => void;
-  private showPanel!: () => void;
+  private openDeck!: () => void;
+  private showPanel: ((panel: HTMLElement) => void) | undefined;
 
   /** Binds this deck's toolbox, activation rail and ShowPanel operation.
    * @param focusDeckTitle - Focuses the existing deck toolbox without activation.
    * @param focusButton - Focuses the implemented activation button.
-   * @param showPanel - Opens the owning deck before browser title focus.
+   * @param openDeck - Opens the owning deck before browser title focus.
+   * @param showPanel - Adjusts the owned viewport after expansion and title focus.
    * @returns Nothing.
    */
-  SetDeck(focusDeckTitle: () => void, focusButton: () => void, showPanel: () => void): void {
+  SetDeck(
+    focusDeckTitle: () => void,
+    focusButton: () => void,
+    openDeck: () => void,
+    showPanel?: (panel: HTMLElement) => void,
+  ): void {
     this.focusDeckTitle = focusDeckTitle;
     this.focusButton = focusButton;
+    this.openDeck = openDeck;
     this.showPanel = showPanel;
   }
 
@@ -64,6 +72,17 @@ export class SidebarFocusManager {
     );
   }
 
+  /** Resolves a mounted panel's native focus-location index in actual display order.
+   * @param element - Registered owning panel root.
+   * @returns Display index.
+   */
+  GetPanelIndex(element: HTMLElement): number {
+    return this.GetPanels().findIndex(
+      /** Locates the owning registered panel. @param panel - Mounted panel. @returns Ownership match. */
+      (panel) => panel.element === element,
+    );
+  }
+
   /** Enters an indexed expanded panel, with the native invalid-index fallback.
    * @param index - Panel display index.
    * @param fallbackToDeckTitle - Whether a missing index returns to the toolbox.
@@ -75,8 +94,9 @@ export class SidebarFocusManager {
       if (fallbackToDeckTitle) this.FocusDeckTitle();
       return;
     }
-    this.showPanel();
+    this.openDeck();
     panel.focusTitle();
+    this.showPanel?.(panel.element);
   }
 
   /** Moves between panel titles and the existing deck/rail boundaries.
@@ -85,15 +105,11 @@ export class SidebarFocusManager {
    * @returns Nothing.
    */
   MovePanel(element: HTMLElement, direction: -1 | 1): void {
-    const panels = this.GetPanels();
-    const index = panels.findIndex(
-      /** Locates the owning registered panel. @param panel - Mounted panel. @returns Ownership match. */
-      (panel) => panel.element === element,
-    );
+    const index = this.GetPanelIndex(element);
     if (direction < 0) {
       if (index > 0) this.FocusPanel(index - 1, true);
       else this.FocusDeckTitle();
-    } else if (index < panels.length - 1) this.FocusPanel(index + 1, false);
+    } else if (index < this.panels.size - 1) this.FocusPanel(index + 1, false);
     else this.FocusButton();
   }
 }

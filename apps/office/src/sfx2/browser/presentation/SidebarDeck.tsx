@@ -43,10 +43,30 @@ export function SidebarDeck({
   const contentId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const activationRef = useRef<HTMLButtonElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const [focusManager] = useState(
     /** Creates focus ownership for this deck's mounted lifetime. @returns Owned manager. */ () =>
       new SidebarFocusManager(),
   );
+  /** Projects Deck ShowPanel adjustment for the existing browser scrollport.
+   * @param panel - Expanded panel whose title has received focus.
+   * @returns Nothing.
+   */
+  function showPanel(panel: HTMLElement): void {
+    const viewport = viewportRef.current as HTMLDivElement;
+    if (viewport.scrollHeight <= viewport.clientHeight) return;
+    const extent = panel.getBoundingClientRect();
+    const panelTop =
+      extent.top - viewport.getBoundingClientRect().top - viewport.clientTop + viewport.scrollTop;
+    // Native Rectangle Bottom is closed; ShowPanel subtracts one further pixel.
+    const panelBottom = panelTop + Math.max(0, extent.height - 1) - 1;
+    let position = viewport.scrollTop;
+    if (panelBottom >= position + viewport.clientHeight)
+      position = panelBottom - viewport.clientHeight;
+    if (panelTop < position) position = panelTop;
+    viewport.scrollTop = position;
+  }
+
   useLayoutEffect(
     /** Binds mounted controls after commit rather than reading refs during render. @returns Nothing. */ () => {
       focusManager.SetDeck(
@@ -59,6 +79,7 @@ export function SidebarDeck({
             /** Opens the retained deck for panel entry. @returns Nothing. */ () => setIsOpen(true),
           );
         },
+        showPanel,
       );
     },
     [focusManager],
@@ -125,7 +146,10 @@ export function SidebarDeck({
             <X aria-hidden size={16} />
           </button>
         </header>
-        <div className="max-h-[32vh] overflow-auto p-4 lg:h-[calc(100%_-_2.5rem)] lg:max-h-none">
+        <div
+          className="max-h-[32vh] overflow-auto p-4 lg:h-[calc(100%_-_2.5rem)] lg:max-h-none"
+          ref={viewportRef}
+        >
           <SidebarFocusContext.Provider value={focusManager}>
             {children}
           </SidebarFocusContext.Provider>

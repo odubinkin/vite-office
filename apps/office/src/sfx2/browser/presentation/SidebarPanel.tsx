@@ -109,7 +109,8 @@ export function SidebarPanel({
   function returnToPanelTitle(event: KeyboardEvent<HTMLDivElement>): void {
     if (event.defaultPrevented || event.key !== "Escape") return;
     event.preventDefault();
-    focusPanelTitle();
+    if (focusManager === undefined) focusPanelTitle();
+    else focusManager.FocusPanel(focusManager.GetPanelIndex(panelRef.current as HTMLElement), true);
   }
   return (
     <section aria-label={title} ref={panelRef}>
