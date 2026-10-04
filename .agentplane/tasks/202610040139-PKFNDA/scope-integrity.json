@@ -1,6 +1,6 @@
 {
   "base": "3465e116767e",
-  "priorTestsByteIdentical": 262,
+  "priorTestsByteIdentical": 259,
   "manifests": [
     {
       "path": "docs/program/source-provenance.json",
@@ -47,6 +47,35 @@
     {
       "path": "docs/program/parity/runtime-inventory.json",
       "sha256": "be0230088337bb4c450611aed08731334d6266b44cd34092d593c6a12b5c8b3e"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+      "sha256": "6257c71090130baa5856c7b60c95fb1b56b6a6bc4b39977da0818eefc01e351c"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx",
+      "sha256": "6669cf484af3a04fa3e32265cefb2169b48dbee0cec579e7801609536ab5c8e2"
+    },
+    {
+      "path": "apps/office/e2e/writer-responsive-sidebar.spec.ts",
+      "sha256": "d2dac92030fbad163bebd2ba9d8b379709398e6f113e504af1be06aff7775323"
+    }
+  ],
+  "locatorOnlyPriorTests": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+      "assertionsInputsAndTestCountPreserved": true,
+      "exactFormattedInverse": true
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx",
+      "assertionsInputsAndTestCountPreserved": true,
+      "exactFormattedInverse": true
+    },
+    {
+      "path": "apps/office/e2e/writer-responsive-sidebar.spec.ts",
+      "assertionsInputsAndTestCountPreserved": true,
+      "exactFormattedInverse": true
     }
   ]
 }
