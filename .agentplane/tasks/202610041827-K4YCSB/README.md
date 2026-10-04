@@ -1,10 +1,11 @@
 ---
 id: "202610041827-K4YCSB"
 title: "Restore destination-owned text hint copying"
-status: "DOING"
+result_summary: "Restored CopyTo/CloneTo/CopyRange destination ownership and native fresh flags; 62 new cases, 331 unchanged prior tests, absent-only gates with one failed-new-helper case recovered, coverage100 percent, source/helper-free AP and broad parity gaps retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -47,11 +48,16 @@ quality_review:
   findings:
     - "Seven semantic paths match approved scope; 331 prior test files byte-identical, 234 runtime fields/statuses/defaults/exceptions retained except three bounded justification appendices. Native CopyText/InsertItem/MakeTextAttr constructor paths support destination pool conversion and copied flags."
     - "All six static gates, one absent build, app coverage100 percent with1762 initial passes plus only the failed new helper case recovered, inventory109 coverage100 percent, scripts5, Chromium99 passed. Five restored audits and routing passed; no repeated passing suites."
-commit: null
+commit:
+  hash: "a2391d267ec37a509f4959e4851e745897809343"
+  message: "✅ K4YCSB task: record destination-owned hint copy verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved destination-owned copy boundaries under standing iterative goal."
+  -
+    author: "CODER"
+    body: "Verified: destination-owned text attribute copies and retained same-pool snapshots passed the approved bounded gates."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All approved gates passed with failed-new-helper-only recovery; production unchanged after coverage100 percent, total1763 app cases, inventory109, scripts5 and Chromium99 upstream-absent; nine native hashes, 331 unchanged prior tests, 234 unchanged runtime fields and seven semantic paths. Same-actor quality pass at bf505de3f8baa6d3a2304ca08641f844fa801998; vendor restored and no source/helper AP artifacts."
+  -
+    type: "status"
+    at: "2026-10-04T18:45:42.388Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: destination-owned text attribute copies and retained same-pool snapshots passed the approved bounded gates."
 doc_version: 3
-doc_updated_at: "2026-10-04T18:45:23.689Z"
+doc_updated_at: "2026-10-04T18:45:42.390Z"
 doc_updated_by: "CODER"
 description: "Restore native MakeTextAttr copying at existing text-node/container/fragment copy boundaries, converting automatic handles into destination pools and resetting copied hint flags while retaining same-pool snapshot clones for undo."
 sections:
@@ -126,6 +139,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task's implementation and documentation commits through a new traceable task; restore vendor directory if interrupted. No history rewrite."
   Findings: "Iteration115 restores destination-owned automatic handles and constructor flags at actual CloneTo/CopyRange text copying via MakeTextAttr; same-pool historical clone/slice, state restoration and whole moves retain flags/shared handles. Foreign containers bind automatic and internet hints, including internet-only fragments; raw foreign automatic arrays convert before marker-only pruning. All 331 prior tests are byte-identical, 62 new app cases cover eight flag combinations, source isolation, pool separation/style reuse, parent/state exclusion, adjacent merging, real node/import/copy/move boundaries and later formatting/codec consumers. Six static gates passed. One upstream-absent build and app coverage run: 1762 initially passed, one new helper failed on its first-hint ordering assumption; the helper now selects WhichId53, and only that failed case was recovered absent. Production remained byte-identical after coverage; four app metrics100%. Inventory109/36 four metrics100%, scripts5/2, Chromium99 all first absent passes. No repeated passing suite/build. Vendor restored before five source audits; all passed with semantic violations0. Exact seven semantic paths, all234 runtime fields/statuses/defaults/exceptions unchanged except three appended justifications; nine native hashes only. Ignored-inclusive AP scan3734 files, forbidden0; doctor errors0 with two unchanged warnings; policy routing passed. Partial MoveText split semantics, native holder/refcount/client/character-style listener ownership, nullable automatic handles, unordered pool iteration and broader module/browser parity remain unverified. No broad goal/status promotion or registered I/O deviation changes."
+extensions:
+  implementation_commit:
+    hash: "bf505de3f8baa6d3a2304ca08641f844fa801998"
+    message: "🛠️ K4YCSB writer: restore destination-owned text hint copying"
 id_source: "generated"
 ---
 ## Summary
