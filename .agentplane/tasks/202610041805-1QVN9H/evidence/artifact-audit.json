@@ -1,0 +1,6 @@
+{
+  "ignoredInclusiveFiles": 3723,
+  "forbiddenCount": 0,
+  "scope": "All .agentplane including ignored files; no upstream/helper/Python/source-frame/raw-diff/executable artifacts",
+  "upstreamRestored": true
+}

@@ -1,0 +1,66 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    {
+      "path": "svl/source/items/stylepool.cxx",
+      "sha256": "01425093bb895db6bd7c226ccc2c64af1c09dbafd420f21fbb3b54269690236d"
+    },
+    {
+      "path": "include/svl/stylepool.hxx",
+      "sha256": "2834dc7211a1fb72fa1dc3f40e6994bca4047c2401f59a608c3495697231c552"
+    },
+    {
+      "path": "include/svl/itemiter.hxx",
+      "sha256": "c71644ef88411f52312652bac3a390101b8761ebb343f79034b47e2708a1f9ed"
+    },
+    {
+      "path": "include/svl/itemset.hxx",
+      "sha256": "556a9c3a7bacddffc2e9da13462161836261c4ca97c83361e67ac5d166a33c1c"
+    },
+    {
+      "path": "svl/source/items/itemset.cxx",
+      "sha256": "e9cd6e67ef9f5f9bd02f0cea10543d41f0d03ace23e903841db38d894dc26dbe"
+    },
+    {
+      "path": "include/svl/poolitem.hxx",
+      "sha256": "cfbe8314efb61fb9956aef3b44aae678361603a416f0b91e8b1f301e0c436294"
+    },
+    {
+      "path": "svl/source/items/poolitem.cxx",
+      "sha256": "54017f9b6a450889bcddcc8a7dc95ed1bada03f5bbe0d4ac810e55a940d9a680"
+    },
+    {
+      "path": "sw/source/core/doc/swstylemanager.cxx",
+      "sha256": "0568482dc9465372972d5360419a5ec5f7e98bc1d95f0c257efc3319e06bd25d"
+    },
+    {
+      "path": "sw/inc/istyleaccess.hxx",
+      "sha256": "da187306bdd6ddd82e0342e3a096f61889ff0f5292e6135d09e6e01bd2e024f1"
+    },
+    {
+      "path": "sw/source/core/txtnode/txtedt.cxx",
+      "sha256": "900413bc482204a05a6bc74a7a3b2b89824335f0f849a531afde833793f083f1"
+    },
+    {
+      "path": "sw/source/core/txtnode/fmtatr2.cxx",
+      "sha256": "f21ad8f8f8615d648f068c27a52f8457828c180843f9917a4ba42c95dd203de3"
+    },
+    {
+      "path": "sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "sw/inc/hintids.hxx",
+      "sha256": "c69353d16f8f15575a82843880cc016c6033e2f86e91905f999a0cfec8cf398f"
+    },
+    {
+      "path": "include/svl/whichranges.hxx",
+      "sha256": "e352e8133ec6278004b6db4cc8367f4e2445f35f661f2652aae9c28e3e40f9c1"
+    }
+  ]
+}

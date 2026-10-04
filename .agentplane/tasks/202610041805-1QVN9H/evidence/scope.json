@@ -1,0 +1,34 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
+    "apps/office/src/sw/source/core/txtnode/thints.test.ts",
+    "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-replacement.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-stylepool.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "priorTestFiles": 329,
+  "unchangedPriorTests": 327,
+  "changedPriorTests": [
+    "apps/office/src/sw/source/core/txtnode/txtedt-replacement.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts"
+  ],
+  "newRegressionCases": 26,
+  "previousRuntimeRows": 233,
+  "currentRuntimeRows": 234,
+  "unchangedStatusDefaultsExceptions": true,
+  "modifiedExistingEvidenceRows": [
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+    "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
+    "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt.ts"
+  ],
+  "newUnverifiedOwner": "apps/office/src/sw/source/core/txtnode/thints.ts",
+  "nativeSourceHashes": 15,
+  "restored": true
+}

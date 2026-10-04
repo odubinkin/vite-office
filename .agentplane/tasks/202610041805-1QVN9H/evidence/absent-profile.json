@@ -1,0 +1,68 @@
+{
+  "results": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-unavailable",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "86e3abe13cacaf566dea062518f2386408fffa2fac996d473ca7dbb42a4bb0fe",
+      "totals": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-unavailable",
+      "exit": 0,
+      "bytes": 1035,
+      "sha256": "2df9e13fa242f2ce10719fccb1e1f10c933409f1ce27581ff4496cf6f6961644",
+      "totals": [
+        "Test Files  248 passed (248)",
+        "Tests  1701 passed (1701)"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-unavailable",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "16f3243538521c62ef9c1a18ff2048fd7a36ac6103e5c95827dbba0cdaa875d2",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-unavailable",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "40de13b434147b58d5fb251886f19c912a32d261653d44c0d9dac08184bea33b",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ]
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-unavailable",
+      "exit": 0,
+      "bytes": 13578,
+      "sha256": "a12ca9fa69f8bf205d403d7a81547a05795701995465bd3d0ddbfe38ea5fbf5a",
+      "totals": [
+        "99 passed (36.0s)"
+      ]
+    }
+  ],
+  "restored": true
+}
