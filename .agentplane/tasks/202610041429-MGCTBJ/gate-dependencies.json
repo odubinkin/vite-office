@@ -1,0 +1,6 @@
+{
+  "command": "npm run check:dependencies",
+  "exitCode": 0,
+  "outputBytes": 188,
+  "outputSha256": "3b8fd627cffb4fe1cf19692561114d7eafc3b4ef92cfbfa94c1b5f9e0d211841"
+}
