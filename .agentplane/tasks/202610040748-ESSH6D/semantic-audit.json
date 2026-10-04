@@ -1,0 +1,7 @@
+{
+  "command": "npm run inventory:parity",
+  "exitCode": 0,
+  "outputBytes": 994727,
+  "outputSha256": "7c8d652ff17d778645e3da8e651e4ec835c65426d7ba82e6839cfd6ef0c7c610",
+  "semanticViolationCount": 0
+}

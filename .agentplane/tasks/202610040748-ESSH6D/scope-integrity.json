@@ -21,8 +21,8 @@
     },
     {
       "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
-      "bytes": 10340,
-      "sha256": "aac0a30c9d5eb183c7b9fd7467e82afa79841dfa876336afc3881066561ea6cf"
+      "bytes": 10314,
+      "sha256": "b44ec09366dc288c62652c3f4f319e54eb18e5c89554c0bb65910516342bce10"
     },
     {
       "path": "apps/office/e2e/writer-ruler-auto-first.spec.ts",
