@@ -1,10 +1,11 @@
 ---
 id: "202610041642-VG6XZG"
 title: "Restore native selective text hint reset decisions and no-op ownership"
-status: "DOING"
+result_summary: "Restored registered native selective reset decisions and no-op ownership;20 local regressions; one absent-only test profile; no broad parity promotion."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Actual four-path diff restores exact precedence, direct SET whole-hint deletion, lazy common direct SET filtering and no-op owner/notification preservation. Twenty new independent tests exercise real model and frame/history owners;323 previous tests/specs remain byte-identical. Every declared static/product/source gate passed; suites ran once absent-only,1571app/109inventory/5scripts/99Chromium, four required metrics100%. No implementation change after verification."
     - "Ignored-inclusive complete Agentplane audit found zero stored source/helpers/Python/executables/raw source diffs/source frames. Three native file hashes bind to pinned SHA.230 runtime rows preserve status/default/exception fields and all registered I/O/recovery deviations. Doctor zero errors and routing pass."
-commit: null
+commit:
+  hash: "28d60d3fbc37358609bb5dde46de381521d32390"
+  message: "✅ VG6XZG task: restore canonical verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Restore the approved native selective hint reset contract with independent local regressions and one absent-only verification profile."
+  -
+    author: "CODER"
+    body: "Verified: Restored selective text hint SET decisions, exact precedence and no-op ownership at semantic866b60c3e000116c4e2732d0e6be49761ee932ba. All declared gates pass; single absent-only product profile1571app/109inventory/5scripts/99Chromium, required metrics100%. Upstream restored,323 prior tests unchanged, scope/AP audits pass, same-actor exact-SHA quality pass, doctor zero errors and routing pass. Broad goal remains active."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Semantic866b60c3e000116c4e2732d0e6be49761ee932ba passes approved bounded contract. Evidence under evidence and exact-SHA quality/20261004-165513534-recovery-context;1571app/109inventory/5scripts/99Chromium first absent-only pass, four metrics100%,323 old tests unchanged, source/scope/AP audits and doctor/routing pass. Restore generated blueprint evidence after custom Verification prose replacement; no test rerun or semantic change."
+  -
+    type: "status"
+    at: "2026-10-04T16:57:07.766Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Restored selective text hint SET decisions, exact precedence and no-op ownership at semantic866b60c3e000116c4e2732d0e6be49761ee932ba. All declared gates pass; single absent-only product profile1571app/109inventory/5scripts/99Chromium, required metrics100%. Upstream restored,323 prior tests unchanged, scope/AP audits pass, same-actor exact-SHA quality pass, doctor zero errors and routing pass. Broad goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T16:56:48.850Z"
+doc_updated_at: "2026-10-04T16:57:07.768Z"
 doc_updated_by: "CODER"
 description: "Continue approved existing-functionality parity goal with one bounded txtedt reset contract leaf. Preserve state markers, direct hint deletion, exact-range precedence and no-op identity against pinned LibreOffice; add independent local real-owner regressions and bounded metadata."
 sections:
@@ -119,6 +132,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task semantic commit with a new commit if required; do not rewrite history. Restore upstream directory in finally on every absent-profile exit."
   Findings: "Confirmed pinned full-node decision gap and repaired it without broad parity promotion. All static gates and all product assertions passed first execution:1571 app/241files,109 inventory/36files,5 scripts/2files,99 Chromium. Product suites ran once with upstream unavailable and restored afterward; app/inventory four required coverage metrics100%. All323 previous test/spec files are byte-identical; exact four semantic paths and230 unchanged runtime statuses/defaults/exceptions. Evidence-reader recovery only: ignored the optional zero-total branchesTrue coverage field; refined whole-tree source-body detection to distinguish symbol references and primitive assertion diffs from stored code. No product gate failed or was repeated. Complete native replacement flags, notification kinds and unsupported hint/field/mark/layout/redline/range/style-access contracts remain separately unverified. No network/outside-repo access, upstream source execution or Agentplane source/helper storage."
+extensions:
+  implementation_commit:
+    hash: "866b60c3e000116c4e2732d0e6be49761ee932ba"
+    message: "🛠️ VG6XZG writer: restore native selective hint reset decisions"
 id_source: "generated"
 ---
 ## Summary
