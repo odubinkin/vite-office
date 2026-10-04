@@ -4,7 +4,7 @@ title: "Restore native independent list-indent core contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T10:15:18.198Z"
+  updated_at: "2026-10-04T10:18:12.405Z"
   updated_by: "CODER"
-  note: "Command: split npm verify gates, corrected failed app/coverage gate with --coverage.reportOnFailure, then inventory/scripts/Chromium once with vendor directory absent and restored finally. Result: pass. Evidence: app1306/228files; inventory109/36files; scripts5/2files; Chromium85; app and inventory statements/branches/functions/lines100%. Seven final static checks passed. Restored resource/source-tree/provenance/invariants audits passed; parity222modules semanticViolationCount0. Six paths; all304prior tests and all existing consumers byte-identical;221manifest rows retained, only two existing evidence appends plus one new helper/filename split. Three native read-only hashes; AP3311files forbidden0/proseonlydiff5. Routing and doctor exit0. Scope: independent core mask and selected alignment contracts; no browser/filter/registered I/O/recovery changes. Initial failed consumer application gate is preserved as bounded evidence, no passing full suite repeated. Exact-SHA evaluator and clean finish remain."
+  note: "Refreshed blueprint snapshot after final task title/description narrowed to reviewed core scope. Existing final evidence and semantic identities unchanged; app1306/inventory109/scripts5/browser85 pass absent, both coverage100%, all source/static/audit checks pass. No tests rerun; pinned semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742."
   attempts: 0
 quality_review:
   state: "pass"
@@ -74,8 +74,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: split npm verify gates, corrected failed app/coverage gate with --coverage.reportOnFailure, then inventory/scripts/Chromium once with vendor directory absent and restored finally. Result: pass. Evidence: app1306/228files; inventory109/36files; scripts5/2files; Chromium85; app and inventory statements/branches/functions/lines100%. Seven final static checks passed. Restored resource/source-tree/provenance/invariants audits passed; parity222modules semanticViolationCount0. Six paths; all304prior tests and all existing consumers byte-identical;221manifest rows retained, only two existing evidence appends plus one new helper/filename split. Three native read-only hashes; AP3311files forbidden0/proseonlydiff5. Routing and doctor exit0. Scope: independent core mask and selected alignment contracts; no browser/filter/registered I/O/recovery changes. Initial failed consumer application gate is preserved as bounded evidence, no passing full suite repeated. Exact-SHA evaluator and clean finish remain."
+  -
+    type: "verify"
+    at: "2026-10-04T10:18:12.405Z"
+    author: "CODER"
+    state: "ok"
+    note: "Refreshed blueprint snapshot after final task title/description narrowed to reviewed core scope. Existing final evidence and semantic identities unchanged; app1306/inventory109/scripts5/browser85 pass absent, both coverage100%, all source/static/audit checks pass. No tests rerun; pinned semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742."
 doc_version: 3
-doc_updated_at: "2026-10-04T10:17:22.853Z"
+doc_updated_at: "2026-10-04T10:18:12.465Z"
 doc_updated_by: "CODER"
 description: "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion."
 sections:
@@ -98,7 +104,41 @@ sections:
     2. Actual connected node/style ownership, immutable raw snapshots, full graph/history/no-op/direct absence, clone destination and existing rendering remain unchanged by inspection/reads. All304 prior test files and all existing consumer files byte-identical to base.
     3. All seven final static gates pass; repeat only affected gates. Corrected failed full app/coverage gate passes with reportOnFailure. Inventory coverage/scripts/full browser run once, only absent. Both coverage outputs all four metrics100%. Finally upstream restored; no tests invoke native sources.
     4. Resource/source-tree/provenance/invariants/parity audits pass after restoration. Six semantic paths; mapping222 preserving221 old order and only two existing evidence rows plus one helper/new filename split. Three read-only native hashes. Whole AP forbidden0. Routing/doctor, exact-SHA same-actor read-only EVALUATOR, final clean tracked state and parent progress update.
-  Verification: "Command: split npm verify gates, corrected failed app/coverage gate with --coverage.reportOnFailure, then inventory/scripts/Chromium once with vendor directory absent and restored finally. Result: pass. Evidence: app1306/228files; inventory109/36files; scripts5/2files; Chromium85; app and inventory statements/branches/functions/lines100%. Seven final static checks passed. Restored resource/source-tree/provenance/invariants audits passed; parity222modules semanticViolationCount0. Six paths; all304prior tests and all existing consumers byte-identical;221manifest rows retained, only two existing evidence appends plus one new helper/filename split. Three native read-only hashes; AP3311files forbidden0/proseonlydiff5. Routing and doctor exit0. Scope: independent core mask and selected alignment contracts; no browser/filter/registered I/O/recovery changes. Initial failed consumer application gate is preserved as bounded evidence, no passing full suite repeated. Exact-SHA same-actor read-only EVALUATOR passed at a89b8333d4a2b8c50398de7d9a00a7d3b97ee742; quality report: .agentplane/tasks/202610040949-DSEN0S/quality/20261004-101652904-recovery-context/quality-report.json. Semantic files unchanged after review. Finish requires final evidence-only close packet."
+  Verification: |-
+    Command: split npm verify gates, corrected failed app/coverage gate with --coverage.reportOnFailure, then inventory/scripts/Chromium once with vendor directory absent and restored finally. Result: pass. Evidence: app1306/228files; inventory109/36files; scripts5/2files; Chromium85; app and inventory statements/branches/functions/lines100%. Seven final static checks passed. Restored resource/source-tree/provenance/invariants audits passed; parity222modules semanticViolationCount0. Six paths; all304prior tests and all existing consumers byte-identical;221manifest rows retained, only two existing evidence appends plus one new helper/filename split. Three native read-only hashes; AP3311files forbidden0/proseonlydiff5. Routing and doctor exit0. Scope: independent core mask and selected alignment contracts; no browser/filter/registered I/O/recovery changes. Initial failed consumer application gate is preserved as bounded evidence, no passing full suite repeated. Exact-SHA same-actor read-only EVALUATOR passed at a89b8333d4a2b8c50398de7d9a00a7d3b97ee742; quality report: .agentplane/tasks/202610040949-DSEN0S/quality/20261004-101652904-recovery-context/quality-report.json. Semantic files unchanged after review. Finish requires final evidence-only close packet.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T10:18:12.405Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Refreshed blueprint snapshot after final task title/description narrowed to reviewed core scope. Existing final evidence and semantic identities unchanged; app1306/inventory109/scripts5/browser85 pass absent, both coverage100%, all source/static/audit checks pass. No tests rerun; pinned semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T10:17:22.853Z, excerpt_hash=sha256:8a0ee3d8686e1fb7b21e66e0486a5cf565638db71c3923002c087bfb04517dc7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040949-DSEN0S/blueprint/resolved-snapshot.json
+    - old_digest: 6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524
+    - current_digest: 6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040949-DSEN0S
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610040949-DSEN0S --result verified-202610040949-DSEN0S --commit 7c0e6452b0277de239548655e4423f69c2b7525f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert scoped semantic commit if native mask or selected alignment contract is disproved. No shared reset/history rewrite or registered deviation changes."
   Findings: |-
     Initial consumer migration caused existing exact listLayout DTO assertion to receive an extra field and tdf114287 imported style print bound2268 instead of357. Existing ODT named custom styles flatten inherited items into direct node items, so full style hierarchy restoration is a prerequisite for native per-axis consumer migration. Restore current consumers and defer integration to the next coherent task rather than introduce a sideband invalidation shortcut or weaken prior tests. All initial native ownership cases passed. No full module/default/contract/parent parity promotion.
@@ -136,6 +176,39 @@ Core mask and selected-value contracts only. Preserve all existing print-bounds,
 ## Verification
 
 Command: split npm verify gates, corrected failed app/coverage gate with --coverage.reportOnFailure, then inventory/scripts/Chromium once with vendor directory absent and restored finally. Result: pass. Evidence: app1306/228files; inventory109/36files; scripts5/2files; Chromium85; app and inventory statements/branches/functions/lines100%. Seven final static checks passed. Restored resource/source-tree/provenance/invariants audits passed; parity222modules semanticViolationCount0. Six paths; all304prior tests and all existing consumers byte-identical;221manifest rows retained, only two existing evidence appends plus one new helper/filename split. Three native read-only hashes; AP3311files forbidden0/proseonlydiff5. Routing and doctor exit0. Scope: independent core mask and selected alignment contracts; no browser/filter/registered I/O/recovery changes. Initial failed consumer application gate is preserved as bounded evidence, no passing full suite repeated. Exact-SHA same-actor read-only EVALUATOR passed at a89b8333d4a2b8c50398de7d9a00a7d3b97ee742; quality report: .agentplane/tasks/202610040949-DSEN0S/quality/20261004-101652904-recovery-context/quality-report.json. Semantic files unchanged after review. Finish requires final evidence-only close packet.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T10:18:12.405Z — VERIFY — ok
+
+By: CODER
+
+Note: Refreshed blueprint snapshot after final task title/description narrowed to reviewed core scope. Existing final evidence and semantic identities unchanged; app1306/inventory109/scripts5/browser85 pass absent, both coverage100%, all source/static/audit checks pass. No tests rerun; pinned semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T10:17:22.853Z, excerpt_hash=sha256:8a0ee3d8686e1fb7b21e66e0486a5cf565638db71c3923002c087bfb04517dc7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040949-DSEN0S/blueprint/resolved-snapshot.json
+- old_digest: 6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524
+- current_digest: 6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040949-DSEN0S
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610040949-DSEN0S --result verified-202610040949-DSEN0S --commit 7c0e6452b0277de239548655e4423f69c2b7525f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

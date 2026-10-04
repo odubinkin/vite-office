@@ -3,8 +3,8 @@
   "artifactKind": "agentplane.blueprint.resolved_snapshot",
   "resolverInput": {
     "taskId": "202610040949-DSEN0S",
-    "title": "Resolve live list indent precedence from native independent masks",
-    "description": "Iteration101: restore AreListLevelIndentsApplicable and source-owned label-alignment item selection; wire live core print bounds and frozen browser geometry independently for both axes. Existing import/serialization sideband and wider tab/layout remain unverified separate obligations, no registered I/O/recovery changes.",
+    "title": "Restore native independent list-indent core contracts",
+    "description": "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "1772783513df8b3ccdffb702dd81ab635bbb59217bfe4991d865c3a98cafc858"
+    "value": "6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524"
   }
 }
