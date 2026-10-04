@@ -4,7 +4,7 @@ title: "Own hyperlink item metadata by value"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: execute approved iteration121 hyperlink string value ownership correction with literal metadata/actual graph boundaries;tests once absent,no AP helper/source artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-04T20:48:59.942Z"
+doc_updated_at: "2026-10-04T20:54:10.162Z"
 doc_updated_by: "CODER"
 description: "Iteration121 fixes retained caller metadata alias in existing SwFormatINetFormat. Capture supported immutable string values at construction as in native owned OUString/UIName fields,keeping metadata optional/empty values and existing JSON codecs/defaults. Prove caller/returned/clone isolation through direct items,actual hint graphs,copy/cut/transfer/history boundaries. One upstream-absent profile;registered I/O/recovery deviations untouched."
 sections:
@@ -61,7 +61,7 @@ sections:
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass; CODER verify/finish separate commit hashes; clean main/vendor restored;parent/goal active. No broad native/core/UI promotion.
   Verification: "Pending execution;no parity or test claims before evidence."
   Rollback Plan: "Revert only the semantic commit through a new scoped task,preserve history and other work;no history rewrite."
-  Findings: "Preflight clean main after verified iteration120. Native SwFormatINetFormat owns URL/target/name/style string fields and copies them in copy construction;current TS parameter property stores caller object. Mutable caller fields can silently alter pool item values. Scoped value-ownership repair under standing goal authorization. Additional native hyperlink nesting/adjacent boundaries and insertion adjustment remain unverified."
+  Findings: "Implemented five-string SwFormatINetFormat constructor value snapshot,including inherited supported properties,while retaining plain JSON property order/optional-empty distinctions/URL guard/non-shareability.78 literal cases added:38 direct ownership/projection/clone cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Six static gates first pass. All341 prior tests intended byte-identical and234 runtime fields unchanged except one bounded appendix,pending scope audit. No product tests yet. Native constructors/owned string fields/copy/equality read; broader style IDs/macros/broadcaster/text backlinks/UNO/default empty URL and coupled adjacent INET/native insertion topology remain unverified. No AP sources/helpers or registered I/O/recovery changes."
 id_source: "generated"
 ---
 ## Summary
@@ -100,4 +100,4 @@ Revert only the semantic commit through a new scoped task,preserve history and o
 
 ## Findings
 
-Preflight clean main after verified iteration120. Native SwFormatINetFormat owns URL/target/name/style string fields and copies them in copy construction;current TS parameter property stores caller object. Mutable caller fields can silently alter pool item values. Scoped value-ownership repair under standing goal authorization. Additional native hyperlink nesting/adjacent boundaries and insertion adjustment remain unverified.
+Implemented five-string SwFormatINetFormat constructor value snapshot,including inherited supported properties,while retaining plain JSON property order/optional-empty distinctions/URL guard/non-shareability.78 literal cases added:38 direct ownership/projection/clone cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Six static gates first pass. All341 prior tests intended byte-identical and234 runtime fields unchanged except one bounded appendix,pending scope audit. No product tests yet. Native constructors/owned string fields/copy/equality read; broader style IDs/macros/broadcaster/text backlinks/UNO/default empty URL and coupled adjacent INET/native insertion topology remain unverified. No AP sources/helpers or registered I/O/recovery changes.
