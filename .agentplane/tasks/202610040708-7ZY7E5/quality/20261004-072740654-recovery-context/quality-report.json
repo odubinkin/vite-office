@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "task_id": "202610040708-7ZY7E5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-04T07:27:40.654Z",
+  "verdict": "pass",
+  "summary": "Same-actor separate EVALUATOR reviewed exact semantic c5f97d1596a23716535b64be3492edb87b77fa2e and revised approved8-path contract;bounded native explicit-pixel correction passes. No independent-agent/full-native claim.",
+  "evaluated_sha": "c5f97d1596a23716535b64be3492edb87b77fa2e",
+  "blueprint_digest": "58ea296b5f58168841bb37ab237797a6b05ec6d749f3d822aabe73803f7e860b",
+  "findings": [
+    "Production reuses existing signed whole-coordinate rounder for explicit typed rendering/hit/tracking anchors as inspected SvxRuler UpdateTabs/ConvertHPosPixel/VCL LogicToPixel(Size);raw logical positions/metadata and frozen records remain unchanged.",
+    "13new actual Writer cases and corrected1280/390Chromium prove fourtypes,completeorigin/signed/zero/int32 coordinates,relativeflag and no-motion/cancel/rawindex/acceptedmove/Undo preservation.292prior testfiles retain289identical and exact7oldassertion corrections in3files;220rows retained with1append-onlyrow/no promotions.",
+    "Final1176app/109inventory/5scripts pass withvendorabsent and100%fourcoverage metrics;69priorChromium passedinitial,only2newfixturecorrections reran andpassed. Failedappgate alone retried after approved2oldcallback corrections. Separate static/source audits0semanticviolations;AP forbiddenfindings0. No source-present or routine passing-suite duplicates.",
+    "Two new E2E fixtures initially putDefaultfirst and invoked correct importselection;removing onlythatfixtureDefault restores intendedfourtypedinput. Scopeaudit originally overlappedtemporaryvendorrename,thenonlyaudit repeatedafterrestoration. No product/import/config/gate weakening;initialbounded failures retained."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610040708-7ZY7E5/README.md",
+    ".agentplane/tasks/202610040708-7ZY7E5/scope-integrity.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/final-integrity.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/artifact-audit.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/source-comparison.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-runtime.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-runtime-initial.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-scripts.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-browser-initial.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-browser.json",
+    ".agentplane/tasks/202610040708-7ZY7E5/visual-inspection.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "This verifies horizontal explicit anchors atCSS96dpi only;full native hitpriority/RTL/vertical/systemDPI/theme/selector/snapping/modifiers/capture/fullpage geometry and parent parity remainunverified. Registered save/open/recovery deviations preserved."
+  ]
+}

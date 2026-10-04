@@ -4,7 +4,7 @@ title: "Round explicit Writer ruler tab anchors to native pixels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,38 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T07:26:36.575Z"
+  updated_at: "2026-10-04T07:28:45.683Z"
   updated_by: "CODER"
-  note: "Final absent1176app/109inventory/5scripts pass;69priorChromium+only2correctednewcases pass. Failedapp gate corrected/retried only;100%coverage,static/source audits0semantic violations,8paths/7exactoldexpectations,2hashes,APforbidden0,vendorrestored."
+  note: "Final exactc5f97d15 same-actor EVALUATOR pass andunchangedsemantic integrity;all1176/109/5 plus69+2Chromium verifiedabsent,100%coverage,sourceaudits0semantic,APforbidden0,8paths/exact7oldassertions. No test reruns atcloseout."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T07:27:40.654Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR reviewed exact semantic c5f97d1596a23716535b64be3492edb87b77fa2e and revised approved8-path contract;bounded native explicit-pixel correction passes. No independent-agent/full-native claim."
+  evaluated_sha: "c5f97d1596a23716535b64be3492edb87b77fa2e"
+  blueprint_digest: "58ea296b5f58168841bb37ab237797a6b05ec6d749f3d822aabe73803f7e860b"
+  evidence_refs:
+    - ".agentplane/tasks/202610040708-7ZY7E5/README.md"
+    - ".agentplane/tasks/202610040708-7ZY7E5/quality/20261004-072740654-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/quality/20261004-072740654-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040708-7ZY7E5/quality/20261004-072740654-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040708-7ZY7E5/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/scope-integrity.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/final-integrity.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/artifact-audit.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/source-comparison.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-runtime.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-runtime-initial.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-scripts.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-browser-initial.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/vendor-absent-browser.json"
+    - ".agentplane/tasks/202610040708-7ZY7E5/visual-inspection.json"
+  findings:
+    - "Production reuses existing signed whole-coordinate rounder for explicit typed rendering/hit/tracking anchors as inspected SvxRuler UpdateTabs/ConvertHPosPixel/VCL LogicToPixel(Size);raw logical positions/metadata and frozen records remain unchanged."
+    - "13new actual Writer cases and corrected1280/390Chromium prove fourtypes,completeorigin/signed/zero/int32 coordinates,relativeflag and no-motion/cancel/rawindex/acceptedmove/Undo preservation.292prior testfiles retain289identical and exact7oldassertion corrections in3files;220rows retained with1append-onlyrow/no promotions."
+    - "Final1176app/109inventory/5scripts pass withvendorabsent and100%fourcoverage metrics;69priorChromium passedinitial,only2newfixturecorrections reran andpassed. Failedappgate alone retried after approved2oldcallback corrections. Separate static/source audits0semanticviolations;AP forbiddenfindings0. No source-present or routine passing-suite duplicates."
+    - "Two new E2E fixtures initially putDefaultfirst and invoked correct importselection;removing onlythatfixtureDefault restores intendedfourtypedinput. Scopeaudit originally overlappedtemporaryvendorrename,thenonlyaudit repeatedafterrestoration. No product/import/config/gate weakening;initialbounded failures retained."
 commit: null
 comments:
   -
@@ -53,8 +81,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final absent1176app/109inventory/5scripts pass;69priorChromium+only2correctednewcases pass. Failedapp gate corrected/retried only;100%coverage,static/source audits0semantic violations,8paths/7exactoldexpectations,2hashes,APforbidden0,vendorrestored."
+  -
+    type: "verify"
+    at: "2026-10-04T07:28:45.683Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final exactc5f97d15 same-actor EVALUATOR pass andunchangedsemantic integrity;all1176/109/5 plus69+2Chromium verifiedabsent,100%coverage,sourceaudits0semantic,APforbidden0,8paths/exact7oldassertions. No test reruns atcloseout."
 doc_version: 3
-doc_updated_at: "2026-10-04T07:26:36.628Z"
+doc_updated_at: "2026-10-04T07:28:45.735Z"
 doc_updated_by: "CODER"
 description: "Iteration95: use inspected SvxRuler ConvertHPosPixel/VCL signed rounding for complete explicit tab origins at CSS96dpi. Preserve raw logical item positions and typed hit ownership;add real model/DOM/Undo and Chromium rounding cases. One absent-upstream test pass;separate static source audits."
 sections:
@@ -78,17 +112,17 @@ sections:
     Command: vendor-absent npm run test. Result:initial appgate2obsolete callbacks failed/1174passed;revisedapproved scope corrects exactly237->231 twice. Onlyfailedgate rerun,final1176app/222files+109inventory/36files pass;four app/inventory coverage metrics100%. No pre-fix/focused/source-present test runs.
     Command: vendor-absent npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts. Result:5tests/2files pass first-run.
     Command: vendor-absent npm run test:e2e. Result:69prior scenarios pass;2newfixtures fail becausefirstDefault excludes later explicitstops duringownedODTimport. Correctnewfixture only. Command:npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-ruler-tab-pixels.spec.ts withvendorabsent. Result:2pass. No69passingbrowser/app/inventory/scripts repeated. Vendor finallyrestored aftereach attempt,latestfailure null.
-    Command: separate post-restoration generator--check,source-tree,source-provenance,invariants,parityCLI,routing,doctor,diffcheck,scope/sourcehash/Agentplane audit. Result:pass;semanticViolationCount0.8semanticpaths,292prior tests/289byte-identical,exact7assertion replacements in3files;220rows each retain order/status/default/owner/exception with1append-onlyexistingrow/no promotion.2pinnedfilehashes unchanged. Scoped audit originally overlapped transientvendorrename andfailed;onlyaudit repeatedafterrestoration,not tests. AP ignored-inclusive raw/decoded source/helper/Python/native/archive/frame/code-diff findings0;5historicalprose-onlydiffreferences. Actual1280/390roundedglyphscreenshots visuallyinspectedoutsideAP. No native execution/network/outside access. Exact semanticSHA same-actor EVALUATOR pending;fullgoalactive.
+    Command: separate post-restoration generator--check,source-tree,source-provenance,invariants,parityCLI,routing,doctor,diffcheck,scope/sourcehash/Agentplane audit. Result:pass;semanticViolationCount0.8semanticpaths,292prior tests/289byte-identical,exact7assertion replacements in3files;220rows each retain order/status/default/owner/exception with1append-onlyexistingrow/no promotion.2pinnedfilehashes unchanged. Scoped audit originally overlapped transientvendorrename andfailed;onlyaudit repeatedafterrestoration,not tests. AP ignored-inclusive raw/decoded source/helper/Python/native/archive/frame/code-diff findings0;5historicalprose-onlydiffreferences. Actual1280/390roundedglyphscreenshots visuallyinspectedoutsideAP. No native execution/network/outside access. Same-actor separate EVALUATOR quality/20261004-072740654-recovery-context/quality-report.json pass onexact semantic c5f97d1596a23716535b64be3492edb87b77fa2e;not independent-agent review. Allsemanticbytesunchanged;cleanclosure andfullgoalactive.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-04T07:26:36.575Z — VERIFY — ok
+    ### 2026-10-04T07:28:45.683Z — VERIFY — ok
 
     By: CODER
 
-    Note: Final absent1176app/109inventory/5scripts pass;69priorChromium+only2correctednewcases pass. Failedapp gate corrected/retried only;100%coverage,static/source audits0semantic violations,8paths/7exactoldexpectations,2hashes,APforbidden0,vendorrestored.
+    Note: Final exactc5f97d15 same-actor EVALUATOR pass andunchangedsemantic integrity;all1176/109/5 plus69+2Chromium verifiedabsent,100%coverage,sourceaudits0semantic,APforbidden0,8paths/exact7oldassertions. No test reruns atcloseout.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:26:36.228Z, excerpt_hash=sha256:5951fdab32d15f7c4f6518dba225b95b90290dcd78482f107795120a7976f430
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:28:23.738Z, excerpt_hash=sha256:5951fdab32d15f7c4f6518dba225b95b90290dcd78482f107795120a7976f430
 
     Details:
 
@@ -103,12 +137,12 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610040708-7ZY7E5
+    - safe_command: agentplane task complete 202610040708-7ZY7E5 --result verified-202610040708-7ZY7E5 --commit c5f97d1596a23716535b64be3492edb87b77fa2e
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -118,6 +152,7 @@ sections:
     First single absent-upstream application coverage gate failed only2old WriterPageLayout tab-drag assertions:expected237,actual231 from the newly rounded initial physical anchor;1174/1176pass including all13newcases. Inventory/scripts/Chromium didnotrun because orchestration stopped at failed gate,vendor restored in finally. Bounded failure exit/hash/counts only retained;raw diagnostic frames remain outsideAP. Source/domain inspection validates the fixture's initial1974twips rounds132px;the existing 1mm snapped endpoint yields231 rather than fractional-start237. Re-approve oneadditional priorfixturepath and exactly2callback expectations before correction;no snapping algorithm/core/gate/config changes. Allpassing suites willnot be rerun;failedapplicationcoveragegate mustrerun to produce currentcoverage,then unruninventory/scripts/browser. Standinggoal authorizes this local expectation correction;ORCHESTRATOR approves revised exact scope.
     Corrected appgate passed1176app/222files andunrun109inventory/36files+5scripts/2files firstpass. FirstChromiumgatepassed69oldscenarios;only2newpixel cases failed:nointeractive tabs afterODTimport because the fixture puts Defaultfirst,whose source-compatible importcontainer selects onlythatfirstDefault andskipslater explicitstops (owned xmltabi sourceconfirmed). Remove onlythe newE2Efixture'sDefaultstop;retain hidden-Default/rawindexcoverage in13passing ownedunitcases. No product/import/gate/config change,no scopeexpansion,no expectationweakening. Repeatonlythese2failed Chromiumcases with upstreamabsent;do notrerun69passingbrowser/app/inventory/script suites. Keepbounded initialexit/hash/counts,raw diagnostics/screenshots/traces outsideAP.
     Onlythe2correctednewChromiumcases reran andpassed;69oldcases/app/inventory/scripts notduplicated,vendor restored. A concurrently scheduled scope audit observed vendor/.offline-7ZY7E5 while the targetedbrowsercheck was running andfailed itscheckout assertion;this audit mustrun afterrestoration. No artifact/source contamination or product change;rerunonlythefailed scopeaudit sequentiallyafter vendorrestored,andrecordbounded conclusion. No tests rerun for this orchestration correction.
+    Final qualityreview passedexact semantic c5f97d1596a23716535b64be3492edb87b77fa2e in separate same-actor EVALUATOR phase. Allscope/hash/coverage/source/artifact gates passed. Thisgoalturn madeverifiedprogress;fullgoal/parentremainactive,notcomplete/blocked. No native/status promotions or registeredI/O deviations changed.
 id_source: "generated"
 ---
 ## Summary
@@ -151,17 +186,17 @@ Command: split format:check,lint,typecheck,check:dependencies,test:static,check:
 Command: vendor-absent npm run test. Result:initial appgate2obsolete callbacks failed/1174passed;revisedapproved scope corrects exactly237->231 twice. Onlyfailedgate rerun,final1176app/222files+109inventory/36files pass;four app/inventory coverage metrics100%. No pre-fix/focused/source-present test runs.
 Command: vendor-absent npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts. Result:5tests/2files pass first-run.
 Command: vendor-absent npm run test:e2e. Result:69prior scenarios pass;2newfixtures fail becausefirstDefault excludes later explicitstops duringownedODTimport. Correctnewfixture only. Command:npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-ruler-tab-pixels.spec.ts withvendorabsent. Result:2pass. No69passingbrowser/app/inventory/scripts repeated. Vendor finallyrestored aftereach attempt,latestfailure null.
-Command: separate post-restoration generator--check,source-tree,source-provenance,invariants,parityCLI,routing,doctor,diffcheck,scope/sourcehash/Agentplane audit. Result:pass;semanticViolationCount0.8semanticpaths,292prior tests/289byte-identical,exact7assertion replacements in3files;220rows each retain order/status/default/owner/exception with1append-onlyexistingrow/no promotion.2pinnedfilehashes unchanged. Scoped audit originally overlapped transientvendorrename andfailed;onlyaudit repeatedafterrestoration,not tests. AP ignored-inclusive raw/decoded source/helper/Python/native/archive/frame/code-diff findings0;5historicalprose-onlydiffreferences. Actual1280/390roundedglyphscreenshots visuallyinspectedoutsideAP. No native execution/network/outside access. Exact semanticSHA same-actor EVALUATOR pending;fullgoalactive.
+Command: separate post-restoration generator--check,source-tree,source-provenance,invariants,parityCLI,routing,doctor,diffcheck,scope/sourcehash/Agentplane audit. Result:pass;semanticViolationCount0.8semanticpaths,292prior tests/289byte-identical,exact7assertion replacements in3files;220rows each retain order/status/default/owner/exception with1append-onlyexistingrow/no promotion.2pinnedfilehashes unchanged. Scoped audit originally overlapped transientvendorrename andfailed;onlyaudit repeatedafterrestoration,not tests. AP ignored-inclusive raw/decoded source/helper/Python/native/archive/frame/code-diff findings0;5historicalprose-onlydiffreferences. Actual1280/390roundedglyphscreenshots visuallyinspectedoutsideAP. No native execution/network/outside access. Same-actor separate EVALUATOR quality/20261004-072740654-recovery-context/quality-report.json pass onexact semantic c5f97d1596a23716535b64be3492edb87b77fa2e;not independent-agent review. Allsemanticbytesunchanged;cleanclosure andfullgoalactive.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-04T07:26:36.575Z — VERIFY — ok
+### 2026-10-04T07:28:45.683Z — VERIFY — ok
 
 By: CODER
 
-Note: Final absent1176app/109inventory/5scripts pass;69priorChromium+only2correctednewcases pass. Failedapp gate corrected/retried only;100%coverage,static/source audits0semantic violations,8paths/7exactoldexpectations,2hashes,APforbidden0,vendorrestored.
+Note: Final exactc5f97d15 same-actor EVALUATOR pass andunchangedsemantic integrity;all1176/109/5 plus69+2Chromium verifiedabsent,100%coverage,sourceaudits0semantic,APforbidden0,8paths/exact7oldassertions. No test reruns atcloseout.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:26:36.228Z, excerpt_hash=sha256:5951fdab32d15f7c4f6518dba225b95b90290dcd78482f107795120a7976f430
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:28:23.738Z, excerpt_hash=sha256:5951fdab32d15f7c4f6518dba225b95b90290dcd78482f107795120a7976f430
 
 Details:
 
@@ -176,12 +211,12 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane task verify-show 202610040708-7ZY7E5
+- safe_command: agentplane task complete 202610040708-7ZY7E5 --result verified-202610040708-7ZY7E5 --commit c5f97d1596a23716535b64be3492edb87b77fa2e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -196,3 +231,4 @@ Previousgoalturn is verifiedprogress:iteration94DONE semantic4602af9e,currentcle
 First single absent-upstream application coverage gate failed only2old WriterPageLayout tab-drag assertions:expected237,actual231 from the newly rounded initial physical anchor;1174/1176pass including all13newcases. Inventory/scripts/Chromium didnotrun because orchestration stopped at failed gate,vendor restored in finally. Bounded failure exit/hash/counts only retained;raw diagnostic frames remain outsideAP. Source/domain inspection validates the fixture's initial1974twips rounds132px;the existing 1mm snapped endpoint yields231 rather than fractional-start237. Re-approve oneadditional priorfixturepath and exactly2callback expectations before correction;no snapping algorithm/core/gate/config changes. Allpassing suites willnot be rerun;failedapplicationcoveragegate mustrerun to produce currentcoverage,then unruninventory/scripts/browser. Standinggoal authorizes this local expectation correction;ORCHESTRATOR approves revised exact scope.
 Corrected appgate passed1176app/222files andunrun109inventory/36files+5scripts/2files firstpass. FirstChromiumgatepassed69oldscenarios;only2newpixel cases failed:nointeractive tabs afterODTimport because the fixture puts Defaultfirst,whose source-compatible importcontainer selects onlythatfirstDefault andskipslater explicitstops (owned xmltabi sourceconfirmed). Remove onlythe newE2Efixture'sDefaultstop;retain hidden-Default/rawindexcoverage in13passing ownedunitcases. No product/import/gate/config change,no scopeexpansion,no expectationweakening. Repeatonlythese2failed Chromiumcases with upstreamabsent;do notrerun69passingbrowser/app/inventory/script suites. Keepbounded initialexit/hash/counts,raw diagnostics/screenshots/traces outsideAP.
 Onlythe2correctednewChromiumcases reran andpassed;69oldcases/app/inventory/scripts notduplicated,vendor restored. A concurrently scheduled scope audit observed vendor/.offline-7ZY7E5 while the targetedbrowsercheck was running andfailed itscheckout assertion;this audit mustrun afterrestoration. No artifact/source contamination or product change;rerunonlythefailed scopeaudit sequentiallyafter vendorrestored,andrecordbounded conclusion. No tests rerun for this orchestration correction.
+Final qualityreview passedexact semantic c5f97d1596a23716535b64be3492edb87b77fa2e in separate same-actor EVALUATOR phase. Allscope/hash/coverage/source/artifact gates passed. Thisgoalturn madeverifiedprogress;fullgoal/parentremainactive,notcomplete/blocked. No native/status promotions or registeredI/O deviations changed.
