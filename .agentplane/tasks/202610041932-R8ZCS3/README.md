@@ -4,7 +4,7 @@ title: "Restore native text hint tie ordering"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -47,7 +47,7 @@ events:
     to: "DOING"
     note: "Start: refined order-only recovery includes edfcol-modifier test, production unchanged; repeat five failed cases only with pending absent suites."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:43:26.263Z"
+doc_updated_at: "2026-10-04T19:47:02.026Z"
 doc_updated_by: "CODER"
 description: "Iteration118: fix native CompareSwpHtStart Which-descending tie ordering and restore final order after adjacent merge. Correct only existing tests that assumed AUTO before INET at equal ranges; add independent literal order/ownership/projection tests. Preserve all statuses/defaults/exceptions and registered I/O deviations. Tests once absent upstream; no AP sources/helpers."
 sections:
@@ -73,9 +73,9 @@ sections:
     4. After restoration run npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. All pass, semanticViolationCount0.
     5. Audit exact12paths, prior336tests with only eight declared order-dependent corrections,234existing runtime fields unchanged except one appended justification, provenance only one bounded appendix, native hashes, ignored-inclusive AP no source/helpers. Run ap doctor and node .agentplane/policy/check-routing.mjs; no new errors.
     6. Same-actor read-only EVALUATOR pass on exact semantic SHA; CODER verification/finish with separate commit hashes; clean main/vendor restored; parent and goal active.
-  Verification: "Pending approved implementation and upstream-absent verification."
+  Verification: "Six static gates pass after new-test tuple typecheck recovery; focused formatter/lint/typecheck pass on order-only EDF correction. First absent build and app2068+5failed legacy-order expectations coverage100%four metrics; failed five cases alone recovered after order-only test correction,production unchanged. First absent inventory109 coverage100%,scripts5,Chromium99 pass. Vendor restored before five source audits all pass semantic0. Twelve paths,328 unchanged prior tests/eight native-order corrections,67newcases,234 runtime fields unchanged except one justification appendix,one provenance appendix,five native hashes. APforbidden0,doctor0errors/two unchanged warnings,routing pass. Same-actor read-only exact semantic quality SHA required before verify/finish. Broad native/core/browser parity remains unverified."
   Rollback Plan: "Revert only this task's semantic commit through a new authorized follow-up; preserve existing intentional I/O deviations and unrelated task history."
-  Findings: "Native comparator start/end priorities already matched; missing descending Which tie and post-merge resort now fixed.67 literal order/merge/actual graph cases added; seven prior files change only order-dependent family selection/54-before53 expectations. Initial formatter/lint passed, typecheck failed only union-tuple spread in new test; explicit tuple element reads recovered failed typecheck, pending dependency/docs/size pass, focused formatter/lint pass. Source appendix writer initially used wrong responsibilities key; corrected preservedResponsibilities without double inventory append. No tests run yet, production unchanged after initial implementation. Next run five gates once absent upstream, restore before source audits. No scope/default/status/I/O changes or AP source/helper artifacts."
+  Findings: "Native start ascending/end descending already matched;118 restores descending Which tie and re-sorts normalized array after end-extending merges.67 literal matrix/merge cases pass, including both input orders/all8flags, actual nodes/copy/move/independent undo and visible overlap. Eight prior files correct only order-dependent AUTO/INET selection/native order;328 other prior tests byte-identical. Missing EDF file discovered by first absent gate, scope/plan refined and approved before correction. Six static gates pass after new-test tuple-spread typecheck recovery, focused formatter/lint/typecheck pass. First absent build pass; app2068pass5legacy ordering failures, coverage100%four metrics. Production unchanged; only five failed cases recovered absent,43 others skipped. Pending inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. No successful suite/build repeats or present profile. Vendor restored before five source audits all pass semantic violations0. Twelve semantic paths,234 runtime fields/statuses/defaults/exceptions unchanged except one bounded appendix,provenance only one appendix, five native hashes; AP3765 ignored-inclusive files forbidden0; doctor0errors/two unchanged warnings,routing pass. Source appendix lookup corrected preservedResponsibilities before tests. Native pointer ties/maps/owner notifications/backlinks/refcounts/listeners, empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join remain unverified; no full core/UI/goal promotion or I/O deviation change."
 id_source: "generated"
 ---
 ## Summary
@@ -112,7 +112,7 @@ Correct CompareSwpHtStart tie ordering to descending Which and re-sort normalize
 
 ## Verification
 
-Pending approved implementation and upstream-absent verification.
+Six static gates pass after new-test tuple typecheck recovery; focused formatter/lint/typecheck pass on order-only EDF correction. First absent build and app2068+5failed legacy-order expectations coverage100%four metrics; failed five cases alone recovered after order-only test correction,production unchanged. First absent inventory109 coverage100%,scripts5,Chromium99 pass. Vendor restored before five source audits all pass semantic0. Twelve paths,328 unchanged prior tests/eight native-order corrections,67newcases,234 runtime fields unchanged except one justification appendix,one provenance appendix,five native hashes. APforbidden0,doctor0errors/two unchanged warnings,routing pass. Same-actor read-only exact semantic quality SHA required before verify/finish. Broad native/core/browser parity remains unverified.
 
 ## Rollback Plan
 
@@ -120,4 +120,4 @@ Revert only this task's semantic commit through a new authorized follow-up; pres
 
 ## Findings
 
-Native comparator start/end priorities already matched; missing descending Which tie and post-merge resort now fixed.67 literal order/merge/actual graph cases added; seven prior files change only order-dependent family selection/54-before53 expectations. Initial formatter/lint passed, typecheck failed only union-tuple spread in new test; explicit tuple element reads recovered failed typecheck, pending dependency/docs/size pass, focused formatter/lint pass. Source appendix writer initially used wrong responsibilities key; corrected preservedResponsibilities without double inventory append. No tests run yet, production unchanged after initial implementation. Next run five gates once absent upstream, restore before source audits. No scope/default/status/I/O changes or AP source/helper artifacts.
+Native start ascending/end descending already matched;118 restores descending Which tie and re-sorts normalized array after end-extending merges.67 literal matrix/merge cases pass, including both input orders/all8flags, actual nodes/copy/move/independent undo and visible overlap. Eight prior files correct only order-dependent AUTO/INET selection/native order;328 other prior tests byte-identical. Missing EDF file discovered by first absent gate, scope/plan refined and approved before correction. Six static gates pass after new-test tuple-spread typecheck recovery, focused formatter/lint/typecheck pass. First absent build pass; app2068pass5legacy ordering failures, coverage100%four metrics. Production unchanged; only five failed cases recovered absent,43 others skipped. Pending inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. No successful suite/build repeats or present profile. Vendor restored before five source audits all pass semantic violations0. Twelve semantic paths,234 runtime fields/statuses/defaults/exceptions unchanged except one bounded appendix,provenance only one appendix, five native hashes; AP3765 ignored-inclusive files forbidden0; doctor0errors/two unchanged warnings,routing pass. Source appendix lookup corrected preservedResponsibilities before tests. Native pointer ties/maps/owner notifications/backlinks/refcounts/listeners, empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join remain unverified; no full core/UI/goal promotion or I/O deviation change.

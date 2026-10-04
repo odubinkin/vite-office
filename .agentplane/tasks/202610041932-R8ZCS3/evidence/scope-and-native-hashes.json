@@ -1,0 +1,119 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/native-hint-order.test.ts",
+    "apps/office/src/sw/source/core/txtnode/hint-pool-ownership.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-replacement.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+    "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 336,
+  "priorTestsByteIdentical": 328,
+  "priorOrderCorrections": [
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/hint-pool-ownership.test.ts",
+      "sha256": "a910613099617936191171fa1114e5f60e7c27c6daf65c0ede94e711274ce005"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+      "sha256": "e2c363861f4b56f4ed1f723617293529368044abf91a1c146136077159231204"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts",
+      "sha256": "4b4bcdcd3c0928e132fa6f4ec060873d14073782c70d0a771497574d9e30cb48"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txtedt-replacement.test.ts",
+      "sha256": "dd631d07866897354d1f2ec8b8344db1fd668d0cf89b9a0921b715f65f3fd6bf"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+      "sha256": "8d4e4811eba23bd2caa9abb8c6d8a6da3d3eb102df831344b0542954a571392e"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+      "sha256": "08158d0e8b9cd2877d7390cd36923273517816cf2a56e96549b4d881cc7180be"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+      "sha256": "1cd5993ab65f6a1c8fa028c9064b50449fa86d45bb5cc6aa6ed4de095a35cddf"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+      "sha256": "15602e741eaeeefbaf635d236d26ae7fdd9bceb836428ece88deda295a166fcd"
+    }
+  ],
+  "priorCorrectionScope": "Only family-selection indices/native order expectations; one helper selects AUTO by Which across variable ranges.",
+  "newAppCases": 67,
+  "existingRuntimeRows": 234,
+  "allExistingRuntimeFieldsExceptOneAppendedJustificationUnchanged": true,
+  "sourceProvenanceOnlyOneAppendix": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+      "sha256": "b59e66c9c5d31bf6fc0416a160e1584e465c4d2ac8e37ddf08607d9b570fbb60"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+      "sha256": "16ac2f8916ab0e6b597502b84247ef283d4a0cbaa2a79f0dbc2f3aa7e8ad052e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txatbase.hxx",
+      "sha256": "ac8e656fd70b8348cdf4ad8f58669553a420c70054712c62a423570d52635d6b"
+    }
+  ],
+  "staticChecks": 6,
+  "staticRecovery": "Union tuple spreads in new test replaced by explicit element reads; failed typecheck repeated alone, remaining static gates pass. Focused formatter/lint/typecheck pass after later order-only EDF test correction.",
+  "absentProfile": {
+    "build": 1,
+    "app": {
+      "tests": 2073,
+      "files": 254,
+      "initialPassed": 2068,
+      "initialFailed": 5,
+      "recoveredFailedCasesOnly": 5,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "inventory": {
+      "tests": 109,
+      "files": 36,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "scripts": {
+      "tests": 5,
+      "files": 2
+    },
+    "chromium": 99
+  },
+  "recovery": "Production unchanged; only five failed EDF order-dependent cases replayed absent,43 others skipped. Pending suites first absent pass. No successful suite/build repetition or present profile.",
+  "passingSuitesRepeated": false,
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass"
+}
