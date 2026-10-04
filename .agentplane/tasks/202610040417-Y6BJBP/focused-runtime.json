@@ -1,0 +1,10 @@
+{
+  "command": "(apps/office) npm exec -- vitest run src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx src/sfx2/browser/presentation/SidebarFocusManager.test.tsx src/sfx2/browser/presentation/SidebarDeck.test.tsx src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+  "exitCode": 0,
+  "outputBytes": 240,
+  "outputSha256": "da8ed44d0e3efca36685fde1cbf635f2027b3d7c41221936afd8f45d9a05f1f1",
+  "summary": [
+    " Test Files  6 passed (6)",
+    "      Tests  75 passed (75)"
+  ]
+}
