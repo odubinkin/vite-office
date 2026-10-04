@@ -1,10 +1,11 @@
 ---
 id: "202610040538-PWDK4Q"
 title: "Preserve Writer ruler tab item identity"
-status: "DOING"
+result_summary: "Preserved Writer ruler raw item identity and selected-tab collision metadata with working Undo/Redo;intentional I/O/recovery exceptions retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "9semantic paths;282of284oldtests unchanged;only4formatted DTO fixture payloads changed with every assertion retained.220rows each retain prior order/status/owner/default/exception fields,3append-only updates,no new rows/native promotion;3sourcehashes unchanged."
     - "Final tests with upstream unavailable:1134app+109tool+12scripts+63browser pass/restored;100%four app/inventory coverage metrics;0semantic. Source-present full verify completed before user steering is historical evidence;current already-live absent run finished without restart and no tests rerun afterwards. Future tests once without upstream;source CLI audits separate."
     - "Ignored-inclusive raw/decoded Agentplane source/helper/Python/frame/code-diff/archive findings0;only5historical prose-only diff refs. Doctor0errors/2knownwarnings/2info;registered save/open/recovery exceptions preserved."
-commit: null
+commit:
+  hash: "e7e27e6398df1bf2e35adbce80569dd6b5124f8d"
+  message: "🎯 PWDK4Q code: preserve Writer ruler tab item identity"
 comments:
   -
     author: "CODER"
     body: "Start:standing goal authorizes one tab item identity correction;source hashes/results only,owned fixtures and tests with no upstream invocation or helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified:raw tab item identity survives compact browser markers,reordering and default stops;selected metadata wins move collisions via native remove-then-insert ordering. Final absent1134+109+12+63tests pass/restored;no reruns after user single-run steering;100%coverage/0semantic,AP forbidden0,exact semantic same-actor quality pass. Full native/parent open."
 events:
   -
     type: "status"
@@ -71,8 +77,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final documentation/evidence revision verified without rerunning tests;exact unchanged semantic SHAe7e27e6398df1bf2e35adbce80569dd6b5124f8d has same-actor EVALUATOR pass. Final absent tests1134+109+12+63pass/restored,100%coverage,0semantic;9paths/3sourcehashes/AP forbidden0;full goal remains open."
+  -
+    type: "status"
+    at: "2026-10-04T05:57:24.695Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:raw tab item identity survives compact browser markers,reordering and default stops;selected metadata wins move collisions via native remove-then-insert ordering. Final absent1134+109+12+63tests pass/restored;no reruns after user single-run steering;100%coverage/0semantic,AP forbidden0,exact semantic same-actor quality pass. Full native/parent open."
 doc_version: 3
-doc_updated_at: "2026-10-04T05:57:09.218Z"
+doc_updated_at: "2026-10-04T05:57:24.696Z"
 doc_updated_by: "CODER"
 description: "Iteration91:stop compact visible-tab ordinal from addressing hidden default tab in the raw SvxTabStopItem;retain model index in immutable browser projection and verify actual Writer/Undo/Chromium without upstream test dependencies."
 sections:
@@ -169,6 +182,10 @@ sections:
     Final owned deltas are exact291/1198/314twips for mixed item fixtures; Chromium new tab1200twips moves274twips at both widths,with actual Undo/Redo,cancellation and later editing. Initial fresh-build attempt preceded the new DTO interface and failed only fixture type references; final build and all mandatory gates pass. Pre-fix browser evidence used the unchanged previously built product; final rebuilt product is covered.
     User single-run steering is authoritative: no repeated source-present/source-absent verification pairs in future. The already-live absent run was completed without restarting and no tests were run after it. Bounded results/hashes/conclusions only, no helpers/source/native artifacts. Same-actor separate EVALUATOR review is required and is not independent-agent review.
     Read-only follow-up source comparison: SvxRuler Click constructs and inserts a new tab, replacing any colliding default/existing stop; current AddRulerTabStop delegates position rebuilding to CreateTabStops,which reuses existing metadata at a matching position. That separate insertion-at-existing-position contract remains to repair in a subsequent coherent task. Full native/parent parity remains open.
+extensions:
+  implementation_commit:
+    hash: "e7e27e6398df1bf2e35adbce80569dd6b5124f8d"
+    message: "🎯 PWDK4Q code: preserve Writer ruler tab item identity"
 id_source: "generated"
 ---
 ## Summary
