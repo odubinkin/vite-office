@@ -1,6 +1,6 @@
 {
-  "agentplaneFiles": 2871,
-  "artifactFiles": 2802,
+  "agentplaneFiles": 2872,
+  "artifactFiles": 2805,
   "python": [],
   "source": [],
   "executable": [],
@@ -8,5 +8,6 @@
   "magic": [],
   "embedded": [],
   "sourceFrames": [],
-  "gitCodeDiff": []
+  "gitCodeDiff": [],
+  "decodedSourceCandidates": []
 }

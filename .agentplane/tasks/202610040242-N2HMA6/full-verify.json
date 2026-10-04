@@ -1,0 +1,27 @@
+{
+  "command": "npm run verify",
+  "exitCode": 0,
+  "outputBytes": 971851,
+  "outputSha256": "33fdd53736069af72ac971158d8826912c47a5d49a934d116f9eefd399a22e40",
+  "summary": [
+    "Module boundary check passed: 217 runtime sources, 896 relative imports, 14 allowed cross-module edges.",
+    "Test Files  1 passed (1)",
+    "Tests  2 passed (2)",
+    "Test Files  208 passed (208)",
+    "Tests  1042 passed (1042)",
+    "Statements   : 100% ( 11275/11275 )",
+    "Branches     : 100% ( 8508/8508 )",
+    "Functions    : 100% ( 3004/3004 )",
+    "Lines        : 100% ( 10342/10342 )",
+    "Test Files  36 passed (36)",
+    "Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )",
+    "53 passed (15.4s)",
+    "Static build smoke passed: relative assets, 2 JavaScript bundle(s), no backend endpoints.",
+    "JSDoc validation passed for 542 authored source files.",
+    "\"semanticViolationCount\": 0,"
+  ]
+}

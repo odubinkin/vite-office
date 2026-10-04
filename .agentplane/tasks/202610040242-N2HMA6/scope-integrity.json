@@ -25,8 +25,8 @@
     },
     {
       "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
-      "bytes": 3797,
-      "sha256": "be6096bc9e50502b5f1ca0defc19a87f566d011c8faf077ef9be4a2a83e8f58c"
+      "bytes": 3869,
+      "sha256": "3827bddf63a0498c302818df3392c2426a7d9245fa99e0fdd281d97cc17d23a1"
     },
     {
       "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
