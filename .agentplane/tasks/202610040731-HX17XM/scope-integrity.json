@@ -1,0 +1,70 @@
+{
+  "base": "740359eccd809f9e475f70785fe5579a8f6cfa50",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+    "apps/office/e2e/writer-ruler-indent-pixels.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "bytes": 25840,
+      "sha256": "806d9a02db91eeb2188b6e498b0ee0bc56392da3c39a647c727383f0a49e07bc"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+      "bytes": 9323,
+      "sha256": "d91f71066d17f8e009a478da9278cb96d690d0a664ea68c005907b4169aa8583"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-indent-pixels.spec.ts",
+      "bytes": 5451,
+      "sha256": "03f10d90e8c13de99277e6166b55373a6442347f55544b9858db6ecb05dd7dc0"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+      "bytes": 31524,
+      "sha256": "5ea2148d4e216a08f3d9eb54261d13b5668f0fe11e22531f3d3724509f8765c2"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 749569,
+      "sha256": "214569e9ddb416930ddeaae8510413b9e02664f57e4118755143335a8bf6d87d"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 731359,
+      "sha256": "20b0600635639a269d8d4747b75906168c5edf8e9e8d6a5aafdc0f37512b9ba8"
+    }
+  ],
+  "priorTestFiles": 294,
+  "priorTestFilesByteIdentical": 293,
+  "exactPriorAssertionReplacements": 1,
+  "priorModifiedTestFiles": 1,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 1,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 1,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}

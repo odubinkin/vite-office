@@ -1,0 +1,17 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "inspection": "Read-only source/hash inspection,no source bodies or native execution.",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "marker": "SvxRuler::UpdatePara",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/outdev/map.cxx",
+      "marker": "lcl_logicToPixel",
+      "sha256": "c6c0d2cbb8b7cc24eba6217977b0145eb286adb8d6ed674593b5c9501d015739"
+    }
+  ],
+  "conclusion": "Iteration96 reuses signed DPI1/CSS96dpi toRulerPixel for the complete left-paragraph,first-line and right-paragraph coordinates before rendering and gesture admission,following inspected SvxRuler UpdatePara/ConvertHPosPixel and VCL LogicToPixel(Size)/llround. Raw indent items,spacing,tabs and immutable paragraph values remain precise;existing no-motion/cancel/accepted history ownership and snap algorithm stay intact. Owned actual Writer projection/DOM cases cover signed/zero/extreme complete-coordinate tuples and three accepted logical transitions with one Undo/Redo;Chromium1280/390 covers allthree onscreen rounded anchors,actualtriangle hits,cancellation,no-motion,reprojection and later editing. One obsolete detached rounded-start delta107 becomes literal101;allother prior testbytes retained. Bounded paragraph-anchor evidence does not promote native contracts:automatic-firstline visibility,RTL,vertical/systemDPI/theme,selector/hitpriority/modifiers/snapping/capture/fullframe/page/coreindentmutation and complete native/parent parity remain unverified. Registered save/open/recovery deviations preserved."
+}
