@@ -838,7 +838,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetParagraphListKind("numbered")).toBe(true);
     expect(shell.ChangeParagraphListLevel("demote")).toBe(true);
     expect(shell.GetDoc()).toBe(document);
-    expect(document.paragraphs[0]?.GetParagraphAlignment()).toBe("center");
+    expect(document.paragraphs[0]?.GetParagraphAlignment()).toBe("left");
     expect(document.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
     expect(
       projectWriterParagraphList(

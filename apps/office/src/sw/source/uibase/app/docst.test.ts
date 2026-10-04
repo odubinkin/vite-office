@@ -247,7 +247,7 @@ describe("SwDocShell native paragraph StyleApply", /** Groups source-owned reque
     ).toMatchObject({ value: undefined });
   });
 
-  it("returns success on no-op and preserves point/mark and history of only the edited paragraph", /** Checks the retained paragraph primitive and exact history. @returns Nothing. */ () => {
+  it("records native repeated success and preserves point/mark and paragraph history", /** Checks the retained paragraph primitive and exact history. @returns Nothing. */ () => {
     const { owner, dispatch, shell } = fixture();
     shell.Insert("Alpha");
     shell.SplitNode();
@@ -273,6 +273,8 @@ describe("SwDocShell native paragraph StyleApply", /** Groups source-owned reque
     const noOp = new SfxRequest(5552, [new SfxStringItem(5552, "Heading 1")]);
     dispatch.ExecuteRequest(noOp);
     returned(noOp, 2);
+    expect(shell.Undo()).toBe(true);
+    expect(first.GetParagraphStyle()).toBe("heading-1");
     expect(shell.Undo()).toBe(true);
     expect(first.GetParagraphStyle()).toBe("default");
     expect(shell.Redo()).toBe(true);

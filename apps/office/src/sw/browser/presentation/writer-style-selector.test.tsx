@@ -129,7 +129,7 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
     );
     owner.close();
   });
-  it("shows custom names, dispatches their native identity, and updates history without a no-op entry", /** Checks actual StyleApply command and model history. @returns Nothing. */ () => {
+  it("shows custom names, dispatches their native identity, and records native repeat history", /** Checks actual StyleApply command and model history. @returns Nothing. */ () => {
     const document = new SwDoc();
     document.MakeTextFormatColl("Owned: & <字>", document.GetDfltTextFormatColl(), "custom-id");
     const owner = attach(document),
@@ -147,9 +147,11 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
     expect(required(document.paragraphs[0]).GetTextFormatColl().GetName()).toBe("Owned: & <字>");
     const history = document.GetUndoManager().GetUndoActionCount();
     fireEvent.change(select, { target: { value: "custom-id" } });
-    expect(document.GetUndoManager().GetUndoActionCount()).toBe(history);
+    expect(document.GetUndoManager().GetUndoActionCount()).toBe(history + 1);
     act(
-      /** Undoes the applied style. @returns Nothing. */ () => {
+      /** Undoes the repeated request and then the applied style. @returns Nothing. */ () => {
+        owner.source.Execute(WRITER_COMMAND_IDS.undo);
+        expect(select).toHaveValue("custom-id");
         owner.source.Execute(WRITER_COMMAND_IDS.undo);
       },
     );

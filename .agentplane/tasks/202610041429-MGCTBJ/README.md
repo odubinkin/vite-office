@@ -4,7 +4,7 @@ title: "Restore ordinary StyleApply direct reset and native repeat history"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on:
@@ -47,7 +47,7 @@ events:
     to: "DOING"
     note: "Start: recover failed first absent app gate by source-contradicted repeat-history/alignment expectations and effective inherited level1 assertion. Approved ordinary reset scope expanded by two bounded prior test paths; no production changes or passing test-suite repetition."
 doc_version: 3
-doc_updated_at: "2026-10-04T14:53:18.779Z"
+doc_updated_at: "2026-10-04T15:06:05.513Z"
 doc_updated_by: "CODER"
 description: "Close native ordinary paragraph style reset/list/whole-node auto-format and repeated-request history across existing range owners with exact reversible history and real browser ODT evidence; preserve registered deviations and exclude absent modifier/ring/layout/redline subsystems."
 sections:
@@ -89,6 +89,14 @@ sections:
     Readonly native lcl_RstAttr in docfmt.cxx saves list items83..87, nonempty NUMRULE, non-null PAGEDESC and non-NONE BREAK, then ResetAllAttr and restore saved items for ordinary bResetAll=true. SwDoc lcl_SetTextFormatColl conditionally resets six list items or assigns the requested style level; SwEditShell subsequently RstTextAttrs exact whole-node ranges. Native txtedt bExactRange removes AUTOFMT spanning exactly the paragraph and preserves other ranged hint types. SwDoc always appends SwUndoFormatColl before traversal, even on unchanged requested collection. Current local code changes collection only, snapshots list items only and returns no action on matching collection. This task repairs the ordinary operation as one coherent behavior/history boundary. Absent native modifiers/rings/layout/redlines/full defaults/API remain separate; no new registered deviations.
 
     First vendor-absent app gate:1463passed/5failed; vendor restored. Four old native-contradicted expectations concern repeat Undo or cleared alignment; one new same-rule test incorrectly expected effective zero after clearing direct list level while requested style owns level1. No production mismatch detected. Under the authorized ordinary reset/repeat-history objective, scope amended by two additional old test files (desktop and editing-shell acceptance); eleven bounded prior files,305byte-identical others and strict20paths. Fix expected effective1 and independently assert direct-level presence only for same-rule assignment. Retain every unrelated assertion and strengthen style Undo alignment restoration. No product pass repeated; source/framework semantics and verification criteria unchanged.
+
+    Completed ordinary registered single-PaM StyleApply: protected direct items follow docfmt reset/save/restore defaults; requested inherited rule eligibility drives six-item list reset or requested list level; exact whole-paragraph AUTOFMT is removed while partial formatting and internet hints remain. Every valid repeat creates one range history with exact direct items, hints, suppression and cursor rollback and captured-name redo.
+
+    Evidence: seven final static gates, four source-only restored-vendor checks, app1468/236files, inventory109/36files, scripts5/2files, Chromium97 pass. App and inventory coverage reach100 on lines/statements/functions/branches. First absent app1463passed/5failed is retained; only failed app gate recovered, with no production changes after first product run. No passing full suite repeated. Upstream unavailable for every product run and restored in finally.
+
+    Strict scope:20semantic paths;316prior test files,305byte-identical and11 exact replayed native-expectation updates preserving unrelated assertions.227old mapping rows preserve status/default/exception fields; four bounded description/evidence appends and one new unverified txtedt row give228modules/zero violations. Ten native hashes, ignored-inclusive artifact audit3552files/zero forbidden findings. Native execution/compilation/source copies absent. Screenshots at1280/390 show whole and partial formatting, internet link and unchanged neighbors; toolbar follows active untouched neighbor after typing undo, while preceding browser assertions verify style/sidebar/focus/export.
+
+    Modifier/full-char reset, rings/read-only/layout/redlines/inline headings, absent native direction/style-name fields and pointer semantics, full history/callback architecture and native global defaults remain unverified. Registered save/open/recovery deviations unchanged. Doctor0errors/two pre-existing warnings. Evidence: final-integrity.json, scope-integrity.json, source-comparison.json, artifact-audit.json and bounded gate records.
 id_source: "generated"
 ---
 ## Summary
@@ -145,3 +153,11 @@ Revert only the task implementation commit in a new task if required; no history
 Readonly native lcl_RstAttr in docfmt.cxx saves list items83..87, nonempty NUMRULE, non-null PAGEDESC and non-NONE BREAK, then ResetAllAttr and restore saved items for ordinary bResetAll=true. SwDoc lcl_SetTextFormatColl conditionally resets six list items or assigns the requested style level; SwEditShell subsequently RstTextAttrs exact whole-node ranges. Native txtedt bExactRange removes AUTOFMT spanning exactly the paragraph and preserves other ranged hint types. SwDoc always appends SwUndoFormatColl before traversal, even on unchanged requested collection. Current local code changes collection only, snapshots list items only and returns no action on matching collection. This task repairs the ordinary operation as one coherent behavior/history boundary. Absent native modifiers/rings/layout/redlines/full defaults/API remain separate; no new registered deviations.
 
 First vendor-absent app gate:1463passed/5failed; vendor restored. Four old native-contradicted expectations concern repeat Undo or cleared alignment; one new same-rule test incorrectly expected effective zero after clearing direct list level while requested style owns level1. No production mismatch detected. Under the authorized ordinary reset/repeat-history objective, scope amended by two additional old test files (desktop and editing-shell acceptance); eleven bounded prior files,305byte-identical others and strict20paths. Fix expected effective1 and independently assert direct-level presence only for same-rule assignment. Retain every unrelated assertion and strengthen style Undo alignment restoration. No product pass repeated; source/framework semantics and verification criteria unchanged.
+
+Completed ordinary registered single-PaM StyleApply: protected direct items follow docfmt reset/save/restore defaults; requested inherited rule eligibility drives six-item list reset or requested list level; exact whole-paragraph AUTOFMT is removed while partial formatting and internet hints remain. Every valid repeat creates one range history with exact direct items, hints, suppression and cursor rollback and captured-name redo.
+
+Evidence: seven final static gates, four source-only restored-vendor checks, app1468/236files, inventory109/36files, scripts5/2files, Chromium97 pass. App and inventory coverage reach100 on lines/statements/functions/branches. First absent app1463passed/5failed is retained; only failed app gate recovered, with no production changes after first product run. No passing full suite repeated. Upstream unavailable for every product run and restored in finally.
+
+Strict scope:20semantic paths;316prior test files,305byte-identical and11 exact replayed native-expectation updates preserving unrelated assertions.227old mapping rows preserve status/default/exception fields; four bounded description/evidence appends and one new unverified txtedt row give228modules/zero violations. Ten native hashes, ignored-inclusive artifact audit3552files/zero forbidden findings. Native execution/compilation/source copies absent. Screenshots at1280/390 show whole and partial formatting, internet link and unchanged neighbors; toolbar follows active untouched neighbor after typing undo, while preceding browser assertions verify style/sidebar/focus/export.
+
+Modifier/full-char reset, rings/read-only/layout/redlines/inline headings, absent native direction/style-name fields and pointer semantics, full history/callback architecture and native global defaults remain unverified. Registered save/open/recovery deviations unchanged. Doctor0errors/two pre-existing warnings. Evidence: final-integrity.json, scope-integrity.json, source-comparison.json, artifact-audit.json and bounded gate records.

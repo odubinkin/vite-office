@@ -313,7 +313,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsNum);
     shell.ChangeParagraphListLevel("demote");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoNumLevel);
-    expect(paragraph.GetParagraphAlignment()).toBe("center");
+    expect(paragraph.GetParagraphAlignment()).toBe("left");
     expect(paragraph.GetParagraphStyle()).toBe("heading-1");
     expect(projectWriterParagraphList(paragraph)).toMatchObject({ kind: "numbered", level: 1 });
     shell.Undo();
@@ -322,6 +322,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(projectWriterParagraphList(paragraph).kind).toBe("none");
     shell.Undo();
     expect(paragraph.GetParagraphStyle()).toBe("default");
+    expect(paragraph.GetParagraphAlignment()).toBe("center");
     shell.Undo();
     expect(paragraph.GetParagraphAlignment()).toBe("left");
   });
@@ -459,10 +460,10 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(fixtureMergeParagraphWithPrevious(shell, "p-1")).toBe(false);
     expect(fixtureMergeParagraphWithNext(shell, "p-1")).toBe(false);
     expect(shell.SetParagraphAlignment("left")).toBe(false);
-    expect(shell.SetParagraphStyle("default")).toBe(false);
+    expect(shell.SetParagraphStyle("default")).toBe(true);
     expect(shell.SetParagraphListKind("none")).toBe(false);
     expect(shell.ChangeParagraphListLevel("promote")).toBe(false);
-    expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(0);
+    expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
   });
 
   it("reports bounded action payloads and rejects empty or incompatible grouped actions" /** Covers retained-payload contracts and SwUndo grouping guards directly. @returns Nothing. */, function validatesActionPayloads(): void {

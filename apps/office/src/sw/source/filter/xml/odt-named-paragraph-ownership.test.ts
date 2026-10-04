@@ -352,7 +352,7 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
     }
   });
 
-  it("preserves custom graph ownership through shell no-op and Undo/Redo", /** Checks native existing commands and complete direct absence history. @returns Nothing. */ function restoresNamedHistory() {
+  it("preserves custom graph ownership through repeated native style requests and Undo/Redo", /** Checks native existing commands and complete direct absence history. @returns Nothing. */ function restoresNamedHistory() {
     const doc = input(),
       shellDoc = new SwDocShell(doc, metadata),
       view = new SwView(shellDoc),
@@ -371,7 +371,7 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
       expect(shell.Redo()).toBe(true);
       expect(encodeWriterDocument(doc)).toEqual(edited);
       expect(shell.SetParagraphStyle("PlainParent")).toBe(true);
-      expect(shell.SetParagraphStyle("PlainParent")).toBe(false);
+      expect(shell.SetParagraphStyle("PlainParent")).toBe(true);
       const slot = required(
         shellDoc.GetCommandShell().GetInterface().GetSlot(WRITER_COMMAND_IDS.styleApply),
       );

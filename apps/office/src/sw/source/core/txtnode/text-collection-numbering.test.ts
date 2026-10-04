@@ -243,7 +243,7 @@ it("restores exact direct list-item history and suppression through repeated sty
   node.SetAttrOutlineLevel(4);
   const before = node.CaptureListItems();
   expect(shell.SetParagraphStyle("default")).toBe(true);
-  expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(true);
+  expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(false);
   for (let i = 0; i < 2; i++) {
     expect(shell.Undo()).toBe(true);
     expect(node.GetParagraphStyle()).toBe("text-body");
@@ -252,14 +252,14 @@ it("restores exact direct list-item history and suppression through repeated sty
     expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(false);
     expect(shell.Redo()).toBe(true);
     expect(node.IsInList()).toBe(false);
-    expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(true);
+    expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(false);
   }
   const empty = node.CaptureListItems();
   shell.SetParagraphStyle("heading");
   expect(node.GetListLabel()).toBe("•");
   expect(shell.Undo()).toBe(true);
   expect(node.CaptureListItems().entries()).toEqual(empty.entries());
-  expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(true);
+  expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(false);
   expect(shell.Redo()).toBe(true);
   expect(node.GetListLabel()).toBe("•");
 });

@@ -169,6 +169,8 @@ describe("App" /**
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Start" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "default" } });
+    expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
     expect(firstParagraph).toHaveStyle({ fontSize: "18pt" });

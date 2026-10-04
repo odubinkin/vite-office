@@ -133,7 +133,7 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
       fireEvent.keyDown(fixture.editor, { ctrlKey: true, shiftKey: true, key: "z" });
       expect(fixture.select).toHaveValue("OwnedB");
     });
-  it("keeps travel and Escape out of model/history and releases focus on no-op Enter", /** Checks native travel cancellation and repeated style acceptance. @returns Nothing. */ () => {
+  it("keeps travel and Escape out of model/history and releases focus on repeated native Enter", /** Checks native travel cancellation and repeated style acceptance. @returns Nothing. */ () => {
     const fixture = mount(),
       before = endpoints(fixture);
     fixture.select.focus();
@@ -149,7 +149,7 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
     fixture.select.focus();
     fireEvent.keyDown(fixture.select, { key: "Enter" });
     expect(fixture.editor.contains(document.activeElement)).toBe(true);
-    expect(fixture.document.GetUndoManager().GetUndoActionCount()).toBe(0);
+    expect(fixture.document.GetUndoManager().GetUndoActionCount()).toBe(1);
   });
   it("accepts Tab without releasing focus and clears stale drafts on document replacement", /** Checks native Tab and live graph ownership. @returns Nothing. */ () => {
     const fixture = mount();
@@ -174,7 +174,7 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
     expect(screen.queryByRole("option", { name: "Owned: A & 字" })).toBeNull();
     fireEvent.keyDown(fixture.select, { key: "Enter" });
     expect(replacement.paragraphs[0]?.GetParagraphStyle()).toBe("default");
-    expect(replacement.GetUndoManager().GetUndoActionCount()).toBe(0);
+    expect(replacement.GetUndoManager().GetUndoActionCount()).toBe(1);
   });
   it("releases only to the active owning frame and leaves a modal's focus intact", /** Checks actual client isolation and eligibility. @returns Nothing. */ () => {
     const first = mount("first", false),

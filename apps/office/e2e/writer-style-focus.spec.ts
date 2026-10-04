@@ -85,6 +85,8 @@ for (const width of [1280, 390]) {
     await fixture.select.selectOption("OwnedB");
     await expectClientFocus(fixture.editor);
     await page.keyboard.press("Control+z");
+    await expect(fixture.select).toHaveValue("OwnedB");
+    await page.keyboard.press("Control+z");
     await expect(fixture.select).toHaveValue("OwnedA");
     await expect(fixture.untouched).toHaveText("UntouchedStyleFocus");
     await expect(fixture.untouched).toHaveAttribute("style", fixture.untouchedStyle as string);
@@ -131,6 +133,8 @@ for (const width of [1280, 390]) {
     await page.keyboard.insertText(":Tab");
     await expect(fixture.paragraph).toHaveText("FirstStyleFocus:Tab");
     await page.keyboard.press("Control+z");
+    await page.keyboard.press("Control+z");
+    await expect(fixture.select).toHaveValue("OwnedB");
     await page.keyboard.press("Control+z");
     await expect(fixture.select).toHaveValue("OwnedA");
     await expect(fixture.untouched).toHaveText("UntouchedStyleFocus");

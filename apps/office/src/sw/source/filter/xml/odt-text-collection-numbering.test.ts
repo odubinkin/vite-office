@@ -181,36 +181,37 @@ it("uses the newly selected rule in genuine ODT and preserves style attributes t
   expect(node.GetListLabel()).toBe("7.");
   shell.SetParagraphStyle("heading");
   expect(node.GetNum()?.GetNumRule()?.GetName()).toBe("Bullets");
-  expect(node.GetListLabel()).toBe("▪");
+  expect(node.GetListLabel()).toBe("•");
   const stored = encodeWriterDocument(doc);
   expect(stored.swModelVersion).toBe(16);
   const transferred = decodeWriterDocument(stored);
   for (const current of [doc, transferred]) {
     const paragraph = firstParagraph(current);
     expect(paragraph.GetNum()?.GetNumRule()?.GetName()).toBe("Bullets");
-    expect(paragraph.GetListId()).toBe("Retained");
-    expect(paragraph.GetAttrListLevel()).toBe(2);
-    expect(paragraph.GetListLabel()).toBe("▪");
+    expect(paragraph.GetListId()).toBe(current.FindNumRulePtr("Bullets")?.GetDefaultListId());
+    expect(paragraph.GetListId()).not.toBe("Retained");
+    expect(paragraph.GetAttrListLevel()).toBe(0);
+    expect(paragraph.GetListLabel()).toBe("•");
     const bytes = writeOdtDocument(current, { title: metadata.title });
     const xml = await new ZipFile(bytes).readTextEntry("content.xml");
     expect(xml).toContain('text:style-name="L1"');
-    expect(xml).toContain('text:start-value="7"');
+    expect(xml).not.toContain('text:start-value="7"');
     const reopened = (await readOdtDocument(bytes, metadata)).document;
     expect(reopened.GetTextFormatColl("text-body").GetNumRule().GetValue()).toBe("Counters");
     expect(reopened.FindNumRulePtr("Counters")).toBeDefined();
     expect(firstParagraph(reopened).GetNum()?.GetNumRule()?.GetName()).toBe("Bullets");
-    expect(firstParagraph(reopened).GetListLabel()).toBe("▪");
-    expect(firstParagraph(reopened).GetAttrListLevel()).toBe(2);
+    expect(firstParagraph(reopened).GetListLabel()).toBe("•");
+    expect(firstParagraph(reopened).GetAttrListLevel()).toBe(0);
     firstParagraph(reopened).ResetAttr(73);
     firstParagraph(reopened).ChgFormatColl(reopened.GetTextFormatColl("text-body"));
-    expect(firstParagraph(reopened).GetListLabel()).toBe("7.");
+    expect(firstParagraph(reopened).GetListLabel()).toBe("1.");
   }
   expect(shell.Undo()).toBe(true);
   expect(node.GetParagraphStyle()).toBe("text-body");
   expect(node.GetListLabel()).toBe("7.");
   expect(node.GetListId()).toBe("Retained");
   expect(shell.Redo()).toBe(true);
-  expect(node.GetListLabel()).toBe("▪");
+  expect(node.GetListLabel()).toBe("•");
 });
 
 it("retains assigned heading and direct unsigned outline attributes in existing Worker graph v16", /** Verifies the new source-owned item codec without changing the graph version. @returns Nothing. */ () => {

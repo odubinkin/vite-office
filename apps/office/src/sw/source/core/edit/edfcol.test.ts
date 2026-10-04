@@ -104,8 +104,14 @@ describe("SwEditShell inclusive paragraph collection range", /** Groups source-d
       expect(first.GetTextFormatColl()).toBe(a);
       expect(a.DerivedFrom()).toBe(parent);
       expect(a.GetNextTextFormatColl()).toBe(b);
-      expect(shell.SetParagraphStyle("OwnedA")).toBe(false);
-      expect(owner.GetUndoManager().GetUndoActionCount()).toBe(1);
+      expect(shell.SetParagraphStyle("OwnedA")).toBe(true);
+      expect(owner.GetUndoManager().GetUndoActionCount()).toBe(2);
+      expect(shell.Undo()).toBe(true);
+      expect([
+        first.GetTextFormatColl(),
+        empty.GetTextFormatColl(),
+        last.GetTextFormatColl(),
+      ]).toEqual([a, a, a]);
       for (let iteration = 0; iteration < 3; iteration += 1) {
         expect(shell.Undo()).toBe(true);
         expect(
@@ -132,7 +138,7 @@ describe("SwEditShell inclusive paragraph collection range", /** Groups source-d
     },
   );
 
-  it("changes only the collapsed paragraph and retains local whole-range no-op history", /** Checks canonical caret and unchanged range contracts. @returns Nothing. */ () => {
+  it("changes only the collapsed paragraph and records native whole-range repeat history", /** Checks canonical caret and unchanged range contracts. @returns Nothing. */ () => {
     const { owner, shell, nodes, a } = fixture();
     const target = required(nodes[2]);
     shell.SetPaM(new SwPosition(target, 0));
@@ -145,8 +151,10 @@ describe("SwEditShell inclusive paragraph collection range", /** Groups source-d
     ).toEqual(["default", "default", "OwnedA", "default", "default"]);
     expect(target.GetTextFormatColl()).toBe(a);
     expect(shell.GetCursor().HasMark()).toBe(false);
-    expect(shell.SetParagraphStyle("OwnedA")).toBe(false);
-    expect(owner.GetUndoManager().GetUndoActionCount()).toBe(1);
+    expect(shell.SetParagraphStyle("OwnedA")).toBe(true);
+    expect(owner.GetUndoManager().GetUndoActionCount()).toBe(2);
+    expect(shell.Undo()).toBe(true);
+    expect(target.GetParagraphStyle()).toBe("OwnedA");
     expect(shell.Undo()).toBe(true);
     expect(target.GetParagraphStyle()).toBe("default");
     expect(shell.Undo()).toBe(false);

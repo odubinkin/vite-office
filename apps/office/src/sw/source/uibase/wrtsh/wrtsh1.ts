@@ -485,7 +485,7 @@ export class SwWrtShell extends SwModify {
     return this.textShell.SetParagraphAlignment(alignment);
   }
 
-  /** Applies a paragraph style through one shell-owned history transition. @param style - Next style. @returns Whether content changed. */
+  /** Applies a paragraph style through one native range history transition, including repeated requests. @param style - Next style. @returns Whether the valid request was applied. */
   public SetParagraphStyle(style: WriterParagraphStyle): boolean {
     const document = this.GetDoc();
     if (!isWriterParagraphStyle(style) && document.FindTextFormatColl(style) === undefined)
@@ -496,7 +496,7 @@ export class SwWrtShell extends SwModify {
       document.GetTextFormatColl(style),
       this.CaptureCursorState(),
     );
-    return action === undefined ? false : this.ApplyAction(action);
+    return this.ApplyAction(action);
   }
 
   /** Applies or removes the active paragraph's default list. @param kind - Next list kind. @returns Whether content changed. */
