@@ -6955,6 +6955,26 @@
           {
             "marker": "getMovedLeftMargin",
             "path": "apps/office/src/sw/source/core/doc/docfmt.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+            "marker": "createTextFormatCollAction"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+            "marker": "getTextFormatCollNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+            "marker": "SwUndoFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+            "marker": "SwEditShell inclusive paragraph collection range"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selection.spec.ts",
+            "marker": "Writer inclusive paragraph style range"
           }
         ],
         "upstream": [
@@ -6974,7 +6994,8 @@
         "Native table and multiple-selection-ring layout operations are outside the implemented browser slice."
       ],
       "preservedResponsibilities": [
-        "Computes tab-distance-based text-left margin changes from the document default tab item."
+        "Computes tab-distance-based text-left margin changes from the document default tab item.",
+        "Iteration106 restores inclusive text-node traversal for the current single SwPaM paragraph collection range, including empty/end-offset-zero paragraphs and table-cell text, with the supported editing primitive delegated to core edfcol instead of SwTextShell. One SwUndoFormatColl captures each original collection/list-item/suppression state and retains point/mark orientation; redo resolves the captured native collection display name and safely leaves nodes unchanged if absent. Actual document/view/frame tests and desktop/mobile ODT UI scenarios cover mixed active-endpoint styles, untouched neighbors, one history unit, repeated UndoRedo, owner guards, toolbar/sidebar/focus, continued editing and exported ownership. The existing whole-range no-op history remains a local contract and unverified against native repeated requests. Direct attribute and full-node hint resets, modifier/list resets, cursor rings, read-only/layout/redline/inline-heading handling, complete native history/defaults/style API and whole core/UI parity remain unverified. No status/default/exception promotion or registered save/open/recovery change."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/docfmt.cxx",
@@ -8083,6 +8104,62 @@
       "upstreamSymbols": [
         "SwEditShell::IsMoveLeftMargin",
         "SwEditShell::MoveLeftMargin"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+            "marker": "createTextFormatCollAction"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+            "marker": "getTextFormatCollNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+            "marker": "SwUndoFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+            "marker": "SwEditShell inclusive paragraph collection range"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selection.spec.ts",
+            "marker": "Writer inclusive paragraph style range"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/edfcol.cxx",
+            "marker": "SwEditShell::SetTextFormatColl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx",
+            "marker": "SwDoc::SetTextFormatColl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unfmco.cxx",
+            "marker": "SwUndoFormatColl::DoSetFormatColl"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/edit/edfcol.ts",
+      "localSymbols": [
+        "createTextFormatCollAction"
+      ],
+      "omittedResponsibilities": [
+        "Native direct attribute/full-node hint resets, unchanged-request history, modifier/list resets, selection rings, read-only/layout/redline/inline-heading and complete editing-shell contracts remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration106 restores inclusive text-node traversal for the current single SwPaM paragraph collection range, including empty/end-offset-zero paragraphs and table-cell text, with the supported editing primitive delegated to core edfcol instead of SwTextShell. One SwUndoFormatColl captures each original collection/list-item/suppression state and retains point/mark orientation; redo resolves the captured native collection display name and safely leaves nodes unchanged if absent. Actual document/view/frame tests and desktop/mobile ODT UI scenarios cover mixed active-endpoint styles, untouched neighbors, one history unit, repeated UndoRedo, owner guards, toolbar/sidebar/focus, continued editing and exported ownership. The existing whole-range no-op history remains a local contract and unverified against native repeated requests. Direct attribute and full-node hint resets, modifier/list resets, cursor rings, read-only/layout/redline/inline-heading handling, complete native history/defaults/style API and whole core/UI parity remain unverified. No status/default/exception promotion or registered save/open/recovery change."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/edit/edfcol.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::SetTextFormatColl"
       ]
     },
     {
@@ -9542,6 +9619,26 @@
           {
             "marker": "SwUndoFormatColl",
             "path": "apps/office/src/sw/source/core/undo/unfmco.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+            "marker": "createTextFormatCollAction"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+            "marker": "getTextFormatCollNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+            "marker": "SwUndoFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+            "marker": "SwEditShell inclusive paragraph collection range"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selection.spec.ts",
+            "marker": "Writer inclusive paragraph style range"
           }
         ],
         "upstream": [
@@ -9561,7 +9658,8 @@
       ],
       "preservedResponsibilities": [
         "Implements paragraph style collection undo from pinned LibreOffice unfmco.cxx.",
-        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations."
+        "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
+        "Iteration106 restores inclusive text-node traversal for the current single SwPaM paragraph collection range, including empty/end-offset-zero paragraphs and table-cell text, with the supported editing primitive delegated to core edfcol instead of SwTextShell. One SwUndoFormatColl captures each original collection/list-item/suppression state and retains point/mark orientation; redo resolves the captured native collection display name and safely leaves nodes unchanged if absent. Actual document/view/frame tests and desktop/mobile ODT UI scenarios cover mixed active-endpoint styles, untouched neighbors, one history unit, repeated UndoRedo, owner guards, toolbar/sidebar/focus, continued editing and exported ownership. The existing whole-range no-op history remains a local contract and unverified against native repeated requests. Direct attribute and full-node hint resets, modifier/list resets, cursor rings, read-only/layout/redline/inline-heading handling, complete native history/defaults/style API and whole core/UI parity remain unverified. No status/default/exception promotion or registered save/open/recovery change."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unfmco.cxx",
@@ -11071,6 +11169,26 @@
           {
             "path": "apps/office/src/sw/source/uibase/app/docst.test.ts",
             "marker": "SwDocShell native paragraph StyleApply"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+            "marker": "createTextFormatCollAction"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+            "marker": "getTextFormatCollNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+            "marker": "SwUndoFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+            "marker": "SwEditShell inclusive paragraph collection range"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selection.spec.ts",
+            "marker": "Writer inclusive paragraph style range"
           }
         ],
         "upstream": [
@@ -11120,7 +11238,8 @@
         "Owns supported character, paragraph, hyperlink, indent, and history execute/state semantics; converts accepted paragraph drafts to pooled items and groups selected-paragraph undo actions while SwWrtShell supplies cursor and action primitives.",
         "Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion.",
         "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
-        "Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes."
+        "Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
+        "Iteration106 restores inclusive text-node traversal for the current single SwPaM paragraph collection range, including empty/end-offset-zero paragraphs and table-cell text, with the supported editing primitive delegated to core edfcol instead of SwTextShell. One SwUndoFormatColl captures each original collection/list-item/suppression state and retains point/mark orientation; redo resolves the captured native collection display name and safely leaves nodes unchanged if absent. Actual document/view/frame tests and desktop/mobile ODT UI scenarios cover mixed active-endpoint styles, untouched neighbors, one history unit, repeated UndoRedo, owner guards, toolbar/sidebar/focus, continued editing and exported ownership. The existing whole-range no-op history remains a local contract and unverified against native repeated requests. Direct attribute and full-node hint resets, modifier/list resets, cursor rings, read-only/layout/redline/inline-heading handling, complete native history/defaults/style API and whole core/UI parity remain unverified. No status/default/exception promotion or registered save/open/recovery change."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
@@ -11393,6 +11512,26 @@
           {
             "path": "apps/office/e2e/writer-ruler-indent-items.spec.ts",
             "marker": "Writer automatic ruler item history at width"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+            "marker": "createTextFormatCollAction"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+            "marker": "getTextFormatCollNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+            "marker": "SwUndoFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+            "marker": "SwEditShell inclusive paragraph collection range"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selection.spec.ts",
+            "marker": "Writer inclusive paragraph style range"
           }
         ],
         "upstream": [
@@ -11442,7 +11581,8 @@
       ],
       "preservedResponsibilities": [
         "Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice sw/source/uibase/wrtsh/wrtsh1.cxx, including ruler page and paragraph transitions delegated to its undo actions.",
-        "Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion."
+        "Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion.",
+        "Iteration106 restores inclusive text-node traversal for the current single SwPaM paragraph collection range, including empty/end-offset-zero paragraphs and table-cell text, with the supported editing primitive delegated to core edfcol instead of SwTextShell. One SwUndoFormatColl captures each original collection/list-item/suppression state and retains point/mark orientation; redo resolves the captured native collection display name and safely leaves nodes unchanged if absent. Actual document/view/frame tests and desktop/mobile ODT UI scenarios cover mixed active-endpoint styles, untouched neighbors, one history unit, repeated UndoRedo, owner guards, toolbar/sidebar/focus, continued editing and exported ownership. The existing whole-range no-op history remains a local contract and unverified against native repeated requests. Direct attribute and full-node hint resets, modifier/list resets, cursor rings, read-only/layout/redline/inline-heading handling, complete native history/defaults/style API and whole core/UI parity remain unverified. No status/default/exception promotion or registered save/open/recovery change."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",

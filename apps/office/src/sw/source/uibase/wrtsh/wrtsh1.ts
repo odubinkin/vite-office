@@ -9,7 +9,8 @@ import type { SwModelHint } from "../../../inc/hints";
 import { SwPaM, SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
-import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
+import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
+import { createTextFormatCollAction } from "../../core/edit/edfcol";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type {
   SwTextFragment,
@@ -486,7 +487,16 @@ export class SwWrtShell extends SwModify {
 
   /** Applies a paragraph style through one shell-owned history transition. @param style - Next style. @returns Whether content changed. */
   public SetParagraphStyle(style: WriterParagraphStyle): boolean {
-    return this.textShell.SetParagraphStyle(style);
+    const document = this.GetDoc();
+    if (!isWriterParagraphStyle(style) && document.FindTextFormatColl(style) === undefined)
+      throw new Error(`Unsupported Writer paragraph style: ${style}`);
+    const action = createTextFormatCollAction(
+      document,
+      this.cursor,
+      document.GetTextFormatColl(style),
+      this.CaptureCursorState(),
+    );
+    return action === undefined ? false : this.ApplyAction(action);
   }
 
   /** Applies or removes the active paragraph's default list. @param kind - Next list kind. @returns Whether content changed. */

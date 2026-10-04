@@ -29,7 +29,6 @@ import {
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { SwPosition, getWriterSelectedTextRange, type WriterTextRange } from "../../core/crsr/pam";
-import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type {
   SwTextNode,
   WriterCharacterFormat,
@@ -49,7 +48,6 @@ import {
   SwUndoParagraphFormat,
   SwUndoParagraphItem,
 } from "../../core/undo/unattr";
-import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
@@ -663,21 +661,6 @@ export class SwTextShell {
         cursor,
         cursor,
       ),
-    );
-  }
-
-  /** Applies a paragraph style through the text shell. @param style - Style identity. @returns Whether changed. */
-  public SetParagraphStyle(style: WriterParagraphStyle): boolean {
-    const paragraph = this.target.GetActiveParagraph();
-    if (
-      !isWriterParagraphStyle(style) &&
-      paragraph.GetDoc().FindTextFormatColl(style) === undefined
-    )
-      throw new Error(`Unsupported Writer paragraph style: ${style}`);
-    if (paragraph.GetParagraphStyle() === style) return false;
-    const cursor = this.target.CaptureCursorState();
-    return this.target.ApplyAction(
-      new SwUndoFormatColl(paragraph, paragraph.GetParagraphStyle(), style, cursor, cursor),
     );
   }
 

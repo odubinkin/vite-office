@@ -4,6 +4,26 @@ import { SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
 import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import type { SwDoc } from "./doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwPaM } from "../crsr/pam";
+
+/** Visits every text node in SwDoc::SetTextFormatColl's inclusive ordered span, retaining zero-width paragraph boundaries. @param document - Active model. @param range - Canonical point/mark. @returns Selected text nodes in native node order. */
+export function getTextFormatCollNodes(document: SwDoc, range: SwPaM): readonly SwTextNode[] {
+  const point = range.GetPoint().GetNode();
+  const mark = range.GetMark().GetNode();
+  const nodes = document.GetNodes();
+  if (point.GetNodes() !== nodes || mark.GetNodes() !== nodes)
+    throw new Error("Writer paragraph style range belongs to another node graph.");
+  const ordered = nodes.entries();
+  if (!ordered.includes(point) || !ordered.includes(mark))
+    throw new Error("Writer paragraph style range is detached.");
+  const start = range.Start().GetNodeIndex();
+  const end = range.End().GetNodeIndex();
+  return ordered.filter(
+    /** Skips native non-text nodes while including both range endpoints. @param node - Candidate node. @returns Whether selected text. */
+    (node): node is SwTextNode =>
+      node.IsTextNode() && node.GetIndex() >= start && node.GetIndex() <= end,
+  );
+}
 
 /** Upstream's 2 cm fallback when the document default tab item has no stops. */
 export const SW_DEFAULT_INDENT_DISTANCE = 1134;

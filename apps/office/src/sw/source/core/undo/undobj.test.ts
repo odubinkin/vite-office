@@ -5,7 +5,7 @@ import { encodeWriterDocument } from "../../../browser/filter/xml/writer-documen
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../doc/doc";
 import { createWriterListItemSet, projectWriterParagraphList } from "../doc/list";
-import { SwPosition } from "../crsr/pam";
+import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../txtnode/txatbase";
 import { copyWriterTextRangeRuns, projectWriterTextRuns } from "../txtnode/ndtxt";
@@ -506,7 +506,14 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     );
     const paragraph = new SwUndoParagraphFormat(target, "left", "center", state, state);
     const margin = new SwUndoMoveLeftMargin(target, 0, 1134, state, state);
-    const style = new SwUndoFormatColl(target, "default", "heading-1", state, state);
+    const styleRange = new SwPaM(new SwPosition(target, 0));
+    const style = new SwUndoFormatColl(
+      styleRange,
+      document.GetTextFormatColl("heading-1"),
+      state,
+      state,
+    );
+    styleRange.Dispose();
     const numbering = new SwUndoInsNum(
       target,
       createWriterListItemSet(target, { kind: "none", level: 0 }),
