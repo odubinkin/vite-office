@@ -1,10 +1,11 @@
 ---
 id: "202610040949-DSEN0S"
 title: "Restore native independent list-indent core contracts"
-status: "DOING"
+result_summary: "Restored native independent list-indent core contract; consumer migration awaits imported style hierarchy refactor."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +42,9 @@ quality_review:
   findings:
     - "Refreshed snapshot digest6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524 matches final narrowed title/description and current Verify Steps; no route or acceptance change after successful tests."
     - "Six semantic paths and three native hashes unchanged, all304prior tests and consumers preserved; app1306/inventory109/scripts5/browser85 pass absent with both coverages100%; seven static gates/four source audits/parity222 and AP forbidden0 pass."
-commit: null
+commit:
+  hash: "f4410459c4dd8db2f2649a0d6d1695f817d6de73"
+  message: "🧩 DSEN0S task: clarify exact evaluated implementation tree"
 comments:
   -
     author: "CODER"
@@ -49,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Narrow to independent core mask and value contracts; preserve existing consumers pending imported style hierarchy prerequisite under the standing iterative goal."
+  -
+    author: "CODER"
+    body: "Verified: Native independent list-indent core contracts pass all bounded source/product evidence;1306app/109inventory/5scripts/85browser cases pass absent, coverage100%. Original semantic commit a89b8333; all six source identities equal at evaluated containing implementation tree7c0e6452 and workspace. Current blueprint and same-actor EVALUATOR pass;304prior tests and consumers unchanged. No tests repeated after passing; parent and goal remain active."
 events:
   -
     type: "status"
@@ -76,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Refreshed blueprint snapshot after final task title/description narrowed to reviewed core scope. Existing final evidence and semantic identities unchanged; app1306/inventory109/scripts5/browser85 pass absent, both coverage100%, all source/static/audit checks pass. No tests rerun; pinned semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742."
+  -
+    type: "status"
+    at: "2026-10-04T10:20:43.515Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native independent list-indent core contracts pass all bounded source/product evidence;1306app/109inventory/5scripts/85browser cases pass absent, coverage100%. Original semantic commit a89b8333; all six source identities equal at evaluated containing implementation tree7c0e6452 and workspace. Current blueprint and same-actor EVALUATOR pass;304prior tests and consumers unchanged. No tests repeated after passing; parent and goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-04T10:20:41.053Z"
+doc_updated_at: "2026-10-04T10:20:43.516Z"
 doc_updated_by: "CODER"
 description: "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion."
 sections:
@@ -140,6 +153,10 @@ sections:
     Initial consumer migration caused existing exact listLayout DTO assertion to receive an extra field and tdf114287 imported style print bound2268 instead of357. Existing ODT named custom styles flatten inherited items into direct node items, so full style hierarchy restoration is a prerequisite for native per-axis consumer migration. Restore current consumers and defer integration to the next coherent task rather than introduce a sideband invalidation shortcut or weaken prior tests. All initial native ownership cases passed. No full module/default/contract/parent parity promotion.
     Final bounded core implementation: all1306app/109inventory/5scripts/85browser cases pass absent; both coverage outputs100%, all304oldtests and all consumer files unchanged. Source hashes3, manifests222, forbidden AP findings0. Same-actor read-only EVALUATOR passes exact semantic SHA a89b8333d4a2b8c50398de7d9a00a7d3b97ee742. First local commit message scope core was rejected by commit-msg; corrected to code after doctor passed, no implementation or tests changed/repeated. Remaining prerequisite: restore actual named/imported style hierarchy and graph persistence before per-axis consumers, then remove static sideband when exact transport ownership is proven. Goal and parent remain active; full parity is not asserted.
     Blueprint refreshed without rerunning tests. The current quality report runtime evaluated_sha is7c0e6452b0277de239548655e4423f69c2b7525f (snapshot digest6ddf034fcc819182c95ea5cc3b7a5a64cbd2661ba5630770192dba81259c9524). Read-only Git checks prove all six semantic paths byte-identical at original code commit a89b8333d4a2b8c50398de7d9a00a7d3b97ee742, evaluated containing tree7c0e6452, and current workspace. Closure records this evaluated containing tree as implementation evidence, with the original semantic commit retained here. Runtime rejected mismatched explicit implementation SHA on second finish; corrected traceability to the exact evaluated tree, no implementation/tests changed.
+extensions:
+  implementation_commit:
+    hash: "7c0e6452b0277de239548655e4423f69c2b7525f"
+    message: "🧩 DSEN0S task: record reviewed core contract evidence"
 id_source: "generated"
 ---
 ## Summary
