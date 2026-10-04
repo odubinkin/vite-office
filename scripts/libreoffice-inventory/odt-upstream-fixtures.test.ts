@@ -300,7 +300,10 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
             /** Projects one imported style identifier. @param paragraph - Imported paragraph. @returns Style identity. */
             (paragraph) => paragraph.GetParagraphStyle(),
           ),
-        ).toEqual(["default", "default", "default", "title", "text-body"]);
+        ).toEqual(["default", "default", "default", "title", "Custom_5f_Style"]);
+        expect(document.GetTextFormatColl("Custom_5f_Style").DerivedFrom()).toBe(
+          document.GetTextFormatColl("text-body"),
+        );
       },
       file: "sw/qa/uitest/data/styles.odt",
     },

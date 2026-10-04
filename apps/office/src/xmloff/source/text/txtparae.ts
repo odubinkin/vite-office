@@ -41,6 +41,8 @@ export interface XMLTextRunSource {
 
 /** Writer paragraph styles supported by the bounded filter. */
 export type XMLParagraphStyle = string;
+/** Fixed fields in the structured automatic-style key. */
+type StyleKey = [string, OdfParagraphAlignment | "", string, string, string, string, string];
 
 /** Paragraph alignment values shared with the Writer model. */
 export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
@@ -125,6 +127,8 @@ export interface XMLTextParagraphSource {
   readonly leftMargin?: number;
   readonly list?: XMLTextListSource;
   readonly listGeometryWins?: boolean;
+  /** Direct numbering item; common style ownership remains on the original named parent. */
+  readonly directListRule?: string;
   /** Zero-width Writer marks and imported pagination hints in UTF-16 coordinates. */
   readonly markers?: readonly Readonly<{
     kind: "bookmark" | "soft-page-break";
@@ -190,7 +194,8 @@ export class XMLTextParagraphExport {
         paragraph.leftMargin !== undefined ||
         paragraph.paragraphProperties !== undefined ||
         paragraph.properties !== undefined ||
-        paragraph.listGeometryWins === true
+        paragraph.listGeometryWins === true ||
+        paragraph.directListRule !== undefined
       ) {
         const key = paragraphStyleKey(
           getOdfStyleName(paragraph),
@@ -199,6 +204,7 @@ export class XMLTextParagraphExport {
           paragraph.paragraphProperties,
           paragraph.properties,
           paragraph.listGeometryWins === true ? paragraph.list?.rule.name : undefined,
+          paragraph.directListRule,
         );
         if (!paragraphStyleNames.has(key))
           paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
@@ -228,22 +234,16 @@ export class XMLTextParagraphExport {
       /** Emits one automatic paragraph style. @param entry - Internal key and ODF name. @returns Style XML. */
       (entry) => {
         const [key, name] = entry;
-        const [style, alignment, leftMargin, paragraphPropertiesKey, propertiesKey, listRule] =
-          key.split(":") as [
-            XMLParagraphStyle,
-            OdfParagraphAlignment | "",
-            string,
-            string,
-            string,
-            string,
-          ];
-        const parent = style;
+        const [style, alignment, leftMargin, paraKey, charKey, listRule, directRule] = JSON.parse(
+          key,
+        ) as StyleKey;
+        const parent = escapeXml(style);
         const paragraphAttributes = [
           ...(alignment === "" ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
           ...(leftMargin === "" ? [] : [`fo:margin-left="${exportOdfLength(Number(leftMargin))}"`]),
-          ...exportParagraphAttributes(parseParagraphPropertiesKey(paragraphPropertiesKey)),
+          ...exportParagraphAttributes(parseParagraphPropertiesKey(paraKey)),
         ];
-        const parsedParagraphProperties = parseParagraphPropertiesKey(paragraphPropertiesKey);
+        const parsedParagraphProperties = parseParagraphPropertiesKey(paraKey);
         const masterPage =
           parsedParagraphProperties.pageStyleName === undefined
             ? ""
@@ -253,7 +253,7 @@ export class XMLTextParagraphExport {
           paragraphAttributes.length === 0 && paragraphChildren.length === 0
             ? ""
             : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
-        const properties = parseCharacterPropertiesKey(propertiesKey);
+        const properties = parseCharacterPropertiesKey(charKey);
         const textProperties =
           Object.keys(properties).length === 0
             ? ""
@@ -268,7 +268,12 @@ export class XMLTextParagraphExport {
           );
           return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
         }
-        return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}"${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
+        const directNumbering = directRule === "" ? undefined : listStyleNames.get(directRule);
+        if (directRule !== "" && directNumbering === undefined)
+          throw new Error(`Missing ODF direct list style: ${directRule}`);
+        const numbering =
+          directNumbering === undefined ? "" : ` style:list-style-name="${directNumbering}"`;
+        return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}"${numbering}${masterPage}>${paragraphProperties}${textProperties}</style:style>`;
       },
     );
     const characterStyles = [...characterStyleNames].map(
@@ -464,7 +469,8 @@ function exportParagraphElement(
     paragraph.leftMargin === undefined &&
     paragraph.paragraphProperties === undefined &&
     paragraph.properties === undefined &&
-    paragraph.listGeometryWins !== true
+    paragraph.listGeometryWins !== true &&
+    paragraph.directListRule === undefined
       ? baseStyleName
       : (paragraphStyleNames.get(
           paragraphStyleKey(
@@ -474,6 +480,7 @@ function exportParagraphElement(
             paragraph.paragraphProperties,
             paragraph.properties,
             paragraph.listGeometryWins === true ? paragraph.list?.rule.name : undefined,
+            paragraph.directListRule,
           ),
         ) as string);
   let content = "";
@@ -594,7 +601,7 @@ function createXmlId(value: string, used: Set<string>): string {
   return candidate;
 }
 
-/** Creates an automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param listGeometryRule - Higher-priority list rule. @returns Key. */
+/** Creates a structured automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param listGeometryRule - Legacy adapter priority. @param directListRule - Actual direct rule item. @returns Key. */
 function paragraphStyleKey(
   style: XMLParagraphStyle,
   alignment?: OdfParagraphAlignment,
@@ -602,8 +609,17 @@ function paragraphStyleKey(
   paragraphProperties?: OdfParagraphProperties,
   properties?: Partial<OdfCharacterProperties>,
   listGeometryRule?: string,
+  directListRule?: string,
 ): string {
-  return `${style}:${alignment ?? ""}:${leftMargin ?? ""}:${paragraphPropertiesKey(paragraphProperties)}:${partialCharacterPropertiesKey(properties)}:${listGeometryRule ?? ""}`;
+  return JSON.stringify([
+    style,
+    alignment ?? "",
+    leftMargin === undefined ? "" : String(leftMargin),
+    paragraphPropertiesKey(paragraphProperties),
+    partialCharacterPropertiesKey(properties),
+    listGeometryRule ?? "",
+    directListRule ?? "",
+  ]);
 }
 
 /** Creates a stable key for direct paragraph deltas. @param properties - Direct paragraph properties. @returns Key. */

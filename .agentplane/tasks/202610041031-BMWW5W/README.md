@@ -4,7 +4,7 @@ title: "Preserve document-owned named paragraph style hierarchy through ODT and 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T11:30:41.777Z"
+  updated_by: "CODER"
+  note: "All declared local gates pass: app1331 inventory109 scripts5 Chromium87 only absent; coverage100%four metrics, source/parity223/0, exact17paths/303unchanged prior tests, two bounded assertion updates, AP forbidden0; next toolbar custom style gap and native residuals recorded."
   attempts: 0
 commit: null
 comments:
@@ -66,8 +66,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: correct only actual custom fixture ownership and three relocated local markers; passing app suite will not be repeated."
+  -
+    type: "verify"
+    at: "2026-10-04T11:30:41.777Z"
+    author: "CODER"
+    state: "ok"
+    note: "All declared local gates pass: app1331 inventory109 scripts5 Chromium87 only absent; coverage100%four metrics, source/parity223/0, exact17paths/303unchanged prior tests, two bounded assertion updates, AP forbidden0; next toolbar custom style gap and native residuals recorded."
 doc_version: 3
-doc_updated_at: "2026-10-04T11:30:38.519Z"
+doc_updated_at: "2026-10-04T11:30:41.835Z"
 doc_updated_by: "CODER"
 description: "Iteration102 replaces flattening of imported named paragraph styles with document-owned SwTextFormatColl collections, retaining direct automatic deltas and exact parent/follow/item ownership through ODT, graph/history and destination copying. Native independent list-indent applicability must agree with real imported hierarchy; existing consumers and registered I/O/recovery deviations remain unchanged until the next consumer migration."
 sections:
@@ -105,6 +111,39 @@ sections:
   Verification: |-
     Command: split npm run verify gates plus exact scope/native hash and ignored-inclusive AP inspection recorded in task JSON summaries.
     Result: pass. App1331/229and inventory109/36pass100%lines/statements/functions/branches; scripts5/2and Chromium87pass. All tests ran with the pinned directory absent. Only failed app/inventory gates repeated; no passing full suite repeated. All seven static gates pass, scoped corrections checked, final browser build/static output validated. Restored resources/source-tree/provenance/invariants pass; parity223modules/0violations. Five read-only source hashes,17paths,303unchanged prior tests and exact two bounded assertion updates verified. No native execution or source copies. Both screenshot widths inspected; current toolbar custom-style display remains a recorded next-iteration gap.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T11:30:41.777Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All declared local gates pass: app1331 inventory109 scripts5 Chromium87 only absent; coverage100%four metrics, source/parity223/0, exact17paths/303unchanged prior tests, two bounded assertion updates, AP forbidden0; next toolbar custom style gap and native residuals recorded.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T11:30:38.519Z, excerpt_hash=sha256:7f36c9b9513e9bdb2639cb0b1492f74e9c56d3bdf3f0ce7bef3c1c5afd89da15
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041031-BMWW5W/blueprint/resolved-snapshot.json
+    - old_digest: 1202f07981ebde5d179af4df02a38764c1cef2e1906a6d7d7f8cfa3353d4eb16
+    - current_digest: 1202f07981ebde5d179af4df02a38764c1cef2e1906a6d7d7f8cfa3353d4eb16
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610041031-BMWW5W
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610041031-BMWW5W
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commit if actual named/automatic ownership or transport contracts are disproved; no history rewrite/reset, coverage relaxation or registered deviation changes."
   Findings: |-
     Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure. Result: initial5fail/1325pass; then1331pass with one branch below100%; final1331/229pass100%four metrics. Native list display-name, invalid parent, composite item and empty direct-rule diagnostics were corrected without changing numeric literals. The generic XML port parent-alignment branch has a literal independent test. No app production change or app rerun after its passing gate.
@@ -157,6 +196,39 @@ Preserve registered document I/O/recovery deviations and all existing status/def
 
 Command: split npm run verify gates plus exact scope/native hash and ignored-inclusive AP inspection recorded in task JSON summaries.
 Result: pass. App1331/229and inventory109/36pass100%lines/statements/functions/branches; scripts5/2and Chromium87pass. All tests ran with the pinned directory absent. Only failed app/inventory gates repeated; no passing full suite repeated. All seven static gates pass, scoped corrections checked, final browser build/static output validated. Restored resources/source-tree/provenance/invariants pass; parity223modules/0violations. Five read-only source hashes,17paths,303unchanged prior tests and exact two bounded assertion updates verified. No native execution or source copies. Both screenshot widths inspected; current toolbar custom-style display remains a recorded next-iteration gap.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T11:30:41.777Z — VERIFY — ok
+
+By: CODER
+
+Note: All declared local gates pass: app1331 inventory109 scripts5 Chromium87 only absent; coverage100%four metrics, source/parity223/0, exact17paths/303unchanged prior tests, two bounded assertion updates, AP forbidden0; next toolbar custom style gap and native residuals recorded.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T11:30:38.519Z, excerpt_hash=sha256:7f36c9b9513e9bdb2639cb0b1492f74e9c56d3bdf3f0ce7bef3c1c5afd89da15
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041031-BMWW5W/blueprint/resolved-snapshot.json
+- old_digest: 1202f07981ebde5d179af4df02a38764c1cef2e1906a6d7d7f8cfa3353d4eb16
+- current_digest: 1202f07981ebde5d179af4df02a38764c1cef2e1906a6d7d7f8cfa3353d4eb16
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610041031-BMWW5W
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610041031-BMWW5W
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

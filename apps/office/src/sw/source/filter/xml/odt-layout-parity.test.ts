@@ -11,7 +11,7 @@ import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { RES_CHRATR_FONTSIZE, RES_PARATR_LINESPACING, RES_UL_SPACE } from "../../../inc/hintids";
-import { exportContentXml } from "./xmlexp";
+import { exportContentXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
@@ -142,7 +142,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     expect((node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(
       100,
     );
-    const exported = exportContentXml(document);
+    const exported = exportStylesXml(document);
     expect(exported).toContain('style:contextual-spacing="false"');
   });
 

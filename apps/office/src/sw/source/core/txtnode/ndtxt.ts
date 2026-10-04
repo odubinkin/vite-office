@@ -783,7 +783,7 @@ export class SwTextNode extends SwContentNode {
     const clone = new SwTextNode(
       nodes,
       nodes.GetEndOfContent().StartOfSectionNode(),
-      nodes.GetDoc().GetTextFormatColl(this.GetParagraphStyle()),
+      nodes.GetDoc().CopyTextColl(this.GetTextFormatColl()),
     );
     const direct = this.GetpSwAttrSet();
     if (direct !== undefined) clone.SetAttr(direct);

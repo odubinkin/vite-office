@@ -30,6 +30,15 @@ export class DocumentStylePoolManager {
     return this.collectionsById.get(id);
   }
 
+  /** Registers a newly created document-owned named collection. @param collection - New collection. @returns Registered collection. */
+  public AddTextFormatColl(collection: SwTextFormatColl): SwTextFormatColl {
+    if (this.collectionsById.has(collection.id))
+      throw new Error(`Duplicate SwTextFormatColl: ${collection.id}`);
+    this.collectionsById.set(collection.id, collection);
+    this.collections.push(collection);
+    return collection;
+  }
+
   /** Finds or creates a supported collection with pinned parent/follow links. @param id - Programmatic identity. @returns Document-owned collection. */
   public GetTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl {
     const existing = this.FindTextFormatColl(id);

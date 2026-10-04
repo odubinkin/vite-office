@@ -5,8 +5,6 @@ import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocor
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
 
 import {
-  SvxAdjust,
-  SvxAdjustItem,
   SvxLineSpacingItem,
   SvxTabAdjust,
   SvxTabStop,
@@ -15,7 +13,6 @@ import {
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
-  SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
@@ -31,9 +28,13 @@ import {
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { applyNamedParagraphStyles } from "./xmlimp-named-styles";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { createWriterCharacterItemSet } from "../../core/txtnode/txatbase";
+import {
+  createWriterCharacterItemSet,
+  projectWriterCharacterAttributes,
+} from "../../core/txtnode/txatbase";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   FastAttributeList,
@@ -65,7 +66,6 @@ import {
   type XMLParagraphListState,
   type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
-import type { SwFormat } from "../../core/attr/format";
 import { LineNumberPosition, SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
 import { SwPosition } from "../../core/crsr/pam";
@@ -92,7 +92,6 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
-  RES_PARATR_ADJUST,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
@@ -100,16 +99,11 @@ import {
   RES_PARATR_TABSTOP,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
-  RES_MARGIN_TEXTLEFT,
   RES_UL_SPACE,
   RES_KEEP,
   RES_LINENUMBER,
 } from "../../../inc/hintids";
-import {
-  getWriterOdfStyleName,
-  getWriterStyleIdFromOdfName,
-  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
-} from "../../../inc/poolfmt";
+import { getWriterStyleIdFromOdfName } from "../../../inc/poolfmt";
 
 const ignoredDocumentChildren = new Set([XMLToken.OFFICE_SETTINGS, XMLToken.OFFICE_SCRIPTS]);
 
@@ -313,6 +307,15 @@ class SwXMLImport
     return getWriterStyleIdFromOdfName(styleName);
   }
 
+  /** Resolves actual common paragraph collection ownership without flattening it into direct items. @param styleName - Common ODF identity. @returns Registered collection identity. */
+  public resolveNamedParagraphStyle(styleName: string): string | undefined {
+    const id = getWriterStyleIdFromOdfName(styleName);
+    return (
+      (id === undefined ? undefined : this.document.FindTextFormatColl(id))?.id ??
+      this.document.FindTextFormatColl(styleName)?.id
+    );
+  }
+
   /** Resolves one document-owned list rule. @param styleName - ODF list style name. @returns Rule view. */
   public getListRule(styleName: string): XMLTextListRule | undefined {
     return this.listRules.get(styleName);
@@ -422,7 +425,7 @@ class SwXMLImport
     this.titleSeen = true;
   }
 
-  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - Optional list state. @param listGeometryWins - Whether list geometry overrides inherited paragraph indentation. @returns Paragraph target. */
+  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - Optional list state. @param listGeometryWins - Whether list geometry overrides inherited paragraph indentation. @param forceListRule - Automatic list declaration requires a direct rule. @returns Paragraph target. */
   public createParagraph(
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
@@ -431,6 +434,7 @@ class SwXMLImport
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
     listGeometryWins: boolean,
+    forceListRule = false,
   ): XMLParagraphImportTarget {
     const cell = this.activeCell;
     if (cell === undefined) this.paragraphCount += 1;
@@ -450,18 +454,22 @@ class SwXMLImport
         /** Applies one direct paragraph item. @param item - Imported item. @returns Set result. */ (
           item,
         ) => node.SetAttr(item),
+        /** Reads native composite fields before applying a delta. @param which - Item identity. @returns Effective item. */
+        (which) => node.GetAttr(which),
       );
     if (list !== undefined) {
       /* v8 ignore next -- list contexts only expose rules registered in this same temporary document. */
       if (this.document.FindNumRulePtr(list.ruleName) === undefined)
         throw new Error(`Unsupported ODF list rule: ${list.ruleName}`);
-      node.SetNumRule(list.ruleName);
+      if (forceListRule || node.GetNumRuleName() !== list.ruleName) node.SetNumRule(list.ruleName);
       node.SetListId(list.listId);
       node.SetAttrListLevel(list.level);
       node.SetListRestart(list.restart === true);
       node.SetAttrListRestartValue(list.startValue ?? 65_535);
       if (list.counted === false) node.SetCountedInList(false);
       node.AddToList();
+    } else if (node.GetNumRuleName() !== "" && node.GetNumRuleName() !== "Outline") {
+      node.SetAttr(new SwNumRuleItem(""));
     }
     if (properties !== undefined)
       putCharacterProperties(
@@ -475,7 +483,15 @@ class SwXMLImport
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
-    applyNamedParagraphStyles(this.document, paragraphs, this.defaultParagraphStyle);
+    applyNamedParagraphStyles(
+      this.document,
+      paragraphs,
+      this.defaultParagraphStyle,
+      putParagraphProperties,
+      putCharacterProperties,
+      /** Resolves the declared ODF numbering name to its native display name. @param name - ODF identity. @returns Registered rule name. */
+      (name) => this.listRules.get(name)?.name,
+    );
     const createValue =
       /** Converts a registered page layout to Writer geometry. @param name - Master-page name. @param layout - Imported page layout. @returns Writer page descriptor. */ (
         name: string,
@@ -538,6 +554,12 @@ class SwXMLParagraphTarget implements XMLParagraphImportTarget {
   private readonly openBookmarks = new Map<string, number>();
   /** Wraps one live text node. @param node - Canonical node. @returns Paragraph target. */
   public constructor(private readonly node: SwTextNode) {}
+
+  /** Reads actual inherited character state after style and automatic items have been applied. @returns Effective supported properties. */
+  public getInheritedProperties(): OdfCharacterProperties {
+    const items = this.node.GetSwAttrSet();
+    return projectWriterCharacterAttributes(items, items);
+  }
 
   /** Registers one collapsed bookmark at the current paragraph offset. @param name - ODF name. @returns Nothing. */
   public addBookmark(name: string): void {
@@ -747,94 +769,6 @@ class XMLTitleContext extends SvXMLImportContext {
   }
 }
 
-/** Applies built-in named style state. @param document - Destination. @param styles - Parsed styles. @param defaultStyle - Shared paragraph defaults. @returns Nothing. */
-function applyNamedParagraphStyles(
-  document: SwDoc,
-  styles: ReadonlyMap<string, OdfStyleDefinition>,
-  defaultStyle?: OdfStyleDefinition,
-): void {
-  const standard = styles.get("Standard");
-  if (standard === undefined) throw new Error("ODF Writer Standard paragraph style is missing.");
-  for (const poolStyle of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
-    const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
-    if (definition === undefined) continue;
-    const collection = document.GetTextFormatColl(poolStyle.id);
-    collection.SetDerivedFrom(undefined);
-    if (defaultStyle?.alignment !== undefined)
-      collection.SetFormatAttr(
-        new SvxAdjustItem(toSvxAdjust(defaultStyle.alignment), RES_PARATR_ADJUST),
-      );
-    if (defaultStyle?.leftMargin !== undefined)
-      collection.SetFormatAttr(
-        new SvxTextLeftMarginItem(defaultStyle.leftMargin, RES_MARGIN_TEXTLEFT),
-      );
-    if (defaultStyle?.paragraphProperties !== undefined)
-      putParagraphProperties(
-        defaultStyle.paragraphProperties,
-        /** Applies one default paragraph item. @param item - Imported item. @returns Set result. */
-        (item) => collection.SetFormatAttr(item),
-      );
-    if (defaultStyle?.properties !== undefined)
-      putCharacterProperties(
-        defaultStyle.properties,
-        /** Applies one default character item. @param item - Imported item. @returns Set result. */
-        (item) => collection.SetFormatAttr(item),
-      );
-    if (definition.displayName !== undefined) collection.SetFormatName(definition.displayName);
-    if (definition.outlineLevel !== undefined)
-      collection.SetAttrOutlineLevel(definition.outlineLevel);
-    if (definition.listStyleName !== undefined)
-      collection.SetFormatAttr(new SwNumRuleItem(definition.listStyleName));
-    if (definition.alignment !== undefined)
-      collection.SetFormatAttr(
-        new SvxAdjustItem(toSvxAdjust(definition.alignment), RES_PARATR_ADJUST),
-      );
-    if (definition.leftMargin !== undefined)
-      collection.SetFormatAttr(
-        new SvxTextLeftMarginItem(definition.leftMargin, RES_MARGIN_TEXTLEFT),
-      );
-    if (definition.paragraphProperties !== undefined)
-      putParagraphProperties(
-        definition.paragraphProperties,
-        /** Applies one named-style paragraph item. @param item - Imported item. @returns Set result. */ (
-          item,
-        ) => collection.SetFormatAttr(item),
-      );
-    if (definition.properties !== undefined)
-      putCharacterProperties(
-        definition.properties,
-        /** Applies one style item. @param item - Imported item. @returns Set result. */ (item) =>
-          collection.SetFormatAttr(item),
-      );
-  }
-  for (const poolStyle of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
-    const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
-    if (definition === undefined) continue;
-    const collection = document.GetTextFormatColl(poolStyle.id);
-    const parentId =
-      definition.parentStyleName === undefined
-        ? undefined
-        : getWriterStyleIdFromOdfName(definition.parentStyleName);
-    const parent = parentId === undefined ? undefined : document.GetTextFormatColl(parentId);
-    if (parent !== collection && !derivesFrom(parent, collection))
-      collection.SetDerivedFrom(parent);
-    const followId =
-      definition.nextStyleName === undefined
-        ? undefined
-        : getWriterStyleIdFromOdfName(definition.nextStyleName);
-    collection.SetNextTextFormatColl(
-      followId === undefined ? collection : document.GetTextFormatColl(followId),
-    );
-  }
-}
-
-/** Detects whether assigning a parent would form an inheritance cycle. @param format - Candidate parent. @param ancestor - Style that must not occur in the parent chain. @returns Whether the candidate derives from the style. */
-function derivesFrom(format: SwFormat | undefined, ancestor: SwFormat): boolean {
-  for (let current = format; current !== undefined; current = current.DerivedFrom())
-    if (current === ancestor) return true;
-  return false;
-}
-
 /** Converts ODF character deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */
 function putCharacterProperties(
   properties: Partial<OdfCharacterProperties>,
@@ -874,17 +808,20 @@ function putCharacterProperties(
     );
 }
 
-/** Converts ODF paragraph deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */
+/** Converts ODF paragraph deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @param inherited - Effective items for untouched composite fields. @returns Nothing. */
 function putParagraphProperties(
   properties: XMLParagraphImportProperties,
   put: (item: SfxPoolItem) => unknown,
+  inherited: (which: number) => SfxPoolItem,
 ): void {
   if (properties.firstLineIndent !== undefined || properties.autoTextIndent !== undefined)
     put(
       new SvxFirstLineIndentItem(
-        properties.firstLineIndent ?? 0,
+        properties.firstLineIndent ??
+          (inherited(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
         RES_MARGIN_FIRSTLINE,
-        properties.autoTextIndent === true,
+        properties.autoTextIndent ??
+          (inherited(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).IsAutoFirst(),
       ),
     );
   if (properties.rightMargin !== undefined)
@@ -896,10 +833,10 @@ function putParagraphProperties(
   )
     put(
       new SvxULSpaceItem(
-        properties.upperSpacing ?? 0,
-        properties.lowerSpacing ?? 0,
+        properties.upperSpacing ?? (inherited(RES_UL_SPACE) as SvxULSpaceItem).GetUpper(),
+        properties.lowerSpacing ?? (inherited(RES_UL_SPACE) as SvxULSpaceItem).GetLower(),
         RES_UL_SPACE,
-        properties.contextualSpacing === true,
+        properties.contextualSpacing ?? (inherited(RES_UL_SPACE) as SvxULSpaceItem).GetContext(),
       ),
     );
   const lineMode =
@@ -921,7 +858,8 @@ function putParagraphProperties(
         lineValue,
         RES_PARATR_LINESPACING,
         lineMode,
-        properties.fontIndependentLineSpacing === true,
+        properties.fontIndependentLineSpacing ??
+          (inherited(RES_PARATR_LINESPACING) as SvxLineSpacingItem).IsFontIndependent(),
       ),
     );
   if (properties.tabStopDetails !== undefined)
@@ -980,12 +918,4 @@ function putParagraphProperties(
     );
   if (properties.countLineNumbers !== undefined)
     put(new SfxBoolItem(RES_LINENUMBER, properties.countLineNumbers));
-}
-
-/** Converts ODF alignment to Writer adjustment. @param alignment - ODF alignment. @returns Writer adjustment. */
-function toSvxAdjust(alignment: OdfParagraphAlignment): SvxAdjust {
-  if (alignment === "left") return SvxAdjust.ParaStart;
-  if (alignment === "right") return SvxAdjust.ParaEnd;
-  if (alignment === "center") return SvxAdjust.Center;
-  return SvxAdjust.Block;
 }

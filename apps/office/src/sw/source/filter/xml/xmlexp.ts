@@ -146,7 +146,7 @@ export function exportStylesXml(document: SwDoc): string {
       const parentCollection = collection.DerivedFrom();
       const parent =
         parentCollection instanceof Object && "id" in parentCollection
-          ? ` style:parent-style-name="${getWriterOdfStyleName(String(parentCollection.id))}"`
+          ? ` style:parent-style-name="${escapeXml(getWriterOdfStyleName(String(parentCollection.id)))}"`
           : "";
       const leftMargin = getDirectLeftMargin(collection.GetAttrSet());
       const directParagraphProperties = getParagraphProperties(collection.GetAttrSet());
@@ -367,7 +367,10 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
     ...(hasDirectLeftMargin ? { leftMargin: node.GetParagraphTextLeftMargin() } : {}),
     ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
     ...(markers.length === 0 ? {} : { markers }),
-    ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
+    ...(rule !== undefined &&
+    node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) !== undefined
+      ? { directListRule: rule.GetName() }
+      : {}),
     inheritedProperties: getCharacterProperties(
       node.GetSwAttrSet(),
       true,

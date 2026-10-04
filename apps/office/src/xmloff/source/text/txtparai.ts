@@ -90,6 +90,7 @@ export interface XMLParagraphListState {
 
 /** Canonical paragraph operation surface used by SAX callbacks. */
 export interface XMLParagraphImportTarget {
+  getInheritedProperties?(): OdfCharacterProperties;
   appendText(text: string, properties: OdfCharacterProperties, hyperlink?: OdfHyperlink): void;
   addBookmark(name: string): void;
   addBookmarkStart(name: string): void;
@@ -108,6 +109,7 @@ export interface XMLTextImportTarget {
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
     listGeometryWins: boolean,
+    forceListRule?: boolean,
   ): XMLParagraphImportTarget;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(family: OdfStyleDefinition["family"], styleName: string): OdfStyleDefinition | undefined;
@@ -116,6 +118,7 @@ export interface XMLTextImportTarget {
     styleName: string,
   ): OdfStyleDefinition | undefined;
   resolveBuiltInParagraphStyle?(styleName: string): string | undefined;
+  resolveNamedParagraphStyle?(styleName: string): string | undefined;
 }
 
 const DEFAULT_PROPERTIES: OdfCharacterProperties = {
@@ -179,7 +182,6 @@ export class XMLParaContext extends SvXMLImportContext {
       element === XMLToken.TEXT_H,
       target,
     );
-    this.inherited = { ...DEFAULT_PROPERTIES, ...resolved.effectiveProperties };
     this.paragraph = target.createParagraph(
       resolved.style,
       resolved.alignment,
@@ -188,7 +190,13 @@ export class XMLParaContext extends SvXMLImportContext {
       resolved.properties,
       list,
       resolved.listGeometryWins === true,
+      resolved.forceListRule,
     );
+    this.inherited = {
+      ...DEFAULT_PROPERTIES,
+      ...resolved.effectiveProperties,
+      ...this.paragraph.getInheritedProperties?.(),
+    };
   }
 
   /** Appends paragraph characters. @param characters - Decoded text. @returns Nothing. */
@@ -434,6 +442,7 @@ class XMLCharacterContext extends SvXMLImportContext {
 
 /** Resolved Writer paragraph style state. */
 interface ResolvedParagraphStyle {
+  readonly forceListRule?: boolean;
   readonly alignment?: OdfParagraphAlignment;
   readonly effectiveProperties?: Partial<OdfCharacterProperties>;
   readonly leftMargin?: number;
@@ -447,7 +456,10 @@ interface ResolvedParagraphStyle {
 export function resolveParagraphStyle(
   name: string,
   heading: boolean,
-  target: Pick<XMLTextImportTarget, "getStyle" | "getAutoStyle" | "resolveBuiltInParagraphStyle">,
+  target: Pick<
+    XMLTextImportTarget,
+    "getStyle" | "getAutoStyle" | "resolveBuiltInParagraphStyle" | "resolveNamedParagraphStyle"
+  >,
   seen = new Set<string>(),
   namedOnly = false,
 ): ResolvedParagraphStyle {
@@ -461,9 +473,14 @@ export function resolveParagraphStyle(
       seen,
       true,
     );
-    return applyParagraphDefinition(automatic, parent);
+    return {
+      ...applyParagraphDefinition(automatic, parent),
+      forceListRule: automatic.listStyleName !== undefined,
+    };
   }
+  const ownedStyle = target.resolveNamedParagraphStyle?.(name);
   const builtInStyle =
+    ownedStyle ??
     target.resolveBuiltInParagraphStyle?.(name) ??
     (name === "Standard" ? "default" : name === "Heading_20_1" ? "heading-1" : undefined);
   if (builtInStyle !== undefined) {
@@ -484,10 +501,12 @@ export function resolveParagraphStyle(
             style: heading ? ("heading-1" as const) : ("default" as const),
           };
     return {
-      ...(definition?.alignment === undefined && parent.alignment === undefined
+      ...(ownedStyle !== undefined ||
+      (definition?.alignment === undefined && parent.alignment === undefined)
         ? {}
         : { alignment: definition?.alignment ?? parent.alignment }),
-      ...(definition?.leftMargin === undefined && parent.leftMargin === undefined
+      ...(ownedStyle !== undefined ||
+      (definition?.leftMargin === undefined && parent.leftMargin === undefined)
         ? {}
         : { leftMargin: definition?.leftMargin ?? parent.leftMargin }),
       listGeometryWins:

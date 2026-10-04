@@ -444,8 +444,15 @@ export function decodeWriterDocument(
     descriptor.SetFollow(follow);
   }
   document.GetDocumentSettingManager().SetValues(record.documentSettings);
+  if (record.textFormatCollections[0]?.id !== "default")
+    throw new Error("Stored Writer style is invalid.");
   for (const style of record.textFormatCollections) {
-    if (!isWriterParagraphStyle(style.id)) throw new Error("Stored Writer style is invalid.");
+    if (typeof style.id !== "string" || style.id.length === 0)
+      throw new Error("Stored Writer style is invalid.");
+    if (!isWriterParagraphStyle(style.id))
+      document.MakeTextFormatColl(style.name, undefined, style.id);
+  }
+  for (const style of record.textFormatCollections) {
     const collection = document.GetTextFormatColl(style.id);
     const factoryOutlineLevel = collection.GetAttrOutlineLevel();
     const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
@@ -640,7 +647,10 @@ export function decodeWriterDocument(
   node: SwTextNode,
   nodeRecord: WriterTextNodeRecord,
 ): void {
-  if (!isWriterParagraphStyle(nodeRecord.formatCollId))
+  if (
+    !isWriterParagraphStyle(nodeRecord.formatCollId) &&
+    document.FindTextFormatColl(nodeRecord.formatCollId) === undefined
+  )
     throw new Error("Stored Writer paragraph style is invalid.");
   node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId), false);
   node.ResetAllAttr();

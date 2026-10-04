@@ -13,7 +13,9 @@ import { DocumentListsManager } from "./DocumentListsManager";
 import { DocumentSettingManager } from "./DocumentSettingManager";
 import { DocumentStateManager } from "./DocumentStateManager";
 import { DocumentStylePoolManager } from "./DocumentStylePoolManager";
-import type { SwTextFormatColl, WriterParagraphStyle } from "./fmtcol";
+import { SwTextFormatColl, isWriterParagraphStyle, type WriterParagraphStyle } from "./fmtcol";
+import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import type { SwNumRuleItem } from "../para/paratr";
 import type { SwNumRule } from "./number";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
@@ -262,9 +264,58 @@ export class SwDoc {
   public FindTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl | undefined {
     return this.stylePoolManager.FindTextFormatColl(id);
   }
+  /** Finds a document-owned collection by its native name. @param name - Display name. @returns Existing owner. */
+  public FindTextFormatCollByName(name: string): SwTextFormatColl | undefined {
+    return this.GetTextFormatColls().find(
+      /** Matches the native name. @param collection - Owner. @returns Match. */
+      (collection) => collection.GetName() === name,
+    );
+  }
   /** Finds or creates a paragraph collection. @param id - Programmatic identity. @returns Document collection. */
   public GetTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl {
     return this.stylePoolManager.GetTextFormatColl(id);
+  }
+
+  /** Creates and registers a named text collection like native docfmt.cxx. @param name - Display name. @param parent - Parent collection. @param id - Stable graph identity, defaulting to the name. @returns New document-owned collection. */
+  public MakeTextFormatColl(name: string, parent?: SwTextFormatColl, id = name): SwTextFormatColl {
+    const collection = this.stylePoolManager.AddTextFormatColl(
+      new SwTextFormatColl(this.attrPool, id, name, parent),
+    );
+    this.NotifyModelChange({ kind: "format-inheritance-changed", formatId: name });
+    return collection;
+  }
+
+  /** Copies absent custom style ownership with native parent/follow/direct-item and manual-rule handling. @param source - Source collection. @returns Destination collection; the existing builtin identity adapter is retained. */
+  public CopyTextColl(source: SwTextFormatColl): SwTextFormatColl {
+    if (isWriterParagraphStyle(source.id)) return this.GetTextFormatColl(source.id);
+    const existing = this.FindTextFormatCollByName(source.GetName());
+    if (existing !== undefined) return existing;
+    const sourceParent = source.DerivedFrom();
+    const parent =
+      sourceParent instanceof SwTextFormatColl
+        ? this.CopyTextColl(sourceParent)
+        : this.GetDfltTextFormatColl();
+    const completed = this.FindTextFormatCollByName(source.GetName());
+    if (completed !== undefined) return completed;
+    const copied = this.MakeTextFormatColl(source.GetName(), parent, source.id);
+    copied.SetFormatAttrSet(source.GetAttrSet());
+    if (source.IsAssignedToListLevelOfOutlineStyle())
+      copied.AssignToListLevelOfOutlineStyle(source.GetAssignedOutlineStyleLevel());
+    const follow = source.GetNextTextFormatColl();
+    if (follow !== source) copied.SetNextTextFormatColl(this.CopyTextColl(follow));
+    const ruleName = (
+      source.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) as SwNumRuleItem | undefined
+    )?.GetValue();
+    const rule =
+      ruleName === undefined || ruleName === ""
+        ? undefined
+        : source.GetAttrSet().GetDoc().FindNumRulePtr(ruleName);
+    if (rule !== undefined && !rule.IsAutoRule() && source.GetAttrSet().GetDoc() !== this) {
+      const destinationRule = this.FindNumRulePtr(rule.GetName());
+      if (destinationRule === undefined) this.AddNumRule(rule);
+      else destinationRule.Invalidate();
+    }
+    return copied;
   }
   /** Adds a numbering rule. @param rule - Source rule. @returns Stored rule. */
   public AddNumRule(rule: SwNumRule): SwNumRule {

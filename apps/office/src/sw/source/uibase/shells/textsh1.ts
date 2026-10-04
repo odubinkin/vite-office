@@ -669,9 +669,12 @@ export class SwTextShell {
 
   /** Applies a paragraph style through the text shell. @param style - Style identity. @returns Whether changed. */
   public SetParagraphStyle(style: WriterParagraphStyle): boolean {
-    if (!isWriterParagraphStyle(style))
-      throw new Error(`Unsupported Writer paragraph style: ${style}`);
     const paragraph = this.target.GetActiveParagraph();
+    if (
+      !isWriterParagraphStyle(style) &&
+      paragraph.GetDoc().FindTextFormatColl(style) === undefined
+    )
+      throw new Error(`Unsupported Writer paragraph style: ${style}`);
     if (paragraph.GetParagraphStyle() === style) return false;
     const cursor = this.target.CaptureCursorState();
     return this.target.ApplyAction(
@@ -977,15 +980,15 @@ export function createWriterTextCommandRegistry(
       /** Applies the Style argument carried by the numeric StyleApply request. @param _context - Bound shell. @param arguments_ - Parsed UNO arguments. @returns Whether content changed. */
       execute: (_context, arguments_: unknown): boolean => {
         const name = getWriterCommandArguments<Readonly<{ Style?: string }>>(arguments_)?.Style;
+        const document = active().GetDoc();
         const style = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
-          /** Matches a supported programmatic style name. @param candidate - Available style. @returns Whether matching. */ (
-            candidate,
-          ) =>
+          /** Matches a pool name. @param candidate - Style. @returns Match. */ (candidate) =>
             (candidate.name === "Standard" ? "Default Paragraph Style" : candidate.name) === name,
         );
-        if (style === undefined)
+        const selected = style?.id ?? document.FindTextFormatCollByName(name ?? "")?.id;
+        if (selected === undefined)
           throw new Error(`Unsupported Writer paragraph style: ${name ?? ""}`);
-        return target.SetParagraphStyle(style.id);
+        return target.SetParagraphStyle(selected);
       },
       /** Reads the active paragraph style value. @returns Stable style ID. */
       getStateValue: (): string => active().GetParagraphStyle(),
