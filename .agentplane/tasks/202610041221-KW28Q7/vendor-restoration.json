@@ -1,4 +1,4 @@
 {
   "vendorRestored": true,
-  "failure": "browser"
+  "failure": "runtime-deferred-recovery"
 }
