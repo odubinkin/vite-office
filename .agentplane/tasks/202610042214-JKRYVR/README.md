@@ -4,7 +4,7 @@ title: "Bind internet attributes to their owning text nodes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T22:33:01.505Z"
+  updated_by: "CODER"
+  note: "Verified exact semantic SHA a97a25df9bafd49d37733ffa12a1fa2306c29da4;same-actor EVALUATOR pass;one absent full profile app2649/100%all coverage,scripts5,Chromium99,one failed inventory case recovered only with combined100%;six latest static gates,five restored audits,347prior test files unchanged,doctor0errors/routingpass,AP forbidden0. Full native style/client/destruction/core/UI parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -61,8 +61,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore bounded internet text-node ownership under the standing iterative goal and absent-reference verification contract."
+  -
+    type: "verify"
+    at: "2026-10-04T22:33:01.505Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified exact semantic SHA a97a25df9bafd49d37733ffa12a1fa2306c29da4;same-actor EVALUATOR pass;one absent full profile app2649/100%all coverage,scripts5,Chromium99,one failed inventory case recovered only with combined100%;six latest static gates,five restored audits,347prior test files unchanged,doctor0errors/routingpass,AP forbidden0. Full native style/client/destruction/core/UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:32:47.725Z"
+doc_updated_at: "2026-10-04T22:33:01.564Z"
 doc_updated_by: "CODER"
 description: "Restore the native internet attribute text-node backlink at existing insertion, copy, move and node transition boundaries. Keep retained undo paragraph identity and registered save/open/recovery deviations. No upstream source or executable helper artifacts; verification suites run once with the pinned reference directory absent."
 sections:
@@ -108,6 +114,39 @@ sections:
     Command: scope-and-native-hashes,focused changed-manifest formatting,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence:347prior test files byte-identical;18newcases;eight semantic paths;236existing runtime fields/statuses/defaults/exceptions preserved except3bounded responsibility appendices and2relocated projection declarations;one unverified helper;unchanged projection bodies;six native file hashes;3824APfiles/0forbidden. Scope: bounded node ownership;full styles/clients/visited/refcounts/physical destruction/all families/core/UI goal remains unverified.
 
     Command: same-actor read-only EVALUATOR exact-head review of a97a25df9bafd49d37733ffa12a1fa2306c29da4;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: eight committed source/test/manifest files equal reviewed checkout;all bounded evidence assertions pass;quality verdict pass at .agentplane/tasks/202610042214-JKRYVR/quality/20261004-223228764-recovery-context/quality-report.json;doctor0errors with two unchanged legacy warnings;routing OK;clean main before quality persistence. Scope: this leaf only;no independent-agent review claim or broader parity promotion.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T22:33:01.505Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified exact semantic SHA a97a25df9bafd49d37733ffa12a1fa2306c29da4;same-actor EVALUATOR pass;one absent full profile app2649/100%all coverage,scripts5,Chromium99,one failed inventory case recovered only with combined100%;six latest static gates,five restored audits,347prior test files unchanged,doctor0errors/routingpass,AP forbidden0. Full native style/client/destruction/core/UI parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:32:47.725Z, excerpt_hash=sha256:dec7fe2943b6f56e034e92fd22b7bb2b53eda98d87cad04a763354e70a83e209
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042214-JKRYVR/blueprint/resolved-snapshot.json
+    - old_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+    - current_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042214-JKRYVR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610042214-JKRYVR
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task semantic commit if required; do not rewrite history or alter pre-existing changes."
   Findings: |-
     Pinned reference: LibreOffice 26.8.0.2, 9bc445578031fecf56086729d8e4940c77e14d65. Native txtinet.hxx defines a null node pointer with GetpTextNode/GetTextNode/ChgTextNode. txtatr2.cxx initializes null; thints.cxx insertion and ndtxt.cxx copy bind the node. InitINetFormat also registers a char style, so this task does not invent a pointer-only complete implementation. Local retained undo nodes own their existing contents after structural removal; clearing them would break undo identity. Retained old hint containers are portable detached snapshots; native physical destruction remains unverified. Full char-style, client notification, visited state, protection and all attribute-family parity remain unverified. User authorizes iterative safe local leaves and explicitly prohibits saved source/helper artifacts and duplicate present/absent test profiles.
@@ -170,6 +209,39 @@ Command: five restored source audits listed in Verify Steps. Result: pass after 
 Command: scope-and-native-hashes,focused changed-manifest formatting,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence:347prior test files byte-identical;18newcases;eight semantic paths;236existing runtime fields/statuses/defaults/exceptions preserved except3bounded responsibility appendices and2relocated projection declarations;one unverified helper;unchanged projection bodies;six native file hashes;3824APfiles/0forbidden. Scope: bounded node ownership;full styles/clients/visited/refcounts/physical destruction/all families/core/UI goal remains unverified.
 
 Command: same-actor read-only EVALUATOR exact-head review of a97a25df9bafd49d37733ffa12a1fa2306c29da4;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: eight committed source/test/manifest files equal reviewed checkout;all bounded evidence assertions pass;quality verdict pass at .agentplane/tasks/202610042214-JKRYVR/quality/20261004-223228764-recovery-context/quality-report.json;doctor0errors with two unchanged legacy warnings;routing OK;clean main before quality persistence. Scope: this leaf only;no independent-agent review claim or broader parity promotion.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T22:33:01.505Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified exact semantic SHA a97a25df9bafd49d37733ffa12a1fa2306c29da4;same-actor EVALUATOR pass;one absent full profile app2649/100%all coverage,scripts5,Chromium99,one failed inventory case recovered only with combined100%;six latest static gates,five restored audits,347prior test files unchanged,doctor0errors/routingpass,AP forbidden0. Full native style/client/destruction/core/UI parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:32:47.725Z, excerpt_hash=sha256:dec7fe2943b6f56e034e92fd22b7bb2b53eda98d87cad04a763354e70a83e209
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042214-JKRYVR/blueprint/resolved-snapshot.json
+- old_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+- current_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042214-JKRYVR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610042214-JKRYVR
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
