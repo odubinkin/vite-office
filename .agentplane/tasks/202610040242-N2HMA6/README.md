@@ -4,7 +4,7 @@ title: "Restore managed Sidebar Tab and arrow focus traversal"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: standing user parity goal; one managed Sidebar Tab/arrows task, no Agentplane sources/helpers and no upstream execution from tests."
 doc_version: 3
-doc_updated_at: "2026-10-04T02:53:29.359Z"
+doc_updated_at: "2026-10-04T03:04:56.297Z"
 doc_updated_by: "CODER"
 description: "Iteration86: restore the source-owned navigation graph of existing Sidebar deck/panel controls, using a scoped focus manager with panel registration, actual display order and native ShowPanel open/expand contract; preserve Escape/Return and registered deviations."
 sections:
@@ -46,7 +46,7 @@ sections:
   Verify Steps: "1. Read-only pinned FocusManager/SidebarController/Deck/TabBar/TitleBar/DockingWindow inspection and hash evidence; no source copies. 2. New Writer baseline demonstrates missing Tab/arrows, then focused owned runtime tests and freshly built focused browser tests pass. 3. Scope integrity proves 268 previous test files unchanged, 217 prior rows preserved with only two append-only evidence/responsibility updates plus one manager row; eight semantic paths only. 4. npm run verify passes: application and browser tests, static provenance/resource/inventory audits, coverage 100% and zero semantic module violations. Static CLI audits may read pinned files separately; tests must not. 5. With vendor/libreoffice-reference temporarily renamed inside vendor, npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e all pass; restore vendor finally. 6. git diff --check, node .agentplane/policy/check-routing.mjs and ap doctor pass (two preexisting doctor warnings only). 7. Ignored-inclusive Agentplane artifact audit reports zero Python/helper/source/archive/embedded diff bodies; exact semantic hash reviewed by EVALUATOR, final clean tracked/untracked state."
   Verification: "Pending implementation and declared checks; no parity claims from source inspection alone."
   Rollback Plan: "Revert the isolated semantic commit if required, retain task result/hash evidence. Offline verification always restores vendor in finally. No history rewriting."
-  Findings: "Current base ee2509d41cfaed1fd49b619d84a3a9b3715054f5; previous Escape iteration DONE. Native ShowPanel opens closed deck; FocusDeckTitle does not. Closed hidden-title/toolkit focus flags, native scrolling geometry, F6, settings/other decks, titleless fallback, contexts and whole Sidebar/parent/native parity remain open. Current-turn ignored-inclusive .agentplane audit examined 2947 files: zero .py/.pyc/.pyo/.ipynb and zero helper source files under tasks/tmp. No new source copies or executable helper files will be saved."
+  Findings: "Current base ee2509d41cfaed1fd49b619d84a3a9b3715054f5; previous Escape iteration DONE. Native ShowPanel opens closed deck; FocusDeckTitle does not. Closed hidden-title/toolkit focus flags, native scrolling geometry, F6, settings/other decks, titleless fallback, contexts and whole Sidebar/parent/native parity remain open. Current-turn ignored-inclusive .agentplane audit examined 2947 files: zero .py/.pyc/.pyo/.ipynb and zero helper source files under tasks/tmp. No new source copies or executable helper files will be saved. Baseline5 new owned Writer cases failed; corrected focused39/5files and rebuilt2 browser cases pass. React ref binding moved from construction to post-mount SetDeck under lint; no lint suppression. Initial full application coverage1041cases exposed two enclosing-key-owner branches; added real capture-consumed traversal test, final1042cases all coverage100%. First full verify then failed only on new runtime row lexical ordering, corrected new-row insertion without moving relative order of old217 rows or weakening tests. Independent explicit-user artifact cleanup task202610040259-3B65MX deleted87 source-bearing diagnostic files (83tracked/4ignored) in72102c6ea9ddedf8c5ae90b447437cc3384008a4; previous audit missed code frames. No source/helper scripts added; final source-frame audits zero. Full verify retry pending; no native parity promotion."
 id_source: "generated"
 ---
 ## Summary
@@ -75,4 +75,4 @@ Revert the isolated semantic commit if required, retain task result/hash evidenc
 
 ## Findings
 
-Current base ee2509d41cfaed1fd49b619d84a3a9b3715054f5; previous Escape iteration DONE. Native ShowPanel opens closed deck; FocusDeckTitle does not. Closed hidden-title/toolkit focus flags, native scrolling geometry, F6, settings/other decks, titleless fallback, contexts and whole Sidebar/parent/native parity remain open. Current-turn ignored-inclusive .agentplane audit examined 2947 files: zero .py/.pyc/.pyo/.ipynb and zero helper source files under tasks/tmp. No new source copies or executable helper files will be saved.
+Current base ee2509d41cfaed1fd49b619d84a3a9b3715054f5; previous Escape iteration DONE. Native ShowPanel opens closed deck; FocusDeckTitle does not. Closed hidden-title/toolkit focus flags, native scrolling geometry, F6, settings/other decks, titleless fallback, contexts and whole Sidebar/parent/native parity remain open. Current-turn ignored-inclusive .agentplane audit examined 2947 files: zero .py/.pyc/.pyo/.ipynb and zero helper source files under tasks/tmp. No new source copies or executable helper files will be saved. Baseline5 new owned Writer cases failed; corrected focused39/5files and rebuilt2 browser cases pass. React ref binding moved from construction to post-mount SetDeck under lint; no lint suppression. Initial full application coverage1041cases exposed two enclosing-key-owner branches; added real capture-consumed traversal test, final1042cases all coverage100%. First full verify then failed only on new runtime row lexical ordering, corrected new-row insertion without moving relative order of old217 rows or weakening tests. Independent explicit-user artifact cleanup task202610040259-3B65MX deleted87 source-bearing diagnostic files (83tracked/4ignored) in72102c6ea9ddedf8c5ae90b447437cc3384008a4; previous audit missed code frames. No source/helper scripts added; final source-frame audits zero. Full verify retry pending; no native parity promotion.

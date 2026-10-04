@@ -15,8 +15,8 @@
   "fileIdentities": [
     {
       "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
-      "bytes": 6337,
-      "sha256": "b48427820ebfb6e9b8324376b8abd250ca31a26fd5c1320ac654d2776cc19cf4"
+      "bytes": 6311,
+      "sha256": "823c96b503e988fbc93adafc854f2efea828e2f91776bd1201185cee06012c67"
     },
     {
       "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
@@ -30,8 +30,8 @@
     },
     {
       "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx",
-      "bytes": 13115,
-      "sha256": "9813100fc8a848cc7159f8a337c15041f1bcef204c89b499a257836ed63f5274"
+      "bytes": 14317,
+      "sha256": "359cedfb62a495c2ff99a1157856262075a702153f16a06cb5df89cd37144434"
     },
     {
       "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx",
@@ -46,12 +46,12 @@
     {
       "path": "docs/program/source-provenance.json",
       "bytes": 710861,
-      "sha256": "8c48486090fd31509abe4de423ab6b96d3a0bce9bec6b156a9dc0792f44bb766"
+      "sha256": "106c71336d67538e9f1dc988eb32ee1d1fe9bb20a8769f9ee64a39820200f6d6"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
       "bytes": 696442,
-      "sha256": "3f7217383a68bc111d8b73b8c40e6bf890f03112be893f834db829024f685921"
+      "sha256": "ce9637bb74642c79a22131d4ae90390aea6c77c070c9dfb2c84470837a03cb65"
     }
   ],
   "manifests": {
@@ -62,7 +62,8 @@
         "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
         "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx"
       ],
-      "statusDefaultOwnerExceptionsUnchanged": true
+      "statusDefaultOwnerExceptionsUnchanged": true,
+      "newRowPosition": "lexicographic insertion; all prior rows retain relative order"
     },
     "docs/program/parity/runtime-inventory.json": {
       "oldRows": 217,
@@ -71,7 +72,8 @@
         "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
         "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx"
       ],
-      "statusDefaultOwnerExceptionsUnchanged": true
+      "statusDefaultOwnerExceptionsUnchanged": true,
+      "newRowPosition": "lexicographic insertion; all prior rows retain relative order"
     }
   }
 }

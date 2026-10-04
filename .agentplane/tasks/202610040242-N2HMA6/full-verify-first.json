@@ -1,0 +1,20 @@
+{
+  "command": "npm run verify",
+  "exitCode": 1,
+  "outputBytes": 4082,
+  "outputSha256": "fa54e9bd2920306132e013c82053b4c1bdf6c75457eaee576ad1a47b530315b0",
+  "summary": [
+    "Module boundary check passed: 217 runtime sources, 896 relative imports, 14 allowed cross-module edges.",
+    "Test Files  1 passed (1)",
+    "Tests  2 passed (2)",
+    "Test Files  208 passed (208)",
+    "Tests  1042 passed (1042)",
+    "Statements   : 100% ( 11275/11275 )",
+    "Branches     : 100% ( 8508/8508 )",
+    "Functions    : 100% ( 3004/3004 )",
+    "Lines        : 100% ( 10342/10342 )",
+    "Test Files  1 failed | 35 passed (36)",
+    "Tests  1 failed | 108 passed (109)",
+    "Error: Runtime module paths must be unique and lexicographically ordered."
+  ]
+}
