@@ -957,6 +957,47 @@
         "Test Files  1 failed (1)",
         "Tests  1 failed | 1 passed (2)"
       ]
+    },
+    {
+      "path": ".agentplane/tasks/202610032252-Y7E2AQ/foundation-focus-full-verify-summary.json",
+      "bytes": 4854,
+      "sha256": "c26105f25beced000b43fb9245ce0079f866dab243156b707051da72560fd1b2",
+      "tracked": true,
+      "summary": {
+        "exitCode": null,
+        "reason": "JSON-encoded diagnostic source frames removed; no tail payload retained"
+      }
+    },
+    {
+      "path": ".agentplane/tasks/202610032252-Y7E2AQ/foundation-owner-full-verify-summary.json",
+      "bytes": 4862,
+      "sha256": "b5b996de9852f67e9ec79685befe1a6911eba1097520fa63fe515dc94b361619",
+      "tracked": true,
+      "summary": {
+        "exitCode": null,
+        "reason": "JSON-encoded diagnostic source frames removed; no tail payload retained"
+      }
+    },
+    {
+      "path": ".agentplane/tasks/202610032331-31YTFD/baseline-runtime.json",
+      "bytes": 2413,
+      "sha256": "355c7325a7052708a95f37181d0de3ef4fa2545b76068da7a12a9a56a3445174",
+      "tracked": true,
+      "summary": {
+        "exitCode": null,
+        "reason": "JSON-encoded diagnostic source frames removed; no tail payload retained"
+      }
+    },
+    {
+      "path": ".agentplane/tasks/202610032331-31YTFD/writer-selection-fixture-runtime.json",
+      "bytes": 2051,
+      "sha256": "fa360efddb89efc9963266451e763e6e033683f26bd9ffe61b4f14bda642631e",
+      "tracked": true,
+      "summary": {
+        "exitCode": null,
+        "reason": "JSON-encoded diagnostic source frames removed; no tail payload retained"
+      }
     }
-  ]
+  ],
+  "totalDeleted": 91
 }
