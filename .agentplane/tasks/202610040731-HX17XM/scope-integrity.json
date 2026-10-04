@@ -21,8 +21,8 @@
     },
     {
       "path": "apps/office/e2e/writer-ruler-indent-pixels.spec.ts",
-      "bytes": 5451,
-      "sha256": "03f10d90e8c13de99277e6166b55373a6442347f55544b9858db6ecb05dd7dc0"
+      "bytes": 5429,
+      "sha256": "51b169d074a2bbb08fc51b10274760d839db4f603a63b6b250ed2fa89f9d0bf9"
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
