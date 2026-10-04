@@ -57,6 +57,7 @@ export function getSidebarIcon(commandId: string): LucideIcon {
 
 /** Defines the focused paragraph details rendered by the Writer properties sidebar. */
 export interface WriterParagraphPropertiesProps extends BrowserCommandSurfaceProps {
+  readonly focusDocument?: () => void;
   readonly alignment: WriterParagraphAlignment;
   readonly listKind: WriterParagraphListKind;
   /** One-based document position of the focused Writer paragraph. */
@@ -70,6 +71,7 @@ export interface WriterParagraphPropertiesProps extends BrowserCommandSurfacePro
  * @param props - Immutable selected paragraph information supplied by the Writer workbench.
  * @param props.alignment - Current paragraph alignment.
  * @param props.commandSource - Active bindings-backed command source.
+ * @param props.focusDocument - Returns panel header focus to the owning Writer client.
  * @param props.listKind - Current paragraph list kind.
  * @param props.paragraphNumber - One-based visible position for the active paragraph.
  * @param props.resolveArguments - Browser argument adapter.
@@ -79,6 +81,7 @@ export interface WriterParagraphPropertiesProps extends BrowserCommandSurfacePro
 export function WriterParagraphProperties({
   alignment,
   commandSource,
+  focusDocument,
   listKind,
   paragraphNumber,
   resolveArguments,
@@ -94,6 +97,7 @@ export function WriterParagraphProperties({
     };
   return (
     <SidebarPanel
+      focusDocument={focusDocument}
       title={localization.GetText("writer.properties.paragraph", "Paragraph")}
       focusContent={
         /** Focuses this panel's first eligible paragraph-content widget. @returns Nothing. */ () =>

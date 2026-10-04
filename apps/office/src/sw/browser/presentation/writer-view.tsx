@@ -461,6 +461,10 @@ export function WriterWorkbench({
             <WriterParagraphProperties
               alignment={snapshot.activeParagraph.alignment}
               commandSource={commandSource}
+              focusDocument={
+                /** Returns panel header focus to this Writer frame's mounted client. @returns Nothing. */ () =>
+                  (editingHostRef.current as HTMLElement).focus()
+              }
               listKind={snapshot.activeParagraph.list.kind}
               paragraphNumber={snapshot.activeParagraphIndex + 1}
               resolveArguments={resolveCommandArguments}

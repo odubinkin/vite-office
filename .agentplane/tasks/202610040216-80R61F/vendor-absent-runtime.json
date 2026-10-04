@@ -1,0 +1,21 @@
+{
+  "command": "npm run test",
+  "pinnedUpstreamPathAbsent": true,
+  "exit": 0,
+  "sha256": "210ebd5edc0679077ad286dafef70f962a7770f0a1a88fb18c874a52e651272f",
+  "bytes": 2220,
+  "summary": [
+    " Test Files  206 passed (206)",
+    "      Tests  1021 passed (1021)",
+    "Statements   : 100% ( 11193/11193 )",
+    "Branches     : 100% ( 8461/8461 )",
+    "Functions    : 100% ( 2983/2983 )",
+    "Lines        : 100% ( 10269/10269 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )"
+  ]
+}
