@@ -1,0 +1,80 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/hint-owner-notifications.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-notifications.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 337,
+  "priorTestsByteIdentical": 337,
+  "newAppCases": 51,
+  "existingRuntimeRows": 234,
+  "allExistingRuntimeFieldsExceptTwoAppendedJustificationsUnchanged": true,
+  "sourceProvenanceOnlyTwoAppendices": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txatbase.hxx",
+      "sha256": "ac8e656fd70b8348cdf4ad8f58669553a420c70054712c62a423570d52635d6b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+      "sha256": "16ac2f8916ab0e6b597502b84247ef283d4a0cbaa2a79f0dbc2f3aa7e8ad052e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+      "sha256": "b59e66c9c5d31bf6fc0416a160e1584e465c4d2ac8e37ddf08607d9b570fbb60"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    }
+  ],
+  "staticChecks": 6,
+  "staticRecovery": "Only lint repeated after the labeled four-value notification tuple replaced unused trailing parameters; other static gates ran once.",
+  "absentProfile": {
+    "build": 1,
+    "app": {
+      "tests": 2124,
+      "files": 256,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "inventory": {
+      "tests": 109,
+      "files": 36,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "scripts": {
+      "tests": 5,
+      "files": 2
+    },
+    "chromium": 99
+  },
+  "passingSuitesRepeated": false,
+  "vendorRestored": true,
+  "sourceAuditCommands": 5,
+  "semanticViolations": 0,
+  "nativeReview": "Owner bind/release and unchanged-start/changed-end notifications match supported native range behavior; native clean/full/partial primary-map sentinels and binary bounds reviewed. Existing ranged stand-in/internal public owner storage do not establish class hierarchy/friend visibility parity. Additional end/Which maps, full insertion/deletion maps, history/refcounts/destruction/listeners and broad core/UI parity remain unverified.",
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass",
+  "ignoredInclusiveApFiles": 3774,
+  "forbiddenApArtifacts": 0
+}
