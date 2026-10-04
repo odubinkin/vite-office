@@ -1,10 +1,11 @@
 ---
 id: "202610041956-2E6B9B"
 title: "Restore text hint owner range notifications"
-status: "DOING"
+result_summary: "Iteration119 complete: native owner notification/bind/release and primary sorting restored with51 literal tests. App2124/inventory109/scripts5/Chromium99 passed once without upstream; coverage100%,prior337 tests unchanged,scope six paths,quality pass. Broad native/core/UI parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Exact commit six semantic paths and working bytes match.337 prior tests byte-identical;234 inventory fields/statuses/defaults/exceptions unchanged except two appended justifications; two provenance appendices only. Native SetStart/changed-end owner notification and primary dirty interval sorting reviewed against five pinned hashes. Actual owner release/bind behavior and51 new literal tests cover clone/merge/cut/transfer/undo boundaries."
     - "Six static gates pass with failed lint-only recovery. Build/app2124/inventory109/scripts5/Chromium99 each passed once absent; both coverage summaries all four metrics100%. Vendor restored before five source audits,semantic violations0. Ignored-inclusive AP scan forbidden0; doctor0 errors/two unchanged warnings and routing pass."
-commit: null
+commit:
+  hash: "106b6a3cb96d3e852e05c6105161749626d21afa"
+  message: "🧩 2E6B9B task: record owner notification verification"
 comments:
   -
     author: "CODER"
     body: "Start: restore approved actual hint owner notification and lazy primary-map resort; preserve prior tests and run once absent upstream."
+  -
+    author: "CODER"
+    body: "Verified: owned hint notifications and lazy primary sorting pass all approved gates; suites once absent, vendor restored."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All approved iteration119 gates passed at semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a; app2124 and Chromium99 once absent, all coverage100%, prior337 tests unchanged, five restored audits semantic0, exact-SHA same-actor quality pass. Vendor restored; no AP sources/helpers or broad parity promotion."
+  -
+    type: "status"
+    at: "2026-10-04T20:16:58.997Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: owned hint notifications and lazy primary sorting pass all approved gates; suites once absent, vendor restored."
 doc_version: 3
-doc_updated_at: "2026-10-04T20:16:37.900Z"
+doc_updated_at: "2026-10-04T20:16:58.998Z"
 doc_updated_by: "CODER"
 description: "Iteration119: restore SwTextAttr owner backlink, native SetStart/SetEnd notifications and lazy dirty-range ResortStartMap/GetWithoutResorting for the existing primary map; transfer/replacement/normalization bind or release actual owners, snapshots stay independent. No new native operation families/maps/status promotion or registered I/O changes. Tests once absent upstream; no AP sources/helpers."
 sections:
@@ -126,6 +139,10 @@ sections:
     - Observation: Native owner callbacks and lazy primary sorting were absent from supported ranged attributes.
       Impact: Actual range mutation could leave hint order stale or notify a former owner during transfer.
       Resolution: Owner bind/release and native full/partial sorting notifications implemented with51 literal cases; only initial lint failed and was recovered.
+extensions:
+  implementation_commit:
+    hash: "082670f76dc9b0c8a5075996aa5896d5aee74f4a"
+    message: "🧩 2E6B9B code: restore owned hint range notifications"
 id_source: "generated"
 ---
 ## Summary
