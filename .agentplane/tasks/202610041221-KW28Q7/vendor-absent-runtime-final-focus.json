@@ -1,0 +1,11 @@
+{
+  "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.include=src/sw/browser/editor/WriterPlainTextEditor.tsx --coverage.reportsDirectory=coverage/style-focus-recovery src/sw/browser/editor/WriterPlainTextEditor.test.tsx src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx src/sw/browser/presentation/writer-view-style-focus.test.tsx src/sw/browser/presentation/writer-view-document-key.test.tsx src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx src/sw/browser/presentation/WriterPageLayout.test.tsx src/sw/browser/presentation/writer-view.test.tsx",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 1595,
+  "outputSha256": "d3615ce89ade08e6af0cca5ee51820baacaab7d91c34fff50a496c572b2c325c",
+  "summary": [
+    " Test Files  8 passed (8)",
+    "      Tests  86 passed (86)"
+  ]
+}

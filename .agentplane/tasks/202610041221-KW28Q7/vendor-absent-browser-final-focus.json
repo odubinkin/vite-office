@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/foundation.spec.ts apps/office/e2e/writer-clipboard.spec.ts apps/office/e2e/writer-style-focus.spec.ts --grep Writer menu keyboard navigation and accessible application chrome|copies visible formatted Writer content through the native browser copy event|Writer (direct|keyboard) style choice focus width= --output=test-results/style-focus-final",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 1455,
+  "outputSha256": "4a7617691f95926c88060fb4c45d940b69741ab8bebc1647dcb8f94ec0ac8aed",
+  "summary": [
+    "  6 passed (4.8s)"
+  ]
+}

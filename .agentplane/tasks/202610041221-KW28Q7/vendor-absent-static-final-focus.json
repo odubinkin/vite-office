@@ -1,0 +1,8 @@
+{
+  "command": "node scripts/check-static-build.mjs",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 90,
+  "outputSha256": "c347442cc5580450b6c775ac143f052b626f355a24a238f04f9918856fb753b0",
+  "summary": []
+}
