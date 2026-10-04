@@ -1,0 +1,11 @@
+{
+  "command": "npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+  "upstreamDirectoryPresent": false,
+  "exitCode": 0,
+  "outputBytes": 223,
+  "outputSha256": "12ff782d87bd743d8986e042ce3c5f102a92ab6e4178d2270b9ef22c7e08fb1b",
+  "summary": [
+    "Test Files  3 passed (3)",
+    "Tests  12 passed (12)"
+  ]
+}

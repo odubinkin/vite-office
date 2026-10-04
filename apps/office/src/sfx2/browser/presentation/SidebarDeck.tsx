@@ -1,6 +1,15 @@
 /** @fileoverview Projects the existing sidebar deck's native close and activation lifecycle. */
-import { useId, useState, type ReactNode, type KeyboardEvent } from "react";
+import {
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type KeyboardEvent,
+} from "react";
+import { flushSync } from "react-dom";
 import { SlidersHorizontal, X } from "lucide-react";
+import { SidebarFocusContext, SidebarFocusManager } from "./SidebarFocusManager";
 
 /** Supplies one implemented sidebar deck and its owning document client. */
 export interface SidebarDeckProps {
@@ -32,6 +41,28 @@ export function SidebarDeck({
 }: SidebarDeckProps): React.JSX.Element {
   const [isOpen, setIsOpen] = useState(true);
   const contentId = useId();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const activationRef = useRef<HTMLButtonElement>(null);
+  const [focusManager] = useState(
+    /** Creates focus ownership for this deck's mounted lifetime. @returns Owned manager. */ () =>
+      new SidebarFocusManager(),
+  );
+  useLayoutEffect(
+    /** Binds mounted controls after commit rather than reading refs during render. @returns Nothing. */ () => {
+      focusManager.SetDeck(
+        /** Focuses the deck toolbox without opening or activating it. @returns Nothing. */ () =>
+          (closeRef.current as HTMLButtonElement).focus(),
+        /** Focuses the existing activation button without toggling. @returns Nothing. */ () =>
+          (activationRef.current as HTMLButtonElement).focus(),
+        /** Projects SidebarController ShowPanel before browser focus. @returns Nothing. */ () => {
+          flushSync(
+            /** Opens the retained deck for panel entry. @returns Nothing. */ () => setIsOpen(true),
+          );
+        },
+      );
+    },
+    [focusManager],
+  );
 
   /** Handles native deck-toolbox and tab-bar cancellation without closing the deck.
    * @param event - Control key event.
@@ -41,6 +72,34 @@ export function SidebarDeck({
     if (event.key !== "Escape") return;
     event.preventDefault();
     focusDocument?.();
+  }
+
+  /** Handles native deck toolbox Tab and cancellation.
+   * @param event - Toolbox key input.
+   * @returns Nothing.
+   */
+  function handleDeckKey(event: KeyboardEvent<HTMLButtonElement>): void {
+    if (event.defaultPrevented) return;
+    if (event.key === "Tab") {
+      event.preventDefault();
+      focusManager.FocusButton();
+    } else returnToDocument(event);
+  }
+
+  /** Handles activation-rail traversal without activating the deck.
+   * @param event - Activation key input.
+   * @returns Nothing.
+   */
+  function handleActivationKey(event: KeyboardEvent<HTMLButtonElement>): void {
+    if (event.defaultPrevented) return;
+    if (event.key === "Tab") {
+      event.preventDefault();
+      if (event.shiftKey) focusManager.FocusDeckTitle();
+      else focusManager.FocusPanel(0, true);
+    } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      event.preventDefault();
+      focusManager.FocusButton();
+    } else returnToDocument(event);
   }
 
   return (
@@ -58,7 +117,8 @@ export function SidebarDeck({
               /** Requests a closed deck while retaining the tab bar and children. @returns Nothing. */ () =>
                 setIsOpen(false)
             }
-            onKeyDown={returnToDocument}
+            onKeyDown={handleDeckKey}
+            ref={closeRef}
             title={closeLabel}
             type="button"
           >
@@ -66,7 +126,9 @@ export function SidebarDeck({
           </button>
         </header>
         <div className="max-h-[32vh] overflow-auto p-4 lg:h-[calc(100%_-_2.5rem)] lg:max-h-none">
-          {children}
+          <SidebarFocusContext.Provider value={focusManager}>
+            {children}
+          </SidebarFocusContext.Provider>
         </div>
       </div>
       <div
@@ -89,7 +151,8 @@ export function SidebarDeck({
               );
             }
           }
-          onKeyDown={returnToDocument}
+          onKeyDown={handleActivationKey}
+          ref={activationRef}
           title={title}
           type="button"
         >
