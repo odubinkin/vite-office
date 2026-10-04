@@ -4,7 +4,7 @@ title: "Restore document-shell ownership and native paragraph StyleApply argumen
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T13:48:38.139Z"
+  updated_by: "CODER"
+  note: "Verified committed semantic a716f39030d3d586907be865fccf88526853de85 with exact evaluated_sha pass in quality/20261004-134701895-recovery-context/quality-report.json. Native paragraph StyleApply doc-shell owner/default/argument precedence and SfxUInt16Item completion pass; app1421 inventory109 scripts5 Chromium93 only absent/finally restore, app/inventory100percent four metrics, static7/routing/source4/parity226zero. Initial failed app gate recovered after only manual selector owner registration, all assertions unchanged; no passing full suite repeated. Strict12paths/313prior files310unchanged/3bounded fixture-owner updates/225oldrows5descriptive appends1unverifiedrow/10nativehashes/APforbidden0, registered deviations unchanged. Same-actor read-only review; full native and browser goal remains open."
   attempts: 0
 quality_review:
   state: "pass"
@@ -78,8 +78,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: recover only the failed app gate after registering the real doc-shell in the unchanged selector scenarios; other product suites have not run."
+  -
+    type: "verify"
+    at: "2026-10-04T13:48:38.139Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified committed semantic a716f39030d3d586907be865fccf88526853de85 with exact evaluated_sha pass in quality/20261004-134701895-recovery-context/quality-report.json. Native paragraph StyleApply doc-shell owner/default/argument precedence and SfxUInt16Item completion pass; app1421 inventory109 scripts5 Chromium93 only absent/finally restore, app/inventory100percent four metrics, static7/routing/source4/parity226zero. Initial failed app gate recovered after only manual selector owner registration, all assertions unchanged; no passing full suite repeated. Strict12paths/313prior files310unchanged/3bounded fixture-owner updates/225oldrows5descriptive appends1unverifiedrow/10nativehashes/APforbidden0, registered deviations unchanged. Same-actor read-only review; full native and browser goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T13:45:46.005Z"
+doc_updated_at: "2026-10-04T13:48:38.199Z"
 doc_updated_by: "CODER"
 description: "Iteration105 moves existing paragraph StyleApply from SwTextShell to SwDocShell as native docst.cxx, adds Template/Family and typed request items plus Style/FamilyName conversion, retains owned style names/cursor/history/current model and active view lifecycle, and preserves registered document I/O deviations. Existing popup/editable/nonparagraph/reset/style creation gaps remain open."
 sections:
@@ -114,6 +120,39 @@ sections:
     Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e. Result: pass, only with upstream absent and finally restored. Evidence: app1421/234files,inventory109/36files,scripts5/2files,Chromium93; both app and inventory100percent statements/branches/functions/lines. First app1419passed/2oldfixture failures had100percent production coverage; selector fixture now registers real doc-shell, every original assertion unchanged, failed app gate recovered1421passed. Inventory/scripts/Chromium each passed once; no passing full suite repeated, no baseline/present tests/native execution/compilation or concurrent source/scope/AP audits.
 
     Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Result: pass after vendor restoration. Evidence: source4pass,226modules,0semantic violations;225oldrows/order/status/default/exception preserved except5bounded descriptions and1new unverified owner row. Scope: exact12paths,313prior testfiles310byteidentical/3bounded owner changes, production text-shell only StyleApply removed, selector all assertions unchanged,10read-only native hashes, ignored-inclusive AP scan3487files forbidden0/five historical prose-only diff references. Doctor0errors/2pre-existingwarnings. Source/hash comparison only; no AP source/helpers/Python/raw diagnostics/code diffs. Semantic commit and exact-SHA same-actor quality/committed verification remain to record.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T13:48:38.139Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified committed semantic a716f39030d3d586907be865fccf88526853de85 with exact evaluated_sha pass in quality/20261004-134701895-recovery-context/quality-report.json. Native paragraph StyleApply doc-shell owner/default/argument precedence and SfxUInt16Item completion pass; app1421 inventory109 scripts5 Chromium93 only absent/finally restore, app/inventory100percent four metrics, static7/routing/source4/parity226zero. Initial failed app gate recovered after only manual selector owner registration, all assertions unchanged; no passing full suite repeated. Strict12paths/313prior files310unchanged/3bounded fixture-owner updates/225oldrows5descriptive appends1unverifiedrow/10nativehashes/APforbidden0, registered deviations unchanged. Same-actor read-only review; full native and browser goal remains open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T13:45:46.005Z, excerpt_hash=sha256:5ab22df4bc64b5c8bfe100ef0def3d5bd01961f5f6d3c85357acc30e4c7267c3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041318-YZH08J/blueprint/resolved-snapshot.json
+    - old_digest: 5dc46a9c89cd5ee45c97b1edda2e7c5c3018dbb6eb8819e5155e897995e0087f
+    - current_digest: 5dc46a9c89cd5ee45c97b1edda2e7c5c3018dbb6eb8819e5155e897995e0087f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610041318-YZH08J
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610041318-YZH08J
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this semantic commit through a new approved leaf; preserve immutable DONE records, native pins and registered I/O/recovery deviations. Vendor absence orchestration restores the directory in finally on every exit."
   Findings: "Read-only pinned native _docsh.sdi registers ExecStyleSheet; docst.cxx accepts Template5552/Family5553 and paired Style6703/FamilyName5566 conversion, native Para2 default and FamilyName override; ApplyStyles searches actual style pool, returns None when absent, applies via active GetWrtShell. svx toolbar dispatches Template+Family after client focus. Local SwTextShell instead owns StyleApply, only reads Style, ignores Family and returns exceptions for absent names; native request/pool/owner contracts diverge. This coherent owner/request repair retains current supported paragraph primitive and marks remaining StyleDesigner/other families/full pool/state/default/native widget responsibilities open. Native docst ApplyStyleSheetRequest supplies SfxUInt16Item with the returned family and then completes the request; native dispatcher Call_Impl observes IsDone without overwriting the return item. Local ExecuteRequest unconditionally completes synchronous requests again and destroys unsigned owner results. One additional dispatcher path and its bounded mapping description are necessary for the same StyleApply request contract; API-mode boolean return, missing no-args StyleDesigner dispatch and broader Sfx completion semantics remain unverified. Standing goal authorizes this coherent local scope amendment. First absent static build passed; initial absent app ran1421cases across234files,1419passed and2selector cases failed because that old fixture registered only view/text shells. All production coverage four metrics were100percent and all55new owner cases passed. Add only the document shell to that fixture and retain every original assertion; one additional test file (12semantic paths,310other prior files unchanged) is coherent in-scope owner validation under the standing goal. Earlier static typecheck caught imprecise slot removal before any product test; restored native InsertBreak byte-identically and removed only StyleApply, final typecheck passed. No passing full suite repeated."
 id_source: "generated"
@@ -159,6 +198,39 @@ Command: npm run format:check; npm run lint; npm run typecheck; npm run check:de
 Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e. Result: pass, only with upstream absent and finally restored. Evidence: app1421/234files,inventory109/36files,scripts5/2files,Chromium93; both app and inventory100percent statements/branches/functions/lines. First app1419passed/2oldfixture failures had100percent production coverage; selector fixture now registers real doc-shell, every original assertion unchanged, failed app gate recovered1421passed. Inventory/scripts/Chromium each passed once; no passing full suite repeated, no baseline/present tests/native execution/compilation or concurrent source/scope/AP audits.
 
 Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Result: pass after vendor restoration. Evidence: source4pass,226modules,0semantic violations;225oldrows/order/status/default/exception preserved except5bounded descriptions and1new unverified owner row. Scope: exact12paths,313prior testfiles310byteidentical/3bounded owner changes, production text-shell only StyleApply removed, selector all assertions unchanged,10read-only native hashes, ignored-inclusive AP scan3487files forbidden0/five historical prose-only diff references. Doctor0errors/2pre-existingwarnings. Source/hash comparison only; no AP source/helpers/Python/raw diagnostics/code diffs. Semantic commit and exact-SHA same-actor quality/committed verification remain to record.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T13:48:38.139Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified committed semantic a716f39030d3d586907be865fccf88526853de85 with exact evaluated_sha pass in quality/20261004-134701895-recovery-context/quality-report.json. Native paragraph StyleApply doc-shell owner/default/argument precedence and SfxUInt16Item completion pass; app1421 inventory109 scripts5 Chromium93 only absent/finally restore, app/inventory100percent four metrics, static7/routing/source4/parity226zero. Initial failed app gate recovered after only manual selector owner registration, all assertions unchanged; no passing full suite repeated. Strict12paths/313prior files310unchanged/3bounded fixture-owner updates/225oldrows5descriptive appends1unverifiedrow/10nativehashes/APforbidden0, registered deviations unchanged. Same-actor read-only review; full native and browser goal remains open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T13:45:46.005Z, excerpt_hash=sha256:5ab22df4bc64b5c8bfe100ef0def3d5bd01961f5f6d3c85357acc30e4c7267c3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041318-YZH08J/blueprint/resolved-snapshot.json
+- old_digest: 5dc46a9c89cd5ee45c97b1edda2e7c5c3018dbb6eb8819e5155e897995e0087f
+- current_digest: 5dc46a9c89cd5ee45c97b1edda2e7c5c3018dbb6eb8819e5155e897995e0087f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610041318-YZH08J
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610041318-YZH08J
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
