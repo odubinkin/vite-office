@@ -1,0 +1,117 @@
+{
+  "base": "42cade7c64fe293b7cd36d4334aa484912f243fd",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+    "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "apps/office/src/xmloff/source/text/txtparai.ts",
+    "apps/office/src/xmloff/source/text/txtparae.ts",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+    "apps/office/e2e/writer-named-style-history.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+    "docs/program/parity/writer-command-slice.json"
+  ],
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedHashesUnchanged": 5,
+  "priorTestFiles": 305,
+  "priorTestFilesByteIdentical": 303,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 223,
+      "existingRows": 222,
+      "existingRowsAppended": 9,
+      "newRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 223,
+      "existingRows": 222,
+      "existingRowsAppended": 9,
+      "newRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    }
+  ],
+  "staticChecksPassed": 7,
+  "sourceChecksPassed": 4,
+  "appCasesPassed": 1331,
+  "inventoryCasesPassed": 109,
+  "scriptCasesPassed": 5,
+  "browserCasesPassed": 87,
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10520,
+      "covered": 10520,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11486,
+      "covered": 11486,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3035,
+      "covered": 3035,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8742,
+      "covered": 8742,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "artifactAudit": "artifact-audit.json",
+  "nativeExecution": false
+}

@@ -1,0 +1,21 @@
+{
+  "widths": [
+    390,
+    1280
+  ],
+  "inspected": true,
+  "bodyGlyphIndentMatches": true,
+  "untouchedParagraphPreserved": true,
+  "sidebarOwnedNameVisibleAt1280": true,
+  "remainingUnverified": "The existing toolbar style chooser still shows its builtin fallback for custom styles; custom style chooser/menu behavior needs the next iteration.",
+  "screenshots": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-named-style-history-b2813-med-style-history-width-390/named-style-history.png",
+      "sha256": "32c7deb8d71472d91c08b05bbfaafbc9ae16000a0db6ac17a2b2ab540ed24525"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-named-style-history-6f035-ed-style-history-width-1280/named-style-history.png",
+      "sha256": "0053ac83a21539d554674c8e8303cea3a056d1f3c49bf8fbf97f6225dca8081d"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "agentplaneFiles": 3358,
+  "artifactFiles": 3291,
+  "python": [],
+  "source": [],
+  "executable": [],
+  "archives": [],
+  "magic": [],
+  "embedded": [],
+  "sourceFrames": [],
+  "gitCodeDiff": [],
+  "decodedSourceCandidates": [],
+  "proseOnlyDiffReferences": [
+    {
+      "path": ".agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/agent-trace.jsonl",
+      "key": "$[67].parsed.item.aggregated_output"
+    },
+    {
+      "path": ".agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/agent-trace.jsonl",
+      "key": "$[25].parsed.item.aggregated_output"
+    },
+    {
+      "path": ".agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/agent-trace.jsonl",
+      "key": "$[50].parsed.item.aggregated_output"
+    },
+    {
+      "path": ".agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-46-04-618Z/agent-trace.jsonl",
+      "key": "$[20].parsed.item.aggregated_output"
+    },
+    {
+      "path": ".agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-46-04-618Z/agent-trace.jsonl",
+      "key": "$[35].parsed.item.aggregated_output"
+    }
+  ],
+  "symlinks": []
+}
