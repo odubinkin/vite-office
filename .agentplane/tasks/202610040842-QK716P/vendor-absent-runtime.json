@@ -1,0 +1,11 @@
+{
+  "command": "Initial app gate passed1241/100% plus corrected failed inventory gate retry; npm run test initial exit1 retained",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "appEvidence": "vendor-absent-runtime-initial.json",
+  "inventoryEvidence": "vendor-absent-inventory.json",
+  "summary": [
+    "1241 passed application cases (no repeat)",
+    "109 passed inventory cases"
+  ]
+}
