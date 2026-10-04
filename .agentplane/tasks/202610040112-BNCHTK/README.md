@@ -4,7 +4,7 @@ title: "Restore Properties sidebar deck close and reopen lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration83 existing Properties deck close/reopen and activation rail, source-shaped lifecycle and own document focus, unchanged global Sidebar/registered deviations, upstream-independent tests and results-only artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-04T01:24:15.213Z"
+doc_updated_at: "2026-10-04T01:26:03.419Z"
 doc_updated_by: "CODER"
 description: "Iteration83 under C9TN6M: native-owned Sidebar deck title close and Properties activation rail retain child content across collapse, separate from whole-sidebar visibility. Existing Writer content/commands retained; upstream-independent tests and no source/helper artifacts."
 sections:
@@ -51,6 +51,7 @@ sections:
     Before-code3actualWriter tests fail solely for missing deck close/activation controls. Initial corrected46pass1fail due new test using summary Centered instead of generated command label Center; fixture-only correction yields47pass/4files including24existing document-key and14layout checks. Initial build rejects unsupported RTL exact option in5new queries, removed only new-test options; production unchanged. Manifest locale sorting caused unwanted prior row reordering; restored exact prior sequence before verification, inserted only1new row. No artifacts contain copied source bodies or helper code. Source11hashes/conclusions only. Rebuilt desktop/mobile Chromium pending.
     Focused fresh build0 and desktop/mobile deck+responsive+document-key Chromium10pass. Scope proof259prior tests byte-identical,215prior module rows/fields/status/defaults/ownership/old evidence/order preserved in both manifests,3existing rows append-only evidence/responsibility notes and1new row each,9semantic path hashes recorded. Doctor0errors2knownwarnings/routing/diff pass. Full verify then sequential upstream-root-absent tests running; no source/helper/Python or archives saved.
     Initial fullverify exit1 before test/coverage summaries; bounded failure filter did not include the specific cause, so no unsupported diagnosis asserted. Isolated npm run format:check subsequently pass0 on unchanged semantic files. Preserved initial-full-verify hash/exit, expanded bounded warning/problem matching and repeated complete verification; all required steps retained, no threshold/criteria/code changes or skips.
+    Fullverify diagnostic identified check:dependencies failure: non-allowlisted sfx2->framework edge and framework->sfx2->framework module cycle from new SidebarDeck localization-context import. Prior bounded filter omitted capitalized Module boundary check failed lines; initial/second outcomes retained, no passing claim. Corrected same approved files by passing localized native labels from WriterWorkspaceChrome to the lower SidebarDeck presenter, eliminating upward context import without changing dependency rules. Re-run focused/full contracts on corrected architecture.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +84,4 @@ Preflight clean main fdf069b5a372, direct workflow, parent C9TN6M DOING. Previou
 Before-code3actualWriter tests fail solely for missing deck close/activation controls. Initial corrected46pass1fail due new test using summary Centered instead of generated command label Center; fixture-only correction yields47pass/4files including24existing document-key and14layout checks. Initial build rejects unsupported RTL exact option in5new queries, removed only new-test options; production unchanged. Manifest locale sorting caused unwanted prior row reordering; restored exact prior sequence before verification, inserted only1new row. No artifacts contain copied source bodies or helper code. Source11hashes/conclusions only. Rebuilt desktop/mobile Chromium pending.
 Focused fresh build0 and desktop/mobile deck+responsive+document-key Chromium10pass. Scope proof259prior tests byte-identical,215prior module rows/fields/status/defaults/ownership/old evidence/order preserved in both manifests,3existing rows append-only evidence/responsibility notes and1new row each,9semantic path hashes recorded. Doctor0errors2knownwarnings/routing/diff pass. Full verify then sequential upstream-root-absent tests running; no source/helper/Python or archives saved.
 Initial fullverify exit1 before test/coverage summaries; bounded failure filter did not include the specific cause, so no unsupported diagnosis asserted. Isolated npm run format:check subsequently pass0 on unchanged semantic files. Preserved initial-full-verify hash/exit, expanded bounded warning/problem matching and repeated complete verification; all required steps retained, no threshold/criteria/code changes or skips.
+Fullverify diagnostic identified check:dependencies failure: non-allowlisted sfx2->framework edge and framework->sfx2->framework module cycle from new SidebarDeck localization-context import. Prior bounded filter omitted capitalized Module boundary check failed lines; initial/second outcomes retained, no passing claim. Corrected same approved files by passing localized native labels from WriterWorkspaceChrome to the lower SidebarDeck presenter, eliminating upward context import without changing dependency rules. Re-run focused/full contracts on corrected architecture.

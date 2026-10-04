@@ -30,9 +30,9 @@
     "docs/program/parity/runtime-inventory.json"
   ],
   "hashes": {
-    "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx": "1bbf85d374714954d41cb8b3d260d6bbae7c44a476cce32ea0a6479faf850365",
+    "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx": "247d5fa3425a8c7ddc419cd66505d4ad90407aec094654cec08d068a44af4d90",
     "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx": "b9431e8a5f519c39ebd3ee393cdaaa1f3c58122ac4e985eedf1619431277f55c",
-    "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx": "e77f2ded8760ff63601e0c90b5dda58e50236eb42991174b12e7239971a4557a",
+    "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx": "5bcf7b541e41afb99297a4a659dbb79ed4e0737f3ddf5d1271daeeb2d1466e13",
     "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx": "da3d1f2d81d6970ad0f27da5f8da78e658e077c09b31fec6c829aa8291a6a1bb",
     "apps/office/src/sw/browser/presentation/writer-view.tsx": "ba6aaec51d1367df7f71152abd20244ffc0e483b09424f1d75a3c51650f82d4b",
     "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx": "58083f3b3c6c56c45b43ea55c186e14e51b7ee6dc9ae7834b91e5513b812b9d6",
