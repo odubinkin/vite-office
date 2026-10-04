@@ -1,0 +1,12 @@
+{
+  "command": "npm run verify",
+  "exitCode": 1,
+  "outputBytes": 3078,
+  "outputSha256": "fd40d52a1c157735d9d66d4bb6f4b38867785252f96ad445882c3fd65dafffbb",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  1 failed | 216 passed (217)",
+    "      Tests  1 failed | 1128 passed (1129)"
+  ]
+}

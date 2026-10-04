@@ -7,6 +7,7 @@
     "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
     "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
     "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
     "apps/office/e2e/writer-ruler-tracking.spec.ts",
     "docs/program/source-provenance.json",
     "docs/program/parity/runtime-inventory.json"
@@ -43,27 +44,35 @@
       "sha256": "0e40a3e204b9a2d3a7ae0fc05fc1888eee6311338f52625a17d88d9d0a3416b1"
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+      "bytes": 43014,
+      "sha256": "67c9533cc4574c8d3b7c57a64b2ef3ffdc9cb2426fb7f9ce78af4e4af92ea5fb"
+    },
+    {
       "path": "apps/office/e2e/writer-ruler-tracking.spec.ts",
       "bytes": 5674,
       "sha256": "bb12ff77a15d6a22ceb76aa9ba415e41a14b6093f4f7febe85a4a4b7c513b5b8"
     },
     {
       "path": "docs/program/source-provenance.json",
-      "bytes": 731349,
-      "sha256": "df5f35866ccab945365a0a3512fcbac9a4ae140bc8aaf83a8d1cefc86350d527"
+      "bytes": 731373,
+      "sha256": "0b08ea39dc799c68d8f41dbe20aa8c532be49878209ca636c89c8cac71fde760"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
-      "bytes": 713158,
-      "sha256": "a08f91b6da28b22eb4a68ab8b0884a9782da6cd513a0cffdd30b4f8dd777f011"
+      "bytes": 713182,
+      "sha256": "6593cf8dfef76dae8bd701f8cebb2dafd2d8a9d65a10cc9992b34b74fc03f271"
     }
   ],
   "priorTestFiles": 280,
-  "priorTestFilesByteIdentical": 279,
+  "priorTestFilesByteIdentical": 278,
   "approvedPriorTestChanges": {
-    "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
-    "inputTriggerLines": 4,
-    "matchingPointerUpInputLines": 4,
+    "paths": [
+      "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+      "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
+    ],
+    "inputTriggerLines": 6,
+    "matchingPointerUpInputLines": 6,
     "allAssertionAndOtherBytesPreserved": true
   },
   "manifests": [
