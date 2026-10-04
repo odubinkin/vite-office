@@ -1,0 +1,9 @@
+{
+  "command": "npm run verify",
+  "exit": 1,
+  "signal": null,
+  "bytes": 1122,
+  "sha256": "5761549a8b7d6b72c9788b9f8b80424fca758dc3f43e18c66ff5f85e1814b627",
+  "summary": [],
+  "errors": []
+}
