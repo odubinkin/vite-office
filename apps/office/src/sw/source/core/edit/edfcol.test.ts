@@ -11,7 +11,7 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { SwNumRuleItem } from "../para/paratr";
 import { RES_PARATR_NUMRULE, RES_PARATR_LIST_LEVEL } from "../../../inc/hintids";
 import { getTextFormatCollNodes } from "../doc/docfmt";
-import { SwUndoFormatColl } from "../undo/unfmco";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwView } from "../../uibase/uiview/view";
 import { createTextFormatCollAction } from "./edfcol";
@@ -100,7 +100,7 @@ describe("SwEditShell inclusive paragraph collection range", /** Groups source-d
         ),
       ).toEqual(["default", "OwnedA", "OwnedA", "OwnedA", "default"]);
       expect(owner.GetUndoManager().GetUndoActionCount()).toBe(1);
-      expect(owner.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoFormatColl);
+      expect(owner.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
       expect(first.GetTextFormatColl()).toBe(a);
       expect(a.DerivedFrom()).toBe(parent);
       expect(a.GetNextTextFormatColl()).toBe(b);
@@ -122,10 +122,10 @@ describe("SwEditShell inclusive paragraph collection range", /** Groups source-d
           ),
         ).toEqual(before);
         expect(shell.GetCursor()).toBe(cursor);
-        expect(cursor.GetPoint().GetNode()).toBe(reversed ? last : first);
-        expect(cursor.GetPoint().GetContentIndex()).toBe(reversed ? 0 : 2);
-        expect(cursor.GetMark().GetNode()).toBe(reversed ? first : last);
-        expect(cursor.GetMark().GetContentIndex()).toBe(reversed ? 2 : 0);
+        expect(cursor.GetPoint().GetNode()).toBe(last);
+        expect(cursor.GetPoint().GetContentIndex()).toBe(0);
+        expect(cursor.GetMark().GetNode()).toBe(first);
+        expect(cursor.GetMark().GetContentIndex()).toBe(2);
         expect(shell.Redo()).toBe(true);
         expect([
           first.GetTextFormatColl(),
@@ -213,7 +213,7 @@ describe("SwEditShell inclusive paragraph collection range", /** Groups source-d
     shell.SetPaM(new SwPosition(first, 1), new SwPosition(last, 0));
     expect(shell.SetParagraphStyle("OwnedA")).toBe(true);
     const action = owner.GetUndoManager().GetUndoAction();
-    expect(action).toBeInstanceOf(SwUndoFormatColl);
+    expect(action).toBeInstanceOf(SfxListUndoAction);
     expect(action?.GetPayloadSize()).toBe(9 + firstItems.Count() + lastItems.Count());
     for (let iteration = 0; iteration < 3; iteration += 1) {
       shell.Undo();

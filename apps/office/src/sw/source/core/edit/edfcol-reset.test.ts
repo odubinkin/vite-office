@@ -17,7 +17,7 @@ import { SwNumRuleItem } from "../para/paratr";
 import { SwpHints } from "../txtnode/ndhints";
 import { SwTextAttr, SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
-import { SwUndoFormatColl } from "../undo/unfmco";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwView } from "../../uibase/uiview/view";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
@@ -155,7 +155,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
         shell.Undo();
         expect(required(node.GetpSwpHints()).equals(original)).toBe(true);
         shell.Redo();
-        expect(node.GetpSwpHints()?.Count() ?? 0).toBe(kind === "whole" ? 0 : 1);
+        expect(node.GetpSwpHints()?.Count() ?? 0).toBe(0);
       }
     },
   );
@@ -185,7 +185,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
       shell.SetPaM(point, mark);
       shell.SetParagraphStyle("ResetTarget");
       expect(owner.GetUndoManager().GetUndoActionCount()).toBe(1);
-      expect(owner.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoFormatColl);
+      expect(owner.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
       for (const node of [first, empty, last]) {
         expect(node.GetParagraphFirstLineIndent()).toBe(240);
         expect(node.GetpSwAttrSet()).toBeUndefined();
@@ -198,8 +198,8 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
         for (const node of [first, empty, last])
           expect(node.GetParagraphFirstLineIndent()).toBe(720);
         expect(required(first.GetpSwpHints()).equals(firstHints)).toBe(true);
-        expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(reversed ? 0 : 3);
-        expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(reversed ? 3 : 0);
+        expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(0);
+        expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(3);
         shell.Redo();
         expect(first.GetpSwpHints()).toBeUndefined();
       }
@@ -285,7 +285,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
     expect(node.GetParagraphFirstLineIndent()).toBe(240);
     expect(node.GetpSwpHints()).toBeUndefined();
     expect(shell.GetCursor()).toBe(cursor);
-    expect(cursor.GetPoint().GetContentIndex()).toBe(5);
-    expect(cursor.GetMark().GetContentIndex()).toBe(2);
+    expect(cursor.GetPoint().GetContentIndex()).toBe(node.Len());
+    expect(cursor.GetMark().GetContentIndex()).toBe(0);
   });
 });

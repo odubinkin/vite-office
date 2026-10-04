@@ -2,6 +2,10 @@
 
 import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import type { SwPaM } from "../crsr/pam";
+import { getTextFormatCollNodes } from "../doc/docfmt";
+import { SwpHints } from "../txtnode/ndhints";
+import { resetFullParagraphAutoFormat, resetParagraphTextAttributes } from "../txtnode/txtedt";
 import {
   CopyTextFragment,
   CopyUndoFragment,
@@ -13,6 +17,52 @@ import {
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "./undobj";
+
+/** Native RES_CHRFMT reset history for StyleApply's full-node range, separate from collection history. */
+export class SwUndoResetAttr extends SwUndo {
+  private readonly history: readonly Readonly<{ node: SwTextNode; hints: SwpHints }>[];
+
+  /** Captures the expanded range before initial exact text reset. @param range - Original inclusive paragraph range. @param state - Expanded full-node cursor state. @returns Nothing. */
+  public constructor(range: SwPaM, state: SwUndoCursorState) {
+    super("Reset Attributes", state, state);
+    this.history = getTextFormatCollNodes(state.point.node.GetDoc(), range).map(
+      /** Captures independent native hint payload. @param node - Owned text node. @returns Hint history. */
+      (node) => ({
+        node,
+        hints: node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool()),
+      }),
+    );
+  }
+
+  /** Performs the initial exact reset without restoring a history cursor. @returns Nothing. */
+  public ApplyExact(): void {
+    for (const { node } of this.history) resetFullParagraphAutoFormat(node);
+  }
+
+  /** Reports retained hint payload only. @returns Payload units. */
+  public override GetPayloadSize(): number {
+    return this.history.reduce(
+      /** Counts native retained hints. @param size - Prior total. @param entry - Hint owner. @returns Total. */
+      (size, entry) => size + entry.hints.Count(),
+      0,
+    );
+  }
+
+  /** Restores original hints before collection history rollback. @param context - Current native owner. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    for (const entry of this.history)
+      GetUndoTextNode(context.GetDoc(), entry.node).SetTextHints(entry.hints);
+  }
+
+  /** Uses native RES_CHRFMT redo's default non-exact reset, independent of collection name lookup. @param context - Current native owner. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const nodes = this.history.map(
+      /** Validates all nodes before mutation. @param entry - Hint owner. @returns Owned node. */
+      (entry) => GetUndoTextNode(context.GetDoc(), entry.node),
+    );
+    for (const node of nodes) resetParagraphTextAttributes(node);
+  }
+}
 
 /** Reversible direct character formatting over one same-node range. */
 export class SwUndoAttr extends SwUndo {

@@ -3,15 +3,21 @@ import type { SwTextNode } from "./ndtxt";
 import { SwpHints } from "./ndhints";
 import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 
-/** Removes only AUTOFMT hints with exactly the full paragraph range, retaining other ranged hint types and partial formatting. @param node - Reset text node. @returns Nothing. */
-export function resetFullParagraphAutoFormat(node: SwTextNode): void {
+/** Ports full-node RstTextAttr for the registered ranged hint types; default non-exact reset includes internet hints. @param node - Reset text node. @param exactRange - Whether only exact whole AUTOFMT is removed. @returns Nothing. */
+export function resetParagraphTextAttributes(node: SwTextNode, exactRange = false): void {
   const hints = node.GetpSwpHints();
   if (hints === undefined) return;
   const retained = hints.entries().filter(
     /** Applies native bExactRange's WhichId and endpoint checks. @param hint - Direct ranged attribute. @returns Whether retained. */
     (hint) =>
-      hint.format.Which() !== RES_TXTATR_AUTOFMT || hint.start !== 0 || hint.end !== node.Len(),
+      exactRange &&
+      (hint.format.Which() !== RES_TXTATR_AUTOFMT || hint.start !== 0 || hint.end !== node.Len()),
   );
   if (retained.length !== hints.Count())
     node.SetTextHints(new SwpHints(node.GetDoc().GetAttrPool(), retained));
+}
+
+/** Performs initial StyleApply's exact full-paragraph hint reset. @param node - Reset text node. @returns Nothing. */
+export function resetFullParagraphAutoFormat(node: SwTextNode): void {
+  resetParagraphTextAttributes(node, true);
 }

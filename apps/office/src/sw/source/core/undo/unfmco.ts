@@ -5,17 +5,14 @@ import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwPaM } from "../crsr/pam";
 import { getTextFormatCollNodes, setTextFormatCollAtNode } from "../doc/docfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwpHints } from "../txtnode/ndhints";
-import { resetFullParagraphAutoFormat } from "../txtnode/txtedt";
 import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 
-/** Captured paragraph collection, direct item and hint history for one native range node. */
+/** Captured paragraph collection and direct item history for one native range node. */
 interface FormatCollHistory {
   readonly paragraph: SwTextNode;
   readonly beforeStyle: WriterParagraphStyle;
   readonly beforeItems: SfxItemSet;
-  readonly beforeHints: SwpHints;
   readonly beforeEmptyListStyle: boolean;
 }
 
@@ -41,18 +38,16 @@ export class SwUndoFormatColl extends SwUndo {
         beforeItems:
           paragraph.GetpSwAttrSet()?.Clone() ??
           new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES),
-        beforeHints:
-          paragraph.GetpSwpHints()?.clone() ?? new SwpHints(paragraph.GetDoc().GetAttrPool()),
         beforeEmptyListStyle: paragraph.IsEmptyListStyleDueToSetOutlineLevelAttr(),
       }),
     );
   }
 
-  /** Reports collection identities, marker, direct items and retained hints. @returns Payload units. */
+  /** Reports collection identities, marker and direct items; text-reset history has its own owner. @returns Payload units. */
   public override GetPayloadSize(): number {
     return this.history.reduce(
-      /** Counts retained paragraph collection/marker, item and hint payloads. @param size - Prior total. @param entry - Captured node. @returns Total payload units. */
-      (size, entry) => size + 3 + entry.beforeItems.Count() + entry.beforeHints.Count(),
+      /** Counts retained paragraph collection/marker and item payloads. @param size - Prior total. @param entry - Captured node. @returns Total payload units. */
+      (size, entry) => size + 3 + entry.beforeItems.Count(),
       0,
     );
   }
@@ -65,7 +60,6 @@ export class SwUndoFormatColl extends SwUndo {
       paragraph.ChgFormatColl(document.GetTextFormatColl(entry.beforeStyle));
       paragraph.ResetAllAttr();
       if (entry.beforeItems.Count() !== 0) paragraph.SetAttr(entry.beforeItems);
-      paragraph.SetTextHints(entry.beforeHints);
       if (entry.beforeEmptyListStyle) paragraph.SetEmptyListStyleDueToSetOutlineLevelAttr();
     }
   }
@@ -79,9 +73,7 @@ export class SwUndoFormatColl extends SwUndo {
     );
     const collection = document.FindTextFormatCollByName(this.formatName);
     if (collection !== undefined)
-      for (const paragraph of nodes) {
+      for (const paragraph of nodes)
         setTextFormatCollAtNode(paragraph, collection, this.resetListAttrs);
-        resetFullParagraphAutoFormat(paragraph);
-      }
   }
 }

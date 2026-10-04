@@ -14,6 +14,7 @@ import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";
 import { SwUndoFormatColl } from "./unfmco";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwUndoInsert } from "./unins";
 import { SwUndoAttr, SwUndoMoveLeftMargin, SwUndoParagraphFormat } from "./unattr";
 import { SwUndoInsNum, SwUndoNumLevel } from "./unnum";
@@ -308,7 +309,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.SetParagraphAlignment("center");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoParagraphFormat);
     shell.SetParagraphStyle("heading-1");
-    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoFormatColl);
+    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
     shell.SetParagraphListKind("numbered");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsNum);
     shell.ChangeParagraphListLevel("demote");

@@ -490,13 +490,13 @@ export class SwWrtShell extends SwModify {
     const document = this.GetDoc();
     if (!isWriterParagraphStyle(style) && document.FindTextFormatColl(style) === undefined)
       throw new Error(`Unsupported Writer paragraph style: ${style}`);
-    const action = createTextFormatCollAction(
+    const operation = createTextFormatCollAction(
       document,
       this.cursor,
       document.GetTextFormatColl(style),
       this.CaptureCursorState(),
     );
-    return this.ApplyAction(action);
+    return this.ApplyAction(operation.action, false, operation.execute);
   }
 
   /** Applies or removes the active paragraph's default list. @param kind - Next list kind. @returns Whether content changed. */
@@ -636,11 +636,15 @@ export class SwWrtShell extends SwModify {
     );
   }
 
-  /** Executes one semantic action and publishes cursor-state invalidation. @param action - Reversible Writer action. @param tryMerge - Whether adjacent typing/deletion grouping is allowed. @returns True after successful execution. */
-  public ApplyAction(action: SfxUndoAction<SwUndoRedoContext>, tryMerge = false): boolean {
+  /** Executes one semantic action and publishes cursor-state invalidation. @param action - Reversible Writer action. @param tryMerge - Whether adjacent typing/deletion grouping is allowed. @param execute - Initial native operation when its flags differ from redo. @returns True after successful execution. */
+  public ApplyAction(
+    action: SfxUndoAction<SwUndoRedoContext>,
+    tryMerge = false,
+    execute?: () => void,
+  ): boolean {
     return this.RunNotificationTransaction(
       /** Aggregates model, lifecycle, and cursor changes. @returns True after execution. */ () => {
-        this.docShell.ApplyUndoAction(action, this.undoContext, tryMerge);
+        this.docShell.ApplyUndoAction(action, this.undoContext, tryMerge, execute);
         this.NotifySelection();
         return true;
       },

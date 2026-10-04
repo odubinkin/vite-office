@@ -280,8 +280,8 @@ describe("SwDocShell native paragraph StyleApply", /** Groups source-owned reque
     expect(shell.Redo()).toBe(true);
     expect(first.GetParagraphStyle()).toBe("heading-1");
     expect(shell.GetCursor()).toBe(cursor);
-    expect(cursor.GetPoint().GetContentIndex()).toBe(4);
-    expect(cursor.GetMark().GetContentIndex()).toBe(1);
+    expect(cursor.GetPoint().GetContentIndex()).toBe(5);
+    expect(cursor.GetMark().GetContentIndex()).toBe(0);
   });
 
   it("follows the replacement graph, isolates documents and drops active view eligibility on detach or close", /** Checks owner lifetime and canonical graph replacement. @returns Nothing. */ () => {

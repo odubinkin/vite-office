@@ -159,18 +159,21 @@ export class SwDocShell extends SfxObjectShell {
     );
   }
 
-  /** Executes and records one semantic Writer action as one notification transaction. @param action - Reversible operation. @param context - Writer undo context. @param tryMerge - Whether adjacent history may merge. @returns True after execution. */
+  /** Executes and records one semantic Writer action as one notification transaction. @param action - Reversible operation. @param context - Writer undo context. @param tryMerge - Whether adjacent history may merge. @param execute - Initial native operation when its flags differ from redo. @returns True after execution. */
   public ApplyUndoAction(
     action: SfxUndoAction<SwUndoRedoContext>,
     context: SwUndoRedoContext,
     tryMerge = false,
+    execute?: () => void,
   ): boolean {
     this.EnsureOpen();
     this.notifications.RunNotificationTransaction(
       /** Executes one shell transaction. @returns Nothing. */ () => {
         this.document.RunModelTransaction(
-          /** Executes the action against the model. @returns Nothing. */ () =>
-            action.RedoWithContext(context),
+          /** Executes the initial operation or ordinary redo against the model. @returns Nothing. */ () => {
+            if (execute === undefined) action.RedoWithContext(context);
+            else execute();
+          },
         );
         this.document.GetUndoManager().AddUndoAction(action, tryMerge);
       },

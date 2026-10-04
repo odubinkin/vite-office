@@ -129,6 +129,8 @@ for (const width of [1280, 390])
     await page.keyboard.press("Control+Shift+z");
     await page.keyboard.press("Control+Shift+z");
     await expect(whole).toHaveCSS("text-indent", "16px");
+    await expect(partial.locator("strong")).toHaveCount(0);
+    await expect(link.locator("a")).toHaveCount(0);
     await select.selectOption("ResetB");
     for (const node of [whole, empty, partial, link]) {
       await expect(node).toHaveAttribute("data-style", "ResetB");
@@ -185,7 +187,7 @@ for (const width of [1280, 390])
     expect(
       required(exportedWhole).GetTextRangeFormatState(0, required(exportedWhole).Len(), "bold"),
     ).toBe("off");
-    expect(required(exportedPartial).GetTextRangeFormatState(2, 7, "bold")).toBe("on");
-    expect(required(exportedLink).getHyperlinkAt(2)?.url).toBe("https://example.test/style-reset");
+    expect(required(exportedPartial).GetTextRangeFormatState(2, 7, "bold")).toBe("off");
+    expect(required(exportedLink).getHyperlinkAt(2)).toBeUndefined();
     imported.document.Dispose();
   });
