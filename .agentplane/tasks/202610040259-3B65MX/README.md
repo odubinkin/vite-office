@@ -4,7 +4,7 @@ title: "Remove diagnostic source excerpts from retained Agentplane artifacts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-04T03:06:50.168Z"
+  state: "ok"
+  updated_at: "2026-10-04T03:09:28.641Z"
   updated_by: "CODER"
-  note: "Extended approved cleanup scope includes four JSON-encoded source-frame diagnostics; previous verification covers only initial87 files, reverify required after additional removals."
-  attempts: 1
+  note: "Cumulative91 old source-bearing diagnostics removed in isolated72102c6ea9dd/4917d440fe2c (87tracked4ignored); decoded JSON/JSONL audit1143 files no source bodies,5 prose-only diffs classified; no application changes, quality deferred until separately clean implementation commit."
+  attempts: 0
 commit: null
 comments:
   -
@@ -47,8 +47,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Extended approved cleanup scope includes four JSON-encoded source-frame diagnostics; previous verification covers only initial87 files, reverify required after additional removals."
+  -
+    type: "verify"
+    at: "2026-10-04T03:09:28.641Z"
+    author: "CODER"
+    state: "ok"
+    note: "Cumulative91 old source-bearing diagnostics removed in isolated72102c6ea9dd/4917d440fe2c (87tracked4ignored); decoded JSON/JSONL audit1143 files no source bodies,5 prose-only diffs classified; no application changes, quality deferred until separately clean implementation commit."
 doc_version: 3
-doc_updated_at: "2026-10-04T03:06:50.231Z"
+doc_updated_at: "2026-10-04T03:09:28.717Z"
 doc_updated_by: "CODER"
 description: "Explicit user artifact cleanup: remove old diagnostic logs/context with embedded source frames, preserve bounded hashes and outcomes in a separate local commit; no app edits or history rewrite."
 sections:
@@ -120,9 +126,39 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
-    <!-- END VERIFICATION RESULTS -->
+    ### 2026-10-04T03:09:28.641Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Cumulative91 old source-bearing diagnostics removed in isolated72102c6ea9dd/4917d440fe2c (87tracked4ignored); decoded JSON/JSONL audit1143 files no source bodies,5 prose-only diffs classified; no application changes, quality deferred until separately clean implementation commit.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T03:09:28.229Z, excerpt_hash=sha256:6c2d4d639480610547cfd87b7138b76ddccd91a2bc4b5724b4d51ee2fd52ca5d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040259-3B65MX/blueprint/resolved-snapshot.json
+    - old_digest: 94ccd59dc93cf48e5fad8008c84623a3321b9898ff1d143aac2d8f80ad452d18
+    - current_digest: 94ccd59dc93cf48e5fad8008c84623a3321b9898ff1d143aac2d8f80ad452d18
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040259-3B65MX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610040259-3B65MX -m 🧩 3B65MX task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS --> Extended approved cleanup removed four JSON diagnostic source tails in second isolated commit 4917d440fe2c8f4ba4d0eb9a4356a4a67d8ceb31. Cumulative91 files (87 tracked/4 ignored) with hashes/results only. Decoded audit1143 JSON/JSONL files found zero source declarations/code frames/implementation patches after distinguishing five historical documentation-only README/AGENTS diffs and minimal marker addresses. No app/test changes in either cleanup commit. Current artifact/helper/Python/source/frame/archive checks zero. Same-actor quality still pending separately committed N2HMA6 workspace.
   Rollback Plan: "Explicitly recover selected old diagnostics from Git history if required; do not rewrite history. Ignored tmp deletion is limited to redundant diagnostic copies."
-  Findings: "Extended source-frame detection corrected the earlier audit blind spot. Cleanup action 72102c6ea9ddedf8c5ae90b447437cc3384008a4 removes old source excerpts without rewriting history or mutating old task lifecycle/docs. Four ignored tmp logs removed as redundant copies; all83 tracked removals isolated. No py files existed. Verification/artifact audit complete; same-actor quality and closure pending clean tracked workspace after separate N2HMA6 commit."
+  Findings: "Extended source-frame detection corrected the earlier audit blind spot. Cleanup action 72102c6ea9ddedf8c5ae90b447437cc3384008a4 removes old source excerpts without rewriting history or mutating old task lifecycle/docs. Four ignored tmp logs removed as redundant copies; all83 tracked removals isolated. No py files existed. Verification/artifact audit complete; same-actor quality and closure pending clean tracked workspace after separate N2HMA6 commit. Scope reapproved for four encoded source-frame copies; previous verification marked rework before additional deletion. Action commits72102c6ea9ddedf8c5ae90b447437cc3384008a4 and 4917d440fe2c8f4ba4d0eb9a4356a4a67d8ceb31 kept separate from implementation. Decoded JSON/JSONL audit now differentiates five documentation-only diffs from implementation/source snippets. Total91 cleanly removed; current audit all zero."
 id_source: "generated"
 ---
 ## Summary
@@ -206,7 +242,37 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
-<!-- END VERIFICATION RESULTS -->
+### 2026-10-04T03:09:28.641Z — VERIFY — ok
+
+By: CODER
+
+Note: Cumulative91 old source-bearing diagnostics removed in isolated72102c6ea9dd/4917d440fe2c (87tracked4ignored); decoded JSON/JSONL audit1143 files no source bodies,5 prose-only diffs classified; no application changes, quality deferred until separately clean implementation commit.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T03:09:28.229Z, excerpt_hash=sha256:6c2d4d639480610547cfd87b7138b76ddccd91a2bc4b5724b4d51ee2fd52ca5d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040259-3B65MX/blueprint/resolved-snapshot.json
+- old_digest: 94ccd59dc93cf48e5fad8008c84623a3321b9898ff1d143aac2d8f80ad452d18
+- current_digest: 94ccd59dc93cf48e5fad8008c84623a3321b9898ff1d143aac2d8f80ad452d18
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040259-3B65MX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610040259-3B65MX -m 🧩 3B65MX task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS --> Extended approved cleanup removed four JSON diagnostic source tails in second isolated commit 4917d440fe2c8f4ba4d0eb9a4356a4a67d8ceb31. Cumulative91 files (87 tracked/4 ignored) with hashes/results only. Decoded audit1143 JSON/JSONL files found zero source declarations/code frames/implementation patches after distinguishing five historical documentation-only README/AGENTS diffs and minimal marker addresses. No app/test changes in either cleanup commit. Current artifact/helper/Python/source/frame/archive checks zero. Same-actor quality still pending separately committed N2HMA6 workspace.
 
 ## Rollback Plan
 
@@ -214,4 +280,4 @@ Explicitly recover selected old diagnostics from Git history if required; do not
 
 ## Findings
 
-Extended source-frame detection corrected the earlier audit blind spot. Cleanup action 72102c6ea9ddedf8c5ae90b447437cc3384008a4 removes old source excerpts without rewriting history or mutating old task lifecycle/docs. Four ignored tmp logs removed as redundant copies; all83 tracked removals isolated. No py files existed. Verification/artifact audit complete; same-actor quality and closure pending clean tracked workspace after separate N2HMA6 commit.
+Extended source-frame detection corrected the earlier audit blind spot. Cleanup action 72102c6ea9ddedf8c5ae90b447437cc3384008a4 removes old source excerpts without rewriting history or mutating old task lifecycle/docs. Four ignored tmp logs removed as redundant copies; all83 tracked removals isolated. No py files existed. Verification/artifact audit complete; same-actor quality and closure pending clean tracked workspace after separate N2HMA6 commit. Scope reapproved for four encoded source-frame copies; previous verification marked rework before additional deletion. Action commits72102c6ea9ddedf8c5ae90b447437cc3384008a4 and 4917d440fe2c8f4ba4d0eb9a4356a4a67d8ceb31 kept separate from implementation. Decoded JSON/JSONL audit now differentiates five documentation-only diffs from implementation/source snippets. Total91 cleanly removed; current audit all zero.
