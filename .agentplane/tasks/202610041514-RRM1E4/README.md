@@ -4,7 +4,7 @@ title: "Restore native paired paragraph-style reset history and redo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -47,7 +47,7 @@ events:
     to: "DOING"
     note: "Start: recover failed absent app gate with bounded native redo endpoint expectations and valid independent hint fixture; amended15paths authorized by standing goal, production unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:28:05.441Z"
+doc_updated_at: "2026-10-04T15:28:48.408Z"
 doc_updated_by: "CODER"
 description: "Iteration108: replace fused paragraph-style/reset history with native ordered SwUndoFormatColl plus SwUndoResetAttr in one Sfx list action. Separate initial exact full-node cleanup from default non-exact reset redo, including partial AUTOFMT/internet removal and expanded redo selection; native sorted style undo. Current registered single-PaM profile only. Preserve registered save/open/recovery deviations and all inventory status/default/exception fields. Strict15semanticpaths/five bounded prior test files;318prior files/313unchanged. All product tests once without upstream, failed-gate recovery only; no native execution/compilation/copies/AP helpers. Parent remains active."
 sections:
@@ -88,6 +88,8 @@ sections:
     Pre-product static formatting gate exit1/outputsha199401e5da7cca140f2fcb0fbb9deb0934e321d7ad78ab69456307ded731593a: new browser test requires an additional formatter pass. Lint/type/dependency/JSDoc/file-size/routing pass. Bounded in-scope recovery; no product tests yet. No raw diagnostics/helpers saved in AP.
 
     First absent app gate1480passed/2failed; coverage100 all four metrics. One native-contradicted prior document-shell expectation still retains4/1 after redo instead of expanded5/0; one new fixture overlaps whole/middle same-type AUTOFMT contrary to the registered graph. Reapprove one additional prior test file for bounded redo endpoints only;15paths/five prior files/313others byte-identical. Fix new fixture with independent whole AUTO and internet types. Production unchanged after first product run; repeat failed app only, then first remaining inventory/scripts/Chromium. Failure record outputsha87d7e79e678c1dde2c1c723fb1c37c80b17ea2fc9379831dbaaf48bb1071689f; vendor restored.
+
+    Artifact-persistence attempt exit5 reported dirty working tree while final static records were still being produced. Recomputed route; all writers now terminal/pass. No semantic commit or test repetition involved; retry persistence only after all record writers complete.
 id_source: "generated"
 ---
 ## Summary
@@ -143,3 +145,5 @@ Readonly source comparison: edfcol native StartUndo groups SwDoc::SetTextFormatC
 Pre-product static formatting gate exit1/outputsha199401e5da7cca140f2fcb0fbb9deb0934e321d7ad78ab69456307ded731593a: new browser test requires an additional formatter pass. Lint/type/dependency/JSDoc/file-size/routing pass. Bounded in-scope recovery; no product tests yet. No raw diagnostics/helpers saved in AP.
 
 First absent app gate1480passed/2failed; coverage100 all four metrics. One native-contradicted prior document-shell expectation still retains4/1 after redo instead of expanded5/0; one new fixture overlaps whole/middle same-type AUTOFMT contrary to the registered graph. Reapprove one additional prior test file for bounded redo endpoints only;15paths/five prior files/313others byte-identical. Fix new fixture with independent whole AUTO and internet types. Production unchanged after first product run; repeat failed app only, then first remaining inventory/scripts/Chromium. Failure record outputsha87d7e79e678c1dde2c1c723fb1c37c80b17ea2fc9379831dbaaf48bb1071689f; vendor restored.
+
+Artifact-persistence attempt exit5 reported dirty working tree while final static records were still being produced. Recomputed route; all writers now terminal/pass. No semantic commit or test repetition involved; retry persistence only after all record writers complete.
