@@ -1,0 +1,60 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1035,
+      "sha256": "204f4c950db12bfdc66b21a0c88f39faa39e7869010a95967b0c58a38ce7f5f6",
+      "totals": [
+        "Test Files  253 passed (253)",
+        "Tests  2006 passed (2006)"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "fbb2b2a3d4db6fe7b68530f6d697c63dc90f61e4a96297bdaa480f40de4d09af",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "a6ddc5e2924c5f6c634d5db7b686125dd8e5fc129d12f5a41cb2b7801bfd6447",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ]
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13580,
+      "sha256": "8bd7bf5c62548f107e347d8ed2731dab842e5939a4bea6bc485d85a1e583dc97",
+      "totals": [
+        "99 passed (35.4s)"
+      ]
+    }
+  ]
+}
