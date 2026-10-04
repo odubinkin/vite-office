@@ -1,0 +1,96 @@
+{
+  "base": "b01dbf9033c81f81c0ac440a555bb7067b339b6e",
+  "semanticPaths": 20,
+  "priorTestFiles": 316,
+  "byteIdenticalPriorTests": 305,
+  "boundedOldTestUpdates": 11,
+  "sourceContradictedNativeExpectationsOnly": true,
+  "priorDocfmtIndentAndRangeAlgorithmsUnchanged": true,
+  "oldMappingRows": 227,
+  "descriptionAppends": 4,
+  "newUnverifiedOwnerRows": 1,
+  "runtimeModuleCount": 228,
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+      "sha256": "173b0bcff863135630bf259246fc63284917fc117734e9525c93d15b2f43340e"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "sha256": "8bf85c5581a727a597691c14bd0e5db0bfc44ecda8a61132aadefffa4d46486e"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+      "sha256": "78956a7436b181ccbd7d1d9f5ecbb773e4b55fdd26b446a118a34de49d24198c"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "sha256": "7c43c738e83d84c0f45e77ead4e008f8d97a6426cc22bf8209ba741414aac7c8"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txtedt.ts",
+      "sha256": "98d6d642e227aa2169dd60f033df03f37c89aa0aee8c0c5ae02f6cd9008a04d3"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol-reset.test.ts",
+      "sha256": "2a27343fa289f2459c2b875cfe361853182350db57d8effa66f98af746c92e41"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol.test.ts",
+      "sha256": "9c2362a8af8fa83e962d3d2112ac2456b7b4232eae191d979cd16905b135205e"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+      "sha256": "1b51d6a5f38f2a734cc8288cee9c9f8adc34b5919fbdb42713f44abee2ffbdbc"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.test.ts",
+      "sha256": "66a02fe3b9c7a990afc48b90f7f3a7d8290ad65d3fe0ef3732c5e5718dfe84f0"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+      "sha256": "29e7aeefa9a3e076e8ff2d9a2c325677b9639b9deefd5dbfd94269305f36554d"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+      "sha256": "8ff24e051d0d712af8557e0246abe93f4a8c025b6c2dcc684190b3456158576d"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
+      "sha256": "ab6c5f5ca5591b139675edf08d984c2f06388b19430fa9959272425bebe9082b"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/text-collection-numbering.test.ts",
+      "sha256": "037cd58e12f4c0a8bc107a81bd082503e3f0e9027db6d5c6c86d9391d7a0c7d6"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-text-collection-numbering.test.ts",
+      "sha256": "929e6be0eaea4cedd55eba0d673289edf85131276160b3a7ecc03c0cec8387eb"
+    },
+    {
+      "path": "apps/office/e2e/writer-style-focus.spec.ts",
+      "sha256": "0cd73d3df1ab08b1f8d6f25826627ad78e6a42995c79929d94441b4d4cebe6d0"
+    },
+    {
+      "path": "apps/office/e2e/writer-style-reset.spec.ts",
+      "sha256": "7e09f993979e91158eef0952f17016a7ea5af139252c504a9f701a8204575dcd"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "372e75838ea447505eb5887809fa0da42541f65a5f1531734e923fc6a34cdb1d"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "145ec85297f1a6d72d8435d1f392423f0b8dfba68b1b94648db20fd085775145"
+    },
+    {
+      "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+      "sha256": "5604d2ea7bc32713fb6edf41c90c34db9955ac6221b1569e9379d53042b0792c"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+      "sha256": "d9c74f5a83890a52be98e16cbb771564d57e42c0500ba8aae845210be39d57f4"
+    }
+  ],
+  "registeredDeviationFieldsUnchanged": true
+}

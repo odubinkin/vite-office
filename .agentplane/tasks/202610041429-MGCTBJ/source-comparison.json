@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx",
+      "marker": "lcl_RstAttr",
+      "sha256": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/edit/edfcol.cxx",
+      "marker": "SwEditShell::SetTextFormatColl",
+      "sha256": "36ebd01cb4debf30d908e5e5058cc0e9b83813ed8f1fc01acc24796eb4abba2f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtedt.cxx",
+      "marker": "SwTextNode::RstTextAttr",
+      "sha256": "900413bc482204a05a6bc74a7a3b2b89824335f0f849a531afde833793f083f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unfmco.cxx",
+      "marker": "SwUndoFormatColl::DoSetFormatColl",
+      "sha256": "b74cf639a6b928c1e86528cf655c9c5256624554ef37713d231dd0dbaa89b684"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/app/docst.cxx",
+      "marker": "SwDocShell::ApplyStyles",
+      "sha256": "587d8d8fe1ead83d0f63f0796164698ee9f8dc41e894e4a1cfa58144b9aadbc3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/inc/DocumentContentOperationsManager.hxx",
+      "marker": "bResetAll(true)",
+      "sha256": "dd062b61e48829e03e3549b030140ebeae784a3760c09262683f13d71ec58a9f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "marker": "lcl_RstTextAttr",
+      "sha256": "cfbc09c7a7413e29dc3320c46eac6b4c706e9f805f0b90436ec636f9bc2bdb08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/format.hxx",
+      "marker": "bSrchInParent = true",
+      "sha256": "df433fe1ded3ef36c674cc14dbccc44105f77116fbda41abd82215c7d8455819"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/editsh.hxx",
+      "marker": "SetTextFormatColl",
+      "sha256": "b928e3ad82ba7a7391afacbcc32ae3a44d3fbcd6039ec05d17b18eb075429f1f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/hintids.hxx",
+      "marker": "RES_PARATR_LIST_AUTOFMT",
+      "sha256": "c69353d16f8f15575a82843880cc016c6033e2f86e91905f999a0cfec8cf398f"
+    }
+  ],
+  "nativeExecution": false,
+  "nativeCompilation": false,
+  "sourceCopies": false,
+  "comparison": "Readonly comparison of ordinary StyleApply protected direct items, reset-all defaults, changed-collection list resets and inherited rule eligibility; exact full-paragraph AUTOFMT removal with internet and partial hints retained; every valid request creates one inclusive range history, restoring original direct items, hints, list suppression and cursor with captured-name redo. Modifier/full character reset, selection rings, read-only/layout/redlines/inline headings, native callback/history architecture and full native contracts remain unverified."
+}
