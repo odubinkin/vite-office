@@ -1,0 +1,7 @@
+{
+  "command": "node .agentplane/policy/check-routing.mjs",
+  "evaluatedSha": "2be6f5212debd38210360430a2854b78dfff9213",
+  "exitCode": 0,
+  "bytes": 18,
+  "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+}
