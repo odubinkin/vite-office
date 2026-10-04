@@ -52,6 +52,7 @@ export class SwFormatINetFormat extends SfxPoolItem {
   /** Creates one hyperlink value. @param hyperlink - Canonical hyperlink metadata. @returns Nothing. */
   public constructor(private readonly hyperlink: WriterHyperlink) {
     super(RES_TXTATR_INETFMT);
+    this.setNonShareable();
     if (hyperlink.url.length === 0) throw new Error("Writer hyperlink URL must not be empty.");
   }
 

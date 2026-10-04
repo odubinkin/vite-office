@@ -86,8 +86,8 @@ describe("native selective text hint reset", /** Tests registered native decisio
     },
   );
   it.each([SfxItemState.INVALID, SfxItemState.DISABLED])(
-    "removes SET while retaining state marker %s and independent hint",
-    /** Checks mixed automatic style state. @param marker - Native state. @returns Nothing. */ (
+    "rejects sentinel-bearing replacement %s outside the concrete pool domain",
+    /** Checks excluded-domain input does not create a nonpooled fallback. @param marker - Sentinel state. @returns Nothing. */ (
       marker,
     ) => {
       const f = fixture();
@@ -98,26 +98,27 @@ describe("native selective text hint reset", /** Tests registered native decisio
       f.reset.Put(new SvxWeightItem(5, 15));
       install(f);
       const original = automatic(f.node);
+      const owned = f.node.GetpSwpHints();
       const notify = vi.spyOn(f.doc, "NotifyModelChange");
-      resetParagraphTextAttributes(f.node, false, f.reset);
-      expect(automatic(f.node).Count()).toBe(1);
+      expect(
+        /** Attempts a non-cloneable sentinel pool input. @returns Nothing. */
+        () => resetParagraphTextAttributes(f.node, false, f.reset),
+      ).toThrow("requires concrete SET items");
+      expect(f.node.GetpSwpHints()).toBe(owned);
+      expect(automatic(f.node)).toBe(original);
+      expect(automatic(f.node).Count()).toBe(2);
       expect(automatic(f.node).GetItemState(15, false)).toBe(marker);
-      expect(automatic(f.node).GetItemState(11, false)).toBe(SfxItemState.DEFAULT);
+      expect(automatic(f.node).GetItemState(11, false)).toBe(SfxItemState.SET);
       expect(original.Count()).toBe(2);
       expect(original.GetItemState(11, false)).toBe(SfxItemState.SET);
       expect(required(f.node.GetpSwpHints()).Get(0)).toMatchObject({
         start: 2,
         end: 5,
-        dontExpand: false,
-        dontExpandStart: false,
-        dontMoveAttr: false,
+        dontExpand: true,
+        dontExpandStart: true,
+        dontMoveAttr: true,
       });
       expect(required(f.node.GetpSwpHints()).Get(1).format.equals(f.link.format)).toBe(true);
-      expect(notify).toHaveBeenCalledTimes(1);
-      notify.mockClear();
-      const owned = f.node.GetpSwpHints();
-      resetParagraphTextAttributes(f.node, false, f.reset);
-      expect(f.node.GetpSwpHints()).toBe(owned);
       expect(notify).not.toHaveBeenCalled();
     },
   );

@@ -36,8 +36,8 @@ import {
 } from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
 import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
-import { SwFormatAutoFormat, SwTextAttr } from "../../../source/core/txtnode/txatbase";
-import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
+import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
+import { MakeTextAttr } from "../../../source/core/txtnode/thints";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
 import type { DocumentSettingId } from "../../../source/core/doc/DocumentSettingManager";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
@@ -665,16 +665,10 @@ export function decodeWriterDocument(
       hint,
     ) => {
       if (hint.kind === "hyperlink")
-        return new SwTextAttr(new SwFormatINetFormat(hint.hyperlink), hint.start, hint.end);
+        return MakeTextAttr(document, new SwFormatINetFormat(hint.hyperlink), hint.start, hint.end);
       const items = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       decodeSfxItemSet(items, hint.items);
-      return new SwTextAttr(
-        new SwFormatAutoFormat(
-          document.GetIStyleAccess().getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR),
-        ),
-        hint.start,
-        hint.end,
-      );
+      return MakeTextAttr(document, items, hint.start, hint.end);
     },
   );
   const position = new SwPosition(node, 0, "redline");

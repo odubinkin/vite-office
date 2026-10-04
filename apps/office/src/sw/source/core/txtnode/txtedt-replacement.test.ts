@@ -1,7 +1,7 @@
 /** @fileoverview Checks native fresh automatic hint flags versus retained flags through actual text reset and Writer command/history owners. */
 import { afterEach, describe, expect, it } from "vitest";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
-import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SvxWeightItem, SvxPostureItem } from "../../../../editeng/source/items/textitem";
 import { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwDoc } from "../doc/doc";
@@ -27,14 +27,14 @@ function required<T>(value: T | undefined): T {
 function flags(hint: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>): boolean[] {
   return [hint.dontExpand, hint.dontExpandStart, hint.dontMoveAttr];
 }
-/** Builds actual node with a mixed value/state automatic hint and independent internet hint. @param mask - Three source flags. @param start - Hint start. @param end - Hint end. @returns Real model owners. */
+/** Builds actual node with concrete automatic items and an independent internet hint. @param mask - Three source flags. @param start - Hint start. @param end - Hint end. @returns Real model owners. */
 function fixture(mask: number, start = 2, end = 5) {
   const doc = new SwDoc(),
     node = required(doc.paragraphs[0]);
   node.SetText("FreshHintText");
   const items = new SfxItemSet(doc.GetAttrPool(), [[1, 15]]);
   items.Put(new SvxWeightItem(8, 15));
-  items.InvalidateItem(11);
+  items.Put(new SvxPostureItem(2, 11));
   const auto = new SwTextAttr(new SwFormatAutoFormat(items), start, end);
   auto.dontExpand = (mask & 1) !== 0;
   auto.dontExpandStart = (mask & 2) !== 0;
@@ -85,7 +85,7 @@ describe("native fresh selective automatic hint flags", /** Groups actual model 
             kind === "replace" ? [false, false, false] : flags(f.auto),
           );
           const style = (remaining.Get(0).format as SwFormatAutoFormat).GetStyleHandle();
-          expect(style.GetItemState(11, false)).toBe(SfxItemState.INVALID);
+          expect(style.GetItemState(11, false)).toBe(SfxItemState.SET);
           expect(style.GetItemState(15, false)).toBe(
             kind === "replace" ? SfxItemState.DEFAULT : SfxItemState.SET,
           );
@@ -134,11 +134,9 @@ describe("native fresh selective automatic hint flags", /** Groups actual model 
         .GetDispatcher()
         .Execute(".uno:StyleApply", { Template: "Fresh target", Family: 2, KeyModifier: 8192 });
       const initial = required(f.node.GetpSwpHints());
-      expect(flags(initial.Get(0))).toEqual([false, false, false]);
-      expect(
-        (initial.Get(0).format as SwFormatAutoFormat).GetStyleHandle().GetItemState(11, false),
-      ).toBe(SfxItemState.INVALID);
-      expect(flags(initial.Get(1))).toEqual([true, true, true]);
+      expect(initial.Count()).toBe(1);
+      expect(initial.Get(0).Which()).toBe(54);
+      expect(flags(initial.Get(0))).toEqual([true, true, true]);
       expect(owner.GetUndoManager().GetUndoActionCount()).toBe(1);
       for (let cycle = 0; cycle < 3; cycle++) {
         expect(shell.Undo()).toBe(true);

@@ -2,7 +2,9 @@
 import type { SwTextNode } from "./ndtxt";
 import { SwpHints } from "./ndhints";
 import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
-import { SwFormatAutoFormat, SwTextAttr } from "./txatbase";
+import { SwFormatAutoFormat } from "./txatbase";
+import { MakeTextAttr } from "./thints";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 
 /** Ports full-node RstTextAttr for the registered ranged hint types; default non-exact reset includes internet hints. @param node - Reset text node. @param exactRange - Whether only exact whole AUTOFMT is removed. @param resetSet - Optional native selective deletion set. @returns Nothing. */
@@ -33,7 +35,11 @@ export function resetParagraphTextAttributes(
         if (style === undefined) return [hint];
         changed = true;
         if (style.Count() === 0) return [];
-        return [new SwTextAttr(new SwFormatAutoFormat(style), hint.start, hint.end)];
+        const handle = node
+          .GetDoc()
+          .GetIStyleAccess()
+          .getAutomaticStyle(style, SwAutoStyleFamily.AUTO_STYLE_CHAR);
+        return [MakeTextAttr(node.GetDoc(), handle, hint.start, hint.end)];
       },
     );
     if (changed) node.SetTextHints(new SwpHints(node.GetDoc().GetAttrPool(), retained));
