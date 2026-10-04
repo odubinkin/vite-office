@@ -1,0 +1,13 @@
+{
+  "checks": [
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "summary": "TypeScript and fresh production Vite build pass;existing large chunk advisory."
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/framework/browser/presentation/use-command-shortcuts.ts apps/office/src/framework/browser/presentation/use-command-shortcuts-ownership.test.tsx apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx apps/office/e2e/writer-accelerator-ownership.spec.ts --max-warnings 0",
+      "exitCode": 0
+    }
+  ]
+}

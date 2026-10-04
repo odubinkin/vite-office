@@ -1,0 +1,61 @@
+{
+  "base": "8fb521b8ba12b17db4a412efaae13425f927e94e",
+  "priorTests": 274,
+  "changedOldTests": [],
+  "semanticPaths": [
+    "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts",
+    "apps/office/src/framework/browser/presentation/use-command-shortcuts-ownership.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+    "apps/office/e2e/writer-accelerator-ownership.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts",
+      "bytes": 2741,
+      "sha256": "6fad7d2d4f2d68c362234477a9b3d56c195e4629a5a04c0ac015d00edb988865"
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/use-command-shortcuts-ownership.test.tsx",
+      "bytes": 5337,
+      "sha256": "b033de46c6cf6cc205e8147d46843049cb045243d3a63dffd180e6024f060002"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+      "bytes": 4862,
+      "sha256": "6cff1e5a49473cb2dcc1b14082660be5d718c2fd6d97cd46206f6afc6370e4f3"
+    },
+    {
+      "path": "apps/office/e2e/writer-accelerator-ownership.spec.ts",
+      "bytes": 2720,
+      "sha256": "75c5d7b0125582eea1498913c2b6f5924b371420c760be101c2800ea4ef1b2f8"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 718309,
+      "sha256": "39463df6269a611227f3b6ad37512950b34c851fa647b081e9a0fe221b67e7aa"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 702489,
+      "sha256": "44a22beae6c3374db6b11cce5fffdb059494103eabc8f4aa98db41eb6b0ec717"
+    }
+  ],
+  "manifests": {
+    "docs/program/source-provenance.json": {
+      "rows": 218,
+      "appendOnlyRows": [
+        "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts"
+      ],
+      "statusDefaultOwnerExceptionsUnchanged": true
+    },
+    "docs/program/parity/runtime-inventory.json": {
+      "rows": 218,
+      "appendOnlyRows": [
+        "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts"
+      ],
+      "statusDefaultOwnerExceptionsUnchanged": true
+    }
+  }
+}

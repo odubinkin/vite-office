@@ -1,0 +1,9 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-accelerator-ownership.spec.ts",
+  "exitCode": 0,
+  "outputBytes": 663,
+  "outputSha256": "3e34efa33f8e8e35c8fe7e5f19580646db315682d3259204e7581a81cfd9baf9",
+  "summary": [
+    "  2 passed (1.7s)"
+  ]
+}

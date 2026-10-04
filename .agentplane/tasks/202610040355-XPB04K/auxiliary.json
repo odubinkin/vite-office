@@ -1,0 +1,19 @@
+{
+  "checks": [
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "summary": ""
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "summary": "policy routing OK"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "summary": "Doctor OK;0errors,2known warnings (old managed hook shim and DONE2Z3962 missing implementation SHA),2info."
+    }
+  ]
+}

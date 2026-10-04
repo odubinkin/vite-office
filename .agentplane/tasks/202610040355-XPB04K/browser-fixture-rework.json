@@ -1,0 +1,17 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-accelerator-ownership.spec.ts",
+  "exitCode": 1,
+  "outputBytes": 6343,
+  "outputSha256": "2990a2ef2a429fbf51b8042845bca5c824a7553349c0a6f09a2e462536283d81",
+  "summary": [
+    "    Error: expect(locator).toHaveCount(expected) failed",
+    "    Expected: 0",
+    "    Received: 1",
+    "    Timeout:  5000ms",
+    "    Error: expect(locator).toHaveCount(expected) failed",
+    "    Expected: 0",
+    "    Received: 1",
+    "    Timeout:  5000ms",
+    "  2 failed"
+  ]
+}

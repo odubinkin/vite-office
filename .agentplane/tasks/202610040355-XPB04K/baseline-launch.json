@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- vitest run --config apps/office/vitest.config.ts apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+  "exitCode": 1,
+  "outputBytes": 1635,
+  "outputSha256": "afaaf260c31a0deae3bd3710b4c0c6ce73e3e4b24d100142f3cb06c9acf1f0f6",
+  "summary": []
+}

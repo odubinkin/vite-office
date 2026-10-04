@@ -1,0 +1,17 @@
+{
+  "command": "(apps/office) npm exec -- vitest run src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx",
+  "exitCode": 1,
+  "outputBytes": 2655,
+  "outputSha256": "46a632a78c68a1ceb393f9cfd1149558430b7d037a746b379ceb6cf4c233a04c",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  4 failed | 1 passed (5)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx > Writer accelerator ownership > executes locally handled ctrlKey SelectAll once",
+    " FAIL  src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx > Writer accelerator ownership > executes locally handled metaKey SelectAll once",
+    "AssertionError: expected \"SelectAll\" to be called once, but got 2 times",
+    " FAIL  src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx > Writer accelerator ownership > preserves a consumed Bold key from editor",
+    " FAIL  src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx > Writer accelerator ownership > preserves a consumed Bold key from sidebar",
+    "AssertionError: expected \"FindCommandByShortcut\" to not be called at all, but actually been called 1 times"
+  ]
+}

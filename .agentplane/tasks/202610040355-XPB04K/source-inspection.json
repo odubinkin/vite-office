@@ -1,0 +1,27 @@
+{
+  "method": "Manual read-only pinned source inspection;no native compilation/execution or source copies",
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceIdentities": [
+    {
+      "path": "sfx2/source/dialog/dockwin.cxx",
+      "bytes": 55440,
+      "sha256": "33323293f3f0741aab11149c7c9fb337aaa7f64cb818265a467ff9cefabe39d6"
+    },
+    {
+      "path": "sfx2/source/view/viewsh.cxx",
+      "bytes": 149359,
+      "sha256": "bc275167e0675f0f70984c44db45e16b9eca2343a067cbdd4dc79d647eba8e36"
+    },
+    {
+      "path": "sfx2/source/sidebar/SidebarDockingWindow.cxx",
+      "bytes": 7263,
+      "sha256": "862d1289946425b6eb184eb3520fbe6ea18c61c3b106bc774d166f8662055dc1"
+    }
+  ],
+  "conclusions": [
+    "SfxDockingWindow EventNotify invokes GlobalKeyInput_Impl only after DockingWindow dialog-key handling returns false; consumed local keys never fall through.",
+    "SfxViewShell KeyInput and GlobalKeyInput_Impl delegate to the same ExecKey_Impl accelerator route.",
+    "SidebarDockingWindow consumes its explicit local key-code list and handles Undo/Redo before inherited global fallback. Complete Sidebar key isolation and native accelerator hierarchy remain unverified.",
+    "Local browser editor SelectAll consumes Ctrl/Meta+A; prior global hook ignored defaultPrevented and duplicated registered command dispatch."
+  ]
+}
