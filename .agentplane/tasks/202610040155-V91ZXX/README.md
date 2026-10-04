@@ -1,10 +1,11 @@
 ---
 id: "202610040155-V91ZXX"
 title: "Remove retained code diff from Agentplane artifacts"
-status: "DOING"
+result_summary: "Removed retained code diff in separate deletion commit eaa15ebac432; artifact audits clean, reviewed closure snapshot recorded separately."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Reviewed deletion commit name-status: only quality-code-diff.log removed plus cleanup README/result. Source-bearing23707byte old log hash retained without payload. No app/test/vendor or PKFNDA implementation included."
     - "Ignored-inclusive recursive2768file cleanup audit and later2776file integrity audit have zero source/helper/Python/executable/archive/ZIP-GZIPmagic/embedded/diff payloads. Routing/diff pass,doctor0errors2knownwarnings. Approval explicit user,rollback Git history. Closure deferred until separately owned implementation clean as required; now clean."
-commit: null
+commit:
+  hash: "e6da4dc940b094cf105f19e69c1aa358d507caaf"
+  message: "🧩 V91ZXX task: persist final cleanup verification"
 comments:
   -
     author: "CODER"
     body: "Start: explicit user cleanup; separate deletion only, bounded results, no code copies or history rewrite."
+  -
+    author: "CODER"
+    body: "Verified: explicit-user cleanup deleted retained code diff in separate action commit eaa15ebac432fbdb5807c5ca428311d178a0fcd9. Reviewed clean snapshot/closure evidence e6da4dc940b094cf105f19e69c1aa358d507caaf contains this separately inspected deletion; same-actor quality pass. Recursive source/helper/Python/exe/archive/magic/embedded/diff audits zero,policy/diffpassdoctor0errors2knownwarnings; no app/test/vendor changes/history rewrite. Action SHA is recorded here separately from closure-evidence metadata; no independent-agent review claimed."
 events:
   -
     type: "status"
@@ -74,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final cleanup docs current; same-actor quality pass snapshote6da4dc940b094cf105f19e69c1aa358d507caaf reviews separate deletioneaa15ebac432fbdb5807c5ca428311d178a0fcd9. Artifact source/helper/Python/exe/archive/magic/embedded/diff0,routing/diffpassdoctor0errors2knownwarnings;no app/test/vendor changes or history rewrite. Explicit user cleanup satisfied."
+  -
+    type: "status"
+    at: "2026-10-04T02:12:40.930Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: explicit-user cleanup deleted retained code diff in separate action commit eaa15ebac432fbdb5807c5ca428311d178a0fcd9. Reviewed clean snapshot/closure evidence e6da4dc940b094cf105f19e69c1aa358d507caaf contains this separately inspected deletion; same-actor quality pass. Recursive source/helper/Python/exe/archive/magic/embedded/diff audits zero,policy/diffpassdoctor0errors2knownwarnings; no app/test/vendor changes/history rewrite. Action SHA is recorded here separately from closure-evidence metadata; no independent-agent review claimed."
 doc_version: 3
-doc_updated_at: "2026-10-04T02:11:14.466Z"
+doc_updated_at: "2026-10-04T02:12:40.931Z"
 doc_updated_by: "CODER"
 description: "Explicit user cleanup: delete the tracked old code diff log, keep only bounded outcomes and hashes; separate local deletion commit, no history rewrite or app changes."
 sections:
