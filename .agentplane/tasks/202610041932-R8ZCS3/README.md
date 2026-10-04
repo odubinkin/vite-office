@@ -1,10 +1,11 @@
 ---
 id: "202610041932-R8ZCS3"
 title: "Restore native text hint tie ordering"
-status: "DOING"
+result_summary: "Native ranged hints sort by start ascending,end descending,Which descending,including post-merge resort.67newcases,328prior tests unchanged8order-selection corrections. App2073 including5failed-only recoveries,inventory109/scripts5/Chromium99 absent upstream;coverage100%;source audits semantic0 and intentional deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -45,7 +46,9 @@ quality_review:
   findings:
     - "Native CompareSwpHtStart Which descending restored after existing start ascending/end descending priorities; post-merge final resort confirmed by native MergePortions.67literal cases and all existing semantic checks pass,actual graph/copy/cut/undo ownership preserved. Eight prior files change only family/order reads;328others unchanged. Twelve paths and234runtime fields unchanged except one appendix; provenance one appendix,five native hashes."
     - "Six static gates pass after new-test tuple typecheck recovery. Initial absent build/app2068pass5legacy-order failures,100%four coverage metrics. Production unchanged; only five failed cases recovered absent,43others skipped. Inventory109 coverage100,scripts5,Chromium99 first absent pass. Five restored audits pass semantic0;AP3765 forbidden0,doctor0errors/two unchanged warnings,routing pass. Commit hook rejected writer scope before any commit; successful retry uses expected code scope. No test/build repeats from that hook rejection."
-commit: null
+commit:
+  hash: "fe8173a34173ff07a42b63cb1a263c690345e55a"
+  message: "🧩 R8ZCS3 task: record native hint ordering verification"
 comments:
   -
     author: "CODER"
@@ -53,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Start: refined order-only recovery includes edfcol-modifier test, production unchanged; repeat five failed cases only with pending absent suites."
+  -
+    author: "CODER"
+    body: "Verified: native supported hint tie order and post-merge order restored, all declared gates pass; broader runtime parity remains active."
 events:
   -
     type: "status"
@@ -74,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native Which tie order and post-merge resort verified at semantic538b6fa75ecd5588eba8ea3b798169b82eb7c49c. Six static gates pass,absent build/app2068plus5failed cases recovered alone,coverage100%;inventory109coverage100,scripts5,Chromium99. Source audits semantic0;328prior tests unchanged8order corrections,234runtime fields preserved. APforbidden0,doctor0errors/routing pass,exact-SHA same-actor quality pass; broad parity unverified."
+  -
+    type: "status"
+    at: "2026-10-04T19:49:16.278Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native supported hint tie order and post-merge order restored, all declared gates pass; broader runtime parity remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:49:01.794Z"
+doc_updated_at: "2026-10-04T19:49:16.279Z"
 doc_updated_by: "CODER"
 description: "Iteration118: fix native CompareSwpHtStart Which-descending tie ordering and restore final order after adjacent merge. Correct only existing tests that assumed AUTO before INET at equal ranges; add independent literal order/ownership/projection tests. Preserve all statuses/defaults/exceptions and registered I/O deviations. Tests once absent upstream; no AP sources/helpers."
 sections:
@@ -138,6 +151,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's semantic commit through a new authorized follow-up; preserve existing intentional I/O deviations and unrelated task history."
   Findings: "Native start ascending/end descending already matched;118 restores descending Which tie and re-sorts normalized array after end-extending merges.67 literal matrix/merge cases pass, including both input orders/all8flags, actual nodes/copy/move/independent undo and visible overlap. Eight prior files correct only order-dependent AUTO/INET selection/native order;328 other prior tests byte-identical. Missing EDF file discovered by first absent gate, scope/plan refined and approved before correction. Six static gates pass after new-test tuple-spread typecheck recovery, focused formatter/lint/typecheck pass. First absent build pass; app2068pass5legacy ordering failures, coverage100%four metrics. Production unchanged; only five failed cases recovered absent,43 others skipped. Pending inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. No successful suite/build repeats or present profile. Vendor restored before five source audits all pass semantic violations0. Twelve semantic paths,234 runtime fields/statuses/defaults/exceptions unchanged except one bounded appendix,provenance only one appendix, five native hashes; AP3765 ignored-inclusive files forbidden0; doctor0errors/two unchanged warnings,routing pass. Source appendix lookup corrected preservedResponsibilities before tests. Native pointer ties/maps/owner notifications/backlinks/refcounts/listeners, empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join remain unverified; no full core/UI/goal promotion or I/O deviation change."
+extensions:
+  implementation_commit:
+    hash: "538b6fa75ecd5588eba8ea3b798169b82eb7c49c"
+    message: "🧩 R8ZCS3 code: restore native hint tie ordering after merges"
 id_source: "generated"
 ---
 ## Summary
