@@ -1,0 +1,51 @@
+[
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "sha256": "2b0e26d3f0470a88c388e85f01a47b0e0b87f9d6a5a1b53d9c61b1c2cccaaa64",
+    "lines": [
+      "doctor (OK)",
+      "doctor: checking workspace",
+      "doctor: checking branch_pr drift",
+      "doctor: checking runtime source",
+      "doctor: checking project-local blueprints",
+      "doctor: checking prompt graph",
+      "doctor: checking recent task archive",
+      "doctor: checking workflow contract",
+      "{\"ts\":\"2026-10-04T00:33:18.375Z\",\"component\":\"workflow-runtime\",\"event\":\"workflow_doctor_check\",\"details\":{\"ok\":true,\"findings\":0}}",
+      "warning: doctor findings: errors=0 warnings=2 info=2",
+      "- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches",
+      "Likely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery",
+      "Next action: agentplane hooks install (rewrite the shim with the current fallback chain)",
+      "Details: Shim path: .agentplane/bin/agentplane",
+      "  - AGENTPLANE_HOOK_RUNNER fallback: present",
+      "  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present",
+      "  - Runner startup readiness: missing",
+      "- [INFO] State: managed pre-push hook will use installed clean-project fallback checks",
+      "Likely cause: this project does not ship a repository-local scripts/run-pre-push-hook.mjs",
+      "Next action: add project-local package scripts such as format:check or test, or keep the installed fallback (make pre-push behavior explicit when the project needs stricter repository-specific checks)",
+      "Details: Missing repository script: scripts/run-pre-push-hook.mjs",
+      "  - Fallback will consider declared scripts: build, format:check, test",
+      "- [INFO] Project blueprint compatibility: compatible; trusted=0",
+      "- [WARN] DONE task is missing implementation commit hash: 202610031635-2Z3962 (finish with --commit <hash>).",
+      ""
+    ]
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "lines": [
+      "policy routing OK",
+      ""
+    ]
+  },
+  {
+    "command": "git diff --check",
+    "exit": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lines": [
+      ""
+    ]
+  }
+]

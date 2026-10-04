@@ -1,0 +1,11 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-document-key.spec.ts apps/office/e2e/writer-menu-key.spec.ts apps/office/e2e/writer-menu-saved-focus.spec.ts",
+  "exit": 1,
+  "sha256": "f6d0f59634fff5f4aeeff22b61e1676a42b2f97675e91109b5eae45ddbb8e6eb",
+  "summary": [
+    "Running 11 tests using 3 workers",
+    "  7 passed (24.0s)"
+  ],
+  "tail": [],
+  "conclusion": "Initial focused Playwright command omitted npm run build. Config serves existing static dist through preview; all4new Ctrl-F6 cases failed while7old cases passed. Rebuild current app before retry; no trace/archive/source excerpt retained in Agentplane."
+}
