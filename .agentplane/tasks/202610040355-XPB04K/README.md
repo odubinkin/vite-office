@@ -1,10 +1,11 @@
 ---
 id: "202610040355-XPB04K"
 title: "Respect consumed browser keys before global accelerator dispatch"
-status: "DOING"
+result_summary: "Restored local key ownership before global accelerator fallback; full native accelerator hierarchy and parent parity remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,11 +49,16 @@ quality_review:
     - "Owned hook lifecycle/disabled/unmapped/React/native events and actual Chromium selection,replacement,consumed plain typing and unconsumed Bold typing are covered. Fixture corrections were documented; no old test edits or production workaround."
     - "Fullverify0 and vendor-absent1065+109+12+57pass with100%app/inventory coverage,0semantic violations. Exact6semantic paths,274oldtest bytes,218manifest rows/order/default/status/owner/exceptions retained;only1append-only update,no promotions."
     - "Ignored-inclusive raw/decoded Agentplane audit finds0source/helper/Python/diagnostic code frames/archive;5historical Markdown prose diffs separately classified. Evidence contains bounded results/hashes/conclusions only."
-commit: null
+commit:
+  hash: "d1ee0494af449c0fff275fadd746fe4af1597d6b"
+  message: "🎯 XPB04K code: respect locally consumed accelerator keys"
 comments:
   -
     author: "CODER"
     body: "Start: standing parity goal, one global accelerator ownership correction; bounded result/hash evidence only, no upstream tests or source/helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: locally consumed keys return before global lookup/arguments/dispatch;actual Writer SelectAll once,retained fallback;full1065+109+57+2 and vendor-absent1065+109+12+57pass,100%coverage,6paths/274oldtests/218rows preserved,artifact source/helper/Python audit0,same-actor exactsemantic quality. Parent goal remains open."
 events:
   -
     type: "status"
@@ -73,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared checks pass plus same-actor quality on exactsemantic d1ee0494af449c0fff275fadd746fe4af1597d6b; final metadata updated without further code changes."
+  -
+    type: "status"
+    at: "2026-10-04T04:13:06.640Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: locally consumed keys return before global lookup/arguments/dispatch;actual Writer SelectAll once,retained fallback;full1065+109+57+2 and vendor-absent1065+109+12+57pass,100%coverage,6paths/274oldtests/218rows preserved,artifact source/helper/Python audit0,same-actor exactsemantic quality. Parent goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T04:13:03.951Z"
+doc_updated_at: "2026-10-04T04:13:06.641Z"
 doc_updated_by: "CODER"
 description: "Iteration88: restore source local-key-before-global priority; prevent duplicate actual Writer SelectAll and consumed-key command mutation without changing command registries or intentional save/open/recovery behavior."
 sections:
@@ -152,6 +165,10 @@ sections:
     Base8fb521b8ba12b17db4a412efaae13425f927e94e clean main/direct. Previous turn progress: Sidebar ShowPanel iteration87 DONE156c7e47f38d; no blocker audit applies. SfxDockingWindow runs global accelerators only after local Dialog/DockingWindow rejects key. Current browser window hook ignores defaultPrevented after editor SelectAll handled Ctrl/Meta+A; registered SelectAll can execute again. Existing hook scope does not establish full native accelerator ordering,pane F6,modal eligibility,platform mapping or complete browser/native parity; these remain open. No upstream/source/helper scripts in Agentplane.
 
     Implementation adds defaultPrevented guard before normalization/lookup/argument resolution/execution; no command registry or priority reshuffle. Corrected baseline has4expected failures and1unconsumed pass: real Ctrl/Meta+A SelectAll twice and local-consumed Ctrl+B reaches dispatcher. Initial baseline launch referenced nonexistent vitest.config.ts; bounded fallback ran existing apps/office vite config via cwd, recorded baseline-launch.json. Initial new unconsumed Bold test assumed immediate toolbar checked state, but collapsed native attributes affect subsequent typing; corrected assertion inspects rendered strong text after model insertion. Chromium fixtures required nonempty text before SelectAll and matching Ctrl+B before removing a one-shot local handler (separate Control keydown precedes B). These are fixture corrections, no prior test/assertion edits or production workaround. Focused40ownedcases/5files, scoped lint,fresh build and2Chromium widths pass. Fullverify0:1065app/212files,109inventory/36files,57browser,2resource;100%app/inventory coverage,0semantic violations,217sources/896imports/14allowed edges,548JSDoc sources. Vendor-absent tests pass 1065+109+12+57 with vendor restored finally. Final ignored-inclusive raw/decoded artifact audit scans2918Agentplane files:0source/helper/Python/frame/code diff/archive;5historical Markdown prose diffs classified separately. Exact6semantic file hashes and3pinned source hashes unchanged;274prior tests byte-identical;218manifest rows/order with only1append-only evidence/responsibility update and no promotions/exceptions. git diff --check/routing/doctor exit0;2known unrelated doctor warnings. Same-actor EVALUATOR pass on exact semantic d1ee0494af449c0fff275fadd746fe4af1597d6b; quality/20261004-041237804-recovery-context/quality-report.json confirms evaluated_sha. No independent-agent claim. Clean final closure follows; parent/goal remains open. Full native accelerator hierarchy,modal/input eligibility,Sidebar explicit key isolation,pane F6/platform mapping and complete browser/native/parent parity remain open.
+extensions:
+  implementation_commit:
+    hash: "d1ee0494af449c0fff275fadd746fe4af1597d6b"
+    message: "🎯 XPB04K code: respect locally consumed accelerator keys"
 id_source: "generated"
 ---
 ## Summary
