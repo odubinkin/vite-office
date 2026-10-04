@@ -4,7 +4,7 @@
   "resolverInput": {
     "taskId": "202610041514-RRM1E4",
     "title": "Restore native paired paragraph-style reset history and redo",
-    "description": "Iteration108: replace fused paragraph-style/reset history with native ordered SwUndoFormatColl plus SwUndoResetAttr in one Sfx list action. Separate initial exact full-node cleanup from default non-exact reset redo, including partial AUTOFMT/internet removal and expanded redo selection; native sorted style undo. Current registered single-PaM profile only. Preserve registered save/open/recovery deviations and all inventory status/default/exception fields. Strict14semanticpaths/four bounded prior test files;318prior files/314unchanged. All product tests once without upstream, failed-gate recovery only; no native execution/compilation/copies/AP helpers. Parent remains active.",
+    "description": "Iteration108: replace fused paragraph-style/reset history with native ordered SwUndoFormatColl plus SwUndoResetAttr in one Sfx list action. Separate initial exact full-node cleanup from default non-exact reset redo, including partial AUTOFMT/internet removal and expanded redo selection; native sorted style undo. Current registered single-PaM profile only. Preserve registered save/open/recovery deviations and all inventory status/default/exception fields. Strict15semanticpaths/five bounded prior test files;318prior files/313unchanged. All product tests once without upstream, failed-gate recovery only; no native execution/compilation/copies/AP helpers. Parent remains active.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "57f819b2439d729710e5d539b5f809ca45db76b61e3417aeba629c7f8c85a6a8"
+    "value": "ff9ed185103f845a12f1437f32ccef5a84605c30bc224d9c485c2bb7e62914d2"
   }
 }

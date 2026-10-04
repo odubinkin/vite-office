@@ -1,0 +1,10 @@
+{
+  "command": "npm run test:static",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 1103,
+  "outputSha256": "6326672959e21dd464865e6e1b45dabd18964a4a39fa2fb4099531031a8f0918",
+  "summary": [
+    "✓ built in 462ms"
+  ]
+}
