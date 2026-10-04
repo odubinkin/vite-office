@@ -1,10 +1,11 @@
 ---
 id: "202610040924-V8PQRM"
 title: "Preserve native signed-short manual first-line layout boundary"
-status: "DOING"
+result_summary: "Restored native signed-short manual first-line layout without narrowing authored items or automatic offsets; registered deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Native short output assignment and long manual placement match signed16 unnumbered manual resolver; raw pooled/ruler/dialog/filter values remain complete and automatic offsets long. Independent literals, ownership/no-op, full codec/ODT, clone destination inheritance, actual history and first/follow CSS cover core contract."
     - "First failed app fixture corrected without production change; corrected failed app/coverage gate1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Inventory/scripts/browser once; no passing full suite repeated. Original failed npm run test result retained, not claimed successful."
     - "Scope5/all302oldtests byte-identical/mappings221oneappend-onlyrow/native2hashes intact/AP forbidden0/source/routing/doctor pass. Four actual screenshots inspected; mobile horizontal clipping and script/language/bidi/list-mask/full layout obligations remain unverified."
-commit: null
+commit:
+  hash: "cfaf8093fac20fe6156befca2bcda4df72f5fbec"
+  message: "🧩 V8PQRM task: record exact-SHA quality and final verification"
 comments:
   -
     author: "CODER"
     body: "Start: restore the native signed16 unnumbered manual first-line layout boundary while retaining raw authorship, automatic long values and existing list behavior. Tests only once absent; no upstream source/helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: native signed16 unnumbered manual first-line layout with full raw storage/authoring and automatic long offsets preserved. Corrected failed app gate1276/100%, inventory109/100%, scripts5 and85Chromium absent; source/scope/AP audits and exact-SHA same-actor EVALUATOR pass. Parent goal remains active."
 events:
   -
     type: "status"
@@ -72,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final exact-SHA083121f82878baa271421ef54549274afcb611ce same-actor EVALUATOR PASS. Scope/native/AP hashes rechecked without tests; final1276/100%,109/100%,5scripts,85Chromium absent. Initial app fixture failure retained; no passing full suite repeated. Parent DOING/goal active."
+  -
+    type: "status"
+    at: "2026-10-04T09:42:00.595Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native signed16 unnumbered manual first-line layout with full raw storage/authoring and automatic long offsets preserved. Corrected failed app gate1276/100%, inventory109/100%, scripts5 and85Chromium absent; source/scope/AP audits and exact-SHA same-actor EVALUATOR pass. Parent goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T09:41:58.087Z"
+doc_updated_at: "2026-10-04T09:42:00.596Z"
 doc_updated_by: "CODER"
 description: "Iteration100: correct existing unnumbered manual layout narrowing from native GetFirstLineOfsWithNum, preserving authored items and ruler/dialog/filter/history values. No source/helper artifacts, upstream execution or registered I/O/recovery changes."
 sections:
@@ -138,6 +151,10 @@ sections:
   Findings: |-
     Native source-only inspection confirms active-script/font/language/bidi selection is a separate unresolved layout obligation; no naive CJK heuristic added. Also found persisted listGeometryWins boolean versus native independent list-indent masks; deferred separate source-owned refactor. Neither obligation is certified by this manual integer-boundary task.
     Initial verification: formatting of one new E2E callback required a second Prettier write; only the failed format gate repeated. The first full upstream-absent application run passed1275 and failed one new raw0/direct fixture expectation: the existing typed writer operation correctly suppresses a default-equal no-op rather than creating a direct item. Corrected that expectation; production code stayed identical. Since Vitest removes coverage on failure, the failed application/coverage gate repeats absent with reportOnFailure enabled; inventory/scripts/browser were not reached in the initial pipeline and execute once. Original failed result/hash retained; no claim that the first npm run test exited successfully.
+extensions:
+  implementation_commit:
+    hash: "083121f82878baa271421ef54549274afcb611ce"
+    message: "🛠️ V8PQRM code: preserve native manual first-line signed-short layout"
 id_source: "generated"
 ---
 ## Summary
