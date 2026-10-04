@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- vitest run --root apps/office src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+  "exitCode": 1,
+  "outputBytes": 4488,
+  "outputSha256": "165ed2768dc39dbe497cc962153aac4dcf98f59a8d695455f7762f4402c69059",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  2 failed (2)"
+  ]
+}

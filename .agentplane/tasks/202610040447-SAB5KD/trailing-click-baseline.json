@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-ruler-tracking.spec.ts",
+  "exitCode": 1,
+  "outputBytes": 6069,
+  "outputSha256": "444edc17e28644735831f32fd12138fcb1e2aa253d881f3c701e5bda0ae8c2c6",
+  "summary": []
+}

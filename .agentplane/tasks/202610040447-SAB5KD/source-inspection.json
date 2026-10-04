@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only source inspection;hashes/conclusions only,no native compilation/execution;tests never invoke/read upstream.",
+  "sources": [
+    {
+      "path": "svtools/source/control/ruler.cxx",
+      "bytes": 85839,
+      "sha256": "3d311b4b4fdfa0c05651bb7aa169c2b2a39def6023059b9dd1ffdb29f80bd413"
+    },
+    {
+      "path": "svx/source/dialog/svxruler.cxx",
+      "bytes": 132232,
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vcl/source/window/winproc.cxx",
+      "bytes": 111433,
+      "sha256": "2dd8b79736a6fc7f4f32f260ef71ee44b87a5a81672e606cacf5a11899dff6c2"
+    },
+    {
+      "path": "vcl/source/window/window2.cxx",
+      "bytes": 63572,
+      "sha256": "69d5a219053a01f535c2f1afa1fe99ddfd181abb1b94ffaefa4ed9dd945f2975"
+    },
+    {
+      "path": "vcl/source/window/window.cxx",
+      "bytes": 148631,
+      "sha256": "2b5baaa2d77411ced7a3b25d0792d1123b2b6ae47d6be8d7ef62f128e628e8ba"
+    }
+  ],
+  "conclusions": [
+    "Existing ruler gestures now follow inspected Ruler left-single-click/nontracking admission and VCL StartTracking replacement/key-input priority: one ruler owner and initiating pointer, Escape cancellation, Return acceptance at the last painted coordinate, all other tracking keys consumed before widget/document dispatch. Cancelled gestures do not commit; accepted termination releases listeners and ownership before one application callback. Browser handle/ruler teardown and window blur discard transient DOM callbacks without claiming identical native disposal flags. Existing coordinate conversion, snapping, ticks, guides, page/paragraph/tab callbacks and model undo remain owned by their previous layers. Owned boundary/handle/actual Writer tests and rebuilt desktop/mobile cases cover cancellation, stale release, accepted history and later input only. Complete native hit testing, double-click dialogs, modifier snapping, deletion, mouse capture, platform/LOK/input and full ruler/Writer/native parity remain unverified. Intentional save/open/recovery exceptions are preserved."
+  ]
+}

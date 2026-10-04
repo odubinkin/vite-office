@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/use-ruler-tracking.ts apps/office/src/sw/browser/presentation/WriterRulers.tsx apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx apps/office/e2e/writer-ruler-tracking.spec.ts --max-warnings 0",
+  "exitCode": 1,
+  "outputBytes": 670,
+  "outputSha256": "e712c95e1ac52cca6fde3cb12ceb89f0bdb2b5994aace665e030dbbc6569c58f",
+  "summary": []
+}

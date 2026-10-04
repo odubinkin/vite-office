@@ -1,0 +1,80 @@
+{
+  "base": "958a7ea83009dd6e2f827f7a7fb5731f1996c8bc",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+    "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+    "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+    "apps/office/e2e/writer-ruler-tracking.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+      "bytes": 4579,
+      "sha256": "cf33d042b59c4862bb0bb5457b84e43989d65a921100e14acd0f7d689856f797"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "bytes": 19055,
+      "sha256": "d56fdcf189bdd48b5058d84008b8131354bf70ad93e41584c522a8e9d5bb7753"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+      "bytes": 7376,
+      "sha256": "1c5da7de354388ce5595afc1e900a3a60e54341ca0bbc5e7d5965664265bf7a6"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+      "bytes": 6014,
+      "sha256": "0a1e03309a5942656a60ac435257b6d2b3f23559b42e80c17f0e952d451e7df4"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+      "bytes": 5710,
+      "sha256": "9c3b281c4aab2d6a88e780375d35161f5f1188a1584a4e43e0300654ff998f2b"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-tracking.spec.ts",
+      "bytes": 4013,
+      "sha256": "b186d8693d7638954475ed950195b3e5ed834130ab37cbe7e0a6409aa01cd8c1"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 729257,
+      "sha256": "0aaa983193c951d90efe697b6aa7cc7e46d6e76ffd324314c25ccbfd48565f52"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 711538,
+      "sha256": "7def4c5fbe4fbc2471818ed0dad7064f062a79a2793368b5c68d42878519b0e0"
+    }
+  ],
+  "priorTestFiles": 280,
+  "priorTestFilesByteIdentical": 280,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 219,
+      "currentRows": 220,
+      "existingRowsPreserved": 219,
+      "appendOnlyUpdatedRows": 1,
+      "newLocalOnlyUnverifiedRows": 1,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 219,
+      "currentRows": 220,
+      "existingRowsPreserved": 219,
+      "appendOnlyUpdatedRows": 1,
+      "newLocalOnlyUnverifiedRows": 1,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}
