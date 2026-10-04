@@ -333,12 +333,10 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(item.equals(new SfxInt16Item(RES_TXTATR_INETFMT, 1))).toBe(false);
     expect(item.equals(new SwFormatINetFormat({ url: "different" }))).toBe(false);
     expect(restoreSwFormatINetFormat(encodeSfxPoolItem(item)).equals(item)).toBe(true);
-    expect(
-      throwing(
-        /** Rejects an empty destination. @returns Invalid item. */ () =>
-          new SwFormatINetFormat({ url: "" }),
-      ),
-    ).toThrow("must not be empty");
+    const empty = new SwFormatINetFormat({ url: "" });
+    expect(empty.GetValue()).toBe("");
+    expect(empty.Clone().equals(empty)).toBe(true);
+    expect(normalizeWriterHyperlink(empty.GetHyperlink())).toBeUndefined();
     for (const snapshot of [
       { value: "{}", which: 52 },
       { value: {}, which: RES_TXTATR_INETFMT },

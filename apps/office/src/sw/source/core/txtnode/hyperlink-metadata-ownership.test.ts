@@ -58,24 +58,21 @@ describe("owned hyperlink item metadata", /** Registers explicit value ownership
       },
     );
   it.each(["name", "targetFrame", "styleName", "visitedStyleName"] as const)(
-    "preserves an explicit empty %s as distinct from omitted metadata",
-    /** Checks current optional-value contracts while copying strings. @param field - Optional metadata field. @returns Nothing. */ (
+    "compares an explicit empty %s as the native omitted string",
+    /** Checks native empty-string equality and canonical projection while copying strings. @param field - Optional metadata field. @returns Nothing. */ (
       field,
     ) => {
       const caller: MutableHyperlink = { url: "https://example.test/empty", [field]: "" },
         item = new SwFormatINetFormat(caller);
       caller[field] = "Later";
-      expect(item.GetHyperlink()).toEqual({ url: "https://example.test/empty", [field]: "" });
-      expect(item.equals(new SwFormatINetFormat({ url: "https://example.test/empty" }))).toBe(
-        false,
-      );
+      expect(item.GetHyperlink()).toEqual({ url: "https://example.test/empty" });
+      expect(item.equals(new SwFormatINetFormat({ url: "https://example.test/empty" }))).toBe(true);
       expect(item.Clone().GetHyperlink()).toEqual({
         url: "https://example.test/empty",
-        [field]: "",
       });
     },
   );
-  it("creates later items from new caller values without changing an earlier item", /** Checks separate construction snapshots and plain JSON property order. @returns Nothing. */ () => {
+  it("creates later items from new caller values without changing an earlier item", /** Checks separate construction snapshots and canonical native string projection order. @returns Nothing. */ () => {
     const caller = {
         visitedStyleName: "Visited",
         name: "First",
@@ -85,7 +82,7 @@ describe("owned hyperlink item metadata", /** Registers explicit value ownership
       },
       first = new SwFormatINetFormat(caller);
     expect(first.QueryValue()).toBe(
-      '{"visitedStyleName":"Visited","name":"First","url":"https://example.test/first","targetFrame":"_self","styleName":"Normal"}',
+      '{"url":"https://example.test/first","name":"First","targetFrame":"_self","styleName":"Normal","visitedStyleName":"Visited"}',
     );
     caller.url = "https://example.test/second";
     caller.name = "Second";
@@ -97,14 +94,14 @@ describe("owned hyperlink item metadata", /** Registers explicit value ownership
     expect(first.Clone().GetValue()).toBe("https://example.test/first");
     expect(second.Clone().GetValue()).toBe("https://example.test/second");
   });
-  it("rejects an empty URL without freezing or changing caller metadata", /** Checks retained empty-URL guard and caller mutability. @returns Nothing. */ () => {
+  it("owns an empty URL without freezing or changing caller metadata", /** Checks native empty URL values and caller mutability. @returns Nothing. */ () => {
     const caller = { url: "", name: "Unchanged" };
-    expect(
-      /** Attempts an invalid owned value. @returns No item. */ () =>
-        new SwFormatINetFormat(caller),
-    ).toThrow("URL must not be empty");
+    const empty = new SwFormatINetFormat(caller);
+    expect(empty.GetValue()).toBe("");
+    expect(empty.GetName()).toBe("Unchanged");
     expect(caller).toEqual({ url: "", name: "Unchanged" });
     caller.url = "https://example.test/valid";
+    expect(empty.GetValue()).toBe("");
     const item = new SwFormatINetFormat(caller);
     expect(Object.isFrozen(caller)).toBe(false);
     expect(item.GetValue()).toBe("https://example.test/valid");

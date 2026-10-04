@@ -50,7 +50,11 @@ export function equalWriterHyperlinks(
 
 /** Writer pool item backing one `RES_TXTATR_INETFMT` range. */
 export class SwFormatINetFormat extends SfxPoolItem {
-  private readonly hyperlink: WriterHyperlink;
+  private readonly msURL: string;
+  private readonly msTargetFrame: string;
+  private readonly msINetFormatName: string;
+  private readonly msVisitedFormatName: string;
+  private msHyperlinkName: string;
   /** Internal friend-access backlink assigned by the concrete internet attribute. */
   public mpTextAttr: SwTextINetFormat | undefined;
 
@@ -59,46 +63,92 @@ export class SwFormatINetFormat extends SfxPoolItem {
     return this.mpTextAttr;
   }
 
-  /** Creates one hyperlink value. @param hyperlink - Canonical hyperlink metadata. @returns Nothing. */
-  public constructor(hyperlink: WriterHyperlink) {
+  /** Creates native zero/copy values or ingests the existing portable metadata boundary. @param hyperlink - Copied native item or projected strings. @returns Nothing. */
+  public constructor(hyperlink: WriterHyperlink | SwFormatINetFormat = { url: "" }) {
     super(RES_TXTATR_INETFMT);
     this.setNonShareable();
-    const { url, name, targetFrame, styleName, visitedStyleName } = hyperlink;
-    if (url.length === 0) throw new Error("Writer hyperlink URL must not be empty.");
-    this.hyperlink = {
-      ...hyperlink,
-      url,
-      ...(name !== undefined ? { name } : {}),
-      ...(targetFrame !== undefined ? { targetFrame } : {}),
-      ...(styleName !== undefined ? { styleName } : {}),
-      ...(visitedStyleName !== undefined ? { visitedStyleName } : {}),
-    };
+    if (hyperlink instanceof SwFormatINetFormat) {
+      this.msURL = hyperlink.msURL;
+      this.msTargetFrame = hyperlink.msTargetFrame;
+      this.msINetFormatName = hyperlink.msINetFormatName;
+      this.msVisitedFormatName = hyperlink.msVisitedFormatName;
+      this.msHyperlinkName = hyperlink.msHyperlinkName;
+    } else {
+      this.msURL = hyperlink.url;
+      this.msTargetFrame = hyperlink.targetFrame ?? "";
+      this.msINetFormatName = hyperlink.styleName ?? "";
+      this.msVisitedFormatName = hyperlink.visitedStyleName ?? "";
+      this.msHyperlinkName = hyperlink.name ?? "";
+    }
+  }
+
+  /** Creates the native type-info default item. @returns Empty non-shareable item. */
+  public static CreateDefault(): SwFormatINetFormat {
+    return new SwFormatINetFormat();
+  }
+
+  /** Returns the native link name. @returns Owned string. */
+  public GetName(): string {
+    return this.msHyperlinkName;
+  }
+
+  /** Sets the native link name without changing the text-attribute backlink. @param name - New owned string. @returns Nothing. */
+  public SetName(name: string): void {
+    this.msHyperlinkName = name;
+  }
+
+  /** Returns the native target frame. @returns Owned string. */
+  public GetTargetFrame(): string {
+    return this.msTargetFrame;
+  }
+
+  /** Returns the normal character-format name. @returns Owned string. */
+  public GetINetFormat(): string {
+    return this.msINetFormatName;
+  }
+
+  /** Returns the visited character-format name. @returns Owned string. */
+  public GetVisitedFormat(): string {
+    return this.msVisitedFormatName;
   }
 
   /** Returns independent hyperlink metadata. @returns Hyperlink value. */
   public GetHyperlink(): WriterHyperlink {
-    return { ...this.hyperlink };
+    return {
+      url: this.msURL,
+      ...(this.msHyperlinkName.length > 0 ? { name: this.msHyperlinkName } : {}),
+      ...(this.msTargetFrame.length > 0 ? { targetFrame: this.msTargetFrame } : {}),
+      ...(this.msINetFormatName.length > 0 ? { styleName: this.msINetFormatName } : {}),
+      ...(this.msVisitedFormatName.length > 0
+        ? { visitedStyleName: this.msVisitedFormatName }
+        : {}),
+    };
   }
 
   /** Returns the stored destination. @returns URL string. */
   public GetValue(): string {
-    return this.hyperlink.url;
+    return this.msURL;
   }
 
   /** Creates an independent hyperlink item. @returns Cloned item. */
   public Clone(): SwFormatINetFormat {
-    return new SwFormatINetFormat(this.GetHyperlink());
+    return new SwFormatINetFormat(this);
   }
 
   /** Compares all supported hyperlink metadata. @param other - Candidate pool item. @returns Whether equal. */
   public equals(other: SfxPoolItem): boolean {
     return (
-      other instanceof SwFormatINetFormat && equalWriterHyperlinks(other.hyperlink, this.hyperlink)
+      other instanceof SwFormatINetFormat &&
+      other.msURL === this.msURL &&
+      other.msHyperlinkName === this.msHyperlinkName &&
+      other.msTargetFrame === this.msTargetFrame &&
+      other.msINetFormatName === this.msINetFormatName &&
+      other.msVisitedFormatName === this.msVisitedFormatName
     );
   }
 
   /** Exposes the bounded hyperlink value for filter/persistence codecs. @returns JSON value. */
   public QueryValue(): string {
-    return JSON.stringify(this.hyperlink);
+    return JSON.stringify(this.GetHyperlink());
   }
 }

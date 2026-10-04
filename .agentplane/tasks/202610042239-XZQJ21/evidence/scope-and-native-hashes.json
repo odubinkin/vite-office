@@ -1,0 +1,56 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
+    "apps/office/src/sw/source/core/txtnode/internet-item-defaults.test.ts",
+    "apps/office/src/sw/source/core/txtnode/hyperlink-metadata-ownership.test.ts",
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 349,
+  "priorByteIdentical": 347,
+  "priorNativeCorrections": [
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "apps/office/src/sw/source/core/txtnode/hyperlink-metadata-ownership.test.ts"
+  ],
+  "newAppCases": 24,
+  "existingRuntimeRows": 237,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "oneResponsibilityAppendixOnly": true,
+  "staticChecks": 6,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 2673,
+    "appFiles": 267,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appCoverage100": true,
+  "inventoryCoverage100": true,
+  "failedCaseReplayAttempts": 0,
+  "noPassingSuiteOrBuildReplay": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "semanticViolations": 0,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/fmtinfmt.hxx",
+      "sha256": "85d4ad5ce3b8252f913c93301d11a9f2039ff5eb3505ac0c270ce3d020bb3bfb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx",
+      "sha256": "f21ad8f8f8615d648f068c27a52f8457828c180843f9917a4ba42c95dd203de3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
+      "sha256": "ffc4aeb0518fa5d885ab9a2aa2cd99a21b1613ceedcc27c581407d8f68ca96b3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/poolfmt.hxx",
+      "sha256": "35d7ec14c5e8cbbbd5bd82466d3b4e5cfa8a8a17768c1423d999c963abe72fbe"
+    }
+  ],
+  "nativeReview": "Iteration125 replaces canonical hyperlink DTO storage with five native owned string fields and restores zero default/copy construction,CreateDefault and existing-string getters/name setter. Core empty URLs are valid;missing and explicitly empty optional strings both store native empty strings and compare equally. Clone starts without an item-to-text backlink. Existing portable GetHyperlink/JSON projection emits only nonempty optional fields in deterministic value order;caller key order and optional-presence distinctions are not canonical item semantics. UI/filter normalization still rejects blank active links. This supersedes iteration121 claims retaining core empty-URL rejection/empty optional inequality/caller JSON ordering. Native styled URL/target constructor,pool style IDs/locale mapping,UNO members/macros/broadcaster/client/destruction and broader model/UI parity remain unverified. All existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;no module or goal promotion."
+}
