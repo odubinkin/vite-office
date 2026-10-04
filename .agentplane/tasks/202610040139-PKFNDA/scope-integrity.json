@@ -1,0 +1,52 @@
+{
+  "base": "3465e116767e",
+  "priorTestsByteIdentical": 262,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 216,
+      "currentRows": 217,
+      "changedPriorEvidenceOnly": 1,
+      "addedBrowserRows": 1,
+      "priorOrderPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 216,
+      "currentRows": 217,
+      "changedPriorEvidenceOnly": 1,
+      "addedBrowserRows": 1,
+      "priorOrderPreserved": true
+    }
+  ],
+  "semantic": [
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+      "sha256": "852285349c512a6c8fb183b3fbcee87b67db8e48e21bb85c2350ec30ae0dd451"
+    },
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx",
+      "sha256": "37624d5ae970e932b844c2fd439db45d7f9902f2ecdea743b6b49235cbfbe235"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
+      "sha256": "45ac63d5b8f54f7a3eed0d68b3646ab24cba5adb2d173a849135ad11f9dbeda1"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+      "sha256": "728de346a1ae21bdfb25d0ad70ccc46ea8c7964bc391839675a861e08ce34155"
+    },
+    {
+      "path": "apps/office/e2e/writer-sidebar-panel.spec.ts",
+      "sha256": "101e853d2320de4ed60709e5fe1c5dec0eea79d9f48c1c9ec21c57d2cbd2861e"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "ca8c0a908cfa5d11cadbee8b5eb86e3820a493f34ca176fa8f06a301b8716bfc"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "be0230088337bb4c450611aed08731334d6266b44cd34092d593c6a12b5c8b3e"
+    }
+  ]
+}

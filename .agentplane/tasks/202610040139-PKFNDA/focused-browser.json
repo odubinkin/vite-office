@@ -1,0 +1,13 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-sidebar-panel.spec.ts apps/office/e2e/writer-sidebar-deck.spec.ts apps/office/e2e/writer-responsive-sidebar.spec.ts apps/office/e2e/writer-document-key.spec.ts",
+  "exit": 1,
+  "sha256": "79713c9d783cde3bf68bb4829429de110ceb3bf83802effbb59e57492cd2fbbb",
+  "bytes": 5891,
+  "summary": [
+    "    Error: expect(locator).toBeVisible() failed",
+    "    Error: strict mode violation: getByRole('button', { name: 'More Options' }) resolved to 2 elements:",
+    "    test-results/e2e/writer-responsive-sidebar--faa72-tions-opens-the-full-dialog/test-failed-1.png",
+    "  1 failed",
+    "  11 passed (3.8s)"
+  ]
+}

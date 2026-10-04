@@ -1,0 +1,31 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only source inspection; no copied bodies, native builds or execution",
+  "sources": [
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/PanelTitleBar.cxx",
+      "sha256": "75cad9ec0d25ca80bc5b68e2ab170a8325ca3817033ee43a1b866f284084e666"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/Panel.cxx",
+      "sha256": "f2be3e14171379340f33ef355babe80e86a6aa195b1ee26f6839e927e51fea52"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/FocusManager.cxx",
+      "sha256": "c6e98a7801482c112f661b8ebe856308e93ca5befebdb1c4f55da3cc132ea0b5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/ResourceManager.cxx",
+      "sha256": "a2edfef9136927508a4b751b4fef9f540c85b0eece71ff2b2a39b661da5e0572"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/uiconfig/ui/panel.ui",
+      "sha256": "eab7df7caef41cff39f944f526d5d259da1d8251a627f8cdab5e22468f987989"
+    },
+    {
+      "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+      "sha256": "51961238bcf25e13904ab7aa1cd78dc709982a5f598b587e76ebfc6c2488b96e"
+    }
+  ],
+  "conclusion": "Paragraph panel header follows inspected Panel::SetExpanded/PanelTitleBar and FocusManager Return: initial expanded state, collapse retains mounted content, More Options remains available and dispatches existing ParagraphDialog, and Return expands before first eligible content focus. Owned lifecycle/bindings/dialog/keyboard and rebuilt desktop/mobile checks cover this bounded contract. Complete panel/deck focus graph, F6, Help/settings/other panels, context/profile expansion persistence and native sizing remain open."
+}
