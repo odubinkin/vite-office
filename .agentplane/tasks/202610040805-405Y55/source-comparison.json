@@ -1,0 +1,57 @@
+{
+  "pinnedCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+      "sha256": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/edit/edatmisc.cxx",
+      "sha256": "348ab1f78566c22bc12969eac7261389273653c40533ca7d87bfb3de45f8daeb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+      "sha256": "18888b58d07725197cb70b069c2e11e90c4aaa8cf8c43f288017d3cefdd65786"
+    }
+  ],
+  "sourceRefs": [
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "marker": "SvxRuler::ApplyIndents"
+    },
+    {
+      "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+      "marker": "SvxLRSpaceItem::SetTextFirstLineOffset"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+      "marker": "SwView::ExecTabWin"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/edit/edatmisc.cxx",
+      "marker": "SwEditShell::SetAttrItem"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+      "marker": "SwUndoAttr::SwUndoAttr"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+      "marker": "SwUndoAttr::UndoImpl"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+      "marker": "SwUndoAttr::RedoImpl"
+    }
+  ],
+  "nativeExecution": false,
+  "conclusion": "Native ruler item updates retain automatic mode, Writer transfers complete typed margin items, and generic attribute history retains item sets and rollback state. Local numeric-only ruler history drops the flag and direct inheritance; reuse the existing typed-item path and capture node-direct state only."
+}

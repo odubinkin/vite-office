@@ -1,0 +1,84 @@
+{
+  "base": "b1c20432023d34f125befd1f50288f01bf7e80b1",
+  "semanticPaths": [
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+    "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "bytes": 34231,
+      "sha256": "c0dea13fd845be0918fc13a96beb1235adffbdaeea1d9cd3f7b934b9d5d95f74"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+      "bytes": 1607,
+      "sha256": "f235a10b5afc86abf2ead8be55e1928785b2b5f4878c46d04a00ad747963547f"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+      "bytes": 46478,
+      "sha256": "e710c3b8159140eab8ec08d4d8dd816cc62783cfc98ffac53501aff666346b06"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+      "bytes": 41988,
+      "sha256": "1f952334e576b157fa4513a026bb5a93cc39e93e2460a3488d1abd7cf48f2dee"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+      "bytes": 11881,
+      "sha256": "b8286262933f9736f23535db61519af6dd4098e03e699cbfad7f762a5e6bb8aa"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+      "bytes": 6541,
+      "sha256": "ac778d6a79f342b9de88c8e003851c4e756590e315eb399c2b1131c66f4e00cb"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 765607,
+      "sha256": "b123f49b75a5c871dad3ee5d66945bbbd3208e188b6778243ca149e794b5b7cd"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 744739,
+      "sha256": "3aa69717bbe25ee2c179d76ee1e7a93d7df3d6e864a9172e5f2da16037749865"
+    }
+  ],
+  "priorTestFiles": 298,
+  "priorTestFilesByteIdentical": 297,
+  "exactPriorPayloadAssertionMigrations": 1,
+  "priorModifiedTestFiles": 1,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "exactUpdatedRows": 3,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true,
+      "obsoleteRulerSymbolsRemoved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "exactUpdatedRows": 3,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true,
+      "obsoleteRulerSymbolsRemoved": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}
