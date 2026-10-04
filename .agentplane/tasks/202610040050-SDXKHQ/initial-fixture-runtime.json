@@ -1,0 +1,21 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx",
+  "exit": 1,
+  "sha256": "f52f24e5e60aa66656ff660433d9ecca1b5498aa76166dbc19e955e4f97a4090",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  8 failed | 3 passed (11)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯"
+  ],
+  "errors": [
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > Home moves an active root popup to its boundary",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > Home moves an active child popup to its boundary",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > Home reuses its active boundary popup and later selection",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > End moves an active root popup to its boundary",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > End moves an active child popup to its boundary",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > End reuses its active boundary popup and later selection",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > ArrowLeft retains boundary wrap and active-popup preselection",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > ArrowRight retains boundary wrap and active-popup preselection",
+    "Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Read-only complete relevant native root-key/highlight/popup creation/reuse/cleanup functions inspected, no copying/compilation/execution/helper artifacts.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.cxx",
+      "sha256": "fd2028b1bc48249fab735c0df7809abb91061031dd952885981183f5aa757375"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.hxx",
+      "sha256": "8cc86f855c8390a6bb50958266a873850d8a414e13819c80118e19cb7c58f26b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+      "sha256": "dacf0d685add44c79f4a62bef9810b77fb36f42ca5e4af34d1e200069bf0e3e2"
+    }
+  ],
+  "conclusions": [
+    "MenuBarWindow HandleKeyEvent groups Left/Right/Home/End and selects eligible root via ChangeHighlightItem(n,true).",
+    "ChangeHighlightItem kills former active popup on root change and creates new popup only under active auto-popup; keyboard selection requests first item.",
+    "ImplCreatePopup reuses same active popup without a new first-item request. Unopened activation leaves auto-popup false.",
+    "Native popup Home/End remain local first/last movement; this leaf changes only root trigger navigation, with source-owned root focus/dispatch contracts retained.",
+    "F6 wider pane/Sidebar focus composition, platform/global flags, hidden/disabled traversal, Alt/mnemonics and full native menus remain open."
+  ]
+}

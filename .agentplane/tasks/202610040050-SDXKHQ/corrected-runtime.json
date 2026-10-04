@@ -1,0 +1,10 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx src/framework/browser/presentation/CommandMenuBar-saved-focus.test.tsx src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+  "exit": 0,
+  "sha256": "d0b4289aab7667b4bfa97a636b258e56a3f1ed3c426d761632be3c7cc6beacc1",
+  "summary": [
+    " Test Files  5 passed (5)",
+    "      Tests  70 passed (70)"
+  ],
+  "errors": []
+}

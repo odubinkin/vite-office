@@ -1,0 +1,18 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx",
+  "exit": 1,
+  "sha256": "1451b0fd2152396b76ce4a62d950254dd1512dd8030325317301803c40bfb2e6",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  4 failed | 7 passed (11)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯"
+  ],
+  "errors": [
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > Home moves an active root popup to its boundary",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > End moves an active root popup to its boundary",
+    "Error: expect(element).not.toBeInTheDocument()",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > Home moves an active child popup to its boundary",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx > menubar root boundary navigation > End moves an active child popup to its boundary",
+    "AssertionError: expected [ <div …(6)>…(2)</div>, …(1) ] to have a length of 1 but got 2"
+  ]
+}
