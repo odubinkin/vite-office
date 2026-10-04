@@ -4,7 +4,7 @@ title: "Restore native empty hyperlink item values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,26 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T22:49:40.417Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only exact-head review of 1fd61a1d0f8e71136ac83895a071b36debc6ea2f passes native empty/default/copy/string equality scope;full upstream parity remains unverified."
+  evaluated_sha: "1fd61a1d0f8e71136ac83895a071b36debc6ea2f"
+  blueprint_digest: "c7b8816c9db6f651d4e6ccd29d0391c2a48fc1442c5d597ae28b54396b63dc5d"
+  evidence_refs:
+    - ".agentplane/tasks/202610042239-XZQJ21/README.md"
+    - ".agentplane/tasks/202610042239-XZQJ21/quality/20261004-224940417-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610042239-XZQJ21/quality/20261004-224940417-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610042239-XZQJ21/quality/20261004-224940417-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610042239-XZQJ21/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610042239-XZQJ21/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610042239-XZQJ21/evidence/static-gates.json"
+    - ".agentplane/tasks/202610042239-XZQJ21/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610042239-XZQJ21/evidence/restored-source-audits.json"
+  findings:
+    - "Six committed paths match reviewed checkout.24new literal cases;349prior files accounted with347byte-identical/two declared native corrections. Canonical strings are separately owned,empty strings compare identically,zero/default construction accepts empty URL,copy/Clone clears backlink and name mutation does not alias retained copies."
+    - "All six static gates,five absent suites and five restored source audits pass first attempts. One build,app2673,inventory109,scripts5,Chromium99;app/inventory all four coverage metrics100%;no failed cases or replays.237runtime states/defaults/exceptions preserved,one responsibility appendix;four pinned hashes,AP3833files/0forbidden,doctor0errors/two unchanged warnings,routingpass,cleanhead."
 commit: null
 comments:
   -
