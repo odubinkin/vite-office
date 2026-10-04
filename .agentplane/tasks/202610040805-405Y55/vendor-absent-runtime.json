@@ -1,0 +1,10 @@
+{
+  "command": "Full app cases passed on coverage-only failed gate, then targeted missing-unit coverage completion, then first inventory coverage invocation",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "fullAppEvidence": "vendor-absent-runtime-coverage-initial.json",
+  "coverageCompletion": "coverage-completion.json",
+  "inventoryEvidence": "vendor-absent-inventory.json",
+  "appCasesPassed": 1210,
+  "inventoryCasesPassed": 109
+}

@@ -1,0 +1,918 @@
+{
+  "method": "Exact missing-unit union from full passing-case summary and HTML locations plus targeted V8 map; partial-run thresholds do not satisfy final coverage independently.",
+  "fullAppCasesPassed": 1210,
+  "targetCasesPassed": 3,
+  "targetCasesSkipped": 12,
+  "productionSourceIdentitiesUnchanged": 217,
+  "sourceIdentities": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/inc/svxenum.ts",
+      "sha256": "d64b35578c9b2a186a9910710ce6a8c69300a4127378a40bc52e32e61082f453"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/source/items/frmitems.ts",
+      "sha256": "e3a49a05a4a35f0636235243f079528145077cf8ada9648c066d1b01434b9404"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/source/items/numitem.ts",
+      "sha256": "bdf67aafc228ce8be4e3730804cf961e341fd80fdf6e9f9e35c9c9e166876806"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/source/items/paraitem.ts",
+      "sha256": "fd3b8da148154c8c54b9f26252b18b47b9aa6319c0c154393219e3418d9e2d55"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/source/items/textitem.ts",
+      "sha256": "ab4a4370658ae5bbde1c6cb6fb727c0320b154714755da2cf860d55657f03ee3"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/accelerators/keymapping.ts",
+      "sha256": "fc5922de33b75fdfc7dddd8c81f83a407733f13c05b15224256d866787a693c6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/app/SuiteCard.tsx",
+      "sha256": "7e467634684a566982e75fb55c29f782a0b762e1e564d18367f75ba95074c339"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/app/bootstrap.tsx",
+      "sha256": "94cc58eb193ef2a134c6a4973aefac14d64fede6378e1ec7e1d382d06cd1a8d5"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/app/desktop.tsx",
+      "sha256": "82d250a4b72f50c1fea1dd7c108c39656e9c8d016d6bdda82688d9e836f6e62f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/app/modulemanager.ts",
+      "sha256": "07fd833a2da71a38aa8b24add707a87213363e50d7a94c68410f5b56b023d93f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/dispatch/browser-dispatcher.ts",
+      "sha256": "64a6a16171e2d5e82c1aa1865dae91d25ce87d63fc2a031d29972effbb3f0435"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx",
+      "sha256": "d3406ebf079cdea2aabb44287371db327ff51871a36afc0ae24de958f4242aed"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/localization/browser-localization-context.ts",
+      "sha256": "b88336be20540194882ac949d35f5ebf1b9eb6322f90ca5185994b292612ed47"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/localization/browser-localization.ts",
+      "sha256": "849fde247a7e5ca73d2078fc580b3fee75d3e9b463c6cb087ba26d542f133436"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/localization/messages.ts",
+      "sha256": "6ee2976b7ff59f5116835a6bf09783a6d219b05c0207fcbf9422c086b7b801e5"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+      "sha256": "6ae8c36680bad846687d13c2e78093ca34b2fa1ef8cacb83c1caf0a83814ec0e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/presentation/CommandToolbar.tsx",
+      "sha256": "ea66e8572a3f66a13c0cfd74f830f43610de98b5bb91ee08831b44ac67c5d3d4"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/presentation/command-surface.ts",
+      "sha256": "42750e5723c44316bdc28c79bc22924c8249b768ee8fbf807c6ef83d901b7e4e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/presentation/use-command-shortcuts.ts",
+      "sha256": "6fad7d2d4f2d68c362234477a9b3d56c195e4629a5a04c0ac015d00edb988865"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/browser/workers/worker-protocol.ts",
+      "sha256": "7c2b43f7b92e73115efd603d3e98f3ec25e3a5432dcef55c4627da97921e2cd0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/source/dispatch/dispatchprovider.ts",
+      "sha256": "7d4d76ec2bca4842f31b2eef09e68055bdb37569934956b491de53e80721d343"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/framework/source/services/autorecovery.ts",
+      "sha256": "57e1ac3d1b8b0024262423177eee51cd27e512614e6bf21b00125556d72d13fa"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/o3tl/inc/sorted_vector.ts",
+      "sha256": "50b7503e930c1ffdc546e2d9afc5b6a952344c5eeec0bcea88601a70b914a674"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/manifest/ManifestExport.ts",
+      "sha256": "cfeba54c4440a44ab032250cd3a82b77550bee3ec3bf2fc874483c550b489ab7"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zipapi/CRC32.ts",
+      "sha256": "6ca8658f0de647ea20652eaaec3c89f34eaf3e3b832b96669744d0f8e345f9ca"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zipapi/ZipFile.ts",
+      "sha256": "e85412e8ee12a8f6bb76bc3aa1cb26bb2f84836e754632bb848fa3430410722a"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+      "sha256": "e2cde105536560fd6b54f95bfe46978f9945d74d98bb6b9968130045cf9f497e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.ts",
+      "sha256": "cf127b79c3579889efa788cd93c8ad6e0a9d7b6d2dadc13af36e3ee4f828e81f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/converter.ts",
+      "sha256": "afb2fa6c806a59ac4c4ec5237e3694b1384565d3233dcd1668d764a202e41858"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+      "sha256": "e7ee890c6b13c9a62b77b2b60a94ca8fc921edc1a6feea802b98cd5b06af2f99"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx",
+      "sha256": "1b973a8ee6ce965847c9891af195d71e78fafd8e7e24ccbe632450879e82071a"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+      "sha256": "9df6bbe6f63ba19af312b293e5bb2f7a4a5109a810df8a7f44ee3aff5ea2e4b0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+      "sha256": "62c132349fdeb40654f7bc90eb41436a7f922013e01c74aef37b864a4e276554"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/control/bindings.ts",
+      "sha256": "f3498fc990bfad4d55501b6abce69ebf5b69a255418e7939deaa8f199aec5cd5"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/control/ctrlitem.ts",
+      "sha256": "1d92a68400d8f15bf8d300ba2d7658291d1cf7c0c7edd6158d73da8440b0b4fc"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/control/dispatch.ts",
+      "sha256": "acb7754d11841997677807fbf4359f94bdbb232152d24f554632037eb5880461"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/control/msg.ts",
+      "sha256": "f01dcebe17f94e27507b127756e4cbcb4cf9d98762491dd6d7bdbd37d19a6346"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/control/objface.ts",
+      "sha256": "c7ad82932dfa1b5720568dddaa951666fa1f2bc1dfa595d19527f42207a1cf6b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/control/request.ts",
+      "sha256": "75877f88704ef5d92e9b7472cabc58a6213517092c0627aa0290acc434f0f61c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/control/shell.ts",
+      "sha256": "c0421a59308ffd41670ab7d9b1f7683ab1c505ca6f4a129735bc0d9db4eef26f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/dialog/basedlgs.ts",
+      "sha256": "900132bfa7010a1c6c0c708bd14385649dbcca5991e45a030698e1fb3748158d"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/doc/docfile.ts",
+      "sha256": "ff8cdde1aaa1b49eff1090404e763e343b484202083c7fe27c0ee81a486542b6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/doc/objsh.ts",
+      "sha256": "ec4c1a6639372a0783047410a1095eeec3477d43cbc25894460836a7af9d5fd9"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/view/frame.ts",
+      "sha256": "85e495fe956e9fca89c5bc884a80962c005181b9d2b276fe44def1f1f367af03"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/view/viewfrm.ts",
+      "sha256": "d9a51ca55a627cf0f203172dee7f8ec5079396bf40841677ed36c88c3944191a"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/cenumitm.ts",
+      "sha256": "ca4476cc49b7d6f76eb9a7606c13cfc1e4b580696761c667a15ec2548b6f765f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/cintitem.ts",
+      "sha256": "7625604921b934f19a93789ba7eec8e2e7f9426d5a74b382cdf66471589f3ee0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/intitem.ts",
+      "sha256": "8c7001c69685119aa828f6fc9b4ffe23b77171651ef644a6ee34e3d740296c25"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/itempool.ts",
+      "sha256": "4a6a3183ec8e7472c1f333a3a4ab52f31d9adb8c2cf610faf7221cc67e503035"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/itemset.ts",
+      "sha256": "df8473c02ca1bdbcaaffda96459fb8eeda18615f48461ce3f31883366ae5c18f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/poolitem.ts",
+      "sha256": "f13f91629647fb0f8168ea6878dc02bc9dd52c8dd87d63b996b5c63a13291edc"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/stritem.ts",
+      "sha256": "2a4d6b7c29e068a19936dc648177167226329b8666c2a981200716f2c0585230"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/misc/recovery.ts",
+      "sha256": "6e34b10076456b8f9a4b81605fb52fe4badb36f747c4fc0cd91918f21c7c0d33"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/misc/storage.ts",
+      "sha256": "4d2f9474a4fdb0968872fed1d040326fbfae7944d4d0e13f631667dd4721a9ba"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+      "sha256": "e039f20b674ef8531481f2056842ae1d123e59c71654384fc64932053470a153"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/notify/lstner.ts",
+      "sha256": "3e6e13018fec68873b851a195fe18d55a9182e0fa56090c78b910e88cc261858"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/undo/undo.ts",
+      "sha256": "9dcf8e024f8c7e9d8799dae7998526d252cd5f44b5fa9f21f7d6cf233a36da06"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/composition/writer-module.tsx",
+      "sha256": "531253ed77985812115b41a4128e8f2b60deebd335e7847df0c28130915b3f32"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "sha256": "622b1632592985878caa5d31a7665f3c127d71fdbafe1128e0db027a20897bcb"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "sha256": "1acd4fe1c68096c281e329add6d0e589c480e0b77f2dec152782d8de04336277"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+      "sha256": "b051a196b63eb5c2d56ebbf73bd8dd057480ef1f8f96edccd9c1ab0a264477e1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "sha256": "3d00fb1e0e52dc23d89f9df464aecf91f3bc0f316a341725002abeb0da0b8462"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+      "sha256": "4536e7a388967a1298e8ed616c4f132fcf6ca8b726991c56a517e884b2d34313"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/writer-font-family.ts",
+      "sha256": "662e2cdecf3a50a995f217ede8536bd55b7955a7c9a076aa409afb382d17b09b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/writer-geometry.ts",
+      "sha256": "76f94ed060551194ab517a0caeb47e3c253915c8c9ec0e4eb9979bef6e139fc0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+      "sha256": "b501eedf085b7fc635fee6f812f8b73fb23ccabf41421366fb42af964a4065f8"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/writer-selection-types.ts",
+      "sha256": "0082228530fee731123929fadbb2646e2512fc978213f8695ac690fd971ee6a6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/writer-selection.ts",
+      "sha256": "f12c1158894f80464b13f7d861962e0ec345431959c2a8babeb9b2e7e10526b8"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/filter/html/swhtml.ts",
+      "sha256": "8b1bd257148eb21bb8d859c2ed680b3362605e26e5a8f752a3952ba3cb74c49e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/filter/xml/item-codec.ts",
+      "sha256": "a47d301e1fdd6b4356c9f7e4aec594b350a0a38836fc1a8d6bf745c36b1b075b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/filter/xml/odt-transfer.ts",
+      "sha256": "156ea21c72f7f682d28a2581bde83f7ed0cb84e4a3007d28c3fc4818d4696411"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
+      "sha256": "d96528d69b7aeee8cab18f9920c1d0f52d5dd4e5ba7fb26cba87f50b574ae69c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts",
+      "sha256": "08a7bdbc731a64cd06df65e9f5baf89b10822a57532b78c267423377d01e04b5"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "sha256": "0a6202d33a380973e323c2201582af05036442bc4dbc06670f67751cf30cdcda"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx",
+      "sha256": "ad981f12df09a7cd7e281b46d1dedd718882515b405019304aea33cfaf5dd651"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx",
+      "sha256": "729d7d7a797711a416e09a12f45c4e3bc630050d15476be7f72ffbd854d61a60"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterColorControl.tsx",
+      "sha256": "b0b7c93357d270582cd831c169d6ab4cc12c8d474fbfc971310faa4700914a11"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+      "sha256": "29b250eaf99eb382b5f91a6dc0b6ada81f600a630a0a5c780b2b4b2d1891a51e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "sha256": "201e8847ad78a6bf0204025bdf481698e87aca6a15a772489ee91f3f404e4643"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+      "sha256": "0852a07b1c1d0b02495219700f1a578b2898200231d89a3307f5f637f6bb04d6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
+      "sha256": "7110db0701f2179dcfeca576df1b35c1e02f93df030d93218d0d578a348fd501"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx",
+      "sha256": "36843f113064c2be3d1612fccf8c553fa51272a4d9ebc50049e91c3df0c77840"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterLineNumberingDialog.tsx",
+      "sha256": "b0daea3a9e4e55980ac587ee1b2a11e791227cb242ed4784a4051ef6d09d6ae1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterLineSpacingControl.tsx",
+      "sha256": "06580fe8efbc481496530ec763fec99dac7ba15bfd27125b1bcceafd74faccd7"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
+      "sha256": "8a8005d0e4bb61e3b13e762f3bd4b242adf12f397aff10c491440c9a2221f85d"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx",
+      "sha256": "76c215d098555b6d71ab11cda25fef440e0c117357df07c1bbb5b3b388da070d"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
+      "sha256": "ab7249585e069a9ddf3c1dd7b33c331bff1f441c3fc32a436d0d9ac9395bc125"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
+      "sha256": "a7706abd5d07f9b4bf2dff49b8b5c79c0378055640da59b37266957f2ed552e1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "sha256": "87cbe2059fe2c195d79db34f0d6d0712c0c5da81f35b90c5858bcbe2097da088"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+      "sha256": "e5efd015509ba9339abb9acc053c9a6172975e67857e788b07330fa127315a60"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterTableInsertControl.tsx",
+      "sha256": "fc3dd018990eb2376f183f2db17c960b67de9e0ed94dc9fbc8a34d18f4431b75"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
+      "sha256": "5bcf7b541e41afb99297a4a659dbb79ed4e0737f3ddf5d1271daeeb2d1466e13"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+      "sha256": "f3738ec4f50f6fb214577e4e4d402aa9c0c876d80bb2851e137a5fafd718a0a2"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/writer-command-presentation.ts",
+      "sha256": "4e479a061adc982ed6478d99857a58a83c90b0d41ca36168f996cb71de25b639"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts",
+      "sha256": "6d377e86b771b53eea3d5bdec9335a2b7165e0a3d974f3c30a3c14aff2c145a5"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "sha256": "3ef77f84b1837e587207d15ef6edf96140ccf6bfbd6d32d2e999cf40daadc2a6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "d3fbb84a827c9340ddd2d5879246325bbefcf14fb3ef80236719799adb76952f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "sha256": "a245fa0efe64182f9202141e5d046d50951f9c57c3d3ad4c1d3f14d5923543f1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/workflows/writer-autosave.ts",
+      "sha256": "b33b3f8e04bf81555577bac9358fcd6de1a514c0bc7dfb673d23673a01c135a6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/workflows/writer-document-io.ts",
+      "sha256": "dcceeefa6476692172d561fc0408300f7ff1ec13273e592db4d7780f3e4558a1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts",
+      "sha256": "7fad1371b0f63321d360ae447dcc78efeefb12e92f0bab01c24335e891f6d143"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "sha256": "e6dfa9e2a635aac5692c942a71aa6ea39963356afc2d15c0c9f78dcbb12b5808"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/workflows/writer-workflows.ts",
+      "sha256": "37a6998632b0ea54e698cedd81777b198e6e183b6fd966110ad79e8368fd3257"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/SwNumberTreeTypes.ts",
+      "sha256": "aa52a1c5bc4f2430d29ca555381dcfadd9e6b6b3dcfdd02b1509926d9d427e9c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/calbck.ts",
+      "sha256": "33143d4265c4a5838a735eb5d719c048405249a0396ae11e0a0778addbe77bc0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/hintids.ts",
+      "sha256": "65f0cd0056407656a687a7a4b3d06f1889cc812d00da72712667e0b04a203ddf"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/hints.ts",
+      "sha256": "e2a3d80689d945edb5ff7de1392b3779e3e9df778153df6bae2169fdc2a77d06"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/lineinfo.ts",
+      "sha256": "962399ef73b8beb0d3efd3cfb4e8e64e8e9d319f54151d7d681c7e1ccfaca004"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/poolfmt.ts",
+      "sha256": "77c13501c1c1fd7e58514f6a6ac90770047762419b49c47324f4122b7df3815b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/viewopt.ts",
+      "sha256": "f43a087614c7e4fb24b5fcaab7c8338ed01dc6f725917d664473eaef1eeff80b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/sdi/swriter.ts",
+      "sha256": "37f167106d3f73d95271c01ba7da1e3bb1f8d6b2e1c150bbefdd88d6da5397fc"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "sha256": "317b75b81631fefe226f31e0cbb10267d08c77d356e70d45c5037e2e38cf8cf2"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+      "sha256": "e49022d6c15262b8ee477ad5d228fbdf995c4125407092496cebbc2bca553bab"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/attr/fmtpdsc.ts",
+      "sha256": "cf42c2cef80ac6b39335b6c77e1ea0b3a4e069169cbf22a26fadb6be0a198c46"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "c79c109026e550d97052353f591c70924c505a4b1a6a936b717bfeb0088fb31f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "c54d7b3213312191e120b6bf7849106c5bf02b64d5f80cebbc4fa85e83dd6eb1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/bastyp/index.ts",
+      "sha256": "21eba98bffc6ba1eb8969caa9748982574734de19eb1ea0ca14a5ef9d88c1fc2"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/crsr/pam.ts",
+      "sha256": "9b964114ba8e401acf77343a99222dc341821092282b7f1caec2a6039695332d"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+      "sha256": "cabf37c19042b094a40edf23b6c83322f25bee4b2b9df56406d9023390c5adf1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/DocumentListItemsManager.ts",
+      "sha256": "1c6875bd594dd7f91380329473cfe752f9f9f48ed75a14021b1d13e46b24796a"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/DocumentListsManager.ts",
+      "sha256": "fb1272d56c6994383ee5bd073ea47b52e9be5e983ddd751a9f203e5bce20b486"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/DocumentSettingManager.ts",
+      "sha256": "9cc3c158669f633e1e6c53d8a20527025e3ab13838506f491dfad3b8d632724c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/DocumentStateManager.ts",
+      "sha256": "f76d4aa6608fc4190fb1ec81583854696e3683b1793abc651870660f1fec49bb"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+      "sha256": "d213eeddc2dbe9113d1786c2d2a181fe1445b5ffee6309d21252e7ccf1d89df2"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/default-font.ts",
+      "sha256": "193927566d42b695fb9973cbe18bc92df5945c5c85449eb63dcbd77339a98ed4"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "6d6b1d09b3dfe2c9f3adb5adf40e9fb4d40e02f75d323f29b672a18fbefc11dd"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/docbm.ts",
+      "sha256": "18edfd0e74985aa2880771d52cda142287fb8cb468aacb859d934b4c48b86870"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/docfmt.ts",
+      "sha256": "4bc65a84a21f5f4af4439b400c478e5669dcf5e8f081873cbbf8174581ca0967"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/fmtcol.ts",
+      "sha256": "2c64abcacddfe544fd6b2feafabf4ef9f1f4bbe16da9c8c99ac6f2a0ec5af94b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/list.ts",
+      "sha256": "0c92b88e13de49ef5195f1e2456390ca77d4e77b30ff321b0e91034a44445199"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/number.ts",
+      "sha256": "3b6bbddf7abda71ea8c9be7fc4ad0a4492eac79408bc23e0579a7de2663aa030"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+      "sha256": "711ab961358e3783672c624a5f327dead8c05dac99470ef0cd00eca93f819f24"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/docnode/ndnum.ts",
+      "sha256": "d7a53d92641d70c34491e515dc1e801e96fb8ad793765fd8bf046e27a5af62e3"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/docnode/node-attribute-handle.ts",
+      "sha256": "de1cd28a80e7849dd78a1ef8c0a7477a10321f0d1fd924b4d58bb2a62175f2bd"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/docnode/node.ts",
+      "sha256": "b2b415c9fcb398c20930f9c2326ec7043e95a7215a6d9424c59eeed9ec8b9372"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "9d5848edc835adb86fd7c9fd9935e2ae99065994ebcc28a8c09e0518e15ffaba"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/edit/edattr.ts",
+      "sha256": "d2d47bc188e107fb608c519b2e9960e46965d7d06b4bb07028649e00f1a4257b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/edit/editsh.ts",
+      "sha256": "6ba06e580fcf4fe95fa5ff534cce0aaf651fb24de309b8eb834d043f817ef434"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/edit/ednumber.ts",
+      "sha256": "b6a16d81854740b3e5cfe1c2dfd57f53d84eb5d1c526e17e81d0a85bd4c84189"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/layout/newfrm.ts",
+      "sha256": "c3a2cfd6d76ef97b7d7d4868a2829b473117029987ceef11b4d9e7331d53c476"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/layout/pagedesc.ts",
+      "sha256": "e2184825c171397896c18f42b6ad06662a6c41af5197f73d31aa20fb1cbdf41c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/para/paratr.ts",
+      "sha256": "8e1aaef85225aff9654570ca854092349ab1fa87dd3afa772f929ba8707e91a9"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/table/swtable.ts",
+      "sha256": "42ab30506c49f8c043c4e81f365dbfadabb2ffcbafe80d350c9abbfaecb0a4c6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/text/itrform2.ts",
+      "sha256": "18e9b457c5976af7e568947891868b2641bd05f60324e6eb009f7901f6ca7d51"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/text/txtfrm.ts",
+      "sha256": "83fdc39b39a6a65437828fe0902ed454a53d6982c1faecc8730b3199cd508b72"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
+      "sha256": "42103467b11e8dd53af6b92d425dfb62627c071bdcf94ced897f14e58dc5e9e0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/txtnode/ndhints.ts",
+      "sha256": "317bed9908dc7ed4fe6bbe75647733c1847dc2411046aec49592540a18c858f1"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/txtnode/ndtxt-attribute-handlers.ts",
+      "sha256": "1622b7480733b43ec695ae3d02e48d78190335ec779623116a336ec86d193cd8"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+      "sha256": "93203f0b838d60caec3d6d97407962021728fe07aca9e1235c80269775d4cbe0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "sha256": "706dc8b2c5e4183172c893e9cc08339479f2e6bd775ce3d7cf8920fcb3b0eee8"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/txtnode/txatbase.ts",
+      "sha256": "cc8da8a81566070bfc48f21a125f1666cbc1d84c984fa254d0baf64e37a65102"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+      "sha256": "f235a10b5afc86abf2ead8be55e1928785b2b5f4878c46d04a00ad747963547f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/docundo.ts",
+      "sha256": "dfda595f4521917c4b08ad3209ab7e2d04900e140729246daf5a3cfcdddc3636"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/unattr.ts",
+      "sha256": "1cbf827c3074a18a55919d3afbf602def6204a04c60e51cc73cf16f62ecb1ad6"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/undel.ts",
+      "sha256": "3fff56e4c80afe84ba392ec82e00060e13554690687880842fd441ccd449fb98"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/undobj.ts",
+      "sha256": "fc0b9ee5d0d8aec23f5b3cc2d7f3f044a5534f73cc61169f1099cff674bc3375"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/unfmco.ts",
+      "sha256": "89d93a5676a8fa02077bd800c2025ff471c33f4034c230c6f665c54e59bdc053"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/unins.ts",
+      "sha256": "0695a1592205a7f2bc3825c3c494f31690ca0aeb9df9b7d32e35ffde66973918"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/unnum.ts",
+      "sha256": "81f35e8e75baab4ef0f86bf1a6074df7df13de8fd39bb87ccbb485b94dcc176a"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/unspnd.ts",
+      "sha256": "d2ef4053cf6fe34a92184ebfba577b9ffd038d148cdec5d4c719e1910e53e920"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/unocore/unosett.ts",
+      "sha256": "702e7df0f7f8c2879fcd30aec3c46f072595479d3f1c29f76ab3280b20703bb0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ascii/ascatr.ts",
+      "sha256": "b2d750f2eb1b989e37f4f214e489d196bd1adeacd94c4c9d0efaa600b4128bf0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
+      "sha256": "0d898daf2b65b87f553f9f525d24ad29081875334af5b74029b9419895be5d04"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
+      "sha256": "f98d29955d73d7cd3480a953985860897503987af0993fac301380568aee7af3"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+      "sha256": "488d4db4dbf63059ce26677f4c2a40efaa274f9d29ce9df5264bf16cf9f030a4"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/swxml.ts",
+      "sha256": "a32bbe3faf861c13019eafb55f48b62a8b5c11ab34a7aa81ed7ca0a276585058"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/wrtxml.ts",
+      "sha256": "db0178e56d73695a1b7bf4a8534aba9e96804661df0b1d1dcaee013e786340c8"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "cc5c4ba95b7b96aa02228c53c93f8ef70b4431f6f7dd742aaf3a7b45d7f6bc74"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/xmlfonte.ts",
+      "sha256": "7c26b2d01bf61e841c6a930a2b1c31fdde81e8cf8919fad5bbe77e6dddbcdd62"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "sha256": "e726de4b038cbb1f374da990f7f823842723f8ae0245bb83f626668f78708768"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "d92536441db305c9da0d2fff7ba558257e056776c8daf13a32004380cff00756"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/app/docsh.ts",
+      "sha256": "760232ed8b1135b443107314b8c5f5f64a8290a7a0ed382117bb979972f4507f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
+      "sha256": "f2931de22cd8376d124203ed7494698d8ccd79d0d5ced6538b5a8b3bbb38396c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+      "sha256": "87d50c6127018037ef175305cc35a297d36f7e3799e6a765650a17fa0087e42a"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "sha256": "d5f62e756f525298a14682bf08014c3da2d41aa5e5f962a102558cbb9375030d"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/shells/listsh.ts",
+      "sha256": "54a9afd1e98f8f4e502c7d30860554daa4f984449943852be1c1a1ab6cf1e207"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/shells/textsh1.ts",
+      "sha256": "e710c3b8159140eab8ec08d4d8dd816cc62783cfc98ffac53501aff666346b06"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/shells/view.ts",
+      "sha256": "c595866a35f8fb68e70d6d3b88561b61427e8a702c5254fb7e5f0eb06fb816a7"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/uiview/view.ts",
+      "sha256": "47e5ad6dd8b4da716596f9e9903b7a6341284ba9c454511d2c1b9cd6b00cbd3e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
+      "sha256": "18a29b980e2a108a6c8fd71128294a5fac6dfcdbde94fd7bf855999adba89581"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/delete.ts",
+      "sha256": "5670f68d27f56632627c194ae82374d5f1acf8161a2f0de74da8817cb69a1e72"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+      "sha256": "9b512d159b84dec2a482125c51b763d63cd610cc7ad4d1a58e7f5f25400a0d1c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "sha256": "f73da6b9275ef6d2cd719f4fd4409c43deb7f063bf66887884960c728553a665"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/uiconfig/swriter/ui-resource.ts",
+      "sha256": "5f577141cce979e24aa576c3de920be5740b897a5e37af71192ec660804739d0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+      "sha256": "122fa7c5c0416d5699fa790dac0845cee2d9a43adeac0c281bd00fd813a2ac9b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+      "sha256": "6cbb7acda3ddcdd49f89666c7f9095d635df04fcb372300fdc4a03fd3685955b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+      "sha256": "211c85f9baf53bdc33e84014b63212e3c3c4da6a4003ebbbad41aa2ea2af9eab"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts",
+      "sha256": "a379f56379ccba547ec26c242a43b0c37c4f47b2b4e20b1ab3b0a26aca5978f2"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+      "sha256": "0d99594e83a8295fb11ca39021387b51d66bcacbd5d38f01c17af7cc934b8d4f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/vcl/browser/browser-clipboard.ts",
+      "sha256": "cf1b96e7d7689046910b20c9cd96018ecb1dabcc0fd0d00c2e163ff8df74875e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/vcl/browser/browser-download.ts",
+      "sha256": "1f1ec87513ae26a66e3d43fcc5018ae1bd5f048d78d81f0c48ddada8c9aed4c7"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/vcl/browser/browser-file.ts",
+      "sha256": "bcde256e47f67e740b02b922c93ed255b30fc13c80f410abe330c900bd199ea4"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/vcl/browser/default-font-device.ts",
+      "sha256": "d32e91c04cdc83b2994ebe503f448ecdabc6ef63b03ce463f0918727a0cb8f57"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/vcl/browser/embedded-font-loader.ts",
+      "sha256": "45e37ee5cf79f42080b274199397e8b958b1d5fdc93386c9da74476bad11246a"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/vcl/browser/font-list.ts",
+      "sha256": "bdd50eef1855034a36dc0f700d89fa86fc339b8629c45050b31525d4af1437e0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/vcl/source/font/font.ts",
+      "sha256": "c9a67ec0fd87fc26eb6e5ea68a9f0108f8c6802b389f19776f168d531eecb4be"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/core/xmlimp.ts",
+      "sha256": "f058a7217aab2b2d35524659d74ed8be85f836abe5ff35d1970bb9332e29495c"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "c0f2c2715d2fd18e1f4d02a375458d3ef35361ca2c4e52154364aa837014196b"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/core/xmluconv.ts",
+      "sha256": "18af94774b82604e538d8107735c661b18ab651b7721e4cae33c7dd3b03c523f"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+      "sha256": "62b3493e8e134e19a35fd1e0557b4ac22bb5e17cfa2772aaacae79af9f2e7d18"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
+      "sha256": "43d2b010ed44d780a8cd8a226fefecb3e066acdc2667170cc4af0a3a3e7a5a14"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/styleexp.ts",
+      "sha256": "e361c7e17fe959acd2282a25e33da56b3055c03671cb641108fb6258a89752e0"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/xmlnume.ts",
+      "sha256": "541410854340c4d9f8e4bbf7d34b2ecba64ac71674cfbd3e62e7dd2b7912c662"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/xmlnumi.ts",
+      "sha256": "97bd4dd68a348f67f665301b212c5a4833485c3044dbd522d1e13341156f339e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/xmlstyle.ts",
+      "sha256": "15077f00381e562da0f84cbf012f3ad376006f43dc31983dac8dee42e83773cb"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/xmltabi.ts",
+      "sha256": "6f74bc805bf03f722189d9e246ebb9ceed35a39d131ec818dd19d09fec251a1e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/table/XMLTableExport.ts",
+      "sha256": "cac8e923cfd5c4f757c96793d713449d9bd1493d4528e762481ec52ad7feb5cc"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "sha256": "5236feefd46b0133a045fd793f08605105abfb3bc4ddf1fbcdaca5c5392c897e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts",
+      "sha256": "c02589147e0280b199e39946648f0dcda0629a241953840d6a95509242571d88"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts",
+      "sha256": "36908fe943a4e9ad9077457fbccede0a57ee9b927ff4ddbb63059e87dfb24eca"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/XMLTextListBlockContext.ts",
+      "sha256": "5489f8195b8617407dfa4a51e8ba80a668861cda418893c5636d4ea964067c8e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/XMLTextListItemContext.ts",
+      "sha256": "16757d5a892994c4e85dcbfcb47ee75cd517e6eeaa3b166ea4e95b6aa3dca3e3"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/XMLTextNumRuleInfo.ts",
+      "sha256": "9ab55a9e184438d03e3e7b7afd45ed97cf940d47d7d724bddda26d75088b41aa"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts",
+      "sha256": "62120b1ae42a63a1785199217946965a0c95856799ff0d22fe14f086831865f3"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/txtlists.ts",
+      "sha256": "d25ac1343cc203cdceff5ae2b2687ad5868398efbc26f183779f2bb1090cc4db"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/txtparae.ts",
+      "sha256": "6fa3b19ab31cfbafdffd6e85bc138baa27b755052ac86aca161c961cc35abdd9"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/text/txtparai.ts",
+      "sha256": "981ce80ad0dd54ae4b2c1948268e4bacf8ee31f5585ec8d5801e08c9017cd28b"
+    }
+  ],
+  "baselineSummarySha256": "bb3fc384e026bf33bd18e70a0f605ba308cd7b02c82dfea441987acf778a65d3",
+  "baselineHtmlSha256": "bebefbbae293401f29a88d4cc2d4a52dedf3023a74ac6d88e87dfd74a50aa1e6",
+  "targetCoverageSha256": "a6d296300e1674f416feaec167de5e59ffd2359cd5acd08f7849f792a288c018",
+  "missingFunctionDeclarationLine": 510,
+  "missingStatementAndLine": 511,
+  "functionHits": 3,
+  "statementHits": 3,
+  "finalCoverage": {
+    "lines": {
+      "total": 10434,
+      "covered": 10434,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11385,
+      "covered": 11385,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3020,
+      "covered": 3020,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8616,
+      "covered": 8616,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "finalSummarySha256": "a182d0d89254d8faa778c7157a345e035a0da361f6a83e1d8a938bdeb32c4da0",
+  "upstreamDirectoryPresent": false
+}

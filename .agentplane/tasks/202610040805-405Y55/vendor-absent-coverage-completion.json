@@ -1,0 +1,11 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx -t automatic=false inherited=false --coverage --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportsDirectory=coverage-indent-items --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.thresholds.statements=0",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 283,
+  "outputSha256": "cabfb2b2e8555f39e5c0f00c4e78bc854413ce0d21d4e6c619809705b84feccd",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  3 passed | 12 skipped (15)"
+  ]
+}
