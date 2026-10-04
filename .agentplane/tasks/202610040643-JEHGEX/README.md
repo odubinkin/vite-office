@@ -1,10 +1,12 @@
 ---
 id: "202610040643-JEHGEX"
 title: "Compose noninteractive Writer default ruler tab markers"
-status: "DOING"
+result_summary: "Writer ruler composes native default tab grid without editing hit targets;single absent-upstream verification passed."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +49,16 @@ quality_review:
     - "Actual implementation matches inspected Writer stripping of Default/zero for ruler inputs,document/item spacing,relative origin and SvxRuler signed rounding/16-bit buffer/grid/boundary arithmetic;stored paragraph values/history unchanged."
     - "Owned real model/projection/DOM/Undo and Chromium1280/390 evidence covers noninteractive glyphs/free-surface admission/cancel/accept/reprojection;all290prior tests unchanged and manifest statuses/exceptions preserved."
     - "One source-absent test pass only:1163app,109inventory,5scripts,69Chromium;100%coverage and zero semantic violations. All evidence bound to current six semantic file hashes;source hashes retained,no native/source/helper artifacts."
-commit: null
+commit:
+  hash: "4602af9eff39aed0699ec765f18d9387eb8b0878"
+  message: "🛠️ JEHGEX code: compose noninteractive Writer default ruler tabs"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer default-marker preparation/generation/rendering under the standing goal;one absent-upstream test pass and separate static source audits."
+  -
+    author: "CODER"
+    body: "Verified: Writer default-marker composition implemented in 4602af9eff39aed0699ec765f18d9387eb8b0878;one first-run absent-upstream1163app/109inventory/5scripts/69Chromium pass,100%coverage,static/source/integrity gates pass,zero semantic/AP forbidden findings,vendor restored and exact-SHA same-actor EVALUATOR pass. Clean checkout before closure;fullgoal remains active."
 events:
   -
     type: "status"
@@ -72,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final integrity and same-actor EVALUATOR exact4602af9e pass;semantic bytes unchanged. No test reruns:single absent1163/109/5/69,100%coverage,static source audits0violations,Agentplane forbidden0,vendor restored."
+  -
+    type: "status"
+    at: "2026-10-04T07:06:27.334Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer default-marker composition implemented in 4602af9eff39aed0699ec765f18d9387eb8b0878;one first-run absent-upstream1163app/109inventory/5scripts/69Chromium pass,100%coverage,static/source/integrity gates pass,zero semantic/AP forbidden findings,vendor restored and exact-SHA same-actor EVALUATOR pass. Clean checkout before closure;fullgoal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T07:06:11.657Z"
+doc_updated_at: "2026-10-04T07:06:27.336Z"
 doc_updated_by: "CODER"
 description: "Iteration94: match Writer tab-state normalization and SvxRuler default-marker generation using effective tab distance, document-relative origin and paragraph right boundary. Render source-shaped Default glyphs without hit targets or model changes. Preserve general paragraph tab metadata,raw-index editing,undo and registered I/O deviations. One absent-upstream test pass;separate static source audits."
 sections:
@@ -129,6 +143,10 @@ sections:
   Findings: |-
     Writer-specific source clarification supersedes the previous generic SvxRuler inference:SwView strips stored Default and zero-position ruler inputs,then document/item distance and relative-origin settings govern regenerated defaults. Model/general paragraph zero values remain unchanged. The native signed rounding,16-bit count,grid phase,buffer underfill and strict right boundary are covered by owned actual projection/DOM/item cases;no arbitrary cap was substituted. Noninteractive Default glyphs admit the real free-surface transaction only after acceptance;Escape leaves history unchanged,one Undo/Redo restores explicit/default composition at desktop/mobile widths. All290oldtests unchanged and registered save/open/recovery deviations preserved. No whole-native/parent claim:RTL,vertical/systemDPI/theme/hitpriority/snapping/modifiers/selector/capture/full page/frame selection remain unverified. This goal turn is verified bounded progress,not completion or blocked.
     Commit validation rejected two subject variants (capitalized scope,then writer scope);corrected to the permitted code scope without changing implementation,tests,gates or configuration. Semantic commit 4602af9eff39aed0699ec765f18d9387eb8b0878 succeeded. This was a local naming correction,not an approval rejection or verification failure.
+extensions:
+  implementation_commit:
+    hash: "4602af9eff39aed0699ec765f18d9387eb8b0878"
+    message: "🛠️ JEHGEX code: compose noninteractive Writer default ruler tabs"
 id_source: "generated"
 ---
 ## Summary
