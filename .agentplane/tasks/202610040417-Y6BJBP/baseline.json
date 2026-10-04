@@ -1,0 +1,19 @@
+{
+  "command": "(apps/office) npm exec -- vitest run src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx",
+  "exitCode": 1,
+  "outputBytes": 4548,
+  "outputSha256": "c40bc872064739f7b7ec6b7043965ad1fb2dd8ae9fc7e1034ccc6ddd36b80d1d",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  4 failed | 1 passed (5)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx > Writer Sidebar key isolation > isolates {\"owner\":\"Start\",\"key\":\"Delete\",\"shiftKey\":true,\"ctrlKey\":false,\"metaKey\":false} from document clipboard commands",
+    "AssertionError: expected \"FindCommandByShortcut\" to not be called at all, but actually been called 1 times",
+    " FAIL  src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx > Writer Sidebar key isolation > isolates {\"owner\":\"More Options\",\"key\":\"Insert\",\"shiftKey\":false,\"ctrlKey\":true,\"metaKey\":false} from document clipboard commands",
+    "AssertionError: expected \"FindCommandByShortcut\" to not be called at all, but actually been called 1 times",
+    " FAIL  src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx > Writer Sidebar key isolation > isolates {\"owner\":\"Close Sidebar Deck\",\"key\":\"Insert\",\"shiftKey\":false,\"ctrlKey\":false,\"metaKey\":true} from document clipboard commands",
+    "AssertionError: expected \"FindCommandByShortcut\" to not be called at all, but actually been called 1 times",
+    " FAIL  src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx > Writer Sidebar key isolation > isolates {\"owner\":\"Properties\",\"key\":\"Insert\",\"shiftKey\":true,\"ctrlKey\":false,\"metaKey\":false} from document clipboard commands",
+    "AssertionError: expected \"FindCommandByShortcut\" to not be called at all, but actually been called 1 times"
+  ]
+}
