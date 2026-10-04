@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "inspection": "Read-only source/hash inspection only,no source bodies or native execution.",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+      "marker": "lcl_EraseDefTabs",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/utlui/uitool.cxx",
+      "marker": "GetTabDist",
+      "sha256": "51ac205f6098f3ff667f97a6e652bdad57293891c985bd5da2d49ebf646a9827"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "marker": "SvxRuler::UpdateTabs",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svtools/source/control/ruler.cxx",
+      "marker": "ImplDrawRulerTab",
+      "sha256": "3d311b4b4fdfa0c05651bb7aa169c2b2a39def6023059b9dd1ffdb29f80bd413"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/outdev/map.cxx",
+      "marker": "lcl_logicToPixel",
+      "sha256": "c6c0d2cbb8b7cc24eba6217977b0145eb286adb8d6ed674593b5c9501d015739"
+    }
+  ],
+  "conclusion": "Iteration94 follows the Writer-specific tab preparation inspected in SwView StateTabWin/lcl_EraseDefTabs: stored Default and zero positions are excluded from ruler inputs while raw item indices, general paragraph tab values and complete model metadata remain intact. Frozen primitive settings resolve document first-stop/1134 fallback,zero-to-one normalization,current nonzero item distance and TABS_RELATIVE_TO_INDENT. The ruler composes noninteractive Default glyphs using inspected signed DPI1 rounding,16-bit buffer count,grid remainder and strict paragraph right boundary;explicit markers and accepted add conversion share the existing relative/frame origin setting. Owned actual model/projection/DOM/Undo and rebuilt desktop/mobile Chromium cover these bounded paths,including source underfill and no rendering-induced mutation. All290prior tests unchanged;220existing rows retained with no native status promotion. Source clarification supersedes earlier generic-Svx inference: Writer regenerates defaults rather than displaying stored Default positions directly. Native RTL/vertical/platformDPI/theme/hitpriority/snap/selector/capture,full page/frame selection and complete ruler/native/parent parity remain unverified;registered save/open/recovery exceptions preserved."
+}
