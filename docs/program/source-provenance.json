@@ -2507,6 +2507,61 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+            "marker": "populateStyleToolbox"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "IsUsed"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+            "marker": "Writer live style selector"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+            "marker": "native style toolbox population"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selector.spec.ts",
+            "marker": "Writer live style selector width"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+            "marker": "SvxStyleToolBoxControl::FillStyleBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+            "marker": "ShowDefaultStyles"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/poolfmt.cxx",
+            "marker": "SwDoc::IsUsed"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/app/docstyle.cxx",
+            "marker": "SwDocStyleSheet::IsUsed"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+      "rationale": "Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+      "responsibilities": [
+        "Population order, exact-name deduplication and detached primitive style selector entries."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser primitives replace the native welded style box presentation; source-owned core supplies actual usage and styles."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterDocumentSession",
             "path": "apps/office/src/sw/browser/composition/writer-module.tsx"
           }
@@ -3168,11 +3223,31 @@
           {
             "marker": "WriterFormattingToolbar",
             "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+            "marker": "populateStyleToolbox"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "IsUsed"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+            "marker": "Writer live style selector"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+            "marker": "native style toolbox population"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selector.spec.ts",
+            "marker": "Writer live style selector width"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
       "responsibilities": [
         "Renders the browser Writer paragraph-formatting toolbar."
       ],
@@ -3995,6 +4070,26 @@
           {
             "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
             "marker": "Writer automatic body layout"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+            "marker": "populateStyleToolbox"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "IsUsed"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+            "marker": "Writer live style selector"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+            "marker": "native style toolbox population"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selector.spec.ts",
+            "marker": "Writer live style selector width"
           }
         ],
         "upstream": [
@@ -4021,7 +4116,7 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
-      "rationale": "Projects live Writer nodes into immutable primitive presentation values. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory.",
+      "rationale": "Projects live Writer nodes into immutable primitive presentation values. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory. Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
       "responsibilities": [
         "Projects live Writer nodes into immutable primitive presentation values.",
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
@@ -6586,6 +6681,26 @@
           {
             "path": "apps/office/e2e/writer-named-style-history.spec.ts",
             "marker": "Writer named-style history"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+            "marker": "populateStyleToolbox"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "IsUsed"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+            "marker": "Writer live style selector"
+          },
+          {
+            "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+            "marker": "native style toolbox population"
+          },
+          {
+            "path": "apps/office/e2e/writer-style-selector.spec.ts",
+            "marker": "Writer live style selector width"
           }
         ],
         "upstream": [
@@ -6675,7 +6790,8 @@
         "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
         "Iteration38 restores native document reading suppression for the existing shown-list notification path. SwDoc owns mbInReading=false and native IsInReading/SetInReading accessors; SwXMLImport brackets the existing parse lifetime and clears the flag on success or failure. List/tree operations propagate the actual document context. Worker graph16 restores direct text-node items in one complete text-node-range batch before attachment, retaining counted/restart/list identity and explicit rule type. Forty unchanged added native definitions compare60 sequences/2130 states including true/false reading, raw caches and notifications; literal genuine ODT/Worker/reopen expectations remain intact. Full native destructor/temporary notification blockers/layout/UNO/history/fields/live-style/serialization lifetime remain unverified; no whole-module promotion or registered IO change.",
         "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion.",
-        "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion."
+        "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
+        "Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",

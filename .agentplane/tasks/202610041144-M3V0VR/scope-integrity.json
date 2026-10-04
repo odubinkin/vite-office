@@ -1,0 +1,74 @@
+{
+  "base": "a4e0ffb7a45066c05445099456898d6030c69231",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+    "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+    "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+    "apps/office/e2e/writer-style-selector.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "scripts/check-module-boundaries.mjs",
+    "apps/office/src/framework/browser/app/desktop.test.tsx"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "cea162667fe9a80b3173dcd6779aa1220e099eaafa2eb1c222b0a1e5f541f348"
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+      "sha256": "254e7f6322cc60e9f198adb87478223c62807ef7796b288b99557ab8f83d5832"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "sha256": "7b8040011c41f4bfc3da6e991f175fe9a6e5b503208325ab77bed2eeb995ad34"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+      "sha256": "5a3a5e34ee33cb8f74700eefe050cc90f7561d8e1fe29b8700be257cec6707b8"
+    },
+    {
+      "path": "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+      "sha256": "f87c6b60b6ad0837dabe84545857d93b1aaa9a4c5a17976905ed43bf52bd6d82"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+      "sha256": "07f5e979b5795dc97c3f06dc16d00c3500fb0b32a23ceb4b66c4cc9f26c934ed"
+    },
+    {
+      "path": "apps/office/e2e/writer-style-selector.spec.ts",
+      "sha256": "e701f39cde181fe1d46fa5eaa6110e3bbf673f0bc1fa3ef09f74e06f6eeffb9c"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "6e030898e5e58be8de3ab517304e2f4f299c05ecd40ebcf898b39fb59cfbe839"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "c8d33afa4d3b41459ffb5d3c7d64f63f1ac95a11ef3835a1653720ab31d7f85c"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "sha256": "a154f46f6f20c3d8fe4b7c26ba2ddbb9e186b961a8aa2ee629deb877e99e7e5a"
+    },
+    {
+      "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+      "sha256": "b7c9260c2a7ee481e712fbe789051eeacebe7519f7bae883191476fd44334a68"
+    }
+  ],
+  "priorTestFiles": 307,
+  "priorTestFilesByteIdentical": 306,
+  "priorTestsWithBoundedSelectorAdmissionUpdated": [
+    "apps/office/src/framework/browser/app/desktop.test.tsx"
+  ],
+  "nativeFontLiteralAssertionsPreserved": 9,
+  "mappingRows": 224,
+  "oldRows": 223,
+  "existingRowsAppended": 3,
+  "newRows": 1,
+  "statusDefaultExceptionFieldsUnchanged": true,
+  "boundaryRegistration": "Only svx owner, no outgoing svx dependencies and sw -> svx admission."
+}

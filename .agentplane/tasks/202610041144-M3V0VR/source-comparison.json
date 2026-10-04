@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+      "marker": "SvxStyleToolBoxControl::FillStyleBox",
+      "sha256": "42aaeb42ad2b38421f8775af673f1cb7916f9d70dd5d56bedabf2ec116577c58"
+    },
+    {
+      "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+      "marker": "ShowDefaultStyles",
+      "sha256": "68638aecc184c70e0262905a8c3b2a8e369ed26b28d83f3bd381a3f68a6cb630"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/poolfmt.cxx",
+      "marker": "SwDoc::IsUsed",
+      "sha256": "285d5538e9ad713f44a58b4199f2ab2e4a8123fe1ee31e06c29bda9b778344d1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/app/docstyle.cxx",
+      "marker": "SwDocStyleSheet::IsUsed",
+      "sha256": "7406130f2a02935a44e5c39e80dca68ab63b78dff20ecdc9d62701689af0de47"
+    }
+  ],
+  "comparison": "Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
+  "nativeExecution": false,
+  "sourceCopies": false
+}

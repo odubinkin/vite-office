@@ -1,0 +1,17 @@
+{
+  "entries": [
+    {
+      "width": 1280,
+      "path": "test-results/e2e/writer-style-selector-Writer-live-style-selector-width-1280/live-style-selector.png",
+      "sha256": "b8e87ccca398cd9337c01bf2a7e9cefe26c87acf30e9ac74cb25f25b9010ef68",
+      "observed": "Toolbar displays Owned child after real style choice/UndoRedo/dialog history; desktop Properties agrees. Mobile retains its established responsive panel policy."
+    },
+    {
+      "width": 390,
+      "path": "test-results/e2e/writer-style-selector-Writer-live-style-selector-width-390/live-style-selector.png",
+      "sha256": "beee2d29cf075acd87be974d25f637991101fbb9a55fb83a7f5ff65a65177ab4",
+      "observed": "Toolbar displays Owned child after real style choice/UndoRedo/dialog history; desktop Properties agrees. Mobile retains its established responsive panel policy."
+    }
+  ],
+  "inspected": true
+}

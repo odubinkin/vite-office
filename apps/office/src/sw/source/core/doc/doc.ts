@@ -1,6 +1,7 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 
 import { SwAttrPool } from "../attr/swatrset";
+import type { SwFormat } from "../attr/format";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode } from "../docnode/node";
@@ -259,6 +260,18 @@ export class SwDoc {
   /** Returns document paragraph collections. @returns Ordered collections. */
   public GetTextFormatColls(): readonly SwTextFormatColl[] {
     return this.stylePoolManager.GetTextFormatColls();
+  }
+  /** Reports regular node use, including derived paragraph collections like native poolfmt.cxx. @param format - Candidate identity. @returns Whether a regular node depends on it. */
+  public IsUsed(format: SwTextFormatColl): boolean {
+    for (const node of this.nodes.entries()) {
+      if (!(node instanceof SwTextNode)) continue;
+      let owner: SwFormat | undefined = node.GetTextFormatColl();
+      while (owner !== undefined) {
+        if (owner === format) return true;
+        owner = owner.DerivedFrom();
+      }
+    }
+    return false;
   }
   /** Finds a supported paragraph collection. @param id - Programmatic identity. @returns Existing collection. */
   public FindTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl | undefined {

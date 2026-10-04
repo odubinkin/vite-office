@@ -231,7 +231,7 @@ describe("App" /**
     expect(editor.querySelector('[style*="font-size"]')).toHaveStyle({ fontSize: "14pt" });
 
     const styleSelect = screen.getByLabelText("Paragraph style");
-    expect(within(styleSelect).getAllByRole("option")).toHaveLength(26);
+    expect(within(styleSelect).getAllByRole("option")).toHaveLength(10);
     expect(
       within(styleSelect).queryByRole("option", { name: "List Heading" }),
     ).not.toBeInTheDocument();
@@ -246,6 +246,32 @@ describe("App" /**
       ["caption", "10pt"],
       ["footnote", "10pt"],
     ] as const) {
+      if (
+        !Array.from((styleSelect as HTMLSelectElement).options).some(
+          /** Checks actual available styles. @param option - Native select option. @returns Match. */
+          (option) => option.value === style,
+        )
+      ) {
+        const names: Readonly<Record<typeof style, string>> = {
+          title: "Title",
+          subtitle: "Subtitle",
+          "heading-3": "Heading 3",
+          "preformatted-text": "Preformatted Text",
+          quotations: "Quotations",
+          "heading-5": "Heading 5",
+          heading: "Heading",
+          caption: "Caption",
+          footnote: "Footnote",
+        };
+        fireEvent.click(screen.getByRole("button", { name: "Styles" }));
+        fireEvent.click(screen.getByRole("menuitemradio", { name: names[style] }));
+        expect(
+          Array.from((styleSelect as HTMLSelectElement).options).map(
+            /** Reads actual option identity after native style use. @param option - Option. @returns Identity. */
+            (option) => option.value,
+          ),
+        ).toContain(style);
+      }
       fireEvent.change(styleSelect, { target: { value: style } });
       expect(editor).toHaveStyle({ fontSize });
     }

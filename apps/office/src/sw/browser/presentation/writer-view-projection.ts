@@ -1,4 +1,9 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import {
+  populateStyleToolbox,
+  type StyleToolboxEntry,
+} from "../../../svx/browser/tbxctrls/style-toolbox-control";
+import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterNumFormatBullet } from "../../source/core/doc/number";
 
 import type { SwDoc } from "../../source/core/doc/doc";
@@ -50,14 +55,9 @@ import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
 
-/** Browser selector metadata projected outside React from the Writer style pool. */
-export interface WriterParagraphStyleOption {
-  readonly depth: number;
-  readonly group: (typeof WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL)[number]["group"];
-  readonly id: string;
-}
+/** Detached document style selector metadata. */
+export type WriterParagraphStyleOption = StyleToolboxEntry;
 
-const paragraphStyleOptions = createParagraphStyleOptions();
 /** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
 export interface WriterParagraphProjection {
   readonly alignment: WriterParagraphAlignment;
@@ -341,7 +341,7 @@ export class WriterViewProjection {
       lineNumberInfo: Object.freeze(document.GetLineNumberInfo().QueryValue()),
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),
       paragraphs: Object.freeze(paragraphs),
-      paragraphStyleOptions,
+      paragraphStyleOptions: createParagraphStyleOptions(document),
       pageDescriptor: document.GetPageDesc().GetValue(),
       pageDescriptors: Object.freeze(
         Array.from(
@@ -366,30 +366,73 @@ export class WriterViewProjection {
   }
 }
 
-/** Resolves the immutable Writer style hierarchy once for binding-backed view snapshots. @returns Selector options. */
-function createParagraphStyleOptions(): readonly WriterParagraphStyleOption[] {
-  const parents = new Map(
-    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
-      /** Indexes one style parent. @param style - Pool style. @returns ID and parent pair. */ (
-        style,
-      ) => [style.id, style.parentId],
+/** Writer InitializeStyles order from native tbcontrl.cxx, before document pool iteration. */
+const writerDefaultStyleIds = [
+  "default",
+  "text-body",
+  "title",
+  "subtitle",
+  "heading-1",
+  "heading-2",
+  "heading-3",
+  "heading-4",
+  "quotations",
+  "preformatted-text",
+] as const;
+
+/** Projects actual names without creating unused pool collections during a read. @param document - Current owner. @returns Immutable selector entries. */
+function createParagraphStyleOptions(document: SwDoc): readonly WriterParagraphStyleOption[] {
+  /** Resolves actual names and localizable builtin resources. @param id - Stable identity. @param name - Native display name. @returns Detached entry. */
+  function entry(id: string, name: string): StyleToolboxEntry {
+    const definition = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
+      /** Finds supported metadata. @param style - Pool metadata. @returns Identity match. */
+      (style) => style.id === id,
+    );
+    const builtinName =
+      definition?.name === "Standard" ? "Default Paragraph Style" : definition?.name;
+    return {
+      id,
+      name,
+      ...(name === builtinName ? { resourceId: getWriterParagraphStyleCommandId(id) } : {}),
+    };
+  }
+  const collections = document.GetTextFormatColls();
+  return populateStyleToolbox({
+    defaults: writerDefaultStyleIds.flatMap(
+      /** Resolves known defaults without pool materialization. @param id - Builtin identity. @returns Entries. */
+      (id) =>
+        WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.filter(
+          /** Matches one native default. @param style - Pool metadata. @returns Match. */
+          (style) => style.id === id,
+        ).map(
+          /** Resolves the existing or factory name. @param definition - Pool metadata. @returns Entry. */
+          (definition) => {
+            const factoryName =
+              definition.name === "Standard" ? "Default Paragraph Style" : definition.name;
+            return entry(id, document.FindTextFormatColl(id)?.GetName() ?? factoryName);
+          },
+        ),
     ),
-  );
-  return Object.freeze(
-    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
-      /** Projects one style option. @param style - Pool style. @returns Immutable option. */ (
-        style,
-      ) => {
-        let depth = 0;
-        let parentId = style.parentId;
-        while (parentId !== undefined && depth < 8) {
-          depth += 1;
-          parentId = parents.get(parentId);
-        }
-        return Object.freeze({ depth, group: style.group, id: style.id });
-      },
-    ),
-  );
+    used: collections
+      .filter(
+        /** Queries document dependencies. @param collection - Owner. @returns Usage. */
+        (collection) => document.IsUsed(collection),
+      )
+      .map(
+        /** Detaches a used owner. @param collection - Owner. @returns Entry. */
+        (collection) => entry(collection.id, collection.GetName()),
+      ),
+    favourites: [],
+    userDefined: collections
+      .filter(
+        /** Selects custom declarations. @param collection - Owner. @returns User-defined flag. */
+        (collection) => collection.poolId === 0,
+      )
+      .map(
+        /** Detaches a custom owner. @param collection - Owner. @returns Entry. */
+        (collection) => entry(collection.id, collection.GetName()),
+      ),
+  });
 }
 
 /** Owns browser projection caching and external-store subscriptions outside SwView. */

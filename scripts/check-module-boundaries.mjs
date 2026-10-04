@@ -16,6 +16,7 @@ const moduleNames = [
   "sax",
   "sfx2",
   "svl",
+  "svx",
   "sw",
   "vcl",
   "xmloff",
@@ -29,7 +30,11 @@ const allowedEdges = new Map([
   ["sax", new Set()],
   ["sfx2", new Set(["svl"])],
   ["svl", new Set()],
-  ["sw", new Set(["editeng", "framework", "o3tl", "package", "sfx2", "svl", "vcl", "xmloff"])],
+  ["svx", new Set()],
+  [
+    "sw",
+    new Set(["editeng", "framework", "o3tl", "package", "sfx2", "svl", "svx", "vcl", "xmloff"]),
+  ],
   ["vcl", new Set(["svl"])],
   ["xmloff", new Set(["sax"])],
 ]);

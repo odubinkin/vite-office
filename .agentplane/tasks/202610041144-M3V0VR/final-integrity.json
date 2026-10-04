@@ -1,0 +1,102 @@
+{
+  "base": "a4e0ffb7a45066c05445099456898d6030c69231",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+    "apps/office/src/svx/browser/tbxctrls/style-toolbox-control.test.ts",
+    "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+    "apps/office/e2e/writer-style-selector.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "scripts/check-module-boundaries.mjs",
+    "apps/office/src/framework/browser/app/desktop.test.tsx"
+  ],
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedHashesUnchanged": 4,
+  "priorTestFiles": 307,
+  "priorTestFilesByteIdentical": 306,
+  "oldRows": 223,
+  "mappingRows": 224,
+  "appendRows": 3,
+  "newRows": 1,
+  "statusDefaultExceptionFieldsUnchanged": true,
+  "staticChecksPassed": 7,
+  "sourceChecksPassed": 4,
+  "appCasesPassed": 1352,
+  "inventoryCasesPassed": 109,
+  "scriptCasesPassed": 5,
+  "browserCasesPassed": 89,
+  "browserPriorCasesPassedOnce": 87,
+  "browserFailedOwnedCasesRecovered": 2,
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10538,
+      "covered": 10538,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11508,
+      "covered": 11508,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3041,
+      "covered": 3041,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8763,
+      "covered": 8763,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "artifactAudit": "artifact-audit.json",
+  "nativeExecution": false,
+  "passingFullSuitesRepeated": false,
+  "finalTestOnlyChanges": "After passing app suite, removed invalid Testing Library exact option and made unchanged menu labels exhaustively typed. Final browser build typechecked final sources; production did not change after the passing app suite."
+}
