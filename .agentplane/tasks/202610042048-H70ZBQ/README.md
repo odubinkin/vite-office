@@ -1,10 +1,11 @@
 ---
 id: "202610042048-H70ZBQ"
 title: "Own hyperlink item metadata by value"
-status: "DOING"
+result_summary: "Own five supported hyperlink string values independently of caller metadata;78 new literal cases,341 prior tests unchanged,2277 app/109 inventory/5 script/99 Chromium cases and100% coverage pass once without upstream;registered deviations preserved,broad parity unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -46,11 +47,16 @@ quality_review:
   findings:
     - "Exact semantic diff contains five allowed paths; constructor owns supported string values without freezing caller, retains existing optional/JSON/clone contracts.78 literal boundary and actual graph cases cover caller mutation before cloning or ingestion,projection/copy/cut/history independence;all341 prior tests unchanged."
     - "Evidence ties six first-pass static gates,one upstream-absent build/app2277/inventory109/scripts5/Chromium99 run,100% four-metric app/inventory coverage and five restored source audits semantic0 to unchanged semantic bytes.234 runtime rows retain every field/status/default/exception except one bounded appendix;3 native hashes match. AP forbidden0,doctor0 errors/routingpass."
-commit: null
+commit:
+  hash: "7123cd1fec82728dfd53cfe8408b4d3419b8d4a1"
+  message: "🧩 H70ZBQ task: record successful task verification"
 comments:
   -
     author: "CODER"
     body: "Start: execute approved iteration121 hyperlink string value ownership correction with literal metadata/actual graph boundaries;tests once absent,no AP helper/source artifacts."
+  -
+    author: "CODER"
+    body: "Verified: owned hyperlink metadata; one absent suite profile and exact-SHA quality pass."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified owned hyperlink metadata scope at 7af77163b12d6c0d6b0c86006b37a3252cbd637d: six static first-pass gates; one upstream-absent build,2277 app tests,109 inventory tests,5 script tests,99 Chromium cases;100% app/inventory coverage. Five restored source audits semantic0,341 prior tests unchanged,five paths,234 runtime rows preserved,AP sourcefree,doctor0 errors/routingpass; exact-SHA same-actor quality pass. Broad native/UI parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-04T21:05:07.002Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: owned hyperlink metadata; one absent suite profile and exact-SHA quality pass."
 doc_version: 3
-doc_updated_at: "2026-10-04T21:04:55.290Z"
+doc_updated_at: "2026-10-04T21:05:07.004Z"
 doc_updated_by: "CODER"
 description: "Iteration121 fixes retained caller metadata alias in existing SwFormatINetFormat. Capture supported immutable string values at construction as in native owned OUString/UIName fields,keeping metadata optional/empty values and existing JSON codecs/defaults. Prove caller/returned/clone isolation through direct items,actual hint graphs,copy/cut/transfer/history boundaries. One upstream-absent profile;registered I/O/recovery deviations untouched."
 sections:
@@ -123,6 +136,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the semantic commit through a new scoped task,preserve history and other work;no history rewrite."
   Findings: "Iteration121 fixes SwFormatINetFormat caller metadata alias with an owned five-string construction snapshot,including supported inherited fields. Existing plain JSON order/optional omission versus empty strings/non-shareability/URL rejection/equality/Clone codecs preserved.78 literal cases pass:38 direct value/projection/clone/later-item cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Exactly five semantic paths;all341 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,one provenance appendix,three native hashes. Six static gates first pass;one absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 passed,all app/inventory coverage metrics100%. No suite/build replay or recovery. Vendor restored before five source audits semantic0. Ignored-inclusive AP source/helper scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Exact-SHA 7af77163b12d6c0d6b0c86006b37a3252cbd637d same-actor read-only quality pass recorded at .agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/quality-report.json. Full native style IDs/macros/broadcaster/text backlink/client/refcounts/hierarchy/default empty URL/full UNO and coupled adjacent INET/native insertion topology remain unverified. Registered I/O/recovery deviations untouched;no module/goal promotion."
+extensions:
+  implementation_commit:
+    hash: "7af77163b12d6c0d6b0c86006b37a3252cbd637d"
+    message: "🧩 H70ZBQ code: own hyperlink metadata by value"
 id_source: "generated"
 ---
 ## Summary
