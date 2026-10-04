@@ -4,7 +4,7 @@ title: "Restore Properties sidebar deck close and reopen lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,36 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T01:33:17.174Z"
+  updated_at: "2026-10-04T01:34:26.374Z"
   updated_by: "CODER"
-  note: "Verified: deck close/activation lifecycle full998app109inventory47browser2resources100%coverage0semantic, upstream-absent998+109+12+47 restored;259oldbytes215priorrows/9hashes/11sourcehashes/zero artifact source-helper-Python proofs. Native broader/sidebar-F6 gaps open."
+  note: "Verified: final blueprint evidence at semantic213fe1350d9f, exact same-actor EVALUATOR pass and declared full998+109+47+2/offline998+109+12+47/hash/scope/artifact gates unchanged. Source/helper/Python artifacts0; whole native Sidebar/F6/parent parity open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T01:33:58.801Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR phase at exact semantic213fe1350d9f; existing Properties deck close/reopen/activation contract and approved nine-path scope satisfy deterministic gates. No independent-agent claim."
+  evaluated_sha: "213fe1350d9f0029ecd786f6974d3cb734af5945"
+  blueprint_digest: "f06a937fbe404e9f69253b3fc247ce67d5493a07145f05a3f28bbb813fa5840e"
+  evidence_refs:
+    - ".agentplane/tasks/202610040112-BNCHTK/README.md"
+    - ".agentplane/tasks/202610040112-BNCHTK/quality/20261004-013358801-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/quality/20261004-013358801-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040112-BNCHTK/quality/20261004-013358801-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040112-BNCHTK/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/source-inspection.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/baseline-runtime.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/corrected-runtime.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/corrected-browser.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/scope-integrity.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/full-verify.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/final-integrity.json"
+    - ".agentplane/tasks/202610040112-BNCHTK/auxiliary.json"
+  findings:
+    - "Native RequestCloseDeck separates deck collapse from whole Sidebar and removes rail selection, retains content; TabBar activation focuses document before toggling; deck-toolbox/rail Escape returns document without toggle. New sfx2 browser presenter retains mounted children, integrates Writer own-client focus and current generated command content."
+    - "Focused47owned/10rebuiltbrowser plus full998app109inventory47browser2resources100%coverage0semantic pass; owned lifetime/state/order/frame/no-dispatch and desktop/mobile checkedstate/focus-plus-typing cover the approved bounded contract."
+    - "Initial module-cycle defect repaired by passing localized labels from Writer, eliminating upward sfx2->framework dependency without changing rules. Final semantic hashes match verified code,259prior tests byte-identical;215prior rows/status/defaults/owner/old evidence/order preserved,3evidence-only rows+1new bounded browser adaptation row each."
+    - "Vendor-absent998+109+12+47 pass/restored finally; no test reads/compiles/invokes pinned upstream, static source-reading CLI audits separate.11source hashes unchanged and2754taskartifact files source/helpers/Python/exe/archive/magic/embedded signatures0."
 commit: null
 comments:
   -
@@ -41,8 +67,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: deck close/activation lifecycle full998app109inventory47browser2resources100%coverage0semantic, upstream-absent998+109+12+47 restored;259oldbytes215priorrows/9hashes/11sourcehashes/zero artifact source-helper-Python proofs. Native broader/sidebar-F6 gaps open."
+  -
+    type: "verify"
+    at: "2026-10-04T01:34:26.374Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: final blueprint evidence at semantic213fe1350d9f, exact same-actor EVALUATOR pass and declared full998+109+47+2/offline998+109+12+47/hash/scope/artifact gates unchanged. Source/helper/Python artifacts0; whole native Sidebar/F6/parent parity open."
 doc_version: 3
-doc_updated_at: "2026-10-04T01:33:17.224Z"
+doc_updated_at: "2026-10-04T01:34:26.426Z"
 doc_updated_by: "CODER"
 description: "Iteration83 under C9TN6M: native-owned Sidebar deck title close and Properties activation rail retain child content across collapse, separate from whole-sidebar visibility. Existing Writer content/commands retained; upstream-independent tests and no source/helper artifacts."
 sections:
@@ -84,7 +116,38 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-04T01:34:26.374Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: final blueprint evidence at semantic213fe1350d9f, exact same-actor EVALUATOR pass and declared full998+109+47+2/offline998+109+12+47/hash/scope/artifact gates unchanged. Source/helper/Python artifacts0; whole native Sidebar/F6/parent parity open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T01:34:26.041Z, excerpt_hash=sha256:27c572076e521f0bf083107200ad025cafa538522861d2753d474d472f32070d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040112-BNCHTK/blueprint/resolved-snapshot.json
+    - old_digest: f06a937fbe404e9f69253b3fc247ce67d5493a07145f05a3f28bbb813fa5840e
+    - current_digest: f06a937fbe404e9f69253b3fc247ce67d5493a07145f05a3f28bbb813fa5840e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040112-BNCHTK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610040112-BNCHTK --result verified-202610040112-BNCHTK --commit 213fe1350d9f0029ecd786f6974d3cb734af5945
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
+    Semantic213fe1350d9f0029ecd786f6974d3cb734af5945; same-actor separate EVALUATOR pass quality/20261004-013358801-recovery-context/quality-report.json at exact evaluated_sha, no independent-review claim. All nine final semantic file hashes match full/offline verified code, clean semantic commit. Final blueprint verification recorded after quality/doc updates; canonical finish retains true implementation SHA. Parent/goal remains active.
   Rollback Plan: "Revert only semantic iteration83 commit via a new authorized task, preserving history/results/registered save-open-recovery decisions."
   Findings: |-
     Preflight clean main fdf069b5a372, direct workflow, parent C9TN6M DOING. Previous goal turn progress: iteration82 semantic54f2976e2819 closed root Home/End active popup repair. Native ordinary F6 pane list cannot faithfully enter current Sidebar because deck title and rail composition missing; selected one prerequisite existing-deck lifecycle correction, not a speculative F6 fallback. Native CloseDeck retains Sidebar tabbar, RemoveDeckHighlight; activation focuses document then OpenThenToggleDeck. Native deck and panel Help/settings/docking/full other decks and F6/panel focus remain open. Some broad file/resource reads truncated and one guessed sidebar UI glob absent; exact actual paths loaded thereafter. No network/outside access or helper/source artifacts.
@@ -146,7 +209,38 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-04T01:34:26.374Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: final blueprint evidence at semantic213fe1350d9f, exact same-actor EVALUATOR pass and declared full998+109+47+2/offline998+109+12+47/hash/scope/artifact gates unchanged. Source/helper/Python artifacts0; whole native Sidebar/F6/parent parity open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T01:34:26.041Z, excerpt_hash=sha256:27c572076e521f0bf083107200ad025cafa538522861d2753d474d472f32070d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040112-BNCHTK/blueprint/resolved-snapshot.json
+- old_digest: f06a937fbe404e9f69253b3fc247ce67d5493a07145f05a3f28bbb813fa5840e
+- current_digest: f06a937fbe404e9f69253b3fc247ce67d5493a07145f05a3f28bbb813fa5840e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040112-BNCHTK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610040112-BNCHTK --result verified-202610040112-BNCHTK --commit 213fe1350d9f0029ecd786f6974d3cb734af5945
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
+Semantic213fe1350d9f0029ecd786f6974d3cb734af5945; same-actor separate EVALUATOR pass quality/20261004-013358801-recovery-context/quality-report.json at exact evaluated_sha, no independent-review claim. All nine final semantic file hashes match full/offline verified code, clean semantic commit. Final blueprint verification recorded after quality/doc updates; canonical finish retains true implementation SHA. Parent/goal remains active.
 
 ## Rollback Plan
 
