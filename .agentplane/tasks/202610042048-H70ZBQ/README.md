@@ -4,7 +4,7 @@ title: "Own hyperlink item metadata by value"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,27 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T21:04:13.311Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only exact-SHA review passes approved hyperlink value-ownership scope at 7af77163b12d6c0d6b0c86006b37a3252cbd637d."
+  evaluated_sha: "7af77163b12d6c0d6b0c86006b37a3252cbd637d"
+  blueprint_digest: "27be13eef277b0a1f48178310c8de79df7b589f2e92177851bef9bef1d84489f"
+  evidence_refs:
+    - ".agentplane/tasks/202610042048-H70ZBQ/README.md"
+    - ".agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610042048-H70ZBQ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610042048-H70ZBQ/evidence/static-gates.json"
+    - ".agentplane/tasks/202610042048-H70ZBQ/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610042048-H70ZBQ/evidence/restored-source-audits.json"
+    - ".agentplane/tasks/202610042048-H70ZBQ/evidence/scope-and-native-hashes.json"
+    - "Read-only exact-commit/scope/native-hash audit at 7af77163b12d6c0d6b0c86006b37a3252cbd637d"
+  findings:
+    - "Exact semantic diff contains five allowed paths; constructor owns supported string values without freezing caller, retains existing optional/JSON/clone contracts.78 literal boundary and actual graph cases cover caller mutation before cloning or ingestion,projection/copy/cut/history independence;all341 prior tests unchanged."
+    - "Evidence ties six first-pass static gates,one upstream-absent build/app2277/inventory109/scripts5/Chromium99 run,100% four-metric app/inventory coverage and five restored source audits semantic0 to unchanged semantic bytes.234 runtime rows retain every field/status/default/exception except one bounded appendix;3 native hashes match. AP forbidden0,doctor0 errors/routingpass."
 commit: null
 comments:
   -
