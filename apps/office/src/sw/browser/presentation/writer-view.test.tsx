@@ -521,7 +521,8 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     );
     const rulerSurface = screen.getByLabelText("Writer horizontal ruler")
       .firstElementChild as HTMLElement;
-    fireEvent.click(rulerSurface, { clientX: 240 });
+    fireEvent.pointerDown(rulerSurface, { clientX: 240 });
+    fireEvent.pointerUp(window, { clientX: 240 });
     expect(
       (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops(),
     ).toHaveLength(3);
@@ -539,7 +540,8 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect((shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(
       0,
     );
-    fireEvent.click(rulerSurface, { clientX: 240 });
+    fireEvent.pointerDown(rulerSurface, { clientX: 240 });
+    fireEvent.pointerUp(window, { clientX: 240 });
     expect(
       (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetTabPos(),
     ).toBeGreaterThan(0);

@@ -3343,13 +3343,74 @@
           {
             "marker": "WriterRulers",
             "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+            "marker": "useRulerTracking"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+            "marker": "StartTracking"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+            "marker": "ownsPointer"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+            "marker": "ownsKeys"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+            "marker": "replacesOwner"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "acceptsPreview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "removesTabHandle"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "cancelsWriterDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "removesWriterDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "acceptsWriterDrag"
+          },
+          {
+            "path": "apps/office/e2e/writer-ruler-tracking.spec.ts",
+            "marker": "Writer ruler tracking at width"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "admitsTabPress"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "cancelsNewTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "acceptsNewTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "tracksNewWriterTab"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
       "rationale": "Projects Writer ruler handles in the browser and emits pointer deltas/positions while SwWrtShell applies authoritative page, indent, and tab-stop transitions.",
       "responsibilities": [
-        "Presents accessible page-margin, paragraph-indent, and tab-stop handles for the browser Writer workspace."
+        "Presents accessible page-margin, paragraph-indent, and tab-stop handles for the browser Writer workspace.",
+        "Existing ruler gestures now project inspected Ruler left-single-click/nontracking admission,VCL owner replacement and all-key tracking priority:initiating pointer owns movement/termination,Escape cancels,Return accepts the last painted position,and other keys cannot reach widget/document dispatch. All cancellation paths release listeners and discard preview without application changes;accepted termination releases ownership before one callback. Temporary tabs begin on a free-surface press as in SvxRuler Click and Ruler MouseButtonDown,and remain browser preview until accepted pointer/Return termination;cancel/hide/unmount never inserts a model tab and trailing clicks cannot add a second undo entry. Zero-motion termination preserves its initial position. Existing nonzero snapping,coordinate conversion,ticks/guides,page/paragraph/tab callbacks and core undo ownership remain unchanged. Six old tab fixture triggers in two files use pointer-down plus matched pointer-up,with every assertion and all other bytes retained;278of280prior test files byte-identical. Browser teardown cancels DOM callbacks without claiming identical native disposal flags. Owned boundary/handle/actual Writer and rebuilt desktop/mobile tests cover this bounded tracking contract only. Full native hit testing,RTL/tab types,double-click dialogs,modifier snapping,deletion,mouse capture,platform/LOK/input and complete ruler/Writer/native parity remain unverified;intentional save/open/recovery exceptions are preserved."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -3446,6 +3507,83 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+            "marker": "useRulerTracking"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+            "marker": "StartTracking"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+            "marker": "ownsPointer"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+            "marker": "ownsKeys"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
+            "marker": "replacesOwner"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "acceptsPreview"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "removesTabHandle"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "cancelsWriterDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "removesWriterDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "acceptsWriterDrag"
+          },
+          {
+            "path": "apps/office/e2e/writer-ruler-tracking.spec.ts",
+            "marker": "Writer ruler tracking at width"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "admitsTabPress"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "cancelsNewTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+            "marker": "acceptsNewTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+            "marker": "tracksNewWriterTab"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
+      "rationale": "Owned DOM tracking lifecycle adapted from read-only pinned Ruler/VCL input routing;complete native tracking parity remains unverified.",
+      "responsibilities": [
+        "Existing ruler gestures now project inspected Ruler left-single-click/nontracking admission,VCL owner replacement and all-key tracking priority:initiating pointer owns movement/termination,Escape cancels,Return accepts the last painted position,and other keys cannot reach widget/document dispatch. All cancellation paths release listeners and discard preview without application changes;accepted termination releases ownership before one callback. Temporary tabs begin on a free-surface press as in SvxRuler Click and Ruler MouseButtonDown,and remain browser preview until accepted pointer/Return termination;cancel/hide/unmount never inserts a model tab and trailing clicks cannot add a second undo entry. Zero-motion termination preserves its initial position. Existing nonzero snapping,coordinate conversion,ticks/guides,page/paragraph/tab callbacks and core undo ownership remain unchanged. Six old tab fixture triggers in two files use pointer-down plus matched pointer-up,with every assertion and all other bytes retained;278of280prior test files byte-identical. Browser teardown cancels DOM callbacks without claiming identical native disposal flags. Owned boundary/handle/actual Writer and rebuilt desktop/mobile tests cover this bounded tracking contract only. Full native hit testing,RTL/tab types,double-click dialogs,modifier snapping,deletion,mouse capture,platform/LOK/input and complete ruler/Writer/native parity remain unverified;intentional save/open/recovery exceptions are preserved."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React lifecycle and pointer identity replace native tracking/capture disposal while retaining local gesture ownership and application termination boundaries."
       },
       "status": "local-only"
     },

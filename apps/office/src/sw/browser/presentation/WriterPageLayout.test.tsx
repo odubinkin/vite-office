@@ -184,9 +184,11 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
     const rulerSurface = container.querySelector(
       '[aria-label="Writer horizontal ruler"] > div',
     ) as HTMLElement;
-    fireEvent.click(rulerSurface, { clientX: 240 });
+    fireEvent.pointerDown(rulerSurface, { clientX: 240 });
+    fireEvent.pointerUp(window, { clientX: 240 });
     expect(onTabStopAdd).toHaveBeenCalledWith(expect.any(Number));
-    fireEvent.click(rulerSurface, { clientX: 0 });
+    fireEvent.pointerDown(rulerSurface, { clientX: 0 });
+    fireEvent.pointerUp(window, { clientX: 0 });
     expect(onTabStopAdd).toHaveBeenCalledTimes(1);
     const handle = screen.getByRole("button", { name: "Tab stop 1" });
     fireEvent.pointerDown(handle, { clientX: 100 });
@@ -227,7 +229,8 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
     const rulerSurface = container.querySelector(
       '[aria-label="Writer horizontal ruler"] > div',
     ) as HTMLElement;
-    fireEvent.click(rulerSurface, { clientX: 240 });
+    fireEvent.pointerDown(rulerSurface, { clientX: 240 });
+    fireEvent.pointerUp(window, { clientX: 240 });
     expect(onTabStopAdd).toHaveBeenLastCalledWith(expect.any(Number));
     rerender(
       <WriterRulers
@@ -238,7 +241,8 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
         paragraph={item}
       />,
     );
-    fireEvent.click(rulerSurface, { clientX: 240 });
+    fireEvent.pointerDown(rulerSurface, { clientX: 240 });
+    fireEvent.pointerUp(window, { clientX: 240 });
     expect(onTabStopAdd).toHaveBeenCalledTimes(1);
   });
 });
