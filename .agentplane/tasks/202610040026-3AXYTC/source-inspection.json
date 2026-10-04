@@ -1,0 +1,37 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only relevant complete native functions inspected, no compilation/execution/copies/helpers. Conclusions/hashes only.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/syswin.cxx",
+      "sha256": "763492c745ad5fbfcd8446f12941f83997383f17dea3e86e57a292f9149f6ab5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/window.cxx",
+      "sha256": "2b5baaa2d77411ced7a3b25d0792d1123b2b6ae47d6be8d7ef62f128e628e8ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/mouse.cxx",
+      "sha256": "10a9993f3636425339b63d2a96da94383b0ba28303288de520ab78680e0d8215"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menubarwindow.cxx",
+      "sha256": "fd2028b1bc48249fab735c0df7809abb91061031dd952885981183f5aa757375"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+      "sha256": "66be41992cb64622549e76c58bb112ab8f49aa6eae8e6ac677f7bb014f34d351"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/taskpanelist.cxx",
+      "sha256": "9cc77f718a03948632745fa48a494a5fcc8bfbd11c2efa25f8761d812f74b2c6"
+    }
+  ],
+  "conclusions": [
+    "SystemWindow PreNotify Ctrl-F6 without Shift grabs its document client and returns handled; additional Alt/Mod3 are not excluded by this condition. Other F6 variants continue task-pane routing.",
+    "Window GrabFocusToDocument delegates; ImplGrabFocusToDocument climbs own frame and grabs client, while ImplGrabFocus rejects disabled/input-disabled/modal/disposed client and sends old LoseFocus.",
+    "MenuBarWindow LoseFocus invalidates highlight with restore disabled, killing current popup and consuming saved owner. Explicit direct document focus wins over saved toolbar owner.",
+    "Native menu/popup Ctrl-F6 cleanup and TaskPaneList confirm document shortcut ownership distinct from command Execute; browser frame owns route and existing DOM menubar blur owns teardown.",
+    "Mounted Writer editor maps frame client. Shared active/modal eligibility keeps blocked Writer client untouched. Full plain/Shift-F6 pane cycle/platform modifier mapping/native flags/focus graph remain unverified."
+  ]
+}

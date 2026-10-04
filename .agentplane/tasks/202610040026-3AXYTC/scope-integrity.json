@@ -1,0 +1,38 @@
+{
+  "base": "2a56dd8e8704",
+  "priorTests": 255,
+  "allPriorTestBytesPreserved": true,
+  "productionInverseProof": {
+    "passed": true,
+    "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "changes": "Shared active/modal eligibility and owned Ctrl-F6 document focus listener only; inverse yields byte-identical base."
+  },
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changed": 1,
+      "evidenceOnly": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changed": 1,
+      "evidenceOnly": true
+    }
+  ],
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+    "apps/office/e2e/writer-document-key.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "hashes": {
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "8b726f3db4fdd4c8813f5c3add00a6ad127fe71a0b20f314eefe1c276eb54932",
+    "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx": "bb2d20c55accd0fa8fa3241650cfbf42af52ef9668063280aa94f4f0fe09dadc",
+    "apps/office/e2e/writer-document-key.spec.ts": "9614d4e6bc4fcb0431fb8edf8107b070daa2318e7f6c97a18125f7ab42fdfe7d",
+    "docs/program/source-provenance.json": "de2b05183f85891f676f1a0f4dcf24a7973a1e03dd22a41a2aa8ad4a38173d78",
+    "docs/program/parity/runtime-inventory.json": "99014dbf5b56a0d916ce5747061729a9d5ffd2084dd64d8f888dccc2d90eda8e"
+  }
+}

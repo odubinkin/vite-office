@@ -1,0 +1,38 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/presentation/writer-view-document-key.test.tsx",
+  "exit": 1,
+  "sha256": "af9191ff0492eb86b4a27fb05e2ba0e899540b3527939d7af66e416cf76f7e78",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  17 failed | 7 passed (24)",
+    "⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯"
+  ],
+  "errors": [
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > focuses the document directly from its formatting toolbar",
+    "AssertionError: expected false to be true // Object.is equality",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > discards saved toolbar focus and closes the root menu cycle",
+    "Error: expect(element).toHaveFocus()",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > discards saved toolbar focus and closes the popup menu cycle",
+    "Error: expect(element).toHaveFocus()",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > discards saved toolbar focus and closes the child menu cycle",
+    "Error: expect(element).toHaveFocus()",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > retains the native direct-key condition with {\"altKey\":true}",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > retains the native direct-key condition with {\"metaKey\":true}",
+    "AssertionError: expected false to be true // Object.is equality",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > routes only to the current frame and observes active changes",
+    "Error: expect(element).toHaveFocus()",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the paragraph modal's focus and resumes after cancellation",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the hyperlink modal's focus and resumes after cancellation",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the break modal's focus and resumes after cancellation",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the page modal's focus and resumes after cancellation",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the line modal's focus and resumes after cancellation",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the open modal's focus and resumes after cancellation",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the save-as modal's focus and resumes after cancellation",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the export modal's focus and resumes after cancellation",
+    "AssertionError: expected false to be true // Object.is equality",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the bookmark modal's focus and resumes after cancellation",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Cancel\"",
+    " FAIL  src/sw/browser/presentation/writer-view-document-key.test.tsx > Writer direct document key > keeps the table modal's focus and resumes after cancellation",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"More Options\""
+  ]
+}
