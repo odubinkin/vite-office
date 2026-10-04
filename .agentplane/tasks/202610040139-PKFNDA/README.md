@@ -1,10 +1,11 @@
 ---
 id: "202610040139-PKFNDA"
 title: "Restore Paragraph sidebar panel expansion and More Options"
-status: "DOING"
+result_summary: "Restored Paragraph sidebar expansion, More Options and Return content focus; full and upstream-absent checks pass, broader Sidebar parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 32
+revision: 33
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Reviewed scoped generic sfx2 panel, mounted hidden children, source-owned ParagraphDialog bindings/metadata and native More Options label. Return expands before first eligible paragraph-content focus, includes list fallback/all-disabled state. Eleven new app tests and two browser cases; four prior locators narrowed to owning table popup with exact inverse proofs, no assertions/inputs/count weakened."
     - "216 prior manifest rows/order/status/defaults/ownership/evidence preserved; one existing row append-only evidence/responsibility plus one bounded unverified browser row each.258 other prior tests byte-identical;11semantic6pinned source hashes unchanged. No core/resources/SidebarDeck/save-open-recovery modifications or new exception/module promotion. Artifacts contain outcomes/hashes only; separately cleaned old diff in V91ZXX."
-commit: null
+commit:
+  hash: "38c845e57656ebe260133eac032670c1b463519d"
+  message: "🎯 PKFNDA code: restore Paragraph sidebar panel controls"
 comments:
   -
     author: "CODER"
     body: "Start: authorized iteration84 existing Paragraph expander/MoreOptions/Enter content focus, reuse source-owned dialog/bindings and retain content; upstream-independent tests,registered deviations preserved,results-only artifacts."
+  -
+    author: "CODER"
+    body: "Verified: restored existing Paragraph panel persistent expander, bindings-backed More Options and Return first eligible content focus including list fallback; full1009app109inventory49browser2resources100%coverage0semantic,upstream-absent1009+109+12+49 restoredfinally.258priorbyte tests4exactinverse selector proofs216priorrows preserved,11semantic6source hashes unchanged,artifactsource/helper/Python/exe/archive/magic/embedded/diff0. Same-actor exact semantic quality pass;fullsidebar/context-profile/native/parent parity open,registered deviations retained."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final docs/evidence current; same-actor EVALUATOR pass evaluated_sha38c845e57656ebe260133eac032670c1b463519d confirmed. Full1009+109+49+2resource100%0semantic,upstream-absent1009+109+12+49 restored;11semantic6source intact,258priorbytes4inverse locator proofs216oldrows preserved,artifacts code/helper/Python/archive0. Broader Sidebar/parent parity open."
+  -
+    type: "status"
+    at: "2026-10-04T02:09:59.469Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored existing Paragraph panel persistent expander, bindings-backed More Options and Return first eligible content focus including list fallback; full1009app109inventory49browser2resources100%coverage0semantic,upstream-absent1009+109+12+49 restoredfinally.258priorbyte tests4exactinverse selector proofs216priorrows preserved,11semantic6source hashes unchanged,artifactsource/helper/Python/exe/archive/magic/embedded/diff0. Same-actor exact semantic quality pass;fullsidebar/context-profile/native/parent parity open,registered deviations retained."
 doc_version: 3
-doc_updated_at: "2026-10-04T02:09:56.787Z"
+doc_updated_at: "2026-10-04T02:09:59.470Z"
 doc_updated_by: "CODER"
 description: "Iteration84 under C9TN6M: replace existing static Paragraph heading with native-shaped persistent expander and bindings-backed More Options for already implemented ParagraphDialog; preserve content/model/Sidebar lifecycle and registered save-open-recovery deviations."
 sections:
@@ -145,6 +158,10 @@ sections:
     <!-- END VERIFICATION RESULTS --> Quality evidence: .agentplane/tasks/202610040139-PKFNDA/quality/20261004-020929189-recovery-context/quality-report.json. Phase is same actor, not independent-agent review. Full sidebar/context-profile/native/parent parity remains open.
   Rollback Plan: "Revert only iteration84 semantic commit through a new authorized task; preserve history/results/registered save-open-recovery decisions."
   Findings: "Pinned manual read-only complete relevant Panel/PanelTitleBar/FocusManager/ResourceManager/resource functions inspected, six hashes only;no source copies/native execution. Before-code actual Writer4fails missing Paragraph button; generic six tests and real Writer five tests now pass, focused28/4files and fresh desktop/mobile/browser regressions12pass. Native More Options duplicates table-grid label: narrowed four old global locators to their existing Table size popup, exact inverse proofs preserve assertions/inputs/counts, no application/accessibility workaround. Paragraph content ref owns all controls, Return selects list fallback when alignment is disabled, retains state and does not dispatch. Full terminal verify0:1009app/204files109inventory/36files49browser2resource checks,100%both coverage all metrics,semanticViolationCount0. Initial full browser fail1/48 label ambiguity recorded; earlier successful full before final focus refinement separately bounded hash. Sequential vendor-absent checks allpass1009+109+12+49,upstream restored finally, static CLI source audits kept separate. Separate user-requested artifact cleanup V91ZXX eaa15ebac432 removes old diff body;all new artifacts hashes/results/conclusions only. Complete sidebar focus/F6/settings/Help/other panels/native sizing/profile context and parent parity remain open;registered save-open-recovery deviations preserved. Command: npm run verify; sequential pinned upstream path absent npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e; final integrity. Result: pass. Evidence: full-verify.json1009app109inventory49browser2resource100%both0semantic; vendor-absent-runtime.json1009+109, vendor-absent-scripts.json12, vendor-absent-browser.json49; restoredfinally and6source11semantic hashes unchanged.258prior tests byte-identical4exact formatted inverse selector proofs;216prior manifest fields/evidence/order preserved,one evidence-only row+one new row each. final-integrity.json artifact source/helper/Python/exe/archive/magic/embedded/diff0,coverage100all metrics;auxiliary routing/diffpass doctor0errors2knownwarnings. Source inspection manual only, no native compile/run,static vendor-reading CLI audits separate. Scope: existing Paragraph panel header/retained expansion/More Options/Return focus only. Same-actor exact semantic EVALUATOR pass at38c845e57656ebe260133eac032670c1b463519d; full sidebar/context profile/parent parity remain open. Quality evidence: .agentplane/tasks/202610040139-PKFNDA/quality/20261004-020929189-recovery-context/quality-report.json. Phase is same actor, not independent-agent review. Full sidebar/context-profile/native/parent parity remains open."
+extensions:
+  implementation_commit:
+    hash: "38c845e57656ebe260133eac032670c1b463519d"
+    message: "🎯 PKFNDA code: restore Paragraph sidebar panel controls"
 id_source: "generated"
 ---
 ## Summary
