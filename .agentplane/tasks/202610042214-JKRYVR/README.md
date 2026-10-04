@@ -1,10 +1,11 @@
 ---
 id: "202610042214-JKRYVR"
 title: "Bind internet attributes to their owning text nodes"
-status: "DOING"
+result_summary: "verified-202610042214-JKRYVR"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -21,9 +22,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T22:33:01.505Z"
+  updated_at: "2026-10-04T22:33:19.484Z"
   updated_by: "CODER"
-  note: "Verified exact semantic SHA a97a25df9bafd49d37733ffa12a1fa2306c29da4;same-actor EVALUATOR pass;one absent full profile app2649/100%all coverage,scripts5,Chromium99,one failed inventory case recovered only with combined100%;six latest static gates,five restored audits,347prior test files unchanged,doctor0errors/routingpass,AP forbidden0. Full native style/client/destruction/core/UI parity remains unverified."
+  note: "verified-202610042214-JKRYVR"
   attempts: 0
 quality_review:
   state: "pass"
@@ -48,11 +49,16 @@ quality_review:
     - "Exact-head eight-path audit confirms actual node binding and old map detachment,347 prior tests byte-identical,18 new ownership/transition cases,unchanged projection bodies and re-export API,236 existing runtime statuses/defaults/exceptions preserved and one unverified helper."
     - "One absent full profile only: build,app2649 with100%coverage,scripts5,Chromium99 pass. Only the single failed inventory case replayed; lexical row ordering and relocated declaration markers corrected. Initial full inventory coverage plus final failed-case-only raw coverage covers all original CLI gaps. No passing suite/build replay or repository threshold change."
     - "Five restored source audits pass after filename-split registration;semantic violations0. Static docs comment failure repaired;latest six gates pass. Ignored-inclusive AP3824files/0forbidden. Doctor0errors/two unchanged legacy warnings;routingpass;clean reviewed checkout."
-commit: null
+commit:
+  hash: "478df10c9028897ec1440dfbe2fc0637986bdf42"
+  message: "🧩 JKRYVR task: record verified node ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Restore bounded internet text-node ownership under the standing iterative goal and absent-reference verification contract."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610042214-JKRYVR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact semantic SHA a97a25df9bafd49d37733ffa12a1fa2306c29da4;same-actor EVALUATOR pass;one absent full profile app2649/100%all coverage,scripts5,Chromium99,one failed inventory case recovered only with combined100%;six latest static gates,five restored audits,347prior test files unchanged,doctor0errors/routingpass,AP forbidden0. Full native style/client/destruction/core/UI parity remains unverified."
+  -
+    type: "verify"
+    at: "2026-10-04T22:33:19.484Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610042214-JKRYVR"
+  -
+    type: "status"
+    at: "2026-10-04T22:33:19.616Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610042214-JKRYVR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:33:01.564Z"
+doc_updated_at: "2026-10-04T22:33:19.617Z"
 doc_updated_by: "CODER"
 description: "Restore the native internet attribute text-node backlink at existing insertion, copy, move and node transition boundaries. Keep retained undo paragraph identity and registered save/open/recovery deviations. No upstream source or executable helper artifacts; verification suites run once with the pinned reference directory absent."
 sections:
@@ -146,6 +165,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-04T22:33:19.484Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610042214-JKRYVR
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:33:01.564Z, excerpt_hash=sha256:dec7fe2943b6f56e034e92fd22b7bb2b53eda98d87cad04a763354e70a83e209
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042214-JKRYVR/blueprint/resolved-snapshot.json
+    - old_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+    - current_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042214-JKRYVR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610042214-JKRYVR --result verified-202610042214-JKRYVR --commit 478df10c9028897ec1440dfbe2fc0637986bdf42
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task semantic commit if required; do not rewrite history or alter pre-existing changes."
   Findings: |-
@@ -154,6 +203,10 @@ sections:
     Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion.
 
     Validation: all347 pre-existing test files are byte-identical;18 independent application cases added. All2649 application cases/266files and Chromium99 passed on their sole absent-reference full run;app coverage100%all four metrics. Inventory initially108pass/1fail because new helper row was misplaced;only that failed case replayed twice. First replay exposed two extracted projection declarations still listed under ndtxt;correct markers relocated while existing re-export APIs and projection bodies remain unchanged. Second replay1pass/2skipped;initial full summary plus failed-case raw coverage confirms combined100%all four metrics,with repository thresholds unchanged. Source-provenance first failed for an omitted filename-split registration;registered approved decomposition and repeated only that failed gate before the pending invariant/parity gates. All five restored source audits pass,semantic violations0. Static docs failed only on missing new callback comments;documentation repaired and only failed docs gate repeated,then pending file-size gate ran. Existing236 runtime statuses/defaults/exceptions preserved;one new helper remains unverified. Ignored-inclusive Agentplane scan3824files,0forbidden. No source/helper/native artifacts,network,upstream execution,passing suite/build replay or registered I/O deviation change. Full broad existing core/UI parity remains unverified.
+extensions:
+  implementation_commit:
+    hash: "a97a25df9bafd49d37733ffa12a1fa2306c29da4"
+    message: "🧩 JKRYVR code: bind internet attributes to their owning text nodes"
 id_source: "generated"
 ---
 ## Summary
@@ -239,6 +292,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-04T22:33:19.484Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610042214-JKRYVR
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:33:01.564Z, excerpt_hash=sha256:dec7fe2943b6f56e034e92fd22b7bb2b53eda98d87cad04a763354e70a83e209
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042214-JKRYVR/blueprint/resolved-snapshot.json
+- old_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+- current_digest: 833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042214-JKRYVR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610042214-JKRYVR --result verified-202610042214-JKRYVR --commit 478df10c9028897ec1440dfbe2fc0637986bdf42
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
