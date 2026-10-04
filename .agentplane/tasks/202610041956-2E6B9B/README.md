@@ -4,7 +4,7 @@ title: "Restore text hint owner range notifications"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T20:16:37.847Z"
+  updated_by: "CODER"
+  note: "All approved iteration119 gates passed at semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a; app2124 and Chromium99 once absent, all coverage100%, prior337 tests unchanged, five restored audits semantic0, exact-SHA same-actor quality pass. Vendor restored; no AP sources/helpers or broad parity promotion."
   attempts: 0
 quality_review:
   state: "pass"
@@ -57,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore approved actual hint owner notification and lazy primary-map resort; preserve prior tests and run once absent upstream."
+  -
+    type: "verify"
+    at: "2026-10-04T20:16:37.847Z"
+    author: "CODER"
+    state: "ok"
+    note: "All approved iteration119 gates passed at semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a; app2124 and Chromium99 once absent, all coverage100%, prior337 tests unchanged, five restored audits semantic0, exact-SHA same-actor quality pass. Vendor restored; no AP sources/helpers or broad parity promotion."
 doc_version: 3
-doc_updated_at: "2026-10-04T20:15:00.661Z"
+doc_updated_at: "2026-10-04T20:16:37.900Z"
 doc_updated_by: "CODER"
 description: "Iteration119: restore SwTextAttr owner backlink, native SetStart/SetEnd notifications and lazy dirty-range ResortStartMap/GetWithoutResorting for the existing primary map; transfer/replacement/normalization bind or release actual owners, snapshots stay independent. No new native operation families/maps/status promotion or registered I/O changes. Tests once absent upstream; no AP sources/helpers."
 sections:
@@ -78,9 +84,48 @@ sections:
     4. After restoration npm exec -- tsx scripts/generate-writer-ui-resources.ts --check;npm run check:source-tree;npm run check:source-provenance;npm run inventory:invariants;npm run inventory:parity. All pass,semantic violations0.
     5. Audit six semantic paths,all337previous tests byte-identical,234runtime fields/statuses/defaults/exceptions unchanged except two justification appendices,provenance only two bounded appendices,native hashes,ignored-inclusive AP source/helper-free. Run ap doctor,node .agentplane/policy/check-routing.mjs; no new errors.
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass; CODER verify/finish separate commit hashes; clean main/vendor restored;parent/goal active. No broad native/core/UI promotion.
-  Verification: "Executed declared verification for iteration119. Six static gates pass; initial lint-only unused parameters corrected through the labeled four-value notification tuple and only lint repeated before remaining gates. One sequential upstream-absent profile: build pass,app2124 tests/256 files and inventory109/36 with all four metrics100%,script tests5/2,Chromium99; every gate exit0,no successful suite repeated and no present-upstream product test profile. Vendor restored in finally. Five restored source/resource/inventory audits exit0,semantic violations0. Scope audit confirms exactly six semantic paths,all337 prior test/spec files byte-identical,234 runtime fields/statuses/defaults/exceptions unchanged except two justification appendices and two provenance appendices. Five pinned native source hashes recorded without source copies. Ignored-inclusive AP source/helper scan forbidden0; ap doctor errors0/two unchanged warnings and policy routing pass. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json. Read-only same-actor exact-SHA EVALUATOR review required before verify/finish. Broad parity and documented native representation gaps remain unverified."
+  Verification: |-
+    Executed declared verification for iteration119. Six static gates pass; only initially failed lint repeated after preserving the four-value notification contract. One sequential upstream-absent build/app2124 tests/256 files,inventory109/36,script tests5/2,Chromium99 passed; app and inventory all four coverage metrics100%. No successful suite repeated and no present-upstream product profile. Vendor restored in finally before five source/resource/inventory audits; semantic violations0. Exact six semantic paths,all337 prior tests byte-identical,234 runtime fields/statuses/defaults/exceptions unchanged except two justification appendices; two provenance appendices. Five pinned native hashes recorded without sources. Ignored-inclusive AP scan forbidden0,doctor0 errors/two unchanged warnings,routing pass. Same-actor read-only EVALUATOR quality pass tied to exact actual semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a; quality/20261004-201611974-recovery-context/quality-report.json. No independent-agent claim or broad parity promotion. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json. Documented hierarchy/friend visibility/secondary maps/history/refcounts/destruction/listeners and broader runtime/UI gaps remain unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T20:16:37.847Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All approved iteration119 gates passed at semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a; app2124 and Chromium99 once absent, all coverage100%, prior337 tests unchanged, five restored audits semantic0, exact-SHA same-actor quality pass. Vendor restored; no AP sources/helpers or broad parity promotion.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T20:16:37.515Z, excerpt_hash=sha256:419874cb10e92aa0ab3932424d7e4150aff67da5e41823261f9214f3b455388d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041956-2E6B9B/blueprint/resolved-snapshot.json
+    - old_digest: 5dabbb2bd36fb35b259c2ce2708585153c31d5115796e0bfa7f9093d6731758d
+    - current_digest: 5dabbb2bd36fb35b259c2ce2708585153c31d5115796e0bfa7f9093d6731758d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610041956-2E6B9B
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610041956-2E6B9B
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task semantic commit through an authorized follow-up; preserve task history, intentional I/O deviations and unrelated changes."
-  Findings: "Iteration119 implemented owned SwTextAttr range notifications and native lazy primary-map sorting. m_pHints is bound to actual surviving container attributes, detached from merged/removed attributes and released before cut/packet rebasing; cloned snapshots/history remain independently owned. SetStart always marks the map dirty; SetEnd notifies the current owner only for actual valid end changes. Get sorts lazily, Count/raw GetWithoutResorting preserve iteration, and binary lower/upper start bounds sort only the affected interval.51 new literal cases pass. Six semantic paths only; all337 prior test/spec files byte-identical.234 runtime rows retain all fields/statuses/defaults/exceptions apart from two appended justifications; provenance has two bounded appendices. Six static gates pass, only initially failed lint repeated. One upstream-absent build and app2124/256,inventory109/36,scripts5/2,Chromium99 pass; app/inventory lines/statements/functions/branches100%. Finally restored vendor; five source audits pass with semantic violations0. Ignored-inclusive AP scan3774 files,forbidden0. Doctor0 errors/two unchanged warnings,routing pass. Exact semantic-SHA read-only same-actor quality review still pending. Supported primary-map behavior does not establish full native class hierarchy/friend visibility/end/Which maps/history/refcounts/destruction/listeners, empty hints/full destination adjustment or broad core/UI parity. Registered save/open/recovery deviations untouched."
+  Findings: |-
+    Iteration119 implemented owned SwTextAttr range notifications and native lazy primary-map sorting. m_pHints is bound to actual surviving container attributes, detached from merged/removed attributes and released before cut/packet rebasing; cloned snapshots/history remain independently owned. SetStart always marks the map dirty; SetEnd notifies the current owner only for actual valid end changes. Get sorts lazily, Count/raw GetWithoutResorting preserve iteration, and binary lower/upper start bounds sort only the affected interval.51 new literal cases pass. Six semantic paths only; all337 prior test/spec files byte-identical.234 runtime rows retain all fields/statuses/defaults/exceptions apart from two appended justifications; provenance has two bounded appendices. Six static gates pass, only initially failed lint repeated. One upstream-absent build and app2124/256,inventory109/36,scripts5/2,Chromium99 pass; app/inventory lines/statements/functions/branches100%. Finally restored vendor; five source audits pass with semantic violations0. Ignored-inclusive AP scan3774 files,forbidden0. Doctor0 errors/two unchanged warnings,routing pass. Exact semantic-SHA read-only same-actor quality review still pending. Supported primary-map behavior does not establish full native class hierarchy/friend visibility/end/Which maps/history/refcounts/destruction/listeners, empty hints/full destination adjustment or broad core/UI parity. Registered save/open/recovery deviations untouched.
+
+    - Observation: Native owner callbacks and lazy primary sorting were absent from supported ranged attributes.
+      Impact: Actual range mutation could leave hint order stale or notify a former owner during transfer.
+      Resolution: Owner bind/release and native full/partial sorting notifications implemented with51 literal cases; only initial lint failed and was recovered.
 id_source: "generated"
 ---
 ## Summary
@@ -111,7 +156,40 @@ Restore native m_pHints owner reference and SetStart/SetEnd notification semanti
 
 ## Verification
 
-Executed declared verification for iteration119. Six static gates pass; initial lint-only unused parameters corrected through the labeled four-value notification tuple and only lint repeated before remaining gates. One sequential upstream-absent profile: build pass,app2124 tests/256 files and inventory109/36 with all four metrics100%,script tests5/2,Chromium99; every gate exit0,no successful suite repeated and no present-upstream product test profile. Vendor restored in finally. Five restored source/resource/inventory audits exit0,semantic violations0. Scope audit confirms exactly six semantic paths,all337 prior test/spec files byte-identical,234 runtime fields/statuses/defaults/exceptions unchanged except two justification appendices and two provenance appendices. Five pinned native source hashes recorded without source copies. Ignored-inclusive AP source/helper scan forbidden0; ap doctor errors0/two unchanged warnings and policy routing pass. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json. Read-only same-actor exact-SHA EVALUATOR review required before verify/finish. Broad parity and documented native representation gaps remain unverified.
+Executed declared verification for iteration119. Six static gates pass; only initially failed lint repeated after preserving the four-value notification contract. One sequential upstream-absent build/app2124 tests/256 files,inventory109/36,script tests5/2,Chromium99 passed; app and inventory all four coverage metrics100%. No successful suite repeated and no present-upstream product profile. Vendor restored in finally before five source/resource/inventory audits; semantic violations0. Exact six semantic paths,all337 prior tests byte-identical,234 runtime fields/statuses/defaults/exceptions unchanged except two justification appendices; two provenance appendices. Five pinned native hashes recorded without sources. Ignored-inclusive AP scan forbidden0,doctor0 errors/two unchanged warnings,routing pass. Same-actor read-only EVALUATOR quality pass tied to exact actual semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a; quality/20261004-201611974-recovery-context/quality-report.json. No independent-agent claim or broad parity promotion. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json. Documented hierarchy/friend visibility/secondary maps/history/refcounts/destruction/listeners and broader runtime/UI gaps remain unverified.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T20:16:37.847Z — VERIFY — ok
+
+By: CODER
+
+Note: All approved iteration119 gates passed at semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a; app2124 and Chromium99 once absent, all coverage100%, prior337 tests unchanged, five restored audits semantic0, exact-SHA same-actor quality pass. Vendor restored; no AP sources/helpers or broad parity promotion.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T20:16:37.515Z, excerpt_hash=sha256:419874cb10e92aa0ab3932424d7e4150aff67da5e41823261f9214f3b455388d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041956-2E6B9B/blueprint/resolved-snapshot.json
+- old_digest: 5dabbb2bd36fb35b259c2ce2708585153c31d5115796e0bfa7f9093d6731758d
+- current_digest: 5dabbb2bd36fb35b259c2ce2708585153c31d5115796e0bfa7f9093d6731758d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610041956-2E6B9B
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610041956-2E6B9B
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -120,3 +198,7 @@ Revert only the task semantic commit through an authorized follow-up; preserve t
 ## Findings
 
 Iteration119 implemented owned SwTextAttr range notifications and native lazy primary-map sorting. m_pHints is bound to actual surviving container attributes, detached from merged/removed attributes and released before cut/packet rebasing; cloned snapshots/history remain independently owned. SetStart always marks the map dirty; SetEnd notifies the current owner only for actual valid end changes. Get sorts lazily, Count/raw GetWithoutResorting preserve iteration, and binary lower/upper start bounds sort only the affected interval.51 new literal cases pass. Six semantic paths only; all337 prior test/spec files byte-identical.234 runtime rows retain all fields/statuses/defaults/exceptions apart from two appended justifications; provenance has two bounded appendices. Six static gates pass, only initially failed lint repeated. One upstream-absent build and app2124/256,inventory109/36,scripts5/2,Chromium99 pass; app/inventory lines/statements/functions/branches100%. Finally restored vendor; five source audits pass with semantic violations0. Ignored-inclusive AP scan3774 files,forbidden0. Doctor0 errors/two unchanged warnings,routing pass. Exact semantic-SHA read-only same-actor quality review still pending. Supported primary-map behavior does not establish full native class hierarchy/friend visibility/end/Which maps/history/refcounts/destruction/listeners, empty hints/full destination adjustment or broad core/UI parity. Registered save/open/recovery deviations untouched.
+
+- Observation: Native owner callbacks and lazy primary sorting were absent from supported ranged attributes.
+  Impact: Actual range mutation could leave hint order stale or notify a former owner during transfer.
+  Resolution: Owner bind/release and native full/partial sorting notifications implemented with51 literal cases; only initial lint failed and was recovered.
