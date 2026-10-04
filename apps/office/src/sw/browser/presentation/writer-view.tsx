@@ -320,6 +320,34 @@ export function WriterWorkbench({
     isActive,
     resolveArguments: resolveCommandArguments,
   });
+  const isInputEnabled =
+    isActive &&
+    dialogRequest === undefined &&
+    fileDialogKind === undefined &&
+    tableDialog === undefined &&
+    !lineNumberingDialog;
+  useEffect(
+    /** Routes the active frame's direct document focus key. @returns Listener cleanup. */
+    function installDocumentFocusKey(): () => void {
+      /** Focuses this Writer client without executing a command or restoring menu focus. @param event - Browser key. @returns Nothing. */
+      function focusDocumentFromKey(event: KeyboardEvent): void {
+        if (
+          !isInputEnabled ||
+          event.defaultPrevented ||
+          event.key !== "F6" ||
+          !event.ctrlKey ||
+          event.shiftKey
+        )
+          return;
+        event.preventDefault();
+        (editingHostRef.current as HTMLElement).focus();
+      }
+      window.addEventListener("keydown", focusDocumentFromKey);
+      return /** Removes the frame's document focus route. @returns Nothing. */ () =>
+        window.removeEventListener("keydown", focusDocumentFromKey);
+    },
+    [isInputEnabled],
+  );
   useEffect(
     /** Registers browser Save while this Writer view is mounted. @returns Listener cleanup. */
     () => {
@@ -418,13 +446,7 @@ export function WriterWorkbench({
                 (editingHostRef.current as HTMLElement).focus()
             }
             idPrefix="writer"
-            isInputEnabled={
-              isActive &&
-              dialogRequest === undefined &&
-              fileDialogKind === undefined &&
-              tableDialog === undefined &&
-              !lineNumberingDialog
-            }
+            isInputEnabled={isInputEnabled}
             menus={writerMenuPlacements}
             resolveArguments={resolveCommandArguments}
           />

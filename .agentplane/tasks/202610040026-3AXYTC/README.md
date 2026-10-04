@@ -4,7 +4,7 @@ title: "Route Writer Ctrl-F6 directly to its document client"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T00:41:39.052Z"
+  updated_by: "CODER"
+  note: "Ctrl-F6 leaf passes focused66owned11browser and fullverify978app109inventory42browser100%coverage0semantic. Vendor-absent978app109inventory12script42browser all terminal0/restored.255oldtests byte-identical,215rows1evidence-only row each, exact1production inverse/5semantic6source hashes unchanged; artifact source/helpers/Python/executable/archive/magic/signature0, doctor0errors2knownwarnings/routing/diff. Initial stale-build browser failure corrected by rebuilding; no code/test threshold workaround. Full F6 pane/native platform/focus graph remains open."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement authorized iteration81 direct-document Ctrl-F6 at Writer browser frame with existing modal gates/focus-loss cleanup, owned tests only and no source/helper/Python artifacts."
+  -
+    type: "verify"
+    at: "2026-10-04T00:41:39.052Z"
+    author: "CODER"
+    state: "ok"
+    note: "Ctrl-F6 leaf passes focused66owned11browser and fullverify978app109inventory42browser100%coverage0semantic. Vendor-absent978app109inventory12script42browser all terminal0/restored.255oldtests byte-identical,215rows1evidence-only row each, exact1production inverse/5semantic6source hashes unchanged; artifact source/helpers/Python/executable/archive/magic/signature0, doctor0errors2knownwarnings/routing/diff. Initial stale-build browser failure corrected by rebuilding; no code/test threshold workaround. Full F6 pane/native platform/focus graph remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T00:41:20.247Z"
+doc_updated_at: "2026-10-04T00:41:39.108Z"
 doc_updated_by: "CODER"
 description: "Iteration81 under C9TN6M: source-shaped active Writer frame Ctrl-F6 focus route, menu loss cleanup and saved-owner disposal, shared modal input eligibility. No core/save/open/recovery behavior changes or upstream test dependency/source/helper artifacts."
 sections:
@@ -44,7 +50,41 @@ sections:
   Scope: "Five semantic paths: writer-view.tsx (one shared active/modal eligibility value used by existing F10 and new Ctrl-F6 effect, mounted editing-host focus only), new writer-view-document-key.test.tsx, new writer-document-key.spec.ts, existing writer-view evidence row append-only in source-provenance.json/runtime-inventory.json. All255prior test/spec byte-identical, all215rows/status/defaults/ownership/prior evidence preserved. No other implementation/core/commands/resources/save/open/recovery changes or source/helpers/Python/binary/archive artifacts. Full plain/Shift-F6 pane cycle/platform/global focus/native whole-menu parity remain open."
   Plan: "1. Manual read-only complete native SystemWindow PreNotify/EventNotify, Window GrabFocusToDocument/ImplGrabFocusToDocument/ImplGrabFocus eligibility and MenuBarWindow LoseFocus/ChangeHighlightItem, popup Ctrl-F6 routing and TaskPaneList cycle inspected at exact pin; hashes/conclusions only. 2. Owned actual Writer cases expose missing direct document route from toolbar, first-root activation and root/child popup, ignore saved toolbar restoration, subsequent F10 cycle saves new document, no Execute; active frame changes/listener lifetime/modifier shape/prevented key/current modal dialogs. 3. One frame-owned effect routes F6+Ctrl without Shift using shared active/modal eligibility and current mounted editing host. Existing menubar blur closes and consumes its cycle without restoring toolbar. Native SystemWindow key shape accepts additional Alt/Meta; test preservation of CtrlShift/bare/Shift/nonF6 and native extra-modifier route without claiming full platform mapping. 4. Real Chromium toolbar/root/nested focus+typing and Hyperlink modal, append bounded evidence only. 5. Focused, full npm run verify100%coverage0semantic; vendor-absent npm run test/3noninventory script tests/npm run test:e2e sequential/restoredfinally. Exact255prior bytes,215row manifests1evidence-only row each,1production bounded inverse/hash proof, ignored-inclusive storage sources/helpers/Python/exe/archives0 plus signature scan, source hashes unchanged,doctor/routing/diff. 6. Semantic commit, same-actor separate EVALUATOR exactSHA, canonical finish and parent progress, leave goal active."
   Verify Steps: "Complete relevant manual read-only pinned functions inspected/no native execution or copying. Before/after owned real Writer Ctrl-F6 from toolbar and activated root/root-popup/child-popup focuses own editinghost, closes popup and discards saved toolbar without Execute, next F10 restores document; active-frame and mounted lifetime checks; original key condition F6+Ctrl&&!Shift includes extra Alt/Meta; prevented/unhandled keys remain owned by caller. Current paragraph/Hyperlink/bookmark/break/page/table/line-numbering/file modal eligibility rejects document focus; actual Chromium toolbar/root/child focus+typing and modal Hyperlink assertions. All255prior tests byte-identical;215row manifests exactly1append-only evidence row each preserve statuses/defaults/ownership/prior evidence; exact1production inverse proof. npm run verify allpass100%coverage0semantic; sequential vendor-absent npm run test, npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts, npm run test:e2e allpass/restoredfinally. Static upstream resource/provenance/parity CLI audits run separately with source present; tests never read/compile/invoke pinned upstream. Source/semantic hashes unchanged, ignored-inclusive artifact source/helper/Python/executable/archive0 plus embedded signature candidates0,doctor0errors2knownwarnings/routing/diff, same-actor exactSHA quality and clean final state."
-  Verification: "Command: npm run verify. Result: pass (terminal0),978app/199files109inventory/36files42browser2resource checks,100%app/inventorycoverage all dimensions, semanticViolationCount0 and all static source/resource/provenance/type/lint/build gates pass. Evidence: full-verify.json/final-integrity.json. Scope: complete existing runtime/tool checks. Command: npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e sequential with vendor root absent/restoredfinally. Result: all terminal0,978app109inventory12script42browser. Evidence: vendor-absent-*.json/vendor-restoration.json. Scope: tests do not need pinned upstream; separate static CLIs read vendor only outside this test run. Focused66owned/4files and11browser/3specs after rebuilt current static app pass. Baseline17fail7pass included15real missing-route failures/2newfixture issues; corrected without old tests/implementation workaround. Initial browser stale-dist failure accounted for, fresh-build rerun allpass. All255oldtest/spec bytes unchanged;215rows1append-only evidence row each preserve statuses/defaults/ownership/prior evidence; exact1production inverse proof,5semantic6source SHA256 unchanged; storage source/helpers/Python/executable/archive/magic/signature0. Doctor0errors2knownwarnings,routing/diff pass; no skipped gates. Semantic commit/same-actor separate exactSHA quality/canonical finish pending; whole F6 task-pane/platform/native focus graph remains open."
+  Verification: |-
+    Command: npm run verify. Result: pass (terminal0),978app/199files109inventory/36files42browser2resource checks,100%app/inventorycoverage all dimensions, semanticViolationCount0 and all static source/resource/provenance/type/lint/build gates pass. Evidence: full-verify.json/final-integrity.json. Scope: complete existing runtime/tool checks. Command: npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e sequential with vendor root absent/restoredfinally. Result: all terminal0,978app109inventory12script42browser. Evidence: vendor-absent-*.json/vendor-restoration.json. Scope: tests do not need pinned upstream; separate static CLIs read vendor only outside this test run. Focused66owned/4files and11browser/3specs after rebuilt current static app pass. Baseline17fail7pass included15real missing-route failures/2newfixture issues; corrected without old tests/implementation workaround. Initial browser stale-dist failure accounted for, fresh-build rerun allpass. All255oldtest/spec bytes unchanged;215rows1append-only evidence row each preserve statuses/defaults/ownership/prior evidence; exact1production inverse proof,5semantic6source SHA256 unchanged; storage source/helpers/Python/executable/archive/magic/signature0. Doctor0errors2knownwarnings,routing/diff pass; no skipped gates. Semantic commit/same-actor separate exactSHA quality/canonical finish pending; whole F6 task-pane/platform/native focus graph remains open.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T00:41:39.052Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Ctrl-F6 leaf passes focused66owned11browser and fullverify978app109inventory42browser100%coverage0semantic. Vendor-absent978app109inventory12script42browser all terminal0/restored.255oldtests byte-identical,215rows1evidence-only row each, exact1production inverse/5semantic6source hashes unchanged; artifact source/helpers/Python/executable/archive/magic/signature0, doctor0errors2knownwarnings/routing/diff. Initial stale-build browser failure corrected by rebuilding; no code/test threshold workaround. Full F6 pane/native platform/focus graph remains open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T00:41:20.247Z, excerpt_hash=sha256:3ef32bc89bb78e1d34fc7627614602e68c0b839b1b869d95da437246b322fc9e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040026-3AXYTC/blueprint/resolved-snapshot.json
+    - old_digest: b5eccd3875676128e55b59666bab5f72e2ee1058275abb410ed7291c10554800
+    - current_digest: b5eccd3875676128e55b59666bab5f72e2ee1058275abb410ed7291c10554800
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040026-3AXYTC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610040026-3AXYTC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If needed revert only the semantic iteration81 commit through a new authorized task, preserving history/outcomes and registered deviations."
   Findings: |-
     Previous turn is progress: iteration80 DONE bff74e64d720 implemented eligible bare-F10 cycle; cleanmain current base2a56dd8e8704. Native SystemWindow PreNotify routes Ctrl-F6 without Shift directly to document, independent of saved focus; Window ImplGrabFocusToDocument walks own frame and grabs client, ImplGrabFocus rejects disabled/input-disabled/modal. Native menubar LoseFocus consumes current cycle without restoring saved owner. Browser has no Ctrl-F6 path; mounted own editinghost and all modal states already available. A read-only guessed accelerator filename was absent; rg files located use-command-shortcuts instead, no mutation/outside access. No-source/helpers/Python contract retained; separate cleanup commits4bf67a647e07/b23c4f18c359 already landed.
@@ -72,6 +112,39 @@ Complete relevant manual read-only pinned functions inspected/no native executio
 ## Verification
 
 Command: npm run verify. Result: pass (terminal0),978app/199files109inventory/36files42browser2resource checks,100%app/inventorycoverage all dimensions, semanticViolationCount0 and all static source/resource/provenance/type/lint/build gates pass. Evidence: full-verify.json/final-integrity.json. Scope: complete existing runtime/tool checks. Command: npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e sequential with vendor root absent/restoredfinally. Result: all terminal0,978app109inventory12script42browser. Evidence: vendor-absent-*.json/vendor-restoration.json. Scope: tests do not need pinned upstream; separate static CLIs read vendor only outside this test run. Focused66owned/4files and11browser/3specs after rebuilt current static app pass. Baseline17fail7pass included15real missing-route failures/2newfixture issues; corrected without old tests/implementation workaround. Initial browser stale-dist failure accounted for, fresh-build rerun allpass. All255oldtest/spec bytes unchanged;215rows1append-only evidence row each preserve statuses/defaults/ownership/prior evidence; exact1production inverse proof,5semantic6source SHA256 unchanged; storage source/helpers/Python/executable/archive/magic/signature0. Doctor0errors2knownwarnings,routing/diff pass; no skipped gates. Semantic commit/same-actor separate exactSHA quality/canonical finish pending; whole F6 task-pane/platform/native focus graph remains open.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T00:41:39.052Z — VERIFY — ok
+
+By: CODER
+
+Note: Ctrl-F6 leaf passes focused66owned11browser and fullverify978app109inventory42browser100%coverage0semantic. Vendor-absent978app109inventory12script42browser all terminal0/restored.255oldtests byte-identical,215rows1evidence-only row each, exact1production inverse/5semantic6source hashes unchanged; artifact source/helpers/Python/executable/archive/magic/signature0, doctor0errors2knownwarnings/routing/diff. Initial stale-build browser failure corrected by rebuilding; no code/test threshold workaround. Full F6 pane/native platform/focus graph remains open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T00:41:20.247Z, excerpt_hash=sha256:3ef32bc89bb78e1d34fc7627614602e68c0b839b1b869d95da437246b322fc9e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040026-3AXYTC/blueprint/resolved-snapshot.json
+- old_digest: b5eccd3875676128e55b59666bab5f72e2ee1058275abb410ed7291c10554800
+- current_digest: b5eccd3875676128e55b59666bab5f72e2ee1058275abb410ed7291c10554800
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040026-3AXYTC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610040026-3AXYTC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

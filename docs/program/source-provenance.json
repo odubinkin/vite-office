@@ -3078,6 +3078,26 @@
           {
             "path": "apps/office/e2e/writer-menu-key.spec.ts",
             "marker": "F10 activates the first Writer root without opening"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+            "marker": "focusesDocumentClient"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+            "marker": "closesMenuToDocument"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+            "marker": "routesActiveFrame"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+            "marker": "preservesModalFocus"
+          },
+          {
+            "path": "apps/office/e2e/writer-document-key.spec.ts",
+            "marker": "Ctrl-F6 from the Writer"
           }
         ]
       },
@@ -3086,7 +3106,8 @@
       "responsibilities": [
         "Renders the Writer view as a browser-owned React projection of the upstream-shaped SwView shell.",
         "Unopened activated menubar Escape defaults to its Writer frame client when no connected external owner is saved; a live saved owner takes precedence. The browser view supplies its own mounted editing-host reference, keeping DOM out of core and avoiding document-wide selectors. Owned per-frame/disconnected-owner cases and Chromium focus-plus-editing checks cover this branch only; no-owner popup cleanup, frame/global native flags and full menu parity remain unverified.",
-        "Unmodified F10 activates the first root without opening a popup, and repeats to deactivate an active menubar or popup with saved-owner/default-client focus restoration and no command dispatch. An explicit activation flag follows the inspected native highlight-valid cycle. The Writer view grants this browser key route only to an active input-enabled frame outside its existing modal dialogs; detached presenters require explicit eligibility. Owned cycle/frame/modifier cases and actual Chromium editing, toolbar-owner and modal focus checks cover this bounded contract. Modified keys remain on their existing command/browser route (native Ctrl-F10 belongs to .uno:ControlCodes). Complete accelerator priority, Alt/mnemonics, F6, platform/system menus, no-owner popup fallback and the full native focus graph remain unverified."
+        "Unmodified F10 activates the first root without opening a popup, and repeats to deactivate an active menubar or popup with saved-owner/default-client focus restoration and no command dispatch. An explicit activation flag follows the inspected native highlight-valid cycle. The Writer view grants this browser key route only to an active input-enabled frame outside its existing modal dialogs; detached presenters require explicit eligibility. Owned cycle/frame/modifier cases and actual Chromium editing, toolbar-owner and modal focus checks cover this bounded contract. Modified keys remain on their existing command/browser route (native Ctrl-F10 belongs to .uno:ControlCodes). Complete accelerator priority, Alt/mnemonics, F6, platform/system menus, no-owner popup fallback and the full native focus graph remain unverified.",
+        "Ctrl-F6 without Shift routes the active input-enabled Writer browser frame directly to its own mounted editing host, independently of a saved toolbar focus owner. Existing menu focus-loss teardown closes root/child popups and consumes the old saved cycle without dispatch. One shared active/modal eligibility value gates both this frame route and F10. Owned actual-session cases cover frame changes, disposal, already-consumed/nonmatching keys, the inspected Ctrl/non-Shift condition with additional modifiers, and all existing modal request owners; Chromium checks focus plus actual editing and a fresh F10 cycle. Full plain/Shift-F6 pane traversal, platform modifier mapping, native focus flags and the complete focus graph remain unverified."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
