@@ -1,0 +1,62 @@
+{
+  "base": "f80a934025dde330ad0ea4181fcc5edacd3b0048",
+  "semanticPaths": [
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+    "apps/office/e2e/writer-ruler-tab-insertion.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "bytes": 33936,
+      "sha256": "5fa8950d873f989f393a4bb6cad518317fa9a1bc615f0ba00988e13d24e285a2"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+      "bytes": 8488,
+      "sha256": "965d3e63af6bedb120eb61cbd99b658b2dec3f7c343474d90c74db376a5ee6f4"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-tab-insertion.spec.ts",
+      "bytes": 3479,
+      "sha256": "2e2c56be9f83fdaa32ee3dd37295eaca8d1beb0fe75528cf2f694d9d19c75a1c"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 738232,
+      "sha256": "a332235def33fac16f0822ab84554d1163d872450c7754892d32846997df367d"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 719996,
+      "sha256": "0078bc73a627cd95d548ecfa718ab7f4edf7925a14dc807354a9c2781cf93fb5"
+    }
+  ],
+  "priorTestFiles": 286,
+  "priorTestFilesByteIdentical": 286,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 2,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 2,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}

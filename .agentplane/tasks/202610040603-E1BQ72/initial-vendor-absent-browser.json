@@ -1,0 +1,11 @@
+{
+  "command": "npm run test:e2e",
+  "exitCode": 1,
+  "outputBytes": 17182,
+  "outputSha256": "8e5f2c8ba8cf3c36c1732257eaa58f4ceb6107f8b8d5c47c495857f164d015bc",
+  "upstreamDirectoryPresent": false,
+  "summary": [
+    "✓ built in 565ms",
+    "  63 passed (25.4s)"
+  ]
+}

@@ -4,7 +4,7 @@ title: "Match Writer ruler tab insertion replacement semantics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved insertion replacement semantics under the standing iterative goal; one vendor-absent test pass and separate static source audits."
 doc_version: 3
-doc_updated_at: "2026-10-04T06:08:23.287Z"
+doc_updated_at: "2026-10-04T06:12:32.407Z"
 doc_updated_by: "CODER"
 description: "Iteration 92: replace an occupied ruler tab position with a fresh Left tab stop, preserving unrelated stored stops and metadata. Keep general paragraph tab-list editing unchanged. Verify once with the pinned upstream directory unavailable; inspect upstream source separately without storing source bodies or helpers in Agentplane."
 sections:
@@ -58,6 +58,10 @@ sections:
     - Observation: Initial static checks found unsupported Testing Library exact option in the new owned regression and a formatting stabilization issue; no suites have run.
       Impact: Typecheck/build and formatting need correction before the one vendor-absent test pass; approved semantic scope and criteria unchanged.
       Resolution: Remove the unsupported selector option, stabilize owned formatting, then rerun only affected static gates. Keep raw diagnostics out of Agentplane.
+
+    - Observation: Single absent-upstream app/inventory/script pass succeeded:1142+109+5. Chromium63 prior scenarios passed;two new scenarios failed at the fixture text assertion because the document wrapper also contains the existing paragraph-style label.
+      Impact: The new browser regression selector needs to target the paragraph text; product scope and app tests stay unchanged.
+      Resolution: Assert exact fixture content on Writer document text while retaining the document body as gesture/shortcut owner. Rerun only the two corrected Chromium scenarios with upstream unavailable; do not repeat passing app/inventory/scripts or63 prior browser scenarios.
 id_source: "generated"
 ---
 ## Summary
@@ -96,3 +100,7 @@ Confirmed source-only gap: current AddRulerTabStop reconstructs all positions th
 - Observation: Initial static checks found unsupported Testing Library exact option in the new owned regression and a formatting stabilization issue; no suites have run.
   Impact: Typecheck/build and formatting need correction before the one vendor-absent test pass; approved semantic scope and criteria unchanged.
   Resolution: Remove the unsupported selector option, stabilize owned formatting, then rerun only affected static gates. Keep raw diagnostics out of Agentplane.
+
+- Observation: Single absent-upstream app/inventory/script pass succeeded:1142+109+5. Chromium63 prior scenarios passed;two new scenarios failed at the fixture text assertion because the document wrapper also contains the existing paragraph-style label.
+  Impact: The new browser regression selector needs to target the paragraph text; product scope and app tests stay unchanged.
+  Resolution: Assert exact fixture content on Writer document text while retaining the document body as gesture/shortcut owner. Rerun only the two corrected Chromium scenarios with upstream unavailable; do not repeat passing app/inventory/scripts or63 prior browser scenarios.

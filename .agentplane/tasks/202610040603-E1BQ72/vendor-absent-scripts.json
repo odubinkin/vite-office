@@ -1,0 +1,11 @@
+{
+  "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+  "exitCode": 0,
+  "outputBytes": 218,
+  "outputSha256": "1e752ca07461efb3d7e37c41dc6ae60ebef1903ad652505ca77f266a278a365f",
+  "upstreamDirectoryPresent": false,
+  "summary": [
+    " Test Files  2 passed (2)",
+    "      Tests  5 passed (5)"
+  ]
+}
