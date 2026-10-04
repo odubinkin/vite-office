@@ -1,0 +1,16 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+  "exit": 1,
+  "sha256": "6853e79db8896f837bb644aa425d65310da5294c61f3dc31074989005870eea3",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  6 failed | 5 passed (11)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx > menubar menu key > activates the first root without a popup and restores its saved document on F10",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx > menubar menu key > defaults to its document without a saved owner and resets each cycle to first root",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx > menubar menu key > deactivates the root popup through F10 without executing",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx > menubar menu key > deactivates the child popup through F10 without executing",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx > menubar menu key > only routes to the eligible frame and observes eligibility changes",
+    " FAIL  src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx > menubar menu key > activates the actual Writer menu from its editing host"
+  ]
+}
