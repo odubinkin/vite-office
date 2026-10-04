@@ -4,6 +4,7 @@
  */
 
 import { useState, type ReactNode } from "react";
+import { SidebarDeck } from "../../../sfx2/browser/presentation/SidebarDeck";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { WriterRulerLaneContext } from "./writer-ruler-lane-context";
 
@@ -29,6 +30,8 @@ export interface WriterWorkspaceChromeProps {
   readonly isStatusBarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
   readonly propertiesSidebar: ReactNode;
+  /** Returns sidebar activation and cancellation to this document client. */
+  readonly focusDocument?: () => void;
   /** Current operation result shown in the Writer status bar. */
   readonly status: string;
   /** Implemented commands placed in the Writer standard toolbar. */
@@ -49,6 +52,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
  * @param props.menuBar - Functional Writer menus placed beside the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
+ * @param props.focusDocument - Focuses the owning Writer document client.
  * @param props.status - Current storage or download feedback.
  * @param props.toolbar - Implemented command buttons in the standard toolbar.
  * @returns A browser-only Writer workspace that preserves Vite Office visual language.
@@ -63,6 +67,7 @@ export function WriterWorkspaceChrome({
   menuBar,
   onDocumentTitleChange,
   propertiesSidebar,
+  focusDocument,
   rulers,
   status,
   toolbar,
@@ -158,7 +163,7 @@ export function WriterWorkspaceChrome({
       <div
         className={`min-h-0 min-w-0 flex-1 overflow-hidden ${
           isPropertiesSidebarVisible
-            ? "grid grid-rows-[auto_minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_240px] lg:grid-rows-[auto_minmax(0,1fr)]"
+            ? "grid grid-rows-[auto_minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_auto] lg:grid-rows-[auto_minmax(0,1fr)]"
             : "flex flex-col"
         }`}
       >
@@ -190,12 +195,18 @@ export function WriterWorkspaceChrome({
           </div>
         </div>
         {isPropertiesSidebarVisible ? (
-          <aside
-            aria-label="Writer properties sidebar"
-            className="min-h-0 max-h-[40vh] overflow-auto border-t border-slate-200 bg-white p-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-h-none lg:border-l lg:border-t-0"
+          <SidebarDeck
+            ariaLabel="Writer properties sidebar"
+            closeLabel={localization.GetText("sidebar.deck.close", "Close Sidebar Deck")}
+            selectionLabel={localization.GetText(
+              "sidebar.deck.selection",
+              "Sidebar deck selection",
+            )}
+            {...(focusDocument === undefined ? {} : { focusDocument })}
+            title={localization.GetText("writer.properties.title", "Properties")}
           >
             {propertiesSidebar}
-          </aside>
+          </SidebarDeck>
         ) : null}
       </div>
 

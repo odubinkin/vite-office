@@ -1022,6 +1022,41 @@
       }
     },
     {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx#SidebarDeck",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#retainsDeckContent",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#togglesSelectedDeck",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#cancelsDeckFocus",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#retainsWriterDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#recreatesSidebarDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#focusesOwningWriter",
+          "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus"
+        ],
+        "justification": "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SidebarDeck"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sfx2/source/control/bindings.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -2817,9 +2852,16 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx#WriterParagraphProperties"
+          "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx#WriterParagraphProperties",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#retainsDeckContent",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#togglesSelectedDeck",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#cancelsDeckFocus",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#retainsWriterDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#recreatesSidebarDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#focusesOwningWriter",
+          "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus"
         ],
-        "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state.",
+        "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state. Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
         "knownViolations": [],
         "localSymbols": [
           "getSidebarIcon",
@@ -2958,9 +3000,16 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx#WriterWorkspaceChrome"
+          "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx#WriterWorkspaceChrome",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#retainsDeckContent",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#togglesSelectedDeck",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#cancelsDeckFocus",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#retainsWriterDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#recreatesSidebarDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#focusesOwningWriter",
+          "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus"
         ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
         "knownViolations": [],
         "localSymbols": [
           "WriterWorkspaceChrome"
@@ -3114,9 +3163,16 @@
           "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx#closesMenuToDocument",
           "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx#routesActiveFrame",
           "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx#preservesModalFocus",
-          "apps/office/e2e/writer-document-key.spec.ts#Ctrl-F6 from the Writer"
+          "apps/office/e2e/writer-document-key.spec.ts#Ctrl-F6 from the Writer",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#retainsDeckContent",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#togglesSelectedDeck",
+          "apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx#cancelsDeckFocus",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#retainsWriterDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#recreatesSidebarDeck",
+          "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#focusesOwningWriter",
+          "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus"
         ],
-        "justification": "Browser presentation submits primitive paragraph drafts and ruler gestures to Writer shells. Document-owned line numbering and SvxTabStopItem construction have moved out of React; this entry claims only the browser projection boundary. Unopened activated menubar Escape defaults to its Writer frame client when no connected external owner is saved; a live saved owner takes precedence. The browser view supplies its own mounted editing-host reference, keeping DOM out of core and avoiding document-wide selectors. Owned per-frame/disconnected-owner cases and Chromium focus-plus-editing checks cover this branch only; no-owner popup cleanup, frame/global native flags and full menu parity remain unverified. Unmodified F10 activates the first root without opening a popup, and repeats to deactivate an active menubar or popup with saved-owner/default-client focus restoration and no command dispatch. An explicit activation flag follows the inspected native highlight-valid cycle. The Writer view grants this browser key route only to an active input-enabled frame outside its existing modal dialogs; detached presenters require explicit eligibility. Owned cycle/frame/modifier cases and actual Chromium editing, toolbar-owner and modal focus checks cover this bounded contract. Modified keys remain on their existing command/browser route (native Ctrl-F10 belongs to .uno:ControlCodes). Complete accelerator priority, Alt/mnemonics, F6, platform/system menus, no-owner popup fallback and the full native focus graph remain unverified. Ctrl-F6 without Shift routes the active input-enabled Writer browser frame directly to its own mounted editing host, independently of a saved toolbar focus owner. Existing menu focus-loss teardown closes root/child popups and consumes the old saved cycle without dispatch. One shared active/modal eligibility value gates both this frame route and F10. Owned actual-session cases cover frame changes, disposal, already-consumed/nonmatching keys, the inspected Ctrl/non-Shift condition with additional modifiers, and all existing modal request owners; Chromium checks focus plus actual editing and a fresh F10 cycle. Full plain/Shift-F6 pane traversal, platform modifier mapping, native focus flags and the complete focus graph remain unverified.",
+        "justification": "Browser presentation submits primitive paragraph drafts and ruler gestures to Writer shells. Document-owned line numbering and SvxTabStopItem construction have moved out of React; this entry claims only the browser projection boundary. Unopened activated menubar Escape defaults to its Writer frame client when no connected external owner is saved; a live saved owner takes precedence. The browser view supplies its own mounted editing-host reference, keeping DOM out of core and avoiding document-wide selectors. Owned per-frame/disconnected-owner cases and Chromium focus-plus-editing checks cover this branch only; no-owner popup cleanup, frame/global native flags and full menu parity remain unverified. Unmodified F10 activates the first root without opening a popup, and repeats to deactivate an active menubar or popup with saved-owner/default-client focus restoration and no command dispatch. An explicit activation flag follows the inspected native highlight-valid cycle. The Writer view grants this browser key route only to an active input-enabled frame outside its existing modal dialogs; detached presenters require explicit eligibility. Owned cycle/frame/modifier cases and actual Chromium editing, toolbar-owner and modal focus checks cover this bounded contract. Modified keys remain on their existing command/browser route (native Ctrl-F10 belongs to .uno:ControlCodes). Complete accelerator priority, Alt/mnemonics, F6, platform/system menus, no-owner popup fallback and the full native focus graph remain unverified. Ctrl-F6 without Shift routes the active input-enabled Writer browser frame directly to its own mounted editing host, independently of a saved toolbar focus owner. Existing menu focus-loss teardown closes root/child popups and consumes the old saved cycle without dispatch. One shared active/modal eligibility value gates both this frame route and F10. Owned actual-session cases cover frame changes, disposal, already-consumed/nonmatching keys, the inspected Ctrl/non-Shift condition with additional modifiers, and all existing modal request owners; Chromium checks focus plus actual editing and a fresh F10 cycle. Full plain/Shift-F6 pane traversal, platform modifier mapping, native focus flags and the complete focus graph remain unverified. Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
         "knownViolations": [],
         "localSymbols": [
           "WriterWorkbench",

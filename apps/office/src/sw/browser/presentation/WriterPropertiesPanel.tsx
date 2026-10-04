@@ -90,9 +90,6 @@ export function WriterParagraphProperties({
     };
   return (
     <>
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
-        {localization.GetText("writer.properties.title", "Properties")}
-      </p>
       <h2 className="mt-1 text-base font-bold text-slate-950">
         {localization.GetText("writer.properties.paragraph", "Paragraph")}
       </h2>

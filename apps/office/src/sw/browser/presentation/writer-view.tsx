@@ -428,6 +428,10 @@ export function WriterWorkbench({
           />
         }
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
+        focusDocument={
+          /** Returns sidebar focus to this Writer frame's mounted client. @returns Nothing. */ () =>
+            (editingHostRef.current as HTMLElement).focus()
+        }
         isVerticalRulerVisible={snapshot.isVerticalRulerVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
         menuBar={
