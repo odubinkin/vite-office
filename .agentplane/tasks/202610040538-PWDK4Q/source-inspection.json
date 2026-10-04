@@ -1,0 +1,27 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "svtools/source/control/ruler.cxx",
+      "sha256": "3d311b4b4fdfa0c05651bb7aa169c2b2a39def6023059b9dd1ffdb29f80bd413"
+    },
+    {
+      "path": "svx/source/dialog/svxruler.cxx",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "editeng/source/items/paraitem.cxx",
+      "sha256": "1aa97ce01c9fc44c8c4079edd175639a16207580f912233df8812ed2b5582e66"
+    }
+  ],
+  "conclusions": [
+    "Ruler ImplHitTest excludes Default tab hit targets but retains their raw array slots.",
+    "SvxRuler UpdateTabs projects tab item order;ApplyTabs uses selected raw index and remove-then-insert ordering.",
+    "SvxTabStopItem Insert replaces a colliding position with the inserted stop.",
+    "Browser compact labels must retain item index,position pairs;selected tab metadata must win collisions.",
+    "Full native ruler/UI and shell parity remain unverified."
+  ],
+  "nativeCompilation": false,
+  "nativeExecution": false,
+  "sourceCopies": false
+}

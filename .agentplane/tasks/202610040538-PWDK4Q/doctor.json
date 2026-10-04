@@ -1,0 +1,12 @@
+{
+  "command": "ap doctor",
+  "exitCode": 0,
+  "outputBytes": 1616,
+  "outputSha256": "6fa29366c2fc364a313422c238d2c5e9cd3af13ca6462a785d1e2e98ecb22090",
+  "summary": [
+    "doctor (OK)",
+    "warning: doctor findings: errors=0 warnings=2 info=2",
+    "- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches",
+    "- [WARN] DONE task is missing implementation commit hash: 202610031635-2Z3962 (finish with --commit <hash>)."
+  ]
+}

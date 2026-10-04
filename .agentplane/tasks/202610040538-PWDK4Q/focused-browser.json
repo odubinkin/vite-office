@@ -1,0 +1,9 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-ruler-tab-identity.spec.ts",
+  "exitCode": 0,
+  "outputBytes": 631,
+  "outputSha256": "59304f815f4664fa0c55ccb0e5a393b2dc10039c434e81617da7a68449eb3082",
+  "summary": [
+    "  2 passed (2.5s)"
+  ]
+}

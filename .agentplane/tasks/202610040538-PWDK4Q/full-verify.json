@@ -1,0 +1,17 @@
+{
+  "command": "npm run verify",
+  "exitCode": 0,
+  "outputBytes": 994087,
+  "outputSha256": "8cea9cea6b7a55b04ad549091f79df2758be3ade98d98b7dcaf178bf5877c411",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  218 passed (218)",
+    "      Tests  1134 passed (1134)",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "✓ built in 589ms",
+    "  63 passed (18.8s)",
+    "✓ built in 626ms"
+  ]
+}

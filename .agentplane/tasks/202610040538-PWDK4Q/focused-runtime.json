@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- vitest run --root apps/office src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx src/sw/browser/presentation/WriterRulers-tracking.test.tsx src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx src/sw/browser/presentation/use-ruler-tracking.test.tsx src/sw/browser/presentation/WriterPageLayout.test.tsx src/sw/source/uibase/wrtsh/wrtsh-paragraph-ruler.test.ts",
+  "exitCode": 0,
+  "outputBytes": 240,
+  "outputSha256": "150c1a72cca4d876e731a5002ac4721d87bf869d716a361ec02c120421bcdc58",
+  "summary": [
+    " Test Files  6 passed (6)",
+    "      Tests  49 passed (49)"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "base": "11a7405467db84e2ad011db34803dac5cc390e45",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+    "apps/office/e2e/writer-ruler-tab-identity.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "bytes": 18234,
+      "sha256": "8bcec67b56b350ff3b6a16964627f26e6e0d5c2c2bf82c374d50c1f1c7827176"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "bytes": 21066,
+      "sha256": "8e2f906ac780c52995557138d7ce1c7b3200a640566d7aec4c4bd43809b9bdf1"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "bytes": 33971,
+      "sha256": "47b558933c5aad73d290c3032d4cfee7e408e1957d5109392e371b77bdf2d382"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+      "bytes": 31479,
+      "sha256": "f90f987e170646eed093d3e452b0d202619efc694442b16de97cc896d9179075"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+      "bytes": 10217,
+      "sha256": "3685de571b1ee1feb4bf9a69dd1e0e827ed774b004d06a4825bfd3f13d191db3"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+      "bytes": 9146,
+      "sha256": "7d8b40e309e7871ba56e70420c57973b0a4b16872f2bea79cdeaf0273b25fd48"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-tab-identity.spec.ts",
+      "bytes": 3906,
+      "sha256": "7773be27fe8d015ff5553ab7b7b9b98475df3ac22e7aa069a2d759fa76e3c0c0"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 735299,
+      "sha256": "a6df650c145964241a7171984261c9ef895c916fd96fb0e04d1ebe104973df7e"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 716958,
+      "sha256": "1dc1350ce4c6c01acecd1bbc7bce3ca7d56550fd8f8e1f86d9f7d53d7685b5d4"
+    }
+  ],
+  "priorTestFiles": 284,
+  "priorTestFilesByteIdentical": 282,
+  "approvedPriorTestChanges": {
+    "paths": [
+      "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+      "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx"
+    ],
+    "fixtureDtoPayloads": 4,
+    "allAssertionsAndBytesOutsideFormattedFixturePayloadsPreserved": true
+  },
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 3,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 3,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}
