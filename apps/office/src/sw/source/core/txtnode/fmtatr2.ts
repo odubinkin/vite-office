@@ -49,11 +49,22 @@ export function equalWriterHyperlinks(
 
 /** Writer pool item backing one `RES_TXTATR_INETFMT` range. */
 export class SwFormatINetFormat extends SfxPoolItem {
+  private readonly hyperlink: WriterHyperlink;
+
   /** Creates one hyperlink value. @param hyperlink - Canonical hyperlink metadata. @returns Nothing. */
-  public constructor(private readonly hyperlink: WriterHyperlink) {
+  public constructor(hyperlink: WriterHyperlink) {
     super(RES_TXTATR_INETFMT);
     this.setNonShareable();
-    if (hyperlink.url.length === 0) throw new Error("Writer hyperlink URL must not be empty.");
+    const { url, name, targetFrame, styleName, visitedStyleName } = hyperlink;
+    if (url.length === 0) throw new Error("Writer hyperlink URL must not be empty.");
+    this.hyperlink = {
+      ...hyperlink,
+      url,
+      ...(name !== undefined ? { name } : {}),
+      ...(targetFrame !== undefined ? { targetFrame } : {}),
+      ...(styleName !== undefined ? { styleName } : {}),
+      ...(visitedStyleName !== undefined ? { visitedStyleName } : {}),
+    };
   }
 
   /** Returns independent hyperlink metadata. @returns Hyperlink value. */
