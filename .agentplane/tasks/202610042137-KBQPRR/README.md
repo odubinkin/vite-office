@@ -1,10 +1,11 @@
 ---
 id: "202610042137-KBQPRR"
 title: "Restore native ranged text attribute hierarchy"
-status: "DOING"
+result_summary: "Leaf123 complete:2631app/109inventory/5script/99Chromium cases verified,32newcases,100%app/combinedinventory coverage;all345previous tests accounted for,235existingstatuses/defaults/exceptions preserved,source/AP/doctor/routing/quality gates pass,parent goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610042137-KBQPRR/evidence/failed-case-recovery.json"
   findings:
     - "Six static gates and five restored audits pass. One absent full profile,followed by only35app/1inventory failed-case recovery;all2631app/109inventory/5script/99Chromium cases verified. App100%coverage;inventory initial+targeted coverage closes all original diagnostic gaps to100%fourmetrics without replaying passing cases.235existing statuses/defaults/exceptions and registered I/O deviations preserved;one new unverified module. Ignored-inclusive APscan zero forbidden;no upstream source/helpers/probes."
-commit: null
+commit:
+  hash: "d08b32f04a7eedb77fc19ae664cff9376d3bb848"
+  message: "🧩 KBQPRR task: record verified hierarchy contracts"
 comments:
   -
     author: "CODER"
     body: "Start: restore approved native attribute hierarchy/concrete nesting defaults and migrate supported ranged storage/factory/fixtures;verify once absent with failed-only recovery."
+  -
+    author: "CODER"
+    body: "Verified: native base/end/nesting/INET hierarchy,12flags,locked hyperlink defaults,factory/backlinks,concrete independent snapshots;one absent profile and onlyfailedcase recovery."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native hierarchy/defaults leaf123 verified at 883990759b08ad5e2e8fdd6f86525f9853c0bea4;six static/five source audits pass;one absent profile and only36failedcases replayed,2631app/109inventory/5script/99Chromium,100%app and combinedinventory coverage;345prior tests accounted,32newcases,registered deviations preserved. Same-actor exact-SHA quality pass;parent goal active."
+  -
+    type: "status"
+    at: "2026-10-04T22:04:37.152Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native base/end/nesting/INET hierarchy,12flags,locked hyperlink defaults,factory/backlinks,concrete independent snapshots;one absent profile and onlyfailedcase recovery."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:04:10.913Z"
+doc_updated_at: "2026-10-04T22:04:37.154Z"
 doc_updated_by: "CODER"
 description: "Iteration123 replaces the single generic ranged attribute with native SwTextAttr/SwTextAttrEnd/SwTextAttrNesting/SwTextINetFormat contracts and native locked nesting defaults. Migrate actual production constructors/factory/storage and range fixtures,add independent literal class/flag/copy/node tests,correct old expectations contradicted by concrete native INET defaults. One executable refactor leaf;no upstream execution or AP source/helpers;one absent suite profile only. Full reference-count/listener/empty hints and broader core/UI fidelity remain open."
 sections:
@@ -149,6 +162,10 @@ sections:
     Native hierarchy/source review: Iteration123 restores SwTextAttr's protected start-only base and optional end,SwTextAttrEnd's ranged end notifications without range-order rejection,and twelve private native flags/accessors. SwTextAttrNesting initializes DontExpand/LockExpandFlag/DontExpandStart/Nesting true;SwTextINetFormat additionally sets CharFormatAttr and its item's GetTextINetFormat backlink. MakeTextAttr and production hyperlink creation now construct concrete internet attributes;fresh copied AUTO flags are false while INET nesting/char-format defaults are true. This supersedes prior generic false-INET constructor/copy/reset claims in iterations114-122;native locked DontExpand reset remains blocked. Portable snapshots preserve concrete ranged kind and independent supported flags,distinct from native deleted copy construction. Existing generic range fixtures use SwTextAttrEnd;fresh concrete factory expectations and native temporary crossed-end write expectations are corrected without weakening range/value/ownership checks. JavaScript integer guards and public internal friend-storage/projection adapters remain bounded language boundaries. Native item holders/refcounts/destruction/listeners,full ChgTextNode/style clients/visited behavior,empty-hint retention/full nesting insertion/modes,nondefault unsupported graph flags and other attribute families remain unverified. Existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;one new source-owned txtatr2 module remains unverified,no module or goal promotion.
     Evidence: six static gates pass. One sequential upstream-absent profile ran build once,2631 app cases across264 files,109 inventory cases across36 files,5 script cases,99 Chromium scenarios. Original app2596pass/35fail with100%four-metric coverage;inventory108pass/1fail with99.59lines/99.6statements/99.21functions/99.9branches. Thirty-five app and one inventory failed cases alone replayed successfully;115app/2inventory cases explicitly skipped. Inventory targeted coverage disabled standalone subset thresholds only to collect complementary evidence,then verified every six missing CLI diagnostic statements,three named function gaps and the only runtime line454 branch against JSON coverage. Initial plus targeted evidence covers100%allfourmetrics without replaying passing tests;no repository coverage threshold changed. Original coverage JSON summaries remain bounded evidence;raw diagnostics/source/helper material never saved in AP. Only test changes followed the initial absent profile:missed fresh-INET defaults,crossed/signed coordinate expectations,restore canonical marker,correct foreign-internet selection to actualINET54,and fix new interior-insertion end literal. Production unchanged after initial profile.
     Final focused formatting/lint/app TypeScript pass. Restored five source audits pass;semanticViolationCount0. Scope audit accounts for all345prior tests:320byte-identical,13range-type/format-only,12native expectation corrections retaining geometry/value/ownership checks. Exactly35 semantic paths;235existing runtime statuses/defaults/exceptions preserved,one new unverified txtatr2 record,five responsibility appendices and two range symbols. Six pinned source hashes retained. Ignored-inclusive APscan3814files/0forbidden. Doctor0errors/two unchanged warnings;policy routing passes. Broad core/UI goal remains unverified. No upstream execution/network/other-repo/global access.
+extensions:
+  implementation_commit:
+    hash: "883990759b08ad5e2e8fdd6f86525f9853c0bea4"
+    message: "🧩 KBQPRR code: restore native text attribute hierarchy and nesting defaults"
 id_source: "generated"
 ---
 ## Summary
