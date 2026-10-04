@@ -1,0 +1,15 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+  "exit": 1,
+  "sha256": "aad0678cd73e0da947aa61c8a11263f36462b89c79ffb204193c691704d2a6ab",
+  "bytes": 70364,
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  4 failed (4)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Paragraph\"",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Paragraph\"",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Paragraph\"",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Paragraph\""
+  ]
+}
