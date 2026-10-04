@@ -1,0 +1,10 @@
+{
+  "path": "apps/office/coverage/coverage-summary.json",
+  "metrics": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "branchesTrue": 100
+  }
+}

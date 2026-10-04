@@ -1,0 +1,7 @@
+{
+  "command": "npm run inventory:parity",
+  "profile": "restored-source audit only",
+  "exitCode": 0,
+  "bytes": 1130540,
+  "sha256": "50b0bdb79c8de42dc0b341d3a8de702d03ce20e1d05ffd30d2327adad16ab111"
+}

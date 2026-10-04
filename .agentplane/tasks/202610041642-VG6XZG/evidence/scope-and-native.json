@@ -1,0 +1,28 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "unchangedPriorTestFiles": 323,
+  "unchangedRuntimeRows": 230,
+  "boundedExistingRuntimeAppendices": 1,
+  "sourceAppendices": 1,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeHashes": [
+    {
+      "path": "sw/source/core/txtnode/txtedt.cxx",
+      "sha256": "900413bc482204a05a6bc74a7a3b2b89824335f0f849a531afde833793f083f1"
+    },
+    {
+      "path": "include/svl/itemset.hxx",
+      "sha256": "556a9c3a7bacddffc2e9da13462161836261c4ca97c83361e67ac5d166a33c1c"
+    },
+    {
+      "path": "svtools/source/misc/acceleratorexecute.cxx",
+      "sha256": "ced43334df839c3b37b2531da80008b45d2fb6756927ac1d20a9b58b13cf6f3b"
+    }
+  ],
+  "registeredDeviationsUnchanged": true
+}

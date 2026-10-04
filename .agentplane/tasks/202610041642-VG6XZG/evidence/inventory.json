@@ -1,0 +1,7 @@
+{
+  "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+  "profile": "upstream unavailable",
+  "exitCode": 0,
+  "bytes": 1062,
+  "sha256": "f38b31ab713fee497c0c5b89d6cfd8d63d6fcef37e50668532e082b7dce2c2dd"
+}

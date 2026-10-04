@@ -1,0 +1,7 @@
+{
+  "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+  "profile": "upstream unavailable",
+  "exitCode": 0,
+  "bytes": 1035,
+  "sha256": "a8f331ac4ecf4ad2126154e4f2f4f3616a78aadabf53f2fe2458a578ee33fca3"
+}
