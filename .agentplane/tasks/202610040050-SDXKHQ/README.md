@@ -1,10 +1,11 @@
 ---
 id: "202610040050-SDXKHQ"
 title: "Synchronize active root popup with menubar Home and End"
-status: "DOING"
+result_summary: "Root Home/End active popup now follows selected root; full989app109inventory45browser2resource100%coverage0semantic, upstream-absent989+109+12+45 pass, no source/helper/Python artifacts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Grouped root arrows/Home/End preserves old arrow behavior and calls existing popup transition only when already open; native inspected highlight/create/reuse contracts supported by owned root/child replacement and same-root tests, no new popup/focus/dispatch workaround."
     - "Before-code4fail7pass becomes11newpass plus59prior focused checks; rebuilt browser11pass and full989app109inventory45browser2resource tests100%coverage0semantic."
     - "Vendor-absent989+109+12+45 pass proves tests require no upstream; static source-reading CLI audits are separate. Vendor restored,4source/5semantic hashes preserved;257old test bytes and215rows evidence-only proof, no source/helper/Python/executable/archive artifacts."
-commit: null
+commit:
+  hash: "54f2976e2819f7c3c5239ec0e69e2009c295f6b5"
+  message: "🎯 SDXKHQ code: synchronize active popup with root Home and End"
 comments:
   -
     author: "CODER"
     body: "Start: implement authorized iteration82 common root arrows/Home/End navigation with native active-popup selection and unchanged focus/dispatch, upstream-independent tests and no source/helper/Python artifacts."
+  -
+    author: "CODER"
+    body: "Verified: root Home/End active-popup synchronization, all declared full/offline/hash/scope/artifact gates pass and exact-semantic same-actor quality pass; broader goal remains active."
 events:
   -
     type: "status"
@@ -72,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: all declared checks pass; immutable terminal full/offline results and source-semantic hashes at semantic54f2976e2819. Same-actor separate exact-semantic EVALUATOR pass,257oldbytes215rows evidence-only,100%coverage0semantic,no source-helper-Python artifacts; vendor restored. Re-record final blueprint verification after quality/doc persistence."
+  -
+    type: "status"
+    at: "2026-10-04T01:07:28.228Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: root Home/End active-popup synchronization, all declared full/offline/hash/scope/artifact gates pass and exact-semantic same-actor quality pass; broader goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T01:07:09.406Z"
+doc_updated_at: "2026-10-04T01:07:28.229Z"
 doc_updated_by: "CODER"
 description: "Iteration82 under C9TN6M: native-shaped common root navigation for arrows/Home/End, active popup follows selected root with first-item keyboard preselection; no popup before keyboard activation. Preserve current child popup and saved-owner lifecycle, registered save/open/recovery and upstream-independent tests."
 sections:
@@ -122,6 +135,10 @@ sections:
     Initial new fixture8fail3pass included unstable GetState snapshot objects causing maximum-update-depth; corrected stable owned state per controller without implementation workaround. Revised before-code baseline4fail7pass shows Home/End active root and child popup replacement failures. Corrected11new+59prior cases70pass/5files, true fresh-resource rerender retains later selection. One failed multi-file apply_patch verification was atomic, inspected files unchanged before exact patch applied. Browser boundary assumptions corrected from actual generated supported roots: first File/New Document, last Tools/Line Numbering, before browser run; no unsupported Help expansion or save/open changes. Native root4hashes/conclusions only. Exact1production inverse and257oldbytes/215rows1evidence-only row each pass. Auxiliary doctor0errors2knownwarnings/routing/diff pass. Focused rebuilt Chromium checks running, full/offline pending; broader F6/Sidebar and native flags remain open.
     Final checks completed: focused rebuilt browser11pass,full989+109+45+2pass100%coverage0semantic;vendor-absent989+109+12+45pass,restored finally. Final integrity2732taskfiles source/helpers/Python/exec/archive/magic/embedded source0,4source and5semantic hashes unchanged,coverage100,scope preserved. Existing Python/probe helpers were removed in cleanup commit4bf67a647e07; source-bearing legacy trace archive removed in b23c4f18c359. No new source/helper artifact created. Ordinary F6 pane traversal/Sidebar focus composition, native flags, Alt/mnemonics and full parent/module parity remain open.
     Canonical finish validation rejected missing recorded blueprint verification evidence after verification/doc/quality commits; no implementation mutation. Re-read route and declared checks, all terminal/hash evidence unchanged; record verification again after final docs, then canonical finish with true semantic hash.
+extensions:
+  implementation_commit:
+    hash: "54f2976e2819f7c3c5239ec0e69e2009c295f6b5"
+    message: "🎯 SDXKHQ code: synchronize active popup with root Home and End"
 id_source: "generated"
 ---
 ## Summary
