@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- eslint apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts --max-warnings 0",
+  "exitCode": 0,
+  "outputBytes": 0,
+  "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "summary": []
+}
