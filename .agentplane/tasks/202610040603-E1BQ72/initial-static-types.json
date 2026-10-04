@@ -1,0 +1,7 @@
+{
+  "command": "npm run typecheck",
+  "exitCode": 2,
+  "outputBytes": 2296,
+  "outputSha256": "03d443f8670f16d571a0473df2d77a1fd9a6e1405d63cc3d1997ed47ee75631f",
+  "summary": []
+}

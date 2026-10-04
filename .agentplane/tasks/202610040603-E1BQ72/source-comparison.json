@@ -1,0 +1,22 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "inspection": "Read-only source comparison; no compilation or execution; bodies not stored.",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "marker": "SvxRuler::Click",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+      "marker": "SvxTabStopItem::Insert",
+      "sha256": "1aa97ce01c9fc44c8c4079edd175639a16207580f912233df8812ed2b5582e66"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/editeng/tstpitem.hxx",
+      "marker": "SvxTabStop",
+      "sha256": "45817a89df00f174b20bd8811d67725ad49dc665d9a1aa6aec119889440ab53c"
+    }
+  ],
+  "conclusion": "Iteration92 makes existing ruler insertion clone the stored tab item and Insert a freshly constructed Left tab, matching inspected SvxRuler Click and SvxTabStopItem Insert collision replacement. The new stop resets adjustment, decimal and leader to constructor defaults while preserving every unrelated stored stop and item default distance. Only the selected new positive integer position is validated; general paragraph position-list editing still retains matching metadata. Owned actual-session, immutable projection, cancellation, Undo/Redo and Chromium widths1280/390 cover this bounded insertion contract. All prior tests remain byte-identical. Native selector types/glyphs, signed geometry, RTL, modifiers/snapping/capture, complete ruler/SwWrtShell parity and parent goal remain unverified; no native promotion or registered save/open/recovery change."
+}
