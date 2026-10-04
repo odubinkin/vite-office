@@ -1,0 +1,9 @@
+{
+  "command": "npm exec -- tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+  "exitCode": 0,
+  "outputBytes": 1017366,
+  "outputSha256": "1975e8ea949018cee8164c6d946ae6eed8ed12cd5ad8af772e085a8173c79218",
+  "semanticViolationCount": 0,
+  "runtimeModules": 221,
+  "wholeParentParityClaimed": false
+}

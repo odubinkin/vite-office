@@ -38,18 +38,18 @@
     },
     {
       "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
-      "bytes": 7177,
-      "sha256": "7a2287ee0274129fd18090d3fc484be5bc75327ce9f6eaf7dbd35164da753329"
+      "bytes": 9687,
+      "sha256": "ce5c73190630a3b0faec2bfbb0a2803b131ad8bda7b071c8ca4f2297684fe213"
     },
     {
       "path": "docs/program/source-provenance.json",
-      "bytes": 782142,
-      "sha256": "b95476dfa500656ec2180025a58f1ca77eaa2bfcfac59a96a0e36f947934f225"
+      "bytes": 782614,
+      "sha256": "32e5d6f35f84308f3ce00172380e3cfe92f239bc0b25a05d1a9a911334ed3a9e"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
-      "bytes": 757896,
-      "sha256": "729397322071dd5d1e623e9bbd7284e895f8dd3c79cccbb9e58a5a8a9f18c68d"
+      "bytes": 758368,
+      "sha256": "8f192859ea8c21b3e86552682b94f54cbeef1b84203ef184e8e298c688bff252"
     }
   ],
   "priorTestFiles": 300,
