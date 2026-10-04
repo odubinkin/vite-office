@@ -1,0 +1,19 @@
+{
+  "screenshots": [
+    {
+      "path": "test-results/e2e/writer-ruler-indent-items--e0fd6-r-item-history-at-width-390/automatic-indent-items.png",
+      "sha256": "63dbedc35fbe5b7d82415366e9f08349d284c4424d4bdd6057d99cd86efd84d8",
+      "visuallyInspected": true
+    },
+    {
+      "path": "test-results/e2e/writer-ruler-indent-items--3a74e--item-history-at-width-1280/automatic-indent-items.png",
+      "sha256": "b5054d49f41dc11beb89ca57b8671abc34cf3f507dd86e1ec6e4298afb2c83aa",
+      "visuallyInspected": true
+    }
+  ],
+  "finding": "Both actual Chromium captures show left/right paragraph markers, absent automatic first-line marker and no leftover guide.",
+  "widths": [
+    390,
+    1280
+  ]
+}

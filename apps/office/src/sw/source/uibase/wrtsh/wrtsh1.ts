@@ -31,7 +31,19 @@ import {
   type SwUndoRedoContext,
 } from "../../core/undo/undobj";
 import type { UndoManager } from "../../core/undo/docundo";
-import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import {
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_TEXTLEFT,
+  RES_PARATR_TABSTOP,
+} from "../../../inc/hintids";
+import {
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShellEditingOperations } from "./wrtsh-editing";
@@ -39,11 +51,14 @@ import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/ed
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
-import {
-  SwUndoPageDesc,
-  SwUndoRulerIndent,
-  type WriterParagraphIndentValue,
-} from "../../core/undo/SwUndoPageDesc";
+import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
+
+/** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
+export interface WriterParagraphIndentValue {
+  readonly firstLine: number;
+  readonly left: number;
+  readonly right: number;
+}
 
 /** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
 interface WriterCompositionState {
@@ -556,29 +571,24 @@ export class SwWrtShell extends SwModify {
         });
     }
   }
-  /** Applies direct active-paragraph ruler indents as one Writer undo action. @param value - Replacement indent tuple. @returns Whether it changed. */
+  /** Applies ruler margin items through paragraph attribute history, retaining automatic mode. @param value - Replacement indent tuple. @returns Whether the selected paragraph attributes changed. */
   public SetParagraphRulerIndents(value: WriterParagraphIndentValue): boolean {
     const paragraph = this.GetActiveParagraph();
-    const before = {
-      firstLine: paragraph.GetParagraphFirstLineIndent(),
-      left: paragraph.GetParagraphTextLeftMargin(),
-      right: paragraph.GetParagraphRightMargin(),
-    };
-    if (
-      before.firstLine === value.firstLine &&
-      before.left === value.left &&
-      before.right === value.right
-    )
-      return false;
-    const cursor = this.CaptureCursorState();
-    return this.ApplyAction(new SwUndoRulerIndent(paragraph, before, value, cursor, cursor));
+    const firstLine = paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
+    return this.SetParagraphItems([
+      new SvxFirstLineIndentItem(value.firstLine, RES_MARGIN_FIRSTLINE, firstLine.IsAutoFirst()),
+      new SvxTextLeftMarginItem(value.left, RES_MARGIN_TEXTLEFT),
+      new SvxRightMarginItem(value.right, RES_MARGIN_RIGHT),
+    ]);
   }
   /** Applies one paragraph ruler drag to the active paragraph. @param edge - Dragged marker. @param delta - Twip drag delta. @returns Whether changed. */
   public AdjustParagraphRulerIndent(edge: "left" | "firstLine" | "right", delta: number): boolean {
     if (!Number.isFinite(delta)) return false;
     const paragraph = this.GetActiveParagraph();
     const before = {
-      firstLine: paragraph.GetParagraphFirstLineIndent(),
+      firstLine: (
+        paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+      ).ResolveTextFirstLineOffset(),
       left: paragraph.GetParagraphTextLeftMargin(),
       right: paragraph.GetParagraphRightMargin(),
     };

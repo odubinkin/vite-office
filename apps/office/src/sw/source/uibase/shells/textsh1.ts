@@ -615,7 +615,7 @@ export class SwTextShell {
             return [
               new SwUndoParagraphItem(
                 paragraph,
-                paragraph.GetSwAttrSet().GetItemIfSet(item.Which(), false),
+                paragraph.GetpSwAttrSet()?.GetItemIfSet(item.Which(), false),
                 item,
                 cursor,
                 cursor,

@@ -13,8 +13,8 @@
   "fileIdentities": [
     {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
-      "bytes": 34231,
-      "sha256": "c0dea13fd845be0918fc13a96beb1235adffbdaeea1d9cd3f7b934b9d5d95f74"
+      "bytes": 34304,
+      "sha256": "f73da6b9275ef6d2cd719f4fd4409c43deb7f063bf66887884960c728553a665"
     },
     {
       "path": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
@@ -33,8 +33,8 @@
     },
     {
       "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
-      "bytes": 11881,
-      "sha256": "b8286262933f9736f23535db61519af6dd4098e03e699cbfad7f762a5e6bb8aa"
+      "bytes": 11974,
+      "sha256": "f2994fe1b397c8d07f4c50c8015eab4fdbb4349ca7cbf633033920322281eff8"
     },
     {
       "path": "apps/office/e2e/writer-ruler-indent-items.spec.ts",

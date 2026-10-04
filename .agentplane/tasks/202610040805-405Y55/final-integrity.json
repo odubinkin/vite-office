@@ -1,0 +1,113 @@
+{
+  "base": "b1c20432023d34f125befd1f50288f01bf7e80b1",
+  "semanticPaths": [
+    "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+    "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedSourceHashesUnchanged": 5,
+  "priorTestFiles": 298,
+  "priorTestFilesByteIdentical": 297,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "exactUpdatedRows": 3,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true,
+      "obsoleteRulerSymbolsRemoved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "exactUpdatedRows": 3,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true,
+      "obsoleteRulerSymbolsRemoved": true
+    }
+  ],
+  "splitStaticChecksPassed": 11,
+  "vendorAbsentChecksPassed": 5,
+  "fullAppCasesPassed": 1210,
+  "targetedCoverageCasesPassed": 3,
+  "coverageCompletionMethod": "Exact missing-unit union from full passing-case summary and HTML locations plus targeted V8 map; partial-run thresholds do not satisfy final coverage independently.",
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10434,
+      "covered": 10434,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11385,
+      "covered": 11385,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3020,
+      "covered": 3020,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8616,
+      "covered": 8616,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "artifactAudit": "artifact-audit.json",
+  "nativeExecution": false
+}

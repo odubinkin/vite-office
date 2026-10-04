@@ -21,7 +21,7 @@ import {
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
-import { SwUndoPageDesc, SwUndoRulerIndent } from "../../core/undo/SwUndoPageDesc";
+import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
 import { SwUndoParagraphItem } from "../../core/undo/unattr";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh1";
@@ -175,16 +175,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(
       new SwUndoPageDesc(initialPage, nextPage, cursorState, cursorState).GetPayloadSize(),
     ).toBe(10);
-    expect(
-      new SwUndoRulerIndent(
-        paragraph,
-        { firstLine: 0, left: 0, right: 0 },
-        { firstLine: 180, left: 360, right: 240 },
-        cursorState,
-        cursorState,
-      ).GetPayloadSize(),
-    ).toBe(6);
     expect(shell.SetParagraphRulerIndents({ firstLine: 180, left: 360, right: 240 })).toBe(true);
+    expect(shell.GetDocShell().GetUndoManager().GetUndoAction()?.GetPayloadSize()).toBe(6);
     expect([
       paragraph.GetParagraphFirstLineIndent(),
       paragraph.GetParagraphTextLeftMargin(),

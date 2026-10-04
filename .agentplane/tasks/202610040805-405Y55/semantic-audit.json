@@ -1,0 +1,11 @@
+{
+  "command": "npm run inventory:parity",
+  "exitCode": 0,
+  "outputBytes": 1003843,
+  "outputSha256": "dd3224e00325dd31b4316ca132687fd776a031a0901cd82c0c86a9ff17513434",
+  "summary": [],
+  "semanticViolationCount": 0,
+  "metadataExtractionOutputSha256": "fb858c57c872538e2b9673c7b0d1b3dad44e76e528ff80d0c8dc5a9dce665178",
+  "metadataExtractionCommand": "npm exec -- tsx scripts/libreoffice-inventory/parity-mapping-cli.ts (same declared arguments)",
+  "metadataExtractionExitCode": 0
+}

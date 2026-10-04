@@ -6014,13 +6014,27 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts#SwUndoPageDesc",
-          "vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx#SwUndoPageDesc"
+          "vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx#SwUndoPageDesc",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts#SetParagraphRulerIndents",
+          "apps/office/src/sw/source/uibase/shells/textsh1.ts#GetpSwAttrSet",
+          "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts#SwUndoPageDesc",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#preservesRulerItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#setsCompleteIndentItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#appliesSelectedIndentItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#tracksAutomaticIndent",
+          "apps/office/e2e/writer-ruler-indent-items.spec.ts#Writer automatic ruler item history at width",
+          "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx#SvxRuler::ApplyIndents",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxLRSpaceItem::SetTextFirstLineOffset",
+          "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx#SwView::ExecTabWin",
+          "vendor/libreoffice-reference/sw/source/core/edit/edatmisc.cxx#SwEditShell::SetAttrItem",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::SwUndoAttr",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::UndoImpl",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::RedoImpl"
         ],
-        "justification": "Implements reversible page-descriptor replacement and ruler-indent changes using the pinned Writer undo action boundary.",
+        "justification": "Implements reversible page-descriptor replacement using the pinned Writer undo action boundary. Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion.",
         "knownViolations": [],
         "localSymbols": [
-          "SwUndoPageDesc",
-          "SwUndoRulerIndent"
+          "SwUndoPageDesc"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/undo/SwUndoPageDesc.cxx",
@@ -7105,9 +7119,24 @@
         "evidence": [
           "apps/office/src/sw/source/uibase/shells/textsh1.ts#SwTextShell",
           "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute",
-          "apps/office/src/sw/source/uibase/shells/textsh1.test.ts#routes color, spacing, and paragraph dialog through generated slot state"
+          "apps/office/src/sw/source/uibase/shells/textsh1.test.ts#routes color, spacing, and paragraph dialog through generated slot state",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts#SetParagraphRulerIndents",
+          "apps/office/src/sw/source/uibase/shells/textsh1.ts#GetpSwAttrSet",
+          "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts#SwUndoPageDesc",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#preservesRulerItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#setsCompleteIndentItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#appliesSelectedIndentItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#tracksAutomaticIndent",
+          "apps/office/e2e/writer-ruler-indent-items.spec.ts#Writer automatic ruler item history at width",
+          "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx#SvxRuler::ApplyIndents",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxLRSpaceItem::SetTextFirstLineOffset",
+          "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx#SwView::ExecTabWin",
+          "vendor/libreoffice-reference/sw/source/core/edit/edatmisc.cxx#SwEditShell::SetAttrItem",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::SwUndoAttr",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::UndoImpl",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::RedoImpl"
         ],
-        "justification": "Owns supported text, character, paragraph, history, indent, and hyperlink execute/state semantics as a dedicated text context shell while SwWrtShell supplies cursor and action primitives.",
+        "justification": "Owns supported text, character, paragraph, history, indent, and hyperlink execute/state semantics as a dedicated text context shell while SwWrtShell supplies cursor and action primitives. Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion.",
         "knownViolations": [],
         "localSymbols": [
           "SwTextShell",
@@ -7356,14 +7385,30 @@
           "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx#retainsListEditMetadata",
           "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx#SvxRuler::Click",
           "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert",
-          "vendor/libreoffice-reference/include/editeng/tstpitem.hxx#SvxTabStop"
+          "vendor/libreoffice-reference/include/editeng/tstpitem.hxx#SvxTabStop",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts#SetParagraphRulerIndents",
+          "apps/office/src/sw/source/uibase/shells/textsh1.ts#GetpSwAttrSet",
+          "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts#SwUndoPageDesc",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#preservesRulerItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#setsCompleteIndentItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#appliesSelectedIndentItems",
+          "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx#tracksAutomaticIndent",
+          "apps/office/e2e/writer-ruler-indent-items.spec.ts#Writer automatic ruler item history at width",
+          "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx#SvxRuler::ApplyIndents",
+          "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx#SvxLRSpaceItem::SetTextFirstLineOffset",
+          "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx#SwView::ExecTabWin",
+          "vendor/libreoffice-reference/sw/source/core/edit/edatmisc.cxx#SwEditShell::SetAttrItem",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::SwUndoAttr",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::UndoImpl",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr::RedoImpl"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/wrtsh1.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration91 refactors the existing raw-index MoveRulerTabStop transition to clone the current item, remove its selected index and insert the moved copied stop, matching inspected SvxRuler ApplyTabs and SvxTabStopItem Insert ordering. A destination collision retains the selected stop's adjustment, decimal and leader instead of the later neighbour's metadata. Item default distance, unrelated default/explicit stops, invalid-input rejection, existing nonpositive removal and shell-owned single undo/redo are preserved. Actual Writer tests cover these bounded transitions; native geometric drag limits/deletion/modifiers and complete SwWrtShell behavior/contracts/defaults remain unverified. No native status promotion or registered I/O/recovery change. Iteration92 makes existing ruler insertion clone the stored tab item and Insert a freshly constructed Left tab, matching inspected SvxRuler Click and SvxTabStopItem Insert collision replacement. The new stop resets adjustment, decimal and leader to constructor defaults while preserving every unrelated stored stop and item default distance. Only the selected new positive integer position is validated; general paragraph position-list editing still retains matching metadata. Owned actual-session, immutable projection, cancellation, Undo/Redo and Chromium widths1280/390 cover this bounded insertion contract. All prior tests remain byte-identical. Native selector types/glyphs, signed geometry, RTL, modifiers/snapping/capture, complete ruler/SwWrtShell parity and parent goal remain unverified; no native promotion or registered save/open/recovery change.",
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/wrtsh1.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration91 refactors the existing raw-index MoveRulerTabStop transition to clone the current item, remove its selected index and insert the moved copied stop, matching inspected SvxRuler ApplyTabs and SvxTabStopItem Insert ordering. A destination collision retains the selected stop's adjustment, decimal and leader instead of the later neighbour's metadata. Item default distance, unrelated default/explicit stops, invalid-input rejection, existing nonpositive removal and shell-owned single undo/redo are preserved. Actual Writer tests cover these bounded transitions; native geometric drag limits/deletion/modifiers and complete SwWrtShell behavior/contracts/defaults remain unverified. No native status promotion or registered I/O/recovery change. Iteration92 makes existing ruler insertion clone the stored tab item and Insert a freshly constructed Left tab, matching inspected SvxRuler Click and SvxTabStopItem Insert collision replacement. The new stop resets adjustment, decimal and leader to constructor defaults while preserving every unrelated stored stop and item default distance. Only the selected new positive integer position is validated; general paragraph position-list editing still retains matching metadata. Owned actual-session, immutable projection, cancellation, Undo/Redo and Chromium widths1280/390 cover this bounded insertion contract. All prior tests remain byte-identical. Native selector types/glyphs, signed geometry, RTL, modifiers/snapping/capture, complete ruler/SwWrtShell parity and parent goal remain unverified; no native promotion or registered save/open/recovery change. Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion.",
         "knownViolations": [],
         "localSymbols": [
           "SwWrtShell",
           "SwWrtShellHistory",
-          "WriterCompositionState"
+          "WriterCompositionState",
+          "WriterParagraphIndentValue"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/uibase/wrtsh/wrtsh1.cxx",
