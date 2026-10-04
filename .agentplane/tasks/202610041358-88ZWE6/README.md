@@ -4,7 +4,7 @@ title: "Restore inclusive paragraph style selection and native range undo owners
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T14:23:03.996Z"
+  updated_by: "CODER"
+  note: "Exact semantic e1ddcbc3a40eca3d090bc8df035a7002eee3cc36 passes approved inclusive single-PaM range and one native undo-owner scope. Same-actor readonly quality report evaluated this exact SHA. Seven static gates; app1431/inventory109/scripts5/Chromium95 first attempts with upstream absent and restored, app/inventory four metrics100percent; source4/routing/parity227zero, strict10paths/314prior tests313unchanged one constructor-only fixture, ten native hashes and ignored-inclusive AP forbidden0. No passing full suite repeated, native execution, compilation, source copies or registered deviation change. Complete native reset/history/default/API/core/UI parity and parent goal remain active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -56,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore the existing paragraph StyleApply inclusive point/mark traversal and one native range undo under core owners; source-only native analysis, product tests only absent."
+  -
+    type: "verify"
+    at: "2026-10-04T14:23:03.996Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic e1ddcbc3a40eca3d090bc8df035a7002eee3cc36 passes approved inclusive single-PaM range and one native undo-owner scope. Same-actor readonly quality report evaluated this exact SHA. Seven static gates; app1431/inventory109/scripts5/Chromium95 first attempts with upstream absent and restored, app/inventory four metrics100percent; source4/routing/parity227zero, strict10paths/314prior tests313unchanged one constructor-only fixture, ten native hashes and ignored-inclusive AP forbidden0. No passing full suite repeated, native execution, compilation, source copies or registered deviation change. Complete native reset/history/default/API/core/UI parity and parent goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-04T14:21:25.338Z"
+doc_updated_at: "2026-10-04T14:23:04.053Z"
 doc_updated_by: "CODER"
 description: "Iteration106: close actual supported paragraph style point/mark traversal and one SwUndoFormatColl range under native edit/undo owners, preserving canonical node and list ownership and browser history; source comparison only, tests only absent, no AP source/helpers."
 sections:
@@ -85,7 +91,41 @@ sections:
     1. Actual SwNodes inclusive traversal and core edfcol owner apply a requested owned paragraph collection to every selected text node in document order, including empty and end-offset0 paragraphs/table cells, forward/backward/collapsed and mixed already-active endpoint styles. No unselected node/style graph changes; foreign/detached range or collection rejects before mutation. SetParagraphStyle remains a convenience port, SwTextShell no longer owns its primitive, SwDocShell StyleApply owner/result contract remains. Independent literal style IDs and actual core/view/frame/session execution only.
     2. One real SwUndoFormatColl consumes SwPaM/collection, restores all original per-node styles/list direct items/suppression and exact original point/mark orientation/identity through repeated UndoRedo; redo uses captured native collection name and safely leaves nodes unchanged when that name no longer exists. Whole-range unchanged state retains current local no-op contract as unverified native history, not falsely promoted. Original313other prior files byte-identical; one constructor fixture only changes input shape and retains every assertion. Desktop/mobile actual ODT/browser scenarios prove all selected paragraph styles/toolbar/sidebar/focus/history/export and untouched neighbors without browser model injection.
     3. Seven static gates/routing/doctor pass; app/inventory100percent all four metrics/scripts/full Chromium only absent/finally restore, no baseline/pre-fix/present tests or passing full suite repeat/concurrent source/scope/AP audits. Initial app reportOnFailure. Final source4audits/resources--check/parity227zero;10exactpaths/226oldrows4appends1newunverified/314priorfiles313unchanged1boundedfixture/native hashes/APignoredinclusive forbidden0. Semantic commit exact evaluated_sha same-actor readonly pass, committed verification/clean closure/parent progress; registered deviations unchanged and complete core/UI/native state/default/reset/history/selection-ring parity remains open.
-  Verification: "Pending approved implementation; no iteration106 tests or static gates have run."
+  Verification: |-
+    Pending approved implementation; no iteration106 tests or static gates have run.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T14:23:03.996Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic e1ddcbc3a40eca3d090bc8df035a7002eee3cc36 passes approved inclusive single-PaM range and one native undo-owner scope. Same-actor readonly quality report evaluated this exact SHA. Seven static gates; app1431/inventory109/scripts5/Chromium95 first attempts with upstream absent and restored, app/inventory four metrics100percent; source4/routing/parity227zero, strict10paths/314prior tests313unchanged one constructor-only fixture, ten native hashes and ignored-inclusive AP forbidden0. No passing full suite repeated, native execution, compilation, source copies or registered deviation change. Complete native reset/history/default/API/core/UI parity and parent goal remain active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T14:21:25.338Z, excerpt_hash=sha256:d1ddd66af4602efeae5d2bdbec19d04ece4c5db2cadcc5253260c396141e8225
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041358-88ZWE6/blueprint/resolved-snapshot.json
+    - old_digest: 18673bcd75f3e00e219566fbd7e219ac49ea51fc63358e64b5a4175432f2100b
+    - current_digest: 18673bcd75f3e00e219566fbd7e219ac49ea51fc63358e64b5a4175432f2100b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610041358-88ZWE6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610041358-88ZWE6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this semantic commit through a new approved leaf; keep immutable DONE records, native pin and registered I/O/recovery deviations. Absent-vendor orchestration restores the repository-local directory in finally on every exit."
   Findings: |-
     Readonly pinned SwEditShell::SetTextFormatColl in edfcol.cxx dispatches document-range application, SwDoc::SetTextFormatColl in docfmt.cxx visits ordered node span including the final node and skips non-text nodes, and native SwUndoFormatColl retains range/history and redoes by saved display name. Local SwTextShell instead changes only GetActiveParagraph and short-circuits when that node already matches, leaving the rest of a multi-paragraph selection untouched. Local SwUndoFormatColl accepts one paragraph/old/new IDs. This task closes the independent range traversal/undo owner gap completely for the current single PaM graph; direct reset/hints/list modifiers/native repeat-no-op history and broader native operations remain distinct unverified obligations, not registered deviations.
@@ -131,6 +171,39 @@ All313of314prior test files remain byte-identical; only one native undo-construc
 ## Verification
 
 Pending approved implementation; no iteration106 tests or static gates have run.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T14:23:03.996Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic e1ddcbc3a40eca3d090bc8df035a7002eee3cc36 passes approved inclusive single-PaM range and one native undo-owner scope. Same-actor readonly quality report evaluated this exact SHA. Seven static gates; app1431/inventory109/scripts5/Chromium95 first attempts with upstream absent and restored, app/inventory four metrics100percent; source4/routing/parity227zero, strict10paths/314prior tests313unchanged one constructor-only fixture, ten native hashes and ignored-inclusive AP forbidden0. No passing full suite repeated, native execution, compilation, source copies or registered deviation change. Complete native reset/history/default/API/core/UI parity and parent goal remain active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T14:21:25.338Z, excerpt_hash=sha256:d1ddd66af4602efeae5d2bdbec19d04ece4c5db2cadcc5253260c396141e8225
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041358-88ZWE6/blueprint/resolved-snapshot.json
+- old_digest: 18673bcd75f3e00e219566fbd7e219ac49ea51fc63358e64b5a4175432f2100b
+- current_digest: 18673bcd75f3e00e219566fbd7e219ac49ea51fc63358e64b5a4175432f2100b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610041358-88ZWE6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610041358-88ZWE6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
