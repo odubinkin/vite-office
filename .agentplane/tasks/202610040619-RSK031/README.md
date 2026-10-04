@@ -4,7 +4,7 @@ title: "Project Writer ruler tab adjustment glyphs and anchored hit bounds"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,31 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T06:32:47.873Z"
+  updated_at: "2026-10-04T06:34:04.670Z"
   updated_by: "CODER"
-  note: "Single absent-upstream1147app+109inventory+5scripts+67browser first-pass;100%four coverage metrics,separate static gates pass/0semantic;10paths/284of288oldtests identical+11DTOadditions/220rows append-only/2sourcehashes/AP forbidden0;vendor restored."
+  note: "Final documentation/evidence revision verified without rerunning tests;same-actor EVALUATOR pass exactsemantic9cb169bb4588795c2bb740820ca6d023814510cc. Single absent1147+109+5+67first-pass,100%coverage,separate static/0semantic,10paths/11DTOchanges/220rows append-only/2sourcehashes/AP forbidden0,vendor restored."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T06:33:32.177Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR review of actual semantic9cb169bb4588795c2bb740820ca6d023814510cc passes bounded ruler tab adjustment/glyph/horizontal hit-bound correction;complete native/parent parity remains open."
+  evaluated_sha: "9cb169bb4588795c2bb740820ca6d023814510cc"
+  blueprint_digest: "7dd3377435290f3e88f1eb532f730283080c9ea73082fbff74eab7d13708b607"
+  evidence_refs:
+    - ".agentplane/tasks/202610040619-RSK031/README.md"
+    - ".agentplane/tasks/202610040619-RSK031/quality/20261004-063332177-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040619-RSK031/quality/20261004-063332177-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040619-RSK031/quality/20261004-063332177-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040619-RSK031/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040619-RSK031/final-integrity.json"
+    - ".agentplane/tasks/202610040619-RSK031/scope-integrity.json"
+    - ".agentplane/tasks/202610040619-RSK031/source-comparison.json"
+    - ".agentplane/tasks/202610040619-RSK031/visual-check.json"
+    - ".agentplane/tasks/202610040619-RSK031/vendor-absent-runtime.json"
+    - ".agentplane/tasks/202610040619-RSK031/vendor-absent-browser.json"
+  findings:
+    - "Readonly diff/source comparison confirms immutable primitive adjustment travels with raw item index and position;four SVG rectangle shapes match inspected DPI1 native coordinates/inclusive bounds and hit offsets. Preview and accepted freshLeft share one glyph renderer. Ten semantic paths;284of288prior tests byte-identical,exact11DTOadditions across4files/no weakening.220manifest rows retained with2append-only updates/no promotions. Single absent-upstream1147app/109inventory/5scripts/67Chromium first-pass;100%four metrics,separate static gates/0semantic,vendor restored. Two actual rendered widths visually inspected. Two source hashes unchanged and ignored-inclusive Agentplane forbidden0. Initial new-test static optional accesses corrected before suites;no test reruns."
 commit: null
 comments:
   -
@@ -41,8 +62,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Single absent-upstream1147app+109inventory+5scripts+67browser first-pass;100%four coverage metrics,separate static gates pass/0semantic;10paths/284of288oldtests identical+11DTOadditions/220rows append-only/2sourcehashes/AP forbidden0;vendor restored."
+  -
+    type: "verify"
+    at: "2026-10-04T06:34:04.670Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final documentation/evidence revision verified without rerunning tests;same-actor EVALUATOR pass exactsemantic9cb169bb4588795c2bb740820ca6d023814510cc. Single absent1147+109+5+67first-pass,100%coverage,separate static/0semantic,10paths/11DTOchanges/220rows append-only/2sourcehashes/AP forbidden0,vendor restored."
 doc_version: 3
-doc_updated_at: "2026-10-04T06:32:47.925Z"
+doc_updated_at: "2026-10-04T06:34:04.722Z"
 doc_updated_by: "CODER"
 description: "Iteration93: preserve each explicit tab adjustment in immutable ruler projection and render source-shaped Left/Right/Center/Decimal glyphs with type-dependent horizontal hit bounds. Keep raw-index movement, model metadata, preview/cancellation/undo and intentional I/O exceptions. Test once without pinned upstream; static source comparison separately."
 sections:
@@ -62,17 +89,18 @@ sections:
   Plan: "Implement one existing marker-type correction: require adjustment in immutable explicit tab DTO;reuse native DPI1 rectangle geometry for four glyphs and anchored horizontal bounds;share fresh Left glyph with temporary preview. Extend11owned DTO payloads across4prior tests without weakening assertions,add actual Writer/DOM/Undo and Chromium desktop/mobile evidence,append2existing manifests with no promotions,and execute the single absent-upstream test contract plus separate static audits. Standing goal authorizes local scope;no subagents or external actions."
   Verify Steps: "Read ap task verify-show. Inspect pinned svtools ruler_tab/ImplDrawRulerTab/ImplHitTest and svx ToSvTab_Impl/UpdateTabs read-only;record hashes/path/markers/conclusions only. No upstream execution or baseline/focused pre-fix suite. Run format:check,lint,typecheck,check:dependencies,test:static(build/static only),check:docs,check:file-size. Rename vendor/libreoffice-reference inside vendor;run npm run test once(app+inventory coverage),npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts once,and npm run test:e2e once;restore in finally. Only failed corrected gates may rerun,always absent upstream for tests;never repeat a passing suite with source present/absent. After restore run generator --check,source-tree,provenance,invariants,parity CLI separately. Require all pass,app+inventory4coverage metrics100%,semantic violations0. Verify glyph rectangles and anchor/hit bounds for all4types,immutable/raw-index projection,temporaryLeft preview/cancel,typed drag/undo/redo/metadata and desktop/mobile Chromium. Integrity must prove10paths,288prior testfiles with284identical and exact11DTOadditions across4files/no assertion removal,220rows with2append-onlyupdates/no promotions,2source hashes unchanged. Ignored-inclusive Agentplane audit zero code/helper/Python/native/archive/raw diagnostic frames. Routing validation and ap doctor pass. Same-actor separate EVALUATOR on actual semantic SHA;finish cleantracked/untracked and keepparentgoal active."
   Verification: |-
-    Command: split all existing verify gates;Result:pass. Static format/lint/typecheck/dependency/build-static/JSDoc/file-size pass;initial new-test optional-access type errors corrected before any suites. Single absent-upstream npm run test:1147app/220files +109inventory/36files;owned provenance/resource Vitest5/2files;rebuilt Chromium67scenarios,all first-run pass,no test reruns or source-present duplicate. Vendor restored in finally. App/inventory lines/statements/functions/branches all100%. Generator --check/source-tree/provenance/invariants/parity CLI pass separately after restore;semanticViolationCount0. Routing/doctor exit0. Scope integrity:10semantic paths,288prior tests,284byte-identical;4prior files have exactly11DTO adjustment payload additions,all other bytes/previous assertions preserved.220rows each,2append-only updates,no status/default/owner/exception/order promotion. Two pinned source hashes unchanged. Ignored-inclusive Agentplane3050files/2983task-or-tmp artifacts:source/helper/Python/executable/archive/raw frames/code diffs0;fivehistorical prose-only Markdown references. Screenshots outside Agentplane visually inspected at1280/390:distinct Left/Right/Center/Decimal glyphs,stable anchors,no clipping. Bounded hashes/results/conclusions only;no helper files/source bodies/native execution. Evidence:source-comparison.json,scope-integrity.json,static-*.json,source-audit-*.json,vendor-absent-*.json,vendor-restoration.json,semantic-audit.json,visual-check.json,final-integrity.json,artifact-audit.json,routing.json,doctor.json. Same-actor EVALUATOR on actual semantic SHA pending;no independent-agent review claimed. Full native/parent parity,default glyph generation,selector,RTL/systemDPI/theme/vertical hit geometry/modifiers/capture remain open;save/open/recovery deviations preserved.
+    Command: split all existing verify gates;Result:pass. Static format/lint/typecheck/dependency/build-static/JSDoc/file-size pass;initial new-test optional-access type errors corrected before any suites. Single absent-upstream npm run test:1147app/220files +109inventory/36files;owned provenance/resource Vitest5/2files;rebuilt Chromium67scenarios,all first-run pass,no test reruns or source-present duplicate. Vendor restored in finally. App/inventory lines/statements/functions/branches all100%. Generator --check/source-tree/provenance/invariants/parity CLI pass separately after restore;semanticViolationCount0. Routing/doctor exit0. Scope integrity:10semantic paths,288prior tests,284byte-identical;4prior files have exactly11DTO adjustment payload additions,all other bytes/previous assertions preserved.220rows each,2append-only updates,no status/default/owner/exception/order promotion. Two pinned source hashes unchanged. Ignored-inclusive Agentplane3050files/2983task-or-tmp artifacts:source/helper/Python/executable/archive/raw frames/code diffs0;fivehistorical prose-only Markdown references. Screenshots outside Agentplane visually inspected at1280/390:distinct Left/Right/Center/Decimal glyphs,stable anchors,no clipping. Bounded hashes/results/conclusions only;no helper files/source bodies/native execution. Evidence:source-comparison.json,scope-integrity.json,static-*.json,source-audit-*.json,vendor-absent-*.json,vendor-restoration.json,semantic-audit.json,visual-check.json,final-integrity.json,artifact-audit.json,routing.json,doctor.json. Same-actor separate EVALUATOR pass quality/20261004-063332177-recovery-context/quality-report.json evaluates exact semantic9cb169bb4588795c2bb740820ca6d023814510cc;no independent-agent review claimed. Full native/parent parity,default glyph generation,selector,RTL/systemDPI/theme/vertical hit geometry/modifiers/capture remain open;save/open/recovery deviations preserved.
+    Final readonly scope/source/artifact integrity after quality/doc updates passes without rerunning tests.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-04T06:32:47.873Z — VERIFY — ok
+    ### 2026-10-04T06:34:04.670Z — VERIFY — ok
 
     By: CODER
 
-    Note: Single absent-upstream1147app+109inventory+5scripts+67browser first-pass;100%four coverage metrics,separate static gates pass/0semantic;10paths/284of288oldtests identical+11DTOadditions/220rows append-only/2sourcehashes/AP forbidden0;vendor restored.
+    Note: Final documentation/evidence revision verified without rerunning tests;same-actor EVALUATOR pass exactsemantic9cb169bb4588795c2bb740820ca6d023814510cc. Single absent1147+109+5+67first-pass,100%coverage,separate static/0semantic,10paths/11DTOchanges/220rows append-only/2sourcehashes/AP forbidden0,vendor restored.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T06:32:47.562Z, excerpt_hash=sha256:387689e3dd69c8bd6711ea6b702dd9509c53ed89b58b77a14bd94ba979a78db8
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T06:34:02.964Z, excerpt_hash=sha256:387689e3dd69c8bd6711ea6b702dd9509c53ed89b58b77a14bd94ba979a78db8
 
     Details:
 
@@ -87,7 +115,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610040619-RSK031 -m 🧩 RSK031 task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610040619-RSK031 --result verified-202610040619-RSK031 --commit 9cb169bb4588795c2bb740820ca6d023814510cc
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -137,17 +165,18 @@ Read ap task verify-show. Inspect pinned svtools ruler_tab/ImplDrawRulerTab/Impl
 
 ## Verification
 
-Command: split all existing verify gates;Result:pass. Static format/lint/typecheck/dependency/build-static/JSDoc/file-size pass;initial new-test optional-access type errors corrected before any suites. Single absent-upstream npm run test:1147app/220files +109inventory/36files;owned provenance/resource Vitest5/2files;rebuilt Chromium67scenarios,all first-run pass,no test reruns or source-present duplicate. Vendor restored in finally. App/inventory lines/statements/functions/branches all100%. Generator --check/source-tree/provenance/invariants/parity CLI pass separately after restore;semanticViolationCount0. Routing/doctor exit0. Scope integrity:10semantic paths,288prior tests,284byte-identical;4prior files have exactly11DTO adjustment payload additions,all other bytes/previous assertions preserved.220rows each,2append-only updates,no status/default/owner/exception/order promotion. Two pinned source hashes unchanged. Ignored-inclusive Agentplane3050files/2983task-or-tmp artifacts:source/helper/Python/executable/archive/raw frames/code diffs0;fivehistorical prose-only Markdown references. Screenshots outside Agentplane visually inspected at1280/390:distinct Left/Right/Center/Decimal glyphs,stable anchors,no clipping. Bounded hashes/results/conclusions only;no helper files/source bodies/native execution. Evidence:source-comparison.json,scope-integrity.json,static-*.json,source-audit-*.json,vendor-absent-*.json,vendor-restoration.json,semantic-audit.json,visual-check.json,final-integrity.json,artifact-audit.json,routing.json,doctor.json. Same-actor EVALUATOR on actual semantic SHA pending;no independent-agent review claimed. Full native/parent parity,default glyph generation,selector,RTL/systemDPI/theme/vertical hit geometry/modifiers/capture remain open;save/open/recovery deviations preserved.
+Command: split all existing verify gates;Result:pass. Static format/lint/typecheck/dependency/build-static/JSDoc/file-size pass;initial new-test optional-access type errors corrected before any suites. Single absent-upstream npm run test:1147app/220files +109inventory/36files;owned provenance/resource Vitest5/2files;rebuilt Chromium67scenarios,all first-run pass,no test reruns or source-present duplicate. Vendor restored in finally. App/inventory lines/statements/functions/branches all100%. Generator --check/source-tree/provenance/invariants/parity CLI pass separately after restore;semanticViolationCount0. Routing/doctor exit0. Scope integrity:10semantic paths,288prior tests,284byte-identical;4prior files have exactly11DTO adjustment payload additions,all other bytes/previous assertions preserved.220rows each,2append-only updates,no status/default/owner/exception/order promotion. Two pinned source hashes unchanged. Ignored-inclusive Agentplane3050files/2983task-or-tmp artifacts:source/helper/Python/executable/archive/raw frames/code diffs0;fivehistorical prose-only Markdown references. Screenshots outside Agentplane visually inspected at1280/390:distinct Left/Right/Center/Decimal glyphs,stable anchors,no clipping. Bounded hashes/results/conclusions only;no helper files/source bodies/native execution. Evidence:source-comparison.json,scope-integrity.json,static-*.json,source-audit-*.json,vendor-absent-*.json,vendor-restoration.json,semantic-audit.json,visual-check.json,final-integrity.json,artifact-audit.json,routing.json,doctor.json. Same-actor separate EVALUATOR pass quality/20261004-063332177-recovery-context/quality-report.json evaluates exact semantic9cb169bb4588795c2bb740820ca6d023814510cc;no independent-agent review claimed. Full native/parent parity,default glyph generation,selector,RTL/systemDPI/theme/vertical hit geometry/modifiers/capture remain open;save/open/recovery deviations preserved.
+Final readonly scope/source/artifact integrity after quality/doc updates passes without rerunning tests.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-04T06:32:47.873Z — VERIFY — ok
+### 2026-10-04T06:34:04.670Z — VERIFY — ok
 
 By: CODER
 
-Note: Single absent-upstream1147app+109inventory+5scripts+67browser first-pass;100%four coverage metrics,separate static gates pass/0semantic;10paths/284of288oldtests identical+11DTOadditions/220rows append-only/2sourcehashes/AP forbidden0;vendor restored.
+Note: Final documentation/evidence revision verified without rerunning tests;same-actor EVALUATOR pass exactsemantic9cb169bb4588795c2bb740820ca6d023814510cc. Single absent1147+109+5+67first-pass,100%coverage,separate static/0semantic,10paths/11DTOchanges/220rows append-only/2sourcehashes/AP forbidden0,vendor restored.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T06:32:47.562Z, excerpt_hash=sha256:387689e3dd69c8bd6711ea6b702dd9509c53ed89b58b77a14bd94ba979a78db8
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T06:34:02.964Z, excerpt_hash=sha256:387689e3dd69c8bd6711ea6b702dd9509c53ed89b58b77a14bd94ba979a78db8
 
 Details:
 
@@ -162,7 +191,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610040619-RSK031 -m 🧩 RSK031 task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610040619-RSK031 --result verified-202610040619-RSK031 --commit 9cb169bb4588795c2bb740820ca6d023814510cc
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
