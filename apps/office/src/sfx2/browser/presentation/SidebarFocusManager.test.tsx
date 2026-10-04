@@ -121,7 +121,7 @@ describe("managed Sidebar focus", /** Groups the implemented titled-panel graph.
     fireEvent.keyDown(title, { key: "Enter" });
     const content = screen.getByRole("button", { name: "First content" });
     for (const key of ["Tab", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter"]) {
-      expect(fireEvent.keyDown(content, { key })).toBe(true);
+      expect(fireEvent.keyDown(content, { key })).toBe(key === "Tab" || key === "Enter");
       expect(content).toHaveFocus();
     }
   });
@@ -222,11 +222,11 @@ describe("managed Sidebar focus", /** Groups the implemented titled-panel graph.
       expect(rail).toHaveFocus();
     }
     for (const key of ["ArrowLeft", "ArrowRight", "F8"])
-      expect(fireEvent.keyDown(rail, { key })).toBe(true);
+      expect(fireEvent.keyDown(rail, { key })).toBe(key === "F8");
     const close = screen.getByRole("button", { name: "Close Sidebar Deck" });
     close.focus();
     for (const key of ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "F8"])
-      expect(fireEvent.keyDown(close, { key })).toBe(true);
+      expect(fireEvent.keyDown(close, { key })).toBe(key === "F8");
     expect(rail).toHaveAttribute("aria-pressed", "true");
   });
 

@@ -10,6 +10,7 @@ import {
 import { flushSync } from "react-dom";
 import { SlidersHorizontal, X } from "lucide-react";
 import { SidebarFocusContext, SidebarFocusManager } from "./SidebarFocusManager";
+import { SidebarDockingWindow } from "./SidebarDockingWindow";
 
 /** Supplies one implemented sidebar deck and its owning document client. */
 export interface SidebarDeckProps {
@@ -124,8 +125,8 @@ export function SidebarDeck({
   }
 
   return (
-    <aside
-      aria-label={ariaLabel}
+    <SidebarDockingWindow
+      ariaLabel={ariaLabel}
       className={`flex min-h-0 max-h-[40vh] min-w-0 border-t border-slate-200 bg-white lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-h-none lg:border-l lg:border-t-0 ${isOpen ? "lg:w-60" : "lg:w-9"}`}
     >
       <div className="min-w-0 flex-1" hidden={!isOpen} id={contentId}>
@@ -183,6 +184,6 @@ export function SidebarDeck({
           <SlidersHorizontal aria-hidden size={18} />
         </button>
       </div>
-    </aside>
+    </SidebarDockingWindow>
   );
 }

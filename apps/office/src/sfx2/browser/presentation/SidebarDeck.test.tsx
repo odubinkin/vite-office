@@ -102,7 +102,7 @@ describe("sidebar deck close and activation", /** Groups source-owned deck lifec
       expect(fireEvent.keyDown(button, { key: "Escape", ctrlKey: true })).toBe(false);
       expect(focusDocument).toHaveBeenCalledOnce();
       expect(screen.getByText("Panel content")).toBeVisible();
-      expect(fireEvent.keyDown(button, { key: "ArrowRight" })).toBe(true);
+      expect(fireEvent.keyDown(button, { key: "ArrowRight" })).toBe(false);
       expect(focusDocument).toHaveBeenCalledOnce();
     });
   }
