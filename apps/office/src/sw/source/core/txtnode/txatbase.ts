@@ -96,7 +96,7 @@ export class SwFormatAutoFormat extends SfxPoolItem {
     return (
       other instanceof SwFormatAutoFormat &&
       other.Which() === this.Which() &&
-      equalItemSets(other.styleHandle, this.styleHandle)
+      this.styleHandle.Equals(other.styleHandle, true)
     );
   }
 
@@ -245,19 +245,4 @@ export function projectWriterCharacterAttributes(
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: (get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),
   };
-}
-
-/** Compares direct item values without a persistence-shaped intermediate. @param left - First set. @param right - Second set. @returns Whether equal. */
-function equalItemSets(left: SfxItemSet, right: SfxItemSet): boolean {
-  const leftItems = left.entries();
-  const rightItems = right.entries();
-  return (
-    leftItems.length === rightItems.length &&
-    leftItems.every(
-      /** Compares one ordered item. @param item - Left item. @param index - Ordered offset. @returns Whether values match. */ (
-        item,
-        index,
-      ) => item.equals(rightItems[index] as SfxPoolItem),
-    )
-  );
 }

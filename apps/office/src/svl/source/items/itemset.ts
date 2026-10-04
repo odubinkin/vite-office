@@ -66,6 +66,25 @@ export class SfxItemSet {
     return this.poolItemMap.size;
   }
 
+  /** Compares native direct items and optional pool/parent identity, without comparing ranges or inherited content. @param other - Compared set. @param comparePool - Whether pool and parent identities participate. @returns Whether equal. */
+  public Equals(other: SfxItemSet, comparePool: boolean): boolean {
+    if (this === other) return true;
+    if (comparePool && this.parent !== other.parent) return false;
+    if (comparePool && this.pool !== other.pool) return false;
+    if (this.Count() !== other.Count()) return false;
+    if (this.Count() === 0) return true;
+    for (const [which, item] of this.poolItemMap) {
+      const state = this.GetItemState(which, false);
+      if (state !== other.GetItemState(which, false)) return false;
+      if (
+        state === SfxItemState.SET &&
+        !item.equals(other.GetItemIfSet(which, false) as SfxPoolItem)
+      )
+        return false;
+    }
+    return true;
+  }
+
   /** Returns explicit SET values in ascending WhichId order for browser projections. @returns Direct value items. */
   public entries(): readonly SfxPoolItem[] {
     return [...this.poolItemMap.values()]
