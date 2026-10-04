@@ -1,10 +1,11 @@
 ---
 id: "202610040112-BNCHTK"
 title: "Restore Properties sidebar deck close and reopen lifecycle"
-status: "DOING"
+result_summary: "Properties deck closes independently of whole Sidebar and reopens retained content through activation rail; full998app109inventory47browser2resources100%coverage0semantic and vendor-absent998+109+12+47 pass, no source/helper/Python artifacts."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -48,11 +49,16 @@ quality_review:
     - "Focused47owned/10rebuiltbrowser plus full998app109inventory47browser2resources100%coverage0semantic pass; owned lifetime/state/order/frame/no-dispatch and desktop/mobile checkedstate/focus-plus-typing cover the approved bounded contract."
     - "Initial module-cycle defect repaired by passing localized labels from Writer, eliminating upward sfx2->framework dependency without changing rules. Final semantic hashes match verified code,259prior tests byte-identical;215prior rows/status/defaults/owner/old evidence/order preserved,3evidence-only rows+1new bounded browser adaptation row each."
     - "Vendor-absent998+109+12+47 pass/restored finally; no test reads/compiles/invokes pinned upstream, static source-reading CLI audits separate.11source hashes unchanged and2754taskartifact files source/helpers/Python/exe/archive/magic/embedded signatures0."
-commit: null
+commit:
+  hash: "213fe1350d9f0029ecd786f6974d3cb734af5945"
+  message: "🎯 BNCHTK code: restore Properties deck close and reopen lifecycle"
 comments:
   -
     author: "CODER"
     body: "Start: authorized iteration83 existing Properties deck close/reopen and activation rail, source-shaped lifecycle and own document focus, unchanged global Sidebar/registered deviations, upstream-independent tests and results-only artifacts."
+  -
+    author: "CODER"
+    body: "Verified: restored existing Properties deck title close and activation rail with retained content, independent global Sidebar visibility, owning-document focus and source-layer localization; all declared full/offline/hash/scope/artifact checks and same-actor exact-semantic quality pass. Broader goal remains active."
 events:
   -
     type: "status"
@@ -73,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: final blueprint evidence at semantic213fe1350d9f, exact same-actor EVALUATOR pass and declared full998+109+47+2/offline998+109+12+47/hash/scope/artifact gates unchanged. Source/helper/Python artifacts0; whole native Sidebar/F6/parent parity open."
+  -
+    type: "status"
+    at: "2026-10-04T01:34:29.057Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored existing Properties deck title close and activation rail with retained content, independent global Sidebar visibility, owning-document focus and source-layer localization; all declared full/offline/hash/scope/artifact checks and same-actor exact-semantic quality pass. Broader goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T01:34:26.426Z"
+doc_updated_at: "2026-10-04T01:34:29.058Z"
 doc_updated_by: "CODER"
 description: "Iteration83 under C9TN6M: native-owned Sidebar deck title close and Properties activation rail retain child content across collapse, separate from whole-sidebar visibility. Existing Writer content/commands retained; upstream-independent tests and no source/helper artifacts."
 sections:
@@ -156,6 +169,10 @@ sections:
     Initial fullverify exit1 before test/coverage summaries; bounded failure filter did not include the specific cause, so no unsupported diagnosis asserted. Isolated npm run format:check subsequently pass0 on unchanged semantic files. Preserved initial-full-verify hash/exit, expanded bounded warning/problem matching and repeated complete verification; all required steps retained, no threshold/criteria/code changes or skips.
     Fullverify diagnostic identified check:dependencies failure: non-allowlisted sfx2->framework edge and framework->sfx2->framework module cycle from new SidebarDeck localization-context import. Prior bounded filter omitted capitalized Module boundary check failed lines; initial/second outcomes retained, no passing claim. Corrected same approved files by passing localized native labels from WriterWorkspaceChrome to the lower SidebarDeck presenter, eliminating upward context import without changing dependency rules. Re-run focused/full contracts on corrected architecture.
     Final full998app109inventory47browser2resources100%coverage0semantic and vendor-absent998+109+12+47 pass/restored.11source/9semantic hashes unchanged,259prior test bytes and215prior row fields/evidence/order preserved,artifact2754files source/helpers/Python/exe/archive/magic/embedded signatures0. Full result summary omitted2unrelated long manifest justification lines matched by broad summary filter; retained terminal metrics/hash/results only. Nonfailure environment/chunk warnings classified as warnings rather than errors for exit0. Same-actor separate exactsemantic quality next, no independent reviewer claim. Broader full F6/Help/settings/panel/other decks/floating/default-sizing composition remains unverified, no parent/module promotion or registered deviation changes.
+extensions:
+  implementation_commit:
+    hash: "213fe1350d9f0029ecd786f6974d3cb734af5945"
+    message: "🎯 BNCHTK code: restore Properties deck close and reopen lifecycle"
 id_source: "generated"
 ---
 ## Summary
