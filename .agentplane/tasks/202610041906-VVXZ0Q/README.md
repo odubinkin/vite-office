@@ -4,7 +4,7 @@ title: "Restore owned text hint transfer during cuts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T19:29:16.829Z"
+  updated_by: "CODER"
+  note: "Verified bounded owned cross-node hint transfer. Six static gates pass; initial absent build passes, only failed app coverage recovered after new-test corrections. App2006 coverage100%,inventory109 coverage100%,scripts5,Chromium99. Five restored source audits semantic0;334 prior tests unchanged234 runtime fields unchanged except three appendices; AP forbidden0,doctor0errors/routing pass. Same-actor quality pass exact semantic ea8d418fa4402a0bdfca380e2d366ad9f5287e23; full parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -60,8 +60,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved owned cross-node cut transfer while retaining independent snapshots and registered I/O deviations."
+  -
+    type: "verify"
+    at: "2026-10-04T19:29:16.829Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified bounded owned cross-node hint transfer. Six static gates pass; initial absent build passes, only failed app coverage recovered after new-test corrections. App2006 coverage100%,inventory109 coverage100%,scripts5,Chromium99. Five restored source audits semantic0;334 prior tests unchanged234 runtime fields unchanged except three appendices; AP forbidden0,doctor0errors/routing pass. Same-actor quality pass exact semantic ea8d418fa4402a0bdfca380e2d366ad9f5287e23; full parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:27:39.408Z"
+doc_updated_at: "2026-10-04T19:29:16.886Z"
 doc_updated_by: "CODER"
 description: "Replace snapshot-based cross-node moves with an owned cut/transfer path matching native CutImpl pointer movement for strictly interior hints and fresh split hints; preserve independent undo snapshots, prior flags and registered I/O deviations."
 sections:
@@ -83,7 +89,41 @@ sections:
     4. After vendor restoration run npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Expected all pass, semantic violations0.
     5. Audit exact seven semantic paths, all334 previous test files byte-identical,234 existing runtime fields/statuses/defaults/exceptions unchanged except three bounded appendices, ignored-inclusive source/helper-free AP, native hashes; run ap doctor and node .agentplane/policy/check-routing.mjs. Expected no scope drift/new errors.
     6. Same-actor read-only EVALUATOR review exact semantic SHA, quality pass; CODER verify/finish separate hashes, clean final main/vendor restored, parent/goal remains active.
-  Verification: "Six static gates pass with new-test-only formatter/lint/typecheck recovery. Upstream-absent build passed once; failed app coverage gate recovered alone after test-only corrections:2006/253 pass and100%four metrics. Inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. Vendor restored; five source audits pass semantic violations0. Seven semantic paths,334 prior test files unchanged,234 runtime fields/statuses/defaults/exceptions unchanged except three justification appendices; source provenance only three responsibility appendices. Native hashes9; ignored-inclusive AP forbidden0; doctor0errors/two unchanged warnings,routing pass. Required exact-SHA same-actor quality review precedes verify/finish. Full native holder/listener/empty-hint/destination adjustment/same-node/split-join and broad UI/core parity remain unverified."
+  Verification: |-
+    Six static gates pass with new-test-only formatter/lint/typecheck recovery. Upstream-absent build passed once; failed app coverage gate recovered alone after test-only corrections:2006/253 pass and100%four metrics. Inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. Vendor restored; five source audits pass semantic violations0. Seven semantic paths,334 prior test files unchanged,234 runtime fields/statuses/defaults/exceptions unchanged except three justification appendices; source provenance only three responsibility appendices. Native hashes9; ignored-inclusive AP forbidden0; doctor0errors/two unchanged warnings,routing pass. Required exact-SHA same-actor quality review precedes verify/finish. Full native holder/listener/empty-hint/destination adjustment/same-node/split-join and broad UI/core parity remain unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T19:29:16.829Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified bounded owned cross-node hint transfer. Six static gates pass; initial absent build passes, only failed app coverage recovered after new-test corrections. App2006 coverage100%,inventory109 coverage100%,scripts5,Chromium99. Five restored source audits semantic0;334 prior tests unchanged234 runtime fields unchanged except three appendices; AP forbidden0,doctor0errors/routing pass. Same-actor quality pass exact semantic ea8d418fa4402a0bdfca380e2d366ad9f5287e23; full parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T19:27:39.408Z, excerpt_hash=sha256:e9af4696b0656029592ba93defde4f58cf8991596cf96afa1d8dfb316142007b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041906-VVXZ0Q/blueprint/resolved-snapshot.json
+    - old_digest: 6d49d4aaacd3838bed6adba109bfb60735c8996af0cb628f60370faed4ded0f3
+    - current_digest: 6d49d4aaacd3838bed6adba109bfb60735c8996af0cb628f60370faed4ded0f3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610041906-VVXZ0Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610041906-VVXZ0Q
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this leaf through a new traceable task; no history rewrite. Restore vendor directory after interruption."
   Findings: "Implemented owned cross-node cut/transfer and118 new app cases. Native CutImpl strictly interior hints transfer actual pointers/items; partial/equal-end hints reconstruct, retained source objects update in place. SwpHints normalization split preserves caller snapshots. Node cut owns text/index notifications; EraseText delegates bounded replacement. Six initial static gates passed. First absent build passed; initial app1950 passed48 new-test failures from array reference equality, coverage branches99.98. Only new test corrected to deep values plus eight exact-end/interior preview cases; production unchanged. New tuple annotation fixed failed changed-test typecheck; formatter/lint/typecheck pass. Failed app coverage gate alone repeated absent:2006/253 all pass four metrics100. Inventory109/36 coverage100, scripts5/2, Chromium99 first absent pass. No present test profile or successful build repeat. Vendor restored before five source audits, all pass semantic violations0. Seven paths,334 prior tests byte-identical,234 runtime fields unchanged except three appendices, provenance only three appended responsibilities, nine native hashes. Scope-audit comparator corrected for appended array entries; no product change. AP3755 ignored-inclusive files forbidden0; doctor0errors two unchanged warnings, routing pass. Native backlinks/refcounts/destruction/listeners, empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join remain unverified. Parent and goal active; no status promotion or I/O deviation changes."
 id_source: "generated"
@@ -118,6 +158,39 @@ Seven semantic paths: apps/office/src/sw/source/core/txtnode/ndhints.ts, apps/of
 ## Verification
 
 Six static gates pass with new-test-only formatter/lint/typecheck recovery. Upstream-absent build passed once; failed app coverage gate recovered alone after test-only corrections:2006/253 pass and100%four metrics. Inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. Vendor restored; five source audits pass semantic violations0. Seven semantic paths,334 prior test files unchanged,234 runtime fields/statuses/defaults/exceptions unchanged except three justification appendices; source provenance only three responsibility appendices. Native hashes9; ignored-inclusive AP forbidden0; doctor0errors/two unchanged warnings,routing pass. Required exact-SHA same-actor quality review precedes verify/finish. Full native holder/listener/empty-hint/destination adjustment/same-node/split-join and broad UI/core parity remain unverified.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T19:29:16.829Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified bounded owned cross-node hint transfer. Six static gates pass; initial absent build passes, only failed app coverage recovered after new-test corrections. App2006 coverage100%,inventory109 coverage100%,scripts5,Chromium99. Five restored source audits semantic0;334 prior tests unchanged234 runtime fields unchanged except three appendices; AP forbidden0,doctor0errors/routing pass. Same-actor quality pass exact semantic ea8d418fa4402a0bdfca380e2d366ad9f5287e23; full parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T19:27:39.408Z, excerpt_hash=sha256:e9af4696b0656029592ba93defde4f58cf8991596cf96afa1d8dfb316142007b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610041906-VVXZ0Q/blueprint/resolved-snapshot.json
+- old_digest: 6d49d4aaacd3838bed6adba109bfb60735c8996af0cb628f60370faed4ded0f3
+- current_digest: 6d49d4aaacd3838bed6adba109bfb60735c8996af0cb628f60370faed4ded0f3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610041906-VVXZ0Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610041906-VVXZ0Q
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
