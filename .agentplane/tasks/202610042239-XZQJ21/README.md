@@ -4,7 +4,7 @@ title: "Restore native empty hyperlink item values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T22:50:13.022Z"
+  updated_by: "CODER"
+  note: "Exact semantic 1fd61a1d0f8e71136ac83895a071b36debc6ea2f passes same-actor EVALUATOR,six static gates,one absent profile build/app2673/inventory109/scripts5/Chromium99,app/inventory100%all metrics,five restored audits,349prior files accounted/347unchanged/two native corrections,237runtime states preserved,AP forbidden0,doctor0errors/routingpass. Full styled pool/UNO/macros/clients/core/UI parity remains unverified;no replays."
   attempts: 0
 quality_review:
   state: "pass"
@@ -58,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore native empty string and default/copy item semantics with one absent-reference verification profile under the standing iterative goal."
+  -
+    type: "verify"
+    at: "2026-10-04T22:50:13.022Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic 1fd61a1d0f8e71136ac83895a071b36debc6ea2f passes same-actor EVALUATOR,six static gates,one absent profile build/app2673/inventory109/scripts5/Chromium99,app/inventory100%all metrics,five restored audits,349prior files accounted/347unchanged/two native corrections,237runtime states preserved,AP forbidden0,doctor0errors/routingpass. Full styled pool/UNO/macros/clients/core/UI parity remains unverified;no replays."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:50:00.792Z"
+doc_updated_at: "2026-10-04T22:50:13.078Z"
 doc_updated_by: "CODER"
 description: "Replace canonical hyperlink DTO storage with the five native owned strings, restore zero-valued default/copy construction and native empty-string equality, and retain UI normalization at its existing boundary. Correct only prior tests that assert non-native empty rejection, optional-empty inequality or caller JSON property order. Validate the existing ownership/history/browser paths once with upstream absent; preserve registered IO deviations and unverified residual native style IDs/UNO/macros/clients."
 sections:
@@ -103,6 +109,39 @@ sections:
     Command: scope-and-native-hashes,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence: six paths;349prior tests accounted,347unchanged/two native corrections;24newcases;237runtime states/defaults/exceptions preserved,one bounded responsibility appendix;four native hashes;3833APfiles/0forbidden. Scope: native string/default/copy/equality slice. Native styled URL/target pool defaults and complete style IDs/UNO/macros/broadcaster/clients/destruction/full core/UI parity remain unverified.
 
     Command: same-actor read-only EVALUATOR review of exact semantic SHA 1fd61a1d0f8e71136ac83895a071b36debc6ea2f;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: committed six paths equal reviewed checkout;all bounded assertions pass;quality report .agentplane/tasks/202610042239-XZQJ21/quality/20261004-224940417-recovery-context/quality-report.json;doctor0errors/two unchanged legacy warnings;routingOK;cleanmain before quality persistence. Scope: bounded native string/default/copy/equality contract only;no independent-agent claim or full parity promotion.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T22:50:13.022Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic 1fd61a1d0f8e71136ac83895a071b36debc6ea2f passes same-actor EVALUATOR,six static gates,one absent profile build/app2673/inventory109/scripts5/Chromium99,app/inventory100%all metrics,five restored audits,349prior files accounted/347unchanged/two native corrections,237runtime states preserved,AP forbidden0,doctor0errors/routingpass. Full styled pool/UNO/macros/clients/core/UI parity remains unverified;no replays.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:50:00.792Z, excerpt_hash=sha256:2a02172805f1e8415f079dfcffc6fd59d4b90082b71ce7393538fa367e95df5a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042239-XZQJ21/blueprint/resolved-snapshot.json
+    - old_digest: c7b8816c9db6f651d4e6ccd29d0391c2a48fc1442c5d597ae28b54396b63dc5d
+    - current_digest: c7b8816c9db6f651d4e6ccd29d0391c2a48fc1442c5d597ae28b54396b63dc5d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042239-XZQJ21
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610042239-XZQJ21
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the leaf semantic commit if required;do not rewrite history."
   Findings: |-
     Pinned LibreOffice26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. fmtinfmt.hxx declares five owned strings. fmtatr2.cxx zero constructor initializes all five empty and null backlink;CreateDefault returns that constructor;copy constructor copies strings but not backlink;operator== compares string values. Current local model stores optional DTO fields,throws for empty URL and distinguishes missing from empty. Existing nonempty normalization and browser dialog validation are separate and remain active. Native pool default in init.cxx uses the styled URL/target constructor,distinct from type-info/CreateDefault zero constructor;do not falsely claim the native pool-style defaults restored. Native style IDs/styled constructor/UNO/macros/clients require a later separate ownership audit. Standing user authorizes iterative local leaves,prohibits saved source/helpers,and requires tests once absent.
@@ -163,6 +202,39 @@ Command: five restored source audits listed in Verify Steps. Result: pass. Evide
 Command: scope-and-native-hashes,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence: six paths;349prior tests accounted,347unchanged/two native corrections;24newcases;237runtime states/defaults/exceptions preserved,one bounded responsibility appendix;four native hashes;3833APfiles/0forbidden. Scope: native string/default/copy/equality slice. Native styled URL/target pool defaults and complete style IDs/UNO/macros/broadcaster/clients/destruction/full core/UI parity remain unverified.
 
 Command: same-actor read-only EVALUATOR review of exact semantic SHA 1fd61a1d0f8e71136ac83895a071b36debc6ea2f;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: committed six paths equal reviewed checkout;all bounded assertions pass;quality report .agentplane/tasks/202610042239-XZQJ21/quality/20261004-224940417-recovery-context/quality-report.json;doctor0errors/two unchanged legacy warnings;routingOK;cleanmain before quality persistence. Scope: bounded native string/default/copy/equality contract only;no independent-agent claim or full parity promotion.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T22:50:13.022Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic 1fd61a1d0f8e71136ac83895a071b36debc6ea2f passes same-actor EVALUATOR,six static gates,one absent profile build/app2673/inventory109/scripts5/Chromium99,app/inventory100%all metrics,five restored audits,349prior files accounted/347unchanged/two native corrections,237runtime states preserved,AP forbidden0,doctor0errors/routingpass. Full styled pool/UNO/macros/clients/core/UI parity remains unverified;no replays.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:50:00.792Z, excerpt_hash=sha256:2a02172805f1e8415f079dfcffc6fd59d4b90082b71ce7393538fa367e95df5a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042239-XZQJ21/blueprint/resolved-snapshot.json
+- old_digest: c7b8816c9db6f651d4e6ccd29d0391c2a48fc1442c5d597ae28b54396b63dc5d
+- current_digest: c7b8816c9db6f651d4e6ccd29d0391c2a48fc1442c5d597ae28b54396b63dc5d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042239-XZQJ21
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610042239-XZQJ21
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
