@@ -6,6 +6,7 @@
     "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
     "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
     "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
     "apps/office/e2e/writer-ruler-tracking.spec.ts",
     "docs/program/source-provenance.json",
     "docs/program/parity/runtime-inventory.json"
@@ -13,13 +14,13 @@
   "fileIdentities": [
     {
       "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.ts",
-      "bytes": 4579,
-      "sha256": "cf33d042b59c4862bb0bb5457b84e43989d65a921100e14acd0f7d689856f797"
+      "bytes": 5022,
+      "sha256": "f3738ec4f50f6fb214577e4e4d402aa9c0c876d80bb2851e137a5fafd718a0a2"
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
-      "bytes": 19055,
-      "sha256": "d56fdcf189bdd48b5058d84008b8131354bf70ad93e41584c522a8e9d5bb7753"
+      "bytes": 21000,
+      "sha256": "f333f80bd4028014614feff63beec5704d39d2c671f599e422e6488f72e6b08a"
     },
     {
       "path": "apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx",
@@ -28,32 +29,43 @@
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
-      "bytes": 6014,
-      "sha256": "0a1e03309a5942656a60ac435257b6d2b3f23559b42e80c17f0e952d451e7df4"
+      "bytes": 10160,
+      "sha256": "3d9dcbd14c5ffa1f939368827961269d4fd963c06167cdd9a821f68ccc2689bc"
     },
     {
       "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
-      "bytes": 5710,
-      "sha256": "9c3b281c4aab2d6a88e780375d35161f5f1188a1584a4e43e0300654ff998f2b"
+      "bytes": 7665,
+      "sha256": "b9fc6ed52b3243d8514dbfe15190fee0ea7ac64d8a009836c703c0f667f53c53"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+      "bytes": 31175,
+      "sha256": "0e40a3e204b9a2d3a7ae0fc05fc1888eee6311338f52625a17d88d9d0a3416b1"
     },
     {
       "path": "apps/office/e2e/writer-ruler-tracking.spec.ts",
-      "bytes": 4013,
-      "sha256": "b186d8693d7638954475ed950195b3e5ed834130ab37cbe7e0a6409aa01cd8c1"
+      "bytes": 5674,
+      "sha256": "bb12ff77a15d6a22ceb76aa9ba415e41a14b6093f4f7febe85a4a4b7c513b5b8"
     },
     {
       "path": "docs/program/source-provenance.json",
-      "bytes": 729257,
-      "sha256": "0aaa983193c951d90efe697b6aa7cc7e46d6e76ffd324314c25ccbfd48565f52"
+      "bytes": 731349,
+      "sha256": "df5f35866ccab945365a0a3512fcbac9a4ae140bc8aaf83a8d1cefc86350d527"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
-      "bytes": 711538,
-      "sha256": "7def4c5fbe4fbc2471818ed0dad7064f062a79a2793368b5c68d42878519b0e0"
+      "bytes": 713158,
+      "sha256": "a08f91b6da28b22eb4a68ab8b0884a9782da6cd513a0cffdd30b4f8dd777f011"
     }
   ],
   "priorTestFiles": 280,
-  "priorTestFilesByteIdentical": 280,
+  "priorTestFilesByteIdentical": 279,
+  "approvedPriorTestChanges": {
+    "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+    "inputTriggerLines": 4,
+    "matchingPointerUpInputLines": 4,
+    "allAssertionAndOtherBytesPreserved": true
+  },
   "manifests": [
     {
       "path": "docs/program/source-provenance.json",

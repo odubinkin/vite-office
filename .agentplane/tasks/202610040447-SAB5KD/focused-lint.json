@@ -1,5 +1,5 @@
 {
-  "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/use-ruler-tracking.ts apps/office/src/sw/browser/presentation/WriterRulers.tsx apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx apps/office/e2e/writer-ruler-tracking.spec.ts --max-warnings 0",
+  "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/use-ruler-tracking.ts apps/office/src/sw/browser/presentation/WriterRulers.tsx apps/office/src/sw/browser/presentation/use-ruler-tracking.test.tsx apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx apps/office/e2e/writer-ruler-tracking.spec.ts --max-warnings 0",
   "exitCode": 0,
   "outputBytes": 0,
   "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
