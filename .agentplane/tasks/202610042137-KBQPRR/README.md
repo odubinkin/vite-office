@@ -4,7 +4,7 @@ title: "Restore native ranged text attribute hierarchy"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T22:04:10.857Z"
+  updated_by: "CODER"
+  note: "Native hierarchy/defaults leaf123 verified at 883990759b08ad5e2e8fdd6f86525f9853c0bea4;six static/five source audits pass;one absent profile and only36failedcases replayed,2631app/109inventory/5script/99Chromium,100%app and combinedinventory coverage;345prior tests accounted,32newcases,registered deviations preserved. Same-actor exact-SHA quality pass;parent goal active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -53,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore approved native attribute hierarchy/concrete nesting defaults and migrate supported ranged storage/factory/fixtures;verify once absent with failed-only recovery."
+  -
+    type: "verify"
+    at: "2026-10-04T22:04:10.857Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native hierarchy/defaults leaf123 verified at 883990759b08ad5e2e8fdd6f86525f9853c0bea4;six static/five source audits pass;one absent profile and only36failedcases replayed,2631app/109inventory/5script/99Chromium,100%app and combinedinventory coverage;345prior tests accounted,32newcases,registered deviations preserved. Same-actor exact-SHA quality pass;parent goal active."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:03:56.987Z"
+doc_updated_at: "2026-10-04T22:04:10.913Z"
 doc_updated_by: "CODER"
 description: "Iteration123 replaces the single generic ranged attribute with native SwTextAttr/SwTextAttrEnd/SwTextAttrNesting/SwTextINetFormat contracts and native locked nesting defaults. Migrate actual production constructors/factory/storage and range fixtures,add independent literal class/flag/copy/node tests,correct old expectations contradicted by concrete native INET defaults. One executable refactor leaf;no upstream execution or AP source/helpers;one absent suite profile only. Full reference-count/listener/empty hints and broader core/UI fidelity remain open."
 sections:
@@ -103,7 +109,41 @@ sections:
     4. After restoration run npm exec -- tsx scripts/generate-writer-ui-resources.ts --check;npm run check:source-tree;npm run check:source-provenance;npm run inventory:invariants;npm run inventory:parity. All pass,semantic0.
     5. Audit exact approved paths,all345prior tests accounted for as unchanged or explicit ranged-type/native-flag/end-contract corrections,all235existingruntime fields/statuses/defaults/exceptions unchanged except approved concrete responsibility/symbol appendices;one unverified source-ownedtxtatr2module. Record nativehashes/sourcefree ignored-inclusive APscan;ap doctor,node .agentplane/policy/check-routing.mjs pass without new errors.
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass,CODERverify/finish separate hashes,clean main/vendor restored,parent goalactive. Broad core/UI compliance remains unproven.
-  Verification: "Verified native hierarchy leaf123 at semantic SHA 883990759b08ad5e2e8fdd6f86525f9853c0bea4. Same-actor read-only EVALUATOR pass recorded in .agentplane/tasks/202610042137-KBQPRR/quality/20261004-220334189-recovery-context/quality-report.json. All approved35 semantic paths match this SHA;no implementation changes after the one absent full profile. Six static gates plus focused formatting/lint/app TypeScript after test-only corrections pass. One absent build;2631app cases/264files verified from2596initialpasses+35failed-case-only successful recovery with100%fourmetrics.109inventory cases/36files verified from108initialpasses+1failed-case-only recovery;initial full-profile gaps and targeted JSON coverage prove combined100%fourmetrics,without replaying passing tests or changing repository coverage thresholds.5script tests and99Chromium cases pass once absent. Vendor restored;five source audits pass,semanticViolationCount0.345prior tests:320byte-identical,13ranged-type/format-only,12native expectation corrections preserving geometry/value/ownership checks.32new literal cases;235existing runtime statuses/defaults/exceptions unchanged,one new unverified txtatr2 module,five responsibility appendices/two ranged symbols only. Six native source hashes recorded;APignored-inclusive scan3815files/0forbidden. Doctor0errors/two unchanged warnings,policy routing pass. No upstream execution/source/helper/probe artifacts/network/outside-repo changes. Native holders/refcounts/destruction/listeners/fullnode/style/visitedclients/empty-hintretention/full nesting insertion/modes/nondefault unsupported graph flags/otherfamilies remain unverified;registered save/open/recovery deviations preserved,parent/goal active."
+  Verification: |-
+    Verified native hierarchy leaf123 at semantic SHA 883990759b08ad5e2e8fdd6f86525f9853c0bea4. Same-actor read-only EVALUATOR pass recorded in .agentplane/tasks/202610042137-KBQPRR/quality/20261004-220334189-recovery-context/quality-report.json. All approved35 semantic paths match this SHA;no implementation changes after the one absent full profile. Six static gates plus focused formatting/lint/app TypeScript after test-only corrections pass. One absent build;2631app cases/264files verified from2596initialpasses+35failed-case-only successful recovery with100%fourmetrics.109inventory cases/36files verified from108initialpasses+1failed-case-only recovery;initial full-profile gaps and targeted JSON coverage prove combined100%fourmetrics,without replaying passing tests or changing repository coverage thresholds.5script tests and99Chromium cases pass once absent. Vendor restored;five source audits pass,semanticViolationCount0.345prior tests:320byte-identical,13ranged-type/format-only,12native expectation corrections preserving geometry/value/ownership checks.32new literal cases;235existing runtime statuses/defaults/exceptions unchanged,one new unverified txtatr2 module,five responsibility appendices/two ranged symbols only. Six native source hashes recorded;APignored-inclusive scan3815files/0forbidden. Doctor0errors/two unchanged warnings,policy routing pass. No upstream execution/source/helper/probe artifacts/network/outside-repo changes. Native holders/refcounts/destruction/listeners/fullnode/style/visitedclients/empty-hintretention/full nesting insertion/modes/nondefault unsupported graph flags/otherfamilies remain unverified;registered save/open/recovery deviations preserved,parent/goal active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T22:04:10.857Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native hierarchy/defaults leaf123 verified at 883990759b08ad5e2e8fdd6f86525f9853c0bea4;six static/five source audits pass;one absent profile and only36failedcases replayed,2631app/109inventory/5script/99Chromium,100%app and combinedinventory coverage;345prior tests accounted,32newcases,registered deviations preserved. Same-actor exact-SHA quality pass;parent goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:03:56.987Z, excerpt_hash=sha256:7bcbfb78e83c542f0fc0aff498972ef5112892a2e3623926323bd75e4c1e41f7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042137-KBQPRR/blueprint/resolved-snapshot.json
+    - old_digest: 82519ef6f6ab2060b54249e2559dd9af7701801459c95db0d210a61fc7f076f6
+    - current_digest: 82519ef6f6ab2060b54249e2559dd9af7701801459c95db0d210a61fc7f076f6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042137-KBQPRR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610042137-KBQPRR
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the eventual semantic commit via a new follow-up task;no history rewrite or DONE artifact mutation."
   Findings: |-
     Native hierarchy/source review: Iteration123 restores SwTextAttr's protected start-only base and optional end,SwTextAttrEnd's ranged end notifications without range-order rejection,and twelve private native flags/accessors. SwTextAttrNesting initializes DontExpand/LockExpandFlag/DontExpandStart/Nesting true;SwTextINetFormat additionally sets CharFormatAttr and its item's GetTextINetFormat backlink. MakeTextAttr and production hyperlink creation now construct concrete internet attributes;fresh copied AUTO flags are false while INET nesting/char-format defaults are true. This supersedes prior generic false-INET constructor/copy/reset claims in iterations114-122;native locked DontExpand reset remains blocked. Portable snapshots preserve concrete ranged kind and independent supported flags,distinct from native deleted copy construction. Existing generic range fixtures use SwTextAttrEnd;fresh concrete factory expectations and native temporary crossed-end write expectations are corrected without weakening range/value/ownership checks. JavaScript integer guards and public internal friend-storage/projection adapters remain bounded language boundaries. Native item holders/refcounts/destruction/listeners,full ChgTextNode/style clients/visited behavior,empty-hint retention/full nesting insertion/modes,nondefault unsupported graph flags and other attribute families remain unverified. Existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;one new source-owned txtatr2 module remains unverified,no module or goal promotion.
@@ -169,6 +209,39 @@ Restore native SwTextAttr base with protected two-argument constructor,optional 
 ## Verification
 
 Verified native hierarchy leaf123 at semantic SHA 883990759b08ad5e2e8fdd6f86525f9853c0bea4. Same-actor read-only EVALUATOR pass recorded in .agentplane/tasks/202610042137-KBQPRR/quality/20261004-220334189-recovery-context/quality-report.json. All approved35 semantic paths match this SHA;no implementation changes after the one absent full profile. Six static gates plus focused formatting/lint/app TypeScript after test-only corrections pass. One absent build;2631app cases/264files verified from2596initialpasses+35failed-case-only successful recovery with100%fourmetrics.109inventory cases/36files verified from108initialpasses+1failed-case-only recovery;initial full-profile gaps and targeted JSON coverage prove combined100%fourmetrics,without replaying passing tests or changing repository coverage thresholds.5script tests and99Chromium cases pass once absent. Vendor restored;five source audits pass,semanticViolationCount0.345prior tests:320byte-identical,13ranged-type/format-only,12native expectation corrections preserving geometry/value/ownership checks.32new literal cases;235existing runtime statuses/defaults/exceptions unchanged,one new unverified txtatr2 module,five responsibility appendices/two ranged symbols only. Six native source hashes recorded;APignored-inclusive scan3815files/0forbidden. Doctor0errors/two unchanged warnings,policy routing pass. No upstream execution/source/helper/probe artifacts/network/outside-repo changes. Native holders/refcounts/destruction/listeners/fullnode/style/visitedclients/empty-hintretention/full nesting insertion/modes/nondefault unsupported graph flags/otherfamilies remain unverified;registered save/open/recovery deviations preserved,parent/goal active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T22:04:10.857Z — VERIFY — ok
+
+By: CODER
+
+Note: Native hierarchy/defaults leaf123 verified at 883990759b08ad5e2e8fdd6f86525f9853c0bea4;six static/five source audits pass;one absent profile and only36failedcases replayed,2631app/109inventory/5script/99Chromium,100%app and combinedinventory coverage;345prior tests accounted,32newcases,registered deviations preserved. Same-actor exact-SHA quality pass;parent goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T22:03:56.987Z, excerpt_hash=sha256:7bcbfb78e83c542f0fc0aff498972ef5112892a2e3623926323bd75e4c1e41f7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042137-KBQPRR/blueprint/resolved-snapshot.json
+- old_digest: 82519ef6f6ab2060b54249e2559dd9af7701801459c95db0d210a61fc7f076f6
+- current_digest: 82519ef6f6ab2060b54249e2559dd9af7701801459c95db0d210a61fc7f076f6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042137-KBQPRR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610042137-KBQPRR
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
