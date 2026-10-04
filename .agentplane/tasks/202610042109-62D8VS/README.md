@@ -1,10 +1,11 @@
 ---
 id: "202610042109-62D8VS"
 title: "Preserve native hyperlink text boundaries"
-status: "DOING"
+result_summary: "Preserve distinct adjacent INET ranges and actual supported item/object/three-map identity during ordinary insertion/pure erasure;322newliteralcases,341prior tests unchanged,2native expectation corrections.2597app firstpass plus2failed-only recovery,109inventory/5scripts/99Chromium once absent,100%coverage;registered deviations preserved,broad parity unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on:
@@ -48,11 +49,16 @@ quality_review:
     - "Nine exact semantic paths;native MergePortions excludes INET. Actual supported non-overlapping AUTO/INET coordinates now update in place for ordinary insertion/pure erasure;paragraph-start and end flags/cross-family collectors match inspected native branches.322 literal cases check independent geometry/metadata and actual item/map/index/history ownership. Two old native-invalid INET assertions corrected;341other prior tests byte-identical."
     - "Six static gates pass after type-fixture recovery;one absent build/app first run2597pass/2fail with100%four-metric coverage and only2failed cases recovered367skipped. Production hashes match through recovery/exact SHA;no passing full suite/build repeated. Inventory109/scripts5/Chromium99 pass once absent,inventory100%coverage. Five restored audits pass after metadata-only filename split correction;semantic0/APforbidden0/doctor0errors/routingpass."
     - "234existing runtime rows retain all fields/defaults/statuses/exceptions except two bounded justification appendices;one new extracted native helper stays unverified. Provenance has two appendices,one helper mapping and a responsibility-split filename rationale.3native hashes match. Registered I/O/recovery deviations unchanged."
-commit: null
+commit:
+  hash: "c889d81cd7788d38f6fe55897aa513a3823b0ab1"
+  message: "🧩 62D8VS task: record successful task verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved coupled native hyperlink normalization/owned text coordinate update scope;one absent suite profile only,no AP source or helpers."
+  -
+    author: "CODER"
+    body: "Verified: native separate hyperlink boundaries and owned ordinary text updates;one absent suite profile,failed-case-only recovery and exact-SHA quality pass."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified owned native hyperlink boundary scope at e1f17e8baeb84696ff00cd83ae57a237cd5753be. One absent build/app profile2597pass/2fail with100%coverage;only2failed cases recovered367skipped,production unchanged.109inventory/5script/99Chromium pass once absent,100%inventorycoverage.322newcases,341prior tests unchanged,2native expectation corrections;9paths/234existingrows preserved/1newunverifiedhelper. Static gates and5restored source audits pass,semantic0,APsourcefree,doctor0errors/routingpass,exact-SHA same-actor qualitypass;registered deviations untouched,broad parity unverified."
+  -
+    type: "status"
+    at: "2026-10-04T21:31:40.606Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native separate hyperlink boundaries and owned ordinary text updates;one absent suite profile,failed-case-only recovery and exact-SHA quality pass."
 doc_version: 3
-doc_updated_at: "2026-10-04T21:31:27.563Z"
+doc_updated_at: "2026-10-04T21:31:40.607Z"
 doc_updated_by: "CODER"
 description: "Iteration122 replaces ordinary text hint splitting/value remerge with native owned boundary updates and excludes INET from adjacent MergePortions normalization. Include positive/negative coordinate updates,two-family flag/cross-family collector rules,actual object/maps/node/index/history boundaries,explicit formatting compatibility and bounded residuals. No upstream execution/helper artifacts;one absent profile only. Depends on completed iteration121."
 sections:
@@ -128,6 +141,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf's semantic commit via a new authorized follow-up task;do not rewrite history or mutate DONE artifacts."
   Findings: "Iteration122 restores separate adjacent INET54 ranges and native owned boundary changes for ordinary insertion/pure erasure.322 new literal cases exercise two families/eight flags,all start/interior/end/outside/paragraph-start relations,mixed same-end DontExpand behavior,actual item/object/three-map/content-index ownership,caller/history/copy/cut/transfer/graph16/undo independence. Exactly nine semantic paths;2old tests corrected only native-invalid INET count/end/comment expectations,341other343prior tests byte-identical.234 existing runtime fields/statuses/defaults/exceptions unchanged except two justification appendices;one new source-owned helper remains unverified;provenance2appendices/1helpermapping/1filename-split record;3native hashes match. Six static gates pass after one new-fixture generic type correction;focused lint/type checks cover later added direct-adapter assertion,test-only corrections focusedlint. One absent build/app profile:2597pass/2fail with100%four-metric coverage,only2failedcases recovered367skipped;production hashes unchanged,no full app/build replay. Inventory109/36/scripts5/2/Chromium99 pass once absent,inventory100%fourmetrics. Vendor restored before5source audits;provenance filename-split omission corrected metadata-only and only failed provenance audit rerun. Semantic violations0,APignored-inclusive forbidden0,doctor0errors/two unchangedwarnings,routingpass. Exact-SHA e1f17e8baeb84696ff00cd83ae57a237cd5753be same-actor read-only quality pass at .agentplane/tasks/202610042109-62D8VS/quality/20261004-213046335-recovery-context/quality-report.json. Full zero-width attribute retention/Insert modes/ignore-expand locks/families/BuildPortions/nesting/native hierarchy/refcounts/client/listeners and explicit replacement/copy destination/same-node move/split/join remain unverified;registered save/open/recovery deviations untouched;parent goal active."
+extensions:
+  implementation_commit:
+    hash: "e1f17e8baeb84696ff00cd83ae57a237cd5753be"
+    message: "🧩 62D8VS code: preserve native hyperlink text boundaries"
 id_source: "generated"
 ---
 ## Summary
