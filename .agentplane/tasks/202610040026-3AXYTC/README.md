@@ -1,10 +1,11 @@
 ---
 id: "202610040026-3AXYTC"
 title: "Route Writer Ctrl-F6 directly to its document client"
-status: "DOING"
+result_summary: "Writer Ctrl-F6 now directly focuses its document client with active/modal eligibility and existing menu focus-loss cleanup."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -51,11 +52,16 @@ quality_review:
   findings:
     - "Reviewed single production diff: Writer-owned F6+Ctrl&&!Shift uses own editinghost and shared active/modal eligibility, preserves existing F10 predicate, menu loss consumes saved owner and closes popup without Execute.255oldtests unchanged,215rows1append-only evidence row each preserve statuses/defaults/ownership;1exact production inverse and5semantic6source hashes unchanged."
     - "Required focused66owned11browser and fullverification978app109inventory42browser pass with100%coverage0semantic. Vendor-absent978app109inventory12script42browser all terminal0/restored. New modal/active/lifetime/key-shape/prevented cases and Chromium focus plus editing/fresh F10 verified. Initial2fixture issues and stale static build accounted for; corrected fixture/rebuild without production workaround. Artifact source/helpers/Python/executable/archive/magic/embedded signature candidates0;doctor0errors2preexistingwarnings/routing/diff pass."
-commit: null
+commit:
+  hash: "b9a6501881aa710007fbcc9b7369e83caf836992"
+  message: "🎯 3AXYTC code: route Writer Ctrl-F6 directly to its document client"
 comments:
   -
     author: "CODER"
     body: "Start: implement authorized iteration81 direct-document Ctrl-F6 at Writer browser frame with existing modal gates/focus-loss cleanup, owned tests only and no source/helper/Python artifacts."
+  -
+    author: "CODER"
+    body: "Verified: Writer Ctrl-F6 routes its eligible frame to the mounted document client; existing menu blur closes root/child popup and discards saved toolbar focus without Execute. Shared modal gate retained. Fullverify100%coverage0semantic and vendor-absent978app109inventory12script42browser allpass/restored;255oldtests unchanged,1bounded production inverse and evidence-only manifests pass, no source/helper/Python/executable/archive artifacts. Same-actor EVALUATOR passes exact semanticSHA; full pane/native focus and parent parity remain open."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Ctrl-F6 leaf passes focused66owned11browser and fullverify978app109inventory42browser100%coverage0semantic. Vendor-absent978app109inventory12script42browser all terminal0/restored.255oldtests byte-identical,215rows1evidence-only row each, exact1production inverse/5semantic6source hashes unchanged; artifact source/helpers/Python/executable/archive/magic/signature0, doctor0errors2knownwarnings/routing/diff. Initial stale-build browser failure corrected by rebuilding; no code/test threshold workaround. Full F6 pane/native platform/focus graph remains open."
+  -
+    type: "status"
+    at: "2026-10-04T00:42:45.047Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer Ctrl-F6 routes its eligible frame to the mounted document client; existing menu blur closes root/child popup and discards saved toolbar focus without Execute. Shared modal gate retained. Fullverify100%coverage0semantic and vendor-absent978app109inventory12script42browser allpass/restored;255oldtests unchanged,1bounded production inverse and evidence-only manifests pass, no source/helper/Python/executable/archive artifacts. Same-actor EVALUATOR passes exact semanticSHA; full pane/native focus and parent parity remain open."
 doc_version: 3
-doc_updated_at: "2026-10-04T00:42:42.372Z"
+doc_updated_at: "2026-10-04T00:42:45.048Z"
 doc_updated_by: "CODER"
 description: "Iteration81 under C9TN6M: source-shaped active Writer frame Ctrl-F6 focus route, menu loss cleanup and saved-owner disposal, shared modal input eligibility. No core/save/open/recovery behavior changes or upstream test dependency/source/helper artifacts."
 sections:
@@ -120,6 +133,10 @@ sections:
     Baseline owned24cases:17fail7pass, including15missing-route behavior failures and2fixture issues (Bookmark closes with Close, table modal uses registered browser slot rather than toolbar More Options). Both new fixture issues corrected; no old test edits. Corrected24new+15F10+18saved-focus+9document-focus66pass/4files; direct Ctrl-F6 native extra Alt/Meta condition covered, other variants/prevented keys retained. Active frame switching/disposal and all10modal scenarios resume after cancellation. One shared input eligibility value extracted unchanged from F10 into Writer frame and new native-shaped focus route; existing menu blur supplies cleanup, no menu/core/command changes.255oldtests unchanged,215rows1evidence-only row each and exact1production inverse proof pass; source6hashes/conclusions only. Doctor0errors2knownwarnings, routing/diff pass. Actual Chromium11focus cases running; full and vendor-absent checks pending.
     Initial focused Chromium command omitted npm run build and served prior static dist (config confirmed preview).4newcases failed/7oldpass; bounded results/hash only in stale-build-browser.json, no source snippets/screenshots/traces copied. Terminal failure accounted for; rebuild and rerun unchanged approved tests/implementation. No verification contract/scope/threshold changes.
     Fresh built Chromium11pass; fullverification terminal0 with978app109inventory42browser,100%coverage0semantic, vendor-absent978app109inventory12script42browser allpass/restored. Exact hashes/inverse255oldtests215rows proof preserved and ignored-inclusive final storage source/helpers/Python/executable/archive0, no trace/source copies. This is bounded direct client focus progress only, not full pane/global/native menu/parent parity.
+extensions:
+  implementation_commit:
+    hash: "b9a6501881aa710007fbcc9b7369e83caf836992"
+    message: "🎯 3AXYTC code: route Writer Ctrl-F6 directly to its document client"
 id_source: "generated"
 ---
 ## Summary
