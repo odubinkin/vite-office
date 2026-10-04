@@ -1,0 +1,83 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts",
+    "apps/office/src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-text-hint-update.test.ts",
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts"
+  ],
+  "priorTests": 343,
+  "priorTestsByteIdentical": 341,
+  "priorTestsTwoCountCommentEndCorrections": true,
+  "newAppCases": 322,
+  "existingRuntimeRows": 234,
+  "newUnverifiedRuntimeRows": 1,
+  "allExistingRuntimeFieldsExceptTwoAppendedJustificationsUnchanged": true,
+  "sourceProvenanceOnlyTwoAppendicesOneNativeMappingAndFilenameSplit": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtatr2.cxx",
+      "sha256": "0834ec1af0972001223cc0790fe609f331e3e6fdb036752109d9533921cf8de8"
+    }
+  ],
+  "staticChecks": 6,
+  "staticRecoveredTypeFixture": 1,
+  "focusedFinalTestChecks": 2,
+  "absentProfile": {
+    "build": 1,
+    "app": {
+      "tests": 2599,
+      "files": 262,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "inventory": {
+      "tests": 109,
+      "files": 36,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "scripts": {
+      "tests": 5,
+      "files": 2
+    },
+    "chromium": 99
+  },
+  "passingSuitesRepeated": false,
+  "failedCasesOnlyReplayed": 2,
+  "originalAppResult": {
+    "passed": 2597,
+    "failed": 2,
+    "coverage100": true
+  },
+  "recoveredCases": 2,
+  "vendorRestored": true,
+  "sourceAuditCommands": 5,
+  "semanticViolations": 0,
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass",
+  "nativeReview": "Iteration122 excludes INET54 from adjacent value merging per native MergePortions and updates ordinary insert/pure-erase coordinates on actual owned attributes per SwTextNode::Update/default InsertText. Source-owned ndtxt-hint-update decomposition preserves existing1000-line gates. Supported positive/negative ranges,paragraph-start DontExpandStart,end DontExpand reset,INET-first end suppression/AUTO fresh collector and ignored DontMoveAttr match the bounded native non-overlapping AUTO/INET slice. Continuous links keep item/object/map identity;equal adjacent links remain distinct through construction/copy/cut/transfer/history/graph16,even after deleting a gap.322 new literal cases cover both families,eight flags,all boundary relations and mixed end flags. Two old hyperlink expectations correct adjacent Count/comment2 to3 and post-gap-cut Count/end1/6 to2/3;341 other prior tests stay byte-identical. First absent app run2597pass/2fail retained100%coverage;only2failedcases replayed after test-only corrections,no production/full suite/build replay. Explicit formatted insertion/fragment/undo adapters retain their existing contracts.234 existing runtime rows retain statuses/defaults/exceptions except two bounded appendices;one new extracted native helper remains unverified. Native empty-hint retention,full Insert modes/ignore-expand locks/families/BuildPortions/nesting,explicit replacement/copy destination/same-node move/split/join/refcounts/destruction/listeners and broad core/UI parity remain unverified. Registered save/open/recovery deviations preserved;no module/goal promotion."
+}
