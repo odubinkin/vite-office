@@ -12,6 +12,7 @@
     "apps/office/src/xmloff/source/text/txtparae.ts",
     "apps/office/src/sw/source/uibase/shells/textsh1.ts",
     "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
     "apps/office/e2e/writer-named-style-history.spec.ts",
     "docs/program/source-provenance.json",
     "docs/program/parity/runtime-inventory.json"
@@ -35,11 +36,11 @@
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
-      "sha256": "d8cc042f6020e131551ee08251150631a1d8d76209ab7fb9e41cf3adeff4c031"
+      "sha256": "6e0997262d5cbc34ec1de0f9b879be1fe7fd414a24c55177d2c3e3e8ef3b7512"
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
-      "sha256": "19f2133db0c2352eb8d5d8e3b9c7be76eb07cd36ac1387bb28e8e6497c2cbe4e"
+      "sha256": "e3b83d81de232df128e74e60797d956c12d2e8e7cc0a1a6e5cdeb9ae124f23d8"
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
@@ -59,7 +60,11 @@
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
-      "sha256": "fbc9e754bae079eb02cc9dc951ba44c4bf63a69d9992196403b8802a164dacdb"
+      "sha256": "790105e0c4bf73e050911b6a4abd25cd5b612d1dd106bc84017c50d42b21f1c9"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+      "sha256": "c10d13f79a689b56616f29291f4f9d66a04d05ab2baf5797936e8a8c52e358ca"
     },
     {
       "path": "apps/office/e2e/writer-named-style-history.spec.ts",
@@ -67,15 +72,16 @@
     },
     {
       "path": "docs/program/source-provenance.json",
-      "sha256": "6cd80947226493b1bcbca7d48a31adfd30a280612e1527c5ace9a9b042285e4d"
+      "sha256": "c0c7eb83a313d5d4ec2e31159048f3d70c0cde9ecf225dff1578c62e05b1e02c"
     },
     {
       "path": "docs/program/parity/runtime-inventory.json",
-      "sha256": "88daf60f21d8b50b3190aecbbfd5c47d5a34a8decf48f12bdf8affd7bfe9d5b3"
+      "sha256": "97234cfb7302a0f8c1a3ff7dd3cb505e12cf12d347b627f13d54e8e16384ab90"
     }
   ],
   "priorTestFiles": 305,
-  "priorTestFilesByteIdentical": 305,
+  "priorTestFilesByteIdentical": 304,
+  "priorTestWithOnlyCommonXmlStreamAssertionUpdated": "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
   "manifests": [
     {
       "path": "docs/program/source-provenance.json",
