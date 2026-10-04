@@ -1,0 +1,6 @@
+{
+  "command": "npm run check:source-provenance",
+  "exitCode": 0,
+  "outputBytes": 205,
+  "outputSha256": "99ceea53052187b90b9c49bbd5a7f64c36ec044609bf236ee3378b0db8a61dac"
+}

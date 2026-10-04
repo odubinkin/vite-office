@@ -1,0 +1,100 @@
+{
+  "base": "159e45f2b35b6222dc6942431f4f1a77aed23e36",
+  "semanticPaths": 18,
+  "fileHashesUnchanged": true,
+  "sourceHashesUnchanged": 14,
+  "priorTestFiles": 320,
+  "byteIdenticalPriorTests": 320,
+  "newAppCases": 69,
+  "appAssertionsPassed": 1551,
+  "fullAppRuns": 1,
+  "focusedFailedCaseRecoveryRuns": 1,
+  "appFiles": 240,
+  "coverageFromInitialFullRunWithUnchangedProduction": {
+    "lines": {
+      "total": 10761,
+      "covered": 10761,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11765,
+      "covered": 11765,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3086,
+      "covered": 3086,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8984,
+      "covered": 8984,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCasesPassed": 109,
+  "inventoryFiles": 36,
+  "inventoryFullRuns": 2,
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "scriptCasesPassed": 5,
+  "scriptFullRuns": 1,
+  "browserCasesPassed": 99,
+  "browserFullRuns": 1,
+  "absentStaticBuildRuns": 1,
+  "allProductTestsUpstreamUnavailable": true,
+  "vendorRestored": true,
+  "noConcurrentAuditsDuringAbsentTests": true,
+  "productionUnchangedAfterInitialFullRuntime": true,
+  "recovery": "Initial full app1550passed/1new assertionfailed with100%coverage. New empty-autoformat fixture now asserts actual normalization before and after reset; only this case recovered, no passing app assertion repeated. Initial inventory108passed/1failed on required lexicographic row order. Recovered only failed inventory gate after inserting two new rows in required order; passing static/app/script/browser gates not duplicated. All320prior test files remain byte-identical.",
+  "staticRecovery": "Pre-product static recovery corrected literal-set TypeScript inference, callback receiver annotation and JSDoc receiver count; final static6 passed. Existing content-manager class was restored before tests and remains byte-identical. New owner count corrected to2 with existing owner extension and canonical approval renewed.",
+  "oldMappingRows": 228,
+  "descriptionAppends": 11,
+  "newUnverifiedOwnerRows": 2,
+  "runtimeModuleCount": 230,
+  "semanticViolationCount": 0,
+  "registeredDeviationFieldsUnchanged": true,
+  "saveOpenRecoveryCodeUnchanged": true,
+  "goalComplete": false,
+  "artifacts": "English bounded prose/count/hash/command records only; no sources, scripts, Python, binaries, archives, raw diffs or source frames."
+}

@@ -1,0 +1,6 @@
+{
+  "command": "npm run inventory:invariants",
+  "exitCode": 0,
+  "outputBytes": 136,
+  "outputSha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe"
+}

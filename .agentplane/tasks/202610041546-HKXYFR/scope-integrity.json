@@ -1,0 +1,90 @@
+{
+  "base": "159e45f2b35b6222dc6942431f4f1a77aed23e36",
+  "semanticPaths": 18,
+  "priorTestFiles": 320,
+  "byteIdenticalPriorTests": 320,
+  "boundedOldTestUpdates": 0,
+  "otherAttributeUndoAlgorithmsUnchanged": true,
+  "existingContentManagerClassByteIdentical": true,
+  "moveLeftMarginUnchanged": true,
+  "saveOpenRecoveryCodeUnchanged": true,
+  "oldMappingRows": 228,
+  "descriptionAppends": 11,
+  "newMappingRows": 2,
+  "runtimeModuleCount": 230,
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sfx2/source/control/request.ts",
+      "sha256": "6988f8e528cc0e261a24101c10fff9af7d24209af3b37e316f504ccbff242a97"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/dispatch.ts",
+      "sha256": "3c1b09f82d4f89ce4e17577950e5c4ed134f8d6011ed73b9ae49629c11174349"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/unoctitm.ts",
+      "sha256": "c6683c6457a290c416564d8dfdb34039fc48f64ba2b46d1785be674fd21462fc"
+    },
+    {
+      "path": "apps/office/src/vcl/keycodes.ts",
+      "sha256": "0ee604ffcd6d463854f86ae80b452738d5d02124c6bc986edbf4aec3f1912439"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+      "sha256": "fa0f89937192068134a8697f24ae0b69d19e36294915e342918ba89539569eb0"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+      "sha256": "63154187067ee7fd0549efa8733182d43a070153febc5f29d4cc8bfcaf5f4643"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "sha256": "134747e78ced67101e9b7c262e43ccf6d705ed1a5d7913294aff9c8d2a5b1120"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol.ts",
+      "sha256": "ea9a2610624c516f2d85bd2b0d6661a6b69f6d824a3c00d8248d9fd5e03f7397"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "sha256": "c47856a694057f0336f57e73baed90be7eb82af84b8f199c88fab1dbb5d08e4f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+      "sha256": "94588a73792bb8cb7407e185fdd92827f20ebcab1b360ced8b56b387a8a1aadb"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txtedt.ts",
+      "sha256": "a5270b8aed11c4e77aab5fdc71d9071640445c6df777c6a36ec3a72b7e05d136"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+      "sha256": "1b51b99590084b58a409836997a4c039cdac1020c57d601ebda6f4587810d6c2"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+      "sha256": "7d331f44233d97a9b290e1723d9ff5f2f52dae61395c27d7ca51fe76baa2c9d4"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/unoctitm.test.ts",
+      "sha256": "244d34219353f08172d16d44052d2116b8ad3c01180be49335ad0d22886ea240"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+      "sha256": "fcfa12283024a0a3386ddb1b963ed6594b72dcb4914d0887c27f5e31aec81e4a"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-style-modifier.test.tsx",
+      "sha256": "a2fbb242e6c815d9f5c2ce88f1c089c8c6ccb70ce0ab5351d970650bc8259c01"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "ef344e4b7179f71ed4f56f916763ecafee4a47cd1cb230ecb88ded4912e26057"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "42b53545f7b13e756be75c1c66ff9ec1c184dca81529ac8528097217e15ad14b"
+    }
+  ],
+  "registeredDeviationFieldsUnchanged": true
+}

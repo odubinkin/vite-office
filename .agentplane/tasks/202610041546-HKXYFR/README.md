@@ -4,7 +4,7 @@ title: "Restore explicit StyleApply key modifiers and native Ctrl reset history"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -41,7 +41,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved explicit modifier and native Ctrl reset/history correction under the standing iterative user goal."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:57:45.457Z"
+doc_updated_at: "2026-10-04T16:18:09.603Z"
 doc_updated_by: "CODER"
 description: "Iteration109 of C9TN6M: carry explicit UNO KeyModifier to SfxRequest and document-owned paragraph StyleApply; implement the registered full-character deletion set, Ctrl list eligibility and distinct initial/redo history. Preserve every prior test and all registered I/O deviations; product suites run once with upstream unavailable."
 sections:
@@ -80,7 +80,12 @@ sections:
     5. Exact18 semantic paths, all prior test files byte-identical, only two new unverified runtime/source owners and one existing reset-set owner extension and bounded existing-row evidence appendices, no status/default/exception promotion or registered save/open/recovery changes. Ignored-inclusive AP content audit rejects code/scripts/Python/binaries/archives/source frames/raw diffs. Same-actor EVALUATOR review binds actual semantic SHA. Recorded verification, semantic/verification/close commit identities, doctor zero errors and clean tracked/untracked final checkout are required.
   Verification: "Pending implementation and declared checks."
   Rollback Plan: "Revert only this leaf's semantic commit through a new traceable follow-up task if needed; do not rewrite history. Always restore the repository-local vendor path in finally."
-  Findings: "Pinned source inspection establishes explicit KeyModifier filtering in unoctitm, zero modifier in SfxRequest, KEY_MOD1=0x2000, Ctrl full-character/list eligibility in docst, selective deletion-set reset before collection history and a separate exact text-reset history. Native redo omits initial full-character flag and uses default non-exact text reset. Full language/field/mark/layout/redline/ring/inline-heading/native style-family/default and complete UI parity remain unverified. Existing registered save/open/recovery deviations remain unchanged. Standing user goal authorizes this single safe local correction; no new approval is needed."
+  Findings: |-
+    Pinned source inspection establishes explicit KeyModifier filtering in unoctitm, zero modifier in SfxRequest, KEY_MOD1=0x2000, Ctrl full-character/list eligibility in docst, selective deletion-set reset before collection history and a separate exact text-reset history. Native redo omits initial full-character flag and uses default non-exact text reset. Full language/field/mark/layout/redline/ring/inline-heading/native style-family/default and complete UI parity remain unverified. Existing registered save/open/recovery deviations remain unchanged. Standing user goal authorizes this single safe local correction; no new approval is needed.
+
+    Observed corrections: 1550 passed, one new empty-autoformat fixture assertion failed; all app metrics100%. Vendor restored in finally. No production change after first suite. Only the failing new case was recovered; no passing app assertion rerun. Initial inventory108passed/1failed on strict lexicographic row ordering; only the failed inventory gate was repeated, with109passed/100%coverage. All passing suites remained single absent-only runs. Static type/JSDoc issues were fixed before product runs. The existing content-manager class was preserved byte-for-byte before product execution; its existing owner adds one reset-set helper, so two new owner records are needed rather than three. Canonical narrowed plan approval renewed. No source/profile/Artifact audit ran concurrently with absent tests.
+
+    Evidence: strict18semantic paths; all320prior tests byte-identical;14pinned source hashes;228old manifest records keep all status/default/exception fields,11bounded evidence/description appends,2new unverified owners and230total runtime records; source-dependent4checks and parity0violations; AP ignored-inclusive scan3618files/forbidden0. App1551assertions confirmed by1550initial passes plus1focused recovery, with unchanged production and first-run coverage100%; inventory109/100%, scripts5, Chromium99. Full app was not repeated. Same-actor exact-SHA review and canonical leaf closure remain next. Parent goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -136,3 +141,7 @@ Revert only this leaf's semantic commit through a new traceable follow-up task i
 ## Findings
 
 Pinned source inspection establishes explicit KeyModifier filtering in unoctitm, zero modifier in SfxRequest, KEY_MOD1=0x2000, Ctrl full-character/list eligibility in docst, selective deletion-set reset before collection history and a separate exact text-reset history. Native redo omits initial full-character flag and uses default non-exact text reset. Full language/field/mark/layout/redline/ring/inline-heading/native style-family/default and complete UI parity remain unverified. Existing registered save/open/recovery deviations remain unchanged. Standing user goal authorizes this single safe local correction; no new approval is needed.
+
+Observed corrections: 1550 passed, one new empty-autoformat fixture assertion failed; all app metrics100%. Vendor restored in finally. No production change after first suite. Only the failing new case was recovered; no passing app assertion rerun. Initial inventory108passed/1failed on strict lexicographic row ordering; only the failed inventory gate was repeated, with109passed/100%coverage. All passing suites remained single absent-only runs. Static type/JSDoc issues were fixed before product runs. The existing content-manager class was preserved byte-for-byte before product execution; its existing owner adds one reset-set helper, so two new owner records are needed rather than three. Canonical narrowed plan approval renewed. No source/profile/Artifact audit ran concurrently with absent tests.
+
+Evidence: strict18semantic paths; all320prior tests byte-identical;14pinned source hashes;228old manifest records keep all status/default/exception fields,11bounded evidence/description appends,2new unverified owners and230total runtime records; source-dependent4checks and parity0violations; AP ignored-inclusive scan3618files/forbidden0. App1551assertions confirmed by1550initial passes plus1focused recovery, with unchanged production and first-run coverage100%; inventory109/100%, scripts5, Chromium99. Full app was not repeated. Same-actor exact-SHA review and canonical leaf closure remain next. Parent goal active.

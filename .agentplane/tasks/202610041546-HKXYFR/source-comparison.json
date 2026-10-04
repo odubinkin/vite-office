@@ -1,0 +1,78 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/request.cxx",
+      "bytes": 21624,
+      "sha256": "ac3d4de7bb0effaf6e8650652f956a914c76dccd72aa4695a366aaf8ae792825"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx",
+      "bytes": 72933,
+      "sha256": "ee9bab4418d2f8c4813486f6977c1678a18f6389d3016b9a873bd34fdcd044e1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/unoctitm.cxx",
+      "bytes": 62038,
+      "sha256": "cd7548bbb1d535368270e0bf3be3785053624b75d136522289ec1d44dc4a789b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/sfx2/request.hxx",
+      "bytes": 5140,
+      "sha256": "e77019139c7ea78420cce0a02091de4b4ae0de9f584d2efa55155dc4f638df54"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/vcl/keycodes.hxx",
+      "bytes": 8607,
+      "sha256": "e2cd5d8cfc7230ca1925519e6af103c7adaef6d1ce5a8d05f052bc9c310ef954"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/app/docst.cxx",
+      "bytes": 72935,
+      "sha256": "587d8d8fe1ead83d0f63f0796164698ee9f8dc41e894e4a1cfa58144b9aadbc3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/edit/edfcol.cxx",
+      "bytes": 102602,
+      "sha256": "36ebd01cb4debf30d908e5e5058cc0e9b83813ed8f1fc01acc24796eb4abba2f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx",
+      "bytes": 78639,
+      "sha256": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "bytes": 229299,
+      "sha256": "cfbc09c7a7413e29dc3320c46eac6b4c706e9f805f0b90436ec636f9bc2bdb08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtedt.cxx",
+      "bytes": 92014,
+      "sha256": "900413bc482204a05a6bc74a7a3b2b89824335f0f849a531afde833793f083f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unfmco.cxx",
+      "bytes": 2660,
+      "sha256": "b74cf639a6b928c1e86528cf655c9c5256624554ef37713d231dd0dbaa89b684"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx",
+      "bytes": 41466,
+      "sha256": "18888b58d07725197cb70b069c2e11e90c4aaa8cf8c43f288017d3cefdd65786"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/doc.hxx",
+      "bytes": 88006,
+      "sha256": "e1607dcbe67d2e53c8e2100b2a23c9cb2ea78fe24317c6c288112170d0b759d0"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/tbxctrls/tbcontrl.cxx",
+      "bytes": 152862,
+      "sha256": "42aaeb42ad2b38421f8775af673f1cb7916f9d70dd5d56bedabf2ec116577c58"
+    }
+  ],
+  "comparison": "Explicit UNO KeyModifier is filtered into unsigned native request metadata initialized0. KEY_MOD1=8192 enables initial full-character/list reset, including repeating the same collection. Registered deletion set excludes list83..87 and internet54. Common automatic-style items reset before protected direct node items and list decisions. Collection history owns pre-selective-reset hints and reset history owns post-selective-reset hints. Redo retains list eligibility but omits initial full-character flag; separate RES_CHRFMT redo defaults to non-exact full-node reset. Native style-box Select passes only style/family, without modifier. No source execution or source copy is retained.",
+  "remaining": "Complete UNO transforms/sequences/call modes/frames, language/direction/fields/marks/layout/redlines/rings/inline headings and full native style/default/history/UI parity remain unverified."
+}
