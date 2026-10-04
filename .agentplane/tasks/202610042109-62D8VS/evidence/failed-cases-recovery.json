@@ -1,0 +1,26 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-text-hint-update.test.ts src/sw/source/core/txtnode/owned-hint-cut.test.ts -t rejects invalid updates before mutating an owned map and retains zero updates|normalizes retained source portions without replacing the surviving object",
+  "profile": "upstream-absent",
+  "exit": 0,
+  "bytes": 253,
+  "sha256": "7e8ee5765e5d7a9e6665285a55e5e7a514ef0da90dcb28a0f9d0486b7a312ff4",
+  "totals": [
+    "Test Files  2 passed (2)",
+    "Tests  2 passed | 367 skipped (369)"
+  ],
+  "onlyPreviouslyFailedCases": true,
+  "productionHashes": [
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+      "sha256": "871a77f9fcbe766824b120115d4c4636bf5412fe1009e1a9b525ad3e7e3a58e3"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "sha256": "ebc3d036c780decf77346858ecebdb7bd2e3d6cc88c42a7dc6b1f295211ac4d5"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts",
+      "sha256": "2872f29fcfe7133b07cac5ecb2efd660660a39370c037ddba009f4d786ada97a"
+    }
+  ]
+}
