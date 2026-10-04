@@ -1,0 +1,24 @@
+{
+  "command": "npm run test:e2e",
+  "exit": 0,
+  "signal": null,
+  "bytes": 8249,
+  "sha256": "35ad59ecbc5738a6cc9b9956d94bb8aff2ebe050d521401531899fcef1583f54",
+  "summary": [
+    "  47 passed (13.3s)"
+  ],
+  "errors": [],
+  "nonFailureWarnings": [
+    "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.",
+    "[WebServer] (node:86540) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:86556) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:86555) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:86557) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:86554) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)"
+  ]
+}
