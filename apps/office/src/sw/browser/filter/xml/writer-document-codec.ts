@@ -37,6 +37,7 @@ import {
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
 import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
 import { SwFormatAutoFormat, SwTextAttr } from "../../../source/core/txtnode/txatbase";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
 import type { DocumentSettingId } from "../../../source/core/doc/DocumentSettingManager";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
@@ -667,7 +668,13 @@ export function decodeWriterDocument(
         return new SwTextAttr(new SwFormatINetFormat(hint.hyperlink), hint.start, hint.end);
       const items = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       decodeSfxItemSet(items, hint.items);
-      return new SwTextAttr(new SwFormatAutoFormat(items), hint.start, hint.end);
+      return new SwTextAttr(
+        new SwFormatAutoFormat(
+          document.GetIStyleAccess().getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR),
+        ),
+        hint.start,
+        hint.end,
+      );
     },
   );
   const position = new SwPosition(node, 0, "redline");

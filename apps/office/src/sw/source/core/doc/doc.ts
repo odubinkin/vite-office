@@ -14,6 +14,8 @@ import { DocumentListsManager } from "./DocumentListsManager";
 import { DocumentSettingManager } from "./DocumentSettingManager";
 import { DocumentStateManager } from "./DocumentStateManager";
 import { DocumentStylePoolManager } from "./DocumentStylePoolManager";
+import { createStyleManager } from "./swstylemanager";
+import type { IStyleAccess } from "../../../inc/istyleaccess";
 import { SwTextFormatColl, isWriterParagraphStyle, type WriterParagraphStyle } from "./fmtcol";
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import type { SwNumRuleItem } from "../para/paratr";
@@ -64,6 +66,7 @@ export class SwDoc {
     this.mbInReading = reading;
   }
   private readonly attrPool: SwAttrPool;
+  private readonly styleAccess: IStyleAccess;
   private readonly contentOperationsManager: DocumentContentOperationsManager;
   private readonly markAccess: DocumentMarkAccess;
   private readonly listsManager: DocumentListsManager;
@@ -86,6 +89,7 @@ export class SwDoc {
     this.locale = options?.locale ?? "en-US";
     this.pageDescs = [createDefaultWriterPageDescriptor(this.locale)];
     this.attrPool = new SwAttrPool(this);
+    this.styleAccess = createStyleManager();
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
     this.nodes = new SwNodes(this);
@@ -214,6 +218,11 @@ export class SwDoc {
   /** Returns the document attribute pool. @returns SwAttrPool. */
   public GetAttrPool(): SwAttrPool {
     return this.attrPool;
+  }
+
+  /** Returns the document-owned automatic style manager. @returns Stable style access. */
+  public GetIStyleAccess(): IStyleAccess {
+    return this.styleAccess;
   }
   /** Returns content-operation ownership. @returns Content manager. */
   public GetDocumentContentOperationsManager(): DocumentContentOperationsManager {

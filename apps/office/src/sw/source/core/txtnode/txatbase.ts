@@ -36,6 +36,7 @@ import {
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { SwFormatINetFormat } from "./fmtatr2";
 
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
@@ -72,31 +73,37 @@ export function createWriterCharacterItemSet(
 
 /** SfxPoolItem wrapper around the character item set referenced by RES_TXTATR_AUTOFMT. */
 export class SwFormatAutoFormat extends SfxPoolItem {
-  private readonly styleHandle: SfxItemSet;
+  private styleHandle: SfxItemSet;
 
-  /** Creates an auto-format item from direct character deltas. @param styleHandle - Character item set. @param which - Auto-format WhichId. @returns Nothing. */
+  /** Creates a non-shareable attribute referencing an explicit style handle. @param styleHandle - Shared character style. @param which - Auto-format WhichId. @returns Nothing. */
   public constructor(styleHandle: SfxItemSet, which: number = RES_TXTATR_AUTOFMT) {
     super(which);
     if (which !== RES_TXTATR_AUTOFMT) throw new Error("SwFormatAutoFormat WhichId is invalid.");
-    this.styleHandle = styleHandle.Clone();
+    this.setNonShareable();
+    this.styleHandle = styleHandle;
   }
 
-  /** Returns the owned direct character item set. @returns Independent read/write item set. */
+  /** Returns the shared style handle. @returns Referenced item set. */
   public GetStyleHandle(): SfxItemSet {
     return this.styleHandle;
   }
 
-  /** Creates an independent auto-format item. @returns Cloned item and item set. */
+  /** Assigns the shared handle without cloning its contents. @param styleHandle - New style reference. @returns Nothing. */
+  public SetStyleHandle(styleHandle: SfxItemSet): void {
+    this.styleHandle = styleHandle;
+  }
+
+  /** Creates an independent item sharing the same style handle. @returns Cloned item. */
   public Clone(): SwFormatAutoFormat {
     return new SwFormatAutoFormat(this.styleHandle, this.Which());
   }
 
-  /** Compares WhichId and direct item values. @param other - Candidate pool item. @returns Whether equal. */
+  /** Compares automatic items by shared handle identity. @param other - Candidate pool item. @returns Whether equal. */
   public equals(other: SfxPoolItem): boolean {
     return (
       other instanceof SwFormatAutoFormat &&
       other.Which() === this.Which() &&
-      this.styleHandle.Equals(other.styleHandle, true)
+      this.styleHandle === other.styleHandle
     );
   }
 
@@ -214,7 +221,9 @@ export function createSwFormatAutoFormat(
         RES_CHRATR_UNDERLINE,
       ),
     );
-  return new SwFormatAutoFormat(items);
+  return new SwFormatAutoFormat(
+    pool.GetDoc().GetIStyleAccess().getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR),
+  );
 }
 
 /** Projects supported effective character items to the browser command shape. @param items - Direct character item set. @param inherited - Optional inherited style set. @returns Effective boolean properties. */

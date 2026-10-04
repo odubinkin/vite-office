@@ -4,7 +4,7 @@ title: "Restore document-owned character style handles"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Approved iterative goal authorizes this bounded document-owned character handle architecture. Follow exact twelve paths and once-only absent verification."
 doc_version: 3
-doc_updated_at: "2026-10-04T17:42:55.139Z"
+doc_updated_at: "2026-10-04T17:55:32.995Z"
 doc_updated_by: "CODER"
 description: "Port the bounded character StylePool insertion owner into SwDoc and route ordinary character creation and browser snapshot decoding through shared handles; restore automatic-item shared-copy and pointer equality. Preserve raw synthetic state fixtures and leave selective reset interning as a source-domain follow-up."
 sections:
@@ -54,7 +54,7 @@ sections:
     5. Exact twelve semantic paths, ignored-inclusive AP source/helper/Python/executable/raw-frame/diff scan forbidden0. Same-actor exact semantic SHA EVALUATOR pass, ap doctor zero errors and node .agentplane/policy/check-routing.mjs pass. Canonical verify and finish with semantic/verification/close hashes, clean final tracked/untracked checkout.
   Verification: "Pending implementation and one absent-only verification profile."
   Rollback Plan: "Revert semantic task commit in a new commit if necessary; no history rewrite. Restore vendor directory in finally."
-  Findings: "Pinned native SwStyleManager owns the character StylePool; roots group parent pointers and child item equality. Leaf snapshots are cloned once for shareable items, freshly for non-shareable items. SwFormatAutoFormat is non-shareable, copies its handle and compares shared-pointer identity. Current native SfxItemIter includes invalid/disabled sentinels but their Clone returns null; StylePool findChildNode dereferences cloned items. This leaf bounds insertion to concrete SET items rather than pretending state-sentinel pooling is native-defined. Existing raw state-handle fixtures and selective reset are retained pending the separate native input-domain audit. Native QueryValue style names, cache/all-style usage and other families remain unverified; browser persisted record shape retained."
+  Findings: "Implemented document-owned character StylePool insertion and shared automatic style copy/reference equality for ordinary factory and snapshot import.15 new cases pass; one obsolete raw-value adjacent merge assertion/name corrected,326 other prior tests byte-identical. Static docs initially found one missing JSDoc in a new assertion callback; fixed before products. Recovered final five affected static gates, original dependency gate remains valid. Metadata serialization order restored before source audits; two inline audit orchestration errors (duplicate binding and patch context) fixed without product changes. Single absent-only profile passed first:1675app/246files,109inventory/36files,5scripts/2files,99Chromium; four required metrics100%. Absent build and restored five source/resource audits pass, semantic violations0. Exact twelve semantic paths;230 existing status/default/exception rows retained, three new owners all-unverified (233 total);13 pinned native hashes; ignored-inclusive AP3712files forbidden0. Upstream restored, no source execution/storage, no network/outside-repo access or registered I/O/recovery changes. Residual selective reset interning and sentinel input-domain investigation; native unordered iterator/collisions, paragraph/ignorable/usage/cache/names/lifetime/null constructor/UNO QueryValue and whole-module/UI parity remain open. Same-actor exact-SHA review and canonical closure pending."
 id_source: "generated"
 ---
 ## Summary
@@ -87,4 +87,4 @@ Revert semantic task commit in a new commit if necessary; no history rewrite. Re
 
 ## Findings
 
-Pinned native SwStyleManager owns the character StylePool; roots group parent pointers and child item equality. Leaf snapshots are cloned once for shareable items, freshly for non-shareable items. SwFormatAutoFormat is non-shareable, copies its handle and compares shared-pointer identity. Current native SfxItemIter includes invalid/disabled sentinels but their Clone returns null; StylePool findChildNode dereferences cloned items. This leaf bounds insertion to concrete SET items rather than pretending state-sentinel pooling is native-defined. Existing raw state-handle fixtures and selective reset are retained pending the separate native input-domain audit. Native QueryValue style names, cache/all-style usage and other families remain unverified; browser persisted record shape retained.
+Implemented document-owned character StylePool insertion and shared automatic style copy/reference equality for ordinary factory and snapshot import.15 new cases pass; one obsolete raw-value adjacent merge assertion/name corrected,326 other prior tests byte-identical. Static docs initially found one missing JSDoc in a new assertion callback; fixed before products. Recovered final five affected static gates, original dependency gate remains valid. Metadata serialization order restored before source audits; two inline audit orchestration errors (duplicate binding and patch context) fixed without product changes. Single absent-only profile passed first:1675app/246files,109inventory/36files,5scripts/2files,99Chromium; four required metrics100%. Absent build and restored five source/resource audits pass, semantic violations0. Exact twelve semantic paths;230 existing status/default/exception rows retained, three new owners all-unverified (233 total);13 pinned native hashes; ignored-inclusive AP3712files forbidden0. Upstream restored, no source execution/storage, no network/outside-repo access or registered I/O/recovery changes. Residual selective reset interning and sentinel input-domain investigation; native unordered iterator/collisions, paragraph/ignorable/usage/cache/names/lifetime/null constructor/UNO QueryValue and whole-module/UI parity remain open. Same-actor exact-SHA review and canonical closure pending.

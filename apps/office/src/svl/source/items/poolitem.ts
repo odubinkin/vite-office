@@ -20,6 +20,18 @@ export interface SfxPoolItemSnapshot {
 
 /** Base value object stored by SfxItemPool and SfxItemSet. */
 export abstract class SfxPoolItem {
+  private shareable = true;
+
+  /** Reports the native item-dependent sharing policy. @returns Whether pools may share this item. */
+  public isShareable(): boolean {
+    return this.shareable;
+  }
+
+  /** Disables sharing for item classes with native non-shareable ownership. @returns Nothing. */
+  protected setNonShareable(): void {
+    this.shareable = false;
+  }
+
   /** Creates one item for a concrete WhichId or zero-valued request return. @param which - Bounded Writer/SVL item identity. @returns Nothing. */
   protected constructor(private readonly which: number) {
     if (!Number.isInteger(which) || which < 0 || which > 32767)

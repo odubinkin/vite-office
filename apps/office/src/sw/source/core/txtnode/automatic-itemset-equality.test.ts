@@ -99,14 +99,14 @@ describe("automatic item-set equality consumers", /** Tests actual hint owners a
       { text: "cd", bold: false },
     ]);
   });
-  it("distinguishes pool owners and merges equal direct states independent of accepted ranges", /** Checks existing value comparator uses base ownership and count. @returns Nothing. */ () => {
+  it("distinguishes raw style handles even with equal direct values", /** Checks native pointer equality independently from item-set value equality. @returns Nothing. */ () => {
     const doc = new SwDoc(),
       left = new SfxItemSet(doc.GetAttrPool(), [[1, 15]]),
       right = new SfxItemSet(doc.GetAttrPool(), [[15, 15]]),
       foreign = new SfxItemSet(new SwDoc().GetAttrPool(), [[1, 15]]);
     for (const set of [left, right, foreign]) set.Put(new SvxWeightItem(8, 15));
     expect(new SwFormatAutoFormat(left).equals(new SwFormatAutoFormat(foreign))).toBe(false);
-    expect(pair(doc, left, right).Count()).toBe(1);
+    expect(pair(doc, left, right).Count()).toBe(2);
     left.InvalidateItem(11);
     right.SetParent(left);
     expect(pair(doc, left, right).Count()).toBe(2);
