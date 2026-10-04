@@ -1,0 +1,84 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/secondary-hint-maps.test.ts",
+    "apps/office/src/sw/source/core/txtnode/secondary-hint-transfer.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 339,
+  "priorTestsByteIdentical": 339,
+  "newAppCases": 75,
+  "existingRuntimeRows": 234,
+  "allExistingRuntimeFieldsExceptOneAppendedJustificationUnchanged": true,
+  "sourceProvenanceOnlyOneAppendix": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txatbase.hxx",
+      "sha256": "ac8e656fd70b8348cdf4ad8f58669553a420c70054712c62a423570d52635d6b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+      "sha256": "16ac2f8916ab0e6b597502b84247ef283d4a0cbaa2a79f0dbc2f3aa7e8ad052e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+      "sha256": "b59e66c9c5d31bf6fc0416a160e1584e465c4d2ac8e37ddf08607d9b570fbb60"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    }
+  ],
+  "staticChecks": 6,
+  "staticGatesAllFirstPass": true,
+  "additionalFocusedChecks": "Focused JSON format check after metadata appendix repair; focused formatter/JSDoc pass after two comment-only clarifications. Runtime code unchanged after the first absent profile; no passing test/build repeats.",
+  "authoringRecovery": "Initial provenance lookup incorrectly selected path rather than localPath; no provenance change on failure. Only missing bounded appendix repaired,inventory appendix not duplicated.",
+  "absentProfile": {
+    "build": 1,
+    "app": {
+      "tests": 2199,
+      "files": 258,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "inventory": {
+      "tests": 109,
+      "files": 36,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "scripts": {
+      "tests": 5,
+      "files": 2
+    },
+    "chromium": 99
+  },
+  "passingSuitesRepeated": false,
+  "vendorRestored": true,
+  "sourceAuditCommands": 5,
+  "semanticViolations": 0,
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass",
+  "runtimePhysicalLines": 960,
+  "nativeReview": "Secondary map comparator priorities,full/partial sentinel intervals,binary lower-Which/last-end contracts and existing native callers reviewed. Same actual owned object sets retained across replacement/cut/transfer/merge/snapshots/undo. Portable number-index size failure sentinel is not native ABI parity; pointer/debug assertions and full native insertion/deletion/history/refcount/destruction/listener/hierarchy/friend visibility/empty-hint/destination/same-node split-join contracts remain unverified."
+}
