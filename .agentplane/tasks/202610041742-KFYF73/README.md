@@ -4,7 +4,7 @@ title: "Restore document-owned character style handles"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,28 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T17:56:33.154Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only review at exact semantic 09677155e9ea818ecc5cb6d81b5074d34ed3786f: approved document-owned concrete character pool and shared-handle factory/import/copy/equality scope passes. Full parity remains open."
+  evaluated_sha: "09677155e9ea818ecc5cb6d81b5074d34ed3786f"
+  blueprint_digest: "1888d85411af4cdaf531bd3bc6a70e666411fdf7c3f2fd64333181a5c5f4b16e"
+  evidence_refs:
+    - ".agentplane/tasks/202610041742-KFYF73/README.md"
+    - ".agentplane/tasks/202610041742-KFYF73/quality/20261004-175633154-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610041742-KFYF73/quality/20261004-175633154-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610041742-KFYF73/quality/20261004-175633154-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610041742-KFYF73/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610041742-KFYF73/evidence/static-gates.json"
+    - ".agentplane/tasks/202610041742-KFYF73/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610041742-KFYF73/evidence/restored-audits.json"
+    - ".agentplane/tasks/202610041742-KFYF73/evidence/scope.json"
+    - ".agentplane/tasks/202610041742-KFYF73/evidence/native-hashes.json"
+    - "ap doctor: zero errors; node .agentplane/policy/check-routing.mjs: pass; ignored-inclusive AP audit: forbidden0"
+  findings:
+    - "Exact twelve semantic paths;15 new regressions, one obsolete raw-value merge expectation corrected,326 other prior tests unchanged.230 existing status/default/exception rows preserved; three new owners all-unverified. Native insertion/copy contracts reviewed against13 pinned hashes without upstream execution."
+    - "Single absent-only first-pass build and1675app/109inventory/5scripts/99Chromium all pass; four required app/inventory metrics100%. Final static gates and restored source/resource/provenance/invariant/parity audits pass, semantic violations0. Doctor0errors with two unchanged warnings; policy routing pass; AP ignored-inclusive3712files forbidden0."
 commit: null
 comments:
   -
