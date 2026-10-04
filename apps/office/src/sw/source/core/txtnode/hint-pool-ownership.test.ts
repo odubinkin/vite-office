@@ -46,7 +46,11 @@ function expectFlags(hints: SwpHints, mask: number): void {
 
 /** Reads the automatic handle. @param hints - Container with an automatic hint. @returns Handle. */
 function handle(hints: SwpHints): SfxItemSet {
-  return (hints.Get(0).format as SwFormatAutoFormat).GetStyleHandle();
+  const auto = hints.entries().find(
+    /** Selects the automatic family independently of native range order. @param hint - Candidate hint. @returns Whether automatic. */
+    (hint) => hint.Which() === 53,
+  ) as SwTextAttr<SwFormatAutoFormat>;
+  return auto.format.GetStyleHandle();
 }
 
 describe("destination-owned hint copying", /** Registers ownership and snapshot cases. @returns Nothing. */ () => {
@@ -77,7 +81,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
         expect(copy.Get(0)).not.toBe(hints.Get(0));
         expect(copy.Get(0).format).not.toBe(hints.Get(0).format);
         expect(copy.Get(1).format).not.toBe(hints.Get(1).format);
-        expect((copy.Get(1).format as SwFormatINetFormat).GetHyperlink()).toEqual(metadata);
+        expect((copy.Get(0).format as SwFormatINetFormat).GetHyperlink()).toEqual(metadata);
         expect(copy.Get(0)).toMatchObject({ start: 1, end: 4 });
       }
       snapshot.Get(0).SetEnd(3);
@@ -138,7 +142,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
     expect(original.CopyTo(target.GetAttrPool()).Count()).toBe(0);
     expect(original.clone(target.GetAttrPool()).Count()).toBe(0);
     expect(states.Count()).toBe(2);
-    const valid = sourceHints(source, 7).Get(0);
+    const valid = sourceHints(source, 7).Get(1);
     const bound = new SwpHints(target.GetAttrPool(), [valid]);
     expect(handle(bound).GetPool()).toBe(target.GetAttrPool());
     expect(bound.Get(0)).toMatchObject({
@@ -156,7 +160,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
       const target = new SwDoc(),
         source = foreign ? new SwDoc() : target;
       const all = sourceHints(source, 7),
-        internet = new SwpHints(source.GetAttrPool(), [all.Get(1)]).slice(1, 4);
+        internet = new SwpHints(source.GetAttrPool(), [all.Get(0)]).slice(1, 4);
       const empty = new SwpHints(target.GetAttrPool());
       const joined = empty.concat(internet, 2),
         replaced = empty.replaceRange(4, 1, 3, internet, 3);
@@ -167,7 +171,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
           dontExpandStart: !foreign,
           dontMoveAttr: !foreign,
         });
-        expect(result.Get(0).format.QueryValue()).toBe(all.Get(1).format.QueryValue());
+        expect(result.Get(0).format.QueryValue()).toBe(all.Get(0).format.QueryValue());
       }
       expect(joined.Get(0)).toMatchObject({ start: 2, end: 5 });
       expect(replaced.Get(0)).toMatchObject({ start: 1, end: 4 });

@@ -108,8 +108,8 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
             );
           }
           flags(fragment, boundary.transfer ? mask : 0);
-          expect((fragment.Get(0).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
-            (snapshot.Get(0).format as SwFormatAutoFormat).GetStyleHandle(),
+          expect((fragment.Get(1).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
+            (snapshot.Get(1).format as SwFormatAutoFormat).GetStyleHandle(),
           );
           const actual = [...fragment.entries()],
             kept = fragment.clone();
@@ -139,17 +139,17 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
         [4, 6, mask],
       ] as const) {
         const source = fixture(doc, start, end, mask),
-          original = source.Get(0),
+          original = source.Get(1),
           preview = source.sliceForCut(3, 7);
         expect(source.Count()).toBe(2);
-        expect(source.Get(0)).toBe(original);
+        expect(source.Get(1)).toBe(original);
         expect(original).toMatchObject({ start, end });
         flags(source, mask);
         flags(preview, expectedMask);
-        expect(preview.Get(0)).toMatchObject({ start: start - 3, end: end - 3 });
-        expect(preview.Get(0)).not.toBe(original);
-        expect(preview.Get(0).format).not.toBe(original.format);
-        expect((preview.Get(0).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
+        expect(preview.Get(1)).toMatchObject({ start: start - 3, end: end - 3 });
+        expect(preview.Get(1)).not.toBe(original);
+        expect(preview.Get(1).format).not.toBe(original.format);
+        expect((preview.Get(1).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
           (original.format as SwFormatAutoFormat).GetStyleHandle(),
         );
       }

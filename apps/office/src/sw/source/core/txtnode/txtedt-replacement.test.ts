@@ -62,7 +62,7 @@ describe("native fresh selective automatic hint flags", /** Groups actual model 
       ) => {
         const f = fixture(mask),
           owned = required(f.node.GetpSwpHints()),
-          original = owned.Get(0),
+          original = owned.Get(1),
           reset = new SfxItemSet(f.doc.GetAttrPool(), [[1, 54]]);
         if (kind === "replace") reset.Put(new SvxWeightItem(5, 15));
         if (kind === "delete")
@@ -73,24 +73,24 @@ describe("native fresh selective automatic hint flags", /** Groups actual model 
         expect(
           (original.format as SwFormatAutoFormat).GetStyleHandle().GetItemState(15, false),
         ).toBe(SfxItemState.SET);
-        expect(remaining.entries().at(-1)?.format.equals(f.link.format)).toBe(true);
-        expect(flags(required(remaining.entries().at(-1)))).toEqual([true, true, true]);
+        expect(remaining.Get(0).format.equals(f.link.format)).toBe(true);
+        expect(flags(remaining.Get(0))).toEqual([true, true, true]);
         if (kind === "delete") {
           expect(remaining.Count()).toBe(1);
           expect(remaining.Get(0).Which()).toBe(54);
         } else {
           expect(remaining.Count()).toBe(2);
-          expect(remaining.Get(0)).toMatchObject({ start: 2, end: 5 });
-          expect(flags(remaining.Get(0))).toEqual(
+          expect(remaining.Get(1)).toMatchObject({ start: 2, end: 5 });
+          expect(flags(remaining.Get(1))).toEqual(
             kind === "replace" ? [false, false, false] : flags(f.auto),
           );
-          const style = (remaining.Get(0).format as SwFormatAutoFormat).GetStyleHandle();
+          const style = (remaining.Get(1).format as SwFormatAutoFormat).GetStyleHandle();
           expect(style.GetItemState(11, false)).toBe(SfxItemState.SET);
           expect(style.GetItemState(15, false)).toBe(
             kind === "replace" ? SfxItemState.DEFAULT : SfxItemState.SET,
           );
           if (kind === "retain") expect(remaining).toBe(owned);
-          else expect(remaining.Get(0)).not.toBe(original);
+          else expect(remaining.Get(1)).not.toBe(original);
         }
       },
     );
@@ -105,7 +105,7 @@ describe("native fresh selective automatic hint flags", /** Groups actual model 
       reset.Put(new SvxWeightItem(5, 15));
       resetParagraphTextAttributes(f.node, true, reset);
       expect(f.node.GetpSwpHints()).toBe(owned);
-      expect(flags(required(f.node.GetpSwpHints()).Get(0))).toEqual(flags(f.auto));
+      expect(flags(required(f.node.GetpSwpHints()).Get(1))).toEqual(flags(f.auto));
     },
   );
   it.each([0, 1, 2, 3, 4, 5, 6, 7])(
@@ -141,10 +141,10 @@ describe("native fresh selective automatic hint flags", /** Groups actual model 
       for (let cycle = 0; cycle < 3; cycle++) {
         expect(shell.Undo()).toBe(true);
         const restored = required(f.node.GetpSwpHints());
-        expect(flags(restored.Get(0))).toEqual(flags(f.auto));
-        expect(flags(restored.Get(1))).toEqual([true, true, true]);
+        expect(flags(restored.Get(1))).toEqual(flags(f.auto));
+        expect(flags(restored.Get(0))).toEqual([true, true, true]);
         expect(
-          (restored.Get(0).format as SwFormatAutoFormat).GetStyleHandle().GetItemState(15, false),
+          (restored.Get(1).format as SwFormatAutoFormat).GetStyleHandle().GetItemState(15, false),
         ).toBe(SfxItemState.SET);
         expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(4);
         expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(1);

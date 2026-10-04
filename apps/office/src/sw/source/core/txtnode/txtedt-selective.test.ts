@@ -52,7 +52,7 @@ function install(owners: ReturnType<typeof fixture>, start = 2, end = 5): void {
 }
 /** Requires the remaining automatic style. @param node - Text node. @returns Direct style set. */
 function automatic(node: ReturnType<typeof fixture>["node"]): SfxItemSet {
-  return (required(node.GetpSwpHints()).Get(0).format as SwFormatAutoFormat).GetStyleHandle();
+  return (required(node.GetpSwpHints()).Get(1).format as SwFormatAutoFormat).GetStyleHandle();
 }
 
 describe("native selective text hint reset", /** Tests registered native decisions independently. @returns Nothing. */ () => {
@@ -118,7 +118,7 @@ describe("native selective text hint reset", /** Tests registered native decisio
         dontExpandStart: true,
         dontMoveAttr: true,
       });
-      expect(required(f.node.GetpSwpHints()).Get(1).format.equals(f.link.format)).toBe(true);
+      expect(required(f.node.GetpSwpHints()).Get(0).format.equals(f.link.format)).toBe(true);
       expect(notify).not.toHaveBeenCalled();
     },
   );
@@ -205,7 +205,9 @@ describe("native selective text hint reset", /** Tests registered native decisio
         notify = vi.spyOn(f.doc, "NotifyModelChange");
       resetParagraphTextAttributes(f.node, true, f.reset);
       expect(required(f.node.GetpSwpHints()).Count()).toBe(range === "whole" ? 1 : 2);
-      expect(required(f.node.GetpSwpHints()).entries().at(-1)?.Which()).toBe(54);
+      expect(required(f.node.GetpSwpHints()).entries().at(-1)?.Which()).toBe(
+        range === "middle" ? 53 : 54,
+      );
       if (range !== "whole") {
         expect(f.node.GetpSwpHints()).toBe(owned);
         expect(notify).not.toHaveBeenCalled();

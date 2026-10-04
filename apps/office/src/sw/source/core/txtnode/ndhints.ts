@@ -428,7 +428,7 @@ export class SwpHints {
         else normalized.push(hint);
       },
     );
-    this.hintsByStart = normalized;
+    this.hintsByStart = normalized.sort(compareHints);
   }
 
   /** Rebuilds direct item-set hints from complete browser runs. @param runs - Complete text portions. @param inherited - Node/style item set. @returns Nothing. */
@@ -695,7 +695,7 @@ function compareHints(
   left: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
   right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
 ): number {
-  return left.start - right.start || right.end - left.end;
+  return left.start - right.start || right.end - left.end || right.Which() - left.Which();
 }
 
 /** Copies and merges adjacent equal browser runs. @param runs - Generated runs. @returns Independent normalized runs. */

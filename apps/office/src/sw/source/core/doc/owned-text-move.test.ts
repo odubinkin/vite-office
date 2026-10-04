@@ -79,7 +79,7 @@ describe("real owned text moves", /** Registers node and document operation owne
           sourceContainer = required(f.source.GetpSwpHints()),
           history = f.source.CaptureTextFragment(0, 10),
           targetHistory = f.target.CaptureTextFragment(0, 2);
-        const sourceHandle = (required(actual[0]).format as SwFormatAutoFormat).GetStyleHandle();
+        const sourceHandle = (required(actual[1]).format as SwFormatAutoFormat).GetStyleHandle();
         const left = new SwPosition(f.source, 1),
           inside = new SwPosition(f.source, 4),
           right = new SwPosition(f.source, 9);
@@ -117,11 +117,11 @@ describe("real owned text moves", /** Registers node and document operation owne
             for (let i = 0; i < 2; i++) expect(owned(f.source)[i]).toBe(actual[i]);
           } else expect(f.source.GetpSwpHints()).toBeUndefined();
         }
-        expect((required(transferred[0]).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
+        expect((required(transferred[1]).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
           sourceHandle,
         );
         expect(
-          (required(transferred[0]).format as SwFormatAutoFormat).GetStyleHandle().GetPool(),
+          (required(transferred[1]).format as SwFormatAutoFormat).GetStyleHandle().GetPool(),
         ).toBe(f.doc.GetAttrPool());
         expect(history.text).toBe("abcdefghij");
         expect(history.hints.Get(0)).toMatchObject({
@@ -135,7 +135,7 @@ describe("real owned text moves", /** Registers node and document operation owne
         ReplaceUndoRange(f.doc, f.source, 0, f.source.Len(), history);
         expect(f.source.GetText()).toBe("abcdefghij");
         expect(owned(f.source)[0]).not.toBe(transferred[0]);
-        expect((required(owned(f.source)[0]).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
+        expect((required(owned(f.source)[1]).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
           sourceHandle,
         );
         expect(f.target.GetText()).toBe("XdefgY");

@@ -118,7 +118,9 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
       expect(node.GetTextFormatColl()).toBe(target);
       expect(node.GetParagraphFirstLineIndent()).toBe(240);
       expect(required(node.GetpSwpHints()).Count()).toBe((modifier & 8192) !== 0 ? 1 : 2);
-      expect(required(node.GetpSwpHints()).entries().at(-1)?.Which()).toBe(54);
+      expect(required(node.GetpSwpHints()).entries().at(-1)?.Which()).toBe(
+        (modifier & 8192) !== 0 ? 54 : 53,
+      );
       const action = owner.GetUndoManager().GetUndoAction() as SfxListUndoAction<unknown>;
       expect(action.GetActionCount()).toBe(2);
       expect(action.GetPayloadSize()).toBe((modifier & 8192) !== 0 ? 7 : 6);
@@ -311,7 +313,7 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
     const remaining = required(node.GetpSwpHints()).entries();
     expect(remaining).toHaveLength(2);
     expect(
-      (remaining[0]?.format as SwFormatAutoFormat)
+      (remaining[1]?.format as SwFormatAutoFormat)
         .GetStyleHandle()
         .entries()
         .map(
@@ -319,14 +321,14 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
             item.Which(),
         ),
     ).toEqual([11]);
-    expect(remaining[0]).toMatchObject({
+    expect(remaining[1]).toMatchObject({
       start: 2,
       end: 5,
       dontExpand: false,
       dontExpandStart: false,
       dontMoveAttr: false,
     });
-    expect(remaining[1]?.format.QueryValue()).toEqual(original.entries()[1]?.format.QueryValue());
+    expect(remaining[0]?.format.QueryValue()).toEqual(original.entries()[0]?.format.QueryValue());
     const once = required(node.GetpSwpHints()).clone();
     resetParagraphTextAttributes(node, false, onlyWeight);
     expect(required(node.GetpSwpHints()).equals(once)).toBe(true);

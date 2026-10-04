@@ -79,8 +79,8 @@ function expectHints(value: SwpHints | undefined, span: Span | undefined, mask: 
       dontExpandStart: Boolean(mask & 2),
       dontMoveAttr: Boolean(mask & 4),
     });
-  expect(container.Get(0).Which()).toBe(53);
-  expect(container.Get(1).Which()).toBe(54);
+  expect(container.Get(0).Which()).toBe(54);
+  expect(container.Get(1).Which()).toBe(53);
 }
 
 describe("native cross-node cut hint boundaries", /** Registers concrete source and target ownership cases. @returns Nothing. */ () => {
@@ -98,7 +98,7 @@ describe("native cross-node cut hint boundaries", /** Registers concrete source 
         const original = hints(doc, c.hint, mask);
         source.SetTextHints(original);
         const retained = CopyUndoFragment(source.CaptureTextFragment(0, 10));
-        const sourceHandle = (original.Get(0).format as SwFormatAutoFormat).GetStyleHandle();
+        const sourceHandle = (original.Get(1).format as SwFormatAutoFormat).GetStyleHandle();
         const destination = doc
           .GetDocumentContentOperationsManager()
           .MoveRange(
@@ -116,18 +116,18 @@ describe("native cross-node cut hint boundaries", /** Registers concrete source 
         for (const node of [source, target]) {
           const owned = node.GetpSwpHints();
           if (owned !== undefined) {
-            expect((owned.Get(0).format as SwFormatAutoFormat).GetStyleHandle()).toBe(sourceHandle);
-            expect((owned.Get(0).format as SwFormatAutoFormat).GetStyleHandle().GetPool()).toBe(
+            expect((owned.Get(1).format as SwFormatAutoFormat).GetStyleHandle()).toBe(sourceHandle);
+            expect((owned.Get(1).format as SwFormatAutoFormat).GetStyleHandle().GetPool()).toBe(
               doc.GetAttrPool(),
             );
-            expect(owned.Get(1).format.QueryValue()).toBe(original.Get(1).format.QueryValue());
+            expect(owned.Get(0).format.QueryValue()).toBe(original.Get(0).format.QueryValue());
           }
         }
         ReplaceUndoRange(doc, source, 0, source.Len(), retained);
         expect(source.GetText()).toBe("abcdefghij");
         expectHints(source.GetpSwpHints(), c.hint, mask);
         expect(
-          (required(source.GetpSwpHints()).Get(0).format as SwFormatAutoFormat).GetStyleHandle(),
+          (required(source.GetpSwpHints()).Get(1).format as SwFormatAutoFormat).GetStyleHandle(),
         ).toBe(sourceHandle);
       },
     );
@@ -146,8 +146,8 @@ describe("native cross-node cut hint boundaries", /** Registers concrete source 
         id = undo.RetainText({ text: "defg", hints: snapshot });
       expectHints(undo.GetText(id).hints, [0, 4], mask);
       expectHints(original, [1, 9], mask);
-      expect((cut.Get(0).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
-        (original.Get(0).format as SwFormatAutoFormat).GetStyleHandle(),
+      expect((cut.Get(1).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
+        (original.Get(1).format as SwFormatAutoFormat).GetStyleHandle(),
       );
       undo.Release(id);
     },

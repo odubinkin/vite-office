@@ -95,11 +95,11 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
         expect(handle(clone).GetPool()).toBe(target.GetAttrPool());
         if (foreign) expect(handle(clone)).not.toBe(original);
         else expect(handle(clone)).toBe(original);
-        expect(required(clone.GetpSwpHints()).Get(1).format).not.toBe(
-          required(f.node.GetpSwpHints()).Get(1).format,
+        expect(required(clone.GetpSwpHints()).Get(0).format).not.toBe(
+          required(f.node.GetpSwpHints()).Get(0).format,
         );
-        expect(required(clone.GetpSwpHints()).Get(1).format.QueryValue()).toBe(
-          required(f.node.GetpSwpHints()).Get(1).format.QueryValue(),
+        expect(required(clone.GetpSwpHints()).Get(0).format.QueryValue()).toBe(
+          required(f.node.GetpSwpHints()).Get(0).format.QueryValue(),
         );
         expect(projectWriterTextRuns(clone)).toMatchObject([
           { text: "a" },
@@ -149,7 +149,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
         f.node.SetTextHints(before.hints);
         expectFlags(f.node, 1, 4, mask);
         expect(handle(f.node)).toBe(
-          (before.hints.Get(0).format as SwFormatAutoFormat).GetStyleHandle(),
+          (before.hints.Get(1).format as SwFormatAutoFormat).GetStyleHandle(),
         );
       },
     );
