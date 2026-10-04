@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610040748-ESSH6D",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-04T08:01:19.545Z",
+  "verdict": "pass",
+  "summary": "Same-actor quality phase reviewed exact semantic HEAD 2504e29cfab04fba613bd44afefac7b6c9b4a1ce; effective automatic first-line ruler visibility satisfies the bounded approved contract.",
+  "evaluated_sha": "2504e29cfab04fba613bd44afefac7b6c9b4a1ce",
+  "blueprint_digest": "2cabd49a730726a137c77bb0fad42336c6b16029f07ce882f104a34a07da0f85",
+  "findings": [
+    "Effective model IsAutoFirst is retained in a frozen primitive; true removes the existing first-line marker from drawing and hit admission, while false or detached omission preserves the manual marker. Other projected logical values and core mutation ownership are unchanged.",
+    "Single vendor-absent 1195/109/5/75 test pass, four-metric complete coverage, six approved semantic paths, 296 prior byte-identical tests, two append-only existing rows per manifest, three unchanged pinned hashes, four inspected screenshots and zero semantic/forbidden-artifact findings match the reviewed SHA."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610040748-ESSH6D/README.md",
+    ".agentplane/tasks/202610040748-ESSH6D/scope-integrity.json",
+    ".agentplane/tasks/202610040748-ESSH6D/final-integrity.json",
+    ".agentplane/tasks/202610040748-ESSH6D/vendor-restoration.json",
+    ".agentplane/tasks/202610040748-ESSH6D/screenshots.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Core ruler transactions currently lose automatic first-line metadata and require a separate correction; automatic layout computation and other recorded native contracts remain unverified. No whole-parent parity claim."
+  ]
+}

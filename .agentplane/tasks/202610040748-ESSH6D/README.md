@@ -4,7 +4,7 @@ title: "Hide automatic first-line ruler markers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,30 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T08:00:56.680Z"
+  updated_at: "2026-10-04T08:01:42.823Z"
   updated_by: "CODER"
-  note: "Single vendor-absent 1195/109/5/75 test pass, complete coverage, six-path/296-unchanged scope, three pinned hashes, four inspected screenshots, zero semantic and forbidden-artifact findings."
+  note: "Final exact-SHA quality and post-review integrity passed without repeating any test suites."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T08:01:19.545Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor quality phase reviewed exact semantic HEAD 2504e29cfab04fba613bd44afefac7b6c9b4a1ce; effective automatic first-line ruler visibility satisfies the bounded approved contract."
+  evaluated_sha: "2504e29cfab04fba613bd44afefac7b6c9b4a1ce"
+  blueprint_digest: "2cabd49a730726a137c77bb0fad42336c6b16029f07ce882f104a34a07da0f85"
+  evidence_refs:
+    - ".agentplane/tasks/202610040748-ESSH6D/README.md"
+    - ".agentplane/tasks/202610040748-ESSH6D/quality/20261004-080119545-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040748-ESSH6D/quality/20261004-080119545-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040748-ESSH6D/quality/20261004-080119545-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040748-ESSH6D/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040748-ESSH6D/scope-integrity.json"
+    - ".agentplane/tasks/202610040748-ESSH6D/final-integrity.json"
+    - ".agentplane/tasks/202610040748-ESSH6D/vendor-restoration.json"
+    - ".agentplane/tasks/202610040748-ESSH6D/screenshots.json"
+  findings:
+    - "Effective model IsAutoFirst is retained in a frozen primitive; true removes the existing first-line marker from drawing and hit admission, while false or detached omission preserves the manual marker. Other projected logical values and core mutation ownership are unchanged."
+    - "Single vendor-absent 1195/109/5/75 test pass, four-metric complete coverage, six approved semantic paths, 296 prior byte-identical tests, two append-only existing rows per manifest, three unchanged pinned hashes, four inspected screenshots and zero semantic/forbidden-artifact findings match the reviewed SHA."
 commit: null
 comments:
   -
@@ -41,8 +61,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Single vendor-absent 1195/109/5/75 test pass, complete coverage, six-path/296-unchanged scope, three pinned hashes, four inspected screenshots, zero semantic and forbidden-artifact findings."
+  -
+    type: "verify"
+    at: "2026-10-04T08:01:42.823Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final exact-SHA quality and post-review integrity passed without repeating any test suites."
 doc_version: 3
-doc_updated_at: "2026-10-04T08:00:56.733Z"
+doc_updated_at: "2026-10-04T08:01:42.875Z"
 doc_updated_by: "CODER"
 description: "Iteration 97 of parent 202609240501-C9TN6M: preserve the effective automatic first-line item flag in immutable browser projections and exclude that marker from drawing and hit admission, matching pinned Writer StateTabWin and SvxRuler/Ruler. Owned model/DOM/dialog/Undo/browser evidence only; no upstream execution or stored sources; tests run once absent."
 sections:
@@ -65,16 +91,17 @@ sections:
     Behavior: nine new owned cases exercise effective true/false flags for zero and signed offsets, style inheritance, direct override and retained frozen DTOs, detached omission, unchanged precise attributes/generation/history during rendering, and actual dialog cancel/accept with one Undo/Redo. Two rebuilt Chromium cases at 1280/390 import product-authored automatic ODTs, exclude the hidden DOM/input target, restore the manual integer177 anchor and real hit target, track to196, Undo/Redo both moves and automatic mode, and continue editing.
     Visual evidence: four actual automatic/manual screenshots at 1280/390 were inspected and match hidden/restored first-line markers with retained left/right controls. Images remain in test-results/e2e outside Agentplane; only paths/hashes/conclusions are saved.
     This proves bounded effective automatic first-line ruler visibility; complete native automatic layout, mutation metadata and full ruler/parent parity remain unverified.
+    Exact implementation SHA: 2504e29cfab04fba613bd44afefac7b6c9b4a1ce. Same-actor EVALUATOR passed at quality/20261004-080119545-recovery-context/quality-report.json. Post-review scope/hash/artifact integrity passed; no test suites were repeated.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-04T08:00:56.680Z — VERIFY — ok
+    ### 2026-10-04T08:01:42.823Z — VERIFY — ok
 
     By: CODER
 
-    Note: Single vendor-absent 1195/109/5/75 test pass, complete coverage, six-path/296-unchanged scope, three pinned hashes, four inspected screenshots, zero semantic and forbidden-artifact findings.
+    Note: Final exact-SHA quality and post-review integrity passed without repeating any test suites.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T08:00:56.331Z, excerpt_hash=sha256:e7cee529d79bd0a028b565fcbad9a8010fca6e5925ebec9c070b6a0e9fe2b61c
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T08:01:42.477Z, excerpt_hash=sha256:e7cee529d79bd0a028b565fcbad9a8010fca6e5925ebec9c070b6a0e9fe2b61c
 
     Details:
 
@@ -89,7 +116,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610040748-ESSH6D -m 🧩 ESSH6D task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610040748-ESSH6D --result verified-202610040748-ESSH6D --commit 2504e29cfab04fba613bd44afefac7b6c9b4a1ce
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -137,16 +164,17 @@ Scope: six approved semantic paths; all 296 previous test/spec files byte-identi
 Behavior: nine new owned cases exercise effective true/false flags for zero and signed offsets, style inheritance, direct override and retained frozen DTOs, detached omission, unchanged precise attributes/generation/history during rendering, and actual dialog cancel/accept with one Undo/Redo. Two rebuilt Chromium cases at 1280/390 import product-authored automatic ODTs, exclude the hidden DOM/input target, restore the manual integer177 anchor and real hit target, track to196, Undo/Redo both moves and automatic mode, and continue editing.
 Visual evidence: four actual automatic/manual screenshots at 1280/390 were inspected and match hidden/restored first-line markers with retained left/right controls. Images remain in test-results/e2e outside Agentplane; only paths/hashes/conclusions are saved.
 This proves bounded effective automatic first-line ruler visibility; complete native automatic layout, mutation metadata and full ruler/parent parity remain unverified.
+Exact implementation SHA: 2504e29cfab04fba613bd44afefac7b6c9b4a1ce. Same-actor EVALUATOR passed at quality/20261004-080119545-recovery-context/quality-report.json. Post-review scope/hash/artifact integrity passed; no test suites were repeated.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-04T08:00:56.680Z — VERIFY — ok
+### 2026-10-04T08:01:42.823Z — VERIFY — ok
 
 By: CODER
 
-Note: Single vendor-absent 1195/109/5/75 test pass, complete coverage, six-path/296-unchanged scope, three pinned hashes, four inspected screenshots, zero semantic and forbidden-artifact findings.
+Note: Final exact-SHA quality and post-review integrity passed without repeating any test suites.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T08:00:56.331Z, excerpt_hash=sha256:e7cee529d79bd0a028b565fcbad9a8010fca6e5925ebec9c070b6a0e9fe2b61c
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T08:01:42.477Z, excerpt_hash=sha256:e7cee529d79bd0a028b565fcbad9a8010fca6e5925ebec9c070b6a0e9fe2b61c
 
 Details:
 
@@ -161,7 +189,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610040748-ESSH6D -m 🧩 ESSH6D task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610040748-ESSH6D --result verified-202610040748-ESSH6D --commit 2504e29cfab04fba613bd44afefac7b6c9b4a1ce
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
