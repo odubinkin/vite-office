@@ -1,10 +1,11 @@
 ---
 id: "202610041718-TTJ3ZQ"
 title: "Restore native item-set equality ownership and state contracts"
-status: "DOING"
+result_summary: "Restored direct item-set equality states and owner contract;49 regressions; one absent-only product profile; automatic-style handle interning remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Actual six-path diff ports explicit comparePool identity/parent/pool/Count/empty/keyed-state/SET-value Equals and removes SET-only helper.49 new independent real-item/model/hint/clone/direct-projection assertions cover the approved contract;325 prior tests/specs byte-identical. All static/build/product/source gates pass;1660app/109inventory/5scripts/99Chromium first single absent-only profile, four required metrics100%. No production mutation after validation."
     - "Five pinned native hashes and exact scope audit preserve230 runtime statuses/defaults/exceptions with only two bounded appendices. Ignored-inclusive AP scan forbidden0; no source/helpers/Python/executables/source frames/raw source diffs. Doctor zero errors and routing pass; upstream restored and registered I/O/recovery deviations untouched."
-commit: null
+commit:
+  hash: "277dac92db2e5b8f5e7aa47df04c3e3af5aa6851"
+  message: "✅ TTJ3ZQ task: record item-set equality verification"
 comments:
   -
     author: "CODER"
     body: "Start: Restore approved native item-set equality states/owners and replace SET-only helper, keeping handle interning explicitly unresolved."
+  -
+    author: "CODER"
+    body: "Verified: Native base item-set Equals contract restored at semantic 2be6f5212debd38210360430a2854b78dfff9213 and SET-only Writer helper removed.49 new local owner/hint/clone/projection assertions;1660app/109inventory/5scripts/99Chromium pass first absent-only profile with required metrics100%. Static/build/source/scope/AP audits, exact-SHA same-actor quality, doctor zero errors and routing pass.325 prior tests unchanged; upstream restored; registered deviations untouched. Automatic-style shared-handle architecture and broad goal remain open."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Semantic 2be6f5212debd38210360430a2854b78dfff9213 satisfies approved native base item-set Equals contract and bounded consumer correction.49 new assertions;1660app/109inventory/5scripts/99Chromium pass once absent-only, required metrics100%. Static/build/restored-source/scope/AP audits pass;325 prior tests unchanged. Same-actor exact-SHA quality pass, doctor zero errors and routing pass; upstream restored and registered deviations unchanged. Automatic-style handle interning/pointer equality remain open; goal active."
+  -
+    type: "status"
+    at: "2026-10-04T17:34:49.296Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native base item-set Equals contract restored at semantic 2be6f5212debd38210360430a2854b78dfff9213 and SET-only Writer helper removed.49 new local owner/hint/clone/projection assertions;1660app/109inventory/5scripts/99Chromium pass first absent-only profile with required metrics100%. Static/build/source/scope/AP audits, exact-SHA same-actor quality, doctor zero errors and routing pass.325 prior tests unchanged; upstream restored; registered deviations untouched. Automatic-style shared-handle architecture and broad goal remain open."
 doc_version: 3
-doc_updated_at: "2026-10-04T17:34:16.250Z"
+doc_updated_at: "2026-10-04T17:34:49.297Z"
 doc_updated_by: "CODER"
 description: "Restore SfxItemSet::Equals pool/parent/count/direct-state/value contract and replace the existing Writer SET-only equality helper with the owner contract. Add independent actual-owner/item/adjacent-hint regressions. Native automatic-style handle interning and pointer equality remain the next architectural step, not certified by this leaf."
 sections:
@@ -113,6 +126,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic task commit with a new commit if necessary; no history rewrite. Always restore vendor directory in finally."
   Findings: "Restored pinned base SfxItemSet::Equals explicit comparePool contract and removed Writer SET-only helper.49 new real-owner/item/hint/clone/direct-projection assertions cover direct states, keyed markers, parent/pool identity, Count/self/empty/range/order and retained inherited item access. Corrected a new fixture before product execution to distinguish owner inheritance from separately implemented browser inheritance projection; repeated only static gates affected by that new test edit. All product gates pass first single absent-only profile:1660app/244files,109inventory/36files,5scripts/2files,99Chromium; four required metrics100%. Six final static gates and absent build plus restored source/resource/provenance/invariant/parity audits pass, semantic violations0. All325 previous tests/specs byte-identical; exact six semantic paths,230 unchanged runtime statuses/defaults/exceptions with two bounded appendices; five native hashes bind pin; full ignored-inclusive AP scan3701files forbidden0. Upstream restored in finally, no network/outside-repo/source execution or AP source/helper storage, registered I/O/recovery deviations unchanged. Native automatic-format equality requires document-owned shared handles and pointer identity; that next architectural requirement remains open. Complete native style pools/other flags/notifications/layout/ranges/fields/marks/redlines/filter/UI contracts remain unverified; broad goal active."
+extensions:
+  implementation_commit:
+    hash: "2be6f5212debd38210360430a2854b78dfff9213"
+    message: "🛠️ TTJ3ZQ writer: restore direct item-set equality states and owners"
 id_source: "generated"
 ---
 ## Summary
