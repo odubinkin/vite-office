@@ -1,0 +1,39 @@
+{
+  "deletion": {
+    "path": ".agentplane/tasks/202610011119-4H9E82/quality-code-diff.log",
+    "sha256": "b4799e2a1a495faa608e787a2ffe6bf63ef0eca0c6feeb99cfdd38a95ee649ca",
+    "bytes": 23707,
+    "reason": "Retained implementation diff violates explicit user artifact constraints"
+  },
+  "artifactAudit": {
+    "taskFiles": 2768,
+    "python": [],
+    "source": [],
+    "executable": [],
+    "archives": [],
+    "magic": [],
+    "embedded": [],
+    "codeDiff": []
+  },
+  "checks": [
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "summary": []
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "summary": [
+        "policy routing OK"
+      ]
+    },
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "summary": [
+        "doctor (OK)"
+      ]
+    }
+  ]
+}
