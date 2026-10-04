@@ -1,10 +1,11 @@
 ---
 id: "202610041546-HKXYFR"
 title: "Restore explicit StyleApply key modifiers and native Ctrl reset history"
-status: "DOING"
+result_summary: "Restored bounded explicit native StyleApply modifiers and initial Ctrl character/list reset with native paired Undo/Redo; tests absent-only, passing app assertions not repeated, prior tests and registered deviations preserved; full goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on:
@@ -50,11 +51,16 @@ quality_review:
     - "Actual request/core/mounted UI/ODT evidence confirms69 new cases, current whole/partial/inclusive empty/end-zero ranges, real original hint flags and separate history ownership, repeat-list level asymmetry, ordinary toolbar semantics, three undo/redo cycles and continued input/export. All320 prior tests are byte-identical;228 prior metadata rows preserve statuses/defaults/exceptions,11 bounded appendices and2 unverified owners yield230 runtime records with0 semantic violations."
     - "All product tests execute absent-only without concurrent audits. Initial full app1550passes/1new fixture assertion failure produced four-metric100%coverage; only that failed case recovered with unchanged production, no passing app assertions repeated. Only failed inventory gate rerun after lexicographic row correction; inventory109/100%, scripts5 and Chromium99 pass. Static6 plus absent static build and restored source4 audits pass."
     - "Ignored-inclusive AP content check covers3618 files with0 forbidden content; artifacts are bounded English prose/count/hash/command records. Existing content-manager class, other attribute undo algorithms, margin helper, save/open/recovery code and registered deviations remain unchanged."
-commit: null
+commit:
+  hash: "6e2813b217daa84f15cfaafb0cd9d936edd31abe"
+  message: "✅ HKXYFR task: record native modifier reset verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved explicit modifier and native Ctrl reset/history correction under the standing iterative user goal."
+  -
+    author: "CODER"
+    body: "Verified: native explicit StyleApply modifier and Ctrl deletion/list/paired-history correction at semantic cdcb944a47340ef01e9a26c350616186e17e4a9c. Static and restored-source gates pass; absent-only app 1550 initial passes plus one focused recovery with unchanged production and 100% coverage, inventory 109/100%, scripts 5, Chromium 99. All 320 prior tests byte-identical; 18 semantic paths, 14 native hashes, zero forbidden artifact content and semantic violations. Same-actor exact-SHA quality pass; registered I/O deviations preserved; parent goal active."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: approved split static/absent-only product/restored-source gates and strict scope/AP audits. Result: pass with recorded failed-case recovery. Evidence: app1550 initial passes plus1 focused recovery, unchanged production and100%coverage; inventory109/100%, scripts5, Chromium99; all320 prior tests byte-identical;14 source hashes,18 semantic paths and0 forbidden artifacts/semantic violations. Scope: bounded iteration109 at semantic commit cdcb944a47340ef01e9a26c350616186e17e4a9c with same-actor exact-SHA EVALUATOR pass. Full goal stays active; registered I/O deviations unchanged."
+  -
+    type: "status"
+    at: "2026-10-04T16:28:06.294Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native explicit StyleApply modifier and Ctrl deletion/list/paired-history correction at semantic cdcb944a47340ef01e9a26c350616186e17e4a9c. Static and restored-source gates pass; absent-only app 1550 initial passes plus one focused recovery with unchanged production and 100% coverage, inventory 109/100%, scripts 5, Chromium 99. All 320 prior tests byte-identical; 18 semantic paths, 14 native hashes, zero forbidden artifact content and semantic violations. Same-actor exact-SHA quality pass; registered I/O deviations preserved; parent goal active."
 doc_version: 3
-doc_updated_at: "2026-10-04T16:26:48.324Z"
+doc_updated_at: "2026-10-04T16:28:06.295Z"
 doc_updated_by: "CODER"
 description: "Iteration109 of C9TN6M: carry explicit UNO KeyModifier to SfxRequest and document-owned paragraph StyleApply; implement the registered full-character deletion set, Ctrl list eligibility and distinct initial/redo history. Preserve every prior test and all registered I/O deviations; product suites run once with upstream unavailable."
 sections:
@@ -174,6 +187,10 @@ sections:
     Evidence: strict18semantic paths; all320prior tests byte-identical;14pinned source hashes;228old manifest records keep all status/default/exception fields,11bounded evidence/description appends,2new unverified owners and230total runtime records; source-dependent4checks and parity0violations; AP ignored-inclusive scan3618files/forbidden0. App1551assertions confirmed by1550initial passes plus1focused recovery, with unchanged production and first-run coverage100%; inventory109/100%, scripts5, Chromium99. Full app was not repeated. Same-actor EVALUATOR passed exact semantic SHA cdcb944a47340ef01e9a26c350616186e17e4a9c; canonical leaf closure remains next. Parent goal active.
 
     Lifecycle recovery: verification metadata commit subject used an unregistered scope token and was rejected by commit-msg validation before any commit. Corrected to the existing task scope; no code changes or product reruns. Doctor reports zero errors and the same two pre-existing warnings.
+extensions:
+  implementation_commit:
+    hash: "cdcb944a47340ef01e9a26c350616186e17e4a9c"
+    message: "⌨️ HKXYFR writer: restore native Ctrl style application"
 id_source: "generated"
 ---
 ## Summary
