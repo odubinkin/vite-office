@@ -1,10 +1,11 @@
 ---
 id: "202610040805-405Y55"
 title: "Preserve paragraph ruler item state through undo"
-status: "DOING"
+result_summary: "Preserved authored paragraph ruler item state through generic grouped Undo/Redo; removed numeric-only page-undo shortcut."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -43,7 +44,9 @@ quality_review:
   findings:
     - "Five pinned source identities and typed item/history boundaries inspected; numeric-only action removed, authored raw offset and auto flag retained, direct-only before-state restores inheritance, reusable range/group/no-op behavior covered. Exact-SHA eight-path audit preserves297of298 old tests and equal payload assertion migration; both220-row mappings change3existingrows without promotion."
     - "All1210 full app cases passed; coverage-only failure retained. Precisely identified missing function510/statement511/line511 completed by3 targeted cases against217 unchanged sources; composed four metrics100%, not a clean exit0 claim for npm run test. Inventory109/scripts5/firstChromium77 passed absent. Two screenshots inspected; vendor restored, AP forbidden0, routing/doctor pass."
-commit: null
+commit:
+  hash: "cb23954cd2c067b85f357381681fefaddf44dd93"
+  message: "🛠️ 405Y55 code: preserve paragraph ruler item history"
 comments:
   -
     author: "CODER"
@@ -54,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Start: complete coverage using only corrected manual fixture cases on unchanged production sources, then first-run the remaining absent suites."
+  -
+    author: "CODER"
+    body: "Verified: typed ruler item/history correction, precise automatic/raw/direct/inherited Undo/Redo and range ownership. Upstream-absent app1210 passed with targeted3 missing-unit coverage completion100%, inventory109/scripts5/Chromium77; source/scope/artifact audits and exact-SHA same-actor quality pass. Parent goal remains active."
 events:
   -
     type: "status"
@@ -88,8 +94,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final exact-SHA cb23954cd2c067b85f357381681fefaddf44dd93 same-actor evaluator PASS; source/scope/artifact identities rechecked without repeating tests. Full app1210 plus precise target3 coverage union100%, inventory109/scripts5/Chromium77 upstream absent. Vendor restored and AP forbidden0; parent goal active."
+  -
+    type: "status"
+    at: "2026-10-04T08:38:17.397Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: typed ruler item/history correction, precise automatic/raw/direct/inherited Undo/Redo and range ownership. Upstream-absent app1210 passed with targeted3 missing-unit coverage completion100%, inventory109/scripts5/Chromium77; source/scope/artifact audits and exact-SHA same-actor quality pass. Parent goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-04T08:38:14.795Z"
+doc_updated_at: "2026-10-04T08:38:17.399Z"
 doc_updated_by: "CODER"
 description: "Iteration 98 of parent 202609240501-C9TN6M: replace numeric-only specialized ruler undo with existing paragraph item application/history, preserving the effective automatic first-line flag and direct/inherited state; retain source-shaped range routing. Owned tests and single upstream-absent verification only; no upstream code execution or copied sources."
 sections:
@@ -152,6 +165,10 @@ sections:
     Initial upstream-absent app coverage gate: 7 new automatic-mode cases failed and 1203 cases passed. Existing automatic layout getter returns font-based 480 twips while the authored item remains367; AdjustParagraphRulerIndent used that layout value for the unchanged tuple, so no-motion rewrote the authored first-line offset. Read the raw typed first-line item's ResolveTextFirstLineOffset instead. This correction is inside approved item preservation scope. Only the failed app coverage gate repeats; inventory/scripts/browser were not reached and run once next, all absent. Initial bounded output hashes/counts and restoration are retained; no raw failure frames are stored. Automatic paragraph layout already has local handling and needs source audit before any gap claim.
     Corrected app run: all 1210 cases passed; coverage alone failed on the retained public raw manual setter. Direct/manual fixtures will use that setter to establish their verified starting item state. Targeted three-case coverage plus the prior passing full-case coverage may be merged only with identical covered production source hashes; final four metrics must remain100%. Inventory/scripts/browser have not run yet.
     Final correction reads the authored raw typed first-line offset for the unchanged ruler tuple and preserves IsAutoFirst through SetParagraphItems. Selected paragraphs use the reusable generic grouped action; optional direct-set before capture restores full inheritance on Undo. Old page-undo-specific ruler class/helper removed. Independent owned evidence covers complete direct/effective state, raw signed values, spacing/tab metadata, no-op/cancel/history/range/frozen DTO; Chromium includes independent paragraph and later text input. Final full application cases1210 passed, target coverage3 passed, inventory109/scripts5/Chromium77 passed, all upstream absent. Full passing suite was not repeated for coverage completion. The exact-unit summary/HTML/target-map union and217 unchanged source identities are recorded in coverage-completion.json; initial functional and coverage-only failed gate hashes remain. Generated reports temporarily outside ignored coverage caused format/file-size/scope audit failures; move only those reports under apps/office/coverage and repeat only affected gates. Reports and screenshots remain outside Agentplane; no source/helper artifacts were introduced there. Native execution was not used. Native automatic layout and remaining numbering/style-auto-update/range-edge/ruler parity need separate bounded source audit before a gap or completion claim.
+extensions:
+  implementation_commit:
+    hash: "cb23954cd2c067b85f357381681fefaddf44dd93"
+    message: "🛠️ 405Y55 code: preserve paragraph ruler item history"
 id_source: "generated"
 ---
 ## Summary
