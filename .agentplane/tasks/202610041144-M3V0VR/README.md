@@ -1,10 +1,11 @@
 ---
 id: "202610041144-M3V0VR"
 title: "Restore live document-owned Writer toolbar style selection"
-status: "DOING"
+result_summary: "Restore actual document-owned toolbar style names and native ten-default/used/custom population; preserve history, live invalidation, disabled state and registered I/O/recovery exceptions."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on:
@@ -54,11 +55,16 @@ quality_review:
     - "Actual regular/derived/table use, literal ten defaults and four true switches, exact-name deduplication, immutable population, actual custom/renamed names, localization, disabled state, no-op and real UndoRedo/document replacement have owned evidence."
     - "App1352/inventory109/scripts5 passed only with pinned directory absent; four coverage metrics are100percent. All87prior Chromium cases passed once; only the two failed new label cases were recovered. No passing full suite repeated. Final browser build typechecks final tree and no product code changed after app success."
     - "Four read-only native hashes, source audits/parity224modules0violations, routing/doctor and ignored-inclusive AP artifact scan pass; source copies/helpers/Python/native executions are absent. Both inspected product screenshots show actual Owned child; desktop Properties agrees."
-commit: null
+commit:
+  hash: "114b98c5a683382c2fbfb640702d922c30e66b9e"
+  message: "🧩 M3V0VR task: persist committed blueprint verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement the next single native toolbar-style population and actual custom selection correction under the continuing approved goal; tests only absent, no passing gate duplication."
+  -
+    author: "CODER"
+    body: "Verified: live Writer style population and actual names/history; absence-only checks pass,100percent coverage, no passing-suite repeats; full widget and parent parity stay open."
 events:
   -
     type: "status"
@@ -79,8 +85,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: committed semantic475c38604abb and exact-SHA pass report; approved11paths, actual style contract evidence, all absence-only app1352/inventory109/scripts5/browser89 results and unchanged100percent coverage, four native hashes,224modules0violations and AP forbidden0. No tests rerun during closure."
+  -
+    type: "status"
+    at: "2026-10-04T12:13:47.147Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: live Writer style population and actual names/history; absence-only checks pass,100percent coverage, no passing-suite repeats; full widget and parent parity stay open."
 doc_version: 3
-doc_updated_at: "2026-10-04T12:13:27.274Z"
+doc_updated_at: "2026-10-04T12:13:47.148Z"
 doc_updated_by: "CODER"
 description: "Iteration103 replaces the static grouped pool selector with the supported native StyleToolBoxControl default/used/user-defined population and native name dispatch. Correct active custom display, live updates and disabled selection, preserving registered I/O/recovery deviations and recording remaining full style-management/UI gaps."
 sections:
@@ -152,6 +165,10 @@ sections:
     Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.
 
     The generic controller remains a browser boundary with no whole-native responsibility promotion. The new svx owner is registered only with an empty outgoing module set and Writer admission; existing guard behavior is unchanged. The old desktop selector test admits four initially absent builtin styles through the unchanged Styles menu before selecting their now-used entry; the original nine font-size literals remain intact. New owned names preserve colon, XML punctuation and Unicode. Screenshot evidence is kept only in repository test-results, with two bounded hash/path records in task evidence. Full native StyleBox focus release, keyboard/editable creation, clear/more actions, favourites and hidden styles, broadcaster/EE/comment dependencies and broader style/pool/default contracts stay open.
+extensions:
+  implementation_commit:
+    hash: "475c38604abbdd400c9479bce0eace0ef23c544e"
+    message: "🧩 M3V0VR code: restore live document-owned Writer toolbar styles"
 id_source: "generated"
 ---
 ## Summary
