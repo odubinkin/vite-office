@@ -4,7 +4,7 @@ title: "Restore owned text hint transfer during cuts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: implement approved owned cross-node cut transfer while retaining independent snapshots and registered I/O deviations."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:07:16.689Z"
+doc_updated_at: "2026-10-04T19:18:36.730Z"
 doc_updated_by: "CODER"
 description: "Replace snapshot-based cross-node moves with an owned cut/transfer path matching native CutImpl pointer movement for strictly interior hints and fresh split hints; preserve independent undo snapshots, prior flags and registered I/O deviations."
 sections:
@@ -65,7 +65,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this leaf through a new traceable task; no history rewrite. Restore vendor directory after interruption."
-  Findings: "Native CutImpl Delete/InsertHint transfers the same SwTextAttr pointer for strictly interior attributes, while split/equal-end hints use MakeTextAttr. Current snapshot-based MoveRange replaces both categories with new objects; owned cut/transfer corrects that concrete identity deficit. Native holder/refcount/destruction/listeners, source empty hints, destination Update/BuildPortions and broader parity remain unverified."
+  Findings: "Initial six static gates and absent build pass. Absent app coverage:1950 passed/48 new cases failed from one QueryValue array reference-equality assertion; production changes passed all prior tests and39 new actual node ownership cases. Four coverage metrics100/100/100/99.98; one cut-preview branch at ndhints97 is missing now that manager uses destructive cut. Correct only the new test assertion to deep value equality and add exact-end/strict-interior preview cases. Recover the failed application coverage gate once because the global100percent branch threshold cannot be certified by a noncoverage filtered run; do not repeat the passing build. Pending inventory/scripts/Chromium remain first absent runs. No scope or pass-criterion changes; production unchanged."
 id_source: "generated"
 ---
 ## Summary
@@ -106,4 +106,4 @@ Revert this leaf through a new traceable task; no history rewrite. Restore vendo
 
 ## Findings
 
-Native CutImpl Delete/InsertHint transfers the same SwTextAttr pointer for strictly interior attributes, while split/equal-end hints use MakeTextAttr. Current snapshot-based MoveRange replaces both categories with new objects; owned cut/transfer corrects that concrete identity deficit. Native holder/refcount/destruction/listeners, source empty hints, destination Update/BuildPortions and broader parity remain unverified.
+Initial six static gates and absent build pass. Absent app coverage:1950 passed/48 new cases failed from one QueryValue array reference-equality assertion; production changes passed all prior tests and39 new actual node ownership cases. Four coverage metrics100/100/100/99.98; one cut-preview branch at ndhints97 is missing now that manager uses destructive cut. Correct only the new test assertion to deep value equality and add exact-end/strict-interior preview cases. Recover the failed application coverage gate once because the global100percent branch threshold cannot be certified by a noncoverage filtered run; do not repeat the passing build. Pending inventory/scripts/Chromium remain first absent runs. No scope or pass-criterion changes; production unchanged.
