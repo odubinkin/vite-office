@@ -1289,9 +1289,12 @@
         "evidence": [
           "apps/office/src/sfx2/source/control/dispatch.ts#GetSlots",
           "apps/office/src/sfx2/source/control/dispatch.test.ts#GetSlots",
-          "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher::GetSlot"
+          "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher::GetSlot",
+          "apps/office/src/sw/source/uibase/app/docst.ts#execStyleSheet",
+          "apps/office/src/sw/source/uibase/app/docsh.ts#ApplyStyles",
+          "apps/office/src/sw/source/uibase/app/docst.test.ts#SwDocShell native paragraph StyleApply"
         ],
-        "justification": "Removed the unused GetCommands alias; active slot discovery remains in SfxDispatcher.GetSlots with a source-backed assertion. Broader dispatch behavior remains unverified.",
+        "justification": "Removed the unused GetCommands alias; active slot discovery remains in SfxDispatcher.GetSlots with a source-backed assertion. Broader dispatch behavior remains unverified. Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
         "knownViolations": [],
         "localSymbols": [
           "SfxDispatcher",
@@ -2158,9 +2161,12 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/composition/writer-module.tsx#WriterDocumentSession"
+          "apps/office/src/sw/browser/composition/writer-module.tsx#WriterDocumentSession",
+          "apps/office/src/sw/source/uibase/app/docst.ts#execStyleSheet",
+          "apps/office/src/sw/source/uibase/app/docsh.ts#ApplyStyles",
+          "apps/office/src/sw/source/uibase/app/docst.test.ts#SwDocShell native paragraph StyleApply"
         ],
-        "justification": "Composes the browser Writer session from document, shell, frame, persistence, and presentation adapters without claiming the upstream swmodule implementation path.",
+        "justification": "Composes the browser Writer session from document, shell, frame, persistence, and presentation adapters without claiming the upstream swmodule implementation path. Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
         "knownViolations": [],
         "localSymbols": [
           "createWriterBrowserSessionServices",
@@ -7256,9 +7262,12 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/uibase/app/docsh.ts#SwDocShell",
-          "vendor/libreoffice-reference/sw/source/uibase/app/docsh.cxx#SwDocShell"
+          "vendor/libreoffice-reference/sw/source/uibase/app/docsh.cxx#SwDocShell",
+          "apps/office/src/sw/source/uibase/app/docst.ts#execStyleSheet",
+          "apps/office/src/sw/source/uibase/app/docsh.ts#ApplyStyles",
+          "apps/office/src/sw/source/uibase/app/docst.test.ts#SwDocShell native paragraph StyleApply"
         ],
-        "justification": "Owns Writer model replacement, filter invocation, undo save positions, lifecycle hooks, and SfxMedium transitions. Browser cache serialization and ports stay under sw/browser.",
+        "justification": "Owns Writer model replacement, filter invocation, undo save positions, lifecycle hooks, and SfxMedium transitions. Browser cache serialization and ports stay under sw/browser. Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
         "knownViolations": [],
         "localSymbols": [
           "SwDocShell"
@@ -7270,6 +7279,44 @@
           "SwDocShell::InitInterface_Impl",
           "SwDocShell::InsertGeneratedStream",
           "sw::XTextRangeToSwPaM"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-shell",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/app/docst.ts#execStyleSheet",
+          "apps/office/src/sw/source/uibase/app/docsh.ts#ApplyStyles",
+          "apps/office/src/sw/source/uibase/app/docst.test.ts#SwDocShell native paragraph StyleApply",
+          "vendor/libreoffice-reference/sw/source/uibase/app/docst.cxx#SwDocShell::ExecStyleSheet",
+          "vendor/libreoffice-reference/sw/source/uibase/app/docst.cxx#SwDocShell::ApplyStyles",
+          "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#rReq.IsDone()"
+        ],
+        "justification": "Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
+        "knownViolations": [],
+        "localSymbols": [
+          "execStyleSheet",
+          "findParagraphStyle",
+          "createWriterDocStyleInterface"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/uibase/app/docst.cxx",
+        "upstreamSymbols": [
+          "SwDocShell::ExecStyleSheet",
+          "SwDocShell::ApplyStyles",
+          "SwDocShell::ApplyStyleSheetRequest"
         ]
       }
     },
@@ -7468,9 +7515,12 @@
           "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#transportsCustomNames",
           "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#restoresNamedHistory",
           "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts#copiesNamedStyle",
-          "apps/office/e2e/writer-named-style-history.spec.ts#Writer named-style history"
+          "apps/office/e2e/writer-named-style-history.spec.ts#Writer named-style history",
+          "apps/office/src/sw/source/uibase/app/docst.ts#execStyleSheet",
+          "apps/office/src/sw/source/uibase/app/docsh.ts#ApplyStyles",
+          "apps/office/src/sw/source/uibase/app/docst.test.ts#SwDocShell native paragraph StyleApply"
         ],
-        "justification": "Owns supported text, character, paragraph, history, indent, and hyperlink execute/state semantics as a dedicated text context shell while SwWrtShell supplies cursor and action primitives. Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion. Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
+        "justification": "Owns supported text, character, paragraph, history, indent, and hyperlink execute/state semantics as a dedicated text context shell while SwWrtShell supplies cursor and action primitives. Iteration98 applies the existing ruler tuple as typed paragraph margin items through the reusable selected paragraph-item history path, retaining effective SvxFirstLineIndentItem automatic mode as inspected in SvxRuler ApplyIndents and Writer ExecTabWin. The numeric-only SwUndoRulerIndent and helper are removed from page-descriptor undo; the browser tuple belongs to the shell boundary. Direct-only before-item capture uses the optional node set so Undo restores fully inherited attributes instead of copying style items into direct formatting. Existing no-op filtering, grouped history, model/notification transactions and selected range application are reused, with independent nodes untouched. Owned actual Writer evidence covers manual/automatic and direct/inherited states for all three margins, complete signed tuple application, retained frozen projections, no-motion/cancel/accepted gestures, range/cursor state and precise Undo/Redo; Chromium1280/390 checks automatic left/right moves, actual hits, hidden first-line mode, dialog values/history, untouched paragraph and later editing. One obsolete constructor payload assertion is retained against the actual generic applied action; 297 of 298 prior tests remain byte-identical. This bounded item/history correction does not certify whole native SwUndoAttr, SwWrtShell, numbering/style auto-update/range edge semantics, automatic layout or ruler/parent parity. Registered save/open/recovery deviations remain preserved; no status promotion. Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion. Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
         "knownViolations": [],
         "localSymbols": [
           "SwTextShell",
@@ -7547,9 +7597,12 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/uibase/uiview/view.ts#SwView",
-          "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
+          "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView",
+          "apps/office/src/sw/source/uibase/app/docst.ts#execStyleSheet",
+          "apps/office/src/sw/source/uibase/app/docsh.ts#ApplyStyles",
+          "apps/office/src/sw/source/uibase/app/docst.test.ts#SwDocShell native paragraph StyleApply"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/view.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/view.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
         "knownViolations": [],
         "localSymbols": [
           "SwView"

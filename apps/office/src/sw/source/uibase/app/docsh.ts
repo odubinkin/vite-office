@@ -4,6 +4,11 @@
  */
 
 import { SfxObjectShell, type SfxObjectShellState } from "../../../../sfx2/source/doc/objsh";
+import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
+import type { SfxRequest } from "../../../../sfx2/source/control/request";
+import type { SwView } from "../uiview/view";
+import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { createWriterDocStyleInterface, execStyleSheet, findParagraphStyle } from "./docst";
 import {
   acquireSfxMedium,
   type SfxMedium,
@@ -37,6 +42,8 @@ export class SwDocShell extends SfxObjectShell {
   private readonly notifications = new SwModify();
   private readonly defaultFontDevice: DefaultFontDevice | undefined;
   private readonly defaultLocale: string;
+  private view: SwView | undefined;
+  private readonly commandShell = createSfxShell(this, createWriterDocStyleInterface());
 
   /** Creates a shell around an existing Writer model and explicit object-shell state. @param document - Active model. @param documentState - Shell lifecycle state. @param medium - Current medium. @param odtFilter - ODT filter service. @returns Nothing. */
   public constructor(
@@ -62,6 +69,37 @@ export class SwDocShell extends SfxObjectShell {
   /** Returns the shell-owned Writer model. @returns Active model. */
   public GetDoc(): SwDoc {
     return this.document;
+  }
+
+  /** Associates the current Writer view like native SwDocShell::SetView. @param view - Active view or no view. @returns Nothing. */
+  public SetView(view: SwView | undefined): void {
+    this.view = view;
+  }
+
+  /** Resolves the current view's editing shell. @returns Active editing shell. */
+  public GetWrtShell(): SwWrtShell | undefined {
+    return this.GetDocumentState().lifecycle === "closed" ? undefined : this.view?.GetWrtShell();
+  }
+
+  /** Returns the stable document-shell command owner. @returns Document interface shell. */
+  public GetCommandShell(): SfxShell {
+    return this.commandShell;
+  }
+
+  /** Executes the bounded native style-sheet request. @param request - Caller-owned request. @returns Applied family. */
+  public ExecStyleSheet(request: SfxRequest): number | undefined {
+    return execStyleSheet(this, request);
+  }
+
+  /** Applies an existing or supported pool paragraph style and returns the native family even for no-op application. @param name - Exact display name. @param family - Native style family. @returns Para2 on success, None0 when unsupported or missing. */
+  public ApplyStyles(name: string, family: number): number {
+    if (family !== 2) return 0;
+    const shell = this.GetWrtShell();
+    if (shell === undefined) return 0;
+    const style = findParagraphStyle(this.document, name);
+    if (style === undefined) return 0;
+    shell.SetParagraphStyle(style);
+    return family;
   }
 
   /** Returns the session output device used when constructing document defaults. @returns Device or undefined. */
@@ -339,6 +377,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Closes the shell, model, filter, and broadcaster graph. @returns Nothing. */
   public Close(): void {
     if (this.GetDocumentState().lifecycle === "closed") return;
+    this.SetView(undefined);
     this.odtRequestGeneration += 1;
     this.odtFilter.Close();
     this.notifications.RunNotificationTransaction(

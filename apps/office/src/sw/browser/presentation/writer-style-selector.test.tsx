@@ -31,7 +31,11 @@ function attach(document = new SwDoc()) {
     view = new SwView(shell);
   const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
   view.AttachFrame(frame);
-  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  frame.SetActiveView(view, [
+    shell.GetCommandShell(),
+    view.GetCommandShell(),
+    view.GetWrtShell().GetCommandShell(),
+  ]);
   const store = new WriterViewStore(view),
     source = createBrowserCommandSource(frame);
   /** Reads snapshots through the actual store subscription. @returns Toolbar. */

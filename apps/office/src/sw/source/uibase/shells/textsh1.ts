@@ -51,7 +51,6 @@ import {
 } from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
-import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import type { WriterBookmarkDialogResult } from "../dialog/writer-dialog-controller";
@@ -975,24 +974,5 @@ export function createWriterTextCommandRegistry(
         isEnabled: (): boolean => target.CanChangeParagraphIndent(increase),
       }),
     ),
-    {
-      capabilityId: "CAP-0112",
-      /** Applies the Style argument carried by the numeric StyleApply request. @param _context - Bound shell. @param arguments_ - Parsed UNO arguments. @returns Whether content changed. */
-      execute: (_context, arguments_: unknown): boolean => {
-        const name = getWriterCommandArguments<Readonly<{ Style?: string }>>(arguments_)?.Style;
-        const document = active().GetDoc();
-        const style = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
-          /** Matches a pool name. @param candidate - Style. @returns Match. */ (candidate) =>
-            (candidate.name === "Standard" ? "Default Paragraph Style" : candidate.name) === name,
-        );
-        const selected = style?.id ?? document.FindTextFormatCollByName(name ?? "")?.id;
-        if (selected === undefined)
-          throw new Error(`Unsupported Writer paragraph style: ${name ?? ""}`);
-        return target.SetParagraphStyle(selected);
-      },
-      /** Reads the active paragraph style value. @returns Stable style ID. */
-      getStateValue: (): string => active().GetParagraphStyle(),
-      id: WRITER_COMMAND_IDS.styleApply,
-    },
   ]);
 }

@@ -122,7 +122,7 @@ export class SfxDispatcher {
     const command = this.QuerySlot(request.GetSlot());
     if (command === undefined) return { commandId: `slot:${request.GetSlot()}`, status: "missing" };
     const result = command.execute(request);
-    if (result.status === "executed" && !isPromiseLike(result.value))
+    if (result.status === "executed" && !request.IsDone() && !isPromiseLike(result.value))
       request.Done(createRequestReturnItem(request.GetSlot(), result.value));
     return result;
   }

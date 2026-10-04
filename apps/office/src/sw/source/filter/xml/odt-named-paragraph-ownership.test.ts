@@ -28,7 +28,7 @@ import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { resolveSwListParagraphIndents } from "../../core/txtnode/ndtxt-list-indent";
 import { SwDocShell } from "../../uibase/app/docsh";
-import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
+import { SwView } from "../../uibase/uiview/view";
 import { importWriterXml } from "./xmlimp";
 import { exportStylesXml, exportContentXml } from "./xmlexp";
 import { readOdtDocument } from "./swxml";
@@ -355,7 +355,8 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
   it("preserves custom graph ownership through shell no-op and Undo/Redo", /** Checks native existing commands and complete direct absence history. @returns Nothing. */ function restoresNamedHistory() {
     const doc = input(),
       shellDoc = new SwDocShell(doc, metadata),
-      shell = new SwWrtShell(shellDoc);
+      view = new SwView(shellDoc),
+      shell = view.GetWrtShell();
     try {
       const before = encodeWriterDocument(doc);
       expect(shell.SetParagraphItems([new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE)])).toBe(
@@ -372,14 +373,14 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
       expect(shell.SetParagraphStyle("PlainParent")).toBe(true);
       expect(shell.SetParagraphStyle("PlainParent")).toBe(false);
       const slot = required(
-        shell.GetCommandShell().GetInterface().GetSlot(WRITER_COMMAND_IDS.styleApply),
+        shellDoc.GetCommandShell().GetInterface().GetSlot(WRITER_COMMAND_IDS.styleApply),
       );
-      const resolved = required(shell.GetCommandShell().ResolveSlot(slot.slotId));
+      const resolved = required(shellDoc.GetCommandShell().ResolveSlot(slot.slotId));
       expect(
         resolved.execute(
           new SfxRequest(
             slot.slotId,
-            createRequestArguments(slot.slotId, { Style: "Owned child" }),
+            createRequestArguments(slot.slotId, { Template: "Owned child", Family: 2 }),
           ),
         ).status,
       ).toBe("executed");
@@ -389,7 +390,7 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
       expect(shell.Redo()).toBe(true);
       expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("RuleChild");
     } finally {
-      shellDoc.Close();
+      view.Close();
     }
   });
 

@@ -95,6 +95,7 @@ export function createWriterDocumentSession(
   const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
   view.AttachFrame(frame);
   frame.SetActiveView(view, [
+    docShell.GetCommandShell(),
     view.GetCommandShell(),
     workflowCommandShell.GetShell(),
     view.GetWrtShell().GetCommandShell(),

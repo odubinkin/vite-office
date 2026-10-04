@@ -169,16 +169,10 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
     shell.GetDocShell().Close();
   });
 
-  it("rejects unsupported paragraph styles at the generated command boundary", /** Checks rejects unsupported paragraph styles at the generated command boundary. @returns Test callback result. */ () => {
-    const { run, runValue, shell } = createFixture();
-    expect(
-      /** Runs the test callback. @returns Test callback result. */ () =>
-        run(WRITER_COMMAND_IDS.styleApply, { Style: "Unknown" }),
-    ).toThrow(/Unsupported Writer paragraph style/);
-    expect(
-      /** Runs the test callback. @returns Test callback result. */ () =>
-        run(WRITER_COMMAND_IDS.styleApply),
-    ).toThrow(/Unsupported Writer paragraph style/);
+  it("keeps StyleApply outside the text-shell command owner", /** Checks the document-owned slot is absent while text-format argument guards remain. @returns Nothing. */ () => {
+    const { runValue, shell } = createFixture();
+    expect(shell.GetCommandShell().GetInterface().GetSlot(".uno:StyleApply")).toBeUndefined();
+    expect(shell.GetCommandShell().ResolveSlot(5552)).toBeUndefined();
     expect(runValue(WRITER_COMMAND_IDS.fontName, {})).toBe(false);
     expect(runValue(WRITER_COMMAND_IDS.fontHeight, {})).toBe(false);
     shell.GetDocShell().Close();
