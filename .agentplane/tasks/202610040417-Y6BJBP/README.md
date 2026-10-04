@@ -4,7 +4,7 @@ title: "Restore Sidebar docking key isolation before document accelerators"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,40 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T04:41:22.720Z"
+  updated_at: "2026-10-04T04:42:47.120Z"
   updated_by: "CODER"
-  note: "Pass: exact9paths;75focused;1102app+109inventory+59browser+2resource;vendor absent1102+109+12+59/restored;100%coverage/0semantic;275oldtests identical and4arrow expectation lines strengthened;219rows/218prior preserved;artifact source/helper/Python0;native parity open."
+  note: "All declared checks pass;semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4 has same-actor exact-SHA quality pass;final docs updated,source/helper/Python0,vendor restored,scope9;full native/parent goal remains open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T04:42:23.821Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR phase: exact semantic 4adf87624abf2b7911b1278e8c8ab25e0657c8e4 satisfies the bounded Sidebar docking key isolation scope; no independent/native parity claim."
+  evaluated_sha: "4adf87624abf2b7911b1278e8c8ab25e0657c8e4"
+  blueprint_digest: "ad1a91ad93588506b1490371e81479e13d81837101e28dc1cb48d205ebbe386b"
+  evidence_refs:
+    - ".agentplane/tasks/202610040417-Y6BJBP/README.md"
+    - ".agentplane/tasks/202610040417-Y6BJBP/quality/20261004-044223821-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/quality/20261004-044223821-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040417-Y6BJBP/quality/20261004-044223821-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040417-Y6BJBP/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/baseline.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/focused-runtime.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/focused-browser.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/full-verify.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/vendor-absent-runtime.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/vendor-absent-scripts.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/vendor-absent-browser.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/vendor-restoration.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/scope-integrity.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/source-inspection.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/artifact-audit.json"
+    - ".agentplane/tasks/202610040417-Y6BJBP/final-integrity.json"
+  findings:
+    - "Reviewed exact semantic diff: existing aside identity/layout and local handlers retained;13literal keys stop global bubbling after child processing and cancel unhandled browser defaults;editable defaults and button Enter survive;other frame keys retain real Undo/Redo/Bold fallback."
+    - "Corrected pre-fix Writer baseline4fail/1pass;75focused cases and2rebuilt width cases pass;full1102+109+59+2checks and vendor-absent1102+109+12+59pass,restored;100%four coverage metrics and0semantic violations."
+    - "Recomputed9path scope:275of277prior test files byte-identical;only4approved stronger arrow-consumption expectation lines in2files;218prior rows/order/status/default/owner/exception fields preserved,one append-only update plusnew local-only/unverified row;4pinned hashes unchanged."
+    - "Ignored-inclusive raw and decoded Agentplane source/helper/Python/code-frame/archive audit0;5historical prose-only Markdown diff references;clean tracked state and known doctor warnings out of scope."
 commit: null
 comments:
   -
@@ -41,8 +71,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass: exact9paths;75focused;1102app+109inventory+59browser+2resource;vendor absent1102+109+12+59/restored;100%coverage/0semantic;275oldtests identical and4arrow expectation lines strengthened;219rows/218prior preserved;artifact source/helper/Python0;native parity open."
+  -
+    type: "verify"
+    at: "2026-10-04T04:42:47.120Z"
+    author: "CODER"
+    state: "ok"
+    note: "All declared checks pass;semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4 has same-actor exact-SHA quality pass;final docs updated,source/helper/Python0,vendor restored,scope9;full native/parent goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T04:41:22.771Z"
+doc_updated_at: "2026-10-04T04:42:47.175Z"
 doc_updated_by: "CODER"
 description: "Iteration89: project the pinned SidebarDockingWindow thirteen local key codes onto the existing owned browser boundary; isolate document Cut/Copy/Paste without cancelling native HTML widget defaults, preserve Undo/Redo and intentional save/open/recovery deviations."
 sections:
@@ -61,7 +97,7 @@ sections:
 
     Command: inline read-only scope/hash/artifact audit,git diff --check,node .agentplane/policy/check-routing.mjs,ap doctor; Result: pass; Evidence:exact9semantic paths,275of277prior test files byte-identical,exact4approved arrow-consumption expectation lines across2files and all other bytes retained;219manifest rows with218prior rows/status/owner/default/exception/order preserved,one append-only Deck update andone new local-only/unverified row;4pinned source hashes unchanged;ignored-inclusive Agentplane source/helper/Python/raw-decoded code/frame/archive findings0,5historical prose-only Markdown diff references;doctor0errors,2known unrelated warnings and2info. Scope:standing user restrictions preserved.
 
-    Same-actor EVALUATOR review of exact semantic commit remains pending. Full native docking/accelerator/UI parity and parent goal remain open.
+    Same-actor EVALUATOR pass quality/20261004-044223821-recovery-context/quality-report.json evaluated exact semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4;scope/hash/old-tests/manifest/artifact audit rechecked read-only. No independent-agent claim. Approved bounded correction is complete;full parent/native goal remains active. Full native docking/accelerator/UI parity and parent goal remain open.
 
     <!-- BEGIN VERIFICATION RESULTS -->
     ### 2026-10-04T04:41:22.720Z — VERIFY — ok
@@ -94,6 +130,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-04T04:42:47.120Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All declared checks pass;semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4 has same-actor exact-SHA quality pass;final docs updated,source/helper/Python0,vendor restored,scope9;full native/parent goal remains open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T04:42:46.760Z, excerpt_hash=sha256:c08ed0035678fd38a7c57b7cd210d8a3b52bac571ef2687c5e841db111ee18cb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040417-Y6BJBP/blueprint/resolved-snapshot.json
+    - old_digest: ad1a91ad93588506b1490371e81479e13d81837101e28dc1cb48d205ebbe386b
+    - current_digest: ad1a91ad93588506b1490371e81479e13d81837101e28dc1cb48d205ebbe386b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040417-Y6BJBP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610040417-Y6BJBP --result verified-202610040417-Y6BJBP --commit 4adf87624abf2b7911b1278e8c8ab25e0657c8e4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert isolated semantic commit if needed; keep bounded result/hash evidence and restore vendor in finally. No history rewrite."
   Findings: |-
@@ -104,6 +170,8 @@ sections:
     Focused owned checks found only three old cases still expecting unhandled horizontal/content/toolbox arrows. Source13-key policy covers those locations too. Internal reapproval under standing goal expands scope to9paths and two prior test files with exactly4arrow-consumption expectation lines strengthened;275of277oldtest files byte-identical. No other assertions/callback/focus/lifecycle expectations change and no production workaround.
 
     Browser observer fixture initially read event.defaultPrevented in a microtask at the target,which can precede React root bubbling. It now observes after the event using a timer;both desktop/mobile cases pass without production accommodation. Only bounded failure exit/hash is retained;no source-frame diagnostics copied. Literal key matrix owns32boundary cases and5actual Writer cases. All declared full and vendor-absent checks pass;4source hashes and9scope identities retained. Agentplane audit covers ignored files and decoded JSON/JSONL;Python/helper/source/code frames/archives0. Doctor warnings are the existing hook shim and historic DONE202610031635-2Z3962 missing implementation hash,out of scope. Native styles/DesignerDialog,modal/input/platform/LOK accelerator eligibility,hierarchy,F6,floating/mouse docking,other decks/defaults and complete parent/native parity remain unverified. No save/open/recovery changes;no history rewrite/network/outside-repo access/native execution. Same-actor quality only;no independent reviewer claim.
+
+    Same-actor EVALUATOR pass quality/20261004-044223821-recovery-context/quality-report.json evaluated exact semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4;scope/hash/old-tests/manifest/artifact audit rechecked read-only. No independent-agent claim. Approved bounded correction is complete;full parent/native goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -134,7 +202,7 @@ Command: with vendor/libreoffice-reference renamed inside vendor,npm run test; n
 
 Command: inline read-only scope/hash/artifact audit,git diff --check,node .agentplane/policy/check-routing.mjs,ap doctor; Result: pass; Evidence:exact9semantic paths,275of277prior test files byte-identical,exact4approved arrow-consumption expectation lines across2files and all other bytes retained;219manifest rows with218prior rows/status/owner/default/exception/order preserved,one append-only Deck update andone new local-only/unverified row;4pinned source hashes unchanged;ignored-inclusive Agentplane source/helper/Python/raw-decoded code/frame/archive findings0,5historical prose-only Markdown diff references;doctor0errors,2known unrelated warnings and2info. Scope:standing user restrictions preserved.
 
-Same-actor EVALUATOR review of exact semantic commit remains pending. Full native docking/accelerator/UI parity and parent goal remain open.
+Same-actor EVALUATOR pass quality/20261004-044223821-recovery-context/quality-report.json evaluated exact semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4;scope/hash/old-tests/manifest/artifact audit rechecked read-only. No independent-agent claim. Approved bounded correction is complete;full parent/native goal remains active. Full native docking/accelerator/UI parity and parent goal remain open.
 
 <!-- BEGIN VERIFICATION RESULTS -->
 ### 2026-10-04T04:41:22.720Z — VERIFY — ok
@@ -167,6 +235,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-04T04:42:47.120Z — VERIFY — ok
+
+By: CODER
+
+Note: All declared checks pass;semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4 has same-actor exact-SHA quality pass;final docs updated,source/helper/Python0,vendor restored,scope9;full native/parent goal remains open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T04:42:46.760Z, excerpt_hash=sha256:c08ed0035678fd38a7c57b7cd210d8a3b52bac571ef2687c5e841db111ee18cb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040417-Y6BJBP/blueprint/resolved-snapshot.json
+- old_digest: ad1a91ad93588506b1490371e81479e13d81837101e28dc1cb48d205ebbe386b
+- current_digest: ad1a91ad93588506b1490371e81479e13d81837101e28dc1cb48d205ebbe386b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040417-Y6BJBP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610040417-Y6BJBP --result verified-202610040417-Y6BJBP --commit 4adf87624abf2b7911b1278e8c8ab25e0657c8e4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -182,3 +280,5 @@ Internal scope refinement under standing user authorization: source13-key parent
 Focused owned checks found only three old cases still expecting unhandled horizontal/content/toolbox arrows. Source13-key policy covers those locations too. Internal reapproval under standing goal expands scope to9paths and two prior test files with exactly4arrow-consumption expectation lines strengthened;275of277oldtest files byte-identical. No other assertions/callback/focus/lifecycle expectations change and no production workaround.
 
 Browser observer fixture initially read event.defaultPrevented in a microtask at the target,which can precede React root bubbling. It now observes after the event using a timer;both desktop/mobile cases pass without production accommodation. Only bounded failure exit/hash is retained;no source-frame diagnostics copied. Literal key matrix owns32boundary cases and5actual Writer cases. All declared full and vendor-absent checks pass;4source hashes and9scope identities retained. Agentplane audit covers ignored files and decoded JSON/JSONL;Python/helper/source/code frames/archives0. Doctor warnings are the existing hook shim and historic DONE202610031635-2Z3962 missing implementation hash,out of scope. Native styles/DesignerDialog,modal/input/platform/LOK accelerator eligibility,hierarchy,F6,floating/mouse docking,other decks/defaults and complete parent/native parity remain unverified. No save/open/recovery changes;no history rewrite/network/outside-repo access/native execution. Same-actor quality only;no independent reviewer claim.
+
+Same-actor EVALUATOR pass quality/20261004-044223821-recovery-context/quality-report.json evaluated exact semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4;scope/hash/old-tests/manifest/artifact audit rechecked read-only. No independent-agent claim. Approved bounded correction is complete;full parent/native goal remains active.

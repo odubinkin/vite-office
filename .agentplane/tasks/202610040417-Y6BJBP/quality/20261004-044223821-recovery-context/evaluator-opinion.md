@@ -1,0 +1,34 @@
+# EVALUATOR opinion: pass
+
+Same-actor separate EVALUATOR phase: exact semantic 4adf87624abf2b7911b1278e8c8ab25e0657c8e4 satisfies the bounded Sidebar docking key isolation scope; no independent/native parity claim.
+
+## Findings
+- Reviewed exact semantic diff: existing aside identity/layout and local handlers retained;13literal keys stop global bubbling after child processing and cancel unhandled browser defaults;editable defaults and button Enter survive;other frame keys retain real Undo/Redo/Bold fallback.
+- Corrected pre-fix Writer baseline4fail/1pass;75focused cases and2rebuilt width cases pass;full1102+109+59+2checks and vendor-absent1102+109+12+59pass,restored;100%four coverage metrics and0semantic violations.
+- Recomputed9path scope:275of277prior test files byte-identical;only4approved stronger arrow-consumption expectation lines in2files;218prior rows/order/status/default/owner/exception fields preserved,one append-only update plusnew local-only/unverified row;4pinned hashes unchanged.
+- Ignored-inclusive raw and decoded Agentplane source/helper/Python/code-frame/archive audit0;5historical prose-only Markdown diff references;clean tracked state and known doctor warnings out of scope.
+
+## Evidence
+- .agentplane/tasks/202610040417-Y6BJBP/README.md
+- .agentplane/tasks/202610040417-Y6BJBP/baseline.json
+- .agentplane/tasks/202610040417-Y6BJBP/focused-runtime.json
+- .agentplane/tasks/202610040417-Y6BJBP/focused-browser.json
+- .agentplane/tasks/202610040417-Y6BJBP/full-verify.json
+- .agentplane/tasks/202610040417-Y6BJBP/vendor-absent-runtime.json
+- .agentplane/tasks/202610040417-Y6BJBP/vendor-absent-scripts.json
+- .agentplane/tasks/202610040417-Y6BJBP/vendor-absent-browser.json
+- .agentplane/tasks/202610040417-Y6BJBP/vendor-restoration.json
+- .agentplane/tasks/202610040417-Y6BJBP/scope-integrity.json
+- .agentplane/tasks/202610040417-Y6BJBP/source-inspection.json
+- .agentplane/tasks/202610040417-Y6BJBP/artifact-audit.json
+- .agentplane/tasks/202610040417-Y6BJBP/final-integrity.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Complete native styles/DesignerDialog,modal/input/platform/LOK accelerator eligibility,hierarchy,F6,floating/mouse docking,other decks/defaults and full Sidebar/parent/native parity remain unverified;intentional save/open/recovery exceptions preserved.
+- Same actor reviewed this phase;no independent reviewer claim.
