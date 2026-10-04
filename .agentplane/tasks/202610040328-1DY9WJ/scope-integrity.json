@@ -1,0 +1,77 @@
+{
+  "base": "4a28a66c4db5554f3c95b204a92b158a88d8334d",
+  "priorTests": 271,
+  "changedOldTests": [],
+  "semanticPaths": [
+    "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+    "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+    "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+    "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+    "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+      "bytes": 7338,
+      "sha256": "94b1e84a6ac351e12dbdf305fecb90b88e8c3df373ac234500c6f09149ed4303"
+    },
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+      "bytes": 4386,
+      "sha256": "9df6bbe6f63ba19af312b293e5bb2f7a4a5109a810df8a7f44ee3aff5ea2e4b0"
+    },
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+      "bytes": 6069,
+      "sha256": "62c132349fdeb40654f7bc90eb41436a7f922013e01c74aef37b864a4e276554"
+    },
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarDeck-scroll.test.tsx",
+      "bytes": 6879,
+      "sha256": "7e39dbf5950fcd2d7750082412f29ffa6803e5997d9b1e4471ecd94ead22c55c"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+      "bytes": 3096,
+      "sha256": "abe873fccba87af0c004bfdf2062c3e57c531af01a9b3c84d48fd0c5822fdfc4"
+    },
+    {
+      "path": "apps/office/e2e/writer-sidebar-scroll.spec.ts",
+      "bytes": 2866,
+      "sha256": "4c0011138f19f6dc8c5dab6da7320920b987a6231f9b26399f9a9267bce83210"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 716684,
+      "sha256": "9ff40dcabbeb06f8b30d33c85ac6ded9004b95a9dbef10159f7239b96004438c"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 701170,
+      "sha256": "db3d001f5e9d138066ebe141122de15f422bde6ab9f996a06f581e2619b73cde"
+    }
+  ],
+  "manifests": {
+    "docs/program/source-provenance.json": {
+      "rows": 218,
+      "appendOnlyRows": [
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+        "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx"
+      ],
+      "statusDefaultOwnerExceptionsUnchanged": true
+    },
+    "docs/program/parity/runtime-inventory.json": {
+      "rows": 218,
+      "appendOnlyRows": [
+        "apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx",
+        "apps/office/src/sfx2/browser/presentation/SidebarFocusManager.ts",
+        "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx"
+      ],
+      "statusDefaultOwnerExceptionsUnchanged": true
+    }
+  }
+}

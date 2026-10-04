@@ -1,0 +1,11 @@
+{
+  "command": "npm exec -- vitest run src/sfx2/browser/presentation/Sidebar src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx",
+  "cwd": "apps/office",
+  "exitCode": 0,
+  "outputBytes": 240,
+  "outputSha256": "1b4c19c21b4f4e5192e94bd68ad8add0959bd1aa85e240c333e8ffbe28c8501f",
+  "summary": [
+    "Test Files  8 passed (8)",
+    "Tests  58 passed (58)"
+  ]
+}

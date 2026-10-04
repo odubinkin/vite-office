@@ -1,0 +1,14 @@
+{
+  "command": "npm exec -- vitest run src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx",
+  "cwd": "apps/office",
+  "exitCode": 1,
+  "outputSha256": "b27faa8716acf6bd7d694ba116434dab220e7d5ea41b1dd11799f3b24675be06",
+  "summary": [
+    "Test Files  1 failed (1)",
+    "Tests  2 failed (2)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯",
+    "FAIL  src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx > Writer Sidebar ShowPanel > shows the oversized Paragraph panel after Tab title entry",
+    "FAIL  src/sw/browser/presentation/writer-view-sidebar-scroll.test.tsx > Writer Sidebar ShowPanel > shows the oversized Paragraph panel after Escape title entry",
+    "AssertionError: expected +0 to be 80 // Object.is equality"
+  ]
+}

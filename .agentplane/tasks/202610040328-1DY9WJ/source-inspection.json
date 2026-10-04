@@ -1,0 +1,49 @@
+{
+  "method": "Manual read-only pinned source inspection; no source copies/native compilation/execution",
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceIdentities": [
+    {
+      "path": "sfx2/source/sidebar/Deck.cxx",
+      "bytes": 7625,
+      "sha256": "b630b3eb4f9406c7bca2dc13895820c5c3244a056809913d0be6b094c766005e"
+    },
+    {
+      "path": "sfx2/source/sidebar/Panel.cxx",
+      "bytes": 6167,
+      "sha256": "f2be3e14171379340f33ef355babe80e86a6aa195b1ee26f6839e927e51fea52"
+    },
+    {
+      "path": "sfx2/source/sidebar/FocusManager.cxx",
+      "bytes": 15094,
+      "sha256": "c6e98a7801482c112f661b8ebe856308e93ca5befebdb1c4f55da3cc132ea0b5"
+    },
+    {
+      "path": "sfx2/source/sidebar/SidebarController.cxx",
+      "bytes": 56054,
+      "sha256": "8c9cb6041375b8fc0f9c88768d8981c47da51fb31c4baaed3822d16a42d5c763"
+    },
+    {
+      "path": "sfx2/source/sidebar/DeckLayouter.cxx",
+      "bytes": 18291,
+      "sha256": "9dc015b19d184f5d002adc54dfd57e790ca9de5aa6a9d8e2135d83dc2da3fdeb"
+    },
+    {
+      "path": "include/tools/gen.hxx",
+      "bytes": 32618,
+      "sha256": "fb623ead7ffb74dd78beaf12f0e0f4a02cb0d6a0737229ce384d520d6a4f96a1"
+    },
+    {
+      "path": "sfx2/uiconfig/ui/deck.ui",
+      "bytes": 6339,
+      "sha256": "192d2a54ae42c23871456ddc589db59a3e00dcb2d71e427114ebed253a6a33b9"
+    }
+  ],
+  "conclusions": [
+    "Panel get_extents relative to Deck contents constructs a closed tools Rectangle; positive height Bottom=top+height-1; empty height Bottom=top. Deck ShowPanel subtracts one additional pixel.",
+    "ShowPanel reads post-focus scroll adjustment, moves bottom into page size when needed, then gives top priority so oversized panels start at viewport top; source adjustment clamps via native scrollbar/browser setter.",
+    "FocusManager FocusPanel expands/focuses title and then calls controller ShowPanel; controller requests open deck and delegates extent adjustment. Browser visibility opens before DOM focus, while extent adjustment now occurs after expansion/focus.",
+    "DeckLayouter selects a scrollbar when minimum requested panel heights exceed available height outside LibreOfficeKit, and sets ALWAYS/NEVER policy. Existing browser scrollHeight/clientHeight projects current overflow eligibility only; native min/preferred distribution,LibreOfficeKit policy and full sizing remain unverified.",
+    "Managed content Escape calls FocusPanel on its registered owning display index, so the same post-focus adjustment runs. Standalone panels retain local focus behavior.",
+    "Native failed toolkit extents,scrollbar absence,DPI/rounding,full layout sizing/F6/settings/other decks/context/profile and complete native/parent parity remain unverified."
+  ]
+}
