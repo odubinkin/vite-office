@@ -1,0 +1,78 @@
+---
+id: "202610040447-SAB5KD"
+title: "Restore Writer ruler tracking termination and keyboard ownership"
+status: "DOING"
+priority: "med"
+owner: "CODER"
+revision: 10
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-04T04:50:04.775Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: standing parity goal authorizes one ruler tracking correction;keep280prior tests and native metadata,source/hash/result evidence only,no upstream invocation or helper artifacts."
+events:
+  -
+    type: "status"
+    at: "2026-10-04T04:50:05.204Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: standing parity goal authorizes one ruler tracking correction;keep280prior tests and native metadata,source/hash/result evidence only,no upstream invocation or helper artifacts."
+doc_version: 3
+doc_updated_at: "2026-10-04T04:50:05.204Z"
+doc_updated_by: "CODER"
+description: "Iteration90: align existing ruler drag admission, keyboard tracking and cancellation with pinned Ruler/VCL/SvxRuler; remove stale DOM gesture listeners without upstream test dependencies or source/helper artifacts."
+sections:
+  Summary: "Iteration90 restores termination and keyboard ownership of the existing Writer ruler tracking gesture."
+  Scope: "Eight semantic paths: apps/office/src/sw/browser/presentation/use-ruler-tracking.ts;WriterRulers.tsx;use-ruler-tracking.test.tsx;WriterRulers-tracking.test.tsx;writer-view-ruler-tracking.test.tsx;apps/office/e2e/writer-ruler-tracking.spec.ts;docs/program/source-provenance.json;docs/program/parity/runtime-inventory.json. All280prior test/spec files byte-identical. All219prior manifest rows/order/status/default/owner/exception fields preserved;WriterRulers append-only evidence/responsibility andone new local-only/unverified hook row. No core/command/resource/policy/save/open/recovery edits. Own results/hashes/conclusions only,no source/helper files or source-frame logs in Agentplane."
+  Plan: "Standing goal authorizes safe in-scope local correction. Read pinned Ruler MouseButtonDown/Tracking/ImplEndDrag,SvxRuler EndDrag,VCL tracking keyboard/window admission/replacement/disposal,with hashes/conclusions only. Reproduce current Escape leak,duplicate/nonleft starts,foreign-pointer finish and callbacks after handle removal. Extract browser tracking lifecycle into owned hook:single unmodified mouse-button admission independent of keyboard modifiers,ignore repeated starts while same ruler tracks,cancel prior different ruler owner as VCL StartTracking does;initiating pointer owns move/up/cancel. Capture tracking key input before document fallback:Escape cancels,Enter ends at last position,all other key input consumed without ending. Cancellation never commits. Remove all listeners and ownership before accepted commit/cancel;dispose on handle and ruler unmount,blur and pointer cancellation,with stale release no effects. React teardown cancellation is a browser lifetime rule;native Window disposal suppresses Ruler callbacks and is not falsely claimed to be the same cancel path. Preserve existing snap/geometry/ticks/guides/page/paragraph/tab callbacks and model/undo. New owned tracking/ruler/real Writer cases and rebuilt1280/390Chromium cancellation/keyboard completion/drag/undo establish only this bounded contract. Full verify,100%app/inventory coverage,0semantic;vendor-absent tests/restoration;exact paths/old-test/manifest/sourcehash/artifact audit;same-actor EVALUATOR exact semantic SHA;close leaf and record parent progress while full native tracking/UI/goal remain open."
+  Verify Steps: "1. Read-only pinned svtools ruler.cxx,svx svxruler.cxx,vcl winproc.cxx/window2.cxx/window.cxx;source hashes and conclusions only,no native compilation/execution or sources/helpers in Agentplane. 2. Owned pre-fix tracking regressions fail for Escape and stale release after handle removal;focused new hook/ruler/actual Writer tests prove primary-button admission,duplicate/cross-ruler/pointer identity,lifecycle cleanup,cancel/no commit,all-key priority,Enter at last position,snap/guides/callback and model/undo preservation. Existing WriterPageLayout and paragraph-ruler tests pass unchanged. Fresh build and Chromium1280/390 Escape no state/history effect,tracking keys blocked,Enter commit then pointerup no duplicate,normal drag and Undo,subsequent editing pass. 3. Exact8semantic paths,280prior test files byte-identical,219prior manifest rows/order/metadata preserved,only1append-only update plus1new local-only/unverified row;sourcehashes unchanged. 4. npm run verify passes local app/inventory/browser/resource/type/lint/static provenance checks;100%four app/inventory coverage metrics,0semantic violations. Static CLI audits read pinned sources separately;tests never read/compile/invoke upstream. 5. Rename vendor/libreoffice-reference inside vendor;npm run test;npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts;npm run test:e2e;pass and restore in finally. 6. git diff --check,routing,doctor0errors/knownwarnings;ignored-inclusive raw/decoded Agentplane Python/helper/source/frame/code-diff/archive audit0. 7. Same-actor EVALUATOR exact semantic SHA pass;clean final tracked state;leafDONE,parentDOING;complete native and goal remain unproven."
+  Verification: "Pending implementation and declared evidence."
+  Rollback Plan: "Revert isolated semantic commit if necessary,preserve bounded results/hashes and restore temporarily renamed vendor in finally. No history rewrite."
+  Findings: "Base958a7ea83009dd6e2f827f7a7fb5731f1996c8bc clean main/direct;previous goal turn is verified progress:iteration89 DONE4adf87624abf Sidebar local-key boundary. Existing ruler startDrag installs unmanaged global listeners;Escape does not end/cancel,keys reach document accelerators,and removal leaves stale callbacks alive. Pinned Ruler admits only left mouse while not already tracking;VCL tracking owns all key input,Escape cancels and Return accepts;Ruler restores saved drag values on cancel and SvxRuler suppresses Apply on cancel. Native Window disposal suppresses application callbacks;React unmount must release its DOM gesture callbacks without implying identical native disposal cancellation flags. Complete native ruler hit testing,double-click dialogs,modifier snapping,drag deletion,window capture/platform/LOK/input/lifetime and full Writer/browser/parent parity remain unverified. Preserve intentional save/open/recovery deviations;no network/outside-repo access or helper/source artifacts."
+id_source: "generated"
+---
+## Summary
+
+Iteration90 restores termination and keyboard ownership of the existing Writer ruler tracking gesture.
+
+## Scope
+
+Eight semantic paths: apps/office/src/sw/browser/presentation/use-ruler-tracking.ts;WriterRulers.tsx;use-ruler-tracking.test.tsx;WriterRulers-tracking.test.tsx;writer-view-ruler-tracking.test.tsx;apps/office/e2e/writer-ruler-tracking.spec.ts;docs/program/source-provenance.json;docs/program/parity/runtime-inventory.json. All280prior test/spec files byte-identical. All219prior manifest rows/order/status/default/owner/exception fields preserved;WriterRulers append-only evidence/responsibility andone new local-only/unverified hook row. No core/command/resource/policy/save/open/recovery edits. Own results/hashes/conclusions only,no source/helper files or source-frame logs in Agentplane.
+
+## Plan
+
+Standing goal authorizes safe in-scope local correction. Read pinned Ruler MouseButtonDown/Tracking/ImplEndDrag,SvxRuler EndDrag,VCL tracking keyboard/window admission/replacement/disposal,with hashes/conclusions only. Reproduce current Escape leak,duplicate/nonleft starts,foreign-pointer finish and callbacks after handle removal. Extract browser tracking lifecycle into owned hook:single unmodified mouse-button admission independent of keyboard modifiers,ignore repeated starts while same ruler tracks,cancel prior different ruler owner as VCL StartTracking does;initiating pointer owns move/up/cancel. Capture tracking key input before document fallback:Escape cancels,Enter ends at last position,all other key input consumed without ending. Cancellation never commits. Remove all listeners and ownership before accepted commit/cancel;dispose on handle and ruler unmount,blur and pointer cancellation,with stale release no effects. React teardown cancellation is a browser lifetime rule;native Window disposal suppresses Ruler callbacks and is not falsely claimed to be the same cancel path. Preserve existing snap/geometry/ticks/guides/page/paragraph/tab callbacks and model/undo. New owned tracking/ruler/real Writer cases and rebuilt1280/390Chromium cancellation/keyboard completion/drag/undo establish only this bounded contract. Full verify,100%app/inventory coverage,0semantic;vendor-absent tests/restoration;exact paths/old-test/manifest/sourcehash/artifact audit;same-actor EVALUATOR exact semantic SHA;close leaf and record parent progress while full native tracking/UI/goal remain open.
+
+## Verify Steps
+
+1. Read-only pinned svtools ruler.cxx,svx svxruler.cxx,vcl winproc.cxx/window2.cxx/window.cxx;source hashes and conclusions only,no native compilation/execution or sources/helpers in Agentplane. 2. Owned pre-fix tracking regressions fail for Escape and stale release after handle removal;focused new hook/ruler/actual Writer tests prove primary-button admission,duplicate/cross-ruler/pointer identity,lifecycle cleanup,cancel/no commit,all-key priority,Enter at last position,snap/guides/callback and model/undo preservation. Existing WriterPageLayout and paragraph-ruler tests pass unchanged. Fresh build and Chromium1280/390 Escape no state/history effect,tracking keys blocked,Enter commit then pointerup no duplicate,normal drag and Undo,subsequent editing pass. 3. Exact8semantic paths,280prior test files byte-identical,219prior manifest rows/order/metadata preserved,only1append-only update plus1new local-only/unverified row;sourcehashes unchanged. 4. npm run verify passes local app/inventory/browser/resource/type/lint/static provenance checks;100%four app/inventory coverage metrics,0semantic violations. Static CLI audits read pinned sources separately;tests never read/compile/invoke upstream. 5. Rename vendor/libreoffice-reference inside vendor;npm run test;npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts;npm run test:e2e;pass and restore in finally. 6. git diff --check,routing,doctor0errors/knownwarnings;ignored-inclusive raw/decoded Agentplane Python/helper/source/frame/code-diff/archive audit0. 7. Same-actor EVALUATOR exact semantic SHA pass;clean final tracked state;leafDONE,parentDOING;complete native and goal remain unproven.
+
+## Verification
+
+Pending implementation and declared evidence.
+
+## Rollback Plan
+
+Revert isolated semantic commit if necessary,preserve bounded results/hashes and restore temporarily renamed vendor in finally. No history rewrite.
+
+## Findings
+
+Base958a7ea83009dd6e2f827f7a7fb5731f1996c8bc clean main/direct;previous goal turn is verified progress:iteration89 DONE4adf87624abf Sidebar local-key boundary. Existing ruler startDrag installs unmanaged global listeners;Escape does not end/cancel,keys reach document accelerators,and removal leaves stale callbacks alive. Pinned Ruler admits only left mouse while not already tracking;VCL tracking owns all key input,Escape cancels and Return accepts;Ruler restores saved drag values on cancel and SvxRuler suppresses Apply on cancel. Native Window disposal suppresses application callbacks;React unmount must release its DOM gesture callbacks without implying identical native disposal cancellation flags. Complete native ruler hit testing,double-click dialogs,modifier snapping,drag deletion,window capture/platform/LOK/input/lifetime and full Writer/browser/parent parity remain unverified. Preserve intentional save/open/recovery deviations;no network/outside-repo access or helper/source artifacts.
