@@ -1,10 +1,11 @@
 ---
 id: "202610041742-KFYF73"
 title: "Restore document-owned character style handles"
-status: "DOING"
+result_summary: "Restored document-owned concrete character style handles;1675app/109inventory/5scripts/99Chromium pass once absent-only. Full upstream parity and selective reset interning remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -47,11 +48,16 @@ quality_review:
   findings:
     - "Exact twelve semantic paths;15 new regressions, one obsolete raw-value merge expectation corrected,326 other prior tests unchanged.230 existing status/default/exception rows preserved; three new owners all-unverified. Native insertion/copy contracts reviewed against13 pinned hashes without upstream execution."
     - "Single absent-only first-pass build and1675app/109inventory/5scripts/99Chromium all pass; four required app/inventory metrics100%. Final static gates and restored source/resource/provenance/invariant/parity audits pass, semantic violations0. Doctor0errors with two unchanged warnings; policy routing pass; AP ignored-inclusive3712files forbidden0."
-commit: null
+commit:
+  hash: "f2c6f054d862e8d11b8f041d3488bbc1f43ffb1c"
+  message: "✅ KFYF73 task: record shared character handle verification"
 comments:
   -
     author: "CODER"
     body: "Start: Approved iterative goal authorizes this bounded document-owned character handle architecture. Follow exact twelve paths and once-only absent verification."
+  -
+    author: "CODER"
+    body: "Verified: Document-owned automatic character pool and shared-handle factory/import/copy/pointer equality pass bounded native contract review and single absent-only verification;15 new cases and all required metrics100%. Source-free AP, restored vendor, registered deviations retained; selective reset and whole parity remain open."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Semantic 09677155e9ea818ecc5cb6d81b5074d34ed3786f restores document-owned concrete character style handles for ordinary factory/import and native shared-copy/pointer equality.15 new cases;1675app/109inventory/5scripts/99Chromium pass first single absent-only profile; required metrics100%. Static/build/restored source/scope/AP audits pass, exact twelve paths,326 prior tests unchanged, no passing suite repeated. Same-actor exact-SHA quality pass; doctor0errors/routing pass; upstream restored, registered deviations retained. Selective reset interning and wider native pool/module/UI parity remain open; broad goal active."
+  -
+    type: "status"
+    at: "2026-10-04T17:58:27.858Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Document-owned automatic character pool and shared-handle factory/import/copy/pointer equality pass bounded native contract review and single absent-only verification;15 new cases and all required metrics100%. Source-free AP, restored vendor, registered deviations retained; selective reset and whole parity remain open."
 doc_version: 3
-doc_updated_at: "2026-10-04T17:58:08.700Z"
+doc_updated_at: "2026-10-04T17:58:27.859Z"
 doc_updated_by: "CODER"
 description: "Port the bounded character StylePool insertion owner into SwDoc and route ordinary character creation and browser snapshot decoding through shared handles; restore automatic-item shared-copy and pointer equality. Preserve raw synthetic state fixtures and leave selective reset interning as a source-domain follow-up."
 sections:
@@ -117,6 +130,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic task commit in a new commit if necessary; no history rewrite. Restore vendor directory in finally."
   Findings: "Implemented document-owned character StylePool insertion and shared automatic style copy/reference equality for ordinary factory and snapshot import.15 new cases pass; one obsolete raw-value adjacent merge assertion/name corrected,326 other prior tests byte-identical. Static docs initially found one missing JSDoc in a new assertion callback; fixed before products. Recovered final five affected static gates, original dependency gate remains valid. Metadata serialization order restored before source audits; two inline audit orchestration errors (duplicate binding and patch context) fixed without product changes. Single absent-only profile passed first:1675app/246files,109inventory/36files,5scripts/2files,99Chromium; four required metrics100%. Absent build and restored five source/resource audits pass, semantic violations0. Exact twelve semantic paths;230 existing status/default/exception rows retained, three new owners all-unverified (233 total);13 pinned native hashes; ignored-inclusive AP3712files forbidden0. Upstream restored, no source execution/storage, no network/outside-repo access or registered I/O/recovery changes. Residual selective reset interning and sentinel input-domain investigation; native unordered iterator/collisions, paragraph/ignorable/usage/cache/names/lifetime/null constructor/UNO QueryValue and whole-module/UI parity remain open. Same-actor exact-SHA quality/20261004-175633154-recovery-context pass, doctor0errors/two unchanged warnings and routing pass. Read-only review initially counted the canonical AP README traceability path as semantic; corrected by excluding AP, then all exact-SHA scope/evidence assertions passed without product changes or reruns. Full ignored-inclusive AP re-audit forbidden0; canonical closure pending."
+extensions:
+  implementation_commit:
+    hash: "09677155e9ea818ecc5cb6d81b5074d34ed3786f"
+    message: "🛠️ KFYF73 writer: restore document-owned character style handles"
 id_source: "generated"
 ---
 ## Summary
