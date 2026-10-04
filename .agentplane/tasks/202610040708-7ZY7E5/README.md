@@ -1,10 +1,12 @@
 ---
 id: "202610040708-7ZY7E5"
 title: "Round explicit Writer ruler tab anchors to native pixels"
-status: "DOING"
+result_summary: "Explicit Writer ruler tab anchors now use native signed pixel rounding while logical metadata and Undo ownership are preserved."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -50,11 +52,16 @@ quality_review:
     - "13new actual Writer cases and corrected1280/390Chromium prove fourtypes,completeorigin/signed/zero/int32 coordinates,relativeflag and no-motion/cancel/rawindex/acceptedmove/Undo preservation.292prior testfiles retain289identical and exact7oldassertion corrections in3files;220rows retained with1append-onlyrow/no promotions."
     - "Final1176app/109inventory/5scripts pass withvendorabsent and100%fourcoverage metrics;69priorChromium passedinitial,only2newfixturecorrections reran andpassed. Failedappgate alone retried after approved2oldcallback corrections. Separate static/source audits0semanticviolations;AP forbiddenfindings0. No source-present or routine passing-suite duplicates."
     - "Two new E2E fixtures initially putDefaultfirst and invoked correct importselection;removing onlythatfixtureDefault restores intendedfourtypedinput. Scopeaudit originally overlappedtemporaryvendorrename,thenonlyaudit repeatedafterrestoration. No product/import/config/gate weakening;initialbounded failures retained."
-commit: null
+commit:
+  hash: "c5f97d1596a23716535b64be3492edb87b77fa2e"
+  message: "🛠️ 7ZY7E5 code: round explicit Writer ruler tab anchors"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved explicit-tab pixel projection under standing goal;preserve logical values and single absent-upstream verification."
+  -
+    author: "CODER"
+    body: "Verified: bounded native explicit tab pixel anchors implemented in c5f97d1596a23716535b64be3492edb87b77fa2e;final absent1176app/109inventory/5scripts and69prior+2correctedChromium pass,100%coverage,static/source/integrity gates pass,zero semantic/APforbidden findings,vendor restored. Failed gates alone corrected/retried,no source-present tests or passing-suite duplicates;exactsemantic same-actor EVALUATOR pass. Cleanbeforeclosure,parent/goal active."
 events:
   -
     type: "status"
@@ -87,8 +94,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final exactc5f97d15 same-actor EVALUATOR pass andunchangedsemantic integrity;all1176/109/5 plus69+2Chromium verifiedabsent,100%coverage,sourceaudits0semantic,APforbidden0,8paths/exact7oldassertions. No test reruns atcloseout."
+  -
+    type: "status"
+    at: "2026-10-04T07:28:48.550Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: bounded native explicit tab pixel anchors implemented in c5f97d1596a23716535b64be3492edb87b77fa2e;final absent1176app/109inventory/5scripts and69prior+2correctedChromium pass,100%coverage,static/source/integrity gates pass,zero semantic/APforbidden findings,vendor restored. Failed gates alone corrected/retried,no source-present tests or passing-suite duplicates;exactsemantic same-actor EVALUATOR pass. Cleanbeforeclosure,parent/goal active."
 doc_version: 3
-doc_updated_at: "2026-10-04T07:28:45.735Z"
+doc_updated_at: "2026-10-04T07:28:48.551Z"
 doc_updated_by: "CODER"
 description: "Iteration95: use inspected SvxRuler ConvertHPosPixel/VCL signed rounding for complete explicit tab origins at CSS96dpi. Preserve raw logical item positions and typed hit ownership;add real model/DOM/Undo and Chromium rounding cases. One absent-upstream test pass;separate static source audits."
 sections:
@@ -153,6 +167,10 @@ sections:
     Corrected appgate passed1176app/222files andunrun109inventory/36files+5scripts/2files firstpass. FirstChromiumgatepassed69oldscenarios;only2newpixel cases failed:nointeractive tabs afterODTimport because the fixture puts Defaultfirst,whose source-compatible importcontainer selects onlythatfirstDefault andskipslater explicitstops (owned xmltabi sourceconfirmed). Remove onlythe newE2Efixture'sDefaultstop;retain hidden-Default/rawindexcoverage in13passing ownedunitcases. No product/import/gate/config change,no scopeexpansion,no expectationweakening. Repeatonlythese2failed Chromiumcases with upstreamabsent;do notrerun69passingbrowser/app/inventory/script suites. Keepbounded initialexit/hash/counts,raw diagnostics/screenshots/traces outsideAP.
     Onlythe2correctednewChromiumcases reran andpassed;69oldcases/app/inventory/scripts notduplicated,vendor restored. A concurrently scheduled scope audit observed vendor/.offline-7ZY7E5 while the targetedbrowsercheck was running andfailed itscheckout assertion;this audit mustrun afterrestoration. No artifact/source contamination or product change;rerunonlythefailed scopeaudit sequentiallyafter vendorrestored,andrecordbounded conclusion. No tests rerun for this orchestration correction.
     Final qualityreview passedexact semantic c5f97d1596a23716535b64be3492edb87b77fa2e in separate same-actor EVALUATOR phase. Allscope/hash/coverage/source/artifact gates passed. Thisgoalturn madeverifiedprogress;fullgoal/parentremainactive,notcomplete/blocked. No native/status promotions or registeredI/O deviations changed.
+extensions:
+  implementation_commit:
+    hash: "c5f97d1596a23716535b64be3492edb87b77fa2e"
+    message: "🛠️ 7ZY7E5 code: round explicit Writer ruler tab anchors"
 id_source: "generated"
 ---
 ## Summary
