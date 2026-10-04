@@ -8,21 +8,73 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
-import { normalizeWriterHyperlink, SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
+import {
+  normalizeWriterHyperlink,
+  SwFormatINetFormat,
+  type WriterHyperlink,
+} from "../../../source/core/txtnode/fmtatr2";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
+
+/** Browser-owned internet value record; omitted native IDs retain the existing ZERO contract. */
+export interface WriterInternetFormatRecord extends WriterHyperlink {
+  readonly inetFormatId?: number;
+  readonly visitedFormatId?: number;
+}
+
+/** Encodes native internet strings and independent style identities without retaining an item backlink. @param item - Native internet item. @returns Cloneable value record. */
+export function encodeSwFormatINetFormatRecord(
+  item: SwFormatINetFormat,
+): WriterInternetFormatRecord {
+  const normal = item.GetINetFormatId(),
+    visited = item.GetVisitedFormatId();
+  return {
+    ...item.GetHyperlink(),
+    ...(normal === SwPoolFormatId.ZERO ? {} : { inetFormatId: normal }),
+    ...(visited === SwPoolFormatId.ZERO ? {} : { visitedFormatId: visited }),
+  };
+}
+
+/** Restores the supported native internet fields at a browser boundary. @param candidate - Untrusted cloneable record. @returns Detached native item. */
+export function decodeSwFormatINetFormatRecord(candidate: unknown): SwFormatINetFormat {
+  const hyperlink = normalizeWriterHyperlink(candidate);
+  if (hyperlink === undefined) throw new Error("SwFormatINetFormat snapshot is invalid.");
+  const value = candidate as Record<string, unknown>;
+  const normal = decodeInternetStyleId(value.inetFormatId),
+    visited = decodeInternetStyleId(value.visitedFormatId);
+  const item = new SwFormatINetFormat(hyperlink);
+  item.SetINetFormatAndId(item.GetINetFormat(), normal);
+  item.SetVisitedFormatAndId(item.GetVisitedFormat(), visited);
+  return item;
+}
+
+/** Validates a provided native unsigned16 identity while retaining omitted ZERO values. @param candidate - Optional persisted ID. @returns Native pool identity. */
+function decodeInternetStyleId(candidate: unknown): SwPoolFormatId {
+  if (candidate === undefined) return SwPoolFormatId.ZERO;
+  if (
+    typeof candidate !== "number" ||
+    !Number.isInteger(candidate) ||
+    candidate < 0 ||
+    candidate > 65535
+  )
+    throw new Error("SwFormatINetFormat snapshot is invalid.");
+  return candidate as SwPoolFormatId;
+}
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
   const value =
-    item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
-      ? {
-          familyName: item.GetFamilyName(),
-          resolvedFamilyName: item.GetResolvedFamilyName(),
-          genericFamily: item.GetGenericFamily() as string,
-        }
-      : item.QueryValue();
+    item instanceof SwFormatINetFormat
+      ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
+      : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
+        ? {
+            familyName: item.GetFamilyName(),
+            resolvedFamilyName: item.GetResolvedFamilyName(),
+            genericFamily: item.GetGenericFamily() as string,
+          }
+        : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,
@@ -69,7 +121,5 @@ export function decodeSwFormatINetFormat(snapshot: SfxPoolItemSnapshot): SwForma
   } catch {
     throw new Error("SwFormatINetFormat snapshot is invalid.");
   }
-  const hyperlink = normalizeWriterHyperlink(parsed);
-  if (hyperlink === undefined) throw new Error("SwFormatINetFormat snapshot is invalid.");
-  return new SwFormatINetFormat(hyperlink);
+  return decodeSwFormatINetFormatRecord(parsed);
 }

@@ -35,12 +35,17 @@ import {
   WRITER_TEXT_NODE_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
-import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
 import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
 import { MakeTextAttr } from "../../../source/core/txtnode/thints";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
 import type { DocumentSettingId } from "../../../source/core/doc/DocumentSettingManager";
-import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
+import {
+  decodeSfxItemSet,
+  encodeSfxItemSet,
+  decodeSwFormatINetFormatRecord,
+  encodeSwFormatINetFormatRecord,
+  type WriterInternetFormatRecord,
+} from "./item-codec";
 
 /** Primitive graph record for one numbering level. */
 interface WriterNumberFormatRecord {
@@ -140,7 +145,7 @@ type WriterTextHintRecord =
     }>
   | Readonly<{
       end: number;
-      hyperlink: ReturnType<SwFormatINetFormat["GetHyperlink"]>;
+      hyperlink: WriterInternetFormatRecord;
       kind: "hyperlink";
       start: number;
     }>;
@@ -369,7 +374,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
                 }
               : {
                   end: hint.end,
-                  hyperlink: hint.format.GetHyperlink(),
+                  hyperlink: encodeSwFormatINetFormatRecord(hint.format),
                   kind: "hyperlink",
                   start: hint.start,
                 },
@@ -665,7 +670,12 @@ export function decodeWriterDocument(
       hint,
     ) => {
       if (hint.kind === "hyperlink")
-        return MakeTextAttr(document, new SwFormatINetFormat(hint.hyperlink), hint.start, hint.end);
+        return MakeTextAttr(
+          document,
+          decodeSwFormatINetFormatRecord(hint.hyperlink),
+          hint.start,
+          hint.end,
+        );
       const items = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       decodeSfxItemSet(items, hint.items);
       return MakeTextAttr(document, items, hint.start, hint.end);
