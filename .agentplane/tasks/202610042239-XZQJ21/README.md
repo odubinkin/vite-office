@@ -1,10 +1,11 @@
 ---
 id: "202610042239-XZQJ21"
 title: "Restore native empty hyperlink item values"
-status: "DOING"
+result_summary: "Restored native empty hyperlink item strings,default/copy construction and value equality"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -45,11 +46,16 @@ quality_review:
   findings:
     - "Six committed paths match reviewed checkout.24new literal cases;349prior files accounted with347byte-identical/two declared native corrections. Canonical strings are separately owned,empty strings compare identically,zero/default construction accepts empty URL,copy/Clone clears backlink and name mutation does not alias retained copies."
     - "All six static gates,five absent suites and five restored source audits pass first attempts. One build,app2673,inventory109,scripts5,Chromium99;app/inventory all four coverage metrics100%;no failed cases or replays.237runtime states/defaults/exceptions preserved,one responsibility appendix;four pinned hashes,AP3833files/0forbidden,doctor0errors/two unchanged warnings,routingpass,cleanhead."
-commit: null
+commit:
+  hash: "54e2fbc2705706709872c0a2f435ca018502c6a2"
+  message: "🧩 XZQJ21 task: record verified native empty item values"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native empty string and default/copy item semantics with one absent-reference verification profile under the standing iterative goal."
+  -
+    author: "CODER"
+    body: "Verified: Native empty/default/copy hyperlink strings and equality restored;one absent profile2673app/109inventory/5scripts/99Chromium with100%app/inventory coverage,all static/restored audits and exact-head review passed,no replay. Registered IO deviations preserved;full native styled pool/UNO/client and core/UI parity remains unverified."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic 1fd61a1d0f8e71136ac83895a071b36debc6ea2f passes same-actor EVALUATOR,six static gates,one absent profile build/app2673/inventory109/scripts5/Chromium99,app/inventory100%all metrics,five restored audits,349prior files accounted/347unchanged/two native corrections,237runtime states preserved,AP forbidden0,doctor0errors/routingpass. Full styled pool/UNO/macros/clients/core/UI parity remains unverified;no replays."
+  -
+    type: "status"
+    at: "2026-10-04T22:50:30.710Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native empty/default/copy hyperlink strings and equality restored;one absent profile2673app/109inventory/5scripts/99Chromium with100%app/inventory coverage,all static/restored audits and exact-head review passed,no replay. Registered IO deviations preserved;full native styled pool/UNO/client and core/UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:50:13.078Z"
+doc_updated_at: "2026-10-04T22:50:30.711Z"
 doc_updated_by: "CODER"
 description: "Replace canonical hyperlink DTO storage with the five native owned strings, restore zero-valued default/copy construction and native empty-string equality, and retain UI normalization at its existing boundary. Correct only prior tests that assert non-native empty rejection, optional-empty inequality or caller JSON property order. Validate the existing ownership/history/browser paths once with upstream absent; preserve registered IO deviations and unverified residual native style IDs/UNO/macros/clients."
 sections:
@@ -149,6 +162,10 @@ sections:
     Iteration125 replaces canonical hyperlink DTO storage with five native owned string fields and restores zero default/copy construction,CreateDefault and existing-string getters/name setter. Core empty URLs are valid;missing and explicitly empty optional strings both store native empty strings and compare equally. Clone starts without an item-to-text backlink. Existing portable GetHyperlink/JSON projection emits only nonempty optional fields in deterministic value order;caller key order and optional-presence distinctions are not canonical item semantics. UI/filter normalization still rejects blank active links. This supersedes iteration121 claims retaining core empty-URL rejection/empty optional inequality/caller JSON ordering. Native styled URL/target constructor,pool style IDs/locale mapping,UNO members/macros/broadcaster/client/destruction and broader model/UI parity remain unverified. All existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;no module or goal promotion.
 
     Verified evidence: six semantic paths;24 new literal cases. All349prior test files accounted:347byte-identical,only metadata ownership and writer-model native expectation corrections. Optional-empty equality,coredestination emptiness and canonical JSON order expectations corrected;normalization rejection and all nonempty value/caller ownership checks retained. Six static gates passed first attempts. One sequential absent-reference profile passed buildonce,application2673/267files,inventory109/36files,scripts5/2files,Chromium99;app/inventory coverage100%all four metrics. No failed cases or replays. Five restored audits passed,semantic violations0. All237runtime statuses/defaults/exceptions and every manifest field retained except one fmtatr2 responsibility appendix. Four pinned native hashes. Ignored-inclusive Agentplane scan3833files/0forbidden;git diff --check pass. No external writes/network/global reads/native execution/raw source/helper artifacts/registered I/O deviation changes. Full styled URL/target constructor/style IDs/default pool registration,UNO QueryValue/PutValue/macros/broadcaster/clients and physical lifetime remain unverified;goal is active.
+extensions:
+  implementation_commit:
+    hash: "1fd61a1d0f8e71136ac83895a071b36debc6ea2f"
+    message: "🧩 XZQJ21 code: restore native empty hyperlink item strings"
 id_source: "generated"
 ---
 ## Summary
