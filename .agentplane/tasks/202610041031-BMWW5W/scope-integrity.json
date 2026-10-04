@@ -35,11 +35,11 @@
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
-      "sha256": "4cc5c0f348a37b6687d6548c3a112bea166f5a0091b10400ab505654113f3815"
+      "sha256": "d8cc042f6020e131551ee08251150631a1d8d76209ab7fb9e41cf3adeff4c031"
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
-      "sha256": "e5c9df7f69fff556af530696e55d0489e722fed11749cedc60da25e9fb53807a"
+      "sha256": "19f2133db0c2352eb8d5d8e3b9c7be76eb07cd36ac1387bb28e8e6497c2cbe4e"
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
@@ -63,7 +63,7 @@
     },
     {
       "path": "apps/office/e2e/writer-named-style-history.spec.ts",
-      "sha256": "7e74f9300451aacff35daa17f606b2ebccd7b96aac831f9a822723b45d121b18"
+      "sha256": "235e49bf7781ba2da423147db1785ffb4095923cad617dc5dd1be183b34bf4eb"
     },
     {
       "path": "docs/program/source-provenance.json",
