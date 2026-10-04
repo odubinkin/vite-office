@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- eslint apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/txtnode/ndtxt.ts apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/source/filter/xml/xmlimp.ts apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts apps/office/src/sw/source/filter/xml/xmlexp.ts apps/office/src/xmloff/source/text/txtparai.ts apps/office/src/xmloff/source/text/txtparae.ts apps/office/src/sw/source/uibase/shells/textsh1.ts apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts apps/office/e2e/writer-named-style-history.spec.ts --max-warnings 0",
+  "exitCode": 0,
+  "outputBytes": 0,
+  "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "summary": []
+}

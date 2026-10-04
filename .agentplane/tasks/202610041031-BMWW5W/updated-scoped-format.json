@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- prettier --check apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/txtnode/ndtxt.ts apps/office/src/sw/browser/filter/xml/writer-document-codec.ts apps/office/src/sw/source/filter/xml/xmlimp.ts apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts apps/office/src/sw/source/filter/xml/xmlexp.ts apps/office/src/xmloff/source/text/txtparai.ts apps/office/src/xmloff/source/text/txtparae.ts apps/office/src/sw/source/uibase/shells/textsh1.ts apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts apps/office/e2e/writer-named-style-history.spec.ts docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+  "exitCode": 0,
+  "outputBytes": 66,
+  "outputSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+  "summary": []
+}
