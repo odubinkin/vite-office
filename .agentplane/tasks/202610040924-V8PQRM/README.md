@@ -4,7 +4,7 @@ title: "Preserve native signed-short manual first-line layout boundary"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,35 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T09:40:19.356Z"
+  updated_at: "2026-10-04T09:41:58.035Z"
   updated_by: "CODER"
-  note: "Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending."
+  note: "Final exact-SHA083121f82878baa271421ef54549274afcb611ce same-actor EVALUATOR PASS. Scope/native/AP hashes rechecked without tests; final1276/100%,109/100%,5scripts,85Chromium absent. Initial app fixture failure retained; no passing full suite repeated. Parent DOING/goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T09:41:08.761Z"
+  updated_by: "EVALUATOR"
+  note: "Same actor separate read-only quality phase reviewed exact semantic SHA083121f82878baa271421ef54549274afcb611ce. Native manual short layout boundary satisfies approved scope; no full layout/parent parity claim."
+  evaluated_sha: "083121f82878baa271421ef54549274afcb611ce"
+  blueprint_digest: "bf91f290c86594548565a395123c524b1daea2b6e1071de8c5343aaab59eb7f4"
+  evidence_refs:
+    - ".agentplane/tasks/202610040924-V8PQRM/README.md"
+    - ".agentplane/tasks/202610040924-V8PQRM/quality/20261004-094108761-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/quality/20261004-094108761-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040924-V8PQRM/quality/20261004-094108761-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040924-V8PQRM/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/scope-integrity.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/source-comparison.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/final-integrity.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/screenshots.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/vendor-absent-runtime-initial.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/vendor-absent-runtime.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/vendor-absent-inventory.json"
+    - ".agentplane/tasks/202610040924-V8PQRM/vendor-absent-browser.json"
+  findings:
+    - "Native short output assignment and long manual placement match signed16 unnumbered manual resolver; raw pooled/ruler/dialog/filter values remain complete and automatic offsets long. Independent literals, ownership/no-op, full codec/ODT, clone destination inheritance, actual history and first/follow CSS cover core contract."
+    - "First failed app fixture corrected without production change; corrected failed app/coverage gate1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Inventory/scripts/browser once; no passing full suite repeated. Original failed npm run test result retained, not claimed successful."
+    - "Scope5/all302oldtests byte-identical/mappings221oneappend-onlyrow/native2hashes intact/AP forbidden0/source/routing/doctor pass. Four actual screenshots inspected; mobile horizontal clipping and script/language/bidi/list-mask/full layout obligations remain unverified."
 commit: null
 comments:
   -
@@ -41,8 +66,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending."
+  -
+    type: "verify"
+    at: "2026-10-04T09:41:58.035Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final exact-SHA083121f82878baa271421ef54549274afcb611ce same-actor EVALUATOR PASS. Scope/native/AP hashes rechecked without tests; final1276/100%,109/100%,5scripts,85Chromium absent. Initial app fixture failure retained; no passing full suite repeated. Parent DOING/goal active."
 doc_version: 3
-doc_updated_at: "2026-10-04T09:40:19.406Z"
+doc_updated_at: "2026-10-04T09:41:58.087Z"
 doc_updated_by: "CODER"
 description: "Iteration100: correct existing unnumbered manual layout narrowing from native GetFirstLineOfsWithNum, preserving authored items and ruler/dialog/filter/history values. No source/helper artifacts, upstream execution or registered I/O/recovery changes."
 sections:
@@ -69,17 +100,17 @@ sections:
     Command: npm run test; Result: initial fail,1275 passed/one new default-equal raw0 fixture expectation failed. Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; Result: corrected failed application/coverage gate pass1276/227files, all four metrics100% (11399statements/3021functions/8630branches/10446lines). Production resolver hash identical across both invocations; no passing full suite repeated.
     Command: npm run test:inventory:coverage; Result:109/36files and four metrics100%. Owned script command5/2files; npm run test:e2e85/31.4s. Inventory/scripts/Chromium each once, every test invocation upstream absent with finally restoration. Original failures/results retained; no claim original npm run test exited0.
     Command: resource generator --check, source-tree, provenance, invariants, parity CLI; Result: pass after restoration,221runtime modules/0semantic violations. Exact scope5/all302prior tests unchanged/one evidence-only row update per221rowmanifest/native hashes2 unchanged; full ignored-inclusive Agentplane3282files forbidden0, five historical prose-only diff references. Routing pass; doctor0errors/2knownwarnings/2info (hook shim, historical2Z3962 metadata).
-    Evidence: bounded result/hash JSONs and four inspected screenshots. Real ODT/CSS/first-glyph Range/raw dialog and ruler/history/independent paragraph/editing checks pass. Mobile retains existing horizontal clipping; screenshots alone do not certify subpixel/native mobile UI parity. Full active-script/language/bidi/list-mask/layout/parent parity remains separately unverified. Exact-SHA EVALUATOR quality pending.
+    Evidence: bounded result/hash JSONs and four inspected screenshots. Real ODT/CSS/first-glyph Range/raw dialog and ruler/history/independent paragraph/editing checks pass. Mobile retains existing horizontal clipping; screenshots alone do not certify subpixel/native mobile UI parity. Full active-script/language/bidi/list-mask/layout/parent parity remains separately unverified. Same actor, separate read-only EVALUATOR phase PASS at exact semantic SHA083121f82878baa271421ef54549274afcb611ce; .agentplane/tasks/202610040924-V8PQRM/quality/20261004-094108761-recovery-context/quality-report.json. No independent reviewer claimed. Final production/scope/native/AP integrity recheck without tests; parent remains DOING and goal active.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-04T09:40:19.356Z — VERIFY — ok
+    ### 2026-10-04T09:41:58.035Z — VERIFY — ok
 
     By: CODER
 
-    Note: Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending.
+    Note: Final exact-SHA083121f82878baa271421ef54549274afcb611ce same-actor EVALUATOR PASS. Scope/native/AP hashes rechecked without tests; final1276/100%,109/100%,5scripts,85Chromium absent. Initial app fixture failure retained; no passing full suite repeated. Parent DOING/goal active.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:40:19.014Z, excerpt_hash=sha256:21c29afce17bc9f7c9a332b1ba381f39f7dae052d88f15a34634c410a035ad77
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:41:56.381Z, excerpt_hash=sha256:21c29afce17bc9f7c9a332b1ba381f39f7dae052d88f15a34634c410a035ad77
 
     Details:
 
@@ -94,7 +125,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610040924-V8PQRM -m 🧩 V8PQRM task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610040924-V8PQRM --result verified-202610040924-V8PQRM --commit 083121f82878baa271421ef54549274afcb611ce
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -142,17 +173,17 @@ Command: seven split static gates; Result: pass (initial format failure correcte
 Command: npm run test; Result: initial fail,1275 passed/one new default-equal raw0 fixture expectation failed. Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; Result: corrected failed application/coverage gate pass1276/227files, all four metrics100% (11399statements/3021functions/8630branches/10446lines). Production resolver hash identical across both invocations; no passing full suite repeated.
 Command: npm run test:inventory:coverage; Result:109/36files and four metrics100%. Owned script command5/2files; npm run test:e2e85/31.4s. Inventory/scripts/Chromium each once, every test invocation upstream absent with finally restoration. Original failures/results retained; no claim original npm run test exited0.
 Command: resource generator --check, source-tree, provenance, invariants, parity CLI; Result: pass after restoration,221runtime modules/0semantic violations. Exact scope5/all302prior tests unchanged/one evidence-only row update per221rowmanifest/native hashes2 unchanged; full ignored-inclusive Agentplane3282files forbidden0, five historical prose-only diff references. Routing pass; doctor0errors/2knownwarnings/2info (hook shim, historical2Z3962 metadata).
-Evidence: bounded result/hash JSONs and four inspected screenshots. Real ODT/CSS/first-glyph Range/raw dialog and ruler/history/independent paragraph/editing checks pass. Mobile retains existing horizontal clipping; screenshots alone do not certify subpixel/native mobile UI parity. Full active-script/language/bidi/list-mask/layout/parent parity remains separately unverified. Exact-SHA EVALUATOR quality pending.
+Evidence: bounded result/hash JSONs and four inspected screenshots. Real ODT/CSS/first-glyph Range/raw dialog and ruler/history/independent paragraph/editing checks pass. Mobile retains existing horizontal clipping; screenshots alone do not certify subpixel/native mobile UI parity. Full active-script/language/bidi/list-mask/layout/parent parity remains separately unverified. Same actor, separate read-only EVALUATOR phase PASS at exact semantic SHA083121f82878baa271421ef54549274afcb611ce; .agentplane/tasks/202610040924-V8PQRM/quality/20261004-094108761-recovery-context/quality-report.json. No independent reviewer claimed. Final production/scope/native/AP integrity recheck without tests; parent remains DOING and goal active.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-04T09:40:19.356Z — VERIFY — ok
+### 2026-10-04T09:41:58.035Z — VERIFY — ok
 
 By: CODER
 
-Note: Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending.
+Note: Final exact-SHA083121f82878baa271421ef54549274afcb611ce same-actor EVALUATOR PASS. Scope/native/AP hashes rechecked without tests; final1276/100%,109/100%,5scripts,85Chromium absent. Initial app fixture failure retained; no passing full suite repeated. Parent DOING/goal active.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:40:19.014Z, excerpt_hash=sha256:21c29afce17bc9f7c9a332b1ba381f39f7dae052d88f15a34634c410a035ad77
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:41:56.381Z, excerpt_hash=sha256:21c29afce17bc9f7c9a332b1ba381f39f7dae052d88f15a34634c410a035ad77
 
 Details:
 
@@ -167,7 +198,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610040924-V8PQRM -m 🧩 V8PQRM task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610040924-V8PQRM --result verified-202610040924-V8PQRM --commit 083121f82878baa271421ef54549274afcb611ce
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
