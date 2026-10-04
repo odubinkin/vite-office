@@ -1,10 +1,11 @@
 ---
 id: "202610041849-96ZZRB"
 title: "Restore cut text hint reconstruction boundaries"
-status: "DOING"
+result_summary: "Restored CutImpl split/equal-end reconstruction in cross-node MoveRange;125 new cases and one source-supported prior correction,1888app109inventory5scripts99Chromium first absent passes, coverage100 percent, restored vendor and source/helper-free AP."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -46,11 +47,16 @@ quality_review:
   findings:
     - "Native CutImpl and MakeTextAttr sources support fresh split/equal-end flags and retained strictly interior flags. Existing cross-node manager uses explicit cut slices; snapshots and same-node adapter remain separate. One source-supported prior exact-end expectation corrected,332 other prior tests unchanged;125 new literal boundary cases."
     - "Six static gates passed after failed lint only recovery. All five upstream-absent gates first-pass: build,1888app four metrics100%,109inventory four metrics100%,scripts5,Chromium99. Five restored source audits pass semantic violations0. Six paths,234 runtime fields/statuses/defaults/exceptions retained except two bounded appendices, eight native hashes."
-commit: null
+commit:
+  hash: "9be2b458b413778e0730d8a9760816e190a5bdc3"
+  message: "✅ 96ZZRB task: record cut hint reconstruction verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved strict cut-end flag boundaries and source-supported expectation correction under standing goal."
+  -
+    author: "CODER"
+    body: "Verified: native strict cut-end constructor flag boundaries pass the approved leaf checks with snapshots preserved."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved cut flag boundary scope verified:1888app,109inventory,scripts5,Chromium99 all first absent passes, both coverage100 percent; six static gates after failed lint only recovery, source audits semantic violations0. Six paths,332 unchanged prior tests and one native-supported exact-end correction,234 runtime fields retained. Exact semantic82c5e5b08bf1823b3913b503d4e6c04c5e22019e same-actor quality pass; vendor restored and AP source/helper-free."
+  -
+    type: "status"
+    at: "2026-10-04T19:02:02.884Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native strict cut-end constructor flag boundaries pass the approved leaf checks with snapshots preserved."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:01:46.051Z"
+doc_updated_at: "2026-10-04T19:02:02.885Z"
 doc_updated_by: "CODER"
 description: "Port native CutImpl strict end-boundary and split attribute construction into existing cross-node MoveRange; preserve snapshot semantics, correct the previous exact-end expectation, and leave same-node move adapter and native object lifetimes explicitly unverified."
 sections:
@@ -125,6 +138,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task implementation/docs through a new traceable task without history rewrite. Restore vendor directory in finally and after interruption."
   Findings: "Iteration116 restores native CutImpl attribute flag selection for existing cross-node MoveRange. Explicit SwpHints.sliceForCut shares validation/clipping with snapshot slice: hints starting before the cut or ending at/after the exclusive end reconstruct via MakeTextAttr and fresh false flags; only inside-start/end-strictly-before hints retain original flags. Prior iteration115 exact-end whole-move retention statement is superseded; its eight-mask expectation/title/comment is corrected,332 other prior test files byte-identical. New app-owned125 cases cover13 literal boundary relations/all8 masks/both families, exact source/target ranges, metadata, shared owner handles, retained source/undo fragments, real ReplaceUndoRange restoration, invalid/empty/plain cuts and preserved same-node adapter behavior. Six static gates pass after only failed lint recovery for two missing JSDoc comments on new test types. All five first-attempt upstream-absent gates pass: one build,1888app/251files four coverage metrics100%,109inventory/36files four metrics100%,scripts5/2,Chromium99. No test/profile repetitions and no upstream access from product tests. Vendor restored before five source audits; all pass semantic violations0. Exact six semantic paths,234 existing runtime fields/statuses/defaults/exceptions retained except two bounded justification appendices; eight native hashes. AP ignored-inclusive scan3743 files, forbidden0; doctor0 errors/two unchanged warnings, policy routing pass. Native physical hint identity/refcount/listeners, source empty hints, destination Update/InsertHint adjustment, same-node move algorithm, SplitContentNode original-suffix identity and broader core/browser parity remain unverified. No whole-module/status/goal promotion or registered I/O/recovery changes."
+extensions:
+  implementation_commit:
+    hash: "82c5e5b08bf1823b3913b503d4e6c04c5e22019e"
+    message: "🛠️ 96ZZRB writer: restore strict cut hint reconstruction boundaries"
 id_source: "generated"
 ---
 ## Summary
