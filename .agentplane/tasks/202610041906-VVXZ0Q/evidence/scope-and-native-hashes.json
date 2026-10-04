@@ -1,0 +1,92 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 334,
+  "priorTestsByteIdentical": 334,
+  "newAppCases": 118,
+  "existingRuntimeRows": 234,
+  "allExistingRuntimeFieldsExceptThreeAppendedJustificationsUnchanged": true,
+  "sourceProvenanceOnlyThreeAppendices": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+      "sha256": "b59e66c9c5d31bf6fc0416a160e1584e465c4d2ac8e37ddf08607d9b570fbb60"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+      "sha256": "16ac2f8916ab0e6b597502b84247ef283d4a0cbaa2a79f0dbc2f3aa7e8ad052e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+      "sha256": "00ed4be35d90fd8921927b767c09d2d6ba6ae352e08fec9f291d5ac21e836a0b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "sha256": "cfbc09c7a7413e29dc3320c46eac6b4c706e9f805f0b90436ec636f9bc2bdb08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx",
+      "sha256": "e9cd6e67ef9f5f9bd02f0cea10543d41f0d03ace23e903841db38d894dc26dbe"
+    }
+  ],
+  "staticChecks": 6,
+  "staticRecovery": "Only new test changed after first pass: value equality and eight cut-preview boundary cases. Focused formatter/lint passed. New tuple needed as-const annotation; failed changed-test typecheck recovered. Production code unchanged.",
+  "absentProfile": {
+    "build": 1,
+    "app": {
+      "tests": 2006,
+      "files": 253,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "inventory": {
+      "tests": 109,
+      "files": 36,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "scripts": {
+      "tests": 5,
+      "files": 2
+    },
+    "chromium": 99
+  },
+  "recovery": "Only failed app coverage gate repeated after new-test-only corrections; initial build and all other suites passed once without upstream. No present profile.",
+  "passingSuitesRepeated": false,
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass"
+}

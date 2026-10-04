@@ -4,7 +4,7 @@ title: "Restore owned text hint transfer during cuts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: implement approved owned cross-node cut transfer while retaining independent snapshots and registered I/O deviations."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:18:36.730Z"
+doc_updated_at: "2026-10-04T19:27:39.408Z"
 doc_updated_by: "CODER"
 description: "Replace snapshot-based cross-node moves with an owned cut/transfer path matching native CutImpl pointer movement for strictly interior hints and fresh split hints; preserve independent undo snapshots, prior flags and registered I/O deviations."
 sections:
@@ -61,11 +61,9 @@ sections:
     4. After vendor restoration run npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Expected all pass, semantic violations0.
     5. Audit exact seven semantic paths, all334 previous test files byte-identical,234 existing runtime fields/statuses/defaults/exceptions unchanged except three bounded appendices, ignored-inclusive source/helper-free AP, native hashes; run ap doctor and node .agentplane/policy/check-routing.mjs. Expected no scope drift/new errors.
     6. Same-actor read-only EVALUATOR review exact semantic SHA, quality pass; CODER verify/finish separate hashes, clean final main/vendor restored, parent/goal remains active.
-  Verification: |-
-    <!-- BEGIN VERIFICATION RESULTS -->
-    <!-- END VERIFICATION RESULTS -->
+  Verification: "Six static gates pass with new-test-only formatter/lint/typecheck recovery. Upstream-absent build passed once; failed app coverage gate recovered alone after test-only corrections:2006/253 pass and100%four metrics. Inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. Vendor restored; five source audits pass semantic violations0. Seven semantic paths,334 prior test files unchanged,234 runtime fields/statuses/defaults/exceptions unchanged except three justification appendices; source provenance only three responsibility appendices. Native hashes9; ignored-inclusive AP forbidden0; doctor0errors/two unchanged warnings,routing pass. Required exact-SHA same-actor quality review precedes verify/finish. Full native holder/listener/empty-hint/destination adjustment/same-node/split-join and broad UI/core parity remain unverified."
   Rollback Plan: "Revert this leaf through a new traceable task; no history rewrite. Restore vendor directory after interruption."
-  Findings: "Initial six static gates and absent build pass. Absent app coverage:1950 passed/48 new cases failed from one QueryValue array reference-equality assertion; production changes passed all prior tests and39 new actual node ownership cases. Four coverage metrics100/100/100/99.98; one cut-preview branch at ndhints97 is missing now that manager uses destructive cut. Correct only the new test assertion to deep value equality and add exact-end/strict-interior preview cases. Recover the failed application coverage gate once because the global100percent branch threshold cannot be certified by a noncoverage filtered run; do not repeat the passing build. Pending inventory/scripts/Chromium remain first absent runs. No scope or pass-criterion changes; production unchanged."
+  Findings: "Implemented owned cross-node cut/transfer and118 new app cases. Native CutImpl strictly interior hints transfer actual pointers/items; partial/equal-end hints reconstruct, retained source objects update in place. SwpHints normalization split preserves caller snapshots. Node cut owns text/index notifications; EraseText delegates bounded replacement. Six initial static gates passed. First absent build passed; initial app1950 passed48 new-test failures from array reference equality, coverage branches99.98. Only new test corrected to deep values plus eight exact-end/interior preview cases; production unchanged. New tuple annotation fixed failed changed-test typecheck; formatter/lint/typecheck pass. Failed app coverage gate alone repeated absent:2006/253 all pass four metrics100. Inventory109/36 coverage100, scripts5/2, Chromium99 first absent pass. No present test profile or successful build repeat. Vendor restored before five source audits, all pass semantic violations0. Seven paths,334 prior tests byte-identical,234 runtime fields unchanged except three appendices, provenance only three appended responsibilities, nine native hashes. Scope-audit comparator corrected for appended array entries; no product change. AP3755 ignored-inclusive files forbidden0; doctor0errors two unchanged warnings, routing pass. Native backlinks/refcounts/destruction/listeners, empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join remain unverified. Parent and goal active; no status promotion or I/O deviation changes."
 id_source: "generated"
 ---
 ## Summary
@@ -97,8 +95,7 @@ Seven semantic paths: apps/office/src/sw/source/core/txtnode/ndhints.ts, apps/of
 
 ## Verification
 
-<!-- BEGIN VERIFICATION RESULTS -->
-<!-- END VERIFICATION RESULTS -->
+Six static gates pass with new-test-only formatter/lint/typecheck recovery. Upstream-absent build passed once; failed app coverage gate recovered alone after test-only corrections:2006/253 pass and100%four metrics. Inventory109/36 coverage100%,scripts5/2,Chromium99 pass first absent. Vendor restored; five source audits pass semantic violations0. Seven semantic paths,334 prior test files unchanged,234 runtime fields/statuses/defaults/exceptions unchanged except three justification appendices; source provenance only three responsibility appendices. Native hashes9; ignored-inclusive AP forbidden0; doctor0errors/two unchanged warnings,routing pass. Required exact-SHA same-actor quality review precedes verify/finish. Full native holder/listener/empty-hint/destination adjustment/same-node/split-join and broad UI/core parity remain unverified.
 
 ## Rollback Plan
 
@@ -106,4 +103,4 @@ Revert this leaf through a new traceable task; no history rewrite. Restore vendo
 
 ## Findings
 
-Initial six static gates and absent build pass. Absent app coverage:1950 passed/48 new cases failed from one QueryValue array reference-equality assertion; production changes passed all prior tests and39 new actual node ownership cases. Four coverage metrics100/100/100/99.98; one cut-preview branch at ndhints97 is missing now that manager uses destructive cut. Correct only the new test assertion to deep value equality and add exact-end/strict-interior preview cases. Recover the failed application coverage gate once because the global100percent branch threshold cannot be certified by a noncoverage filtered run; do not repeat the passing build. Pending inventory/scripts/Chromium remain first absent runs. No scope or pass-criterion changes; production unchanged.
+Implemented owned cross-node cut/transfer and118 new app cases. Native CutImpl strictly interior hints transfer actual pointers/items; partial/equal-end hints reconstruct, retained source objects update in place. SwpHints normalization split preserves caller snapshots. Node cut owns text/index notifications; EraseText delegates bounded replacement. Six initial static gates passed. First absent build passed; initial app1950 passed48 new-test failures from array reference equality, coverage branches99.98. Only new test corrected to deep values plus eight exact-end/interior preview cases; production unchanged. New tuple annotation fixed failed changed-test typecheck; formatter/lint/typecheck pass. Failed app coverage gate alone repeated absent:2006/253 all pass four metrics100. Inventory109/36 coverage100, scripts5/2, Chromium99 first absent pass. No present test profile or successful build repeat. Vendor restored before five source audits, all pass semantic violations0. Seven paths,334 prior tests byte-identical,234 runtime fields unchanged except three appendices, provenance only three appended responsibilities, nine native hashes. Scope-audit comparator corrected for appended array entries; no product change. AP3755 ignored-inclusive files forbidden0; doctor0errors two unchanged warnings, routing pass. Native backlinks/refcounts/destruction/listeners, empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join remain unverified. Parent and goal active; no status promotion or I/O deviation changes.
