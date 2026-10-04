@@ -1,0 +1,16 @@
+[
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/core/txtnode/native-text-hint-update.test.ts --max-warnings 0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reason": "New direct hyperlink-only public hint insertion assertion added after static gates to cover inherited projection branch."
+  },
+  {
+    "command": "npm exec -- tsc --project apps/office/tsconfig.json --noEmit",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reason": "New direct hyperlink-only public hint insertion assertion added after static gates to cover inherited projection branch."
+  }
+]
