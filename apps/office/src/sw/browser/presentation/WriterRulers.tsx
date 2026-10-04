@@ -33,7 +33,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
   const [newTabWorkspace, setNewTabWorkspace] = useState<HTMLElement | null>(null);
   const pageWidth = props.page.width / TWIPS_PER_CSS_PIXEL;
   const paragraphLeft = props.paragraph.textLeftMargin;
-  const tabStopsPt = props.paragraph.computedStyle.tabStopsPt ?? [];
+  const rulerTabStops = props.paragraph.rulerTabStops ?? [];
   const firstLine = props.paragraph.computedStyle.firstLineIndentPt * 20;
   const paragraphRight = props.paragraph.computedStyle.rightMarginPt * 20;
   return (
@@ -168,14 +168,14 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
                 ) => props.onParagraphIndentChange("right", delta)
               }
             />
-            {tabStopsPt.map(
-              /** Handles Writer formatting state. @param positionPt - Input value. @param index - Input value. @returns Callback result. */ (
-                positionPt,
-                index,
+            {rulerTabStops.map(
+              /** Presents an explicit tab without changing its raw item index. @param stop - Paired model identity and position. @param ordinal - Visible marker ordinal. @returns Ruler handle. */ (
+                { positionPt, index },
+                ordinal,
               ) => (
                 <RulerHandle
                   tracking={tracking}
-                  ariaLabel={`Tab stop ${index + 1}`}
+                  ariaLabel={`Tab stop ${ordinal + 1}`}
                   axis="x"
                   className="h-3 w-2 border-b-2 border-l-2 border-indigo-700"
                   edge="bottom"

@@ -73,6 +73,7 @@ export interface WriterParagraphProjection {
   readonly numRuleName: string;
   readonly nodeIndex: number;
   readonly runs: readonly WriterProjectedTextRun[];
+  readonly rulerTabStops?: readonly Readonly<{ index: number; positionPt: number }>[] | undefined;
   readonly style: WriterParagraphStyle;
   readonly styleDisplayName: string;
   readonly text: string;
@@ -182,22 +183,24 @@ export class WriterViewProjection {
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
-        const tabStopsPt = tabItem
-          .GetStops()
-          .filter(
-            /** Excludes generated default stops from explicit ruler markers. @param stop - Writer tab stop. @returns Whether explicit. */
-            (stop) => stop.GetAdjustment() !== SvxTabAdjust.Default,
-          )
-          .map(
-            /** Converts a tab position from twips to points. @param stop - Writer tab stop. @returns Position in points. */
-            (stop) => stop.GetTabPos() / 20,
-          );
+        const rulerTabStops = tabItem.GetStops().flatMap(
+          /** Excludes default hit targets while retaining each explicit tab's item index. @param stop - Writer tab stop. @param index - Raw item index. @returns Immutable ruler identity. */
+          (stop, index) =>
+            stop.GetAdjustment() === SvxTabAdjust.Default
+              ? []
+              : [Object.freeze({ index, positionPt: stop.GetTabPos() / 20 })],
+        );
+        const tabStopsPt = rulerTabStops.map(
+          /** Projects positions for paragraph formatting without discarding ruler identity. @param stop - Immutable ruler tab. @returns Position in points. */
+          (stop) => stop.positionPt,
+        );
         const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
         const fontFamilyGeneric = font.GetGenericFamily();
         let runOffset = 0;
         return Object.freeze({
+          ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
           alignment: node.GetParagraphAlignment(),
           ...(bulletChar === undefined ? {} : { bulletChar }),
           id: this.GetNodeId(node),

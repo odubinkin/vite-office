@@ -450,24 +450,21 @@ export class SwWrtShell extends SwModify {
       !Number.isFinite(delta)
     )
       return false;
-    const position = Math.round(current.At(index).GetTabPos() + delta);
+    const selected = current.At(index);
+    const position = Math.round(selected.GetTabPos() + delta);
     if (position > 32767) return false;
-    const stops = current
-      .GetStops()
-      .flatMap(
-        /** Repositions or removes only the dragged stop. @param stop - Existing stop. @param stopIndex - Sorted index. @returns Retained stops. */ (
-          stop,
-          stopIndex,
-        ) =>
-          stopIndex !== index
-            ? [stop]
-            : position <= 0
-              ? []
-              : [new SvxTabStop(position, stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill())],
+    const moved = current.Clone();
+    moved.Remove(index);
+    if (position > 0)
+      moved.Insert(
+        new SvxTabStop(
+          position,
+          selected.GetAdjustment(),
+          selected.GetDecimal(),
+          selected.GetFill(),
+        ),
       );
-    return this.SetParagraphItem(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, stops, current.GetDefaultDistance()),
-    );
+    return this.SetParagraphItem(moved);
   }
 
   /** Applies paragraph alignment through one shell-owned history transition. @param alignment - Next alignment. @returns Whether content changed. */

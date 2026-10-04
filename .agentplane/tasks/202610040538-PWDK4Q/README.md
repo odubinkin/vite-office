@@ -4,7 +4,7 @@ title: "Preserve Writer ruler tab item identity"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T05:56:02.333Z"
+  updated_by: "CODER"
+  note: "Pass:9paths;282of284prior tests unchanged,4DTOpayloads/all old assertions retained;220rows/3append-only updates/no status promotion;3pinned hashes;AP forbidden0. Final vendor-absent1134+109+12+63pass/restored,100%four coverage metrics,0semantic. Pre-steering full verify historical only;no further suite reruns. Exact semantic quality pending;full native/parent open."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start:standing goal authorizes one tab item identity correction;source hashes/results only,owned fixtures and tests with no upstream invocation or helper artifacts."
+  -
+    type: "verify"
+    at: "2026-10-04T05:56:02.333Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass:9paths;282of284prior tests unchanged,4DTOpayloads/all old assertions retained;220rows/3append-only updates/no status promotion;3pinned hashes;AP forbidden0. Final vendor-absent1134+109+12+63pass/restored,100%four coverage metrics,0semantic. Pre-steering full verify historical only;no further suite reruns. Exact semantic quality pending;full native/parent open."
 doc_version: 3
-doc_updated_at: "2026-10-04T05:55:33.612Z"
+doc_updated_at: "2026-10-04T05:56:02.394Z"
 doc_updated_by: "CODER"
 description: "Iteration91:stop compact visible-tab ordinal from addressing hidden default tab in the raw SvxTabStopItem;retain model index in immutable browser projection and verify actual Writer/Undo/Chromium without upstream test dependencies."
 sections:
@@ -58,6 +64,39 @@ sections:
     Command: focused owned Vitest and fresh-build Chromium (before steering). Result: pass. Evidence: 49 tests/6 files and 2 widths1280/390; pre-fix 4 owned failures/1 pass and 2 browser failures establish wrong raw index and collision metadata. Scope: raw/default/interleaved tab identity, reordering, complete item metadata/default distance, one accepted Undo/Redo, Escape and immutable retained snapshots.
     Command: exact scope/manifest/source hash checks, ignored-inclusive Agentplane raw/decoded audit, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: 9 semantic paths; 282 of284 old test files byte-identical; 4 fixture DTO updates in2oldfiles,all assertions and bytes outside formatted payloads preserved; 220 rows/order/metadata retained,3append-only updates,no new rows/status promotion; 3 pinned hashes unchanged; Agentplane source/helper/Python/frame/code-diff/archive findings0,5historical prose-only diffs; doctor0errors/2knownwarnings/2info.
     Future verification follows user steering: one suite pass without upstream, source-dependent static CLI audits separate after restoration. Same-actor separate EVALUATOR exact semantic-SHA review and clean leaf closure pending. Full native ruler geometry/default glyphs/type glyphs/RTL/modifiers/deletion/capture/Writer/browser/parent remain unverified. Registered save/open/recovery exceptions unchanged.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T05:56:02.333Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass:9paths;282of284prior tests unchanged,4DTOpayloads/all old assertions retained;220rows/3append-only updates/no status promotion;3pinned hashes;AP forbidden0. Final vendor-absent1134+109+12+63pass/restored,100%four coverage metrics,0semantic. Pre-steering full verify historical only;no further suite reruns. Exact semantic quality pending;full native/parent open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T05:55:33.612Z, excerpt_hash=sha256:fc1d0dfad4ab1afe8b863d0234ff060e06111f1c9a187dd626e4f640c199a5c6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040538-PWDK4Q/blueprint/resolved-snapshot.json
+    - old_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+    - current_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040538-PWDK4Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610040538-PWDK4Q
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert isolated semantic commit if needed,keep bounded results/hashes and restore temporarily renamed vendor in finally;no history rewrite."
   Findings: |-
     Previous goal turn is verified progress:iteration90 leafDONE semantic2a667d6fc8db with clean main/base11a7405467db. Current projection filters SvxTabAdjust.Default before assigning ruler ordinal;WriterRulers passes this compact ordinal to MoveRulerTabStop while the shell indexes complete item. Pinned Ruler skips default hit targets but preserves nAryPos;SvxRuler ApplyTabs uses that raw item index. Preceding default can therefore be moved instead of the explicit handle. Native full geometry/default glyph generation/type glyphs/RTL/snap/delete/capture/platform and parent goal remain open.
@@ -102,6 +141,39 @@ Command: npm run verify (completed before the user's single-run steering). Resul
 Command: focused owned Vitest and fresh-build Chromium (before steering). Result: pass. Evidence: 49 tests/6 files and 2 widths1280/390; pre-fix 4 owned failures/1 pass and 2 browser failures establish wrong raw index and collision metadata. Scope: raw/default/interleaved tab identity, reordering, complete item metadata/default distance, one accepted Undo/Redo, Escape and immutable retained snapshots.
 Command: exact scope/manifest/source hash checks, ignored-inclusive Agentplane raw/decoded audit, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: 9 semantic paths; 282 of284 old test files byte-identical; 4 fixture DTO updates in2oldfiles,all assertions and bytes outside formatted payloads preserved; 220 rows/order/metadata retained,3append-only updates,no new rows/status promotion; 3 pinned hashes unchanged; Agentplane source/helper/Python/frame/code-diff/archive findings0,5historical prose-only diffs; doctor0errors/2knownwarnings/2info.
 Future verification follows user steering: one suite pass without upstream, source-dependent static CLI audits separate after restoration. Same-actor separate EVALUATOR exact semantic-SHA review and clean leaf closure pending. Full native ruler geometry/default glyphs/type glyphs/RTL/modifiers/deletion/capture/Writer/browser/parent remain unverified. Registered save/open/recovery exceptions unchanged.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T05:56:02.333Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass:9paths;282of284prior tests unchanged,4DTOpayloads/all old assertions retained;220rows/3append-only updates/no status promotion;3pinned hashes;AP forbidden0. Final vendor-absent1134+109+12+63pass/restored,100%four coverage metrics,0semantic. Pre-steering full verify historical only;no further suite reruns. Exact semantic quality pending;full native/parent open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T05:55:33.612Z, excerpt_hash=sha256:fc1d0dfad4ab1afe8b863d0234ff060e06111f1c9a187dd626e4f640c199a5c6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040538-PWDK4Q/blueprint/resolved-snapshot.json
+- old_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+- current_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040538-PWDK4Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610040538-PWDK4Q
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

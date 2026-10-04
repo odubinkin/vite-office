@@ -178,7 +178,11 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
         onTabStopAdd={onTabStopAdd}
         onTabStopMove={onTabStopMove}
         page={page}
-        paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: [36] } }}
+        paragraph={{
+          ...item,
+          rulerTabStops: [{ index: 0, positionPt: 36 }],
+          computedStyle: { ...item.computedStyle, tabStopsPt: [36] },
+        }}
       />,
     );
     const rulerSurface = container.querySelector(
@@ -208,7 +212,14 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
         onTabStopAdd={onTabStopAdd}
         onTabStopMove={onTabStopMove}
         page={page}
-        paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: [36, 72] } }}
+        paragraph={{
+          ...item,
+          rulerTabStops: [
+            { index: 0, positionPt: 36 },
+            { index: 1, positionPt: 72 },
+          ],
+          computedStyle: { ...item.computedStyle, tabStopsPt: [36, 72] },
+        }}
       />,
     );
     const handle = screen.getByRole("button", { name: "Tab stop 1" });
@@ -223,7 +234,11 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
         onTabStopAdd={onTabStopAdd}
         onTabStopMove={onTabStopMove}
         page={page}
-        paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: undefined } }}
+        paragraph={{
+          ...item,
+          rulerTabStops: undefined,
+          computedStyle: { ...item.computedStyle, tabStopsPt: undefined },
+        }}
       />,
     );
     const rulerSurface = container.querySelector(

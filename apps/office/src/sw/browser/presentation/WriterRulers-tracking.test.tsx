@@ -93,6 +93,7 @@ describe("ruler handle tracking", /** Groups coordinate preservation and transie
         {...data}
         paragraph={{
           ...data.paragraph,
+          rulerTabStops: [{ index: 0, positionPt: 30 }],
           computedStyle: { ...data.paragraph.computedStyle, tabStopsPt: [30] },
         }}
         horizontalVisible

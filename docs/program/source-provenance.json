@@ -3403,6 +3403,22 @@
           {
             "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tracking.test.tsx",
             "marker": "tracksNewWriterTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+            "marker": "rulerTabStops"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+            "marker": "movesRawTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+            "marker": "reordersTabIndices"
+          },
+          {
+            "path": "apps/office/e2e/writer-ruler-tab-identity.spec.ts",
+            "marker": "Writer ruler tab identity at width"
           }
         ]
       },
@@ -3410,7 +3426,8 @@
       "rationale": "Projects Writer ruler handles in the browser and emits pointer deltas/positions while SwWrtShell applies authoritative page, indent, and tab-stop transitions.",
       "responsibilities": [
         "Presents accessible page-margin, paragraph-indent, and tab-stop handles for the browser Writer workspace.",
-        "Existing ruler gestures now project inspected Ruler left-single-click/nontracking admission,VCL owner replacement and all-key tracking priority:initiating pointer owns movement/termination,Escape cancels,Return accepts the last painted position,and other keys cannot reach widget/document dispatch. All cancellation paths release listeners and discard preview without application changes;accepted termination releases ownership before one callback. Temporary tabs begin on a free-surface press as in SvxRuler Click and Ruler MouseButtonDown,and remain browser preview until accepted pointer/Return termination;cancel/hide/unmount never inserts a model tab and trailing clicks cannot add a second undo entry. Zero-motion termination preserves its initial position. Existing nonzero snapping,coordinate conversion,ticks/guides,page/paragraph/tab callbacks and core undo ownership remain unchanged. Six old tab fixture triggers in two files use pointer-down plus matched pointer-up,with every assertion and all other bytes retained;278of280prior test files byte-identical. Browser teardown cancels DOM callbacks without claiming identical native disposal flags. Owned boundary/handle/actual Writer and rebuilt desktop/mobile tests cover this bounded tracking contract only. Full native hit testing,RTL/tab types,double-click dialogs,modifier snapping,deletion,mouse capture,platform/LOK/input and complete ruler/Writer/native parity remain unverified;intentional save/open/recovery exceptions are preserved."
+        "Existing ruler gestures now project inspected Ruler left-single-click/nontracking admission,VCL owner replacement and all-key tracking priority:initiating pointer owns movement/termination,Escape cancels,Return accepts the last painted position,and other keys cannot reach widget/document dispatch. All cancellation paths release listeners and discard preview without application changes;accepted termination releases ownership before one callback. Temporary tabs begin on a free-surface press as in SvxRuler Click and Ruler MouseButtonDown,and remain browser preview until accepted pointer/Return termination;cancel/hide/unmount never inserts a model tab and trailing clicks cannot add a second undo entry. Zero-motion termination preserves its initial position. Existing nonzero snapping,coordinate conversion,ticks/guides,page/paragraph/tab callbacks and core undo ownership remain unchanged. Six old tab fixture triggers in two files use pointer-down plus matched pointer-up,with every assertion and all other bytes retained;278of280prior test files byte-identical. Browser teardown cancels DOM callbacks without claiming identical native disposal flags. Owned boundary/handle/actual Writer and rebuilt desktop/mobile tests cover this bounded tracking contract only. Full native hit testing,RTL/tab types,double-click dialogs,modifier snapping,deletion,mouse capture,platform/LOK/input and complete ruler/Writer/native parity remain unverified;intentional save/open/recovery exceptions are preserved.",
+        "Iteration91 preserves each explicit ruler tab's raw SvxTabStopItem index in the immutable browser record instead of dispatching its compact visible ordinal. Default tabs remain outside interactive marker admission as inspected in Ruler ImplHitTest; accepted drags address the selected item despite preceding/interleaved defaults and model reordering. Existing tracking, geometry, snapping and visible labels remain unchanged. Actual Writer/Undo and rebuilt Chromium at widths1280/390 cover this bounded identity correction; full native ruler geometry, default glyph generation, tab-type glyphs, RTL, modifiers, deletion, capture and UI parity remain unverified. Registered save/open/recovery exceptions are preserved."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -3663,6 +3680,18 @@
           {
             "path": "apps/office/src/xmloff/source/style/xmlnume.test.ts",
             "marker": "exports only the native legacy group with nonzero and positive attribute predicates"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+            "marker": "rulerTabStops"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+            "marker": "projectsTabIdentity"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+            "marker": "reordersTabIndices"
           }
         ]
       },
@@ -3670,7 +3699,8 @@
       "rationale": "Projects live Writer nodes into immutable primitive presentation values. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory.",
       "responsibilities": [
         "Projects live Writer nodes into immutable primitive presentation values.",
-        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion."
+        "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
+        "Iteration91 pairs explicit ruler positions with their original tab item indices before excluding SvxTabAdjust.Default hit targets. Frozen primitive records retain native UpdateTabs/ApplyTabs addressing without mutable model references or parallel index arrays; computedStyle.tabStopsPt is derived from the same records for existing paragraph formatting. Empty explicit sets omit ruler records. Owned tests retain old snapshots, verify raw indices after reordering and preserve default/explicit item metadata. This browser projection does not certify full native ruler/layout/default-glyph or parent parity."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -9987,6 +10017,22 @@
           {
             "marker": "SwWrtShell",
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "MoveRulerTabStop"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+            "marker": "replacesCollision"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+            "marker": "movesRawTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+            "marker": "cancelsMixedTab"
           }
         ],
         "upstream": [
@@ -10015,6 +10061,9 @@
         "UITestLogger::getInstance",
         "SvxAutoCorrCfg::Get",
         "SwWrtShell::NoEdit"
+      ],
+      "responsibilities": [
+        "Iteration91 refactors the existing raw-index MoveRulerTabStop transition to clone the current item, remove its selected index and insert the moved copied stop, matching inspected SvxRuler ApplyTabs and SvxTabStopItem Insert ordering. A destination collision retains the selected stop's adjustment, decimal and leader instead of the later neighbour's metadata. Item default distance, unrelated default/explicit stops, invalid-input rejection, existing nonpositive removal and shell-owned single undo/redo are preserved. Actual Writer tests cover these bounded transitions; native geometric drag limits/deletion/modifiers and complete SwWrtShell behavior/contracts/defaults remain unverified. No native status promotion or registered I/O/recovery change."
       ]
     },
     {
