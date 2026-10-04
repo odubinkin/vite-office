@@ -1,0 +1,35 @@
+{
+  "base": "f34a32d321d1",
+  "priorTests": 253,
+  "allPriorTestBytesPreserved": true,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changed": 2,
+      "evidenceOnly": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changed": 2,
+      "evidenceOnly": true
+    }
+  ],
+  "semanticPaths": [
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+    "apps/office/e2e/writer-menu-key.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "hashes": {
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx": "4b83af096b0dc6fa49469fedcc553fed4237193c76532c9daf95f84addfb6deb",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "911d2c301ba33a2f4a25e5f89dabafc9f3215f3138253ad7d54cff5926e1b447",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx": "f0815d449d30af440a5f7629057110ef6f33a2125a37d359559770a40713c00e",
+    "apps/office/e2e/writer-menu-key.spec.ts": "383646369de5c64cdecfe3b29be46fb5d746cf46807850d06cdc67e747a1666c",
+    "docs/program/source-provenance.json": "06959e785a75d3f99b550a1ac75cc33ac9468727dd7dd6defd732723ab57d1b8",
+    "docs/program/parity/runtime-inventory.json": "f8935b5cd841c89f5b230f137413ad9b5b3621422c448b6aafe884c26532477d"
+  }
+}
