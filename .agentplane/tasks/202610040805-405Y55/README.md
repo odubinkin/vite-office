@@ -4,7 +4,7 @@ title: "Preserve paragraph ruler item state through undo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -46,7 +46,7 @@ events:
     to: "DOING"
     note: "Start: execute amended typed-item/history correction including direct-only before-item capture under the standing goal authorization."
 doc_version: 3
-doc_updated_at: "2026-10-04T08:07:27.545Z"
+doc_updated_at: "2026-10-04T08:19:43.997Z"
 doc_updated_by: "CODER"
 description: "Iteration 98 of parent 202609240501-C9TN6M: replace numeric-only specialized ruler undo with existing paragraph item application/history, preserving the effective automatic first-line flag and direct/inherited state; retain source-shaped range routing. Owned tests and single upstream-absent verification only; no upstream code execution or copied sources."
 sections:
@@ -68,6 +68,7 @@ sections:
   Findings: |-
     Previous goal turn was verified progress: iteration 97 DONE semantic 2504e29cfab04fba613bd44afefac7b6c9b4a1ce, clean base b1c20432023d34f125befd1f50288f01bf7e80b1. Current local numeric-only SwUndoRulerIndent uses setters that drop automatic first-line state. Read-only native evidence preserves the flag through LR-space item mutation and Writer typed-item transfer. The existing paragraph-item path already retains direct versus inherited state and groups selected changes into one undo action; reuse it instead of a new special case. Automatic layout, numbering/style-autoupdate/native range edge semantics and full parent/ruler parity remain unverified; save/open/recovery deviations stay preserved.
     Read-only inspection before implementation found that the reusable paragraph-item path reads GetSwAttrSet for its prior direct state; on a fully inherited node this returns the style set. Amend this one correction to use GetpSwAttrSet instead, and include fully inherited/no-own-set rollback evidence. One additional implementation path and a third existing mapping row are included; no tests have run.
+    Initial upstream-absent app coverage gate: 7 new automatic-mode cases failed and 1203 cases passed. Existing automatic layout getter returns font-based 480 twips while the authored item remains367; AdjustParagraphRulerIndent used that layout value for the unchanged tuple, so no-motion rewrote the authored first-line offset. Read the raw typed first-line item's ResolveTextFirstLineOffset instead. This correction is inside approved item preservation scope. Only the failed app coverage gate repeats; inventory/scripts/browser were not reached and run once next, all absent. Initial bounded output hashes/counts and restoration are retained; no raw failure frames are stored. Automatic paragraph layout already has local handling and needs source audit before any gap claim.
 id_source: "generated"
 ---
 ## Summary
@@ -106,3 +107,4 @@ Revert the task semantic commit in a new scoped commit if necessary; retain task
 
 Previous goal turn was verified progress: iteration 97 DONE semantic 2504e29cfab04fba613bd44afefac7b6c9b4a1ce, clean base b1c20432023d34f125befd1f50288f01bf7e80b1. Current local numeric-only SwUndoRulerIndent uses setters that drop automatic first-line state. Read-only native evidence preserves the flag through LR-space item mutation and Writer typed-item transfer. The existing paragraph-item path already retains direct versus inherited state and groups selected changes into one undo action; reuse it instead of a new special case. Automatic layout, numbering/style-autoupdate/native range edge semantics and full parent/ruler parity remain unverified; save/open/recovery deviations stay preserved.
 Read-only inspection before implementation found that the reusable paragraph-item path reads GetSwAttrSet for its prior direct state; on a fully inherited node this returns the style set. Amend this one correction to use GetpSwAttrSet instead, and include fully inherited/no-own-set rollback evidence. One additional implementation path and a third existing mapping row are included; no tests have run.
+Initial upstream-absent app coverage gate: 7 new automatic-mode cases failed and 1203 cases passed. Existing automatic layout getter returns font-based 480 twips while the authored item remains367; AdjustParagraphRulerIndent used that layout value for the unchanged tuple, so no-motion rewrote the authored first-line offset. Read the raw typed first-line item's ResolveTextFirstLineOffset instead. This correction is inside approved item preservation scope. Only the failed app coverage gate repeats; inventory/scripts/browser were not reached and run once next, all absent. Initial bounded output hashes/counts and restoration are retained; no raw failure frames are stored. Automatic paragraph layout already has local handling and needs source audit before any gap claim.

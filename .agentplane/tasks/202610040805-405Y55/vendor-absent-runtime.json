@@ -1,0 +1,12 @@
+{
+  "command": "npm run test",
+  "exitCode": 1,
+  "outputBytes": 1993,
+  "outputSha256": "7fc8adac784cd0ced43a81c0ae3ce076c207f641dcc8935c965391278439bde3",
+  "upstreamDirectoryPresent": false,
+  "summary": [
+    " Test Files  225 passed (225)",
+    "      Tests  1210 passed (1210)",
+    "All files          |   99.99 |      100 |   99.96 |   99.99 |                   "
+  ]
+}
