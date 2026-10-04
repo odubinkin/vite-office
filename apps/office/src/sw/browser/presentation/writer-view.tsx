@@ -418,6 +418,13 @@ export function WriterWorkbench({
                 (editingHostRef.current as HTMLElement).focus()
             }
             idPrefix="writer"
+            isInputEnabled={
+              isActive &&
+              dialogRequest === undefined &&
+              fileDialogKind === undefined &&
+              tableDialog === undefined &&
+              !lineNumberingDialog
+            }
             menus={writerMenuPlacements}
             resolveArguments={resolveCommandArguments}
           />

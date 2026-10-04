@@ -36,6 +36,7 @@ export interface CommandMenuBarProps extends BrowserCommandSurfaceProps {
   readonly getCommandResource: (commandUrl: string) => MenuCommandResource;
   readonly getMenuLabel?: (id: string, fallback: string) => string;
   readonly idPrefix: string;
+  readonly isInputEnabled?: boolean;
   readonly menus: readonly CommandMenuPlacement[];
 }
 
@@ -52,6 +53,7 @@ export function CommandMenuBar({
   getCommandResource,
   getMenuLabel = useFallbackMenuLabel,
   idPrefix,
+  isInputEnabled = false,
   menus,
   resolveArguments,
 }: CommandMenuBarProps): React.JSX.Element {
@@ -65,6 +67,7 @@ export function CommandMenuBar({
   const pendingMenuPreselection = useRef<boolean | undefined>(undefined);
   const preselectSubmenuFirst = useRef(false);
   const savedFocus = useRef<HTMLElement | undefined>(undefined);
+  const menuActive = useRef(false);
 
   /** Retains one external owner for the active menu cycle. @param target - Previous focus target. @returns Nothing. */
   function saveFocus(target: EventTarget | null): void {
@@ -83,6 +86,7 @@ export function CommandMenuBar({
     const index = openMenuIndex;
     const previousFocus = savedFocus.current;
     savedFocus.current = undefined;
+    menuActive.current = false;
     pendingMenuPreselection.current = undefined;
     setOpenSubmenuId(undefined);
     setOpenMenuIndex(undefined);
@@ -136,6 +140,7 @@ export function CommandMenuBar({
   function openMenu(index: number, preSelectFirst = false): void {
     if (openMenuIndex === index) return;
     saveFocus(document.activeElement);
+    menuActive.current = true;
     setActiveTriggerIndex(index);
     setOpenSubmenuId(undefined);
     pendingMenuPreselection.current = preSelectFirst;
@@ -183,6 +188,38 @@ export function CommandMenuBar({
   );
 
   useEffect(
+    /** Routes an unmodified menu key only for the eligible frame. @returns Listener cleanup. */
+    function installMenuKey(): () => void {
+      /** Activates the first root or deactivates its current cycle. @param event - Browser key. @returns Nothing. */
+      function handleMenuKey(event: KeyboardEvent): void {
+        if (
+          !isInputEnabled ||
+          event.defaultPrevented ||
+          event.key !== "F10" ||
+          event.shiftKey ||
+          event.ctrlKey ||
+          event.altKey ||
+          event.metaKey
+        )
+          return;
+        const first = triggerRefs.current[0];
+        if (!first) return;
+        event.preventDefault();
+        if (menuActive.current) closeMenu(true, openMenuIndex === undefined);
+        else {
+          saveFocus(document.activeElement);
+          menuActive.current = true;
+          setActiveTriggerIndex(0);
+          first.focus();
+        }
+      }
+      window.addEventListener("keydown", handleMenuKey);
+      return /** Removes this frame's menu-key route. @returns Nothing. */ () =>
+        window.removeEventListener("keydown", handleMenuKey);
+    },
+  );
+
+  useEffect(
     /** Installs document-level outside-pointer dismissal. @returns Listener cleanup. */ function installOutsideDismissal(): () => void {
       /** Handles an outside pointer action. @param event - Document event. @returns Nothing. */
       function dismiss(event: PointerEvent): void {
@@ -202,6 +239,7 @@ export function CommandMenuBar({
   ): void {
     if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
       event.preventDefault();
+      menuActive.current = true;
       const delta = event.key === "ArrowRight" ? 1 : -1;
       const next = (index + delta + menus.length) % menus.length;
       setActiveTriggerIndex(next);
@@ -216,6 +254,7 @@ export function CommandMenuBar({
       else openMenu(index, true);
     } else if (event.key === "Home" || event.key === "End") {
       event.preventDefault();
+      menuActive.current = true;
       const next = event.key === "Home" ? 0 : menus.length - 1;
       setActiveTriggerIndex(next);
       triggerRefs.current[next]?.focus();
@@ -390,7 +429,10 @@ export function CommandMenuBar({
       onFocusCapture={
         /** Saves the external owner before trigger focus activates the menubar. @param event - Focus entry. @returns Nothing. */ (
           event,
-        ) => saveFocus(event.relatedTarget)
+        ) => {
+          saveFocus(event.relatedTarget);
+          if (!event.currentTarget.contains(event.relatedTarget)) menuActive.current = true;
+        }
       }
       ref={rootRef}
       role="menubar"
