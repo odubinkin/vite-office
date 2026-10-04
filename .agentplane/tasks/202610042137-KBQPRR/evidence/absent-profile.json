@@ -1,0 +1,70 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "46cdc0651f9d83c0945ebf26ad3239cbf965ecaaa9712e260c0eff6190c85cb9",
+      "totals": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 4482411,
+      "sha256": "9a119e6ddde10562e6e84d9d50fa074e40ddae331641680c114490e20fb1c6b1",
+      "totals": [
+        "Test Files  5 failed | 259 passed (264)",
+        "Tests  35 failed | 2596 passed (2631)",
+        "⎯⎯⎯⎯⎯⎯ Failed Tests 35 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 2890,
+      "sha256": "448fc65a0e71706b05d52c62c064a3c2f7f04b1524adc2c02b959f0ecdaf3dc3",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "coverage": {
+        "lines": 99.59,
+        "statements": 99.6,
+        "functions": 99.21,
+        "branches": 99.9
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "8088ad1e45507e0d551453a94e21b400a6ee1d23aefc492d17ad4845bade1778",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ]
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13582,
+      "sha256": "8b87ff90a899b4462df8815dae28833b140162d4c007387c57fc680dd50a6679",
+      "totals": [
+        "99 passed (35.2s)"
+      ]
+    }
+  ]
+}
