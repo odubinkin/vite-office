@@ -1,0 +1,75 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/doc/owned-text-move.test.ts src/sw/source/core/doc/text-hint-copy.test.ts src/sw/source/core/doc/writer-model.test.ts src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts src/sw/source/core/txtnode/nesting-attribute-ownership.test.ts -t moves (split|exact) hints|binds foreign internet-only containers|sorts, merges, clones, serializes, and projects auto-format hints|preserves separate links with different|retains locked native internet boundaries at 4",
+      "profile": "upstream-absent-failed-cases-only",
+      "exit": 0,
+      "bytes": 254,
+      "sha256": "e17f3ee5b06b8f7960923495e29732b6ce9c7d7475b097af81414eb90b3b7c96",
+      "totals": [
+        "Test Files  5 passed (5)",
+        "Tests  35 passed | 115 skipped (150)"
+      ]
+    },
+    {
+      "command": "npm exec -- vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t composes the Writer mapping report with owned upstream marker evidence --coverage --coverage.reporter=json --coverage.reporter=json-summary --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0",
+      "profile": "upstream-absent-failed-cases-only",
+      "exit": 0,
+      "bytes": 265,
+      "sha256": "b5bcd441492b63bd08d1afcfb680270fc777e17aed21eb17e6743671f128bf3d",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 2 skipped (3)"
+      ],
+      "coverageRecovery": {
+        "initial": {
+          "lines": {
+            "total": 1464,
+            "covered": 1458,
+            "skipped": 0,
+            "pct": 99.59
+          },
+          "statements": {
+            "total": 1523,
+            "covered": 1517,
+            "skipped": 0,
+            "pct": 99.6
+          },
+          "functions": {
+            "total": 384,
+            "covered": 381,
+            "skipped": 0,
+            "pct": 99.21
+          },
+          "branches": {
+            "total": 1080,
+            "covered": 1079,
+            "skipped": 0,
+            "pct": 99.9
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        },
+        "diagnosticIntervalsCovered": 6,
+        "missingFunctionNames": [
+          "readRuntimeModule",
+          "selectCapabilityId",
+          "readRuntimeDirectory"
+        ],
+        "runtimeLine454BranchesCovered": 1,
+        "combinedCoverage": {
+          "lines": 100,
+          "statements": 100,
+          "functions": 100,
+          "branches": 100
+        },
+        "method": "Initial full-profile coverage plus failed-case-only coverage;every original CLI diagnostic interval,function gap and runtime line454 branch is covered. No passing test replay."
+      }
+    }
+  ]
+}
