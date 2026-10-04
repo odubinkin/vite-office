@@ -1,0 +1,48 @@
+{
+  "base": "fc6f86dc82b6a8d644febeb12b86c8f050315383",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/text/itrcrsr.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+    "apps/office/e2e/writer-manual-first-layout.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/core/text/itrcrsr.ts",
+      "sha256": "99daf61bf5f49010583371d3fc119feac7af948d82df990d95b385bd5c7625f4"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+      "sha256": "6ed644bf6248b6ce3360e4c859e2f70b79a06655dcbca63adeef40eb16dbc615"
+    },
+    {
+      "path": "apps/office/e2e/writer-manual-first-layout.spec.ts",
+      "sha256": "2cf75fb820d8027cf116ee5e57d86f947e37b57114c948b72c6e3e0b08d6c9b4"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "4efe9c91a1b36934d771c2c412d29e180412eac02405186372ffcc4c9702ac15"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "461593c5f555d4e0bdba795fa42cdbaa976fc688f1d5966e19a675dad96431ed"
+    }
+  ],
+  "priorTestFiles": 302,
+  "priorTestFilesByteIdentical": 302,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 221,
+      "changedRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 221,
+      "changedRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    }
+  ]
+}

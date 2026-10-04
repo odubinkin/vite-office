@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "marker": "SwTextNode::GetFirstLineOfsWithNum",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/text/itrcrsr.cxx",
+      "marker": "SwTextMargin::CtorInitTextMargin",
+      "sha256": "862315cefee568e882f24e64226664227fd06a672640493ebc0c48d107389ee2"
+    }
+  ],
+  "comparison": "Read-only native short output assignment and long margin consumption; independent literal tests. Numbered and active-script/language/bidi/full layout remain unverified.",
+  "nativeExecution": false,
+  "sourceCopies": false
+}
