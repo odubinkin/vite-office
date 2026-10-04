@@ -31,5 +31,14 @@
     "apps/office/e2e/writer-menu-key.spec.ts": "383646369de5c64cdecfe3b29be46fb5d746cf46807850d06cdc67e747a1666c",
     "docs/program/source-provenance.json": "06959e785a75d3f99b550a1ac75cc33ac9468727dd7dd6defd732723ab57d1b8",
     "docs/program/parity/runtime-inventory.json": "f8935b5cd841c89f5b230f137413ad9b5b3621422c448b6aafe884c26532477d"
+  },
+  "productionInverseProof": {
+    "passed": true,
+    "paths": [
+      "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+      "apps/office/src/sw/browser/presentation/writer-view.tsx"
+    ],
+    "boundedChanges": "Explicit activation lifecycle and eligible bare-F10 listener only; Writer active/modal eligibility wiring only. Removing these exact additions yields byte-identical prior production files.",
+    "initialAuditRetry": "Initial read-only inverse assertion matched indentation substrings; anchored lines and effect-first removal corrected the audit, with no production change."
   }
 }

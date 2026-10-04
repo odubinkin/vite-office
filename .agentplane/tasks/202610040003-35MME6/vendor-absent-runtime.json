@@ -1,0 +1,29 @@
+{
+  "command": "npm run test",
+  "exit": 0,
+  "signal": null,
+  "bytes": 2217,
+  "sha256": "6e3faecdc35196a4031d16291016657d3dd37f726525a7eaada1a5b6aa780d5c",
+  "summary": [
+    "> npm run test:coverage && npm run test:inventory:coverage",
+    "> vite-office@0.1.0 test:coverage",
+    "> npm run test:coverage --workspace @vite-office/office",
+    "> @vite-office/office@0.1.0 test:coverage",
+    "> vitest run --coverage",
+    "      Coverage enabled with v8",
+    " Test Files  198 passed (198)",
+    "      Tests  954 passed (954)",
+    "   Duration  91.64s (transform 2.67s, setup 13.59s, import 12.24s, tests 62.50s, environment 67.02s)",
+    " % Coverage report from v8",
+    "=============================== Coverage summary ===============================",
+    "> vite-office@0.1.0 test:inventory:coverage",
+    "> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage",
+    "      Coverage enabled with v8",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "   Duration  21.18s (transform 645ms, setup 0ms, import 1.59s, tests 16.31s, environment 2ms)",
+    " % Coverage report from v8",
+    "=============================== Coverage summary ==============================="
+  ],
+  "tail": []
+}

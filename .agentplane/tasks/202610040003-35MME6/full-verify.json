@@ -1,0 +1,23 @@
+{
+  "command": "npm run verify",
+  "exit": 0,
+  "signal": null,
+  "bytes": 947926,
+  "sha256": "8326b53c0c2b41af314267371c845b5d166058ebb57d93fcb5e95e7361c2fe31",
+  "summary": [
+    "    \"semanticViolationCount\": 0,",
+    "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.",
+    "[WebServer] (node:56757) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:56775) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:56774) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:56777) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:56776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+  ],
+  "tail": []
+}
