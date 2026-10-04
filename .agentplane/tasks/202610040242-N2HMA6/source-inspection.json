@@ -1,0 +1,45 @@
+{
+  "method": "manual read-only pinned source inspection, no native execution or source copies",
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceIdentities": [
+    {
+      "path": "sfx2/source/sidebar/FocusManager.cxx",
+      "bytes": 15094,
+      "sha256": "c6e98a7801482c112f661b8ebe856308e93ca5befebdb1c4f55da3cc132ea0b5"
+    },
+    {
+      "path": "sfx2/source/sidebar/SidebarController.cxx",
+      "bytes": 56054,
+      "sha256": "8c9cb6041375b8fc0f9c88768d8981c47da51fb31c4baaed3822d16a42d5c763"
+    },
+    {
+      "path": "sfx2/source/sidebar/Deck.cxx",
+      "bytes": 7625,
+      "sha256": "b630b3eb4f9406c7bca2dc13895820c5c3244a056809913d0be6b094c766005e"
+    },
+    {
+      "path": "sfx2/source/sidebar/TabBar.cxx",
+      "bytes": 14206,
+      "sha256": "245d6c435654ebd2839e39d81f0c6f03fb308f14bc493f69865fc3030d70d732"
+    },
+    {
+      "path": "sfx2/source/sidebar/TitleBar.cxx",
+      "bytes": 2469,
+      "sha256": "22f205e3fc042fff68d5a5b44ab6f060ccb95af6b0159c862b5ed99533cabdfa"
+    },
+    {
+      "path": "sfx2/source/sidebar/SidebarDockingWindow.cxx",
+      "bytes": 7263,
+      "sha256": "862d1289946425b6eb184eb3520fbe6ea18c61c3b106bc774d166f8662055dc1"
+    }
+  ],
+  "conclusions": [
+    "FocusManager SetDeck/SetPanels/SetButtons register and clear native listeners; local manager scopes mounted panels and resolves display order.",
+    "Forward title Tab with toolbar items enters toolbar before content; panel backward Tab and content Tab/arrows remain unconsumed.",
+    "Deck toolbox Tab uses first eligible activation button even with Shift. Native menu occupies index zero; current browser has only one Properties activation button, and settings/other-deck parity stays open.",
+    "Rail forward Tab enters first expanded titled panel. SidebarController ShowPanel requests open deck; browser must flush visibility before DOM focus whereas native calls ShowPanel after focus request.",
+    "Visible titled panel arrows traverse previous/next panel with deck toolbox and first rail button boundaries. Rail Up/Down wraps; Left/Right unconsumed.",
+    "FocusDeckTitle itself does not request deck opening. Closed hidden-title toolkit visibility/focus flags and titleless fallback are not established by these browser checks.",
+    "Native Deck ShowPanel also adjusts vertical extents and scroll policy. Full scroll geometry/F6/settings/other decks/context/native focus parity is outside this task."
+  ]
+}

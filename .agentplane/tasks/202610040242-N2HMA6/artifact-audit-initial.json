@@ -1,0 +1,27 @@
+{
+  "agentplaneFiles": 2952,
+  "artifactFiles": 2885,
+  "python": [],
+  "source": [],
+  "executable": [],
+  "archives": [],
+  "magic": [],
+  "embedded": [],
+  "codeDiff": [
+    ".agentplane/tasks/202609302147-2R4T31/focused-final.log",
+    ".agentplane/tasks/202609302147-2R4T31/focused.log",
+    ".agentplane/tasks/202610010333-G6MKMP/focused-xml.log",
+    ".agentplane/tasks/202610010536-95XQFH/verify-full.log",
+    ".agentplane/tasks/202610010735-THRTCH/focused-reading.log",
+    ".agentplane/tasks/202610010735-THRTCH/verify-initial.log",
+    ".agentplane/tasks/202610011012-HMMTBX/focused-initial.log",
+    ".agentplane/tasks/202610011338-WSMJ80/regression-after.log",
+    ".agentplane/tasks/202610011338-WSMJ80/regression-second.log",
+    ".agentplane/tasks/202610011627-W77K0Q/red-test.log",
+    ".agentplane/tasks/202610020652-35W3EH/green-runtime.log",
+    ".agentplane/tasks/202610031711-DBAPR6/baseline-context-runtime.log",
+    ".agentplane/tasks/202610031844-58PBN7/initial-baseline-runtime.log",
+    ".agentplane/tmp/task49-red-test.log"
+  ],
+  "symlinks": []
+}

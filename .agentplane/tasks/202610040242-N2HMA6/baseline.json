@@ -1,0 +1,20 @@
+{
+  "command": "npm exec -- vitest run src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx",
+  "cwd": "apps/office",
+  "exitCode": 1,
+  "outputSha256": "0d36ae8d561e3a5d6a766c9eed7d8e862cb83048b753aa4735ebd85cb2b87d12",
+  "summary": [
+    "Test Files  1 failed (1)",
+    "Tests  5 failed (5)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯",
+    "FAIL  src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx > Writer Sidebar managed traversal > tabs through a collapsed title and toolbar before expanding into content",
+    "AssertionError: expected true to be false // Object.is equality",
+    "FAIL  src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx > Writer Sidebar managed traversal > tabs between the deck toolbox, activation button and first expanded panel",
+    "AssertionError: expected true to be false // Object.is equality",
+    "FAIL  src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx > Writer Sidebar managed traversal > opens a closed deck when Tab enters its first panel",
+    "AssertionError: expected true to be false // Object.is equality",
+    "FAIL  src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx > Writer Sidebar managed traversal > routes title arrows to the deck title and activation rail",
+    "FAIL  src/sw/browser/presentation/writer-view-sidebar-navigation.test.tsx > Writer Sidebar managed traversal > routes options arrows to the deck title and activation rail",
+    "AssertionError: expected true to be false // Object.is equality"
+  ]
+}

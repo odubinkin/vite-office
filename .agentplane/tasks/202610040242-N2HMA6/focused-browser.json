@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-sidebar-navigation.spec.ts",
+  "cwd": ".",
+  "exitCode": 0,
+  "outputBytes": 663,
+  "outputSha256": "778435e5cb67f1f502319587032ff36a06e12ec87f63d6a7be435fcec61ed6fa",
+  "summary": [
+    "2 passed (2.5s)"
+  ]
+}
