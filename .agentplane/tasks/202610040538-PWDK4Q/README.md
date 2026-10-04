@@ -4,7 +4,7 @@ title: "Preserve Writer ruler tab item identity"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,34 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T05:56:02.333Z"
+  updated_at: "2026-10-04T05:57:09.163Z"
   updated_by: "CODER"
-  note: "Pass:9paths;282of284prior tests unchanged,4DTOpayloads/all old assertions retained;220rows/3append-only updates/no status promotion;3pinned hashes;AP forbidden0. Final vendor-absent1134+109+12+63pass/restored,100%four coverage metrics,0semantic. Pre-steering full verify historical only;no further suite reruns. Exact semantic quality pending;full native/parent open."
+  note: "Final documentation/evidence revision verified without rerunning tests;exact unchanged semantic SHAe7e27e6398df1bf2e35adbce80569dd6b5124f8d has same-actor EVALUATOR pass. Final absent tests1134+109+12+63pass/restored,100%coverage,0semantic;9paths/3sourcehashes/AP forbidden0;full goal remains open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T05:56:40.960Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR review of exact semantic SHAe7e27e6398df1bf2e35adbce80569dd6b5124f8d:bounded raw-tab identity and collision ordering pass;full native/parent open."
+  evaluated_sha: "e7e27e6398df1bf2e35adbce80569dd6b5124f8d"
+  blueprint_digest: "1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d"
+  evidence_refs:
+    - ".agentplane/tasks/202610040538-PWDK4Q/README.md"
+    - ".agentplane/tasks/202610040538-PWDK4Q/quality/20261004-055640960-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040538-PWDK4Q/quality/20261004-055640960-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040538-PWDK4Q/quality/20261004-055640960-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040538-PWDK4Q/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040538-PWDK4Q/final-integrity.json"
+    - ".agentplane/tasks/202610040538-PWDK4Q/source-inspection.json"
+    - ".agentplane/tasks/202610040538-PWDK4Q/full-verify.json"
+    - ".agentplane/tasks/202610040538-PWDK4Q/vendor-absent-runtime.json"
+    - ".agentplane/tasks/202610040538-PWDK4Q/vendor-absent-browser.json"
+    - ".agentplane/tasks/202610040538-PWDK4Q/semantic-audit.json"
+  findings:
+    - "Reviewed paired immutable raw index/position projection,compact label/raw callback boundary and item Clone/Remove/Insert ordering. Default/interleaved stops retain identity;selected metadata wins collision;owned actual Writer snapshots,reordering,Undo/Redo,cancellation and rebuilt1280/390Chromium show the accepted contract."
+    - "9semantic paths;282of284oldtests unchanged;only4formatted DTO fixture payloads changed with every assertion retained.220rows each retain prior order/status/owner/default/exception fields,3append-only updates,no new rows/native promotion;3sourcehashes unchanged."
+    - "Final tests with upstream unavailable:1134app+109tool+12scripts+63browser pass/restored;100%four app/inventory coverage metrics;0semantic. Source-present full verify completed before user steering is historical evidence;current already-live absent run finished without restart and no tests rerun afterwards. Future tests once without upstream;source CLI audits separate."
+    - "Ignored-inclusive raw/decoded Agentplane source/helper/Python/frame/code-diff/archive findings0;only5historical prose-only diff refs. Doctor0errors/2knownwarnings/2info;registered save/open/recovery exceptions preserved."
 commit: null
 comments:
   -
@@ -41,8 +65,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass:9paths;282of284prior tests unchanged,4DTOpayloads/all old assertions retained;220rows/3append-only updates/no status promotion;3pinned hashes;AP forbidden0. Final vendor-absent1134+109+12+63pass/restored,100%four coverage metrics,0semantic. Pre-steering full verify historical only;no further suite reruns. Exact semantic quality pending;full native/parent open."
+  -
+    type: "verify"
+    at: "2026-10-04T05:57:09.163Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final documentation/evidence revision verified without rerunning tests;exact unchanged semantic SHAe7e27e6398df1bf2e35adbce80569dd6b5124f8d has same-actor EVALUATOR pass. Final absent tests1134+109+12+63pass/restored,100%coverage,0semantic;9paths/3sourcehashes/AP forbidden0;full goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T05:56:02.394Z"
+doc_updated_at: "2026-10-04T05:57:09.218Z"
 doc_updated_by: "CODER"
 description: "Iteration91:stop compact visible-tab ordinal from addressing hidden default tab in the raw SvxTabStopItem;retain model index in immutable browser projection and verify actual Writer/Undo/Chromium without upstream test dependencies."
 sections:
@@ -63,7 +93,7 @@ sections:
     Command: npm run verify (completed before the user's single-run steering). Result: pass. Evidence: format/lint/type/dependency/resources/static build/JSDoc/file size/source tree/provenance/invariants/parity gates; 100% statements/branches/functions/lines in app and inventory; semanticViolationCount=0 separately captured by npm run inventory:parity. This is historical pre-steering evidence; no additional full verify or test suite was run after the steering.
     Command: focused owned Vitest and fresh-build Chromium (before steering). Result: pass. Evidence: 49 tests/6 files and 2 widths1280/390; pre-fix 4 owned failures/1 pass and 2 browser failures establish wrong raw index and collision metadata. Scope: raw/default/interleaved tab identity, reordering, complete item metadata/default distance, one accepted Undo/Redo, Escape and immutable retained snapshots.
     Command: exact scope/manifest/source hash checks, ignored-inclusive Agentplane raw/decoded audit, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: 9 semantic paths; 282 of284 old test files byte-identical; 4 fixture DTO updates in2oldfiles,all assertions and bytes outside formatted payloads preserved; 220 rows/order/metadata retained,3append-only updates,no new rows/status promotion; 3 pinned hashes unchanged; Agentplane source/helper/Python/frame/code-diff/archive findings0,5historical prose-only diffs; doctor0errors/2knownwarnings/2info.
-    Future verification follows user steering: one suite pass without upstream, source-dependent static CLI audits separate after restoration. Same-actor separate EVALUATOR exact semantic-SHA review and clean leaf closure pending. Full native ruler geometry/default glyphs/type glyphs/RTL/modifiers/deletion/capture/Writer/browser/parent remain unverified. Registered save/open/recovery exceptions unchanged.
+    Future verification follows user steering: one suite pass without upstream, source-dependent static CLI audits separate after restoration. Same-actor separate EVALUATOR pass: quality/20261004-055640960-recovery-context/quality-report.json evaluated_sha=e7e27e6398df1bf2e35adbce80569dd6b5124f8d. This is not independent-agent review. Semantic and pinned source hashes remain unchanged; canonical finish records final clean closure. Full native ruler geometry/default glyphs/type glyphs/RTL/modifiers/deletion/capture/Writer/browser/parent remain unverified. Registered save/open/recovery exceptions unchanged.
 
     <!-- BEGIN VERIFICATION RESULTS -->
     ### 2026-10-04T05:56:02.333Z — VERIFY — ok
@@ -94,6 +124,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-04T05:57:09.163Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final documentation/evidence revision verified without rerunning tests;exact unchanged semantic SHAe7e27e6398df1bf2e35adbce80569dd6b5124f8d has same-actor EVALUATOR pass. Final absent tests1134+109+12+63pass/restored,100%coverage,0semantic;9paths/3sourcehashes/AP forbidden0;full goal remains open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T05:57:08.816Z, excerpt_hash=sha256:fc1d0dfad4ab1afe8b863d0234ff060e06111f1c9a187dd626e4f640c199a5c6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040538-PWDK4Q/blueprint/resolved-snapshot.json
+    - old_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+    - current_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040538-PWDK4Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610040538-PWDK4Q --result verified-202610040538-PWDK4Q --commit e7e27e6398df1bf2e35adbce80569dd6b5124f8d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -140,7 +200,7 @@ Result: pass. Evidence: 1134 application tests/218 files, 109 inventory tests/36
 Command: npm run verify (completed before the user's single-run steering). Result: pass. Evidence: format/lint/type/dependency/resources/static build/JSDoc/file size/source tree/provenance/invariants/parity gates; 100% statements/branches/functions/lines in app and inventory; semanticViolationCount=0 separately captured by npm run inventory:parity. This is historical pre-steering evidence; no additional full verify or test suite was run after the steering.
 Command: focused owned Vitest and fresh-build Chromium (before steering). Result: pass. Evidence: 49 tests/6 files and 2 widths1280/390; pre-fix 4 owned failures/1 pass and 2 browser failures establish wrong raw index and collision metadata. Scope: raw/default/interleaved tab identity, reordering, complete item metadata/default distance, one accepted Undo/Redo, Escape and immutable retained snapshots.
 Command: exact scope/manifest/source hash checks, ignored-inclusive Agentplane raw/decoded audit, git diff --check, node .agentplane/policy/check-routing.mjs, ap doctor. Result: pass. Evidence: 9 semantic paths; 282 of284 old test files byte-identical; 4 fixture DTO updates in2oldfiles,all assertions and bytes outside formatted payloads preserved; 220 rows/order/metadata retained,3append-only updates,no new rows/status promotion; 3 pinned hashes unchanged; Agentplane source/helper/Python/frame/code-diff/archive findings0,5historical prose-only diffs; doctor0errors/2knownwarnings/2info.
-Future verification follows user steering: one suite pass without upstream, source-dependent static CLI audits separate after restoration. Same-actor separate EVALUATOR exact semantic-SHA review and clean leaf closure pending. Full native ruler geometry/default glyphs/type glyphs/RTL/modifiers/deletion/capture/Writer/browser/parent remain unverified. Registered save/open/recovery exceptions unchanged.
+Future verification follows user steering: one suite pass without upstream, source-dependent static CLI audits separate after restoration. Same-actor separate EVALUATOR pass: quality/20261004-055640960-recovery-context/quality-report.json evaluated_sha=e7e27e6398df1bf2e35adbce80569dd6b5124f8d. This is not independent-agent review. Semantic and pinned source hashes remain unchanged; canonical finish records final clean closure. Full native ruler geometry/default glyphs/type glyphs/RTL/modifiers/deletion/capture/Writer/browser/parent remain unverified. Registered save/open/recovery exceptions unchanged.
 
 <!-- BEGIN VERIFICATION RESULTS -->
 ### 2026-10-04T05:56:02.333Z — VERIFY — ok
@@ -171,6 +231,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-04T05:57:09.163Z — VERIFY — ok
+
+By: CODER
+
+Note: Final documentation/evidence revision verified without rerunning tests;exact unchanged semantic SHAe7e27e6398df1bf2e35adbce80569dd6b5124f8d has same-actor EVALUATOR pass. Final absent tests1134+109+12+63pass/restored,100%coverage,0semantic;9paths/3sourcehashes/AP forbidden0;full goal remains open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T05:57:08.816Z, excerpt_hash=sha256:fc1d0dfad4ab1afe8b863d0234ff060e06111f1c9a187dd626e4f640c199a5c6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040538-PWDK4Q/blueprint/resolved-snapshot.json
+- old_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+- current_digest: 1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040538-PWDK4Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610040538-PWDK4Q --result verified-202610040538-PWDK4Q --commit e7e27e6398df1bf2e35adbce80569dd6b5124f8d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->

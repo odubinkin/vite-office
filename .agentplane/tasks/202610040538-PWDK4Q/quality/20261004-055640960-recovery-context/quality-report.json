@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "202610040538-PWDK4Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-04T05:56:40.960Z",
+  "verdict": "pass",
+  "summary": "Same-actor separate EVALUATOR review of exact semantic SHAe7e27e6398df1bf2e35adbce80569dd6b5124f8d:bounded raw-tab identity and collision ordering pass;full native/parent open.",
+  "evaluated_sha": "e7e27e6398df1bf2e35adbce80569dd6b5124f8d",
+  "blueprint_digest": "1ab5fd5d7851409b9840c6c560b091d7ad052fc1f5e17dc09157d8bacca7881d",
+  "findings": [
+    "Reviewed paired immutable raw index/position projection,compact label/raw callback boundary and item Clone/Remove/Insert ordering. Default/interleaved stops retain identity;selected metadata wins collision;owned actual Writer snapshots,reordering,Undo/Redo,cancellation and rebuilt1280/390Chromium show the accepted contract.",
+    "9semantic paths;282of284oldtests unchanged;only4formatted DTO fixture payloads changed with every assertion retained.220rows each retain prior order/status/owner/default/exception fields,3append-only updates,no new rows/native promotion;3sourcehashes unchanged.",
+    "Final tests with upstream unavailable:1134app+109tool+12scripts+63browser pass/restored;100%four app/inventory coverage metrics;0semantic. Source-present full verify completed before user steering is historical evidence;current already-live absent run finished without restart and no tests rerun afterwards. Future tests once without upstream;source CLI audits separate.",
+    "Ignored-inclusive raw/decoded Agentplane source/helper/Python/frame/code-diff/archive findings0;only5historical prose-only diff refs. Doctor0errors/2knownwarnings/2info;registered save/open/recovery exceptions preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610040538-PWDK4Q/README.md",
+    ".agentplane/tasks/202610040538-PWDK4Q/final-integrity.json",
+    ".agentplane/tasks/202610040538-PWDK4Q/source-inspection.json",
+    ".agentplane/tasks/202610040538-PWDK4Q/full-verify.json",
+    ".agentplane/tasks/202610040538-PWDK4Q/vendor-absent-runtime.json",
+    ".agentplane/tasks/202610040538-PWDK4Q/vendor-absent-browser.json",
+    ".agentplane/tasks/202610040538-PWDK4Q/semantic-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same actor,not independent review. AddRulerTabStop collision insertion,full native ruler geometry/default/type glyphs/RTL/modifiers/deletion/capture/platform/Writer/browser and parent goal remain unverified."
+  ]
+}
