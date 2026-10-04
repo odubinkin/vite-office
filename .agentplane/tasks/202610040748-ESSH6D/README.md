@@ -1,10 +1,11 @@
 ---
 id: "202610040748-ESSH6D"
 title: "Hide automatic first-line ruler markers"
-status: "DOING"
+result_summary: "Automatic first-line ruler markers hide and manual markers restore through existing dialog and Undo/Redo."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Effective model IsAutoFirst is retained in a frozen primitive; true removes the existing first-line marker from drawing and hit admission, while false or detached omission preserves the manual marker. Other projected logical values and core mutation ownership are unchanged."
     - "Single vendor-absent 1195/109/5/75 test pass, four-metric complete coverage, six approved semantic paths, 296 prior byte-identical tests, two append-only existing rows per manifest, three unchanged pinned hashes, four inspected screenshots and zero semantic/forbidden-artifact findings match the reviewed SHA."
-commit: null
+commit:
+  hash: "2504e29cfab04fba613bd44afefac7b6c9b4a1ce"
+  message: "🛠️ ESSH6D code: hide automatic first-line ruler markers"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved effective auto-first ruler visibility and owned verification under the standing goal authorization."
+  -
+    author: "CODER"
+    body: "Verified: automatic first-line ruler markers follow the effective model flag and are excluded from drawing/input; all declared bounded evidence and exact-SHA review passed."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final exact-SHA quality and post-review integrity passed without repeating any test suites."
+  -
+    type: "status"
+    at: "2026-10-04T08:01:45.357Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: automatic first-line ruler markers follow the effective model flag and are excluded from drawing/input; all declared bounded evidence and exact-SHA review passed."
 doc_version: 3
-doc_updated_at: "2026-10-04T08:01:42.875Z"
+doc_updated_at: "2026-10-04T08:01:45.358Z"
 doc_updated_by: "CODER"
 description: "Iteration 97 of parent 202609240501-C9TN6M: preserve the effective automatic first-line item flag in immutable browser projections and exclude that marker from drawing and hit admission, matching pinned Writer StateTabWin and SvxRuler/Ruler. Owned model/DOM/dialog/Undo/browser evidence only; no upstream execution or stored sources; tests run once absent."
 sections:
@@ -131,6 +144,10 @@ sections:
     Initial typecheck/build failures were new-test-only unsupported exact options. Corrected inside the approved scope and repeated only those failed static gates. Every test passed on its single upstream-absent pipeline. All scope/source/artifact audits ran after restoration.
     Next confirmed core gap: SvxRuler ApplyIndents preserves its paragraph item automatic flag; Writer ExecTabWin explicitly transfers that flag to SvxFirstLineIndentItem. Native SvxLRSpaceItem SetTextFirstLineOffset changes the offset without resetting automatic mode. The current local SwUndoRulerIndent captures only numeric values, and its applyIndent calls SetParagraphFirstLineIndent, which constructs a manual item. Moving another ruler indent can therefore discard automatic mode, and its Undo payload cannot restore the flag. Address that transaction/undo contract separately after fresh source review.
     Native automatic layout computation, other item metadata/attribute ownership, RTL/vertical/system DPI/theme/hit priority/modifier/snap/capture/full ruler and parent parity remain unverified. Registered save/open/recovery deviations are preserved. Full goal remains active.
+extensions:
+  implementation_commit:
+    hash: "2504e29cfab04fba613bd44afefac7b6c9b4a1ce"
+    message: "🛠️ ESSH6D code: hide automatic first-line ruler markers"
 id_source: "generated"
 ---
 ## Summary
