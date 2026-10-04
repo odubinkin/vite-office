@@ -1,7 +1,7 @@
 {
   "command": "npm run lint",
-  "exitCode": 1,
-  "outputBytes": 913,
-  "outputSha256": "43389715e417f1c891ecf54be552c43c558053398f937b5babb1872ed29ab4da",
+  "exitCode": 0,
+  "outputBytes": 55,
+  "outputSha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
   "summary": []
 }
