@@ -1,0 +1,76 @@
+{
+  "base": "dac715563f2c9d1c070badcf249f74c59ad32e65",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-pixels.test.tsx",
+    "apps/office/e2e/writer-ruler-tab-pixels.spec.ts",
+    "apps/office/e2e/writer-ruler-tab-glyphs.spec.ts",
+    "apps/office/e2e/writer-ruler-tab-identity.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "bytes": 25902,
+      "sha256": "6ddd9c3a4556c1a28e4bad9be0b1941c6269d2a4766e20663179e398522e473e"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-pixels.test.tsx",
+      "bytes": 8784,
+      "sha256": "3118805e80e1450bfd7c363debe2278829e3a8992321ab2d0819a9492a87ef00"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-tab-pixels.spec.ts",
+      "bytes": 5749,
+      "sha256": "6a9673264bfcf1c9fb08fff5d07cdb84aaaae300b9c6b5c44e06e15608c90973"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-tab-glyphs.spec.ts",
+      "bytes": 7366,
+      "sha256": "20a4395345c7561456033c067a61834ec32ed5428a4a334b84ba317a5953b5a8"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-tab-identity.spec.ts",
+      "bytes": 3828,
+      "sha256": "78c3478a1843ee020a72a7e18d89f02274ebe8541c50e8fcbc8224666b26c2a7"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 747657,
+      "sha256": "912ef0d421d62b5dca364d3369a0f3e74d5641f8100e7bcbef08f5fdf46a22cf"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 729515,
+      "sha256": "696f2147362851c1395472756f6b1a920b77cd332f457e7596e2701ae7376ce7"
+    }
+  ],
+  "priorTestFiles": 292,
+  "priorTestFilesByteIdentical": 290,
+  "exactPriorAssertionReplacements": 5,
+  "priorModifiedTestFiles": 2,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 1,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 1,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}

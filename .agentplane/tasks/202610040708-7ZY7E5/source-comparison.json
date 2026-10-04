@@ -1,0 +1,17 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "inspection": "Read-only source/hash inspection,no source bodies or native execution.",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "marker": "SvxRuler::ConvertHPosPixel",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/outdev/map.cxx",
+      "marker": "lcl_logicToPixel",
+      "sha256": "c6c0d2cbb8b7cc24eba6217977b0145eb286adb8d6ed674593b5c9501d015739"
+    }
+  ],
+  "conclusion": "Iteration95 uses the existing signed DPI1/CSS96dpi toRulerPixel conversion on each complete explicit tab origin+offset before rendering and hit/tracking admission,matching inspected SvxRuler UpdateTabs/ConvertHPosPixel and VCL LogicToPixel(Size)/llround. Logical positions,raw item indices,adjustment/decimal/leader/default spacing and immutable paragraph records remain unchanged; no-motion/cancel adds no undo and accepted existing snapped movement preserves metadata through one Undo/Redo. Owned real Writer/DOM tests cover all four types,both origin settings,complete-origin rounding,positive/negative/zero/signed32 endpoints and actual logical/display reprojection;Chromium1280/390 checks real rounded bounds/glyph hits/history and later editing. Exactly five obsolete fractional postdrag assertions across two old E2E files now require literal integer218;all other prior test bytes retained. This is bounded explicit pixel-projection evidence;native RTL/vertical/platformDPI/theme/selector/hitpriority/modifiers/snapping/capture/full frame/page geometry and complete native/parent parity remain unverified. Registered save/open/recovery exceptions preserved;no native promotion."
+}
