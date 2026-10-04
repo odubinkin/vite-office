@@ -4,7 +4,7 @@ title: "Restore Writer ruler tracking termination and keyboard ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 30
+revision: 33
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,32 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T05:31:56.316Z"
+  updated_at: "2026-10-04T05:33:07.765Z"
   updated_by: "CODER"
-  note: "Pass:1129app+109tool+61browser+2resources;100%four coverage metrics;0semantic. Vendor absent1129+109+12+61pass/restored;10paths,278of280oldtests unchanged,6input+6release-only lines,219prior rows preserved,5sourcehashes unchanged;AP source/helper/Python/frame/archive findings0. Same-actor exact semantic quality pending;full native/parent open."
+  note: "Final evidence/doc revision verified;unchanged semantic SHA2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038 with same-actor EVALUATOR pass pinned exactly. Full and vendor-absent checks pass;10paths/5sourcehashes/AP forbidden0;registered exceptions preserved;full native/parent open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T05:32:48.688Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor separate EVALUATOR review of exact semantic SHA2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038:approved bounded ruler tracking contract passes;full native/parent parity remains open."
+  evaluated_sha: "2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038"
+  blueprint_digest: "1ec910cd34988716bbc7610a486d6299d8978e836b8f79c2d0bdd05c9f695d43"
+  evidence_refs:
+    - ".agentplane/tasks/202610040447-SAB5KD/README.md"
+    - ".agentplane/tasks/202610040447-SAB5KD/quality/20261004-053248688-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040447-SAB5KD/quality/20261004-053248688-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040447-SAB5KD/quality/20261004-053248688-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040447-SAB5KD/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040447-SAB5KD/full-verify.json"
+    - ".agentplane/tasks/202610040447-SAB5KD/final-integrity.json"
+    - ".agentplane/tasks/202610040447-SAB5KD/focused-runtime.json"
+    - ".agentplane/tasks/202610040447-SAB5KD/focused-browser.json"
+    - ".agentplane/tasks/202610040447-SAB5KD/source-inspection.json"
+  findings:
+    - "Reviewed owned window tracking,release-before-callback,all-key capture,Escape/Enter,pointer identity,removed-handle and hidden-ruler cleanup;temporary new tabs commit only after acceptance. Real Writer undo and1280/390Chromium stale release tests match the declared contract."
+    - "10semantic paths;278of280prior test files identical;6input substitutions+6matching release inputs preserve every old assertion;219prior manifest rows preserved,new hook local-only/unverified;5pinned source hashes unchanged;no status promotion or intentional save/open/recovery changes."
+    - "Full1129app+109tool+61browser+2resource checks pass,100%four coverage metrics,0semantic. Vendor absent1129+109+12+61pass/restored. Raw/decoded ignored-inclusive Agentplane source/helper/Python/frame/diff/archive audit0."
 commit: null
 comments:
   -
@@ -41,8 +63,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass:1129app+109tool+61browser+2resources;100%four coverage metrics;0semantic. Vendor absent1129+109+12+61pass/restored;10paths,278of280oldtests unchanged,6input+6release-only lines,219prior rows preserved,5sourcehashes unchanged;AP source/helper/Python/frame/archive findings0. Same-actor exact semantic quality pending;full native/parent open."
+  -
+    type: "verify"
+    at: "2026-10-04T05:33:07.765Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final evidence/doc revision verified;unchanged semantic SHA2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038 with same-actor EVALUATOR pass pinned exactly. Full and vendor-absent checks pass;10paths/5sourcehashes/AP forbidden0;registered exceptions preserved;full native/parent open."
 doc_version: 3
-doc_updated_at: "2026-10-04T05:31:56.373Z"
+doc_updated_at: "2026-10-04T05:33:07.820Z"
 doc_updated_by: "CODER"
 description: "Iteration90: align existing ruler drag admission, keyboard tracking and cancellation with pinned Ruler/VCL/SvxRuler; remove stale DOM gesture listeners without upstream test dependencies or source/helper artifacts."
 sections:
@@ -62,7 +90,7 @@ sections:
     Command: focused owned Vitest and rebuilt Chromium ruler checks. Result: pass. Evidence:63tests/6files and2browser widths1280/390;baselines reproduce Escape stale release and trailing-click extra tab before correction. Scope: initiating pointer identity,primary/single/duplicate admission,cross-owner cancellation,all-key priority,Escape/Enter,temporary tab creation,blur/hide/removed-handle/unmount cleanup,accepted single undo and later editing.
     Command: temporarily rename vendor/libreoffice-reference inside vendor; npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e; restore in finally. Result: pass. Evidence:1129+109 runtime/tool tests,12script tests,61browser scenarios,all upstreamDirectoryPresent=false,vendorRestored=true,nativeCompilation=false,nativeExecution=false.
     Command: exact scope,manifest,source-hash and ignored-inclusive Agentplane raw/decoded audits;git diff --check;node .agentplane/policy/check-routing.mjs;ap doctor. Result: pass. Evidence:10semantic paths;278of280oldtest files byte-identical;6input substitutions+6matching pointerUp input lines with all old assertions retained;219prior manifest rows retained in220rows;5pinned hashes unchanged;Agentplane forbidden source/helper/Python/frame/diff/archive findings0;5historical prose-only diffs;doctor0errors/2knownwarnings/2info.
-    Scope: bounded ruler gesture contract only;native hit testing/RTL/tabtypes/double-click dialogs/modifier snapping/deletion/capture/platform/LOK/input/full ruler/Writer/browser/parent remain unverified. Same-actor EVALUATOR semantic-SHA quality and final clean closure pending.
+    Scope: bounded ruler gesture contract only;native hit testing/RTL/tabtypes/double-click dialogs/modifier snapping/deletion/capture/platform/LOK/input/full ruler/Writer/browser/parent remain unverified. Same-actor separate EVALUATOR pass:quality/20261004-053248688-recovery-context/quality-report.json evaluated_sha2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038;not independent-agent review. Semantic and pinned-source hashes unchanged. Final clean closure recorded by canonical finish.
 
     <!-- BEGIN VERIFICATION RESULTS -->
     ### 2026-10-04T05:31:56.316Z — VERIFY — ok
@@ -93,6 +121,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-04T05:33:07.765Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final evidence/doc revision verified;unchanged semantic SHA2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038 with same-actor EVALUATOR pass pinned exactly. Full and vendor-absent checks pass;10paths/5sourcehashes/AP forbidden0;registered exceptions preserved;full native/parent open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T05:33:07.423Z, excerpt_hash=sha256:8134d67cec4a4b952933c06a35fdfd4e74cb52fb8be00e6d29f3ef24eed85484
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040447-SAB5KD/blueprint/resolved-snapshot.json
+    - old_digest: 1ec910cd34988716bbc7610a486d6299d8978e836b8f79c2d0bdd05c9f695d43
+    - current_digest: 1ec910cd34988716bbc7610a486d6299d8978e836b8f79c2d0bdd05c9f695d43
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040447-SAB5KD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610040447-SAB5KD --result verified-202610040447-SAB5KD --commit 2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -131,7 +189,7 @@ Command: npm run verify. Result: pass. Evidence: 1129 application tests in217fil
 Command: focused owned Vitest and rebuilt Chromium ruler checks. Result: pass. Evidence:63tests/6files and2browser widths1280/390;baselines reproduce Escape stale release and trailing-click extra tab before correction. Scope: initiating pointer identity,primary/single/duplicate admission,cross-owner cancellation,all-key priority,Escape/Enter,temporary tab creation,blur/hide/removed-handle/unmount cleanup,accepted single undo and later editing.
 Command: temporarily rename vendor/libreoffice-reference inside vendor; npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e; restore in finally. Result: pass. Evidence:1129+109 runtime/tool tests,12script tests,61browser scenarios,all upstreamDirectoryPresent=false,vendorRestored=true,nativeCompilation=false,nativeExecution=false.
 Command: exact scope,manifest,source-hash and ignored-inclusive Agentplane raw/decoded audits;git diff --check;node .agentplane/policy/check-routing.mjs;ap doctor. Result: pass. Evidence:10semantic paths;278of280oldtest files byte-identical;6input substitutions+6matching pointerUp input lines with all old assertions retained;219prior manifest rows retained in220rows;5pinned hashes unchanged;Agentplane forbidden source/helper/Python/frame/diff/archive findings0;5historical prose-only diffs;doctor0errors/2knownwarnings/2info.
-Scope: bounded ruler gesture contract only;native hit testing/RTL/tabtypes/double-click dialogs/modifier snapping/deletion/capture/platform/LOK/input/full ruler/Writer/browser/parent remain unverified. Same-actor EVALUATOR semantic-SHA quality and final clean closure pending.
+Scope: bounded ruler gesture contract only;native hit testing/RTL/tabtypes/double-click dialogs/modifier snapping/deletion/capture/platform/LOK/input/full ruler/Writer/browser/parent remain unverified. Same-actor separate EVALUATOR pass:quality/20261004-053248688-recovery-context/quality-report.json evaluated_sha2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038;not independent-agent review. Semantic and pinned-source hashes unchanged. Final clean closure recorded by canonical finish.
 
 <!-- BEGIN VERIFICATION RESULTS -->
 ### 2026-10-04T05:31:56.316Z — VERIFY — ok
@@ -162,6 +220,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-04T05:33:07.765Z — VERIFY — ok
+
+By: CODER
+
+Note: Final evidence/doc revision verified;unchanged semantic SHA2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038 with same-actor EVALUATOR pass pinned exactly. Full and vendor-absent checks pass;10paths/5sourcehashes/AP forbidden0;registered exceptions preserved;full native/parent open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T05:33:07.423Z, excerpt_hash=sha256:8134d67cec4a4b952933c06a35fdfd4e74cb52fb8be00e6d29f3ef24eed85484
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040447-SAB5KD/blueprint/resolved-snapshot.json
+- old_digest: 1ec910cd34988716bbc7610a486d6299d8978e836b8f79c2d0bdd05c9f695d43
+- current_digest: 1ec910cd34988716bbc7610a486d6299d8978e836b8f79c2d0bdd05c9f695d43
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040447-SAB5KD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610040447-SAB5KD --result verified-202610040447-SAB5KD --commit 2a667d6fc8db77bb3c1bd8ea26bbb0ecb505f038
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
