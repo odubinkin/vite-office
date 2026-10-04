@@ -1,0 +1,38 @@
+{
+  "base": "feeeeadde07e",
+  "priorTests": 257,
+  "allPriorTestBytesPreserved": true,
+  "productionInverseProof": {
+    "passed": true,
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+    "changes": "Grouped root arrows/Home/End selection only; inverse restores exact prior split branches and yields byte-identical base."
+  },
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 215,
+      "changed": 1,
+      "evidenceOnly": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 215,
+      "changed": 1,
+      "evidenceOnly": true
+    }
+  ],
+  "semanticPaths": [
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx",
+    "apps/office/e2e/writer-root-menu-boundary.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "hashes": {
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx": "6ae8c36680bad846687d13c2e78093ca34b2fa1ef8cacb83c1caf0a83814ec0e",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar-root-boundary.test.tsx": "841ba1d744447b0a25965b7dedcaf6ec58865623b9c783c925ac1d46eb00b560",
+    "apps/office/e2e/writer-root-menu-boundary.spec.ts": "c03fe8e63061580bb46f91609bc5064c61e9bdf915dd62cc2403f43a6e69b566",
+    "docs/program/source-provenance.json": "3d94f329ea651a7ec504fbab10aa331203ed35b3b76b361eb594473d99fc166a",
+    "docs/program/parity/runtime-inventory.json": "a38df442f6fcbad0bb256a076984bd1f50bf1ccf463b473dfe67111db7a0350d"
+  }
+}

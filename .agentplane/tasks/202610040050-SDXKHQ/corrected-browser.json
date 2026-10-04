@@ -1,0 +1,9 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-root-menu-boundary.spec.ts apps/office/e2e/writer-root-menu-focus.spec.ts apps/office/e2e/writer-menu-key.spec.ts",
+  "exit": 0,
+  "sha256": "1d10ccc6732d185fa5d6a46b21840ceaa7f4f9bfb1923a0d01f0beafaeb681b2",
+  "summary": [
+    "Running 11 tests using 3 workers",
+    "  11 passed (4.0s)"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "command": "npm run build",
+  "exit": 0,
+  "sha256": "d3fcc55aea4117fb6e7eabcf178c43d5c9defd2696cbafc005bc27172284c176",
+  "summary": [
+    "✓ built in 601ms"
+  ]
+}
