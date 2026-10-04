@@ -4,7 +4,7 @@ title: "Restore ordinary StyleApply direct reset and native repeat history"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -23,6 +23,27 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T15:06:57.264Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor readonly exact-commit review: ordinary registered StyleApply reset and repeat range history satisfy approved Verify Steps."
+  evaluated_sha: "b21f8aacbc352dd9b6d706893b7179a0ec066de7"
+  blueprint_digest: "8a1ccf700681d4a43c1755c447d3bc2f551616de33c55192be3f86860fd9ae49"
+  evidence_refs:
+    - ".agentplane/tasks/202610041429-MGCTBJ/README.md"
+    - ".agentplane/tasks/202610041429-MGCTBJ/quality/20261004-150657264-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610041429-MGCTBJ/quality/20261004-150657264-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610041429-MGCTBJ/quality/20261004-150657264-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610041429-MGCTBJ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610041429-MGCTBJ/final-integrity.json"
+    - ".agentplane/tasks/202610041429-MGCTBJ/scope-integrity.json"
+    - ".agentplane/tasks/202610041429-MGCTBJ/source-comparison.json"
+    - ".agentplane/tasks/202610041429-MGCTBJ/artifact-audit.json"
+  findings:
+    - "Exact semantic b21f8aacbc352dd9b6d706893b7179a0ec066de7 replay:20paths,316prior tests/305byte-identical/11bounded native corrections,227oldrows four bounded appends and one unverified row; registered status/default/exception fields preserved."
+    - "Seven static and four source-only checks pass; absent app1468, inventory109, scripts5, Chromium97; four-metric coverage100; only failed app gate recovered with production unchanged and no passing suite repeated."
+    - "Direct saved-item reset, inherited list eligibility, exact whole AUTOFMT removal with partial/internet retention, repeat history and exact Undo/Redo match reviewed native source branches and actual core/ODT/browser assertions."
 commit: null
 comments:
   -
