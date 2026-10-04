@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- eslint apps/office/e2e/writer-ruler-tab-pixels.spec.ts apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx --max-warnings 0",
+  "exitCode": 0,
+  "outputBytes": 0,
+  "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "summary": []
+}

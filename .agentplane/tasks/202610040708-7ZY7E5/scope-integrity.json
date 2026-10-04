@@ -23,8 +23,8 @@
     },
     {
       "path": "apps/office/e2e/writer-ruler-tab-pixels.spec.ts",
-      "bytes": 5749,
-      "sha256": "6a9673264bfcf1c9fb08fff5d07cdb84aaaae300b9c6b5c44e06e15608c90973"
+      "bytes": 5686,
+      "sha256": "68aaba389988ec99c8895e7ee384f585d477acba224a7a8caa0e3a17ddebd6e3"
     },
     {
       "path": "apps/office/e2e/writer-ruler-tab-glyphs.spec.ts",

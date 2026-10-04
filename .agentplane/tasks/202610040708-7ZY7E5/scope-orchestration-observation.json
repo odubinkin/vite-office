@@ -1,0 +1,6 @@
+{
+  "observation": "Scope audit overlapped targeted absent-upstream Chromium process and observed the temporary vendor/.offline-7ZY7E5 directory.",
+  "impact": "Checkout assertion failed;no newscope artifact written and no semantic/test failure.",
+  "resolution": "Waited for targeted Chromium completion and verified vendor restoration;run scope audit only after restoration.",
+  "testsRepeatedForThisObservation": false
+}

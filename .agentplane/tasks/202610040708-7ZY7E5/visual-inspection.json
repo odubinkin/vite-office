@@ -1,0 +1,17 @@
+{
+  "screenshots": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-ruler-tab-pixels-Wr-165b4-d-tab-anchors-at-width-1280/rounded-tab-anchors.png",
+      "sha256": "2ceb8301861daaafcd30e437cbcd45e3814ee1f55fdb258885f74393ecb6d36e"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-ruler-tab-pixels-Wr-60617-ed-tab-anchors-at-width-390/rounded-tab-anchors.png",
+      "sha256": "51e2053893d163378b900f643322488b51ae2100c3ae772ebb1310e71f46ce14"
+    }
+  ],
+  "visualInspection": "Actual desktop1280/mobile390 Chromium ruler screenshots visually inspected: allfour typed glyphs visible at the rounded integer anchors with retained type geometry;typed Right actual hit/bounds,accepted/cancelled/no-motion input and Undo/Redo verified by Chromium. Images remain outsideAgentplane.",
+  "widths": [
+    1280,
+    390
+  ]
+}
