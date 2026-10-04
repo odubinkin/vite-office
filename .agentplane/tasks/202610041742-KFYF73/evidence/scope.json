@@ -1,0 +1,37 @@
+{
+  "semanticPaths": [
+    "apps/office/src/svl/source/items/poolitem.ts",
+    "apps/office/src/svl/source/items/stylepool.test.ts",
+    "apps/office/src/svl/source/items/stylepool.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/inc/istyleaccess.ts",
+    "apps/office/src/sw/source/core/doc/automatic-style-handles.test.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+    "apps/office/src/sw/source/core/txtnode/automatic-itemset-equality.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "priorTestFiles": 327,
+  "unchangedPriorTests": 326,
+  "changedPriorTests": [
+    "apps/office/src/sw/source/core/txtnode/automatic-itemset-equality.test.ts"
+  ],
+  "newRegressionCases": 15,
+  "previousRuntimeRows": 230,
+  "currentRuntimeRows": 233,
+  "unchangedStatusDefaultsExceptions": true,
+  "modifiedExistingEvidenceRows": [
+    "apps/office/src/svl/source/items/poolitem.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/txtnode/txatbase.ts"
+  ],
+  "newUnverifiedRuntimeOwners": [
+    "apps/office/src/svl/source/items/stylepool.ts",
+    "apps/office/src/sw/inc/istyleaccess.ts",
+    "apps/office/src/sw/source/core/doc/swstylemanager.ts"
+  ],
+  "nativeSourceHashes": 13,
+  "restored": true
+}
