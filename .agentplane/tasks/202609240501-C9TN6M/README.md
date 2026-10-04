@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 114
+revision: 115
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-04T15:08:28.742Z"
+doc_updated_at: "2026-10-04T15:38:14.279Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -394,6 +394,14 @@ sections:
     Strict20semanticpaths,316prior tests/305byte-identical/11exact bounded expectation replays.227prior mapping rows preserve statuses/defaults/exceptions; four description/evidence appends and one new unverified txtedt owner yield228/zero violations. Ten native source hashes; ignored-inclusive AP3552files/zero forbidden source/Python/helper/probe/diagnostic findings; vendor restored. Evidence in leaf final-integrity/scope-integrity/source-comparison/artifact-audit JSON. Registered save/open/recovery deviations unchanged.
 
     Parent remains DOING and goal active. Next separate native gaps include modifier/full-char reset and missing direction/style-name/pointer/native callback/history architecture; broader modules/defaults, full UI and native API still require individual review. No blanket promotion or native execution/compilation/source copies.
+
+    Iteration108 completed leaf202610041514-RRM1E4: replaced fused style/reset history with native ordered SwUndoFormatColl and SwUndoResetAttr in one SfxListUndoAction. Collection history owns direct items/style/list suppression only, reset history owns hints. Initial exact whole-AUTOFMT cleanup retains partial/internet hints; native reset redo defaults non-exact and clears all supported full-node AUTOFMT/internet hints even if collection display name disappeared. Reverse undo restores hints then attributes/collections and ordered original selection or caret; redo restores expanded full-node selection. Actual1280/390 DOM selection, replacement typing/history, toolbar/sidebar, untouched neighbors and genuine ODT export verified. Modifier discovery deferred after this earlier native history gap was confirmed; native toolbar supplies no KeyModifier, so no invented Ctrl toolbar behavior.
+
+    Implementationc4a864bf826f4efd68822238af138b9ac6b62ad0; same-actor readonly exact evaluated_sha quality pass at .agentplane/tasks/202610041514-RRM1E4/quality/20261004-153644080-recovery-context/quality-report.json; verificationa5adaa0b66e2147b866357954502e51788228ad3; closef9c236aac0b9e7152b37a0f6fd56ecea6de204ed. Seven final static gates, one absent static build and four restored-vendor source-only checks pass. Absent app1482/237files, inventory109/36files, scripts5/2files, Chromium99; app/inventory100 four metrics. Initial app1480/2failures retained and corrected only via one old endpoint expectation and valid new hint fixture; production unchanged after first run and no passing full suite repeated. Artifact persistence initial exit5 with partial metadata commit recovered sequentially after writers completed.
+
+    Strict15semanticpaths/318priorfiles313byte-identical/five exact bounded native expectation replays; other attribute undo algorithms unchanged.228prior mapping rows only six description/evidence appends, zero violations; all status/default/exception fields preserved. Ten native hashes, ignored-inclusive AP3585files/zero forbidden findings, vendor restored. No native execution/compilation/source copies/helper/probe/raw diagnostics. Leaf final-integrity/scope-integrity/source-comparison/artifact-audit JSON hold bounded evidence.
+
+    Parent remainsDOING and goal active. Next distinct gaps include actual KeyModifier/CTRL style path, native delete-set/fields/marks/callback/ring/layout/redline/inline-heading contracts and full defaults/API/history/UI. Earlier fused-history/directed-cursor/redo-hint claims are superseded by this native pair correction; no blanket status promotion. Registered save/open/recovery deviations unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -761,3 +769,11 @@ Implementation b21f8aacbc352dd9b6d706893b7179a0ec066de7; same-actor readonly exa
 Strict20semanticpaths,316prior tests/305byte-identical/11exact bounded expectation replays.227prior mapping rows preserve statuses/defaults/exceptions; four description/evidence appends and one new unverified txtedt owner yield228/zero violations. Ten native source hashes; ignored-inclusive AP3552files/zero forbidden source/Python/helper/probe/diagnostic findings; vendor restored. Evidence in leaf final-integrity/scope-integrity/source-comparison/artifact-audit JSON. Registered save/open/recovery deviations unchanged.
 
 Parent remains DOING and goal active. Next separate native gaps include modifier/full-char reset and missing direction/style-name/pointer/native callback/history architecture; broader modules/defaults, full UI and native API still require individual review. No blanket promotion or native execution/compilation/source copies.
+
+Iteration108 completed leaf202610041514-RRM1E4: replaced fused style/reset history with native ordered SwUndoFormatColl and SwUndoResetAttr in one SfxListUndoAction. Collection history owns direct items/style/list suppression only, reset history owns hints. Initial exact whole-AUTOFMT cleanup retains partial/internet hints; native reset redo defaults non-exact and clears all supported full-node AUTOFMT/internet hints even if collection display name disappeared. Reverse undo restores hints then attributes/collections and ordered original selection or caret; redo restores expanded full-node selection. Actual1280/390 DOM selection, replacement typing/history, toolbar/sidebar, untouched neighbors and genuine ODT export verified. Modifier discovery deferred after this earlier native history gap was confirmed; native toolbar supplies no KeyModifier, so no invented Ctrl toolbar behavior.
+
+Implementationc4a864bf826f4efd68822238af138b9ac6b62ad0; same-actor readonly exact evaluated_sha quality pass at .agentplane/tasks/202610041514-RRM1E4/quality/20261004-153644080-recovery-context/quality-report.json; verificationa5adaa0b66e2147b866357954502e51788228ad3; closef9c236aac0b9e7152b37a0f6fd56ecea6de204ed. Seven final static gates, one absent static build and four restored-vendor source-only checks pass. Absent app1482/237files, inventory109/36files, scripts5/2files, Chromium99; app/inventory100 four metrics. Initial app1480/2failures retained and corrected only via one old endpoint expectation and valid new hint fixture; production unchanged after first run and no passing full suite repeated. Artifact persistence initial exit5 with partial metadata commit recovered sequentially after writers completed.
+
+Strict15semanticpaths/318priorfiles313byte-identical/five exact bounded native expectation replays; other attribute undo algorithms unchanged.228prior mapping rows only six description/evidence appends, zero violations; all status/default/exception fields preserved. Ten native hashes, ignored-inclusive AP3585files/zero forbidden findings, vendor restored. No native execution/compilation/source copies/helper/probe/raw diagnostics. Leaf final-integrity/scope-integrity/source-comparison/artifact-audit JSON hold bounded evidence.
+
+Parent remainsDOING and goal active. Next distinct gaps include actual KeyModifier/CTRL style path, native delete-set/fields/marks/callback/ring/layout/redline/inline-heading contracts and full defaults/API/history/UI. Earlier fused-history/directed-cursor/redo-hint claims are superseded by this native pair correction; no blanket status promotion. Registered save/open/recovery deviations unchanged.
