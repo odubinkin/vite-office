@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-style-selector.spec.ts",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 619,
+  "outputSha256": "9d10865c91a1373f69d843adeb5ef5314f073da52a3424f164f827eb0b883408",
+  "summary": [
+    "  2 passed (4.3s)"
+  ]
+}
