@@ -1,0 +1,26 @@
+{
+  "screenshots": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-manual-first-layout-b5e92-layout-width-1280-raw-65537/manual-body-layout.png",
+      "sha256": "baf210c40b1e653fcd9184e0572034b1c4ecedd7a0a8e0eac2a89fde60b2b001",
+      "inspected": true
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-manual-first-layout-abec5-ayout-width-1280-raw--65537/manual-body-layout.png",
+      "sha256": "b39cb4391404225e39d547d5605971328dfa8aed2cc6ce7674ec4eba51244541",
+      "inspected": true
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-manual-first-layout-3ae25--layout-width-390-raw-65537/manual-body-layout.png",
+      "sha256": "9f3cc6c61bc5a296fc081a2a7ba2d6c73d9177079608b51af0bbb230da773393",
+      "inspected": true
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-manual-first-layout-f59be-layout-width-390-raw--65537/manual-body-layout.png",
+      "sha256": "6f3e4c4be526a43258ef869495b2d2990286b493956d1c77271512cfa86687b8",
+      "inspected": true
+    }
+  ],
+  "assessment": "Four actual full-page Chromium screenshots inspected. Desktop text placement is visible and untouched paragraph retained. Mobile preserves existing horizontal clipping near the vertical ruler; screenshot alone does not prove subpixel first-glyph geometry or native mobile UI parity. Independent Range/CSS assertions passed for all four cases.",
+  "helperArtifacts": false
+}

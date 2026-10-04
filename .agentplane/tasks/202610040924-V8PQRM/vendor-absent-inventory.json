@@ -1,0 +1,11 @@
+{
+  "command": "npm run test:inventory:coverage",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 1035,
+  "outputSha256": "90a04071051cc296854adf00e7bdb1d2eb19a7282fb52e9e820404cc954adda6",
+  "summary": [
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)"
+  ]
+}

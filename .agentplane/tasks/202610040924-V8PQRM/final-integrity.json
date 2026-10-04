@@ -1,0 +1,101 @@
+{
+  "base": "fc6f86dc82b6a8d644febeb12b86c8f050315383",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/text/itrcrsr.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+    "apps/office/e2e/writer-manual-first-layout.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedHashesUnchanged": 2,
+  "priorTestFiles": 302,
+  "priorTestFilesByteIdentical": 302,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 221,
+      "changedRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 221,
+      "changedRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    }
+  ],
+  "staticChecksPassed": 7,
+  "sourceChecksPassed": 4,
+  "appCasesPassed": 1276,
+  "inventoryCasesPassed": 109,
+  "scriptCasesPassed": 5,
+  "browserCasesPassed": 85,
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10446,
+      "covered": 10446,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11399,
+      "covered": 11399,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3021,
+      "covered": 3021,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8630,
+      "covered": 8630,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "artifactAudit": "artifact-audit.json",
+  "nativeExecution": false
+}

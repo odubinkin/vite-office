@@ -14,7 +14,7 @@
     },
     {
       "path": "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
-      "sha256": "6ed644bf6248b6ce3360e4c859e2f70b79a06655dcbca63adeef40eb16dbc615"
+      "sha256": "0166202f4be407e18688895efe1d4f92a4117e5e8e7e66116c45f483ae2925df"
     },
     {
       "path": "apps/office/e2e/writer-manual-first-layout.spec.ts",

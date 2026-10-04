@@ -13,8 +13,10 @@ import {
 /** Resolves Western paragraph layout without changing authored first-line items or list geometry. @param paragraph - Canonical text node. @returns First-line layout offset in twips. */
 export function resolveSwTextFirstLineIndent(paragraph: SwTextNode): number {
   const item = paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
-  if (!item.IsAutoFirst() || paragraph.GetNum()?.GetNumRule() !== undefined)
-    return item.ResolveTextFirstLineOffset();
+  if (paragraph.GetNum()?.GetNumRule() !== undefined) return item.ResolveTextFirstLineOffset();
+  // GetFirstLineOfsWithNum writes the manual offset through short before
+  // SwTextMargin widens it for placement; the pooled item remains unchanged.
+  if (!item.IsAutoFirst()) return (item.ResolveTextFirstLineOffset() << 16) >> 16;
   const height = (paragraph.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() * 2;
   if (
     paragraph

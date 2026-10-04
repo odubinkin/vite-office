@@ -4,7 +4,7 @@ title: "Preserve native signed-short manual first-line layout boundary"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T09:40:19.356Z"
+  updated_by: "CODER"
+  note: "Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore the native signed16 unnumbered manual first-line layout boundary while retaining raw authorship, automatic long values and existing list behavior. Tests only once absent; no upstream source/helper artifacts."
+  -
+    type: "verify"
+    at: "2026-10-04T09:40:19.356Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending."
 doc_version: 3
-doc_updated_at: "2026-10-04T09:24:46.003Z"
+doc_updated_at: "2026-10-04T09:40:19.406Z"
 doc_updated_by: "CODER"
 description: "Iteration100: correct existing unnumbered manual layout narrowing from native GetFirstLineOfsWithNum, preserving authored items and ruler/dialog/filter/history values. No source/helper artifacts, upstream execution or registered I/O/recovery changes."
 sections:
@@ -58,9 +64,49 @@ sections:
     2. Chromium1280/390 product ODT cases for positive/negative wrapped manual offsets check real first-glyph Range geometry, raw dialog/ruler behavior, mode Undo/Redo, independent paragraph and editing. Inspect accepted screenshots.
     3. npm run format:check, lint, typecheck, check:dependencies, test:static, check:docs, check:file-size pass. Exactly one full npm run test; owned script5 and full npm run test:e2e only with vendor/libreoffice-reference unavailable/restored in finally. App/inventory four coverage metrics100%. No passing suite repeats or upstream invocation.
     4. After restoration: resource generator --check, source-tree, provenance, invariants/parity, exact path/old-test/mapping/native hashes, whole Agentplane forbidden artifact0, routing and doctor. Exact semantic SHA EVALUATOR read-only review, then clean leaf finish and parent progress.
-  Verification: "Pending final owned local and browser checks. No pre-fix tests invoked."
+  Verification: |-
+    Command: seven split static gates; Result: pass (initial format failure corrected, only failed format gate repeated). Scope: actual product and owned tests, no dependency/policy/limit changes.
+    Command: npm run test; Result: initial fail,1275 passed/one new default-equal raw0 fixture expectation failed. Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; Result: corrected failed application/coverage gate pass1276/227files, all four metrics100% (11399statements/3021functions/8630branches/10446lines). Production resolver hash identical across both invocations; no passing full suite repeated.
+    Command: npm run test:inventory:coverage; Result:109/36files and four metrics100%. Owned script command5/2files; npm run test:e2e85/31.4s. Inventory/scripts/Chromium each once, every test invocation upstream absent with finally restoration. Original failures/results retained; no claim original npm run test exited0.
+    Command: resource generator --check, source-tree, provenance, invariants, parity CLI; Result: pass after restoration,221runtime modules/0semantic violations. Exact scope5/all302prior tests unchanged/one evidence-only row update per221rowmanifest/native hashes2 unchanged; full ignored-inclusive Agentplane3282files forbidden0, five historical prose-only diff references. Routing pass; doctor0errors/2knownwarnings/2info (hook shim, historical2Z3962 metadata).
+    Evidence: bounded result/hash JSONs and four inspected screenshots. Real ODT/CSS/first-glyph Range/raw dialog and ruler/history/independent paragraph/editing checks pass. Mobile retains existing horizontal clipping; screenshots alone do not certify subpixel/native mobile UI parity. Full active-script/language/bidi/list-mask/layout/parent parity remains separately unverified. Exact-SHA EVALUATOR quality pending.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T09:40:19.356Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:40:19.014Z, excerpt_hash=sha256:21c29afce17bc9f7c9a332b1ba381f39f7dae052d88f15a34634c410a035ad77
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040924-V8PQRM/blueprint/resolved-snapshot.json
+    - old_digest: bf91f290c86594548565a395123c524b1daea2b6e1071de8c5343aaab59eb7f4
+    - current_digest: bf91f290c86594548565a395123c524b1daea2b6e1071de8c5343aaab59eb7f4
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040924-V8PQRM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610040924-V8PQRM -m 🧩 V8PQRM task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped semantic commit and bounded evidence if the native signed16 layout contract is disproved; do not reset shared state, rewrite history, or change registered deviations."
-  Findings: "Native source-only inspection confirms active-script/font/language/bidi selection is a separate unresolved layout obligation; no naive CJK heuristic added. Also found persisted listGeometryWins boolean versus native independent list-indent masks; deferred separate source-owned refactor. Neither obligation is certified by this manual integer-boundary task."
+  Findings: |-
+    Native source-only inspection confirms active-script/font/language/bidi selection is a separate unresolved layout obligation; no naive CJK heuristic added. Also found persisted listGeometryWins boolean versus native independent list-indent masks; deferred separate source-owned refactor. Neither obligation is certified by this manual integer-boundary task.
+    Initial verification: formatting of one new E2E callback required a second Prettier write; only the failed format gate repeated. The first full upstream-absent application run passed1275 and failed one new raw0/direct fixture expectation: the existing typed writer operation correctly suppresses a default-equal no-op rather than creating a direct item. Corrected that expectation; production code stayed identical. Since Vitest removes coverage on failure, the failed application/coverage gate repeats absent with reportOnFailure enabled; inventory/scripts/browser were not reached in the initial pipeline and execute once. Original failed result/hash retained; no claim that the first npm run test exited successfully.
 id_source: "generated"
 ---
 ## Summary
@@ -92,7 +138,44 @@ Task evidence/results and parent progress only. No source copies/helpers/executi
 
 ## Verification
 
-Pending final owned local and browser checks. No pre-fix tests invoked.
+Command: seven split static gates; Result: pass (initial format failure corrected, only failed format gate repeated). Scope: actual product and owned tests, no dependency/policy/limit changes.
+Command: npm run test; Result: initial fail,1275 passed/one new default-equal raw0 fixture expectation failed. Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; Result: corrected failed application/coverage gate pass1276/227files, all four metrics100% (11399statements/3021functions/8630branches/10446lines). Production resolver hash identical across both invocations; no passing full suite repeated.
+Command: npm run test:inventory:coverage; Result:109/36files and four metrics100%. Owned script command5/2files; npm run test:e2e85/31.4s. Inventory/scripts/Chromium each once, every test invocation upstream absent with finally restoration. Original failures/results retained; no claim original npm run test exited0.
+Command: resource generator --check, source-tree, provenance, invariants, parity CLI; Result: pass after restoration,221runtime modules/0semantic violations. Exact scope5/all302prior tests unchanged/one evidence-only row update per221rowmanifest/native hashes2 unchanged; full ignored-inclusive Agentplane3282files forbidden0, five historical prose-only diff references. Routing pass; doctor0errors/2knownwarnings/2info (hook shim, historical2Z3962 metadata).
+Evidence: bounded result/hash JSONs and four inspected screenshots. Real ODT/CSS/first-glyph Range/raw dialog and ruler/history/independent paragraph/editing checks pass. Mobile retains existing horizontal clipping; screenshots alone do not certify subpixel/native mobile UI parity. Full active-script/language/bidi/list-mask/layout/parent parity remains separately unverified. Exact-SHA EVALUATOR quality pending.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T09:40:19.356Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified signed16 unnumbered manual layout independently of raw items and automatic long offsets. Initial failed app fixture corrected; final1276/100%, inventory109/100%, scripts5 and85Chromium pass absent. Scope5/302unchanged/native2/221rows/AP forbidden0 verified; exact-SHA quality pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:40:19.014Z, excerpt_hash=sha256:21c29afce17bc9f7c9a332b1ba381f39f7dae052d88f15a34634c410a035ad77
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040924-V8PQRM/blueprint/resolved-snapshot.json
+- old_digest: bf91f290c86594548565a395123c524b1daea2b6e1071de8c5343aaab59eb7f4
+- current_digest: bf91f290c86594548565a395123c524b1daea2b6e1071de8c5343aaab59eb7f4
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040924-V8PQRM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610040924-V8PQRM -m 🧩 V8PQRM task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -101,3 +184,4 @@ Revert the scoped semantic commit and bounded evidence if the native signed16 la
 ## Findings
 
 Native source-only inspection confirms active-script/font/language/bidi selection is a separate unresolved layout obligation; no naive CJK heuristic added. Also found persisted listGeometryWins boolean versus native independent list-indent masks; deferred separate source-owned refactor. Neither obligation is certified by this manual integer-boundary task.
+Initial verification: formatting of one new E2E callback required a second Prettier write; only the failed format gate repeated. The first full upstream-absent application run passed1275 and failed one new raw0/direct fixture expectation: the existing typed writer operation correctly suppresses a default-equal no-op rather than creating a direct item. Corrected that expectation; production code stayed identical. Since Vitest removes coverage on failure, the failed application/coverage gate repeats absent with reportOnFailure enabled; inventory/scripts/browser were not reached in the initial pipeline and execute once. Original failed result/hash retained; no claim that the first npm run test exited successfully.
