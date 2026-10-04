@@ -3,7 +3,11 @@
  */
 
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import {
+  RES_TXTATR_AUTOFMT,
+  RES_TXTATR_INETFMT,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 import {
@@ -20,10 +24,17 @@ import {
   type WriterHyperlink,
 } from "./fmtatr2";
 
-/** Stores direct-format text portions in deterministic start/end/which order. */
+/** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
   private m_HintsByStart: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+  private m_HintsByEnd: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+  private m_HintsByWhichAndStart: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
   private m_StartMapNeedsSortingRange: [number, number] = [0x7fffffff, -1];
+  private m_EndMapNeedsSortingRange: [number, number] = [0x7fffffff, -1];
+  private m_WhichMapNeedsSortingRange: [WhichStartPair, WhichStartPair] = [
+    [0x7fffffff, -1],
+    [-1, -1],
+  ];
 
   /** Reads the current primary map after lazy native sorting. @returns Owned sorted attributes. */
   private get hintsByStart(): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
@@ -35,23 +46,45 @@ export class SwpHints {
   private set hintsByStart(hints: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]) {
     for (const hint of this.m_HintsByStart) hint.m_pHints = undefined;
     this.m_HintsByStart = hints;
+    this.m_HintsByEnd = [...hints].sort(compareHintsByEnd);
+    this.m_HintsByWhichAndStart = [...hints].sort(compareHintsByWhichAndStart);
     for (const hint of hints) hint.m_pHints = this;
     this.m_StartMapNeedsSortingRange = [0x7fffffff, -1];
+    this.m_EndMapNeedsSortingRange = [0x7fffffff, -1];
+    this.m_WhichMapNeedsSortingRange = [
+      [0x7fffffff, -1],
+      [-1, -1],
+    ];
   }
 
-  /** Marks the whole primary map dirty after a start change. @returns Nothing. */
+  /** Marks all three maps dirty after a start change. @returns Nothing. */
   public StartPosChanged(): void {
     this.m_StartMapNeedsSortingRange = [-1, -1];
+    this.m_EndMapNeedsSortingRange = [-1, -1];
+    this.m_WhichMapNeedsSortingRange = [
+      [-1, -1],
+      [-1, -1],
+    ];
   }
 
-  /** Expands the primary start interval dirtied by an end change. @param positions - Native Which, start, previous end and new end values; the primary map consumes start. @returns Nothing. */
-  public EndPosChanged(
-    ...positions: [which: number, start: number, oldEnd: number, newEnd: number]
-  ): void {
-    const [, start] = positions;
+  /** Expands each native map's affected interval after an end change. @param which - Changed family. @param start - Unchanged start. @param oldEnd - Previous end. @param newEnd - New end. @returns Nothing. */
+  public EndPosChanged(which: number, start: number, oldEnd: number, newEnd: number): void {
     this.m_StartMapNeedsSortingRange = [
       Math.min(start, this.m_StartMapNeedsSortingRange[0]),
       Math.max(start, this.m_StartMapNeedsSortingRange[1]),
+    ];
+    this.m_EndMapNeedsSortingRange = [
+      Math.min(oldEnd, newEnd, this.m_EndMapNeedsSortingRange[0]),
+      Math.max(oldEnd, newEnd, this.m_EndMapNeedsSortingRange[1]),
+    ];
+    const pair: WhichStartPair = [which, start];
+    this.m_WhichMapNeedsSortingRange = [
+      compareWhichStartPairs(pair, this.m_WhichMapNeedsSortingRange[0]) < 0
+        ? pair
+        : this.m_WhichMapNeedsSortingRange[0],
+      compareWhichStartPairs(pair, this.m_WhichMapNeedsSortingRange[1]) > 0
+        ? pair
+        : this.m_WhichMapNeedsSortingRange[1],
     ];
   }
 
@@ -61,12 +94,87 @@ export class SwpHints {
     if (first === 0x7fffffff) return;
     if (first === -1) this.m_HintsByStart.sort(compareHints);
     else {
-      const from = hintStartBound(this.m_HintsByStart, first, false),
-        to = hintStartBound(this.m_HintsByStart, last, true);
+      const from = hintPositionBound(this.m_HintsByStart, first, false),
+        to = hintPositionBound(this.m_HintsByStart, last, true);
       const ordered = this.m_HintsByStart.slice(from, to).sort(compareHints);
       this.m_HintsByStart.splice(from, to - from, ...ordered);
     }
     this.m_StartMapNeedsSortingRange = [0x7fffffff, -1];
+  }
+
+  /** Restores the full or affected end interval in native end order. @returns Nothing. */
+  public ResortEndMap(): void {
+    const [first, last] = this.m_EndMapNeedsSortingRange;
+    if (first === 0x7fffffff) return;
+    if (first === -1) this.m_HintsByEnd.sort(compareHintsByEnd);
+    else {
+      const from = hintPositionBound(this.m_HintsByEnd, first, false, true),
+        to = hintPositionBound(this.m_HintsByEnd, last, true, true);
+      this.m_HintsByEnd.splice(
+        from,
+        to - from,
+        ...this.m_HintsByEnd.slice(from, to).sort(compareHintsByEnd),
+      );
+    }
+    this.m_EndMapNeedsSortingRange = [0x7fffffff, -1];
+  }
+
+  /** Restores the full or affected lexicographic Which/start interval. @returns Nothing. */
+  public ResortWhichMap(): void {
+    const [first, last] = this.m_WhichMapNeedsSortingRange;
+    if (first[0] === 0x7fffffff) return;
+    if (first[0] === -1) this.m_HintsByWhichAndStart.sort(compareHintsByWhichAndStart);
+    else {
+      const from = hintWhichStartBound(this.m_HintsByWhichAndStart, first, false),
+        to = hintWhichStartBound(this.m_HintsByWhichAndStart, last, true);
+      this.m_HintsByWhichAndStart.splice(
+        from,
+        to - from,
+        ...this.m_HintsByWhichAndStart.slice(from, to).sort(compareHintsByWhichAndStart),
+      );
+    }
+    this.m_WhichMapNeedsSortingRange = [
+      [0x7fffffff, -1],
+      [-1, -1],
+    ];
+  }
+
+  /** Sorts all three maps only when dirty. @returns Nothing. */
+  public SortIfNeedBe(): void {
+    this.ResortStartMap();
+    this.ResortEndMap();
+    this.ResortWhichMap();
+  }
+
+  /** Finds the last hint ending at or before an offset. @param end - Inclusive end boundary. @returns End-map index or -1. */
+  public GetLastPosSortedByEnd(end: number): number {
+    this.ResortEndMap();
+    return hintPositionBound(this.m_HintsByEnd, end, true, true) - 1;
+  }
+
+  /** Reads an actual attribute in native end order. @param position - End-map index. @returns Owned attribute. */
+  public GetSortedByEnd(position: number): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+    this.ResortEndMap();
+    const hint = this.m_HintsByEnd[position];
+    if (hint === undefined) throw new Error(`Unknown SwpHints end position: ${position}`);
+    return hint;
+  }
+
+  /** Finds the lower Which bound, including the next family when the requested one is absent. @param which - Family boundary. @returns Which-map index or the portable number-index size sentinel. */
+  public GetFirstPosSortedByWhichAndStart(which: number): number {
+    this.ResortWhichMap();
+    const position = hintWhichStartBound(this.m_HintsByWhichAndStart, [which, -Infinity], false);
+    return position === this.Count() ? Number.MAX_SAFE_INTEGER : position;
+  }
+
+  /** Reads an actual attribute in native Which/start order. @param position - Which-map index. @returns Owned attribute. */
+  public GetSortedByWhichAndStart(
+    position: number,
+  ): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+    this.ResortWhichMap();
+    const hint = this.m_HintsByWhichAndStart[position];
+    if (hint === undefined) throw new Error(`Unknown SwpHints Which position: ${position}`);
+    return hint;
   }
 
   /** Creates a hint container. @param pool - Owning document pool. @param hints - Initial ranged attributes. @returns Nothing. */
@@ -533,16 +641,8 @@ export class SwpHints {
       const end = ordered[index + 1] as number;
       /* v8 ignore next -- Unique sorted hint boundaries always increase. */
       if (end <= start) continue;
-      const auto = this.hintsByStart.find(
-        /** Finds the auto-format covering a segment. @param hint - Candidate hint. @returns Whether it covers the segment. */
-        (hint) =>
-          hint.format instanceof SwFormatAutoFormat && hint.start <= start && end <= hint.end,
-      );
-      const inet = this.hintsByStart.find(
-        /** Finds the hyperlink covering a segment. @param hint - Candidate hint. @returns Whether it covers the segment. */
-        (hint) =>
-          hint.format instanceof SwFormatINetFormat && hint.start <= start && end <= hint.end,
-      );
+      const auto = this.findFamilyHint(RES_TXTATR_AUTOFMT, start, end);
+      const inet = this.findFamilyHint(RES_TXTATR_INETFMT, start, end);
       runs.push({
         attributes:
           auto?.format instanceof SwFormatAutoFormat
@@ -567,13 +667,7 @@ export class SwpHints {
       throw new Error("Writer character-format caret is outside the text node.");
     if (text.length === 0) return this.projectInherited(inherited);
     const characterOffset = offset === 0 ? 0 : offset - 1;
-    const hint = this.hintsByStart.find(
-      /** Finds the hint covering the inherited character. @param candidate - Ordered hint. @returns Whether it covers the offset. */
-      (candidate) =>
-        candidate.format instanceof SwFormatAutoFormat &&
-        candidate.start <= characterOffset &&
-        characterOffset < candidate.end,
-    );
+    const hint = this.findFamilyHint(RES_TXTATR_AUTOFMT, characterOffset, characterOffset + 1);
     return hint === undefined
       ? this.projectInherited(inherited)
       : projectWriterCharacterAttributes(
@@ -588,13 +682,7 @@ export class SwpHints {
       throw new Error("Writer hyperlink caret is outside the text node.");
     if (text.length === 0) return undefined;
     const characterOffset = offset === 0 ? 0 : offset - 1;
-    const hint = this.hintsByStart.find(
-      /** Finds the hyperlink covering the inherited character. @param candidate - Candidate hint. @returns Whether it covers the offset. */
-      (candidate) =>
-        candidate.format instanceof SwFormatINetFormat &&
-        candidate.start <= characterOffset &&
-        characterOffset < candidate.end,
-    );
+    const hint = this.findFamilyHint(RES_TXTATR_INETFMT, characterOffset, characterOffset + 1);
     return hint?.format instanceof SwFormatINetFormat ? hint.format.GetHyperlink() : undefined;
   }
 
@@ -649,14 +737,7 @@ export class SwpHints {
         index,
       ) => {
         const segmentEnd = ordered[index + 1] as number;
-        const hint = this.hintsByStart.find(
-          /** Finds an auto-format covering the segment. @param candidate - Candidate native hint. @returns Whether it covers the segment. */ (
-            candidate,
-          ) =>
-            candidate.format instanceof SwFormatAutoFormat &&
-            candidate.start <= segmentStart &&
-            segmentEnd <= candidate.end,
-        );
+        const hint = this.findFamilyHint(RES_TXTATR_AUTOFMT, segmentStart, segmentEnd);
         return {
           attributes:
             hint?.format instanceof SwFormatAutoFormat
@@ -667,6 +748,20 @@ export class SwpHints {
         };
       },
     );
+  }
+
+  /** Finds a covering hint using the native Which/start map. @param which - Existing supported family. @param start - Inclusive character boundary. @param end - Exclusive character boundary. @returns Covering actual attribute or undefined. */
+  private findFamilyHint(
+    which: number,
+    start: number,
+    end: number,
+  ): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> | undefined {
+    for (let index = this.GetFirstPosSortedByWhichAndStart(which); index < this.Count(); index++) {
+      const hint = this.GetSortedByWhichAndStart(index);
+      if (hint.Which() !== which || hint.start > start) break;
+      if (end <= hint.end) return hint;
+    }
+    return undefined;
   }
 
   /** Replaces only auto-format hints over one range with native item segments. @param textLength - Complete text length. @param start - Inclusive start. @param end - Exclusive end. @param segments - Replacement effective item segments. @param inherited - Node/style items. @returns Updated independent hints. */
@@ -756,18 +851,62 @@ function compareHints(
   return left.start - right.start || right.end - left.end || right.Which() - left.Which();
 }
 
-/** Finds the native lower or upper start-position bound in an already start-ordered map. @param hints - Primary map. @param position - Start boundary. @param upper - Whether equal starts belong before the bound. @returns Insertion index. */
-function hintStartBound(
+/** Native Which/start sorting boundary. */
+type WhichStartPair = [number, number];
+
+/** Compares native lexicographic boundaries. @param left - First boundary. @param right - Second boundary. @returns Signed order. */
+function compareWhichStartPairs(left: WhichStartPair, right: WhichStartPair): number {
+  return left[0] - right[0] || left[1] - right[1];
+}
+
+/** Compares supported ranges in native end/start-reverse/Which order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
+function compareHintsByEnd(
+  left: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
+  right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
+): number {
+  return left.end - right.end || right.start - left.start || left.Which() - right.Which();
+}
+
+/** Compares supported ranges in native Which/start/end-reverse order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
+function compareHintsByWhichAndStart(
+  left: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
+  right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
+): number {
+  return left.Which() - right.Which() || left.start - right.start || right.end - left.end;
+}
+
+/** Finds native lower/upper Which/start bounds without comparing ends. @param hints - Which map. @param position - Lexicographic boundary. @param upper - Include equals before the bound. @returns Insertion index. */
+function hintWhichStartBound(
+  hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[],
+  position: WhichStartPair,
+  upper: boolean,
+): number {
+  let first = 0,
+    last = hints.length;
+  while (first < last) {
+    const middle = Math.floor((first + last) / 2),
+      hint = hints[middle] as SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>;
+    const order = hint.Which() - position[0] || hint.start - position[1];
+    if (order < 0 || (upper && order === 0)) first = middle + 1;
+    else last = middle;
+  }
+  return first;
+}
+
+/** Finds native lower/upper position bounds in a map ordered by that coordinate. @param hints - Start or end map. @param position - Boundary. @param upper - Include equals before the bound. @param byEnd - Whether to compare ends instead of starts. @returns Insertion index. */
+function hintPositionBound(
   hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[],
   position: number,
   upper: boolean,
+  byEnd = false,
 ): number {
   let first = 0,
     last = hints.length;
   while (first < last) {
     const middle = Math.floor((first + last) / 2);
     const hint = hints[middle] as SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>;
-    if (hint.start < position || (upper && hint.start === position)) first = middle + 1;
+    const coordinate = byEnd ? hint.end : hint.start;
+    if (coordinate < position || (upper && coordinate === position)) first = middle + 1;
     else last = middle;
   }
   return first;
