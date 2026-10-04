@@ -1,0 +1,7 @@
+{
+  "command": "npm run check:source-provenance",
+  "profile": "restored-source audit only",
+  "exitCode": 0,
+  "bytes": 205,
+  "sha256": "99ceea53052187b90b9c49bbd5a7f64c36ec044609bf236ee3378b0db8a61dac"
+}

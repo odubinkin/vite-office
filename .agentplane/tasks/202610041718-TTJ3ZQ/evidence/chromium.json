@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+  "profile": "upstream unavailable",
+  "exitCode": 0,
+  "bytes": 13579,
+  "sha256": "68c6ba8dd2ba1ff264815d84be35238a4e23e873390911a818ef1d0797c84c43"
+}

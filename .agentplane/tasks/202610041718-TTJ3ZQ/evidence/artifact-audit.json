@@ -1,0 +1,5 @@
+{
+  "scope": "complete ignored-inclusive AP tree; canonical policy and managed CLI exempt from source-extension gate; symbol references and primitive assertion diffs remain prose/data",
+  "files": 3701,
+  "forbiddenCount": 0
+}

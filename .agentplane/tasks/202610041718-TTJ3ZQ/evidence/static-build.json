@@ -1,0 +1,7 @@
+{
+  "command": "npm run test:static",
+  "profile": "upstream unavailable",
+  "exitCode": 0,
+  "bytes": 1103,
+  "sha256": "0812de4fca78e958766e6ee83360a1e03305d4237c49769c47e692f2c87e9617"
+}

@@ -2,5 +2,6 @@
   "command": "npm run typecheck",
   "exitCode": 0,
   "bytes": 240,
-  "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+  "reason": "New test fixture corrected before product execution to assert actual item-owner inheritance and independent direct-value projection"
 }

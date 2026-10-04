@@ -1,0 +1,39 @@
+{
+  "semanticPaths": [
+    "apps/office/src/svl/source/items/itemset.ts",
+    "apps/office/src/svl/source/items/itemset-equality.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+    "apps/office/src/sw/source/core/txtnode/automatic-itemset-equality.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "byteIdenticalPriorTestFiles": 325,
+  "runtimeRows": 230,
+  "boundedExistingRuntimeAppendices": 2,
+  "sourceAppendices": 2,
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeHashes": [
+    {
+      "path": "svl/source/items/itemset.cxx",
+      "sha256": "e9cd6e67ef9f5f9bd02f0cea10543d41f0d03ace23e903841db38d894dc26dbe"
+    },
+    {
+      "path": "include/svl/itemset.hxx",
+      "sha256": "556a9c3a7bacddffc2e9da13462161836261c4ca97c83361e67ac5d166a33c1c"
+    },
+    {
+      "path": "sw/source/core/txtnode/fmtatr2.cxx",
+      "sha256": "f21ad8f8f8615d648f068c27a52f8457828c180843f9917a4ba42c95dd203de3"
+    },
+    {
+      "path": "svl/source/items/stylepool.cxx",
+      "sha256": "01425093bb895db6bd7c226ccc2c64af1c09dbafd420f21fbb3b54269690236d"
+    },
+    {
+      "path": "sw/source/core/doc/swstylemanager.cxx",
+      "sha256": "0568482dc9465372972d5360419a5ec5f7e98bc1d95f0c257efc3319e06bd25d"
+    }
+  ],
+  "registeredDeviationsUnchanged": true,
+  "automaticStyleHandleInterningUnverified": true
+}

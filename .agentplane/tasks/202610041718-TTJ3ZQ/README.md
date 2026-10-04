@@ -4,7 +4,7 @@ title: "Restore native item-set equality ownership and state contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore approved native item-set equality states/owners and replace SET-only helper, keeping handle interning explicitly unresolved."
 doc_version: 3
-doc_updated_at: "2026-10-04T17:20:39.664Z"
+doc_updated_at: "2026-10-04T17:32:04.439Z"
 doc_updated_by: "CODER"
 description: "Restore SfxItemSet::Equals pool/parent/count/direct-state/value contract and replace the existing Writer SET-only equality helper with the owner contract. Add independent actual-owner/item/adjacent-hint regressions. Native automatic-style handle interning and pointer equality remain the next architectural step, not certified by this leaf."
 sections:
@@ -54,7 +54,7 @@ sections:
     5. Exact six semantic paths;230 runtime rows preserve statuses/defaults/exceptions, only two bounded existing-row evidence appendices; provenance retains existing evidence with precise residual handle-interner gap. Complete ignored-inclusive AP audit rejects source/helpers/Python/executables/source frames/raw source diffs. Same-actor exact-SHA EVALUATOR pass; ap doctor zero errors and node .agentplane/policy/check-routing.mjs pass. Recorded canonical verification, semantic/verification/close hashes and clean tracked/untracked final checkout required.
   Verification: "Pending execution; product suites authorized once absent-only. No broad native automatic-style identity or whole-module parity claim."
   Rollback Plan: "Revert semantic task commit with a new commit if necessary; no history rewrite. Always restore vendor directory in finally."
-  Findings: "Pinned SfxItemSet::Equals compares parent/pool only when comparePool is true, then Count and keyed direct states and item equality; ranges and inherited content are not compared. Existing Writer helper compares sorted SET-only projection and loses marker and owner differences. Native SwFormatAutoFormat equality itself compares shared handle identity from document-owned StylePool; that architectural requirement remains open beyond this base-owner contract leaf. Corrected previous parent closure hash in its existing executable task before this leaf; no code/tests rerun for that prose correction."
+  Findings: "Restored pinned base SfxItemSet::Equals explicit comparePool contract and removed Writer SET-only helper.49 new real-owner/item/hint/clone/direct-projection assertions cover direct states, keyed markers, parent/pool identity, Count/self/empty/range/order and retained inherited item access. Corrected a new fixture before product execution to distinguish owner inheritance from separately implemented browser inheritance projection; repeated only static gates affected by that new test edit. All product gates pass first single absent-only profile:1660app/244files,109inventory/36files,5scripts/2files,99Chromium; four required metrics100%. Six final static gates and absent build plus restored source/resource/provenance/invariant/parity audits pass, semantic violations0. All325 previous tests/specs byte-identical; exact six semantic paths,230 unchanged runtime statuses/defaults/exceptions with two bounded appendices; five native hashes bind pin; full ignored-inclusive AP scan3701files forbidden0. Upstream restored in finally, no network/outside-repo/source execution or AP source/helper storage, registered I/O/recovery deviations unchanged. Native automatic-format equality requires document-owned shared handles and pointer identity; that next architectural requirement remains open. Complete native style pools/other flags/notifications/layout/ranges/fields/marks/redlines/filter/UI contracts remain unverified; broad goal active."
 id_source: "generated"
 ---
 ## Summary
@@ -87,4 +87,4 @@ Revert semantic task commit with a new commit if necessary; no history rewrite. 
 
 ## Findings
 
-Pinned SfxItemSet::Equals compares parent/pool only when comparePool is true, then Count and keyed direct states and item equality; ranges and inherited content are not compared. Existing Writer helper compares sorted SET-only projection and loses marker and owner differences. Native SwFormatAutoFormat equality itself compares shared handle identity from document-owned StylePool; that architectural requirement remains open beyond this base-owner contract leaf. Corrected previous parent closure hash in its existing executable task before this leaf; no code/tests rerun for that prose correction.
+Restored pinned base SfxItemSet::Equals explicit comparePool contract and removed Writer SET-only helper.49 new real-owner/item/hint/clone/direct-projection assertions cover direct states, keyed markers, parent/pool identity, Count/self/empty/range/order and retained inherited item access. Corrected a new fixture before product execution to distinguish owner inheritance from separately implemented browser inheritance projection; repeated only static gates affected by that new test edit. All product gates pass first single absent-only profile:1660app/244files,109inventory/36files,5scripts/2files,99Chromium; four required metrics100%. Six final static gates and absent build plus restored source/resource/provenance/invariant/parity audits pass, semantic violations0. All325 previous tests/specs byte-identical; exact six semantic paths,230 unchanged runtime statuses/defaults/exceptions with two bounded appendices; five native hashes bind pin; full ignored-inclusive AP scan3701files forbidden0. Upstream restored in finally, no network/outside-repo/source execution or AP source/helper storage, registered I/O/recovery deviations unchanged. Native automatic-format equality requires document-owned shared handles and pointer identity; that next architectural requirement remains open. Complete native style pools/other flags/notifications/layout/ranges/fields/marks/redlines/filter/UI contracts remain unverified; broad goal active.

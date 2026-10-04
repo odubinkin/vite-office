@@ -2,5 +2,6 @@
   "command": "npm run check:file-size",
   "exitCode": 0,
   "bytes": 2799,
-  "sha256": "0b9ecfe73da40f8c70cefd11e97c2d691595dafdb1d2ef47d5e82a0449bec6ba"
+  "sha256": "0b9ecfe73da40f8c70cefd11e97c2d691595dafdb1d2ef47d5e82a0449bec6ba",
+  "reason": "New test fixture corrected before product execution to assert actual item-owner inheritance and independent direct-value projection"
 }
