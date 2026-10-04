@@ -1,10 +1,11 @@
 ---
 id: "202610042319-Y8NHP2"
 title: "Preserve native hyperlink style identities through Worker records"
-status: "DOING"
+result_summary: "Preserved native hyperlink style identities through browser and Worker records"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -61,11 +62,16 @@ quality_review:
     - "Exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d"
   findings:
     - "All six committed semantic paths match approved scope and checkout. Browser-owned record codec is reused by both serialization paths;native paired setters restore independent IDs/names without copying backlink. Zero omissions retain previous records,provided unsigned16 IDs validate strictly. Independent16IDpairs/malformedfields/actualnodecopies/retainedundotext/structured-clone Worker16 prove bounded retention. All352 prior test files unchanged;238states/defaults/exceptions and allothermanifestfields unchanged except two responsibility appendices. Six static/five absent full/five restored source gates pass first attempts:build1,app2716/inventory109/scripts5/Chromium99,coverage100%,notestreplays;semantic0;five native hashes;AP3853files/0forbidden;doctor0errors2unchangedwarnings/routingpass."
-commit: null
+commit:
+  hash: "97bbb0a8f3b146020aa15fb90fa888b4950ca894"
+  message: "🧩 Y8NHP2 task: record verified internet identity transport"
 comments:
   -
     author: "CODER"
     body: "Start: preserve native internet style IDs through one browser-owned record codec reused by pooled snapshots and Worker16 graph."
+  -
+    author: "CODER"
+    body: "Verified: independent native internet style identities survive item snapshots and canonical Worker16 graph through one browser-owned codec. Six paths,36new independent cases,352prior tests unchanged;one absent full profile2716/109/5/99 with100%coverage;restored audits semantic0. Same-actor exact-SHA review and doctor/routing pass;active constructor/style mapping/native clients/full core/UI remain unverified."
 events:
   -
     type: "status"
@@ -80,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d: shared browser record codec retains independent native internet IDs. Six paths,36new literal cases,all352prior tests unchanged;238states/defaults/exceptions retained,two appendices only. Six static/five absent full/five restored source gates first-attempt pass:build1,app2716/inventory109/scripts5/Chromium99,coverage100%,no replays,semantic0. Five native hashes;AP0forbidden;exact-SHA same-actor review pass;doctor0errors/two unchanged warnings/routingOK. Active DTO construction/style lookup and ODF/native client/full parity remain unverified;I/O deviations preserved."
+  -
+    type: "status"
+    at: "2026-10-04T23:33:36.246Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: independent native internet style identities survive item snapshots and canonical Worker16 graph through one browser-owned codec. Six paths,36new independent cases,352prior tests unchanged;one absent full profile2716/109/5/99 with100%coverage;restored audits semantic0. Same-actor exact-SHA review and doctor/routing pass;active constructor/style mapping/native clients/full core/UI remain unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T23:33:03.498Z"
+doc_updated_at: "2026-10-04T23:33:36.247Z"
 doc_updated_by: "CODER"
 description: "Preserve both native internet style pool IDs through the existing browser item snapshot and canonical Worker16 graph. Add one browser-owned internet value-record type and encode/decode pair in existing item-codec.ts;reuse it from JSON item encoding and graph hint encoding/restoration,leaving core QueryValue and GetHyperlink browser metadata projection unchanged. Encode optional native inetFormatId/visitedFormatId when nonzero;absence in existing current-schema records restores ZERO without changing350+existing assumptions. Validate provided IDs as integer unsigned16 before invoking native paired name/ID setters;reject malformed IDs,retain existing blank-active-link snapshot rejection and default-only pool54 generic restore boundary. Native Clone/MakeTextAttr/node copying already preserve IDs and must remain authoritative;no duplicate core persistence class. Add two source-independent literal test files:16literal ID pairs/zero/built-in/custom/sentinel item snapshots,current-schema omitted IDs,all invalid-ID boundary branches,actual node/copy/fragment/history/undo and structured-clone Worker envelope ownership/restoration. All352 prior test files byte-identical. Append bounded responsibility notes only to two existing manifest rows;all238 runtime states/defaults/exceptions and I/O deviations preserved,no new module or promotion. Six static gates then one sequential five-suite absent-reference profile with finally restoration;only failed cases/gates repeat;five restored source audits afterward. Exact committed scope/native hashes/ignored-inclusive artifact audit,same-actor readonly EVALUATOR,doctor/routing,recorded verification and canonical finish with concrete result. Native active DTO constructor/style identity ingestion,ODF UI/programmatic name conversion/localization/custom style copying/visited clients/UNO/macros/broadcaster/lifetime/full core/UI parity remain separate unverified obligations."
 sections:
@@ -165,6 +178,10 @@ sections:
     Iteration127 preserves native normal/visited style IDs through a single browser-owned internet record codec reused by pooled JSON snapshots and canonical Worker16 graph hints. Optional nonzero IDs retain exact unsigned16 values;omitted fields restore ZERO under the existing portable DTO contract. Native item name/ID paired setters restore owned fields without a text backlink;MakeTextAttr attaches actual graph hints normally. Core QueryValue/GetHyperlink projection and default-only pool54 generic decode boundary remain unchanged. All existing runtime states/defaults/exceptions and registered save/open/recovery deviations preserved. Native active styled constructor routing,DTO style identity lookup,ODF programmatic/UI conversion,full localized/custom style families/clients/visited behavior/UNO/macros/broadcaster/lifetimes/global pools/full core/UI remain unverified;no module or goal promotion.
 
     Verified evidence: six semantic paths;36new independent literal cases;all352prior test files byte-identical. Six static gates first-attempt pass. One absent full profile first-attempt pass:build1,app2716/271files,inventory109/36files,scripts5/2files,Chromium99;app/inventory100%allfourcoverage,no failures/replays/passing suite repeats. Vendor restored in finally;five restored source audits pass,semantic0. All238runtime states/defaults/exceptions and all other manifest fields preserved except two bounded codec responsibility appendices. Five native hashes;ignored-inclusive AP3853files/zero forbidden;git diff --check pass. Real node copies/retained text undo keep65000/65535 and actual backlinks;graph/Worker restores preserve exact independent IDs/names/ranges/ownership. Core QueryValue/GetHyperlink unchanged;no persistence helpers added to core. Optional missing IDs restore0 under existing portable DTO contract;new active native styled-constructor routing and name-to-pool-ID lookup remain unverified. ODF name mapping/custom/localized styles/visited clients/UNO/macros/broadcaster/lifetime/global pools/full core/UI remain unverified. No registered I/O/recovery changes/network/global access/native invocation/saved sources/helpers/raw diagnostics.
+extensions:
+  implementation_commit:
+    hash: "de0c2aa18c9716de68e8cdae5d6007d41edcfc9d"
+    message: "🛠️ Y8NHP2 code: preserve native internet identities through browser records"
 id_source: "generated"
 ---
 ## Summary
