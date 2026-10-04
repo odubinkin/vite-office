@@ -1,10 +1,11 @@
 ---
 id: "202610040417-Y6BJBP"
 title: "Restore Sidebar docking key isolation before document accelerators"
-status: "DOING"
+result_summary: "Iteration89 complete:9paths,275oldtest files identical and4approved arrow expectations strengthened,219manifest rows without status/default/owner/exception promotion;1102app+109inventory+59browser+2resource/full and1102+109+12+59vendor-absent pass;100%coverage,0semantic,vendor restored. Full native/parent goal remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -52,11 +53,16 @@ quality_review:
     - "Corrected pre-fix Writer baseline4fail/1pass;75focused cases and2rebuilt width cases pass;full1102+109+59+2checks and vendor-absent1102+109+12+59pass,restored;100%four coverage metrics and0semantic violations."
     - "Recomputed9path scope:275of277prior test files byte-identical;only4approved stronger arrow-consumption expectation lines in2files;218prior rows/order/status/default/owner/exception fields preserved,one append-only update plusnew local-only/unverified row;4pinned hashes unchanged."
     - "Ignored-inclusive raw and decoded Agentplane source/helper/Python/code-frame/archive audit0;5historical prose-only Markdown diff references;clean tracked state and known doctor warnings out of scope."
-commit: null
+commit:
+  hash: "4adf87624abf2b7911b1278e8c8ab25e0657c8e4"
+  message: "🎯 Y6BJBP code: restore Sidebar docking key isolation"
 comments:
   -
     author: "CODER"
     body: "Start: standing parity goal,one owned Sidebar docking keyboard boundary correction;source/hash/result evidence only,no upstream test invocation or helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: Sidebar13local key isolation after child handling preserves DOM defaults and frame fallback;full and vendor-absent tests pass;source/helper/Python artifacts0;exact semantic same-actor quality pass."
 events:
   -
     type: "status"
@@ -77,8 +83,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared checks pass;semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4 has same-actor exact-SHA quality pass;final docs updated,source/helper/Python0,vendor restored,scope9;full native/parent goal remains open."
+  -
+    type: "status"
+    at: "2026-10-04T04:43:16.072Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Sidebar13local key isolation after child handling preserves DOM defaults and frame fallback;full and vendor-absent tests pass;source/helper/Python artifacts0;exact semantic same-actor quality pass."
 doc_version: 3
-doc_updated_at: "2026-10-04T04:42:47.175Z"
+doc_updated_at: "2026-10-04T04:43:16.073Z"
 doc_updated_by: "CODER"
 description: "Iteration89: project the pinned SidebarDockingWindow thirteen local key codes onto the existing owned browser boundary; isolate document Cut/Copy/Paste without cancelling native HTML widget defaults, preserve Undo/Redo and intentional save/open/recovery deviations."
 sections:
@@ -172,6 +185,10 @@ sections:
     Browser observer fixture initially read event.defaultPrevented in a microtask at the target,which can precede React root bubbling. It now observes after the event using a timer;both desktop/mobile cases pass without production accommodation. Only bounded failure exit/hash is retained;no source-frame diagnostics copied. Literal key matrix owns32boundary cases and5actual Writer cases. All declared full and vendor-absent checks pass;4source hashes and9scope identities retained. Agentplane audit covers ignored files and decoded JSON/JSONL;Python/helper/source/code frames/archives0. Doctor warnings are the existing hook shim and historic DONE202610031635-2Z3962 missing implementation hash,out of scope. Native styles/DesignerDialog,modal/input/platform/LOK accelerator eligibility,hierarchy,F6,floating/mouse docking,other decks/defaults and complete parent/native parity remain unverified. No save/open/recovery changes;no history rewrite/network/outside-repo access/native execution. Same-actor quality only;no independent reviewer claim.
 
     Same-actor EVALUATOR pass quality/20261004-044223821-recovery-context/quality-report.json evaluated exact semantic4adf87624abf2b7911b1278e8c8ab25e0657c8e4;scope/hash/old-tests/manifest/artifact audit rechecked read-only. No independent-agent claim. Approved bounded correction is complete;full parent/native goal remains active.
+extensions:
+  implementation_commit:
+    hash: "4adf87624abf2b7911b1278e8c8ab25e0657c8e4"
+    message: "🎯 Y6BJBP code: restore Sidebar docking key isolation"
 id_source: "generated"
 ---
 ## Summary
