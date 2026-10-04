@@ -1,10 +1,11 @@
 ---
 id: "202610040242-N2HMA6"
 title: "Restore managed Sidebar Tab and arrow focus traversal"
-status: "DOING"
+result_summary: "Restored implemented Sidebar Tab and arrow focus traversal; full and upstream-absent tests pass, parent parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Eight scoped semantic paths; 268 previous test files byte-identical,217 prior manifest rows preserved with two append-only evidence/responsibility updates and one lexically inserted browser row,218total. No defaults/status/owner/exception/core changes."
     - "Baseline5fail; focused39runtime/2browser; fullverify0 with1042app109inventory53browser2resources,100%allapp/inventorycoverage0semantic. Vendor-absent1042+109+12+53allpass,restoredfinally. Final integrity8semantic6sourcehashescurrent; artifact raw/decoded source/helper/Python/frame/archive0."
-commit: null
+commit:
+  hash: "6084e42a4575779dd7a43cf30736078cbf5a74fd"
+  message: "🎯 N2HMA6 code: restore managed Sidebar Tab and arrow traversal"
 comments:
   -
     author: "CODER"
     body: "Start: standing user parity goal; one managed Sidebar Tab/arrows task, no Agentplane sources/helpers and no upstream execution from tests."
+  -
+    author: "CODER"
+    body: "Verified: restored managed Sidebar Tab/arrows using own deck/panel registry and ShowPanel lifecycle; isolated semantic6084e42a4575779dd7a43cf30736078cbf5a74fd reviewed same actor exactSHA. Fullverify0:1042app109inventory53browser2resource,100%coverage0semantic; vendor-absent1042+109+12+53allpass restored. 268previous tests byte-identical,8semantic6sourcehashes current; prior217rows preserved2append+1local row218, no promotions/default/exception changes. Artifacts source/helper/Python/raw-decodedframes0; explicit cleanup separate. Routing/diffpassdoctor0errors2knownwarnings,clean state. Complete Sidebar/native/parent parity remains open."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final docs current; same-actor EVALpass exact semantic6084e42a4575779dd7a43cf30736078cbf5a74fd; fullverify0,offline1042+109+12+53allpass restored,100%coverage0semantic;268oldbytes8semantic6sourcecurrent;217priorrows2append+1new218; source/helper/Python/diagnosticraw-decoded0,doctor0errors2knownwarnings; fullnative/parentparityopen."
+  -
+    type: "status"
+    at: "2026-10-04T03:18:35.344Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored managed Sidebar Tab/arrows using own deck/panel registry and ShowPanel lifecycle; isolated semantic6084e42a4575779dd7a43cf30736078cbf5a74fd reviewed same actor exactSHA. Fullverify0:1042app109inventory53browser2resource,100%coverage0semantic; vendor-absent1042+109+12+53allpass restored. 268previous tests byte-identical,8semantic6sourcehashes current; prior217rows preserved2append+1local row218, no promotions/default/exception changes. Artifacts source/helper/Python/raw-decodedframes0; explicit cleanup separate. Routing/diffpassdoctor0errors2knownwarnings,clean state. Complete Sidebar/native/parent parity remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T03:18:32.713Z"
+doc_updated_at: "2026-10-04T03:18:35.346Z"
 doc_updated_by: "CODER"
 description: "Iteration86: restore the source-owned navigation graph of existing Sidebar deck/panel controls, using a scoped focus manager with panel registration, actual display order and native ShowPanel open/expand contract; preserve Escape/Return and registered deviations."
 sections:
@@ -145,6 +158,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the isolated semantic commit if required, retain task result/hash evidence. Offline verification always restores vendor in finally. No history rewriting."
   Findings: "Iteration86 restores the implemented titled-panel Sidebar focus graph under one deck-owned registration manager: forward Tab title/toolbar/content, toolbox Tab regardless of Shift, rail forward/backward Tab, previous/next panel arrows with toolbox/rail boundaries, vertical single-button rail wrap, own ShowPanel opening/expansion, reorder/removal and separate deck ownership. Backward panel Tab, horizontal rail arrows and content keys remain local; existing Escape/Enter/commands verified by unchanged old cases. React refs bind after mount via SetDeck, and DOM visibility flush precedes focus (native ShowPanel follows focus request). Baseline5fail; focused39/2browserpass; full and upstream-absent checks all pass. Initial ref-construction lint rejection fixed without suppression. Initial application coverage1041 revealed two enclosing-key-owner branches, now actual capture-consumed test gives1042/100%. First full pipeline failed new-row ordering, fixed lexical insertion without moving prior rows. Second pipeline passed tests/coverage but found missing cleanup callback JSDoc; corrected comment, third full pipeline exit0. Premature scope check during intentional vendor rename observed temporary offline directory; final exact scope proof after restoration passes, no exclusion or weakened assertion. Independent explicit-user cleanup task202610040259-3B65MX removed91diagnostic source-bearing artifacts (87tracked4ignored) in isolated72102c6ea9ddedf8c5ae90b447437cc3384008a4 and4917d440fe2c action commits. Earlier audit missed source frames and encoded tails, current raw/decoded audits zero source bodies. No upstream sources/helper scripts/native binaries or source-bearing logs added, no native execution. Six source hashes only. F6/settings/other decks/multiple native rail eligibility/titleless-hidden fallback/native focus flags/native scrolling geometry/contexts/native and parent parity remain unverified; no status promotion or added exceptions. Same-actor review only; goal and parent remain active. Same-actor EVALUATOR pass recorded in .agentplane/tasks/202610040242-N2HMA6/quality/20261004-031752810-recovery-context/quality-report.json, evaluated_sha6084e42a4575779dd7a43cf30736078cbf5a74fd equals exact isolated semantic commit. No independent-agent review claimed. Tracked/untracked workspace clean after semantic commit; closure metadata follows separately."
+extensions:
+  implementation_commit:
+    hash: "6084e42a4575779dd7a43cf30736078cbf5a74fd"
+    message: "🎯 N2HMA6 code: restore managed Sidebar Tab and arrow traversal"
 id_source: "generated"
 ---
 ## Summary
