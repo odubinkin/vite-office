@@ -4,7 +4,7 @@ title: "Restore native selective text hint reset decisions and no-op ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T16:55:52.113Z"
+  updated_by: "CODER"
+  note: "Semantic866b60c3e000116c4e2732d0e6be49761ee932ba satisfies approved reset contract:20 new real-owner tests,1571app/109inventory/5scripts/99Chromium pass first absent-only execution; four required app/inventory metrics100%. Six static gates, absent static build, five restored source audits, exact four-path/323 prior-test/230 runtime-row audit and source/helper-free AP audit pass. Same-actor exact-SHA quality pass; doctor zero errors and routing pass. Upstream restored; no broad status promotion or I/O/recovery changes."
   attempts: 0
 quality_review:
   state: "pass"
@@ -56,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore the approved native selective hint reset contract with independent local regressions and one absent-only verification profile."
+  -
+    type: "verify"
+    at: "2026-10-04T16:55:52.113Z"
+    author: "CODER"
+    state: "ok"
+    note: "Semantic866b60c3e000116c4e2732d0e6be49761ee932ba satisfies approved reset contract:20 new real-owner tests,1571app/109inventory/5scripts/99Chromium pass first absent-only execution; four required app/inventory metrics100%. Six static gates, absent static build, five restored source audits, exact four-path/323 prior-test/230 runtime-row audit and source/helper-free AP audit pass. Same-actor exact-SHA quality pass; doctor zero errors and routing pass. Upstream restored; no broad status promotion or I/O/recovery changes."
 doc_version: 3
-doc_updated_at: "2026-10-04T16:54:07.346Z"
+doc_updated_at: "2026-10-04T16:55:52.371Z"
 doc_updated_by: "CODER"
 description: "Continue approved existing-functionality parity goal with one bounded txtedt reset contract leaf. Preserve state markers, direct hint deletion, exact-range precedence and no-op identity against pinned LibreOffice; add independent local real-owner regressions and bounded metadata."
 sections:
@@ -70,7 +76,7 @@ sections:
     3. New independent local tests exercise real SwTextNode/SfxItemSet owners: SET versus INVALID/DISABLED/default/inherited states, empty/noncommon deletion sets, direct automatic/internet hint SET deletion, retained range/flags, no-op identity and notification, exact full-range precedence. Actual Writer frame dispatch with KeyModifier and repeated undo/redo must preserve selective state markers initially and native redo behavior. Every previous323 test file stays byte-identical.
     4. After restoration only: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity, zero semantic violations. Record native source hashes with bounded prose only.
     5. Exact four semantic paths;230 existing runtime rows retain all status/default/exception fields and only one bounded evidence appendix; source rows retain prior evidence. Ignored-inclusive Agentplane audit rejects stored source/scripts/Python/executables/archives/raw diffs/source frames. Same-actor EVALUATOR review binds semantic SHA; ap doctor and node .agentplane/policy/check-routing.mjs must pass. Recorded verification and distinct semantic/verification/close commits plus clean final tracked/untracked checkout required.
-  Verification: "Pending execution. No source-dependent product tests are authorized. Passing gates will not be repeated."
+  Verification: "Command: six static npm gates; absent-only npm run test:static, app coverage with reportOnFailure, inventory coverage with reportOnFailure, two script test files and Playwright Chromium; then restored-only resource/source-tree/provenance/invariants/parity audits. Result: pass first execution;1571 app tests/241files,109 inventory/36files,5 scripts/2files,99 Chromium. Four required app/inventory coverage metrics100%. Evidence: bounded records under evidence; semantic SHA866b60c3e000116c4e2732d0e6be49761ee932ba; exact-SHA same-actor quality pass under quality/20261004-165513534-recovery-context. Scope: exact four semantic paths;323 previous tests/specs byte-identical;230 runtime rows retain statuses/defaults/exceptions; one bounded existing-row extension; three pinned native hashes; ignored-inclusive AP scan zero source/helpers/Python/executables/raw source diffs/source frames. Doctor zero errors with two unchanged prior warnings and routing pass. Upstream restored, passing suites not repeated, clean final tracked/untracked checkout required at closure. Unsupported complete native flags/notification/range/style-access and other model/UI contracts remain unverified; ongoing parent goal remains active."
   Rollback Plan: "Revert only the task semantic commit with a new commit if required; do not rewrite history. Restore upstream directory in finally on every absent-profile exit."
   Findings: "Confirmed pinned full-node decision gap and repaired it without broad parity promotion. All static gates and all product assertions passed first execution:1571 app/241files,109 inventory/36files,5 scripts/2files,99 Chromium. Product suites ran once with upstream unavailable and restored afterward; app/inventory four required coverage metrics100%. All323 previous test/spec files are byte-identical; exact four semantic paths and230 unchanged runtime statuses/defaults/exceptions. Evidence-reader recovery only: ignored the optional zero-total branchesTrue coverage field; refined whole-tree source-body detection to distinguish symbol references and primitive assertion diffs from stored code. No product gate failed or was repeated. Complete native replacement flags, notification kinds and unsupported hint/field/mark/layout/redline/range/style-access contracts remain separately unverified. No network/outside-repo access, upstream source execution or Agentplane source/helper storage."
 id_source: "generated"
@@ -97,7 +103,7 @@ Restore exact-range precedence, direct SET hint deletion, direct SET common auto
 
 ## Verification
 
-Pending execution. No source-dependent product tests are authorized. Passing gates will not be repeated.
+Command: six static npm gates; absent-only npm run test:static, app coverage with reportOnFailure, inventory coverage with reportOnFailure, two script test files and Playwright Chromium; then restored-only resource/source-tree/provenance/invariants/parity audits. Result: pass first execution;1571 app tests/241files,109 inventory/36files,5 scripts/2files,99 Chromium. Four required app/inventory coverage metrics100%. Evidence: bounded records under evidence; semantic SHA866b60c3e000116c4e2732d0e6be49761ee932ba; exact-SHA same-actor quality pass under quality/20261004-165513534-recovery-context. Scope: exact four semantic paths;323 previous tests/specs byte-identical;230 runtime rows retain statuses/defaults/exceptions; one bounded existing-row extension; three pinned native hashes; ignored-inclusive AP scan zero source/helpers/Python/executables/raw source diffs/source frames. Doctor zero errors with two unchanged prior warnings and routing pass. Upstream restored, passing suites not repeated, clean final tracked/untracked checkout required at closure. Unsupported complete native flags/notification/range/style-access and other model/UI contracts remain unverified; ongoing parent goal remains active.
 
 ## Rollback Plan
 
