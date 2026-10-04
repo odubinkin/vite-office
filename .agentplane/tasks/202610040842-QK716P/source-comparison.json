@@ -1,0 +1,55 @@
+{
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeExecution": false,
+  "method": "Read-only pinned source inspection; no source bodies or helpers copied.",
+  "nativeRefs": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/text/itrcrsr.cxx",
+      "marker": "SwTextMargin::CtorInitTextMargin"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "marker": "SwTextNode::GetFirstLineOfsWithNum"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentSettingManager.cxx",
+      "marker": "mbAutoFirstLineIndentDisregardLineSpace(true)"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "marker": "SvxRuler::UpdatePara"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+      "marker": "SwView::StateTabWin"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/text/itrcrsr.cxx",
+      "sha256": "862315cefee568e882f24e64226664227fd06a672640493ebc0c48d107389ee2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentSettingManager.cxx",
+      "sha256": "a737a8cdb6e967bd81389cc45f5e563bb9624fbf74deb52ca78f9bfd68d2b1ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+      "sha256": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+      "sha256": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1"
+    }
+  ],
+  "conclusions": [
+    "Native automatic first-line layout uses font height, doubles non-Japanese/non-Korean font paths, and only applies existing line-space rules when the default-true disregard compatibility flag is false. Active script/language/device font selection is not implemented by this bounded Western resolver.",
+    "Native numbering returns a rule-present flag and suppresses automatic layout calculation; existing raw/list precedence remains separately owned.",
+    "Native automatic first-line default disregard-line-space true stays unchanged.",
+    "Authored raw typed first-line item and automatic flag remain ruler/dialog values; resolved layout is a distinct browser primitive. Follow text-frame fragments start at the ordinary left margin."
+  ]
+}
