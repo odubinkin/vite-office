@@ -1,0 +1,11 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/edit/edfcol-modifier.test.ts -t retains unrelated automatic-style items",
+  "exitCode": 0,
+  "upstreamDirectoryPresent": false,
+  "outputBytes": 250,
+  "outputSha256": "b6a9f3dd4ff1df64b4d5fa5bf6509cefe67f28b9c1d5a6909a535e4b1f229646",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  1 passed | 47 skipped (48)"
+  ]
+}
