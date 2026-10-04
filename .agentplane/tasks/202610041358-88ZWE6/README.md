@@ -1,10 +1,11 @@
 ---
 id: "202610041358-88ZWE6"
 title: "Restore inclusive paragraph style selection and native range undo ownership"
-status: "DOING"
+result_summary: "Restore inclusive paragraph style selection and one native range undo owner; all first vendor-absent product attempts pass and broad parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Inclusive document-node traversal includes empty/end-zero and table-cell text, skips structural nodes and validates actual point/mark and collection ownership. Core edit helper replaces active-paragraph text-shell primitive and one SwUndoFormatColl retains per-node list/style/suppression history; redo uses the native captured display name and missing-name no-op. Actual frame/UI ODT tests exercise mixed endpoint styles, one undo owner, repeated history, toolbar/sidebar/focus, typing/export and untouched neighbors."
     - "All product suites passed first vendor-absent attempt: app1431, inventory109, scripts5, Chromium95; app/inventory four metrics100percent. Seven static checks, routing/source4/parity227zero, ten native hashes, strict10paths and314prior test files313unchanged with one assertion-preserving constructor fixture pass. Old226mapping rows retain statuses/defaults/exceptions and only four evidence/description appends. Ignored-inclusive AP forbidden0; doctor0errors/two preexisting warnings."
-commit: null
+commit:
+  hash: "15291f04dcfbff7a01f7b471f57e6ca01d2e569d"
+  message: "🧩 88ZWE6 task: persist semantic verification"
 comments:
   -
     author: "CODER"
     body: "Start: restore the existing paragraph StyleApply inclusive point/mark traversal and one native range undo under core owners; source-only native analysis, product tests only absent."
+  -
+    author: "CODER"
+    body: "Verified: inclusive single-PaM paragraph style range and one native range undo owner implemented at e1ddcbc3a40eca3d090bc8df035a7002eee3cc36, exact-commit readonly quality pass and committed verification. First product attempts app1431/inventory109/scripts5/Chromium95 passed with upstream absent and restored;100percent four coverage metrics, seven static/source4/routing/parity227zero, strict10paths/314prior tests313unchanged one bounded constructor fixture and ten source hashes/APforbidden0. Registered deviations preserved and wider native reset/history/default/API/core/UI parity and parent goal remain active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic e1ddcbc3a40eca3d090bc8df035a7002eee3cc36 passes approved inclusive single-PaM range and one native undo-owner scope. Same-actor readonly quality report evaluated this exact SHA. Seven static gates; app1431/inventory109/scripts5/Chromium95 first attempts with upstream absent and restored, app/inventory four metrics100percent; source4/routing/parity227zero, strict10paths/314prior tests313unchanged one constructor-only fixture, ten native hashes and ignored-inclusive AP forbidden0. No passing full suite repeated, native execution, compilation, source copies or registered deviation change. Complete native reset/history/default/API/core/UI parity and parent goal remain active."
+  -
+    type: "status"
+    at: "2026-10-04T14:23:26.194Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: inclusive single-PaM paragraph style range and one native range undo owner implemented at e1ddcbc3a40eca3d090bc8df035a7002eee3cc36, exact-commit readonly quality pass and committed verification. First product attempts app1431/inventory109/scripts5/Chromium95 passed with upstream absent and restored;100percent four coverage metrics, seven static/source4/routing/parity227zero, strict10paths/314prior tests313unchanged one bounded constructor fixture and ten source hashes/APforbidden0. Registered deviations preserved and wider native reset/history/default/API/core/UI parity and parent goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-04T14:23:04.053Z"
+doc_updated_at: "2026-10-04T14:23:26.196Z"
 doc_updated_by: "CODER"
 description: "Iteration106: close actual supported paragraph style point/mark traversal and one SwUndoFormatColl range under native edit/undo owners, preserving canonical node and list ownership and browser history; source comparison only, tests only absent, no AP source/helpers."
 sections:
@@ -133,6 +146,10 @@ sections:
     Command: seven final static gates, node .agentplane/policy/check-routing.mjs, vendor-absent static/app/inventory/scripts/Chromium pipeline, source resources --check/source-tree/provenance/invariants and inventory:parity after restoration, inline strict scope/hash/artifact audits, ap doctor.
     Result: pass. Evidence: app1431/235files including10newrange cases; inventory109/36files; scripts5/2files; Chromium95 including2new1280/390 actual ODT range scenarios. Product suites all passed first attempt with upstream absent and restored in finally, no passing full suite repeated. App and inventory each100percent lines/statements/functions/branches. Seven static gates and routing/source4 pass; parity227modules zero violations; ten pinned source hashes retained; strict10paths,314prior tests313byte-identical with one constructor input fixture and all assertions unchanged;226oldrows exactly four bounded description/evidence appends plus one new unverified owner. Ignored-inclusive AP3516files forbidden0, no source/Python/probe/helper/diff/raw-diagnostic/native execution. Doctor0errors/two unchanged preexisting warnings. Desktop/mobile screenshots retain toolbar current style and desktop sidebar; document text is outside the captured viewport after caret/history scrolling, while actual DOM and exported ODT assertions verify range text/styles.
     Scope: actual single-PaM inclusive range operation moved from active-paragraph text shell to source-owned core helper, one native range undo with per-node original list/style/suppression and captured-name redo. Before product execution, new test static typecheck found two unsupported test APIs; replaced item-set equals with actual entries and awaited metadata-bearing ODT import. No product failure or scope drift. No native compile/invoke/source copy; registered deviations and wider goal remain open. Direct/full-node hint/list/modifier resets, native unchanged-request history, cursor rings/read-only/layout/redline/inline-heading and full contracts/defaults remain unverified.
+extensions:
+  implementation_commit:
+    hash: "e1ddcbc3a40eca3d090bc8df035a7002eee3cc36"
+    message: "🧩 88ZWE6 code: apply paragraph styles to inclusive ranges"
 id_source: "generated"
 ---
 ## Summary
