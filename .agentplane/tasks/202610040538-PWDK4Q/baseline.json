@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- vitest run --root apps/office src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+  "exitCode": 1,
+  "outputBytes": 4342,
+  "outputSha256": "a85f3098fb09bdc8bebc86f11e89e6edca80c9d063bfede3d4dcbb4fb063f930",
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  4 failed | 1 passed (5)"
+  ]
+}

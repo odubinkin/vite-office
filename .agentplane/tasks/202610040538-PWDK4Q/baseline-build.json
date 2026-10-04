@@ -1,0 +1,7 @@
+{
+  "command": "npm run build",
+  "exitCode": 2,
+  "outputBytes": 1476,
+  "outputSha256": "e00207305a8bd39b7f97230b42017a64f11345cb724cac1c3ca12277df79fb62",
+  "summary": []
+}
