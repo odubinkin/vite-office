@@ -639,9 +639,14 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts#useCommandShortcuts"
+          "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts#useCommandShortcuts",
+          "apps/office/src/framework/browser/presentation/use-command-shortcuts-ownership.test.tsx#preservesLocalOwner",
+          "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx#selectsOnce",
+          "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx#preservesConsumedCommand",
+          "apps/office/src/sw/browser/presentation/writer-view-accelerator-ownership.test.tsx#dispatchesUnconsumedCommand",
+          "apps/office/e2e/writer-accelerator-ownership.spec.ts#Writer consumed accelerator ownership"
         ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Already-consumed browser key events now return before accelerator normalization,command lookup,argument resolution and execution, matching inspected SfxDockingWindow local dialog-key-before-global fallback. Actual Writer Ctrl/Meta+A invokes its local SelectAll exactly once without a second registered dispatch. Unconsumed enabled/disabled/unmapped keys and mounted active/disposal behavior retain their existing contracts. Owned native/React-event boundary spies,real Writer model/no-dispatch cases and measured Chromium selection/consumed-versus-unconsumed formatting/editing prove this priority only. Full native accelerator hierarchy,modal/input eligibility,pane F6,platform mapping and complete browser/native parity remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "useCommandShortcuts"

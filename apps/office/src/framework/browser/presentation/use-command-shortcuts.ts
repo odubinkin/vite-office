@@ -41,7 +41,7 @@ export function useCommandShortcuts({
     function installCommandShortcuts(): () => void {
       /** Resolves and executes one registered shortcut command. @param event - Browser keyboard event. @returns Nothing. */
       function handleKeyDown(event: KeyboardEvent): void {
-        if (!isActive) return;
+        if (!isActive || event.defaultPrevented) return;
         const shortcut = getBrowserShortcut(event);
         if (shortcut === undefined) return;
         const command = dispatcher.FindCommandByShortcut(shortcut);
