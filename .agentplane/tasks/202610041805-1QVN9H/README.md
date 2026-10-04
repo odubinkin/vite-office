@@ -1,10 +1,11 @@
 ---
 id: "202610041805-1QVN9H"
 title: "Restore pooled selective text attribute reconstruction"
-status: "DOING"
+result_summary: "Restored native pooled selective reconstruction and registered MakeTextAttr;26 new cases and single absent-only profile pass. Whole upstream parity and actual cross-document hint ingestion remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -48,11 +49,16 @@ quality_review:
   findings:
     - "Exact ten semantic paths;26 new real-owner factory/reset/adjacent/shared-undo cases. Two source-contradicted fixture files corrected to concrete style insertion domain;327 other prior tests unchanged. No nonpooled fallback.233 prior status/default/exception rows retained and one new owner all-unverified.15 authoritative pinned source hashes, no upstream execution or storage."
     - "All six static gates first pass; single first absent-only build,1701app/109inventory/5scripts/99Chromium pass and required app/inventory metrics100%. Restored resource/source/provenance/invariants/parity audits pass, semantic violations0. Same-SHA evidence structure verified; doctor0errors/two unchanged warnings; routing pass; ignored-inclusive AP forbidden0; vendor restored and registered deviations retained."
-commit: null
+commit:
+  hash: "086e27cedb9b09193cd016e4f391b481e4557b01"
+  message: "✅ 1QVN9H task: record pooled attribute reconstruction verification"
 comments:
   -
     author: "CODER"
     body: "Start: Approved iterative goal authorizes native pooled reconstruction and source-contradicted synthetic fixture correction. Exact ten paths, no fallback, once-only absent verification."
+  -
+    author: "CODER"
+    body: "Verified: Native registered MakeTextAttr and pooled selective text attribute reconstruction pass26 new real-owner cases and single first absent-only1701app/109inventory/5scripts/99Chromium profile; required metrics100%. Static/build/restored source/scope/AP and exact-SHA quality gates pass;327 prior tests unchanged, two synthetic fixture files corrected without fallback. Vendor restored, registered deviations retained; wider contracts and actual cross-document ingestion remain open."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Semantic 50eb532eee5693018a979bcd0998864bce962e14 restores native registered MakeTextAttr and pooled selective reconstruction.26 new cases;1701app/109inventory/5scripts/99Chromium pass first single absent-only profile; required metrics100%. All six static/absent build/restored source/scope/AP gates pass;327 prior tests unchanged, two out-of-domain fixture files corrected without fallback. Same-actor exact-SHA quality pass, doctor0errors/routing pass, upstream restored and registered deviations retained. Full pool/hint/subtype/copy/actual cross-document ingestion/module/UI parity remains open; broad goal active."
+  -
+    type: "status"
+    at: "2026-10-04T18:21:56.186Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native registered MakeTextAttr and pooled selective text attribute reconstruction pass26 new real-owner cases and single first absent-only1701app/109inventory/5scripts/99Chromium profile; required metrics100%. Static/build/restored source/scope/AP and exact-SHA quality gates pass;327 prior tests unchanged, two synthetic fixture files corrected without fallback. Vendor restored, registered deviations retained; wider contracts and actual cross-document ingestion remain open."
 doc_version: 3
-doc_updated_at: "2026-10-04T18:21:01.009Z"
+doc_updated_at: "2026-10-04T18:21:56.188Z"
 doc_updated_by: "CODER"
 description: "Restore native MakeTextAttr construction for implemented auto/internet hints, character items and cross-pool conversion; route selective reset and snapshot decoding through it. Correct sentinel-bearing replacement tests outside the concrete pool domain without fallback and preserve valid constructor/history flags."
 sections:
@@ -118,6 +131,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic commit through a new commit if necessary; no history rewrite. Restore vendor in finally."
   Findings: "Restored native MakeTextAttr for registered set/character/same-pool auto/internet and foreign automatic pool conversion, native inclusive fixed range1..49 and non-shareable internet policy. Selective reset interns its nonempty remaining set then uses MakeTextAttr, matching the two native access boundaries and enabling adjacent equal remnants to share a handle and merge. Existing snapshot decode uses this owner with unchanged browser item records.26 independent real-owner insertion/range/flags/foreign-copy/parent/retained-undo/reset regressions; two prior fixture files corrected: sentinel-bearing pooled replacement now respects the existing excluded concrete-domain guard with no fallback/notification/mutation, and valid registered flag fixtures assert native Ctrl deletion plus original undo flags and three cycles. All327 other prior tests byte-identical. Exact ten semantic paths;233 existing statuses/defaults/exceptions unchanged, one new owner all-unverified (234 total), five existing bounded evidence appendices. First single absent-only profile passes1701app/248files,109inventory/36files,5scripts/2files,99Chromium; four required metrics100%. All six static gates first pass; absent build and restored resource/source-tree/provenance/invariants/parity pass, semantic violations0.15 pinned native hashes; ignored-inclusive AP3723files forbidden0. No failed gate, repeated passing product suite, concurrent source/scope/AP audit during absent tests, upstream/source/helper/Python storage, network/outside-repo access or registered I/O/recovery change. Vendor restored in finally. Native sentinel style insertion/undefined clone-child reuse remains outside this concrete owner; unordered iteration/collisions, paragraph/ignorable/name/cache/usage/lifetime/null constructor/UNO QueryValue, full native holders/subtypes/listeners/copy flags and actual cross-document SwpHints ingestion remain unverified. Whole-module/model/layout/filter/UI and broad goal stay open; same-actor exact-SHA quality/20261004-181954202-recovery-context pass, doctor0errors/two unchanged warnings and routing pass; post-quality ignored-inclusive AP forbidden0. Canonical closure requires clean final tracked/untracked checkout."
+extensions:
+  implementation_commit:
+    hash: "50eb532eee5693018a979bcd0998864bce962e14"
+    message: "🛠️ 1QVN9H writer: restore pooled text attribute reconstruction"
 id_source: "generated"
 ---
 ## Summary
