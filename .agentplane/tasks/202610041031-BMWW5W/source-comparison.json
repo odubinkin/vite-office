@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx",
+      "marker": "SwDoc::CopyTextColl",
+      "sha256": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/doc.hxx",
+      "marker": "FindTextFormatCollByName",
+      "sha256": "e1607dcbe67d2e53c8e2100b2a23c9cb2ea78fe24317c6c288112170d0b759d0"
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/style/prstylei.cxx",
+      "marker": "XMLPropStyleContext::CreateAndInsert",
+      "sha256": "8e60edff91887d7ae1e781c428ece54026cd977f8aa1ac53ad8363a8d1627b51"
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+      "marker": "XMLTextStyleContext::Finish",
+      "sha256": "d3c68f63058c4eb18c269968e069fa7494cd31dd19159a81a168cf61e9775b50"
+    },
+    {
+      "path": "vendor/libreoffice-reference/xmloff/source/text/txtimp.cxx",
+      "marker": "XMLTextImportHelper::SetStyleAndAttrs",
+      "sha256": "7de482763b65a723370f05145060dc4a65a103a8fdae775bcb4f7c951b605e21"
+    }
+  ],
+  "comparison": "Read-only native common collection creation/finish, name lookup, custom CopyTextColl and actual named/direct rule ownership. Full global default pools, pool/help IDs, conditional styles, builtin destination adapter and geometry consumers remain unverified.",
+  "nativeExecution": false,
+  "sourceCopies": false
+}

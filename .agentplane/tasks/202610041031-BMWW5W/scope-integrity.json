@@ -1,0 +1,97 @@
+{
+  "base": "42cade7c64fe293b7cd36d4334aa484912f243fd",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+    "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "apps/office/src/xmloff/source/text/txtparai.ts",
+    "apps/office/src/xmloff/source/text/txtparae.ts",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+    "apps/office/e2e/writer-named-style-history.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+      "sha256": "320136a9608b0af41cbaf177ef6016be3594dbd2cebb99465d8df6cf4dd0ccc8"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "sha256": "70a89265d505636a1d842ce1508be00b08b0332e22cadc6780a84c203fa8d1a6"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "sha256": "57f558a5ed442d1288df6ff5117ab8f2275233c88dde2dbb7150c7d463af6d54"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "sha256": "2a0cf44e75f1903a8ae660b1d923eee5ea04ecfbb0b179a48f385813dfcb7139"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "sha256": "4cc5c0f348a37b6687d6548c3a112bea166f5a0091b10400ab505654113f3815"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+      "sha256": "e5c9df7f69fff556af530696e55d0489e722fed11749cedc60da25e9fb53807a"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "32d67879f5e4d6af2567627af7532737affefcbed99b2f0d603082530a7b10ca"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+      "sha256": "fb6101f78a05d0bb7ff5a43279e5faad65bf49496da63ef9c10effb5229f2fd5"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+      "sha256": "74da8f6291a720852f91d35312c6b77f498b72648f15106de8cda74c40bdb533"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+      "sha256": "55a3fe5fd2424c060fdf3a6c4051dcb946ff5c0f34d269903ba504dfcb8ab36f"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+      "sha256": "fbc9e754bae079eb02cc9dc951ba44c4bf63a69d9992196403b8802a164dacdb"
+    },
+    {
+      "path": "apps/office/e2e/writer-named-style-history.spec.ts",
+      "sha256": "7e74f9300451aacff35daa17f606b2ebccd7b96aac831f9a822723b45d121b18"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "6cd80947226493b1bcbca7d48a31adfd30a280612e1527c5ace9a9b042285e4d"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "88daf60f21d8b50b3190aecbbfd5c47d5a34a8decf48f12bdf8affd7bfe9d5b3"
+    }
+  ],
+  "priorTestFiles": 305,
+  "priorTestFilesByteIdentical": 305,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 223,
+      "existingRows": 222,
+      "existingRowsAppended": 9,
+      "newRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 223,
+      "existingRows": 222,
+      "existingRowsAppended": 9,
+      "newRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    }
+  ]
+}

@@ -4,7 +4,7 @@ title: "Preserve document-owned named paragraph style hierarchy through ODT and 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -47,7 +47,7 @@ events:
     to: "DOING"
     note: "Start: Continue named style ownership across graph/import/export/copy and admit registered styles through existing shell and StyleApply history."
 doc_version: 3
-doc_updated_at: "2026-10-04T10:44:12.025Z"
+doc_updated_at: "2026-10-04T11:07:09.214Z"
 doc_updated_by: "CODER"
 description: "Iteration102 replaces flattening of imported named paragraph styles with document-owned SwTextFormatColl collections, retaining direct automatic deltas and exact parent/follow/item ownership through ODT, graph/history and destination copying. Native independent list-indent applicability must agree with real imported hierarchy; existing consumers and registered I/O/recovery deviations remain unchanged until the next consumer migration."
 sections:
@@ -80,7 +80,7 @@ sections:
     4. Read-only pinned source hashes and restored resources--check/source-tree/provenance/invariants/parity audits pass; exact14semantic paths and all305prior tests byte-identical, existing mapping statuses/defaults/exceptions unchanged with bounded evidence/new helper ownership. Whole ignored-inclusive AP forbidden0, routing/doctor and exact-SHA same-actor read-only EVALUATOR pass, final clean tracked leaf and parent progress.
   Verification: "Pending implementation; no baseline or pre-fix tests. Previous leaf101 is DONE with native independent core masks; initial consumer regressions from flattened custom styles justify this prerequisite correction."
   Rollback Plan: "Revert the scoped implementation commit if actual named/automatic ownership or transport contracts are disproved; no history rewrite/reset, coverage relaxation or registered deviation changes."
-  Findings: "Previous goal turn is progress: core independent-mask implementation and verification committed in101. Source confirms XMLTextImportHelper::SetStyleAndAttrs assigns an existing named style and only pStyle automatic FillPropertySet adds direct properties; numbering rule is assigned only when an automatic override or different effective rule requires it. SwDoc::MakeTextFormatColl registers named collections, and CopyTextColl copies custom parent/follow/direct attrs and manual rule only when absent in destination. Current parser flattens custom named styles and always hard-sets list rules, so per-axis consumer integration requires this repair. Full native UNO/defaultpool/fonts/conditions/help-ID/UI style-management parity remains unverified; no blanket promotion. The shell currently rejects document-owned custom styles and StyleApply searches only builtins; the same ownership fix also admits already-registered custom identities/display names through these existing commands. Complete native style menus/management/defaultpool remain separately unverified."
+  Findings: "Initial static gates found unused imports and an obsolete alignment converter after the approved common-style split, plus formatting in the new E2E. Dependencies, documentation and file-size gates passed. Correct only those diagnostics and rerun the four failed static gates; no app, inventory, scripts or Chromium test has run."
 id_source: "generated"
 ---
 ## Summary
@@ -129,4 +129,4 @@ Revert the scoped implementation commit if actual named/automatic ownership or t
 
 ## Findings
 
-Previous goal turn is progress: core independent-mask implementation and verification committed in101. Source confirms XMLTextImportHelper::SetStyleAndAttrs assigns an existing named style and only pStyle automatic FillPropertySet adds direct properties; numbering rule is assigned only when an automatic override or different effective rule requires it. SwDoc::MakeTextFormatColl registers named collections, and CopyTextColl copies custom parent/follow/direct attrs and manual rule only when absent in destination. Current parser flattens custom named styles and always hard-sets list rules, so per-axis consumer integration requires this repair. Full native UNO/defaultpool/fonts/conditions/help-ID/UI style-management parity remains unverified; no blanket promotion. The shell currently rejects document-owned custom styles and StyleApply searches only builtins; the same ownership fix also admits already-registered custom identities/display names through these existing commands. Complete native style menus/management/defaultpool remain separately unverified.
+Initial static gates found unused imports and an obsolete alignment converter after the approved common-style split, plus formatting in the new E2E. Dependencies, documentation and file-size gates passed. Correct only those diagnostics and rerun the four failed static gates; no app, inventory, scripts or Chromium test has run.
