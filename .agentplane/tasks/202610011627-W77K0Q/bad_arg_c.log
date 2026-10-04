@@ -1,7 +1,0 @@
-.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:1804:59: error: too few arguments to function call, single argument 'pNode' was not specified
- 1804 |     void missingContinuousArgument() { ValidateContinuous(); }
-      |                                        ~~~~~~~~~~~~~~~~~~ ^
-.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:833:24: note: 'ValidateContinuous' declared here
-  833 | void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
-      |                        ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1 error generated.

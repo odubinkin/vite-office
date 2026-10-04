@@ -1,7 +1,0 @@
-.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:1829:14: error: 'ValidateContinuous' is a protected member of 'SwNumberTreeNode'
- 1829 |         root.ValidateContinuous(nullptr);
-      |              ^
-.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:535:10: note: declared protected here
-  535 |     void ValidateContinuous(const SwNumberTreeNode* pNode) const;
-      |          ^
-1 error generated.

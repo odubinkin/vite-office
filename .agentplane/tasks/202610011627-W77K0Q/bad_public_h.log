@@ -1,7 +1,0 @@
-.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:1826:14: error: 'ValidateHierarchical' is a protected member of 'SwNumberTreeNode'
- 1826 |         root.ValidateHierarchical(nullptr);
-      |              ^
-.agentplane/tmp/upstream-probes/202610011627-W77K0Q/contract-probe.cxx:526:10: note: declared protected here
-  526 |     void ValidateHierarchical(const SwNumberTreeNode* pNode) const;
-      |          ^
-1 error generated.

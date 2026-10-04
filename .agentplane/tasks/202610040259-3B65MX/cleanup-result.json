@@ -1,0 +1,962 @@
+{
+  "reason": "Explicit user prohibits retained source; old diagnostics include source frames",
+  "deleted": [
+    {
+      "path": ".agentplane/tasks/202609301437-ET663N/verify-first-failure.log",
+      "bytes": 2975,
+      "sha256": "53548f4750b59c445a634f0ec9344e49ba39691ee7b72ca6106365b81d1d320f",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  1 failed | 115 passed (116)",
+        "Tests  1 failed | 559 passed (560)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609301617-7M8MJP/verify-before-test-consumers.log",
+      "bytes": 3934,
+      "sha256": "420e365c33112861c24724c034bb284ee8fe3cc2bd2ea772b5c02003aa443a3d",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  2 failed | 115 passed (117)",
+        "Tests  2 failed | 572 passed (574)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609301904-Z2G4HN/focused-before-family-fixture.log",
+      "bytes": 1101,
+      "sha256": "27f3cd455d223cdfe218d8b2ab444c0b1dfec16a9a5f4747f01d7c935e6d8e44",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 5 passed (6)",
+        "Tests  1 failed | 34 passed (35)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302034-1CZ8BR/verify-before-diagnostic-fixtures.log",
+      "bytes": 4609,
+      "sha256": "46169d47f2e7c7fa1c1b3e5fdd50e6a115d486e04df0005e8ecebc561673abd8",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  128 passed (128)",
+        "Tests  604 passed (604)",
+        "Statements   : 100% ( 9655/9655 )",
+        "Branches     : 100% ( 7214/7214 )",
+        "Functions    : 100% ( 2691/2691 )",
+        "Lines        : 100% ( 8891/8891 )",
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  2 failed | 107 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302147-2R4T31/focused-final.log",
+      "bytes": 3178,
+      "sha256": "3045839b483fcb2207e3b18c0dab2da6acf05ae8096c4bd8e2daca3155377124",
+      "tracked": true,
+      "summary": [
+        "Test Files  2 failed | 7 passed (9)",
+        "Tests  3 failed | 52 passed (55)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302147-2R4T31/focused-pass.log",
+      "bytes": 1209,
+      "sha256": "91872f74073a0d190eb09233520dbc1fa1cb91755dc3314989dd653e19ae1764",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 8 passed (9)",
+        "Tests  1 failed | 54 passed (55)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302147-2R4T31/focused.log",
+      "bytes": 1297,
+      "sha256": "76660bf6e53d4fb52cd9e209b31d6a5babd522ad010e91ab332dbc7782a3b0b3",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 7 passed (8)",
+        "Tests  1 failed | 51 passed (52)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302147-2R4T31/verify-initial.log",
+      "bytes": 4147,
+      "sha256": "2cc78e90c1ab9a8efa9602637a354f98148bb91ca30bf5d9b2564f37758e7fcd",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  131 passed (131)",
+        "Tests  617 passed (617)",
+        "Statements   : 100% ( 9685/9685 )",
+        "Branches     : 100% ( 7260/7260 )",
+        "Functions    : 100% ( 2700/2700 )",
+        "Lines        : 100% ( 8920/8920 )",
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/focused-initial.log",
+      "bytes": 4074,
+      "sha256": "8928ec3ec67236ae5eb200c82407f5b0da4186dbcb54d0aa634974ecbc9dc8d4",
+      "tracked": true,
+      "summary": [
+        "Test Files  4 failed | 4 passed (8)",
+        "Tests  5 failed | 52 passed (57)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/focused-second.log",
+      "bytes": 1276,
+      "sha256": "11291e0a1c00c22fce0c5328176ce26ee955e6e18cffb67beb9cd43eb8fc0e29",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 7 passed (8)",
+        "Tests  1 failed | 56 passed (57)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/focused-third.log",
+      "bytes": 1013,
+      "sha256": "ed08b71a8447e72d6c6f796d6b2f3c267783400fd09519a6915bee38779d1cc9",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 8 passed (9)",
+        "Tests  1 failed | 59 passed (60)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/verify-fourth.log",
+      "bytes": 4493,
+      "sha256": "45a9cc61ce144e2cd83e978bbd14e9dede893f767afd8f6424aa78273257a354",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  133 passed (133)",
+        "Tests  623 passed (623)",
+        "Statements   : 100% ( 9712/9712 )",
+        "Branches     : 100% ( 7296/7296 )",
+        "Functions    : 100% ( 2703/2703 )",
+        "Lines        : 100% ( 8945/8945 )",
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/verify-second.log",
+      "bytes": 3061,
+      "sha256": "3f4458f47c09139b1dc9a33d13e73b1f2b91b523b95e6fee075ec570d2a55e77",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  1 failed | 132 passed (133)",
+        "Tests  1 failed | 622 passed (623)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302242-6RBX14/verify-third.log",
+      "bytes": 4824,
+      "sha256": "7efd4e949971eaa2fa594e900682ead4dbb20fd6cd75db25c1d2980ab56c50dd",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  133 passed (133)",
+        "Tests  623 passed (623)",
+        "Statements   : 100% ( 9712/9712 )",
+        "Branches     : 100% ( 7296/7296 )",
+        "Functions    : 100% ( 2703/2703 )",
+        "Lines        : 100% ( 8945/8945 )",
+        "Test Files  2 failed | 34 passed (36)",
+        "Tests  2 failed | 107 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202609302319-9KTM99/focus.log",
+      "bytes": 1986,
+      "sha256": "2506f6a3e3241394ed0e19d4f9db5507baca029e13e04359089413fc995015c4",
+      "tracked": true,
+      "summary": [
+        "Test Files  2 failed | 3 passed (5)",
+        "Tests  2 failed | 27 passed (29)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/browser-failure/error-context.md",
+      "bytes": 16930,
+      "sha256": "91f34dc71a0ee40290f275dce138663eacf01ad4f60873cd1e49de17e1b241a8",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/verify-failed-browser.log",
+      "bytes": 11231,
+      "sha256": "20bf5ebb66a0079cba574677bdb90d8799c59960cd36efe75a8bf1cc19c756e5",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  143 passed (143)",
+        "Tests  651 passed (651)",
+        "Statements   : 100% ( 9952/9952 )",
+        "Branches     : 100% ( 7505/7505 )",
+        "Functions    : 100% ( 2743/2743 )",
+        "Lines        : 100% ( 9152/9152 )",
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/verify-failed-marker.log",
+      "bytes": 4188,
+      "sha256": "9237b4a99a8fab72e84930b29587fcb22dacd4befedef1ede4e60f771966145d",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  143 passed (143)",
+        "Tests  650 passed (650)",
+        "Statements   : 100% ( 9951/9951 )",
+        "Branches     : 100% ( 7505/7505 )",
+        "Functions    : 100% ( 2743/2743 )",
+        "Lines        : 100% ( 9151/9151 )",
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010156-ZDTVKE/verify-failed-order.log",
+      "bytes": 4116,
+      "sha256": "23b0198ae1b80f91da0c634d49f26a2d3f67e60a901ec42a2cbadfd4424e1f5c",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  143 passed (143)",
+        "Tests  650 passed (650)",
+        "Statements   : 100% ( 9951/9951 )",
+        "Branches     : 100% ( 7505/7505 )",
+        "Functions    : 100% ( 2743/2743 )",
+        "Lines        : 100% ( 9151/9151 )",
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010333-G6MKMP/focused-xml.log",
+      "bytes": 1784,
+      "sha256": "9de406daee41d37f56f814f81ad5897110fc4558c8910e0395ebfc89c6544add",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 37 passed (38)",
+        "Tests  1 failed | 153 passed (154)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010536-95XQFH/verify-complete.log",
+      "bytes": 40243,
+      "sha256": "ac7a59b8933ae39b3dec88af02e03929d7726f884da6806aee67ff3d5c0b3c62",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  1 failed | 152 passed (153)",
+        "Tests  3 failed | 679 passed (682)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010536-95XQFH/verify-final.log",
+      "bytes": 3111,
+      "sha256": "28a475dee67137bd08fe86777a4ac1013f3e4030a08629a28f49ee8182be3bf2",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  1 failed | 152 passed (153)",
+        "Tests  1 failed | 681 passed (682)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010536-95XQFH/verify-full.log",
+      "bytes": 6816,
+      "sha256": "cdce61b8e4c4e6df2ede00abfb177e1e42e9b49ea4f2f439921d32c59de67fc5",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  4 failed | 149 passed (153)",
+        "Tests  4 failed | 676 passed (680)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/focused-corrected.log",
+      "bytes": 1044,
+      "sha256": "a107fae664bc7d3ef8ecd53c5b9a62aed68c46f89adf37b006965537602db885",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 8 passed (9)",
+        "Tests  1 failed | 33 passed (34)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/focused-literals.log",
+      "bytes": 1118,
+      "sha256": "71003ceab41be7642d6a02e40342481fdce5cd06a08e509d68080afef69ac496",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 9 passed (10)",
+        "Tests  1 failed | 39 passed (40)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/focused-reading.log",
+      "bytes": 11636,
+      "sha256": "13b30cb94c12d216a632353a040759711645a2d45210d21e444c6744003ac5a0",
+      "tracked": true,
+      "summary": [
+        "Test Files  5 failed | 9 passed (14)",
+        "Tests  6 failed | 40 passed (46)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/focused-runtime.log",
+      "bytes": 3739,
+      "sha256": "bdcb9d8d8db3e4e451ba95ea42819785dc74b50182fbd16f8ba36fd1c57b6a73",
+      "tracked": true,
+      "summary": [
+        "Test Files  3 failed | 6 passed (9)",
+        "Tests  4 failed | 30 passed (34)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/odt-isolated-failure.log",
+      "bytes": 1169,
+      "sha256": "2684c3b56e44e35e9214bcb45bca1217a9959ba436947f04f3d7068507a90aaa",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed (1)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010735-THRTCH/verify-initial.log",
+      "bytes": 9693,
+      "sha256": "9dd2866adf5a996d8fe83de219cabfe9023974f955a3c61ea23bca29aa34a0ab",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  5 failed | 150 passed (155)",
+        "Tests  5 failed | 684 passed (689)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610010849-VYM64Q/native-initial.log",
+      "bytes": 3359,
+      "sha256": "9664b96a3ccbd0645e8e84013dcc7594422f0b4685bdc56d9abdb8787ca82044",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610010849-VYM64Q/native-source-storage.log",
+      "bytes": 1770,
+      "sha256": "3a85f4ff4bec39a0f1440e719619f5ccdd8f95311099c7114ad554aa87a81e96",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610010940-WW4SFA/focused-initial.log",
+      "bytes": 1148,
+      "sha256": "e8129a749318144ddee3e55d4e93d6ae255b32a5c2274ea17e7f5e5d75e368fa",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 1 passed (2)",
+        "Tests  1 failed | 2 passed (3)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011012-HMMTBX/focused-final.log",
+      "bytes": 1441,
+      "sha256": "c6d3244ad3487aef2acf78b9a1e942df4001c16ae4ab4fe6d8f3a072236250d4",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 8 passed (9)",
+        "Tests  1 failed | 40 passed (41)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011012-HMMTBX/focused-initial.log",
+      "bytes": 1499,
+      "sha256": "764b7a2f283a27053d24357e33028a87d1f86d3c5d68b235397e9665327d03b8",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 8 passed (9)",
+        "Tests  1 failed | 40 passed (41)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011035-VZ3MGM/focused-initial.log",
+      "bytes": 1317,
+      "sha256": "8ef62f4798492883bbebbf87e2dc1be98700ff17cafece5a868ac41491e04612",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 3 passed (4)",
+        "Tests  1 failed | 10 passed (11)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011119-4H9E82/focused-initial.log",
+      "bytes": 3123,
+      "sha256": "7e8aefe3e286638274843332f4f24c96eceb2cd457d6477b95d316b638facb9f",
+      "tracked": true,
+      "summary": [
+        "Test Files  2 failed | 48 passed (50)",
+        "Tests  3 failed | 192 passed (195)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/native-format-build.log",
+      "bytes": 553,
+      "sha256": "23be746a5189570b2a24dc4fc43263bd877d63f777ce24a4ef8e0e53795fedbb",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/uno-regression-before.log",
+      "bytes": 1255,
+      "sha256": "147228a6bddc5f1cc13610e27be39a2d21b5bb7abe9e22ad158d20a82c21b27a",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 4 passed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011207-TR9DSM/verify-second.log",
+      "bytes": 4156,
+      "sha256": "9f446050537521091731eced13526111f666b4706060bfee4f3ac665aa503c84",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  161 passed (161)",
+        "Tests  712 passed (712)",
+        "Statements   : 100% ( 10755/10755 )",
+        "Branches     : 100% ( 8190/8190 )",
+        "Functions    : 100% ( 2900/2900 )",
+        "Lines        : 100% ( 9864/9864 )",
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011309-23WGVW/regression-before.log",
+      "bytes": 2663,
+      "sha256": "3aa6ed7b982b017c843013adf275fdabe795c30b797b6d1429ab7187be4bbd2b",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 1 passed (4)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011338-WSMJ80/regression-copy-dispatch-red.log",
+      "bytes": 1387,
+      "sha256": "7db38d050cb316d3e1508c6e4d2f393cbf4169a770b80e1dc329f2c6fe466d4a",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 4 skipped (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011338-WSMJ80/regression-red.log",
+      "bytes": 3376,
+      "sha256": "eb855245b76f39e6de71ecf69080cab1b174bd830b8836252dacd6ae4b95faed",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  5 failed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011338-WSMJ80/regression-second.log",
+      "bytes": 1549,
+      "sha256": "91514cd0e74a4a87a83cd00d5cad23ebf3881a2fc8f262c50ea0bb5d643fa64e",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 3 passed (4)",
+        "Tests  1 failed | 18 passed (19)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011419-EHEH05/red.log",
+      "bytes": 2941,
+      "sha256": "e56d8e04174b6e30f0b36afe18e9f164296b4bba2d938ce7fef5a9f604ca080f",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  5 failed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011456-DA9C87/focused-restart-setup-fail.log",
+      "bytes": 1157,
+      "sha256": "295bcfcbd25265dcfae4a8f4bfaca1357697a5fd1fe61314e3b3f1198add26fb",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 4 passed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011456-DA9C87/focused-uncounted-setup-fail.log",
+      "bytes": 1111,
+      "sha256": "30ffb4cf4a4c737e003851230168ab243847ae9ca68b847c04893c3d8ab5fded",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 4 passed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011456-DA9C87/red.log",
+      "bytes": 3363,
+      "sha256": "656d8b4c9356a6edd74a4b60b54af111b1ccf9d9a349d63ce8ffef4073e47582",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  4 failed (4)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011530-YKNJG7/tool-tests.log",
+      "bytes": 7038,
+      "sha256": "605c9691be65e23a58b12565f41b50298b171c32f5919502fe0ffb2afc06a101",
+      "tracked": true,
+      "summary": [
+        "Test Files  11 failed | 28 passed (39)",
+        "Tests  11 failed | 109 passed (120)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610011627-W77K0Q/bad_arg_c.log",
+      "bytes": 612,
+      "sha256": "7b79d34d6fcf4224885549423a6bac1cc4463e1f3c9b244378b584de2155a4c1",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610011627-W77K0Q/bad_arg_h.log",
+      "bytes": 620,
+      "sha256": "6e6fcf2617e4249417435eb5a79d158317ba96f5f59695830db8fff4eeefa1a7",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610011627-W77K0Q/bad_public_c.log",
+      "bytes": 446,
+      "sha256": "9658096bcda5b9ef86cc14538e93176e3825dc041f9e8cdd960716ba34020d1f",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610011627-W77K0Q/bad_public_h.log",
+      "bytes": 452,
+      "sha256": "9ebb566630c5a3f3ed4889defb3fec8d656e920fe8eaeae5e5408340816966b2",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610011627-W77K0Q/native-build-first.log",
+      "bytes": 3647,
+      "sha256": "79445dbe8a9fc8cd096321890d6d989f9f56682e31336055ddf43a3a6baa236b",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610011627-W77K0Q/red-test.log",
+      "bytes": 1833,
+      "sha256": "9f8dd6b1cd9de221ff97a3ffb4d3e982d24c67fc70c925d1772b145b12980f6f",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 1 passed (2)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020438-HRK7Q8/red-test.log",
+      "bytes": 204155,
+      "sha256": "8bc8ba8c21ff4abfc6ba020b4644ed52ceab464be84908aeb22fa6410c721805",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  7 failed | 6 passed (13)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020455-0P7YJY/red-test.log",
+      "bytes": 3746,
+      "sha256": "479818939805bb563377733699a620629470f3853fa49cc5b9bb6f598169f627",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  4 failed | 2 passed (6)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020512-HGKX68/verify-first.log",
+      "bytes": 11200,
+      "sha256": "3b6047710afb18367bd4eec1ad6a3ae69eabc8e589b396cef83a3a127a38643a",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  169 passed (169)",
+        "Tests  755 passed (755)",
+        "Statements   : 100% ( 10930/10930 )",
+        "Branches     : 100% ( 8274/8274 )",
+        "Functions    : 100% ( 2937/2937 )",
+        "Lines        : 100% ( 10026/10026 )",
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020544-N4RMCC/red-runtime.log",
+      "bytes": 3128,
+      "sha256": "0638cb19df2a6fd4fd70cdf3baca5f3abb7b33175d4ed878640442f146ddc6b5",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed (3)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020611-HF3XGB/baseline-runtime.log",
+      "bytes": 1350,
+      "sha256": "6578d75453e1dfd60ee8d1e370f57676a57550be4de78559eb8c620259be0284",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 2 passed (3)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020611-HF3XGB/green-runtime.log",
+      "bytes": 1301,
+      "sha256": "186de3109b340352e29afea79a5aba173197393eeccdb2ddb30621b5cb2b57a0",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 2 passed (3)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020652-35W3EH/green-runtime.log",
+      "bytes": 1282,
+      "sha256": "61c271cf9e38327479003ef6941165fd17776d344a35221676dc4ae156831a9c",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed | 12 passed (13)",
+        "Tests  1 failed | 57 passed (58)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020721-WNZPDZ/artifacts/baseline-insertion.log",
+      "bytes": 4417,
+      "sha256": "a7681ffeff46409ffa41fbf9eaec1383868c24e4a2aaff1165013e757bd46e89",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  4 failed (4)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020721-WNZPDZ/artifacts/first-full-verify.log",
+      "bytes": 4219,
+      "sha256": "5ea13ca99e565814b5d8d07514d0459ec990050661b29cecc14baf0dd246cf04",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  175 passed (175)",
+        "Tests  775 passed (775)",
+        "Statements   : 100% ( 10995/10995 )",
+        "Branches     : 100% ( 8297/8297 )",
+        "Functions    : 100% ( 2948/2948 )",
+        "Lines        : 100% ( 10088/10088 )",
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020755-KZEWZ5/artifacts/baseline-validity.log",
+      "bytes": 3317,
+      "sha256": "4277f5e363a6096844686895899c9c44c2c575c27626238230bded09b59be5e2",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 1 passed (4)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020828-V0NKAX/artifacts/baseline-state.log",
+      "bytes": 3654,
+      "sha256": "808315bcbe7d0a016226dd5cb809d9727da62a3abd32052156efa4914fe70725",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed (3)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610020854-S2PBHD/artifacts/baseline-prefix.log",
+      "bytes": 4049,
+      "sha256": "2bffe4a73a6f9e17bab001bc182da1599637289850c9171484b3c9f4131ae8da",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  4 failed | 1 passed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031438-RD0HQY/artifacts/baseline-destination.log",
+      "bytes": 3466,
+      "sha256": "06927bf5c7ad8bb505ad4a16caf896ca0633bf281535bfcd857ac3a7e7c8f9ec",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed (3)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031438-RD0HQY/artifacts/full-verify-second.log",
+      "bytes": 11013,
+      "sha256": "e71886a99a0c72e3439db88869f01b473156202793e2e771651b1ecb732cf722",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  179 passed (179)",
+        "Tests  790 passed (790)",
+        "Statements   : 100% ( 11006/11006 )",
+        "Branches     : 100% ( 8311/8311 )",
+        "Functions    : 100% ( 2948/2948 )",
+        "Lines        : 100% ( 10099/10099 )",
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031438-RD0HQY/artifacts/isolated-responsive.log",
+      "bytes": 4203,
+      "sha256": "285f4ee11261e95a84dee874d945f2825f836070e31b9005cea9c3b52c8fb5a8",
+      "tracked": true,
+      "summary": [
+        "1 failed",
+        "2 passed (32.9s)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031549-F4HAPT/artifacts/baseline-menu-bounds.log",
+      "bytes": 2935,
+      "sha256": "8e4086443255addcf86a74d49a0ab2be774e7a5e829d67a8ed0c0197b723274f",
+      "tracked": true,
+      "summary": [
+        "1 failed"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031549-F4HAPT/artifacts/baseline-owned-geometry.log",
+      "bytes": 2180,
+      "sha256": "d00fc0a82d8366c4fda4e4c6959e24aab4a32a338a6512319131871eed64b4af",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  2 failed | 3 skipped (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031549-F4HAPT/artifacts/focused-browser.log",
+      "bytes": 4130,
+      "sha256": "bb9b18f0475bb5e636af4c7b7c8e393cdd6e31b9d80bcd9f2fa67fa171389843",
+      "tracked": true,
+      "summary": [
+        "1 failed",
+        "5 passed (4.4s)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031646-YTEPG2/baseline-runtime.log",
+      "bytes": 3171,
+      "sha256": "436659573422d05f787e3ae640a704af6265ced7cc6af3cbbab338301aa25b43",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 3 passed (6)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031711-DBAPR6/baseline-context-runtime.log",
+      "bytes": 3004,
+      "sha256": "6696f82e0424be75fd0bd69ef9285c79da3ecc76269416e538d67ccb1053301d",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 2 passed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031827-MCVZ4S/baseline-runtime-final.log",
+      "bytes": 3239,
+      "sha256": "04e2f1860ec4d13751a551d68db70e9d820ff72259e400c93ec25e09ed82fdc9",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 3 passed (6)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031827-MCVZ4S/baseline-runtime.log",
+      "bytes": 1825,
+      "sha256": "9f4134d1334ab799475764655a424e69d00424d943e2c4f8646c55f55cfb6cc7",
+      "tracked": true,
+      "summary": []
+    },
+    {
+      "path": ".agentplane/tasks/202610031827-MCVZ4S/baseline-vendor-absent.log",
+      "bytes": 3239,
+      "sha256": "f7e55946321725cad4794fefe642f53ebe6f698c51c98c2aceaae1b44ab2b579",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  3 failed | 3 passed (6)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031844-58PBN7/baseline-runtime.log",
+      "bytes": 1241,
+      "sha256": "510bf0a09e1f55e349e116c985fe9e62ab92df8f82a8269c8b7cef08f0d49f4c",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 3 passed (4)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031844-58PBN7/baseline-vendor-absent.log",
+      "bytes": 1242,
+      "sha256": "4a46641a32f304d04f2de6d8e77038d2cca3d3dee733afe056cb333928f7958c",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 3 passed (4)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031844-58PBN7/initial-baseline-runtime.log",
+      "bytes": 2296,
+      "sha256": "d296e4d363fa6d8d09ed620fb359ccf4bfa78130d6b1eb4202f3a8b645d9c857",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  2 failed | 2 passed (4)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610031908-26F634/baseline-runtime.log",
+      "bytes": 5777,
+      "sha256": "2ddfbed0ac54628fdeacea3772f9eddd9b63b9ad1929c5e5680e1f3c37ce3ffe",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  6 failed (6)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610032252-Y7E2AQ/foundation-focus-full-verify.log",
+      "bytes": 13516,
+      "sha256": "98c53b86ea275849475d49feefc32dbeafb912369ee62e9571b3ec3e8d7b1952",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  196 passed (196)",
+        "Tests  930 passed (930)",
+        "Statements   : 100% ( 11124/11124 )",
+        "Branches     : 100% ( 8400/8400 )",
+        "Functions    : 100% ( 2959/2959 )",
+        "Lines        : 100% ( 10208/10208 )",
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tasks/202610032252-Y7E2AQ/foundation-owner-full-verify.log",
+      "bytes": 13728,
+      "sha256": "a53bf83996d5e7ca29b4e1e1ef28ca87ef4c13a8f701bd26b06f6d2d0e5ebfa4",
+      "tracked": true,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  2 passed (2)",
+        "Test Files  196 passed (196)",
+        "Tests  930 passed (930)",
+        "Statements   : 100% ( 11124/11124 )",
+        "Branches     : 100% ( 8400/8400 )",
+        "Functions    : 100% ( 2959/2959 )",
+        "Lines        : 100% ( 10208/10208 )",
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ]
+    },
+    {
+      "path": ".agentplane/tmp/phase5-unit.log",
+      "bytes": 7082,
+      "sha256": "ee7f39381659325290219f057705a25b48a863088d026499df204a363219fb61",
+      "tracked": false,
+      "summary": [
+        "Test Files  3 failed | 108 passed (111)",
+        "Tests  6 failed | 516 passed (522)"
+      ]
+    },
+    {
+      "path": ".agentplane/tmp/task48-focused-corrected-without-upstream.log",
+      "bytes": 1111,
+      "sha256": "30ffb4cf4a4c737e003851230168ab243847ae9ca68b847c04893c3d8ab5fded",
+      "tracked": false,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 4 passed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tmp/task48-focused-restart-without-upstream.log",
+      "bytes": 1157,
+      "sha256": "295bcfcbd25265dcfae4a8f4bfaca1357697a5fd1fe61314e3b3f1198add26fb",
+      "tracked": false,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 4 passed (5)"
+      ]
+    },
+    {
+      "path": ".agentplane/tmp/task49-red-test.log",
+      "bytes": 1833,
+      "sha256": "9f8dd6b1cd9de221ff97a3ffb4d3e982d24c67fc70c925d1772b145b12980f6f",
+      "tracked": false,
+      "summary": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 1 passed (2)"
+      ]
+    }
+  ]
+}
