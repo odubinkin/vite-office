@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-auto-first-layout.spec.ts --grep disregard=false",
+  "exitCode": 0,
+  "outputBytes": 663,
+  "outputSha256": "dbcc746255a71ab133125610da36213e8b150ee5f125f78d45179aaafc62b6a8",
+  "upstreamDirectoryPresent": false,
+  "summary": [
+    "  2 passed (5.4s)"
+  ]
+}
