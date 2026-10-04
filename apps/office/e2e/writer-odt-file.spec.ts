@@ -141,7 +141,11 @@ test("Writer types in a table cell and reopens the edited ODT", /** Checks nativ
 }) => {
   await page.goto("/writer");
   await page.getByRole("button", { name: "Insert Table" }).click();
-  await page.getByRole("button", { name: "More Options" }).click();
+  await page
+    .getByLabel("Table size")
+    .locator("..")
+    .getByRole("button", { name: "More Options" })
+    .click();
   await page
     .getByRole("dialog", { name: "Insert Table" })
     .getByRole("button", { name: "Insert" })

@@ -12,7 +12,11 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
     fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
     expect(screen.queryByRole("dialog", { name: "Insert Table" })).toBeNull();
-    expect(screen.getByRole("button", { name: "More Options" })).toBeInTheDocument();
+    expect(
+      within(screen.getByLabelText("Table size").parentElement as HTMLElement).getByRole("button", {
+        name: "More Options",
+      }),
+    ).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "3 columns, 2 rows" }));
     const table = session.docShell.GetDoc().GetTables()[0];
     expect(table?.GetTabLines()).toHaveLength(2);

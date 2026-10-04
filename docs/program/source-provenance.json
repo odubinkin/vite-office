@@ -1295,6 +1295,51 @@
       "status": "local-only"
     },
     {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+            "marker": "SidebarPanel"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx",
+            "marker": "retainsPanelContent"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx",
+            "marker": "entersPanelContent"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+            "marker": "retainsParagraphPanel"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+            "marker": "opensParagraphOptions"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+            "marker": "focusesEligibleContent"
+          },
+          {
+            "path": "apps/office/e2e/writer-sidebar-panel.spec.ts",
+            "marker": "Paragraph panel expansion and More Options"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+      "rationale": "React/DOM projection of the existing native sidebar panel header and retained-content expansion contract; broader native ownership remains unverified.",
+      "responsibilities": [
+        "Paragraph panel header follows inspected Panel::SetExpanded/PanelTitleBar and FocusManager Return: initial expanded state, collapse retains mounted content, More Options remains available and dispatches existing ParagraphDialog, and Return expands before first eligible content focus. Owned lifecycle/bindings/dialog/keyboard and rebuilt desktop/mobile checks cover this bounded contract. Complete panel/deck focus graph, F6, Help/settings/other panels, context/profile expansion persistence and native sizing remain open."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React mounted hidden content and title/button DOM replace native Expander, toolbar and child-window visibility."
+      },
+      "status": "local-only"
+    },
+    {
       "classification": "upstream-mechanism",
       "evidence": {
         "local": [
@@ -2918,6 +2963,30 @@
           {
             "path": "apps/office/e2e/writer-sidebar-deck.spec.ts",
             "marker": "Properties deck closes and reopens with document focus"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx",
+            "marker": "retainsPanelContent"
+          },
+          {
+            "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.test.tsx",
+            "marker": "entersPanelContent"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+            "marker": "retainsParagraphPanel"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+            "marker": "opensParagraphOptions"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
+            "marker": "focusesEligibleContent"
+          },
+          {
+            "path": "apps/office/e2e/writer-sidebar-panel.spec.ts",
+            "marker": "Paragraph panel expansion and More Options"
           }
         ]
       },
@@ -2925,7 +2994,8 @@
       "rationale": "Combines immutable current paragraph values with alignment and list controls backed by generated commands and persistent bindings state.",
       "responsibilities": [
         "Renders the bounded Writer paragraph-properties summary and binding-backed sidebar commands.",
-        "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open."
+        "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
+        "Paragraph panel header follows inspected Panel::SetExpanded/PanelTitleBar and FocusManager Return: initial expanded state, collapse retains mounted content, More Options remains available and dispatches existing ParagraphDialog, and Return expands before first eligible content focus. Owned lifecycle/bindings/dialog/keyboard and rebuilt desktop/mobile checks cover this bounded contract. Complete panel/deck focus graph, F6, Help/settings/other panels, context/profile expansion persistence and native sizing remain open."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",

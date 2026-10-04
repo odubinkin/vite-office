@@ -133,13 +133,21 @@ test("the mobile table grid dismisses outside and More Options opens the full di
   await page.goto("/writer");
   const insertTable = page.getByRole("button", { name: "Insert Table" });
   await insertTable.click();
-  await expect(page.getByRole("button", { name: "More Options" })).toBeVisible();
+  await expect(
+    page.getByLabel("Table size").locator("..").getByRole("button", { name: "More Options" }),
+  ).toBeVisible();
   await page
     .getByRole("region", { name: "Writer document canvas" })
     .click({ position: { x: 20, y: 20 } });
-  await expect(page.getByRole("button", { name: "More Options" })).toHaveCount(0);
+  await expect(
+    page.getByLabel("Table size").locator("..").getByRole("button", { name: "More Options" }),
+  ).toHaveCount(0);
   await insertTable.click();
-  await page.getByRole("button", { name: "More Options" }).click();
+  await page
+    .getByLabel("Table size")
+    .locator("..")
+    .getByRole("button", { name: "More Options" })
+    .click();
   await expect(page.getByRole("dialog", { name: "Insert Table" })).toBeVisible();
   await page
     .getByRole("dialog", { name: "Insert Table" })

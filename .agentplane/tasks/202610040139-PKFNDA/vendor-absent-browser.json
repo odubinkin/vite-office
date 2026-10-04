@@ -1,0 +1,11 @@
+{
+  "command": "npm run test:e2e",
+  "pinnedUpstreamPathAbsent": true,
+  "exit": 0,
+  "sha256": "abf4e864d8e2cd9b5bd4ddf8d4351375e2cea3238d27b41c3c4e0198891f7bc7",
+  "bytes": 8496,
+  "summary": [
+    "✓ built in 403ms",
+    "  49 passed (14.3s)"
+  ]
+}

@@ -5,6 +5,8 @@
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { useRef } from "react";
+import { SidebarPanel } from "../../../sfx2/browser/presentation/SidebarPanel";
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
 import { CommandButton } from "../../../framework/browser/presentation/CommandToolbar";
 import {
@@ -15,6 +17,7 @@ import {
   List,
   ListOrdered,
   ListX,
+  Ellipsis,
   type LucideIcon,
 } from "lucide-react";
 import type { WriterParagraphListKind } from "../../source/core/doc/list";
@@ -82,6 +85,7 @@ export function WriterParagraphProperties({
   styleDisplayName,
 }: WriterParagraphPropertiesProps): React.JSX.Element {
   const localization = useBrowserLocalization();
+  const paragraphControls = useRef<HTMLDivElement>(null);
   const getCommandResource =
     /** Localizes one generated sidebar command. @param commandUrl - Command URL. @returns Localized resource. */ (
       commandUrl: string,
@@ -89,10 +93,31 @@ export function WriterParagraphProperties({
       return selectWriterCommandResource(localization, commandUrl);
     };
   return (
-    <>
-      <h2 className="mt-1 text-base font-bold text-slate-950">
-        {localization.GetText("writer.properties.paragraph", "Paragraph")}
-      </h2>
+    <SidebarPanel
+      title={localization.GetText("writer.properties.paragraph", "Paragraph")}
+      focusContent={
+        /** Focuses this panel's first eligible paragraph-content widget. @returns Nothing. */ () =>
+          (paragraphControls.current as HTMLDivElement)
+            .querySelector<HTMLButtonElement>("button:not(:disabled)")
+            ?.focus()
+      }
+      moreOptions={
+        <CommandButton
+          commandId={WRITER_COMMAND_IDS.paragraphDialog}
+          commandSource={commandSource}
+          getCommandResource={
+            /** Applies the native panel toolbar label to the existing dialog command. @param commandId - Existing dialog slot. @returns Localized resource. */ (
+              commandId,
+            ) => ({
+              ...getCommandResource(commandId),
+              label: localization.GetText("sidebar.panel.more-options", "More Options"),
+            })
+          }
+          icon={Ellipsis}
+          resolveArguments={resolveArguments}
+        />
+      }
+    >
       <p className="mt-1 text-sm text-slate-600">
         {localization.GetText(
           "writer.properties.active-paragraph",
@@ -100,7 +125,10 @@ export function WriterParagraphProperties({
           { number: paragraphNumber },
         )}
       </p>
-      <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3">
+      <div
+        className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3"
+        ref={paragraphControls}
+      >
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
           {localization.GetText("writer.properties.alignment", "Alignment")}
         </p>
@@ -159,6 +187,6 @@ export function WriterParagraphProperties({
           )}
         </div>
       </div>
-    </>
+    </SidebarPanel>
   );
 }
