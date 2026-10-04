@@ -4,7 +4,7 @@ title: "Bind internet attributes to their owning text nodes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Restore bounded internet text-node ownership under the standing iterative goal and absent-reference verification contract."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:15:07.011Z"
+doc_updated_at: "2026-10-04T22:31:18.296Z"
 doc_updated_by: "CODER"
 description: "Restore the native internet attribute text-node backlink at existing insertion, copy, move and node transition boundaries. Keep retained undo paragraph identity and registered save/open/recovery deviations. No upstream source or executable helper artifacts; verification suites run once with the pinned reference directory absent."
 sections:
@@ -75,9 +75,23 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Static gates precede one sequential absent-reference profile. Only failed cases/gates may repeat. Exact-head scope/previous-test/manifest review and ignored-inclusive artifact audit are required. No network, upstream invocation or executable Agentplane evidence.
-  Verification: "Pending implementation and declared validation."
+  Verification: |-
+    Command: six static gates listed in Verify Steps. Result: pass after new JSDoc comment repair. Evidence: format,lint,typecheck,dependencies passed once;docs failed then passed;file-size passed once. Scope: approved eight paths and whole repository static contracts.
+
+    Command: one sequential upstream-absent build/application/inventory/scripts/Chromium profile listed in Verify Steps. Result: build,application,scripts,Chromium pass;inventory recovered using only its one failed case. Evidence: app2649/266files,coverage100%all metrics;scripts5/2files;Chromium99;inventory108initialpass/1fail,failed-case replay1fail then1pass/2skipped. Original full coverage four missing CLI statements/lines and three missing functions are all covered by final failed-case raw coverage;combined100%,standalone diagnostic CLI thresholds only,repository thresholds unchanged. Scope: actual existing model/history/browser behavior with reference directory absent. Vendor restored in finally each time;no passing suite or build replay.
+
+    Command: five restored source audits listed in Verify Steps. Result: pass after filename responsibility registration. Evidence: source-tree/UI resources pass once;provenance fails then passes;invariants/parity pass,semantic violations0. Scope: pinned references inspected only after absent test runs.
+
+    Command: scope-and-native-hashes,focused changed-manifest formatting,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence:347prior test files byte-identical;18newcases;eight semantic paths;236existing runtime fields/statuses/defaults/exceptions preserved except3bounded responsibility appendices and2relocated projection declarations;one unverified helper;unchanged projection bodies;six native file hashes;3824APfiles/0forbidden. Scope: bounded node ownership;full styles/clients/visited/refcounts/physical destruction/all families/core/UI goal remains unverified.
+
+    Exact-head EVALUATOR review,doctor/routing and final clean-state evidence are pending semantic commit.
   Rollback Plan: "Revert the task semantic commit if required; do not rewrite history or alter pre-existing changes."
-  Findings: "Pinned reference: LibreOffice 26.8.0.2, 9bc445578031fecf56086729d8e4940c77e14d65. Native txtinet.hxx defines a null node pointer with GetpTextNode/GetTextNode/ChgTextNode. txtatr2.cxx initializes null; thints.cxx insertion and ndtxt.cxx copy bind the node. InitINetFormat also registers a char style, so this task does not invent a pointer-only complete implementation. Local retained undo nodes own their existing contents after structural removal; clearing them would break undo identity. Retained old hint containers are portable detached snapshots; native physical destruction remains unverified. Full char-style, client notification, visited state, protection and all attribute-family parity remain unverified. User authorizes iterative safe local leaves and explicitly prohibits saved source/helper artifacts and duplicate present/absent test profiles."
+  Findings: |-
+    Pinned reference: LibreOffice 26.8.0.2, 9bc445578031fecf56086729d8e4940c77e14d65. Native txtinet.hxx defines a null node pointer with GetpTextNode/GetTextNode/ChgTextNode. txtatr2.cxx initializes null; thints.cxx insertion and ndtxt.cxx copy bind the node. InitINetFormat also registers a char style, so this task does not invent a pointer-only complete implementation. Local retained undo nodes own their existing contents after structural removal; clearing them would break undo identity. Retained old hint containers are portable detached snapshots; native physical destruction remains unverified. Full char-style, client notification, visited state, protection and all attribute-family parity remain unverified. User authorizes iterative safe local leaves and explicitly prohibits saved source/helper artifacts and duplicate present/absent test profiles.
+
+    Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion.
+
+    Validation: all347 pre-existing test files are byte-identical;18 independent application cases added. All2649 application cases/266files and Chromium99 passed on their sole absent-reference full run;app coverage100%all four metrics. Inventory initially108pass/1fail because new helper row was misplaced;only that failed case replayed twice. First replay exposed two extracted projection declarations still listed under ndtxt;correct markers relocated while existing re-export APIs and projection bodies remain unchanged. Second replay1pass/2skipped;initial full summary plus failed-case raw coverage confirms combined100%all four metrics,with repository thresholds unchanged. Source-provenance first failed for an omitted filename-split registration;registered approved decomposition and repeated only that failed gate before the pending invariant/parity gates. All five restored source audits pass,semantic violations0. Static docs failed only on missing new callback comments;documentation repaired and only failed docs gate repeated,then pending file-size gate ran. Existing236 runtime statuses/defaults/exceptions preserved;one new helper remains unverified. Ignored-inclusive Agentplane scan3824files,0forbidden. No source/helper/native artifacts,network,upstream execution,passing suite/build replay or registered I/O deviation change. Full broad existing core/UI parity remains unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -124,7 +138,15 @@ Static gates precede one sequential absent-reference profile. Only failed cases/
 
 ## Verification
 
-Pending implementation and declared validation.
+Command: six static gates listed in Verify Steps. Result: pass after new JSDoc comment repair. Evidence: format,lint,typecheck,dependencies passed once;docs failed then passed;file-size passed once. Scope: approved eight paths and whole repository static contracts.
+
+Command: one sequential upstream-absent build/application/inventory/scripts/Chromium profile listed in Verify Steps. Result: build,application,scripts,Chromium pass;inventory recovered using only its one failed case. Evidence: app2649/266files,coverage100%all metrics;scripts5/2files;Chromium99;inventory108initialpass/1fail,failed-case replay1fail then1pass/2skipped. Original full coverage four missing CLI statements/lines and three missing functions are all covered by final failed-case raw coverage;combined100%,standalone diagnostic CLI thresholds only,repository thresholds unchanged. Scope: actual existing model/history/browser behavior with reference directory absent. Vendor restored in finally each time;no passing suite or build replay.
+
+Command: five restored source audits listed in Verify Steps. Result: pass after filename responsibility registration. Evidence: source-tree/UI resources pass once;provenance fails then passes;invariants/parity pass,semantic violations0. Scope: pinned references inspected only after absent test runs.
+
+Command: scope-and-native-hashes,focused changed-manifest formatting,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence:347prior test files byte-identical;18newcases;eight semantic paths;236existing runtime fields/statuses/defaults/exceptions preserved except3bounded responsibility appendices and2relocated projection declarations;one unverified helper;unchanged projection bodies;six native file hashes;3824APfiles/0forbidden. Scope: bounded node ownership;full styles/clients/visited/refcounts/physical destruction/all families/core/UI goal remains unverified.
+
+Exact-head EVALUATOR review,doctor/routing and final clean-state evidence are pending semantic commit.
 
 ## Rollback Plan
 
@@ -133,3 +155,7 @@ Revert the task semantic commit if required; do not rewrite history or alter pre
 ## Findings
 
 Pinned reference: LibreOffice 26.8.0.2, 9bc445578031fecf56086729d8e4940c77e14d65. Native txtinet.hxx defines a null node pointer with GetpTextNode/GetTextNode/ChgTextNode. txtatr2.cxx initializes null; thints.cxx insertion and ndtxt.cxx copy bind the node. InitINetFormat also registers a char style, so this task does not invent a pointer-only complete implementation. Local retained undo nodes own their existing contents after structural removal; clearing them would break undo identity. Retained old hint containers are portable detached snapshots; native physical destruction remains unverified. Full char-style, client notification, visited state, protection and all attribute-family parity remain unverified. User authorizes iterative safe local leaves and explicitly prohibits saved source/helper artifacts and duplicate present/absent test profiles.
+
+Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion.
+
+Validation: all347 pre-existing test files are byte-identical;18 independent application cases added. All2649 application cases/266files and Chromium99 passed on their sole absent-reference full run;app coverage100%all four metrics. Inventory initially108pass/1fail because new helper row was misplaced;only that failed case replayed twice. First replay exposed two extracted projection declarations still listed under ndtxt;correct markers relocated while existing re-export APIs and projection bodies remain unchanged. Second replay1pass/2skipped;initial full summary plus failed-case raw coverage confirms combined100%all four metrics,with repository thresholds unchanged. Source-provenance first failed for an omitted filename-split registration;registered approved decomposition and repeated only that failed gate before the pending invariant/parity gates. All five restored source audits pass,semantic violations0. Static docs failed only on missing new callback comments;documentation repaired and only failed docs gate repeated,then pending file-size gate ran. Existing236 runtime statuses/defaults/exceptions preserved;one new helper remains unverified. Ignored-inclusive Agentplane scan3824files,0forbidden. No source/helper/native artifacts,network,upstream execution,passing suite/build replay or registered I/O deviation change. Full broad existing core/UI parity remains unverified.

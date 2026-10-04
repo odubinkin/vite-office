@@ -1,0 +1,68 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/txtatr2.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "apps/office/src/sw/source/core/txtnode/internet-node-ownership.test.ts",
+    "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 347,
+  "priorByteIdentical": 347,
+  "newAppCases": 18,
+  "existingRuntimeRows": 236,
+  "newUnverifiedRuntimeRows": 1,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "onlyThreeResponsibilityAppendicesAndTwoRelocatedProjectionSymbols": true,
+  "existingProjectionBodiesUnchanged": true,
+  "registeredFilenameResponsibilitySplit": true,
+  "staticChecks": 6,
+  "staticDocumentationFailureRecovered": true,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 2649,
+    "appFiles": 266,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appInitialCoverage100": true,
+  "inventoryCombinedCoverage100": true,
+  "uniqueFailedInventoryCasesReplayed": 1,
+  "failedCaseReplayAttempts": 2,
+  "noPassingSuiteOrBuildReplay": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "sourceProvenanceFilenameFailureRecovered": true,
+  "semanticViolations": 0,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txtinet.hxx",
+      "sha256": "0ffc2cf2e2bf2d4c4a468d4f88644ef00e83ba1863ed5edf1f57473d668a19de"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtatr2.cxx",
+      "sha256": "0834ec1af0972001223cc0790fe609f331e3e6fdb036752109d9533921cf8de8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx",
+      "sha256": "f21ad8f8f8615d648f068c27a52f8457828c180843f9917a4ba42c95dd203de3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    }
+  ],
+  "nativeReview": "Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion."
+}

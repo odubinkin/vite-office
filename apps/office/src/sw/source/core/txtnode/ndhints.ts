@@ -8,6 +8,7 @@ import {
   RES_TXTATR_INETFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
+import type { SwTextNode } from "./ndtxt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
@@ -31,6 +32,17 @@ type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
 
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
+  private m_pTextNode: SwTextNode | undefined;
+
+  /** Binds the portable map at a native node insertion boundary. @param node - Owning node or detached container. @returns Nothing. */
+  public BindToTextNode(node: SwTextNode | undefined): void {
+    if (node !== undefined && node.GetDoc().GetAttrPool() !== this.pool)
+      throw new Error("Writer hints require the owning document pool.");
+    this.m_pTextNode = node;
+    for (const hint of this.m_HintsByStart)
+      if (hint instanceof SwTextINetFormat) hint.ChgTextNode(node);
+  }
+
   private m_HintsByStart: RangedTextAttr[] = [];
   private m_HintsByEnd: RangedTextAttr[] = [];
   private m_HintsByWhichAndStart: RangedTextAttr[] = [];
@@ -49,11 +61,17 @@ export class SwpHints {
 
   /** Releases old owner links and binds the replacement map without copying attributes. @param hints - Already normalized owned objects. @returns Nothing. */
   private set hintsByStart(hints: RangedTextAttr[]) {
-    for (const hint of this.m_HintsByStart) hint.m_pHints = undefined;
+    for (const hint of this.m_HintsByStart) {
+      hint.m_pHints = undefined;
+      if (hint instanceof SwTextINetFormat) hint.ChgTextNode(undefined);
+    }
     this.m_HintsByStart = hints;
     this.m_HintsByEnd = [...hints].sort(compareHintsByEnd);
     this.m_HintsByWhichAndStart = [...hints].sort(compareHintsByWhichAndStart);
-    for (const hint of hints) hint.m_pHints = this;
+    for (const hint of hints) {
+      hint.m_pHints = this;
+      if (hint instanceof SwTextINetFormat) hint.ChgTextNode(this.m_pTextNode);
+    }
     this.m_StartMapNeedsSortingRange = [0x7fffffff, -1];
     this.m_EndMapNeedsSortingRange = [0x7fffffff, -1];
     this.m_WhichMapNeedsSortingRange = [

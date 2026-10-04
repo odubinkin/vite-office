@@ -55,8 +55,11 @@ import type { WriterHyperlink } from "./fmtatr2";
 
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
 import { resolveSwListLevelIndents } from "./ndtxt-list-indent";
-import { SwpHints, type WriterTextRunLike } from "./ndhints";
+import { SwpHints } from "./ndhints";
 import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
+
+import { ReplaceTextNodeHints, CopyTextNodeHints, CreateTextNodeFragment } from "./ndtxt-hints";
+export { copyWriterTextRangeRuns, projectWriterTextRuns } from "./ndtxt-hints";
 
 /** Names the bounded direct character attributes currently supported by the browser Writer. */
 export const WRITER_CHARACTER_FORMATS = ["bold", "italic", "underline"] as const;
@@ -83,7 +86,17 @@ export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[numb
  */
 export class SwTextNode extends SwContentNode {
   private mText: string;
-  private pSwpHints: SwpHints | undefined;
+  private m_pSwpHints: SwpHints | undefined;
+
+  /** Reads the native hint container. @returns Current owned container. */
+  private get pSwpHints(): SwpHints | undefined {
+    return this.m_pSwpHints;
+  }
+
+  /** Applies node ownership to every existing hint assignment. @param hints - Replacement container. @returns Nothing. */
+  private set pSwpHints(hints: SwpHints | undefined) {
+    this.m_pSwpHints = ReplaceTextNodeHints(this, this.m_pSwpHints, hints);
+  }
   private listGeometryWins = false;
   private mpNodeNum: SwNodeNum | undefined;
   private mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
@@ -140,10 +153,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Replaces canonical ranged attributes without accepting a browser run projection. @param hints - Writer text attributes. @returns Nothing. */
   public SetTextHints(hints: SwpHints): void {
-    for (const hint of hints.entries())
-      if (hint.end > this.mText.length)
-        throw new Error("Writer text hint is outside the text node.");
-    const replacement = hints.clone(this.GetDoc().GetAttrPool());
+    const replacement = CopyTextNodeHints(this, hints);
     this.pSwpHints = replacement.Count() === 0 ? undefined : replacement;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -827,13 +837,7 @@ export class SwTextNode extends SwContentNode {
     attributes: SfxItemSet,
     hyperlink?: WriterHyperlink,
   ): SwTextFragment {
-    const hints = new SwpHints(this.GetDoc().GetAttrPool()).createTextHints(
-      text.length,
-      projectWriterCharacterAttributes(attributes),
-      this.GetSwAttrSet(),
-      hyperlink,
-    );
-    return { text, hints };
+    return CreateTextNodeFragment(this, text, attributes, hyperlink);
   }
 
   /** Creates a native fragment with one toggled character item. @param start - Inclusive source offset. @param end - Exclusive source offset. @param format - Toggled item group. @returns Native formatted fragment. */
@@ -975,23 +979,4 @@ function getWriterParagraphAlignment(adjust: SvxAdjust): WriterParagraphAlignmen
     default:
       return "left";
   }
-}
-
-/** Projects one native node range to immutable runs. @param node - Source node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Derived runs. */
-export function copyWriterTextRangeRuns(
-  node: SwTextNode,
-  start: number,
-  end: number,
-): readonly WriterTextRunLike[] {
-  const fragment = node.CaptureTextFragment(start, end);
-  return fragment.hints.toTextRuns(fragment.text, node.GetSwAttrSet());
-}
-
-/** Projects a complete node without storing run state in SwTextNode. @param node - Canonical node. @returns Derived runs. */
-export function projectWriterTextRuns(node: SwTextNode | undefined): readonly WriterTextRunLike[] {
-  if (node === undefined) return [];
-  return (node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool())).toTextRuns(
-    node.GetText(),
-    node.GetSwAttrSet(),
-  );
 }

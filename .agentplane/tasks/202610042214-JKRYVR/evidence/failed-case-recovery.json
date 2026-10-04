@@ -1,0 +1,72 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t composes the Writer mapping report with owned upstream marker evidence --coverage --coverage.reporter=json --coverage.reporter=json-summary --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0",
+      "profile": "upstream-absent-failed-case-only",
+      "exit": 1,
+      "bytes": 1554,
+      "sha256": "1b42fbaf4f31aba5656a10324e42a554130d93afcd24296abdd59d5a057527b6",
+      "totals": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 2 skipped (3)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ]
+    },
+    {
+      "command": "npm exec -- vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t composes the Writer mapping report with owned upstream marker evidence --coverage --coverage.reporter=json --coverage.reporter=json-summary --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0",
+      "profile": "upstream-absent-failed-case-only",
+      "exit": 0,
+      "bytes": 265,
+      "sha256": "a889401e9525d322adebd13712e5f5fa57df31d994f2dd7747bfdc9abd1b954f",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 2 skipped (3)"
+      ],
+      "coverageRecovery": {
+        "initial": {
+          "lines": {
+            "total": 1464,
+            "covered": 1460,
+            "pct": 99.72
+          },
+          "statements": {
+            "total": 1523,
+            "covered": 1519,
+            "pct": 99.73
+          },
+          "functions": {
+            "total": 384,
+            "covered": 381,
+            "pct": 99.21
+          },
+          "branches": {
+            "total": 1080,
+            "covered": 1080,
+            "pct": 100
+          }
+        },
+        "initialEvidence": "Original full-profile terminal totals recorded before failed-case replay; absent-profile digest and percentage metrics retained.",
+        "diagnosticLinesCovered": [
+          125,
+          130,
+          140,
+          159
+        ],
+        "missingStatementsCovered": 4,
+        "missingFunctionNames": [
+          "readRuntimeModule",
+          "selectCapabilityId",
+          "readRuntimeDirectory"
+        ],
+        "combinedCoverage": {
+          "lines": 100,
+          "statements": 100,
+          "functions": 100,
+          "branches": 100
+        },
+        "method": "Initial full-profile summary plus failed-case-only raw coverage confirms all four original missing CLI statements/lines and three missing functions covered; initial branches were already100%. Standalone subset thresholds apply only to this diagnostic CLI invocation. Repository thresholds unchanged; no passing test replay."
+      }
+    }
+  ]
+}
