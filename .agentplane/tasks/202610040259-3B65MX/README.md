@@ -1,10 +1,11 @@
 ---
 id: "202610040259-3B65MX"
 title: "Remove diagnostic source excerpts from retained Agentplane artifacts"
-status: "DOING"
+result_summary: "Removed91 retained diagnostic source artifacts in isolated cleanup commits; raw and decoded audits clean."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 29
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -45,8 +46,8 @@ quality_review:
     - "Action72102c6ea9dd deletes83 tracked logs/context plus bounded result file; action4917d440fe2c deletes4 JSON diagnostic source tails plus own metadata/results. Four ignored tmp copies removed; total91. Exact action name-status excludes app/test/manifest changes; no history rewrite."
     - "Final ignored-inclusive2879-file raw/decoded JSON/JSONL artifact audit: source/helper/Python/codeframes/archive/magic/implementation bodies0. Five historical README/AGENTS prose diffs classified separately. Routing/diffpassdoctor0errors2knownwarnings. N2HMA6 separatelyDONE6084e42a4575 with full and upstream-absent1042+109+12+53pass."
 commit:
-  hash: "c0fe40e4f092d44fbd3969a0461b97eb7037d777"
-  message: "🎯 N2HMA6 task: restored implemented Sidebar Tab and arrow focus traversal; full and..."
+  hash: "9e9f9b34a8210462149567e344c17efa99c6dde8"
+  message: "🧩 3B65MX task: pin cleanup quality review snapshot"
 comments:
   -
     author: "CODER"
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Review target: clean closure snapshot c0fe40e4f092d44fbd3969a0461b97eb7037d777 contains separately inspected cleanup action commits72102c6ea9dd/4917d440fe2c and separately DONE Sidebar task. Commit metadata records review snapshot, not falsely identified as deletion implementation."
+  -
+    author: "CODER"
+    body: "Verified: explicit user cleanup removed91 source-bearing diagnostics (87tracked4ignored) in isolated action commits72102c6ea9ddedf8c5ae90b447437cc3384008a4 and4917d440fe2c. Raw and decoded source/helper/Python/codeframe/archive audits zero;5 historical prose-only docs diffs classified. No app/test/manifest changes in cleanup commits,no history rewrite. Routing/diffpassdoctor0errors2knownwarnings;N2HMA6 separatelyDONE6084e42a4575 with full and upstream-absent tests. Same-actor quality pass reviewed closure snapshot 9e9f9b34a8210462149567e344c17efa99c6dde8, recorded as closure evidence distinct from deletion action SHAs; no independent-agent review claim,clean state."
 events:
   -
     type: "status"
@@ -99,8 +103,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final cleanup docs current,same-actor qualitypass report20261004-032046874;91diagnostics87tracked4ignored removed in isolated72102c6ea9dd/4917d440fe2c, no app changes/historyrewrite; raw+decoded source/helper/Python/frame/archive0,doctor0errors2knownwarnings; reviewed snapshot recorded separately from deletion SHAs."
+  -
+    type: "status"
+    at: "2026-10-04T03:21:23.192Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: explicit user cleanup removed91 source-bearing diagnostics (87tracked4ignored) in isolated action commits72102c6ea9ddedf8c5ae90b447437cc3384008a4 and4917d440fe2c. Raw and decoded source/helper/Python/codeframe/archive audits zero;5 historical prose-only docs diffs classified. No app/test/manifest changes in cleanup commits,no history rewrite. Routing/diffpassdoctor0errors2knownwarnings;N2HMA6 separatelyDONE6084e42a4575 with full and upstream-absent tests. Same-actor quality pass reviewed closure snapshot 9e9f9b34a8210462149567e344c17efa99c6dde8, recorded as closure evidence distinct from deletion action SHAs; no independent-agent review claim,clean state."
 doc_version: 3
-doc_updated_at: "2026-10-04T03:21:20.432Z"
+doc_updated_at: "2026-10-04T03:21:23.194Z"
 doc_updated_by: "CODER"
 description: "Explicit user artifact cleanup: remove old diagnostic logs/context with embedded source frames, preserve bounded hashes and outcomes in a separate local commit; no app edits or history rewrite."
 sections:
