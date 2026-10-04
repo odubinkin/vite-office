@@ -3419,6 +3419,14 @@
           {
             "path": "apps/office/e2e/writer-ruler-tab-identity.spec.ts",
             "marker": "Writer ruler tab identity at width"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+            "marker": "acceptsDefaultReplacement"
+          },
+          {
+            "path": "apps/office/e2e/writer-ruler-tab-insertion.spec.ts",
+            "marker": "Writer replaces a hidden default ruler tab at width"
           }
         ]
       },
@@ -3427,7 +3435,8 @@
       "responsibilities": [
         "Presents accessible page-margin, paragraph-indent, and tab-stop handles for the browser Writer workspace.",
         "Existing ruler gestures now project inspected Ruler left-single-click/nontracking admission,VCL owner replacement and all-key tracking priority:initiating pointer owns movement/termination,Escape cancels,Return accepts the last painted position,and other keys cannot reach widget/document dispatch. All cancellation paths release listeners and discard preview without application changes;accepted termination releases ownership before one callback. Temporary tabs begin on a free-surface press as in SvxRuler Click and Ruler MouseButtonDown,and remain browser preview until accepted pointer/Return termination;cancel/hide/unmount never inserts a model tab and trailing clicks cannot add a second undo entry. Zero-motion termination preserves its initial position. Existing nonzero snapping,coordinate conversion,ticks/guides,page/paragraph/tab callbacks and core undo ownership remain unchanged. Six old tab fixture triggers in two files use pointer-down plus matched pointer-up,with every assertion and all other bytes retained;278of280prior test files byte-identical. Browser teardown cancels DOM callbacks without claiming identical native disposal flags. Owned boundary/handle/actual Writer and rebuilt desktop/mobile tests cover this bounded tracking contract only. Full native hit testing,RTL/tab types,double-click dialogs,modifier snapping,deletion,mouse capture,platform/LOK/input and complete ruler/Writer/native parity remain unverified;intentional save/open/recovery exceptions are preserved.",
-        "Iteration91 preserves each explicit ruler tab's raw SvxTabStopItem index in the immutable browser record instead of dispatching its compact visible ordinal. Default tabs remain outside interactive marker admission as inspected in Ruler ImplHitTest; accepted drags address the selected item despite preceding/interleaved defaults and model reordering. Existing tracking, geometry, snapping and visible labels remain unchanged. Actual Writer/Undo and rebuilt Chromium at widths1280/390 cover this bounded identity correction; full native ruler geometry, default glyph generation, tab-type glyphs, RTL, modifiers, deletion, capture and UI parity remain unverified. Registered save/open/recovery exceptions are preserved."
+        "Iteration91 preserves each explicit ruler tab's raw SvxTabStopItem index in the immutable browser record instead of dispatching its compact visible ordinal. Default tabs remain outside interactive marker admission as inspected in Ruler ImplHitTest; accepted drags address the selected item despite preceding/interleaved defaults and model reordering. Existing tracking, geometry, snapping and visible labels remain unchanged. Actual Writer/Undo and rebuilt Chromium at widths1280/390 cover this bounded identity correction; full native ruler geometry, default glyph generation, tab-type glyphs, RTL, modifiers, deletion, capture and UI parity remain unverified. Registered save/open/recovery exceptions are preserved.",
+        "Iteration92 makes existing ruler insertion clone the stored tab item and Insert a freshly constructed Left tab, matching inspected SvxRuler Click and SvxTabStopItem Insert collision replacement. The new stop resets adjustment, decimal and leader to constructor defaults while preserving every unrelated stored stop and item default distance. Only the selected new positive integer position is validated; general paragraph position-list editing still retains matching metadata. Owned actual-session, immutable projection, cancellation, Undo/Redo and Chromium widths1280/390 cover this bounded insertion contract. All prior tests remain byte-identical. Native selector types/glyphs, signed geometry, RTL, modifiers/snapping/capture, complete ruler/SwWrtShell parity and parent goal remain unverified; no native promotion or registered save/open/recovery change."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -10033,6 +10042,26 @@
           {
             "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
             "marker": "cancelsMixedTab"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+            "marker": "AddRulerTabStop"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+            "marker": "replacesOccupiedTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+            "marker": "preservesStoredStops"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+            "marker": "rejectsOrKeepsEqualTab"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+            "marker": "retainsListEditMetadata"
           }
         ],
         "upstream": [
@@ -10063,7 +10092,8 @@
         "SwWrtShell::NoEdit"
       ],
       "responsibilities": [
-        "Iteration91 refactors the existing raw-index MoveRulerTabStop transition to clone the current item, remove its selected index and insert the moved copied stop, matching inspected SvxRuler ApplyTabs and SvxTabStopItem Insert ordering. A destination collision retains the selected stop's adjustment, decimal and leader instead of the later neighbour's metadata. Item default distance, unrelated default/explicit stops, invalid-input rejection, existing nonpositive removal and shell-owned single undo/redo are preserved. Actual Writer tests cover these bounded transitions; native geometric drag limits/deletion/modifiers and complete SwWrtShell behavior/contracts/defaults remain unverified. No native status promotion or registered I/O/recovery change."
+        "Iteration91 refactors the existing raw-index MoveRulerTabStop transition to clone the current item, remove its selected index and insert the moved copied stop, matching inspected SvxRuler ApplyTabs and SvxTabStopItem Insert ordering. A destination collision retains the selected stop's adjustment, decimal and leader instead of the later neighbour's metadata. Item default distance, unrelated default/explicit stops, invalid-input rejection, existing nonpositive removal and shell-owned single undo/redo are preserved. Actual Writer tests cover these bounded transitions; native geometric drag limits/deletion/modifiers and complete SwWrtShell behavior/contracts/defaults remain unverified. No native status promotion or registered I/O/recovery change.",
+        "Iteration92 makes existing ruler insertion clone the stored tab item and Insert a freshly constructed Left tab, matching inspected SvxRuler Click and SvxTabStopItem Insert collision replacement. The new stop resets adjustment, decimal and leader to constructor defaults while preserving every unrelated stored stop and item default distance. Only the selected new positive integer position is validated; general paragraph position-list editing still retains matching metadata. Owned actual-session, immutable projection, cancellation, Undo/Redo and Chromium widths1280/390 cover this bounded insertion contract. All prior tests remain byte-identical. Native selector types/glyphs, signed geometry, RTL, modifiers/snapping/capture, complete ruler/SwWrtShell parity and parent goal remain unverified; no native promotion or registered save/open/recovery change."
       ]
     },
     {

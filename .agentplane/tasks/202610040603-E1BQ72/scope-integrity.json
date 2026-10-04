@@ -20,8 +20,8 @@
     },
     {
       "path": "apps/office/e2e/writer-ruler-tab-insertion.spec.ts",
-      "bytes": 3479,
-      "sha256": "2e2c56be9f83fdaa32ee3dd37295eaca8d1beb0fe75528cf2f694d9d19c75a1c"
+      "bytes": 3568,
+      "sha256": "da9cee8138a986f2d62983aaf0e1565195e30ce0cd919ba98aff6222f35502c4"
     },
     {
       "path": "docs/program/source-provenance.json",

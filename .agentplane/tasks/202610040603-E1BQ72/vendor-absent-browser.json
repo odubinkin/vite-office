@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-ruler-tab-insertion.spec.ts",
+  "exitCode": 0,
+  "outputBytes": 671,
+  "outputSha256": "f472743732a68c5cbcfa3c4d7cb646e43e2c0a0f4ce8cfa68dba09ed713a7aef",
+  "upstreamDirectoryPresent": false,
+  "summary": [
+    "  2 passed (2.4s)"
+  ]
+}

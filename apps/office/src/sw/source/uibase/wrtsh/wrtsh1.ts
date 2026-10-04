@@ -430,14 +430,11 @@ export class SwWrtShell extends SwModify {
 
   /** Adds a ruler tab at an absolute position. @param position - Twip position. @returns Whether changed. */
   public AddRulerTabStop(position: number): boolean {
+    if (!Number.isInteger(position) || position <= 0 || position > 32767) return false;
     const current = this.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
-    const positions = current
-      .GetStops()
-      .map(
-        /** Reads a tab position. @param stop - Existing stop. @returns Twips. */ (stop) =>
-          stop.GetTabPos(),
-      );
-    return this.SetTabStopPositions([...positions, position]);
+    const inserted = current.Clone();
+    inserted.Insert(new SvxTabStop(position));
+    return this.SetParagraphItem(inserted);
   }
 
   /** Moves one displayed tab marker by its drag delta. @param index - Sorted stop index. @param delta - Twip delta. @returns Whether changed. */
