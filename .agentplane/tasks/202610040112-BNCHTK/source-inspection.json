@@ -1,0 +1,57 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only relevant complete lifecycle/focus/activation functions and resource definitions, no copying/compile/native execution.",
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/SidebarController.cxx",
+      "sha256": "8c9cb6041375b8fc0f9c88768d8981c47da51fb31c4baaed3822d16a42d5c763"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/DeckTitleBar.cxx",
+      "sha256": "5827cbfec1093bedc893e9f50ce112226d5590da1fc3487ae117207661abe91a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/Deck.cxx",
+      "sha256": "b630b3eb4f9406c7bca2dc13895820c5c3244a056809913d0be6b094c766005e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/TabBar.cxx",
+      "sha256": "245d6c435654ebd2839e39d81f0c6f03fb308f14bc493f69865fc3030d70d732"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/FocusManager.cxx",
+      "sha256": "c6e98a7801482c112f661b8ebe856308e93ca5befebdb1c4f55da3cc132ea0b5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/SidebarDockingWindow.cxx",
+      "sha256": "862d1289946425b6eb184eb3520fbe6ea18c61c3b106bc774d166f8662055dc1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/appl/workwin.cxx",
+      "sha256": "a5fc0024b601c32d9d965584cc295188f8c1f2d3148b5f7e1c3d0b9ceca873a8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/uiconfig/ui/deck.ui",
+      "sha256": "192d2a54ae42c23871456ddc589db59a3e00dcb2d71e427114ebed253a6a33b9"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/uiconfig/ui/tabbar.ui",
+      "sha256": "14956e7512df22131cf972a56ee6233900d20a491948bd265b9ec794187055e3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/uiconfig/ui/tabbarcontents.ui",
+      "sha256": "b1ef80034f07091247707fcd23690645eb6281fd01e7b73ee182ff5c49ef92fd"
+    },
+    {
+      "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+      "sha256": "51961238bcf25e13904ab7aa1cd78dc709982a5f598b587e76ebfc6c2488b96e"
+    }
+  ],
+  "conclusions": [
+    "RequestCloseDeck updates independent deck requested state and removes highlight, shrinks to tabbar width; does not dispatch Sidebar command or destroy panels.",
+    "TabBar Item HandleClick first grabs document focus then activates current deck; OpenThenToggleDeck closes the currently visible docked deck, or RequestOpenDeck then SwitchToDeck.",
+    "FocusManager Escape on deck toolbox/tabbar focuses document without changing deck state. Content Escape belongs to the separate panel focus graph, not this handler.",
+    "SfxWorkWindow whole-child toggle RemoveChildWin destroys child; showing recreates/focuses SidebarDockingWindow, which requests open deck.",
+    "Deck title provides Close Sidebar Deck; PropertyDeck registry title Properties. Help, settings menu, panel title/other decks/native F6/floating/sidebar default sizes remain open, not exceptions."
+  ]
+}

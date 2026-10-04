@@ -1,0 +1,12 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sfx2/browser/presentation/SidebarDeck.test.tsx src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx src/sw/browser/presentation/WriterPageLayout.test.tsx src/sw/browser/presentation/writer-view-document-key.test.tsx",
+  "exit": 1,
+  "sha256": "215d99bdce51b49c4afc76eb55864de539e104d2a2e00de3ea9bcfb62bc4431f",
+  "bytes": 15442,
+  "summary": [
+    " Test Files  1 failed | 3 passed (4)",
+    "      Tests  1 failed | 46 passed (47)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Centered\""
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "command": "npm run build",
+  "exit": 2,
+  "bytes": 3303,
+  "sha256": "076e8f221e2f83c378aec198736cf9b4b3e77d0832799155dd25dcf67fd738d8",
+  "summary": [
+    "src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx(42,82): error TS2769: No overload matches this call.",
+    "src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx(44,63): error TS2769: No overload matches this call.",
+    "src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx(63,72): error TS2769: No overload matches this call.",
+    "src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx(73,60): error TS2769: No overload matches this call.",
+    "src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx(90,79): error TS2769: No overload matches this call.",
+    "npm error Lifecycle script `build` failed with error:",
+    "npm error command failed"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+  "exit": 1,
+  "sha256": "40ce79a924210a7e079f1e104d9fe1acaaa533eb33768662fe5796bca96d19f4",
+  "bytes": 267911,
+  "summary": [
+    " Test Files  1 failed (1)",
+    "      Tests  3 failed (3)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Close Sidebar Deck\"",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Properties\"",
+    "TestingLibraryElementError: Unable to find an accessible element with the role \"button\" and name \"Close Sidebar Deck\""
+  ]
+}
