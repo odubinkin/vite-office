@@ -1,10 +1,11 @@
 ---
 id: "202610040003-35MME6"
 title: "Implement active Writer menubar F10 activation cycle"
-status: "DOING"
+result_summary: "Writer bare-F10 activation/deactivation now follows the inspected native cycle with active/modal frame gating and saved focus restoration."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -49,11 +50,16 @@ quality_review:
   findings:
     - "Reviewed committed diff: explicit activation validity, eligible bare-F10 activation/toggle and Writer active/modal gates reuse existing saved-focus/popup cleanup, no command dispatch or core/save/open/recovery changes. Two exact production inverse proofs pass; two new owned test files only,253previous tests unchanged;215manifest rows each preserve statuses/defaults/ownership/old evidence with2append-only rows."
     - "Required focused51owned9browser and fullverify all pass; coverage100%all dimensions, static semantic violations0. Vendor-absent954app109inventory12script38browser all terminal0/restored.8source hashes and6semantic hashes match reviewed commit. Current ignored-inclusive artifact source/helpers/Python/executables/archives and embedded C++/Python signature candidates0. Doctor0errors2preexisting warnings,routing/diff pass."
-commit: null
+commit:
+  hash: "bff74e64d720acf36731578eeacd6d443fec91f2"
+  message: "🎯 35MME6 code: implement eligible Writer F10 menubar activation cycle"
 comments:
   -
     author: "CODER"
     body: "Start: implement authorized iteration80 F10 menubar cycle with active/modal input gating, source-shaped activation and saved-focus lifecycle, no upstream test dependency/source/helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: eligible Writer F10 first-root/no-popup activation and toggle focus restoration implemented; modified keys and modal focus retained. Fullverify100%coverage0semantic; vendor-absent954app109inventory12script38browser allpass/restored;253old tests unchanged, bounded evidence-only mapping, no source/helper/Python/executable/archive artifacts. Same-actor EVALUATOR passed at exact implementation SHA; full native menus and parent goal remain open."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Bounded F10 leaf: focused51owned9browser; fullverify terminal0, 100%coverage and zero semantic violations; vendor-absent954app109inventory12script38browser pass/restored;253prior tests unchanged, two evidence-only rows each, exact production inverse proof and6semantic/8source hashes unchanged; storage source/helpers/Python/executables/archives0, doctor0errors2knownwarnings, routing/diff pass. Native full menu/accelerator/platform/global focus remains unverified."
+  -
+    type: "status"
+    at: "2026-10-04T00:23:32.925Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: eligible Writer F10 first-root/no-popup activation and toggle focus restoration implemented; modified keys and modal focus retained. Fullverify100%coverage0semantic; vendor-absent954app109inventory12script38browser allpass/restored;253old tests unchanged, bounded evidence-only mapping, no source/helper/Python/executable/archive artifacts. Same-actor EVALUATOR passed at exact implementation SHA; full native menus and parent goal remain open."
 doc_version: 3
-doc_updated_at: "2026-10-04T00:23:30.321Z"
+doc_updated_at: "2026-10-04T00:23:32.926Z"
 doc_updated_by: "CODER"
 description: "Iteration80 under C9TN6M: native-shaped F10 first-root activation without popup and deactivation with saved focus; active and modal-input frame gates, existing popup cleanup reused. No save/open/recovery changes or upstream test dependency/source artifacts."
 sections:
@@ -117,6 +130,10 @@ sections:
     Preflight direct/main clean; C9TN6M only DOING parent. Previous turn is progress: iteration79 DONE b2902b94e5d7; source-bearing legacy archive separately removed b23c4f18c359. F10 missing in local browser code. Native HandleKeyEvent KEY_MENU ignores Shift, activates first item without auto-popup, deactivates next press; MenuBar ImplHandleKeyEvent gates displayability/enabled/input-enabled/modal; popup KEY_MENU forwards to root. Backend maps unhandled F10 alternate to KEY_MENU. Native platform/system menu/Alt/F6 scopes not completed. Read-only guessed nonexistent paths produced errors; actual source routing/functions found within repo, no mutation or outside access.
     Iteration80 implementation: initial owned baseline11cases failed6/passed5; corrected owned15newcases plus18saved-focus+9document-focus+9Writer menu checks51pass, Chromium new3 plus prior6 focus checks9pass. Bare F10 uses explicit highlight-valid activation, first-root/no-popup on entry, current root/child close without Execute, saved-owner/no-owner client on inactive-popup branch, eligibility and modifier guards. Optional eligibility defaults false. Native Ctrl-F10 accelerator remains command-owned. Source/manual conclusions8hashes recorded only; no native compile/run or helpers. All253previous test/spec files byte-identical and215manifest rows each retain statuses/defaults/ownership/old evidence, exactly2rows append bounded evidence. Two apply_patch attempts failed atomically due formatting mismatch before a successful bounded edit; no unintended changes. Auxiliary doctor0errors2preexisting warnings, routing/diff pass. Ignored-inclusive current artifact audit Python0/allsource0/executable0/archive0. Full and vendor-absent verification running; no completion claim.
     Fullverification/offline completed successfully; vendor restored. Exact production inverse proof initially used indentation substrings and failed read-only; corrected anchored/effect-first audit passes with no production changes. Full output was hashed and summaries bounded to results/warnings; no source bodies retained. Complete native menus/accelerators/platform/global focus and no-owner popup behavior remain open, as does the parent objective.
+extensions:
+  implementation_commit:
+    hash: "bff74e64d720acf36731578eeacd6d443fec91f2"
+    message: "🎯 35MME6 code: implement eligible Writer F10 menubar activation cycle"
 id_source: "generated"
 ---
 ## Summary
