@@ -1,10 +1,11 @@
 ---
 id: "202610040619-RSK031"
 title: "Project Writer ruler tab adjustment glyphs and anchored hit bounds"
-status: "DOING"
+result_summary: "Iteration93 bounded explicit ruler tab adjustment glyph/horizontal hit-bound correction verified;intentional save/open/recovery deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202610040619-RSK031/vendor-absent-browser.json"
   findings:
     - "Readonly diff/source comparison confirms immutable primitive adjustment travels with raw item index and position;four SVG rectangle shapes match inspected DPI1 native coordinates/inclusive bounds and hit offsets. Preview and accepted freshLeft share one glyph renderer. Ten semantic paths;284of288prior tests byte-identical,exact11DTOadditions across4files/no weakening.220manifest rows retained with2append-only updates/no promotions. Single absent-upstream1147app/109inventory/5scripts/67Chromium first-pass;100%four metrics,separate static gates/0semantic,vendor restored. Two actual rendered widths visually inspected. Two source hashes unchanged and ignored-inclusive Agentplane forbidden0. Initial new-test static optional accesses corrected before suites;no test reruns."
-commit: null
+commit:
+  hash: "9cb169bb4588795c2bb740820ca6d023814510cc"
+  message: "🎯 RSK031 code: render anchored Writer ruler tab types"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved existing ruler type glyph/anchor correction under the standing goal,with one vendor-absent test pass and separate source audits."
+  -
+    author: "CODER"
+    body: "Verified: typed immutable ruler tabs render four source-shaped DPI1 glyphs and anchored horizontal hit bounds;shared temporaryLeft preview. Single absent1147app+109inventory+5scripts+67Chromium first-pass,100%coverage,separate static/0semantic,10paths/11DTOchanges/220rows unchanged/no promotion/2hashes/AP forbidden0,vendor restored;exactsemantic9cb169bb same-actor evaluator pass. Full native/parent goal remains open."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final documentation/evidence revision verified without rerunning tests;same-actor EVALUATOR pass exactsemantic9cb169bb4588795c2bb740820ca6d023814510cc. Single absent1147+109+5+67first-pass,100%coverage,separate static/0semantic,10paths/11DTOchanges/220rows append-only/2sourcehashes/AP forbidden0,vendor restored."
+  -
+    type: "status"
+    at: "2026-10-04T06:34:18.103Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: typed immutable ruler tabs render four source-shaped DPI1 glyphs and anchored horizontal hit bounds;shared temporaryLeft preview. Single absent1147app+109inventory+5scripts+67Chromium first-pass,100%coverage,separate static/0semantic,10paths/11DTOchanges/220rows unchanged/no promotion/2hashes/AP forbidden0,vendor restored;exactsemantic9cb169bb same-actor evaluator pass. Full native/parent goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T06:34:04.722Z"
+doc_updated_at: "2026-10-04T06:34:18.104Z"
 doc_updated_by: "CODER"
 description: "Iteration93: preserve each explicit tab adjustment in immutable ruler projection and render source-shaped Left/Right/Center/Decimal glyphs with type-dependent horizontal hit bounds. Keep raw-index movement, model metadata, preview/cancellation/undo and intentional I/O exceptions. Test once without pinned upstream; static source comparison separately."
 sections:
@@ -135,6 +148,10 @@ sections:
     - Observation: Immutable explicit tab DTO now carries adjustment;four source-shaped DPI1 rectangle glyphs use anchored horizontal hit bounds Left0/7,Right-8/9,Center/Decimal-3/8. TemporaryLeft glyph reuses accepted display. All4owned typed drag cases preserve complete unrelated/default/tab metadata and rawindex,Undo/Redo;Right-to-Left accepted replacement/cancel and retained old DTOs pass.
       Impact: One bounded existing UI type-display/admission gap closed;all first absent tests1147+109+5+67pass and100%coverage,0semantic. Two rendered screenshot widths1280/390 reviewed,sourcehashes unchanged,10paths/11DTOpayloads/220rows append-only,Agentplane forbidden0.
       Resolution: Evaluate actual isolated semantic SHA in separate same-actor EVALUATOR phase,finish leaf with clean checkout and keep parent active. Native default glyph generation,selector,RTL/theme/systemDPI/verticalbounds/priority/modifier/capture/fullnativeparity stay open. No source-backed tests/helpers/source copies/native probes or registered I/O/recovery changes.
+extensions:
+  implementation_commit:
+    hash: "9cb169bb4588795c2bb740820ca6d023814510cc"
+    message: "🎯 RSK031 code: render anchored Writer ruler tab types"
 id_source: "generated"
 ---
 ## Summary
