@@ -1,0 +1,9 @@
+{
+  "command": "npm run verify",
+  "exit": 0,
+  "sha256": "84d15438e3bcd05867333411af63618d444c97142cf1893f2b781ce94e4a1953",
+  "bytes": 961553,
+  "summary": [
+    "All declared full verification commands exited successfully before the final paragraph-content focus refinement; see final full-verify.json for current behavior."
+  ]
+}

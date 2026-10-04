@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "summary": []
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "summary": [
+        "policy routing OK"
+      ]
+    },
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "summary": [
+        "doctor (OK)"
+      ]
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 {
   "command": "npm run build",
   "exit": 0,
-  "sha256": "fa682bf9067cca921115084d5ffeb326aac8ffee8911567f2e23714757c773e8",
+  "sha256": "921b2a54cb4c43e1c2a618f7494b3b92310ab71b2ebe1fb53499cb368bbcae9b",
   "bytes": 924,
   "summary": [
-    "✓ built in 552ms"
+    "✓ built in 485ms"
   ]
 }

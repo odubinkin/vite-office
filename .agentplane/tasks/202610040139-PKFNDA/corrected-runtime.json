@@ -1,10 +1,10 @@
 {
   "command": "npm exec --workspace @vite-office/office -- vitest run src/sfx2/browser/presentation/SidebarPanel.test.tsx src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx src/sw/browser/presentation/WriterPageLayout.test.tsx",
   "exit": 0,
-  "sha256": "985e98c33e2bc749506624538c26152b773b95381db6b5c56f4479d813f6afe1",
+  "sha256": "3d17751aa5822ddc17031d5aa207885249c6da0e69e281f0ba136dee4382fe6b",
   "bytes": 240,
   "summary": [
     " Test Files  4 passed (4)",
-    "      Tests  27 passed (27)"
+    "      Tests  28 passed (28)"
   ]
 }

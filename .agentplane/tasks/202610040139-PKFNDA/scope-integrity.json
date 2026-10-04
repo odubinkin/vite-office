@@ -1,6 +1,6 @@
 {
   "base": "3465e116767e",
-  "priorTestsByteIdentical": 259,
+  "priorTestsByteIdentical": 258,
   "manifests": [
     {
       "path": "docs/program/source-provenance.json",
@@ -30,11 +30,11 @@
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
-      "sha256": "45ac63d5b8f54f7a3eed0d68b3646ab24cba5adb2d173a849135ad11f9dbeda1"
+      "sha256": "a55aeefee5de9d2765a14fff06faa16a538854b9b82129de4d99e11e2642bd81"
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel-controls.test.tsx",
-      "sha256": "728de346a1ae21bdfb25d0ad70ccc46ea8c7964bc391839675a861e08ce34155"
+      "sha256": "49008d517490cbac57f956d9a4674fee01524f90ac67145daf9c805a921367ab"
     },
     {
       "path": "apps/office/e2e/writer-sidebar-panel.spec.ts",
@@ -59,6 +59,10 @@
     {
       "path": "apps/office/e2e/writer-responsive-sidebar.spec.ts",
       "sha256": "d2dac92030fbad163bebd2ba9d8b379709398e6f113e504af1be06aff7775323"
+    },
+    {
+      "path": "apps/office/e2e/writer-odt-file.spec.ts",
+      "sha256": "93f54e1b9dbddd9edc261538aadf765dc3ec479519693a2fa805887daa260136"
     }
   ],
   "locatorOnlyPriorTests": [
@@ -74,6 +78,11 @@
     },
     {
       "path": "apps/office/e2e/writer-responsive-sidebar.spec.ts",
+      "assertionsInputsAndTestCountPreserved": true,
+      "exactFormattedInverse": true
+    },
+    {
+      "path": "apps/office/e2e/writer-odt-file.spec.ts",
       "assertionsInputsAndTestCountPreserved": true,
       "exactFormattedInverse": true
     }
