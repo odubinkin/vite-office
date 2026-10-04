@@ -1,0 +1,31 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "5b350fab91e1bcd59821c29b06f06b861978a70771c75c27bd995e3225fc82a5",
+      "totals": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 3732,
+      "sha256": "c69bfad69a4c0523fef89dc4906ce2d0a4c042bf9afdcc98d592cd88c56d4cb4",
+      "totals": [
+        "Test Files  1 failed | 253 passed (254)",
+        "Tests  5 failed | 2068 passed (2073)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    }
+  ]
+}

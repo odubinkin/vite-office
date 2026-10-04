@@ -4,7 +4,7 @@ title: "Restore native text hint tie ordering"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: implement approved native hint Which tie order and post-merge resort; correct only declared order-dependent test reads and verify once absent upstream."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:34:03.177Z"
+doc_updated_at: "2026-10-04T19:39:43.988Z"
 doc_updated_by: "CODER"
 description: "Iteration118: fix native CompareSwpHtStart Which-descending tie ordering and restore final order after adjacent merge. Correct only existing tests that assumed AUTO before INET at equal ranges; add independent literal order/ownership/projection tests. Preserve all statuses/defaults/exceptions and registered I/O deviations. Tests once absent upstream; no AP sources/helpers."
 sections:
@@ -64,7 +64,7 @@ sections:
     6. Same-actor read-only EVALUATOR pass on exact semantic SHA; CODER verification/finish with separate commit hashes; clean main/vendor restored; parent and goal active.
   Verification: "Pending approved implementation and upstream-absent verification."
   Rollback Plan: "Revert only this task's semantic commit through a new authorized follow-up; preserve existing intentional I/O deviations and unrelated task history."
-  Findings: "Read-only preflight clean main;117 completed verified progress. Native comparator uses start ascending, end descending, Which descending; current comparator omits Which. Existing adjacent merge extends an end without re-sorting normalized array. No outside-repo/network access."
+  Findings: "Native comparator start/end priorities already matched; missing descending Which tie and post-merge resort now fixed.67 literal order/merge/actual graph cases added; seven prior files change only order-dependent family selection/54-before53 expectations. Initial formatter/lint passed, typecheck failed only union-tuple spread in new test; explicit tuple element reads recovered failed typecheck, pending dependency/docs/size pass, focused formatter/lint pass. Source appendix writer initially used wrong responsibilities key; corrected preservedResponsibilities without double inventory append. No tests run yet, production unchanged after initial implementation. Next run five gates once absent upstream, restore before source audits. No scope/default/status/I/O changes or AP source/helper artifacts."
 id_source: "generated"
 ---
 ## Summary
@@ -108,4 +108,4 @@ Revert only this task's semantic commit through a new authorized follow-up; pres
 
 ## Findings
 
-Read-only preflight clean main;117 completed verified progress. Native comparator uses start ascending, end descending, Which descending; current comparator omits Which. Existing adjacent merge extends an end without re-sorting normalized array. No outside-repo/network access.
+Native comparator start/end priorities already matched; missing descending Which tie and post-merge resort now fixed.67 literal order/merge/actual graph cases added; seven prior files change only order-dependent family selection/54-before53 expectations. Initial formatter/lint passed, typecheck failed only union-tuple spread in new test; explicit tuple element reads recovered failed typecheck, pending dependency/docs/size pass, focused formatter/lint pass. Source appendix writer initially used wrong responsibilities key; corrected preservedResponsibilities without double inventory append. No tests run yet, production unchanged after initial implementation. Next run five gates once absent upstream, restore before source audits. No scope/default/status/I/O changes or AP source/helper artifacts.
