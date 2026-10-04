@@ -104,6 +104,8 @@ export interface WriterParagraphComputedStyle {
   readonly contextualSpacing?: boolean;
   readonly firstLineIndentPt: number;
   readonly fontFamily?: string;
+  /** Layout offset distinct from the authored item; omitted detached DTOs retain their raw value. */
+  readonly resolvedFirstLineIndentPt?: number;
   readonly fontFamilyGeneric?: string;
   readonly fontStyle: "italic" | "normal";
   readonly fontSizePt: number;
@@ -238,6 +240,7 @@ export class WriterViewProjection {
             ...(color === "auto" ? {} : { color }),
             contextualSpacing: spacing.GetContext(),
             firstLineIndentPt: firstLine.ResolveTextFirstLineOffset() / 20,
+            resolvedFirstLineIndentPt: node.GetParagraphFirstLineIndent() / 20,
             fontFamily: font.GetResolvedFamilyName(),
             ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()

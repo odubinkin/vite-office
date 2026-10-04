@@ -1,8 +1,23 @@
 {
   "purpose": "Retry only failed mobile visual-capture gate; no passing test invocation repeated.",
-  "exitCode": 1,
+  "exitCode": 0,
   "upstreamDirectoryPresentDuringCapture": false,
   "vendorRestored": true,
-  "failure": "Preview unavailable",
-  "screenshots": []
+  "failure": null,
+  "screenshots": [
+    {
+      "path": "test-results/iteration99/mobile-default-full-page.png",
+      "sha256": "9b23c96479c68bd994999ea230120ca43a0344832d3c2af1c6870a802f9988cc",
+      "viewport": 390,
+      "disregard": true,
+      "fixtureBoundary": "real product ODT"
+    },
+    {
+      "path": "test-results/iteration99/mobile-controlled-compatibility-full-page.png",
+      "sha256": "8c7e5db51ac22fb51febcef7f07f6da7af43d26f441831a0be8a499fcef84de6",
+      "viewport": 390,
+      "disregard": false,
+      "fixtureBoundary": "explicit existing Worker graph input"
+    }
+  ]
 }

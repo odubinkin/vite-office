@@ -171,7 +171,7 @@ export function WriterEditableParagraph({
             // paragraph indent here moves its text back into the marker slot.
             textIndent:
               paragraph.list.kind === "none"
-                ? `${paragraph.computedStyle.firstLineIndentPt}pt`
+                ? `${isFollow ? 0 : (paragraph.computedStyle.resolvedFirstLineIndentPt ?? paragraph.computedStyle.firstLineIndentPt)}pt`
                 : undefined,
           }}
           tabIndex={-1}

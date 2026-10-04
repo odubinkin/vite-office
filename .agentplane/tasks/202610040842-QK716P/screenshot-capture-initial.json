@@ -1,0 +1,8 @@
+{
+  "purpose": "Retry only failed mobile visual-capture gate; no passing test invocation repeated.",
+  "exitCode": 1,
+  "upstreamDirectoryPresentDuringCapture": false,
+  "vendorRestored": true,
+  "failure": "Preview unavailable",
+  "screenshots": []
+}

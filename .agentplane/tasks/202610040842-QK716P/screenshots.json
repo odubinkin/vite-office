@@ -1,0 +1,31 @@
+{
+  "screenshots": [
+    {
+      "path": "test-results/iteration99/writer-auto-first-layout-W-018b2-t-width-1280-disregard-true-default.png",
+      "sha256": "232ab7020a33a39b8295c4466bc9c9e0464939fb83db09048810d7aa4745ec5e",
+      "visuallyInspected": true
+    },
+    {
+      "path": "test-results/e2e/writer-auto-first-layout-W-135bf--width-1280-disregard-false/automatic-body-layout.png",
+      "sha256": "c8cd18d4d118d9e010f026c586464cc096579f3c87a12db782fcc5843f9e9128",
+      "visuallyInspected": true
+    },
+    {
+      "path": "test-results/iteration99/mobile-default-full-page.png",
+      "sha256": "9b23c96479c68bd994999ea230120ca43a0344832d3c2af1c6870a802f9988cc",
+      "visuallyInspected": true
+    },
+    {
+      "path": "test-results/iteration99/mobile-controlled-compatibility-full-page.png",
+      "sha256": "8c7e5db51ac22fb51febcef7f07f6da7af43d26f441831a0be8a499fcef84de6",
+      "visuallyInspected": true
+    }
+  ],
+  "finding": "Actual desktop paragraph crops and replacement full-page mobile captures show body first-glyph layout. Initial two mobile paragraph crops were occluded by the sticky header and are not accepted visual proof. Only mobile capture was repeated outside AP, not passing tests.",
+  "defaultMode": "real product ODT",
+  "compatibilityMode": "explicit existing Worker graph input; no ODT setting persistence claim",
+  "widths": [
+    1280,
+    390
+  ]
+}

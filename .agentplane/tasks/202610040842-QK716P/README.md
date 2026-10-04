@@ -4,7 +4,7 @@ title: "Resolve automatic first-line layout separately from authored ruler value
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T09:14:13.209Z"
+  updated_by: "CODER"
+  note: "Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending."
   attempts: 0
 commit: null
 comments:
@@ -45,8 +45,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: finish the same source-owned automatic-layout correction, using explicitly controlled existing Worker graph input for the supported false setting. Preserve real ODT/default pair and77prior browser passes, rerun only two failed compatibility cases absent, and keep ODT setting persistence unverified."
+  -
+    type: "verify"
+    at: "2026-10-04T09:14:13.209Z"
+    author: "CODER"
+    state: "ok"
+    note: "Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending."
 doc_version: 3
-doc_updated_at: "2026-10-04T09:04:29.324Z"
+doc_updated_at: "2026-10-04T09:14:13.264Z"
 doc_updated_by: "CODER"
 description: "Iteration99 of the standing iterative upstream goal: source-owned automatic first-line layout calculation for existing Western/font/line-spacing/list paths, distinct immutable resolved layout projection and real body rendering, preserving raw ruler/dialog/Undo contracts and registered I/O/recovery deviations."
 sections:
@@ -67,13 +73,48 @@ sections:
   Verify Steps: |-
     Read ap task verify-show and bounded pinned hashes/markers. No baseline/focused pre-fix test runs, native execution or source/helper artifacts. Static format:check/lint/typecheck/check:dependencies/test:static(build only)/check:docs/check:file-size. Rename vendor/libreoffice-reference inside vendor, run npm run test once, npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts once, and npm run test:e2e once; restore finally. Never run tests with upstream present or repeat passing suites; repeat only failed corrected gates/cases absent. Require100%four app/inventory coverage metrics. Owned evidence uses independent literal expected twips/font/spacing, complete raw-auto QueryValue and direct/inherited state, frozen retained DTO, actual visible/measurement CSS and follow frames, native numbered bypass, detached raw DTO fallback, default ignores spacing and compatibility applies it, actual font/dialog history. Chromium1280/390 product-authored automatic ODT checks glyph Range offset vs paragraph origin/first-line indent CSS, independent untouched paragraph, preserved authored raw dialog/ruler state, formatting/Undo/Redo and later text input; inspect actual screenshots outside Agentplane. After restoration run resource generator--check/source-tree/provenance/invariants/parity CLI with zero semantic violations; scope8paths/all300 prior tests identical/220existing rows preserved3append-only updates+1explicit new unverified row. Pinned source hashes stable; ignored-inclusive AP scan zero forbidden source/helper/Python/native executable/archive/source-frame/code-diff with only5historical prose refs. Routing/doctor required; exact-SHA same-actor EVALUATOR pass, clean finish, parent DOING/goal active.
     Distinct browser proof: default=true pair uses real product ODT and passed unchanged; default=false pair injects only the supported false boolean into the existing decoded Worker graph input before canonical restore, asserts admission and tests real model/CSS/Range/dialog/history/editing. No false-setting ODT persistence claim. Only those two failed cases repeat next; preserve77 prior and2 default pass evidence. Existing failures and vendor restores remain recorded. This refines the fixture boundary, not the required native calculation or browser behavior.
-  Verification: "Pending approved implementation and declared upstream-absent verification."
+  Verification: |-
+    Iteration99 verified at the approved automatic-layout boundary. Seven split static gates pass; final lint/type/docs/format include the explicit browser fixture, and the only later edit changes screenshot capture plus JSDoc. The sole full application invocation passed1241cases/226files with100% statements/functions/branches/lines; four production file hashes remain identical to the pre-run scope checkpoint063106db5545. No passing application suite repeated. Initial inventory gate failed one CLI case because the new row was unordered (108passed); only that failed gate repeated after insertion,109cases/36files and four metrics100%. Owned scripts5/2files ran once. Initial rebuilt Chromium:77prior cases passed and4new fixture export failures; correct equal script font sizes and repeat only4new cases. Two default-mode ODT cases passed; two false-setting cases exposed missing current ODT compatibility transport. Approved explicit fixture admits only that supported boolean through the existing decoded Worker graph before canonical restore; only those2cases then passed, including actual CSS/first-glyph Range offsets, raw ruler/dialog values, history/untouched paragraph/later editing. Thus81distinct browser cases passed; no passing prior/default cases repeated, no clean full npm test or full Chromium exit0 claim. Existing ODT flag persistence remains unverified, product I/O unchanged. All tests and mobile capture ran absent; vendor restored in finally. Four actual desktop/mobile captures accepted after replacing2header-occluded mobile crops; screenshot-only capture retry corrected inline async/preview invocation without repeating tests or storing helpers. Post-restoration resource/tree/provenance/invariants and parity CLI pass with0semantic violations. Scope8paths/all300 prior tests byte-identical; both220existing rows retain all statuses/defaults/owners/exceptions/order,3append-only evidence updates plus1ordered explicit unverified mechanism row (221total). Five pinned source hashes unchanged; ignored-inclusive Agentplane forbidden artifacts0, only5historical prose diff refs. Routing OK; doctor0errors2knownwarnings2info. Exact-SHA same-actor evaluator and clean finish follow; full parent/goal stays active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T09:14:13.209Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:14:11.103Z, excerpt_hash=sha256:5958e3ddec2f2d32d74fab3401798206dda2c80375b66d8ae440944342945802
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040842-QK716P/blueprint/resolved-snapshot.json
+    - old_digest: 42c1e94b903880cb028f34250380860f9d9d541b70698b9eb23415f1e06d2c26
+    - current_digest: 42c1e94b903880cb028f34250380860f9d9d541b70698b9eb23415f1e06d2c26
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040842-QK716P
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610040842-QK716P -m 🧩 QK716P task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped semantic commit in a new task commit if needed; retain task traceability and never rewrite history."
   Findings: |-
     Previous goal turn was verified progress: iteration98 DONE semantic cb23954cd2c067b85f357381681fefaddf44dd93; clean base 9c47d3987eebd979125aac70904243303fa78153. Current browser CSS uses authored raw firstLineIndentPt despite effective auto flag. Existing core getter computes only twice Western font height and ignores the already-supported false compatibility setting; source-native SwTextMargin does not. Native GetFirstLineOfsWithNum suppresses auto calculation when a numbered record has a rule, while existing browser list geometry remains a separate path. Automatic default disregard-line-space true is preserved. Native script/language font selection, combined line-space rule combinations outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain individually unverified; do not silently certify them. Registered save/open/recovery deviations preserved.
     Initial static format/type/build gates failed on formatting and one unsupported Testing Library exact option in the new test. Remove that option and format only the two new tests; preserve bounded initial gate result hashes and repeat only the three failed gates. No tests have run yet.
     First absent pipeline passed all1241application cases with100%four coverage metrics, then inventory coverage failed one owned CLI case (108passed) because the new itrcrsr mapping row was appended instead of ordered. Insert only the new row at its lexicographic position in both manifests, preserving relative order and every existing row value. Repeat only failed inventory coverage gate; preserve the passed application gate and its original result hashes. Owned scripts and rebuilt browser were not reached and run once next, all absent; vendor restored in finally.
     Corrected inventory coverage109/100% and owned scripts5 passed absent. First rebuilt Chromium run:77prior cases passed, four new cases failed before browser interactions because the product-authored ODT fixture changed only Western font height and violated the existing script-specific export restriction. Set Western/CJK/CTL fixture heights equally using current items; product and I/O behavior stay unchanged. Repeat only the four failed new E2E cases using the already-built unchanged application, absent; preserve initial bounded output hash and vendor restoration. No passing app/inventory/script/old-browser suite repeats.
+    Final browser compatibility cases pass through explicitly controlled graph input, not ODT setting persistence. Native calculation and browser output are independently exercised by actual session matrix and Chromium Range geometry. Final initial/default/compatibility case evidence is retained; no passing app/inventory/script/old-browser/default pair rerun. Lint required one JSDoc for the test Worker class, fixed without semantic code change. Mobile crops were header-occluded; change future capture to full-page and rerun only the failed mobile capture gate outside AP. Inline capture first required async wrapping and then direct workspace preview argument forwarding; bounded preview-failure evidence retained, no helper file or raw source/diagnostic persisted. Four accepted screenshots inspected. Exact artifact audit initially included E2E .spec.ts in production hash filter; correct the audit to four actual production paths, then recheck their unchanged pre-run hashes. No test repeated. Separate ODT compatibility transport, native active script/language/device font selection and remaining whole layout/numbering/parent obligations remain unverified; registered save/open/recovery deviations unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -104,7 +145,40 @@ Distinct browser proof: default=true pair uses real product ODT and passed uncha
 
 ## Verification
 
-Pending approved implementation and declared upstream-absent verification.
+Iteration99 verified at the approved automatic-layout boundary. Seven split static gates pass; final lint/type/docs/format include the explicit browser fixture, and the only later edit changes screenshot capture plus JSDoc. The sole full application invocation passed1241cases/226files with100% statements/functions/branches/lines; four production file hashes remain identical to the pre-run scope checkpoint063106db5545. No passing application suite repeated. Initial inventory gate failed one CLI case because the new row was unordered (108passed); only that failed gate repeated after insertion,109cases/36files and four metrics100%. Owned scripts5/2files ran once. Initial rebuilt Chromium:77prior cases passed and4new fixture export failures; correct equal script font sizes and repeat only4new cases. Two default-mode ODT cases passed; two false-setting cases exposed missing current ODT compatibility transport. Approved explicit fixture admits only that supported boolean through the existing decoded Worker graph before canonical restore; only those2cases then passed, including actual CSS/first-glyph Range offsets, raw ruler/dialog values, history/untouched paragraph/later editing. Thus81distinct browser cases passed; no passing prior/default cases repeated, no clean full npm test or full Chromium exit0 claim. Existing ODT flag persistence remains unverified, product I/O unchanged. All tests and mobile capture ran absent; vendor restored in finally. Four actual desktop/mobile captures accepted after replacing2header-occluded mobile crops; screenshot-only capture retry corrected inline async/preview invocation without repeating tests or storing helpers. Post-restoration resource/tree/provenance/invariants and parity CLI pass with0semantic violations. Scope8paths/all300 prior tests byte-identical; both220existing rows retain all statuses/defaults/owners/exceptions/order,3append-only evidence updates plus1ordered explicit unverified mechanism row (221total). Five pinned source hashes unchanged; ignored-inclusive Agentplane forbidden artifacts0, only5historical prose diff refs. Routing OK; doctor0errors2knownwarnings2info. Exact-SHA same-actor evaluator and clean finish follow; full parent/goal stays active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T09:14:13.209Z — VERIFY — ok
+
+By: CODER
+
+Note: Approved automatic-layout boundary verified: one app1241/100%, failed inventory gate corrected109/100%, scripts5once;77prior+2default ODT+2controlled graph-mode Chromium cases pass absent, no passing suite repeats or ODT flag persistence claim. Production pre-run hashes4/source5/scope8/all300oldtests/mapping221/AP forbidden0 verified. Exact-SHA evaluator pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T09:14:11.103Z, excerpt_hash=sha256:5958e3ddec2f2d32d74fab3401798206dda2c80375b66d8ae440944342945802
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040842-QK716P/blueprint/resolved-snapshot.json
+- old_digest: 42c1e94b903880cb028f34250380860f9d9d541b70698b9eb23415f1e06d2c26
+- current_digest: 42c1e94b903880cb028f34250380860f9d9d541b70698b9eb23415f1e06d2c26
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040842-QK716P
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610040842-QK716P -m 🧩 QK716P task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -116,3 +190,4 @@ Previous goal turn was verified progress: iteration98 DONE semantic cb23954cd2c0
 Initial static format/type/build gates failed on formatting and one unsupported Testing Library exact option in the new test. Remove that option and format only the two new tests; preserve bounded initial gate result hashes and repeat only the three failed gates. No tests have run yet.
 First absent pipeline passed all1241application cases with100%four coverage metrics, then inventory coverage failed one owned CLI case (108passed) because the new itrcrsr mapping row was appended instead of ordered. Insert only the new row at its lexicographic position in both manifests, preserving relative order and every existing row value. Repeat only failed inventory coverage gate; preserve the passed application gate and its original result hashes. Owned scripts and rebuilt browser were not reached and run once next, all absent; vendor restored in finally.
 Corrected inventory coverage109/100% and owned scripts5 passed absent. First rebuilt Chromium run:77prior cases passed, four new cases failed before browser interactions because the product-authored ODT fixture changed only Western font height and violated the existing script-specific export restriction. Set Western/CJK/CTL fixture heights equally using current items; product and I/O behavior stay unchanged. Repeat only the four failed new E2E cases using the already-built unchanged application, absent; preserve initial bounded output hash and vendor restoration. No passing app/inventory/script/old-browser suite repeats.
+Final browser compatibility cases pass through explicitly controlled graph input, not ODT setting persistence. Native calculation and browser output are independently exercised by actual session matrix and Chromium Range geometry. Final initial/default/compatibility case evidence is retained; no passing app/inventory/script/old-browser/default pair rerun. Lint required one JSDoc for the test Worker class, fixed without semantic code change. Mobile crops were header-occluded; change future capture to full-page and rerun only the failed mobile capture gate outside AP. Inline capture first required async wrapping and then direct workspace preview argument forwarding; bounded preview-failure evidence retained, no helper file or raw source/diagnostic persisted. Four accepted screenshots inspected. Exact artifact audit initially included E2E .spec.ts in production hash filter; correct the audit to four actual production paths, then recheck their unchanged pre-run hashes. No test repeated. Separate ODT compatibility transport, native active script/language/device font selection and remaining whole layout/numbering/parent obligations remain unverified; registered save/open/recovery deviations unchanged.

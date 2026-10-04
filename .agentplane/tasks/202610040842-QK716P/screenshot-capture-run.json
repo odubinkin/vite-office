@@ -1,6 +1,6 @@
 {
   "command": "npm exec -- tsx -e (inline mobile screenshot-only orchestration; no helper file)",
-  "exitCode": 1,
-  "outputBytes": 73,
-  "outputSha256": "98786077a4a49ef2eccb126a7f512e6ac2eafe25220119395f8d2be57413e402"
+  "exitCode": 0,
+  "outputBytes": 513,
+  "outputSha256": "649b77c1755ef126dd1caab0a1705f8c62a83afb576798a3730e1222a7f9ce3b"
 }

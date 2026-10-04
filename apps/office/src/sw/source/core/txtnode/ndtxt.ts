@@ -14,14 +14,13 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
+import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import {
   RES_PARATR_ADJUST,
-  RES_CHRATR_FONTSIZE,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -158,10 +157,7 @@ export class SwTextNode extends SwContentNode {
   }
   /** Returns the effective first-line indent in twips. @returns First-line indent. */
   public GetParagraphFirstLineIndent(): number {
-    const indent = this.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
-    return indent.IsAutoFirst()
-      ? (this.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() * 2
-      : indent.ResolveTextFirstLineOffset();
+    return resolveSwTextFirstLineIndent(this);
   }
   /** Returns the effective right paragraph margin in twips. @returns Right margin. */
   public GetParagraphRightMargin(): number {

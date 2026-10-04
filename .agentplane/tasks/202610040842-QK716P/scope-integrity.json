@@ -38,8 +38,8 @@
     },
     {
       "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
-      "bytes": 9687,
-      "sha256": "ce5c73190630a3b0faec2bfbb0a2803b131ad8bda7b071c8ca4f2297684fe213"
+      "bytes": 9706,
+      "sha256": "cc5f09dcdaecba5a21c6b0ab16d56db2da4a5f71b7606fa2054d67d14ecb46a2"
     },
     {
       "path": "docs/program/source-provenance.json",
