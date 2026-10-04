@@ -15,7 +15,7 @@ import { SwPosition } from "../crsr/pam";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwpHints } from "../txtnode/ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "../txtnode/txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -132,7 +132,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
       const { doc, node, shell } = fixture();
       const start = kind === "suffix" || kind === "middle" ? 2 : 0;
       const end = kind === "prefix" || kind === "middle" ? 5 : node.Len();
-      const hint = new SwTextAttr(
+      const hint = new SwTextAttrEnd(
         kind === "internet"
           ? new SwFormatINetFormat({
               url: "https://example.test/retained",
@@ -173,10 +173,10 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
       for (const node of [first, empty, last, untouched])
         node.SetAttr(new SvxFirstLineIndentItem(720, 92));
       first.SetTextHints(
-        new SwpHints(doc.GetAttrPool(), [new SwTextAttr(bold(doc), 0, first.Len())]),
+        new SwpHints(doc.GetAttrPool(), [new SwTextAttrEnd(bold(doc), 0, first.Len())]),
       );
       last.SetTextHints(
-        new SwpHints(doc.GetAttrPool(), [new SwTextAttr(bold(doc), 2, last.Len())]),
+        new SwpHints(doc.GetAttrPool(), [new SwTextAttrEnd(bold(doc), 2, last.Len())]),
       );
       const firstHints = required(first.GetpSwpHints()).clone(),
         lastHints = required(last.GetpSwpHints()).clone();
@@ -261,7 +261,9 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
     const { doc, node, shell, dispatch, target, owner } = fixture();
     node.ChgFormatColl(target);
     node.SetAttr(new SvxFirstLineIndentItem(720, 92));
-    node.SetTextHints(new SwpHints(doc.GetAttrPool(), [new SwTextAttr(bold(doc), 0, node.Len())]));
+    node.SetTextHints(
+      new SwpHints(doc.GetAttrPool(), [new SwTextAttrEnd(bold(doc), 0, node.Len())]),
+    );
     shell.SetPaM(new SwPosition(node, 5), new SwPosition(node, 2));
     const cursor = shell.GetCursor();
     for (let requestIndex = 0; requestIndex < 2; requestIndex++) {

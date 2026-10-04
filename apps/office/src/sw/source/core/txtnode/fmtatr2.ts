@@ -1,5 +1,6 @@
 /** @fileoverview Implements Writer's hyperlink pool item from pinned LibreOffice `sw/source/core/txtnode/fmtatr2.cxx` and `sw/inc/fmtinfmt.hxx`. */
 
+import type { SwTextINetFormat } from "./txtatr2";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
@@ -50,6 +51,13 @@ export function equalWriterHyperlinks(
 /** Writer pool item backing one `RES_TXTATR_INETFMT` range. */
 export class SwFormatINetFormat extends SfxPoolItem {
   private readonly hyperlink: WriterHyperlink;
+  /** Internal friend-access backlink assigned by the concrete internet attribute. */
+  public mpTextAttr: SwTextINetFormat | undefined;
+
+  /** Returns the concrete text attribute owning this item. @returns Attribute if bound. */
+  public GetTextINetFormat(): SwTextINetFormat | undefined {
+    return this.mpTextAttr;
+  }
 
   /** Creates one hyperlink value. @param hyperlink - Canonical hyperlink metadata. @returns Nothing. */
   public constructor(hyperlink: WriterHyperlink) {

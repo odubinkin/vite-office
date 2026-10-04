@@ -9,7 +9,7 @@ import { SwPosition } from "../crsr/pam";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwView } from "../../uibase/uiview/view";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "./txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { resetParagraphTextAttributes } from "./txtedt";
 const views: SwView[] = [];
@@ -24,7 +24,7 @@ function required<T>(value: T | undefined): T {
   return value;
 }
 /** Reads independently registered flags. @param hint - Real hint. @returns Literal flag tuple. */
-function flags(hint: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>): boolean[] {
+function flags(hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>): boolean[] {
   return [hint.dontExpand, hint.dontExpandStart, hint.dontMoveAttr];
 }
 /** Builds actual node with concrete automatic items and an independent internet hint. @param mask - Three source flags. @param start - Hint start. @param end - Hint end. @returns Real model owners. */
@@ -35,11 +35,11 @@ function fixture(mask: number, start = 2, end = 5) {
   const items = new SfxItemSet(doc.GetAttrPool(), [[1, 15]]);
   items.Put(new SvxWeightItem(8, 15));
   items.Put(new SvxPostureItem(2, 11));
-  const auto = new SwTextAttr(new SwFormatAutoFormat(items), start, end);
+  const auto = new SwTextAttrEnd(new SwFormatAutoFormat(items), start, end);
   auto.dontExpand = (mask & 1) !== 0;
   auto.dontExpandStart = (mask & 2) !== 0;
   auto.dontMoveAttr = (mask & 4) !== 0;
-  const link = new SwTextAttr(
+  const link = new SwTextAttrEnd(
     new SwFormatINetFormat({
       url: "https://example.test/fresh",
       targetFrame: "_blank",

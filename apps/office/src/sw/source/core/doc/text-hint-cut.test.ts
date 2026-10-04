@@ -5,7 +5,7 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "./doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwpHints } from "../txtnode/ndhints";
-import { SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { CopyUndoFragment, ReplaceUndoRange } from "../undo/undobj";
 
@@ -46,8 +46,8 @@ function hints(doc: SwDoc, span: Span, mask: number): SwpHints {
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
   const attrs = [
-    new SwTextAttr(new SwFormatAutoFormat(set), ...span),
-    new SwTextAttr(
+    new SwTextAttrEnd(new SwFormatAutoFormat(set), ...span),
+    new SwTextAttrEnd(
       new SwFormatINetFormat({
         url: "https://example.test/cut",
         name: "Cut",
@@ -63,8 +63,13 @@ function hints(doc: SwDoc, span: Span, mask: number): SwpHints {
   }
   return new SwpHints(doc.GetAttrPool(), attrs);
 }
-/** Checks a native attribute family pair. @param value - Optional container. @param span - Expected range, or absence. @param mask - Expected flags. @returns Nothing. */
-function expectHints(value: SwpHints | undefined, span: Span | undefined, mask: number): void {
+/** Checks a native attribute family pair. @param value - Optional container. @param span - Expected range, or absence. @param mask - Expected flags. @param fresh - Native constructor defaults. @returns Nothing. */
+function expectHints(
+  value: SwpHints | undefined,
+  span: Span | undefined,
+  mask: number,
+  fresh = false,
+): void {
   if (span === undefined) {
     expect(value?.Count() ?? 0).toBe(0);
     return;
@@ -75,8 +80,8 @@ function expectHints(value: SwpHints | undefined, span: Span | undefined, mask: 
     expect(attr).toMatchObject({
       start: span[0],
       end: span[1],
-      dontExpand: Boolean(mask & 1),
-      dontExpandStart: Boolean(mask & 2),
+      dontExpand: fresh && attr.Which() === 54 ? true : Boolean(mask & 1),
+      dontExpandStart: fresh && attr.Which() === 54 ? true : Boolean(mask & 2),
       dontMoveAttr: Boolean(mask & 4),
     });
   expect(container.Get(0).Which()).toBe(54);
@@ -109,7 +114,7 @@ describe("native cross-node cut hint boundaries", /** Registers concrete source 
         expect(target.GetText()).toBe("XdefgYZ");
         expect(destination.GetNode()).toBe(target);
         expect(destination.GetContentIndex()).toBe(5);
-        expectHints(target.GetpSwpHints(), c.moved, c.retained ? mask : 0);
+        expectHints(target.GetpSwpHints(), c.moved, c.retained ? mask : 0, !c.retained);
         expectHints(source.GetpSwpHints(), c.remaining, mask);
         expectHints(original, c.hint, mask);
         expectHints(retained.hints, c.hint, mask);
@@ -141,7 +146,7 @@ describe("native cross-node cut hint boundaries", /** Registers concrete source 
       const snapshot = original.slice(3, 7),
         cut = original.sliceForCut(3, 7);
       expectHints(snapshot, [0, 4], mask);
-      expectHints(cut, [0, 4], 0);
+      expectHints(cut, [0, 4], 0, true);
       const undo = doc.GetUndoManager().GetUndoNodes(),
         id = undo.RetainText({ text: "defg", hints: snapshot });
       expectHints(undo.GetText(id).hints, [0, 4], mask);

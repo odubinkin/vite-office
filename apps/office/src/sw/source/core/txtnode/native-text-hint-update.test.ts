@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwFormatAutoFormat, SwTextAttr, createWriterCharacterItemSet } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd, createWriterCharacterItemSet } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { SwPosition } from "../crsr/pam";
 /** Requires one graph object. @param value - Optional value. @returns Existing value. */
@@ -17,7 +17,7 @@ function attr(
   mask: number,
   start: number,
   end: number,
-): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
   const format =
     family === 54
       ? new SwFormatINetFormat({ url: "owned", name: "Link" })
@@ -28,7 +28,7 @@ function attr(
             underline: false,
           }),
         );
-  const result = new SwTextAttr(format, start, end);
+  const result = new SwTextAttrEnd(format, start, end);
   result.dontExpand = Boolean(mask & 1);
   result.dontExpandStart = Boolean(mask & 2);
   result.dontMoveAttr = Boolean(mask & 4);
@@ -37,7 +37,7 @@ function attr(
 /** Checks actual map and item identity after one native update. @param owner - Existing container. @param original - Actual attribute. @param start - Literal start. @param end - Literal end. @returns Nothing. */
 function owned(
   owner: SwpHints,
-  original: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
+  original: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
   start: number,
   end: number,
 ): void {

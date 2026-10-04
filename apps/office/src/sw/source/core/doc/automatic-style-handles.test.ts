@@ -9,7 +9,7 @@ import {
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import { SwpHints } from "../txtnode/ndhints";
-import { SwFormatAutoFormat, SwTextAttr, createSwFormatAutoFormat } from "../txtnode/txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd, createSwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwDoc } from "./doc";
 
 /** Builds a direct character input. @param doc - Real owner. @returns Concrete input set. */
@@ -75,9 +75,9 @@ describe("document-owned automatic character handles", /** Groups actual model c
         b = createSwFormatAutoFormat(pool, attributes);
       expect(a).not.toBe(b);
       expect(a.GetStyleHandle()).toBe(b.GetStyleHandle());
-      const hint = new SwTextAttr(a, 0, 2);
+      const hint = new SwTextAttrEnd(a, 0, 2);
       hint.dontExpand = true;
-      const hints = new SwpHints(pool, [hint, new SwTextAttr(b, 2, 4)]);
+      const hints = new SwpHints(pool, [hint, new SwTextAttrEnd(b, 2, 4)]);
       expect(hints.Count()).toBe(1);
       expect(hints.Get(0)).toMatchObject({ start: 0, end: 4, dontExpand: true });
       expect((hints.clone().Get(0).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
@@ -118,7 +118,7 @@ describe("document-owned automatic character handles", /** Groups actual model c
     for (const node of [a, b]) {
       node.SetText("abcd");
       node.SetTextHints(
-        new SwpHints(pool, [new SwTextAttr(createSwFormatAutoFormat(pool, attributes), 0, 4)]),
+        new SwpHints(pool, [new SwTextAttrEnd(createSwFormatAutoFormat(pool, attributes), 0, 4)]),
       );
     }
     const record = encodeWriterDocument(original),
@@ -142,8 +142,8 @@ describe("document-owned automatic character handles", /** Groups actual model c
     expect(factory.GetStyleHandle()).toBe(left.GetStyleHandle());
     expect(
       new SwpHints(restored.GetAttrPool(), [
-        new SwTextAttr(left, 0, 2),
-        new SwTextAttr(factory, 2, 4),
+        new SwTextAttrEnd(left, 0, 2),
+        new SwTextAttrEnd(factory, 2, 4),
       ]).Count(),
     ).toBe(1);
   });

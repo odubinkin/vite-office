@@ -6,7 +6,7 @@ import { SvxPostureItem, SvxWeightItem } from "../../../../editeng/source/items/
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwFormatAutoFormat, SwTextAttr } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { MakeTextAttr } from "./thints";
 import type { SwFormatINetFormat } from "./fmtatr2";
 import { resetParagraphTextAttributes } from "./txtedt";
@@ -27,7 +27,7 @@ function input(doc: SwDoc, weight = 8): SfxItemSet {
   return set;
 }
 /** Reads the automatic handle of a registered hint. @param hint - Real range. @returns Shared style. */
-function handle(hint: SwTextAttr<SwFormatINetFormat | SwFormatAutoFormat>): SfxItemSet {
+function handle(hint: SwTextAttrEnd<SwFormatINetFormat | SwFormatAutoFormat>): SfxItemSet {
   return (hint.format as SwFormatAutoFormat).GetStyleHandle();
 }
 

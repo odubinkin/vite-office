@@ -6,7 +6,7 @@ import { SwDoc } from "./doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwpHints } from "../txtnode/ndhints";
 import { SwTextNode } from "../txtnode/ndtxt";
-import { SwTextAttr, SwFormatAutoFormat } from "../txtnode/txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { ReplaceUndoRange } from "../undo/undobj";
 const masks = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -25,8 +25,8 @@ function fixture(start: number, end: number, mask: number) {
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
   const attrs = [
-    new SwTextAttr(new SwFormatAutoFormat(set), start, end),
-    new SwTextAttr(
+    new SwTextAttrEnd(new SwFormatAutoFormat(set), start, end),
+    new SwTextAttrEnd(
       new SwFormatINetFormat({
         url: "https://example.test/actual-owned",
         name: "Transfer",
@@ -48,16 +48,22 @@ function fixture(start: number, end: number, mask: number) {
 function owned(node: SwTextNode) {
   return [...required(node.GetpSwpHints()).entries()];
 }
-/** Checks range and independent flags for the two supported families. @param node - Actual node. @param start - Inclusive offset. @param end - Exclusive offset. @param mask - Flag combination. @returns Nothing. */
-function expectHints(node: SwTextNode, start: number, end: number, mask: number): void {
+/** Checks range and independent flags for the two supported families. @param node - Actual node. @param start - Inclusive offset. @param end - Exclusive offset. @param mask - Flag combination. @param fresh - Native constructor defaults. @returns Nothing. */
+function expectHints(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  mask: number,
+  fresh = false,
+): void {
   const attrs = owned(node);
   expect(attrs).toHaveLength(2);
   for (const attr of attrs)
     expect(attr).toMatchObject({
       start,
       end,
-      dontExpand: Boolean(mask & 1),
-      dontExpandStart: Boolean(mask & 2),
+      dontExpand: fresh && attr.Which() === 54 ? true : Boolean(mask & 1),
+      dontExpandStart: fresh && attr.Which() === 54 ? true : Boolean(mask & 2),
       dontMoveAttr: Boolean(mask & 4),
     });
 }
@@ -106,7 +112,7 @@ describe("real owned text moves", /** Registers node and document operation owne
             expect(transferred[i]?.format).toBe(actual[i]?.format);
           }
         } else {
-          expectHints(f.target, 1, 5, 0);
+          expectHints(f.target, 1, 5, 0, true);
           for (let i = 0; i < 2; i++) {
             expect(transferred[i]).not.toBe(actual[i]);
             expect(transferred[i]?.format).not.toBe(actual[i]?.format);

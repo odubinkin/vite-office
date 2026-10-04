@@ -5,7 +5,7 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwpHints } from "./ndhints";
-import { SwFormatAutoFormat, SwTextAttr } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { projectWriterTextRuns } from "./ndtxt";
 const masks = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -54,8 +54,8 @@ describe("native hint start map ordering", /** Registers source-independent lite
             target = doc.GetNodes().MakeTextNode();
           source.SetText("abcdef");
           target.SetText("XY");
-          const auto = new SwTextAttr(automatic(doc), boundary.auto[0], boundary.auto[1]),
-            link = new SwTextAttr(
+          const auto = new SwTextAttrEnd(automatic(doc), boundary.auto[0], boundary.auto[1]),
+            link = new SwTextAttrEnd(
               new SwFormatINetFormat({ url: "https://example.test/order" }),
               boundary.link[0],
               boundary.link[1],
@@ -84,8 +84,8 @@ describe("native hint start map ordering", /** Registers source-independent lite
               dontMoveAttr: Boolean(mask & 4),
             });
             expect(required(copy.GetpSwpHints()).Get(i)).toMatchObject({
-              dontExpand: false,
-              dontExpandStart: false,
+              dontExpand: required(copy.GetpSwpHints()).Get(i).Which() === 54,
+              dontExpandStart: required(copy.GetpSwpHints()).Get(i).Which() === 54,
               dontMoveAttr: false,
             });
           }
@@ -131,9 +131,9 @@ describe("native hint start map ordering", /** Registers source-independent lite
     ) => {
       const doc = new SwDoc(),
         format = automatic(doc);
-      const head = new SwTextAttr(format, 0, 2),
-        tail = new SwTextAttr(format.Clone(), 2, 5),
-        link = new SwTextAttr(
+      const head = new SwTextAttrEnd(format, 0, 2),
+        tail = new SwTextAttrEnd(format.Clone(), 2, 5),
+        link = new SwTextAttrEnd(
           new SwFormatINetFormat({ url: "https://example.test/merge-order" }),
           boundary.link[0],
           boundary.link[1],

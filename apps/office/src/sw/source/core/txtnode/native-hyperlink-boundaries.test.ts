@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr } from "./txatbase";
+import { SwTextAttrEnd } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { ReplaceUndoRange } from "../undo/undobj";
 import {
@@ -16,8 +16,8 @@ function required<T>(value: T | undefined): T {
 }
 /** Builds equal or distinct independently flagged ranges. @param doc - Owner. @param different - Distinct second value. @param mask - Flags. @param gap - Gap between links. @returns Native hint pair. */
 function pair(doc: SwDoc, different: boolean, mask: number, gap = 0): SwpHints {
-  const first = new SwTextAttr(new SwFormatINetFormat({ url: "first", name: "One" }), 0, 2),
-    second = new SwTextAttr(
+  const first = new SwTextAttrEnd(new SwFormatINetFormat({ url: "first", name: "One" }), 0, 2),
+    second = new SwTextAttrEnd(
       new SwFormatINetFormat({ url: different ? "second" : "first", name: "One" }),
       2 + gap,
       4 + gap,
@@ -77,7 +77,7 @@ describe("native adjacent hyperlink ranges", /** Registers explicit boundary mat
           expect(independent.Get(0)).not.toBe(first);
           expect(independent.Get(1)).not.toBe(second);
         }
-        expect(copy.Get(0).dontExpand).toBe(false);
+        expect(copy.Get(0).dontExpand).toBe(true);
         expect(clone.Get(0).dontExpand).toBe(Boolean(mask & 1));
         node.InsertText("XY", 2);
         ranges(actual, [

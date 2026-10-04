@@ -4,7 +4,7 @@ import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "./txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 afterEach(/** Releases map spies. @returns Nothing. */ () => vi.restoreAllMocks());
 /** Builds a literal family/range with all flag combinations. @param doc - Owner. @param which - Family. @param start - Start. @param end - End. @param mask - Flags. @returns Detached input. */
@@ -14,10 +14,10 @@ function attr(
   start: number,
   end: number,
   mask: number,
-): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
-  const hint = new SwTextAttr(
+  const hint = new SwTextAttrEnd(
     which === 53
       ? new SwFormatAutoFormat(set)
       : new SwFormatINetFormat({ url: "https://example.test/maps" }),

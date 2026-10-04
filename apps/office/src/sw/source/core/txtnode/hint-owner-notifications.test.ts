@@ -4,7 +4,7 @@ import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "./txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 afterEach(/** Restores per-owner spies. @returns Nothing. */ () => vi.restoreAllMocks());
 /** Creates a concrete ranged family. @param doc - Owner. @param which - Literal family. @param start - Start. @param end - End. @param mask - Flags. @returns Unowned input. */
@@ -14,10 +14,10 @@ function attr(
   start: number,
   end: number,
   mask = 0,
-): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
-  const hint = new SwTextAttr(
+  const hint = new SwTextAttrEnd(
     which === 53
       ? new SwFormatAutoFormat(set)
       : new SwFormatINetFormat({ url: "https://example.test/notify" }),
@@ -90,14 +90,14 @@ describe("hint owner range notifications", /** Registers literal mutation and ow
         expect(starts).toHaveBeenCalledTimes(3);
         expect(ends).toHaveBeenCalledTimes(3);
         expect(moving).toMatchObject({ start: 1, end: 3 });
-        expect(
-          /** Attempts invalid end before notification. @returns Nothing. */ () => moving.SetEnd(0),
-        ).toThrow("end is invalid");
+        moving.SetEnd(0);
+        expect(ends).toHaveBeenLastCalledWith(which, 1, 3, 0);
+        expect(moving.GetEnd()).toBe(0);
         expect(
           /** Attempts fractional end before notification. @returns Nothing. */ () =>
             moving.SetEnd(1.5),
         ).toThrow("end is invalid");
-        expect(ends).toHaveBeenCalledTimes(3);
+        expect(ends).toHaveBeenCalledTimes(4);
       },
     );
   it.each([0, 2, 3, 6, 8, 9])(
@@ -120,7 +120,7 @@ describe("hint owner range notifications", /** Registers literal mutation and ow
   it("releases merged and removed owners while preserving the surviving actual object", /** Checks ownership normalization and empty-map notifications. @returns Nothing. */ () => {
     const doc = new SwDoc(),
       a = attr(doc, 53, 0, 2),
-      b = new SwTextAttr(a.format.Clone(), 4, 6),
+      b = new SwTextAttrEnd(a.format.Clone(), 4, 6),
       hints = new SwpHints(doc.GetAttrPool(), [a, b]),
       head = hints.Get(0),
       tail = hints.Get(1);
@@ -148,7 +148,7 @@ describe("hint owner range notifications", /** Registers literal mutation and ow
   it("sorts actual edits without normalizing or replacing owned hints", /** Checks sort-only behavior and replacement detachment. @returns Nothing. */ () => {
     const doc = new SwDoc(),
       a = attr(doc, 53, 0, 2),
-      b = new SwTextAttr(a.format.Clone(), 4, 6),
+      b = new SwTextAttrEnd(a.format.Clone(), 4, 6),
       hints = new SwpHints(doc.GetAttrPool(), [a, b]),
       head = hints.Get(0),
       tail = hints.Get(1);

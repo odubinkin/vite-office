@@ -33,7 +33,7 @@ import {
   projectWriterCharacterAttributes,
   RES_TXTATR_AUTOFMT,
   SwFormatAutoFormat,
-  SwTextAttr,
+  SwTextAttrEnd,
   type WriterCharacterAttributes,
 } from "../txtnode/txatbase";
 import {
@@ -387,8 +387,8 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       throwing(
         /** Creates overlapping hyperlink hints. @returns Invalid hint collection. */ () =>
           new SwpHints(pool, [
-            new SwTextAttr(new SwFormatINetFormat(hyperlink), 0, 2),
-            new SwTextAttr(new SwFormatINetFormat({ url: "different" }), 1, 3),
+            new SwTextAttrEnd(new SwFormatINetFormat(hyperlink), 0, 2),
+            new SwTextAttrEnd(new SwFormatINetFormat({ url: "different" }), 1, 3),
           ]),
       ),
     ).toThrow("Overlapping Writer");
@@ -398,7 +398,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     const writer = createModelFixture();
     const pool = writer.GetAttrPool();
     const inherited = writer.GetDfltTextFormatColl().GetAttrSet();
-    const first = new SwTextAttr(createSwFormatAutoFormat(pool, bold), 1, 3);
+    const first = new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), 1, 3);
     expect(first.format.GetStyleHandle()).toBeInstanceOf(SfxItemSet);
     expect(first.format.Clone()).not.toBe(first.format);
     expect(first.format.Clone().equals(first.format)).toBe(true);
@@ -421,7 +421,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     first.dontExpand = true;
     first.dontExpandStart = true;
     first.dontMoveAttr = true;
-    const second = new SwTextAttr(createSwFormatAutoFormat(pool, bold), 3, 5);
+    const second = new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), 3, 5);
     const hints = new SwpHints(pool, [second, first]);
     expect(hints.Count()).toBe(1);
     expect(hints.Get(0).Which()).toBe(RES_TXTATR_AUTOFMT);
@@ -458,18 +458,18 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(clonedHint.dontExpand).toBe(true);
     first.SetEnd(4);
     expect(first.GetEnd()).toBe(4);
-    expect(
-      throwing(/** Sets an end before start. @returns Nothing. */ () => first.SetEnd(0)),
-    ).toThrow("end is invalid");
+    first.SetEnd(0);
+    expect(first.GetEnd()).toBe(0);
     expect(
       throwing(/** Reads an absent hint. @returns Missing hint. */ () => hints.Get(9)),
     ).toThrow("Unknown SwpHints position");
+    expect(new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), -1, 1).GetStart()).toBe(-1);
     expect(
       throwing(
-        /** Creates a negative-start hint. @returns Invalid hint. */ () =>
-          new SwTextAttr(createSwFormatAutoFormat(pool, bold), -1, 1),
+        /** Creates a fractional-start hint. @returns Invalid hint. */ () =>
+          new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), 0.5, 1),
       ),
-    ).toThrow("range is invalid");
+    ).toThrow("start is invalid");
   });
 
   it("normalizes run and snapshot inputs while rejecting overlapping hints" /** Covers default gaps, malformed records, and overlap protection. @returns Nothing; assertions inspect normalized ranges. */, function normalizesHints(): void {
@@ -507,14 +507,13 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     const restored = hints.clone();
     expect(restored.toTextRuns("abcd", inherited)).toEqual(hints.toTextRuns("abcd", inherited));
     expect(
-      new SwpHints(pool, [new SwTextAttr(createSwFormatAutoFormat(pool, bold), 5, 6)]).toTextRuns(
-        "ab",
-        inherited,
-      ),
+      new SwpHints(pool, [
+        new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), 5, 6),
+      ]).toTextRuns("ab", inherited),
     ).toEqual([{ attributes: plain, text: "ab" }]);
     const overlap = [
-      new SwTextAttr(createSwFormatAutoFormat(pool, bold), 0, 2),
-      new SwTextAttr(createSwFormatAutoFormat(pool, italic), 1, 3),
+      new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), 0, 2),
+      new SwTextAttrEnd(createSwFormatAutoFormat(pool, italic), 1, 3),
     ];
     expect(
       throwing(
@@ -528,7 +527,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
     const inheritedPool = inheritedWriter.GetAttrPool();
     const redundant = new SwpHints(inheritedPool, [
-      new SwTextAttr(createSwFormatAutoFormat(inheritedPool, bold), 1, 2),
+      new SwTextAttrEnd(createSwFormatAutoFormat(inheritedPool, bold), 1, 2),
     ]);
     expect(
       redundant.toTextRuns("abc", inheritedWriter.GetDfltTextFormatColl().GetAttrSet()),
@@ -537,8 +536,8 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       throwing(
         /** Builds same-start overlapping hints. @returns Invalid hint collection. */ () =>
           new SwpHints(pool, [
-            new SwTextAttr(createSwFormatAutoFormat(pool, bold), 0, 1),
-            new SwTextAttr(createSwFormatAutoFormat(pool, italic), 0, 2),
+            new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), 0, 1),
+            new SwTextAttrEnd(createSwFormatAutoFormat(pool, italic), 0, 2),
           ]),
       ),
     ).toThrow("Overlapping Writer");
@@ -558,7 +557,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     ).toThrow("length is invalid");
 
     const formatted = new SwpHints(pool, [
-      new SwTextAttr(createSwFormatAutoFormat(pool, bold), 1, 3),
+      new SwTextAttrEnd(createSwFormatAutoFormat(pool, bold), 1, 3),
     ]);
     expect(formatted.getCharacterFormatState(4, 2, 2, "bold", inherited)).toBe("off");
     expect(
@@ -570,7 +569,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     ]);
 
     const linked = new SwpHints(pool, [
-      new SwTextAttr(new SwFormatINetFormat({ url: "original" }), 0, 4),
+      new SwTextAttrEnd(new SwFormatINetFormat({ url: "original" }), 0, 4),
     ]).setHyperlink(4, 1, 3, { url: "replacement" });
     expect(linked.toTextRuns("abcd", inherited)).toEqual([
       { attributes: plain, hyperlink: { url: "original" }, text: "a" },

@@ -3,17 +3,17 @@ import type { SwDoc } from "../doc/doc";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { MakeTextAttr } from "./thints";
 import type { SwFormatINetFormat } from "./fmtatr2";
-import type { SwFormatAutoFormat, SwTextAttr } from "./txatbase";
+import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
 /** Changes actual supported hint coordinates without splitting continuous values. @param doc - Owning document. @param hints - Stable start-ordered objects. @param offset - Change position. @param length - Positive change length. @param negative - Whether text is removed. @returns Existing objects and native end-boundary collectors. */
 export function UpdateTextHints(
   doc: SwDoc,
-  hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[],
+  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[],
   offset: number,
   length: number,
   negative: boolean,
-): readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
-  const collector = new Map<number, SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>>();
+): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[] {
+  const collector = new Map<number, SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>>();
   let noExpand = false;
   for (const hint of hints) {
     if (negative) {

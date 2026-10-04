@@ -10,12 +10,13 @@ import {
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
+import { SwTextINetFormat } from "./txtatr2";
 import { UpdateTextHints } from "./ndtxt-hint-update";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
   SwFormatAutoFormat,
-  SwTextAttr,
+  SwTextAttrEnd,
   type WriterCharacterAttributes,
 } from "./txatbase";
 import {
@@ -25,11 +26,14 @@ import {
   type WriterHyperlink,
 } from "./fmtatr2";
 
+/** Bounded implemented ranged item families held by the native maps. */
+type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
+
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
-  private m_HintsByStart: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
-  private m_HintsByEnd: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
-  private m_HintsByWhichAndStart: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+  private m_HintsByStart: RangedTextAttr[] = [];
+  private m_HintsByEnd: RangedTextAttr[] = [];
+  private m_HintsByWhichAndStart: RangedTextAttr[] = [];
   private m_StartMapNeedsSortingRange: [number, number] = [0x7fffffff, -1];
   private m_EndMapNeedsSortingRange: [number, number] = [0x7fffffff, -1];
   private m_WhichMapNeedsSortingRange: [WhichStartPair, WhichStartPair] = [
@@ -38,13 +42,13 @@ export class SwpHints {
   ];
 
   /** Reads the current primary map after lazy native sorting. @returns Owned sorted attributes. */
-  private get hintsByStart(): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
+  private get hintsByStart(): RangedTextAttr[] {
     this.ResortStartMap();
     return this.m_HintsByStart;
   }
 
   /** Releases old owner links and binds the replacement map without copying attributes. @param hints - Already normalized owned objects. @returns Nothing. */
-  private set hintsByStart(hints: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]) {
+  private set hintsByStart(hints: RangedTextAttr[]) {
     for (const hint of this.m_HintsByStart) hint.m_pHints = undefined;
     this.m_HintsByStart = hints;
     this.m_HintsByEnd = [...hints].sort(compareHintsByEnd);
@@ -154,7 +158,7 @@ export class SwpHints {
   }
 
   /** Reads an actual attribute in native end order. @param position - End-map index. @returns Owned attribute. */
-  public GetSortedByEnd(position: number): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+  public GetSortedByEnd(position: number): RangedTextAttr {
     this.ResortEndMap();
     const hint = this.m_HintsByEnd[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints end position: ${position}`);
@@ -169,9 +173,7 @@ export class SwpHints {
   }
 
   /** Reads an actual attribute in native Which/start order. @param position - Which-map index. @returns Owned attribute. */
-  public GetSortedByWhichAndStart(
-    position: number,
-  ): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+  public GetSortedByWhichAndStart(position: number): RangedTextAttr {
     this.ResortWhichMap();
     const hint = this.m_HintsByWhichAndStart[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints Which position: ${position}`);
@@ -181,7 +183,7 @@ export class SwpHints {
   /** Creates a hint container. @param pool - Owning document pool. @param hints - Initial ranged attributes. @returns Nothing. */
   public constructor(
     private readonly pool: SwAttrPool,
-    hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [],
+    hints: readonly RangedTextAttr[] = [],
   ) {
     this.replace(hints);
   }
@@ -192,22 +194,20 @@ export class SwpHints {
   }
 
   /** Returns one attribute in start-sorted order. @param position - Sorted hint position. @returns Hint at position. */
-  public Get(position: number): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+  public Get(position: number): RangedTextAttr {
     this.ResortStartMap();
     return this.GetWithoutResorting(position);
   }
 
   /** Reads the stable raw map while a caller changes several owned ranges. @param position - Raw map position. @returns The actual attribute without sorting. */
-  public GetWithoutResorting(
-    position: number,
-  ): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+  public GetWithoutResorting(position: number): RangedTextAttr {
     const hint = this.m_HintsByStart[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints position: ${position}`);
     return hint;
   }
 
   /** Returns all attributes as an immutable start-sorted view. @returns Ordered hints. */
-  public entries(): readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
+  public entries(): readonly RangedTextAttr[] {
     return this.hintsByStart;
   }
 
@@ -273,8 +273,8 @@ export class SwpHints {
     const fragment = new SwpHints(this.pool);
     const length = end - start;
     if (length === 0) return fragment;
-    const moved: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
-    const remaining: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+    const moved: RangedTextAttr[] = [];
+    const remaining: RangedTextAttr[] = [];
     for (const hint of this.hintsByStart) {
       if (hint.start < end && hint.end > start) {
         if (hint.start >= start && hint.end < end) {
@@ -353,7 +353,7 @@ export class SwpHints {
   }
 
   /** Consumes an owned fragment while rebasing its actual attributes. @param offset - Destination offset. @returns Transferred owned objects. */
-  private takeOwned(offset: number): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
+  private takeOwned(offset: number): RangedTextAttr[] {
     const owned = this.hintsByStart;
     this.hintsByStart = [];
     for (const hint of owned) {
@@ -373,16 +373,16 @@ export class SwpHints {
     if (!Number.isInteger(length) || length < 0)
       throw new Error("Writer hint text length is invalid.");
     if (length === 0) return new SwpHints(this.pool);
-    const hints: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+    const hints: RangedTextAttr[] = [];
     const format = createSwFormatAutoFormat(
       this.pool,
       attributes,
       this.projectInherited(inherited),
     );
-    if (format.GetStyleHandle().Count() > 0) hints.push(new SwTextAttr(format, 0, length));
+    if (format.GetStyleHandle().Count() > 0) hints.push(new SwTextAttrEnd(format, 0, length));
     const normalizedHyperlink = normalizeWriterHyperlink(hyperlink);
     if (normalizedHyperlink !== undefined)
-      hints.push(new SwTextAttr(new SwFormatINetFormat(normalizedHyperlink), 0, length));
+      hints.push(new SwTextINetFormat(new SwFormatINetFormat(normalizedHyperlink), 0, length));
     return new SwpHints(this.pool, hints);
   }
 
@@ -563,12 +563,12 @@ export class SwpHints {
     );
     const normalized = normalizeWriterHyperlink(hyperlink);
     if (normalized !== undefined && end > start)
-      retained.push(new SwTextAttr(new SwFormatINetFormat(normalized), start, end));
+      retained.push(new SwTextINetFormat(new SwFormatINetFormat(normalized), start, end));
     return new SwpHints(this.pool, retained);
   }
 
   /** Replaces all hints, removing empty item sets and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */
-  public replace(hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]): void {
+  public replace(hints: readonly RangedTextAttr[]): void {
     const copies = hints.map(
       /** Binds foreign automatic handles before testing their converted contents. @param hint - Caller-owned hint. @returns Destination-owned hint or same-pool snapshot. */
       (hint) =>
@@ -581,7 +581,7 @@ export class SwpHints {
   }
 
   /** Normalizes already owned objects without replacing their identities. @param hints - Owned ranged attributes. @returns Nothing. */
-  private assignOwned(hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]): void {
+  private assignOwned(hints: readonly RangedTextAttr[]): void {
     const sorted = hints
       .filter(
         /** Keeps only non-empty supported hints. @param hint - Candidate attribute. @returns Whether meaningful. */
@@ -592,11 +592,11 @@ export class SwpHints {
             (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0)),
       )
       .sort(compareHints);
-    const normalized: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+    const normalized: RangedTextAttr[] = [];
     sorted.forEach(
       /** Appends or merges one ordered non-overlapping hint. @param hint - Sorted hint. @returns Nothing. */
       (hint) => {
-        let previous: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> | undefined;
+        let previous: RangedTextAttr | undefined;
         for (let index = normalized.length - 1; index >= 0; index -= 1) {
           const candidate = normalized[index];
           if (candidate?.Which() !== hint.Which()) continue;
@@ -621,7 +621,7 @@ export class SwpHints {
   /** Rebuilds direct item-set hints from complete browser runs. @param runs - Complete text portions. @param inherited - Node/style item set. @returns Nothing. */
   public setTextRuns(runs: readonly WriterTextRunLike[], inherited: SfxItemSet): void {
     let offset = 0;
-    const hints: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
+    const hints: RangedTextAttr[] = [];
     const inheritedAttributes = this.projectInherited(inherited);
     runs.forEach(
       /** Converts one run to a direct item-set delta. @param run - Complete run. @returns Nothing. */
@@ -630,10 +630,11 @@ export class SwpHints {
         offset += run.text.length;
         if (run.text.length === 0) return;
         const format = createSwFormatAutoFormat(this.pool, run.attributes, inheritedAttributes);
-        if (format.GetStyleHandle().Count() > 0) hints.push(new SwTextAttr(format, start, offset));
+        if (format.GetStyleHandle().Count() > 0)
+          hints.push(new SwTextAttrEnd(format, start, offset));
         const hyperlink = normalizeWriterHyperlink(run.hyperlink);
         if (hyperlink !== undefined)
-          hints.push(new SwTextAttr(new SwFormatINetFormat(hyperlink), start, offset));
+          hints.push(new SwTextINetFormat(new SwFormatINetFormat(hyperlink), start, offset));
       },
     );
     this.replace(hints);
@@ -772,11 +773,7 @@ export class SwpHints {
   }
 
   /** Finds a covering hint using the native Which/start map. @param which - Existing supported family. @param start - Inclusive character boundary. @param end - Exclusive character boundary. @returns Covering actual attribute or undefined. */
-  private findFamilyHint(
-    which: number,
-    start: number,
-    end: number,
-  ): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> | undefined {
+  private findFamilyHint(which: number, start: number, end: number): RangedTextAttr | undefined {
     for (let index = this.GetFirstPosSortedByWhichAndStart(which); index < this.Count(); index++) {
       const hint = this.GetSortedByWhichAndStart(index);
       if (hint.Which() !== which || hint.start > start) break;
@@ -806,7 +803,7 @@ export class SwpHints {
     for (const segment of segments) {
       const format = createSwFormatAutoFormat(this.pool, segment.attributes, inheritedAttributes);
       if (format.GetStyleHandle().Count() > 0)
-        retained.push(new SwTextAttr(format, segment.start, segment.end));
+        retained.push(new SwTextAttrEnd(format, segment.start, segment.end));
     }
     return new SwpHints(this.pool, retained);
   }
@@ -821,12 +818,12 @@ interface CharacterSegment {
 
 /** Retains the portions of one hint outside a replacement range. @param hint - Existing hint. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @returns Zero, one, or two clipped clones. */
 function clipHintOutsideRange<T extends SwFormatAutoFormat | SwFormatINetFormat>(
-  hint: SwTextAttr<T>,
+  hint: SwTextAttrEnd<T>,
   start: number,
   end: number,
-): readonly SwTextAttr<T>[] {
+): readonly SwTextAttrEnd<T>[] {
   if (hint.end <= start || hint.start >= end) return [hint.clone()];
-  const retained: SwTextAttr<T>[] = [];
+  const retained: SwTextAttrEnd<T>[] = [];
   if (hint.start < start) {
     const prefix = hint.clone();
     prefix.SetEnd(start);
@@ -865,10 +862,7 @@ export interface WriterTextRunLike {
 }
 
 /** Compares hints using LibreOffice start, end, and item ordering. @param left - First. @param right - Second. @returns Signed ordering. */
-function compareHints(
-  left: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
-  right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
-): number {
+function compareHints(left: RangedTextAttr, right: RangedTextAttr): number {
   return left.start - right.start || right.end - left.end || right.Which() - left.Which();
 }
 
@@ -881,24 +875,18 @@ function compareWhichStartPairs(left: WhichStartPair, right: WhichStartPair): nu
 }
 
 /** Compares supported ranges in native end/start-reverse/Which order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
-function compareHintsByEnd(
-  left: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
-  right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
-): number {
+function compareHintsByEnd(left: RangedTextAttr, right: RangedTextAttr): number {
   return left.end - right.end || right.start - left.start || left.Which() - right.Which();
 }
 
 /** Compares supported ranges in native Which/start/end-reverse order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
-function compareHintsByWhichAndStart(
-  left: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
-  right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
-): number {
+function compareHintsByWhichAndStart(left: RangedTextAttr, right: RangedTextAttr): number {
   return left.Which() - right.Which() || left.start - right.start || right.end - left.end;
 }
 
 /** Finds native lower/upper Which/start bounds without comparing ends. @param hints - Which map. @param position - Lexicographic boundary. @param upper - Include equals before the bound. @returns Insertion index. */
 function hintWhichStartBound(
-  hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[],
+  hints: readonly RangedTextAttr[],
   position: WhichStartPair,
   upper: boolean,
 ): number {
@@ -906,7 +894,7 @@ function hintWhichStartBound(
     last = hints.length;
   while (first < last) {
     const middle = Math.floor((first + last) / 2),
-      hint = hints[middle] as SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>;
+      hint = hints[middle] as RangedTextAttr;
     const order = hint.Which() - position[0] || hint.start - position[1];
     if (order < 0 || (upper && order === 0)) first = middle + 1;
     else last = middle;
@@ -916,7 +904,7 @@ function hintWhichStartBound(
 
 /** Finds native lower/upper position bounds in a map ordered by that coordinate. @param hints - Start or end map. @param position - Boundary. @param upper - Include equals before the bound. @param byEnd - Whether to compare ends instead of starts. @returns Insertion index. */
 function hintPositionBound(
-  hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[],
+  hints: readonly RangedTextAttr[],
   position: number,
   upper: boolean,
   byEnd = false,
@@ -925,7 +913,7 @@ function hintPositionBound(
     last = hints.length;
   while (first < last) {
     const middle = Math.floor((first + last) / 2);
-    const hint = hints[middle] as SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>;
+    const hint = hints[middle] as RangedTextAttr;
     const coordinate = byEnd ? hint.end : hint.start;
     if (coordinate < position || (upper && coordinate === position)) first = middle + 1;
     else last = middle;

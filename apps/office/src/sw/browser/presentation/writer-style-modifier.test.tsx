@@ -6,7 +6,7 @@ import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SvxWeightItem } from "../../../editeng/source/items/textitem";
 import { SwPosition } from "../../source/core/crsr/pam";
-import { SwTextAttr, SwFormatAutoFormat } from "../../source/core/txtnode/txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "../../source/core/txtnode/txatbase";
 import { SwFormatINetFormat } from "../../source/core/txtnode/fmtatr2";
 import { SwpHints } from "../../source/core/txtnode/ndhints";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../inc/hintids";
@@ -42,8 +42,8 @@ function mount() {
   items.Put(new SvxWeightItem(8, 15));
   node.SetTextHints(
     new SwpHints(doc.GetAttrPool(), [
-      new SwTextAttr(new SwFormatAutoFormat(items), 2, 5),
-      new SwTextAttr(
+      new SwTextAttrEnd(new SwFormatAutoFormat(items), 2, 5),
+      new SwTextAttrEnd(
         new SwFormatINetFormat({
           url: "https://example.test/browser-ctrl",
           targetFrame: "_blank",

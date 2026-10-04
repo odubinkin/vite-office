@@ -4,7 +4,7 @@ import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "./txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { ReplaceUndoRange } from "../undo/undobj";
 afterEach(/** Restores actual owner spies. @returns Nothing. */ () => vi.restoreAllMocks());
@@ -18,8 +18,8 @@ function hints(doc: SwDoc, start: number, end: number, mask: number): SwpHints {
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
   const attrs = [
-    new SwTextAttr(new SwFormatAutoFormat(set), start, end),
-    new SwTextAttr(new SwFormatINetFormat({ url: "https://example.test/owner" }), start, end),
+    new SwTextAttrEnd(new SwFormatAutoFormat(set), start, end),
+    new SwTextAttrEnd(new SwFormatINetFormat({ url: "https://example.test/owner" }), start, end),
   ];
   for (const attr of attrs) {
     attr.dontExpand = Boolean(mask & 1);

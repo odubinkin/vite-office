@@ -4,7 +4,7 @@ import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SvxWeightItem, SvxPostureItem } from "../../../../editeng/source/items/textitem";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "./txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "./txatbase";
 
 /** Requires an actual owner. @param value - Optional value. @returns Owned value. */
 function required<T>(value: T | undefined): T {
@@ -14,8 +14,8 @@ function required<T>(value: T | undefined): T {
 /** Builds a real adjacent pair without browser projections. @param doc - Real owner. @param left - Left style. @param right - Right style. @returns Real hints. */
 function pair(doc: SwDoc, left: SfxItemSet, right: SfxItemSet): SwpHints {
   return new SwpHints(doc.GetAttrPool(), [
-    new SwTextAttr(new SwFormatAutoFormat(left), 0, 2),
-    new SwTextAttr(new SwFormatAutoFormat(right), 2, 4),
+    new SwTextAttrEnd(new SwFormatAutoFormat(left), 0, 2),
+    new SwTextAttrEnd(new SwFormatAutoFormat(right), 2, 4),
   ]);
 }
 

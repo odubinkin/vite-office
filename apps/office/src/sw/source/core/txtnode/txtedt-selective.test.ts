@@ -9,7 +9,7 @@ import { SwPosition } from "../crsr/pam";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwView } from "../../uibase/uiview/view";
 import { SwpHints } from "./ndhints";
-import { SwFormatAutoFormat, SwTextAttr } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { resetParagraphTextAttributes } from "./txtedt";
 
@@ -32,7 +32,7 @@ function fixture() {
   node.SetText("SelectiveText");
   const style = new SfxItemSet(doc.GetAttrPool(), [[1, 54]]);
   const reset = new SfxItemSet(doc.GetAttrPool(), [[1, 54]]);
-  const link = new SwTextAttr(
+  const link = new SwTextAttrEnd(
     new SwFormatINetFormat({
       url: "https://example.test/selective",
       targetFrame: "_blank",
@@ -46,7 +46,7 @@ function fixture() {
 }
 /** Installs an automatic style and independent link. @param owners - Fixture owners. @param start - Auto start. @param end - Auto end. @returns Nothing. */
 function install(owners: ReturnType<typeof fixture>, start = 2, end = 5): void {
-  const auto = new SwTextAttr(new SwFormatAutoFormat(owners.style), start, end);
+  const auto = new SwTextAttrEnd(new SwFormatAutoFormat(owners.style), start, end);
   auto.dontExpand = auto.dontExpandStart = auto.dontMoveAttr = true;
   owners.node.SetTextHints(new SwpHints(owners.doc.GetAttrPool(), [auto, owners.link]));
 }

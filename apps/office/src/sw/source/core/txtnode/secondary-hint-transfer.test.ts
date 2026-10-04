@@ -4,7 +4,7 @@ import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "./txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { ReplaceUndoRange } from "../undo/undobj";
 afterEach(/** Releases owner spies. @returns Nothing. */ () => vi.restoreAllMocks());
@@ -24,8 +24,8 @@ function hints(
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(destination ? 5 : 8, 15));
   const attrs = [
-    new SwTextAttr(new SwFormatAutoFormat(set), start, end),
-    new SwTextAttr(
+    new SwTextAttrEnd(new SwFormatAutoFormat(set), start, end),
+    new SwTextAttrEnd(
       new SwFormatINetFormat({
         url: destination ? "https://example.test/destination" : "https://example.test/source",
       }),
@@ -43,8 +43,8 @@ function hints(
 /** Checks all maps contain the same actual owner-bound objects. @param container - Actual owner. @returns Nothing. */
 function owners(container: SwpHints): void {
   const actual = new Set(container.entries()),
-    byEnd = new Set<SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>>(),
-    byWhich = new Set<SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>>();
+    byEnd = new Set<SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>>(),
+    byWhich = new Set<SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>>();
   for (let i = 0; i < container.Count(); i++) {
     byEnd.add(container.GetSortedByEnd(i));
     byWhich.add(container.GetSortedByWhichAndStart(i));
@@ -182,8 +182,8 @@ describe("secondary hint map transfer", /** Registers actual graph and ownership
     set.Put(new SvxWeightItem(8, 15));
     const format = new SwFormatAutoFormat(set),
       owner = new SwpHints(doc.GetAttrPool(), [
-        new SwTextAttr(format, 0, 2),
-        new SwTextAttr(format.Clone(), 4, 6),
+        new SwTextAttrEnd(format, 0, 2),
+        new SwTextAttrEnd(format.Clone(), 4, 6),
       ]),
       first = owner.Get(0),
       removed = owner.Get(1);
@@ -213,7 +213,7 @@ describe("secondary hint map transfer", /** Registers actual graph and ownership
         .GetStyleHandle()
         .GetPool(),
     ).toBe(b.GetAttrPool());
-    expect(copy.GetSortedByWhichAndStart(1).dontExpand).toBe(false);
+    expect(copy.GetSortedByWhichAndStart(1).dontExpand).toBe(true);
     const originalStarts = vi.spyOn(original, "StartPosChanged");
     copy.GetSortedByWhichAndStart(0).SetStart(0);
     copy.SortIfNeedBe();

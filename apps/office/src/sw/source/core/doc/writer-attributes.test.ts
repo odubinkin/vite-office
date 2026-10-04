@@ -62,7 +62,7 @@ import type { SwNodes } from "../docnode/nodes";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatColl } from "./fmtcol";
 import { createWriterNumRule } from "./DocumentListsManager";
-import { createSwFormatAutoFormat, SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
+import { createSwFormatAutoFormat, SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwpHints } from "../txtnode/ndhints";
 import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc";
 
@@ -464,7 +464,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       /** Installs a hint beyond canonical text. @returns Invalid operation. */ () =>
         node.SetTextHints(
           new SwpHints(writer.GetAttrPool(), [
-            new SwTextAttr(
+            new SwTextAttrEnd(
               createSwFormatAutoFormat(writer.GetAttrPool(), {
                 bold: true,
                 italic: false,

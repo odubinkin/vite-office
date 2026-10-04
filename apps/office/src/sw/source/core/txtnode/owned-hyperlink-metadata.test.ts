@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr } from "./txatbase";
+import { SwTextAttrEnd } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 import { ReplaceUndoRange } from "../undo/undobj";
 /** Requires an actual graph object. @param value - Optional graph object. @returns Existing graph object. */
@@ -21,9 +21,9 @@ function metadata() {
   };
 }
 /** Constructs a flagged item and mutates its caller before any clone/graph ingestion. @param start - Start. @param end - End. @param mask - Flags. @returns Original detached attribute. */
-function input(start: number, end: number, mask: number): SwTextAttr<SwFormatINetFormat> {
+function input(start: number, end: number, mask: number): SwTextAttrEnd<SwFormatINetFormat> {
   const caller = metadata(),
-    attr = new SwTextAttr(new SwFormatINetFormat(caller), start, end);
+    attr = new SwTextAttrEnd(new SwFormatINetFormat(caller), start, end);
   attr.dontExpand = Boolean(mask & 1);
   attr.dontExpandStart = Boolean(mask & 2);
   attr.dontMoveAttr = Boolean(mask & 4);
@@ -38,9 +38,9 @@ function input(start: number, end: number, mask: number): SwTextAttr<SwFormatINe
   return attr;
 }
 /** Checks the three maps share one owned object with stable literal metadata. @param hints - Owner. @returns Actual hyperlink attribute. */
-function owned(hints: SwpHints): SwTextAttr<SwFormatINetFormat> {
+function owned(hints: SwpHints): SwTextAttrEnd<SwFormatINetFormat> {
   expect(hints.Count()).toBe(1);
-  const hint = hints.Get(0) as SwTextAttr<SwFormatINetFormat>;
+  const hint = hints.Get(0) as SwTextAttrEnd<SwFormatINetFormat>;
   expect(hint.Which()).toBe(54);
   expect(hint.m_pHints).toBe(hints);
   expect(hints.GetSortedByEnd(0)).toBe(hint);
@@ -85,8 +85,8 @@ describe("graph-owned hyperlink metadata", /** Registers actual object boundary 
         expect(copyAttr).toMatchObject({
           start: 1,
           end: 5,
-          dontExpand: false,
-          dontExpandStart: false,
+          dontExpand: true,
+          dontExpandStart: true,
           dontMoveAttr: false,
         });
         const projected = copyAttr.format.GetHyperlink() as { url: string; name?: string };
@@ -138,8 +138,8 @@ describe("graph-owned hyperlink metadata", /** Registers actual object boundary 
         expect(moved).toMatchObject({
           start: movedStart,
           end: movedEnd,
-          dontExpand: kind === "interior" && Boolean(mask & 1),
-          dontExpandStart: kind === "interior" && Boolean(mask & 2),
+          dontExpand: kind === "interior" ? Boolean(mask & 1) : true,
+          dontExpandStart: kind === "interior" ? Boolean(mask & 2) : true,
           dontMoveAttr: kind === "interior" && Boolean(mask & 4),
         });
         if (kind === "interior") expect(moved).toBe(original);

@@ -132,7 +132,7 @@ describe("native MakeTextAttr construction", /** Groups actual owner/item/factor
     expect(hint.format.QueryValue()).toEqual(format.QueryValue());
     expect(format.isShareable()).toBe(false);
     expect(hint.format.isShareable()).toBe(false);
-    expect(hint).toMatchObject({ dontExpand: false, dontExpandStart: false, dontMoveAttr: false });
+    expect(hint).toMatchObject({ dontExpand: true, dontExpandStart: true, dontMoveAttr: false });
   });
   it.each([0, 49, 52, 55])(
     "rejects unimplemented hint WhichId %s without misclassifying it as a character item",

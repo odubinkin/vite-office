@@ -10,7 +10,7 @@ import { SwDoc } from "./doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwpHints } from "../txtnode/ndhints";
 import { SwTextNode, projectWriterTextRuns } from "../txtnode/ndtxt";
-import { SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 const masks = [0, 1, 2, 3, 4, 5, 6, 7];
 
@@ -26,8 +26,8 @@ function fixture(mask: number) {
   node.SetText("abcdef");
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
-  const auto = new SwTextAttr(new SwFormatAutoFormat(set), 1, 4);
-  const inet = new SwTextAttr(
+  const auto = new SwTextAttrEnd(new SwFormatAutoFormat(set), 1, 4);
+  const inet = new SwTextAttrEnd(
     new SwFormatINetFormat({
       url: "https://example.test/node-copy",
       name: "Copy",
@@ -56,8 +56,14 @@ function handle(node: SwTextNode): SfxItemSet {
     );
   return (required(auto).format as SwFormatAutoFormat).GetStyleHandle();
 }
-/** Checks flags for attributes covering the supplied range. @param node - Actual node. @param start - Hint start. @param end - Hint end. @param mask - Expected flags. @returns Nothing. */
-function expectFlags(node: SwTextNode, start: number, end: number, mask: number): void {
+/** Checks flags for attributes covering the supplied range. @param node - Actual node. @param start - Hint start. @param end - Hint end. @param mask - Expected flags. @param fresh - Native constructor defaults. @returns Nothing. */
+function expectFlags(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  mask: number,
+  fresh = false,
+): void {
   const hints = required(node.GetpSwpHints())
     .entries()
     .filter(
@@ -68,8 +74,8 @@ function expectFlags(node: SwTextNode, start: number, end: number, mask: number)
   expect(hints).toHaveLength(2);
   for (const hint of hints)
     expect(hint).toMatchObject({
-      dontExpand: Boolean(mask & 1),
-      dontExpandStart: Boolean(mask & 2),
+      dontExpand: fresh && hint.Which() === 54 ? true : Boolean(mask & 1),
+      dontExpandStart: fresh && hint.Which() === 54 ? true : Boolean(mask & 2),
       dontMoveAttr: Boolean(mask & 4),
     });
 }
@@ -90,7 +96,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
         expect(clone.GetText()).toBe("abcdef");
         expect(clone.GetParagraphAlignment()).toBe("right");
         expect(clone.GetTextFormatColl()).toBe(target.CopyTextColl(f.node.GetTextFormatColl()));
-        expectFlags(clone, 1, 4, 0);
+        expectFlags(clone, 1, 4, 0, true);
         expectFlags(f.node, 1, 4, mask);
         expect(handle(clone).GetPool()).toBe(target.GetAttrPool());
         if (foreign) expect(handle(clone)).not.toBe(original);
@@ -133,7 +139,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
             .CopyRange(source, new SwPosition(target, offset)),
         ).toBe(2);
         expect(target.GetText()).toBe(sameNode ? "abcdefcd" : "XcdY");
-        expectFlags(target, offset, offset + 2, 0);
+        expectFlags(target, offset, offset + 2, 0, true);
         expectFlags(f.node, 1, 4, mask);
         const copied = required(target.GetpSwpHints())
           .entries()
@@ -164,7 +170,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
         original = handle(f.node);
       node.SetText("ABCDEF");
       node.SetTextHints(required(f.node.GetpSwpHints()));
-      expectFlags(node, 1, 4, 0);
+      expectFlags(node, 1, 4, 0, true);
       expect(handle(node).GetPool()).toBe(target.GetAttrPool());
       expect(handle(node)).not.toBe(original);
       const destinationHandle = handle(node);
@@ -175,7 +181,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
           .InsertTextFragment(new SwPosition(node, 1), f.node.CaptureTextFragment(1, 4)),
       ).toBe(true);
       expect(node.GetText()).toBe("XbcdY");
-      expectFlags(node, 1, 4, 0);
+      expectFlags(node, 1, 4, 0, true);
       expect(handle(node)).toBe(destinationHandle);
       expectFlags(f.node, 1, 4, mask);
       expect(original.GetPool()).toBe(f.doc.GetAttrPool());
@@ -186,13 +192,14 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
       target = new SwDoc(),
       node = required(target.paragraphs[0]);
     node.SetText("abcdef");
-    const internet = new SwpHints(f.doc.GetAttrPool(), [required(f.node.GetpSwpHints()).Get(1)]);
+    const internet = new SwpHints(f.doc.GetAttrPool(), [required(f.node.GetpSwpHints()).Get(0)]);
+    expect(internet.Get(0).Which()).toBe(54);
     node.SetTextHints(internet);
     expect(required(node.GetpSwpHints()).Get(0)).toMatchObject({
       start: 1,
       end: 4,
-      dontExpand: false,
-      dontExpandStart: false,
+      dontExpand: true,
+      dontExpandStart: true,
       dontMoveAttr: false,
     });
     node.SetText("XY");
@@ -202,15 +209,15 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
     expect(required(node.GetpSwpHints()).Get(0)).toMatchObject({
       start: 1,
       end: 4,
-      dontExpand: false,
-      dontExpandStart: false,
+      dontExpand: true,
+      dontExpandStart: true,
       dontMoveAttr: false,
     });
     const states = new SfxItemSet(f.doc.GetAttrPool(), [[1, 49]]);
     states.InvalidateItem(11);
     states.DisableItem(14);
     const markers = new SwpHints(f.doc.GetAttrPool(), [
-      new SwTextAttr(new SwFormatAutoFormat(states), 0, 3),
+      new SwTextAttrEnd(new SwFormatAutoFormat(states), 0, 3),
     ]);
     node.SetTextHints(markers);
     expect(node.GetpSwpHints()).toBeUndefined();
@@ -236,7 +243,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
       expect(f.node.GetText()).toBe("aef");
       expect(f.node.GetpSwpHints()).toBeUndefined();
       expect(target.GetText()).toBe("XbcdY");
-      expectFlags(target, 1, 4, 0);
+      expectFlags(target, 1, 4, 0, true);
       expect(handle(target)).toBe(original);
       f.node.ReplaceRange(0, f.node.Len(), before);
       expect(f.node.GetText()).toBe("abcdef");
@@ -262,7 +269,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
     expect(handle(restoredNode).GetPool()).toBe(restored.GetAttrPool());
     expect(handle(restoredNode)).not.toBe(handle(node));
     expect(projectWriterTextRuns(restoredNode)).toEqual(projectWriterTextRuns(node));
-    expectFlags(restoredNode, 1, 4, 0);
+    expectFlags(restoredNode, 1, 4, 0, true);
     expectFlags(f.node, 1, 4, 7);
   });
 });

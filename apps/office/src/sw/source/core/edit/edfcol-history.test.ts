@@ -8,7 +8,7 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwpHints } from "../txtnode/ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "../txtnode/txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwUndoFormatColl } from "../undo/unfmco";
 import { SwUndoResetAttr } from "../undo/unattr";
@@ -56,10 +56,10 @@ function hint(
   doc: SwDoc,
   kind: string,
   length: number,
-): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
   const items = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
   items.Put(new SvxWeightItem(8, 15));
-  const result = new SwTextAttr(
+  const result = new SwTextAttrEnd(
     kind === "internet"
       ? new SwFormatINetFormat({
           url: "https://example.test/native-history",

@@ -5,7 +5,8 @@ import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import type { SwDoc } from "../doc/doc";
 import { SwFormatINetFormat } from "./fmtatr2";
-import { SwFormatAutoFormat, SwTextAttr } from "./txatbase";
+import { SwTextINetFormat } from "./txtatr2";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
 /** Builds a fresh ranged attribute, interning set/character inputs and converting foreign automatic handles into the destination pool. @param doc - Destination document. @param attr - Document-pool concrete set or supported pool item. @param start - Inclusive offset. @param end - Exclusive offset. @returns Fresh automatic or internet hint with native constructor flags. */
 export function MakeTextAttr(
@@ -13,7 +14,7 @@ export function MakeTextAttr(
   attr: SfxItemSet | SfxPoolItem,
   start: number,
   end: number,
-): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
   if (attr instanceof SfxItemSet) {
     const handle = doc.GetIStyleAccess().getAutomaticStyle(attr, SwAutoStyleFamily.AUTO_STYLE_CHAR);
     return MakeTextAttr(doc, new SwFormatAutoFormat(handle), start, end);
@@ -25,7 +26,7 @@ export function MakeTextAttr(
   }
   if (attr instanceof SwFormatAutoFormat && attr.GetStyleHandle().GetPool() !== doc.GetAttrPool())
     return MakeTextAttr(doc, attr.GetStyleHandle().Clone(true, doc.GetAttrPool()), start, end);
-  if (attr instanceof SwFormatAutoFormat || attr instanceof SwFormatINetFormat)
-    return new SwTextAttr(attr.Clone(), start, end);
+  if (attr instanceof SwFormatINetFormat) return new SwTextINetFormat(attr.Clone(), start, end);
+  if (attr instanceof SwFormatAutoFormat) return new SwTextAttrEnd(attr.Clone(), start, end);
   throw new Error("MakeTextAttr hint type is not implemented.");
 }

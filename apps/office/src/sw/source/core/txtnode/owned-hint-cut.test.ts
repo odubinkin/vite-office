@@ -4,7 +4,7 @@ import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "./txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "./txatbase";
 import { SwFormatINetFormat } from "./fmtatr2";
 const masks = [0, 1, 2, 3, 4, 5, 6, 7];
 /** Literal source, moved and remaining ranges for one cut relationship. */
@@ -29,8 +29,8 @@ function fixture(doc: SwDoc, start: number, end: number, mask: number): SwpHints
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
   const attrs = [
-    new SwTextAttr(new SwFormatAutoFormat(set), start, end),
-    new SwTextAttr(
+    new SwTextAttrEnd(new SwFormatAutoFormat(set), start, end),
+    new SwTextAttrEnd(
       new SwFormatINetFormat({
         url: "https://example.test/owned",
         name: "Owned",
@@ -47,12 +47,12 @@ function fixture(doc: SwDoc, start: number, end: number, mask: number): SwpHints
   }
   return new SwpHints(doc.GetAttrPool(), attrs);
 }
-/** Checks independent flag state. @param hints - Container. @param mask - Expected mask. @returns Nothing. */
-function flags(hints: SwpHints, mask: number): void {
+/** Checks independent flag state. @param hints - Container. @param mask - Expected mask. @param fresh - Native constructor defaults. @returns Nothing. */
+function flags(hints: SwpHints, mask: number, fresh = false): void {
   for (const attr of hints.entries())
     expect(attr).toMatchObject({
-      dontExpand: Boolean(mask & 1),
-      dontExpandStart: Boolean(mask & 2),
+      dontExpand: fresh && attr.Which() === 54 ? true : Boolean(mask & 1),
+      dontExpandStart: fresh && attr.Which() === 54 ? true : Boolean(mask & 2),
       dontMoveAttr: Boolean(mask & 4),
     });
 }
@@ -107,7 +107,7 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
               snapshot.Get(i).format.QueryValue(),
             );
           }
-          flags(fragment, boundary.transfer ? mask : 0);
+          flags(fragment, boundary.transfer ? mask : 0, !boundary.transfer);
           expect((fragment.Get(1).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
             (snapshot.Get(1).format as SwFormatAutoFormat).GetStyleHandle(),
           );
@@ -123,7 +123,7 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
             });
           }
           expect(kept.Get(0)).toMatchObject({ start: boundary.moved[0], end: boundary.moved[1] });
-          flags(kept, boundary.transfer ? mask : 0);
+          flags(kept, boundary.transfer ? mask : 0, !boundary.transfer);
           expect(kept.Get(0)).not.toBe(target.Get(0));
         }
       },
@@ -145,7 +145,7 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
         expect(source.Get(1)).toBe(original);
         expect(original).toMatchObject({ start, end });
         flags(source, mask);
-        flags(preview, expectedMask);
+        flags(preview, expectedMask, end === 7);
         expect(preview.Get(1)).toMatchObject({ start: start - 3, end: end - 3 });
         expect(preview.Get(1)).not.toBe(original);
         expect(preview.Get(1).format).not.toBe(original.format);

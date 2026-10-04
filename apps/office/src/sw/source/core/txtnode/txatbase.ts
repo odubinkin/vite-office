@@ -121,107 +121,279 @@ export class SwFormatAutoFormat extends SfxPoolItem {
   }
 }
 
-/**
- * Models LibreOffice's ranged SwTextAttrEnd for the currently implemented auto-format item.
- *
- * Flags without browser-visible behavior are retained so later ports can extend the object without
- * replacing its identity or range semantics.
- */
+/** Native text attribute base with a start position and an optional end. */
 export class SwTextAttr<
   TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
 > {
   private m_nStart: number;
-  private m_nEnd: number;
+  private m_bDontExpand = false;
+  private m_bLockExpandFlag = false;
+  private m_bDontMoveAttr = false;
+  private m_bCharFormatAttr = false;
+  private m_bOverlapAllowedAttr = false;
+  private m_bPriorityAttr = false;
+  private m_bDontExpandStart = false;
+  private m_bNesting = false;
+  private m_bHasDummyChar = false;
+  private m_bFormatIgnoreStart = false;
+  private m_bFormatIgnoreEnd = false;
+  private m_bHasContent = false;
   /** Internal friend-access storage assigned and released only by the owning SwpHints. */
   public m_pHints: SwpHints | undefined;
-  /** Prevents expansion at the end during insertion when enabled. */
-  public dontExpand = false;
-  /** Prevents expansion at the start during insertion when enabled. */
-  public dontExpandStart = false;
-  /** Prevents moving this attribute during structural edits when enabled. */
-  public dontMoveAttr = false;
-
-  /**
-   * Creates one ranged Writer text attribute.
-   *
-   * @param format - Auto-format item owned by this hint.
-   * @param start - Inclusive UTF-16 start offset.
-   * @param end - Exclusive UTF-16 end offset.
-   * @returns Nothing; initializes this attribute.
-   */
-  public constructor(
+  /** Initializes the native base. @param format - Owned item. @param start - UTF-16 offset. @returns Nothing. */
+  protected constructor(
     public readonly format: TFormat,
     start: number,
-    end: number,
   ) {
-    if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start)
-      throw new Error("SwTextAttr range is invalid.");
+    if (!Number.isInteger(start)) throw new Error("SwTextAttr start is invalid.");
     this.m_nStart = start;
-    this.m_nEnd = end;
   }
-
-  /** Exposes the existing start projection through the native range field. @returns Inclusive offset. */
-  public get start(): number {
-    return this.m_nStart;
+  /** Returns the owned pool item. @returns Attribute item. */
+  public GetAttr(): TFormat {
+    return this.format;
   }
-
-  /** Routes existing start writes through native owner notification. @param start - New inclusive offset. @returns Nothing. */
-  public set start(start: number) {
-    this.SetStart(start);
-  }
-
-  /** Exposes the existing end projection through the native range field. @returns Exclusive offset. */
-  public get end(): number {
-    return this.m_nEnd;
-  }
-
-  /** Routes existing end writes through native owner notification. @param end - New exclusive offset. @returns Nothing. */
-  public set end(end: number) {
-    this.SetEnd(end);
-  }
-
-  /** Returns the Writer pool identifier of this attribute. @returns Auto-format WhichId. */
+  /** Returns the native family. @returns WhichId. */
   public Which(): typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT {
-    return this.format.Which() as typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT;
+    return this.GetAttr().Which() as typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT;
   }
-
-  /** Returns the inclusive start offset. @returns Inclusive UTF-16 offset. */
+  /** Returns the start. @returns UTF-16 offset. */
   public GetStart(): number {
     return this.m_nStart;
   }
-
-  /** Updates the start and always invalidates the owner's order, allowing temporary structural shifts. @param start - New inclusive offset. @returns Nothing. */
+  /** Sets the start and always notifies its owner. @param start - New offset. @returns Nothing. */
   public SetStart(start: number): void {
+    if (!Number.isInteger(start)) throw new Error("SwTextAttr start is invalid.");
     this.m_nStart = start;
     this.m_pHints?.StartPosChanged();
   }
+  /** Returns no end for the native base. @returns Absent end. */
+  public GetEnd(): number | undefined {
+    return undefined;
+  }
+  /** Rejects end writes on an attribute without an end. @param end - Unsupported offset. @returns Nothing. */
+  public SetEnd(end: number): void {
+    throw new Error("SwTextAttr has no end: " + end);
+  }
+  /** Returns the optional native end. @returns End offset if present. */
+  public End(): number | undefined {
+    return this.GetEnd();
+  }
+  /** Returns the end or the start for a point attribute. @returns UTF-16 offset. */
+  public GetAnyEnd(): number {
+    return this.End() ?? this.GetStart();
+  }
+  /** Reads the portable start projection. @returns UTF-16 offset. */
+  public get start(): number {
+    return this.GetStart();
+  }
+  /** Writes through native start notification. @param start - New offset. @returns Nothing. */
+  public set start(start: number) {
+    this.SetStart(start);
+  }
+  /** Reads the native DontExpand flag. @returns Flag value. */
+  public DontExpand(): boolean {
+    return this.m_bDontExpand;
+  }
+  /** Sets the native DontExpand flag. @param flag - New value. @returns Nothing. */
+  public SetDontExpand(flag: boolean): void {
+    if (!this.m_bLockExpandFlag) this.m_bDontExpand = flag;
+  }
+  /** Reads the native LockExpandFlag flag. @returns Flag value. */
+  public IsLockExpandFlag(): boolean {
+    return this.m_bLockExpandFlag;
+  }
+  /** Sets the native LockExpandFlag flag. @param flag - New value. @returns Nothing. */
+  public SetLockExpandFlag(flag: boolean): void {
+    this.m_bLockExpandFlag = flag;
+  }
+  /** Reads the native DontMoveAttr flag. @returns Flag value. */
+  public IsDontMoveAttr(): boolean {
+    return this.m_bDontMoveAttr;
+  }
+  /** Sets the native DontMoveAttr flag. @param flag - New value. @returns Nothing. */
+  protected SetDontMoveAttr(flag: boolean): void {
+    this.m_bDontMoveAttr = flag;
+  }
+  /** Reads the native CharFormatAttr flag. @returns Flag value. */
+  public IsCharFormatAttr(): boolean {
+    return this.m_bCharFormatAttr;
+  }
+  /** Sets the native CharFormatAttr flag. @param flag - New value. @returns Nothing. */
+  protected SetCharFormatAttr(flag: boolean): void {
+    this.m_bCharFormatAttr = flag;
+  }
+  /** Reads the native OverlapAllowedAttr flag. @returns Flag value. */
+  public IsOverlapAllowedAttr(): boolean {
+    return this.m_bOverlapAllowedAttr;
+  }
+  /** Sets the native OverlapAllowedAttr flag. @param flag - New value. @returns Nothing. */
+  protected SetOverlapAllowedAttr(flag: boolean): void {
+    this.m_bOverlapAllowedAttr = flag;
+  }
+  /** Reads the native PriorityAttr flag. @returns Flag value. */
+  public IsPriorityAttr(): boolean {
+    return this.m_bPriorityAttr;
+  }
+  /** Sets the native PriorityAttr flag. @param flag - New value. @returns Nothing. */
+  public SetPriorityAttr(flag: boolean): void {
+    this.m_bPriorityAttr = flag;
+  }
+  /** Reads the native DontExpandStart flag. @returns Flag value. */
+  public IsDontExpandStartAttr(): boolean {
+    return this.m_bDontExpandStart;
+  }
+  /** Sets the native DontExpandStart flag. @param flag - New value. @returns Nothing. */
+  public SetDontExpandStartAttr(flag: boolean): void {
+    this.m_bDontExpandStart = flag;
+  }
+  /** Reads the native Nesting flag. @returns Flag value. */
+  public IsNesting(): boolean {
+    return this.m_bNesting;
+  }
+  /** Sets the native Nesting flag. @param flag - New value. @returns Nothing. */
+  protected SetNesting(flag: boolean): void {
+    this.m_bNesting = flag;
+  }
+  /** Reads the native HasDummyChar flag. @returns Flag value. */
+  public HasDummyChar(): boolean {
+    return this.m_bHasDummyChar;
+  }
+  /** Sets the native HasDummyChar flag. @param flag - New value. @returns Nothing. */
+  protected SetHasDummyChar(flag: boolean): void {
+    this.m_bHasDummyChar = flag;
+  }
+  /** Reads the native FormatIgnoreStart flag. @returns Flag value. */
+  public IsFormatIgnoreStart(): boolean {
+    return this.m_bFormatIgnoreStart;
+  }
+  /** Sets the native FormatIgnoreStart flag. @param flag - New value. @returns Nothing. */
+  public SetFormatIgnoreStart(flag: boolean): void {
+    this.m_bFormatIgnoreStart = flag;
+  }
+  /** Reads the native FormatIgnoreEnd flag. @returns Flag value. */
+  public IsFormatIgnoreEnd(): boolean {
+    return this.m_bFormatIgnoreEnd;
+  }
+  /** Sets the native FormatIgnoreEnd flag. @param flag - New value. @returns Nothing. */
+  public SetFormatIgnoreEnd(flag: boolean): void {
+    this.m_bFormatIgnoreEnd = flag;
+  }
+  /** Reads the native HasContent flag. @returns Flag value. */
+  public HasContent(): boolean {
+    return this.m_bHasContent;
+  }
+  /** Sets the native HasContent flag. @param flag - New value. @returns Nothing. */
+  protected SetHasContent(flag: boolean): void {
+    this.m_bHasContent = flag;
+  }
+  /** Reads the existing portable dontExpand projection. @returns Flag value. */
+  public get dontExpand(): boolean {
+    return this.DontExpand();
+  }
+  /** Writes through the native dontExpand setter. @param flag - New value. @returns Nothing. */
+  public set dontExpand(flag: boolean) {
+    this.SetDontExpand(flag);
+  }
+  /** Reads the existing portable dontExpandStart projection. @returns Flag value. */
+  public get dontExpandStart(): boolean {
+    return this.IsDontExpandStartAttr();
+  }
+  /** Writes through the native dontExpandStart setter. @param flag - New value. @returns Nothing. */
+  public set dontExpandStart(flag: boolean) {
+    this.SetDontExpandStartAttr(flag);
+  }
+  /** Reads the existing portable dontMoveAttr projection. @returns Flag value. */
+  public get dontMoveAttr(): boolean {
+    return this.IsDontMoveAttr();
+  }
+  /** Writes through the native dontMoveAttr setter. @param flag - New value. @returns Nothing. */
+  public set dontMoveAttr(flag: boolean) {
+    this.SetDontMoveAttr(flag);
+  }
+  /** Copies supported state for the portable snapshot adapter, independently of native fresh construction. @param target - Detached snapshot. @returns Nothing. */
+  protected CopyFlagsTo(target: SwTextAttr<TFormat>): void {
+    target.m_bDontExpand = this.m_bDontExpand;
+    target.m_bLockExpandFlag = this.m_bLockExpandFlag;
+    target.m_bDontMoveAttr = this.m_bDontMoveAttr;
+    target.m_bCharFormatAttr = this.m_bCharFormatAttr;
+    target.m_bOverlapAllowedAttr = this.m_bOverlapAllowedAttr;
+    target.m_bPriorityAttr = this.m_bPriorityAttr;
+    target.m_bDontExpandStart = this.m_bDontExpandStart;
+    target.m_bNesting = this.m_bNesting;
+    target.m_bHasDummyChar = this.m_bHasDummyChar;
+    target.m_bFormatIgnoreStart = this.m_bFormatIgnoreStart;
+    target.m_bFormatIgnoreEnd = this.m_bFormatIgnoreEnd;
+    target.m_bHasContent = this.m_bHasContent;
+  }
+}
 
-  /** Returns the exclusive end offset. @returns Exclusive UTF-16 offset. */
-  public GetEnd(): number {
+/** Native ranged text attribute with end-change notifications. */
+export class SwTextAttrEnd<
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+> extends SwTextAttr<TFormat> {
+  protected m_nEnd: number;
+  /** Initializes a ranged item. @param format - Owned item. @param start - Start offset. @param end - End offset. @returns Nothing. */
+  public constructor(format: TFormat, start: number, end: number) {
+    super(format, start);
+    if (!Number.isInteger(end)) throw new Error("SwTextAttr end is invalid.");
+    this.m_nEnd = end;
+  }
+  /** Returns the range end. @returns UTF-16 offset. */
+  public override GetEnd(): number {
     return this.m_nEnd;
   }
-
-  /** Changes the exclusive range end after validating Writer ordering. @param end - New exclusive offset. @returns Nothing. */
-  public SetEnd(end: number): void {
-    if (!Number.isInteger(end) || end < this.start) throw new Error("SwTextAttr end is invalid.");
+  /** Sets the end without imposing ordering during structural shifts. @param end - New offset. @returns Nothing. */
+  public override SetEnd(end: number): void {
+    if (!Number.isInteger(end)) throw new Error("SwTextAttr end is invalid.");
     if (this.m_nEnd !== end) {
       const oldEnd = this.m_nEnd;
       this.m_nEnd = end;
-      this.m_pHints?.EndPosChanged(this.Which(), this.m_nStart, oldEnd, end);
+      this.m_pHints?.EndPosChanged(this.Which(), this.GetStart(), oldEnd, end);
     }
   }
-
-  /** Creates an independent attribute with the same item and flags. @param offset - Offset applied to the cloned range. @returns Independent attribute. */
-  public clone(offset = 0): SwTextAttr<TFormat> {
-    const cloned = new SwTextAttr(
+  /** Reads the existing portable end projection. @returns UTF-16 offset. */
+  public get end(): number {
+    return this.GetEnd();
+  }
+  /** Writes through native end notification. @param end - New offset. @returns Nothing. */
+  public set end(end: number) {
+    this.SetEnd(end);
+  }
+  /** Constructs the same concrete ranged kind for a portable snapshot. @param format - Independent item. @param start - Start. @param end - End. @returns Detached snapshot. */
+  protected createRangeClone(format: TFormat, start: number, end: number): SwTextAttrEnd<TFormat> {
+    return new SwTextAttrEnd(format, start, end);
+  }
+  /** Captures independent supported state, distinct from MakeTextAttr's fresh native flags. @param offset - Range translation. @returns Detached snapshot. */
+  public clone(offset = 0): SwTextAttrEnd<TFormat> {
+    const cloned = this.createRangeClone(
       this.format.Clone() as TFormat,
       this.start + offset,
       this.end + offset,
     );
-    cloned.dontExpand = this.dontExpand;
-    cloned.dontExpandStart = this.dontExpandStart;
-    cloned.dontMoveAttr = this.dontMoveAttr;
+    this.CopyFlagsTo(cloned);
     return cloned;
+  }
+}
+
+/** Native range whose constructor prohibits expansion and marks nesting. */
+export class SwTextAttrNesting<
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+> extends SwTextAttrEnd<TFormat> {
+  /** Initializes native nesting defaults. @param format - Owned item. @param start - Start. @param end - End. @returns Nothing. */
+  protected constructor(format: TFormat, start: number, end: number) {
+    super(format, start, end);
+    this.SetDontExpand(true);
+    this.SetLockExpandFlag(true);
+    this.SetDontExpandStartAttr(true);
+    this.SetNesting(true);
+  }
+  /** Retains nesting identity in portable snapshots. @param format - Independent item. @param start - Start. @param end - End. @returns Detached snapshot. */
+  protected override createRangeClone(
+    format: TFormat,
+    start: number,
+    end: number,
+  ): SwTextAttrNesting<TFormat> {
+    return new SwTextAttrNesting(format, start, end);
   }
 }
 

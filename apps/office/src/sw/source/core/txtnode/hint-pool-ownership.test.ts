@@ -6,7 +6,7 @@ import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
 import { SwFormatINetFormat } from "./fmtatr2";
-import { SwFormatAutoFormat, SwTextAttr } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
 const flags = [0, 1, 2, 3, 4, 5, 6, 7];
 const metadata = {
@@ -22,8 +22,8 @@ function sourceHints(doc: SwDoc, mask: number): SwpHints {
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
   const hints = [
-    new SwTextAttr(new SwFormatAutoFormat(set), 1, 4),
-    new SwTextAttr(new SwFormatINetFormat(metadata), 1, 4),
+    new SwTextAttrEnd(new SwFormatAutoFormat(set), 1, 4),
+    new SwTextAttrEnd(new SwFormatINetFormat(metadata), 1, 4),
   ];
   for (const hint of hints) {
     hint.dontExpand = Boolean(mask & 1);
@@ -33,13 +33,13 @@ function sourceHints(doc: SwDoc, mask: number): SwpHints {
   return new SwpHints(doc.GetAttrPool(), hints);
 }
 
-/** Verifies flags on every attribute. @param hints - Container. @param mask - Expected mask. @returns Nothing. */
-function expectFlags(hints: SwpHints, mask: number): void {
+/** Verifies flags on every attribute. @param hints - Container. @param mask - Expected mask. @param fresh - Native constructor defaults. @returns Nothing. */
+function expectFlags(hints: SwpHints, mask: number, fresh = false): void {
   expect(hints.Count()).toBe(2);
   for (const hint of hints.entries())
     expect(hint).toMatchObject({
-      dontExpand: Boolean(mask & 1),
-      dontExpandStart: Boolean(mask & 2),
+      dontExpand: fresh && hint.Which() === 54 ? true : Boolean(mask & 1),
+      dontExpandStart: fresh && hint.Which() === 54 ? true : Boolean(mask & 2),
       dontMoveAttr: Boolean(mask & 4),
     });
 }
@@ -49,7 +49,7 @@ function handle(hints: SwpHints): SfxItemSet {
   const auto = hints.entries().find(
     /** Selects the automatic family independently of native range order. @param hint - Candidate hint. @returns Whether automatic. */
     (hint) => hint.Which() === 53,
-  ) as SwTextAttr<SwFormatAutoFormat>;
+  ) as SwTextAttrEnd<SwFormatAutoFormat>;
   return auto.format.GetStyleHandle();
 }
 
@@ -67,9 +67,9 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
         foreignCopy = hints.CopyTo(target.GetAttrPool()),
         foreignClone = hints.clone(target.GetAttrPool());
       expectFlags(snapshot, mask);
-      expectFlags(sameCopy, 0);
-      expectFlags(foreignCopy, 0);
-      expectFlags(foreignClone, 0);
+      expectFlags(sameCopy, 0, true);
+      expectFlags(foreignCopy, 0, true);
+      expectFlags(foreignClone, 0, true);
       expectFlags(hints, mask);
       expect(handle(snapshot)).toBe(handle(hints));
       expect(handle(sameCopy)).toBe(handle(hints));
@@ -112,7 +112,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
     expect(foreign.GetParent()).toBe(parent);
     expect(foreign.Count()).toBe(3);
     const leading = new SwpHints(target.GetAttrPool(), [
-      new SwTextAttr(new SwFormatAutoFormat(pooled), 0, 2),
+      new SwTextAttrEnd(new SwFormatAutoFormat(pooled), 0, 2),
     ]);
     const result = leading.concat(hints.slice(1, 4), 2);
     expect(result.Count()).toBe(2);
@@ -121,8 +121,8 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
     expect(result.Get(1)).toMatchObject({
       start: 2,
       end: 5,
-      dontExpand: false,
-      dontExpandStart: false,
+      dontExpand: true,
+      dontExpandStart: true,
       dontMoveAttr: false,
     });
     const third = hints.CopyTo(new SwDoc().GetAttrPool());
@@ -134,7 +134,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
       states = new SfxItemSet(source.GetAttrPool(), [[1, 49]]);
     states.InvalidateItem(11);
     states.DisableItem(14);
-    const marker = new SwTextAttr(new SwFormatAutoFormat(states), 0, 3);
+    const marker = new SwTextAttrEnd(new SwFormatAutoFormat(states), 0, 3);
     marker.dontExpand = marker.dontExpandStart = marker.dontMoveAttr = true;
     const original = new SwpHints(source.GetAttrPool(), [marker]);
     expect(original.Count()).toBe(1);
@@ -167,8 +167,8 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
       for (const result of [joined, replaced]) {
         expect(result.Count()).toBe(1);
         expect(result.Get(0)).toMatchObject({
-          dontExpand: !foreign,
-          dontExpandStart: !foreign,
+          dontExpand: true,
+          dontExpandStart: true,
           dontMoveAttr: !foreign,
         });
         expect(result.Get(0).format.QueryValue()).toBe(all.Get(0).format.QueryValue());

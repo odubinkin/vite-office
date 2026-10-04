@@ -17,7 +17,7 @@ import { SwPosition } from "../crsr/pam";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwpHints } from "../txtnode/ndhints";
-import { SwTextAttr, SwFormatAutoFormat } from "../txtnode/txatbase";
+import { SwTextAttrEnd, SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { resetParagraphTextAttributes } from "../txtnode/txtedt";
 import { SwUndoResetAttr } from "../undo/unattr";
@@ -64,8 +64,8 @@ function hints(doc: SwDoc, start: number, end: number): SwpHints {
   const items = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
   items.Put(new SvxWeightItem(8, 15));
   items.Put(new SvxPostureItem(2, 11));
-  const auto = new SwTextAttr(new SwFormatAutoFormat(items), start, end);
-  const link = new SwTextAttr(
+  const auto = new SwTextAttrEnd(new SwFormatAutoFormat(items), start, end);
+  const link = new SwTextAttrEnd(
     new SwFormatINetFormat({
       url: "https://example.test/ctrl",
       targetFrame: "_blank",
@@ -334,7 +334,7 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
     expect(required(node.GetpSwpHints()).equals(once)).toBe(true);
     node.SetTextHints(
       new SwpHints(doc.GetAttrPool(), [
-        new SwTextAttr(
+        new SwTextAttrEnd(
           new SwFormatAutoFormat(new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES)),
           0,
           node.Len(),
