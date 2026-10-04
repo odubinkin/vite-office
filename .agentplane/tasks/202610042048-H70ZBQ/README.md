@@ -4,7 +4,7 @@ title: "Own hyperlink item metadata by value"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: execute approved iteration121 hyperlink string value ownership correction with literal metadata/actual graph boundaries;tests once absent,no AP helper/source artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-04T20:54:10.162Z"
+doc_updated_at: "2026-10-04T21:00:44.812Z"
 doc_updated_by: "CODER"
 description: "Iteration121 fixes retained caller metadata alias in existing SwFormatINetFormat. Capture supported immutable string values at construction as in native owned OUString/UIName fields,keeping metadata optional/empty values and existing JSON codecs/defaults. Prove caller/returned/clone isolation through direct items,actual hint graphs,copy/cut/transfer/history boundaries. One upstream-absent profile;registered I/O/recovery deviations untouched."
 sections:
@@ -59,9 +59,9 @@ sections:
     4. After restoration npm exec -- tsx scripts/generate-writer-ui-resources.ts --check;npm run check:source-tree;npm run check:source-provenance;npm run inventory:invariants;npm run inventory:parity. All pass,semantic violations0.
     5. Audit five semantic paths,all341previous tests byte-identical,234runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,provenance only one bounded appendix,native hashes,ignored-inclusive AP source/helper-free. Run ap doctor,node .agentplane/policy/check-routing.mjs; no new errors.
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass; CODER verify/finish separate commit hashes; clean main/vendor restored;parent/goal active. No broad native/core/UI promotion.
-  Verification: "Pending execution;no parity or test claims before evidence."
+  Verification: "Command/results: six declared static gates first pass;one sequential upstream-absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 allpass,app/inventory100%lines/statements/functions/branches. No passing suite/build repeats. Vendor restored in finally before five resource/source/inventory audits semantic0. Scope five semantic paths,all341 prior tests byte-identical,234 fields/statuses/defaults/exceptions unchanged except one justification/provenance appendix,three native hashes. Ignored-inclusive AP scan forbidden0;doctor0 errors/two unchanged warnings,routingpass. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json. Exact-SHA same-actor read-only EVALUATOR pass required before verify/finish;broader native/UI and documented hyperlink gaps remain unverified."
   Rollback Plan: "Revert only the semantic commit through a new scoped task,preserve history and other work;no history rewrite."
-  Findings: "Implemented five-string SwFormatINetFormat constructor value snapshot,including inherited supported properties,while retaining plain JSON property order/optional-empty distinctions/URL guard/non-shareability.78 literal cases added:38 direct ownership/projection/clone cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Six static gates first pass. All341 prior tests intended byte-identical and234 runtime fields unchanged except one bounded appendix,pending scope audit. No product tests yet. Native constructors/owned string fields/copy/equality read; broader style IDs/macros/broadcaster/text backlinks/UNO/default empty URL and coupled adjacent INET/native insertion topology remain unverified. No AP sources/helpers or registered I/O/recovery changes."
+  Findings: "Iteration121 fixes SwFormatINetFormat caller metadata alias with an owned five-string construction snapshot,including supported inherited fields. Existing plain JSON order/optional omission versus empty strings/non-shareability/URL rejection/equality/Clone codecs preserved.78 literal cases pass:38 direct value/projection/clone/later-item cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Exactly five semantic paths;all341 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,one provenance appendix,three native hashes. Six static gates first pass;one absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 passed,all app/inventory coverage metrics100%. No suite/build replay or recovery. Vendor restored before five source audits semantic0. Ignored-inclusive AP source/helper scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Exact-SHA same-actor read-only quality review pending. Full native style IDs/macros/broadcaster/text backlink/client/refcounts/hierarchy/default empty URL/full UNO and coupled adjacent INET/native insertion topology remain unverified. Registered I/O/recovery deviations untouched;no module/goal promotion."
 id_source: "generated"
 ---
 ## Summary
@@ -92,7 +92,7 @@ Capture SwFormatINetFormat's five supported string metadata fields at constructi
 
 ## Verification
 
-Pending execution;no parity or test claims before evidence.
+Command/results: six declared static gates first pass;one sequential upstream-absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 allpass,app/inventory100%lines/statements/functions/branches. No passing suite/build repeats. Vendor restored in finally before five resource/source/inventory audits semantic0. Scope five semantic paths,all341 prior tests byte-identical,234 fields/statuses/defaults/exceptions unchanged except one justification/provenance appendix,three native hashes. Ignored-inclusive AP scan forbidden0;doctor0 errors/two unchanged warnings,routingpass. Evidence: evidence/static-gates.json,evidence/absent-profile.json,evidence/restored-source-audits.json,evidence/scope-and-native-hashes.json. Exact-SHA same-actor read-only EVALUATOR pass required before verify/finish;broader native/UI and documented hyperlink gaps remain unverified.
 
 ## Rollback Plan
 
@@ -100,4 +100,4 @@ Revert only the semantic commit through a new scoped task,preserve history and o
 
 ## Findings
 
-Implemented five-string SwFormatINetFormat constructor value snapshot,including inherited supported properties,while retaining plain JSON property order/optional-empty distinctions/URL guard/non-shareability.78 literal cases added:38 direct ownership/projection/clone cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Six static gates first pass. All341 prior tests intended byte-identical and234 runtime fields unchanged except one bounded appendix,pending scope audit. No product tests yet. Native constructors/owned string fields/copy/equality read; broader style IDs/macros/broadcaster/text backlinks/UNO/default empty URL and coupled adjacent INET/native insertion topology remain unverified. No AP sources/helpers or registered I/O/recovery changes.
+Iteration121 fixes SwFormatINetFormat caller metadata alias with an owned five-string construction snapshot,including supported inherited fields. Existing plain JSON order/optional omission versus empty strings/non-shareability/URL rejection/equality/Clone codecs preserved.78 literal cases pass:38 direct value/projection/clone/later-item cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Exactly five semantic paths;all341 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,one provenance appendix,three native hashes. Six static gates first pass;one absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 passed,all app/inventory coverage metrics100%. No suite/build replay or recovery. Vendor restored before five source audits semantic0. Ignored-inclusive AP source/helper scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Exact-SHA same-actor read-only quality review pending. Full native style IDs/macros/broadcaster/text backlink/client/refcounts/hierarchy/default empty URL/full UNO and coupled adjacent INET/native insertion topology remain unverified. Registered I/O/recovery deviations untouched;no module/goal promotion.

@@ -1,0 +1,69 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
+    "apps/office/src/sw/source/core/txtnode/hyperlink-metadata-ownership.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hyperlink-metadata.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 341,
+  "priorTestsByteIdentical": 341,
+  "newAppCases": 78,
+  "existingRuntimeRows": 234,
+  "allExistingRuntimeFieldsExceptOneAppendedJustificationUnchanged": true,
+  "sourceProvenanceOnlyOneAppendix": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/fmtinfmt.hxx",
+      "sha256": "85d4ad5ce3b8252f913c93301d11a9f2039ff5eb3505ac0c270ce3d020bb3bfb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx",
+      "sha256": "f21ad8f8f8615d648f068c27a52f8457828c180843f9917a4ba42c95dd203de3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    }
+  ],
+  "staticChecks": 6,
+  "staticGatesAllFirstPass": true,
+  "absentProfile": {
+    "build": 1,
+    "app": {
+      "tests": 2277,
+      "files": 260,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "inventory": {
+      "tests": 109,
+      "files": 36,
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "scripts": {
+      "tests": 5,
+      "files": 2
+    },
+    "chromium": 99
+  },
+  "passingSuitesRepeated": false,
+  "vendorRestored": true,
+  "sourceAuditCommands": 5,
+  "semanticViolations": 0,
+  "doctor": {
+    "errors": 0,
+    "unchangedWarnings": 2
+  },
+  "policyRouting": "pass",
+  "nativeReview": "Native hyperlink item owns independent URL/target/name/style string fields and copy-construction values,matching the supported five-string snapshot. Caller/returned/clone/later-item/node/copy/cut/move/undo values and current optional/JSON contracts independently checked. Style IDs/macros/broadcaster/text/client/refcount/hierarchy/default empty URL/full UNO remain unverified. Native MergePortions excludes INET;current normalization and insertion topology require a separate coupled correction,beyond this ownership leaf. Registered I/O/recovery deviations untouched."
+}
