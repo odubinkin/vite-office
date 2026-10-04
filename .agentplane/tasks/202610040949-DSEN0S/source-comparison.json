@@ -1,0 +1,23 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "marker": "SwTextNode::AreListLevelIndentsApplicable",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+      "marker": "AreListLevelIndentsApplicable",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/paratr.hxx",
+      "marker": "enum class ListLevelIndents",
+      "sha256": "4128f9548d9fbc697e8eba71b910acdc866fa7a6c05472f72763ef70a04d2ff4"
+    }
+  ],
+  "comparison": "Read-only native independent per-axis applicability and selected alignment inputs; live direct/style ownership and literal geometry. Custom-style flattening, retained serialized sideband and full tab/device/RTL/table/redline/frame layout remain separately unverified.",
+  "nativeExecution": false,
+  "sourceCopies": false
+}

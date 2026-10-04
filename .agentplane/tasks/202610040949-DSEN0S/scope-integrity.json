@@ -1,0 +1,57 @@
+{
+  "base": "b4c7a00ed2d6a2b6fa5eb81f1fe267a1e807d222",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/para/paratr.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/core/para/paratr.ts",
+      "sha256": "4abc91b9c6f4cfe711ffe67567b169ae457ec46037a68855b15ebc44f63d370d"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+      "sha256": "05c70e7ce1e3f5179733ddf9274ef47a93469718fa89bc0e805371d8710cd1a8"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "sha256": "cfc51aee3aec88a50694d4a7958276dc5c9c00581b0d114e271c2d872ed74831"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+      "sha256": "2070845c4a55c68c8d60b6c7498d263707e007d80ddf71d950798937c5e901da"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "e6c63c04b2d94d31e2e8903fe79fc315d5aedb56aded2ac0fad67e9a9d128e2c"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "259aa5191fd22d58d8678f22c77d3ce600a3ee2dcb79b6ac6e6364a0c408d66b"
+    }
+  ],
+  "priorTestFiles": 304,
+  "priorTestFilesByteIdentical": 304,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "rows": 222,
+      "existingRows": 221,
+      "existingRowsAppended": 2,
+      "newRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "rows": 222,
+      "existingRows": 221,
+      "existingRowsAppended": 2,
+      "newRows": 1,
+      "statusDefaultExceptionFieldsUnchanged": true
+    }
+  ]
+}
