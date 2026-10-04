@@ -1,0 +1,64 @@
+{
+  "base": "2b78130bff81",
+  "semanticPaths": 12,
+  "priorTestFiles": 313,
+  "byteIdenticalPriorTests": 310,
+  "boundedOldTestUpdates": 3,
+  "productionTextShellOnlyStyleDescriptorRemoved": true,
+  "selectorAssertionsUnchanged": true,
+  "oldMappingRows": 225,
+  "descriptionAppends": 5,
+  "newUnverifiedOwnerRows": 1,
+  "runtimeModuleCount": 226,
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+      "sha256": "16efa8a1cc21d770aa8799f0b45e1cb2ebb3bd486b813ea6e372e8793005f94f"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+      "sha256": "eef84885d0fdf8ecced947299e1e58d351e830a2b36a9e931cf8a6672eafca98"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+      "sha256": "7b7ebdf2507da191df075f26945f7a7bdf033fd2d0e2b8ba29092feb91be8841"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+      "sha256": "e331ee0312471f0ae7a5af494a826b79876285899b7a8bc5cebc25d1a31531d8"
+    },
+    {
+      "path": "apps/office/src/sw/browser/composition/writer-module.tsx",
+      "sha256": "ed5841e909165368513d54d66c3fe2cd7e86e8f07027bad2a21960d9af036c12"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.test.ts",
+      "sha256": "a22658667789f72731004aec68bbc89c538f1a131d4a11c3a5cb447558339c07"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.test.ts",
+      "sha256": "121a067dd5c8ec60283557ea1035f4b1cb6b96655a05bb0b06c23bdb659759af"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+      "sha256": "19596aa96264ebcf954950a529a54eb2ed0bfb0e354aa6162ddbd5e3096bc1b2"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "5eb017573e41a0337874669fe90c83478998030bbc77a645c05d1a94d020d316"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "9cadae632063cfe7a963b6141720449aa9b53613b914bb3f0704298c67af2047"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/dispatch.ts",
+      "sha256": "a7ed9e591734a669bd2ae8fd47c1b54a8adbb7ea4b5191e745850477edc4795f"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+      "sha256": "bd3e92573471d6de8c2c292cb31818e6817abd550562eace769db89ba528140d"
+    }
+  ],
+  "registeredDeviationFieldsUnchanged": true
+}

@@ -1,0 +1,100 @@
+{
+  "base": "2b78130bff81",
+  "semanticPaths": 12,
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedHashesUnchanged": 10,
+  "priorTestFiles": 313,
+  "byteIdenticalPriorTests": 310,
+  "boundedOwnerTestUpdates": 3,
+  "selectorAssertionsUnchanged": true,
+  "oldMappingRows": 225,
+  "descriptionAppends": 5,
+  "newUnverifiedOwnerRows": 1,
+  "runtimeModuleCount": 226,
+  "statusDefaultExceptionFieldsUnchanged": true,
+  "staticChecksPassed": 7,
+  "routingPassed": true,
+  "sourceChecksPassed": 4,
+  "appCasesPassed": 1421,
+  "newNativeOwnerCases": 55,
+  "inventoryCasesPassed": 109,
+  "scriptCasesPassed": 5,
+  "browserCasesPassed": 93,
+  "initialAppCasesPassed": 1419,
+  "initialAppFixtureFailures": 2,
+  "recovery": "First app gate failed only two old selector cases whose manual fixture lacked the new actual doc-shell command owner. Added owner registration without changing assertions; final full app1421passed. Other suites passed once; no passing full suite repeated.",
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10641,
+      "covered": 10641,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11627,
+      "covered": 11627,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3061,
+      "covered": 3061,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8871,
+      "covered": 8871,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "agentplaneForbiddenFindings": 0,
+  "nativeExecution": false,
+  "nativeCompilation": false,
+  "sourceCopies": false,
+  "passingFullSuitesRepeated": false,
+  "doctor": {
+    "errors": 0,
+    "existingWarnings": 2
+  }
+}

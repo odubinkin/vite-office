@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/app/docst.cxx",
+      "marker": "SwDocShell::ExecStyleSheet",
+      "sha256": "587d8d8fe1ead83d0f63f0796164698ee9f8dc41e894e4a1cfa58144b9aadbc3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/app/docsh.cxx",
+      "marker": "SwDocShell::SetView",
+      "sha256": "7fc864b56298f3a4e32ee79943a3de2d0619ae6627236d1e5b9fda51f9c8b779"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/docsh.hxx",
+      "marker": "GetWrtShell",
+      "sha256": "da50a9e51812e36dcaae32509cde2f17d7d7a39f6e3d2556565dfbc31ab402a3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx",
+      "marker": "SetView",
+      "sha256": "a1d685a3d98ff12eeee129ab9513b4f384bda8ada598ecf3a820ed73b68ba469"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/sdi/_docsh.sdi",
+      "marker": "ExecStyleSheet",
+      "sha256": "47e122c06acc631e4cc11ca502be66a6c7a655328c954e0cfa537127ea30ce57"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/sdi/sfx.sdi",
+      "marker": "SfxTemplateItem StyleApply",
+      "sha256": "c26b0eec89e599621852b6ff99a4e0f354c132343ba2b5f55aa64f094920bc4b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/sfx2/sfxsids.hrc",
+      "marker": "SID_APPLY_STYLE",
+      "sha256": "1bdf55f8f93136e6700c879ef1dfac3ada472ef1a8aeba3b74df945baf323afc"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/svl/style.hxx",
+      "marker": "Para",
+      "sha256": "1948cb44a1ef3c08188c33d60378861040956bd282ca329f51a28fe6dd1356be"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/svl/solar.hrc",
+      "marker": "SID_SFX_START",
+      "sha256": "73c3aeb9a7ed1e0762a89dff9e1f0fcd82497dc61e509bd8176cee37a07e4ba2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx",
+      "marker": "rReq.IsDone()",
+      "sha256": "ee9bab4418d2f8c4813486f6977c1678a18f6389d3016b9a873bd34fdcd044e1"
+    }
+  ],
+  "nativeExecution": false,
+  "sourceCopies": false,
+  "comparison": "Bounded SwDocShell StyleApply owner, active SwView association, Template5552/Family5553 and paired Style6703/FamilyName5566 conversion, Para2 default and named-family override, actual paragraph ownership and unsigned family completion; native dispatcher preserves completed request. Existing paragraph primitive retained. API mode, StyleDesigner, full native style pool/state/selection/reset/modifier/list application and other families remain unverified."
+}
