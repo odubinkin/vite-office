@@ -125,10 +125,15 @@ export class DocumentContentOperationsManager {
     if (targetNode === node && targetOffset >= start && targetOffset <= end)
       throw new Error("Writer cannot move a range into itself.");
     const fragment = node.CaptureTextFragment(start, end);
+    const sourceHints = node.GetpSwpHints();
+    const moved =
+      targetNode !== node && sourceHints !== undefined
+        ? { text: fragment.text, hints: sourceHints.sliceForCut(start, end) }
+        : fragment;
     node.EraseText(start, end - start);
     const adjustedOffset =
       targetNode === node && targetOffset > end ? targetOffset - (end - start) : targetOffset;
-    targetNode.ReplaceRange(adjustedOffset, adjustedOffset, fragment);
+    targetNode.ReplaceRange(adjustedOffset, adjustedOffset, moved);
     return new SwPosition(targetNode, adjustedOffset + fragment.text.length);
   }
 

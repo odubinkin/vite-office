@@ -73,6 +73,16 @@ export class SwpHints {
 
   /** Copies hints intersecting a text range, clipping and rebasing them to zero. @param start - Inclusive text offset. @param end - Exclusive text offset. @returns Independent rebased hints. */
   public slice(start: number, end: number): SwpHints {
+    return this.sliceRange(start, end, false);
+  }
+
+  /** Captures cut attributes with native split/equal-end reconstruction and strictly interior retained flags. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Rebased cut hints. */
+  public sliceForCut(start: number, end: number): SwpHints {
+    return this.sliceRange(start, end, true);
+  }
+
+  /** Clips snapshot or cut attributes without changing the source container. @param start - Inclusive offset. @param end - Exclusive offset. @param cut - Whether native CutImpl construction applies. @returns Independent rebased attributes. */
+  private sliceRange(start: number, end: number, cut: boolean): SwpHints {
     if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start)
       throw new Error("Writer hint slice is invalid.");
     return new SwpHints(
@@ -84,7 +94,10 @@ export class SwpHints {
           const clippedStart = Math.max(start, hint.start);
           const clippedEnd = Math.min(end, hint.end);
           if (clippedEnd <= clippedStart) return [];
-          const copy = hint.clone();
+          const copy =
+            cut && (hint.start < start || hint.end >= end)
+              ? MakeTextAttr(this.pool.GetDoc(), hint.format, clippedStart, clippedEnd)
+              : hint.clone();
           copy.start = clippedStart - start;
           copy.SetEnd(clippedEnd - start);
           return [copy];

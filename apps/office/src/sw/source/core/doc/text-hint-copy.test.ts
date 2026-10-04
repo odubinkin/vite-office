@@ -217,8 +217,8 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
     expect(markers.Count()).toBe(1);
   });
   it.each(masks)(
-    "retains whole moved attributes and captured history for mask %s",
-    /** Checks a whole attribute move separately from actual copying. @param mask - Source flags. @returns Nothing. */ (
+    "reconstructs exact-end moved attributes and retains captured history for mask %s",
+    /** Checks native strict cut-end boundary separately from retained snapshots. @param mask - Source flags. @returns Nothing. */ (
       mask,
     ) => {
       const f = fixture(mask),
@@ -236,7 +236,7 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
       expect(f.node.GetText()).toBe("aef");
       expect(f.node.GetpSwpHints()).toBeUndefined();
       expect(target.GetText()).toBe("XbcdY");
-      expectFlags(target, 1, 4, mask);
+      expectFlags(target, 1, 4, 0);
       expect(handle(target)).toBe(original);
       f.node.ReplaceRange(0, f.node.Len(), before);
       expect(f.node.GetText()).toBe("abcdef");

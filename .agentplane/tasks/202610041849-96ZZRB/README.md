@@ -4,7 +4,7 @@ title: "Restore cut text hint reconstruction boundaries"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: implement approved strict cut-end flag boundaries and source-supported expectation correction under standing goal."
 doc_version: 3
-doc_updated_at: "2026-10-04T18:54:32.104Z"
+doc_updated_at: "2026-10-04T19:00:15.973Z"
 doc_updated_by: "CODER"
 description: "Port native CutImpl strict end-boundary and split attribute construction into existing cross-node MoveRange; preserve snapshot semantics, correct the previous exact-end expectation, and leave same-node move adapter and native object lifetimes explicitly unverified."
 sections:
@@ -65,7 +65,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task implementation/docs through a new traceable task without history rewrite. Restore vendor directory in finally and after interruption."
-  Findings: "Native CutImpl uses strict hint end before cut end for retained flags; exact-end prior expectation is corrected. Initial format gate passed; lint found two missing JSDoc comments on new test-only Span/CutCase declarations. Add the comments and recover only lint, then run pending static gates and the single absent test profile. No production behavior, scope, verification criteria or upstream-dependent test change."
+  Findings: "Iteration116 restores native CutImpl attribute flag selection for existing cross-node MoveRange. Explicit SwpHints.sliceForCut shares validation/clipping with snapshot slice: hints starting before the cut or ending at/after the exclusive end reconstruct via MakeTextAttr and fresh false flags; only inside-start/end-strictly-before hints retain original flags. Prior iteration115 exact-end whole-move retention statement is superseded; its eight-mask expectation/title/comment is corrected,332 other prior test files byte-identical. New app-owned125 cases cover13 literal boundary relations/all8 masks/both families, exact source/target ranges, metadata, shared owner handles, retained source/undo fragments, real ReplaceUndoRange restoration, invalid/empty/plain cuts and preserved same-node adapter behavior. Six static gates pass after only failed lint recovery for two missing JSDoc comments on new test types. All five first-attempt upstream-absent gates pass: one build,1888app/251files four coverage metrics100%,109inventory/36files four metrics100%,scripts5/2,Chromium99. No test/profile repetitions and no upstream access from product tests. Vendor restored before five source audits; all pass semantic violations0. Exact six semantic paths,234 existing runtime fields/statuses/defaults/exceptions retained except two bounded justification appendices; eight native hashes. AP ignored-inclusive scan3743 files, forbidden0; doctor0 errors/two unchanged warnings, policy routing pass. Native physical hint identity/refcount/listeners, source empty hints, destination Update/InsertHint adjustment, same-node move algorithm, SplitContentNode original-suffix identity and broader core/browser parity remain unverified. No whole-module/status/goal promotion or registered I/O/recovery changes."
 id_source: "generated"
 ---
 ## Summary
@@ -106,4 +106,4 @@ Revert task implementation/docs through a new traceable task without history rew
 
 ## Findings
 
-Native CutImpl uses strict hint end before cut end for retained flags; exact-end prior expectation is corrected. Initial format gate passed; lint found two missing JSDoc comments on new test-only Span/CutCase declarations. Add the comments and recover only lint, then run pending static gates and the single absent test profile. No production behavior, scope, verification criteria or upstream-dependent test change.
+Iteration116 restores native CutImpl attribute flag selection for existing cross-node MoveRange. Explicit SwpHints.sliceForCut shares validation/clipping with snapshot slice: hints starting before the cut or ending at/after the exclusive end reconstruct via MakeTextAttr and fresh false flags; only inside-start/end-strictly-before hints retain original flags. Prior iteration115 exact-end whole-move retention statement is superseded; its eight-mask expectation/title/comment is corrected,332 other prior test files byte-identical. New app-owned125 cases cover13 literal boundary relations/all8 masks/both families, exact source/target ranges, metadata, shared owner handles, retained source/undo fragments, real ReplaceUndoRange restoration, invalid/empty/plain cuts and preserved same-node adapter behavior. Six static gates pass after only failed lint recovery for two missing JSDoc comments on new test types. All five first-attempt upstream-absent gates pass: one build,1888app/251files four coverage metrics100%,109inventory/36files four metrics100%,scripts5/2,Chromium99. No test/profile repetitions and no upstream access from product tests. Vendor restored before five source audits; all pass semantic violations0. Exact six semantic paths,234 existing runtime fields/statuses/defaults/exceptions retained except two bounded justification appendices; eight native hashes. AP ignored-inclusive scan3743 files, forbidden0; doctor0 errors/two unchanged warnings, policy routing pass. Native physical hint identity/refcount/listeners, source empty hints, destination Update/InsertHint adjustment, same-node move algorithm, SplitContentNode original-suffix identity and broader core/browser parity remain unverified. No whole-module/status/goal promotion or registered I/O/recovery changes.
