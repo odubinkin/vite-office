@@ -4,7 +4,7 @@ title: "Preserve native hyperlink text boundaries"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T21:31:27.504Z"
+  updated_by: "CODER"
+  note: "Verified owned native hyperlink boundary scope at e1f17e8baeb84696ff00cd83ae57a237cd5753be. One absent build/app profile2597pass/2fail with100%coverage;only2failed cases recovered367skipped,production unchanged.109inventory/5script/99Chromium pass once absent,100%inventorycoverage.322newcases,341prior tests unchanged,2native expectation corrections;9paths/234existingrows preserved/1newunverifiedhelper. Static gates and5restored source audits pass,semantic0,APsourcefree,doctor0errors/routingpass,exact-SHA same-actor qualitypass;registered deviations untouched,broad parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -61,8 +61,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved coupled native hyperlink normalization/owned text coordinate update scope;one absent suite profile only,no AP source or helpers."
+  -
+    type: "verify"
+    at: "2026-10-04T21:31:27.504Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified owned native hyperlink boundary scope at e1f17e8baeb84696ff00cd83ae57a237cd5753be. One absent build/app profile2597pass/2fail with100%coverage;only2failed cases recovered367skipped,production unchanged.109inventory/5script/99Chromium pass once absent,100%inventorycoverage.322newcases,341prior tests unchanged,2native expectation corrections;9paths/234existingrows preserved/1newunverifiedhelper. Static gates and5restored source audits pass,semantic0,APsourcefree,doctor0errors/routingpass,exact-SHA same-actor qualitypass;registered deviations untouched,broad parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T21:31:14.146Z"
+doc_updated_at: "2026-10-04T21:31:27.563Z"
 doc_updated_by: "CODER"
 description: "Iteration122 replaces ordinary text hint splitting/value remerge with native owned boundary updates and excludes INET from adjacent MergePortions normalization. Include positive/negative coordinate updates,two-family flag/cross-family collector rules,actual object/maps/node/index/history boundaries,explicit formatting compatibility and bounded residuals. No upstream execution/helper artifacts;one absent profile only. Depends on completed iteration121."
 sections:
@@ -85,7 +91,41 @@ sections:
     4. After restoration npm exec -- tsx scripts/generate-writer-ui-resources.ts --check;npm run check:source-tree;npm run check:source-provenance;npm run inventory:invariants;npm run inventory:parity. All pass,semantic violations0.
     5. Exact nine-path scope audit;two existing Count/comment/end corrections,all341otherprevious tests byte-identical;234 existing runtime rows identical except two bounded justification appendices,one new unverified native helper row/mapping;native hashes and sourcefree ignored-inclusive AP scan. ap doctor and node .agentplane/policy/check-routing.mjs pass without new errors.
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass;CODER verify/finish with separate hashes;clean main/vendor restored,parent active. No broad native/UI status/default/exception or registered I/O/recovery promotion.
-  Verification: "Iteration122 restores separate adjacent INET54 ranges and native owned boundary changes for ordinary insertion/pure erasure.322 new literal cases exercise two families/eight flags,all start/interior/end/outside/paragraph-start relations,mixed same-end DontExpand behavior,actual item/object/three-map/content-index ownership,caller/history/copy/cut/transfer/graph16/undo independence. Exactly nine semantic paths;2old tests corrected only native-invalid INET count/end/comment expectations,341other343prior tests byte-identical.234 existing runtime fields/statuses/defaults/exceptions unchanged except two justification appendices;one new source-owned helper remains unverified;provenance2appendices/1helpermapping/1filename-split record;3native hashes match. Six static gates pass after one new-fixture generic type correction;focused lint/type checks cover later added direct-adapter assertion,test-only corrections focusedlint. One absent build/app profile:2597pass/2fail with100%four-metric coverage,only2failedcases recovered367skipped;production hashes unchanged,no full app/build replay. Inventory109/36/scripts5/2/Chromium99 pass once absent,inventory100%fourmetrics. Vendor restored before5source audits;provenance filename-split omission corrected metadata-only and only failed provenance audit rerun. Semantic violations0,APignored-inclusive forbidden0,doctor0errors/two unchangedwarnings,routingpass. Exact-SHA e1f17e8baeb84696ff00cd83ae57a237cd5753be same-actor read-only quality pass at .agentplane/tasks/202610042109-62D8VS/quality/20261004-213046335-recovery-context/quality-report.json. Full zero-width attribute retention/Insert modes/ignore-expand locks/families/BuildPortions/nesting/native hierarchy/refcounts/client/listeners and explicit replacement/copy destination/same-node move/split/join remain unverified;registered save/open/recovery deviations untouched;parent goal active."
+  Verification: |-
+    Iteration122 restores separate adjacent INET54 ranges and native owned boundary changes for ordinary insertion/pure erasure.322 new literal cases exercise two families/eight flags,all start/interior/end/outside/paragraph-start relations,mixed same-end DontExpand behavior,actual item/object/three-map/content-index ownership,caller/history/copy/cut/transfer/graph16/undo independence. Exactly nine semantic paths;2old tests corrected only native-invalid INET count/end/comment expectations,341other343prior tests byte-identical.234 existing runtime fields/statuses/defaults/exceptions unchanged except two justification appendices;one new source-owned helper remains unverified;provenance2appendices/1helpermapping/1filename-split record;3native hashes match. Six static gates pass after one new-fixture generic type correction;focused lint/type checks cover later added direct-adapter assertion,test-only corrections focusedlint. One absent build/app profile:2597pass/2fail with100%four-metric coverage,only2failedcases recovered367skipped;production hashes unchanged,no full app/build replay. Inventory109/36/scripts5/2/Chromium99 pass once absent,inventory100%fourmetrics. Vendor restored before5source audits;provenance filename-split omission corrected metadata-only and only failed provenance audit rerun. Semantic violations0,APignored-inclusive forbidden0,doctor0errors/two unchangedwarnings,routingpass. Exact-SHA e1f17e8baeb84696ff00cd83ae57a237cd5753be same-actor read-only quality pass at .agentplane/tasks/202610042109-62D8VS/quality/20261004-213046335-recovery-context/quality-report.json. Full zero-width attribute retention/Insert modes/ignore-expand locks/families/BuildPortions/nesting/native hierarchy/refcounts/client/listeners and explicit replacement/copy destination/same-node move/split/join remain unverified;registered save/open/recovery deviations untouched;parent goal active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T21:31:27.504Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified owned native hyperlink boundary scope at e1f17e8baeb84696ff00cd83ae57a237cd5753be. One absent build/app profile2597pass/2fail with100%coverage;only2failed cases recovered367skipped,production unchanged.109inventory/5script/99Chromium pass once absent,100%inventorycoverage.322newcases,341prior tests unchanged,2native expectation corrections;9paths/234existingrows preserved/1newunverifiedhelper. Static gates and5restored source audits pass,semantic0,APsourcefree,doctor0errors/routingpass,exact-SHA same-actor qualitypass;registered deviations untouched,broad parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T21:31:14.146Z, excerpt_hash=sha256:1711dc00a30399f00f2b21548daac8ce8934f9d2921b9a67c048a248af508086
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042109-62D8VS/blueprint/resolved-snapshot.json
+    - old_digest: 695974f4389e9e98f530d89c161692fae3d1f2fea32bbd01e3b8337c89f5d93d
+    - current_digest: 695974f4389e9e98f530d89c161692fae3d1f2fea32bbd01e3b8337c89f5d93d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042109-62D8VS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610042109-62D8VS
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf's semantic commit via a new authorized follow-up task;do not rewrite history or mutate DONE artifacts."
   Findings: "Iteration122 restores separate adjacent INET54 ranges and native owned boundary changes for ordinary insertion/pure erasure.322 new literal cases exercise two families/eight flags,all start/interior/end/outside/paragraph-start relations,mixed same-end DontExpand behavior,actual item/object/three-map/content-index ownership,caller/history/copy/cut/transfer/graph16/undo independence. Exactly nine semantic paths;2old tests corrected only native-invalid INET count/end/comment expectations,341other343prior tests byte-identical.234 existing runtime fields/statuses/defaults/exceptions unchanged except two justification appendices;one new source-owned helper remains unverified;provenance2appendices/1helpermapping/1filename-split record;3native hashes match. Six static gates pass after one new-fixture generic type correction;focused lint/type checks cover later added direct-adapter assertion,test-only corrections focusedlint. One absent build/app profile:2597pass/2fail with100%four-metric coverage,only2failedcases recovered367skipped;production hashes unchanged,no full app/build replay. Inventory109/36/scripts5/2/Chromium99 pass once absent,inventory100%fourmetrics. Vendor restored before5source audits;provenance filename-split omission corrected metadata-only and only failed provenance audit rerun. Semantic violations0,APignored-inclusive forbidden0,doctor0errors/two unchangedwarnings,routingpass. Exact-SHA e1f17e8baeb84696ff00cd83ae57a237cd5753be same-actor read-only quality pass at .agentplane/tasks/202610042109-62D8VS/quality/20261004-213046335-recovery-context/quality-report.json. Full zero-width attribute retention/Insert modes/ignore-expand locks/families/BuildPortions/nesting/native hierarchy/refcounts/client/listeners and explicit replacement/copy destination/same-node move/split/join remain unverified;registered save/open/recovery deviations untouched;parent goal active."
 id_source: "generated"
@@ -122,6 +162,39 @@ Preserve separate adjacent INET54 ranges while retaining existing AUTO53 adjacen
 ## Verification
 
 Iteration122 restores separate adjacent INET54 ranges and native owned boundary changes for ordinary insertion/pure erasure.322 new literal cases exercise two families/eight flags,all start/interior/end/outside/paragraph-start relations,mixed same-end DontExpand behavior,actual item/object/three-map/content-index ownership,caller/history/copy/cut/transfer/graph16/undo independence. Exactly nine semantic paths;2old tests corrected only native-invalid INET count/end/comment expectations,341other343prior tests byte-identical.234 existing runtime fields/statuses/defaults/exceptions unchanged except two justification appendices;one new source-owned helper remains unverified;provenance2appendices/1helpermapping/1filename-split record;3native hashes match. Six static gates pass after one new-fixture generic type correction;focused lint/type checks cover later added direct-adapter assertion,test-only corrections focusedlint. One absent build/app profile:2597pass/2fail with100%four-metric coverage,only2failedcases recovered367skipped;production hashes unchanged,no full app/build replay. Inventory109/36/scripts5/2/Chromium99 pass once absent,inventory100%fourmetrics. Vendor restored before5source audits;provenance filename-split omission corrected metadata-only and only failed provenance audit rerun. Semantic violations0,APignored-inclusive forbidden0,doctor0errors/two unchangedwarnings,routingpass. Exact-SHA e1f17e8baeb84696ff00cd83ae57a237cd5753be same-actor read-only quality pass at .agentplane/tasks/202610042109-62D8VS/quality/20261004-213046335-recovery-context/quality-report.json. Full zero-width attribute retention/Insert modes/ignore-expand locks/families/BuildPortions/nesting/native hierarchy/refcounts/client/listeners and explicit replacement/copy destination/same-node move/split/join remain unverified;registered save/open/recovery deviations untouched;parent goal active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T21:31:27.504Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified owned native hyperlink boundary scope at e1f17e8baeb84696ff00cd83ae57a237cd5753be. One absent build/app profile2597pass/2fail with100%coverage;only2failed cases recovered367skipped,production unchanged.109inventory/5script/99Chromium pass once absent,100%inventorycoverage.322newcases,341prior tests unchanged,2native expectation corrections;9paths/234existingrows preserved/1newunverifiedhelper. Static gates and5restored source audits pass,semantic0,APsourcefree,doctor0errors/routingpass,exact-SHA same-actor qualitypass;registered deviations untouched,broad parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T21:31:14.146Z, excerpt_hash=sha256:1711dc00a30399f00f2b21548daac8ce8934f9d2921b9a67c048a248af508086
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042109-62D8VS/blueprint/resolved-snapshot.json
+- old_digest: 695974f4389e9e98f530d89c161692fae3d1f2fea32bbd01e3b8337c89f5d93d
+- current_digest: 695974f4389e9e98f530d89c161692fae3d1f2fea32bbd01e3b8337c89f5d93d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042109-62D8VS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610042109-62D8VS
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
