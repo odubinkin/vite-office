@@ -4,7 +4,7 @@ title: "Restore native empty hyperlink item values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -59,7 +59,7 @@ events:
     to: "DOING"
     note: "Start: Restore native empty string and default/copy item semantics with one absent-reference verification profile under the standing iterative goal."
 doc_version: 3
-doc_updated_at: "2026-10-04T22:48:40.049Z"
+doc_updated_at: "2026-10-04T22:50:00.792Z"
 doc_updated_by: "CODER"
 description: "Replace canonical hyperlink DTO storage with the five native owned strings, restore zero-valued default/copy construction and native empty-string equality, and retain UI normalization at its existing boundary. Correct only prior tests that assert non-native empty rejection, optional-empty inequality or caller JSON property order. Validate the existing ownership/history/browser paths once with upstream absent; preserve registered IO deviations and unverified residual native style IDs/UNO/macros/clients."
 sections:
@@ -102,7 +102,7 @@ sections:
 
     Command: scope-and-native-hashes,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence: six paths;349prior tests accounted,347unchanged/two native corrections;24newcases;237runtime states/defaults/exceptions preserved,one bounded responsibility appendix;four native hashes;3833APfiles/0forbidden. Scope: native string/default/copy/equality slice. Native styled URL/target pool defaults and complete style IDs/UNO/macros/broadcaster/clients/destruction/full core/UI parity remain unverified.
 
-    Exact semantic SHA EVALUATOR review,doctor/routing and final clean-state evidence pending commit.
+    Command: same-actor read-only EVALUATOR review of exact semantic SHA 1fd61a1d0f8e71136ac83895a071b36debc6ea2f;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: committed six paths equal reviewed checkout;all bounded assertions pass;quality report .agentplane/tasks/202610042239-XZQJ21/quality/20261004-224940417-recovery-context/quality-report.json;doctor0errors/two unchanged legacy warnings;routingOK;cleanmain before quality persistence. Scope: bounded native string/default/copy/equality contract only;no independent-agent claim or full parity promotion.
   Rollback Plan: "Revert the leaf semantic commit if required;do not rewrite history."
   Findings: |-
     Pinned LibreOffice26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. fmtinfmt.hxx declares five owned strings. fmtatr2.cxx zero constructor initializes all five empty and null backlink;CreateDefault returns that constructor;copy constructor copies strings but not backlink;operator== compares string values. Current local model stores optional DTO fields,throws for empty URL and distinguishes missing from empty. Existing nonempty normalization and browser dialog validation are separate and remain active. Native pool default in init.cxx uses the styled URL/target constructor,distinct from type-info/CreateDefault zero constructor;do not falsely claim the native pool-style defaults restored. Native style IDs/styled constructor/UNO/macros/clients require a later separate ownership audit. Standing user authorizes iterative local leaves,prohibits saved source/helpers,and requires tests once absent.
@@ -162,7 +162,7 @@ Command: five restored source audits listed in Verify Steps. Result: pass. Evide
 
 Command: scope-and-native-hashes,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence: six paths;349prior tests accounted,347unchanged/two native corrections;24newcases;237runtime states/defaults/exceptions preserved,one bounded responsibility appendix;four native hashes;3833APfiles/0forbidden. Scope: native string/default/copy/equality slice. Native styled URL/target pool defaults and complete style IDs/UNO/macros/broadcaster/clients/destruction/full core/UI parity remain unverified.
 
-Exact semantic SHA EVALUATOR review,doctor/routing and final clean-state evidence pending commit.
+Command: same-actor read-only EVALUATOR review of exact semantic SHA 1fd61a1d0f8e71136ac83895a071b36debc6ea2f;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: committed six paths equal reviewed checkout;all bounded assertions pass;quality report .agentplane/tasks/202610042239-XZQJ21/quality/20261004-224940417-recovery-context/quality-report.json;doctor0errors/two unchanged legacy warnings;routingOK;cleanmain before quality persistence. Scope: bounded native string/default/copy/equality contract only;no independent-agent claim or full parity promotion.
 
 ## Rollback Plan
 
