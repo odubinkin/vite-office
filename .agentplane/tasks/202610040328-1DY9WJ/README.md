@@ -1,10 +1,11 @@
 ---
 id: "202610040328-1DY9WJ"
 title: "Restore Sidebar ShowPanel viewport adjustment after focus"
-status: "DOING"
+result_summary: "Restored owned Sidebar viewport adjustment for Tab and content Escape; native full layout and parent parity remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -47,11 +48,16 @@ quality_review:
     - "Reviewed owned DOM geometry and closed native rectangle boundaries, post-expansion/focus ordering, optional legacy callback, actual registered Escape index, isolated decks and measured browser editing. Declared tests and baseline support bounded behavior."
     - "Exact8semantic paths;271prior test bytes and218manifest rows/order/status/owner/default/exceptions retained. Three append-only evidence/responsibility updates; no status promotion."
     - "Full pipeline and vendor-absent app/tool/browser tests exit0;100% app/inventory coverage. Artifact audit raw/decoded and ignored-inclusive finds0source/helper/Python/code frames/archive;5historical prose-only diffs explicitly excluded."
-commit: null
+commit:
+  hash: "156c7e47f38df93fd089bc5b47fedc430d913ed6"
+  message: "🎯 1DY9WJ code: restore Sidebar ShowPanel viewport adjustment"
 comments:
   -
     author: "CODER"
     body: "Start: standing parity goal, one owned Sidebar ShowPanel scroll correction; no upstream execution or source/helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: bounded Sidebar ShowPanel adjustment after expansion/focus, exact8semantic paths,271oldtests preserved; full1055+109+55+2 and vendor-absent1055+109+12+55 pass,coverage100%,artifact source/helper/Python audit0,same-actor quality exactsemantic. Parent goal remains open."
 events:
   -
     type: "status"
@@ -72,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Declared deterministic checks and same-actor EVALUATOR pass on semantic156c7e47f38df93fd089bc5b47fedc430d913ed6; final evidence updated without code changes."
+  -
+    type: "status"
+    at: "2026-10-04T03:50:31.037Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: bounded Sidebar ShowPanel adjustment after expansion/focus, exact8semantic paths,271oldtests preserved; full1055+109+55+2 and vendor-absent1055+109+12+55 pass,coverage100%,artifact source/helper/Python audit0,same-actor quality exactsemantic. Parent goal remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T03:50:28.248Z"
+doc_updated_at: "2026-10-04T03:50:31.039Z"
 doc_updated_by: "CODER"
 description: "Iteration87: adapt pinned Deck ShowPanel extent and adjustment contract to existing owned Sidebar scrollport after expansion/focus, including content Escape; preserve old tests, statuses and intentional save/open/recovery deviations."
 sections:
@@ -148,6 +161,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert isolated semantic commit if needed; keep bounded task result/hash evidence. Vendor restoration always runs in finally; no history rewrite."
   Findings: "Iteration87 corrects existing ShowPanel scrolling after expanded title focus. Baseline actual Writer Tab/Escape both failed missing adjustment; new tests now pass. Native closed Rectangle Bottom then additional minus-one is covered by literal positive/empty/boundary cases; top takes precedence for oversized panels. Existing viewport owns geometry and adjustment; managed Escape resolves actual registered panel index; legacy three-callback manager and standalone panels retained. Lint first found one helper JSDoc parameter name and declaration ordering; corrected comment and moved ShowPanel declaration before mount binding, without suppressions. No prior test edits,core/resource/policy or intentional save/open/recovery changes. Evidence contains bounded results/hashes/conclusions only, no helper files, source bodies, diagnostic tails or native compilation/execution. Full native failed extents,minimum/preferred sizing and LOK scroll policy,DPI/rounding,F6/settings/other decks/context/profile/native flags and whole Sidebar/native/parent parity remain unverified. Parent goal stays open; this is one bounded correction."
+extensions:
+  implementation_commit:
+    hash: "156c7e47f38df93fd089bc5b47fedc430d913ed6"
+    message: "🎯 1DY9WJ code: restore Sidebar ShowPanel viewport adjustment"
 id_source: "generated"
 ---
 ## Summary
