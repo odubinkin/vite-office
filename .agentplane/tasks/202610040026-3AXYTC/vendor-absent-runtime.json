@@ -1,0 +1,22 @@
+{
+  "command": "npm run test",
+  "exit": 0,
+  "signal": null,
+  "bytes": 2217,
+  "sha256": "7ceb6d57818d143349e539eb07c923ac8fbd7daf459b5e50cd9f0d389b3a13f8",
+  "summary": [
+    " Test Files  199 passed (199)",
+    "      Tests  978 passed (978)",
+    "Statements   : 100% ( 11161/11161 )",
+    "Branches     : 100% ( 8435/8435 )",
+    "Functions    : 100% ( 2966/2966 )",
+    "Lines        : 100% ( 10241/10241 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )"
+  ],
+  "errors": []
+}
