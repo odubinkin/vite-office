@@ -4,7 +4,7 @@ title: "Restore Paragraph sidebar Escape focus routing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: authorized iteration85 Paragraph Escape content-title-document route;retain mounted panel/deck/model,child consumption,own document ref and registered deviations;upstream-independent tests/results-only artifacts."
 doc_version: 3
-doc_updated_at: "2026-10-04T02:17:07.765Z"
+doc_updated_at: "2026-10-04T02:24:15.072Z"
 doc_updated_by: "CODER"
 description: "Iteration85: restore native Sidebar FocusManager Escape from Paragraph content to panel title and from panel title/toolbar to the owning document, retaining panel/deck/model state and registered deviations."
 sections:
@@ -46,7 +46,7 @@ sections:
   Verify Steps: "Read-only pinned9bc445578031fecf56086729d8e4940c77e14d65 complete relevant FocusManager GetFocusLocation/FocusPanel/HandleKeyEvent Escape and Panel SetExpanded/Deck Window ownership/GrabFocusToDocument helper, no source copies/native compilation/execution. New owned actual Writer baseline failures then fixed: content Escape to title, title/toolbox Escape to own editor, panel/deck/model/retained draft unchanged,no commands;plain/modified Escape native condition;child defaultPrevented honored;no-owner header unconsumed;other keys preserved. Fresh desktop/mobile Chromium content-title-document route, collapsed MoreOptions/title Escape remains collapsed/deck selected,actual editor typing after focus.265prior tests byte-identical217prior rows/defaults/status/owner/evidence/order preserved,three evidence/responsibility-only append updates,no new rows. npm run verify allpass100%coverage0semantic;sequential vendor root absent npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e;restorefinally. Tests do not read/compile/invoke pin;static source-reading CLI audits separate.8semantic/source hashes unchanged,artifact ignored-inclusive source/helper/Python/exe/archive/magic/embedded/diff0,doctor0errors2knownwarnings/routing/diffpass,exactsemantic same-actor quality,canonicalfinish cleancheckout."
   Verification: "Pending baseline/corrected owned and fresh Chromium/full/vendor-absent checks. Tests upstream-independent; static CLI audits separate."
   Rollback Plan: "Revert only semantic correction through a new authorized task;preserve history/results/registered deviations."
-  Findings: "Previous goal turn is progress: Paragraph expansion/More Options DONE38c845e57656 and explicit separate artifact cleanupeaa15ebac432. Current cleanmainadc5d7f0796f;parentC9TN6M DOING. Pinned FocusManager Escape distinguishes content->panel title from title/toolbox->own document; current SidebarPanel implements Return only and existing deck Escape handles deck controls. No source/helper artifacts and no native execution. Full wider sidebar focus/parent parity open."
+  Findings: "Previous goal turn is progress: Paragraph expansion/More Options DONE38c845e57656 and explicit separate artifact cleanupeaa15ebac432. Current cleanmainadc5d7f0796f;parentC9TN6M DOING. Pinned FocusManager Escape distinguishes content->panel title from title/toolbox->own document; current SidebarPanel implements Return only and existing deck Escape handles deck controls. No source/helper artifacts and no native execution. Full wider sidebar focus/parent parity open. Before-production actual Writer baseline6fails due unconsumed Escape; corrected12new owned cases and focused26/5files pass. Fresh browser10cases pass including2new widths. First build failed strict optional props forwarding explicit undefined; SidebarPanel optional ownership type now explicitly accepts forwarded undefined, preserving no-owner behavior without changing tsconfig or criteria;corrected buildpass.265prior tests byte-identical,217rows fields/order/status/defaults/owners retained,three append-only evidence/responsibility rows each;8semantic5source hashes. Full and vendor-absent checks pending."
 id_source: "generated"
 ---
 ## Summary
@@ -75,4 +75,4 @@ Revert only semantic correction through a new authorized task;preserve history/r
 
 ## Findings
 
-Previous goal turn is progress: Paragraph expansion/More Options DONE38c845e57656 and explicit separate artifact cleanupeaa15ebac432. Current cleanmainadc5d7f0796f;parentC9TN6M DOING. Pinned FocusManager Escape distinguishes content->panel title from title/toolbox->own document; current SidebarPanel implements Return only and existing deck Escape handles deck controls. No source/helper artifacts and no native execution. Full wider sidebar focus/parent parity open.
+Previous goal turn is progress: Paragraph expansion/More Options DONE38c845e57656 and explicit separate artifact cleanupeaa15ebac432. Current cleanmainadc5d7f0796f;parentC9TN6M DOING. Pinned FocusManager Escape distinguishes content->panel title from title/toolbox->own document; current SidebarPanel implements Return only and existing deck Escape handles deck controls. No source/helper artifacts and no native execution. Full wider sidebar focus/parent parity open. Before-production actual Writer baseline6fails due unconsumed Escape; corrected12new owned cases and focused26/5files pass. Fresh browser10cases pass including2new widths. First build failed strict optional props forwarding explicit undefined; SidebarPanel optional ownership type now explicitly accepts forwarded undefined, preserving no-owner behavior without changing tsconfig or criteria;corrected buildpass.265prior tests byte-identical,217rows fields/order/status/defaults/owners retained,three append-only evidence/responsibility rows each;8semantic5source hashes. Full and vendor-absent checks pending.
