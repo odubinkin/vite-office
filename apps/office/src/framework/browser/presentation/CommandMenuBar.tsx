@@ -237,11 +237,20 @@ export function CommandMenuBar({
     event: React.KeyboardEvent<HTMLButtonElement>,
     index: number,
   ): void {
-    if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+    if (
+      event.key === "ArrowRight" ||
+      event.key === "ArrowLeft" ||
+      event.key === "Home" ||
+      event.key === "End"
+    ) {
       event.preventDefault();
       menuActive.current = true;
-      const delta = event.key === "ArrowRight" ? 1 : -1;
-      const next = (index + delta + menus.length) % menus.length;
+      const next =
+        event.key === "Home"
+          ? 0
+          : event.key === "End"
+            ? menus.length - 1
+            : (index + (event.key === "ArrowRight" ? 1 : -1) + menus.length) % menus.length;
       setActiveTriggerIndex(next);
       triggerRefs.current[next]?.focus();
       if (openMenuIndex !== undefined) openMenu(next, true);
@@ -252,12 +261,6 @@ export function CommandMenuBar({
       event.preventDefault();
       if (openMenuIndex === index) closeMenu(true);
       else openMenu(index, true);
-    } else if (event.key === "Home" || event.key === "End") {
-      event.preventDefault();
-      menuActive.current = true;
-      const next = event.key === "Home" ? 0 : menus.length - 1;
-      setActiveTriggerIndex(next);
-      triggerRefs.current[next]?.focus();
     } else if (event.key === "Escape") closeMenu(true, openMenuIndex === undefined);
   }
 
