@@ -1,0 +1,105 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/writer-style-modifier.test.tsx",
+    "apps/office/src/sw/source/core/doc/automatic-style-handles.test.ts",
+    "apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "apps/office/src/sw/source/core/edit/edfcol-history.test.ts",
+    "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+    "apps/office/src/sw/source/core/edit/edfcol-reset.test.ts",
+    "apps/office/src/sw/source/core/txtnode/automatic-itemset-equality.test.ts",
+    "apps/office/src/sw/source/core/txtnode/hint-owner-notifications.test.ts",
+    "apps/office/src/sw/source/core/txtnode/hint-pool-ownership.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-hint-order.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-text-hint-update.test.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-notifications.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hyperlink-metadata.test.ts",
+    "apps/office/src/sw/source/core/txtnode/secondary-hint-maps.test.ts",
+    "apps/office/src/sw/source/core/txtnode/secondary-hint-transfer.test.ts",
+    "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-replacement.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-selective.test.ts",
+    "apps/office/src/sw/source/core/txtnode/txtedt-stylepool.test.ts",
+    "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
+    "apps/office/src/sw/source/core/txtnode/txtatr2.ts",
+    "apps/office/src/sw/source/core/txtnode/text-attribute-hierarchy.test.ts",
+    "apps/office/src/sw/source/core/txtnode/nesting-attribute-ownership.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/txtnode/thints.test.ts"
+  ],
+  "priorTests": 345,
+  "priorByteIdentical": 320,
+  "priorRangeTypeOnly": 13,
+  "priorNativeExpectationCorrections": [
+    "apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "apps/office/src/sw/source/core/txtnode/hint-owner-notifications.test.ts",
+    "apps/office/src/sw/source/core/txtnode/hint-pool-ownership.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-hint-order.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hyperlink-metadata.test.ts",
+    "apps/office/src/sw/source/core/txtnode/secondary-hint-transfer.test.ts",
+    "apps/office/src/sw/source/core/txtnode/thints.test.ts"
+  ],
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txatbase.hxx",
+      "sha256": "ac8e656fd70b8348cdf4ad8f58669553a420c70054712c62a423570d52635d6b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtatr2.cxx",
+      "sha256": "0834ec1af0972001223cc0790fe609f331e3e6fdb036752109d9533921cf8de8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txtinet.hxx",
+      "sha256": "0ffc2cf2e2bf2d4c4a468d4f88644ef00e83ba1863ed5edf1f57473d668a19de"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/fmtinfmt.hxx",
+      "sha256": "85d4ad5ce3b8252f913c93301d11a9f2039ff5eb3505ac0c270ce3d020bb3bfb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    }
+  ],
+  "newAppCases": 32,
+  "existingRuntimeRows": 235,
+  "newUnverifiedRuntimeRows": 1,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "onlyFiveResponsibilityAppendicesAndTwoRangeSymbols": true,
+  "staticChecks": 6,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 2631,
+    "appFiles": 264,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appInitialCoverage100": true,
+  "inventoryCombinedCoverage100": true,
+  "failedCasesOnlyReplayed": 36,
+  "noPassingSuiteOrBuildReplay": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "semanticViolations": 0,
+  "nativeReview": "Iteration123 restores SwTextAttr's protected start-only base and optional end,SwTextAttrEnd's ranged end notifications without range-order rejection,and twelve private native flags/accessors. SwTextAttrNesting initializes DontExpand/LockExpandFlag/DontExpandStart/Nesting true;SwTextINetFormat additionally sets CharFormatAttr and its item's GetTextINetFormat backlink. MakeTextAttr and production hyperlink creation now construct concrete internet attributes;fresh copied AUTO flags are false while INET nesting/char-format defaults are true. This supersedes prior generic false-INET constructor/copy/reset claims in iterations114-122;native locked DontExpand reset remains blocked. Portable snapshots preserve concrete ranged kind and independent supported flags,distinct from native deleted copy construction. Existing generic range fixtures use SwTextAttrEnd;fresh concrete factory expectations and native temporary crossed-end write expectations are corrected without weakening range/value/ownership checks. JavaScript integer guards and public internal friend-storage/projection adapters remain bounded language boundaries. Native item holders/refcounts/destruction/listeners,full ChgTextNode/style clients/visited behavior,empty-hint retention/full nesting insertion/modes,nondefault unsupported graph flags and other attribute families remain unverified. Existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;one new source-owned txtatr2 module remains unverified,no module or goal promotion."
+}

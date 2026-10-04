@@ -1,0 +1,28 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/core/doc/owned-text-move.test.ts apps/office/src/sw/source/core/doc/text-hint-copy.test.ts apps/office/src/sw/source/core/doc/writer-model.test.ts apps/office/src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts apps/office/src/sw/source/core/txtnode/nesting-attribute-ownership.test.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/core/doc/owned-text-move.test.ts apps/office/src/sw/source/core/doc/text-hint-copy.test.ts apps/office/src/sw/source/core/doc/writer-model.test.ts apps/office/src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts apps/office/src/sw/source/core/txtnode/nesting-attribute-ownership.test.ts",
+    "exit": 0,
+    "evidence": "Observed successful focused lint after test-only corrections."
+  },
+  {
+    "command": "npm run typecheck --workspace @vite-office/office",
+    "exit": 0,
+    "evidence": "Observed successful app TypeScript check after test-only corrections."
+  },
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "evidence": "Zero errors;two unchanged warnings for the old shim and older DONE task hash."
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "evidence": "Policy routing OK."
+  }
+]
