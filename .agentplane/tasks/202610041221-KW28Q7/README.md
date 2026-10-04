@@ -1,10 +1,11 @@
 ---
 id: "202610041221-KW28Q7"
 title: "Restore native Writer style choice focus and keyboard acceptance"
-status: "DOING"
+result_summary: "Iteration104 restores ordinary native Writer style choice focus and keyboard travel/acceptance, preserving canonical selection and toolbar navigation; bounded evidence passes, wider parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 29
+revision: 30
 origin:
   system: "manual"
 depends_on:
@@ -49,11 +50,16 @@ quality_review:
     - "Exact10semantic paths and all310prior test bytes independently checked against base;224old mapping rows/order/status/default/exception fields preserved except4bounded description appends,1unverified browser widget row, no status promotion or registered deviation changes."
     - "Generic9 and actual Writer5 new cases cover native focus-before-dispatch, tentative travel, Tab/Escape/blur/invalidation, actual names/mark/history/no-op and modal/inactive/other-client isolation. Final editor86cases/8files100percent four metrics;93unique browser cases validated through bounded recovery and4final desktop/mobile focus cases with screenshots inspected."
     - "Full app1366/inventory109/scripts5 passed only absent; passing full suites not repeated. Last production change is only editor focus restoration, verified by targeted final coverage and browser checks. Source4audits/parity225zero violations,3native readonly hashes and whole AP forbidden0 reviewed; no native execution/source copies."
-commit: null
+commit:
+  hash: "7c68a7d3d86fb5077054ba0d7dfa38f644cd9c31"
+  message: "✅ KW28Q7 task: record committed semantic verification"
 comments:
   -
     author: "CODER"
     body: "Start: restore the next single style-box focus/keyboard contract under the standing approved goal; preserve existing population/name behavior, tests only absent, no passing-suite repeats and no AP source/helper artifacts."
+  -
+    author: "CODER"
+    body: "Verified: ordinary native style acceptance and owning-client focus, tentative travel/Tab/Escape, final DOM selection field/client boundaries. Committed semantic e4e57091b476f7c8a7568934d23233de9cf457ba has exact same-actor read-only pass. App1366/inventory109/scripts5, final editor86cases100percent,93unique Chromium with4final focus cases; all product tests absent/finally restored, no passing full suite repeat. Sevenstatic4source225moduleszero, exact10paths310prior tests unchanged224oldrows preserved4appends1unverifiedrow,3native hashes/APforbidden0. Wider parity remains open."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: committed semantic e4e57091b476f7c8a7568934d23233de9cf457ba satisfies ordinary native style acceptance/focus and final browser DOM selection boundaries. Fullapp1366/inventory109/scripts5; fullapp andinventory100percent metrics; final8file86case changed-editor coverage100percent,93unique Chromium through bounded recovery,4final focus screenshots inspected. Product runs only absent/finally restored, no passing full suite repeat. Sevenstatic4source/parity225zero, exact10paths/all310prior tests unchanged/224oldrows preserved4appends1unverifiedrow,3nativehashes/APforbidden0. Same-actor read-only pass report quality/20261004-130641934-recovery-context evaluated_sha exactly matches semantic commit. Wider parity remains open."
+  -
+    type: "status"
+    at: "2026-10-04T13:07:55.730Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ordinary native style acceptance and owning-client focus, tentative travel/Tab/Escape, final DOM selection field/client boundaries. Committed semantic e4e57091b476f7c8a7568934d23233de9cf457ba has exact same-actor read-only pass. App1366/inventory109/scripts5, final editor86cases100percent,93unique Chromium with4final focus cases; all product tests absent/finally restored, no passing full suite repeat. Sevenstatic4source225moduleszero, exact10paths310prior tests unchanged224oldrows preserved4appends1unverifiedrow,3native hashes/APforbidden0. Wider parity remains open."
 doc_version: 3
-doc_updated_at: "2026-10-04T13:07:14.132Z"
+doc_updated_at: "2026-10-04T13:07:55.731Z"
 doc_updated_by: "CODER"
 description: "Iteration104 restores style-box direct acceptance, noncommitting keyboard travel, Enter/Tab/Escape and focus-before-dispatch through an actual frame client. Preserve previous population/name contracts and registered I/O/recovery deviations; full editable creation, special actions, previews and native popup/platform details remain open."
 sections:
@@ -135,6 +148,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task semantic commit through a new approved leaf, preserving immutable DONE task artifacts, source pins and registered I/O/recovery exceptions. Vendor absence orchestration restores its directory in finally on every exit."
   Findings: "Native read-only SvxStyleBox Select ignores travel, resolves entry before ReleaseFocus-before-Dispatch, Enter activates, Tab suppresses one focus release without consuming navigation, Escape restores saved binding and releases toolbar focus. GTK ordinary closed-key travel is bounded/non-direct; native editable/popup/special/storage/preview/contextmenu behavior remains unverified. Browser DOM restoration originally steals toolbar focus; simply skipping restoration for toolbar fields breaks Select All/clipboard/delete because DOM range stays stale. Final browser boundary projects canonical selection while restoring the external toolbar field's focus and defers only another editing client. Explicit container focus is preserved; normal paragraph editing still follows source nodes. Initial full app failures and browser3failures are recorded as bounded counts/hashes; passing full suites are never repeated. First browser recovery file selectors incidentally repeat two already-passing cases; final recovery uses exact grep and additionally4focus cases after changed editor code. Source ownership/command payload and registered save/open/recovery deviations are unchanged; wider parent parity is not certified."
+extensions:
+  implementation_commit:
+    hash: "e4e57091b476f7c8a7568934d23233de9cf457ba"
+    message: "🛠 KW28Q7 code: restore native Writer style acceptance and client focus"
 id_source: "generated"
 ---
 ## Summary
