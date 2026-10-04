@@ -4,7 +4,7 @@ title: "Restore destination-owned text hint copying"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: implement approved destination-owned copy boundaries under standing iterative goal."
 doc_version: 3
-doc_updated_at: "2026-10-04T18:31:12.930Z"
+doc_updated_at: "2026-10-04T18:40:15.360Z"
 doc_updated_by: "CODER"
 description: "Restore native MakeTextAttr copying at existing text-node/container/fragment copy boundaries, converting automatic handles into destination pools and resetting copied hint flags while retaining same-pool snapshot clones for undo."
 sections:
@@ -65,7 +65,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task's implementation and documentation commits through a new traceable task; restore vendor directory if interrupted. No history rewrite."
-  Findings: "Native copying reconstructs text attributes through MakeTextAttr/InsertItem(IS_COPY); same-pool historical snapshots retain attribute flags and shared handles. Cross-document character-style listeners, native holders, split MoveText semantics and broad module/browser parity remain unverified."
+  Findings: "Native copying reconstructs text attributes through MakeTextAttr/InsertItem(IS_COPY); same-pool historical snapshots retain attribute flags and shared handles. Initial absent build passed. Initial absent app coverage: 1762 passed, one new test helper failed because it assumed the first sorted hint was automatic after continued formatting; all four production coverage metrics are 100%. Production changes remain fixed. Correct the test helper to select WhichId53 and recover only the failed case, then run pending inventory/scripts/Chromium once without upstream. Partial MoveText split semantics, native holders/refcounts/character-style listeners and broad parity remain unverified."
 id_source: "generated"
 ---
 ## Summary
@@ -106,4 +106,4 @@ Revert this task's implementation and documentation commits through a new tracea
 
 ## Findings
 
-Native copying reconstructs text attributes through MakeTextAttr/InsertItem(IS_COPY); same-pool historical snapshots retain attribute flags and shared handles. Cross-document character-style listeners, native holders, split MoveText semantics and broad module/browser parity remain unverified.
+Native copying reconstructs text attributes through MakeTextAttr/InsertItem(IS_COPY); same-pool historical snapshots retain attribute flags and shared handles. Initial absent build passed. Initial absent app coverage: 1762 passed, one new test helper failed because it assumed the first sorted hint was automatic after continued formatting; all four production coverage metrics are 100%. Production changes remain fixed. Correct the test helper to select WhichId53 and recover only the failed case, then run pending inventory/scripts/Chromium once without upstream. Partial MoveText split semantics, native holders/refcounts/character-style listeners and broad parity remain unverified.
