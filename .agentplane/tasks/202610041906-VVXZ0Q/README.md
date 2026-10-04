@@ -1,10 +1,11 @@
 ---
 id: "202610041906-VVXZ0Q"
 title: "Restore owned text hint transfer during cuts"
-status: "DOING"
+result_summary: "Owned cross-node text hint cuts transfer actual interior attributes, reconstruct boundary attributes, preserve retained source owners and consume destination fragments. Added118 app cases;334 previous tests unchanged. All tests absent upstream:app2006/inventory109/scripts5/Chromium99, coverage100%. Only failed app gate recovered; source audits semantic0 and registered deviations unchanged."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -47,11 +48,16 @@ quality_review:
   findings:
     - "Native strictly interior hint/item objects transfer and consumable fragments empty; split/equal-end attributes reconstruct. Source owners and historical snapshots remain independent. Literal eight-mask boundary/real-node/repeated-transfer tests pass. Erase replacement delegation retains existing behavior; node988lines."
     - "Six static gates pass; new-test-only tuple typecheck recovery passes. Initial absent build passes; only failed app coverage gate recovered after test-only corrections:2006/253 and100%four metrics. Inventory109/36 coverage100,scripts5/2,Chromium99 first absent pass. Five restored audits pass semantic violations0; seven paths334 prior tests unchanged234 runtime fields unchanged except three appendices. AP3755 files forbidden0; doctor0errors/two unchanged warnings,routing pass."
-commit: null
+commit:
+  hash: "e4d7a34bd4c31e50eec238e1e1f386f8957bdd56"
+  message: "🧩 VVXZ0Q task: record successful bounded transfer verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved owned cross-node cut transfer while retaining independent snapshots and registered I/O deviations."
+  -
+    author: "CODER"
+    body: "Verified: native strictly interior hint/item transfer and independent snapshots, all declared gates pass; full parity remains unverified."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified bounded owned cross-node hint transfer. Six static gates pass; initial absent build passes, only failed app coverage recovered after new-test corrections. App2006 coverage100%,inventory109 coverage100%,scripts5,Chromium99. Five restored source audits semantic0;334 prior tests unchanged234 runtime fields unchanged except three appendices; AP forbidden0,doctor0errors/routing pass. Same-actor quality pass exact semantic ea8d418fa4402a0bdfca380e2d366ad9f5287e23; full parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-04T19:29:33.361Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native strictly interior hint/item transfer and independent snapshots, all declared gates pass; full parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:29:16.886Z"
+doc_updated_at: "2026-10-04T19:29:33.363Z"
 doc_updated_by: "CODER"
 description: "Replace snapshot-based cross-node moves with an owned cut/transfer path matching native CutImpl pointer movement for strictly interior hints and fresh split hints; preserve independent undo snapshots, prior flags and registered I/O deviations."
 sections:
@@ -126,6 +139,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this leaf through a new traceable task; no history rewrite. Restore vendor directory after interruption."
   Findings: "Implemented owned cross-node cut/transfer and118 new app cases. Native CutImpl strictly interior hints transfer actual pointers/items; partial/equal-end hints reconstruct, retained source objects update in place. SwpHints normalization split preserves caller snapshots. Node cut owns text/index notifications; EraseText delegates bounded replacement. Six initial static gates passed. First absent build passed; initial app1950 passed48 new-test failures from array reference equality, coverage branches99.98. Only new test corrected to deep values plus eight exact-end/interior preview cases; production unchanged. New tuple annotation fixed failed changed-test typecheck; formatter/lint/typecheck pass. Failed app coverage gate alone repeated absent:2006/253 all pass four metrics100. Inventory109/36 coverage100, scripts5/2, Chromium99 first absent pass. No present test profile or successful build repeat. Vendor restored before five source audits, all pass semantic violations0. Seven paths,334 prior tests byte-identical,234 runtime fields unchanged except three appendices, provenance only three appended responsibilities, nine native hashes. Scope-audit comparator corrected for appended array entries; no product change. AP3755 ignored-inclusive files forbidden0; doctor0errors two unchanged warnings, routing pass. Native backlinks/refcounts/destruction/listeners, empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join remain unverified. Parent and goal active; no status promotion or I/O deviation changes."
+extensions:
+  implementation_commit:
+    hash: "ea8d418fa4402a0bdfca380e2d366ad9f5287e23"
+    message: "🧩 VVXZ0Q writer: transfer owned cut hints between text nodes"
 id_source: "generated"
 ---
 ## Summary
