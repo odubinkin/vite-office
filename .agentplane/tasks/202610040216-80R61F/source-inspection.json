@@ -1,0 +1,27 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only complete relevant functions; no copied source, native compilation or execution",
+  "sources": [
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/FocusManager.cxx",
+      "sha256": "c6e98a7801482c112f661b8ebe856308e93ca5befebdb1c4f55da3cc132ea0b5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sfx2/source/sidebar/Panel.cxx",
+      "sha256": "f2be3e14171379340f33ef355babe80e86a6aa195b1ee26f6839e927e51fea52"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/sfx2/sidebar/Deck.hxx",
+      "sha256": "7aa4c2663e3165dc1e285c631c0b4a19469740311d4b9bf2bcc36ad1e13b92d2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/window.cxx",
+      "sha256": "2b5baaa2d77411ced7a3b25d0792d1123b2b6ae47d6be8d7ef62f128e628e8ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/vcl/source/window/mouse.cxx",
+      "sha256": "10a9993f3636425339b63d2a96da94383b0ba28303288de520ab78680e0d8215"
+    }
+  ],
+  "conclusion": "Existing visible Paragraph panel Escape follows pinned FocusManager: unconsumed content cancellation focuses the expanded panel title; title/toolbar cancellation returns to its own document without closing or dispatch. Child-consumed keys remain owned by that child and a detached header without document ownership leaves Escape unconsumed. Owned retained-draft/controls/modifier/frame/model checks and rebuilt desktop/mobile focus-plus-editing cases cover this branch only. Full Tab/arrows/F6/other panels/hidden-title fallback/Help/settings/native sizing/context-profile persistence remain unverified."
+}

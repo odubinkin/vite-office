@@ -1,0 +1,15 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx",
+  "exit": 1,
+  "sha256": "2991e98d67a302035b6856019e66f7985535ec5f3e6d77883478e496906a8912",
+  "bytes": 3255,
+  "summary": [
+    " ❯ src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx (6 tests | 6 failed) 789ms",
+    " Test Files  1 failed (1)",
+    "      Tests  6 failed (6)",
+    "   Duration  2.33s (transform 627ms, setup 128ms, import 806ms, tests 789ms, environment 506ms)",
+    "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯",
+    "AssertionError: expected true to be false // Object.is equality",
+    "AssertionError: expected true to be false // Object.is equality"
+  ]
+}
