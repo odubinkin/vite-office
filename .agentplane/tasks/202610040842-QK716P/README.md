@@ -4,7 +4,7 @@ title: "Resolve automatic first-line layout separately from authored ruler value
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved source-owned automatic first-line layout and distinct resolved browser primitive, preserving raw ruler/dialog/list ownership and registered exceptions. One upstream-absent pipeline; results/hashes only in Agentplane."
 doc_version: 3
-doc_updated_at: "2026-10-04T08:57:19.816Z"
+doc_updated_at: "2026-10-04T08:59:55.639Z"
 doc_updated_by: "CODER"
 description: "Iteration99 of the standing iterative upstream goal: source-owned automatic first-line layout calculation for existing Western/font/line-spacing/list paths, distinct immutable resolved layout projection and real body rendering, preserving raw ruler/dialog/Undo contracts and registered I/O/recovery deviations."
 sections:
@@ -59,6 +59,7 @@ sections:
     Previous goal turn was verified progress: iteration98 DONE semantic cb23954cd2c067b85f357381681fefaddf44dd93; clean base 9c47d3987eebd979125aac70904243303fa78153. Current browser CSS uses authored raw firstLineIndentPt despite effective auto flag. Existing core getter computes only twice Western font height and ignores the already-supported false compatibility setting; source-native SwTextMargin does not. Native GetFirstLineOfsWithNum suppresses auto calculation when a numbered record has a rule, while existing browser list geometry remains a separate path. Automatic default disregard-line-space true is preserved. Native script/language font selection, combined line-space rule combinations outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain individually unverified; do not silently certify them. Registered save/open/recovery deviations preserved.
     Initial static format/type/build gates failed on formatting and one unsupported Testing Library exact option in the new test. Remove that option and format only the two new tests; preserve bounded initial gate result hashes and repeat only the three failed gates. No tests have run yet.
     First absent pipeline passed all1241application cases with100%four coverage metrics, then inventory coverage failed one owned CLI case (108passed) because the new itrcrsr mapping row was appended instead of ordered. Insert only the new row at its lexicographic position in both manifests, preserving relative order and every existing row value. Repeat only failed inventory coverage gate; preserve the passed application gate and its original result hashes. Owned scripts and rebuilt browser were not reached and run once next, all absent; vendor restored in finally.
+    Corrected inventory coverage109/100% and owned scripts5 passed absent. First rebuilt Chromium run:77prior cases passed, four new cases failed before browser interactions because the product-authored ODT fixture changed only Western font height and violated the existing script-specific export restriction. Set Western/CJK/CTL fixture heights equally using current items; product and I/O behavior stay unchanged. Repeat only the four failed new E2E cases using the already-built unchanged application, absent; preserve initial bounded output hash and vendor restoration. No passing app/inventory/script/old-browser suite repeats.
 id_source: "generated"
 ---
 ## Summary
@@ -98,3 +99,4 @@ Revert the scoped semantic commit in a new task commit if needed; retain task tr
 Previous goal turn was verified progress: iteration98 DONE semantic cb23954cd2c067b85f357381681fefaddf44dd93; clean base 9c47d3987eebd979125aac70904243303fa78153. Current browser CSS uses authored raw firstLineIndentPt despite effective auto flag. Existing core getter computes only twice Western font height and ignores the already-supported false compatibility setting; source-native SwTextMargin does not. Native GetFirstLineOfsWithNum suppresses auto calculation when a numbered record has a rule, while existing browser list geometry remains a separate path. Automatic default disregard-line-space true is preserved. Native script/language font selection, combined line-space rule combinations outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain individually unverified; do not silently certify them. Registered save/open/recovery deviations preserved.
 Initial static format/type/build gates failed on formatting and one unsupported Testing Library exact option in the new test. Remove that option and format only the two new tests; preserve bounded initial gate result hashes and repeat only the three failed gates. No tests have run yet.
 First absent pipeline passed all1241application cases with100%four coverage metrics, then inventory coverage failed one owned CLI case (108passed) because the new itrcrsr mapping row was appended instead of ordered. Insert only the new row at its lexicographic position in both manifests, preserving relative order and every existing row value. Repeat only failed inventory coverage gate; preserve the passed application gate and its original result hashes. Owned scripts and rebuilt browser were not reached and run once next, all absent; vendor restored in finally.
+Corrected inventory coverage109/100% and owned scripts5 passed absent. First rebuilt Chromium run:77prior cases passed, four new cases failed before browser interactions because the product-authored ODT fixture changed only Western font height and violated the existing script-specific export restriction. Set Western/CJK/CTL fixture heights equally using current items; product and I/O behavior stay unchanged. Repeat only the four failed new E2E cases using the already-built unchanged application, absent; preserve initial bounded output hash and vendor restoration. No passing app/inventory/script/old-browser suite repeats.
