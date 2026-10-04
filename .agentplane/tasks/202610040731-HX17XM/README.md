@@ -4,7 +4,7 @@ title: "Round Writer paragraph ruler anchors to native pixels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T07:44:59.660Z"
+  updated_by: "CODER"
+  note: "All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved three paragraph-anchor rounding correction understandinggoal;one absent-upstream suitepass and separate sourceaudits."
+  -
+    type: "verify"
+    at: "2026-10-04T07:44:59.660Z"
+    author: "CODER"
+    state: "ok"
+    note: "All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified."
 doc_version: 3
-doc_updated_at: "2026-10-04T07:33:10.705Z"
+doc_updated_at: "2026-10-04T07:44:59.714Z"
 doc_updated_by: "CODER"
 description: "Iteration96: match complete-coordinate signed SvxRuler UpdatePara pixel rounding for three existing paragraph indent handles. Preserve logical items,history and gesture ownership;add actual Writer/DOM/Chromium evidence. Correct one obsolete rounded-start fixture delta. One absent-upstream test pass;separate static source audits."
 sections:
@@ -51,9 +57,52 @@ sections:
     Exactly6semanticpaths pluscanonical leaf/parent records andboundedevidence.294oldtestfiles:293identical,one exactrounded-start assertion107->101 inWriterPageLayout.220manifestrows eachpreserveorder/status/owner/default/exceptions with1append-onlyrow. Core/projection/snapalgorithm/page/vertical/visibility/RTL remainoutsidechange;no network/global/outside/native/APsources/helpers.
   Plan: "Under standing goal implement one paragraph anchor projection correction:reuse toRulerPixel on complete left/first-line/right logical coordinates before existing RulerHandle rendering/admission/tracking. Preserve logical items/history/gesture and snap algorithm;no page-margin/vertical/autoFirst/RTL scope. New real Writer projection/DOM tests cover positive/negative/zero/extreme signed inputs and allthree accepted/cancelled/no-motion/Undo paths. New Chromium1280/390 imported ownedfixture puts allthree roundedhandles onscreen andchecks actualhits/transactions/reprojection/screenshots. Change exactlyone obsolete WriterPageLayout expectation107->101,allother oldtest bytes intact. Append oneexisting row inboth manifests withoutpromotion. One absent-upstream suites plus separate static sourceaudits;exactsemantic same-actor EVALUATOR/cleanfinish,fullgoalactive."
   Verify Steps: "Read ap task verify-show;read-only inspect pinned SvxRuler UpdatePara/ConvertHPosPixel andVCL lcl_logicToPixel;store2sourcefilehashes/markers/conclusions only,no native execution. No baseline/focused test runs. Run format:check,lint,typecheck,check:dependencies,test:static(buildonly),check:docs,check:file-size. Renamevendor/libreoffice-reference insidevendor;run npm run test once(app/inventorycoverage),npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts once,and npm run test:e2e once;restorefinally. Onlyfailedcorrected gates/cases mayrerun,alwaysabsent,no passing-suite duplication. Afterrestoration runresourcegenerator--check,source-tree,provenance,invariants,parityCLI separately;require100%fourapp/inventorycoverage and0semanticviolations. Owned realmodel/projection/DOM cases verify signed complete-coordinate rounded left/firstline/right anchors,unchanged tuple/frozenDTO/history/spacing/tabs,zero/extreme/signed fields and source-domain geometry withoutcaps;actualall3gesture cases check no-motion/cancel/acceptedtwipitem changes/oneUndo/Redo. Chromium1280/390 confirmsall3integeranchors/realhits/no newtabs/cancel/acceptedmoves/Undo/reprojection/laterediting andactualscreenshots. Exactscope6paths,294priorfiles/293byte-identical/oneoldassertion107->101;220rows each1append-onlyupdate/no status/default/owner/exception promotion;2pinnedhashes unchanged. Scope/source/artifact audits onlyaftervendor restored,sequentiallyaftertests;ignored-inclusiveAgentplane source/helper/Python/native/archive/rawframes/codediff0,onlyboundedhashes/results/conclusions. Routing/doctor pass;exactSHA same-actor EVALUATOR andcleanfinish;keep parentDOING/fullgoalactive."
-  Verification: "Pending one absent-upstream suitepass and separate staticaudits;no testsrun."
+  Verification: |-
+    Command: the declared split static gates; npm run test; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e; the four source audits; npm run inventory:parity; routing, doctor, scope and ignored-inclusive artifact audits.
+    Result: pass after correcting only new E2E formatting and rerunning format:check. No test gate failed or was repeated.
+    Evidence: 1186 application cases in 223 files, 109 inventory cases in 36 files, 5 owned resource/provenance cases, and 73 Chromium cases passed with vendor/libreoffice-reference unavailable. Both coverage summaries retain 100% lines/statements/functions/branches; semantic violations are zero. Vendor restored in finally with no failure. All seven static gates and four source audits passed; routing and doctor exit zero. Doctor retains its existing historical warnings.
+    Scope: six approved semantic paths; all 294 previous test/spec files accounted for, 293 byte-identical and one exact 107-to-101 assertion correction. Both 220-row manifests preserve order and status/default/owner/exception fields, with one existing row amended each. Two pinned source hashes remain unchanged. Agentplane contains no forbidden source/helper/Python/executable/archive/source-frame/code-diff content; five historical prose-only references remain.
+    Visual evidence: both actual 1280/390 screenshots show the three integer paragraph anchors and were inspected. Screenshots stay under test-results/e2e, outside Agentplane; only paths, hashes and conclusions are recorded.
+    This verifies the signed full-coordinate CSS 96 dpi paragraph marker conversion and precise item/DTO/gesture/history contracts, not complete native or parent parity.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T07:44:59.660Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:44:59.307Z, excerpt_hash=sha256:60b6043d7238497875f3a2c4842ddf402609918dbe80f6ce390316bfaf4a5819
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040731-HX17XM/blueprint/resolved-snapshot.json
+    - old_digest: fde1ebbe9eb59e122bedd1259f32466e18cd5b793c0e22cf43a73595b2ade739
+    - current_digest: fde1ebbe9eb59e122bedd1259f32466e18cd5b793c0e22cf43a73595b2ade739
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610040731-HX17XM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610040731-HX17XM -m 🧩 HX17XM task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert isolated semanticcommit ifrequired;restore temporarilyrenamedvendor finally. No historyrewrite."
-  Findings: "Previousgoalturn verifiedprogress:iteration95DONEsemanticc5f97d15,currentcleanmain740359ec. Read-only sourceinspection confirmsSvxRuler::UpdatePara convertscomplete left/firstline/right logicalcoordinates withConvertHPosPixel;currentbrowser dividesby15 andkeepsfractions. Reuseexistingsignedrounder;items remainprecise. Existingdetachedfixtureleft1254twips rounds84pixels andits7pixelgesture yields101twips vs107 fromfractional83.6start;approveoneexpectation correction now. NativeautoFirstvisibility,RTL/vertical/theme/systemDPI/hitpriority/modifiers/snapping/capture/fullframe/page/coreindentmutation/completeparent parity remainunverified. Registered save/open/recovery deviations preserved."
+  Findings: |-
+    The initial format gate identified only formatting in the new browser test; Prettier corrected it and only that failed static gate was repeated. Every test gate passed on its sole upstream-absent run. Source, scope and artifact audits ran after vendor restoration. No source bodies, executables or scripts were stored in Agentplane.
+    The actual seven literal signed-coordinate projection cases and three real model gesture cases retain precise logical margins, spacing, tab metadata, immutable projections and history. Browser cases at 1280/390 exercise all three real hit targets, no-motion Enter, moved Escape, accepted drags, Undo/Redo and later editing.
+    Next confirmed gap: native SvxRuler::UpdatePara marks the first-line indent invisible when the effective item IsAutoFirst is true; the existing browser projection omits that flag and always renders its control. Address separately.
+    Auto-first visibility, RTL/vertical/theme/system DPI/hit priority/modifiers/snapping/capture/full frame/page/core indent mutation and whole-parent parity remain unverified. Registered save/open/recovery deviations remain preserved. Full goal stays active.
 id_source: "generated"
 ---
 ## Summary
@@ -80,7 +129,45 @@ Read ap task verify-show;read-only inspect pinned SvxRuler UpdatePara/ConvertHPo
 
 ## Verification
 
-Pending one absent-upstream suitepass and separate staticaudits;no testsrun.
+Command: the declared split static gates; npm run test; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e; the four source audits; npm run inventory:parity; routing, doctor, scope and ignored-inclusive artifact audits.
+Result: pass after correcting only new E2E formatting and rerunning format:check. No test gate failed or was repeated.
+Evidence: 1186 application cases in 223 files, 109 inventory cases in 36 files, 5 owned resource/provenance cases, and 73 Chromium cases passed with vendor/libreoffice-reference unavailable. Both coverage summaries retain 100% lines/statements/functions/branches; semantic violations are zero. Vendor restored in finally with no failure. All seven static gates and four source audits passed; routing and doctor exit zero. Doctor retains its existing historical warnings.
+Scope: six approved semantic paths; all 294 previous test/spec files accounted for, 293 byte-identical and one exact 107-to-101 assertion correction. Both 220-row manifests preserve order and status/default/owner/exception fields, with one existing row amended each. Two pinned source hashes remain unchanged. Agentplane contains no forbidden source/helper/Python/executable/archive/source-frame/code-diff content; five historical prose-only references remain.
+Visual evidence: both actual 1280/390 screenshots show the three integer paragraph anchors and were inspected. Screenshots stay under test-results/e2e, outside Agentplane; only paths, hashes and conclusions are recorded.
+This verifies the signed full-coordinate CSS 96 dpi paragraph marker conversion and precise item/DTO/gesture/history contracts, not complete native or parent parity.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T07:44:59.660Z — VERIFY — ok
+
+By: CODER
+
+Note: All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:44:59.307Z, excerpt_hash=sha256:60b6043d7238497875f3a2c4842ddf402609918dbe80f6ce390316bfaf4a5819
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610040731-HX17XM/blueprint/resolved-snapshot.json
+- old_digest: fde1ebbe9eb59e122bedd1259f32466e18cd5b793c0e22cf43a73595b2ade739
+- current_digest: fde1ebbe9eb59e122bedd1259f32466e18cd5b793c0e22cf43a73595b2ade739
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610040731-HX17XM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610040731-HX17XM -m 🧩 HX17XM task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -88,4 +175,7 @@ Revert isolated semanticcommit ifrequired;restore temporarilyrenamedvendor final
 
 ## Findings
 
-Previousgoalturn verifiedprogress:iteration95DONEsemanticc5f97d15,currentcleanmain740359ec. Read-only sourceinspection confirmsSvxRuler::UpdatePara convertscomplete left/firstline/right logicalcoordinates withConvertHPosPixel;currentbrowser dividesby15 andkeepsfractions. Reuseexistingsignedrounder;items remainprecise. Existingdetachedfixtureleft1254twips rounds84pixels andits7pixelgesture yields101twips vs107 fromfractional83.6start;approveoneexpectation correction now. NativeautoFirstvisibility,RTL/vertical/theme/systemDPI/hitpriority/modifiers/snapping/capture/fullframe/page/coreindentmutation/completeparent parity remainunverified. Registered save/open/recovery deviations preserved.
+The initial format gate identified only formatting in the new browser test; Prettier corrected it and only that failed static gate was repeated. Every test gate passed on its sole upstream-absent run. Source, scope and artifact audits ran after vendor restoration. No source bodies, executables or scripts were stored in Agentplane.
+The actual seven literal signed-coordinate projection cases and three real model gesture cases retain precise logical margins, spacing, tab metadata, immutable projections and history. Browser cases at 1280/390 exercise all three real hit targets, no-motion Enter, moved Escape, accepted drags, Undo/Redo and later editing.
+Next confirmed gap: native SvxRuler::UpdatePara marks the first-line indent invisible when the effective item IsAutoFirst is true; the existing browser projection omits that flag and always renders its control. Address separately.
+Auto-first visibility, RTL/vertical/theme/system DPI/hit priority/modifiers/snapping/capture/full frame/page/core indent mutation and whole-parent parity remain unverified. Registered save/open/recovery deviations remain preserved. Full goal stays active.

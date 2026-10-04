@@ -143,7 +143,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               className="h-0 w-0 border-x-[6px] border-b-[8px] border-x-transparent border-b-slate-950"
               edge="bottom"
               origin={props.page.leftMargin / TWIPS_PER_CSS_PIXEL}
-              position={(props.page.leftMargin + paragraphLeft) / TWIPS_PER_CSS_PIXEL}
+              position={toRulerPixel(props.page.leftMargin + paragraphLeft)}
               onCommit={
                 /** Commits the paragraph left indent. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,
@@ -156,7 +156,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               axis="x"
               className="h-0 w-0 border-x-[6px] border-t-[8px] border-x-transparent border-t-indigo-700"
               origin={props.page.leftMargin / TWIPS_PER_CSS_PIXEL}
-              position={(props.page.leftMargin + paragraphLeft + firstLine) / TWIPS_PER_CSS_PIXEL}
+              position={toRulerPixel(props.page.leftMargin + paragraphLeft + firstLine)}
               onCommit={
                 /** Commits the first-line indent. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,
@@ -170,9 +170,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               className="h-0 w-0 border-x-[6px] border-b-[8px] border-x-transparent border-b-slate-950"
               edge="bottom"
               origin={props.page.leftMargin / TWIPS_PER_CSS_PIXEL}
-              position={
-                (props.page.width - props.page.rightMargin - paragraphRight) / TWIPS_PER_CSS_PIXEL
-              }
+              position={toRulerPixel(props.page.width - props.page.rightMargin - paragraphRight)}
               onCommit={
                 /** Commits the paragraph right indent. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,

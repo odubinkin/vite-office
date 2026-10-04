@@ -1,0 +1,14 @@
+[
+  {
+    "path": "test-results/e2e/writer-ruler-indent-pixels-98f2c-graph-indents-at-width-1280/rounded-paragraph-indents.png",
+    "sha256": "1f092cb893157e26cf0c1b6848a1ce8cf96315926df98c5aaf8f0caedf2b9236",
+    "visuallyInspected": true,
+    "conclusion": "All three paragraph indent anchors are visible at their literal integer positions."
+  },
+  {
+    "path": "test-results/e2e/writer-ruler-indent-pixels-78ae5-agraph-indents-at-width-390/rounded-paragraph-indents.png",
+    "sha256": "15f176a1ecaac07f94ebbb50d97149ca2f9960796afa8ce99966188e586d2423",
+    "visuallyInspected": true,
+    "conclusion": "All three paragraph indent anchors are visible at their literal integer positions."
+  }
+]

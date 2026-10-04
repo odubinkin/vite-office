@@ -533,7 +533,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
       clientX: 100,
     });
     fireEvent.pointerUp(window, { clientX: 107 });
-    expect(onParagraphIndentChange).toHaveBeenCalledWith("left", 107);
+    expect(onParagraphIndentChange).toHaveBeenCalledWith("left", 101);
   });
 
   it("docks page rulers at the canvas edge and keeps their page-relative origins through scrolling", /** Verifies the fixed lane and page origins. @returns Nothing. */ () => {
