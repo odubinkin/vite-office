@@ -1,0 +1,26 @@
+[
+  {
+    "path": "test-results/e2e/writer-ruler-auto-first-Wr-0b143-st-line-ruler-at-width-1280/automatic-first-line.png",
+    "sha256": "b5054d49f41dc11beb89ca57b8671abc34cf3f507dd86e1ec6e4298afb2c83aa",
+    "visuallyInspected": true,
+    "conclusion": "Automatic first-line marker is absent; paragraph left/right markers remain visible."
+  },
+  {
+    "path": "test-results/e2e/writer-ruler-auto-first-Wr-0b143-st-line-ruler-at-width-1280/manual-first-line.png",
+    "sha256": "1f092cb893157e26cf0c1b6848a1ce8cf96315926df98c5aaf8f0caedf2b9236",
+    "visuallyInspected": true,
+    "conclusion": "Manual first-line marker is restored at the literal integer anchor; paragraph left/right markers remain visible."
+  },
+  {
+    "path": "test-results/e2e/writer-ruler-auto-first-Wr-dacdb-rst-line-ruler-at-width-390/automatic-first-line.png",
+    "sha256": "63dbedc35fbe5b7d82415366e9f08349d284c4424d4bdd6057d99cd86efd84d8",
+    "visuallyInspected": true,
+    "conclusion": "Automatic first-line marker is absent; paragraph left/right markers remain visible."
+  },
+  {
+    "path": "test-results/e2e/writer-ruler-auto-first-Wr-dacdb-rst-line-ruler-at-width-390/manual-first-line.png",
+    "sha256": "15f176a1ecaac07f94ebbb50d97149ca2f9960796afa8ce99966188e586d2423",
+    "visuallyInspected": true,
+    "conclusion": "Manual first-line marker is restored at the literal integer anchor; paragraph left/right markers remain visible."
+  }
+]

@@ -98,6 +98,8 @@ export interface WriterProjectedTextRun extends WriterTextRun {
 
 /** Browser-ready values projected from effective Writer paragraph items. */
 export interface WriterParagraphComputedStyle {
+  /** Effective automatic first-line mode; omitted detached DTOs retain the manual default. */
+  readonly autoFirstLineIndent?: boolean;
   readonly color?: string;
   readonly contextualSpacing?: boolean;
   readonly firstLineIndentPt: number;
@@ -194,6 +196,7 @@ export class WriterViewProjection {
         const listFormat = list.kind === "none" ? undefined : node.GetNumRule()?.Get(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+        const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
         const explicitTabStops = tabItem.GetStops().flatMap(
           /** Excludes default hit targets while retaining each explicit tab's item index. @param stop - Writer tab stop. @param index - Raw item index. @returns Immutable ruler identity. */
@@ -231,12 +234,10 @@ export class WriterViewProjection {
           ...(bulletChar === undefined ? {} : { bulletChar }),
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
+            autoFirstLineIndent: firstLine.IsAutoFirst(),
             ...(color === "auto" ? {} : { color }),
             contextualSpacing: spacing.GetContext(),
-            firstLineIndentPt:
-              (
-                node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
-              ).ResolveTextFirstLineOffset() / 20,
+            firstLineIndentPt: firstLine.ResolveTextFirstLineOffset() / 20,
             fontFamily: font.GetResolvedFamilyName(),
             ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
