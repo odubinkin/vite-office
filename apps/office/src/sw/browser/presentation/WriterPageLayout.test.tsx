@@ -180,7 +180,7 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
         page={page}
         paragraph={{
           ...item,
-          rulerTabStops: [{ index: 0, positionPt: 36 }],
+          rulerTabStops: [{ index: 0, positionPt: 36, adjustment: 0 }],
           computedStyle: { ...item.computedStyle, tabStopsPt: [36] },
         }}
       />,
@@ -215,8 +215,8 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
         paragraph={{
           ...item,
           rulerTabStops: [
-            { index: 0, positionPt: 36 },
-            { index: 1, positionPt: 72 },
+            { index: 0, positionPt: 36, adjustment: 0 },
+            { index: 1, positionPt: 72, adjustment: 0 },
           ],
           computedStyle: { ...item.computedStyle, tabStopsPt: [36, 72] },
         }}

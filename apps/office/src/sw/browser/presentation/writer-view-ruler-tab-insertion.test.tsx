@@ -149,7 +149,9 @@ describe("Writer fresh ruler tab insertion", /** Groups item replacement and bro
         stops: [{ position: 1134, adjustment: SvxTabAdjust.Left, decimal: "\0", fill: " " }],
       });
       const next = store.GetSnapshot().activeParagraph;
-      expect(next.rulerTabStops).toEqual([{ index: 0, positionPt: 56.7 }]);
+      expect(next.rulerTabStops).toEqual([
+        { index: 0, positionPt: 56.7, adjustment: SvxTabAdjust.Left },
+      ]);
       expect(Object.isFrozen(next.rulerTabStops)).toBe(true);
       expect(Object.isFrozen(next.rulerTabStops?.[0])).toBe(true);
       expect(retained.rulerTabStops).toBeUndefined();

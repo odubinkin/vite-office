@@ -168,8 +168,8 @@ describe("Writer ruler tab item identity", /** Groups raw indices, collisions an
     try {
       const first = store.GetSnapshot().activeParagraph;
       expect(first.rulerTabStops).toEqual([
-        { index: 1, positionPt: 45 },
-        { index: 3, positionPt: 75 },
+        { index: 1, positionPt: 45, adjustment: SvxTabAdjust.Right },
+        { index: 3, positionPt: 75, adjustment: SvxTabAdjust.Decimal },
       ]);
       expect(first.computedStyle.tabStopsPt).toEqual([45, 75]);
       expect(Object.isFrozen(first.rulerTabStops)).toBe(true);
@@ -177,12 +177,12 @@ describe("Writer ruler tab item identity", /** Groups raw indices, collisions an
       shell.MoveRulerTabStop(1, 1198);
       const next = store.GetSnapshot().activeParagraph;
       expect(next.rulerTabStops).toEqual([
-        { index: 2, positionPt: 75 },
-        { index: 4, positionPt: 104.9 },
+        { index: 2, positionPt: 75, adjustment: SvxTabAdjust.Decimal },
+        { index: 4, positionPt: 104.9, adjustment: SvxTabAdjust.Right },
       ]);
       expect(first.rulerTabStops).toEqual([
-        { index: 1, positionPt: 45 },
-        { index: 3, positionPt: 75 },
+        { index: 1, positionPt: 45, adjustment: SvxTabAdjust.Right },
+        { index: 3, positionPt: 75, adjustment: SvxTabAdjust.Decimal },
       ]);
       shell.SetTabStopPositions([]);
       expect(store.GetSnapshot().activeParagraph.rulerTabStops).toBeUndefined();

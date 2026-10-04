@@ -1,0 +1,94 @@
+{
+  "base": "22ac1c17c8b2b60c055fd08ad7e03d9f8ffbb7be",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-glyphs.test.tsx",
+    "apps/office/e2e/writer-ruler-tab-glyphs.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "bytes": 22996,
+      "sha256": "2ce624bf962917c49b644404080d0aeb04ecff2855eb92a6940e937c63063879"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "bytes": 18420,
+      "sha256": "022b1199aac1cce428e53de81bac33c3e2b6a3a6103c93be09f517ccf15c4b30"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+      "bytes": 31524,
+      "sha256": "d6ded9f52d0728962d603721fc8609fb6d178dd8921c7804d10df140d3e25187"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers-tracking.test.tsx",
+      "bytes": 10232,
+      "sha256": "206b4eec5452ccca922af2e10394f2d6b5ec22f841be691b3c3f4c46f59313aa"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-identity.test.tsx",
+      "bytes": 9344,
+      "sha256": "407b0c7a84cb8a461f738fedb3e8ba5a73f88007c95e49b7d860201518e6be67"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-insertion.test.tsx",
+      "bytes": 8536,
+      "sha256": "8f23502008c2430f5f7ec54de97534c5a3f8b577babfedac5e5b3d45b46249cf"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-tab-glyphs.test.tsx",
+      "bytes": 9967,
+      "sha256": "e2f0e89604c989a322806f0ee505442f571223989d745aeea8314ceae68486b0"
+    },
+    {
+      "path": "apps/office/e2e/writer-ruler-tab-glyphs.spec.ts",
+      "bytes": 7416,
+      "sha256": "732bd2485a080ff3788cb1c23b66d043e3dc859e18f55d0b0e0dc4e4f5445b97"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 741435,
+      "sha256": "5b6a5b26811a923cb31080e66f968e698bd54c7d8e40519e4f4883864cab0637"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 723120,
+      "sha256": "63282ebe61af7f455f3a3b1e78c5b269f86da97b4b97b7c1baa696f2821d47f1"
+    }
+  ],
+  "priorTestFiles": 288,
+  "priorTestFilesByteIdentical": 284,
+  "approvedFixtureAdjustmentPayloads": 11,
+  "approvedFixturePaths": 4,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 2,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 2,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}

@@ -1,0 +1,14 @@
+{
+  "screenshots": [
+    {
+      "path": "test-results/e2e/writer-ruler-tab-glyphs-Wr-0b6b1--typed-glyphs-at-width-1280/typed-tab-glyphs.png",
+      "sha256": "8269861fe117932ddb0efbd0225072fe1744e82b1cc26739b96c545acb98a54d"
+    },
+    {
+      "path": "test-results/e2e/writer-ruler-tab-glyphs-Wr-6289f-r-typed-glyphs-at-width-390/typed-tab-glyphs.png",
+      "sha256": "e7722887d330e29c63379251ca9756742d67c5164b1d47000c824bd54145a12f"
+    }
+  ],
+  "review": "Visually inspected both actual Chromium ruler screenshots: Left,Right,Center,Decimal distinct,anchored and not clipped. CSS pixels reflect inspected DPI1 geometry;no native platform render equivalence claim.",
+  "upstreamExecution": false
+}

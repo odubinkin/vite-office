@@ -73,7 +73,9 @@ export interface WriterParagraphProjection {
   readonly numRuleName: string;
   readonly nodeIndex: number;
   readonly runs: readonly WriterProjectedTextRun[];
-  readonly rulerTabStops?: readonly Readonly<{ index: number; positionPt: number }>[] | undefined;
+  readonly rulerTabStops?:
+    | readonly Readonly<{ index: number; positionPt: number; adjustment: SvxTabAdjust }>[]
+    | undefined;
   readonly style: WriterParagraphStyle;
   readonly styleDisplayName: string;
   readonly text: string;
@@ -188,7 +190,13 @@ export class WriterViewProjection {
           (stop, index) =>
             stop.GetAdjustment() === SvxTabAdjust.Default
               ? []
-              : [Object.freeze({ index, positionPt: stop.GetTabPos() / 20 })],
+              : [
+                  Object.freeze({
+                    index,
+                    positionPt: stop.GetTabPos() / 20,
+                    adjustment: stop.GetAdjustment(),
+                  }),
+                ],
         );
         const tabStopsPt = rulerTabStops.map(
           /** Projects positions for paragraph formatting without discarding ruler identity. @param stop - Immutable ruler tab. @returns Position in points. */

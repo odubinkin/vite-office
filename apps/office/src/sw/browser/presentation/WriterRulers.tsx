@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { createPortal } from "react-dom";
+import { SvxTabAdjust } from "../../../editeng/source/items/paraitem";
 
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import type { WriterParagraphProjection } from "./writer-view-projection";
@@ -170,14 +171,15 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
             />
             {rulerTabStops.map(
               /** Presents an explicit tab without changing its raw item index. @param stop - Paired model identity and position. @param ordinal - Visible marker ordinal. @returns Ruler handle. */ (
-                { positionPt, index },
+                { positionPt, index, adjustment },
                 ordinal,
               ) => (
                 <RulerHandle
                   tracking={tracking}
                   ariaLabel={`Tab stop ${ordinal + 1}`}
                   axis="x"
-                  className="h-3 w-2 border-b-2 border-l-2 border-indigo-700"
+                  className="h-3 text-indigo-700"
+                  tabAdjustment={adjustment}
                   edge="bottom"
                   key={`${positionPt}-${index}`}
                   origin={props.page.leftMargin / TWIPS_PER_CSS_PIXEL}
@@ -196,9 +198,11 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               <span
                 aria-hidden="true"
                 data-ruler-new-tab="true"
-                className="pointer-events-none absolute bottom-0 h-3 w-2 border-b-2 border-l-2 border-indigo-700"
-                style={{ left: newTab, transform: "translateX(-50%)" }}
-              />
+                className="pointer-events-none absolute bottom-0 h-3 text-indigo-700"
+                style={{ left: newTab }}
+              >
+                <RulerTabGlyph adjustment={SvxTabAdjust.Left} anchor={0} />
+              </span>
             )}
           </div>
         </div>
@@ -329,6 +333,7 @@ function RulerHandle({
   onCommit,
   position,
   tracking,
+  tabAdjustment,
 }: Readonly<{
   ariaLabel: string;
   axis: "x" | "y";
@@ -338,6 +343,7 @@ function RulerHandle({
   onCommit: (deltaTwips: number) => void;
   position: number;
   tracking: RulerTracking;
+  tabAdjustment?: SvxTabAdjust;
 }>): React.JSX.Element {
   const cancelDrag = useRef<(() => void) | undefined>(undefined);
   useEffect(
@@ -348,6 +354,15 @@ function RulerHandle({
   const [dragDelta, setDragDelta] = useState<number | null>(null);
   const [dragWorkspace, setDragWorkspace] = useState<HTMLElement | null>(null);
   const [dragPageIndex, setDragPageIndex] = useState<number | null>(null);
+  // DPI1 horizontal tab bounds from Ruler::ImplHitTest, relative to the stored tab position.
+  const tabBounds =
+    tabAdjustment === undefined
+      ? undefined
+      : tabAdjustment === SvxTabAdjust.Left
+        ? { adjustment: tabAdjustment, offset: 0, width: 7 }
+        : tabAdjustment === SvxTabAdjust.Right
+          ? { adjustment: tabAdjustment, offset: -8, width: 9 }
+          : { adjustment: tabAdjustment, offset: -3, width: 8 };
   return (
     <>
       <button
@@ -383,7 +398,11 @@ function RulerHandle({
                 cursor: "ew-resize",
                 left: position + (dragDelta ?? 0),
                 ...(edge === "bottom" ? { bottom: 0 } : { top: 0 }),
-                transform: "translateX(-50%)",
+                transform:
+                  tabBounds === undefined
+                    ? "translateX(-50%)"
+                    : `translateX(${tabBounds.offset}px)`,
+                ...(tabBounds === undefined ? {} : { width: tabBounds.width }),
               }
             : {
                 cursor: "ns-resize",
@@ -394,7 +413,11 @@ function RulerHandle({
         }
         title={ariaLabel}
         type="button"
-      />
+      >
+        {tabBounds === undefined ? null : (
+          <RulerTabGlyph adjustment={tabBounds.adjustment} anchor={-tabBounds.offset} />
+        )}
+      </button>
       {dragDelta !== null && dragWorkspace !== null
         ? createPortal(
             renderDragGuides(dragWorkspace, axis, position + dragDelta, dragPageIndex),
@@ -402,6 +425,31 @@ function RulerHandle({
           )
         : null}
     </>
+  );
+}
+
+/** Draws the inspected DPI1 horizontal tab rectangles around their model anchor. @param props - Explicit adjustment and anchor within the hit target. @returns Tab glyph. */
+function RulerTabGlyph({
+  adjustment,
+  anchor,
+}: Readonly<{ adjustment: SvxTabAdjust; anchor: number }>): React.JSX.Element {
+  const left = adjustment === SvxTabAdjust.Left;
+  const right = adjustment === SvxTabAdjust.Right;
+  return (
+    <svg
+      aria-hidden="true"
+      className="pointer-events-none absolute bottom-0"
+      fill="currentColor"
+      height={6}
+      width={13}
+      viewBox="-6 -5 13 6"
+      shapeRendering="crispEdges"
+      style={{ left: anchor - 6 }}
+    >
+      <rect x={left ? 0 : right ? -6 : -3} y={-1} width={left || right ? 7 : 8} height={2} />
+      <rect x={right ? -1 : 0} y={-5} width={2} height={6} />
+      {adjustment === SvxTabAdjust.Decimal ? <rect x={3} y={-4} width={2} height={2} /> : null}
+    </svg>
   );
 }
 
