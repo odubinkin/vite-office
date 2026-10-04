@@ -37,6 +37,16 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
   const rulerTabStops = props.paragraph.rulerTabStops ?? [];
   const firstLine = props.paragraph.computedStyle.firstLineIndentPt * 20;
   const paragraphRight = props.paragraph.computedStyle.rightMarginPt * 20;
+  const tabOriginIndent =
+    (props.paragraph.rulerTabSettings?.relativeToIndent ?? true) ? paragraphLeft : 0;
+  const tabOrigin = props.page.leftMargin + tabOriginIndent;
+  const defaultTabs = createRulerDefaultTabs(
+    props.page.leftMargin + paragraphLeft,
+    props.page.width - props.page.rightMargin - paragraphRight,
+    tabOrigin,
+    (rulerTabStops.at(-1)?.positionPt ?? 0) * 20,
+    props.paragraph.rulerTabSettings?.defaultDistance ?? 1134,
+  );
   return (
     <>
       {props.horizontalVisible ? (
@@ -65,11 +75,11 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
                   (event.clientX - event.currentTarget.getBoundingClientRect().left) *
                     TWIPS_PER_CSS_PIXEL -
                     props.page.leftMargin -
-                    paragraphLeft,
+                    tabOriginIndent,
                 );
                 if (position <= 0) return;
                 const owner = event.currentTarget;
-                const pagePosition = props.page.leftMargin + paragraphLeft + position;
+                const pagePosition = tabOrigin + position;
                 startDrag(
                   event,
                   "x",
@@ -183,15 +193,27 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
                   edge="bottom"
                   key={`${positionPt}-${index}`}
                   origin={props.page.leftMargin / TWIPS_PER_CSS_PIXEL}
-                  position={
-                    (props.page.leftMargin + paragraphLeft + positionPt * 20) / TWIPS_PER_CSS_PIXEL
-                  }
+                  position={(tabOrigin + positionPt * 20) / TWIPS_PER_CSS_PIXEL}
                   onCommit={
                     /** Handles Writer formatting state. @param delta - Input value. @returns Callback result. */ (
                       delta,
                     ) => props.onTabStopMove?.(index, delta)
                   }
                 />
+              ),
+            )}
+            {defaultTabs.map(
+              /** Displays one generated Default tab without an editing hit target. @param tab - Logical grid and rounded pixel position. @returns Noninteractive marker. */
+              (tab) => (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-0 h-3 text-indigo-700"
+                  data-ruler-default-tab={tab.positionTwips}
+                  key={tab.positionTwips}
+                  style={{ left: tab.positionPixels }}
+                >
+                  <RulerTabGlyph adjustment={SvxTabAdjust.Default} anchor={0} />
+                </span>
               ),
             )}
             {newTab === null ? null : (
@@ -446,11 +468,52 @@ function RulerTabGlyph({
       shapeRendering="crispEdges"
       style={{ left: anchor - 6 }}
     >
-      <rect x={left ? 0 : right ? -6 : -3} y={-1} width={left || right ? 7 : 8} height={2} />
-      <rect x={right ? -1 : 0} y={-5} width={2} height={6} />
-      {adjustment === SvxTabAdjust.Decimal ? <rect x={3} y={-4} width={2} height={2} /> : null}
+      {adjustment === SvxTabAdjust.Default ? (
+        <>
+          <rect x={-2} y={0} width={5} height={1} />
+          <rect x={0} y={-3} width={1} height={4} />
+        </>
+      ) : (
+        <>
+          <rect x={left ? 0 : right ? -6 : -3} y={-1} width={left || right ? 7 : 8} height={2} />
+          <rect x={right ? -1 : 0} y={-5} width={2} height={6} />
+          {adjustment === SvxTabAdjust.Decimal ? <rect x={3} y={-4} width={2} height={2} /> : null}
+        </>
+      )}
     </svg>
   );
+}
+
+/** Converts twips at CSS96dpi with VCL's signed llround rule. @param twips - Logical size. @returns DPI1 pixel. */
+function toRulerPixel(twips: number): number {
+  return Math.sign(twips) * Math.round(Math.abs(twips) / TWIPS_PER_CSS_PIXEL);
+}
+
+/** Fills the inspected SvxRuler buffer/grid after Writer has stripped Default and zero stops. @param paragraphLeft - Paragraph left edge in twips. @param paragraphRight - Paragraph right edge in twips. @param origin - Native relative/frame tab origin. @param lastTab - Last supplied explicit offset. @param distance - Effective document/item spacing. @returns Logical offsets paired with native rounded pixel positions. */
+function createRulerDefaultTabs(
+  paragraphLeft: number,
+  paragraphRight: number,
+  origin: number,
+  lastTab: number,
+  distance: number,
+): readonly Readonly<{ positionTwips: number; positionPixels: number }>[] {
+  const lastPixel = toRulerPixel(lastTab);
+  const startPixel = toRulerPixel(paragraphLeft) + lastPixel;
+  const rightPixel = toRulerPixel(paragraphRight);
+  const distancePixel = toRulerPixel(distance);
+  const count =
+    startPixel > rightPixel || lastPixel > rightPixel || distancePixel === 0
+      ? 0
+      : Math.trunc((rightPixel - startPixel) / distancePixel) & 0xffff;
+  const tabs: { positionTwips: number; positionPixels: number }[] = [];
+  let offset = lastTab - (lastTab % distance);
+  for (let index = 0; index < count; index += 1) {
+    offset += distance;
+    const pixel = toRulerPixel(origin + offset);
+    if (pixel >= rightPixel) break;
+    tabs.push({ positionTwips: offset, positionPixels: pixel });
+  }
+  return tabs;
 }
 
 /** Draws the current snapped position across the visible portions of document pages. @param workspace - Writer workspace. @param axis - Active ruler axis. @param position - Snapped page position in pixels. @param pageIndex - Active page for vertical drags. @returns Guide overlay. */

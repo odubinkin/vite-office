@@ -76,6 +76,8 @@ export interface WriterParagraphProjection {
   readonly rulerTabStops?:
     | readonly Readonly<{ index: number; positionPt: number; adjustment: SvxTabAdjust }>[]
     | undefined;
+  /** Effective tab spacing and origin; omitted detached values use Writer's 2 cm/relative defaults. */
+  readonly rulerTabSettings?: Readonly<{ defaultDistance: number; relativeToIndent: boolean }>;
   readonly style: WriterParagraphStyle;
   readonly styleDisplayName: string;
   readonly text: string;
@@ -171,6 +173,14 @@ export class WriterViewProjection {
     cursor: SwPaM,
     documentState: SfxObjectShellState,
   ): WriterPresentationProjection {
+    const defaultTabs = document
+      .GetAttrPool()
+      .GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    const defaultTabDistance =
+      (defaultTabs.Count() === 0 ? 1134 : defaultTabs.At(0).GetTabPos()) || 1;
+    const tabsRelativeToIndent = document
+      .GetDocumentSettingManager()
+      .get("TABS_RELATIVE_TO_INDENT");
     const paragraphs = document.paragraphs.map(
       /** Projects one canonical text node. @param node - Live node. @returns Frozen primitive paragraph. */ (
         node,
@@ -185,7 +195,7 @@ export class WriterViewProjection {
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
-        const rulerTabStops = tabItem.GetStops().flatMap(
+        const explicitTabStops = tabItem.GetStops().flatMap(
           /** Excludes default hit targets while retaining each explicit tab's item index. @param stop - Writer tab stop. @param index - Raw item index. @returns Immutable ruler identity. */
           (stop, index) =>
             stop.GetAdjustment() === SvxTabAdjust.Default
@@ -198,7 +208,11 @@ export class WriterViewProjection {
                   }),
                 ],
         );
-        const tabStopsPt = rulerTabStops.map(
+        const rulerTabStops = explicitTabStops.filter(
+          /** Writer strips zero-position ruler inputs while retaining their model/format values. @param stop - Primitive explicit tab. @returns Ruler admission. */
+          (stop) => stop.positionPt !== 0,
+        );
+        const tabStopsPt = explicitTabStops.map(
           /** Projects positions for paragraph formatting without discarding ruler identity. @param stop - Immutable ruler tab. @returns Position in points. */
           (stop) => stop.positionPt,
         );
@@ -209,6 +223,10 @@ export class WriterViewProjection {
         let runOffset = 0;
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
+          rulerTabSettings: Object.freeze({
+            defaultDistance: tabItem.GetDefaultDistance() || defaultTabDistance,
+            relativeToIndent: tabsRelativeToIndent,
+          }),
           alignment: node.GetParagraphAlignment(),
           ...(bulletChar === undefined ? {} : { bulletChar }),
           id: this.GetNodeId(node),

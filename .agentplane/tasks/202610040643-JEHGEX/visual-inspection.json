@@ -1,0 +1,17 @@
+{
+  "screenshots": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-ruler-default-tabs--fc0a8-lt-ruler-tabs-at-width-1280/default-tab-glyphs.png",
+      "sha256": "465e3657603ed753ba2d328c2797b9f94d4ef9550d7f5d74b56f165c0a857abc"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/test-results/e2e/writer-ruler-default-tabs--e6cab-ult-ruler-tabs-at-width-390/default-tab-glyphs.png",
+      "sha256": "3e63f4dbdf3dbb583b5ee0913e32db024baf8d035797aaa7f7f1a9ca13f9a350"
+    }
+  ],
+  "visualInspection": "Both actual Chromium ruler screenshots inspected: Default T-shaped glyphs visible at the expected grid positions along the lower ruler edge; desktop renders the complete seven-marker grid and mobile shows the visible portion without a glyph shape regression. Actual free-surface hit and accepted/cancelled history verified by Chromium assertions. Images remain outside Agentplane.",
+  "widths": [
+    1280,
+    390
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "base": "ae6f72df804be936041fc8f98b38d63a775ca47e",
+  "semanticPaths": [
+    "apps/office/e2e/writer-ruler-default-tabs.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-ruler-default-tabs.test.tsx",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "semanticFileIdentitiesUnchanged": true,
+  "pinnedSourceHashesUnchanged": 5,
+  "priorTestFiles": 290,
+  "priorTestFilesByteIdentical": 290,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 2,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 220,
+      "existingRowsPreserved": 220,
+      "appendOnlyUpdatedRows": 2,
+      "newRows": 0,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "splitStaticChecksPassed": 11,
+  "vendorAbsentChecksPassed": 3,
+  "vendorRestored": true,
+  "coverage": {
+    "lines": {
+      "total": 10447,
+      "covered": 10447,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 11398,
+      "covered": 11398,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3026,
+      "covered": 3026,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 8619,
+      "covered": 8619,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "artifactAudit": "artifact-audit.json",
+  "nativeExecution": false
+}
