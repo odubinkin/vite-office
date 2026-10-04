@@ -4,7 +4,7 @@ title: "Resolve automatic first-line layout separately from authored ruler value
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved source-owned automatic first-line layout and distinct resolved browser primitive, preserving raw ruler/dialog/list ownership and registered exceptions. One upstream-absent pipeline; results/hashes only in Agentplane."
 doc_version: 3
-doc_updated_at: "2026-10-04T08:44:43.633Z"
+doc_updated_at: "2026-10-04T08:53:23.198Z"
 doc_updated_by: "CODER"
 description: "Iteration99 of the standing iterative upstream goal: source-owned automatic first-line layout calculation for existing Western/font/line-spacing/list paths, distinct immutable resolved layout projection and real body rendering, preserving raw ruler/dialog/Undo contracts and registered I/O/recovery deviations."
 sections:
@@ -55,7 +55,9 @@ sections:
   Verify Steps: "Read ap task verify-show and bounded pinned hashes/markers. No baseline/focused pre-fix test runs, native execution or source/helper artifacts. Static format:check/lint/typecheck/check:dependencies/test:static(build only)/check:docs/check:file-size. Rename vendor/libreoffice-reference inside vendor, run npm run test once, npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts once, and npm run test:e2e once; restore finally. Never run tests with upstream present or repeat passing suites; repeat only failed corrected gates/cases absent. Require100%four app/inventory coverage metrics. Owned evidence uses independent literal expected twips/font/spacing, complete raw-auto QueryValue and direct/inherited state, frozen retained DTO, actual visible/measurement CSS and follow frames, native numbered bypass, detached raw DTO fallback, default ignores spacing and compatibility applies it, actual font/dialog history. Chromium1280/390 product-authored automatic ODT checks glyph Range offset vs paragraph origin/first-line indent CSS, independent untouched paragraph, preserved authored raw dialog/ruler state, formatting/Undo/Redo and later text input; inspect actual screenshots outside Agentplane. After restoration run resource generator--check/source-tree/provenance/invariants/parity CLI with zero semantic violations; scope8paths/all300 prior tests identical/220existing rows preserved3append-only updates+1explicit new unverified row. Pinned source hashes stable; ignored-inclusive AP scan zero forbidden source/helper/Python/native executable/archive/source-frame/code-diff with only5historical prose refs. Routing/doctor required; exact-SHA same-actor EVALUATOR pass, clean finish, parent DOING/goal active."
   Verification: "Pending approved implementation and declared upstream-absent verification."
   Rollback Plan: "Revert the scoped semantic commit in a new task commit if needed; retain task traceability and never rewrite history."
-  Findings: "Previous goal turn was verified progress: iteration98 DONE semantic cb23954cd2c067b85f357381681fefaddf44dd93; clean base 9c47d3987eebd979125aac70904243303fa78153. Current browser CSS uses authored raw firstLineIndentPt despite effective auto flag. Existing core getter computes only twice Western font height and ignores the already-supported false compatibility setting; source-native SwTextMargin does not. Native GetFirstLineOfsWithNum suppresses auto calculation when a numbered record has a rule, while existing browser list geometry remains a separate path. Automatic default disregard-line-space true is preserved. Native script/language font selection, combined line-space rule combinations outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain individually unverified; do not silently certify them. Registered save/open/recovery deviations preserved."
+  Findings: |-
+    Previous goal turn was verified progress: iteration98 DONE semantic cb23954cd2c067b85f357381681fefaddf44dd93; clean base 9c47d3987eebd979125aac70904243303fa78153. Current browser CSS uses authored raw firstLineIndentPt despite effective auto flag. Existing core getter computes only twice Western font height and ignores the already-supported false compatibility setting; source-native SwTextMargin does not. Native GetFirstLineOfsWithNum suppresses auto calculation when a numbered record has a rule, while existing browser list geometry remains a separate path. Automatic default disregard-line-space true is preserved. Native script/language font selection, combined line-space rule combinations outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain individually unverified; do not silently certify them. Registered save/open/recovery deviations preserved.
+    Initial static format/type/build gates failed on formatting and one unsupported Testing Library exact option in the new test. Remove that option and format only the two new tests; preserve bounded initial gate result hashes and repeat only the three failed gates. No tests have run yet.
 id_source: "generated"
 ---
 ## Summary
@@ -93,3 +95,4 @@ Revert the scoped semantic commit in a new task commit if needed; retain task tr
 ## Findings
 
 Previous goal turn was verified progress: iteration98 DONE semantic cb23954cd2c067b85f357381681fefaddf44dd93; clean base 9c47d3987eebd979125aac70904243303fa78153. Current browser CSS uses authored raw firstLineIndentPt despite effective auto flag. Existing core getter computes only twice Western font height and ignores the already-supported false compatibility setting; source-native SwTextMargin does not. Native GetFirstLineOfsWithNum suppresses auto calculation when a numbered record has a rule, while existing browser list geometry remains a separate path. Automatic default disregard-line-space true is preserved. Native script/language font selection, combined line-space rule combinations outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain individually unverified; do not silently certify them. Registered save/open/recovery deviations preserved.
+Initial static format/type/build gates failed on formatting and one unsupported Testing Library exact option in the new test. Remove that option and format only the two new tests; preserve bounded initial gate result hashes and repeat only the three failed gates. No tests have run yet.
