@@ -1,10 +1,11 @@
 ---
 id: "202610042302-PAZJC3"
 title: "Restore the hyperlink document-pool style default"
-status: "DOING"
+result_summary: "Restored styled hyperlink document-pool defaults and native style identities"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -61,11 +62,16 @@ quality_review:
     - "exact semantic SHA e91ad56567462e07507c301f96d2ff21b5e9c120"
   findings:
     - "Reviewed all nine committed semantic paths against approved scope and independent literal cases. All350 prior tests byte-identical;237prior states/defaults/exceptions and manifest fields retained except four bounded appendices;new mapper wholly unverified. Native zero and styled defaults differ as pinned init.cxx requires;copy/equality retain both IDs;default registration is independent of browser codecs and unknown snapshots still reject. Six static gates pass with failed-lint-only correction;one absent five-gate profile passes2680/109/5/99 and coverage100%,no test replays;five restored audits semantic0. Seven native hashes checked;ignored-inclusive3844APfiles/0forbidden;doctor0errors/two unchanged warnings/routingpass."
-commit: null
+commit:
+  hash: "8d1a254356826bc9b6d090858bd1998461fcca10"
+  message: "🧩 PAZJC3 task: record verified styled hyperlink pool contract"
 comments:
   -
     author: "CODER"
     body: "Start: restore styled hyperlink pool default, independent native IDs and optional snapshot factory within nine paths."
+  -
+    author: "CODER"
+    body: "Verified: restored styled internet document-pool default54 and native1030/1031 identities independently of zero CreateDefault and browser codecs. Nine paths,seven independent cases,350prior tests unchanged;one absent profile2680/109/5/99 and100%coverage passes,restored audits semantic0. Same-actor exact-SHA review and doctor/routing pass;full style/native/core/UI parity stays unverified."
 events:
   -
     type: "status"
@@ -80,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Bounded styled pool default/IDs verified at e91ad56567462e07507c301f96d2ff21b5e9c120. Ninepaths,sevennewliteralcases,all350prior files unchanged;237states/defaults/exceptions retained/newmapperunverified. Sixstaticpass with failed-lint-only correction;oneabsentprofile build1/app2680/inventory109/scripts5/Chrome99/coverage100%,notestreplays;five restoredsourceauditspass semantic0;sevennativehashes/AP0forbidden;exact-SHA same-actorEVALUATORpass/doctor0errors2unchangedwarnings/routingOK. DTOstyleIDs/ODFmapping/alllocalizedstyles/nativeclients/fullparity remainunverified;registeredIOdeviations preserved."
+  -
+    type: "status"
+    at: "2026-10-04T23:14:54.367Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored styled internet document-pool default54 and native1030/1031 identities independently of zero CreateDefault and browser codecs. Nine paths,seven independent cases,350prior tests unchanged;one absent profile2680/109/5/99 and100%coverage passes,restored audits semantic0. Same-actor exact-SHA review and doctor/routing pass;full style/native/core/UI parity stays unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T23:14:38.424Z"
+doc_updated_at: "2026-10-04T23:14:54.369Z"
 doc_updated_by: "CODER"
 description: "Restore the existing RES_TXTATR_INETFMT document-pool default through native URL/target constructor, distinct from zero CreateDefault. Add native ZERO/CHR_INET_NORMAL/CHR_INET_VISIT pool IDs, normal/visited ID storage/getters/paired setters, copy and equality. Add bounded source-owned SwStyleNameMapper.GetUIName(poolId,fallback) for two English internet resources; all other/localized families remain unverified. Keep portable DTO ingestion semantics separate and unchanged; active-link DTO migration and XML UI/programmatic name conversion remain later obligations. Decouple SfxItemPool default registration from optional browser snapshot factory; register new SwFormatINetFormat(emptyURL,emptyTarget) in real SwAttrPool without fabricated generic JSON restore. Existing specialized internet snapshot codec remains separate. Add two independent literal test files covering defaults/IDs/names/copy/backlinks/equality/setters/actual document-node-item-set lookup, inheritance/direct clear, registry ownership/duplicate/missing restore/existing factory. All350 prior test files byte-identical. Append bounded responsibility notes to four existing manifest rows and register one new unverified mapper module, preserving all237 prior states/defaults/exceptions and I/O deviations. Run six static gates then one sequential five-suite absent-reference profile with finally restoration; only failed gates/cases repeat. Five source audits after restoration; scope/native hashes/ignored-inclusive artifact checks; same-actor readonly exact-SHA EVALUATOR and doctor/routing; verified canonical finish with concrete result. No full native style resolution, UNO/macros/broadcaster/client lifetime, global registry or whole-core/UI parity claim."
 sections:
@@ -168,6 +181,10 @@ sections:
     Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged.
 
     Verified evidence: nine semantic paths;seven new independent literal cases;all350prior test files byte-identical. Six static gates pass;initial lint rejected a static-only class,changed mapper to the repository's object namespace pattern and reran only failed lint before remaining first-attempt static gates. One absent full profile passed build1,app2680/269files,inventory109/36files,scripts5/2files,Chromium99;app/inventory coverage100%allfour. No test failures/replays/passing suite repeats. Five restored source audits pass,semantic0. All237prior runtime states/defaults/exceptions and other manifest fields retained,four bounded responsibility appendices,one new unverified mapper. Seven native file hashes;ignored-inclusive AP3844files/zero forbidden;git diff --check pass. Default-only54 has no invented generic snapshot factory;existing specialized browser codec stays separate. Existing active DTO constructor still retains its portable semantics and zero style IDs;native active-link routing,nondefault ID persistence and UI/programmatic ODF identity conversions remain separate unverified obligations. English two-entry name mapper is incomplete beyond these resources;full localization/families/custom resolution,UNO/macros/style clients/broadcaster/lifetime/global pool architecture and full core/UI parity remain unverified. No network/global access/native invocation/source/helpers/artifact diagnostics/I/O deviation changes.
+extensions:
+  implementation_commit:
+    hash: "e91ad56567462e07507c301f96d2ff21b5e9c120"
+    message: "🛠️ PAZJC3 code: restore styled hyperlink pool defaults and native identities"
 id_source: "generated"
 ---
 ## Summary
