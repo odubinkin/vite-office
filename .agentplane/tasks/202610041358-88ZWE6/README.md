@@ -4,7 +4,7 @@ title: "Restore inclusive paragraph style selection and native range undo owners
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -23,6 +23,26 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T14:22:45.100Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only quality phase evaluated exact semantic commit e1ddcbc3a40eca3d090bc8df035a7002eee3cc36 against approved single-PaM range/undo scope; evidence and source/hash/scope replay pass, no implementation edits or test reruns."
+  evaluated_sha: "e1ddcbc3a40eca3d090bc8df035a7002eee3cc36"
+  blueprint_digest: "18673bcd75f3e00e219566fbd7e219ac49ea51fc63358e64b5a4175432f2100b"
+  evidence_refs:
+    - ".agentplane/tasks/202610041358-88ZWE6/README.md"
+    - ".agentplane/tasks/202610041358-88ZWE6/quality/20261004-142245100-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610041358-88ZWE6/quality/20261004-142245100-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610041358-88ZWE6/quality/20261004-142245100-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610041358-88ZWE6/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610041358-88ZWE6/final-integrity.json"
+    - ".agentplane/tasks/202610041358-88ZWE6/scope-integrity.json"
+    - ".agentplane/tasks/202610041358-88ZWE6/source-comparison.json"
+    - ".agentplane/tasks/202610041358-88ZWE6/artifact-audit.json"
+  findings:
+    - "Inclusive document-node traversal includes empty/end-zero and table-cell text, skips structural nodes and validates actual point/mark and collection ownership. Core edit helper replaces active-paragraph text-shell primitive and one SwUndoFormatColl retains per-node list/style/suppression history; redo uses the native captured display name and missing-name no-op. Actual frame/UI ODT tests exercise mixed endpoint styles, one undo owner, repeated history, toolbar/sidebar/focus, typing/export and untouched neighbors."
+    - "All product suites passed first vendor-absent attempt: app1431, inventory109, scripts5, Chromium95; app/inventory four metrics100percent. Seven static checks, routing/source4/parity227zero, ten native hashes, strict10paths and314prior test files313unchanged with one assertion-preserving constructor fixture pass. Old226mapping rows retain statuses/defaults/exceptions and only four evidence/description appends. Ignored-inclusive AP forbidden0; doctor0errors/two preexisting warnings."
 commit: null
 comments:
   -
