@@ -3,6 +3,8 @@
 import type { SwTextINetFormat } from "./txtatr2";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
+import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
 
 /** Supported hyperlink metadata retained by the bounded Writer model and ODF filter. */
 export interface WriterHyperlink {
@@ -52,9 +54,11 @@ export function equalWriterHyperlinks(
 export class SwFormatINetFormat extends SfxPoolItem {
   private readonly msURL: string;
   private readonly msTargetFrame: string;
-  private readonly msINetFormatName: string;
-  private readonly msVisitedFormatName: string;
+  private msINetFormatName: string;
+  private msVisitedFormatName: string;
   private msHyperlinkName: string;
+  private mnINetFormatId = SwPoolFormatId.ZERO;
+  private mnVisitedFormatId = SwPoolFormatId.ZERO;
   /** Internal friend-access backlink assigned by the concrete internet attribute. */
   public mpTextAttr: SwTextINetFormat | undefined;
 
@@ -63,8 +67,11 @@ export class SwFormatINetFormat extends SfxPoolItem {
     return this.mpTextAttr;
   }
 
-  /** Creates native zero/copy values or ingests the existing portable metadata boundary. @param hyperlink - Copied native item or projected strings. @returns Nothing. */
-  public constructor(hyperlink: WriterHyperlink | SwFormatINetFormat = { url: "" }) {
+  /** Creates native zero, URL/target or copy values, or ingests the existing portable metadata boundary. @param hyperlink - Native URL, copied item or projected strings. @param targetFrame - Native URL constructor target. @returns Nothing. */
+  public constructor(
+    hyperlink: string | WriterHyperlink | SwFormatINetFormat = { url: "" },
+    targetFrame = "",
+  ) {
     super(RES_TXTATR_INETFMT);
     this.setNonShareable();
     if (hyperlink instanceof SwFormatINetFormat) {
@@ -73,6 +80,16 @@ export class SwFormatINetFormat extends SfxPoolItem {
       this.msINetFormatName = hyperlink.msINetFormatName;
       this.msVisitedFormatName = hyperlink.msVisitedFormatName;
       this.msHyperlinkName = hyperlink.msHyperlinkName;
+      this.mnINetFormatId = hyperlink.mnINetFormatId;
+      this.mnVisitedFormatId = hyperlink.mnVisitedFormatId;
+    } else if (typeof hyperlink === "string") {
+      this.msURL = hyperlink;
+      this.msTargetFrame = targetFrame;
+      this.msHyperlinkName = "";
+      this.mnINetFormatId = SwPoolFormatId.CHR_INET_NORMAL;
+      this.mnVisitedFormatId = SwPoolFormatId.CHR_INET_VISIT;
+      this.msINetFormatName = SwStyleNameMapper.GetUIName(this.mnINetFormatId, "");
+      this.msVisitedFormatName = SwStyleNameMapper.GetUIName(this.mnVisitedFormatId, "");
     } else {
       this.msURL = hyperlink.url;
       this.msTargetFrame = hyperlink.targetFrame ?? "";
@@ -112,6 +129,28 @@ export class SwFormatINetFormat extends SfxPoolItem {
     return this.msVisitedFormatName;
   }
 
+  /** Returns the native normal-style pool identity. @returns Pool ID. */
+  public GetINetFormatId(): SwPoolFormatId {
+    return this.mnINetFormatId;
+  }
+
+  /** Returns the native visited-style pool identity. @returns Pool ID. */
+  public GetVisitedFormatId(): SwPoolFormatId {
+    return this.mnVisitedFormatId;
+  }
+
+  /** Sets normal-style name and identity independently of visited style and backlink. @param name - UI style name. @param id - Native pool ID. @returns Nothing. */
+  public SetINetFormatAndId(name: string, id: SwPoolFormatId): void {
+    this.msINetFormatName = name;
+    this.mnINetFormatId = id;
+  }
+
+  /** Sets visited-style name and identity independently of normal style and backlink. @param name - UI style name. @param id - Native pool ID. @returns Nothing. */
+  public SetVisitedFormatAndId(name: string, id: SwPoolFormatId): void {
+    this.msVisitedFormatName = name;
+    this.mnVisitedFormatId = id;
+  }
+
   /** Returns independent hyperlink metadata. @returns Hyperlink value. */
   public GetHyperlink(): WriterHyperlink {
     return {
@@ -143,7 +182,9 @@ export class SwFormatINetFormat extends SfxPoolItem {
       other.msHyperlinkName === this.msHyperlinkName &&
       other.msTargetFrame === this.msTargetFrame &&
       other.msINetFormatName === this.msINetFormatName &&
-      other.msVisitedFormatName === this.msVisitedFormatName
+      other.msVisitedFormatName === this.msVisitedFormatName &&
+      other.mnINetFormatId === this.mnINetFormatId &&
+      other.mnVisitedFormatId === this.mnVisitedFormatId
     );
   }
 

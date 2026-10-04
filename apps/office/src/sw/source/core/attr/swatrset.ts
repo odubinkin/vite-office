@@ -76,12 +76,14 @@ import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatPageDesc } from "./fmtpdsc";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
+import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 
-/** Writer-owned item pool with defaults for the currently implemented paragraph WhichIds. */
+/** Writer-owned item pool with defaults for the currently implemented WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    this.RegisterDefaultItem(new SwFormatINetFormat("", ""));
     const device = document.GetDefaultFontDevice();
     this.RegisterDefaultItem(
       new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, 0),

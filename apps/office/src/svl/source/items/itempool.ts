@@ -12,11 +12,11 @@ export class SfxItemPool {
   private readonly defaults = new Map<number, SfxPoolItem>();
   private readonly factories = new Map<number, SfxPoolItemFactory>();
 
-  /** Registers one pool default and its snapshot factory. @param item - Default item. @param factory - Concrete restore function. @returns Nothing. */
-  public RegisterDefaultItem(item: SfxPoolItem, factory: SfxPoolItemFactory): void {
+  /** Registers a pool default independently of optional browser snapshot restoration. @param item - Default item. @param factory - Optional concrete restore function. @returns Nothing. */
+  public RegisterDefaultItem(item: SfxPoolItem, factory?: SfxPoolItemFactory): void {
     if (this.defaults.has(item.Which())) throw new Error(`Duplicate pool default: ${item.Which()}`);
     this.defaults.set(item.Which(), item.Clone() as SfxPoolItem);
-    this.factories.set(item.Which(), factory);
+    if (factory !== undefined) this.factories.set(item.Which(), factory);
   }
 
   /** Returns the immutable default for one WhichId. @param which - Registered item identity. @returns Pool default item. */

@@ -3,8 +3,11 @@
  * LibreOffice `sw/inc/poolfmt.hxx` and `SwStyleNameMapper.cxx` tables.
  */
 
-/** Native unsigned16 pool identity sentinel; other native pool enum families remain outside this bounded export. */
+/** Native unsigned16 sentinels and internet character-style identities; other native enum families remain outside this bounded export. */
 export enum SwPoolFormatId {
+  ZERO = 0,
+  CHR_INET_NORMAL = 1030,
+  CHR_INET_VISIT = 1031,
   UNKNOWN = 65535,
 }
 
