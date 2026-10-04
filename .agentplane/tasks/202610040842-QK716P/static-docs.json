@@ -1,0 +1,7 @@
+{
+  "command": "npm run check:docs",
+  "exitCode": 0,
+  "outputBytes": 119,
+  "outputSha256": "49a0ff369c98c7515d976796cf5395c3c9bdd748e9adf81218f636cbf82c881f",
+  "summary": []
+}

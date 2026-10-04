@@ -1,0 +1,7 @@
+{
+  "command": "npm run test:static",
+  "exitCode": 2,
+  "outputBytes": 1130,
+  "outputSha256": "cdf772c538abdd6902aab01754ef17dc0a91d8c6cebf6e5e0573192739e85c25",
+  "summary": []
+}

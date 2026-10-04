@@ -1,0 +1,81 @@
+{
+  "base": "9c47d3987eebd979125aac70904243303fa78153",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/text/itrcrsr.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+    "apps/office/e2e/writer-auto-first-layout.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "fileIdentities": [
+    {
+      "path": "apps/office/src/sw/source/core/text/itrcrsr.ts",
+      "bytes": 1667,
+      "sha256": "c2465c980eb40ee635df0ee27b3ee18ea41ced05d8a86b96fbe3b9394379229e"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "bytes": 42054,
+      "sha256": "e4315921e9653274e3cb73fa44428aaf64a1965513fb29b865178b0593af4d6e"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "bytes": 19855,
+      "sha256": "96bfa221ff51c4878739652bac4b369d898ddbf51c96a1155c9548a7e6455be2"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "bytes": 11574,
+      "sha256": "dce90b6b98bb649ad32df7a42481b0be873be97bf483bce23c62e30d7373c86e"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+      "bytes": 13541,
+      "sha256": "74c72e46a787a970289373b82eab3369b403af00d0fd240b4d2422c41ce2acb1"
+    },
+    {
+      "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
+      "bytes": 7203,
+      "sha256": "084cff3218eb70e943202c65dd4ee6577253cd1fef9ec1c07a9597bae066385a"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "bytes": 782142,
+      "sha256": "1b7bf46809a0607efefcf7c2fe85509c193d9289cfa81b7b3fe2751e6f35488e"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "bytes": 757896,
+      "sha256": "37aff003f4a45d5856ed1f4ecb35765a9c9d2b764cd7a327e0f18090d0a1368f"
+    }
+  ],
+  "priorTestFiles": 300,
+  "priorTestFilesByteIdentical": 300,
+  "priorModifiedTestFiles": 0,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 220,
+      "currentRows": 221,
+      "existingRowsPreserved": 220,
+      "appendOnlyExistingRowUpdates": 3,
+      "newExplicitMechanismRows": 1,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 220,
+      "currentRows": 221,
+      "existingRowsPreserved": 220,
+      "appendOnlyExistingRowUpdates": 3,
+      "newExplicitMechanismRows": 1,
+      "statusOwnerDefaultExceptionFieldsUnchanged": true,
+      "priorOrderUnchanged": true
+    }
+  ],
+  "saveOpenRecoveryExceptionsUnchanged": true
+}
