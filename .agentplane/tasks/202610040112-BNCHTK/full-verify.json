@@ -1,0 +1,41 @@
+{
+  "command": "npm run verify",
+  "exit": 0,
+  "signal": null,
+  "bytes": 957965,
+  "sha256": "6a46b26c1b49cd2385d9af5962ea9e53f0dff451eb867de382b98256cca8a42d",
+  "summary": [
+    " Test Files  1 passed (1)",
+    "      Tests  2 passed (2)",
+    " Test Files  202 passed (202)",
+    "      Tests  998 passed (998)",
+    "Statements   : 100% ( 11166/11166 )",
+    "Branches     : 100% ( 8445/8445 )",
+    "Functions    : 100% ( 2972/2972 )",
+    "Lines        : 100% ( 10245/10245 )",
+    " Test Files  36 passed (36)",
+    "      Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )",
+    "  47 passed (13.4s)",
+    "    \"semanticViolationCount\": 0,"
+  ],
+  "errors": [],
+  "nonFailureWarnings": [
+    "> eslint . --max-warnings 0",
+    "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.",
+    "[WebServer] (node:84443) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:84454) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:84452) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:84453) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "(node:84451) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.",
+    "(Use `node --trace-warnings ...` to show where the warning was created)",
+    "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+  ]
+}
