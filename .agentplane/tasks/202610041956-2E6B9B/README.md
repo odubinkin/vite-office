@@ -4,7 +4,7 @@ title: "Restore text hint owner range notifications"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -23,6 +23,27 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T20:16:11.974Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only quality phase passes approved iteration119 at exact semantic SHA 082670f76dc9b0c8a5075996aa5896d5aee74f4a. No independent-agent review or broad parity promotion."
+  evaluated_sha: "082670f76dc9b0c8a5075996aa5896d5aee74f4a"
+  blueprint_digest: "5dabbb2bd36fb35b259c2ce2708585153c31d5115796e0bfa7f9093d6731758d"
+  evidence_refs:
+    - ".agentplane/tasks/202610041956-2E6B9B/README.md"
+    - ".agentplane/tasks/202610041956-2E6B9B/quality/20261004-201611974-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610041956-2E6B9B/quality/20261004-201611974-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610041956-2E6B9B/quality/20261004-201611974-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610041956-2E6B9B/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610041956-2E6B9B/evidence/static-gates.json"
+    - ".agentplane/tasks/202610041956-2E6B9B/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610041956-2E6B9B/evidence/restored-source-audits.json"
+    - ".agentplane/tasks/202610041956-2E6B9B/evidence/scope-and-native-hashes.json"
+    - "Read-only actual commit byte/path/native-hash/evidence assertions passed at 082670f76dc9b0c8a5075996aa5896d5aee74f4a; no product suite replay."
+  findings:
+    - "Exact commit six semantic paths and working bytes match.337 prior tests byte-identical;234 inventory fields/statuses/defaults/exceptions unchanged except two appended justifications; two provenance appendices only. Native SetStart/changed-end owner notification and primary dirty interval sorting reviewed against five pinned hashes. Actual owner release/bind behavior and51 new literal tests cover clone/merge/cut/transfer/undo boundaries."
+    - "Six static gates pass with failed lint-only recovery. Build/app2124/inventory109/scripts5/Chromium99 each passed once absent; both coverage summaries all four metrics100%. Vendor restored before five source audits,semantic violations0. Ignored-inclusive AP scan forbidden0; doctor0 errors/two unchanged warnings and routing pass."
 commit: null
 comments:
   -
