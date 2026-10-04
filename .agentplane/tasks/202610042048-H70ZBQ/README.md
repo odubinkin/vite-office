@@ -4,7 +4,7 @@ title: "Own hyperlink item metadata by value"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T21:04:55.232Z"
+  updated_by: "CODER"
+  note: "Verified owned hyperlink metadata scope at 7af77163b12d6c0d6b0c86006b37a3252cbd637d: six static first-pass gates; one upstream-absent build,2277 app tests,109 inventory tests,5 script tests,99 Chromium cases;100% app/inventory coverage. Five restored source audits semantic0,341 prior tests unchanged,five paths,234 runtime rows preserved,AP sourcefree,doctor0 errors/routingpass; exact-SHA same-actor quality pass. Broad native/UI parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -59,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: execute approved iteration121 hyperlink string value ownership correction with literal metadata/actual graph boundaries;tests once absent,no AP helper/source artifacts."
+  -
+    type: "verify"
+    at: "2026-10-04T21:04:55.232Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified owned hyperlink metadata scope at 7af77163b12d6c0d6b0c86006b37a3252cbd637d: six static first-pass gates; one upstream-absent build,2277 app tests,109 inventory tests,5 script tests,99 Chromium cases;100% app/inventory coverage. Five restored source audits semantic0,341 prior tests unchanged,five paths,234 runtime rows preserved,AP sourcefree,doctor0 errors/routingpass; exact-SHA same-actor quality pass. Broad native/UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T21:04:42.058Z"
+doc_updated_at: "2026-10-04T21:04:55.290Z"
 doc_updated_by: "CODER"
 description: "Iteration121 fixes retained caller metadata alias in existing SwFormatINetFormat. Capture supported immutable string values at construction as in native owned OUString/UIName fields,keeping metadata optional/empty values and existing JSON codecs/defaults. Prove caller/returned/clone isolation through direct items,actual hint graphs,copy/cut/transfer/history boundaries. One upstream-absent profile;registered I/O/recovery deviations untouched."
 sections:
@@ -80,7 +86,41 @@ sections:
     4. After restoration npm exec -- tsx scripts/generate-writer-ui-resources.ts --check;npm run check:source-tree;npm run check:source-provenance;npm run inventory:invariants;npm run inventory:parity. All pass,semantic violations0.
     5. Audit five semantic paths,all341previous tests byte-identical,234runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,provenance only one bounded appendix,native hashes,ignored-inclusive AP source/helper-free. Run ap doctor,node .agentplane/policy/check-routing.mjs; no new errors.
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass; CODER verify/finish separate commit hashes; clean main/vendor restored;parent/goal active. No broad native/core/UI promotion.
-  Verification: "PASS: Iteration121 fixes SwFormatINetFormat caller metadata alias with an owned five-string construction snapshot,including supported inherited fields. Existing plain JSON order/optional omission versus empty strings/non-shareability/URL rejection/equality/Clone codecs preserved.78 literal cases pass:38 direct value/projection/clone/later-item cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Exactly five semantic paths;all341 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,one provenance appendix,three native hashes. Six static gates first pass;one absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 passed,all app/inventory coverage metrics100%. No suite/build replay or recovery. Vendor restored before five source audits semantic0. Ignored-inclusive AP source/helper scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Exact-SHA 7af77163b12d6c0d6b0c86006b37a3252cbd637d same-actor read-only quality pass recorded at .agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/quality-report.json. Full native style IDs/macros/broadcaster/text backlink/client/refcounts/hierarchy/default empty URL/full UNO and coupled adjacent INET/native insertion topology remain unverified. Registered I/O/recovery deviations untouched;no module/goal promotion."
+  Verification: |-
+    PASS: Iteration121 fixes SwFormatINetFormat caller metadata alias with an owned five-string construction snapshot,including supported inherited fields. Existing plain JSON order/optional omission versus empty strings/non-shareability/URL rejection/equality/Clone codecs preserved.78 literal cases pass:38 direct value/projection/clone/later-item cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Exactly five semantic paths;all341 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,one provenance appendix,three native hashes. Six static gates first pass;one absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 passed,all app/inventory coverage metrics100%. No suite/build replay or recovery. Vendor restored before five source audits semantic0. Ignored-inclusive AP source/helper scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Exact-SHA 7af77163b12d6c0d6b0c86006b37a3252cbd637d same-actor read-only quality pass recorded at .agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/quality-report.json. Full native style IDs/macros/broadcaster/text backlink/client/refcounts/hierarchy/default empty URL/full UNO and coupled adjacent INET/native insertion topology remain unverified. Registered I/O/recovery deviations untouched;no module/goal promotion.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T21:04:55.232Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified owned hyperlink metadata scope at 7af77163b12d6c0d6b0c86006b37a3252cbd637d: six static first-pass gates; one upstream-absent build,2277 app tests,109 inventory tests,5 script tests,99 Chromium cases;100% app/inventory coverage. Five restored source audits semantic0,341 prior tests unchanged,five paths,234 runtime rows preserved,AP sourcefree,doctor0 errors/routingpass; exact-SHA same-actor quality pass. Broad native/UI parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T21:04:42.058Z, excerpt_hash=sha256:bdf8fe8c14aae4787788354ba77ccc744e2939f5cb9c01d3d90811cbb120a3e7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042048-H70ZBQ/blueprint/resolved-snapshot.json
+    - old_digest: 27be13eef277b0a1f48178310c8de79df7b589f2e92177851bef9bef1d84489f
+    - current_digest: 27be13eef277b0a1f48178310c8de79df7b589f2e92177851bef9bef1d84489f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042048-H70ZBQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610042048-H70ZBQ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the semantic commit through a new scoped task,preserve history and other work;no history rewrite."
   Findings: "Iteration121 fixes SwFormatINetFormat caller metadata alias with an owned five-string construction snapshot,including supported inherited fields. Existing plain JSON order/optional omission versus empty strings/non-shareability/URL rejection/equality/Clone codecs preserved.78 literal cases pass:38 direct value/projection/clone/later-item cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Exactly five semantic paths;all341 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,one provenance appendix,three native hashes. Six static gates first pass;one absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 passed,all app/inventory coverage metrics100%. No suite/build replay or recovery. Vendor restored before five source audits semantic0. Ignored-inclusive AP source/helper scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Exact-SHA 7af77163b12d6c0d6b0c86006b37a3252cbd637d same-actor read-only quality pass recorded at .agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/quality-report.json. Full native style IDs/macros/broadcaster/text backlink/client/refcounts/hierarchy/default empty URL/full UNO and coupled adjacent INET/native insertion topology remain unverified. Registered I/O/recovery deviations untouched;no module/goal promotion."
 id_source: "generated"
@@ -114,6 +154,39 @@ Capture SwFormatINetFormat's five supported string metadata fields at constructi
 ## Verification
 
 PASS: Iteration121 fixes SwFormatINetFormat caller metadata alias with an owned five-string construction snapshot,including supported inherited fields. Existing plain JSON order/optional omission versus empty strings/non-shareability/URL rejection/equality/Clone codecs preserved.78 literal cases pass:38 direct value/projection/clone/later-item cases and40 actual node/copy/cut/transfer/history/undo cases across all eight flags. Exactly five semantic paths;all341 prior test/spec files byte-identical.234 runtime fields/statuses/defaults/exceptions unchanged except one justification appendix,one provenance appendix,three native hashes. Six static gates first pass;one absent build/app2277/260,inventory109/36,scripts5/2,Chromium99 passed,all app/inventory coverage metrics100%. No suite/build replay or recovery. Vendor restored before five source audits semantic0. Ignored-inclusive AP source/helper scan forbidden0,doctor0 errors/two unchanged warnings,routingpass. Exact-SHA 7af77163b12d6c0d6b0c86006b37a3252cbd637d same-actor read-only quality pass recorded at .agentplane/tasks/202610042048-H70ZBQ/quality/20261004-210413311-recovery-context/quality-report.json. Full native style IDs/macros/broadcaster/text backlink/client/refcounts/hierarchy/default empty URL/full UNO and coupled adjacent INET/native insertion topology remain unverified. Registered I/O/recovery deviations untouched;no module/goal promotion.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T21:04:55.232Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified owned hyperlink metadata scope at 7af77163b12d6c0d6b0c86006b37a3252cbd637d: six static first-pass gates; one upstream-absent build,2277 app tests,109 inventory tests,5 script tests,99 Chromium cases;100% app/inventory coverage. Five restored source audits semantic0,341 prior tests unchanged,five paths,234 runtime rows preserved,AP sourcefree,doctor0 errors/routingpass; exact-SHA same-actor quality pass. Broad native/UI parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T21:04:42.058Z, excerpt_hash=sha256:bdf8fe8c14aae4787788354ba77ccc744e2939f5cb9c01d3d90811cbb120a3e7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042048-H70ZBQ/blueprint/resolved-snapshot.json
+- old_digest: 27be13eef277b0a1f48178310c8de79df7b589f2e92177851bef9bef1d84489f
+- current_digest: 27be13eef277b0a1f48178310c8de79df7b589f2e92177851bef9bef1d84489f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042048-H70ZBQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610042048-H70ZBQ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
