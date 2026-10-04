@@ -1,0 +1,54 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/edit/edfcol-modifier.test.ts -t honors only KEY_MOD1 in actual command mask (0|4096|16384|32768)$|retains unrelated automatic-style items and internet flags while normalizing empty styles",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 251,
+      "sha256": "6d7e4cd6e76b048e8315794c15d2246022b086de827211169f490969a3c5df9d",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  5 passed | 43 skipped (48)"
+      ]
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "5dec8bca5b3edc94faced0b4f95f1637871363b9997b91531c07e12ce93627a5",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "841165b4f61a6391349dfd9e9c096669b209a0cee2a324a23e88e2941eb2789b",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ]
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13579,
+      "sha256": "bee40157582f4cedfb282d725312c16a7b15c9e6ed38bf8124d9c9799e5650f3",
+      "totals": [
+        "99 passed (35.7s)"
+      ]
+    }
+  ]
+}
