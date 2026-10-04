@@ -4,7 +4,7 @@ title: "Restore pooled selective text attribute reconstruction"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,29 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T18:19:54.202Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only review at exact semantic 50eb532eee5693018a979bcd0998864bce962e14: approved pooled selective reconstruction and registered MakeTextAttr contract pass; wider native contract and broad goal remain open."
+  evaluated_sha: "50eb532eee5693018a979bcd0998864bce962e14"
+  blueprint_digest: "880902600392b739864fcb03242e121bc22fdedf47b92cb1cc765c57bc968cf4"
+  evidence_refs:
+    - ".agentplane/tasks/202610041805-1QVN9H/README.md"
+    - ".agentplane/tasks/202610041805-1QVN9H/quality/20261004-181954202-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610041805-1QVN9H/quality/20261004-181954202-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610041805-1QVN9H/quality/20261004-181954202-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610041805-1QVN9H/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610041805-1QVN9H/evidence/static-gates.json"
+    - ".agentplane/tasks/202610041805-1QVN9H/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610041805-1QVN9H/evidence/restored-audits.json"
+    - ".agentplane/tasks/202610041805-1QVN9H/evidence/scope.json"
+    - ".agentplane/tasks/202610041805-1QVN9H/evidence/native-hashes.json"
+    - ".agentplane/tasks/202610041805-1QVN9H/evidence/artifact-audit.json"
+    - "ap doctor0errors and node .agentplane/policy/check-routing.mjs pass"
+  findings:
+    - "Exact ten semantic paths;26 new real-owner factory/reset/adjacent/shared-undo cases. Two source-contradicted fixture files corrected to concrete style insertion domain;327 other prior tests unchanged. No nonpooled fallback.233 prior status/default/exception rows retained and one new owner all-unverified.15 authoritative pinned source hashes, no upstream execution or storage."
+    - "All six static gates first pass; single first absent-only build,1701app/109inventory/5scripts/99Chromium pass and required app/inventory metrics100%. Restored resource/source/provenance/invariants/parity audits pass, semantic violations0. Same-SHA evidence structure verified; doctor0errors/two unchanged warnings; routing pass; ignored-inclusive AP forbidden0; vendor restored and registered deviations retained."
 commit: null
 comments:
   -
