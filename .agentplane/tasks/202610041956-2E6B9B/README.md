@@ -4,7 +4,7 @@ title: "Restore text hint owner range notifications"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: restore approved actual hint owner notification and lazy primary-map resort; preserve prior tests and run once absent upstream."
 doc_version: 3
-doc_updated_at: "2026-10-04T19:57:04.971Z"
+doc_updated_at: "2026-10-04T20:09:27.336Z"
 doc_updated_by: "CODER"
 description: "Iteration119: restore SwTextAttr owner backlink, native SetStart/SetEnd notifications and lazy dirty-range ResortStartMap/GetWithoutResorting for the existing primary map; transfer/replacement/normalization bind or release actual owners, snapshots stay independent. No new native operation families/maps/status promotion or registered I/O changes. Tests once absent upstream; no AP sources/helpers."
 sections:
@@ -59,7 +59,7 @@ sections:
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass; CODER verify/finish separate commit hashes; clean main/vendor restored;parent/goal active. No broad native/core/UI promotion.
   Verification: "Pending implementation and upstream-absent gates."
   Rollback Plan: "Revert only the task semantic commit through an authorized follow-up; preserve task history, intentional I/O deviations and unrelated changes."
-  Findings: "Clean main preflight;118completed verified progress. Current actual range writes do not notify the owning container or repair its stale sorted order. Native m_pHints is assigned by Insert/released by DeleteAtPos; SetStart always dirties maps,SetEnd notifies only on change. Primary dirty ranges and raw stable iteration are absent. Network/outside-repo access unnecessary."
+  Findings: "Implemented native owner backlinks, start/end notification boundaries and full/partial lazy primary-map sorting. Owned cut/transfer/replacement release former owners before rebasing and bind actual survivors. Added51 literal independent cases across both supported families/eight flags, raw/sorted reads, snapshots, merge removal, real moves and undo. Six static gates pass. Initial lint rejected two unused secondary-map parameters; retained the four-argument contract via a labeled tuple and repeated only failed lint before running remaining gates. No product tests yet in this iteration. All337 prior tests and234 runtime fields are intended unchanged, pending scope audit. Extra sorted maps, native friend visibility/history/refcounts/destruction/listeners and broad parity remain unverified."
 id_source: "generated"
 ---
 ## Summary
@@ -98,4 +98,4 @@ Revert only the task semantic commit through an authorized follow-up; preserve t
 
 ## Findings
 
-Clean main preflight;118completed verified progress. Current actual range writes do not notify the owning container or repair its stale sorted order. Native m_pHints is assigned by Insert/released by DeleteAtPos; SetStart always dirties maps,SetEnd notifies only on change. Primary dirty ranges and raw stable iteration are absent. Network/outside-repo access unnecessary.
+Implemented native owner backlinks, start/end notification boundaries and full/partial lazy primary-map sorting. Owned cut/transfer/replacement release former owners before rebasing and bind actual survivors. Added51 literal independent cases across both supported families/eight flags, raw/sorted reads, snapshots, merge removal, real moves and undo. Six static gates pass. Initial lint rejected two unused secondary-map parameters; retained the four-argument contract via a labeled tuple and repeated only failed lint before running remaining gates. No product tests yet in this iteration. All337 prior tests and234 runtime fields are intended unchanged, pending scope audit. Extra sorted maps, native friend visibility/history/refcounts/destruction/listeners and broad parity remain unverified.
