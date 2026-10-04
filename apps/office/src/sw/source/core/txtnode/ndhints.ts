@@ -10,6 +10,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
+import { UpdateTextHints } from "./ndtxt-hint-update";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
@@ -385,23 +386,42 @@ export class SwpHints {
     return new SwpHints(this.pool, hints);
   }
 
-  /** Inserts a native formatted range and rebases existing hints. @param textLength - Original text length. @param offset - Insertion offset. @param insertedLength - Inserted text length. @param attributes - Effective inserted character state. @param inherited - Node/style items. @param hyperlink - Optional inserted hyperlink. @returns Updated independent hints. */
+  /** Inserts ordinary text through owned native coordinates or an explicitly formatted fragment. @param textLength - Original text length. @param offset - Insertion offset. @param insertedLength - Inserted text length. @param attributes - Optional explicit character state. @param inherited - Node/style items. @param hyperlink - Optional explicit inserted hyperlink. @returns Updated owned or explicit-fragment hints. */
   public insertText(
     textLength: number,
     offset: number,
     insertedLength: number,
-    attributes: WriterCharacterAttributes,
+    attributes: WriterCharacterAttributes | undefined,
     inherited: SfxItemSet,
     hyperlink?: WriterHyperlink,
   ): SwpHints {
     assertTextRange(textLength, offset, offset);
+    if (attributes === undefined && hyperlink === undefined)
+      return this.Update(textLength, offset, insertedLength);
     return this.replaceRange(
       textLength,
       offset,
       offset,
-      this.createTextHints(insertedLength, attributes, inherited, hyperlink),
+      this.createTextHints(
+        insertedLength,
+        attributes ?? this.projectInherited(inherited),
+        inherited,
+        hyperlink,
+      ),
       insertedLength,
     );
+  }
+
+  /** Updates actual supported attributes after ordinary text insertion or erasure. @param textLength - Original node length. @param offset - Change position. @param length - Nonnegative change length. @param negative - Whether text is removed. @returns This owned container. */
+  public Update(textLength: number, offset: number, length: number, negative = false): SwpHints {
+    assertTextRange(textLength, offset, negative ? offset + length : offset);
+    if (!Number.isInteger(length) || length < 0)
+      throw new Error("Writer hint text length is invalid.");
+    if (length > 0)
+      this.assignOwned(
+        UpdateTextHints(this.pool.GetDoc(), this.hintsByStart, offset, length, negative),
+      );
+    return this;
   }
 
   /** Toggles one supported character item over a native hint range. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param format - Supported item group. @param inherited - Node/style items. @returns Updated independent hints. */
@@ -587,6 +607,7 @@ export class SwpHints {
           throw new Error("Overlapping Writer same-type hints are not normalized.");
         if (
           previous !== undefined &&
+          hint.Which() === RES_TXTATR_AUTOFMT &&
           previous.end === hint.start &&
           previous.format.equals(hint.format)
         )

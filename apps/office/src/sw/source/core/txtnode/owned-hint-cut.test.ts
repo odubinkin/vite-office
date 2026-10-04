@@ -216,9 +216,9 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
     const actualHead = source.Get(0),
       actualTail = source.Get(1);
     expect(source.Cut(3, 7).Count()).toBe(0);
-    expect(source.Count()).toBe(1);
+    expect(source.Count()).toBe(2);
     expect(source.Get(0)).toBe(actualHead);
-    expect(source.Get(0)).toMatchObject({ start: 0, end: 6 });
+    expect(source.Get(0)).toMatchObject({ start: 0, end: 3 });
     expect(actualTail).toMatchObject({ start: 3, end: 6 });
   });
 });

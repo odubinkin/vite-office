@@ -569,18 +569,20 @@ export class SwTextNode extends SwContentNode {
   public InsertText(
     text: string,
     offset: number,
-    attributes = this.GetCharacterItemsAt(offset),
-    hyperlink = this.getHyperlinkAt(offset),
+    attributes?: SfxItemSet,
+    hyperlink?: WriterHyperlink,
   ): string {
     if (text.length === 0) return text;
     this.assertRange(offset, offset);
-    const hints = this.GetTextHints().insertText(
+    const hints = (this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool())).insertText(
       this.mText.length,
       offset,
       text.length,
-      projectWriterCharacterAttributes(attributes),
+      attributes === undefined && hyperlink === undefined
+        ? undefined
+        : projectWriterCharacterAttributes(attributes ?? this.GetCharacterItemsAt(offset)),
       this.GetSwAttrSet(),
-      hyperlink,
+      attributes === undefined ? hyperlink : (hyperlink ?? this.getHyperlinkAt(offset)),
     );
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.pSwpHints = hints.Count() === 0 ? undefined : hints;
@@ -628,14 +630,21 @@ export class SwTextNode extends SwContentNode {
     this.assertRange(start, end);
     const replacementText = replacement.text;
     const removedLength = end - start;
-    const hints = this.GetTextHints().replaceRange(
-      this.mText.length,
-      start,
-      end,
-      replacement.hints,
-      replacementText.length,
-      transferHints,
-    );
+    const existing = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
+    const hints =
+      !transferHints &&
+      replacement.hints.Count() === 0 &&
+      removedLength > 0 &&
+      replacementText.length === 0
+        ? existing.Update(this.mText.length, start, removedLength, true)
+        : existing.replaceRange(
+            this.mText.length,
+            start,
+            end,
+            replacement.hints,
+            replacementText.length,
+            transferHints,
+          );
     this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
     this.pSwpHints = hints.Count() === 0 ? undefined : hints;
     if (removedLength > replacementText.length) {

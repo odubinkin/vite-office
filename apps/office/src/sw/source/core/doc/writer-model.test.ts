@@ -355,7 +355,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       ).toThrow("snapshot is invalid");
   });
 
-  it("projects overlapping character formatting and hyperlink ranges", /** Verifies different Writer hint kinds coexist while same-kind hyperlinks merge and reject overlaps. @returns Nothing. */ function projectsHyperlinkHints(): void {
+  it("projects overlapping character formatting and hyperlink ranges", /** Verifies different Writer hint kinds coexist while adjacent hyperlinks stay separate and overlaps are rejected. @returns Nothing. */ function projectsHyperlinkHints(): void {
     const writer = createModelFixture();
     const pool = writer.GetAttrPool();
     const inherited = writer.GetDfltTextFormatColl().GetAttrSet();
@@ -368,7 +368,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       ],
       inherited,
     );
-    expect(hints.Count()).toBe(2);
+    expect(hints.Count()).toBe(3);
     expect(hints.toTextRuns("ab", inherited)).toEqual([
       { attributes: plain, hyperlink, text: "a" },
       { attributes: bold, hyperlink, text: "b" },
