@@ -4,7 +4,7 @@ title: "Restore native fresh flags for selectively replaced automatic hints"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,24 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T17:10:04.737Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only quality review at semantic bc9d95c1ed5462033a11b041f131af868ee1eb50: approved native fresh three-flag replacement defaults satisfied; no broad parity promotion."
+  evaluated_sha: "bc9d95c1ed5462033a11b041f131af868ee1eb50"
+  blueprint_digest: "125dee8d95d01ca529703c68866adf1ff4a78e0583c718066de83a0232c3dd98"
+  evidence_refs:
+    - ".agentplane/tasks/202610041659-JF2KV2/README.md"
+    - ".agentplane/tasks/202610041659-JF2KV2/quality/20261004-171004737-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610041659-JF2KV2/quality/20261004-171004737-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610041659-JF2KV2/quality/20261004-171004737-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610041659-JF2KV2/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610041659-JF2KV2/evidence"
+    - "bc9d95c1ed5462033a11b041f131af868ee1eb50"
+  findings:
+    - "Actual six-path diff uses existing SwTextAttr constructor defaults for selective replacements while retaining original/no-op/unrelated hint flags.40 new real-model and actual frame Ctrl StyleApply/history tests cover all eight input masks and three history cycles.322 prior tests/specs byte-identical; two files change only six obsolete flag literals. All declared static/product/source gates pass first single absent-only profile:1611app/109inventory/5scripts/99Chromium, required four metrics100%. No production change after validation."
+    - "Exact source pin and three native hashes bind constructor/factory/reset/insertion evidence.230 runtime statuses/defaults/exceptions unchanged with one bounded appendix. Complete ignored-inclusive AP audit forbidden0. Doctor zero errors and routing pass; upstream restored; no registered I/O/recovery change."
 commit: null
 comments:
   -
