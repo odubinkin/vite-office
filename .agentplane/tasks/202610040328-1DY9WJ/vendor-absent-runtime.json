@@ -1,0 +1,21 @@
+{
+  "command": "npm run test",
+  "upstreamDirectoryPresent": false,
+  "exitCode": 0,
+  "outputBytes": 2220,
+  "outputSha256": "aa05954a18b75d6dad0f8b72db6e3c1537cf4fff506035ead74c31e1daa51032",
+  "summary": [
+    "Test Files  210 passed (210)",
+    "Tests  1055 passed (1055)",
+    "Statements   : 100% ( 11292/11292 )",
+    "Branches     : 100% ( 8516/8516 )",
+    "Functions    : 100% ( 3006/3006 )",
+    "Lines        : 100% ( 10356/10356 )",
+    "Test Files  36 passed (36)",
+    "Tests  109 passed (109)",
+    "Statements   : 100% ( 1523/1523 )",
+    "Branches     : 100% ( 1080/1080 )",
+    "Functions    : 100% ( 384/384 )",
+    "Lines        : 100% ( 1464/1464 )"
+  ]
+}
