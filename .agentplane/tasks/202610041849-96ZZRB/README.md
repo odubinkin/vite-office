@@ -4,7 +4,7 @@ title: "Restore cut text hint reconstruction boundaries"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: implement approved strict cut-end flag boundaries and source-supported expectation correction under standing goal."
 doc_version: 3
-doc_updated_at: "2026-10-04T18:50:37.972Z"
+doc_updated_at: "2026-10-04T18:54:32.104Z"
 doc_updated_by: "CODER"
 description: "Port native CutImpl strict end-boundary and split attribute construction into existing cross-node MoveRange; preserve snapshot semantics, correct the previous exact-end expectation, and leave same-node move adapter and native object lifetimes explicitly unverified."
 sections:
@@ -65,7 +65,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task implementation/docs through a new traceable task without history rewrite. Restore vendor directory in finally and after interruption."
-  Findings: "Native CutImpl preserves flags only when hint start is inside the cut and hint end is strictly before the cut end. The previous iteration115 exact-end whole-move expectation was wrong and is superseded by this leaf. Same-pool snapshots remain distinct; full native owner identity, destination Update/InsertHint adjustments, same-node move and SplitContentNode identity/empty hints remain unverified."
+  Findings: "Native CutImpl uses strict hint end before cut end for retained flags; exact-end prior expectation is corrected. Initial format gate passed; lint found two missing JSDoc comments on new test-only Span/CutCase declarations. Add the comments and recover only lint, then run pending static gates and the single absent test profile. No production behavior, scope, verification criteria or upstream-dependent test change."
 id_source: "generated"
 ---
 ## Summary
@@ -106,4 +106,4 @@ Revert task implementation/docs through a new traceable task without history rew
 
 ## Findings
 
-Native CutImpl preserves flags only when hint start is inside the cut and hint end is strictly before the cut end. The previous iteration115 exact-end whole-move expectation was wrong and is superseded by this leaf. Same-pool snapshots remain distinct; full native owner identity, destination Update/InsertHint adjustments, same-node move and SplitContentNode identity/empty hints remain unverified.
+Native CutImpl uses strict hint end before cut end for retained flags; exact-end prior expectation is corrected. Initial format gate passed; lint found two missing JSDoc comments on new test-only Span/CutCase declarations. Add the comments and recover only lint, then run pending static gates and the single absent test profile. No production behavior, scope, verification criteria or upstream-dependent test change.
