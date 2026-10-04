@@ -1,12 +1,11 @@
 {
   "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
-  "exitCode": 1,
+  "exitCode": 0,
   "upstreamDirectoryPresent": false,
-  "outputBytes": 4302,
-  "outputSha256": "6de58a9815f9a0bf8b2316060f673a58cc350365980a2e2b1093388311ffa332",
+  "outputBytes": 1035,
+  "outputSha256": "14f8c8c35a94c252cb17179093390ac377fa342d820944fe3e213243fc172417",
   "summary": [
-    " Test Files  2 failed | 226 passed (228)",
-    "      Tests  2 failed | 1304 passed (1306)",
-    "All files          |     100 |    99.97 |     100 |     100 |                   "
+    " Test Files  228 passed (228)",
+    "      Tests  1306 passed (1306)"
   ]
 }
