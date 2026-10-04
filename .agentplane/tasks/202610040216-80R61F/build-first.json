@@ -1,0 +1,11 @@
+{
+  "command": "npm run build",
+  "exit": 2,
+  "sha256": "797f161427f1ca1cd2bd220087ecbe4e525033e1e4d8771c1f5bdca94643321e",
+  "bytes": 1040,
+  "summary": [
+    "src/sw/browser/presentation/WriterPropertiesPanel.tsx(99,6): error TS2375: Type '{ children: Element[]; focusDocument: (() => void) | undefined; title: string; focusContent: () => void | undefined; moreOptions: Element; }' is not assignable to type 'SidebarPanelProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.",
+    "npm error Lifecycle script `build` failed with error:",
+    "npm error command failed"
+  ]
+}

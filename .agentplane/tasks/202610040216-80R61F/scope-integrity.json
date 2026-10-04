@@ -1,0 +1,54 @@
+{
+  "base": "adc5d7f0796f2bf0697f04a4b2d184694c4be27f",
+  "priorTestsByteIdentical": 265,
+  "manifests": [
+    {
+      "path": "docs/program/source-provenance.json",
+      "priorRows": 217,
+      "currentRows": 217,
+      "appendOnlyEvidenceResponsibilityRows": 3,
+      "priorOrderFieldsStatusesDefaultsOwnersPreserved": true
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "priorRows": 217,
+      "currentRows": 217,
+      "appendOnlyEvidenceResponsibilityRows": 3,
+      "priorOrderFieldsStatusesDefaultsOwnersPreserved": true
+    }
+  ],
+  "semantic": [
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel.tsx",
+      "sha256": "9cb912554a44e3d861928fdd463db01fb15725a3292b3bb8af3cf7d8a88d86c3"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
+      "sha256": "ab7249585e069a9ddf3c1dd7b33c331bff1f441c3fc32a436d0d9ac9395bc125"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "sha256": "d3fbb84a827c9340ddd2d5879246325bbefcf14fb3ef80236719799adb76952f"
+    },
+    {
+      "path": "apps/office/src/sfx2/browser/presentation/SidebarPanel-escape.test.tsx",
+      "sha256": "a7165e8f9a94615c2056926aabe01f7bb2a75b9b67c86bc37f08cc311b04020e"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-escape.test.tsx",
+      "sha256": "6148e8ec68d7a6bad22020a6b134db19fd954f75850f387008a6ba0c1c736641"
+    },
+    {
+      "path": "apps/office/e2e/writer-sidebar-escape.spec.ts",
+      "sha256": "ea0448a3c0d838733c00daf5946ecedee9a227b9dfdb4126c1b9e9ad056d69a9"
+    },
+    {
+      "path": "docs/program/source-provenance.json",
+      "sha256": "c78c1aaa91983e9ec3ba50f1037d6727db2623f33f9eb2243782769a519f5549"
+    },
+    {
+      "path": "docs/program/parity/runtime-inventory.json",
+      "sha256": "4bea50c649c43c6f5b3fd7661746d499964f1e7605ada6ea38c38900b7f11310"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-sidebar-escape.spec.ts apps/office/e2e/writer-sidebar-panel.spec.ts apps/office/e2e/writer-sidebar-deck.spec.ts apps/office/e2e/writer-responsive-sidebar.spec.ts",
+  "exit": 0,
+  "sha256": "67168cbf2c35d22c5de7accc5351d9e1ba28bbe480ac4a9e04296221b6b59c15",
+  "bytes": 2319,
+  "summary": [
+    "Running 10 tests using 4 workers",
+    "  10 passed (4.1s)"
+  ]
+}
