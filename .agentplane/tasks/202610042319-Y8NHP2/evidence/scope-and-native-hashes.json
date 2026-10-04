@@ -1,0 +1,56 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/source/core/txtnode/internet-style-id-transport.test.ts",
+    "apps/office/src/sw/source/filter/xml/hyperlink-item-codec.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 352,
+  "priorByteIdentical": 352,
+  "newAppCases": 36,
+  "existingRuntimeRows": 238,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "twoResponsibilityAppendicesOnly": true,
+  "staticChecks": 6,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 2716,
+    "appFiles": 271,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appCoverage100": true,
+  "inventoryCoverage100": true,
+  "failedCaseReplayAttempts": 0,
+  "noPassingSuiteOrBuildReplay": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "semanticViolations": 0,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/fmtinfmt.hxx",
+      "sha256": "85d4ad5ce3b8252f913c93301d11a9f2039ff5eb3505ac0c270ce3d020bb3bfb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx",
+      "sha256": "f21ad8f8f8615d648f068c27a52f8457828c180843f9917a4ba42c95dd203de3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/poolfmt.hxx",
+      "sha256": "35d7ec14c5e8cbbbd5bd82466d3b4e5cfa8a8a17768c1423d999c963abe72fbe"
+    }
+  ],
+  "nativeReview": "Iteration127 preserves native normal/visited style IDs through a single browser-owned internet record codec reused by pooled JSON snapshots and canonical Worker16 graph hints. Optional nonzero IDs retain exact unsigned16 values;omitted fields restore ZERO under the existing portable DTO contract. Native item name/ID paired setters restore owned fields without a text backlink;MakeTextAttr attaches actual graph hints normally. Core QueryValue/GetHyperlink projection and default-only pool54 generic decode boundary remain unchanged. All existing runtime states/defaults/exceptions and registered save/open/recovery deviations preserved. Native active styled constructor routing,DTO style identity lookup,ODF programmatic/UI conversion,full localized/custom style families/clients/visited behavior/UNO/macros/broadcaster/lifetimes/global pools/full core/UI remain unverified;no module or goal promotion."
+}
