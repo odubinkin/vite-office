@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Manual read-only inspection; no source copies, compilation or native execution; application and inventory tests have no upstream dependency.",
+  "sources": [
+    {
+      "path": "sfx2/source/sidebar/SidebarDockingWindow.cxx",
+      "bytes": 7263,
+      "sha256": "862d1289946425b6eb184eb3520fbe6ea18c61c3b106bc774d166f8662055dc1"
+    },
+    {
+      "path": "sfx2/source/dialog/dockwin.cxx",
+      "bytes": 55440,
+      "sha256": "33323293f3f0741aab11149c7c9fb337aaa7f64cb818265a467ff9cefabe39d6"
+    },
+    {
+      "path": "vcl/source/window/dockwin.cxx",
+      "bytes": 35885,
+      "sha256": "8377314fa6f24b846b5f10e3f2b80c41755ca5c51bb1ec77215f8232287134ac"
+    },
+    {
+      "path": "sfx2/source/view/viewsh.cxx",
+      "bytes": 149359,
+      "sha256": "bc275167e0675f0f70984c44db45e16b9eca2343a067cbdd4dc79d647eba8e36"
+    }
+  ],
+  "conclusions": [
+    "The existing Sidebar root now owns the 13 local key codes inspected in SidebarDockingWindow::EventNotify after child widget handling, regardless of modifiers. It stops document accelerator lookup and cancels unhandled browser defaults while retaining editable widget defaults and button Enter activation. Literal owned key/modifier cases and actual Writer clipboard-port/model/no-dispatch checks cover this bounded routing contract; desktop/mobile browser cases cover selected-document safety, real local editing and activation. Other keys retain the existing frame fallback. Native DesignerDialog/styles handling, complete accelerator precedence/platform/LOK/input eligibility, floating/mouse docking, other decks and full Sidebar/native parity remain unverified. Save/open/recovery exceptions are unchanged."
+  ]
+}

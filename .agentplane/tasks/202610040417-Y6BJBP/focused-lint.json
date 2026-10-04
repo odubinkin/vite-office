@@ -1,0 +1,7 @@
+{
+  "command": "npm exec -- eslint apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.tsx apps/office/src/sfx2/browser/presentation/SidebarDeck.tsx apps/office/src/sfx2/browser/presentation/SidebarDockingWindow.test.tsx apps/office/src/sfx2/browser/presentation/SidebarFocusManager.test.tsx apps/office/src/sfx2/browser/presentation/SidebarDeck.test.tsx apps/office/src/sw/browser/presentation/writer-view-sidebar-key-isolation.test.tsx apps/office/e2e/writer-sidebar-key-isolation.spec.ts --max-warnings 0",
+  "exitCode": 0,
+  "outputBytes": 0,
+  "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "summary": []
+}

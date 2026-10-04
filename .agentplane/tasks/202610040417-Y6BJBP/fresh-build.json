@@ -1,0 +1,9 @@
+{
+  "command": "npm run build",
+  "exitCode": 0,
+  "outputBytes": 924,
+  "outputSha256": "c3d07473cf0fb9703316ab8a43969386681893841c63a2a4e6690ef6498316c0",
+  "summary": [
+    "✓ built in 591ms"
+  ]
+}

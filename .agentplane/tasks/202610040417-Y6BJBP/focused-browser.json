@@ -1,0 +1,9 @@
+{
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-sidebar-key-isolation.spec.ts",
+  "exitCode": 0,
+  "outputBytes": 647,
+  "outputSha256": "86ef848f74cd79fbaf5ae6db59348bc417609e6e9083802975f7cdc306b34fa5",
+  "summary": [
+    "  2 passed (2.3s)"
+  ]
+}
