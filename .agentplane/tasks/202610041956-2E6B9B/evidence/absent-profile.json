@@ -1,0 +1,68 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "d344b1ce34e4249b4c5e5ab492b2331bce27b3b7ba62b11f86317027b251a55f",
+      "totals": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1035,
+      "sha256": "282635c5fce0d1f7f23bf4cd6859308d7e48d06934fd54cd2ffccdbf1a51d79b",
+      "totals": [
+        "Test Files  256 passed (256)",
+        "Tests  2124 passed (2124)"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "bd44f1c0b378c7ccedf9326361ed2597fa3bcb313b5dee1a95c0e46de7be56c5",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "4132d388ba0e01fdce9c060266164a10c5aac762f81c8c7d9405276247223f56",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ]
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13578,
+      "sha256": "387426478cdd4cbf916279d72b0d1c17da9f97cae3dc47a4c65782669a530ed0",
+      "totals": [
+        "99 passed (35.8s)"
+      ]
+    }
+  ]
+}
