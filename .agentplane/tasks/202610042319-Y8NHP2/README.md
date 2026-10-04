@@ -4,7 +4,7 @@ title: "Preserve native hyperlink style identities through Worker records"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -37,10 +37,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-04T23:33:03.433Z"
+  updated_by: "CODER"
+  note: "Verified exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d: shared browser record codec retains independent native internet IDs. Six paths,36new literal cases,all352prior tests unchanged;238states/defaults/exceptions retained,two appendices only. Six static/five absent full/five restored source gates first-attempt pass:build1,app2716/inventory109/scripts5/Chromium99,coverage100%,no replays,semantic0. Five native hashes;AP0forbidden;exact-SHA same-actor review pass;doctor0errors/two unchanged warnings/routingOK. Active DTO construction/style lookup and ODF/native client/full parity remain unverified;I/O deviations preserved."
   attempts: 0
 quality_review:
   state: "pass"
@@ -74,8 +74,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: preserve native internet style IDs through one browser-owned record codec reused by pooled snapshots and Worker16 graph."
+  -
+    type: "verify"
+    at: "2026-10-04T23:33:03.433Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d: shared browser record codec retains independent native internet IDs. Six paths,36new literal cases,all352prior tests unchanged;238states/defaults/exceptions retained,two appendices only. Six static/five absent full/five restored source gates first-attempt pass:build1,app2716/inventory109/scripts5/Chromium99,coverage100%,no replays,semantic0. Five native hashes;AP0forbidden;exact-SHA same-actor review pass;doctor0errors/two unchanged warnings/routingOK. Active DTO construction/style lookup and ODF/native client/full parity remain unverified;I/O deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-04T23:33:01.100Z"
+doc_updated_at: "2026-10-04T23:33:03.498Z"
 doc_updated_by: "CODER"
 description: "Preserve both native internet style pool IDs through the existing browser item snapshot and canonical Worker16 graph. Add one browser-owned internet value-record type and encode/decode pair in existing item-codec.ts;reuse it from JSON item encoding and graph hint encoding/restoration,leaving core QueryValue and GetHyperlink browser metadata projection unchanged. Encode optional native inetFormatId/visitedFormatId when nonzero;absence in existing current-schema records restores ZERO without changing350+existing assumptions. Validate provided IDs as integer unsigned16 before invoking native paired name/ID setters;reject malformed IDs,retain existing blank-active-link snapshot rejection and default-only pool54 generic restore boundary. Native Clone/MakeTextAttr/node copying already preserve IDs and must remain authoritative;no duplicate core persistence class. Add two source-independent literal test files:16literal ID pairs/zero/built-in/custom/sentinel item snapshots,current-schema omitted IDs,all invalid-ID boundary branches,actual node/copy/fragment/history/undo and structured-clone Worker envelope ownership/restoration. All352 prior test files byte-identical. Append bounded responsibility notes only to two existing manifest rows;all238 runtime states/defaults/exceptions and I/O deviations preserved,no new module or promotion. Six static gates then one sequential five-suite absent-reference profile with finally restoration;only failed cases/gates repeat;five restored source audits afterward. Exact committed scope/native hashes/ignored-inclusive artifact audit,same-actor readonly EVALUATOR,doctor/routing,recorded verification and canonical finish with concrete result. Native active DTO constructor/style identity ingestion,ODF UI/programmatic name conversion/localization/custom style copying/visited clients/UNO/macros/broadcaster/lifetime/full core/UI parity remain separate unverified obligations."
 sections:
@@ -119,6 +125,39 @@ sections:
     Command: scope-and-native-hashes,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence: six semantic paths,36new literal cases;all352prior test files byte-identical;all238runtime states/defaults/exceptions and other manifest fields unchanged except two responsibility appendices;five native hashes;3853APfiles/0forbidden. Scope: exact independent unsigned16 internet IDs/names preserved through shared browser codec,JSON item snapshot,actual canonical Worker16 graph ownership and retained text undo. Core QueryValue/GetHyperlink and existing zero-omission DTO contract unchanged;no saved source/helpers/raw diagnostics.
 
     Command: same-actor read-only EVALUATOR exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: committed six paths equal reviewed checkout;quality report .agentplane/tasks/202610042319-Y8NHP2/quality/20261004-233205037-recovery-context/quality-report.json;doctor0errors/two unchanged legacy warnings;routingOK;cleanmain before quality persistence. Scope: bounded identity-retention slice,no independent-agent claim or full parity promotion. Native active styled constructor routing/DTO style identity resolution/ODF programmatic-UI conversion/all localized/custom style families/visited clients/UNO/macros/broadcaster/refcounts/lifetimes/global pool architecture/full core/UI remain unverified. Registered save/open/recovery deviations preserved;goal active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-04T23:33:03.433Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d: shared browser record codec retains independent native internet IDs. Six paths,36new literal cases,all352prior tests unchanged;238states/defaults/exceptions retained,two appendices only. Six static/five absent full/five restored source gates first-attempt pass:build1,app2716/inventory109/scripts5/Chromium99,coverage100%,no replays,semantic0. Five native hashes;AP0forbidden;exact-SHA same-actor review pass;doctor0errors/two unchanged warnings/routingOK. Active DTO construction/style lookup and ODF/native client/full parity remain unverified;I/O deviations preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T23:33:01.100Z, excerpt_hash=sha256:37de0a29b766f73545af95ad519fe5ac0c215511151bac6ce2f0f6675b82d68e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042319-Y8NHP2/blueprint/resolved-snapshot.json
+    - old_digest: fdd5bc693ebc698ce86cc77cf595c0c04fefc415454edcc58df24a0ed406cecd
+    - current_digest: fdd5bc693ebc698ce86cc77cf595c0c04fefc415454edcc58df24a0ed406cecd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610042319-Y8NHP2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610042319-Y8NHP2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without history rewriting."
   Findings: |-
     Pinned LibreOffice26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. fmtinfmt.hxx owns mnINetFormatId/mnVisitedFormatId;fmtatr2.cxx native copy and operator== retain both IDs. Local core Clone/MakeTextAttr preserve them after iteration126. item-codec currently serializes only five string QueryValue fields and decode normalizes into a DTO constructor,losing IDs. writer-document-codec independently stores GetHyperlink strings and restores same DTO,also losing IDs. Actual Worker envelope uses this canonical graph. This task repairs both serialization boundaries through one browser-owned value record,without claiming browser DTO creation/ODF style conversion/native client resolution complete. Standing goal authorizes safe local leaf work;tests once absent;no saved source/helper artifacts/network/global reads/native test invocation.
@@ -179,6 +218,39 @@ Command: five restored source audits listed in Verify Steps. Result: pass. Evide
 Command: scope-and-native-hashes,git diff --check,ignored-inclusive artifact audit. Result: pass. Evidence: six semantic paths,36new literal cases;all352prior test files byte-identical;all238runtime states/defaults/exceptions and other manifest fields unchanged except two responsibility appendices;five native hashes;3853APfiles/0forbidden. Scope: exact independent unsigned16 internet IDs/names preserved through shared browser codec,JSON item snapshot,actual canonical Worker16 graph ownership and retained text undo. Core QueryValue/GetHyperlink and existing zero-omission DTO contract unchanged;no saved source/helpers/raw diagnostics.
 
 Command: same-actor read-only EVALUATOR exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d;ap doctor;node .agentplane/policy/check-routing.mjs;git status --short --untracked-files=all. Result: pass. Evidence: committed six paths equal reviewed checkout;quality report .agentplane/tasks/202610042319-Y8NHP2/quality/20261004-233205037-recovery-context/quality-report.json;doctor0errors/two unchanged legacy warnings;routingOK;cleanmain before quality persistence. Scope: bounded identity-retention slice,no independent-agent claim or full parity promotion. Native active styled constructor routing/DTO style identity resolution/ODF programmatic-UI conversion/all localized/custom style families/visited clients/UNO/macros/broadcaster/refcounts/lifetimes/global pool architecture/full core/UI remain unverified. Registered save/open/recovery deviations preserved;goal active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-04T23:33:03.433Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified exact semantic SHA de0c2aa18c9716de68e8cdae5d6007d41edcfc9d: shared browser record codec retains independent native internet IDs. Six paths,36new literal cases,all352prior tests unchanged;238states/defaults/exceptions retained,two appendices only. Six static/five absent full/five restored source gates first-attempt pass:build1,app2716/inventory109/scripts5/Chromium99,coverage100%,no replays,semantic0. Five native hashes;AP0forbidden;exact-SHA same-actor review pass;doctor0errors/two unchanged warnings/routingOK. Active DTO construction/style lookup and ODF/native client/full parity remain unverified;I/O deviations preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T23:33:01.100Z, excerpt_hash=sha256:37de0a29b766f73545af95ad519fe5ac0c215511151bac6ce2f0f6675b82d68e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610042319-Y8NHP2/blueprint/resolved-snapshot.json
+- old_digest: fdd5bc693ebc698ce86cc77cf595c0c04fefc415454edcc58df24a0ed406cecd
+- current_digest: fdd5bc693ebc698ce86cc77cf595c0c04fefc415454edcc58df24a0ed406cecd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610042319-Y8NHP2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610042319-Y8NHP2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
