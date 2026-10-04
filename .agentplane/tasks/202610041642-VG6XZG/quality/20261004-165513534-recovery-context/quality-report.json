@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610041642-VG6XZG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-04T16:55:13.534Z",
+  "verdict": "pass",
+  "summary": "Same-actor read-only quality review of semantic SHA866b60c3e000116c4e2732d0e6be49761ee932ba: approved selective reset contract and deterministic gates satisfied; no broad parity promotion.",
+  "evaluated_sha": "866b60c3e000116c4e2732d0e6be49761ee932ba",
+  "blueprint_digest": "ff8bb601db503ab301a2f469fb9638863aa751a25aa9265a5de489ec180420ef",
+  "findings": [
+    "Actual four-path diff restores exact precedence, direct SET whole-hint deletion, lazy common direct SET filtering and no-op owner/notification preservation. Twenty new independent tests exercise real model and frame/history owners;323 previous tests/specs remain byte-identical. Every declared static/product/source gate passed; suites ran once absent-only,1571app/109inventory/5scripts/99Chromium, four required metrics100%. No implementation change after verification.",
+    "Ignored-inclusive complete Agentplane audit found zero stored source/helpers/Python/executables/raw source diffs/source frames. Three native file hashes bind to pinned SHA.230 runtime rows preserve status/default/exception fields and all registered I/O/recovery deviations. Doctor zero errors and routing pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610041642-VG6XZG/README.md",
+    ".agentplane/tasks/202610041642-VG6XZG/evidence",
+    "866b60c3e000116c4e2732d0e6be49761ee932ba"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [
+    "This is a same-actor review, not an independently delegated review."
+  ],
+  "residual_risks": [
+    "Complete native replacement flags, notification kinds and unsupported hint/field/mark/layout/redline/range/style-access contracts remain unverified; broad parity goal remains active. Two pre-existing doctor warnings were not changed."
+  ]
+}

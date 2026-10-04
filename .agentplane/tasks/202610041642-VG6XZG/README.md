@@ -4,7 +4,7 @@ title: "Restore native selective text hint reset decisions and no-op ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,24 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T16:55:13.534Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only quality review of semantic SHA866b60c3e000116c4e2732d0e6be49761ee932ba: approved selective reset contract and deterministic gates satisfied; no broad parity promotion."
+  evaluated_sha: "866b60c3e000116c4e2732d0e6be49761ee932ba"
+  blueprint_digest: "ff8bb601db503ab301a2f469fb9638863aa751a25aa9265a5de489ec180420ef"
+  evidence_refs:
+    - ".agentplane/tasks/202610041642-VG6XZG/README.md"
+    - ".agentplane/tasks/202610041642-VG6XZG/quality/20261004-165513534-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610041642-VG6XZG/quality/20261004-165513534-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610041642-VG6XZG/quality/20261004-165513534-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610041642-VG6XZG/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610041642-VG6XZG/evidence"
+    - "866b60c3e000116c4e2732d0e6be49761ee932ba"
+  findings:
+    - "Actual four-path diff restores exact precedence, direct SET whole-hint deletion, lazy common direct SET filtering and no-op owner/notification preservation. Twenty new independent tests exercise real model and frame/history owners;323 previous tests/specs remain byte-identical. Every declared static/product/source gate passed; suites ran once absent-only,1571app/109inventory/5scripts/99Chromium, four required metrics100%. No implementation change after verification."
+    - "Ignored-inclusive complete Agentplane audit found zero stored source/helpers/Python/executables/raw source diffs/source frames. Three native file hashes bind to pinned SHA.230 runtime rows preserve status/default/exception fields and all registered I/O/recovery deviations. Doctor zero errors and routing pass."
 commit: null
 comments:
   -
