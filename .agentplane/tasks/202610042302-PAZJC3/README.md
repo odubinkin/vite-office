@@ -4,7 +4,7 @@ title: "Restore the hyperlink document-pool style default"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -42,6 +42,25 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T23:13:45.430Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only review of exact semantic SHA e91ad56567462e07507c301f96d2ff21b5e9c120 passes the bounded styled internet document-pool default/IDs slice;no independent-agent or whole parity claim."
+  evaluated_sha: "e91ad56567462e07507c301f96d2ff21b5e9c120"
+  blueprint_digest: "c586f544347c39b4e7e3c874ec71d9d83512c2934636ca2981c0326f52557e0c"
+  evidence_refs:
+    - ".agentplane/tasks/202610042302-PAZJC3/README.md"
+    - ".agentplane/tasks/202610042302-PAZJC3/quality/20261004-231345430-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610042302-PAZJC3/quality/20261004-231345430-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610042302-PAZJC3/quality/20261004-231345430-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610042302-PAZJC3/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610042302-PAZJC3/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610042302-PAZJC3/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610042302-PAZJC3/evidence/restored-source-audits.json"
+    - "exact semantic SHA e91ad56567462e07507c301f96d2ff21b5e9c120"
+  findings:
+    - "Reviewed all nine committed semantic paths against approved scope and independent literal cases. All350 prior tests byte-identical;237prior states/defaults/exceptions and manifest fields retained except four bounded appendices;new mapper wholly unverified. Native zero and styled defaults differ as pinned init.cxx requires;copy/equality retain both IDs;default registration is independent of browser codecs and unknown snapshots still reject. Six static gates pass with failed-lint-only correction;one absent five-gate profile passes2680/109/5/99 and coverage100%,no test replays;five restored audits semantic0. Seven native hashes checked;ignored-inclusive3844APfiles/0forbidden;doctor0errors/two unchanged warnings/routingpass."
 commit: null
 comments:
   -
