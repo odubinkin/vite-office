@@ -1,10 +1,11 @@
 ---
 id: "202610040842-QK716P"
 title: "Resolve automatic first-line layout separately from authored ruler values"
-status: "DOING"
+result_summary: "Resolved existing automatic paragraph first-line layout independently of authored ruler/dialog values; preserved history and registered I/O/recovery behavior."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -47,7 +48,9 @@ quality_review:
     - "Source-owned itrcrsr resolver reuses canonical items and existing default-true setting, supports native proportional/fixed/minimum/leading compatibility rules and numbered bypass. Raw ruler/dialog primitive remains unchanged; separate frozen resolved value governs shared measured/visible text and follows use zero indent. All1241 application cases pass once, four metrics100%; four production hashes match pre-run checkpoint."
     - "Inventory ordering corrected after one failed gate, final109/100%; owned scripts5once. Browser81distinct pass:77prior,2real ODT defaults,2explicit existing decoded Worker graph-setting fixtures before canonical restore. No passing suites or default pair repeated, no false-setting ODT transport certification. Four accepted screenshots inspected, two occluded mobile crops replaced only by capture retry outside AP."
     - "Exact scope8, all300 old tests byte-identical,221rows retain220existing rows with3evidence-only updates and1ordered unverified mechanism row; five pinned hashes unchanged. Source audits/semantic violations0/AP forbidden0/routing/doctor pass; vendor restored."
-commit: null
+commit:
+  hash: "5da774b16e4199bfdd76738136d9e4747aaa5a74"
+  message: "🛠️ QK716P code: resolve automatic paragraph first-line layout"
 comments:
   -
     author: "CODER"
@@ -55,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Start: finish the same source-owned automatic-layout correction, using explicitly controlled existing Worker graph input for the supported false setting. Preserve real ODT/default pair and77prior browser passes, rerun only two failed compatibility cases absent, and keep ODT setting persistence unverified."
+  -
+    author: "CODER"
+    body: "Verified: separate authored and resolved automatic first-line layout at native core margin responsibility, existing compatibility/default/numbering and browser follow handling. One app1241/100%, inventory109/100%, scripts5,81distinct Chromium cases absent; exact-SHA same-actor quality, scope/source/AP audits and accepted visual evidence pass. Full parent goal active; ODT setting persistence remains unverified."
 events:
   -
     type: "status"
@@ -82,8 +88,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final exact-SHA5da774b16e4199bfdd76738136d9e4747aaa5a74 same-actor EVALUATOR PASS. Rechecked source/scope/AP hashes without tests. One app1241/100%, corrected failed inventory109/100%, scripts5,81distinct browser passes and4accepted screenshots absent; controlled compatibility graph boundary explicit, ODT flag transport unverified. Parent remains DOING/goal active."
+  -
+    type: "status"
+    at: "2026-10-04T09:16:45.841Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: separate authored and resolved automatic first-line layout at native core margin responsibility, existing compatibility/default/numbering and browser follow handling. One app1241/100%, inventory109/100%, scripts5,81distinct Chromium cases absent; exact-SHA same-actor quality, scope/source/AP audits and accepted visual evidence pass. Full parent goal active; ODT setting persistence remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-04T09:16:43.375Z"
+doc_updated_at: "2026-10-04T09:16:45.843Z"
 doc_updated_by: "CODER"
 description: "Iteration99 of the standing iterative upstream goal: source-owned automatic first-line layout calculation for existing Western/font/line-spacing/list paths, distinct immutable resolved layout projection and real body rendering, preserving raw ruler/dialog/Undo contracts and registered I/O/recovery deviations."
 sections:
@@ -146,6 +159,10 @@ sections:
     First absent pipeline passed all1241application cases with100%four coverage metrics, then inventory coverage failed one owned CLI case (108passed) because the new itrcrsr mapping row was appended instead of ordered. Insert only the new row at its lexicographic position in both manifests, preserving relative order and every existing row value. Repeat only failed inventory coverage gate; preserve the passed application gate and its original result hashes. Owned scripts and rebuilt browser were not reached and run once next, all absent; vendor restored in finally.
     Corrected inventory coverage109/100% and owned scripts5 passed absent. First rebuilt Chromium run:77prior cases passed, four new cases failed before browser interactions because the product-authored ODT fixture changed only Western font height and violated the existing script-specific export restriction. Set Western/CJK/CTL fixture heights equally using current items; product and I/O behavior stay unchanged. Repeat only the four failed new E2E cases using the already-built unchanged application, absent; preserve initial bounded output hash and vendor restoration. No passing app/inventory/script/old-browser suite repeats.
     Final browser compatibility cases pass through explicitly controlled graph input, not ODT setting persistence. Native calculation and browser output are independently exercised by actual session matrix and Chromium Range geometry. Final initial/default/compatibility case evidence is retained; no passing app/inventory/script/old-browser/default pair rerun. Lint required one JSDoc for the test Worker class, fixed without semantic code change. Mobile crops were header-occluded; change future capture to full-page and rerun only the failed mobile capture gate outside AP. Inline capture first required async wrapping and then direct workspace preview argument forwarding; bounded preview-failure evidence retained, no helper file or raw source/diagnostic persisted. Four accepted screenshots inspected. Exact artifact audit initially included E2E .spec.ts in production hash filter; correct the audit to four actual production paths, then recheck their unchanged pre-run hashes. No test repeated. Separate ODT compatibility transport, native active script/language/device font selection and remaining whole layout/numbering/parent obligations remain unverified; registered save/open/recovery deviations unchanged.
+extensions:
+  implementation_commit:
+    hash: "5da774b16e4199bfdd76738136d9e4747aaa5a74"
+    message: "🛠️ QK716P code: resolve automatic paragraph first-line layout"
 id_source: "generated"
 ---
 ## Summary
