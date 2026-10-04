@@ -1,10 +1,11 @@
 ---
 id: "202610040216-80R61F"
 title: "Restore Paragraph sidebar Escape focus routing"
-status: "DOING"
+result_summary: "Restored Paragraph Escape focus from content to title and header to own document; full/upstream-absent tests pass, broader Sidebar parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
   findings:
     - "Reviewed source-shaped distinction: content Escape focuses expanded title; title/toolbox Escape returns own client through Writer editing-host ref, retains panel/deck/model/draft and executes no command. Child defaultPrevented honored, no-owner header unconsumed, other keys and modified Escape native condition retained. Source inspected complete relevant functions, five hashes only, no copied bodies/native build/run."
     - "Before-code actual Writer6fails;12new owned cases and2new browser widths,focused26/5files10browser pass. Full1021app109inventory51browser2resources100%both0semantic;vendor-absent1021+109+12+51 restoredfinally.265prior test bytes unchanged;217prior row/order/fields/status/defaults/owners/evidence retained with three append-only evidence/responsibility updates each,no new rows/promotion/exception.8semantic5source hashes intact;artifact source/helper/Python/exe/archive/magic/embedded/diff0. Core/SidebarDeck/resources/save-open-recovery unchanged."
-commit: null
+commit:
+  hash: "ca30bbf88785f5eaea071daa604bac239a424ff3"
+  message: "🎯 80R61F code: restore Paragraph sidebar Escape focus routing"
 comments:
   -
     author: "CODER"
     body: "Start: authorized iteration85 Paragraph Escape content-title-document route;retain mounted panel/deck/model,child consumption,own document ref and registered deviations;upstream-independent tests/results-only artifacts."
+  -
+    author: "CODER"
+    body: "Verified: restored existing Paragraph panel Escape content-title-own document routing,retained panel/deck/draft/model,no dispatch,child consumption/no-owner/modifier semantics. Full1021app109inventory51browser2resources100%coverage0semantic;upstream-absent1021+109+12+51 restoredfinally.265prior test bytes217prior rows/status/defaults/owners/evidence/order retained,three append-only evidence rows each,no new rows/exceptions/promotions;8semantic5source hashes intact,artifactsource/helper/Python/exe/archive/magic/embedded/diff0,doctor0errors2knownwarnings/routing/diff. Same-actor exact semantic quality pass,broaderSidebar/native/context-profile/parent parity open,registered save-open-recovery deviations retained."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final docs/current evidence, same-actor quality pass evaluated_shaca30bbf88785f5eaea071daa604bac239a424ff3 confirmed. Full1021+109+51+2resources100%0semantic;upstream-absent1021+109+12+51 restored;265oldtestbytes217priorrows retained,append-only3evidence rows each;8semantic5source intact,artifactsource/helper/Python/exe/archive/magic/embedded/diff0,doctor0errors2knownwarnings/routing/diff. WiderSidebar/parent parity open."
+  -
+    type: "status"
+    at: "2026-10-04T02:31:33.014Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored existing Paragraph panel Escape content-title-own document routing,retained panel/deck/draft/model,no dispatch,child consumption/no-owner/modifier semantics. Full1021app109inventory51browser2resources100%coverage0semantic;upstream-absent1021+109+12+51 restoredfinally.265prior test bytes217prior rows/status/defaults/owners/evidence/order retained,three append-only evidence rows each,no new rows/exceptions/promotions;8semantic5source hashes intact,artifactsource/helper/Python/exe/archive/magic/embedded/diff0,doctor0errors2knownwarnings/routing/diff. Same-actor exact semantic quality pass,broaderSidebar/native/context-profile/parent parity open,registered save-open-recovery deviations retained."
 doc_version: 3
-doc_updated_at: "2026-10-04T02:31:30.273Z"
+doc_updated_at: "2026-10-04T02:31:33.015Z"
 doc_updated_by: "CODER"
 description: "Iteration85: restore native Sidebar FocusManager Escape from Paragraph content to panel title and from panel title/toolbar to the owning document, retaining panel/deck/model state and registered deviations."
 sections:
@@ -146,6 +159,10 @@ sections:
     <!-- END VERIFICATION RESULTS --> Quality evidence: .agentplane/tasks/202610040216-80R61F/quality/20261004-023128967-recovery-context/quality-report.json. Same actor; no independent reviewer/native runtime claim. Complete Sidebar/parent parity remains open.
   Rollback Plan: "Revert only semantic correction through a new authorized task;preserve history/results/registered deviations."
   Findings: "Previous goal turn is progress: Paragraph expansion/More Options DONE38c845e57656 and explicit separate artifact cleanupeaa15ebac432. Current cleanmainadc5d7f0796f;parentC9TN6M DOING. Pinned FocusManager Escape distinguishes content->panel title from title/toolbox->own document; current SidebarPanel implements Return only and existing deck Escape handles deck controls. No source/helper artifacts and no native execution. Full wider sidebar focus/parent parity open. Before-production actual Writer baseline6fails due unconsumed Escape; corrected12new owned cases and focused26/5files pass. Fresh browser10cases pass including2new widths. First build failed strict optional props forwarding explicit undefined; SidebarPanel optional ownership type now explicitly accepts forwarded undefined, preserving no-owner behavior without changing tsconfig or criteria;corrected buildpass.265prior tests byte-identical,217rows fields/order/status/defaults/owners retained,three append-only evidence/responsibility rows each;8semantic5source hashes. Fullverify0:1021app/206files109inventory/36files51browser2resources,100%all metrics both coverages,semanticViolationCount0. Sequential vendor-absent1021+109+12+51 allpass,upstream restoredfinally;static vendor-reading audits separate from tests. Command: npm run verify; sequential pinned upstream path absent npm run test; npm exec -- vitest run scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm run test:e2e; final integrity. Result: pass. Evidence: full-verify.json1021app/206files109inventory/36files51browser2resources100%both0semantic;vendor-absent-runtime.json1021+109,vendor-absent-scripts.json12,vendor-absent-browser.json51;upstream restoredfinally. Focused26/5files10browser;actual before-code6fails fixed by12new owned cases/2browser widths.265prior tests byte-identical217prior rows/fields/status/defaults/owners/evidence/order retained,three append-only evidence/responsibility rows each,no new rows/exceptions/promotions.8semantic5source hashes intact. final-integrity.json2799artifact files source/helper/Python/exe/archive/magic/embedded/diff0;auxiliarydoctor0errors2knownwarnings,routing/diff0. Strict optional forwarding first build failed; corrected optional undefined type without relaxing TS/config/gates. Scope: existing visible Paragraph panel Escape only;manual source comparison,no native compilation/run,static vendor-reading CLI audits separate from tests. Exact semantic same-actor EVALUATOR pass ca30bbf88785f5eaea071daa604bac239a424ff3;widerSidebar Tab/arrows/F6/otherpanels/Help/settings/native sizing/context-profile/parent parity remain open. Quality evidence: .agentplane/tasks/202610040216-80R61F/quality/20261004-023128967-recovery-context/quality-report.json. Same actor; no independent reviewer/native runtime claim. Complete Sidebar/parent parity remains open."
+extensions:
+  implementation_commit:
+    hash: "ca30bbf88785f5eaea071daa604bac239a424ff3"
+    message: "🎯 80R61F code: restore Paragraph sidebar Escape focus routing"
 id_source: "generated"
 ---
 ## Summary
