@@ -1,10 +1,11 @@
 ---
 id: "202610041659-JF2KV2"
 title: "Restore native fresh flags for selectively replaced automatic hints"
-status: "DOING"
+result_summary: "Restored constructor flag defaults for selective automatic hint replacements;40 regressions and corrected obsolete expectations; single absent-only verification profile."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Actual six-path diff uses existing SwTextAttr constructor defaults for selective replacements while retaining original/no-op/unrelated hint flags.40 new real-model and actual frame Ctrl StyleApply/history tests cover all eight input masks and three history cycles.322 prior tests/specs byte-identical; two files change only six obsolete flag literals. All declared static/product/source gates pass first single absent-only profile:1611app/109inventory/5scripts/99Chromium, required four metrics100%. No production change after validation."
     - "Exact source pin and three native hashes bind constructor/factory/reset/insertion evidence.230 runtime statuses/defaults/exceptions unchanged with one bounded appendix. Complete ignored-inclusive AP audit forbidden0. Doctor zero errors and routing pass; upstream restored; no registered I/O/recovery change."
-commit: null
+commit:
+  hash: "e1996ad6507ca7c061190cc75b721e7f9e98d014"
+  message: "✅ JF2KV2 task: record fresh hint flag verification"
 comments:
   -
     author: "CODER"
     body: "Start: Restore native fresh automatic replacement flags within approved six-path scope, correct obsolete expectations and verify once absent-only."
+  -
+    author: "CODER"
+    body: "Verified: Native fresh selective automatic hint flags restored at semantic bc9d95c1ed5462033a11b041f131af868ee1eb50.40 new real-owner/history regressions;1611app/109inventory/5scripts/99Chromium pass first single absent-only profile with four metrics100%. Static/build/source/scope/AP audits, same-actor exact-SHA quality, doctor zero errors and routing pass.322 prior tests byte-identical and two only six obsolete flag literals corrected. Upstream restored; registered deviations untouched; broad goal active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: Semantic bc9d95c1ed5462033a11b041f131af868ee1eb50 satisfies approved native fresh replacement flag contract.40 new local real-owner/history tests;1611app/109inventory/5scripts/99Chromium first absent-only pass, four required metrics100%. Static/build/restored-source/scope/AP audits pass;322 prior tests byte-identical, two only six obsolete flag literals corrected. Same-actor exact-SHA quality, doctor zero errors and routing pass. Upstream restored; registered deviations unchanged; goal active."
+  -
+    type: "status"
+    at: "2026-10-04T17:11:05.240Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native fresh selective automatic hint flags restored at semantic bc9d95c1ed5462033a11b041f131af868ee1eb50.40 new real-owner/history regressions;1611app/109inventory/5scripts/99Chromium pass first single absent-only profile with four metrics100%. Static/build/source/scope/AP audits, same-actor exact-SHA quality, doctor zero errors and routing pass.322 prior tests byte-identical and two only six obsolete flag literals corrected. Upstream restored; registered deviations untouched; broad goal active."
 doc_version: 3
-doc_updated_at: "2026-10-04T17:10:43.337Z"
+doc_updated_at: "2026-10-04T17:11:05.242Z"
 doc_updated_by: "CODER"
 description: "One existing-contract leaf: remove inherited expansion/movement flags from selective automatic hint replacement and restore constructor defaults proven by native MakeTextAttr/NOHINTADJUST. Correct two obsolete flag expectations, add real-owner/history regressions, preserve unrelated/no-op hints and registered deviations."
 sections:
@@ -113,6 +126,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task semantic commit with a new commit if needed; no history rewrite. Always restore vendor directory in finally."
   Findings: "Native fresh replacement flags confirmed from pinned RstTextAttr, MakeTextAttr, SwTextAttr constructor and NOHINTADJUST insertion. Removed three copied flags and corrected six obsolete assertion literals in two prior files.40 new actual-model/frame/history assertions cover eight input masks, replacement/retention/deletion/exact behavior and three history cycles. Six static gates, absent static build,1611app/242files,109inventory/36files,5scripts/2files and99Chromium all pass first execution; four required app/inventory metrics100%. Restored-only resource/source-tree/provenance/invariants/parity audits pass with zero semantic violations. Exact six semantic paths;322 prior tests/specs byte-identical, two changed only six flag literals;230 runtime statuses/defaults/exceptions retained with one bounded evidence appendix. Three native hashes bind pin; full ignored-inclusive AP audit3671files forbidden0. Product suites ran once without upstream and directory restored in finally. No network/outside-repo access, source execution, source/helper storage or registered I/O/recovery change. Other native flags/style-access interning/notification/range/hint/field/mark/layout/redline and full UI parity remain unverified; broad goal active."
+extensions:
+  implementation_commit:
+    hash: "bc9d95c1ed5462033a11b041f131af868ee1eb50"
+    message: "🛠️ JF2KV2 writer: restore fresh automatic hint flag defaults"
 id_source: "generated"
 ---
 ## Summary
