@@ -485,8 +485,8 @@ export class SwWrtShell extends SwModify {
     return this.textShell.SetParagraphAlignment(alignment);
   }
 
-  /** Applies a paragraph style through one native range history transition, including repeated requests. @param style - Next style. @returns Whether the valid request was applied. */
-  public SetParagraphStyle(style: WriterParagraphStyle): boolean {
+  /** Applies a paragraph style through one native range history transition, including repeated requests. @param style - Next style. @param resetAllCharAttrs - Initial native full-character reset. @returns Whether the valid request was applied. */
+  public SetParagraphStyle(style: WriterParagraphStyle, resetAllCharAttrs = false): boolean {
     const document = this.GetDoc();
     if (!isWriterParagraphStyle(style) && document.FindTextFormatColl(style) === undefined)
       throw new Error(`Unsupported Writer paragraph style: ${style}`);
@@ -495,6 +495,7 @@ export class SwWrtShell extends SwModify {
       this.cursor,
       document.GetTextFormatColl(style),
       this.CaptureCursorState(),
+      resetAllCharAttrs,
     );
     return this.ApplyAction(operation.action, false, operation.execute);
   }

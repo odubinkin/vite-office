@@ -20,7 +20,7 @@ import {
 
 /** Native RES_CHRFMT reset history for StyleApply's full-node range, separate from collection history. */
 export class SwUndoResetAttr extends SwUndo {
-  private readonly history: readonly Readonly<{ node: SwTextNode; hints: SwpHints }>[];
+  private history: readonly Readonly<{ node: SwTextNode; hints: SwpHints }>[];
 
   /** Captures the expanded range before initial exact text reset. @param range - Original inclusive paragraph range. @param state - Expanded full-node cursor state. @returns Nothing. */
   public constructor(range: SwPaM, state: SwUndoCursorState) {
@@ -36,6 +36,13 @@ export class SwUndoResetAttr extends SwUndo {
 
   /** Performs the initial exact reset without restoring a history cursor. @returns Nothing. */
   public ApplyExact(): void {
+    this.history = this.history.map(
+      /** Captures text reset at its own native boundary after collection/delete-set processing. @param entry - Range node. @returns Current hint history. */
+      ({ node }) => ({
+        node,
+        hints: node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool()),
+      }),
+    );
     for (const { node } of this.history) resetFullParagraphAutoFormat(node);
   }
 

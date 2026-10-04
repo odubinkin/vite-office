@@ -6,6 +6,7 @@
 import { SfxObjectShell, type SfxObjectShellState } from "../../../../sfx2/source/doc/objsh";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxRequest } from "../../../../sfx2/source/control/request";
+import { KEY_MOD1 } from "../../../../vcl/keycodes";
 import type { SwView } from "../uiview/view";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { createWriterDocStyleInterface, execStyleSheet, findParagraphStyle } from "./docst";
@@ -91,14 +92,14 @@ export class SwDocShell extends SfxObjectShell {
     return execStyleSheet(this, request);
   }
 
-  /** Applies an existing or supported pool paragraph style and returns the native family even for no-op application. @param name - Exact display name. @param family - Native style family. @returns Para2 on success, None0 when unsupported or missing. */
-  public ApplyStyles(name: string, family: number): number {
+  /** Applies an existing or supported pool paragraph style and returns the native family even for no-op application. @param name - Exact display name. @param family - Native style family. @param modifier - Native request key mask, initially zero. @returns Para2 on success, None0 when unsupported or missing. */
+  public ApplyStyles(name: string, family: number, modifier = 0): number {
     if (family !== 2) return 0;
     const shell = this.GetWrtShell();
     if (shell === undefined) return 0;
     const style = findParagraphStyle(this.document, name);
     if (style === undefined) return 0;
-    shell.SetParagraphStyle(style);
+    shell.SetParagraphStyle(style, (modifier & KEY_MOD1) !== 0);
     return family;
   }
 

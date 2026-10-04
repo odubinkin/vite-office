@@ -22,6 +22,7 @@ import type { SwNumRule } from "./number";
 import type { SwDoc } from "./doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwPaM } from "../crsr/pam";
+import { resetParagraphTextAttributes } from "../txtnode/txtedt";
 
 /** Visits every text node in SwDoc::SetTextFormatColl's inclusive ordered span, retaining zero-width paragraph boundaries. @param document - Active model. @param range - Canonical point/mark. @returns Selected text nodes in native node order. */
 export function getTextFormatCollNodes(document: SwDoc, range: SwPaM): readonly SwTextNode[] {
@@ -42,8 +43,8 @@ export function getTextFormatCollNodes(document: SwDoc, range: SwPaM): readonly 
   );
 }
 
-/** Ports ordinary lcl_RstAttr saved-item ordering for the registered node profile. @param node - Target text node. @returns Nothing. */
-export function resetTextFormatCollAttributes(node: SwTextNode): void {
+/** Ports lcl_RstAttr saved-item ordering and optional native deletion-set reset for the registered node profile. @param node - Target text node. @param resetSet - Full-character deletion set when requested. @returns Nothing. */
+export function resetTextFormatCollAttributes(node: SwTextNode, resetSet?: SfxItemSet): void {
   const direct = node.GetpSwAttrSet();
   if (direct === undefined) return;
   const saved = new SfxItemSet(node.GetDoc().GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES);
@@ -63,19 +64,31 @@ export function resetTextFormatCollAttributes(node: SwTextNode): void {
   if (page !== undefined && page.GetPageDescName().length !== 0) saved.Put(page);
   const pageBreak = direct.GetItemIfSet(RES_BREAK, false) as SfxInt16Item | undefined;
   if (pageBreak !== undefined && pageBreak.GetValue() !== 0) saved.Put(pageBreak);
-  node.ResetAllAttr();
-  if (saved.Count() !== 0) node.SetAttr(saved);
+  if (resetSet !== undefined && resetSet.Count() !== 0) {
+    const protectedItems = new Set<number>([RES_PAGEDESC, RES_BREAK, RES_PARATR_NUMRULE]);
+    for (const item of resetSet.entries())
+      if (
+        !protectedItems.has(item.Which()) ||
+        saved.GetItemIfSet(item.Which(), false) === undefined
+      )
+        node.ResetAttr(item.Which());
+  } else {
+    node.ResetAllAttr();
+    if (saved.Count() !== 0) node.SetAttr(saved);
+  }
 }
 
-/** Applies ordinary lcl_SetTextFormatColl reset and list decisions before collection change. @param node - Selected text node. @param collection - Requested owned style. @param resetListAttrs - Native style list-reset eligibility. @returns Nothing. */
+/** Applies lcl_SetTextFormatColl reset and list decisions before collection change. @param node - Selected text node. @param collection - Requested owned style. @param resetListAttrs - Native style list-reset eligibility. @param resetSet - Initial native full-character deletion set. @returns Nothing. */
 export function setTextFormatCollAtNode(
   node: SwTextNode,
   collection: SwTextFormatColl,
   resetListAttrs: boolean,
+  resetSet?: SfxItemSet,
 ): void {
   const previous = node.GetTextFormatColl();
-  resetTextFormatCollAttributes(node);
-  if (resetListAttrs && collection !== previous && node.IsInList()) {
+  if (resetSet !== undefined) resetParagraphTextAttributes(node, false, resetSet);
+  resetTextFormatCollAttributes(node, resetSet);
+  if (resetListAttrs && (resetSet !== undefined || collection !== previous) && node.IsInList()) {
     // The registered list graph guarantees an owned rule for every in-list node.
     if ((node.GetNumRule() as SwNumRule).GetName() !== collection.GetNumRule().GetValue())
       node.ResetAttr([

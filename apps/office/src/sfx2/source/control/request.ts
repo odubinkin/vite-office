@@ -12,6 +12,7 @@ import { SfxUnoAnyItem } from "../view/frame";
 /** One slot invocation with item arguments, completion state, and an optional return item. */
 export class SfxRequest {
   private done = false;
+  private modifier = 0;
   private returnValue: SfxPoolItem | undefined;
 
   /** Creates one request. Browser-only payloads are deliberately not part of this upstream-shaped record. @param slot - Numeric Sfx slot ID. @param arguments_ - Argument items. @returns Nothing. */
@@ -30,6 +31,16 @@ export class SfxRequest {
   /** Returns immutable argument items. @returns Request arguments. */
   public GetArgs(): readonly SfxPoolItem[] {
     return this.arguments_;
+  }
+
+  /** Sets native caller-owned key metadata independently of argument items. @param modifier - Unsigned native key mask. @returns Nothing. */
+  public SetModifier(modifier: number): void {
+    this.modifier = modifier;
+  }
+
+  /** Returns native key metadata, initially zero. @returns Unsigned key mask. */
+  public GetModifier(): number {
+    return this.modifier;
   }
 
   /** Completes the request with an optional return item. @param returnValue - Slot return item. @returns Nothing. */

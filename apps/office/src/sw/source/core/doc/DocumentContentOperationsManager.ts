@@ -6,6 +6,12 @@
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import {
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_ISCOUNTED,
+  WRITER_TEXT_NODE_WHICH_RANGES,
+} from "../../../inc/hintids";
 
 /** Applies every supported canonical content mutation through SwPosition and SwPaM. */
 export class DocumentContentOperationsManager {
@@ -152,4 +158,15 @@ export class DocumentContentOperationsManager {
     if (node.GetNodes().indexOfOrUndefined(node) === undefined)
       throw new Error(`Writer ${operation} requires a connected SwTextNode.`);
   }
+}
+
+/** Builds native reset defaults for registered character/paragraph/frame items, excluding list83..87. Languages, direction and other unregistered native items remain outside this profile. @param document - Owning attribute pool. @returns Independent deletion item set. */
+export function createParagraphStyleResetSet(document: SwDoc): SfxItemSet {
+  const pool = document.GetAttrPool();
+  const result = new SfxItemSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
+  for (const [start, end] of WRITER_TEXT_NODE_WHICH_RANGES)
+    for (let which = start; which <= end; which++)
+      if (which < RES_PARATR_LIST_ID || which > RES_PARATR_LIST_ISCOUNTED)
+        result.Put(pool.GetUserOrPoolDefaultItem(which));
+  return result;
 }

@@ -12,6 +12,7 @@ import {
   SfxRequest,
 } from "./request";
 import type { ResolvedShellCommand, SfxShell } from "./shell";
+import { createUnoDispatchRequest } from "./unoctitm";
 
 /** Presentation-facing alias for slot state. */
 export type CommandState<Value = unknown> = SfxSlotState<Value>;
@@ -107,13 +108,13 @@ export class SfxDispatcher {
   public Execute(commandUrl: string, arguments_?: unknown): CommandDispatchResult<unknown> {
     const command = this.QueryDispatch(commandUrl);
     if (command === undefined) return { commandId: commandUrl, status: "missing" };
-    const requestArguments =
-      arguments_ === undefined ? parseCommandUrlArguments(commandUrl) : arguments_;
     return this.ExecuteRequest(
-      new SfxRequest(
-        command.slot.slotId,
-        createRequestArguments(command.slot.slotId, requestArguments),
-      ),
+      arguments_ === undefined
+        ? new SfxRequest(
+            command.slot.slotId,
+            createRequestArguments(command.slot.slotId, parseCommandUrlArguments(commandUrl)),
+          )
+        : createUnoDispatchRequest(command.slot.slotId, arguments_),
     );
   }
 

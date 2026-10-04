@@ -6,6 +6,7 @@ import type { SwPaM } from "../crsr/pam";
 import { getTextFormatCollNodes, setTextFormatCollAtNode } from "../doc/docfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
+import { SwpHints } from "../txtnode/ndhints";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 
 /** Captured paragraph collection and direct item history for one native range node. */
@@ -14,19 +15,21 @@ interface FormatCollHistory {
   readonly beforeStyle: WriterParagraphStyle;
   readonly beforeItems: SfxItemSet;
   readonly beforeEmptyListStyle: boolean;
+  readonly beforeHints: SwpHints | undefined;
 }
 
 /** Reversible SwTextFormatColl assignment for the inclusive native paragraph range. */
 export class SwUndoFormatColl extends SwUndo {
   private readonly history: readonly FormatCollHistory[];
   private readonly formatName: string;
-  /** Captures one native range and requested collection display name. @param range - Target point/mark. @param collection - Requested collection. @param before - Cursor before formatting. @param after - Cursor after formatting. @param resetListAttrs - Native ordinary list-reset eligibility. @returns Nothing. */
+  /** Captures one native range and requested collection display name. @param range - Target point/mark. @param collection - Requested collection. @param before - Cursor before formatting. @param after - Cursor after formatting. @param resetListAttrs - Native list-reset eligibility retained for redo. @param resetAllCharAttrs - Whether initial collection processing owns original hints; the flag is not retained for redo. @returns Nothing. */
   public constructor(
     range: SwPaM,
     collection: SwTextFormatColl,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
     private readonly resetListAttrs = false,
+    resetAllCharAttrs = false,
   ) {
     super("Paragraph Style", before, after);
     this.formatName = collection.GetName();
@@ -39,15 +42,18 @@ export class SwUndoFormatColl extends SwUndo {
           paragraph.GetpSwAttrSet()?.Clone() ??
           new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES),
         beforeEmptyListStyle: paragraph.IsEmptyListStyleDueToSetOutlineLevelAttr(),
+        beforeHints: resetAllCharAttrs
+          ? (paragraph.GetpSwpHints()?.clone() ?? new SwpHints(paragraph.GetDoc().GetAttrPool()))
+          : undefined,
       }),
     );
   }
 
-  /** Reports collection identities, marker and direct items; text-reset history has its own owner. @returns Payload units. */
+  /** Reports collection identities, marker, direct items and initial selective reset hints; exact reset has its own history. @returns Payload units. */
   public override GetPayloadSize(): number {
     return this.history.reduce(
       /** Counts retained paragraph collection/marker and item payloads. @param size - Prior total. @param entry - Captured node. @returns Total payload units. */
-      (size, entry) => size + 3 + entry.beforeItems.Count(),
+      (size, entry) => size + 3 + entry.beforeItems.Count() + (entry.beforeHints?.Count() ?? 0),
       0,
     );
   }
@@ -61,6 +67,7 @@ export class SwUndoFormatColl extends SwUndo {
       paragraph.ResetAllAttr();
       if (entry.beforeItems.Count() !== 0) paragraph.SetAttr(entry.beforeItems);
       if (entry.beforeEmptyListStyle) paragraph.SetEmptyListStyleDueToSetOutlineLevelAttr();
+      if (entry.beforeHints !== undefined) paragraph.SetTextHints(entry.beforeHints);
     }
   }
 

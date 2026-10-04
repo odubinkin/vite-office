@@ -7,6 +7,7 @@ import { SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import { getTextFormatCollNodes, setTextFormatCollAtNode } from "../doc/docfmt";
+import { createParagraphStyleResetSet } from "../doc/DocumentContentOperationsManager";
 import { SwUndoFormatColl } from "../undo/unfmco";
 import { SwUndoResetAttr } from "../undo/unattr";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
@@ -17,12 +18,13 @@ export interface TextFormatCollOperation {
   readonly execute: () => void;
 }
 
-/** Creates one source-owned ordinary range operation with two native history owners. @param document - Active model. @param range - Current point/mark. @param collection - Owned requested collection. @param state - Cursor and pending items. @returns Prepared operation. */
+/** Creates one source-owned range operation with two native history owners. @param document - Active model. @param range - Current point/mark. @param collection - Owned requested collection. @param state - Cursor and pending items. @param resetAllCharAttrs - Initial native full-character reset eligibility. @returns Prepared operation. */
 export function createTextFormatCollAction(
   document: SwDoc,
   range: SwPaM,
   collection: SwTextFormatColl,
   state: SwUndoCursorState,
+  resetAllCharAttrs = false,
 ): TextFormatCollOperation {
   const nodes = getTextFormatCollNodes(document, range);
   if (collection.GetAttrSet().GetDoc() !== document)
@@ -47,16 +49,20 @@ export function createTextFormatCollAction(
     mark: { node: startNode, offset: 0 },
   };
   const resetListAttrs =
+    resetAllCharAttrs ||
     collection.GetAttrSet().GetItemState(RES_PARATR_NUMRULE) === SfxItemState.SET;
   const action = new SfxListUndoAction<SwUndoRedoContext>("Paragraph Style");
-  action.AddAction(new SwUndoFormatColl(range, collection, ordered, ordered, resetListAttrs));
+  action.AddAction(
+    new SwUndoFormatColl(range, collection, ordered, ordered, resetListAttrs, resetAllCharAttrs),
+  );
   const reset = new SwUndoResetAttr(range, expanded);
   action.AddAction(reset);
   return {
     action,
     /** Executes native initial collection reset followed by exact hint cleanup. @returns Nothing. */
     execute: () => {
-      for (const node of nodes) setTextFormatCollAtNode(node, collection, resetListAttrs);
+      const resetSet = resetAllCharAttrs ? createParagraphStyleResetSet(document) : undefined;
+      for (const node of nodes) setTextFormatCollAtNode(node, collection, resetListAttrs, resetSet);
       reset.ApplyExact();
     },
   };
