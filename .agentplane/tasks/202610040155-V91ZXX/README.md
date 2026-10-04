@@ -4,7 +4,7 @@ title: "Remove retained code diff from Agentplane artifacts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T01:56:44.301Z"
+  updated_at: "2026-10-04T02:10:35.862Z"
   updated_by: "CODER"
-  note: "Verified explicit-user artifact-only deletion, ignored-inclusive source/helper/Python/exe/archive/magic/embedded/diff audit zero; routing/diff pass,doctor zero errors/two known warnings. No application edits; pending PKFNDA unstaged changes excluded."
+  note: "Final cleanup verification current: deletion eaa15ebac432 only old source diff plus own metadata/results; ignored-inclusive audits zero source/helper/Python/exe/archive/magic/embedded/diff,policy/diffpassdoctor0errors2knownwarnings. PKFNDA independently committed/DONE; globally clean quality phase now possible. Explicit user authorization,no app edits/history rewrite."
   attempts: 0
 commit: null
 comments:
@@ -43,8 +43,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified explicit-user artifact-only deletion, ignored-inclusive source/helper/Python/exe/archive/magic/embedded/diff audit zero; routing/diff pass,doctor zero errors/two known warnings. No application edits; pending PKFNDA unstaged changes excluded."
+  -
+    type: "verify"
+    at: "2026-10-04T02:10:35.862Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final cleanup verification current: deletion eaa15ebac432 only old source diff plus own metadata/results; ignored-inclusive audits zero source/helper/Python/exe/archive/magic/embedded/diff,policy/diffpassdoctor0errors2knownwarnings. PKFNDA independently committed/DONE; globally clean quality phase now possible. Explicit user authorization,no app edits/history rewrite."
 doc_version: 3
-doc_updated_at: "2026-10-04T01:58:11.683Z"
+doc_updated_at: "2026-10-04T02:10:35.909Z"
 doc_updated_by: "CODER"
 description: "Explicit user cleanup: delete the tracked old code diff log, keep only bounded outcomes and hashes; separate local deletion commit, no history rewrite or app changes."
 sections:
@@ -53,17 +59,17 @@ sections:
   Plan: "Inspect old diff identification/hash without copying bodies; delete the sole tracked source-bearing diff log. Audit all task artifacts including ignored files for source/helper/Python/executable/archive/magic/embedded code/diff signatures. Record bounded evidence, git diff check and policy routing/doctor, exact deletion-only implementation commit and same-actor quality; finish without staging current PKFNDA implementation. Separate deletion commit eaa15ebac432fbdb5807c5ca428311d178a0fcd9 verified name-status (only old log deletion plus own result/README). CLI evaluator requires global clean tracked state, so review and canonical closure will follow PKFNDA commit; report evaluated_sha is then-current clean HEAD and deletion SHA is separately reviewed evidence, not falsely claimed identical."
   Verify Steps: "Deleted old quality-code-diff.log absent. Ignored-inclusive recursive artifact audit: no Python/source/helpers/executables/archives/ZIP-GZIP magic/embedded source or diff bodies. git diff --check and policy routing pass; doctor zero errors with two known preexisting warnings. Separate implementation commit changes only old log deletion plus own task metadata/results. No app tests needed for deletion-only change; existing PKFNDA verification separately owns pending full suite. Same-actor EVALUATOR reviewing exact deletion commit from a clean current HEAD and canonical finish. Separate deletion commit eaa15ebac432fbdb5807c5ca428311d178a0fcd9 verified name-status (only old log deletion plus own result/README). CLI evaluator requires global clean tracked state, so review and canonical closure will follow PKFNDA commit; report evaluated_sha is then-current clean HEAD and deletion SHA is separately reviewed evidence, not falsely claimed identical."
   Verification: |-
-    Command: deletion and ignored-inclusive recursive artifact audit; git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass. Evidence: cleanup-result.json records old log hash/23707 bytes,2768 inspected files,zero Python/source/executable/archive/magic/embedded/diff bodies; doctor zero errors/two known warnings. Scope: artifact cleanup only, no implementation/test changes. Explicit user authorization and Rollback Plan satisfy ops approval/rollback. Exact-SHA quality pending.
+    Command: remove old retained diff; ignored-inclusive recursive source/helper/Python/executable/archive/magic/embedded/diff artifact audit; git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor; git show --format= --name-status eaa15ebac432fbdb5807c5ca428311d178a0fcd9. Result: pass. Evidence: cleanup-result.json deletion hash23707bytes,2768files all source classes zero; subsequent PKFNDA final-integrity.json2776files also zero. Deletion commit includes only old log deletion and this task README/results, excludes app/tests/vendor. Policy routing/diff pass,doctor0errors2knownwarnings. Explicit user instruction is approval,Git history preserves recoverability,no rewrite. PKFNDA now separately DONE38c845e57656 with full/upstream-absent tests. Quality reviews exact deletion SHA from then-current globally clean HEAD; report evaluated_sha is current snapshot, not falsely claimed deletion SHA. Same-actor review pending.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-04T01:56:44.301Z — VERIFY — ok
+    ### 2026-10-04T02:10:35.862Z — VERIFY — ok
 
     By: CODER
 
-    Note: Verified explicit-user artifact-only deletion, ignored-inclusive source/helper/Python/exe/archive/magic/embedded/diff audit zero; routing/diff pass,doctor zero errors/two known warnings. No application edits; pending PKFNDA unstaged changes excluded.
+    Note: Final cleanup verification current: deletion eaa15ebac432 only old source diff plus own metadata/results; ignored-inclusive audits zero source/helper/Python/exe/archive/magic/embedded/diff,policy/diffpassdoctor0errors2knownwarnings. PKFNDA independently committed/DONE; globally clean quality phase now possible. Explicit user authorization,no app edits/history rewrite.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T01:56:44.000Z, excerpt_hash=sha256:39481bf6cdb0eb514e4ed1c51c3fe23c2c9276520bfe03370253ffb801a3b45c
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T02:10:35.222Z, excerpt_hash=sha256:b97301e16e4032baa80aa1e215e63aa7bfe4c0ecbc5c9d3227fa802d391206ab
 
     Details:
 
@@ -78,7 +84,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610040155-V91ZXX -m 🧩 V91ZXX task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610040155-V91ZXX --result verified-202610040155-V91ZXX --commit 87ca5394d21d931a120548fd4ce49683f63ecd1f
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -109,17 +115,17 @@ Deleted old quality-code-diff.log absent. Ignored-inclusive recursive artifact a
 
 ## Verification
 
-Command: deletion and ignored-inclusive recursive artifact audit; git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor. Result: pass. Evidence: cleanup-result.json records old log hash/23707 bytes,2768 inspected files,zero Python/source/executable/archive/magic/embedded/diff bodies; doctor zero errors/two known warnings. Scope: artifact cleanup only, no implementation/test changes. Explicit user authorization and Rollback Plan satisfy ops approval/rollback. Exact-SHA quality pending.
+Command: remove old retained diff; ignored-inclusive recursive source/helper/Python/executable/archive/magic/embedded/diff artifact audit; git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor; git show --format= --name-status eaa15ebac432fbdb5807c5ca428311d178a0fcd9. Result: pass. Evidence: cleanup-result.json deletion hash23707bytes,2768files all source classes zero; subsequent PKFNDA final-integrity.json2776files also zero. Deletion commit includes only old log deletion and this task README/results, excludes app/tests/vendor. Policy routing/diff pass,doctor0errors2knownwarnings. Explicit user instruction is approval,Git history preserves recoverability,no rewrite. PKFNDA now separately DONE38c845e57656 with full/upstream-absent tests. Quality reviews exact deletion SHA from then-current globally clean HEAD; report evaluated_sha is current snapshot, not falsely claimed deletion SHA. Same-actor review pending.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-04T01:56:44.301Z — VERIFY — ok
+### 2026-10-04T02:10:35.862Z — VERIFY — ok
 
 By: CODER
 
-Note: Verified explicit-user artifact-only deletion, ignored-inclusive source/helper/Python/exe/archive/magic/embedded/diff audit zero; routing/diff pass,doctor zero errors/two known warnings. No application edits; pending PKFNDA unstaged changes excluded.
+Note: Final cleanup verification current: deletion eaa15ebac432 only old source diff plus own metadata/results; ignored-inclusive audits zero source/helper/Python/exe/archive/magic/embedded/diff,policy/diffpassdoctor0errors2knownwarnings. PKFNDA independently committed/DONE; globally clean quality phase now possible. Explicit user authorization,no app edits/history rewrite.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T01:56:44.000Z, excerpt_hash=sha256:39481bf6cdb0eb514e4ed1c51c3fe23c2c9276520bfe03370253ffb801a3b45c
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T02:10:35.222Z, excerpt_hash=sha256:b97301e16e4032baa80aa1e215e63aa7bfe4c0ecbc5c9d3227fa802d391206ab
 
 Details:
 
@@ -134,7 +140,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610040155-V91ZXX -m 🧩 V91ZXX task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610040155-V91ZXX --result verified-202610040155-V91ZXX --commit 87ca5394d21d931a120548fd4ce49683f63ecd1f
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
