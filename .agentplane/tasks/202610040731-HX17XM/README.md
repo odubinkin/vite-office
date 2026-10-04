@@ -4,7 +4,7 @@ title: "Round Writer paragraph ruler anchors to native pixels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,30 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-04T07:44:59.660Z"
+  updated_at: "2026-10-04T07:45:59.703Z"
   updated_by: "CODER"
-  note: "All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified."
+  note: "Final exact-SHA quality and post-review integrity passed; no test suites repeated."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T07:45:38.907Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor quality phase reviewed exact semantic HEAD 0acd09fb56b886a59ecd07b7721e3446f9334ee7; approved bounded paragraph anchor conversion passes."
+  evaluated_sha: "0acd09fb56b886a59ecd07b7721e3446f9334ee7"
+  blueprint_digest: "fde1ebbe9eb59e122bedd1259f32466e18cd5b793c0e22cf43a73595b2ade739"
+  evidence_refs:
+    - ".agentplane/tasks/202610040731-HX17XM/README.md"
+    - ".agentplane/tasks/202610040731-HX17XM/quality/20261004-074538907-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610040731-HX17XM/quality/20261004-074538907-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610040731-HX17XM/quality/20261004-074538907-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610040731-HX17XM/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610040731-HX17XM/scope-integrity.json"
+    - ".agentplane/tasks/202610040731-HX17XM/final-integrity.json"
+    - ".agentplane/tasks/202610040731-HX17XM/vendor-restoration.json"
+    - ".agentplane/tasks/202610040731-HX17XM/screenshots.json"
+  findings:
+    - "Production diff only applies the existing signed complete-coordinate pixel converter to three paragraph anchors. Precise model items, projection values and history remain intact; scope hashes match the reviewed SHA."
+    - "All 1186/109/5/73 test cases passed on one vendor-absent pipeline. Seven static gates, four source audits, zero semantic violations, unchanged pinned hashes, two inspected screenshots and ignored-inclusive artifact integrity satisfy the declared contract."
 commit: null
 comments:
   -
@@ -41,8 +61,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified."
+  -
+    type: "verify"
+    at: "2026-10-04T07:45:59.703Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final exact-SHA quality and post-review integrity passed; no test suites repeated."
 doc_version: 3
-doc_updated_at: "2026-10-04T07:44:59.714Z"
+doc_updated_at: "2026-10-04T07:45:59.754Z"
 doc_updated_by: "CODER"
 description: "Iteration96: match complete-coordinate signed SvxRuler UpdatePara pixel rounding for three existing paragraph indent handles. Preserve logical items,history and gesture ownership;add actual Writer/DOM/Chromium evidence. Correct one obsolete rounded-start fixture delta. One absent-upstream test pass;separate static source audits."
 sections:
@@ -64,16 +90,17 @@ sections:
     Scope: six approved semantic paths; all 294 previous test/spec files accounted for, 293 byte-identical and one exact 107-to-101 assertion correction. Both 220-row manifests preserve order and status/default/owner/exception fields, with one existing row amended each. Two pinned source hashes remain unchanged. Agentplane contains no forbidden source/helper/Python/executable/archive/source-frame/code-diff content; five historical prose-only references remain.
     Visual evidence: both actual 1280/390 screenshots show the three integer paragraph anchors and were inspected. Screenshots stay under test-results/e2e, outside Agentplane; only paths, hashes and conclusions are recorded.
     This verifies the signed full-coordinate CSS 96 dpi paragraph marker conversion and precise item/DTO/gesture/history contracts, not complete native or parent parity.
+    Exact implementation SHA: 0acd09fb56b886a59ecd07b7721e3446f9334ee7. Same-actor EVALUATOR review passed at quality/20261004-074538907-recovery-context/quality-report.json; the post-review scope/hash/artifact audit passed without repeating tests.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-04T07:44:59.660Z — VERIFY — ok
+    ### 2026-10-04T07:45:59.703Z — VERIFY — ok
 
     By: CODER
 
-    Note: All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified.
+    Note: Final exact-SHA quality and post-review integrity passed; no test suites repeated.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:44:59.307Z, excerpt_hash=sha256:60b6043d7238497875f3a2c4842ddf402609918dbe80f6ce390316bfaf4a5819
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:45:59.359Z, excerpt_hash=sha256:60b6043d7238497875f3a2c4842ddf402609918dbe80f6ce390316bfaf4a5819
 
     Details:
 
@@ -88,7 +115,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610040731-HX17XM -m 🧩 HX17XM task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610040731-HX17XM --result verified-202610040731-HX17XM --commit 0acd09fb56b886a59ecd07b7721e3446f9334ee7
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -135,16 +162,17 @@ Evidence: 1186 application cases in 223 files, 109 inventory cases in 36 files, 
 Scope: six approved semantic paths; all 294 previous test/spec files accounted for, 293 byte-identical and one exact 107-to-101 assertion correction. Both 220-row manifests preserve order and status/default/owner/exception fields, with one existing row amended each. Two pinned source hashes remain unchanged. Agentplane contains no forbidden source/helper/Python/executable/archive/source-frame/code-diff content; five historical prose-only references remain.
 Visual evidence: both actual 1280/390 screenshots show the three integer paragraph anchors and were inspected. Screenshots stay under test-results/e2e, outside Agentplane; only paths, hashes and conclusions are recorded.
 This verifies the signed full-coordinate CSS 96 dpi paragraph marker conversion and precise item/DTO/gesture/history contracts, not complete native or parent parity.
+Exact implementation SHA: 0acd09fb56b886a59ecd07b7721e3446f9334ee7. Same-actor EVALUATOR review passed at quality/20261004-074538907-recovery-context/quality-report.json; the post-review scope/hash/artifact audit passed without repeating tests.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-04T07:44:59.660Z — VERIFY — ok
+### 2026-10-04T07:45:59.703Z — VERIFY — ok
 
 By: CODER
 
-Note: All declared bounded checks passed; one upstream-absent test pass, 1186/109/5/73 cases, complete coverage, zero semantic violations and forbidden artifacts; six-path scope and two pinned hashes verified.
+Note: Final exact-SHA quality and post-review integrity passed; no test suites repeated.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:44:59.307Z, excerpt_hash=sha256:60b6043d7238497875f3a2c4842ddf402609918dbe80f6ce390316bfaf4a5819
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-04T07:45:59.359Z, excerpt_hash=sha256:60b6043d7238497875f3a2c4842ddf402609918dbe80f6ce390316bfaf4a5819
 
 Details:
 
@@ -159,7 +187,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610040731-HX17XM -m 🧩 HX17XM task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610040731-HX17XM --result verified-202610040731-HX17XM --commit 0acd09fb56b886a59ecd07b7721e3446f9334ee7
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped

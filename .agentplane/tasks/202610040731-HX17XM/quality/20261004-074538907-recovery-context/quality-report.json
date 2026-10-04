@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610040731-HX17XM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-04T07:45:38.907Z",
+  "verdict": "pass",
+  "summary": "Same-actor quality phase reviewed exact semantic HEAD 0acd09fb56b886a59ecd07b7721e3446f9334ee7; approved bounded paragraph anchor conversion passes.",
+  "evaluated_sha": "0acd09fb56b886a59ecd07b7721e3446f9334ee7",
+  "blueprint_digest": "fde1ebbe9eb59e122bedd1259f32466e18cd5b793c0e22cf43a73595b2ade739",
+  "findings": [
+    "Production diff only applies the existing signed complete-coordinate pixel converter to three paragraph anchors. Precise model items, projection values and history remain intact; scope hashes match the reviewed SHA.",
+    "All 1186/109/5/73 test cases passed on one vendor-absent pipeline. Seven static gates, four source audits, zero semantic violations, unchanged pinned hashes, two inspected screenshots and ignored-inclusive artifact integrity satisfy the declared contract."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610040731-HX17XM/README.md",
+    ".agentplane/tasks/202610040731-HX17XM/scope-integrity.json",
+    ".agentplane/tasks/202610040731-HX17XM/final-integrity.json",
+    ".agentplane/tasks/202610040731-HX17XM/vendor-restoration.json",
+    ".agentplane/tasks/202610040731-HX17XM/screenshots.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Automatic first-line visibility and other listed native contracts remain separate gaps; this is bounded CSS 96 dpi evidence, not full parent parity."
+  ]
+}
