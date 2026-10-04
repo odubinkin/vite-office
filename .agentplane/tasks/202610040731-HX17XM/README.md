@@ -1,10 +1,11 @@
 ---
 id: "202610040731-HX17XM"
 title: "Round Writer paragraph ruler anchors to native pixels"
-status: "DOING"
+result_summary: "Paragraph ruler anchors round to native CSS pixels while precise items and Undo/Redo remain intact."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Production diff only applies the existing signed complete-coordinate pixel converter to three paragraph anchors. Precise model items, projection values and history remain intact; scope hashes match the reviewed SHA."
     - "All 1186/109/5/73 test cases passed on one vendor-absent pipeline. Seven static gates, four source audits, zero semantic violations, unchanged pinned hashes, two inspected screenshots and ignored-inclusive artifact integrity satisfy the declared contract."
-commit: null
+commit:
+  hash: "0acd09fb56b886a59ecd07b7721e3446f9334ee7"
+  message: "🛠️ HX17XM code: round paragraph ruler anchors to native pixels"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved three paragraph-anchor rounding correction understandinggoal;one absent-upstream suitepass and separate sourceaudits."
+  -
+    author: "CODER"
+    body: "Verified: rounded all three paragraph ruler anchors using native signed full-coordinate conversion; all declared bounded evidence and clean exact-SHA review passed."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final exact-SHA quality and post-review integrity passed; no test suites repeated."
+  -
+    type: "status"
+    at: "2026-10-04T07:46:02.238Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: rounded all three paragraph ruler anchors using native signed full-coordinate conversion; all declared bounded evidence and clean exact-SHA review passed."
 doc_version: 3
-doc_updated_at: "2026-10-04T07:45:59.754Z"
+doc_updated_at: "2026-10-04T07:46:02.239Z"
 doc_updated_by: "CODER"
 description: "Iteration96: match complete-coordinate signed SvxRuler UpdatePara pixel rounding for three existing paragraph indent handles. Preserve logical items,history and gesture ownership;add actual Writer/DOM/Chromium evidence. Correct one obsolete rounded-start fixture delta. One absent-upstream test pass;separate static source audits."
 sections:
@@ -130,6 +143,10 @@ sections:
     The actual seven literal signed-coordinate projection cases and three real model gesture cases retain precise logical margins, spacing, tab metadata, immutable projections and history. Browser cases at 1280/390 exercise all three real hit targets, no-motion Enter, moved Escape, accepted drags, Undo/Redo and later editing.
     Next confirmed gap: native SvxRuler::UpdatePara marks the first-line indent invisible when the effective item IsAutoFirst is true; the existing browser projection omits that flag and always renders its control. Address separately.
     Auto-first visibility, RTL/vertical/theme/system DPI/hit priority/modifiers/snapping/capture/full frame/page/core indent mutation and whole-parent parity remain unverified. Registered save/open/recovery deviations remain preserved. Full goal stays active.
+extensions:
+  implementation_commit:
+    hash: "0acd09fb56b886a59ecd07b7721e3446f9334ee7"
+    message: "🛠️ HX17XM code: round paragraph ruler anchors to native pixels"
 id_source: "generated"
 ---
 ## Summary
