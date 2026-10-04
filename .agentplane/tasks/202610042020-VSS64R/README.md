@@ -4,7 +4,7 @@ title: "Restore native text hint secondary maps"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: execute approved iteration120 secondary hint maps and indexed existing-family reads under the standing goal authorization; no upstream-dependent tests or AP helpers."
 doc_version: 3
-doc_updated_at: "2026-10-04T20:20:49.280Z"
+doc_updated_at: "2026-10-04T20:30:39.495Z"
 doc_updated_by: "CODER"
 description: "Iteration120 restores the missing end and Which/start maps on the existing SwpHints container, using the same actual owned attributes and native notification/sort/binary lookup contracts for supported automatic and internet ranges. Replace current whole-primary-map family scans with the existing-family indexed lookup; preserve public projection values,prior tests and registered I/O/recovery deviations. One upstream-absent product profile only."
 sections:
@@ -61,7 +61,7 @@ sections:
     6. Same-actor read-only EVALUATOR exact semantic SHA quality pass; CODER verify/finish separate commit hashes; clean main/vendor restored;parent/goal active. No broad native/core/UI promotion.
   Verification: "Pending execution. No acceptance claims before evidence."
   Rollback Plan: "Revert only the semantic commit for this leaf through a new scoped task; preserve task history and other changes. Never rewrite Git history."
-  Findings: "Read-only preflight clean main after verified119. Existing supported SwpHints holds only the start map and currently ignores the other native dirty maps. Pinned native secondary comparator/resort/query contracts and supported native callers inspected. Goal-authorized single correction; no external action or broad parity promotion."
+  Findings: "Implemented three actual-object hint maps,native end/Which orders and clean/full/partial independent sorting ranges,plus binary queries. Existing family projection/caret/segment reads now use Which/start lookup.75 literal app cases added; prior339 tests intended byte-identical. Six static gates passed once,ndhints959 lines. Initial inline provenance update selected the wrong field path rather than localPath and exited before touching provenance; existing bounded inventory appendix was written once. Read-only route/schema revalidation completed; only missing provenance appendix repaired and focused JSON format check passed. No product tests yet. No native source/helper saved under AP; full native Insert/Delete/history/refcounts/destruction/listeners/hierarchy/debug assertions/pointer ties and broad core/UI parity remain unverified."
 id_source: "generated"
 ---
 ## Summary
@@ -100,4 +100,4 @@ Revert only the semantic commit for this leaf through a new scoped task; preserv
 
 ## Findings
 
-Read-only preflight clean main after verified119. Existing supported SwpHints holds only the start map and currently ignores the other native dirty maps. Pinned native secondary comparator/resort/query contracts and supported native callers inspected. Goal-authorized single correction; no external action or broad parity promotion.
+Implemented three actual-object hint maps,native end/Which orders and clean/full/partial independent sorting ranges,plus binary queries. Existing family projection/caret/segment reads now use Which/start lookup.75 literal app cases added; prior339 tests intended byte-identical. Six static gates passed once,ndhints959 lines. Initial inline provenance update selected the wrong field path rather than localPath and exited before touching provenance; existing bounded inventory appendix was written once. Read-only route/schema revalidation completed; only missing provenance appendix repaired and focused JSON format check passed. No product tests yet. No native source/helper saved under AP; full native Insert/Delete/history/refcounts/destruction/listeners/hierarchy/debug assertions/pointer ties and broad core/UI parity remain unverified.
