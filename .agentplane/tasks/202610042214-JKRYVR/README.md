@@ -4,7 +4,7 @@ title: "Bind internet attributes to their owning text nodes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,29 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-04T22:32:28.764Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only review of exact semantic SHA a97a25df9bafd49d37733ffa12a1fa2306c29da4 passes the bounded internet text-node ownership leaf; full upstream parity remains unverified."
+  evaluated_sha: "a97a25df9bafd49d37733ffa12a1fa2306c29da4"
+  blueprint_digest: "833f1d8a4614ba06d0e1e54ee7f56983d9c691de48ac132d3b3be89d57ecfc9a"
+  evidence_refs:
+    - ".agentplane/tasks/202610042214-JKRYVR/README.md"
+    - ".agentplane/tasks/202610042214-JKRYVR/quality/20261004-223228764-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610042214-JKRYVR/quality/20261004-223228764-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610042214-JKRYVR/quality/20261004-223228764-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610042214-JKRYVR/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610042214-JKRYVR/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610042214-JKRYVR/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610042214-JKRYVR/evidence/failed-case-recovery.json"
+    - ".agentplane/tasks/202610042214-JKRYVR/evidence/restored-source-audits.json"
+    - ".agentplane/tasks/202610042214-JKRYVR/evidence/static-gates.json"
+    - ".agentplane/tasks/202610042214-JKRYVR/evidence/static-recovery.json"
+  findings:
+    - "Exact-head eight-path audit confirms actual node binding and old map detachment,347 prior tests byte-identical,18 new ownership/transition cases,unchanged projection bodies and re-export API,236 existing runtime statuses/defaults/exceptions preserved and one unverified helper."
+    - "One absent full profile only: build,app2649 with100%coverage,scripts5,Chromium99 pass. Only the single failed inventory case replayed; lexical row ordering and relocated declaration markers corrected. Initial full inventory coverage plus final failed-case-only raw coverage covers all original CLI gaps. No passing suite/build replay or repository threshold change."
+    - "Five restored source audits pass after filename-split registration;semantic violations0. Static docs comment failure repaired;latest six gates pass. Ignored-inclusive AP3824files/0forbidden. Doctor0errors/two unchanged legacy warnings;routingpass;clean reviewed checkout."
 commit: null
 comments:
   -
