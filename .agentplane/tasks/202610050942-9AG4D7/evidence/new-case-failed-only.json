@@ -1,0 +1,22 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "failed-chromium",
+      "command": "Inline Playwright runner; existing config in memory with development server; sole failed new Chromium case only",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 557,
+      "sha256": "4045aa5e09f2f57ca1e18f27046b495d1be397f2d87732e4293a702d05dabfe5",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T10:12:39.366Z",
+        "duration": 4406.736,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

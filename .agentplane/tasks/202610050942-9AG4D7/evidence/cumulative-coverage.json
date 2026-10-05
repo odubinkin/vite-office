@@ -1,0 +1,103 @@
+{
+  "result": "pass",
+  "method": "Actual first-profile maps plus only one new unexecuted mounted-case map. Two changed renderers align only exact contiguous source-identical locations by ordered-line LCS; edited or crossing locations use final-source counters only. Other production source hashes unchanged. Diagnostic isolated thresholds do not relax actual cumulative100 percent. No passing replay or second build.",
+  "total": {
+    "lines": {
+      "total": 11826,
+      "covered": 11826,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12946,
+      "covered": 12946,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3307,
+      "covered": 3307,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9728,
+      "covered": 9728,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventory": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "changedSourceDetails": [
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "firstSHA256": "4c2d47bf5e4ef311d03d745c69f5399c504e46f47a6088ba94963f3097265dda",
+      "currentSHA256": "127594f0fb00ffb201f4dafe7d1c83443754d7f8d585928919f2e29ff95373d9",
+      "carriedUnchangedLocationCounts": {
+        "statements": 37,
+        "functions": 6,
+        "branches": 115
+      },
+      "missing": {
+        "statements": 0,
+        "functions": 0,
+        "branches": 0
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "firstSHA256": "39e75523598122e1a5bc5db08b5541ed0d9e112b2e55c63ed1d0261f7b142ec3",
+      "currentSHA256": "ce5c154e455ce1f257163a5cdc8103654d3563713d5bd3575a67fc72225c4100",
+      "carriedUnchangedLocationCounts": {
+        "statements": 16,
+        "functions": 8,
+        "branches": 44
+      },
+      "missing": {
+        "statements": 0,
+        "functions": 0,
+        "branches": 0
+      }
+    }
+  ],
+  "passingReplays": 0,
+  "appCumulativeSHA256": "9fb2e9e098f48f352ceea9ef1588066e35dc45218e7ebfa3448a68d80557bac1",
+  "inventoryCumulativeSHA256": "3211de0cb38ffcb1cd893f4415734b20b76ad3ef8b685ca6905573d3e9e8adac"
+}
