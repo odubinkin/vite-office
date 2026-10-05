@@ -1,10 +1,11 @@
 ---
 id: "202610051853-R2N8T2"
 title: "Continue numbering through native document ranges and history"
-status: "DOING"
+result_summary: "Removed body-only ContinueNumbering projection/filter and retained paragraph identities;source-shaped document search and inclusive native cell/plain/mixed range execution,countedreset/rule-sensitive restart retainingvalue.43newapp/2newChromium pass,411prior tests unchanged/one source-confirmed ODT correction/250states preserved,allgates pass,exactsemantic3ac17d7acc52bfdb72bf871ce7db36445543e171 sameagentEVALUATORpass. Fullnative SetNumRule/SwHistory/listcreation/otheradapters/split/table/UI parity unverified;goalactive."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610051853-R2N8T2/evidence/final-coverage.json"
   findings:
     - "43new nativeapp/2newChromium;12359app/109inventory/5scripts/122distinctChromium.411prior testfiles unchanged,one source-confirmed ODT expectation correction,250states/evidence/defaults/IOexceptions preserved.6statics pass onlyfailedtypecheck replay;ONEfullabsent profile thenonly2originalfailed browsercases,actual100%coverage,5audits0violations. Same agent explicit EVALUATOR,no independentreviewclaim."
-commit: null
+commit:
+  hash: "561998fdd0ae7dc210347ca474135e089b505e09"
+  message: "🧩 R2N8T2 task: record verified native list continuation"
 comments:
   -
     author: "CODER"
     body: "Start: native Continue Numbering range/search/history repair under standing iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: native Continue Numbering search/inclusive body-cell ranges/currentnumeric history and actualbrowsercellmenu/label/input/history;all declared gates pass,consciousIO deviations retained,fullnative SetNumRule/SwHistory/broadUI parity remainsopen."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "6statics latestpass onlyfailedtypecheck repeat;ONEfullabsent build/12359app/109inventory/5scripts/120Chromium pass2newfocusfixturefails,onlyoriginal2retriedpass,122distinctfinalproduction.43newapp/2newbrowser,411prior unchanged/one sourceconfirmed ODT correction/250states preserved. Actual100%L/S/F/B no merges;5audits0violations;exactsemantic3ac17d7acc52bfdb72bf871ce7db36445543e171 sameagent EVALUATORpass. Fullnative SetNumRule/SwHistory/otherlist/table/UI parity unverified,goalactive."
+  -
+    type: "status"
+    at: "2026-10-05T19:08:37.860Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Continue Numbering search/inclusive body-cell ranges/currentnumeric history and actualbrowsercellmenu/label/input/history;all declared gates pass,consciousIO deviations retained,fullnative SetNumRule/SwHistory/broadUI parity remainsopen."
 doc_version: 3
-doc_updated_at: "2026-10-05T19:08:20.608Z"
+doc_updated_at: "2026-10-05T19:08:37.862Z"
 doc_updated_by: "CODER"
 description: "Iteration160 repair Continue Numbering through native ordered SwNodes across body/table cells, removing body-only slice/filter/reverse adapter and retained paragraph identities from its history. Implement bounded SwDoc.SearchNumRule source policy: start-excluded by default, nearest numbered/bullet/outline rule stops search even incompatible, nonempty allowance and document-section boundaries; no layout/merged/hide-redline claims. SwListShell searches numbered first then bullet from native selection start, applies found rule/list ID to every inclusive selected text node, counted true, clears restart only if actual rule changes; existing local no-op false contract retained. SwUndoContinueNumbering stores numeric index/original document and independent before/after item sets, resolves current slots after physical replacement and guards foreign documents. Existing SwUndoInsNum abstraction/full native SetNumRule/SwHistory still unverified. Scope8paths:doc.ts,unnum.ts,listsh.ts,new native-list-continuation.test.ts,new writer-cell-list-continue.spec.ts,existing listsh-odt.test.ts only source-confirmed expectation correction if required,and2metadata owners additive3records.412prior testfiles preserved except explicit source-confirmed ODT correction;250states/defaults/classifications/IO exceptions/prior evidence preserved. Meaningful native command/body-cell/mixed/plain/count/restart/search/no-op/history/cursor/independent values and actualChromium menu/cell label history evidence. Six statics first;ONE full upstream-absent build/app/inventory/scripts/Chromium profile thenfailed/new-only cases/gates,neverpassing replays;exact failures/errors persisted before assertions,skipped=skipped,vendor repository rename try/finally restored before5source audits. Actual100%L/S/F/B, maps/results onlyignored appcache;APboundedEnglishcounts/hashes/outcomes/exactnames/prose,no sources/helpers/Python/nativeprobes/binaries/rawdiffs/sourceframes/diagnostics. Exact semanticSHA sameagent EVALUATORpass,recordedverify/meaningfulfinish/parentcheckpoint cleanmain. No network/outside/global/subagents. Goalactive,broad list/table/UI native architecture unverified."
 sections:
@@ -126,6 +139,10 @@ sections:
     Limits:Native SearchNumRule and represented Continue Numbering policy/current-slot ownership only. Search is over actual native nodes, no layout/merged/hide-redline/margin propagation/complete fixed extras semantics claim; represented body/table/postit section boundaries and raw enumeration/itemization/outline contracts verified. Shell applies found rule/list ID to inclusive native text range, numbered-first/bullet fallback/enabledstate,counted reset and rule-sensitive restart flag retaining restart value. Continue numeric history preserves existing independent direct item tuples/originaldocument guards/payload/comment; full native SetNumRule/SwHistory/registered deltas/client/undo classification/Repeat unavailable. Other InsNum shallow abstraction and retained split physical bridge/list creation body-only projection remainopen, broadUI/list/table nested/merged/protected/rendering/clipboard/layout unverified. Registered save/open/recovery deviations preserved. One source-confirmed old ODT expectation correction includes result/Undo checks,411other prior testfiles byte-identical;43newapp/2newChromium. Initial2newbrowser focus assertions corrected to actual singleeditinghost/selection/currentcaret plus immediatekeyboard insertion and undo, production unchanged, only original2failed retried. No app/inventory/build/passingbrowser replays or coveragecountertransfer;100%actual currentproduction app/inventory. No wholemodule or broad parity claim.
     Prior turn159 verifiedprogress. Thisturn160 realvisiblecell/plain/mixed listbehavior improved, broadgoalactive andparentDOING. Next meaningful work remainsnative listtoggle selection/document SetNumRule/history consolidation and table/rendering/split architecture. No wholemodule/broad parity promotion.
     Same coding agent in explicit EVALUATOR role reviewed exact semantic 3ac17d7acc52bfdb72bf871ce7db36445543e171 and returnedpass quality 20261005-190757912-recovery-context; noindependentreviewer claimed. Residual collapsedstyle inheritance/direct forceditem vs native SetNumRule remainsunverified alongside completehistory/client/classification;goalactive.
+extensions:
+  implementation_commit:
+    hash: "3ac17d7acc52bfdb72bf871ce7db36445543e171"
+    message: "🧩 R2N8T2 code: continue lists through native ranges and current history"
 id_source: "generated"
 ---
 ## Summary
