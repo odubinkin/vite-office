@@ -1,0 +1,41 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts --testNamePattern=^native empty end split preserves expanding AUTO items and removes closed hints$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/PY9DJV.remaining-app-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 1,
+      "bytes": 4490,
+      "sha256": "50ac3f67e5ff3877a3eeefad21005df64df28b53101b14adc804d52f106e351c",
+      "caseCounts": {
+        "passed": 0,
+        "failed": 1,
+        "total": 20
+      },
+      "failedCases": [
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts > native empty end split preserves expanding AUTO items and removes closed hints"
+      ],
+      "executedCases": [
+        "native empty end split preserves expanding AUTO items and removes closed hints"
+      ]
+    },
+    {
+      "kind": "chromium",
+      "command": "inline Playwright actual config with dev server; only two exact initially failed new cases",
+      "profile": "upstream-absent failed/new only",
+      "exit": 0,
+      "bytes": 735,
+      "sha256": "bc92e15d12e790324058844accb411d9cac7bf2b3aa256e9640fe39f988331bb",
+      "caseCounts": {
+        "startTime": "2026-10-05T14:09:44.508Z",
+        "duration": 6503.575000000001,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ]
+}

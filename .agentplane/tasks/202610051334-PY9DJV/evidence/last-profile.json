@@ -1,0 +1,22 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts --testNamePattern=^native empty end split preserves expanding AUTO items and removes closed hints$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/PY9DJV.last-app-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 0,
+      "bytes": 1088,
+      "sha256": "43b521c4efb25bfe139057a39c1538a718f04954270b1e75971581703e355ca3",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 20
+      },
+      "failedCases": [],
+      "executedCases": [
+        "native empty end split preserves expanding AUTO items and removes closed hints"
+      ]
+    }
+  ]
+}

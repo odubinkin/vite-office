@@ -1,0 +1,90 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts"
+  ],
+  "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against original base. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
+  "carried": {
+    "statements": 353,
+    "functions": 107,
+    "branches": 236
+  },
+  "summary": {
+    "lines": {
+      "total": 12207,
+      "covered": 12207,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13364,
+      "covered": 13364,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3360,
+      "covered": 3360,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9991,
+      "covered": 9991,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialMapSHA256": "bb210dc8c5c03eeec00cf79404d6791de511524c41322ed1393e5853986f0fd5",
+  "finalMapSHA256": "2c7d320b81a332ed673e4f58fc09f6d72932e749f151a8981b9459b55e061311",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/filter/ascii/parasc.ts": "6e54ae1ec7f98bc8b8203842788937fabd418db9834f1648fd1bae5dd3d7a3f2",
+    "apps/office/src/sw/source/core/undo/untblk.ts": "bd9e414e6dd94459c99c4c40899b7810f44e5f15dcca888165bc8d899bab6d32",
+    "apps/office/src/sw/source/filter/basflt/shellio.ts": "0c350b6e4e9dbb8de53c92f9e38a5dc61879f582b6bda7c5b7c1d25bb50f38b5",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "fb0bb2b9a729201f96c4fddbc795491a816123646fce10b223e2d3ce62178efc",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts": "6dd9e5cc72551fbd3d05ab2c056402832fe236db5bc39ec69641258a580c0bfe",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "bde496dd91cd1d551e3418990bc0130f2ba1484ee31b7a1c2006d5ff7fdeaec6",
+    "apps/office/src/sw/browser/editor/writer-clipboard-events.ts": "5467e05c8ae80cd5f0ce693c806e0407f4ddedb0b91eef33a2e7f39178b5d8a6",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "ab46923b12b53853a929622a1cfee6b56e99da2c5aa452803c8a2ebecbfdf31c",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "12dda3e3b97306638d7af0934f272bd3a137ae501b883baecae6f78b3b71ca2f"
+  }
+}

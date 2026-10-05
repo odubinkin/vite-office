@@ -1,0 +1,42 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts --testNamePattern=^(?:native ASCII selected column preserves inherited content and history false \"\\\\n\"|native ASCII selected column preserves inherited content and history false \"\\\\r\\\\n\"|native ASCII selected column preserves inherited content and history false \"\\\\r\"|native ASCII selected column preserves inherited content and history true \"\\\\n\"|native ASCII selected column preserves inherited content and history true \"\\\\r\\\\n\"|native ASCII selected column preserves inherited content and history true \"\\\\r\"|native empty end split preserves expanding AUTO items and removes closed hints|native split retains nonend fragments unformatted suffixes and expanding nonAUTO hint ownership)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/PY9DJV.closure-app-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 1,
+      "bytes": 5776,
+      "sha256": "8a5f0f051a334474d2e848b4373b895485e6d321bdeafddff480bf03e6cf4435",
+      "caseCounts": {
+        "passed": 7,
+        "failed": 1,
+        "total": 20
+      },
+      "failedCases": [
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts > native empty end split preserves expanding AUTO items and removes closed hints"
+      ],
+      "executedCases": [
+        "native empty end split preserves expanding AUTO items and removes closed hints",
+        "native split retains nonend fragments unformatted suffixes and expanding nonAUTO hint ownership",
+        "native ASCII selected column preserves inherited content and history false \"\\n\"",
+        "native ASCII selected column preserves inherited content and history false \"\\r\\n\"",
+        "native ASCII selected column preserves inherited content and history false \"\\r\"",
+        "native ASCII selected column preserves inherited content and history true \"\\n\"",
+        "native ASCII selected column preserves inherited content and history true \"\\r\\n\"",
+        "native ASCII selected column preserves inherited content and history true \"\\r\""
+      ]
+    },
+    {
+      "kind": "chromium",
+      "command": "inline Playwright actual config with dev server; only two exact initially failed new cases",
+      "profile": "upstream-absent failed/new only",
+      "exit": 1,
+      "bytes": 2200,
+      "sha256": "f7e4e9c10701413bd4aee7d4ea3da11212946ce152c79967ef9f8dec09150bfc",
+      "errorNames": [
+        "SyntaxError: Unexpected identifier passed in inline Playwright orchestration; zero cases executed"
+      ]
+    }
+  ]
+}
