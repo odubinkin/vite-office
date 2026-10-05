@@ -1,0 +1,87 @@
+{
+  "base": "5beb1d43d21d3e3800cca944fac5ff69a437e154",
+  "changedSemanticPaths": 21,
+  "productionOwners": 10,
+  "priorTestFiles": 432,
+  "priorTestFilesByteIdentical": 426,
+  "sourceConfirmedOwnerMigrations": [
+    "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+    "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+    "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts"
+  ],
+  "optionalPriorCellCorrection": false,
+  "existingSemanticRecordsPreserved": 255,
+  "totalSemanticRecords": 258,
+  "newPartialUnverifiedOwners": [
+    "apps/office/src/sw/source/uibase/shells/textsh1-commands.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+    "apps/office/src/sw/source/uibase/inc/wrtsh.ts"
+  ],
+  "registrySymbolRelocation": {
+    "symbol": "createWriterTextCommandRegistry",
+    "from": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "to": "apps/office/src/sw/source/uibase/shells/textsh1-commands.ts"
+  },
+  "allStatesDefaultsClassificationsIOExceptionsPreserved": true,
+  "priorEvidencePreserved": true,
+  "sourceProof": {
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "385c5d86940afc716f28264f24f85c84b599d67b9aaeb4d16f5ec32efa2b588f",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "5398a9b48e6ba3d2aa3e7c2b464beaf61001b5818ea5f54f963ce079676b08e1",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts": "7c093644039d2177f4df3c58d361b6143c093bffcb49eb3413bbe8a2d292f6cf",
+    "apps/office/src/sw/source/uibase/shells/textsh1-commands.ts": "f2462737a35f07473e87942700e7a7c93ef15928e086d97ab9745918dc2db0ea",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "4bef2962fe21375876265509e4448591d8d2c3286ea79cb39f89cb2a84beaafd",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts": "35fd9de2d7652dfbf11a976a135391955c3c40a2891efcb6546bba642ee9b7ee",
+    "apps/office/src/sw/source/uibase/inc/wrtsh.ts": "b0723fc7b1ef8585bf21d7b57440fbff8294bdad7f1ccee53bbfd3480136b810",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "efc9f46afe2f964847f80b2e91cf9175495ff00ee0206434e0e5f03e57057db3",
+    "apps/office/src/sw/browser/composition/writer-module.tsx": "9ec8b32a98053b00b9fa0d26da761cb8af263fdcfe36290f13f2d24f0d8f1fe6",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx": "2b1754fdd0624092382ee98dacc60d4c6a0c2bc3edf3c09c46c57de8af8085e8"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 19,
+  "newChromiumCases": 2,
+  "finalDistinctPassed": {
+    "app": 12588,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 145
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/edit/ednumber.cxx",
+      "sha256": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114"
+    },
+    {
+      "path": "sw/source/uibase/shells/listsh.cxx",
+      "sha256": "73a2d3208ce4cc26838ea170290d5b152b9a0298a29621cf28c4b71ab49e912a"
+    },
+    {
+      "path": "sw/source/uibase/shells/textsh1.cxx",
+      "sha256": "ff294d3cc9b7cdb11af4aca02c44987e7b506488a6bbaa84781c3227019a8f0d"
+    },
+    {
+      "path": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "sha256": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac"
+    },
+    {
+      "path": "sw/source/uibase/inc/wrtsh.hxx",
+      "sha256": "b4d95a93df5a07fe869e8768d5e130ac86fc0fb8aa98fe123d8d568d13e858e4"
+    },
+    {
+      "path": "sw/source/uibase/uiview/view.cxx",
+      "sha256": "a1d685a3d98ff12eeee129ab9513b4f384bda8ada598ecf3a820ed73b68ba469"
+    },
+    {
+      "path": "framework/source/uielement/menubarmanager.cxx",
+      "sha256": "f791ef72d4861b6d6498b26e16af5ca92a45b77b5e65942c976db4c801fc2d44"
+    },
+    {
+      "path": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+      "sha256": "68638aecc184c70e0262905a8c3b2a8e369ed26b28d83f3bd381a3f68a6cb630"
+    }
+  ],
+  "validationLimit": "Represented current-point list state, conditional text/list context, unchanged text-owned list operations and supported inactive menu entry visibility only. Other contexts/table row-column subtypes/framework/layout/readonly/toolbars/full KeyInput/core/UI/list/table parity and ODT NONE serialization remain unverified. Conscious IO deviations unchanged;parent DOING and goal ACTIVE."
+}

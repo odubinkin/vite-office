@@ -1,0 +1,22 @@
+[
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "errors": 0,
+    "warnings": 2,
+    "knownWarnings": [
+      "Managed hook shim readiness/fallback branches",
+      "Existing DONE202610031635-2Z3962 missing implementation SHA"
+    ]
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "result": "policy routing OK"
+  },
+  {
+    "command": "git diff --check",
+    "exit": 0,
+    "result": "No whitespace errors"
+  }
+]
