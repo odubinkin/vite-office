@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm run format:check",
+    "exit": 0,
+    "bytes": 122,
+    "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+  },
+  {
+    "command": "npm run lint",
+    "exit": 1,
+    "bytes": 280,
+    "sha256": "d5c97a62e5e1d44f075fb88a58cbee20bb09af1536c62be9304a8dc74f1c96bf"
+  }
+]
