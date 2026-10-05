@@ -358,14 +358,14 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
           "<table:table-column/><table:table-row><table:table-cell><table:table-row/></table:table-cell></table:table-row>",
         ),
     ).not.toThrow();
-    for (const unsupported of ["<text:list/>", "<table:table/>", "<text:section/>"])
+    for (const unsupported of ["<table:table/>", "<text:section/>"])
       expect(
         /** Preserves explicit rejection for native cell features not implemented here. @returns Nothing. */ () =>
           open(
             tableProps('style:width="1cm"'),
             `<table:table-column/><table:table-row><table:table-cell>${unsupported}</table:table-cell></table:table-row>`,
           ),
-      ).toThrow("Unsupported ODF table cell list, section or nested table");
+      ).toThrow("Unsupported ODF table cell section or nested table");
     const invalidFamily = new FastAttributeList([
       {
         name: "style:name",

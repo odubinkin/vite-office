@@ -297,32 +297,24 @@ export class XMLTextParagraphExport {
         return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
       },
     );
+    const listIdentities = new Map<string, { readonly rootId: string; segments: number }>();
+    const usedXmlIds = new Set<string>();
+    const renderParagraphs =
+      /** Renders one text location while borrowing the full export-pass identity catalogue. @param paragraphs - Actual text location. @returns XML. */
+      (paragraphs: Iterable<XMLTextParagraphSource>): string =>
+        exportParagraphBody(
+          paragraphs,
+          paragraphStyleNames,
+          characterStyleNames,
+          listStyleNames,
+          isCancelled,
+          listIdentities,
+          usedXmlIds,
+        );
     const rendered =
       source.blocks === undefined
-        ? {
-            body: exportParagraphBody(
-              source.paragraphs(),
-              paragraphStyleNames,
-              characterStyleNames,
-              listStyleNames,
-              isCancelled,
-            ),
-            automaticStyles: "",
-          }
-        : exportTableBlocks(
-            source.blocks(),
-            /** Processes one ODF table value. @param argument1 - Callback input. @returns Callback result. */ (
-              paragraphs,
-            ) =>
-              exportParagraphBody(
-                paragraphs,
-                paragraphStyleNames,
-                characterStyleNames,
-                listStyleNames,
-                isCancelled,
-              ),
-            isCancelled,
-          );
+        ? { body: renderParagraphs(source.paragraphs()), automaticStyles: "" }
+        : exportTableBlocks(source.blocks(), renderParagraphs, isCancelled);
     return {
       automaticStyles: [
         ...paragraphStyles,
@@ -345,20 +337,20 @@ export function exportTextParagraphs(
   return new XMLTextParagraphExport(source, isCancelled, fontFaceName).Export();
 }
 
-/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @returns ODF body fragment. */
+/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @param listIdentities - Shared export-pass list catalogue. @param usedXmlIds - Shared unique XML identities. @returns ODF body fragment. */
 function exportParagraphBody(
   paragraphs: Iterable<XMLTextParagraphSource>,
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
   listStyleNames: ReadonlyMap<string, string>,
   isCancelled: () => boolean,
+  listIdentities: Map<string, { readonly rootId: string; segments: number }>,
+  usedXmlIds: Set<string>,
 ): string {
   let body = "";
   let activeListId: string | undefined;
   const openRules: string[] = [];
   const openItems: Array<"list-item" | "list-header"> = [];
-  const listIdentities = new Map<string, { readonly rootId: string; segments: number }>();
-  const usedXmlIds = new Set<string>();
   const info = new XMLTextNumRuleInfo();
 
   /** Closes every currently open list item and list. @returns Nothing. */

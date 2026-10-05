@@ -1,11 +1,9 @@
 /** @fileoverview Implements LibreOffice-shaped streaming paragraph/list import contexts. */
 
-import { XMLTextListsHelper } from "./txtlists";
-import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
+import { XMLTextImportHelper } from "./txtimp";
 
-import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
+import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
-import { XMLTableContext, type XMLTableImportTarget } from "../table/XMLTableImport";
 import type {
   OdfCharacterProperties,
   OdfHyperlink,
@@ -129,7 +127,7 @@ const DEFAULT_PROPERTIES: OdfCharacterProperties = {
 
 /** Handles office:text children and owns list identity state for one stream. */
 export class XMLTextBodyContext extends SvXMLImportContext {
-  private readonly lists = new XMLTextListsHelper();
+  private readonly helper: XMLTextImportHelper;
 
   /** Sequence declarations carry no modeled effect without sequence fields. @param element - Child token. @returns Whether declaration-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
@@ -137,8 +135,9 @@ export class XMLTextBodyContext extends SvXMLImportContext {
   }
 
   /** Creates a body context. @param target - Writer import target. @returns Context. */
-  public constructor(private readonly target: XMLTextImportTarget) {
+  public constructor(target: XMLTextImportTarget) {
     super();
+    this.helper = new XMLTextImportHelper(target);
   }
 
   /** Creates one paragraph, list, or ignored declarations context. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
@@ -146,15 +145,7 @@ export class XMLTextBodyContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
-      return new XMLParaContext(this.target, element, attributes);
-    if (element === XMLToken.TEXT_LIST)
-      return new XMLTextListBlockContext(this.target, attributes, this.lists);
-    if (element === XMLToken.TABLE_TABLE && "beginTable" in this.target)
-      return new XMLTableContext(this.target as XMLTableImportTarget, attributes);
-    if (element === XMLToken.TEXT_SEQUENCE_DECLS) return new SvXMLIgnoreContext(true);
-    if (element === XMLToken.TEXT_SECTION) throw new Error("Unsupported ODF text section.");
-    return null;
+    return this.helper.CreateTextChildContext(element, attributes, "Body");
   }
 }
 

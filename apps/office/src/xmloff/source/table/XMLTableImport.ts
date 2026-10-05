@@ -3,7 +3,8 @@
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { importOdfLength } from "../core/xmluconv";
-import { XMLParaContext, type XMLTextImportTarget } from "../text/txtparai";
+import type { XMLTextImportTarget } from "../text/txtparai";
+import { XMLTextImportHelper } from "../text/txtimp";
 
 /** Supported ODF table style families and physical properties. */
 export type OdfTableStyle =
@@ -174,10 +175,11 @@ export class XMLTableStyleContext extends SvXMLImportContext {
 
 /** Imports a table in document body order. */
 export class XMLTableContext extends SvXMLImportContext {
-  /** Opens one table in document order. @param target - Writer table sink. @param attributes - Table identity. @returns Nothing. */
+  /** Opens one table in document order. @param target - Writer table sink. @param attributes - Table identity. @param helper - Shared native text owner. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
     attributes: FastAttributeList,
+    private readonly helper = new XMLTextImportHelper(target),
   ) {
     super();
     attributes.assertOnly([XMLToken.TABLE_NAME, XMLToken.TABLE_STYLE_NAME], "table");
@@ -203,11 +205,11 @@ export class XMLTableContext extends SvXMLImportContext {
       return new SvXMLIgnoreContext();
     }
     if (element === XMLToken.TABLE_TABLE_ROW)
-      return new XMLTableRowContext(this.target, attributes);
+      return new XMLTableRowContext(this.target, attributes, this.helper);
     if (element === XMLToken.TABLE_TABLE_HEADER_ROWS) {
       attributes.assertOnly([], "table header rows");
       this.target.beginTableHeaderRows();
-      return new XMLTableHeaderRowsContext(this.target);
+      return new XMLTableHeaderRowsContext(this.target, this.helper);
     }
     if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
       attributes.assertOnly([], "table soft page break");
@@ -225,8 +227,11 @@ export class XMLTableContext extends SvXMLImportContext {
 
 /** Imports the first repeated header rows from Writer's table grouping. */
 class XMLTableHeaderRowsContext extends SvXMLImportContext {
-  /** Stores the table sink. @param target - Writer table sink. @returns Nothing. */
-  public constructor(private readonly target: XMLTableImportTarget) {
+  /** Stores the table sink. @param target - Writer table sink. @param helper - Shared native text owner. @returns Nothing. */
+  public constructor(
+    private readonly target: XMLTableImportTarget,
+    private readonly helper: XMLTextImportHelper,
+  ) {
     super();
   }
   /** Opens one header row. @param element - Child token. @param attributes - Row attributes. @returns Row context. */
@@ -235,7 +240,7 @@ class XMLTableHeaderRowsContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     return element === XMLToken.TABLE_TABLE_ROW
-      ? new XMLTableRowContext(this.target, attributes)
+      ? new XMLTableRowContext(this.target, attributes, this.helper)
       : null;
   }
   /** Completes the header group. @returns Nothing. */
@@ -246,10 +251,11 @@ class XMLTableHeaderRowsContext extends SvXMLImportContext {
 
 /** Imports one ordered table row. */
 class XMLTableRowContext extends SvXMLImportContext {
-  /** Opens a row. @param target - Writer table sink. @param attributes - Row style. @returns Nothing. */
+  /** Opens a row. @param target - Writer table sink. @param attributes - Row style. @param helper - Shared native text owner. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
     attributes: FastAttributeList,
+    private readonly helper: XMLTextImportHelper,
   ) {
     super();
     attributes.assertOnly([XMLToken.TABLE_STYLE_NAME], "table row");
@@ -261,7 +267,7 @@ class XMLTableRowContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element === XMLToken.TABLE_TABLE_CELL)
-      return new XMLTableCellContext(this.target, attributes);
+      return new XMLTableCellContext(this.target, attributes, this.helper);
     return null;
   }
   /** Closes the row. @returns Nothing. */
@@ -272,10 +278,11 @@ class XMLTableRowContext extends SvXMLImportContext {
 
 /** Imports a table cell's ordered paragraphs. */
 class XMLTableCellContext extends SvXMLImportContext {
-  /** Opens a cell. @param target - Writer table sink. @param attributes - Cell style. @returns Nothing. */
+  /** Opens a cell. @param target - Writer table sink. @param attributes - Cell style. @param helper - Shared native text owner. @returns Nothing. */
   public constructor(
     private readonly target: XMLTableImportTarget,
     attributes: FastAttributeList,
+    private readonly helper: XMLTextImportHelper,
   ) {
     super();
     attributes.assertOnly([XMLToken.TABLE_STYLE_NAME, XMLToken.TABLE_VALUE_TYPE], "table cell");
@@ -286,15 +293,7 @@ class XMLTableCellContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element === XMLToken.TEXT_P || element === XMLToken.TEXT_H)
-      return new XMLParaContext(this.target, element, attributes);
-    if (
-      element === XMLToken.TABLE_TABLE ||
-      element === XMLToken.TEXT_LIST ||
-      element === XMLToken.TEXT_SECTION
-    )
-      throw new Error("Unsupported ODF table cell list, section or nested table.");
-    return null;
+    return this.helper.CreateTextChildContext(element, attributes, "Cell");
   }
   /** Closes the cell. @returns Nothing. */
   public override endFastElement(): void {
