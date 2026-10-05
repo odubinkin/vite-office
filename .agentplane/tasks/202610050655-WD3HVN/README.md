@@ -4,7 +4,7 @@ title: "End empty Writer lists through the native edit-window Enter decision"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -12,9 +12,9 @@ tags:
   - "code"
 verify: []
 plan_approval:
-  state: "pending"
-  updated_at: null
-  updated_by: null
+  state: "approved"
+  updated_at: "2026-10-05T07:16:19.045Z"
+  updated_by: "ORCHESTRATOR"
   note: null
 verification:
   state: "pending"
@@ -22,6 +22,26 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T07:17:04.761Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only exact-SHA review ff0b20b58f76813ca315fa2b0b277725ee89928c passed after exit0 audit;no independent review claim. Native Enter decision,document deletion and attribute undo within scope;one full absent profile plus exact2failedapp closure,actual100coverage,103Chromium firstpass."
+  evaluated_sha: "ff0b20b58f76813ca315fa2b0b277725ee89928c"
+  blueprint_digest: "ff31693f8fddae8ff937e249980cfdfd5cc5d686508fd4c85eee9a44a0d3b25a"
+  evidence_refs:
+    - ".agentplane/tasks/202610050655-WD3HVN/README.md"
+    - ".agentplane/tasks/202610050655-WD3HVN/quality/20261005-071704761-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610050655-WD3HVN/quality/20261005-071704761-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610050655-WD3HVN/quality/20261005-071704761-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610050655-WD3HVN/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610050655-WD3HVN/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610050655-WD3HVN/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610050655-WD3HVN/evidence/failed-only-replay.json"
+    - ".agentplane/tasks/202610050655-WD3HVN/evidence/cumulative-coverage.json"
+    - ".agentplane/tasks/202610050655-WD3HVN/evidence/restored-source-audits.json"
+  findings:
+    - "Reviewed exact11semantic paths and native6hashes;13newappcontracts,old372tests371byteidentical,soleplatformmockcompatibility. All244states/defaults/exceptions retained,10boundednotes. Five restoredsourceaudits and doctor/routingpass. No passing suite/build replay,upstream sources/helpers/probes inAP,or broad parity promotion."
 commit: null
 comments:
   -
