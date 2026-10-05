@@ -4,36 +4,37 @@
     "apps/office/src/sw/source/core/undo/undel.ts",
     "apps/office/src/sw/source/core/undo/unspnd.ts",
     "apps/office/src/sw/source/core/edit/eddel.ts",
-    "apps/office/src/sw/source/core/undo/untbl.ts"
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
   ],
   "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against exact initial variant source hashes; new scope owners retain original base bytes. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
   "carried": {
-    "statements": 357,
-    "functions": 51,
-    "branches": 172
+    "statements": 710,
+    "functions": 166,
+    "branches": 369
   },
   "summary": {
     "lines": {
-      "total": 12356,
-      "covered": 12356,
+      "total": 12367,
+      "covered": 12363,
       "skipped": 0,
-      "pct": 100
+      "pct": 99.96
     },
     "statements": {
-      "total": 13528,
-      "covered": 13528,
+      "total": 13549,
+      "covered": 13544,
       "skipped": 0,
-      "pct": 100
+      "pct": 99.96
     },
     "functions": {
-      "total": 3376,
-      "covered": 3376,
+      "total": 3379,
+      "covered": 3378,
       "skipped": 0,
-      "pct": 100
+      "pct": 99.97
     },
     "branches": {
-      "total": 10073,
-      "covered": 10071,
+      "total": 10079,
+      "covered": 10077,
       "skipped": 0,
       "pct": 99.98
     },
@@ -80,13 +81,14 @@
     }
   },
   "initialMapSHA256": "d163975fc1b310cc2870b9bb9d7cfe9eab54e482f90940539042bc6550c8735f",
-  "finalMapSHA256": "48985819f809ab256d15fc99a1330e92e48566fbfbcae12433785a95d41cc836",
+  "finalMapSHA256": "8801a0e58808ac73c4bd160aa02c741f077c45d1e56868df1625c1031d84ba26",
   "finalProductionSHA256": {
     "apps/office/src/sw/source/core/undo/undobj.ts": "d37b6adba88a30634701ded82d57b934f56dce13bae323ca40dee6c3a9d5bfc9",
     "apps/office/src/sw/source/core/undo/unins.ts": "968b9ef395e02a7f775c71fae9487aef412d88cbe917b2ba6683874b7d215123",
     "apps/office/src/sw/source/core/undo/undel.ts": "7381f8e3f188051045c0eca28d8c634a19842da0002d1f7a2b4e14dc152a7106",
     "apps/office/src/sw/source/core/undo/unspnd.ts": "ae74e9deda59968e51e8e592ed359af63ba11b71f3127c49d0f12f9b2b0fd008",
     "apps/office/src/sw/source/core/edit/eddel.ts": "26e861061a6794c489fcf25b2825ffcf1471f961d25412f90c4549c4ef8f2756",
-    "apps/office/src/sw/source/core/undo/untbl.ts": "c4ce080aeea5c1e09c6dfd1ae72cf97c42b63d2680390ab30350144283fb94a4"
+    "apps/office/src/sw/source/core/undo/untbl.ts": "c4ce080aeea5c1e09c6dfd1ae72cf97c42b63d2680390ab30350144283fb94a4",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "def92f0d1073269b7cf8e0958ad9b707b3bb3a30a1ebb4595425e56a622b9972"
   }
 }
