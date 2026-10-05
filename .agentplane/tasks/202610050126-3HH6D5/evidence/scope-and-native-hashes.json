@@ -1,0 +1,76 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/docnode/node.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints-range.ts",
+    "apps/office/src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 357,
+  "priorByteIdentical": 357,
+  "correctedPriorFiles": 0,
+  "newAppCases": 549,
+  "existingRuntimeRows": 241,
+  "newRuntimeRows": 0,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "fourResponsibilityAppendicesAndTwoHelperExportsOnly": true,
+  "existingComparatorAndRangeHelperBodiesUnchanged": true,
+  "staticChecks": 6,
+  "staticFailedGate": "check:file-size",
+  "staticRecoveryPassed": true,
+  "focusedChangedFileFormatAndLintPassed": true,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 3560,
+    "appFiles": 275,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appCoverage100": true,
+  "inventoryCoverage100": true,
+  "firstPassedAppCases": 3559,
+  "firstFailedAppCases": 1,
+  "failedCasesResolved": 1,
+  "failedOnlyReplayAttempts": 2,
+  "passingCasesRepeated": 0,
+  "noPassingSuiteOrBuildReplay": true,
+  "productionUnchangedAfterFullProfile": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "semanticViolations": 0,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/node.hxx",
+      "sha256": "92f1e375ba39481d1fcd231e58eebd9a57aa17840844db4ac31ccb6c309b9fea"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx",
+      "sha256": "6c97de9ee74658aaa7b4ee64ed396cb87c11872f8681299090c3600e178ca9c9"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+      "sha256": "b59e66c9c5d31bf6fc0416a160e1584e465c4d2ac8e37ddf08607d9b570fbb60"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txatbase.hxx",
+      "sha256": "ac8e656fd70b8348cdf4ad8f58669553a420c70054712c62a423570d52635d6b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtatr2.cxx",
+      "sha256": "0834ec1af0972001223cc0790fe609f331e3e6fdb036752109d9533921cf8de8"
+    }
+  ],
+  "nativeReview": "Iteration131 restores private SwNode IgnoreDontExpand=false with silent native accessors. Bound positive SwpHints.Update reads its own node state and becomes coordinate-only; DEFAULT insertion applies separate AdjustInsertTextHints end-equal and paragraph-prefix adjustment on actual attributes after Update. Ignore expands end-equal ranges without resetting locked or unlocked flags; DEFAULT postprocessing can restore both nonempty ends and empty points. Existing comparator moves unchanged into the range helper under the1000-line gate. Literal two-family/eight-mask/lock/ignore/boundary tests cover actual ownership and fresh false clone/graph16/Worker5 node state. All357 prior tests and241 runtime states/defaults/exceptions remain unchanged. Native Insert flags/temporary FORCE toggles/manager defaults/callers/selection replacement,full GCAttr/COPY/BuildPortions/families/style clients/UNO/refcounts/full core/UI remain unverified; registered I/O deviations preserved,no module or goal promotion."
+}

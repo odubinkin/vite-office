@@ -12,8 +12,8 @@ import type { SwTextNode } from "./ndtxt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
-import { EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
-import { assertTextRange, clipHintOutsideRange } from "./ndhints-range";
+import { AdjustInsertTextHints, EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
+import { assertTextRange, clipHintOutsideRange, compareHints } from "./ndhints-range";
 import { GetTextAttrAt } from "./ndtxt-attribute-query";
 import { GetTextAttrMode } from "../../../inc/swtypes";
 import {
@@ -423,9 +423,9 @@ export class SwpHints {
   ): SwpHints {
     assertTextRange(textLength, offset, offset);
     if (attributes === undefined && hyperlink === undefined)
-      return this.Update(textLength, offset, insertedLength);
+      return this.UpdateForInsert(textLength, offset, insertedLength);
     if (attributes !== undefined && hyperlink === undefined) {
-      this.Update(textLength, offset, insertedLength);
+      this.UpdateForInsert(textLength, offset, insertedLength);
       if (insertedLength === 0) return this;
       const end = offset + insertedLength;
       const retained = this.hintsByStart.flatMap(
@@ -461,10 +461,17 @@ export class SwpHints {
     assertTextRange(textLength, offset, negative ? offset + length : offset);
     if (!Number.isInteger(length) || length < 0)
       throw new Error("Writer hint text length is invalid.");
+    const doc = this.pool.GetDoc(),
+      ignore = this.m_pTextNode?.IsIgnoreDontExpand() ?? false;
     if (length > 0)
-      this.assignOwned(
-        UpdateTextHints(this.pool.GetDoc(), this.hintsByStart, offset, length, negative),
-      );
+      this.assignOwned(UpdateTextHints(doc, this.hintsByStart, offset, length, negative, ignore));
+    return this;
+  }
+
+  /** Coordinates ordinary insertion before its DEFAULT postphase. @param textLength - Original length. @param offset - Position. @param length - Inserted length. @returns This container. */
+  private UpdateForInsert(textLength: number, offset: number, length: number): SwpHints {
+    this.Update(textLength, offset, length);
+    if (length > 0) this.assignOwned(AdjustInsertTextHints(this.hintsByStart, offset, length));
     return this;
   }
 
@@ -882,11 +889,6 @@ export interface WriterTextRunLike {
   readonly hyperlink?: WriterHyperlink;
   /** Visible text in this portion. */
   readonly text: string;
-}
-
-/** Compares hints using LibreOffice start, end, and item ordering. @param left - First. @param right - Second. @returns Signed ordering. */
-function compareHints(left: RangedTextAttr, right: RangedTextAttr): number {
-  return left.start - right.start || right.end - left.end || right.Which() - left.Which();
 }
 
 /** Native Which/start sorting boundary. */

@@ -1,0 +1,76 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "eeade3ef23a48c414ff13d042dd9e46dbba45d4c446bfa306c45ec9425734ad0",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 2415,
+      "sha256": "a07593a2552bfd3abc62ae9aca8b4f79f47bd36da8fc6d48b1983bd503c169c1",
+      "totals": [
+        "Test Files  1 failed | 274 passed (275)",
+        "Tests  1 failed | 3559 passed (3560)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "FAIL  src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts > native node ignore expansion > uses only the bound node and defaults detached maps to false"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "e383d460528694844494b10258b4890040d2e45ec0fd9dd15217338851d6339f",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "f18f1b1240a0164906a9dc581d734635614eceffe919457c20af337de4f380d3",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13571,
+      "sha256": "663a999699b6f22cbee3f059dd6884585bd01a4f6231f8ce10880c9067f5a5e8",
+      "totals": [
+        "99 passed (37.5s)"
+      ],
+      "failedCases": []
+    }
+  ]
+}

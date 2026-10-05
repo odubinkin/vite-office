@@ -36,3 +36,11 @@ export function assertTextRange(textLength: number, start: number, end: number):
   )
     throw new Error("Writer hint range is outside the text node.");
 }
+
+/** Compares hints using LibreOffice start, end, and item ordering. @param left - First. @param right - Second. @returns Signed ordering. */
+export function compareHints(
+  left: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+  right: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+): number {
+  return left.start - right.start || right.end - left.end || right.Which() - left.Which();
+}

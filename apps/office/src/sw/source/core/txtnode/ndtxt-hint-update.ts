@@ -5,13 +5,14 @@ import { MakeTextAttr } from "./thints";
 import type { SwFormatINetFormat } from "./fmtatr2";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
-/** Changes actual supported hint coordinates without splitting continuous values. @param doc - Owning document. @param hints - Stable start-ordered objects. @param offset - Change position. @param length - Positive change length. @param negative - Whether text is removed. @returns Existing objects and native end-boundary collectors. */
+/** Changes actual supported hint coordinates without splitting continuous values. @param doc - Owning document. @param hints - Stable start-ordered objects. @param offset - Change position. @param length - Positive change length. @param negative - Whether text is removed. @param ignoreDontExpand - Owning node state. @returns Existing objects and native end-boundary collectors. */
 export function UpdateTextHints(
   doc: SwDoc,
   hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[],
   offset: number,
   length: number,
   negative: boolean,
+  ignoreDontExpand = false,
 ): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[] {
   const collector = new Map<number, SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>>();
   let noExpand = false;
@@ -22,7 +23,8 @@ export function UpdateTextHints(
     } else if (hint.start >= offset) {
       hint.SetStart(hint.start + length);
       hint.SetEnd(hint.end + length);
-    } else if (hint.end > offset) hint.SetEnd(hint.end + length);
+    } else if (hint.end > offset || (hint.end === offset && ignoreDontExpand))
+      hint.SetEnd(hint.end + length);
     else if (hint.end === offset) {
       if (hint.dontExpand) {
         hint.dontExpand = false;
@@ -32,19 +34,25 @@ export function UpdateTextHints(
       else hint.SetEnd(hint.end + length);
     }
   }
-  // Default InsertText restores DontExpand empty points before paragraph-start expansion.
-  if (!negative)
-    for (const hint of hints)
-      if (hint.start === hint.end && hint.end === offset + length && hint.dontExpand) {
-        hint.SetStart(offset);
-        hint.SetEnd(offset);
-      }
-  // Empty end-equal attributes continue before the native paragraph-start branch.
-  if (!negative && offset === 0)
-    for (const hint of hints)
-      if (hint.start !== hint.end && hint.start === length && !hint.dontExpandStart)
-        hint.SetStart(0);
   return [...hints, ...collector.values()];
+}
+
+/** Applies DEFAULT InsertText adjustment after coordinate Update. @param hints - Actual updated attributes. @param offset - Original insertion position. @param length - Inserted length. @returns The same actual attribute array. */
+export function AdjustInsertTextHints(
+  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[],
+  offset: number,
+  length: number,
+): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[] {
+  for (const hint of hints) {
+    if (hint.end === offset + length) {
+      if (hint.dontExpand) {
+        if (hint.start === hint.end) hint.SetStart(hint.start - length);
+        hint.SetEnd(hint.end - length);
+      } else continue;
+    }
+    if (offset === 0 && hint.start === length && !hint.dontExpandStart) hint.SetStart(0);
+  }
+  return hints;
 }
 
 /** Collects interior no-dummy ranged hints before EraseText updates coordinates. @param doc - Owning document. @param hints - Actual supported attributes. @param offset - Erase start. @param length - Erased length. @returns Retained actual attributes after negative Update. */

@@ -1,0 +1,12 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts -t ^native node ignore expansion uses only the bound node and defaults detached maps to false$",
+  "profile": "upstream-absent",
+  "exit": 0,
+  "bytes": 251,
+  "sha256": "5075b2231cd7c5e04661637cf6f1afbe6562f257b7feb79594b44ee99a197fa3",
+  "totals": [
+    "Test Files  1 passed (1)",
+    "Tests  1 passed | 548 skipped (549)"
+  ],
+  "failedCases": []
+}

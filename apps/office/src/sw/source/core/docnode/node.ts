@@ -17,6 +17,8 @@ export type SwNodeType = "end" | "start" | "text";
 
 /** Base class of every Writer document model element. */
 export abstract class SwNode extends SwContentIndexRegistry {
+  private m_bIgnoreDontExpand = false;
+
   /**
    * Creates a node owned by one SwNodes array.
    * @param nodes - Owning node array.
@@ -30,6 +32,16 @@ export abstract class SwNode extends SwContentIndexRegistry {
     private readonly startOfSection?: SwStartNode,
   ) {
     super();
+  }
+
+  /** Reports whether end-equal hints ignore DontExpand during coordinate updates. @returns Native node state. */
+  public IsIgnoreDontExpand(): boolean {
+    return this.m_bIgnoreDontExpand;
+  }
+
+  /** Assigns the native ignore-expansion state without broadcasting. @param value - New state. @returns Nothing. */
+  public SetIgnoreDontExpand(value: boolean): void {
+    this.m_bIgnoreDontExpand = value;
   }
 
   /** Returns the owning node array. @returns Owning SwNodes. */
