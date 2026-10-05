@@ -4,7 +4,7 @@ title: "Render Writer text from native attribute iteration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved native attribute iteration leaf under standing explicit user authorization; source-confirmed overlap/UI filter adapter only, registered IO deviations unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-05T21:14:30.416Z"
+doc_updated_at: "2026-10-05T21:23:37.720Z"
 doc_updated_by: "CODER"
 description: "Iteration165 removes the browser dependency on filter TextRuns by representing native SwAttrIter/SwAttrHandler ownership and direct effective item projection; fixes overlapping automatic formatting and preserves body/cell editing/history without changing registered IO deviations."
 sections:
@@ -60,7 +60,7 @@ sections:
     4. Afterrestore five source audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/sourcehash/APignoredinclusive/doctor/routing. Sameagent EVALUATOR exactSHApass, recordverify,canonicalmeaningfulfinish,wholeparentFindingsappend/cleantracked+untracked. Full native SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/paragraph mark and broad core/UI/list/table parity remain unverified.
   Verification: "Pending actual deterministic profile and exact semantic-SHA review."
   Rollback Plan: "Revert only this leaf semantic commit; retain immutable completed task evidence and all prior parent findings."
-  Findings: "Previous164 is verified progress. Read-only discovery confirms existing toTextRuns chooses one covering automatic hint and browser depends on filter WriterTextRun. Native itratr SeekFwd traverses separate start/end maps and atrstck maintains each character-item stack with priority. Full native font/device and unrepresented families remain unverified."
+  Findings: "Previous164 verified progress. Native attribute traversal and direct item display implemented;423 prior tests unchanged. Initial format check failed only new E2E import ordering, fixed and failed format gate passed. Initial lint passed. Initial typecheck failed because the projection interface replacement was incomplete and new fixtures used wrong public insertion/invalidation APIs. Correct browser-only WriterTextPortion interface, native SwFormatAutoFormat InsertItem, public dispatcher Invalidate and SwWrtShell Insert; no product API expansion or test workaround. Only failed typecheck and unexecuted dependency/docs/size gates next, changed-file format/lint checks as needed. Full native font/device/other-family and broad UI parity remain unverified."
 id_source: "generated"
 ---
 ## Summary
@@ -100,4 +100,4 @@ Revert only this leaf semantic commit; retain immutable completed task evidence 
 
 ## Findings
 
-Previous164 is verified progress. Read-only discovery confirms existing toTextRuns chooses one covering automatic hint and browser depends on filter WriterTextRun. Native itratr SeekFwd traverses separate start/end maps and atrstck maintains each character-item stack with priority. Full native font/device and unrepresented families remain unverified.
+Previous164 verified progress. Native attribute traversal and direct item display implemented;423 prior tests unchanged. Initial format check failed only new E2E import ordering, fixed and failed format gate passed. Initial lint passed. Initial typecheck failed because the projection interface replacement was incomplete and new fixtures used wrong public insertion/invalidation APIs. Correct browser-only WriterTextPortion interface, native SwFormatAutoFormat InsertItem, public dispatcher Invalidate and SwWrtShell Insert; no product API expansion or test workaround. Only failed typecheck and unexecuted dependency/docs/size gates next, changed-file format/lint checks as needed. Full native font/device/other-family and broad UI parity remain unverified.
