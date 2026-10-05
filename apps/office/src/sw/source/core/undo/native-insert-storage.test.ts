@@ -175,7 +175,7 @@ it("native undo content moves actual interior hint ownership without a second sn
   content.MoveToUndoNds(pam);
   expect(first.GetText()).toBe("");
   expect(storage.Count()).toBe(1);
-  expect(storage.GetText(1).hints.Get(0)).toBe(original);
+  expect(required(storage.GetNode(1).GetpSwpHints()).Get(0)).toBe(original);
   expect(content.GetPayloadSize(doc)).toBe(9);
   const point = new SwPosition(first, 0);
   content.MoveFromUndoNds(point);

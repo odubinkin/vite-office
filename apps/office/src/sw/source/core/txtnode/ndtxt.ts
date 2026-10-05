@@ -69,6 +69,8 @@ import {
   CreateTextNodeHyperlinkFragment,
   AppendTextNodeHints,
   SplitTextNodeEndHints,
+  MoveTextAttrToAttrSet,
+  AssertTextNodeRange,
 } from "./ndtxt-hints";
 import { InsertTextNodeItem, ClearTextNodeHints, FormatTextNodeToTextAttr } from "./thints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
@@ -195,6 +197,12 @@ export class SwTextNode extends SwContentNode {
   public FormatToTextAttr(node: SwTextNode): void {
     FormatTextNodeToTextAttr(this, node);
     if (node.GetOrCreateSwpHints().CanBeDeleted()) node.pSwpHints = undefined;
+  }
+
+  /** Moves eligible full-span hints into this paragraph's native direct item set. @returns Nothing. */
+  public MoveTextAttr_To_AttrSet(): void {
+    MoveTextAttrToAttrSet(this);
+    if (this.pSwpHints?.CanBeDeleted()) this.pSwpHints = undefined;
   }
 
   /** Returns the paragraph adjustment item as a view-friendly value. @returns Paragraph alignment. */
@@ -620,7 +628,7 @@ export class SwTextNode extends SwContentNode {
     hyperlink?: WriterHyperlink,
   ): string {
     if (text.length === 0) return text;
-    this.assertRange(offset, offset);
+    AssertTextNodeRange(this, offset, offset);
     const hints = InsertTextNodeHints(this, text, offset, mode, attributes, hyperlink);
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
@@ -635,7 +643,7 @@ export class SwTextNode extends SwContentNode {
   /** Erases one bounded text range and adjusts all intersecting hints. @param start - Inclusive erase offset. @param count - Maximum erased length. @returns Nothing. */
   public EraseText(start: number, count = Number.MAX_SAFE_INTEGER): void {
     const end = Math.min(this.mText.length, start + count);
-    this.assertRange(start, end);
+    AssertTextNodeRange(this, start, end);
     const removedLength = end - start;
     if (removedLength === 0) {
       if (this.pSwpHints?.CanBeDeleted()) this.pSwpHints = undefined;
@@ -646,7 +654,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Cuts text and transfers its owned hints without turning them into historical snapshots. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Consumable native fragment. */
   public CutTextFragment(start: number, end: number): SwTextFragment {
-    this.assertRange(start, end);
+    AssertTextNodeRange(this, start, end);
     if (start === end) return this.CaptureTextFragment(start, end);
     const text = this.mText.slice(start, end);
     const remaining = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
@@ -668,7 +676,7 @@ export class SwTextNode extends SwContentNode {
     replacement: SwTextFragment,
     transferHints = false,
   ): void {
-    this.assertRange(start, end);
+    AssertTextNodeRange(this, start, end);
     const replacementText = replacement.text;
     const removedLength = end - start;
     const existing = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
@@ -734,7 +742,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Applies or removes one direct format over a non-empty range. @param start - Inclusive format start. @param end - Exclusive format end. @param format - Toggled direct property. @returns Nothing. */
   public ToggleTextRangeFormat(start: number, end: number, format: WriterCharacterFormat): void {
-    this.assertRange(start, end);
+    AssertTextNodeRange(this, start, end);
     const hints = this.GetTextHints().toggleCharacterFormat(
       this.mText.length,
       start,
@@ -760,7 +768,7 @@ export class SwTextNode extends SwContentNode {
     end: number,
     format: WriterCharacterFormat,
   ): "mixed" | "off" | "on" {
-    this.assertRange(start, end);
+    AssertTextNodeRange(this, start, end);
     return this.GetTextHints().getCharacterFormatState(
       this.mText.length,
       start,
@@ -786,7 +794,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Applies, replaces, or removes one hyperlink over a non-empty range. @param start - Inclusive range start. @param end - Exclusive range end. @param hyperlink - Replacement hyperlink or undefined to remove. @returns Nothing. */
   public SetHyperlink(start: number, end: number, hyperlink: WriterHyperlink | undefined): void {
-    this.assertRange(start, end);
+    AssertTextNodeRange(this, start, end);
     if (start === end) return;
     const hints = this.GetTextHints().setHyperlink(this.mText.length, start, end, hyperlink);
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
@@ -798,7 +806,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @returns Prepared trailing text node. */
   public SplitContent(offset: number): SwTextNode {
-    this.assertRange(offset, offset);
+    AssertTextNodeRange(this, offset, offset);
     const prefix = this.CaptureTextFragment(0, offset);
     const suffix = this.CaptureTextFragment(offset, this.Len());
     const trailing = new SwTextNode(
@@ -809,10 +817,11 @@ export class SwTextNode extends SwContentNode {
     );
     const directAttributes = this.GetpSwAttrSet();
     if (directAttributes !== undefined) trailing.SetAttr(directAttributes);
-    const trailingHints = SplitTextNodeEndHints(this, trailing, offset, suffix.hints);
-    trailing.pSwpHints = trailingHints.CanBeDeleted() ? undefined : trailingHints;
+    trailing.pSwpHints = SplitTextNodeEndHints(this, offset, suffix.hints);
     this.mText = prefix.text;
     this.pSwpHints = prefix.hints.CanBeDeleted() ? undefined : prefix.hints;
+    this.MoveTextAttr_To_AttrSet();
+    trailing.MoveTextAttr_To_AttrSet();
     this.MoveContentIndicesFrom(trailing, offset);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -857,7 +866,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Captures text and direct hints without projecting through browser runs. @param start - Inclusive offset. @param end - Exclusive offset. @returns Native fragment. */
   public CaptureTextFragment(start: number, end: number): SwTextFragment {
-    this.assertRange(start, end);
+    AssertTextNodeRange(this, start, end);
     return { text: this.mText.slice(start, end), hints: this.GetTextHints().slice(start, end) };
   }
 
@@ -946,18 +955,6 @@ export class SwTextNode extends SwContentNode {
   /** Returns an independent native hint container, including the empty case. @returns Independent hints. */
   private GetTextHints(): SwpHints {
     return this.pSwpHints?.clone() ?? new SwpHints(this.GetDoc().GetAttrPool());
-  }
-
-  /** Validates a same-node UTF-16 range. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
-  private assertRange(start: number, end: number): void {
-    if (
-      !Number.isInteger(start) ||
-      !Number.isInteger(end) ||
-      start < 0 ||
-      end < start ||
-      end > this.mText.length
-    )
-      throw new Error("Writer text range is outside the text node.");
   }
 }
 

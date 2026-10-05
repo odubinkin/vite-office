@@ -9,10 +9,21 @@ import { SetAttrMode } from "../../../inc/swtypes";
 import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SwFormatAutoFormat } from "./txatbase";
 
-/** Preserves CutText's equal-end attributes in an empty split suffix and moves supported AUTO items to its item set. Other split ownership remains unverified. @param node - Source. @param trailing - New suffix. @param offset - Split position. @param suffix - Captured nonempty suffix hints. @returns Remaining suffix hints. */
+/** Validates the existing text-node range contract at the source-owned responsibility split. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
+export function AssertTextNodeRange(node: SwTextNode, start: number, end: number): void {
+  if (
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    start < 0 ||
+    end < start ||
+    end > node.Len()
+  )
+    throw new Error("Writer text range is outside the text node.");
+}
+
+/** Preserves CutText's equal-end attributes in an empty split suffix and removes closed empty hints. Full CutImpl ownership remains unverified. @param node - Source. @param offset - Split position. @param suffix - Captured nonempty suffix hints. @returns Remaining suffix hints. */
 export function SplitTextNodeEndHints(
   node: SwTextNode,
-  trailing: SwTextNode,
   offset: number,
   suffix: SwpHints,
 ): SwpHints {
@@ -20,16 +31,34 @@ export function SplitTextNodeEndHints(
   const hints = new SwpHints(node.GetDoc().GetAttrPool());
   for (const hint of node.GetpSwpHints()?.entries() ?? []) {
     if (hint.end !== offset || hint.DontExpand()) continue;
-    if (hint.Which() === RES_TXTATR_AUTOFMT && !hint.IsDontMoveAttr()) {
-      trailing.SetAttr((hint.GetAttr() as SwFormatAutoFormat).GetStyleHandle());
-    } else {
-      const copied = hint.clone();
-      copied.SetStart(0);
-      copied.SetEnd(0);
-      hints.Insert(copied);
-    }
+    const copied = hint.clone();
+    copied.SetStart(0);
+    copied.SetEnd(0);
+    hints.Insert(copied);
   }
   return hints;
+}
+
+/** Moves eligible full-span attributes using native start-map traversal and successful SetAttr removal. @param node - Actual paragraph owner. @returns Nothing. */
+export function MoveTextAttrToAttrSet(node: SwTextNode): void {
+  const hints = node.GetpSwpHints();
+  for (let index = 0; hints !== undefined && index < hints.Count(); index++) {
+    const hint = hints.Get(index);
+    if (hint.GetStart() !== 0) break;
+    const end = hint.GetEnd();
+    if (end === undefined) continue;
+    if (end < node.Len() || hint.IsCharFormatAttr()) break;
+    if (hint.IsDontMoveAttr()) continue;
+    const item = hint.GetAttr();
+    if (
+      node.SetAttr(
+        hint.Which() === RES_TXTATR_AUTOFMT ? (item as SwFormatAutoFormat).GetStyleHandle() : item,
+      )
+    ) {
+      hints.DeleteAtPos(index);
+      index--;
+    }
+  }
 }
 
 /** Prepares joined hints, using native CutImpl's CopyAttr branch for an empty source. Full nonempty CutImpl ownership remains unverified. @param node - Surviving node. @param source - Trailing source. @param offset - Destination boundary. @returns Joined native hints. */

@@ -4,7 +4,8 @@
  */
 
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextFragment } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -46,7 +47,7 @@ export class SwUndRng {
 
 /** Owns removed append-only content until the native move from undo storage consumes it. Full SwNodes undo sections and non-end moves remain unverified. */
 export class SwUndoSaveContent {
-  private fragmentId: number | undefined;
+  private boundaryNodeId: number | undefined;
   private readonly nodeIds: number[] = [];
 
   /** Cuts a represented trailing range and moves actual paragraphs out of the live section. @param range - Actual insertion span. @returns Nothing. */
@@ -73,11 +74,26 @@ export class SwUndoSaveContent {
     )
       throw new Error("Writer nontext undo content move is not implemented.");
     const undoNodes = first.GetDoc().GetUndoManager().GetUndoNodes();
-    if (start.GetContentIndex() !== first.Len())
-      this.fragmentId = undoNodes.RetainText(
-        first.CutTextFragment(start.GetContentIndex(), first.Len()),
-        false,
+    if (start.GetContentIndex() !== first.Len()) {
+      const boundary = new SwTextNode(
+        first.GetNodes(),
+        first.StartOfSectionNode(),
+        first.GetTextFormatColl(),
       );
+      const items = new SfxItemSet(first.GetDoc().GetAttrPool(), [
+        [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+      ]);
+      const direct = first.GetpSwAttrSet();
+      if (direct !== undefined) items.PutSet(direct);
+      if (items.Count() !== 0) boundary.SetAttr(items);
+      boundary.ReplaceRange(
+        0,
+        0,
+        first.CutTextFragment(start.GetContentIndex(), first.Len()),
+        true,
+      );
+      this.boundaryNodeId = undoNodes.RetainNode(boundary);
+    }
     const ids: number[] = [];
     for (const node of [...added].reverse()) {
       first.GetNodes().removeTextNode(node as SwTextNode);
@@ -90,15 +106,17 @@ export class SwUndoSaveContent {
   public MoveFromUndoNds(position: SwPosition): void {
     let previous = position.GetNode() as SwTextNode;
     const undoNodes = previous.GetDoc().GetUndoManager().GetUndoNodes();
-    if (this.fragmentId !== undefined) {
+    if (this.boundaryNodeId !== undefined) {
+      const boundary = undoNodes.GetNode(this.boundaryNodeId);
+      boundary.FormatToTextAttr(boundary);
       previous.ReplaceRange(
         position.GetContentIndex(),
         position.GetContentIndex(),
-        undoNodes.GetText(this.fragmentId),
+        boundary.CutTextFragment(0, boundary.Len()),
         true,
       );
-      undoNodes.Release(this.fragmentId);
-      this.fragmentId = undefined;
+      undoNodes.Release(this.boundaryNodeId);
+      this.boundaryNodeId = undefined;
     }
     for (const id of this.nodeIds.splice(0)) {
       const node = undoNodes.GetNode(id);
@@ -111,11 +129,10 @@ export class SwUndoSaveContent {
   /** Counts only actually removed content retained in undo storage. @param doc - Owning document. @returns Payload units. */
   public GetPayloadSize(doc: SwDoc): number {
     const undoNodes = doc.GetUndoManager().GetUndoNodes();
-    let size =
-      this.fragmentId === undefined
-        ? 0
-        : GetFragmentPayloadSize(undoNodes.GetText(this.fragmentId));
-    for (const id of this.nodeIds) {
+    let size = 0;
+    const ids =
+      this.boundaryNodeId === undefined ? this.nodeIds : [this.boundaryNodeId, ...this.nodeIds];
+    for (const id of ids) {
       const node = undoNodes.GetNode(id);
       size +=
         node.Len() + (node.GetpSwpHints()?.Count() ?? 0) * 4 + (node.GetpSwAttrSet()?.Count() ?? 0);
@@ -126,8 +143,8 @@ export class SwUndoSaveContent {
   /** Drops only removed content when its history owner is discarded. @param doc - Owning document. @returns Nothing. */
   public Dispose(doc: SwDoc): void {
     const undoNodes = doc.GetUndoManager().GetUndoNodes();
-    if (this.fragmentId !== undefined) undoNodes.Release(this.fragmentId);
-    this.fragmentId = undefined;
+    if (this.boundaryNodeId !== undefined) undoNodes.Release(this.boundaryNodeId);
+    this.boundaryNodeId = undefined;
     for (const id of this.nodeIds.splice(0)) undoNodes.Release(id);
   }
 }
