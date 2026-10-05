@@ -1,0 +1,33 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts -t <anchored union of 168 recorded exact failed full names>",
+      "profile": "upstream-absent-failed-cases-only",
+      "selectedCases": 168,
+      "selectedNamesSHA256": "e5e4c070259bad2683f56ff8425742596363b2b706e9e7b969e5d3bf4bfd37ae",
+      "exit": 1,
+      "bytes": 204656,
+      "sha256": "e496d043a42e6d6e95600eaaa2cf9085628a4175ae0bdb541cd1094e125d1f34",
+      "totals": [
+        "Test Files  1 failed (1)",
+        "Tests  12 failed | 156 passed | 701 skipped (869)",
+        "⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Insert reverse=false family=53 selection=2..6 mask=2",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Insert reverse=false family=53 selection=2..6 mask=3",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Insert reverse=false family=53 selection=2..6 mask=6",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Insert reverse=false family=53 selection=2..6 mask=7",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Replace reverse=false family=53 selection=2..6 mask=2",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Replace reverse=false family=53 selection=2..6 mask=3",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Replace reverse=false family=53 selection=2..6 mask=6",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > Replace reverse=false family=53 selection=2..6 mask=7",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > composition reverse=false family=53 selection=2..6 mask=2",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > composition reverse=false family=53 selection=2..6 mask=3",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > composition reverse=false family=53 selection=2..6 mask=6",
+        "FAIL  src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts > native same-node selected insertion > composition reverse=false family=53 selection=2..6 mask=7"
+      ]
+    }
+  ]
+}

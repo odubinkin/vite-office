@@ -1,0 +1,9 @@
+{
+  "result": "recovered",
+  "observation": "The second replay orchestration retained the first output path and overwrote the first bounded ledger; the scope audit detected the missing distinct second ledger.",
+  "resolution": "Preserved the second record in its intended path and restored the first record from the observed completed tool result, including exact failed names, hashes and counts; no test rerun.",
+  "firstReplayCount": 168,
+  "secondReplayCount": 12,
+  "productionChanges": 0,
+  "passingReplays": 0
+}

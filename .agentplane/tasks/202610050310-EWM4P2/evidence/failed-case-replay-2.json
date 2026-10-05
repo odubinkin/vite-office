@@ -1,0 +1,19 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts -t <anchored union of 12 recorded exact failed full names>",
+      "profile": "upstream-absent-failed-cases-only",
+      "selectedCases": 12,
+      "selectedNamesSHA256": "16e62c8766edc41b7384c5355b0046d06c6ecdc695f8bfa868ce99d61b54bf62",
+      "exit": 0,
+      "bytes": 253,
+      "sha256": "d158a45186739608d895d53a434c2a8e790e9e7c8d1ab6469220ceb37f0fa4b9",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  12 passed | 857 skipped (869)"
+      ],
+      "failedCases": []
+    }
+  ]
+}

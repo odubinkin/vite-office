@@ -1,0 +1,36 @@
+{
+  "result": "pass",
+  "base": "26805a98703fa8f905daffd8b2e1da7029137eb1",
+  "semanticPaths": [
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 361,
+  "priorTestFilesByteIdentical": 361,
+  "newIndependentCases": 869,
+  "existingRuntimeRows": 243,
+  "existingRowsStatesDefaultsExceptionsUnchanged": true,
+  "onlyBoundedAppendices": 4,
+  "crossNodeAndCollapsedAndRemainingEditingBodiesUnchanged": true,
+  "productionAndDocsUnchangedAfterFirstProfile": true,
+  "oneFullAbsentProfile": true,
+  "failedOnlyReplayCounts": [
+    168,
+    12
+  ],
+  "passingReplays": 0,
+  "allReferenceRestored": true,
+  "nativeSHA256": {
+    "sw/source/uibase/wrtsh/wrtsh1.cxx": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac",
+    "sw/source/core/edit/editsh.cxx": "73025af65692efee4e3d59d565c1597958092657bd751077afaf168c7f751f08",
+    "sw/source/core/undo/undel.cxx": "290817001673a6a745e944e18fddd750858370ecf7f121178d6e99d969bf0e75",
+    "sw/source/core/undo/rolbck.cxx": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17",
+    "sw/source/core/undo/docundo.cxx": "25317403b9e01736eef297c38a376c494190f86d8631c4bfaefb576d87e7967d",
+    "svl/source/undo/undo.cxx": "fb98a5bd200ad6852afe07dedc0ac6c552ff51a287811ef88cc21979f80af8d7",
+    "sw/source/core/txtnode/thints.cxx": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+  }
+}
