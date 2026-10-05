@@ -4,7 +4,7 @@ title: "Restore node-owned ignore-expansion state and pure hint Update"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T01:44:11.184Z"
+  updated_by: "CODER"
+  note: "Bounded131 leaf verified: native node ignore state,pure coordinate Update and DEFAULT postphase;one absent full profile,one failed-only case resolved,100%app/inventory coverage,357prior tests/241states preserved,restored audits0violations,exact-SHAqualitypass;full flags/core/UI unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -59,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port native SwNode ignore-expansion ownership and pure Update/default insertion separation under the standing parity goal;one absent profile and exact failed-name recovery only."
+  -
+    type: "verify"
+    at: "2026-10-05T01:44:11.184Z"
+    author: "CODER"
+    state: "ok"
+    note: "Bounded131 leaf verified: native node ignore state,pure coordinate Update and DEFAULT postphase;one absent full profile,one failed-only case resolved,100%app/inventory coverage,357prior tests/241states preserved,restored audits0violations,exact-SHAqualitypass;full flags/core/UI unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T01:42:33.364Z"
+doc_updated_at: "2026-10-05T01:44:11.237Z"
 doc_updated_by: "CODER"
 description: "Port native SwNode IgnoreDontExpand default/state and separate generic hint Update coordinates from DEFAULT InsertText postprocessing for actual AUTO/INET owners,with source-independent tests and one absent-reference full profile."
 sections:
@@ -95,7 +101,64 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Static first,one absent-reference full profile,record exact failed names immediately and replay only failed cases. Restore before five source audits and all scope/APaudits. Audit357prior test files/241runtime states and native hashes. No upstream/helper/source artifacts.
-  Verification: "Pending implementation and validation."
+  Verification: |-
+    Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+    Result: pass after failed size gate recovery only.
+    Evidence: static-gates.json records fivepasses/size1001fail; static-recovery.json records sizepass after compacting call. Changed-file Prettier and ESLint passed after their final edits.
+    Scope: approved seven semantic paths;source and docs conventions/types/dependencies/line budgets.
+
+    Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+    Result: full profile once,upstream absent;build/inventory/scripts/Chromium pass;app first3559pass/1newfixturefail of3560.
+    Evidence: absent-profile.json;app/inventory100%lines/statements/functions/branches;inventory109,scripts5,Chromium99. Exactfailedname captured immediately.
+    Scope: source-independent runtime/app/inventory/scripts/UI. Catalog renamed inside repository and restored in finally;no source audits concurrent.
+
+    Command: npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts -t '^native node ignore expansion uses only the bound node and defaults detached maps to false$'.
+    Result: pass1case/548skipped after two failed-only attempts.
+    Evidence: failed-only-replay.json and failed-only-replay-2.json. AUTO shared-handle collector merge and longer-end sort expectations corrected only in the new fixture. Zero passing cases/suites/builds repeated;production unchanged after fullprofile;vendor restored after both attempts.
+    Scope: the one exact failed locality case only.
+
+    Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+    Result: pass5restored-source audits.
+    Evidence: restored-source-audits.json;0semanticviolations.
+    Scope: source/static audits after reference restoration only.
+
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; exact scope/native hash/read-only SHA audit;ignored-inclusive Agentplane artifact scan.
+    Result: pass;doctor0errors/two unchanged legacywarnings;routingOK.
+    Evidence: scope-and-native-hashes.json;quality report .agentplane/tasks/202610050126-3HH6D5/quality/20261005-014327502-recovery-context/quality-report.json;evaluated semantic SHA 5d2851ce11906bdb470530beba6e4c8e83e31171. Sevenpaths,357prior test files byte-identical,241runtime states/defaults/exceptions unchanged;549newcases;7nativehashes;AP3899files/0forbidden.
+    Scope: same-actor read-only bounded leaf review,not independent evidence or full parity promotion. Native flags/callers/full core/UI remain unverified;registered I/O/recovery deviations preserved.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T01:44:11.184Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Bounded131 leaf verified: native node ignore state,pure coordinate Update and DEFAULT postphase;one absent full profile,one failed-only case resolved,100%app/inventory coverage,357prior tests/241states preserved,restored audits0violations,exact-SHAqualitypass;full flags/core/UI unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T01:44:10.834Z, excerpt_hash=sha256:0e96ef67baf1e832c4652a914f46ff6b3c10ae1da259a994477fa383d55675ff
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050126-3HH6D5/blueprint/resolved-snapshot.json
+    - old_digest: d3fcdbe59a4a9d445a4e3a0aa14793cfcc8629123a43b2ecfb8806fd3c34d03d
+    - current_digest: d3fcdbe59a4a9d445a4e3a0aa14793cfcc8629123a43b2ecfb8806fd3c34d03d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610050126-3HH6D5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610050126-3HH6D5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without rewriting history."
   Findings: |-
     Preflight131:cleanmain99349e412e50dfcf0e90b3952f3e49dc81d86a52,direct,onlyparentDOING. Iteration130 verified progress,notblocked. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native IgnoreDontExpand lives on SwNode(node.hxx106/accessors168-169),not SwContentNode;all node.cxxconstructors initialize false. SwTextNode::Update ndtxt.cxx1374 expands an end-equal hint when IsIgnoreDontExpand is true,without resetting DontExpand even when locked. Native InsertText saves this state,temporarily overrides it forFORCE,restores it before native end-equal/post-prefix processing. DEFAULT postprocessing can undo nonempty end expansion while preserving DontExpand;current helper handles only zero end-equal hints and mixes insertion postprocessing into genericUpdate. This leaf repairs the owner/coordinate/postphase contract before implementing the flags and callers. CompareSwpHtStart ndhints.cxx33 establishes existing start/end/Which ordering;extraction preserves current bounded comparator body and leaves native pointer-tie/CHARFMT sorting unverified. Standing goal authorizes this safe local implementation/refactoring. Four matched policies read;user-instructions absent. No network/outside/global access.
@@ -146,7 +209,63 @@ Static first,one absent-reference full profile,record exact failed names immedia
 
 ## Verification
 
-Pending implementation and validation.
+Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+Result: pass after failed size gate recovery only.
+Evidence: static-gates.json records fivepasses/size1001fail; static-recovery.json records sizepass after compacting call. Changed-file Prettier and ESLint passed after their final edits.
+Scope: approved seven semantic paths;source and docs conventions/types/dependencies/line budgets.
+
+Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+Result: full profile once,upstream absent;build/inventory/scripts/Chromium pass;app first3559pass/1newfixturefail of3560.
+Evidence: absent-profile.json;app/inventory100%lines/statements/functions/branches;inventory109,scripts5,Chromium99. Exactfailedname captured immediately.
+Scope: source-independent runtime/app/inventory/scripts/UI. Catalog renamed inside repository and restored in finally;no source audits concurrent.
+
+Command: npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts -t '^native node ignore expansion uses only the bound node and defaults detached maps to false$'.
+Result: pass1case/548skipped after two failed-only attempts.
+Evidence: failed-only-replay.json and failed-only-replay-2.json. AUTO shared-handle collector merge and longer-end sort expectations corrected only in the new fixture. Zero passing cases/suites/builds repeated;production unchanged after fullprofile;vendor restored after both attempts.
+Scope: the one exact failed locality case only.
+
+Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+Result: pass5restored-source audits.
+Evidence: restored-source-audits.json;0semanticviolations.
+Scope: source/static audits after reference restoration only.
+
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; exact scope/native hash/read-only SHA audit;ignored-inclusive Agentplane artifact scan.
+Result: pass;doctor0errors/two unchanged legacywarnings;routingOK.
+Evidence: scope-and-native-hashes.json;quality report .agentplane/tasks/202610050126-3HH6D5/quality/20261005-014327502-recovery-context/quality-report.json;evaluated semantic SHA 5d2851ce11906bdb470530beba6e4c8e83e31171. Sevenpaths,357prior test files byte-identical,241runtime states/defaults/exceptions unchanged;549newcases;7nativehashes;AP3899files/0forbidden.
+Scope: same-actor read-only bounded leaf review,not independent evidence or full parity promotion. Native flags/callers/full core/UI remain unverified;registered I/O/recovery deviations preserved.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T01:44:11.184Z — VERIFY — ok
+
+By: CODER
+
+Note: Bounded131 leaf verified: native node ignore state,pure coordinate Update and DEFAULT postphase;one absent full profile,one failed-only case resolved,100%app/inventory coverage,357prior tests/241states preserved,restored audits0violations,exact-SHAqualitypass;full flags/core/UI unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T01:44:10.834Z, excerpt_hash=sha256:0e96ef67baf1e832c4652a914f46ff6b3c10ae1da259a994477fa383d55675ff
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050126-3HH6D5/blueprint/resolved-snapshot.json
+- old_digest: d3fcdbe59a4a9d445a4e3a0aa14793cfcc8629123a43b2ecfb8806fd3c34d03d
+- current_digest: d3fcdbe59a4a9d445a4e3a0aa14793cfcc8629123a43b2ecfb8806fd3c34d03d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610050126-3HH6D5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610050126-3HH6D5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
