@@ -1,10 +1,11 @@
 ---
 id: "202610051149-WY14DH"
 title: "Own selected table text deletion in native edit-shell ranges"
-status: "DOING"
+result_summary: "Delivered native selected-table text deletion and removed private wrtsh cross-paragraph selection deletion. Delete/Backspace/cut remove all selected cell content without joining cells, retain neighbor/table identities, restore native hints/list/paragraph items through repeated Undo/Redo and resume input/ODT serialization. Core CopyAttr zero-length attribute merge replaces erroneous raw duplicate-boundary concatenation. ONE full upstream-absent profile with only exact failed/new retries; no passing replay. All246prior semantic states/defaults/conscious I/O/recovery deviations retained; new eddel module remains unverified for broader profiles. Native ring insertion/replacement/paste and broader CutImpl/history/layout/merged/nested/protection/redlines remain separate; broad goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610051149-WY14DH/evidence/final-coverage.json"
   findings:
     - "Same-agent explicit EVALUATOR phase, no independent reviewer claim. Native eddel rings/temporary flat-cell ranges and sequential node-index history remove the private wrtsh selection deletion owner. Empty-source CopyAttr merging fixed from native code. Failed/new-only closures and source audits satisfy approved contract; provenance prior order restored with values unchanged."
-commit: null
+commit:
+  hash: "44365340304096189a33370ecfdc3fc61de9ae3e"
+  message: "🧩 WY14DH task: record selected-cell deletion verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement native ring/section selected table deletion in core eddel, preserve table structure/history and existing deviations, then one upstream-absent full profile and failed/new-only closure."
+  -
+    author: "CODER"
+    body: "Verified: selected-cell deletion is owned by native core eddel rings and flat-section DeleteSel, with sequential native history, one Undo boundary, table-mode caret exit and restored selection through Undo; empty-source CopyAttr fixes continued formatted insertion.25new app and2new Chromium cases closed,394old test files unchanged,actual coverage100,source audits/quality pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified bounded selected-cell deletion: native eddel ring/flat-section ownership, sequential SwUndoDelete history, table-mode caret exit/Undo restoration and continued input. Six statics, ONE upstream-absent full profile, exact failed/new closures, changed-file statics and five restored source audits pass;25new app and2new Chromium cases closed,394old test files byte-identical,246old semantic states/defaults/exceptions retained. Actual merged/aligned coverage100. Final empty-source CopyAttr fix verified by focused native/Chromium and changed-source checks after initial build, without successful replay. Exact-SHA EVALUATOR pass on ca83c26ff092, broad residuals recorded; no AP sources/helpers or network/outside access."
+  -
+    type: "status"
+    at: "2026-10-05T12:53:36.023Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: selected-cell deletion is owned by native core eddel rings and flat-section DeleteSel, with sequential native history, one Undo boundary, table-mode caret exit and restored selection through Undo; empty-source CopyAttr fixes continued formatted insertion.25new app and2new Chromium cases closed,394old test files unchanged,actual coverage100,source audits/quality pass."
 doc_version: 3
-doc_updated_at: "2026-10-05T12:52:19.574Z"
+doc_updated_at: "2026-10-05T12:53:36.026Z"
 doc_updated_by: "CODER"
 description: "Move selection deletion from the single-cursor wrtsh editing helper into core eddel ownership; traverse native rings and partition ordinary flat-table cross-cell selections without joining boxes, preserve one history unit and native table-mode exit."
 sections:
@@ -138,6 +151,10 @@ sections:
     - Observation: Exact-SHA review found unnecessary sorting of existing provenance entries. Runtime modules still retain required lexicographic order; provenance restored original prior-entry order with new module appended.
       Impact: Reduces unrelated metadata diff without changing any entry value, marker, source contract or evidence.
       Resolution: Asserted complete value equality before/after reorder. No source/test change and no passing-gate replay; repeat exact-SHA audit at final metadata commit.
+extensions:
+  implementation_commit:
+    hash: "ca83c26ff092f7a8a84a1407b0f12bcef599c666"
+    message: "🧩 WY14DH code: retain existing provenance order"
 id_source: "generated"
 ---
 ## Summary
