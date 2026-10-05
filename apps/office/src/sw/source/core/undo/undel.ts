@@ -1,6 +1,7 @@
 /** @fileoverview Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx. */
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
 import { SwHistory } from "./rolbck";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
@@ -158,10 +159,11 @@ export class SwUndoReplace extends SwUndo {
   }
 }
 
-/** Reversible paragraph join retaining only the removed trailing node snapshot. */
+/** Reversible paragraph join retaining the trailing node and both boundaries' native attribute history. */
 export class SwUndoJoinParagraphs extends SwUndo {
   private readonly undoNodes: SwUndoNodes;
   private readonly removedNodeId: number;
+  private readonly m_pHistory = new SwHistory();
   /** Creates one join action. @param precedingParagraphId - Surviving leading node. @param joinOffset - Original leading text length. @param removedParagraph - Removed trailing node state. @param before - Cursor before join. @param after - Cursor after join. @returns Nothing. */
   public constructor(
     private readonly precedingParagraph: SwTextNode,
@@ -173,12 +175,18 @@ export class SwUndoJoinParagraphs extends SwUndo {
     super("Join Paragraphs", before, after);
     this.undoNodes = precedingParagraph.GetDoc().GetUndoManager().GetUndoNodes();
     this.removedNodeId = this.undoNodes.RetainNode(removedParagraph);
+    for (const node of [precedingParagraph, removedParagraph]) {
+      this.m_pHistory.CopyAttr(node.GetpSwpHints(), node.GetIndex(), 0, node.Len(), true);
+      const direct = node.GetpSwAttrSet();
+      if (direct !== undefined) this.m_pHistory.CopyFormatAttr(direct, node.GetIndex());
+      this.m_pHistory.AddColl(node.GetTextFormatColl(), node.GetIndex(), node.GetNodeType());
+    }
   }
 
   /** Reports one removed paragraph payload. @returns Approximate serialized units. */
   public override GetPayloadSize(): number {
     const removedParagraph = this.undoNodes.GetNode(this.removedNodeId);
-    return removedParagraph.Len() + (removedParagraph.GetpSwpHints()?.Count() ?? 0);
+    return removedParagraph.Len() + this.m_pHistory.Count() * 4;
   }
 
   /** Releases the disconnected paragraph when history drops this action. @returns Nothing. */
@@ -197,12 +205,18 @@ export class SwUndoJoinParagraphs extends SwUndo {
         this.joinOffset,
         this.undoNodes.GetNode(this.removedNodeId),
       );
+    for (const node of [preceding, this.undoNodes.GetNode(this.removedNodeId)]) {
+      node.ClearSwpHintsArr(true);
+      node.ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END - 1);
+    }
+    this.m_pHistory.TmpRollback(document, 0, false);
   }
 
   /** Joins the trailing node into its predecessor again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
     const preceding = GetUndoTextNode(document, this.precedingParagraph);
+    this.m_pHistory.SetTmpEnd(this.m_pHistory.Count());
     document
       .GetDocumentContentOperationsManager()
       .JoinTextNodes(preceding, this.undoNodes.GetNode(this.removedNodeId));

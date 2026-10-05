@@ -278,7 +278,12 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoJoinParagraphs);
     expect(document.paragraphs).toHaveLength(1);
     shell.Undo();
-    expect(encodeWriterDocument(document).textNodes[1]).toEqual(trailingSnapshot);
+    // Native collection history calls ChgFormatColl with default SetListLevel=true,
+    // so restoring this assigned heading collection also writes its direct level 0.
+    expect(encodeWriterDocument(document).textNodes[1]).toEqual({
+      ...trailingSnapshot,
+      autoAttributes: [...(trailingSnapshot?.autoAttributes ?? []), { value: 0, which: 84 }],
+    });
     shell.Redo();
     expect(
       document.paragraphs.map(

@@ -11,7 +11,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwTextNode } from "./ndtxt";
 import type { SwAttrPool } from "../attr/swatrset";
-import { MakeTextAttr } from "./thints";
+import { MakeTextAttr, MergeTextNodePortions } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
 import { AdjustInsertTextHints, EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
 import {
@@ -233,6 +233,12 @@ export class SwpHints {
         entry,
       ) => entry !== hint,
     );
+  }
+
+  /** Merges registered automatic-style portions and normalizes native format-ignore boundaries. @param node - Native owning paragraph. @returns Whether merged. */
+  public MergePortions(node: SwTextNode): boolean {
+    void node;
+    return MergeTextNodePortions(this);
   }
 
   /** Returns the number of ranged attributes. @returns Hint count. */

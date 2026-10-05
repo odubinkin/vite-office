@@ -5,8 +5,12 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwpHints } from "../txtnode/ndhints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwContentNode, type SwNodeType } from "../docnode/node";
+import type { SwFormatColl, SwTextFormatColl } from "../doc/fmtcol";
 
-/** Native history discriminants from core/inc/rolbck.hxx;only old ranged text history is implemented. */
+/** Native history discriminants;registered old ranged text,direct format and text collection entries are implemented. */
 export enum HISTORY_HINT {
   HSTRY_SETFMTHNT,
   HSTRY_RESETFMTHNT,
@@ -40,6 +44,45 @@ export abstract class SwHistoryHint {
   }
   /** Restores the entry into the graph. @param doc - Destination graph. @param tmp - Temporary rollback. @returns Nothing. */
   public abstract SetInDoc(doc: SwDoc, tmp: boolean): void;
+}
+
+/** Native cloned direct format item,retained by temporary rollback and released by destructive rollback. */
+export class SwHistorySetFormat extends SwHistoryHint {
+  private m_pAttr: SfxPoolItem | undefined;
+  /** Clones one old registered direct item. @param item - Original value. @param m_nNodeIndex - Original content node index. @returns Nothing. */
+  public constructor(
+    item: SfxPoolItem,
+    private readonly m_nNodeIndex: number,
+  ) {
+    super(HISTORY_HINT.HSTRY_SETFMTHNT);
+    this.m_pAttr = item.Clone() as SfxPoolItem;
+  }
+  /** Restores registered content-node items;table frame/formula/drop variants remain outside this implemented profile. @param doc - Actual graph. @param tmp - Whether retain the item. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc, tmp: boolean): void {
+    const node = doc.GetNodes().at(this.m_nNodeIndex);
+    if (node instanceof SwContentNode) node.SetAttr(this.m_pAttr as SfxPoolItem);
+    if (!tmp) this.m_pAttr = undefined;
+  }
+}
+
+/** Native collection identity and content type,with a live-owner check before restoration. */
+export class SwHistoryChangeFormatColl extends SwHistoryHint {
+  /** Records the collection pointer rather than its name. @param m_pColl - Original collection. @param m_nNodeIndex - Original index. @param m_nNodeType - Content category. @returns Nothing. */
+  public constructor(
+    private readonly m_pColl: SwFormatColl,
+    private readonly m_nNodeIndex: number,
+    private readonly m_nNodeType: SwNodeType,
+  ) {
+    super(HISTORY_HINT.HSTRY_CHGFMTCOLL);
+  }
+  /** Restores only a matching text node and still-live paragraph collection. @param doc - Actual graph. @param tmp - Temporary policy;collection identity is retained in both modes. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc, tmp: boolean): void {
+    void tmp;
+    const node = doc.GetNodes().at(this.m_nNodeIndex);
+    if (!(node instanceof SwTextNode) || node.GetNodeType() !== this.m_nNodeType) return;
+    if (doc.GetTextFormatColls().includes(this.m_pColl as SwTextFormatColl))
+      node.ChgFormatColl(this.m_pColl);
+  }
 }
 /** Cloned native item and original coordinates,retaining only format-ignore flags. */
 export class SwHistorySetText extends SwHistoryHint {
@@ -101,6 +144,16 @@ export class SwHistory {
   ): void {
     if (newAttr) throw new Error("Writer new-attribute reset history is not implemented.");
     this.m_SwpHstry.push(new SwHistorySetText(hint, nodeIndex));
+  }
+
+  /** Copies explicit registered old format values in native item order. @param set - Direct node set. @param nodeIndex - Original index. @returns Nothing. */
+  public CopyFormatAttr(set: SfxItemSet, nodeIndex: number): void {
+    for (const item of set.entries()) this.m_SwpHstry.push(new SwHistorySetFormat(item, nodeIndex));
+  }
+
+  /** Captures the live collection pointer and node type. @param collection - Original collection. @param nodeIndex - Original index. @param nodeType - Original category. @returns Nothing. */
+  public AddColl(collection: SwFormatColl, nodeIndex: number, nodeType: SwNodeType): void {
+    this.m_SwpHstry.push(new SwHistoryChangeFormatColl(collection, nodeIndex, nodeType));
   }
   /** Copies old ranged items using native half-open overlap tests. @param hints - Optional original maps. @param nodeIndex - Original node index. @param start - Range start. @param end - Range end. @param copyFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
   public CopyAttr(

@@ -12,6 +12,8 @@ import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISCOUNTED,
   WRITER_TEXT_NODE_WHICH_RANGES,
+  RES_CHRATR_BEGIN,
+  RES_CHRATR_END,
 } from "../../../inc/hintids";
 
 /** Applies every supported canonical content mutation through SwPosition and SwPaM. */
@@ -75,6 +77,18 @@ export class DocumentContentOperationsManager {
     )
       throw new Error("Writer join requires adjacent SwTextNodes in one document.");
     const offset = preceding.Len();
+    if (offset !== 0) trailing.FormatToTextAttr(preceding);
+    else {
+      preceding.ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END - 1);
+      const direct = trailing.GetpSwAttrSet();
+      if (direct !== undefined) {
+        const items = new SfxItemSet(this.document.GetAttrPool(), [
+          [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+        ]);
+        items.PutSet(direct);
+        preceding.SetAttr(items);
+      }
+    }
     preceding.AppendTextNode(trailing);
     preceding.GetNodes().removeTextNode(trailing);
     return offset;

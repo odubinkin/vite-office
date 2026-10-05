@@ -68,7 +68,7 @@ import {
   CreateTextNodeToggledFragment,
   CreateTextNodeHyperlinkFragment,
 } from "./ndtxt-hints";
-import { InsertTextNodeItem, ClearTextNodeHints } from "./thints";
+import { InsertTextNodeItem, ClearTextNodeHints, FormatTextNodeToTextAttr } from "./thints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import type { SwFormatINetFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -187,6 +187,12 @@ export class SwTextNode extends SwContentNode {
   /** Clears implemented text attributes while retaining the allocated map. @param deleteFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
   public ClearSwpHintsArr(deleteFields: boolean): void {
     ClearTextNodeHints(this, deleteFields);
+  }
+
+  /** Converts direct character items into native ranged automatic styles before joining. @param node - Surviving paragraph. @returns Nothing. */
+  public FormatToTextAttr(node: SwTextNode): void {
+    FormatTextNodeToTextAttr(this, node);
+    if (node.GetOrCreateSwpHints().CanBeDeleted()) node.pSwpHints = undefined;
   }
 
   /** Returns the paragraph adjustment item as a view-friendly value. @returns Paragraph alignment. */

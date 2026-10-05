@@ -165,9 +165,19 @@ describe("internet node transition ownership", /** Registers actual existing tra
     expect(shell.Undo()).toBe(true);
     expect(doc.paragraphs[1]).toBe(trailing);
     links(node);
-    expect(links(trailing)[0]).toBe(tail);
+    const restoredTail = required(links(trailing)[0]);
+    expect(restoredTail).not.toBe(tail);
+    expect(restoredTail.format).not.toBe(tail?.format);
+    expect([restoredTail.start, restoredTail.end]).toEqual([0, 2]);
+    expect(restoredTail.format.GetHyperlink()).toEqual(tail?.format.GetHyperlink());
+    expect([
+      restoredTail.dontExpand,
+      restoredTail.dontExpandStart,
+      restoredTail.dontMoveAttr,
+      restoredTail.IsLockExpandFlag(),
+    ]).toEqual([true, true, false, true]);
     expect(shell.Redo()).toBe(true);
     links(node);
-    expect(links(trailing)[0]).toBe(tail);
+    expect(links(trailing)[0]).toBe(restoredTail);
   });
 });
