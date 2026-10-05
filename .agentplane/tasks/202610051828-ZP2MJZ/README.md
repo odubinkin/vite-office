@@ -1,10 +1,11 @@
 ---
 id: "202610051828-ZP2MJZ"
 title: "Resolve formatting history through current native coordinates"
-status: "DOING"
+result_summary: "Removed retained paragraph-object identities from directcharacter/item/alignment/margin/reset/style history;current numeric SwNodes targets and SwUndRng/PaM current range replay,Reset exactcapture resolves currentowners,existing docguards/payloads/defaults retained.45new nativebody/cell shellhistorycases pass,411prior testfiles/250records preserved,allgates pass,exactsemantic40d686bd38b065db764953faeec7121cc7d315e1 same-agentEVALUATORpass. FullnativeSwHistory/attribute payload/othernodepointers/split physicalownership/broadUI parity unverified;goalactive."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202610051828-ZP2MJZ/evidence/final-coverage.json"
   findings:
     - "45new nativebody/cell historycases,411prior tests/250records preserved;12316distinct app/109inventory/5scripts/120Chromium finalproduction.6static gates pass (onlyfailedlint repeated);ONEfullabsent profile thenoriginal4failed-only4pass41skipped;fixture correction only,unchangedproduction;actual100%L/S/F/B,5audits0violations. Same agent explicit EVALUATOR, no independentreviewclaim."
-commit: null
+commit:
+  hash: "71e9f78f2c5aedacdf383f12287128b4b3965fb1"
+  message: "🧩 ZP2MJZ task: record verified formatting coordinate ownership"
 comments:
   -
     author: "CODER"
     body: "Start: native formatting coordinate ownership migration under standing iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified:6represented formatting/reset/style actions resolve native numeric targets/ranges;45newcases,411prior unchanged,12316app/109inventory/5scripts/120Chromium exactproduction,actual100%coverage,ONEfull absent profile thenoriginal4failed-only closure. Fullnativehistory/payload/split/UI remainsopen."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "6statics afteronlyfailedlint retry;ONEfull absent profile thenoriginal4failed-only fixture closure4pass41skipped;12316distinctapp/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exactsemantic40d686bd38b065db764953faeec7121cc7d315e1 sameagent EVALUATORpass;fullnativehistory/payload/split/UI unverified,goalactive."
+  -
+    type: "status"
+    at: "2026-10-05T18:46:27.674Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:6represented formatting/reset/style actions resolve native numeric targets/ranges;45newcases,411prior unchanged,12316app/109inventory/5scripts/120Chromium exactproduction,actual100%coverage,ONEfull absent profile thenoriginal4failed-only closure. Fullnativehistory/payload/split/UI remainsopen."
 doc_version: 3
-doc_updated_at: "2026-10-05T18:46:06.114Z"
+doc_updated_at: "2026-10-05T18:46:27.675Z"
 doc_updated_by: "CODER"
 description: "Iteration159 migrate formatting/reset/style history node ownership to native numeric targets and range replay; remove retained paragraph identities blocking native split ownership migration."
 sections:
@@ -123,6 +136,10 @@ sections:
     Actual final app/inventory100%L/S/F/B:app12386lines/13558statements/3374functions/10070branches;inventory1464/1523/384/1080. Actual initial/failed-only counters merged only after identical statement/function/branch location maps and unchanged productionSHA unattr a74074921c7655a1f78d2fc0c4de3ea393bf6023ff1aaaafb947e9fff195fb9d,unfmco125b4e478767cc1dbc83eab3bf2c9ec662cb8c751c0640cdc3d8762378fb53ee. No changed-source counter transfer/fabrication. Maps/results onlyignored appcache.5restoredsource audits pass0semanticviolations. APignoredinclusive scan4271files0forbidden/doctor0errors2oldwarnings/routingOK. Vendor restoredfinally afterbothabsent profiles;no network/outside/global/subagents/upstreamcopies/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics inAP. Inline edit assertion caught stale replacement string beforefilewrite,route recomputed and corrected inline safely,no partial sourcewrite.
     Limits:represented numeric target/range ownership only. Wholecharacter fragments still replay through ReplaceUndoRange rather than full native attribute-only m_AttrSet/SwHistory machinery; directitem/fullhint/style identifier snapshots and originaldocguard adjuncts remain portable contracts. Fullnative SwHistory/SwRegHistory/registered item/text deltas/reset-range/conditionalcollection/undoarea/redline/client/frame semantics stillopen. Other list/deletion action pointers, retained split trailing bridge and native freshprefix/originalsuffix physicalownership remainopen. Broad UI/list/table merged/nested/protected/layout/clipboard/rendering behavior unverified;conscious save/open/recovery deviations preserved,parentDOING/goalactive,no broad/fullmodulepromotion.
     Same coding agent in explicit EVALUATOR role reviewed exact semantic SHA40d686bd38b065db764953faeec7121cc7d315e1 and returned pass quality20261005-184526445-recovery-context; no independent reviewer claimed. Required evidence and unchanged productionvariant limits recorded in exact-sha-review/scope-audit/final-coverage. Goalactive; no fullmodule/broadpromotion.
+extensions:
+  implementation_commit:
+    hash: "40d686bd38b065db764953faeec7121cc7d315e1"
+    message: "🧩 ZP2MJZ code: resolve formatting history through native coordinates"
 id_source: "generated"
 ---
 ## Summary
