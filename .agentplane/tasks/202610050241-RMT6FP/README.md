@@ -1,10 +1,11 @@
 ---
 id: "202610050241-RMT6FP"
 title: "Restore native attribute history for same-node deletion undo"
-status: "DOING"
+result_summary: "Same-node deletion undo now uses native attribute history and raw deleted text; grouped deletions retain the first history, undo reconstructs native hints and redo resets temporary rollback. All 919 new cases passed first, the single observed ownership fixture passed its exact replay, and remaining parity gaps stay unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Delete undo now clears hints,inserts raw text withNOHINT2 and restores original whole-node history;grouping retains firsthistory,redo resetsTmpEnd,disposal releases;old fragment stitching removed."
     - "One full absent profile;app10153cases with one observed old ownership failure recovered by one exactcase replay,15others skipped;app/inventory100%allfour,no passing replays,production/docs hashes unchanged."
     - "Thirteen semantic paths;359of360prior files byte-identical,four .text constructor migrations and onlytwo Count expectations in one observedcase corrected;242existingstates/defaults/exceptions retained,one new243rdhistoryrow whollyunverified."
-commit: null
+commit:
+  hash: "23e122698373c287d1c0ee198999e60825673382"
+  message: "🧩 RMT6FP task: record verified native deletion history"
 comments:
   -
     author: "CODER"
     body: "Start: restore native same-node delete attribute history under standing parity goal."
+  -
+    author: "CODER"
+    body: "Verified: native old AUTO/INET attribute history restores same-node deletion undo through cloned native items and saved FormatIgnore flags. One full upstream-absent profile and one exact failed-case replay passed; restored audits and same-actor quality review passed."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native old AUTO/INET hint history and same-node deletion undo verified at 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8. One full upstream-absent profile and one exact failed-case replay only; coverage 100%, restored source audits and same-actor quality review passed; remaining parity gaps unverified."
+  -
+    type: "status"
+    at: "2026-10-05T03:08:16.240Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native old AUTO/INET attribute history restores same-node deletion undo through cloned native items and saved FormatIgnore flags. One full upstream-absent profile and one exact failed-case replay passed; restored audits and same-actor quality review passed."
 doc_version: 3
-doc_updated_at: "2026-10-05T03:07:56.686Z"
+doc_updated_at: "2026-10-05T03:08:16.241Z"
 doc_updated_by: "CODER"
 description: "Continuation134: restore SwHistorySetText/SwHistory capture and rollback,raw deleted text with NOHINTEXPAND and reconstructed native hints for same-node SwUndoDelete;keep selection replacement unchanged until this dependency is verified."
 sections:
@@ -163,6 +176,10 @@ sections:
     Preflight134:cleanmain 9678ca50f5fcfb907a241ff075114a56a1839e38,direct,onlyparentactive.133 verifiedprogress,notblocked. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native undel.cxx455 SaveContent copies all node hints and retains raw startstring;1043 clears hints,InsertText NOHINTEXPAND,1059 forward TmpRollback;1233 redo resetsTmpEnd. rolbck.cxx222 clones item/index/range/FormatIgnore only,250 InsertItem with12;1242 reverseRollback,1257 tmp reverse/forward,endDiff;1335 CopyAttr half-open including interiorzero excludingendzero. Native thints.cxx1316 InsertItem MakeTextAttr,3330 NOHINTADJUST bypasses automatic merging,3466 ClearSwpHintsArr retains empty map;ndhints.cxx188 owns Insert/DeleteAtPos. Current deleteundo retains clipped fragments inundoNodes and restitchesINET. Node/map994lines require measured helper extraction. Four matched policies read,user-instructions absent;standing goal authorizes safe local scope.
 
     Implementation134:old AUTO/INET history now lives in source-owned rolbck. SwHistorySetText captures cloned item,index/range and two FormatIgnore flags;fresh restore through MakeTextAttr/InsertItem12 resets expansion/nesting flags to native constructor defaults(verified txtatr2.cxx131). SwHistory CopyAttr excludes end-zero,includes interior-zero and native zero-range overlaps;reverse/destructive and reverse/default or forward/tmp ordering/endDiff/reset are literal-tested. Same-node delete owns raw string plus whole-node history,undo ClearSwpHintsArr/InsertText NOHINT2/forwardTmpRollback,redo resetsTmpEnd,grouping keeps firsthistory/rawstringconcat,Dispose releases. Selection insert branches remainbyteidentical. New native map Insert/DeleteAtPos own actual objects in three maps;NOHINTADJUST avoids merging portions. Native SetAttrMode values added to existingheader. Ordinary InsertItem BuildPortions,reset/new-attribute history/otherfamilies/SwRegHistory remain explicitly unimplemented/unverified,not new registered deviations. Three node helper bodies(two exact owner substitution,one cached pure hintsgetter) andtwo binary-search bodies move without behavior changes under992node/975mapline gates.919newcases allfirstpass. Fouroldconstructors receive .text-only migration;only priorundo-node ownershipcase needed twoCount1->0 corrections because native same-node text is action-owned;remainingcase assertions and359otherpriorfiles preserved. Staticfirstformatfailedthints,failedformat recovered;newfixtureunusedimport lintfailed,failedlint recovered;type/dependency/docs/sizepassed. First full absent profile:buildpass,app10152pass/1fail of10153 in278files,app100%allfourcoverage,inventory109/36files/100%allfour,scripts5,Chromium99 firstpass. Exactfailed full name persisted immediately;one failed-only absent replay1pass/15skip of16,zero passing case/suite/build replays. Production/docs hashes captured beforefullprofile remainunchanged;reference restored in finally before5sourceaudits allpass0semanticviolations. Scope13semanticpaths,360prior files/359byteidentical/fourconstructor syntaxmigrations/oneobservedownershipcase,242existingruntime states/defaults/exceptions preserved with8boundedappendices/8helperflagmappings;one new historyrow whollyunverified,total243. Nine nativehashes,source/scopeauditpass;APignored-inclusive3934files0forbidden beforequality;doctor0errors/two unchangedlegacywarnings/routingOK. Registered I/O/recovery preserved;no fullparitypromotion. Next native same-node selected input can use delete-plus-forced5 atomiclist now historydependencyexists;cross-node selection/structuralhistory,full grouping/redline/multicursor/indexoverloads/nesting/BuildPortions/styleclients/UNO/refcounts/core/UI remain unverified. Goalactive,verifiedprogress,noexternalblocker.
+extensions:
+  implementation_commit:
+    hash: "45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8"
+    message: "🧩 RMT6FP code: restore native same-node delete attribute history"
 id_source: "generated"
 ---
 ## Summary
