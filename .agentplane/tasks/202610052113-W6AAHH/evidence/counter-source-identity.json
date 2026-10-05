@@ -1,0 +1,8 @@
+[
+  {
+    "path": "apps/office/src/sw/source/core/text/atrstck.ts",
+    "initialSHA256": "8f8a783dcac4d02bb61ab6ef973b74479b9f213bf18e92e360fb41dc52f02639",
+    "initialSourceOrigin": "actual initial profile source copy in ignored appcache",
+    "finalSHA256": "b7a22fdcc4ee4b000acfb47c24c4463641b5f11154c4bc8dae59fdda502dde34"
+  }
+]
