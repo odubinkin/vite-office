@@ -1,0 +1,49 @@
+{
+  "base": "3ba3b1f0c4b174354af74199e993a70a0e0d84cd",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/edit/eddel.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/edit/eddel.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-delete.test.tsx",
+    "apps/office/e2e/writer-native-table-delete.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "apps/office/src/sw/inc/swtypes.ts"
+  ],
+  "priorTestFiles": 394,
+  "priorTestFilesByteIdentical": 394,
+  "changedPriorTests": [],
+  "semanticRecords": 247,
+  "priorSemanticRecords": 246,
+  "existingSemanticStatesDefaultsClassificationsAndExceptionsUnchanged": true,
+  "newNativeModuleUnverified": true,
+  "priorProvenanceContractsAndEvidenceRetained": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/edit/eddel.cxx",
+      "sha256": "fb8da38059d71b0ac944f13c669df51e1af701c1e04d8e2760605c66feb0aab4"
+    },
+    {
+      "path": "sw/source/uibase/wrtsh/delete.cxx",
+      "sha256": "ad0cf9a7c733660d3f5513b08caaaeb2420c7dc6c0cc93956a790178eff30e57"
+    },
+    {
+      "path": "sw/source/core/crsr/crsrsh.cxx",
+      "sha256": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    }
+  ],
+  "validationLimit": "ONE successful full build and115previous passing Chromium cases precede the bounded empty-source CopyAttr core fix. No passing replay. Final changed core owners exercised by9failed/new app cases plus the one remaining failed ODT case and2failed Chromium cases via actual dev server; changed-file format/lint/docs/types/size pass. Actual counters aligned only through unchanged contiguous source locations; all changed/new locations have real closure counts."
+}
