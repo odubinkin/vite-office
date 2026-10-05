@@ -1,10 +1,11 @@
 ---
 id: "202610051420-T1QNV8"
 title: "Move inserted table content into native undo storage only during Undo"
-status: "DOING"
+result_summary: "Inserted table text is recorded as native coordinates, moved into undo storage only on Undo and consumed with original hint/node ownership on Redo."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on:
@@ -41,7 +42,9 @@ quality_review:
     - ".agentplane/tasks/202610051420-T1QNV8/evidence/absent-profile.json"
   findings:
     - "Six statics and ONE full absent build/app/inventory/scripts/Chromium pass first attempt;12148app/120Chromium/100%L/S/F/B,12new native tests,0replays,0post-profile code edits. Five restored audits pass0semantic violations.403of404prior tests byte-identical; exactly2native-source storage count literals corrected in remaining file.250statuses/defaults/classifications and prior evidence preserved; native symbols/evidence only extended for3owners."
-commit: null
+commit:
+  hash: "c8a8e40890337747216ea9435982aade3fd1d7fe"
+  message: "🧩 T1QNV8 task: record native insertion storage verification"
 comments:
   -
     author: "CODER"
@@ -49,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Consume actual cut hints through existing undo storage without an extra historical clone; prior RetainText defaults preserved."
+  -
+    author: "CODER"
+    body: "Verified: Native SwUndRng absolute coordinates and SwUndoSaveContent cut/move/consume ownership replace eager retention of live insertion content. Six statics and ONE upstream-absent full build/profile first-pass,12148app/120Chromium,100%app/inventory coverage,5restored source audits0violations. Only2source-confirmed storage-count literals changed in prior tests,250states/defaults/classifications preserved. Exact-SHA same-agent EVALUATOR pass; full native undo sections/index/structural contracts unverified."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified semantic53bb1b81b06fa09a3da0f0d061c2255ba53f512d: numeric SwUndRng coordinates and actual cut/move/consume lifecycle replace eager live insertion retention. Six statics and ONE upstream-absent full build/profile first-pass:12148app/109inventory/5scripts/120Chromium,100%app/inventory L/S/F/B,0fail/flake/skip/replay. Five restored source audits0semantic violations;403old tests unchanged,2source-confirmed count literals corrected;250states/defaults/classifications preserved. Exact-SHA same-agent EVALUATOR pass."
+  -
+    type: "status"
+    at: "2026-10-05T14:49:07.639Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native SwUndRng absolute coordinates and SwUndoSaveContent cut/move/consume ownership replace eager retention of live insertion content. Six statics and ONE upstream-absent full build/profile first-pass,12148app/120Chromium,100%app/inventory coverage,5restored source audits0violations. Only2source-confirmed storage-count literals changed in prior tests,250states/defaults/classifications preserved. Exact-SHA same-agent EVALUATOR pass; full native undo sections/index/structural contracts unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T14:48:13.116Z"
+doc_updated_at: "2026-10-05T14:49:07.641Z"
 doc_updated_by: "CODER"
 description: "Iteration152: replace eager plain table import snapshots/retained live nodes with native SwUndRng coordinates and SwUndoSaveContent move lifecycle; record native range in SetInsertRange, cut/detach into storage during Undo, consume/reconnect and release storage during Redo. Preserve current table UI behavior, old content/list/format/selection and registered I/O exceptions."
 sections:
@@ -143,6 +156,10 @@ sections:
     - Observation: Native SetInsertRange records coordinates; Undo removes content into undo nodes; Redo consumes/reconnects it and releases storage. Prior implementation retained live nodes/text at read completion and stored first-node identity instead of numeric span.
       Impact: Removes premature duplicate document ownership and permits repeated range recording without extra retained payload, while preserving current table/list/format/selection and history behavior.
       Resolution: Native SwUndRng/SwUndoSaveContent facets now own represented numeric span/content movement. All tests first-pass. Full physical native undo sections, non-end/suffix/fly/redline/history/cursor supplier/index contracts remain unverified; broad goal active.
+extensions:
+  implementation_commit:
+    hash: "53bb1b81b06fa09a3da0f0d061c2255ba53f512d"
+    message: "🧩 T1QNV8 code: move native inserted content only during Undo and consume it on Redo"
 id_source: "generated"
 ---
 ## Summary
