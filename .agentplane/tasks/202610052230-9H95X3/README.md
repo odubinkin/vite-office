@@ -4,7 +4,7 @@ title: "Implement native Writer outline level movement for paragraph Tab"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T22:58:35.146Z"
+  updated_by: "CODER"
+  note: "Verified exact semantic ef1417a98ff8314c2897f32dadacb50f465dd3b3; same-agent EVALUATOR pass 20261005-225810135-recovery-context. Native outline Tab/history/rings/count boundaries;33newapp4newbrowser12569distinctapp109inventory5scripts143Chromiumpass;actual100%L/S/F/B. One full absent profile,onlyoriginalfailed/genuinelynew afterward;allstatics/restoredsourceaudits/scope/AP/doctor/routingpass.429prior tests428byteidentical1source-confirmed correction;253prior states preserved2newunverifiedowners255modules. Conscious IOexceptions preserved;fullgoalparityunverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved iteration167 native outline movement and heading Tab behavior under standing explicit iterative authorization."
+  -
+    type: "verify"
+    at: "2026-10-05T22:58:35.146Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified exact semantic ef1417a98ff8314c2897f32dadacb50f465dd3b3; same-agent EVALUATOR pass 20261005-225810135-recovery-context. Native outline Tab/history/rings/count boundaries;33newapp4newbrowser12569distinctapp109inventory5scripts143Chromiumpass;actual100%L/S/F/B. One full absent profile,onlyoriginalfailed/genuinelynew afterward;allstatics/restoredsourceaudits/scope/AP/doctor/routingpass.429prior tests428byteidentical1source-confirmed correction;253prior states preserved2newunverifiedowners255modules. Conscious IOexceptions preserved;fullgoalparityunverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T22:56:35.092Z"
+doc_updated_at: "2026-10-05T22:58:35.207Z"
 doc_updated_by: "CODER"
 description: "Iteration167: native docnum outline style move-table and range preflight, SwUndoOutlineLeftRight inverse-delta history, SwEditShell normalized ring execution and SwEditWin assigned-heading Tab routing. Remove unsupported outline fallback. One bounded executable leaf under standing explicit iterative core/UI/refactor authorization."
 sections:
@@ -86,12 +92,50 @@ sections:
     3. Verify native docnum complete represented nonmerged outline move-table algorithm: actual sorted outline range and predecessor, style creation-order ties, native lazy pool admission and skipped assignments, signed multi-step movement across gaps, direct outline increments, whole-range rejection, preserved text/char/list items and actual shell grouping/normalized rings with native short-circuit semantics. UndoRedo must call the same primitive with inverse/same offset, numeric current node slots and fixed-size delta payload rather than style snapshots. Default shell offset one. Native MAXLEVEL10 movement and level8 NONE/equal-indent literal Tab guard plus genuinely new assigned/direct ninth-to-tenth boundary cases. SwEditWin eligible heading Tab owns actual native outline operation with list/table priority and boundary text/no-op unchanged. Actual mounted DOM session/history/caret and production Chromium1280/390 ordinary Open/export/fresh-storage reopen, no runtime injection.
     4.429 prior tests:428 byte-identical; exact source-confirmed old unsupported four-case outline expectation correction only in native-list-tab.test.ts.253 prior semantic states/defaults/classifications/IO exceptions/evidence preserved;2 new partial unverified owners=255 modules. No broad native or full-module promotion. Direct document auto-history/framework Repeat/failed-operation dirty flag/native layout batching/merged props/conditional collections and full KeyInput remain unverified, no fake simulation.
     5. Five restored audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Exact scope/prior-test/metadata/sourcehash/AP ignored-inclusive/doctor/routing/diffcheck, same-agent exact-SHA EVALUATOR pass, record verify/canonical meaningful finish, whole prior parent Findings append and clean tracked/untracked. Full objective stays active; conscious IO deviations unchanged.
-  Verification: "Pending declared checks; no full native parity claim."
+  Verification: |-
+    Pending declared checks; no full native parity claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T22:58:35.146Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified exact semantic ef1417a98ff8314c2897f32dadacb50f465dd3b3; same-agent EVALUATOR pass 20261005-225810135-recovery-context. Native outline Tab/history/rings/count boundaries;33newapp4newbrowser12569distinctapp109inventory5scripts143Chromiumpass;actual100%L/S/F/B. One full absent profile,onlyoriginalfailed/genuinelynew afterward;allstatics/restoredsourceaudits/scope/AP/doctor/routingpass.429prior tests428byteidentical1source-confirmed correction;253prior states preserved2newunverifiedowners255modules. Conscious IOexceptions preserved;fullgoalparityunverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T22:56:35.092Z, excerpt_hash=sha256:53fed17c6bba1990926ff8da981fb94f88cbce070dd039efc1a026cefdf99eca
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052230-9H95X3/blueprint/resolved-snapshot.json
+    - old_digest: 889084b682d174f250be9b12d65607fd699501c67470e85a7d6622bc89586f37
+    - current_digest: 889084b682d174f250be9b12d65607fd699501c67470e85a7d6622bc89586f37
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610052230-9H95X3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610052230-9H95X3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the semantic implementation commit if necessary; preserve task evidence and conscious IO deviations."
   Findings: |-
     Read-only evidence: pinned docnum.cxx SwDoc::OutlineUpDown uses actual outline index, creation-order style map and lazy adjacent pool styles, movement across occupied levels, full-range preflight, assignment/direct outline changes. Native unoutl.cxx retains numeric range and signed delta; undo reuses the same document operation with inverse offset. ednumber.cxx normalizes multiple ranges and short-circuits after first failure. Current eligible heading Tab returns false; no OutlineUpDown owner exists. Existing core primitive/shell history boundary will be retained explicitly, without fake callbacks or snapshot adapters.
 
     Implemented actual native docnum OutlineUpDown move-table and matching unoutl inverse numeric range/delta history; shell normalizes and short-circuits rings retaining earlier successful changes. SwEditWin eligible heading-at-start Tab/ShiftTab now calls actual native outline operation. Corrected MAXLEVEL count10 versus zero-based maximum9, including native NONE/equal-indent level8 literal Tab decision. No snapshot/preparation/no-op callback/browser heuristic or new model. Initial one absent full profile: buildpass12559app6failed109inventory5scripts141Chromiumpass. Only6originalfailed plus3newapp and2newproductionbrowser cases afterwards:9app2Chromiumpass; one genuine new highest-level guard case then1pass. Final12569distinctapp109inventory5scripts143Chromium0flaky;33newapp4newbrowser. Final production build after actual production correction; existing passing browser cases not repeated. Actual app100%12828L14061S3418F10442B,inventory100%1464/1523/384/1080. Counter identity checked and contiguous unchanged source location transfer only; changed locations require actual new/failed-only counters. Initial failures, counts/errors/hashes and skipped counts retained before assertions; no full/passing replay.429 prior tests428byteidentical1exactsource-confirmed prior unsupported heading correction.253prior records/states/defaults/classes/IOexceptions/evidence preserved,2newpartialunverifiedowners=255modules. Sixstatics/changedfilechecks/five restored audits/scope/APignoredscan/doctor0errors2knownwarnings/routingpass. Metadata note normalized to existing responsibility/justification fields; exact schema/prior prefixes preserved, canonical JSON formatting checked. Direct document auto-history/frameworkRepeat/failed-operationdirtyflag/native layoutbatching/mergedprops/conditionalcollections/fullKeyInput/fullcore/UI/list/tableparity unverified. Conscious IOdeviationsunchanged,parentDOING/goalACTIVE. Scope12semanticpaths6productionowners.
+
+    - Observation: Initial6newapp failures identified count10/index9 defect and invalid DOM/item identity assertions; source-confirmed fixes, failed-only/genuine new tests passed.
+      Impact: Native represented outline move algorithm now owns eligible heading Tab with numeric inverse history; no browser conversion or snapshot adapter.
+      Resolution: Scope verified and source/map counters checked; direct document auto-history/Repeat/layout batching/merged/conditional props/full UI parity stay unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -134,6 +178,39 @@ Initial single absent profile completed: build, inventory109/scripts5/Chromium14
 
 Pending declared checks; no full native parity claim.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T22:58:35.146Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified exact semantic ef1417a98ff8314c2897f32dadacb50f465dd3b3; same-agent EVALUATOR pass 20261005-225810135-recovery-context. Native outline Tab/history/rings/count boundaries;33newapp4newbrowser12569distinctapp109inventory5scripts143Chromiumpass;actual100%L/S/F/B. One full absent profile,onlyoriginalfailed/genuinelynew afterward;allstatics/restoredsourceaudits/scope/AP/doctor/routingpass.429prior tests428byteidentical1source-confirmed correction;253prior states preserved2newunverifiedowners255modules. Conscious IOexceptions preserved;fullgoalparityunverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T22:56:35.092Z, excerpt_hash=sha256:53fed17c6bba1990926ff8da981fb94f88cbce070dd039efc1a026cefdf99eca
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052230-9H95X3/blueprint/resolved-snapshot.json
+- old_digest: 889084b682d174f250be9b12d65607fd699501c67470e85a7d6622bc89586f37
+- current_digest: 889084b682d174f250be9b12d65607fd699501c67470e85a7d6622bc89586f37
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610052230-9H95X3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610052230-9H95X3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the semantic implementation commit if necessary; preserve task evidence and conscious IO deviations.
@@ -143,3 +220,7 @@ Revert only the semantic implementation commit if necessary; preserve task evide
 Read-only evidence: pinned docnum.cxx SwDoc::OutlineUpDown uses actual outline index, creation-order style map and lazy adjacent pool styles, movement across occupied levels, full-range preflight, assignment/direct outline changes. Native unoutl.cxx retains numeric range and signed delta; undo reuses the same document operation with inverse offset. ednumber.cxx normalizes multiple ranges and short-circuits after first failure. Current eligible heading Tab returns false; no OutlineUpDown owner exists. Existing core primitive/shell history boundary will be retained explicitly, without fake callbacks or snapshot adapters.
 
 Implemented actual native docnum OutlineUpDown move-table and matching unoutl inverse numeric range/delta history; shell normalizes and short-circuits rings retaining earlier successful changes. SwEditWin eligible heading-at-start Tab/ShiftTab now calls actual native outline operation. Corrected MAXLEVEL count10 versus zero-based maximum9, including native NONE/equal-indent level8 literal Tab decision. No snapshot/preparation/no-op callback/browser heuristic or new model. Initial one absent full profile: buildpass12559app6failed109inventory5scripts141Chromiumpass. Only6originalfailed plus3newapp and2newproductionbrowser cases afterwards:9app2Chromiumpass; one genuine new highest-level guard case then1pass. Final12569distinctapp109inventory5scripts143Chromium0flaky;33newapp4newbrowser. Final production build after actual production correction; existing passing browser cases not repeated. Actual app100%12828L14061S3418F10442B,inventory100%1464/1523/384/1080. Counter identity checked and contiguous unchanged source location transfer only; changed locations require actual new/failed-only counters. Initial failures, counts/errors/hashes and skipped counts retained before assertions; no full/passing replay.429 prior tests428byteidentical1exactsource-confirmed prior unsupported heading correction.253prior records/states/defaults/classes/IOexceptions/evidence preserved,2newpartialunverifiedowners=255modules. Sixstatics/changedfilechecks/five restored audits/scope/APignoredscan/doctor0errors2knownwarnings/routingpass. Metadata note normalized to existing responsibility/justification fields; exact schema/prior prefixes preserved, canonical JSON formatting checked. Direct document auto-history/frameworkRepeat/failed-operationdirtyflag/native layoutbatching/mergedprops/conditionalcollections/fullKeyInput/fullcore/UI/list/tableparity unverified. Conscious IOdeviationsunchanged,parentDOING/goalACTIVE. Scope12semanticpaths6productionowners.
+
+- Observation: Initial6newapp failures identified count10/index9 defect and invalid DOM/item identity assertions; source-confirmed fixes, failed-only/genuine new tests passed.
+  Impact: Native represented outline move algorithm now owns eligible heading Tab with numeric inverse history; no browser conversion or snapshot adapter.
+  Resolution: Scope verified and source/map counters checked; direct document auto-history/Repeat/layout batching/merged/conditional props/full UI parity stay unverified.
