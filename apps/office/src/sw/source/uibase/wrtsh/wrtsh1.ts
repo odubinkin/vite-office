@@ -941,21 +941,16 @@ export class SwWrtShell extends SwModify {
     return createWriterCollapsedCursorState(paragraph, offset, this.pendingCharacterItems);
   }
 
-  /** Restores action-owned cursor state against the current mutable SwDoc graph. @param state - Stored cursor boundary. @returns Nothing. */
+  /** Installs current native endpoints reconstructed by history or owned by this shell's composition. @param state - Current cursor boundary. @returns Nothing. */
   private RestoreCursorState(state: SwUndoCursorState): void {
-    const document = this.GetDoc();
-    const pointNode =
-      state.point.node.GetDoc() === document
-        ? state.point.node
-        : (document.paragraphs[0] as WriterParagraph);
+    const pointNode = state.point.node;
     const point = new SwPosition(pointNode, Math.min(state.point.offset, pointNode.Len()));
-    const markNode = state.mark?.node.GetDoc() === document ? state.mark.node : undefined;
+    const markNode = state.mark?.node;
     const mark =
       state.mark === undefined || markNode === undefined
         ? undefined
         : new SwPosition(markNode, Math.min(state.mark.offset, markNode.Len()));
-    this.activeParagraph =
-      state.activeParagraph.GetDoc() === document ? state.activeParagraph : pointNode;
+    this.activeParagraph = state.activeParagraph;
     this.pendingCharacterItems = state.pendingCharacterItems.Clone();
     this.ClearTableCursor();
     this.cursor.Assign(point, mark);

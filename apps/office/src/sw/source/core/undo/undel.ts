@@ -34,6 +34,7 @@ export class SwUndoDelete extends SwUndo {
   private m_nEndContent = 0;
   private m_aSelectedNodes: readonly SwTextNode[] | undefined;
   private readonly m_aUndoNodeIds: number[] = [];
+  private afterRecorded = false;
 
   /** Creates one delete action. @param paragraph - First boundary. @param start - Deleted range start. @param deletedText - Removed native start string. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Normalized cursor before deletion. @param after - Cursor after deletion. @param selection - Optional cross-node selection with native join direction. @returns Nothing. */
   public constructor(
@@ -105,8 +106,14 @@ export class SwUndoDelete extends SwUndo {
     } else if (this.direction === "delete" && nextAction.start === this.start) {
       this.m_aSttStr += nextAction.m_aSttStr;
     } else return false;
-    this.SetAfterCursor(nextAction.GetAfterCursorState());
+    this.SetAfterCursor(nextAction.GetAfterCursorState(this.paragraph.GetDoc()));
     return true;
+  }
+
+  /** Records the actual completed delete point, including the outer sequential cell command's final caret. @param position - Current native point after deletion. @returns Nothing. */
+  public SetAfterDelete(position: SwPosition): void {
+    this.SetAfterCursorPosition(position);
+    this.afterRecorded = true;
   }
 
   /** Reports retained deleted text and native hint history without a document snapshot. @returns Approximate payload units. */
@@ -154,6 +161,7 @@ export class SwUndoDelete extends SwUndo {
         range = new SwPaM(point, mark);
       try {
         context.GetDoc().GetDocumentContentOperationsManager().DeleteAndJoin(range);
+        if (!this.afterRecorded) this.SetAfterDelete(range.GetPoint());
       } finally {
         range.Dispose();
         point.Dispose();

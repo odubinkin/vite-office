@@ -4,7 +4,7 @@ title: "Reconstruct undo cursors from native numeric ranges"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -56,7 +56,7 @@ events:
     to: "DOING"
     note: "Start: remove obsolete private foreign cursor fallback, one genuinely new replacement/composition/current-native-history case, final changed bundle for3failed Chromium only."
 doc_version: 3
-doc_updated_at: "2026-10-05T17:24:05.340Z"
+doc_updated_at: "2026-10-05T17:35:25.188Z"
 doc_updated_by: "CODER"
 description: "Replace retained SwTextNode cursor snapshots in shared SwUndo with native SwUndRng numeric coordinates and current-document reconstruction, preserving direction, active node, pending items and table mode. Necessary prerequisite to removing retained split identity bridge; physical split and action payload references remain separate unverified work."
 sections:
@@ -74,7 +74,14 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic commit through a new approved task; preserve all other iteration history and conscious IO/recovery deviations."
-  Findings: ""
+  Findings: |-
+    Iteration156 verified bounded progress. Shared SwUndo cursor boundaries use existing SwUndRng absolute node/content indices and COMPLETE_STRING no-mark sentinel rather than retained node-reference snapshots. Current native nodes are reconstructed after payload execution through actual SwPosition/SwPaM/SwUndRng.SetPaM; selection direction, independent active numeric target, table mode and independently cloned pending items remain portable shell adjuncts. Capture supports predicted future content offsets without registering invalid live positions. Grouping receives current document explicitly. Old cloneCursorState removed. Numeric boundaries exposed stale forecast dependencies: source-confirmed completed deletion points now recorded from live SwPosition, per-cell initial actions use current local active endpoints/final outer native point, table insertion records after only once new cell sections are connected, split Redo uses native content0. Private shell foreign-document fallback/mark filtering/active substitution removed; document replacement already cancels composition and history.
+
+    Evidence:23new cases;18direction/mark/body-cell/table-mode combinations, mutable input/pending ownership, future offsets, grouping updates, real shell native node replacement cycles and document replacement/composition cancellation. All408prior test files byte-identical;250states/defaults/classifications/exceptions/prior evidence preserved; additive5existing owner evidence,10scope paths. Six statics finalpass, one initial newtest lint failure corrected and only failed gate repeated. Changed-file statics passed. ONE full upstream-absent build/app/inventory/scripts/Chromium profile:12082app pass/155fail of12237;109inventory/5scripts pass;117Chromium pass/3fail. Exact failures persisted before assertions. Only155failed app cases repeated, all pass,702skipped. One genuinely new replacement case passes,22prior new cases skipped. Browser selection attempt matched0 because title ancestry; next3failed retry ran initial stale dist, actual fresh report recovered read-only after filename mismatch. New final changed-source bundle built once because preview serves dist; only3remainingfailed Chromium pass. No passing test/suite/profile replay.
+
+    Final distinct12238app in312files,109inventory in36files,5scripts in2files,120Chromium. Actual app/inventory100%L/S/F/B; app12355lines/13527statements/3376functions/10067branches;inventory1464/1523/384/1080. Changed source counter audit initially merged old/new shell maps and showed obsolete prior locations; fixed by excluding obsolete shell map, using current actual extra-case map and exact hashed contiguous unchanged initial source locations. No fabricated counters; maps/local initial source variants only ignored appcache. Browser closure actual failure names match original file/leaf titles, preserving ancestry in original record. Five restored source audits pass0semantic violations. Ignored-inclusive AP scan4229files0forbidden before semantic review,doctor0errors2pre-existingwarnings,routingOK. No upstream copies/helpers/Python/native probes/binaries/raw diffs/source frames/diagnostics in AP; vendor finally restored after all profiles; no network/outside/global/subagents.
+
+    Limits:SwUndo still owns portable before/after shell adjuncts unlike native base; numeric shared cursor reconstruction does not remove existing action payload paragraph/row/table node identity bridges. Native split physical node ownership, complete undo-area/CutImpl/client/frame/redline/field lifetimes and broad UI/list/table merged/nested/protected/layout/clipboard remain unverified. Conscious save/open/recovery deviations unchanged. No whole-module or broad parity promotion; parent DOING,goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -108,3 +115,11 @@ Iteration156 replace shared undo cursor node retention with represented native n
 Revert only this leaf semantic commit through a new approved task; preserve all other iteration history and conscious IO/recovery deviations.
 
 ## Findings
+
+Iteration156 verified bounded progress. Shared SwUndo cursor boundaries use existing SwUndRng absolute node/content indices and COMPLETE_STRING no-mark sentinel rather than retained node-reference snapshots. Current native nodes are reconstructed after payload execution through actual SwPosition/SwPaM/SwUndRng.SetPaM; selection direction, independent active numeric target, table mode and independently cloned pending items remain portable shell adjuncts. Capture supports predicted future content offsets without registering invalid live positions. Grouping receives current document explicitly. Old cloneCursorState removed. Numeric boundaries exposed stale forecast dependencies: source-confirmed completed deletion points now recorded from live SwPosition, per-cell initial actions use current local active endpoints/final outer native point, table insertion records after only once new cell sections are connected, split Redo uses native content0. Private shell foreign-document fallback/mark filtering/active substitution removed; document replacement already cancels composition and history.
+
+Evidence:23new cases;18direction/mark/body-cell/table-mode combinations, mutable input/pending ownership, future offsets, grouping updates, real shell native node replacement cycles and document replacement/composition cancellation. All408prior test files byte-identical;250states/defaults/classifications/exceptions/prior evidence preserved; additive5existing owner evidence,10scope paths. Six statics finalpass, one initial newtest lint failure corrected and only failed gate repeated. Changed-file statics passed. ONE full upstream-absent build/app/inventory/scripts/Chromium profile:12082app pass/155fail of12237;109inventory/5scripts pass;117Chromium pass/3fail. Exact failures persisted before assertions. Only155failed app cases repeated, all pass,702skipped. One genuinely new replacement case passes,22prior new cases skipped. Browser selection attempt matched0 because title ancestry; next3failed retry ran initial stale dist, actual fresh report recovered read-only after filename mismatch. New final changed-source bundle built once because preview serves dist; only3remainingfailed Chromium pass. No passing test/suite/profile replay.
+
+Final distinct12238app in312files,109inventory in36files,5scripts in2files,120Chromium. Actual app/inventory100%L/S/F/B; app12355lines/13527statements/3376functions/10067branches;inventory1464/1523/384/1080. Changed source counter audit initially merged old/new shell maps and showed obsolete prior locations; fixed by excluding obsolete shell map, using current actual extra-case map and exact hashed contiguous unchanged initial source locations. No fabricated counters; maps/local initial source variants only ignored appcache. Browser closure actual failure names match original file/leaf titles, preserving ancestry in original record. Five restored source audits pass0semantic violations. Ignored-inclusive AP scan4229files0forbidden before semantic review,doctor0errors2pre-existingwarnings,routingOK. No upstream copies/helpers/Python/native probes/binaries/raw diffs/source frames/diagnostics in AP; vendor finally restored after all profiles; no network/outside/global/subagents.
+
+Limits:SwUndo still owns portable before/after shell adjuncts unlike native base; numeric shared cursor reconstruction does not remove existing action payload paragraph/row/table node identity bridges. Native split physical node ownership, complete undo-area/CutImpl/client/frame/redline/field lifetimes and broad UI/list/table merged/nested/protected/layout/clipboard remain unverified. Conscious save/open/recovery deviations unchanged. No whole-module or broad parity promotion; parent DOING,goal active.

@@ -149,9 +149,9 @@ export class SwUndoSaveContent {
   }
 }
 
-/** Identifies one stable text-node content position without retaining a node graph. */
+/** Supplies one current native endpoint to an action boundary; stored history uses numeric ranges. */
 export interface SwUndoCursorPosition {
-  /** Canonical SwTextNode identity retained like an upstream node index. */
+  /** Current node resolved at the shell boundary. */
   readonly node: SwTextNode;
   /** UTF-16 content offset in that node. */
   readonly offset: number;
@@ -213,25 +213,30 @@ export interface SwUndoRedoContext {
 
 /** Writer action base that brackets its model payload with complete cursor states. */
 export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
+  private readonly before: SwUndoCursorRange;
+  private after: SwUndoCursorRange;
+
   /** Creates a Writer undo action. @param comment - User-visible label. @param before - Cursor state before execution. @param after - Cursor state after execution. @returns Nothing. */
   protected constructor(
     private readonly comment: string,
-    private readonly before: SwUndoCursorState,
-    private after: SwUndoCursorState,
+    before: SwUndoCursorState,
+    after: SwUndoCursorState,
   ) {
     super();
+    this.before = captureCursorRange(before);
+    this.after = captureCursorRange(after);
   }
 
   /** Reverts the model payload and restores the pre-command cursor. @param context - Active Writer undo context. @returns Nothing. */
   public finalUndo(context: SwUndoRedoContext): void {
     this.UndoImpl(context);
-    context.RestoreCursor(cloneCursorState(this.before));
+    context.RestoreCursor(restoreCursorRange(context.GetDoc(), this.before));
   }
 
   /** Reapplies the model payload and restores the post-command cursor. @param context - Active Writer redo context. @returns Nothing. */
   public finalRedo(context: SwUndoRedoContext): void {
     this.RedoImpl(context);
-    context.RestoreCursor(cloneCursorState(this.after));
+    context.RestoreCursor(restoreCursorRange(context.GetDoc(), this.after));
   }
 
   /** Implements the SfxUndoAction undo entry point. @param context - Active Writer context. @returns Nothing. */
@@ -251,12 +256,23 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
 
   /** Replaces the post-command cursor after compatible action grouping. @param state - New grouped endpoint. @returns Nothing. */
   protected SetAfterCursor(state: SwUndoCursorState): void {
-    this.after = cloneCursorState(state);
+    this.after = captureCursorRange(state);
   }
 
-  /** Returns the post-command cursor for compatible subclass grouping. @returns Independent endpoint state. */
-  protected GetAfterCursorState(): SwUndoCursorState {
-    return cloneCursorState(this.after);
+  /** Records a completed native mutation's collapsed point while retaining its owned pending items and mode. @param position - Actual post-mutation native point. @returns Nothing. */
+  protected SetAfterCursorPosition(position: SwPosition): void {
+    const pam = new SwPaM(position);
+    try {
+      this.after.range.SetValues(pam);
+      this.after = { ...this.after, pointIsStart: true, activeNode: position.GetNodeIndex() };
+    } finally {
+      pam.Dispose();
+    }
+  }
+
+  /** Reconstructs the post-command cursor for compatible grouping against current nodes. @param document - Current native document. @returns Independent endpoint state. */
+  protected GetAfterCursorState(document: SwDoc): SwUndoCursorState {
+    return restoreCursorRange(document, this.after);
   }
 
   /** Reverts only the domain payload. @param context - Active Writer context. @returns Nothing. */
@@ -333,13 +349,70 @@ export function GetFragmentPayloadSize(fragment: SwTextFragment): number {
   return fragment.text.length + fragment.hints.Count() * 4;
 }
 
-/** Clones one complete action cursor boundary. @param state - Stored state. @returns Independent state. */
-function cloneCursorState(state: SwUndoCursorState): SwUndoCursorState {
+/** Numeric native range plus the shell's direction, active target and pending-item adjuncts. */
+interface SwUndoCursorRange {
+  readonly range: SwUndRng;
+  readonly pointIsStart: boolean;
+  readonly activeNode: number;
+  readonly pendingCharacterItems: SfxItemSet;
+  readonly tableSelection?: boolean;
+}
+
+/** Captures absolute coordinates without registering predicted post-action offsets in live text. @param state - Current shell boundary. @returns Owned numeric history. */
+function captureCursorRange(state: SwUndoCursorState): SwUndoCursorRange {
+  const pointNode = state.point.node.GetIndex(),
+    markNode = state.mark?.node.GetIndex(),
+    pointIsStart =
+      state.mark === undefined ||
+      pointNode < (markNode as number) ||
+      (pointNode === markNode && state.point.offset <= state.mark.offset),
+    range = new SwUndRng();
+  const start = pointIsStart ? state.point : (state.mark as SwUndoCursorPosition);
+  range.m_nSttNode = start.node.GetIndex();
+  range.m_nSttContent = start.offset;
+  if (state.mark === undefined) {
+    range.m_nEndNode = 0;
+    range.m_nEndContent = 0x7fffffff;
+  } else {
+    const end = pointIsStart ? state.mark : state.point;
+    range.m_nEndNode = end.node.GetIndex();
+    range.m_nEndContent = end.offset;
+  }
   return {
     ...(state.tableSelection === undefined ? {} : { tableSelection: state.tableSelection }),
-    activeParagraph: state.activeParagraph,
-    ...(state.mark === undefined ? {} : { mark: { ...state.mark, node: state.mark.node } }),
+    range,
+    pointIsStart,
+    activeNode: state.activeParagraph.GetIndex(),
     pendingCharacterItems: state.pendingCharacterItems.Clone(),
-    point: { ...state.point, node: state.point.node },
   };
+}
+
+/** Rebuilds a current native PaM and releases its temporary registered indices after boundary conversion. @param document - Current document from undo context. @param state - Stored numeric boundary. @returns Ephemeral current shell endpoints. */
+function restoreCursorRange(document: SwDoc, state: SwUndoCursorRange): SwUndoCursorState {
+  const point = new SwPosition(document.GetNodes().at(state.range.m_nSttNode) as SwTextNode, 0),
+    pam = new SwPaM(point);
+  try {
+    state.range.SetPaM(pam);
+    if (state.pointIsStart) pam.Exchange();
+    return {
+      ...(state.tableSelection === undefined ? {} : { tableSelection: state.tableSelection }),
+      activeParagraph: document.GetNodes().at(state.activeNode) as SwTextNode,
+      ...(pam.HasMark()
+        ? {
+            mark: {
+              node: pam.GetMark().GetNode() as SwTextNode,
+              offset: pam.GetMark().GetContentIndex(),
+            },
+          }
+        : {}),
+      pendingCharacterItems: state.pendingCharacterItems.Clone(),
+      point: {
+        node: pam.GetPoint().GetNode() as SwTextNode,
+        offset: pam.GetPoint().GetContentIndex(),
+      },
+    };
+  } finally {
+    pam.Dispose();
+    point.Dispose();
+  }
 }

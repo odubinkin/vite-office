@@ -84,9 +84,17 @@ export function createWriterDeleteSelectionOperation(
                   : (endpoints[index] as SwUndoCursorState),
               );
               context.GetDoc().GetDocumentContentOperationsManager().DeleteAndJoin(range);
+              action.SetAfterDelete(
+                index === currentRanges.length - 1 ? cursor.GetPoint() : range.GetPoint(),
+              );
               group.AddAction(action);
             }
-            context.RestoreCursor(final);
+            const point = cursor.GetPoint();
+            context.RestoreCursor({
+              ...final,
+              activeParagraph: point.GetNode() as SwTextNode,
+              point: { node: point.GetNode() as SwTextNode, offset: point.GetContentIndex() },
+            });
           } finally {
             for (const range of currentRanges) range.Dispose();
           }
@@ -115,7 +123,7 @@ function createDeleteAction(
     point.GetContentIndex(),
     mark.GetNode() as SwTextNode,
     mark.GetContentIndex(),
-    before.activeParagraph,
+    point.GetNode() as SwTextNode,
     before.pendingCharacterItems,
   );
   return new SwUndoDelete(
@@ -125,7 +133,11 @@ function createDeleteAction(
     direction,
     undefined,
     outerSelection ? before : localBefore,
-    after,
+    {
+      ...after,
+      activeParagraph: first,
+      point: { node: first, offset },
+    },
     first === last ? undefined : range,
   );
 }

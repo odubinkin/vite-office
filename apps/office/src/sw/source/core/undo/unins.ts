@@ -61,7 +61,7 @@ export class SwUndoInsert extends SwUndo {
       text: left.text + right.text,
       hints: left.hints.concat(right.hints, left.text.length),
     };
-    this.SetAfterCursor(nextAction.GetAfterCursorState());
+    this.SetAfterCursor(nextAction.GetAfterCursorState(this.paragraph.GetDoc()));
     return true;
   }
 

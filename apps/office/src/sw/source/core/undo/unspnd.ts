@@ -59,13 +59,12 @@ export class SwUndoSplitNode extends SwUndo {
     if (this.trailingParagraph === undefined) this.trailingParagraph = provisional;
     else operations.RestoreSplitTextNode(provisional, this.trailingParagraph);
     this.m_pHistory?.SetTmpEnd(this.m_pHistory.Count());
-    const trailing = this.trailingParagraph;
-    const after = this.GetAfterCursorState();
-    this.SetAfterCursor({
-      ...after,
-      activeParagraph: trailing,
-      point: { ...after.point, node: trailing },
-    });
+    const after = new SwPosition(this.trailingParagraph, 0);
+    try {
+      this.SetAfterCursorPosition(after);
+    } finally {
+      after.Dispose();
+    }
   }
 
   private trailingParagraph: SwTextNode | undefined;
