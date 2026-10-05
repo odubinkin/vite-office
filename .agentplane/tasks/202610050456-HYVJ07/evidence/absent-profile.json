@@ -1,0 +1,191 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "db3287b8a948af245f4908ccd1a1ad348242f3365f96d1afd0c30f0e78a1f4c8",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "43bdb1c90da9089bb998b15f19425030a1041faa5336d8517a5189f7ca2acf20",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "f7e2608e9153a8b6c1a877d9ef52adc3bc534c9cc771fc3b9a87cac925da61e7",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "a750bdbfe4c0a79dadc7d421c52156752cfa4b79892eb820cc5e7370e1b89196",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "33c2764f6cbda6a5d648b9b5cdc84b1c25276666e739be014403c3f90adb56cb",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "8f31da659224475b466a9a3d893e00f0f02bcd1f043807ba335fc2da0c5f30a0",
+    "apps/office/src/sw/source/core/table/swtable.ts": "c0bda741e1fcab5194257d10c42ff8c9d237a2b11d59438ccfadac5d8b393210",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "10db98eba8ff77a08667c48ba3bd947f4ea173d400fc1613a7be9355d5dcaaeb",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts": "735b96121df7f9ffd002b39be6e8e6b44276836ce0d4cc6541343c3f9ac9845f",
+    "docs/program/source-provenance.json": "49c91d7289253e35dfcddf8856930cca03405ba82568485dacc4c5dbe6cbe19e",
+    "docs/program/parity/runtime-inventory.json": "2cdab6d5970a9ee6fa53c106cb8166fb7842cf5189a2537f3bfe23d6cf88596b"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "8aadc9fb9dc5c33682996c6aea1df377ee3dabdcbf8587f2565a4a21efa78f84",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HYVJ07.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 61208,
+      "sha256": "e0bf68b1a6017f70ca62cdf81b49150e3c97f8d41d324da76ec4392785cb30a0",
+      "totals": [
+        "Test Files  3 failed | 280 passed (283)",
+        "Tests  6 failed | 11862 passed (11868)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "apps/office/src/sw/browser/editor/native-table-editing.test.tsx > native table DOM editing renders cell splits and merges from canonical section history",
+        "apps/office/src/sw/browser/editor/native-table-editing.test.tsx > native table DOM editing routes composition and formatting from cell events to the shell",
+        "apps/office/src/sw/browser/presentation/writer-view.test.tsx > Writer browser presentation inserts, selects, edits and reopens a canonical Writer table",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts > native table cell editing owners reads split/join cell nodes from their section, direction=backward",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts > native table cell editing owners reads split/join cell nodes from their section, direction=forward",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts > native table cell editing owners projects the actual active cell without inserting it in the body layout list"
+      ],
+      "caseCounts": {
+        "passed": 11862,
+        "failed": 6,
+        "total": 11868
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 11530,
+          "covered": 11530,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12628,
+          "covered": 12628,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3255,
+          "covered": 3255,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 9467,
+          "covered": 9467,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "3248d2fb4dc6d65ac334283e8f1f0bd66686cc83036c60c93ccb1d9d19d4ca43",
+      "incompleteFiles": {},
+      "unhandledErrorCases": [
+        "apps/office/src/sw/browser/editor/native-table-editing.test.tsx > native table DOM editing renders cell splits and merges from canonical section history",
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts > BrowserWriterEditWindow routes native editing intents to the platform-neutral edit window"
+      ]
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HYVJ07.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40605,
+      "sha256": "343cd749fff7c9879fde32556351854d89e944d04d90c0d10921b34bfc828e50",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "total": 109
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverageMapSHA256": "5bb1b9d91b56402952cb14def232e168946ec92305a276774c498d94bc1303ce",
+      "incompleteFiles": {}
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 219,
+      "sha256": "df64378ee4fc1659f235c9bf31cbfdd4b03d7cbab046b012275db048b899233b",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 16804,
+      "sha256": "67093e87437378140695f62b6cf639216b4a9dcd619fe333e85f361cab0fc4d8",
+      "totals": [
+        "99 passed (1.1m)"
+      ],
+      "failedCases": [
+        "writer-native-table-editing.spec.ts > Writer table cell typing, split, join and formatting use document history"
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-05T05:16:49.247Z",
+        "duration": 64730.119,
+        "expected": 99,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    }
+  ]
+}
