@@ -18,6 +18,7 @@ import {
 } from "../../core/undo/undel";
 import { createWriterInsertTextAction } from "../../core/edit/editsh";
 import { createWriterDeleteSelectionOperation } from "../../core/edit/eddel";
+import { createWriterReadTextOperation } from "../../filter/basflt/shellio";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
@@ -255,6 +256,15 @@ export class SwWrtShellEditingOperations {
         this.port.createCollapsedCursorState(paragraph, nextOffset),
       ),
     );
+  }
+
+  /** Reads plain clipboard text through native cursor rings and document-insertion history. @param text - Plain clipboard text. @returns Whether imported. */
+  public PastePlainText(text: string): boolean {
+    const before = this.port.captureCursorState();
+    const operation = createWriterReadTextOperation(this.port.getCursor(), text, before);
+    return operation === undefined
+      ? false
+      : this.port.applyAction(operation.action, false, operation.execute);
   }
 
   /** Pastes one safe transfer document as a compound Writer action. @param paste - Parsed clipboard content. @returns Whether changed. */

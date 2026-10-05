@@ -6,6 +6,31 @@ import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
 import { SetAttrMode } from "../../../inc/swtypes";
+import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
+import { SwFormatAutoFormat } from "./txatbase";
+
+/** Preserves CutText's equal-end attributes in an empty split suffix and moves supported AUTO items to its item set. Other split ownership remains unverified. @param node - Source. @param trailing - New suffix. @param offset - Split position. @param suffix - Captured nonempty suffix hints. @returns Remaining suffix hints. */
+export function SplitTextNodeEndHints(
+  node: SwTextNode,
+  trailing: SwTextNode,
+  offset: number,
+  suffix: SwpHints,
+): SwpHints {
+  if (offset !== node.Len()) return suffix;
+  const hints = new SwpHints(node.GetDoc().GetAttrPool());
+  for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+    if (hint.end !== offset || hint.DontExpand()) continue;
+    if (hint.Which() === RES_TXTATR_AUTOFMT && !hint.IsDontMoveAttr()) {
+      trailing.SetAttr((hint.GetAttr() as SwFormatAutoFormat).GetStyleHandle());
+    } else {
+      const copied = hint.clone();
+      copied.SetStart(0);
+      copied.SetEnd(0);
+      hints.Insert(copied);
+    }
+  }
+  return hints;
+}
 
 /** Prepares joined hints, using native CutImpl's CopyAttr branch for an empty source. Full nonempty CutImpl ownership remains unverified. @param node - Surviving node. @param source - Trailing source. @param offset - Destination boundary. @returns Joined native hints. */
 export function AppendTextNodeHints(

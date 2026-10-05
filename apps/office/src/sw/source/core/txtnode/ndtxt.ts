@@ -68,6 +68,7 @@ import {
   CreateTextNodeToggledFragment,
   CreateTextNodeHyperlinkFragment,
   AppendTextNodeHints,
+  SplitTextNodeEndHints,
 } from "./ndtxt-hints";
 import { InsertTextNodeItem, ClearTextNodeHints, FormatTextNodeToTextAttr } from "./thints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
@@ -808,7 +809,8 @@ export class SwTextNode extends SwContentNode {
     );
     const directAttributes = this.GetpSwAttrSet();
     if (directAttributes !== undefined) trailing.SetAttr(directAttributes);
-    trailing.pSwpHints = suffix.hints.CanBeDeleted() ? undefined : suffix.hints;
+    const trailingHints = SplitTextNodeEndHints(this, trailing, offset, suffix.hints);
+    trailing.pSwpHints = trailingHints.CanBeDeleted() ? undefined : trailingHints;
     this.mText = prefix.text;
     this.pSwpHints = prefix.hints.CanBeDeleted() ? undefined : prefix.hints;
     this.MoveContentIndicesFrom(trailing, offset);

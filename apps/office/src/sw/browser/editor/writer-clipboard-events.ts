@@ -10,7 +10,7 @@ export function readBrowserWriterClipboardPaste(
   return parseWriterClipboardPaste(data.getData("text/html"), data.getData("text/plain"), document);
 }
 
-/** Removes browser parser provenance before a transfer enters the Writer shell. @param paste - Browser import record. @returns Writer-owned transfer document. */
+/** Preserves native clipboard format when a parsed transfer enters Writer. @param paste - Browser import record. @returns Writer-owned transfer document. */
 export function createWriterTransferDocument(paste: WriterClipboardPaste): WriterTransferDocument {
-  return { isBlock: paste.isBlock, paragraphs: paste.paragraphs };
+  return { isBlock: paste.isBlock, paragraphs: paste.paragraphs, source: paste.source };
 }

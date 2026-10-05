@@ -488,6 +488,11 @@ export class SwWrtShell extends SwModify {
     return this.editing.Paste(paste);
   }
 
+  /** Reads plain clipboard text at native selected-cell points. @param text - Plain clipboard text. @returns Whether imported. */
+  public PastePlainTextAtCursor(text: string): boolean {
+    return this.editing.PastePlainText(text);
+  }
+
   /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
   public Insert(text: string): boolean {
     return text.length > 0 && this.editing.InsertAtCursor(text, true);

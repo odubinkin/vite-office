@@ -18,6 +18,7 @@ import type {
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import {
   createWriterTextFragment,
+  getWriterTextFromRuns,
   splitWriterTextRuns,
   type WriterTextRun,
 } from "../../filter/basflt/writer-transfer";
@@ -31,6 +32,7 @@ export interface WriterClipboardSelection {
 
 /** Writer-owned text and list transfer awaiting insertion in a target document pool. */
 export interface WriterTransferDocument {
+  readonly source?: "html" | "plain-text";
   readonly isBlock: boolean;
   readonly paragraphs: readonly Readonly<{
     listKind: "bullet" | "none" | "numbered";
@@ -100,6 +102,16 @@ export class SwTransferable {
 
   /** Inserts an imported transfer into the current Writer target pool and PaM. @param paste - Sanitized transfer record. @returns Whether the document changed. */
   public Paste(paste: WriterTransferDocument): boolean {
+    if (paste.source === "plain-text" && this.shell.HasBoxSelection())
+      return this.shell.PastePlainTextAtCursor(
+        paste.paragraphs
+          .map(
+            /** Coordinates native ASCII insertion and retained history. @param item - Native operation input. @returns Operation result. */ (
+              item,
+            ) => getWriterTextFromRuns(item.runs),
+          )
+          .join("\n"),
+      );
     const paragraph = this.shell.GetActiveParagraph();
     return this.shell.PasteAtCursor({
       isBlock: paste.isBlock,

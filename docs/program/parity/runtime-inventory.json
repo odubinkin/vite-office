@@ -7701,6 +7701,48 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/undo/untblk.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0102"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/untblk.ts#SwUndoInserts",
+          "apps/office/src/sw/source/filter/basflt/shellio.ts#createWriterReadTextOperation",
+          "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts#native ASCII selected column preserves inherited content and history",
+          "apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx#mounted plain clipboard %j reads all selected cells through native document undo",
+          "apps/office/e2e/writer-native-table-plain-paste.spec.ts#Writer native plain table clipboard",
+          "vendor/libreoffice-reference/sw/source/core/undo/untblk.cxx#SwUndoInserts::SwUndoInserts",
+          "vendor/libreoffice-reference/sw/source/filter/basflt/shellio.cxx#SwReader::Read",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::PasteFileContent",
+          "vendor/libreoffice-reference/sw/inc/IDocumentContentOperations.hxx#SwInsertFlags::EMPTYEXPAND"
+        ],
+        "justification": "Iteration151 preserves plain clipboard source into SwTransferable and dispatches selected-cell ordinary text before explicit TextRuns fragment conversion. Native ASCII default EMPTYEXPAND inserts inherited text at every actual editing ring point and splits only inside each cell, with native trailing-newline omission and paragraph/control/wrap rules. Reader captures each SwUndoInsDoc sequentially at current indices, records actual inserted node/fragment ownership and original SwHistory/collection, groups one Sfx undo unit, and uses tracked native display positions. Undo restores old target text/items/hints/table selection; redo reconnects retained inserted nodes. No shell paste/split/caret/list callback replay or whole-document snapshots. Complete reader options/encodings/page-break import, native SwUndoInserts non-end/suffix/fly/redline/index lifetimes, rich/internal/structured table transfer and rendering remain unverified. Existing statuses/defaults/classifications/conscious I/O/recovery deviations unchanged.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoInserts",
+          "SwUndoInsDoc"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/core/undo/untblk.cxx",
+        "upstreamSymbols": [
+          "SwUndoInserts::SwUndoInserts",
+          "SwUndoInserts::SetInsertRange",
+          "SwUndoInserts::UndoImpl",
+          "SwUndoInserts::RedoImpl",
+          "SwUndoInsDoc::SwUndoInsDoc"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/unocore/unosett.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -7802,6 +7844,45 @@
           "SwASC_AttrIter::SearchNext",
           "SwASC_AttrIter::OutAttr",
           "std::make_pair"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ascii/parasc.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0102"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/ascii/parasc.ts#prepareWriterAsciiParagraphs",
+          "apps/office/src/sw/source/filter/basflt/shellio.ts#createWriterReadTextOperation",
+          "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts#native ASCII selected column preserves inherited content and history",
+          "apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx#mounted plain clipboard %j reads all selected cells through native document undo",
+          "apps/office/e2e/writer-native-table-plain-paste.spec.ts#Writer native plain table clipboard",
+          "vendor/libreoffice-reference/sw/source/filter/ascii/parasc.cxx#SwASCIIParser::ReadChars",
+          "vendor/libreoffice-reference/sw/source/filter/basflt/shellio.cxx#SwReader::Read",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::PasteFileContent",
+          "vendor/libreoffice-reference/sw/inc/IDocumentContentOperations.hxx#SwInsertFlags::EMPTYEXPAND"
+        ],
+        "justification": "Iteration151 preserves plain clipboard source into SwTransferable and dispatches selected-cell ordinary text before explicit TextRuns fragment conversion. Native ASCII default EMPTYEXPAND inserts inherited text at every actual editing ring point and splits only inside each cell, with native trailing-newline omission and paragraph/control/wrap rules. Reader captures each SwUndoInsDoc sequentially at current indices, records actual inserted node/fragment ownership and original SwHistory/collection, groups one Sfx undo unit, and uses tracked native display positions. Undo restores old target text/items/hints/table selection; redo reconnects retained inserted nodes. No shell paste/split/caret/list callback replay or whole-document snapshots. Complete reader options/encodings/page-break import, native SwUndoInserts non-end/suffix/fly/redline/index lifetimes, rich/internal/structured table transfer and rendering remain unverified. Existing statuses/defaults/classifications/conscious I/O/recovery deviations unchanged.",
+        "knownViolations": [],
+        "localSymbols": [
+          "prepareWriterAsciiParagraphs",
+          "readWriterAsciiParagraphs"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/filter/ascii/parasc.cxx",
+        "upstreamSymbols": [
+          "SwASCIIParser::ReadChars",
+          "SwASCIIParser::InsertText"
         ]
       }
     },
