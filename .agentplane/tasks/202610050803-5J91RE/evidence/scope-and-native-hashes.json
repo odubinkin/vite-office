@@ -1,0 +1,100 @@
+{
+  "result": "pass",
+  "base": "6e0140b947c400777ac7401d52a30e253a0a8aab",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+    "apps/office/src/sw/source/core/layout/newfrm.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-uncounted-list-layout.test.tsx",
+    "apps/office/e2e/writer-uncounted-list-layout.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 378,
+  "priorTestFilesByteIdentical": 378,
+  "oldTestChanges": 0,
+  "newAppCases": 33,
+  "newAppCasesPassedFirst": 33,
+  "newChromiumCases": 2,
+  "existingRuntimeRows": 244,
+  "newRuntimeRows": 0,
+  "boundedAppendices": 8,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "oneFullAbsentProfile": true,
+  "passingTestReplays": 0,
+  "passingFullBuildReplays": 0,
+  "productionUnchangedAfterFirstProfile": true,
+  "appCoverage": {
+    "lines": {
+      "total": 11647,
+      "covered": 11647,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12753,
+      "covered": 12753,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3275,
+      "covered": 3275,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9603,
+      "covered": 9603,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "nativeSHA256": {
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+    "sw/source/core/text/itrcrsr.cxx": "862315cefee568e882f24e64226664227fd06a672640493ebc0c48d107389ee2",
+    "sw/source/core/layout/frmtool.cxx": "6ce439b0e3081aeace445255ef29938e3deef0b4c5223445274d1042acb71ecf",
+    "editeng/source/items/frmitems.cxx": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f",
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3"
+  },
+  "residual": "Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnative frames,HomeEnd/table navigation,zero-mark and recentTab counters,outline/history/UI and broad goal unverified."
+}
