@@ -4,7 +4,7 @@ title: "Apply native Writer Backspace numbering and indent transitions"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Apply the approved native Backspace numbering/count/indent order through shared edit-window and actual-node delta history,then verify body and cells."
 doc_version: 3
-doc_updated_at: "2026-10-05T07:24:55.375Z"
+doc_updated_at: "2026-10-05T07:33:16.271Z"
 doc_updated_by: "CODER"
 description: "One Backspace key transition through shared edit-window,actual-node NumOrNoNum and delta history with native indentation ordering;body and cell evidence."
 sections:
@@ -76,7 +76,7 @@ sections:
     Owned actual-node and mounted/Chromium Backspace contracts;one absent profile,exact failed/new-only closure,100 actual coverage,no passing replay.
   Verification: "Pending implementation and validation."
   Rollback Plan: "Revert semantic leaf without history rewriting."
-  Findings: "Iteration141 verified progress DONE. Currentmain8a8017ab clean,onlyparentactive,direct,fourmatched policies,userinstructionsabsent. Native edtwin2048 Backspace/ShiftBackspace indent/count branch;delete.cxx64 TryRemoveIndent;ednumber632 shellguard;docnum2530 NumOrNoNum counts or removes already-uncounteddirectrule;unnum282 delta booleans,nativeNumberOn/Offcomment strings492. LocalDeleteLeft unconditionallyDelLeft,browserbeforeinput lacks modifier distinction. Standingusergoal/UIlist/table instructionauthorizessafelocalcorrection;preserve244states/deviations. No source/network/runtimeupstream invocation."
+  Findings: "Iteration141 verified progress DONE. Currentmain8a8017ab clean,onlyparentactive,direct,fourmatched policies,userinstructionsabsent. Native edtwin2048 Backspace/ShiftBackspace indent/count branch;delete.cxx64 TryRemoveIndent;ednumber632 shellguard;docnum2530 NumOrNoNum counts or removes already-uncounteddirectrule;unnum282 delta booleans,nativeNumberOn/Offcomment strings492. LocalDeleteLeft unconditionallyDelLeft,browserbeforeinput lacks modifier distinction. Standingusergoal/UIlist/table instructionauthorizessafelocalcorrection;preserve244states/deviations. No source/network/runtimeupstream invocation. Firstformat/lintpass;TSfailed onlynewstructuralfixture passingSwTableinstead ofSwTableNode. Correctcase toactualtable.GetTableNode(),preservebehaviorassertions;retryTSthenrunnotyetexecuteddeps/docs/size only. Noexistingtest/productionpolicy change."
 id_source: "generated"
 ---
 ## Summary
@@ -133,4 +133,4 @@ Revert semantic leaf without history rewriting.
 
 ## Findings
 
-Iteration141 verified progress DONE. Currentmain8a8017ab clean,onlyparentactive,direct,fourmatched policies,userinstructionsabsent. Native edtwin2048 Backspace/ShiftBackspace indent/count branch;delete.cxx64 TryRemoveIndent;ednumber632 shellguard;docnum2530 NumOrNoNum counts or removes already-uncounteddirectrule;unnum282 delta booleans,nativeNumberOn/Offcomment strings492. LocalDeleteLeft unconditionallyDelLeft,browserbeforeinput lacks modifier distinction. Standingusergoal/UIlist/table instructionauthorizessafelocalcorrection;preserve244states/deviations. No source/network/runtimeupstream invocation.
+Iteration141 verified progress DONE. Currentmain8a8017ab clean,onlyparentactive,direct,fourmatched policies,userinstructionsabsent. Native edtwin2048 Backspace/ShiftBackspace indent/count branch;delete.cxx64 TryRemoveIndent;ednumber632 shellguard;docnum2530 NumOrNoNum counts or removes already-uncounteddirectrule;unnum282 delta booleans,nativeNumberOn/Offcomment strings492. LocalDeleteLeft unconditionallyDelLeft,browserbeforeinput lacks modifier distinction. Standingusergoal/UIlist/table instructionauthorizessafelocalcorrection;preserve244states/deviations. No source/network/runtimeupstream invocation. Firstformat/lintpass;TSfailed onlynewstructuralfixture passingSwTableinstead ofSwTableNode. Correctcase toactualtable.GetTableNode(),preservebehaviorassertions;retryTSthenrunnotyetexecuteddeps/docs/size only. Noexistingtest/productionpolicy change.
