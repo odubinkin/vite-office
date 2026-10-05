@@ -1,0 +1,24 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "643bd96a97e6188a21f23aa282c4050ec390654b",
+  "base": "c2d9b3d9c3ddd1e5e47c5bee7117a7a1bdbd3ae3",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+    "apps/office/e2e/writer-table-ring-continue.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/bastyp/index.ts"
+  ],
+  "reviewedSemanticDiffBytes": 166778,
+  "reviewedSemanticDiffSHA256": "a88ff6a3b5e4f58215e27edbcc361961ce371939f085a0c8f4ba4df7098118be",
+  "verdict": "pass",
+  "evidence": "Source FN_NUM_CONTINUE actual ring traversal/rule-sensitive restart prepass/final SetCurNumRule default no indent reset,SwEditShell normalized endpoints,SwDoc flag guards and SwUndoNumRuleStart bool branch inspected. UI direct attribute snapshot/history builder removed. Native generic structural position and nullable content index preserve live cursor initialization; current-slot history and atomic table selection verified.25newapp/5newcommittedChromium;12470distinctapp/109inventory/5scripts/133distinctChromium finalcommittedcases pass. ONEfullabsent profile:6initial newapp failures recovered with only those6plus3new app cases. Initial132browser passed unchanged; finalnew supported body-restart to table case passed on once-built changedsource bundle. Unsupported restarted-cell ODT probe failed beforecommand,retained diagnostic and replaced with supported fixture,not claimed as pass. No passing/fullprofile replay. Actual coverage app/inventory100%L/S/F/B with hashed contiguous unchanged-location counter transfer and actualchanged/new closure counters.417of418prior testfiles byteidentical,oneexactpayloadcorrection;250states/defaults/classes/IOexceptions/prior evidence preserved. Sixstatics/changedfiles/dependencygraph/five restoredaudits/scope/APscan/doctor/routing finalpass.",
+  "validationLimit": "Actual existing browser/UI ContinueNumbering all-ring prepass and core inherited rule/count owner,native flag-only numeric restart history/default no-indent-reset,table row/column/body ranges/current replacement/atomic history only. Generic structural native position constructor/Assign/clone and nullable index ownership preserve zero-content structural nodes and live ring initialization. Existing Sfx manager grouping remains represented directly; full native StartUndo ID/rewriter,API/macro,numeric restart-value overload,Repeat,document-owned auto undo,SwHistory/full cursor shell hierarchy/client/layout/merged/rule factory remain unverified. Column browser selector absent;core column and real Chromium row evidence only. Conscious save/open/recovery deviations unchanged,parentDOING/goalACTIVE.",
+  "residualRisk": "No browser cell restart setup: existing cell-list ODT import unsupported and restart control absent. Core restart cells verified; browser imported restartedbody continuation verified. Full native macro/API/StartUndo/numeric restart overload/Repeat/document-owned auto history/SwHistory/cursor shell hierarchy/client/layout/merged factory and broad UI/table/list parity remain unverified. Column selector absent;actual core columns and browser rows only. Conscious IO/recovery deviations unchanged,parentDOING/goalACTIVE."
+}
