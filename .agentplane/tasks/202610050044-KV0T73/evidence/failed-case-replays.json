@@ -1,0 +1,104 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/doc/text-hint-copy.test.ts -t reconstructs exact-end moved attributes and retains captured history for mask [0-7]$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 251,
+      "sha256": "3168b9acc4eaa9ec9a888feecca057007eb62f355cf4be60f1d6f324224dccba",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  8 passed | 42 skipped (50)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/doc/text-hint-cut.test.ts -t (starts inside, ends at cut end|matches both cut boundaries) with mask [0-7]$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 253,
+      "sha256": "635d4fcf7ca469cf9dffcddc8b2536f26cafe1a6f3bd6489f7ad868751d031da",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  16 passed | 109 skipped (125)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/doc/owned-text-move.test.ts -t moves exact hints with mask [0-7]$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 250,
+      "sha256": "86d9ea5b054d06f2d97a80cb4730b33489a0f666a73000de50b4b4a1d1c35997",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  8 passed | 31 skipped (39)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/owned-hint-cut.test.ts -t owns boundary 3\\.\\.7 for mask [0-7]$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 250,
+      "sha256": "1d3ef7030f7726b39680d1f2045754d09eacbae7ff26af592987fdac670b6a52",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  8 passed | 71 skipped (79)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/owned-hint-notifications.test.ts -t hands off exact owners for flag mask [0-7]$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 250,
+      "sha256": "e3032b81797a851c7c60bed731ffeefd8de6c56070e4d9b64671cae2f878551e",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  8 passed | 19 skipped (27)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/secondary-hint-transfer.test.ts -t keeps three owned maps across exact move, flags=[0-7]$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 250,
+      "sha256": "bb31c41d67db52caaeecc24cb829e1044f516301a7d9d5d356b0f12758014708",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  8 passed | 19 skipped (27)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/internet-node-ownership.test.ts -t detaches and rebinds cut 3\\.\\.7 with actual transfer=false$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 237,
+      "sha256": "48f68e58c894dd818d12417e3203fea0c400383665997ee9a4017529df2ed388",
+      "totals": [
+        "Test Files  1 skipped (1)",
+        "Tests  9 skipped (9)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts -t (retains zero ranges through owned clones,copies,graph16 and Worker5 family=(53|54)|retains the same empty internet item through actual typing undo and redo)$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 1,
+      "bytes": 1359,
+      "sha256": "f431d5ba9a6a18d43af4ff3519e4d3a1fbae39a4951aab42d74080b7647fdd17",
+      "totals": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 2 passed | 183 skipped (186)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "FAIL  src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts > native empty ranged ownership > retains zero ranges through owned clones,copies,graph16 and Worker5 family=53"
+      ]
+    }
+  ]
+}
