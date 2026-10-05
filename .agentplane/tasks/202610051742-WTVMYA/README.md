@@ -1,10 +1,11 @@
 ---
 id: "202610051742-WTVMYA"
 title: "Resolve insertion undo through native node indices"
-status: "DOING"
+result_summary: "Represented insertion undo resolves current native node index/document instead of retained paragraph object; native typing grouping survives replacement. Shell derives active paragraph from persistent cursor, eliminating redundant cache; selected table deletion preserves chosen registered final position.12new tests,409old unchanged,4failures closed plus1new case; final actual app/inventory100%. Broader native payload/list/table/UI parity remains open; conscious IO/recovery exceptions retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202610051742-WTVMYA/evidence/restored-source-audits.json"
   findings:
     - "Same-agent EVALUATOR reviewed exact semantic diff and evidence.12new,409prior tests unchanged,250metadata states/defaults/exceptions preserved. ONE absent full profile and4failed+1new closure, no passing replay. Actual app/inventory100% source-aligned counters,6paths/3owners,5restored source audits0violations.120Chromium initial variant evidence bounded explicitly."
-commit: null
+commit:
+  hash: "5e1f9cd69f35520de54856c6027735386424c53e"
+  message: "🧩 WTVMYA task: record exact commit verification"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native insertion node-index ownership and actual current body/cell grouping/history tests under standing iterative user authorization. Existing tests/defaults/exceptions untouched; ONE absent profile then restored source audits."
+  -
+    author: "CODER"
+    body: "Verified: native insertion numeric m_nNode/m_rDoc ownership and real current shell cursor paragraph; redundant cache plus8writes removed. Registered final SwPosition preserves reversed/partial table caret.12new,409prior tests unchanged,250states/defaults/exceptions preserved. ONE absent full profile and4failed+1new closure, actual app/inventory100%,5restored source audits0violations. Exact EVALUATOR pass.120Chromium initialvariant; full finalbrowser variant and broader payload/UI parity remain open."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact semantic5ac7b6f5bb2a5eecbfe1f650394c2297fdd140a2: native numeric insertion target/grouping and native current shell paragraph cache removal; registered final SwPosition fixes represented reversed/partial table caret.12new tests,409prior files byte-identical,250states/defaults/exceptions preserved. ONE absent full profile12245app pass4fail/12249,109inventory,5scripts,120Chromium initialvariant; original4failed+1new only closure5pass23skipped. Final distinct12250app, actual app/inventory100% source-aligned counters. Six statics/changed-file no-emit/JSDoc/5restored sourceaudits0violations. Same-agent EVALUATOR pass. No passing replay; final full browser variant and broader ownership/UI parity unverified, conscious IO/recovery deviations retained."
+  -
+    type: "status"
+    at: "2026-10-05T18:03:07.347Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native insertion numeric m_nNode/m_rDoc ownership and real current shell cursor paragraph; redundant cache plus8writes removed. Registered final SwPosition preserves reversed/partial table caret.12new,409prior tests unchanged,250states/defaults/exceptions preserved. ONE absent full profile and4failed+1new closure, actual app/inventory100%,5restored source audits0violations. Exact EVALUATOR pass.120Chromium initialvariant; full finalbrowser variant and broader payload/UI parity remain open."
 doc_version: 3
-doc_updated_at: "2026-10-05T18:02:35.519Z"
+doc_updated_at: "2026-10-05T18:03:07.348Z"
 doc_updated_by: "CODER"
 description: "Iteration157 removes retained paragraph-object target from represented SwUndoInsert, resolving the current native node by m_nNode and native m_rDoc as pinned unins.cxx. Required prerequisite for removing retained split trailing identity bridge. Numeric grouping/current node replacement/body and table shell evidence; existing fragment payload and offset contract unchanged and unverified as full native undo content semantics. Standing iterative UI/refactoring authorization; previous turn156 verified progress, clean main. Four scoped paths;409prior test files unchanged;250states/defaults/exceptions/prior evidence preserved. One absent full profile, only failures/new cases repeated; no upstream source/helper artifacts in AP."
 sections:
@@ -129,6 +142,10 @@ sections:
     Evidence:actual app/inventory100%L/S/F/B. App12350lines/13522statements/3376functions/10068branches;inventory1464/1523/384/1080. Final current closure map carries only actual exact unchanged contiguous counters from hashed initial sources for2changedowners; new/changed/crossing locations require actual5-case counters. Initial source copies/maps only ignored appcache; no fabricated counters. Unins finalhash equals original full profile. All250states/defaults/classifications/exceptions/prior evidence preserved; additive3existingowner evidence only,6scopepaths. Five restored source audits pass0semantic violations. AP ignored-inclusive scan4243files0forbidden before review,doctor0errors2oldwarnings,routingOK. No upstreamcopies/helpers/Python/nativeprobes/binaries/rawdiffs/sourceframes/diagnostics inAP; vendor finallyrestored; no network/outside/global/subagents.
 
     Limits:existing formatted fragment/start-offset/pending native insert payload differs from full maText/MoveToUndoNds/nontext/append/RSID/redline behavior; remaining delete/format/list action payload object retention, retained split trailing bridge and native physical fresh-prefix/original-suffix semantics still open. Full undo-area/CutImpl/client/frame/field/redline lifetimes and broad UI/list/table merged/nested/protected/layout/clipboard remain unverified. Conscious save/open/recovery deviations preserved. No whole-module or broad parity promotion; parentDOING,goalactive.
+extensions:
+  implementation_commit:
+    hash: "5ac7b6f5bb2a5eecbfe1f650394c2297fdd140a2"
+    message: "🧩 WTVMYA code: resolve native insertion and shell cursor owners"
 id_source: "generated"
 ---
 ## Summary
