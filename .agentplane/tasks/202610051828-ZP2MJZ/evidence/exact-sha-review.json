@@ -1,0 +1,18 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "40d686bd38b065db764953faeec7121cc7d315e1",
+  "base": "318e41bd51b9fd20a03f6ae81c7aa7786e65a452",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unattr.ts",
+    "apps/office/src/sw/source/core/undo/unfmco.ts",
+    "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "reviewedSemanticDiffBytes": 78138,
+  "reviewedSemanticDiffSHA256": "4bff5ea6ffe2a0897fe3ba75ece038890033f7db763df35076b4f1a9d576e540",
+  "verdict": "pass",
+  "evidence": "Pinned unattr SwUndoAttr/ResetAttr numeric range constructors and current doc history/redo, unfmco SwUndRng/name/DoSetFormatColl current inclusive range replay inspected.6represented formatting/reset/style actions no longer retain paragraph objects; numeric indices resolve current native slots, existing original-document guards/payload sizes/defaults preserved. Reset ApplyExact captures actual current hints; Reset/FormatColl redo build current numeric PaM, temporary positions disposed finally.45new native body/cell section-preserving replacement, direct/composite/standalone shell history,cursor/pending/payload/neighbor/foreignguard cases,411prior testfiles/250records preserved;5paths/2owners.6static gates pass after onlyfailedlint JSDoc correction;ONEfull absent profile12312app pass4newfixturefail/12316,109inventory,5scripts,120Chromium final production. Only4originalfailedcases repeated4pass41skipped afterfixture clone correction,no productionchanges or passingreplay. Actual same-source maps merged app/inventory100%L/S/F/B;5source audits0semanticviolations,APscan0forbidden/doctor0errors2oldwarnings/routingOK. No broad/fullmodulepromotion.",
+  "validationLimit": "Sixrepresented direct character/item/alignment/margin/reset/style actions resolve current numeric native nodes; Reset exact capture resolves current entry indices, FormatColl and Reset redo rebuild native numeric SwUndRng/PaM current inclusive nodes. Current document guard adjunct retained; native base ownership remains unverified. Wholefragment/directitems/fullhints/style identifier snapshots remain portable, full native SwHistory/client/registered delta/attribute payloads/reset ranges/undo area not implemented.45distinct native body/cell section-preserving replacement, shell cursor/pending/neighbors/foreignguards/direct/composite/standalone history cases;4new collapsed composite failures corrected fixture CopyTo fresh constructor flags to same-pool state-preserving clone, assertions kept.411prior testfiles unchanged/250records prior evidence/state/defaults/exceptions retained.120Chromium passed exact final production; only newtest fixture changed afterward. Other action node references/split physical bridge and broad UI/list/table behavior remainopen, conscious IO/recovery exceptions preserved, no broad/fullmodule promotion.",
+  "residualRisk": "Wholecharacter fragments still use ReplaceUndoRange, directitem/fullhint/style identifier snapshots and originaldocument guard remain portable; fullnative SwHistory/SwRegHistory/registered delta/baseownership/reset-range/attribute payload/redline/undoarea/client/frame architecture unverified. Other list/deletion node references and retained split physicalbridge remainopen,broadUI/list/tableparity unverified;consciousIO exceptions preserved,parent/goalactive."
+}
