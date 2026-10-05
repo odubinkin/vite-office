@@ -1,0 +1,26 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-counted-list-layout.spec.ts writer-selected-list-toggle.spec.ts --grep=(?:^|\\s)(?:Writer counted axes stay independent through paragraph history cell=true|Writer selected body toggle Ordered List as one list range|Writer selected body toggle Unordered List as one list range)$ --reporter=list,json",
+      "profile": "upstream-absent original failed Chromium cases only",
+      "exit": 0,
+      "bytes": 991,
+      "sha256": "2c47239d70ebdcc9a3ac0de5034c798534e3a01c87d063f3dc0ae4ea9bd001cf",
+      "caseCounts": {
+        "startTime": "2026-10-05T19:36:01.908Z",
+        "duration": 3037.425,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": [],
+      "executedCases": [
+        "writer-counted-list-layout.spec.ts > Writer counted axes stay independent through paragraph history cell=true",
+        "writer-selected-list-toggle.spec.ts > Writer selected body toggle Ordered List as one list range",
+        "writer-selected-list-toggle.spec.ts > Writer selected body toggle Unordered List as one list range"
+      ]
+    }
+  ]
+}

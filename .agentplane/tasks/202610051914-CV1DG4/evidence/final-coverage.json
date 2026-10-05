@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "lines": {
+      "total": 12508,
+      "covered": 12508,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13700,
+      "covered": 13700,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3375,
+      "covered": 3375,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10183,
+      "covered": 10183,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "sourceChangedAfterInitialProfile": [],
+  "counterTransfer": "Actual initial and four originally failed cases and one genuinely new explicit suppression case counters merged only with identical statement/function/branch maps; final production hashes equal initial full absent profile. No passing replay or changed-source counter transfer.",
+  "initialMapSHA256": "ed5b47f6da161b90f9432edffcd801c8217a217ed70ec73552b306e070a3d253",
+  "finalMapSHA256": "a2becb9adb1831314583085839a1d249addae6fbd4f949976585b1913ef32831",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "846f7bc1234f5dab25e354eae7787aae3d03a7f1eca562f12707020c26666588",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "efaa14161b86cec7f6a3c3b6a81588f18858ef0bb82b71c33fc5b9c08392707e",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "35825a6e4f4cd88544cddba82222d2b7ad6c5d66989fb1e81f303caf9fb9a591"
+  }
+}
