@@ -84,6 +84,19 @@ export class SwEditWin {
       start ? this.wrtShell.StartOfSection(select) : this.wrtShell.EndOfSection(select),
     );
   }
+  /** Converts a browser row hit into native text/cursor coordinates and shell selection. @param nodeIndex - Hit row's actual text node. @returns Whether accepted. */
+  public SelectTableRow(nodeIndex: number): boolean {
+    const node = this.ResolveTextNode(nodeIndex);
+    if (node === undefined || !(node.StartOfSectionNode() instanceof SwTableBoxStartNode))
+      return false;
+    const point = new SwPosition(node, 0);
+    try {
+      this.wrtShell.SetCursor(point);
+      return this.Complete(this.wrtShell.SelectTableRow());
+    } finally {
+      point.Dispose();
+    }
+  }
 
   /** Handles table Tab intent with numbering-at-start priority before cell traversal. @param shift - Previous-cell or list-promote direction. @returns Whether Writer owns this key, including a table boundary no-op. */
   public HandleTableTab(shift = false): boolean {

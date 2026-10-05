@@ -1,4 +1,6 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
+import type { SwTableLine, SwTableBox } from "../../source/core/table/swtable";
+import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { TableProperties } from "lucide-react";
@@ -40,7 +42,7 @@ import type { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
-import type { SwTable } from "../../source/core/table/swtable";
+import { SwTableCursor } from "../../source/core/crsr/swcrsr";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../sdi/swriter";
@@ -99,14 +101,9 @@ export function WriterWorkbench({
     presentationStore.GetSnapshot,
   );
   const activeDocument = view.GetDocShell().GetDoc();
-  const [selectedTable, setSelectedTable] = useState<SwTable>();
-  const [selectedTableRow, setSelectedTableRow] = useState<number>();
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
-  const currentTable =
-    selectedTable !== undefined && activeDocument.GetTables().includes(selectedTable)
-      ? selectedTable
-      : undefined;
+  const currentTable = view.GetWrtShell().IsCursorInTable()?.GetTable();
   const availableTableWidth =
     snapshot.pageDescriptor.width -
     snapshot.pageDescriptor.leftMargin -
@@ -158,8 +155,15 @@ export function WriterWorkbench({
         column === columns - 1 ? availableTableWidth - columnWidth * (columns - 1) : columnWidth,
       );
     for (let row = 0; row < rows; row += 1) activeDocument.nodes.AppendTableRow(table, columns);
-    setSelectedTable(table);
-    setSelectedTableRow(0);
+    view
+      .GetEditWin()
+      .FocusNode(
+        (
+          (
+            (table.GetTabLines()[0] as SwTableLine).GetTabBoxes()[0] as SwTableBox
+          ).GetParagraphs()[0] as SwTextNode
+        ).GetIndex(),
+      );
   }
   const submitTable =
     /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
@@ -191,8 +195,15 @@ export function WriterWorkbench({
               }),
             ),
           );
-        setSelectedTable(table);
-        setSelectedTableRow(0);
+        view
+          .GetEditWin()
+          .FocusNode(
+            (
+              (
+                (table.GetTabLines()[0] as SwTableLine).GetTabBoxes()[0] as SwTableBox
+              ).GetParagraphs()[0] as SwTextNode
+            ).GetIndex(),
+          );
       } else if (currentTable !== undefined) {
         currentTable.SetFormat({
           ...currentTable.GetFormat(),
@@ -206,8 +217,25 @@ export function WriterWorkbench({
             index,
           ) => currentTable.SetColumnWidth(index, width),
         );
-        const rowIndex = selectedTableRow as number;
-        const rows = currentTable.GetTabLines().slice(rowIndex, rowIndex + 1);
+        const cursor = view.GetWrtShell().GetCursor(),
+          section = cursor.GetPoint().GetNode().StartOfSectionNode();
+        const rows = currentTable
+          .GetTabLines()
+          .filter(
+            /** Projects actual native table ownership. @param row - Current owner. @returns Operation result. */ (
+              row,
+            ) =>
+              row
+                .GetTabBoxes()
+                .some(
+                  /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
+                    box,
+                  ) =>
+                    cursor instanceof SwTableCursor
+                      ? cursor.GetSelectedBoxes().includes(box)
+                      : box.GetStartNode() === section,
+                ),
+          );
         for (const row of rows) {
           row.SetFormat({
             ...row.GetFormat(),
@@ -554,17 +582,7 @@ export function WriterWorkbench({
           paragraphSpacingSettings={snapshot.paragraphSpacingSettings}
           paragraphs={snapshot.paragraphs}
           textNodes={snapshot.textNodes}
-          {...(currentTable === undefined ? {} : { selectedTable: currentTable })}
-          {...(selectedTableRow === undefined ? {} : { selectedTableRow })}
-          onSelectTableRow={
-            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-              table,
-              row,
-            ) => {
-              setSelectedTable(table);
-              setSelectedTableRow(row);
-            }
-          }
+          selectedTableBoxes={snapshot.selectedTableBoxes}
           showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
           lineNumberInfo={snapshot.lineNumberInfo}
           verticalRuler={

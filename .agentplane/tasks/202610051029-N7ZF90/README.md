@@ -4,7 +4,7 @@ title: "Own table row selection and selected box painting in native cursor"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: user authorized iterative UI upstream refactoring; native table selection leaf 147."
 doc_version: 3
-doc_updated_at: "2026-10-05T10:29:56.359Z"
+doc_updated_at: "2026-10-05T10:56:18.701Z"
 doc_updated_by: "CODER"
 description: "Iteration 147 under 202609240501-C9TN6M. Remove React selected table and row state; use native SwTableCursor selected boxes and shell row selection for the implemented flat table profile."
 sections:
@@ -52,7 +52,10 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the intentional semantic commit and task closure through a new authorized leaf; no history rewrite."
-  Findings: "Source inspection: current React selectedTable/selectedTableRow separately own properties and painting. Pinned SwTableCursor owns sorted SwSelBoxes/ActualizeSelection/NewTableSelection; SwTable::CreateSelection owns flat selection; SwWrtShell::SelectTableRow delegates native cursor shell selection. Existing browser row affordance retained; no whole UI parity claim. Flat equal-column boxes only; full rings/layout/protection/nesting/merging remain unverified."
+  Findings: |-
+    Iteration147 verified bounded progress: removed React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor sorted actual box identities, SwTable flat shared-column rectangle/row selection, shell point-first/mark-last row selection and native table context, immutable selected-box painting. No content history for selection. Insert focuses actual first cell. Properties follow actual current table/row selection; ordinary caret clears stale row paint. One existing Chromium focus failure exposed already-current first-cell focus; a DOM click-focus wrapper retains a single editing host and closes the original assertion without editing old tests.
+    Verification: six static gates pass after failed-only lint/type/doc corrections; changed-file format/lint pass. ONE upstream-absent full profile: static build pass; app12062/298 all assertions pass, initial coverage short2statements3branches; inventory109/36,100%; scripts5/2; Chromium113pass/1failed of114 with no flakes. Initial exact failed case saved before closure: Writer types in a table cell and reopens the edited ODT. New-only closure ran3 actual new cases (2pass/1ambiguous DOM label query), original failed Chromium only passed using development server. Scoped failed DOM query to First table and sole failed case passed; no production changes after the focus wrapper. Total19new app cases and2new Chromium cases;114unique Chromium closed. No passing full/static/build/suite/test replay. Final map actual counters100% lines11919,statements13049,functions3323,branches9771. Initial maps ignored appcache only. One changed production file after full profile; reconstruct initial source hash exactly; carry only contiguous unchanged locations, anonymous numeric function labels normalized by unchanged decl/loc; changed/crossing locations use executed new cases. Final wrapper validated by mounted focus and original failed Chromium ODT case; successful bundle/full profiles not rebuilt/replayed. This validation boundary remains explicit.
+    After restoration five source audits pass; source-provenance required missing test markers corrected and failed gate only retried, invariants/parity then first executions pass. Existing246 module states/defaults/classifications/exceptions and all prior tests retained. AP ignored-inclusive scan4101files/0forbidden; no saved helper/script/Python/upstream/raw source/raw diagnostics. No network/outside/subagent access. Native source hashes and scoped diff recorded. Full cursor rings/per-box edit ranges, native table layout, merged/nested/protected/hidden cells, drag/column selections and plain visual Home/End remain unverified. Broad goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -85,4 +88,6 @@ Revert the intentional semantic commit and task closure through a new authorized
 
 ## Findings
 
-Source inspection: current React selectedTable/selectedTableRow separately own properties and painting. Pinned SwTableCursor owns sorted SwSelBoxes/ActualizeSelection/NewTableSelection; SwTable::CreateSelection owns flat selection; SwWrtShell::SelectTableRow delegates native cursor shell selection. Existing browser row affordance retained; no whole UI parity claim. Flat equal-column boxes only; full rings/layout/protection/nesting/merging remain unverified.
+Iteration147 verified bounded progress: removed React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor sorted actual box identities, SwTable flat shared-column rectangle/row selection, shell point-first/mark-last row selection and native table context, immutable selected-box painting. No content history for selection. Insert focuses actual first cell. Properties follow actual current table/row selection; ordinary caret clears stale row paint. One existing Chromium focus failure exposed already-current first-cell focus; a DOM click-focus wrapper retains a single editing host and closes the original assertion without editing old tests.
+Verification: six static gates pass after failed-only lint/type/doc corrections; changed-file format/lint pass. ONE upstream-absent full profile: static build pass; app12062/298 all assertions pass, initial coverage short2statements3branches; inventory109/36,100%; scripts5/2; Chromium113pass/1failed of114 with no flakes. Initial exact failed case saved before closure: Writer types in a table cell and reopens the edited ODT. New-only closure ran3 actual new cases (2pass/1ambiguous DOM label query), original failed Chromium only passed using development server. Scoped failed DOM query to First table and sole failed case passed; no production changes after the focus wrapper. Total19new app cases and2new Chromium cases;114unique Chromium closed. No passing full/static/build/suite/test replay. Final map actual counters100% lines11919,statements13049,functions3323,branches9771. Initial maps ignored appcache only. One changed production file after full profile; reconstruct initial source hash exactly; carry only contiguous unchanged locations, anonymous numeric function labels normalized by unchanged decl/loc; changed/crossing locations use executed new cases. Final wrapper validated by mounted focus and original failed Chromium ODT case; successful bundle/full profiles not rebuilt/replayed. This validation boundary remains explicit.
+After restoration five source audits pass; source-provenance required missing test markers corrected and failed gate only retried, invariants/parity then first executions pass. Existing246 module states/defaults/classifications/exceptions and all prior tests retained. AP ignored-inclusive scan4101files/0forbidden; no saved helper/script/Python/upstream/raw source/raw diagnostics. No network/outside/subagent access. Native source hashes and scoped diff recorded. Full cursor rings/per-box edit ranges, native table layout, merged/nested/protected/hidden cells, drag/column selections and plain visual Home/End remain unverified. Broad goal remains active.

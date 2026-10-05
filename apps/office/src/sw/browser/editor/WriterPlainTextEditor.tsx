@@ -1,4 +1,6 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
+import type { SwTableLine, SwTableBox } from "../../source/core/table/swtable";
+import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 
 import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
@@ -10,7 +12,6 @@ import type { WriterParagraphProjection as WriterParagraph } from "../presentati
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { WriterEditableTable } from "./WriterEditableTable";
-import type { SwTable } from "../../source/core/table/swtable";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import {
@@ -37,9 +38,7 @@ export interface WriterPlainTextEditorProps {
   readonly verticalRuler?: ReactNode;
   readonly showLineNumbers?: boolean;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
-  readonly selectedTable?: SwTable;
-  readonly selectedTableRow?: number;
-  readonly onSelectTableRow?: (table: SwTable, row: number) => void;
+  readonly selectedTableBoxes?: readonly number[];
 }
 
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
@@ -166,11 +165,18 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         }
         firstRow={frame.firstRow}
         lastRow={frame.lastRow}
-        selectedRow={props.selectedTable === frame.table ? props.selectedTableRow : undefined}
+        selectedBoxes={props.selectedTableBoxes}
         onSelectRow={
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
             row,
-          ) => props.onSelectTableRow?.(frame.table, row)
+          ) =>
+            props.editWindow.SelectTableRow(
+              (
+                (
+                  (frame.table.GetTabLines()[row] as SwTableLine).GetTabBoxes()[0] as SwTableBox
+                ).GetParagraphs()[0] as SwTextNode
+              ).GetIndex(),
+            )
         }
       />
     );
@@ -427,7 +433,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         className="grid w-max min-w-full justify-center gap-6 px-8 text-slate-950 outline-none"
         contentEditable
         data-writer-editing-host="true"
-        onClick={controller.HandleClick}
+        onClick={
+          /** Keeps the clicked cell's focus when its native cursor position was already current. @param event - Browser click. @returns Nothing. */ (
+            event,
+          ) => {
+            controller.HandleClick(event);
+            (event.target as HTMLElement).closest<HTMLElement>("[data-writer-table-cell]")?.focus();
+          }
+        }
         onCompositionEnd={controller.HandleCompositionEnd}
         onCompositionStart={controller.HandleCompositionStart}
         onCompositionUpdate={controller.HandleCompositionUpdate}

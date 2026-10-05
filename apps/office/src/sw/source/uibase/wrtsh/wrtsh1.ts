@@ -10,7 +10,7 @@ import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
 import { SwTableBoxStartNode, SwTableNode } from "../../core/docnode/node";
 import { SwUndoTableNdsChg } from "../../core/undo/untbl";
-import type { SwTableLine } from "../../core/table/swtable";
+import { SwTable, type SwTableBox, type SwTableLine } from "../../core/table/swtable";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
@@ -181,6 +181,44 @@ export class SwWrtShell extends SwModify {
   /** Reports the bounded shell table-selection mode. @returns Whether a native table cursor is active. */
   public HasBoxSelection(): boolean {
     return this.tableCursor !== undefined;
+  }
+  /** Resolves native table context from selected boxes or the ordinary point section. @returns Current table node. */
+  public IsCursorInTable(): SwTableNode | undefined {
+    const node =
+      this.tableCursor?.GetSelectedBoxes()[0]?.GetStartNode() ??
+      this.GetCursor().GetPoint().GetNode();
+    const section = node instanceof SwTableBoxStartNode ? node : node.StartOfSectionNode();
+    return section instanceof SwTableBoxStartNode
+      ? (section.StartOfSectionNode() as SwTableNode)
+      : undefined;
+  }
+  /** Selects the current flat row using native boxes and endpoint direction. @returns Whether a row was selected. */
+  public SelectTableRow(): boolean {
+    const table = this.IsCursorInTable();
+    if (table === undefined) return false;
+    const cursor = this.GetCursor(),
+      point = cursor.GetPoint().GetNode().StartOfSectionNode(),
+      mark = cursor.GetMark().GetNode().StartOfSectionNode();
+    if (!(point instanceof SwTableBoxStartNode) || !(mark instanceof SwTableBoxStartNode))
+      return false;
+    const boxes: SwTableBox[] = [];
+    table.GetTable().CreateSelection(point, mark, boxes, SwTable.SEARCH_ROW);
+    if (boxes.length === 0) return false;
+    if (this.tableCursor === undefined)
+      this.tableCursor = new SwTableCursor(this.cursor.GetPoint());
+    this.cursor.DeleteMark();
+    const first = (boxes[0] as SwTableBox).GetParagraphs().at(-1) as WriterParagraph,
+      last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as WriterParagraph;
+    this.tableCursor.DeleteMark();
+    this.tableCursor.GetPoint().Assign(last, last.Len());
+    this.tableCursor.SetMark();
+    this.tableCursor.GetPoint().Assign(first, first.Len());
+    this.tableCursor.ActualizeSelection(boxes);
+    this.activeParagraph = first;
+    this.pendingCharacterItems = first.GetCharacterItemsAt(first.Len());
+    this.docShell.GetUndoManager().BreakUndoGrouping();
+    this.NotifySelection();
+    return true;
   }
   /** Releases the table cursor without changing the persistent ordinary cursor. @returns Nothing. */
   private ClearTableCursor(): void {
@@ -894,6 +932,7 @@ export class SwWrtShell extends SwModify {
 
   /** Publishes shell-local selection state invalidation. @returns Nothing. */
   private NotifySelection(): void {
+    this.tableCursor?.NewTableSelection();
     this.CallSwClientNotify({ kind: "cursor-selection-changed" });
   }
 }

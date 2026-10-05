@@ -94,6 +94,8 @@ export class SwTableLine {
 
 /** Owns ordered rows, columns and a node-array section like upstream SwTable. */
 export class SwTable {
+  public static readonly SEARCH_NONE = 0;
+  public static readonly SEARCH_ROW = 1;
   private readonly lines: SwTableLine[] = [];
   private readonly columnWidths: number[] = [];
   private readonly softPageBreakRows: number[] = [];
@@ -157,6 +159,33 @@ export class SwTable {
   /** Returns ordered rows. @returns Rows. */
   public GetTabLines(): readonly SwTableLine[] {
     return this.lines;
+  }
+
+  /** Collects native boxes for the represented flat shared-column grid. @param start - First endpoint section. @param end - Other endpoint section. @param boxes - Replaced sorted selection. @param search - Rectangle or complete rows. @returns Nothing. */
+  public CreateSelection(
+    start: SwTableBoxStartNode,
+    end: SwTableBoxStartNode,
+    boxes: SwTableBox[],
+    search: 0 | 1,
+  ): void {
+    boxes.length = 0;
+    const endpoints: { row: number; column: number }[] = [];
+    for (const [row, line] of this.lines.entries())
+      for (const [column, box] of line.GetTabBoxes().entries())
+        if (box.GetStartNode() === start || box.GetStartNode() === end) {
+          boxes.push(box);
+          endpoints.push({ row, column });
+          if (start === end) endpoints.push({ row, column });
+        }
+    if (endpoints.length !== 2) return;
+    const first = endpoints[0] as { row: number; column: number },
+      last = endpoints[1] as { row: number; column: number };
+    const left = Math.min(first.column, last.column),
+      right = Math.max(first.column, last.column);
+    boxes.length = 0;
+    for (let row = first.row; row <= last.row; row++)
+      for (const [column, box] of (this.lines[row] as SwTableLine).GetTabBoxes().entries())
+        if (search === SwTable.SEARCH_ROW || (column >= left && column <= right)) boxes.push(box);
   }
 
   /** Stores the table-owned soft pagination hint. @returns Nothing. */

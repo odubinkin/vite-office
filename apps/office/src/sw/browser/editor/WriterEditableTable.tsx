@@ -7,7 +7,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
 /** Renders one visible, editable Writer table with row selection. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterEditableTable({
   table,
-  selectedRow,
+  selectedBoxes,
   onSelectRow,
   firstRow = 0,
   lastRow = table.GetTabLines().length - 1,
@@ -17,7 +17,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
   retainParagraphElement,
 }: Readonly<{
   table: SwTable;
-  selectedRow?: number | undefined;
+  selectedBoxes?: readonly number[] | undefined;
   onSelectRow: (row: number) => void;
   firstRow?: number;
   lastRow?: number;
@@ -71,7 +71,13 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                 fragmentRowIndex,
               ) => (
                 <tr
-                  aria-selected={selectedRow === firstRow + fragmentRowIndex}
+                  aria-selected={row
+                    .GetTabBoxes()
+                    .every(
+                      /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
+                        box,
+                      ) => selectedBoxes?.includes(box.GetStartNode().GetIndex()) === true,
+                    )}
                   data-writer-table-row={firstRow + fragmentRowIndex}
                   key={firstRow + fragmentRowIndex}
                   onClick={
@@ -97,7 +103,9 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                       return (
                         <CellTag
                           data-writer-editor-selected={
-                            selectedRow === rowIndex ? "true" : undefined
+                            selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
+                              ? "true"
+                              : undefined
                           }
                           data-writer-border-guide={
                             cellFormat.border === undefined || cellFormat.border === "none"
@@ -105,7 +113,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                               : undefined
                           }
                           className={
-                            selectedRow === rowIndex
+                            selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
                               ? "bg-indigo-50 outline outline-1 outline-indigo-300"
                               : ""
                           }
@@ -123,9 +131,22 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                             <button
                               aria-label={`Select row ${rowIndex + 1} in ${table.GetName()}`}
                               className="mr-1 text-xs text-indigo-700"
+                              contentEditable={false}
+                              onMouseDown={
+                                /** Keeps browser focus at the document while a native row gesture runs. @param event - Pointer down. @returns Nothing. */ (
+                                  event,
+                                ) => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                }
+                              }
                               onClick={
-                                /** Handles the browser table interaction.  @returns Callback result. */ () =>
-                                  onSelectRow(rowIndex)
+                                /** Selects the native row without bubbling a second row gesture. @param event - Browser click. @returns Nothing. */ (
+                                  event,
+                                ) => {
+                                  event.stopPropagation();
+                                  onSelectRow(rowIndex);
+                                }
                               }
                               type="button"
                             >

@@ -6,7 +6,7 @@
   "counterTransfer": "Only unchanged contiguous line locations; changed or crossing locations use actual new cases. Final callbacks executed; no inferred counters.",
   "carried": {
     "statements": 136,
-    "functions": 38,
+    "functions": 46,
     "branches": 72
   },
   "summary": {
@@ -24,9 +24,9 @@
     },
     "functions": {
       "total": 3323,
-      "covered": 3322,
+      "covered": 3323,
       "skipped": 0,
-      "pct": 99.96
+      "pct": 100
     },
     "branches": {
       "total": 9771,
@@ -41,37 +41,7 @@
       "pct": "Unknown"
     }
   },
-  "missing": [
-    {
-      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
-      "summary": {
-        "lines": {
-          "total": 132,
-          "covered": 132,
-          "skipped": 0,
-          "pct": 100
-        },
-        "functions": {
-          "total": 48,
-          "covered": 47,
-          "skipped": 0,
-          "pct": 97.91
-        },
-        "statements": {
-          "total": 139,
-          "covered": 139,
-          "skipped": 0,
-          "pct": 100
-        },
-        "branches": {
-          "total": 72,
-          "covered": 72,
-          "skipped": 0,
-          "pct": 100
-        }
-      }
-    }
-  ],
+  "missing": [],
   "initialMapSHA256": "443043966311e2a649b9057859842617ffc90d18526e7573168d419408c9eae1",
-  "finalMapSHA256": "23b43553e779292dfb01032bf8603edaaa91e7fbaa6d62cb821c0189d791c4b9"
+  "finalMapSHA256": "823944b694ff03600984590018f15364569c38c065a633d8596e8ef7007a8564"
 }

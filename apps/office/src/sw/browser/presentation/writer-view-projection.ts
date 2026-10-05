@@ -21,6 +21,7 @@ import { type WriterTextRun } from "../../source/filter/basflt/writer-transfer";
 import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
+import { SwTableCursor } from "../../source/core/crsr/swcrsr";
 import type { SwView } from "../../source/uibase/uiview/view";
 import {
   SvxLineSpacingItem,
@@ -131,6 +132,7 @@ export interface WriterParagraphComputedStyle {
 
 /** Immutable browser presentation value with no mutable model references. */
 export interface WriterPresentationProjection {
+  readonly selectedTableBoxes: readonly number[];
   readonly activeParagraph: WriterParagraphProjection;
   readonly activeParagraphIndex: number;
   readonly cursorSelection: WriterCursorSelection;
@@ -354,6 +356,17 @@ export class WriterViewProjection {
       },
     };
     return Object.freeze({
+      selectedTableBoxes: Object.freeze(
+        cursor instanceof SwTableCursor
+          ? cursor
+              .GetSelectedBoxes()
+              .map(
+                /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
+                  box,
+                ) => box.GetStartNode().GetIndex(),
+              )
+          : [],
+      ),
       activeParagraph: textNodes[nodes.indexOf(activeParagraph)] as WriterParagraphProjection,
       activeParagraphIndex,
       cursorSelection: Object.freeze(cursorSelection),
