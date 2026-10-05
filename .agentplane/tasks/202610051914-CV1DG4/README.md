@@ -1,10 +1,11 @@
 ---
 id: "202610051914-CV1DG4"
 title: "Apply selected lists through native document rule operations"
-status: "DOING"
+result_summary: "Selected list toggles and continuation now use native document ranges with grouped numeric history; redundant paragraph/continuation layers removed; bounded behavior verified, broad upstream goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,7 +45,9 @@ quality_review:
     - ".agentplane/tasks/202610051914-CV1DG4/evidence/final-coverage.json"
   findings:
     - "13 intentional paths;native SetNumRule/SetCounted flags and inclusive current ranges,shared numeric InsNum history,36newapp/4newChromium,12395app/109inventory/5scripts/126Chromium pass. ONEfullabsentprofile;only4failedapp+1new suppression/3failedChromium recovery;unchangedproductionactualidenticalmapmerge100%.408prior testfiles unchanged,6source-confirmedboundedcorrections,250states/defaults/exceptions/prior evidence retained;5sourceaudits0violations."
-commit: null
+commit:
+  hash: "3c8f96a9c3737e87d4371f369e7227460d91d59b"
+  message: "🧩 CV1DG4 task: record verified selected list range evidence"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved native selected list task;source-confirmed reset-indent/unique-level expectations and failed-only recovery under standing iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: selected body/table lists execute native document range operations and shared numeric InsNum history;6statics,12395distinctapp109inventory5scripts126Chromium pass,100%actualcoverage,5sourceaudits. One absent profile,onlyfailed/new retries;408priorfilesunchanged6source-confirmedcorrections250states/defaults/IOexceptions/prior evidence preserved. ExactSHA sameagentEVALUATOR pass;nativefullhistory/broadUI limits recorded,parentDOING/goalactive."
 events:
   -
     type: "status"
@@ -73,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native selected list range behavior and removed redundant history layers at c655f5118b2422e3c878a0c55e4f00422863d333;6statics/changedtestchecks/ONEabsentprofile+failednewonly recovery allpass;12395distinctapp109inventory5scripts126Chromium,100%actualapp/inventoryL/S/F/B;5restoredsourceaudits0violations408priorfilesunchanged6sourceconfirmedcorrections250states/defaults/IOexceptions/prior evidence preserved;exactSHA sameagentEVALUATOR pass;AP0forbidden. Limits recorded;parentDOING/goalactive."
+  -
+    type: "status"
+    at: "2026-10-05T19:40:31.304Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: selected body/table lists execute native document range operations and shared numeric InsNum history;6statics,12395distinctapp109inventory5scripts126Chromium pass,100%actualcoverage,5sourceaudits. One absent profile,onlyfailed/new retries;408priorfilesunchanged6source-confirmedcorrections250states/defaults/IOexceptions/prior evidence preserved. ExactSHA sameagentEVALUATOR pass;nativefullhistory/broadUI limits recorded,parentDOING/goalactive."
 doc_version: 3
-doc_updated_at: "2026-10-05T19:40:27.788Z"
+doc_updated_at: "2026-10-05T19:40:31.305Z"
 doc_updated_by: "CODER"
 description: "Iteration161 repair selected-range list application with source-shaped bounded SwDoc.SetNumRule/SetCounted and remove redundant shell/direct-list history layers. Implement native SetNumRuleMode0/1/2/4/8 flags, document rule lookup/add/assignment, explicit continued/new list identity, actual inclusive native textnodes, collapsed existing/style rule directitem policy, DontSetIfAlreadyApplied and label-alignment-only indent reset; mark modified/modeltransaction. Nativelayout/merged/marginpropagation/documentowned undo/client/SwHistory excluded andremainunverified. Shell listtoggle applies to all selected body/cell/mixed nodes, native preceding-rule search from point withnonempty0 or existingautomaticrule factory, per-command native SfxListUndoAction records actual before/after numeric InsNum entries after initial docmutation; current original cursor retained. None uses existing native DelNumRules. Continue uses same document SetNumRule/SetCounted and numeric InsNum history instead of obsolete ContinueNumbering action/iteminterface; GetKind selectedrange consensus for toggle/checkedstate. Remove abstract SwUndoParagraphList; SwUndoInsNum own numeric target/originaldocguard and independent existing item snapshots/publicsingle-node input preserved for clipboard/Enter contracts. No new helper/sharedmodule/adapter/DTO/TextRuns/legacyoverload. Native SetNumRule history/delta/client/Repeat stillunverified; no fullmodulepromotion.10scopepaths doc/unnum/listsh,3old tests source-confirmed API/actiongroup migration only preservingsemantic assertions,newnative-rule-range test,newChromium selectedlisttoggle test,2metadata/additive3owners.414prior testfiles preserve411byte-identical and3bounded API migrations,250states/defaults/classifications/consciousIO exceptions/prior evidence preserved. Source/default/rule identity/flags/indents/currentnative range/cursor/history/replacement/neighbors/foreignguard and actualselectedbrowser body/table menu/labels/UndoRedo evidence. Sixstatics first;ONEfull upstream-absent build/app/inventory/scripts/Chromium profile, vendor repository rename try/finally restore before5sourceaudits. Exactfailures/errors persisted beforeassertions,onlyfailed/new cases/gates repeated,skipped=skipped,no passingtest/fullprofile replays;actualapp/inventory100%L/S/F/B. Maps/results onlyignoredappcache; AP boundedEnglishcounts/hashes/exactfailednames/outcomes/prose,no sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. Sameagent explicit EVALUATOR exactsemanticSHApass, recordedverify/meaningfulfinish/parentcheckpoint cleanmain. Standingiterativeuserauthorization,no network/outside/global/subagents. ParentDOING/goalactive."
 sections:
@@ -135,6 +148,10 @@ sections:
     Command: Five restored source audits generatedUIresources/source-tree/source-provenance/inventory-invariants/parity.
     Result: pass0semanticviolations. Exact six bounded prior test transforms checked;408of414prior testfiles byteidentical;250states/defaults/classifications/conscioussave/open/recovery exceptions/prior evidence preserved,3owner metadata additive,13intentional scopepaths. Initial scope validator expected-transform selected wrong duplicate string; validator-only correction then exact auditpass, no test/product change. AP ignored-inclusive4299files0forbidden;no upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. Doctor0errors2pre-existingwarnings;policy routingOK.
     Limits: public single-node InsNum API and direct item snapshots remain portable. Full native document-owned undo/SwHistory/registered deltas/rule rollback/Repeat/client/layout/merged/margin propagation and list factory outline/font/leading whitespace remain unverified; selected-family consensus does not certify all native outline/HasNumber/HasBullet eligibility. Broad UI/list/table rendering/editing/protection/clipboard/layout and retained split physical owner bridge remain open. No whole module/status/broad UI promotion,registered IO/recovery deviations unchanged,parentDOING/goalactive. Exact-SHA same-agent EVALUATOR pass quality 20261005-194000223-recovery-context bound to c655f5118b2422e3c878a0c55e4f00422863d333; no independent reviewer claimed. Final verification recorded OK; canonical meaningful finish and parent checkpoint next.
+extensions:
+  implementation_commit:
+    hash: "c655f5118b2422e3c878a0c55e4f00422863d333"
+    message: "🧩 CV1DG4 code: apply selected lists through native document ranges"
 id_source: "generated"
 ---
 ## Summary
