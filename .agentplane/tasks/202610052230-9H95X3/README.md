@@ -4,7 +4,7 @@ title: "Implement native Writer outline level movement for paragraph Tab"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T22:58:10.135Z"
+  updated_by: "EVALUATOR"
+  note: "Same current agent EVALUATOR reviewed exact semantic ef1417a98ff8314c2897f32dadacb50f465dd3b3: native represented OutlineUpDown and inverse history, heading Tab priority and level count; all bounded gates pass; broad parity remains unverified."
+  evaluated_sha: "ef1417a98ff8314c2897f32dadacb50f465dd3b3"
+  blueprint_digest: "889084b682d174f250be9b12d65607fd699501c67470e85a7d6622bc89586f37"
+  evidence_refs:
+    - ".agentplane/tasks/202610052230-9H95X3/README.md"
+    - ".agentplane/tasks/202610052230-9H95X3/quality/20261005-225810135-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610052230-9H95X3/quality/20261005-225810135-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610052230-9H95X3/quality/20261005-225810135-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610052230-9H95X3/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610052230-9H95X3/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610052230-9H95X3/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610052230-9H95X3/evidence/final-coverage.json"
+  findings:
+    - "33 new core/DOM and4 new browser cases;12569 distinct app109inventory5scripts143Chromium pass;actual100%L/S/F/B. One full absent profile,only6originalfailed and genuinelynew cases afterward.429prior tests428byteidentical1source-confirmed correction;253prior semantic states preserved2newpartialunverifiedowners255modules. Native direct document auto-history/Repeat/layout batching/merged props/conditional collections and full UI/core/list/table parity unverified; registered IO exceptions preserved."
 commit: null
 comments:
   -
