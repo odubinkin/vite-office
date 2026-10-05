@@ -1,0 +1,86 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints-range.ts",
+    "apps/office/src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-notifications.test.ts",
+    "apps/office/src/sw/source/core/txtnode/secondary-hint-transfer.test.ts",
+    "apps/office/src/sw/source/core/txtnode/internet-node-ownership.test.ts"
+  ],
+  "priorTests": 356,
+  "priorByteIdentical": 349,
+  "correctedPriorFiles": 7,
+  "correctedPriorCases": 57,
+  "correctedPriorPaths": [
+    "apps/office/src/sw/source/core/doc/text-hint-copy.test.ts",
+    "apps/office/src/sw/source/core/doc/text-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/doc/owned-text-move.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-cut.test.ts",
+    "apps/office/src/sw/source/core/txtnode/owned-hint-notifications.test.ts",
+    "apps/office/src/sw/source/core/txtnode/secondary-hint-transfer.test.ts",
+    "apps/office/src/sw/source/core/txtnode/internet-node-ownership.test.ts"
+  ],
+  "newAppCases": 186,
+  "existingRuntimeRows": 241,
+  "newRuntimeRows": 0,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "fourResponsibilityAppendicesAndTwoHelperExportsOnly": true,
+  "existingClipAndRangeGuardBodiesUnchanged": true,
+  "staticChecks": 6,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 3011,
+    "appFiles": 274,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appCoverage100": true,
+  "inventoryCoverage100": true,
+  "noPassingSuiteOrBuildReplay": true,
+  "failedCasesResolved": 60,
+  "firstPassedAppCases": 2951,
+  "firstFailedAppCases": 60,
+  "boundedDiagnosticPassingCasesRepeated": 7,
+  "emptyLiteralNameSelectionAttempts": 1,
+  "productionUnchangedAfterFullProfile": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "semanticViolations": 0,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+      "sha256": "16ac2f8916ab0e6b597502b84247ef283d4a0cbaa2a79f0dbc2f3aa7e8ad052e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtatr2.cxx",
+      "sha256": "0834ec1af0972001223cc0790fe609f331e3e6fdb036752109d9533921cf8de8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txatbase.hxx",
+      "sha256": "ac8e656fd70b8348cdf4ad8f58669553a420c70054712c62a423570d52635d6b"
+    }
+  ],
+  "nativeReview": "Iteration130 retains meaningful zero AUTO53/INET54 ranges in actual native maps. Native CanBeDeleted releases only count-empty maps;zero-count node erasure preserves nonempty ownership. EraseTextHints performs bounded no-dummy interior GC before negative Update,retaining exact-end attributes as zero ranges. Generic negative Update remains coordinate-only. Default InsertText restores DontExpand empty points and leaves other empty points at insertion end before nonempty paragraph-start expansion. Zero AUTO ranges never merge or conceal positive overlap. Existing assertTextRange moves unchanged to the existing range helper under the1000-line gate. Literal two-family/eight-flag erasure and insertion matrices plus actual values/backlinks/inactivity/copies/graph16/Worker5/history cover this bounded path. All356 prior tests and241 runtime states/defaults/exceptions retained. Native Insert flags/EMPTY/FORCE/NOHINT/selection replacement,GCAttr invocation/full zero slicing/COPY/BuildPortions/dummy/endless/other families/style clients/UNO/refcounts/full core/UI remain unverified;registered I/O deviations preserved,no module/goal promotion."
+}
