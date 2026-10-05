@@ -1,0 +1,84 @@
+{
+  "evaluatedSHA": "5d873b3ad547cd4f95e064c24356df478c1b3a5d",
+  "result": "pass",
+  "actor": "Same agent, explicit EVALUATOR phase; no independent reviewer claim",
+  "diffSHA256": "7c6c4d40c5f9c64911d11aec360398c8d2c86583c865af495d9a3c01dfe94525",
+  "diffBytes": 72384,
+  "semanticPaths": 14,
+  "newAppCases": 23,
+  "newChromiumCases": 2,
+  "appCases": 12136,
+  "chromiumCases": 120,
+  "priorTestFilesByteIdentical": 401,
+  "existingSemanticRecordsPreserved": 248,
+  "newNativeModulesUnverified": 2,
+  "fullAbsentProfileCount": 1,
+  "passingTestReplays": 0,
+  "appCoverage": {
+    "lines": {
+      "total": 12207,
+      "covered": 12207,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13364,
+      "covered": 13364,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3360,
+      "covered": 3360,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9991,
+      "covered": 9991,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "sourceOwnership": "External plain selected-cell paste preserves format provenance, bypasses old paste/caret/list callbacks and reads actual PaM ring endpoints using native ASCII default EMPTYEXPAND/SplitNode. Original SwHistory items/collection and actual inserted native content own one reversible document-read group. Empty/end suffix hint correction is in the existing native text node owner, no React format patch or new context adapter.",
+  "residual": "Eager native inserted-content retention differs MoveToUndoNds timing; full insert range/index/fly/redline/lifetimes, complete split prefix/nonend/conditional style/list restart/superscript and empty-hint caret projection remain unverified. Encoding/options, form-feed page breaks, rich/internal/structured/nested/merged/protected/layout parity remain unverified. No module promotion.",
+  "validationLimit": "ONE initial absent build/full suites. Six initially failed app cases and two new split cases only subsequently executed; failed new split retried alone. Two initially failed Chromium cases only retried. Inline first Chromium closure syntax error executed zero cases. No passing tests replayed. Existing ndtxt owners changed after initial build; changed-file statics and exact failed/new-only coverage exercise final changes, unchanged contiguous counters carried explicitly. Full native reader/undo lifetime/structural/encoding/layout contracts remain unverified."
+}

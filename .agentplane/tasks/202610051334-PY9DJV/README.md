@@ -4,7 +4,7 @@ title: "Read plain clipboard text into selected table sections with native docum
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -23,11 +23,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T14:15:19.977Z"
+  updated_by: "CODER"
+  note: "Verified semantic5d873b3ad547: six statics passed; ONE absent full build/profile with exact initial6app/2Chromium failures recorded and failed/new-only closure.12136distinct app/120Chromium,100% actual merged L/S/F/B;109inventory/5scripts; five restored source audits0violations;401old tests and248old semantic/provenance records unchanged,2new modules unverified. Same-agent exact-SHA EVALUATOR pass quality20261005-141454961. No passing replay; final ndtxt edit validated by changed-file statics and exact targeted cases, full build predates fix."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T14:14:54.961Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact-SHA evaluation of 5d873b3ad547cd4f95e064c24356df478c1b3a5d: approved plain selected-table native read and bounded empty split behavior verified; whole-module/native lifetime parity stays unverified."
+  evaluated_sha: "5d873b3ad547cd4f95e064c24356df478c1b3a5d"
+  blueprint_digest: "02c754547d5fc2e3b1d43d228b7da98fd123c5b0179c84dc7fa0e742f1367c52"
+  evidence_refs:
+    - ".agentplane/tasks/202610051334-PY9DJV/README.md"
+    - ".agentplane/tasks/202610051334-PY9DJV/quality/20261005-141454961-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610051334-PY9DJV/quality/20261005-141454961-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610051334-PY9DJV/quality/20261005-141454961-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610051334-PY9DJV/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610051334-PY9DJV/evidence/exact-sha-evaluation.json"
+    - ".agentplane/tasks/202610051334-PY9DJV/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610051334-PY9DJV/evidence/final-coverage.json"
+  findings:
+    - "All401prior test files and248prior semantic/provenance records preserved. ONE full absent profile; initial6app/2Chromium failures closed by exact failed/new cases only;12136distinct app/120Chromium,100% actual merged L/S/F/B. Five source audits pass0semantic violations. Final ndtxt correction checked by changed-file statics and targeted tests; no passing replay."
 commit: null
 comments:
   -
@@ -51,8 +69,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: Source-confirmed empty/end split inheritance correction within approved plain table reader scope."
+  -
+    type: "verify"
+    at: "2026-10-05T14:15:19.977Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified semantic5d873b3ad547: six statics passed; ONE absent full build/profile with exact initial6app/2Chromium failures recorded and failed/new-only closure.12136distinct app/120Chromium,100% actual merged L/S/F/B;109inventory/5scripts; five restored source audits0violations;401old tests and248old semantic/provenance records unchanged,2new modules unverified. Same-agent exact-SHA EVALUATOR pass quality20261005-141454961. No passing replay; final ndtxt edit validated by changed-file statics and exact targeted cases, full build predates fix."
 doc_version: 3
-doc_updated_at: "2026-10-05T14:13:41.645Z"
+doc_updated_at: "2026-10-05T14:15:20.061Z"
 doc_updated_by: "CODER"
 description: "Iteration151 under parent 202609240501-C9TN6M: preserve plain clipboard format, read actual selected-cell cursor rings through native ASCII insertion/split ownership and SwUndoInsDoc range history; remove TextRuns/compound shell-command insertion from this path, including multiline and inherited formatting. Keep structural/rich transfer and consciously registered I/O/recovery deviations outside scope."
 sections:
@@ -76,7 +100,41 @@ sections:
     2. ONE sequential full upstream-absent profile: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts. Rename vendor inside repo and restore in finally; no upstream access/execution by tests. Persist exact failed/error names before assertions. Only failed gates/cases and genuinely new unexecuted cases repeat; no passing full/static/build/suite/case replay; actual maps ignored appcache only.
     3. Source-independent native and browser tests prove plain format provenance dispatch before fragment conversion, actual selected-cell ring points, multiline/blank/trailing-newline behavior, preserved old cell paragraphs and neighbors, inherited character/list/paragraph attributes, native SetInsertRange/SwUndoNodes/SwHistory ownership, one reversible history unit with repeated Undo/Redo and disposal, native table display endpoints/rings/DOM paint and ODT serialization. Mounted and Chromium real paste events cover one-line and multiline text. All old tests remain byte-identical; any correction must be source-confirmed and recorded before edit.
     4. Restore vendor before five audits: writer resource generation --check, source-tree, source-provenance, inventory invariants and parity; repeat failed audits only. Preserve all248existing semantic states/defaults/classifications/exceptions and register two new native ASCII/history modules unverified with precise local/upstream/test references. Scope/old-test/changed-file/AP artifact checks, exact-SHA same-agent EVALUATOR phase before quality report, recorded verification and canonical finish, parent progress checkpoint; clean final tracked state. Broad goal remains active.
-  Verification: "Pending declared checks."
+  Verification: |-
+    Pending declared checks.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T14:15:19.977Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified semantic5d873b3ad547: six statics passed; ONE absent full build/profile with exact initial6app/2Chromium failures recorded and failed/new-only closure.12136distinct app/120Chromium,100% actual merged L/S/F/B;109inventory/5scripts; five restored source audits0violations;401old tests and248old semantic/provenance records unchanged,2new modules unverified. Same-agent exact-SHA EVALUATOR pass quality20261005-141454961. No passing replay; final ndtxt edit validated by changed-file statics and exact targeted cases, full build predates fix.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T14:13:41.645Z, excerpt_hash=sha256:202ef922703f492256a5e74a6ef30745e3cd093211382dd14301ea01659c1012
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051334-PY9DJV/blueprint/resolved-snapshot.json
+    - old_digest: 02c754547d5fc2e3b1d43d228b7da98fd123c5b0179c84dc7fa0e742f1367c52
+    - current_digest: 02c754547d5fc2e3b1d43d228b7da98fd123c5b0179c84dc7fa0e742f1367c52
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051334-PY9DJV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610051334-PY9DJV -m 🧩 PY9DJV task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert scoped semantic commit without rewriting history. Preserve task/parent evidence."
   Findings: |-
     Pinned source read in place: LibreOffice26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. PasteFileContent passes actual GetCursor cell PaM ring into SwReader; ASCII ReadChars clones point, uses default EMPTYEXPAND, omits terminal newline, preserves blank paragraphs and wraps at MAX_ASCII_PARA250000. SwReader captures SwUndoInsDoc before each read and SetInsertRange afterward. Implementation now preserves browser plain/html format provenance; plain selected-table transfer delegates before native fragment conversion or shell paste/caret/list callbacks. Existing shellio loops actual ring points, native ASCII InsertString/SplitNode own mutations; SwUndoInserts/SwUndoInsDoc retain actual inserted paragraphs and boundary fragments with original SwHistory items/collection, grouped one history unit. Tracked native display positions preserve actual table selection. No new UI/context adapter, whole-document snapshot or runtime upstream dependency.
@@ -88,6 +146,10 @@ sections:
     Command: restore vendor, then five declared source audits. Result: pass, semanticViolationCount0. Evidence: restored-source-audits.json. Scope:250runtime modules, all248prior records and all prior provenance entries unchanged; two new mapped native modules remain wholly unverified. Ignored-inclusive AP scan4151files,0forbidden; no upstream copies/helpers/Python/probes/raw diagnostics.
 
     Residuals: append-only represented cell import only. Actual inserted native nodes/fragments are eagerly retained by SetInsertRange while still connected; native MoveToUndoNds/MoveFromUndoNds timing, full non-end/suffix/fly/redline/index/lifetime ownership remains unverified. Full SplitContent prefix attribute-to-item conversion, non-end CutText owner/identity, list restart/conditional styles, superscript reset and collapsed empty hint projection remain unverified. Native form-feed page-break is explicitly unsupported before mutation; native encoding/options/system line-ending defaults and internal structured clipboard identity are unverified. Rich/body/list transfer stays existing separate route; numbered-cell ODT import, merged/nested/protected/layout contracts remain unverified. Conscious save/open/recovery deviations preserved. Broad goal active; no whole-module parity promotion.
+
+    - Observation: Six new multiline formatted-column failures traced to native empty/end split attributes; source-confirmed correction reapproved within14paths. Two new browser fixture failures fixed by actual paragraph focus after toolbar. New split fixture initially used unsupported API/caret projection/identical merged AUTO items; corrected actual native operations and distinct owned hints. First inline Chromium closure syntax error executed0cases; corrected callback replacement. Exact names/errors and actual counters retained; native undo storage timing/full ownership remain unverified.
+      Impact: Plain table paste preserves existing cell content, blank/newline semantics, inherited items/list attributes, display selection and repeated Undo/Redo through native reader/history owners.
+      Resolution: All failed/new cases closed without passing replay. Conscious deviations unchanged. Whole-module and broad parity unverified; no completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -124,6 +186,39 @@ Iteration151 atomic external plain-text table clipboard native read. Preserve ex
 
 Pending declared checks.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T14:15:19.977Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified semantic5d873b3ad547: six statics passed; ONE absent full build/profile with exact initial6app/2Chromium failures recorded and failed/new-only closure.12136distinct app/120Chromium,100% actual merged L/S/F/B;109inventory/5scripts; five restored source audits0violations;401old tests and248old semantic/provenance records unchanged,2new modules unverified. Same-agent exact-SHA EVALUATOR pass quality20261005-141454961. No passing replay; final ndtxt edit validated by changed-file statics and exact targeted cases, full build predates fix.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T14:13:41.645Z, excerpt_hash=sha256:202ef922703f492256a5e74a6ef30745e3cd093211382dd14301ea01659c1012
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051334-PY9DJV/blueprint/resolved-snapshot.json
+- old_digest: 02c754547d5fc2e3b1d43d228b7da98fd123c5b0179c84dc7fa0e742f1367c52
+- current_digest: 02c754547d5fc2e3b1d43d228b7da98fd123c5b0179c84dc7fa0e742f1367c52
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051334-PY9DJV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610051334-PY9DJV -m 🧩 PY9DJV task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert scoped semantic commit without rewriting history. Preserve task/parent evidence.
@@ -139,3 +234,7 @@ Command: ONE sequential full upstream-absent build/app/inventory/scripts/Chromiu
 Command: restore vendor, then five declared source audits. Result: pass, semanticViolationCount0. Evidence: restored-source-audits.json. Scope:250runtime modules, all248prior records and all prior provenance entries unchanged; two new mapped native modules remain wholly unverified. Ignored-inclusive AP scan4151files,0forbidden; no upstream copies/helpers/Python/probes/raw diagnostics.
 
 Residuals: append-only represented cell import only. Actual inserted native nodes/fragments are eagerly retained by SetInsertRange while still connected; native MoveToUndoNds/MoveFromUndoNds timing, full non-end/suffix/fly/redline/index/lifetime ownership remains unverified. Full SplitContent prefix attribute-to-item conversion, non-end CutText owner/identity, list restart/conditional styles, superscript reset and collapsed empty hint projection remain unverified. Native form-feed page-break is explicitly unsupported before mutation; native encoding/options/system line-ending defaults and internal structured clipboard identity are unverified. Rich/body/list transfer stays existing separate route; numbered-cell ODT import, merged/nested/protected/layout contracts remain unverified. Conscious save/open/recovery deviations preserved. Broad goal active; no whole-module parity promotion.
+
+- Observation: Six new multiline formatted-column failures traced to native empty/end split attributes; source-confirmed correction reapproved within14paths. Two new browser fixture failures fixed by actual paragraph focus after toolbar. New split fixture initially used unsupported API/caret projection/identical merged AUTO items; corrected actual native operations and distinct owned hints. First inline Chromium closure syntax error executed0cases; corrected callback replacement. Exact names/errors and actual counters retained; native undo storage timing/full ownership remain unverified.
+  Impact: Plain table paste preserves existing cell content, blank/newline semantics, inherited items/list attributes, display selection and repeated Undo/Redo through native reader/history owners.
+  Resolution: All failed/new cases closed without passing replay. Conscious deviations unchanged. Whole-module and broad parity unverified; no completion claim.
