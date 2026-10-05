@@ -1,10 +1,11 @@
 ---
 id: "202610050655-WD3HVN"
 title: "End empty Writer lists through the native edit-window Enter decision"
-status: "DOING"
+result_summary: "Implemented native Writer empty-list Enter decision with actual-node DelNumRules and one attribute-history undo across body and table cells;verified ordinary and outline/selection split boundaries and kept broad parity unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610050655-WD3HVN/evidence/restored-source-audits.json"
   findings:
     - "Reviewed exact11semantic paths and native6hashes;13newappcontracts,old372tests371byteidentical,soleplatformmockcompatibility. All244states/defaults/exceptions retained,10boundednotes. Five restoredsourceaudits and doctor/routingpass. No passing suite/build replay,upstream sources/helpers/probes inAP,or broad parity promotion."
-commit: null
+commit:
+  hash: "5bd7eae62880b3b291cca937769cf045fbde658a"
+  message: "🧩 WD3HVN task: record native list Enter verification"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved native Enter list transition and actual-node numbering deletion/history with owned body and cell evidence."
+  -
+    author: "CODER"
+    body: "Verified: Native empty ordinary list Enter now terminates numbering without split through shared edit-window and document history;13newappcases,103Chromiumfirstpass,exact2failedclosure,actual100coverage and restoredsourceauditspass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native Enter/list transition verified at ff0b20b5,one absent full profile plus exact2failedcase closure,actual100app/inventorycoverage,103Chromiumfirstpass,five sourceauditspass,sameactorreadonlyquality;fullparityunverified."
+  -
+    type: "status"
+    at: "2026-10-05T07:18:55.882Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native empty ordinary list Enter now terminates numbering without split through shared edit-window and document history;13newappcases,103Chromiumfirstpass,exact2failedclosure,actual100coverage and restoredsourceauditspass."
 doc_version: 3
-doc_updated_at: "2026-10-05T07:18:23.027Z"
+doc_updated_at: "2026-10-05T07:18:55.884Z"
 doc_updated_by: "CODER"
 description: "One Enter transition with document-owned DelNumRules and native list-attribute undo;body and cell UI behavior against pinned source."
 sections:
@@ -185,6 +198,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without rewriting history."
   Findings: "Iteration140 verified progress DONE. Clean main52d2d13,onlyparentactive,direct,all4matched policies,userinstructionsabsent. Pinned edtwin.cxx1985/2009 KEY_RETURN rule-present nonoutline noselection emptyparagraph ->NumOff,2756 ->DelNumRules;SwWrtShell.SplitNode1452 is unconditionalsplit. Local beforeinput conflatesinsertParagraph andlinebreak and alwayssplits. Native docnum1432 resets directrule orsets empty inherited rule plus5listattrs;unnum156 retainsattributehistory and RedocallsDoc.DelNumRules. Usergoal/explicitUI/list/table mandateauthorizessafelocalcorrection. ShiftEnter,Backspace,fulloutline/layout/rings/redlines remainunverified;registered deviations untouched. Firstprofile buildpass;app11903pass/2failof11905/288files,coverage99.88/99.89/100/99.86 only browserowner incompletebecause oldmockabortedtest. Exactfailednamespersistedimmediately beforecollectors. Inventory109pass100,scripts5pass,Chromium103passnoflake. Twofailures:oldmock missingInsertParagraph;newNONEcase incorrectlyexpectsGetListKindnone despite currentgetWriterNumFormatKind mappingallnonbulletnumbered. Fixactualmockcontractandliteralnativeformatassertion;widerdisplayNONEgapexplicitlyunverified. Production unchanged afterfirstprofile,zero passingreplay. Closure:exact2failedappcases passed,13skipped;actualunchangedproductionIstanbulfirst+failed counters100allfour;inventoryfirstmap100 retained,noinventoryreplay. Sixglobalstaticsfirstpass;onlychangedtestformat/ESLintaftermock/NONEcorrection. Five restoredsourceauditspass/semanticviolations0. Scope proof372oldtests371byteidentical,solemockaddition/former2splitcalls->1Enter+1split;all244rowstates/defaults/exceptions unchanged,10boundednotes/oneadditiveundosymbol. 13newappcases12firstpass+solefailureclosed;103Chromiumfirstpass/noflake. Native references6hashes retained,no nativecode/probe/copiedsource inAP. Doctor0errors2preexistingwarnings,routingpass. ResidualNONEdisplay,ShiftEnter,Backspace,fulloutline,selectionrings,merged/redlineprops,fullnativeundo/layout/tablenav/UI andoverallgoalunverified. ExactSHA sameactorreadonly review ff0b20b58f76813ca315fa2b0b277725ee89928c passed exit0 BEFORE evaluatorrecord;initialaudit-only expectedtag spelling corrected toactual libreoffice-26.8.0.2,pincommit9bc445 verified,no code/test/suite replay. Scopecompatplan refreshedapproval under standinguserauthorization. Quality .agentplane/tasks/202610050655-WD3HVN/quality/20261005-071704761-recovery-context/quality-report.json verdictpass. APignoredinclusive4029files0forbiddenprequality;noindependentreviewclaim."
+extensions:
+  implementation_commit:
+    hash: "ff0b20b58f76813ca315fa2b0b277725ee89928c"
+    message: "🧩 WD3HVN code: end empty Writer lists at native Enter boundary"
 id_source: "generated"
 ---
 ## Summary
