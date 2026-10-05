@@ -1,0 +1,68 @@
+{
+  "base": "07c5a469bcbf078efd786dfc64f975a2080fbc46",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/core/undo/undel.ts",
+    "apps/office/src/sw/source/core/undo/unspnd.ts",
+    "apps/office/src/sw/source/core/undo/native-cursor-range-history.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/edit/eddel.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+  ],
+  "priorTestFiles": 408,
+  "priorTestFilesByteIdentical": 408,
+  "sourceConfirmedPriorTestCorrections": [],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/undel.ts",
+    "apps/office/src/sw/source/core/edit/eddel.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/undo/undobj.cxx",
+      "sha256": "11321551072e2b476934ebd9cb906979de0f5542d45e9e0c7bf06023cfd1f287"
+    },
+    {
+      "path": "sw/source/core/undo/unspnd.cxx",
+      "sha256": "7ae11f8a16800310791b11a4445b14989d0586868f1ebc3cf17e27174c9eb460"
+    },
+    {
+      "path": "sw/source/core/undo/undel.cxx",
+      "sha256": "290817001673a6a745e944e18fddd750858370ecf7f121178d6e99d969bf0e75"
+    },
+    {
+      "path": "sw/source/core/undo/untbl.cxx",
+      "sha256": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b"
+    },
+    {
+      "path": "sw/source/core/edit/eddel.cxx",
+      "sha256": "fb8da38059d71b0ac944f13c669df51e1af701c1e04d8e2760605c66feb0aab4"
+    }
+  ],
+  "newAppCases": 23,
+  "appCases": 12238,
+  "inventoryCases": 109,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "finalChangedBundleBuilt": true,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/undo/undobj.ts": "d37b6adba88a30634701ded82d57b934f56dce13bae323ca40dee6c3a9d5bfc9",
+    "apps/office/src/sw/source/core/undo/unins.ts": "968b9ef395e02a7f775c71fae9487aef412d88cbe917b2ba6683874b7d215123",
+    "apps/office/src/sw/source/core/undo/undel.ts": "7381f8e3f188051045c0eca28d8c634a19842da0002d1f7a2b4e14dc152a7106",
+    "apps/office/src/sw/source/core/undo/unspnd.ts": "ae74e9deda59968e51e8e592ed359af63ba11b71f3127c49d0f12f9b2b0fd008",
+    "apps/office/src/sw/source/core/edit/eddel.ts": "26e861061a6794c489fcf25b2825ffcf1471f961d25412f90c4549c4ef8f2756",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "c4ce080aeea5c1e09c6dfd1ae72cf97c42b63d2680390ab30350144283fb94a4",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "def92f0d1073269b7cf8e0958ad9b707b3bb3a30a1ebb4595425e56a622b9972"
+  },
+  "coverageMapPolicy": "Actual counters only: final shell map excludes prior-version shell map; unchanged exact source locations align against hashed initial sources. No passing test replay. Maps and initial local production variants only ignored appcache.",
+  "validationLimit": "Numeric shared cursor history and represented body/cell/current-document behavior only. SwUndo still owns portable direction/active/pending/table adjuncts. Existing payload paragraph/table section identities and split physical ownership remain unverified against native fresh nodes; broad list/table/UI and complete undo/client/frame/field/redline lifetimes remain open. Conscious IO/recovery exceptions preserved; no whole-module promotion."
+}
