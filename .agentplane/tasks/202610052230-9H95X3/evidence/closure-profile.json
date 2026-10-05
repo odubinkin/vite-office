@@ -1,0 +1,108 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+      "name": "native outline Tab UI inserts ordinary Tab inside a heading without changing its outline style"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement steps across occupied style gaps by 2"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement rejects unavailable assigned style movement from 10 by 1"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement uses native default shell offset and inverse history without replacing text or character items"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement short-circuits normalized ring ranges after first failure earlierSuccess=false"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement short-circuits normalized ring ranges after first failure earlierSuccess=true"
+    }
+  ],
+  "originalFailedInventory": [],
+  "newChromiumCases": [
+    "Writer native tenth heading boundary width=1280",
+    "Writer native tenth heading boundary width=390"
+  ],
+  "newAppCases": [
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement preserves tenth-level NONE equal-indent literal Tab without demoting"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement moves native ninth and tenth outline boundaries direct=false"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement moves native ninth and tenth outline boundaries direct=true"
+    }
+  ],
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "7a3356b3b15c74d8042c80a5c87cc7c357c26369a709f2292b0eb26a3754873e"
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-outline-tab.test.tsx src/sw/source/core/doc/native-outline-movement.test.ts --testNamePattern=^(?:native outline Tab UI inserts ordinary Tab inside a heading without changing its outline style|native outline movement steps across occupied style gaps by 2|native outline movement rejects unavailable assigned style movement from 10 by 1|native outline movement uses native default shell offset and inverse history without replacing text or character items|native outline movement short-circuits normalized ring ranges after first failure earlierSuccess=false|native outline movement short-circuits normalized ring ranges after first failure earlierSuccess=true|native outline movement preserves tenth-level NONE equal-indent literal Tab without demoting|native outline movement moves native ninth and tenth outline boundaries direct=false|native outline movement moves native ninth and tenth outline boundaries direct=true)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9H95X3.closure-app-results.json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1967,
+      "sha256": "616ad72c3376714b884b71020ec06b8e78f1ada29832fc57b5e3d90aabefb8f4",
+      "caseCounts": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 23,
+        "total": 32
+      },
+      "executedCases": [
+        "native outline Tab UI inserts ordinary Tab inside a heading without changing its outline style",
+        "native outline movement steps across occupied style gaps by 2",
+        "native outline movement rejects unavailable assigned style movement from 10 by 1",
+        "native outline movement uses native default shell offset and inverse history without replacing text or character items",
+        "native outline movement short-circuits normalized ring ranges after first failure earlierSuccess=false",
+        "native outline movement short-circuits normalized ring ranges after first failure earlierSuccess=true",
+        "native outline movement preserves tenth-level NONE equal-indent literal Tab without demoting",
+        "native outline movement moves native ninth and tenth outline boundaries direct=false",
+        "native outline movement moves native ninth and tenth outline boundaries direct=true"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "56875515fd946375a4e8ba95ebe2c1122fb3088fdefea1a4aa1ed4877d8a70e4"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-outline-tab.spec.ts --grep=(?:Writer native tenth heading boundary width=1280|Writer native tenth heading boundary width=390)$ --reporter=list,json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 651,
+      "sha256": "3876a468612e2dc39d95078fef983c758a7922b62ec748618138c3f6174cbab7",
+      "caseCounts": {
+        "startTime": "2026-10-05T22:51:12.583Z",
+        "duration": 2501.523,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer native tenth heading boundary width=1280",
+        "Writer native tenth heading boundary width=390"
+      ],
+      "failedCases": [],
+      "errors": []
+    }
+  ]
+}
