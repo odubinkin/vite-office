@@ -1,10 +1,11 @@
 ---
 id: "202610050217-Y5P172"
 title: "Restore shell insertion modes and stored undo flags"
-status: "DOING"
+result_summary: "Restored bounded shell Insert2 expansion policy,stored SwUndoInsert redo flags and current FORCE grouping barrier;one full upstream-absent profile with161failed-only cases recovered,zero passing replays;selection attribute history and full parity remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Native Insert2 normal1/forced5,stored undo flags and current FORCE grouping barrier are covered;selection adapters remain unchanged pending native attribute history."
     - "One full absent profile;161 exact failed cases recovered once,1572 skipped,no passing case/suite/build replays;app and inventory first-profile coverage100%allfour."
     - "Nine semantic paths,356of359oldtestfiles byte-identical,two syntax-only files,five DEFAULT constructor migrations,and one observed old history case corrected;242runtime states/defaults/exceptions retained."
-commit: null
+commit:
+  hash: "c3e00f3c39a755d53c9ffae5cad7bf567ba76909"
+  message: "🧩 Y5P172 task: record verified shell insertion modes"
 comments:
   -
     author: "CODER"
     body: "Start: restore collapsed shell modes and stored undo flags under the standing parity goal."
+  -
+    author: "CODER"
+    body: "Verified: collapsed shell insertion uses native EMPTYEXPAND and undo retains insertion flags;failed-only replay and all source/scope gates passed."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified bounded shell Insert2 policy and stored undo modes;one absent full profile,161failed-only cases recovered once,all source/scope gates pass;full parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-05T02:34:21.349Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: collapsed shell insertion uses native EMPTYEXPAND and undo retains insertion flags;failed-only replay and all source/scope gates passed."
 doc_version: 3
-doc_updated_at: "2026-10-05T02:34:03.492Z"
+doc_updated_at: "2026-10-05T02:34:21.350Z"
 doc_updated_by: "CODER"
 description: "Continuation 133: restore collapsed SwEditShell Insert2 EMPTYEXPAND policy and required stored SwUndoInsert insertion flags, including the current FORCE grouping barrier; preserve selection adapters until native attribute history exists."
 sections:
@@ -158,6 +171,10 @@ sections:
     Preflight133:cleanmain ce6c0d1c16fefe6a071a07a370580fd2053ae9a3,direct,onlyparentactive;132 verified progress,notblocked. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native editsh.cxx98 normal1/forced5;unins.cxx102 stores flags and340 reuses them;DocumentContentOperationsManager.cxx2902 currentFORCE skips grouping while ordinary may group after forced. Native insert undo erases text without restoring consumed DontExpand;first and redo ranges may differ. Selection delete+force requires missing SwHistory/SwHistorySetText rollback;retained adapters explicitly unverified. Fourmatchedpolicies loaded,user-instructions absent,standing usergoal authorizes safe local scope,no network/outside/globalaccess.
 
     Implementation133:collapsed shell Insert/Replace/composition now use source-owned Insert2 policy EMPTY1;forcedfactory5 is tested but selection adapters intentionally retained pending native history. Required m_nInsertFlags is stored by SwUndoInsert and forwarded on redo;current candidate FORCE grouping rejected,ordinary after forced accepted under bounded existing payload checks and grouped redo retains firstmode. Hyperlink adapter and2priorfixtures received5syntax-only DEFAULT constructor migrations.1547newcases cover real owner/mode/flags/lock/oldIgnore/empty/boundary/history/grouping/pending paths. Staticfirstformatpass/lintfailunusedtestimport;failedlint recovered,typefailnumericliteral5;native bitwise enumcombination fixed and failedtype recovered;remainingdependency/docs/size passed. Changedfixture formatting/lint passed. One full absent profile:buildpass,app9073pass/161fail of9234,100%allfourcoverage,inventory109/100%allfour,scripts5,Chromium99 firstpass. Exactly161failed full names captured in firstprofile;one old EMPTY historycase corrected from zero4..4 to active2..4 while preserving actual item,other185cases unchanged.160newempty undo matrixcases wrongly assumed ownership survives interior GC;native ndtxt.cxx2860 erasure removes zero hints strictly inside deleted range;literal masks now assert detachment and no reconstructed link on redo. Only161failedcases replayed once absent:161pass/1572skip of1733,zero passing case/suite/build replays. Productionunchanged after fullprofile. Finally restored reference before5sourceaudits,allpass0semanticviolations. Scope359prior files:356byteidentical,2ASTsyntax-only with expectations unchanged,1singleobservedhistorycase changed;242runtime rows/states/defaults/exceptions retained except3bounded appendices/onefactory mapping. Nine native hashes recorded;selectionbranch byte-identical. Initial scope-audit header path corrected to actual core/inc/rolbck.hxx without source or test changes/replays. APignored-inclusive3921files0forbidden;doctor0errors/two unchangedlegacywarnings;routingOK. Fullcore/UI/selectionhistory/managergrouping/redline/multicursor/indexoverloads/GCAttr/COPY/BuildPortions/families/styleclients/UNO/refcounts remain unverified;goal active,verifiedprogress,noexternalblocker.
+extensions:
+  implementation_commit:
+    hash: "b1ae1b53f482f6f2495bbe0b2df258ad83e0b646"
+    message: "🧩 Y5P172 parity: restore shell insertion modes and undo flags"
 id_source: "generated"
 ---
 ## Summary
