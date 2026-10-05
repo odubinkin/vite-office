@@ -1,0 +1,134 @@
+---
+id: "202610050616-VQX14V"
+title: "Use native node ranges and delta undo for Writer list levels"
+status: "DOING"
+priority: "med"
+owner: "CODER"
+revision: 5
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-05T06:18:29.560Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: replace body-only list-level traversal and full-list snapshots with actual document node-range mutation and native range/direction undo;verify bounded cell/body behavior with one absent profile."
+events:
+  -
+    type: "status"
+    at: "2026-10-05T06:18:30.233Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: replace body-only list-level traversal and full-list snapshots with actual document node-range mutation and native range/direction undo;verify bounded cell/body behavior with one absent profile."
+doc_version: 3
+doc_updated_at: "2026-10-05T06:18:30.233Z"
+doc_updated_by: "CODER"
+description: "Iteration140:replace body-only list-level traversal and whole-list-item snapshot adaptation with document-owned native SwNodes range mutation and one SwUndoNumUpDown range/direction action;verify actual cell/body range eligibility,attributes,history,UI and ODT while preserving registered deviations."
+sections:
+  Summary: "Use native node ranges and delta undo for Writer list levels."
+  Scope: |-
+    - apps/office/src/sw/source/core/doc/doc.ts
+    - apps/office/src/sw/source/core/edit/ednumber.ts
+    - apps/office/src/sw/source/core/undo/unnum.ts
+    - apps/office/src/sw/source/core/doc/native-list-level-range.test.ts
+    - apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx
+    - apps/office/e2e/writer-cell-list-level.spec.ts
+    - docs/program/source-provenance.json
+    - docs/program/parity/runtime-inventory.json
+    - apps/office/src/sw/source/core/undo/undobj.test.ts
+  Plan: "Iteration140 one ordinary list-level owner correction. Move represented non-outline NumUpDown range traversal/eligibility and mutation to SwDoc:actual inclusive SwPaM SwNodes coordinates,including cells and structural gaps,GetNumRule rather than display-kind/body array,all-selected native derived-level limits checked before any SetAttrListLevel. Keep current represented outline behavior unpromoted;full native OutlineUpDown/style reassignment,mixed outline,redline/merged props/layout expansion/selection rings remain separate unverified work,not advertised as solved. ednumber becomes shell state/delegation boundary over document query and one action. Replace SwUndoNumLevel whole-list-item snapshots plus grouped per-node actions with native-shaped SwUndoNumUpDown storing one range and signed direction;Undo/Redo reconstruct a PaM and call same document mutation with inverse/forward direction,retain shell cursor protocol,and alter only native level. No list DTO recreation,rule/listID/restart/count/geometry changes or React command decisions. Literal owned actual body/cell/structural and reversed-selection cases prove no partial mutation at0/9,stable rule/ID/other list fields,delta-only history after unrelated direct metadata change,single constant-size undo payload,actual nodes/notifications/cursor and ODT persistence. Mounted and real Chromium verify cell Promote/Demote and indent availability,level/geometry and shell history. Existing undobj class-identity fixture may be updated only after observed firststatic stale import failure;all other old assertions unchanged. Three existing mapped rows receive bounded notes/evidence and exact obsolete->native undo local-symbol replacement only;all244states/defaults/exceptions/classifications unchanged,no newmodule/promotion. Six statics first,ONE sequential full upstream-absent build/app/inventory/scripts/Chromium profile reportOnFailure with exact names persisted before collectors and both first JSON countmaps only ignored appcache;failed/new-only closure,zero passing/fullbuild repeat. Restore finally before five source audits. Scope/native hashes,exact-SHA same-actor readonly quality,doctor/routing,CODER Verification beforeverify/canonicalfinish;clean main,parent/goalactive. No network/outside/global/subagents/Agentplane sources/helpers/Python/native probes/rawdiagnostics. Oneleaf140only."
+  Verify Steps: |-
+    - `npm run format:check`
+    - `npm run lint`
+    - `npm run typecheck`
+    - `npm run check:dependencies`
+    - `npm run check:docs`
+    - `npm run check:file-size`
+    - `npm run test:static`
+    - `npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure`
+    - `npm run test:inventory:coverage -- --coverage.reportOnFailure`
+    - `npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts`
+    - `npm exec -- playwright test --config apps/office/playwright.config.ts`
+    - `npm exec -- tsx scripts/generate-writer-ui-resources.ts --check`
+    - `npm run check:source-tree`
+    - `npm run check:source-provenance`
+    - `npm run inventory:invariants`
+    - `npm run inventory:parity`
+    - `ap doctor`
+    - `node .agentplane/policy/check-routing.mjs`
+
+    Owned literal core,mounted cell and real Chromium list-level/history/ODT contracts. ONE absent full profile,exact failed/new-only closure,zero passing replay,both initial countmaps only ignored appcache.
+  Verification: "Pending implementation and validation."
+  Rollback Plan: "Revert the semantic leaf commit without history rewriting."
+  Findings: "Iteration139 classified verified progress DONE;current140 preflight clean main5c36a52c9781ce3e0b0c40aea351995217ebd930,direct,only parent active,user-instructions absent,four matched policies loaded. ednumber.getSelectedListNodes currently filters doc.paragraphs,so actual cell-node list level commands are disabled and ignored. It also recreates full list-item sets and groups node-local SwUndoNumLevel actions,unlike pinned docnum.cxx1846 inclusive native-node NumUpDown all-range validation/SetAttrListLevel and unnum.cxx256 SwUndoNumUpDown range/direction inverse operation. List shell and text indent share this owner,so fixing document range/undo improves both UI paths without another React adapter. Existing heading/outline style promotion is incomplete and not certified by this ordinary-list leaf. Standing user goal and explicit UI/list/table instruction authorize safe local correction;preserve all244states and registered deviations."
+id_source: "generated"
+---
+## Summary
+
+Use native node ranges and delta undo for Writer list levels.
+
+## Scope
+
+- apps/office/src/sw/source/core/doc/doc.ts
+- apps/office/src/sw/source/core/edit/ednumber.ts
+- apps/office/src/sw/source/core/undo/unnum.ts
+- apps/office/src/sw/source/core/doc/native-list-level-range.test.ts
+- apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx
+- apps/office/e2e/writer-cell-list-level.spec.ts
+- docs/program/source-provenance.json
+- docs/program/parity/runtime-inventory.json
+- apps/office/src/sw/source/core/undo/undobj.test.ts
+
+## Plan
+
+Iteration140 one ordinary list-level owner correction. Move represented non-outline NumUpDown range traversal/eligibility and mutation to SwDoc:actual inclusive SwPaM SwNodes coordinates,including cells and structural gaps,GetNumRule rather than display-kind/body array,all-selected native derived-level limits checked before any SetAttrListLevel. Keep current represented outline behavior unpromoted;full native OutlineUpDown/style reassignment,mixed outline,redline/merged props/layout expansion/selection rings remain separate unverified work,not advertised as solved. ednumber becomes shell state/delegation boundary over document query and one action. Replace SwUndoNumLevel whole-list-item snapshots plus grouped per-node actions with native-shaped SwUndoNumUpDown storing one range and signed direction;Undo/Redo reconstruct a PaM and call same document mutation with inverse/forward direction,retain shell cursor protocol,and alter only native level. No list DTO recreation,rule/listID/restart/count/geometry changes or React command decisions. Literal owned actual body/cell/structural and reversed-selection cases prove no partial mutation at0/9,stable rule/ID/other list fields,delta-only history after unrelated direct metadata change,single constant-size undo payload,actual nodes/notifications/cursor and ODT persistence. Mounted and real Chromium verify cell Promote/Demote and indent availability,level/geometry and shell history. Existing undobj class-identity fixture may be updated only after observed firststatic stale import failure;all other old assertions unchanged. Three existing mapped rows receive bounded notes/evidence and exact obsolete->native undo local-symbol replacement only;all244states/defaults/exceptions/classifications unchanged,no newmodule/promotion. Six statics first,ONE sequential full upstream-absent build/app/inventory/scripts/Chromium profile reportOnFailure with exact names persisted before collectors and both first JSON countmaps only ignored appcache;failed/new-only closure,zero passing/fullbuild repeat. Restore finally before five source audits. Scope/native hashes,exact-SHA same-actor readonly quality,doctor/routing,CODER Verification beforeverify/canonicalfinish;clean main,parent/goalactive. No network/outside/global/subagents/Agentplane sources/helpers/Python/native probes/rawdiagnostics. Oneleaf140only.
+
+## Verify Steps
+
+- `npm run format:check`
+- `npm run lint`
+- `npm run typecheck`
+- `npm run check:dependencies`
+- `npm run check:docs`
+- `npm run check:file-size`
+- `npm run test:static`
+- `npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure`
+- `npm run test:inventory:coverage -- --coverage.reportOnFailure`
+- `npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts`
+- `npm exec -- playwright test --config apps/office/playwright.config.ts`
+- `npm exec -- tsx scripts/generate-writer-ui-resources.ts --check`
+- `npm run check:source-tree`
+- `npm run check:source-provenance`
+- `npm run inventory:invariants`
+- `npm run inventory:parity`
+- `ap doctor`
+- `node .agentplane/policy/check-routing.mjs`
+
+Owned literal core,mounted cell and real Chromium list-level/history/ODT contracts. ONE absent full profile,exact failed/new-only closure,zero passing replay,both initial countmaps only ignored appcache.
+
+## Verification
+
+Pending implementation and validation.
+
+## Rollback Plan
+
+Revert the semantic leaf commit without history rewriting.
+
+## Findings
+
+Iteration139 classified verified progress DONE;current140 preflight clean main5c36a52c9781ce3e0b0c40aea351995217ebd930,direct,only parent active,user-instructions absent,four matched policies loaded. ednumber.getSelectedListNodes currently filters doc.paragraphs,so actual cell-node list level commands are disabled and ignored. It also recreates full list-item sets and groups node-local SwUndoNumLevel actions,unlike pinned docnum.cxx1846 inclusive native-node NumUpDown all-range validation/SetAttrListLevel and unnum.cxx256 SwUndoNumUpDown range/direction inverse operation. List shell and text indent share this owner,so fixing document range/undo improves both UI paths without another React adapter. Existing heading/outline style promotion is incomplete and not certified by this ordinary-list leaf. Standing user goal and explicit UI/list/table instruction authorize safe local correction;preserve all244states and registered deviations.
