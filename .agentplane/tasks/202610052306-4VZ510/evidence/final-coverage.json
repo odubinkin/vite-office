@@ -1,0 +1,92 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+  ],
+  "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against exact initial variant source hashes; new scope owners retain original base bytes. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
+  "carried": {
+    "statements": 208,
+    "functions": 41,
+    "branches": 195
+  },
+  "summary": {
+    "lines": {
+      "total": 12879,
+      "covered": 12879,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14117,
+      "covered": 14117,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3424,
+      "covered": 3424,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10472,
+      "covered": 10472,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialInventoryMapSHA256": "128ce2084b8d48f9e3bbf5863436766e5d5236b38faa8d294e0a99849a08c7ae",
+  "finalInventoryMapSHA256": "3c23f2789d413650e82f156cc3b7237c91c756a4fb87dc3720a036d924379f1c",
+  "initialMapSHA256": "e60bf53f3294ca9565f1bbbcd8121c8a51d9dc1f75057a76bd75d310bf0eac04",
+  "finalMapSHA256": "55549c496b274e5373c830956d48c3ce4810fa1be6dd4e4cdfc0148365101c93",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "385c5d86940afc716f28264f24f85c84b599d67b9aaeb4d16f5ec32efa2b588f",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "5398a9b48e6ba3d2aa3e7c2b464beaf61001b5818ea5f54f963ce079676b08e1",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts": "7c093644039d2177f4df3c58d361b6143c093bffcb49eb3413bbe8a2d292f6cf",
+    "apps/office/src/sw/source/uibase/shells/textsh1-commands.ts": "f2462737a35f07473e87942700e7a7c93ef15928e086d97ab9745918dc2db0ea",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "4bef2962fe21375876265509e4448591d8d2c3286ea79cb39f89cb2a84beaafd",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts": "35fd9de2d7652dfbf11a976a135391955c3c40a2891efcb6546bba642ee9b7ee",
+    "apps/office/src/sw/source/uibase/inc/wrtsh.ts": "b0723fc7b1ef8585bf21d7b57440fbff8294bdad7f1ccee53bbfd3480136b810",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "efc9f46afe2f964847f80b2e91cf9175495ff00ee0206434e0e5f03e57057db3",
+    "apps/office/src/sw/browser/composition/writer-module.tsx": "9ec8b32a98053b00b9fa0d26da761cb8af263fdcfe36290f13f2d24f0d8f1fe6",
+    "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx": "2b1754fdd0624092382ee98dacc60d4c6a0c2bc3edf3c09c46c57de8af8085e8"
+  }
+}

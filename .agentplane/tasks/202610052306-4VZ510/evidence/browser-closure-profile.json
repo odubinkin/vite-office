@@ -1,0 +1,52 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI uses captured DOM point rather than all-range availability boundary=false"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI uses captured DOM point rather than all-range availability boundary=true"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI keeps no-label numbering outside native list shell context"
+    }
+  ],
+  "originalFailedInventory": [
+    {
+      "file": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+      "name": "pinned LibreOffice ODT feature fixtures continues tdf113213_addToList.odt and restores the original list with one Undo"
+    }
+  ],
+  "originalFailedChromium": [
+    "Writer native list context and point state width=1280",
+    "Writer native list context and point state width=390"
+  ],
+  "newAppCases": [],
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-list-context.spec.ts --grep=(?:Writer native list context and point state width=1280|Writer native list context and point state width=390)$ --reporter=list,json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 663,
+      "sha256": "0f826d24a6886d0a26c110b34933bcced2cb95715c1adf4234b3f9928cdeed9a",
+      "caseCounts": {
+        "startTime": "2026-10-05T23:37:34.972Z",
+        "duration": 5181.458,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer native list context and point state width=1280",
+        "Writer native list context and point state width=390"
+      ],
+      "failedCases": [],
+      "errors": []
+    }
+  ]
+}
