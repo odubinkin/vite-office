@@ -1,0 +1,23 @@
+{
+  "vendorRestored": true,
+  "actualCaseCounts": {
+    "startTime": "2026-10-05T17:20:37.497Z",
+    "duration": 13943.91,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  },
+  "failedCases": [
+    "writer-native-table-delete.spec.ts > Writer selected row Delete preserves table cells and native Undo Redo",
+    "writer-native-table-delete.spec.ts > Writer selected row Backspace preserves table cells and native Undo Redo",
+    "writer-native-table-tab.spec.ts > Writer Tab traverses native cell sections and appends one row with history"
+  ],
+  "executedCases": [
+    "writer-native-table-delete.spec.ts > Writer selected row Delete preserves table cells and native Undo Redo",
+    "writer-native-table-delete.spec.ts > Writer selected row Backspace preserves table cells and native Undo Redo",
+    "writer-native-table-tab.spec.ts > Writer Tab traverses native cell sections and appends one row with history"
+  ],
+  "reportSHA256": "fd15e17ca47f55298ae7c7ba1ff16e71b85f6786fbf8093ce7ded739b7f139ea",
+  "correction": "Retry orchestration read stale zero-match original report due to single string replacement; actual fresh report recovered without executing any tests."
+}
