@@ -1,10 +1,11 @@
 ---
 id: "202610050724-Z5PVZ9"
 title: "Apply native Writer Backspace numbering and indent transitions"
-status: "DOING"
+result_summary: "Implemented native Backspace and ShiftBackspace list count transitions,paragraph-indent removal ordering and boolean-delta undo across body and table cells;kept default text deletion and registered deviations,with broad parity unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610050724-Z5PVZ9/evidence/restored-source-audits.json"
   findings:
     - "All375oldtestfilesbyteidentical;16newappcases,103Chromiumfirstpass and solefailedcaseclosed,8nativehashes,pin9bc445/libreoffice-26.8.0.2. All244states/defaults/deviationsunchanged,10boundednotes. Production unchanged afterprofile;sourceaudits5pass,doctor0errors2oldwarnings/routingpass,AP0forbidden;no passingreplay."
-commit: null
+commit:
+  hash: "36530e5049b471dc061057f30968741770b559b1"
+  message: "🧩 Z5PVZ9 task: record native Backspace verification"
 comments:
   -
     author: "CODER"
     body: "Start: Apply the approved native Backspace numbering/count/indent order through shared edit-window and actual-node delta history,then verify body and cells."
+  -
+    author: "CODER"
+    body: "Verified: Native Backspace now applies indentation,counted-list and deletion transitions through shared edit-window and core history;16newappcases,all375oldfilesunchanged,exactfailedclosures,actual100coverage,sourceauditandqualitypass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native Backspace count/indent/delete transition verified at ddb9195d;16newappcases,all375oldfilesunchanged,oneabsentfullprofile/exactoneapponeChromiumclosure,actual100coverage,sourceauditsandqualitypass;fullparityunverified."
+  -
+    type: "status"
+    at: "2026-10-05T07:56:24.278Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Backspace now applies indentation,counted-list and deletion transitions through shared edit-window and core history;16newappcases,all375oldfilesunchanged,exactfailedclosures,actual100coverage,sourceauditandqualitypass."
 doc_version: 3
-doc_updated_at: "2026-10-05T07:54:51.932Z"
+doc_updated_at: "2026-10-05T07:56:24.280Z"
 doc_updated_by: "CODER"
 description: "One Backspace key transition through shared edit-window,actual-node NumOrNoNum and delta history with native indentation ordering;body and cell evidence."
 sections:
@@ -184,6 +197,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic leaf without history rewriting."
   Findings: "Iteration141 verified progress DONE. Currentmain8a8017ab clean,onlyparentactive,direct,fourmatched policies,userinstructionsabsent. Native edtwin2048 Backspace/ShiftBackspace indent/count branch;delete.cxx64 TryRemoveIndent;ednumber632 shellguard;docnum2530 NumOrNoNum counts or removes already-uncounteddirectrule;unnum282 delta booleans,nativeNumberOn/Offcomment strings492. LocalDeleteLeft unconditionallyDelLeft,browserbeforeinput lacks modifier distinction. Standingusergoal/UIlist/table instructionauthorizessafelocalcorrection;preserve244states/deviations. No source/network/runtimeupstream invocation. Firstformat/lintpass;TSfailed onlynewstructuralfixture passingSwTableinstead ofSwTableNode. Correctcase toactualtable.GetTableNode(),preservebehaviorassertions;retryTSthenrunnotyetexecuteddeps/docs/size only. Noexistingtest/productionpolicy change. Firstfullabsent buildpass;app11920pass/1failof11921/290files,all4coverage100;inventory109pass100,scripts5pass,Chromium103pass/1newfail. Exactnamespersistedbeforecollectors. Nativeclassification existingSwNumFormat.IsEnumeration returns!IsItemize,includingNONE;newfixturewronglyexpectedNONEwoulddisableNumOrNoNum. CorrectliteralHasNumber/NONE/countoff/nativealreadyuncountedremoval expectations. Chromium Home driverleftDOMcaret at4 andBackspacedeletedm;replacecaretsetupwithsameexistingrealArrowLeft+actualDOMprefixpoll usedby native-tableediting case,andcellonly Range selection forfinaldelete;allactualBackspace/history assertions retained. Home/End native navigation remains unverifiedfollowup. No production edits afterfirstprofile;onlyexactfailedapp+Chromiumreplays,nextsourceauditsafterrestoration. Closure:exactfailedapp1passed/11skipped;exactfailedChromium1passed/noflake. App/inventoryfirstmaps100allfour;actualappfirst+failedcountermergealso100;zero passingtests/suites/build replay. Five restoredsourceauditspass/semanticviolations0. All375oldapp/script testfilesbyteidentical;16newappcases15firstpass+solefailureclosed. Fiveownershiprows10notes/nativeundosymbol additive;all244states/defaults/deviations unchanged;8nativehashes. No productionchangeafterfullprofile. Doctor0errors2oldwarnings,routingpass,diffcheckpass. APignoredinclusivescan0forbidden. FullnativeHome/End/tablenav,uncountedlistlayout,recentTabstate/labelcaret,zero-lengthmarkedPaMequivalence,fulloutline/redline/rings/history/layout/UI andgoalremainunverified. ExactSHA readonly sameactorreview ddb9195d7ec54ad698ad8499d9d8a4fa86b8f03b passed exit0 beforequalityrecord. Quality .agentplane/tasks/202610050724-Z5PVZ9/quality/20261005-075334407-recovery-context/quality-report.json verdictpass. No independentreviewclaim. AP4040files0forbiddenprequality. CODERVerification recordedbeforeverify;close,parentcheckpoint andfinalcleanscan follow."
+extensions:
+  implementation_commit:
+    hash: "ddb9195d7ec54ad698ad8499d9d8a4fa86b8f03b"
+    message: "🧩 Z5PVZ9 code: apply native Backspace numbering and indent order"
 id_source: "generated"
 ---
 ## Summary
