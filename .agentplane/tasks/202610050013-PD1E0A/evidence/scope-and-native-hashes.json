@@ -1,0 +1,79 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints-range.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-typing-internet-ownership.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 355,
+  "priorByteIdentical": 355,
+  "newAppCases": 61,
+  "existingRuntimeRows": 240,
+  "newUnverifiedRuntimeRows": 1,
+  "currentRuntimeRows": 241,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "fourResponsibilityAppendicesAndRangeSplitOnly": true,
+  "existingClipHelperBodyUnchanged": true,
+  "staticChecks": 6,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 2825,
+    "appFiles": 273,
+    "firstPassAppTests": 2797,
+    "firstFailedNewFixtureCases": 28,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appCoverage100": true,
+  "inventoryCoverage100": true,
+  "failedCaseReplayAttempts": 1,
+  "failedCasesOnlyPassed": 28,
+  "productionUnchangedAfterFullProfile": true,
+  "finalFixtureRefinement": {
+    "failed28InputsSameAsReplay": true,
+    "passing33InputsRestoredToFirstProfile": true,
+    "passingNewMatrixCases20": 20,
+    "passingNewIntegrationCases13": 13
+  },
+  "noPassingSuiteOrBuildReplay": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "semanticViolations": 0,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx",
+      "sha256": "519f2521b38582e84ce91f10fb717ef27f37590ca36a905be769c828bb95d8e4"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "sha256": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx",
+      "sha256": "73025af65692efee4e3d59d565c1597958092657bd751077afaf168c7f751f08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtatr2.cxx",
+      "sha256": "0834ec1af0972001223cc0790fe609f331e3e6fdb036752109d9533921cf8de8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/txatbase.hxx",
+      "sha256": "ac8e656fd70b8348cdf4ad8f58669553a420c70054712c62a423570d52635d6b"
+    }
+  ],
+  "nativeReview": "Iteration129 restores collapsed typing and SwUndoInsert text-mode redo through SwTextNode.InsertText/owned Update. Character-items-only insertion overlays existing automatic portions while retaining actual internet attribute/item/map/backlinks,seven native fields and Update boundary flags;no inherited hyperlink DTO reconstruction. Typed actions clone pending items,capture inserted native fragments for bounded grouping payload and reject grouping with explicit fragment mode;legacy fragment/link adapters retained. Existing range clipping is extracted unchanged to ndhints-range under the1000-line gate. Literal flag/boundary,real shell/undo/redo/grouping/live item/composition/Worker and pending ownership checks cover this bounded path. All355 prior tests and240 existing runtime states/defaults/exceptions and I/O deviations retained;new range helper whollyunverified. Selection FORCE/EMPTY/native Insert flags,empty hints,full BuildPortions/other families/style clients/UNO/refcounts/full core/UI remain unverified;no module/goal promotion."
+}

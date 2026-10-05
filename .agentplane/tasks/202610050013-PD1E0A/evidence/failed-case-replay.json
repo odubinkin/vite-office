@@ -1,0 +1,12 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/uibase/wrtsh/native-typing-internet-ownership.test.ts -t owned text insertion flags (?:0|2|4|6).*preserves actual internet ownership at |owned text insertion flags (?:1|3|5|7).*preserves actual internet ownership at end",
+  "profile": "upstream-absent-failed-cases-only",
+  "exit": 0,
+  "bytes": 252,
+  "sha256": "5b9c275ba3a40f40312c719a93597301e270d1853258365ae9d28d06a6fc09ed",
+  "totals": [
+    "Test Files  1 passed (1)",
+    "Tests  28 passed | 33 skipped (61)"
+  ],
+  "vendorRestored": true
+}

@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/uibase/wrtsh/native-typing-internet-ownership.test.ts",
+      "exit": 0
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/uibase/wrtsh/native-typing-internet-ownership.test.ts",
+      "exit": 0
+    },
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "errors": 0,
+      "unchangedLegacyWarnings": 2
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0
+    }
+  ],
+  "finalFixtureScope": "Only28failed matrix inputs need an explicit unlock. Conditional fixture preparation preserves exactly those replayed inputs and restores the33passing inputs to their original concrete nesting lock defaults. Production has no changes after the full profile.",
+  "noPassingSuiteOrBuildReplay": true
+}
