@@ -4,7 +4,7 @@ title: "Move split paragraph full-span text attributes into native item sets"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 37
+revision: 39
 origin:
   system: "manual"
 depends_on:
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T15:35:45.023Z"
+  updated_by: "CODER"
+  note: "Scoped native split/undo boundary implementation7a4035b66c11 verified:20new/12168distinct app,109inventory,5scripts,120Chromium;100% actual merged coverage; failed/new-only closure;5restored source audits0violations;405prior files404unchanged/one accessor;250states preserved; final build predates dead copy-mode removal with final changed-file/new behavior; broad parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -92,8 +92,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: Clarified authoritative prior file count405 with404 unchanged files and exactly one existing owner-accessor migration; scope and every acceptance criterion unchanged."
+  -
+    type: "verify"
+    at: "2026-10-05T15:35:45.023Z"
+    author: "CODER"
+    state: "ok"
+    note: "Scoped native split/undo boundary implementation7a4035b66c11 verified:20new/12168distinct app,109inventory,5scripts,120Chromium;100% actual merged coverage; failed/new-only closure;5restored source audits0violations;405prior files404unchanged/one accessor;250states preserved; final build predates dead copy-mode removal with final changed-file/new behavior; broad parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T15:33:27.627Z"
+doc_updated_at: "2026-10-05T15:35:45.107Z"
 doc_updated_by: "CODER"
 description: "Iteration153 replaces the empty-end AUTO-only split workaround with native MoveTextAttr_To_AttrSet for both represented split paragraphs, retaining source traversal stop conditions, DontMove and changed-item deletion ownership. Preserve conscious IO deviations and all existing semantic states; full native CutText and list split remain separate."
 sections:
@@ -108,7 +114,40 @@ sections:
   Verification: |-
     Command: Six initial static gates with failed-only lint/file-size/JSDoc recovery and changed-file checks; ONE full sequential upstream-absent static build/app coverage/inventory coverage/scripts/Chromium; exact failed inventory case and new/failed sparse native app case only; restored resource/source-tree/provenance/invariants/parity audits.
     Result: pass for scoped final implementation. Evidence:20new cases,12168distinct app/109inventory/5scripts/120Chromium, final actual merged app/inventory100% L/S/F/B, source audits0violations, scope405prior files404unchanged/one accessor migration,250states preserved, AP0forbidden. Maps ignored appcache, exact failed names persisted before assertions. Final build predates dead snapshot copy-mode removal with changed-file statics and new native behavior; no passing test/build replay.
-    Scope: native full-span split attribute-to-item-set ownership for represented AUTO/INET paths, native removed boundary character items and consumption, obsolete snapshot copy flag removal. Complete native CutImpl/list split/default/style/index/frame/undo-area and broad UI parity unverified. Same-agent EVALUATOR exact-SHA review pending.
+    Scope: native full-span split attribute-to-item-set ownership for represented AUTO/INET paths, native removed boundary character items and consumption, obsolete snapshot copy flag removal. Complete native CutImpl/list split/default/style/index/frame/undo-area and broad UI parity unverified. Same-agent explicit EVALUATOR reviewed exact7a4035b66c11301e681eb6decfa0c68be79d6cee; quality20261005-153448120 pass, no independent reviewer claimed.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T15:35:45.023Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Scoped native split/undo boundary implementation7a4035b66c11 verified:20new/12168distinct app,109inventory,5scripts,120Chromium;100% actual merged coverage; failed/new-only closure;5restored source audits0violations;405prior files404unchanged/one accessor;250states preserved; final build predates dead copy-mode removal with final changed-file/new behavior; broad parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T15:35:43.892Z, excerpt_hash=sha256:93cf8c3a47837d4e37d423511072e274171da02943eaf9d55c5654caaa272149
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051457-4YCSJP/blueprint/resolved-snapshot.json
+    - old_digest: f127aade8922ed1253bb95bdc08d7583a2b25a9f9ca409952838729ea57ef447
+    - current_digest: f127aade8922ed1253bb95bdc08d7583a2b25a9f9ca409952838729ea57ef447
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051457-4YCSJP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610051457-4YCSJP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic implementation commit if required; preserve parent history and immutable completed tasks."
   Findings: |-
     Pinned source ndtxt.cxx MoveTextAttr_To_AttrSet lines833-870 and SplitContentNode invocation for both paragraphs establishes traversal and changed-item removal. Existing SplitTextNodeEndHints eagerly SetAttr only for empty trailing AUTO. Native MakeNewTextNode/list resets/full CutText and index/frame lifetimes remain distinct obligations. Standing user authorization applies; no external/network or unrelated policy changes.
@@ -148,7 +187,40 @@ Iteration153 atomic native split full-span attribute-to-item-set lifecycle. Impl
 
 Command: Six initial static gates with failed-only lint/file-size/JSDoc recovery and changed-file checks; ONE full sequential upstream-absent static build/app coverage/inventory coverage/scripts/Chromium; exact failed inventory case and new/failed sparse native app case only; restored resource/source-tree/provenance/invariants/parity audits.
 Result: pass for scoped final implementation. Evidence:20new cases,12168distinct app/109inventory/5scripts/120Chromium, final actual merged app/inventory100% L/S/F/B, source audits0violations, scope405prior files404unchanged/one accessor migration,250states preserved, AP0forbidden. Maps ignored appcache, exact failed names persisted before assertions. Final build predates dead snapshot copy-mode removal with changed-file statics and new native behavior; no passing test/build replay.
-Scope: native full-span split attribute-to-item-set ownership for represented AUTO/INET paths, native removed boundary character items and consumption, obsolete snapshot copy flag removal. Complete native CutImpl/list split/default/style/index/frame/undo-area and broad UI parity unverified. Same-agent EVALUATOR exact-SHA review pending.
+Scope: native full-span split attribute-to-item-set ownership for represented AUTO/INET paths, native removed boundary character items and consumption, obsolete snapshot copy flag removal. Complete native CutImpl/list split/default/style/index/frame/undo-area and broad UI parity unverified. Same-agent explicit EVALUATOR reviewed exact7a4035b66c11301e681eb6decfa0c68be79d6cee; quality20261005-153448120 pass, no independent reviewer claimed.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T15:35:45.023Z — VERIFY — ok
+
+By: CODER
+
+Note: Scoped native split/undo boundary implementation7a4035b66c11 verified:20new/12168distinct app,109inventory,5scripts,120Chromium;100% actual merged coverage; failed/new-only closure;5restored source audits0violations;405prior files404unchanged/one accessor;250states preserved; final build predates dead copy-mode removal with final changed-file/new behavior; broad parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T15:35:43.892Z, excerpt_hash=sha256:93cf8c3a47837d4e37d423511072e274171da02943eaf9d55c5654caaa272149
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051457-4YCSJP/blueprint/resolved-snapshot.json
+- old_digest: f127aade8922ed1253bb95bdc08d7583a2b25a9f9ca409952838729ea57ef447
+- current_digest: f127aade8922ed1253bb95bdc08d7583a2b25a9f9ca409952838729ea57ef447
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051457-4YCSJP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610051457-4YCSJP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
