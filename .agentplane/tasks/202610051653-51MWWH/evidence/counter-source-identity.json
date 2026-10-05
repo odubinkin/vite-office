@@ -28,5 +28,11 @@
     "initialSHA256": "e7844cdca3a615e85f3627bad5e1156972627e5037c4b1c976d67bcddc22a887",
     "initialIdentity": "unchanged original base owner; added to approved scope only after initial profile",
     "finalSHA256": "c4ce080aeea5c1e09c6dfd1ae72cf97c42b63d2680390ab30350144283fb94a4"
+  },
+  {
+    "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "initialSHA256": "fb0bb2b9a729201f96c4fddbc795491a816123646fce10b223e2d3ce62178efc",
+    "initialIdentity": "unchanged original base owner; foreign fallback removal added after completed initial profile",
+    "finalSHA256": "def92f0d1073269b7cf8e0958ad9b707b3bb3a30a1ebb4595425e56a622b9972"
   }
 ]
