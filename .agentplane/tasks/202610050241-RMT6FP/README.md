@@ -4,7 +4,7 @@ title: "Restore native attribute history for same-node deletion undo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T03:07:56.633Z"
+  updated_by: "CODER"
+  note: "Native old AUTO/INET hint history and same-node deletion undo verified at 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8. One full upstream-absent profile and one exact failed-case replay only; coverage 100%, restored source audits and same-actor quality review passed; remaining parity gaps unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -57,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore native same-node delete attribute history under standing parity goal."
+  -
+    type: "verify"
+    at: "2026-10-05T03:07:56.633Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native old AUTO/INET hint history and same-node deletion undo verified at 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8. One full upstream-absent profile and one exact failed-case replay only; coverage 100%, restored source audits and same-actor quality review passed; remaining parity gaps unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T03:03:21.671Z"
+doc_updated_at: "2026-10-05T03:07:56.686Z"
 doc_updated_by: "CODER"
 description: "Continuation134: restore SwHistorySetText/SwHistory capture and rollback,raw deleted text with NOHINTEXPAND and reconstructed native hints for same-node SwUndoDelete;keep selection replacement unchanged until this dependency is verified."
 sections:
@@ -99,7 +105,59 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Audit360prior testfiles,242existingruntime rows,new unverifiedhistory module,native hashes and exact semanticSHA. Staticfirst,one absentprofile,failedonlyreplays,restore before audits. No source/helper/code/Python/rawdiagnostic APartifacts.
-  Verification: "Pending implementation and validation."
+  Verification: |-
+    Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+    Result: pass; only failed formatting and lint gates recovered.
+    Evidence: static-gates.json initial formatting failure, static-recovery.json formatting pass and unused test import lint failure, static-recovery-2.json lint/type/dependency/docs/size pass. Corrections preceded the full profile. Changed-file formatting/lint passed after the observed fixture correction.
+    Scope: approved native history, deletion undo, node helpers and application fixtures.
+
+    Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+    Result: one full sequential upstream-absent profile; one failed application case recovered by one exact failed-case replay.
+    Evidence: absent-profile.json: build pass, application 10152 pass/1 fail of 10153 in 278 files; all 919 new cases passed first. Inventory 109 in 36 files, scripts 5, Chromium 99 passed first. Application and inventory coverage 100% lines/statements/functions/branches, including first application failure. failed-case-replay.json: 1 pass/15 skipped of 16; exact first-profile failed full name and selected-name hash preserved. Zero passing case/suite/build replays.
+    Scope: only the first two undoNodes count assertions in the observed ownership case changed from 1 to 0 because deleted text is now owned by the deletion action. Four constructor migrations are syntax-only. Production and documentation hashes remained unchanged after the first full profile. Reference renamed inside repository and restored in finally for both executions; no source/scope/AP audits concurrent with tests.
+
+    Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+    Result: all five passed after reference restoration.
+    Evidence: restored-source-audits.json; semantic violation count 0.
+    Scope: pinned source audits only; reference is never a runtime or test dependency.
+
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; exact scope/native hash/AST/read-only semantic SHA audit; ignored-inclusive Agentplane forbidden-artifact scan.
+    Result: pass; doctor 0 errors and two unchanged legacy warnings; routing passed; pre-quality 3934 Agentplane files, 0 forbidden artifacts.
+    Evidence: scope-and-native-hashes.json and .agentplane/tasks/202610050241-RMT6FP/quality/20261005-030436294-recovery-context/quality-report.json; same-actor read-only review of semantic SHA 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8, not independent review. Thirteen semantic paths; 360 prior tests, 359 byte-identical and one observed case with four syntax-only migrations; 919 new cases; 242 existing runtime rows retained, one new wholly unverified history module; 8 bounded appendices, 8 helper/flag exports; 9 native hashes including the actual nesting constructor; two search and three node helper bodies preserved; selection insertion branch unchanged.
+    Scope: native old AUTO/INET history restoration for same-node deletion only. Ordinary InsertItem/BuildPortions, new/reset and structural history variants, selected insertion grouping, remaining core/UI contracts remain unverified. Registered save/open/recovery deviations preserved. No parity promotion; iterative goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T03:07:56.633Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native old AUTO/INET hint history and same-node deletion undo verified at 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8. One full upstream-absent profile and one exact failed-case replay only; coverage 100%, restored source audits and same-actor quality review passed; remaining parity gaps unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T03:07:56.289Z, excerpt_hash=sha256:f0817ea6e5f35babdd1e0b8b742c10ddd09f0eb7559be48bf24c357ad81d820c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050241-RMT6FP/blueprint/resolved-snapshot.json
+    - old_digest: 7112eac172e5843064f596a2ab92ccc0e3d55a1977609d5d74b6a428f0f329a9
+    - current_digest: 7112eac172e5843064f596a2ab92ccc0e3d55a1977609d5d74b6a428f0f329a9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610050241-RMT6FP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610050241-RMT6FP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without rewriting history."
   Findings: |-
     Preflight134:cleanmain 9678ca50f5fcfb907a241ff075114a56a1839e38,direct,onlyparentactive.133 verifiedprogress,notblocked. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native undel.cxx455 SaveContent copies all node hints and retains raw startstring;1043 clears hints,InsertText NOHINTEXPAND,1059 forward TmpRollback;1233 redo resetsTmpEnd. rolbck.cxx222 clones item/index/range/FormatIgnore only,250 InsertItem with12;1242 reverseRollback,1257 tmp reverse/forward,endDiff;1335 CopyAttr half-open including interiorzero excludingendzero. Native thints.cxx1316 InsertItem MakeTextAttr,3330 NOHINTADJUST bypasses automatic merging,3466 ClearSwpHintsArr retains empty map;ndhints.cxx188 owns Insert/DeleteAtPos. Current deleteundo retains clipped fragments inundoNodes and restitchesINET. Node/map994lines require measured helper extraction. Four matched policies read,user-instructions absent;standing goal authorizes safe local scope.
@@ -156,7 +214,58 @@ Audit360prior testfiles,242existingruntime rows,new unverifiedhistory module,nat
 
 ## Verification
 
-Pending implementation and validation.
+Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+Result: pass; only failed formatting and lint gates recovered.
+Evidence: static-gates.json initial formatting failure, static-recovery.json formatting pass and unused test import lint failure, static-recovery-2.json lint/type/dependency/docs/size pass. Corrections preceded the full profile. Changed-file formatting/lint passed after the observed fixture correction.
+Scope: approved native history, deletion undo, node helpers and application fixtures.
+
+Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+Result: one full sequential upstream-absent profile; one failed application case recovered by one exact failed-case replay.
+Evidence: absent-profile.json: build pass, application 10152 pass/1 fail of 10153 in 278 files; all 919 new cases passed first. Inventory 109 in 36 files, scripts 5, Chromium 99 passed first. Application and inventory coverage 100% lines/statements/functions/branches, including first application failure. failed-case-replay.json: 1 pass/15 skipped of 16; exact first-profile failed full name and selected-name hash preserved. Zero passing case/suite/build replays.
+Scope: only the first two undoNodes count assertions in the observed ownership case changed from 1 to 0 because deleted text is now owned by the deletion action. Four constructor migrations are syntax-only. Production and documentation hashes remained unchanged after the first full profile. Reference renamed inside repository and restored in finally for both executions; no source/scope/AP audits concurrent with tests.
+
+Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+Result: all five passed after reference restoration.
+Evidence: restored-source-audits.json; semantic violation count 0.
+Scope: pinned source audits only; reference is never a runtime or test dependency.
+
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; exact scope/native hash/AST/read-only semantic SHA audit; ignored-inclusive Agentplane forbidden-artifact scan.
+Result: pass; doctor 0 errors and two unchanged legacy warnings; routing passed; pre-quality 3934 Agentplane files, 0 forbidden artifacts.
+Evidence: scope-and-native-hashes.json and .agentplane/tasks/202610050241-RMT6FP/quality/20261005-030436294-recovery-context/quality-report.json; same-actor read-only review of semantic SHA 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8, not independent review. Thirteen semantic paths; 360 prior tests, 359 byte-identical and one observed case with four syntax-only migrations; 919 new cases; 242 existing runtime rows retained, one new wholly unverified history module; 8 bounded appendices, 8 helper/flag exports; 9 native hashes including the actual nesting constructor; two search and three node helper bodies preserved; selection insertion branch unchanged.
+Scope: native old AUTO/INET history restoration for same-node deletion only. Ordinary InsertItem/BuildPortions, new/reset and structural history variants, selected insertion grouping, remaining core/UI contracts remain unverified. Registered save/open/recovery deviations preserved. No parity promotion; iterative goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T03:07:56.633Z — VERIFY — ok
+
+By: CODER
+
+Note: Native old AUTO/INET hint history and same-node deletion undo verified at 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8. One full upstream-absent profile and one exact failed-case replay only; coverage 100%, restored source audits and same-actor quality review passed; remaining parity gaps unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T03:07:56.289Z, excerpt_hash=sha256:f0817ea6e5f35babdd1e0b8b742c10ddd09f0eb7559be48bf24c357ad81d820c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050241-RMT6FP/blueprint/resolved-snapshot.json
+- old_digest: 7112eac172e5843064f596a2ab92ccc0e3d55a1977609d5d74b6a428f0f329a9
+- current_digest: 7112eac172e5843064f596a2ab92ccc0e3d55a1977609d5d74b6a428f0f329a9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610050241-RMT6FP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610050241-RMT6FP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
