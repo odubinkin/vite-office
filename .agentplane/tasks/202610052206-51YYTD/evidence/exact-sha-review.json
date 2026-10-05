@@ -1,0 +1,23 @@
+{
+  "reviewer": "same current coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "0d207b4ed1130786aa557c92d435cdf6826b6a0d",
+  "base": "54df5dfd11890d5939f47f77ec61e0762605fc05",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/number.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+    "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+    "apps/office/src/sw/browser/editor/native-list-tab.test.tsx",
+    "apps/office/e2e/writer-native-list-tab.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "reviewedSemanticDiffBytes": 114305,
+  "reviewedSemanticDiffSHA256": "a3c84080bb5fa673b597c8f5b8f71a949acb515ab54d9292c43f225cfead0e66",
+  "verdict": "pass",
+  "evidence": "Native number.cxx NumDownChangesIndent and edtwin.cxx unmodified KEY_TAB/ShiftTab priority reviewed against represented typed text/rule/cell contracts. Numbering decision now belongs to native number.ts; SwEditWin unifies body/list/cell handling with actual shell typing/NumUpDown/history/traversal. Removed table-only contract and embedded heuristic without compatibility wrapper.21 new core and6 new mounted DOM cases pass; actual production1280/390 ODT import/list demotion/promotion/literal text tab/cell focus/typing/UndoRedo pass. Existing ODF guard retained; invalid new fixture column widths corrected only in failed cases.12536app109inventory5scripts139distinctChromium pass0flaky;one full absent profile,onlyoriginal2failed browser cases afterwards. All production bytes identical to actual once-built/covered profile, app/inventory100%L/S/F/B with exactmap/sourceidentity,no countermerge.426 prior tests424byteidentical2exactsource-confirmed obsoletebodyrefusal/method-name corrections;253prior states/defaults/classes/IOexceptions/evidence preserved. Sixstatics/changedfilechecks/five restored sourceaudits/scope/APscan/doctor/routing pass. Source metadata new function marker corrected to literal native declaration; no passing checks replay.",
+  "validationLimit": "Represented ordinary body/list/cell Tab and ShiftTab only. Eligible assigned-outline routing remains unrepresented pending native OutlineUpDown. Null/nontext cursors, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter/full KeyInput and full core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged,parent DOING/goal ACTIVE.",
+  "residualRisk": "Eligible assigned-outline-at-start Tab remains unsupported pending native OutlineUpDown; native null/nontext cursor/forms/input/contentcontrols/graphics/read-only/WebView/modifiedTab/config/autocorrect/NumDownCount/fullKeyInput and full core/UI/list/table parity remainunverified. No fullmodule or broad parity promotion. Conscious save/open/recovery deviations unchanged,parentDOING/goalACTIVE."
+}
