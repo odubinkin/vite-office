@@ -4,7 +4,7 @@ title: "Restore native attribute history for same-node deletion undo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T03:04:36.294Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only review of semantic SHA 45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8:same-node delete text and old AUTO/INET history satisfy approved bounded scope."
+  evaluated_sha: "45c1e3e81c8d65c90a918b367b1f4dc3ed2593b8"
+  blueprint_digest: "7112eac172e5843064f596a2ab92ccc0e3d55a1977609d5d74b6a428f0f329a9"
+  evidence_refs:
+    - ".agentplane/tasks/202610050241-RMT6FP/README.md"
+    - ".agentplane/tasks/202610050241-RMT6FP/quality/20261005-030436294-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610050241-RMT6FP/quality/20261005-030436294-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610050241-RMT6FP/quality/20261005-030436294-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610050241-RMT6FP/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610050241-RMT6FP/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610050241-RMT6FP/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610050241-RMT6FP/evidence/failed-case-replay.json"
+    - ".agentplane/tasks/202610050241-RMT6FP/evidence/restored-source-audits.json"
+  findings:
+    - "SwHistory cloned items/index/ranges/FormatIgnore,half-open CopyAttr/reverse rollback/tmp order/endDiff and native NOHINTADJUST restoration are covered by919literal actual-owner cases."
+    - "Delete undo now clears hints,inserts raw text withNOHINT2 and restores original whole-node history;grouping retains firsthistory,redo resetsTmpEnd,disposal releases;old fragment stitching removed."
+    - "One full absent profile;app10153cases with one observed old ownership failure recovered by one exactcase replay,15others skipped;app/inventory100%allfour,no passing replays,production/docs hashes unchanged."
+    - "Thirteen semantic paths;359of360prior files byte-identical,four .text constructor migrations and onlytwo Count expectations in one observedcase corrected;242existingstates/defaults/exceptions retained,one new243rdhistoryrow whollyunverified."
 commit: null
 comments:
   -
