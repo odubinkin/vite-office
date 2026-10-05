@@ -1,10 +1,11 @@
 ---
 id: "202610051307-EA01RS"
 title: "Read single-paragraph clipboard fragments through native table cursor rings"
-status: "DOING"
+result_summary: "Native single-paragraph table clipboard ring insertion with preserved cell content and one reversible history boundary;9app+1browser scenarios, full absent gates/100%coverage pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - ".agentplane/tasks/202610051307-EA01RS/evidence/scope-audit.json"
   findings:
     - "Actual SwPaM cell end points supply all targets; existing content/earlier paragraphs/neighbor identities and native table selection survive grouped fragment insertion and repeated Undo/Redo. Direct shell-to-reader dispatch bypasses callback paste adapter for bounded route.9new app and1Chromium scenarios pass;398old test files and247prior semantic records/provenance preserved. No production changes after successful profile or passing replay."
-commit: null
+commit:
+  hash: "4c7d8c407725d8fc679155781dcb0b8421dc1616"
+  message: "🧩 EA01RS task: record native table clipboard verification"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native single-paragraph table clipboard ring read and source-independent coverage."
+  -
+    author: "CODER"
+    body: "Verified: Native single non-block paragraph clipboard reads actual selected table cursor ring points without deleting cell content, bypasses callback paste operations and retains grouped Undo/Redo table selection. Final code passes one upstream-absent full build,12113app,109inventory,5script and118Chromium checks;100%app/inventory coverage and five restored-source audits.398old test files and247prior semantic records/provenance retained; exact aa62e7c9 same-agent quality pass. Broader reader/default/history and multiline/structural parity remains unverified."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native single-paragraph selected-table ring insertion verified on aa62e7c9. Six statics and sole absent build/12113 app/109inventory/5scripts/118Chromium all pass; app/inventory100%; restored five source audits pass;398old test files and247prior semantic records preserved. No passing test replay; source copies/helpers/raw diagnostics absent in AP. Exact-SHA same-agent quality pass; broad reader/filter/native-history behavior remains unverified."
+  -
+    type: "status"
+    at: "2026-10-05T13:28:02.950Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native single non-block paragraph clipboard reads actual selected table cursor ring points without deleting cell content, bypasses callback paste operations and retains grouped Undo/Redo table selection. Final code passes one upstream-absent full build,12113app,109inventory,5script and118Chromium checks;100%app/inventory coverage and five restored-source audits.398old test files and247prior semantic records/provenance retained; exact aa62e7c9 same-agent quality pass. Broader reader/default/history and multiline/structural parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T13:27:33.204Z"
+doc_updated_at: "2026-10-05T13:28:02.952Z"
 doc_updated_by: "CODER"
 description: "Iteration150: route external single-paragraph table paste through native SwReader ring ownership, preserving existing cell content and one undo unit instead of deleting selected boxes and writing one cell. Parent 202609240501-C9TN6M; standing user UI/refactoring authorization. Leave multiline and structural clipboard behavior unverified."
 sections:
@@ -122,6 +135,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped semantic commit without rewriting history; retain parent and task traceability."
   Findings: "Iteration150 verified native ring-based read for external single non-block non-list paragraph clipboard fragments into selected table cells. Pinned PasteData explicitly excludes table selection from pre-paste deletion; PasteFileContent passes actual GetCursor to SwReader, which loops each point. MakeBoxSels puts these points at each cell's last paragraph end. New shellio owner derives history targets from actual SwPaM ring points, clones explicit native fragment payloads via existing SwUndoInsert, preserves all existing content and native table selection, and groups one Paste undo unit. Shell dispatch bypasses old pasteWriterTransfer callback operations for this bounded path; browser/filter run parsing remains at the transfer boundary. No new UI TextRuns editing/context adapter. Tests prove selected middle-column cells/reverse endpoints, earlier paragraphs, empty target cells/empty fragment, cloned formatting, neighbor/structure identities, repeated Undo/Redo, mounted plain/inline HTML paste and real Chromium. The existing Sfx/native cursor restoration uses retained node identities; full native SwUndoInsDoc/history/reader/filter-default formatting and multiline/list/table/nested/merged/protected/redline behavior remain unverified. Conscious save/open/recovery deviations untouched. Initial static failures were an unused new-test parameter and a guessed IsTableMode method name; both corrected inside approved paths before the sole absent profile; passing static/test suites were not replayed. Broad goal remains active."
+extensions:
+  implementation_commit:
+    hash: "aa62e7c9617a96e46e955c7cf3108ba32fd4703b"
+    message: "🧩 EA01RS code: read single paragraph paste through native table rings"
 id_source: "generated"
 ---
 ## Summary
