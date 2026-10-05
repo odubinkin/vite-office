@@ -1,0 +1,20 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts -t (separates generic negative Update|retains zero-count ownership|retains empty hints beside positive|keeps native locked internet defaults)",
+      "profile": "upstream-absent-bounded-failed-file-diagnostic",
+      "exit": 1,
+      "bytes": 1254,
+      "sha256": "5ff0714b2e3a54196a0a04d33e5b8c52bd56f4b9ea5f12654f7ac0188f943ab8",
+      "totals": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 6 passed | 179 skipped (186)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "FAIL  src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts > native empty ranged ownership > retains empty hints beside positive ranges without hiding overlap family=53"
+      ]
+    }
+  ]
+}

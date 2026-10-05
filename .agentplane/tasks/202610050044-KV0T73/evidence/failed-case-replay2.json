@@ -1,0 +1,29 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts -t retains zero ranges through owned clones,copies,graph16 and Worker5 family=53$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 252,
+      "sha256": "1a60b16632afe59a3d3b3abd9c36424d5e6858132cf17365bb5ff80d9accd8be",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 185 skipped (186)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/internet-node-ownership.test.ts -t detaches and rebinds cut .* case=2$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 247,
+      "sha256": "68394856a593be51cc9a2b732afb7b6316d44020e181434029d67c0482670936",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 8 skipped (9)"
+      ],
+      "failedCases": []
+    }
+  ]
+}
