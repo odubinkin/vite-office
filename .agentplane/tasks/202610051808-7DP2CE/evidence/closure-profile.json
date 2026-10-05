@@ -1,0 +1,47 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/undo/native-numbering-node-index.test.ts --testNamePattern=^(?:numeric count payload ignores a structural node at its saved index)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/7DP2CE.closure-app-results.json",
+      "profile": "upstream-absent original failed cases only",
+      "exit": 0,
+      "bytes": 1086,
+      "sha256": "f4198cb65b86e70f2b4604565ccea69ffa36f1e546666ddffdd1cf73e4f47557",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 21
+      },
+      "failedCases": [],
+      "executedCases": [
+        "numeric count payload ignores a structural node at its saved index"
+      ],
+      "skippedCases": [
+        "numeric list-level history targets current native slots body/collapsed/false",
+        "numeric list-level history targets current native slots body/collapsed/true",
+        "numeric list-level history targets current native slots body/forward/false",
+        "numeric list-level history targets current native slots body/forward/true",
+        "numeric list-level history targets current native slots body/reversed/false",
+        "numeric list-level history targets current native slots body/reversed/true",
+        "numeric list-level history targets current native slots cells/collapsed/false",
+        "numeric list-level history targets current native slots cells/collapsed/true",
+        "numeric list-level history targets current native slots cells/forward/false",
+        "numeric list-level history targets current native slots cells/forward/true",
+        "numeric list-level history targets current native slots cells/reversed/false",
+        "numeric list-level history targets current native slots cells/reversed/true",
+        "numeric count history changes only the current slot flag body",
+        "numeric count history changes only the current slot flag cells",
+        "numeric numbering deletion restores current native history entries body/collapsed",
+        "numeric numbering deletion restores current native history entries body/forward",
+        "numeric numbering deletion restores current native history entries body/reversed",
+        "numeric numbering deletion restores current native history entries cells/collapsed",
+        "numeric numbering deletion restores current native history entries cells/forward",
+        "numeric numbering deletion restores current native history entries cells/reversed"
+      ],
+      "productionSHA256": {
+        "apps/office/src/sw/source/core/undo/unnum.ts": "4364f11f75df3c0bbaa99c8438af030af66011f863fdcce3dd6726f812acd610"
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "base": "49e5b68b8028e239b6ab879fd54a672a6f9cd271",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 410,
+  "priorTestFilesByteIdentical": 410,
+  "sourceConfirmedPriorTestCorrections": [],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/undo/unnum.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/undo/unnum.cxx",
+      "sha256": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9"
+    }
+  ],
+  "newAppCases": 21,
+  "appCases": 12271,
+  "inventoryCases": 109,
+  "scriptsCases": 5,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/undo/unnum.ts": "4364f11f75df3c0bbaa99c8438af030af66011f863fdcce3dd6726f812acd610"
+  },
+  "coverageMapPolicy": "Actual initial and one originally failed case counters merged only with identical statement/function/branch location maps; production hashes unchanged. Actual maps only ignored appcache, no changed-source transfer/fabricated counters.",
+  "validationLimit": "Represented NumUpDown native numeric range and delta replay, NumOrNoNum numeric counted-only payload/nontext guard, DelNum numeric item/actual-level history entries and current native range replay.21actual native body/cell section-preserving replacement and shell UndoRedo cases, directions and independent unrelated metadata. DelNum still captures portable direct-item snapshots rather than complete native SwHistory; InsNum/ContinueNumbering and other action payload identities, retained split bridge and native physical split ownership remain unverified.120Chromium passed exact final production variant, only test fixture object-versus-node assertion corrected afterward. Conscious IO/recovery exceptions preserved; no fullmodule/broad parity promotion."
+}
