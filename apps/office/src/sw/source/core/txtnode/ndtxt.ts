@@ -594,7 +594,7 @@ export class SwTextNode extends SwContentNode {
         ? undefined
         : projectWriterCharacterAttributes(attributes ?? this.GetCharacterItemsAt(offset)),
       this.GetSwAttrSet(),
-      attributes === undefined ? hyperlink : (hyperlink ?? this.getHyperlinkAt(offset)),
+      hyperlink,
     );
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.pSwpHints = hints.Count() === 0 ? undefined : hints;

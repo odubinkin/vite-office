@@ -13,6 +13,7 @@ import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
 import { UpdateTextHints } from "./ndtxt-hint-update";
+import { clipHintOutsideRange } from "./ndhints-range";
 import { GetTextAttrAt } from "./ndtxt-attribute-query";
 import { GetTextAttrMode } from "../../../inc/swtypes";
 import {
@@ -418,6 +419,24 @@ export class SwpHints {
     assertTextRange(textLength, offset, offset);
     if (attributes === undefined && hyperlink === undefined)
       return this.Update(textLength, offset, insertedLength);
+    if (attributes !== undefined && hyperlink === undefined) {
+      this.Update(textLength, offset, insertedLength);
+      if (insertedLength === 0) return this;
+      const end = offset + insertedLength;
+      const retained = this.hintsByStart.flatMap(
+        /** Keeps actual internet and unrelated automatic attributes;only intersecting automatic portions are replaced. @param hint - Updated owned attribute. @returns Retained actual attributes or clipped automatic portions. */
+        (hint) => {
+          if (hint.Which() !== RES_TXTATR_AUTOFMT || hint.end <= offset || hint.start >= end)
+            return [hint];
+          return clipHintOutsideRange(hint, offset, end);
+        },
+      );
+      const inserted = this.createTextHints(insertedLength, attributes, inherited).takeOwned(
+        offset,
+      );
+      this.assignOwned([...retained, ...inserted]);
+      return this;
+    }
     return this.replaceRange(
       textLength,
       offset,
@@ -836,27 +855,6 @@ interface CharacterSegment {
   readonly attributes: WriterCharacterAttributes;
   readonly end: number;
   readonly start: number;
-}
-
-/** Retains the portions of one hint outside a replacement range. @param hint - Existing hint. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @returns Zero, one, or two clipped clones. */
-function clipHintOutsideRange<T extends SwFormatAutoFormat | SwFormatINetFormat>(
-  hint: SwTextAttrEnd<T>,
-  start: number,
-  end: number,
-): readonly SwTextAttrEnd<T>[] {
-  if (hint.end <= start || hint.start >= end) return [hint.clone()];
-  const retained: SwTextAttrEnd<T>[] = [];
-  if (hint.start < start) {
-    const prefix = hint.clone();
-    prefix.SetEnd(start);
-    retained.push(prefix);
-  }
-  if (hint.end > end) {
-    const suffix = hint.clone();
-    suffix.start = end;
-    retained.push(suffix);
-  }
-  return retained;
 }
 
 /** Validates a bounded text range. @param textLength - Complete text length. @param start - Inclusive start. @param end - Exclusive end. @returns Nothing. */

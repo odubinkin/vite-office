@@ -2,11 +2,13 @@
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SwTextFragment, SwTextNode } from "../txtnode/ndtxt";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   CopyUndoFragment,
   DeleteUndoRange,
   GetFragmentPayloadSize,
   GetUndoFragmentLength,
+  GetUndoTextNode,
   ReplaceUndoRange,
   SwUndo,
   type SwUndoCursorState,
@@ -19,8 +21,9 @@ export type SwUndoInsertGroup = "delimiter" | "word";
 /** Reversible insertion retaining only inserted formatted text and stable range coordinates. */
 export class SwUndoInsert extends SwUndo {
   private insertedFragment: SwTextFragment;
+  private readonly insertionItems: SfxItemSet | undefined;
 
-  /** Creates one insert action before it is first redone. @param paragraph - Target node. @param offset - Insertion start. @param insertedFragment - Inserted native fragment. @param group - Optional grouping class. @param before - Cursor before insertion. @param after - Cursor after insertion. @returns Nothing. */
+  /** Creates one insert action before it is first redone. @param paragraph - Target node. @param offset - Insertion start. @param insertedFragment - Inserted native fragment. @param group - Optional grouping class. @param before - Cursor before insertion. @param after - Cursor after insertion. @param insertionItems - Pending character items for native text insertion;omitted for explicit fragment adapters. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly offset: number,
@@ -28,9 +31,11 @@ export class SwUndoInsert extends SwUndo {
     private readonly group: SwUndoInsertGroup | undefined,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
+    insertionItems?: SfxItemSet,
   ) {
     super("Insert", before, after);
     this.insertedFragment = CopyUndoFragment(insertedFragment);
+    this.insertionItems = insertionItems?.Clone();
     if (GetUndoFragmentLength(this.insertedFragment) === 0)
       throw new Error("SwUndoInsert requires non-empty text.");
   }
@@ -43,6 +48,7 @@ export class SwUndoInsert extends SwUndo {
       nextAction.group !== this.group ||
       nextAction.paragraph !== this.paragraph ||
       nextAction.offset !== this.offset + GetUndoFragmentLength(this.insertedFragment) ||
+      (this.insertionItems === undefined) !== (nextAction.insertionItems === undefined) ||
       !haveEqualBoundaryHints(this.insertedFragment, nextAction.insertedFragment)
     )
       return false;
@@ -71,8 +77,15 @@ export class SwUndoInsert extends SwUndo {
     );
   }
 
-  /** Reinserts the retained formatted fragments. @param context - Active Writer context. @returns Nothing. */
+  /** Reinserts native text through owned Update or restores an explicit fragment adapter. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
+    if (this.insertionItems !== undefined) {
+      const node = GetUndoTextNode(context.GetDoc(), this.paragraph);
+      const text = this.insertedFragment.text;
+      node.InsertText(text, this.offset, this.insertionItems);
+      this.insertedFragment = node.CaptureTextFragment(this.offset, this.offset + text.length);
+      return;
+    }
     ReplaceUndoRange(
       context.GetDoc(),
       this.paragraph,

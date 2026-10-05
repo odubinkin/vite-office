@@ -121,6 +121,7 @@ export class SwWrtShellEditingOperations {
         group,
         before,
         this.port.createCollapsedCursorState(paragraph, offset + text.length),
+        this.port.getPendingCharacterItems(),
       ),
       group !== undefined,
     );
