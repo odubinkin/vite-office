@@ -70,5 +70,17 @@
     "exit": 1,
     "bytes": 18028,
     "sha256": "7bd753086f69419e10700a4aa89cf651c7da635592d5829b852442eb0340ee17"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 0,
+    "bytes": 119,
+    "sha256": "0524fd08aa6217e9fe24431fc35acec74c6ef0e95381efc8dd5bc525e522ad90"
+  },
+  {
+    "command": "npm run check:file-size",
+    "exit": 0,
+    "bytes": 3037,
+    "sha256": "5ab34ec7148e014430cf81131479239128e9fc71b014262c9e3ada846714f1e9"
   }
 ]

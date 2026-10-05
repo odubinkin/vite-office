@@ -4,7 +4,7 @@ title: "Move split paragraph full-span text attributes into native item sets"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -57,7 +57,7 @@ events:
     to: "DOING"
     note: "Start: Approved seven-path native boundary paragraph retention and one exact native-owner assertion migration."
 doc_version: 3
-doc_updated_at: "2026-10-05T15:05:07.605Z"
+doc_updated_at: "2026-10-05T15:14:05.774Z"
 doc_updated_by: "CODER"
 description: "Iteration153 replaces the empty-end AUTO-only split workaround with native MoveTextAttr_To_AttrSet for both represented split paragraphs, retaining source traversal stop conditions, DontMove and changed-item deletion ownership. Preserve conscious IO deviations and all existing semantic states; full native CutText and list split remain separate."
 sections:
@@ -71,7 +71,10 @@ sections:
     4. Vendor restored before five source audits: writer resources --check, source-tree, source-provenance, inventory invariants/parity. Scope/AP forbidden artifact scan, exact semantic SHA same-agent EVALUATOR review, recorded verification/canonical finish/parent checkpoint. Final tracked checkout clean; broad goal active. New native reader/history assertions must prove character item state survives Undo/Redo with zero applied storage, actual undone boundary node items/hints and cleared storage after Redo; no guessed unsupported CutImpl completion.
   Verification: "Pending implementation and one upstream-absent verification profile."
   Rollback Plan: "Revert only this leaf semantic implementation commit if required; preserve parent history and immutable completed tasks."
-  Findings: "Pinned source ndtxt.cxx MoveTextAttr_To_AttrSet lines833-870 and SplitContentNode invocation for both paragraphs establishes traversal and changed-item removal. Existing SplitTextNodeEndHints eagerly SetAttr only for empty trailing AUTO. Native MakeNewTextNode/list resets/full CutText and index/frame lifetimes remain distinct obligations. Standing user authorization applies; no external/network or unrelated policy changes."
+  Findings: |-
+    Pinned source ndtxt.cxx MoveTextAttr_To_AttrSet lines833-870 and SplitContentNode invocation for both paragraphs establishes traversal and changed-item removal. Existing SplitTextNodeEndHints eagerly SetAttr only for empty trailing AUTO. Native MakeNewTextNode/list resets/full CutText and index/frame lifetimes remain distinct obligations. Standing user authorization applies; no external/network or unrelated policy changes.
+
+    Pre-profile refinement and statics: all seven scoped paths implemented. Existing empty-tail AUTO special mutation replaced by native both-paragraph movement. Native undo boundary now actual paragraph with registered direct character items only, source collection and consumed cut hints; Redo native FormatToTextAttr self conversion preserves character values without DTOs. One exact prior native owner accessor migrated GetText fragment to GetNode hints;403other old files and all other assertions untouched. Initial format passed, lint failed only new unused SwpHints import; import removed, changed test format and failed lint passed. Type/dependencies/JSDoc passed. File-size failed ndtxt1001 including newline; existing range body delegated directly from callers to existing source-owned helper, no extra wrapper and same error/default contract. Changed-file formatting/lint/JSDoc/type diagnostics passed, ndtxt995 authored lines. Mistaken tsc --project without noEmit produced620new app JS files; their exact untracked source-paired paths were removed, remaining untracked only new scoped test; no prior user file existed at preflight. Emitted JS caused a subsequent JSDoc gate failure and was cleaned before closing that failed gate. No test/build/profile has run yet, no upstream/AP source/helper/Python/probe/raw diagnostics. Full native CutImpl/MoveRange/list resets/zero-prefix CopyAttr and native undo-area owners remain unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -104,3 +107,5 @@ Revert only this leaf semantic implementation commit if required; preserve paren
 ## Findings
 
 Pinned source ndtxt.cxx MoveTextAttr_To_AttrSet lines833-870 and SplitContentNode invocation for both paragraphs establishes traversal and changed-item removal. Existing SplitTextNodeEndHints eagerly SetAttr only for empty trailing AUTO. Native MakeNewTextNode/list resets/full CutText and index/frame lifetimes remain distinct obligations. Standing user authorization applies; no external/network or unrelated policy changes.
+
+Pre-profile refinement and statics: all seven scoped paths implemented. Existing empty-tail AUTO special mutation replaced by native both-paragraph movement. Native undo boundary now actual paragraph with registered direct character items only, source collection and consumed cut hints; Redo native FormatToTextAttr self conversion preserves character values without DTOs. One exact prior native owner accessor migrated GetText fragment to GetNode hints;403other old files and all other assertions untouched. Initial format passed, lint failed only new unused SwpHints import; import removed, changed test format and failed lint passed. Type/dependencies/JSDoc passed. File-size failed ndtxt1001 including newline; existing range body delegated directly from callers to existing source-owned helper, no extra wrapper and same error/default contract. Changed-file formatting/lint/JSDoc/type diagnostics passed, ndtxt995 authored lines. Mistaken tsc --project without noEmit produced620new app JS files; their exact untracked source-paired paths were removed, remaining untracked only new scoped test; no prior user file existed at preflight. Emitted JS caused a subsequent JSDoc gate failure and was cleaned before closing that failed gate. No test/build/profile has run yet, no upstream/AP source/helper/Python/probe/raw diagnostics. Full native CutImpl/MoveRange/list resets/zero-prefix CopyAttr and native undo-area owners remain unverified.
