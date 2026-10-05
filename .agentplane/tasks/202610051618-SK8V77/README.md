@@ -4,7 +4,7 @@ title: "Restore native text attribute history for paragraph split Undo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -21,11 +21,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T16:48:36.910Z"
+  updated_by: "CODER"
+  note: "Exact semantic1f2931231ee6 same-agent EVALUATOR pass.12215distinct app,109inventory,5scripts,120Chromium;29new cases. One failed-only closure,8skipped, no passing replay; initial100%app/inventory counters preserved with unchanged production hashes. Six statics finalpass,5restoredsourceaudits0violations,406of407priorfiles unchanged/1native fresh pointer correction,250records/defaults/exceptions preserved."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T16:48:34.762Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent explicit EVALUATOR exact semantic SHA1f2931231ee6: native ranged split history and fresh redo state verified; no broad parity promotion."
+  evaluated_sha: "1f2931231ee6a1aaf7f759b9f34e18b6dc4c5e13"
+  blueprint_digest: "05f1e776cffaed1ea394ae3706b18613c6661ca65abf518bd90451ce5f8ca041"
+  evidence_refs:
+    - ".agentplane/tasks/202610051618-SK8V77/README.md"
+    - ".agentplane/tasks/202610051618-SK8V77/quality/20261005-164834762-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610051618-SK8V77/quality/20261005-164834762-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610051618-SK8V77/quality/20261005-164834762-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610051618-SK8V77/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610051618-SK8V77/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610051618-SK8V77/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610051618-SK8V77/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610051618-SK8V77/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610051618-SK8V77/evidence/closure-profile.json"
+  findings:
+    - "29new cases pass;12215distinct app/109inventory/5scripts/120Chromium. One source-contradicted stale hyperlink pointer expectation closed failed-only with8skipped;406of407prior files byte-identical. Actual100% app/inventory L/S/F/B; production hashes unchanged after full build. Six statics final pass and5restored audits0violations.250states/defaults/exceptions/prior evidence preserved. Removed two fragment snapshots/equality adapter, no TextRuns layer added."
 commit: null
 comments:
   -
@@ -49,8 +69,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: source-confirmed single failed hyperlink identity assertion refinement; no passing profile replay."
+  -
+    type: "verify"
+    at: "2026-10-05T16:48:36.910Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic1f2931231ee6 same-agent EVALUATOR pass.12215distinct app,109inventory,5scripts,120Chromium;29new cases. One failed-only closure,8skipped, no passing replay; initial100%app/inventory counters preserved with unchanged production hashes. Six statics finalpass,5restoredsourceaudits0violations,406of407priorfiles unchanged/1native fresh pointer correction,250records/defaults/exceptions preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T16:47:23.330Z"
+doc_updated_at: "2026-10-05T16:48:36.989Z"
 doc_updated_by: "CODER"
 description: "Iteration155 native conditional SwHistory capture/rollback/rearm and provisional redo native state ownership; removes obsolete fragment snapshot comparison."
 sections:
@@ -64,6 +90,36 @@ sections:
     4. After vendor restored: resource generation --check; source-tree; source-provenance; inventory invariants/parity. Scoped diff/prior tests/defaults/AP forbidden artifacts audit; exact semantic SHA same-agent EVALUATOR review, recorded verification/canonical finish/parent checkpoint and clean tracked main; broad goal active.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T16:48:36.910Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic1f2931231ee6 same-agent EVALUATOR pass.12215distinct app,109inventory,5scripts,120Chromium;29new cases. One failed-only closure,8skipped, no passing replay; initial100%app/inventory counters preserved with unchanged production hashes. Six statics finalpass,5restoredsourceaudits0violations,406of407priorfiles unchanged/1native fresh pointer correction,250records/defaults/exceptions preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T16:47:23.330Z, excerpt_hash=sha256:50e4d53aab9bb770177f472bbd23198f6a6f263e119c949dcb078717a349a43f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051618-SK8V77/blueprint/resolved-snapshot.json
+    - old_digest: 05f1e776cffaed1ea394ae3706b18613c6661ca65abf518bd90451ce5f8ca041
+    - current_digest: 05f1e776cffaed1ea394ae3706b18613c6661ca65abf518bd90451ce5f8ca041
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051618-SK8V77
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610051618-SK8V77 -m 🧩 SK8V77 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only scoped semantic implementation commit in a new task; no history rewrite."
   Findings: |-
@@ -94,6 +150,36 @@ Iteration155 native represented SwUndoSplitNode text-attribute history lifecycle
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T16:48:36.910Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic1f2931231ee6 same-agent EVALUATOR pass.12215distinct app,109inventory,5scripts,120Chromium;29new cases. One failed-only closure,8skipped, no passing replay; initial100%app/inventory counters preserved with unchanged production hashes. Six statics finalpass,5restoredsourceaudits0violations,406of407priorfiles unchanged/1native fresh pointer correction,250records/defaults/exceptions preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T16:47:23.330Z, excerpt_hash=sha256:50e4d53aab9bb770177f472bbd23198f6a6f263e119c949dcb078717a349a43f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051618-SK8V77/blueprint/resolved-snapshot.json
+- old_digest: 05f1e776cffaed1ea394ae3706b18613c6661ca65abf518bd90451ce5f8ca041
+- current_digest: 05f1e776cffaed1ea394ae3706b18613c6661ca65abf518bd90451ce5f8ca041
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051618-SK8V77
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610051618-SK8V77 -m 🧩 SK8V77 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

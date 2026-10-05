@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610051618-SK8V77",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T16:48:34.762Z",
+  "verdict": "pass",
+  "summary": "Same-agent explicit EVALUATOR exact semantic SHA1f2931231ee6: native ranged split history and fresh redo state verified; no broad parity promotion.",
+  "evaluated_sha": "1f2931231ee6a1aaf7f759b9f34e18b6dc4c5e13",
+  "blueprint_digest": "05f1e776cffaed1ea394ae3706b18613c6661ca65abf518bd90451ce5f8ca041",
+  "findings": [
+    "29new cases pass;12215distinct app/109inventory/5scripts/120Chromium. One source-contradicted stale hyperlink pointer expectation closed failed-only with8skipped;406of407prior files byte-identical. Actual100% app/inventory L/S/F/B; production hashes unchanged after full build. Six statics final pass and5restored audits0violations.250states/defaults/exceptions/prior evidence preserved. Removed two fragment snapshots/equality adapter, no TextRuns layer added."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610051618-SK8V77/README.md",
+    ".agentplane/tasks/202610051618-SK8V77/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610051618-SK8V77/evidence/scope-audit.json",
+    ".agentplane/tasks/202610051618-SK8V77/evidence/final-coverage.json",
+    ".agentplane/tasks/202610051618-SK8V77/evidence/absent-profile.json",
+    ".agentplane/tasks/202610051618-SK8V77/evidence/closure-profile.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Retained paragraph identity still needed by pointer-based undo callers and unverified against native fresh nodes; full physical CutImpl/undo-area/table/list UI parity remains open. Conscious IO/recovery deviations preserved."
+  ]
+}
