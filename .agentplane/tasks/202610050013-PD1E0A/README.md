@@ -1,10 +1,11 @@
 ---
 id: "202610050013-PD1E0A"
 title: "Restore owned native text insertion through typing and redo"
-status: "DOING"
+result_summary: "Restored owned native text insertion through collapsed typing and redo;hyperlink style IDs and continuous item identity preserved,with full core/UI still unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -63,11 +64,16 @@ quality_review:
   findings:
     - "Actual internet item/attribute/map/backlinks and all7fields survive supported node/real shell insertion,undo/redo/grouping/composition/Worker;61new cases and355 prior files byte-identical. Existing clipping body extracted unchanged under1000-line gate.240prior states/defaults/exceptions retained;new helper whollyunverified."
     - "Single absent profile:2797pass/28new mutable-lock fixture failures100%coverage. Native nesting lock defaults preserved;28failed cases explicitly unlock and replay pass;33passing fixture inputs restored to initial defaults. Production unchanged;no passing suite/build replay. Inventory109/Chromium99/five restored source audits pass."
-commit: null
+commit:
+  hash: "e339d98a3e216ba0186e594e391fd04e8af4710f"
+  message: "🧩 PD1E0A task: record verified native typing ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Restore owned native collapsed typing and redo direction under standing goal authorization,retaining declared selection/flag gaps."
+  -
+    author: "CODER"
+    body: "Verified: Collapsed Writer typing and redo now use native owned InsertText/Update,retaining internet attribute/item/map/backlinks and7fields while overlaying pending automatic items. Single absent profile and28failed-fixture-only replay passed;355prior tests and all registered deviations preserved."
 events:
   -
     type: "status"
@@ -82,8 +88,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native typing/redo owned internet fields/identity:6static;one absent profile2797pass/28fixturefail100%coverage;exactly28failedcases replaypass/33skip;inventory109/Chrome99/5sourceaudits pass.355oldtests retained;240states retained/newhelperunverified;scope/native hashes/artifact audit/exact-SHA qualitypass."
+  -
+    type: "status"
+    at: "2026-10-05T00:31:34.063Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Collapsed Writer typing and redo now use native owned InsertText/Update,retaining internet attribute/item/map/backlinks and7fields while overlaying pending automatic items. Single absent profile and28failed-fixture-only replay passed;355prior tests and all registered deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T00:31:03.551Z"
+doc_updated_at: "2026-10-05T00:31:34.065Z"
 doc_updated_by: "CODER"
 description: "Restore owned native ordinary text insertion through collapsed SwWrtShell input and SwUndoInsert redo. Explicit character-items-only node insertion must call existing native Update first,then replace only automatic-format portions over inserted text in the owned map,retaining actual internet attributes/items/backlinks/IDs/flags and native boundary eligibility instead of reconstructing inherited hyperlink DTOs. Explicit inserted hyperlink/fragment adapters retain their declared separate boundary. SwUndoInsert accepts a cloned optional pending character item set for native text mode;Redo validates connected node,uses InsertText and captures actual inserted fragment for bounded grouping/history payload. Keep legacy explicit-fragment construction available and prevent grouping incompatible insertion modes. Collapsed shell input supplies pending items;selection replacement retains its existing FORCE/EMPTY flag gap for a separate leaf. Add one source-independent test file:literal8flagmask/6boundary matrix through direct node and real shell,pending ownership/native IDs,actual Insert/Undo/Redo/grouping/live source item inheritance/composition/copy/Worker snapshots,zero update and mode guard. Preserve355 prior test files byte-identical unless a demonstrated native typing expectation requires an explicitly recorded correction;no weakened prior tests. Append bounded notes to four existing runtime/provenance rows only;240 prior module states/defaults/exceptions and I/O deviations retained,no new module/promotion. Six static gates then one sequential five-suite absent-reference profile,finally restore;repeat only failed gates/cases;five restored source audits afterward. Native hashes/exact scope/ignored-inclusive artifact audit,same-actor readonly exact-commit EVALUATOR,doctor/routing,recorded verification and canonical finish. Native full Insert flags,selection FORCE/EMPTY modes,empty hints,all families/BuildPortions/style clients/UNO/refcounts/full core/UI remain unverified. No network/global reads/saved helpers/native-source artifacts/native runtime invocation."
 sections:
@@ -161,6 +174,10 @@ sections:
     - Observation: First absent app profile2797pass/28failed new matrix cases with100%coverage;all355prior test files passed. Concrete SwTextAttrNesting has native DontExpand=true/LockExpandFlag=true;new fixture attempted changing DontExpand without unlocking,so expected mutable flag masks were not installed.
       Impact: Fixture preparation error only;native constructor/locked setter/production logic must stay unchanged. Full passing suites/build must not replay.
       Resolution: Explicitly unlock the new fixture before assigning mutable flags. Replay only28failed full test names;passing33new cases skip. Existing native constructor-lock coverage remains intact.
+extensions:
+  implementation_commit:
+    hash: "ad1fa4f1388096761f38fc59bef1a5c31609e118"
+    message: "🧩 PD1E0A code: preserve owned internet items through native typing"
 id_source: "generated"
 ---
 ## Summary
