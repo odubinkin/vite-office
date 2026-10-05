@@ -1,0 +1,20 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "1213bf81d4eeaf886cf3b43cbd1d24b104674263",
+  "base": "7f59db99ed9025798562a83cc11767bae4751c2a",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+    "apps/office/src/sw/source/core/txtnode/native-split-list-defaults.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx"
+  ],
+  "reviewedSemanticDiffBytes": 95329,
+  "reviewedSemanticDiffSHA256": "679344f4de9ad3c28687a1c617a4b7bc6aee3b94ce80b0497defb940316616bc",
+  "verdict": "pass",
+  "evidence": "Native SplitContentNode/MakeNewTextNode list/style ordering and CopyDirectListLevel inspected against pinned ndtxt.cxx. Follow style only at end, logical prefix direct restart/count values retained, continuation defaults restored, actual native rule/outline conditions with existing item lifecycle; no new UI DTO/TextRuns projection.18new native cases and2source-contradicted old style contracts closed with original failed-only retries.12186distinct app,109inventory,5scripts,120Chromium and actual100% app/inventory L/S/F/B. Full build includes identical final production hashes.406prior files404unchanged/2exact style contracts only;250states/defaults/exceptions/prior evidence preserved;5restored audits0violations. No broad completion.",
+  "validationLimit": "Represented logical paragraph split defaults only; native original-suffix/new-prefix physical ownership, page/break/keep/split/auto-frame resets, full CutImpl and heading Undo item restoration remain unverified. Conscious IO/recovery exceptions preserved; broad UI/table parity remains open.",
+  "residualRisk": "Native physical prefix/suffix identity and page/break/keep/split/auto-frame reset, full CutImpl/native undo-area/frame lifetimes, heading split Undo item history and broad UI/list/table parity remain unverified. Conscious IO/recovery deviations preserved."
+}
