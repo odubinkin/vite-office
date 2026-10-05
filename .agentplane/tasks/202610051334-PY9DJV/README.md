@@ -1,10 +1,11 @@
 ---
 id: "202610051334-PY9DJV"
 title: "Read plain clipboard text into selected table sections with native document undo"
-status: "DOING"
+result_summary: "Plain selected-cell clipboard bypasses shell paste callbacks and preserves multiline formatting, lists, native selection and reversible document-read history."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -46,7 +47,9 @@ quality_review:
     - ".agentplane/tasks/202610051334-PY9DJV/evidence/final-coverage.json"
   findings:
     - "All401prior test files and248prior semantic/provenance records preserved. ONE full absent profile; initial6app/2Chromium failures closed by exact failed/new cases only;12136distinct app/120Chromium,100% actual merged L/S/F/B. Five source audits pass0semantic violations. Final ndtxt correction checked by changed-file statics and targeted tests; no passing replay."
-commit: null
+commit:
+  hash: "1e51fc5ebf5a902919ab73d86eda846cb14e9571"
+  message: "🧩 PY9DJV task: persist canonical task artifacts"
 comments:
   -
     author: "CODER"
@@ -54,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Source-confirmed empty/end split inheritance correction within approved plain table reader scope."
+  -
+    author: "CODER"
+    body: "Verified: Plain selected-table clipboard reads actual native PaM ring points using ASCII InsertString/SplitNode and original SwHistory document-read undo; source-confirmed empty suffix formatting fixed. ONE full absent profile plus failed/new-only closure,12136 distinct app cases/120Chromium,100% actual merged coverage,401 old tests/248 semantic records unchanged; source audits and exact-SHA EVALUATOR pass. Full native lifetime/structural/layout parity remains unverified."
 events:
   -
     type: "status"
@@ -75,8 +81,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified semantic5d873b3ad547: six statics passed; ONE absent full build/profile with exact initial6app/2Chromium failures recorded and failed/new-only closure.12136distinct app/120Chromium,100% actual merged L/S/F/B;109inventory/5scripts; five restored source audits0violations;401old tests and248old semantic/provenance records unchanged,2new modules unverified. Same-agent exact-SHA EVALUATOR pass quality20261005-141454961. No passing replay; final ndtxt edit validated by changed-file statics and exact targeted cases, full build predates fix."
+  -
+    type: "status"
+    at: "2026-10-05T14:15:49.213Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Plain selected-table clipboard reads actual native PaM ring points using ASCII InsertString/SplitNode and original SwHistory document-read undo; source-confirmed empty suffix formatting fixed. ONE full absent profile plus failed/new-only closure,12136 distinct app cases/120Chromium,100% actual merged coverage,401 old tests/248 semantic records unchanged; source audits and exact-SHA EVALUATOR pass. Full native lifetime/structural/layout parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T14:15:20.061Z"
+doc_updated_at: "2026-10-05T14:15:49.215Z"
 doc_updated_by: "CODER"
 description: "Iteration151 under parent 202609240501-C9TN6M: preserve plain clipboard format, read actual selected-cell cursor rings through native ASCII insertion/split ownership and SwUndoInsDoc range history; remove TextRuns/compound shell-command insertion from this path, including multiline and inherited formatting. Keep structural/rich transfer and consciously registered I/O/recovery deviations outside scope."
 sections:
@@ -150,6 +163,10 @@ sections:
     - Observation: Six new multiline formatted-column failures traced to native empty/end split attributes; source-confirmed correction reapproved within14paths. Two new browser fixture failures fixed by actual paragraph focus after toolbar. New split fixture initially used unsupported API/caret projection/identical merged AUTO items; corrected actual native operations and distinct owned hints. First inline Chromium closure syntax error executed0cases; corrected callback replacement. Exact names/errors and actual counters retained; native undo storage timing/full ownership remain unverified.
       Impact: Plain table paste preserves existing cell content, blank/newline semantics, inherited items/list attributes, display selection and repeated Undo/Redo through native reader/history owners.
       Resolution: All failed/new cases closed without passing replay. Conscious deviations unchanged. Whole-module and broad parity unverified; no completion claim.
+extensions:
+  implementation_commit:
+    hash: "5d873b3ad547cd4f95e064c24356df478c1b3a5d"
+    message: "🧩 PY9DJV code: read plain table clipboard through native ASCII and document undo"
 id_source: "generated"
 ---
 ## Summary
