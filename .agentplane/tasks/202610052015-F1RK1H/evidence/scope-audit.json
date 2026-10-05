@@ -1,0 +1,78 @@
+{
+  "base": "c2d9b3d9c3ddd1e5e47c5bee7117a7a1bdbd3ae3",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+    "apps/office/e2e/writer-table-ring-continue.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/bastyp/index.ts"
+  ],
+  "priorTestFiles": 418,
+  "priorTestFilesByteIdentical": 417,
+  "sourceConfirmedPriorTestCorrections": [
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "reason": "Native rule-sensitive restart prepass appends separate boolean SwUndoNumRuleStart index/flag delta2units before common6item rule history; different-rule cases8units/node,same/plain6;all behavior assertions unchanged."
+    }
+  ],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/bastyp/index.ts"
+  ],
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "5945065a64f27089a644ad3b8bd04eb0f4494b2223539dd97adf0f018e20bcfb",
+    "apps/office/src/sw/source/core/doc/doc.ts": "762de2ed866665696051b0cfed9fd0f9df9d6fb28dcdc8e675bc3b744d233fe2",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "148445011285fa774ab7cafdd57988f030dcf40c076ddd723f3ca7444334a837",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "205459a947aed25e4dc8232ed830fa686099672af20010bf5ab62d499c090d48",
+    "apps/office/src/sw/source/core/crsr/pam.ts": "0c545e10373d983eb01d64bbff44c63b4b11786924943e431bc596b9b4075c5b",
+    "apps/office/src/sw/source/core/bastyp/index.ts": "0d7b227a3d57a69eae9faaaa7a5fea6f42002cb8d3cc52db02a05a987ddb5943"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 25,
+  "newChromiumCases": 5,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/edit/ednumber.cxx",
+      "sha256": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114"
+    },
+    {
+      "path": "sw/source/core/doc/docnum.cxx",
+      "sha256": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4"
+    },
+    {
+      "path": "sw/source/core/undo/unnum.cxx",
+      "sha256": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9"
+    },
+    {
+      "path": "sw/source/uibase/shells/textsh1.cxx",
+      "sha256": "ff294d3cc9b7cdb11af4aca02c44987e7b506488a6bbaa84781c3227019a8f0d"
+    },
+    {
+      "path": "sw/inc/editsh.hxx",
+      "sha256": "b928e3ad82ba7a7391afacbcc32ae3a44d3fbcd6039ec05d17b18eb075429f1f"
+    },
+    {
+      "path": "sw/source/core/crsr/pam.cxx",
+      "sha256": "6b88edc57ef122759003e459fd0b43bb9b1ff409b89238b7c598ab291dbf4f77"
+    },
+    {
+      "path": "sw/source/core/bastyp/index.cxx",
+      "sha256": "d620ef23093624af88769891f27cb5fe3b98be36be25cf836f916cfc9e934563"
+    }
+  ],
+  "validationLimit": "Actual existing browser/UI ContinueNumbering all-ring prepass and core inherited rule/count owner,native flag-only numeric restart history/default no-indent-reset,table row/column/body ranges/current replacement/atomic history only. Generic structural native position constructor/Assign/clone and nullable index ownership preserve zero-content structural nodes and live ring initialization. Existing Sfx manager grouping remains represented directly; full native StartUndo ID/rewriter,API/macro,numeric restart-value overload,Repeat,document-owned auto undo,SwHistory/full cursor shell hierarchy/client/layout/merged/rule factory remain unverified. Column browser selector absent;core column and real Chromium row evidence only. Conscious save/open/recovery deviations unchanged,parentDOING/goalACTIVE."
+}

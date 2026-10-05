@@ -41,6 +41,25 @@
       "failedCases": [
         "writer-table-ring-continue.spec.ts > Writer restarted table row Add to List retains live selection and atomic history"
       ]
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-table-ring-continue.spec.ts --grep=(?:^|\\s)Writer table row Add to List continues an imported restarted body list$ --reporter=list,json",
+      "profile": "upstream-absent genuinely new supported restarted body list to table browser case only on final changed-source bundle",
+      "exit": 0,
+      "bytes": 550,
+      "sha256": "cab7968fd326fb10834ed44e104d0dd4c980a44c558338b404579fa0b25c3e4c",
+      "caseCounts": {
+        "startTime": "2026-10-05T20:41:42.625Z",
+        "duration": 2340.575,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer table row Add to List continues an imported restarted body list"
+      ],
+      "failedCases": []
     }
   ]
 }
