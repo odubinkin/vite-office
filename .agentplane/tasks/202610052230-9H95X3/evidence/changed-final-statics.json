@@ -1,0 +1,8 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/core/doc/docnum.ts apps/office/src/sw/source/core/doc/number.ts apps/office/src/sw/source/core/doc/native-outline-movement.test.ts apps/office/src/sw/browser/editor/native-outline-tab.test.tsx apps/office/e2e/writer-native-outline-tab.spec.ts",
+    "exit": 1,
+    "bytes": 164,
+    "sha256": "85f6f030dae1fc67c91c3fd7c39dd2596ac6765b0fc178395bd904ba0fe1ec67"
+  }
+]
