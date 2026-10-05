@@ -1,10 +1,11 @@
 ---
 id: "202610051948-V7JNNJ"
 title: "Own table ring list commands in the native editing shell"
-status: "DOING"
+result_summary: "UI list commands now execute in inherited SwEditShell over all actual selected table boxes, replacing cyclic functional adapters. Native ring state,rule application,deletion and normalized levels preserve one Undo and table cursor.50new app and2new Chromium assertions;12445 distinct app,109 inventory,128 Chromium cases pass,100 percent app/inventory coverage. One full upstream-absent profile and failed/new-only closure; all250 prior states/defaults/IO exceptions preserved. Full hierarchy/history/factory/ContinueNumbering rings and broad UI remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610051948-V7JNNJ/evidence/exact-sha-review.json"
   findings:
     - "Inherited core numbering owner removes cyclic and functional adapters; actual selected row/column rings apply shared list identity, native state and normalized level changes with atomic numeric history. All declared checks final pass; 12445 distinct app,109 inventory,128 Chromium cases pass,100 percent coverage with identical actual maps and no passing replay. Explicit deleted-helper metadata migration and all250 states/defaults/IO exceptions preserved."
-commit: null
+commit:
+  hash: "33715ab1200903a24509e7e131f7520b1b64069a"
+  message: "🧩 V7JNNJ task: record verified native list ring ownership"
 comments:
   -
     author: "CODER"
     body: "Start: repair native table-ring list commands and editing-shell ownership under existing iterative user authorization;one scoped leaf,full goal remainsactive."
+  -
+    author: "CODER"
+    body: "Verified: native inherited editing shell owns table ring list commands; actual native selection, shared identity and atomic current-slot history pass all scoped checks."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified inherited native ring numbering owner and table row/column atomic history; 12445 distinct app,109 inventory,128 Chromium and5 scripts pass, actual100 percent app/inventory coverage. Six statics and5 restored audits finalpass. One full upstream-absent profile; only new/failed cases afterwards. Exact-SHA EVALUATOR pass 20261005-201140971-recovery-context; 414 prior testfiles unchanged,2 bounded API corrections,250 states/defaults/IO exceptions preserved. Full hierarchy/history/factory/ContinueNumbering rings remain open."
+  -
+    type: "status"
+    at: "2026-10-05T20:12:17.354Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native inherited editing shell owns table ring list commands; actual native selection, shared identity and atomic current-slot history pass all scoped checks."
 doc_version: 3
-doc_updated_at: "2026-10-05T20:11:54.627Z"
+doc_updated_at: "2026-10-05T20:12:17.355Z"
 doc_updated_by: "CODER"
 description: "Iteration162 repair actual table row/column/disjoint ring list commands, native numbering state and redundant level route under standing user authorization;previous161verifiedprogress;parent202609240501-C9TN6M remainsDOING."
 sections:
@@ -134,6 +147,10 @@ sections:
     Scope:11intentional paths,5owner metadata records.414of416prior testfiles byteidentical;2exact bounded old corrections only removed function availability API→native method and structural fixture→actual inherited SwEditShell owner;all behavior assertions retained.250states/defaults/classifications/conscious save/open/recovery exceptions preserved, prior evidence preserved except explicitly migrated deleted-helper source marker. One obsolete functional internal operation removed without module promotion. Scope-validator checked wrong field name target instead of actual wrtShell; validator-only correction then exact pass, no code/test change.
     Five restored source audits final pass0violations. Changed owner/test/metadata statics pass. AP ignored-inclusive4316files0forbidden; no upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. Doctor0errors2pre-existing warnings; policy routingOK.
     Limits: SwEditShell currently extends represented SwModify broadcaster; full native SwCursorShell hierarchy remains unverified. Existing native numeric history and portable independently owned item snapshots remain; full document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory/outline fonts and whitespace remain unverified. ContinueNumbering still first-range only. Full native outline factory uses named reserved rule lookup instead of complete GetOutlineNumRule implementation. Broad UI/list/table rendering/editing/protection/clipboard/layout and split physical bridge remain open. Conscious IO/recovery deviations unchanged,parentDOING/goalACTIVE. Exact-SHA same-agent EVALUATOR pass 20261005-201140971-recovery-context bound to 80d342e5871de27ffd71e3f4662f490604aa71b4; no independent reviewer claimed. Recorded verification and meaningful finish next.
+extensions:
+  implementation_commit:
+    hash: "80d342e5871de27ffd71e3f4662f490604aa71b4"
+    message: "🧩 V7JNNJ code: own list commands over native table cursor rings"
 id_source: "generated"
 ---
 ## Summary
