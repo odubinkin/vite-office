@@ -1,10 +1,11 @@
 ---
 id: "202610052113-W6AAHH"
 title: "Render Writer text from native attribute iteration"
-status: "DOING"
+result_summary: "Implemented native SwAttrIter/SwAttrHandler priority-item stack traversal and removed UI display filter TextRuns conversion; shared body/cell renderer reads frozen native item-derived portions and retains resolved/generic fonts.25new app and2browser cases pass;12509app/109inventory/5scripts/137Chromium distinct pass,actual100%app/inventoryL/S/F/B,oneupstream-absentprofile andfailed/new-onlyclosure.423old tests and251old semantic records preserved;2new partial owners unverified. Full native font/layout/list/table/UI parity remains unverified,parentDOING/goalACTIVE."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610052113-W6AAHH/evidence/browser-native-boundary-profile.json"
   findings:
     - "Reviewed semantic commit 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a and source hashes on current persisted-evidence descendant. Actual native item stack/iterator display replaces UI filter TextRuns conversion.25new app/2new browser cases pass;12509app/109inventory/5scripts/137Chromium distinct pass. One full upstream-absent profile, failed/new-only closure, actual100%L/S/F/B with source/map-identity carry.423old testfiles byte-identical,251old states/defaults/classes/IO exceptions/evidence preserved;253modules with2new partial native owners unverified. Sixstatics/sourceaudits/changed-file checks/scope/APignoredscan/doctor/routing pass."
-commit: null
+commit:
+  hash: "8902a0d02348dd8c0d752b799100d1e7e84121ac"
+  message: "🧩 W6AAHH task: record native portion verification"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved native attribute iteration leaf under standing explicit user authorization; source-confirmed overlap/UI filter adapter only, registered IO deviations unchanged."
+  -
+    author: "CODER"
+    body: "Verified: native item-stack display iteration and actual body/cell history/Worker/ODT/browser evidence pass at semantic 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a; same-agent exact-SHA EVALUATOR 20261005-215501550-recovery-context pass, conscious IO/recovery deviations preserved."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native attribute iteration display scope at semantic 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a with same-agent EVALUATOR pass 20261005-215501550-recovery-context;12509app/109inventory/5scripts/137Chromium distinct pass,25new app and2browser. Sixstatics/changed-file checks/sourceaudits/scope/APignoredscan/doctor/routing pass;actual app/inventory100%L/S/F/B,oneupstream-absentfull profile,failed/new-onlyclosures.423old tests byte-identical,251prior semantic records preserved,2new partial unverified owners=253;IO/recovery deviations unchanged,parent DOING/goal ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-05T21:56:21.035Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native item-stack display iteration and actual body/cell history/Worker/ODT/browser evidence pass at semantic 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a; same-agent exact-SHA EVALUATOR 20261005-215501550-recovery-context pass, conscious IO/recovery deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T21:55:35.621Z"
+doc_updated_at: "2026-10-05T21:56:21.036Z"
 doc_updated_by: "CODER"
 description: "Iteration165 removes the browser dependency on filter TextRuns by representing native SwAttrIter/SwAttrHandler ownership and direct effective item projection; fixes overlapping automatic formatting and preserves body/cell editing/history without changing registered IO deviations."
 sections:
@@ -132,6 +145,10 @@ sections:
     Final distinct outcomes:12509 app,109 inventory,5 scripts,137 Chromium cases pass. Source-confirmed production change after first profile is only removal of extra Reset from new SwAttrHandler.Init; final buildpass. Actual final app/inventory100%lines/statements/functions/branches; final app12721lines/13938statements/3406functions/10365branches and inventory1464/1523/384/1080. Map identity retained for unchanged sources; changed handler transfers only real counters at contiguous unchanged LCS locations against exact initial source hash,24statements/4functions/17branches; changed Init function is covered by actual new case. No fabricated counters or passing/full profile replay. Final coverage/source hashes/maps/results retained only in ignored appcache; AP contains bounded counts/hashes/prose/outcomes/exactfailednames.
     Command: five restored source audits, then changed-owner final source-provenance gate, scope audit/AP ignored-inclusive scan/doctor/routing/diffcheck. Result:pass. Evidence:251 prior semantic states/defaults/classifications/conscious IO exceptions/evidence preserved by stable path;2 additional partial native owners stayunverified,253modules. Two stale command-slice renderer markers replaced exactly, no semantic change. AP4376files scanned0forbidden before closure;doctor0errors2pre-existing warnings only. No upstream sources/helpers/Python/probes/rawdiffs/sourceframes/rawdiagnostics in AP; vendor restored.
     Limits: represented unmerged-node automatic item stacks and ranged start/end iteration only. Full native SwFont/device/font-change return/script/language/cache/shaping/redline/fields/merged paragraphs/INET styles/visited-color/paragraph mark and complete portions/layout/core/list/table/UI parity remain unverified. No full-module or overall status promotion. Conscious save/open/recovery deviations unchanged. Same current agent will perform explicit EVALUATOR exact semantic SHA review, without independent-reviewer claim; parent DOING/goal ACTIVE.
+extensions:
+  implementation_commit:
+    hash: "9f8f98affdd3fbc2084f0b15f573b05cfa33d56a"
+    message: "🧩 W6AAHH code: render Writer through native attribute iteration"
 id_source: "generated"
 ---
 ## Summary
