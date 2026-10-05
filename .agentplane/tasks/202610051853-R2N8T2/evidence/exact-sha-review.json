@@ -1,0 +1,21 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "3ac17d7acc52bfdb72bf871ce7db36445543e171",
+  "base": "c74da1ac637d73fb796feaa45b8c422853d80aaf",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "apps/office/e2e/writer-cell-list-continue.spec.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "reviewedSemanticDiffBytes": 86972,
+  "reviewedSemanticDiffSHA256": "7c3fd3d877a786638b49b9cfce1973f8507113827c190e0ea4d7784f7ea9e6f2",
+  "verdict": "pass",
+  "evidence": "Pinned docnum SearchNumRule/SetCounted,ednumber SearchNumRule/SetCurNumRule,textsh1 FN_NUM_CONTINUE/state and ndtxt SetListRestart inspected. Source-shaped bounded document search/defaults and shell native current inclusive body/cell/mixed range behavior,countedreset/rule-sensitive restart/value preservation;removedbody-only active-list filtering. Continue history stores numeric current slot and independent tuples/originaldocument guard instead of retained paragraph identity.43new nativeapp cases and2actualChromium cases,12359app/109inventory/5scripts/122distinctChromium.411prior testfiles unchanged;one source-confirmed ODT test correctedtwoexpectations withactualresult/Undoassertions;250states/defaults/classifications/IOexceptions/prior evidence preserved.6statics latestpass afteronlyfailedtypecheck correction;ONEfullabsent profile thenoriginal2failedChromium only2pass,focus fixture correctedactualsingleeditinghost/currentcaret/immediateinput. Actual app/inventory100%L/S/F/B from original currentproduction map,no merges orcountertransfer;5sourceaudits0semanticviolations/APscan0forbidden/doctor0errors2oldwarnings/routingOK. Exact finalproductionunchanged, no app/inventory/build/passingbrowser replay. No fullmodule/broadpromotion.",
+  "validationLimit": "Native SearchNumRule and represented Continue Numbering policy/current-slot ownership only. Search is over actual native nodes, no layout/merged/hide-redline/margin propagation/complete fixed extras semantics claim; represented body/table/postit section boundaries and raw enumeration/itemization/outline contracts verified. Shell applies found rule/list ID to inclusive native text range, numbered-first/bullet fallback/enabledstate,counted reset and rule-sensitive restart flag retaining restart value. Continue numeric history preserves existing independent direct item tuples/originaldocument guards/payload/comment; full native SetNumRule/SwHistory/registered deltas/client/undo classification/Repeat unavailable. Other InsNum shallow abstraction and retained split physical bridge/list creation body-only projection remainopen, broadUI/list/table nested/merged/protected/rendering/clipboard/layout unverified. Registered save/open/recovery deviations preserved. One source-confirmed old ODT expectation correction includes result/Undo checks,411other prior testfiles byte-identical;43newapp/2newChromium. Initial2newbrowser focus assertions corrected to actual singleeditinghost/selection/currentcaret plus immediatekeyboard insertion and undo, production unchanged, only original2failed retried. No app/inventory/build/passingbrowser replays or coveragecountertransfer;100%actual currentproduction app/inventory. No wholemodule or broad parity claim.",
+  "residualRisk": "Full native SwDoc.SetNumRule remains unimplemented; current direct tuples and shell-local mutation can still differ from native collapsed style-inheritance, registered history,client and undo classification/Repeat. Search layout/merged/hide-redline/margin propagation unsupported; other list toggle/creation projection, InsNum abstraction/node pointers and split physical bridge remainopen. Broad UI/list/table architecture/behavior incomplete, conscious save/open/recovery deviations retained,goalactive."
+}

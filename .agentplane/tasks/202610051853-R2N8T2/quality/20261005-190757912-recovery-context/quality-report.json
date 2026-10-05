@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610051853-R2N8T2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T19:07:57.912Z",
+  "verdict": "pass",
+  "summary": "Native Continue Numbering range/search/current slot history verified at semantic 3ac17d7acc52bfdb72bf871ce7db36445543e171; full native SetNumRule/SwHistory and broad UI parity remainopen.",
+  "evaluated_sha": "3ac17d7acc52bfdb72bf871ce7db36445543e171",
+  "blueprint_digest": "eed950bce977ae5b2b214af4f5b923c34d619dcb152624b05b393562bed83148",
+  "findings": [
+    "43new nativeapp/2newChromium;12359app/109inventory/5scripts/122distinctChromium.411prior testfiles unchanged,one source-confirmed ODT expectation correction,250states/evidence/defaults/IOexceptions preserved.6statics pass onlyfailedtypecheck replay;ONEfullabsent profile thenonly2originalfailed browsercases,actual100%coverage,5audits0violations. Same agent explicit EVALUATOR,no independentreviewclaim."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610051853-R2N8T2/README.md",
+    ".agentplane/tasks/202610051853-R2N8T2/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610051853-R2N8T2/evidence/scope-audit.json",
+    ".agentplane/tasks/202610051853-R2N8T2/evidence/final-coverage.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native SetNumRule/SwHistory/registered deltas/client/undo classification/Repeat and collapsed style inheritance remainunverified; layout/merged/redline/otherlistcreation/split/UI/table parity incomplete. Conscious save/open/recovery deviations retained,goalactive."
+  ]
+}
