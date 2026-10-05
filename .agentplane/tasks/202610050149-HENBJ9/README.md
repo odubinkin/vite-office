@@ -4,7 +4,7 @@ title: "Restore native text insertion flags and manager defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -35,10 +35,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T02:08:11.793Z"
+  updated_by: "CODER"
+  note: "Bounded132 native insertion flags/API/defaults verified;one absent full profile allfirstpass,100%app/inventory,0testreplays,353priorfilesbyteidentical/5ASTsyntax-only,241statesretained,newunverifiedenum;restored audits0violations,exactSHAqualitypass;native shell modes/fullcore/UI unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -73,8 +73,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore native insertion mode contract and all supported flag combinations with one upstream-absent validation profile;preserve registered deviations and existing shell callers for their dependent leaf."
+  -
+    type: "verify"
+    at: "2026-10-05T02:08:11.793Z"
+    author: "CODER"
+    state: "ok"
+    note: "Bounded132 native insertion flags/API/defaults verified;one absent full profile allfirstpass,100%app/inventory,0testreplays,353priorfilesbyteidentical/5ASTsyntax-only,241statesretained,newunverifiedenum;restored audits0violations,exactSHAqualitypass;native shell modes/fullcore/UI unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T02:06:10.824Z"
+doc_updated_at: "2026-10-05T02:08:11.845Z"
 doc_updated_by: "CODER"
 description: "Restore pinned SwInsertFlags and actual third-argument mode/default contract,full supported hint flag combinations and manager EMPTYEXPAND default;move explicit attributes/link adapters to fourth/fifth positions,retaining existing shell caller behavior for the next dependent leaf. Source-independent tests only,no upstream/helper/code artifacts."
 sections:
@@ -118,7 +124,59 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Static first,one absent-reference full profile with exactfailednames saved immediately;only failed gates/cases repeated. Restore upstream before source/scope/APaudits. Review358prior tests(353unchanged/5syntax-only migrations),241existingruntime states and new unverified enum row/native hashes. No upstream/test invocations or source/helper/code/Python/rawdiagnostic artifacts.
-  Verification: "Pending implementation and validation."
+  Verification: |-
+    Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+    Result: pass;failed type/docs gates recovered only.
+    Evidence: static-gates.json firstformat/lintpass,typefail;static-recovery.json typepass,dependencycheckpass,docsfailed missing mode@param;static-recovery-2.json docs/sizepass. Final changed-file Prettier/ESLint passed. Type fixture corrections use actual manager getter and native bitwise flag combination.
+    Scope: approved implementation/tests/docs/type/dependency/JSDoc/file-size contract.
+
+    Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+    Result: pass,one full upstream-absent sequential profile only.
+    Evidence: absent-profile.json;build1pass,app7687/276files,inventory109/36files,scripts5,Chromium99. App/inventory100%lines/statements/functions/branches. All firstpass,failedCases empty;zero test/suite/build replays.
+    Scope: supported runtime/app/inventory/scripts/Chromium behavior. Reference renamed inside repository and restored in finally;no source/scope/APaudits concurrent with tests. No production edits afterprofile.
+
+    Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+    Result: pass5restored-source audits.
+    Evidence: restored-source-audits.json;0semanticviolations.
+    Scope: pinned source audits only after vendor restoration.
+
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; exact scope/native hash/readonly SHA/AST migration audit;ignored-inclusive AP artifact scan.
+    Result: pass;doctor0errors/two unchanged legacywarnings;routingOK.
+    Evidence: scope-and-native-hashes.json;quality report .agentplane/tasks/202610050149-HENBJ9/quality/20261005-020715037-recovery-context/quality-report.json;evaluated semantic SHA 2234c71fc2553e865d9e0ed1c098cfccbc6259f4. Sixteenpaths,358prior testfiles(353byteidentical/5syntax-only),typedUndo syntax-only,11DEFAULT positional migrations;4127newcases;241existingruntime rows/status/default/exception fields preserved,sixappendices/fourhelperexports,oneunverified enumrow;8nativehashes;AP3910files/0forbidden beforequality.
+    Scope: same-actor read-only bounded mode/API/default review,not independent evidence or fullparity promotion. Native shell collapsedEMPTY/selectionFORCE/storedUndo flags remain next leaf;full manager/native overloads/core/UI and documented gaps unverified. Registered I/O/recovery deviations preserved.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T02:08:11.793Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Bounded132 native insertion flags/API/defaults verified;one absent full profile allfirstpass,100%app/inventory,0testreplays,353priorfilesbyteidentical/5ASTsyntax-only,241statesretained,newunverifiedenum;restored audits0violations,exactSHAqualitypass;native shell modes/fullcore/UI unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T02:08:11.425Z, excerpt_hash=sha256:6110f7cbc82db077dc12cc86fa2237b88c6283287e7b61154ccb41b66cba0b62
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050149-HENBJ9/blueprint/resolved-snapshot.json
+    - old_digest: f3e397b80114a9fadfebd3e926ae5c3cd172d9ca23d853e3ee0ad509f646eb09
+    - current_digest: f3e397b80114a9fadfebd3e926ae5c3cd172d9ca23d853e3ee0ad509f646eb09
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610050149-HENBJ9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610050149-HENBJ9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without rewriting history."
   Findings: |-
     Preflight132:cleanmain35f1a0e9048e23a88ea20fe2754d57ba0633a6c7,direct,onlyparentactive. Iteration131 verified progress,notblocked. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native IDocumentContentOperations.hxx57 flags0/1/2/4 and167 managerdefaultEMPTY;ndtxt.hxx287 node thirdmodeDEFAULT. ndtxt.cxx2449 saves old Ignore,temporarily forces aroundUpdate,restores before end-equal mode processing;NOHINT overridesFORCE,EMPTY eligiblezero expansion continues,prefix requires!NOHINT. Current node thirdparameter isSfxItemSet and manager passes nodeDEFAULT incorrectly. SwUndoInsert typed redo andfive oldtestfiles useportableattrs thirdposition and need syntax-only migration. Shell editsh.cxx98 normalEMPTY/forced5,selectionwrtsh1.cxx240..288 deleteplusforced insertion and undo storedflags are next dependent leaf. Existing131 owner/coordinate/postphase mechanism established;registered I/O deviations preserved. Fourmatched policies read;user-instructions absent;standing goal authorizes safe local scope;no network/outside/globalaccess.
@@ -178,7 +236,58 @@ Static first,one absent-reference full profile with exactfailednames saved immed
 
 ## Verification
 
-Pending implementation and validation.
+Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+Result: pass;failed type/docs gates recovered only.
+Evidence: static-gates.json firstformat/lintpass,typefail;static-recovery.json typepass,dependencycheckpass,docsfailed missing mode@param;static-recovery-2.json docs/sizepass. Final changed-file Prettier/ESLint passed. Type fixture corrections use actual manager getter and native bitwise flag combination.
+Scope: approved implementation/tests/docs/type/dependency/JSDoc/file-size contract.
+
+Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+Result: pass,one full upstream-absent sequential profile only.
+Evidence: absent-profile.json;build1pass,app7687/276files,inventory109/36files,scripts5,Chromium99. App/inventory100%lines/statements/functions/branches. All firstpass,failedCases empty;zero test/suite/build replays.
+Scope: supported runtime/app/inventory/scripts/Chromium behavior. Reference renamed inside repository and restored in finally;no source/scope/APaudits concurrent with tests. No production edits afterprofile.
+
+Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+Result: pass5restored-source audits.
+Evidence: restored-source-audits.json;0semanticviolations.
+Scope: pinned source audits only after vendor restoration.
+
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; exact scope/native hash/readonly SHA/AST migration audit;ignored-inclusive AP artifact scan.
+Result: pass;doctor0errors/two unchanged legacywarnings;routingOK.
+Evidence: scope-and-native-hashes.json;quality report .agentplane/tasks/202610050149-HENBJ9/quality/20261005-020715037-recovery-context/quality-report.json;evaluated semantic SHA 2234c71fc2553e865d9e0ed1c098cfccbc6259f4. Sixteenpaths,358prior testfiles(353byteidentical/5syntax-only),typedUndo syntax-only,11DEFAULT positional migrations;4127newcases;241existingruntime rows/status/default/exception fields preserved,sixappendices/fourhelperexports,oneunverified enumrow;8nativehashes;AP3910files/0forbidden beforequality.
+Scope: same-actor read-only bounded mode/API/default review,not independent evidence or fullparity promotion. Native shell collapsedEMPTY/selectionFORCE/storedUndo flags remain next leaf;full manager/native overloads/core/UI and documented gaps unverified. Registered I/O/recovery deviations preserved.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T02:08:11.793Z — VERIFY — ok
+
+By: CODER
+
+Note: Bounded132 native insertion flags/API/defaults verified;one absent full profile allfirstpass,100%app/inventory,0testreplays,353priorfilesbyteidentical/5ASTsyntax-only,241statesretained,newunverifiedenum;restored audits0violations,exactSHAqualitypass;native shell modes/fullcore/UI unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T02:08:11.425Z, excerpt_hash=sha256:6110f7cbc82db077dc12cc86fa2237b88c6283287e7b61154ccb41b66cba0b62
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050149-HENBJ9/blueprint/resolved-snapshot.json
+- old_digest: f3e397b80114a9fadfebd3e926ae5c3cd172d9ca23d853e3ee0ad509f646eb09
+- current_digest: f3e397b80114a9fadfebd3e926ae5c3cd172d9ca23d853e3ee0ad509f646eb09
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610050149-HENBJ9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610050149-HENBJ9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
