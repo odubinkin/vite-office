@@ -4,7 +4,7 @@ title: "Restore native text insertion flags and manager defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,6 +40,26 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T02:07:15.037Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only exact-SHA 2234c71fc2553e865d9e0ed1c098cfccbc6259f4 review passes bounded132native insertion mode leaf;full core/UI parity not promoted."
+  evaluated_sha: "2234c71fc2553e865d9e0ed1c098cfccbc6259f4"
+  blueprint_digest: "f3e397b80114a9fadfebd3e926ae5c3cd172d9ca23d853e3ee0ad509f646eb09"
+  evidence_refs:
+    - ".agentplane/tasks/202610050149-HENBJ9/README.md"
+    - ".agentplane/tasks/202610050149-HENBJ9/quality/20261005-020715037-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610050149-HENBJ9/quality/20261005-020715037-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610050149-HENBJ9/quality/20261005-020715037-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610050149-HENBJ9/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610050149-HENBJ9/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610050149-HENBJ9/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610050149-HENBJ9/evidence/restored-source-audits.json"
+    - "git exact SHA 2234c71fc2553e865d9e0ed1c098cfccbc6259f4 source bytes,scope/native hashes and prior syntax comparison checked"
+  findings:
+    - "Pinned enum0/1/2/4,actual node thirdmodeDEFAULT and managerEMPTYEXPAND default restored. Native FORCE temporarily sets node Ignore around pure Update and restores before NOHINT/EMPTY/prefix postphase;NOHINT precedence and zero EMPTY continuation preserved. Literal matrix verifies supported bound AUTO/INET values/flags/owners and all0..7 combinations,old state true/false,locks,manager and adapters. Source-owned preparation and three unchanged comparator extractions satisfy existing line limits."
+    - "One sequential absent-reference full profile allfirstpass:build1,app7687/276files,inventory109/36files,scripts5,Chromium99;app/inventory100%allfourcoverage. No test replay or passing suite/build repeats;production unchanged afterprofile. Static type/docs failures recovered only those gates;no pass criteria weakened. Sixteenpaths;353priorfilesbyteidentical,five fixturefiles/typedundo ASTprove11syntax-only DEFAULT migrations with expectationsunchanged;241priorsemantic/status/default/exception rows preserved,sixappendices/fourhelperexports,onewhollyunverified enumrow. Five restored audits0violations,eightnativehashes,AP3910files0forbidden,doctor0errors/two unchangedlegacywarnings,routingOK."
 commit: null
 comments:
   -
