@@ -1,0 +1,14 @@
+[
+  {
+    "path": "apps/office/src/sw/source/core/doc/docnum.ts",
+    "initialSHA256": "a461147aa0beb2ffdf99da32be5379b89c6a37397149e66a528742179a585c54",
+    "initialSourceOrigin": "actual initial profile source copy in ignored appcache",
+    "finalSHA256": "3c9d041bdb73fd9dfc97864eb2a36af8fa58c8c0322b10b786275e11605ebf9c"
+  },
+  {
+    "path": "apps/office/src/sw/source/core/doc/number.ts",
+    "initialSHA256": "780457a366b1e1f346bd5158d53c23ffbc2c24faa1a543e2bae02cfdd90b0158",
+    "initialSourceOrigin": "actual initial profile source copy in ignored appcache",
+    "finalSHA256": "123c0fc22b3e9c71de553cc0f6ece8fffff1e024427e414ce1eb03a9f611f292"
+  }
+]

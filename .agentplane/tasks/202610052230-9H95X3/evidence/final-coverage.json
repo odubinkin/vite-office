@@ -1,0 +1,91 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/source/core/doc/docnum.ts",
+    "apps/office/src/sw/source/core/doc/number.ts"
+  ],
+  "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against exact initial variant source hashes; new scope owners retain original base bytes. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
+  "carried": {
+    "statements": 323,
+    "functions": 64,
+    "branches": 227
+  },
+  "summary": {
+    "lines": {
+      "total": 12828,
+      "covered": 12828,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14061,
+      "covered": 14060,
+      "skipped": 0,
+      "pct": 99.99
+    },
+    "functions": {
+      "total": 3418,
+      "covered": 3418,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10442,
+      "covered": 10441,
+      "skipped": 0,
+      "pct": 99.99
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/number.ts"
+  ],
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialInventoryMapSHA256": "440e39c5894533ac963f1e4e55d8bc4f750058dc37001cb74d636c70d0d80449",
+  "finalInventoryMapSHA256": "816c43eab4a105c6cbe774f7d45dcf8d2b6590d4f18b2d2b17e5b30cc17ae035",
+  "initialMapSHA256": "8b869d7ac583830ab1b530dc3c2dedff977607bc2174434764684b03dd04b1be",
+  "finalMapSHA256": "086b5cb668dfd11f3ac0325f176ca18f7fa04b373e498db0c7ab145e064067ab",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/doc/docnum.ts": "3c9d041bdb73fd9dfc97864eb2a36af8fa58c8c0322b10b786275e11605ebf9c",
+    "apps/office/src/sw/source/core/undo/unoutl.ts": "7750174df43e13bc0c12f9a70fd7d63d56791c1c8ed2c3946e7981d59aa4824a",
+    "apps/office/src/sw/source/core/doc/doc.ts": "000071d0b9b126178fcb0d61844ca3f8427d0bfe437769f73dc4a93858f0763e",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "95fdb36c6fdb7223007c960e452928f68d7798ae0d7363c8f11f4823473ebe9a",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "9f409473a71d8b1f1c3136a734d4f01b3678a72bb811b6e4100aacc36ed3dc9e",
+    "apps/office/src/sw/source/core/doc/number.ts": "123c0fc22b3e9c71de553cc0f6ece8fffff1e024427e414ce1eb03a9f611f292"
+  }
+}
