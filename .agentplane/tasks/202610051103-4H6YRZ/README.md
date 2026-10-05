@@ -1,10 +1,11 @@
 ---
 id: "202610051103-4H6YRZ"
 title: "Materialize native per-cell cursor rings for selected table character formatting"
-status: "DOING"
+result_summary: "Native editing cursor rings cover complete selected cells while UI displays table endpoints; character formatting and Undo/Redo verified; broader selected text operations remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Native GetCursor and MakeBoxSels own full selected cell ranges; UI display owner remains table endpoint cursor. Full-cell character formats and table-mode Undo/Redo verified with14new app cases and1new browsercase."
     - "ONE full upstream-absent build/app/inventory/scripts/Chromium profile. Two obsolete mounted mark expectations corrected against pinned source, with stronger full-cell assertions;4failed/new-only closure passed. Final production byte-identical to successful full build and115-case Chromium profile;100actual-counter coverage."
     - "Four existing tests migrate displayed-owner calls;387other prior tests byte-identical. All246semantic statuses/defaults/classifications and conscious I/O/recovery exceptions preserved. Five source audits pass; no AP source/helpers/Python/rawframes."
-commit: null
+commit:
+  hash: "c50b2dfbb583b186e7857b83cd20d4524556bb64"
+  message: "🧩 4H6YRZ task: record native cursor ring verification"
 comments:
   -
     author: "CODER"
     body: "Start: approved iterative UI refactoring; native per-cell formatting cursor ring leaf148."
+  -
+    author: "CODER"
+    body: "Verified: native full-cell cursor rings, selected character formatting and table-mode Undo/Redo; six statics, one upstream-absent full profile, failed/new-only closure, actual coverage100,115Chromium cases and five restored audits. Exact-SHA EVALUATOR pass; scope and registered deviations preserved."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified semantic SHA2ca6a9de9fdc6c8f6849bdcfbfb046ddd17cf716: native circular cell editing cursors/full-cell character formatting/table-mode UndoRedo;14new appcases and1new Chromiumcase. Six statics pass; ONE upstream-absent build/app/inventory/scripts/115caseChromium profile; only2failed expectations and2new cases repeated/executed,4pass. Production unchanged after successful build/Chromium; actualcountercoverage100 in all four metrics. Five restored source audits pass;246semantic states/defaults/classifications/exceptions preserved.387prior tests byte-identical; four displayed-owner API migrations, only two documented obsolete mark expectations corrected against native source with stronger assertions. ExactSHA same-agent EVALUATOR audit precedes quality pass. Per-ring text insertion/deletion/paste and paragraph/list commands, native gestures/layout/merged/protected/redline cases remain separate. Broad goalactive."
+  -
+    type: "status"
+    at: "2026-10-05T11:39:47.245Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native full-cell cursor rings, selected character formatting and table-mode Undo/Redo; six statics, one upstream-absent full profile, failed/new-only closure, actual coverage100,115Chromium cases and five restored audits. Exact-SHA EVALUATOR pass; scope and registered deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T11:39:26.668Z"
+doc_updated_at: "2026-10-05T11:39:47.247Z"
 doc_updated_by: "CODER"
 description: "Iteration148 under 202609240501-C9TN6M. Port native GetCursor default and separate displayed table cursor from editing cursor rings, so selected table character commands cover full cells and preserve selection through history."
 sections:
@@ -125,6 +138,10 @@ sections:
     - Observation: Verification-record commit attempted unsupported verify scope; commit-msg correctly rejected it and HEAD remained unchanged.
       Impact: Only task README remained staged; production and passing verification evidence unaffected.
       Resolution: Use canonical allowed task scope for the verification artifact commit; no hook changes, bypasses or test replay.
+extensions:
+  implementation_commit:
+    hash: "2ca6a9de9fdc6c8f6849bdcfbfb046ddd17cf716"
+    message: "🧩 4H6YRZ code: materialize native selected-cell editing cursor rings"
 id_source: "generated"
 ---
 ## Summary
