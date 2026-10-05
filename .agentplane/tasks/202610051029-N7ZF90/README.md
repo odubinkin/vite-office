@@ -1,10 +1,11 @@
 ---
 id: "202610051029-N7ZF90"
 title: "Own table row selection and selected box painting in native cursor"
-status: "DOING"
+result_summary: "Native cursor owns selected table boxes; shell row selection and table context drive UI painting and properties, with single-host cell focus preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "19 new app cases and 2 new Chromium cases closed. All 388 prior test files byte-identical; 246 semantic states/defaults/classifications/exceptions retained. Actual coverage 100%; one full absent profile, failed/new-only closure and five restored audits."
     - "Same actor EVALUATOR phase; read-only exact-SHA evidence audit completed before report. No independent review claim."
-commit: null
+commit:
+  hash: "c4f54ad27ea3f49ccaf55efe02e9e13ec2043482"
+  message: "🧩 N7ZF90 task: record native table selection verification"
 comments:
   -
     author: "CODER"
     body: "Start: user authorized iterative UI upstream refactoring; native table selection leaf 147."
+  -
+    author: "CODER"
+    body: "Verified: native table selected-box/row ownership replaces React selected-row state; actual app/inventory coverage100%,19new app/2new Chromium,114unique browser cases closed,388prior testfiles unchanged. Full-profile and final click-focus validation boundary recorded."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved bounded native table selection ownership verified at 48804c121de7fa288070253f798bbfea17985e1f; actual app/inventory coverage100%,19new app/2new Chromium,114unique browser cases closed; failed/new-only closure and final focus-wrapper validation boundary recorded."
+  -
+    type: "status"
+    at: "2026-10-05T10:59:15.551Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native table selected-box/row ownership replaces React selected-row state; actual app/inventory coverage100%,19new app/2new Chromium,114unique browser cases closed,388prior testfiles unchanged. Full-profile and final click-focus validation boundary recorded."
 doc_version: 3
-doc_updated_at: "2026-10-05T10:58:43.401Z"
+doc_updated_at: "2026-10-05T10:59:15.554Z"
 doc_updated_by: "CODER"
 description: "Iteration 147 under 202609240501-C9TN6M. Remove React selected table and row state; use native SwTableCursor selected boxes and shell row selection for the implemented flat table profile."
 sections:
@@ -117,6 +130,10 @@ sections:
     Iteration147 verified bounded progress: removed React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor sorted actual box identities, SwTable flat shared-column rectangle/row selection, shell point-first/mark-last row selection and native table context, immutable selected-box painting. No content history for selection. Insert focuses actual first cell. Properties follow actual current table/row selection; ordinary caret clears stale row paint. One existing Chromium focus failure exposed already-current first-cell focus; a DOM click-focus wrapper retains a single editing host and closes the original assertion without editing old tests.
     Verification: six static gates pass after failed-only lint/type/doc corrections; changed-file format/lint pass. ONE upstream-absent full profile: static build pass; app12062/298 all assertions pass, initial coverage short2statements3branches; inventory109/36,100%; scripts5/2; Chromium113pass/1failed of114 with no flakes. Initial exact failed case saved before closure: Writer types in a table cell and reopens the edited ODT. New-only closure ran3 actual new cases (2pass/1ambiguous DOM label query), original failed Chromium only passed using development server. Scoped failed DOM query to First table and sole failed case passed; no production changes after the focus wrapper. Total19new app cases and2new Chromium cases;114unique Chromium closed. No passing full/static/build/suite/test replay. Final map actual counters100% lines11919,statements13049,functions3323,branches9771. Initial maps ignored appcache only. One changed production file after full profile; reconstruct initial source hash exactly; carry only contiguous unchanged locations, anonymous numeric function labels normalized by unchanged decl/loc; changed/crossing locations use executed new cases. Final wrapper validated by mounted focus and original failed Chromium ODT case; successful bundle/full profiles not rebuilt/replayed. This validation boundary remains explicit.
     After restoration five source audits pass; source-provenance required missing test markers corrected and failed gate only retried, invariants/parity then first executions pass. Existing246 module states/defaults/classifications/exceptions and all prior tests retained. AP ignored-inclusive scan4101files/0forbidden; no saved helper/script/Python/upstream/raw source/raw diagnostics. No network/outside/subagent access. Native source hashes and scoped diff recorded. Full cursor rings/per-box edit ranges, native table layout, merged/nested/protected/hidden cells, drag/column selections and plain visual Home/End remain unverified. Broad goal remains active.
+extensions:
+  implementation_commit:
+    hash: "48804c121de7fa288070253f798bbfea17985e1f"
+    message: "🧩 N7ZF90 code: move table selection state from React into native cursor"
 id_source: "generated"
 ---
 ## Summary
