@@ -1,10 +1,11 @@
 ---
 id: "202610052306-4VZ510"
 title: "Align native Writer list context dispatch and current-level command state"
-status: "DOING"
+result_summary: "Aligned existing Writer text/list ownership and conditional native list context; corrected point-based level state and retained disabled menu entries.12588app109inventory5scripts145Chromium pass,100%actual app/inventory coverage,255 prior semantic states and conscious IO deviations preserved. Full core/UI/list/table and NONE codec remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 30
+revision: 31
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610052306-4VZ510/evidence/final-coverage.json"
   findings:
     - "Current point state, actual conditional shell stack, text command ownership and bindings-driven disabled menu entries match represented pinned behavior; full core/UI/list/table and NONE codec remain unverified."
-commit: null
+commit:
+  hash: "149dad8409a6b645d5120f7d14e66c1e59a46ebc"
+  message: "🧩 4VZ510 task: record verified native list context"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-owned text/list command context and current-point native level state under standing approved iteration; preserve IO exceptions and one absent-profile verification."
+  -
+    author: "CODER"
+    body: "Verified: represented native list context/current-point level state and text command ownership, plus bindings-disabled inactive supported menu entries. One full absent profile and failed-only recovery; actual100% coverage, exact-SHA same-agent EVALUATOR pass."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "One full upstream-absent profile and original-failed-only recovery passed; final distinct12588app109inventory5scripts145Chromium0flaky,actual100%L/S/F/B,all static/source/scope/AP/doctor/routing gates passed. Same-agent EVALUATOR pass evaluated exact ae17337742d3b1abd21d76b738a04b13f0bb4a88. Full native/core/UI/list/table and ODT NONE codec remain unverified; conscious IO deviations preserved."
+  -
+    type: "status"
+    at: "2026-10-05T23:43:17.508Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: represented native list context/current-point level state and text command ownership, plus bindings-disabled inactive supported menu entries. One full absent profile and failed-only recovery; actual100% coverage, exact-SHA same-agent EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-05T23:43:02.113Z"
+doc_updated_at: "2026-10-05T23:43:17.510Z"
 doc_updated_by: "CODER"
 description: "Iteration168: move existing list creation/removal/continuation commands from permanent list shell into existing native text shell; select actual native numbered context using represented SwWrtShell GetSelectionType, activate SwListShell below SwTextShell through SwView SelectShell, and use native GetNumLevel current-point state for existing single-level commands. Source-shaped responsibility splits retain mandatory1000-line limits. No new list/subpoint feature or IO policy change; verify actual core/DOM/production behavior with one full upstream-absent profile and failed/new-only recovery."
 sections:
@@ -138,6 +151,10 @@ sections:
     - Observation: Inactive supported menu commands were hidden by an old descriptor-presence gate; six old callers retained obsolete list ownership.
       Impact: Menu composition differed from native disabled-entry default and prior continuation tests used the wrong shell.
       Resolution: Supported resources now render through actual bindings; text-shell owner migrations retain assertions. All original failures recovered without passing/full test replay.
+extensions:
+  implementation_commit:
+    hash: "ae17337742d3b1abd21d76b738a04b13f0bb4a88"
+    message: "🧩 4VZ510 code: align native Writer list context and menu state"
 id_source: "generated"
 ---
 ## Summary
