@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610050217-Y5P172",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T02:33:17.094Z",
+  "verdict": "pass",
+  "summary": "Same-actor read-only review of semantic SHA b1ae1b53f482f6f2495bbe0b2df258ad83e0b646: bounded shell and undo insertion modes satisfy approved scope.",
+  "evaluated_sha": "b1ae1b53f482f6f2495bbe0b2df258ad83e0b646",
+  "blueprint_digest": "1036510f37145ba19243c7b2278c8a2cb84334bac8d533a7b32117e178712a94",
+  "findings": [
+    "Native Insert2 normal1/forced5,stored undo flags and current FORCE grouping barrier are covered;selection adapters remain unchanged pending native attribute history.",
+    "One full absent profile;161 exact failed cases recovered once,1572 skipped,no passing case/suite/build replays;app and inventory first-profile coverage100%allfour.",
+    "Nine semantic paths,356of359oldtestfiles byte-identical,two syntax-only files,five DEFAULT constructor migrations,and one observed old history case corrected;242runtime states/defaults/exceptions retained."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610050217-Y5P172/README.md",
+    ".agentplane/tasks/202610050217-Y5P172/evidence/scope-and-native-hashes.json",
+    ".agentplane/tasks/202610050217-Y5P172/evidence/absent-profile.json",
+    ".agentplane/tasks/202610050217-Y5P172/evidence/failed-case-replay.json",
+    ".agentplane/tasks/202610050217-Y5P172/evidence/restored-source-audits.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full parity unverified;native attribute history before selection delete-plus-forced insertion,full manager grouping/redline/multicursor/BuildPortions/core/UI remain follow-up obligations."
+  ]
+}
