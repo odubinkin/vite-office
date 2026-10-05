@@ -62,6 +62,11 @@
       "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-hint-update.ts",
       "rationale": "Native SwTextNode::Update/default InsertText owned hint coordinates are split from the text-node and hint container to retain their mandatory1000-line limits while preserving ndtxt.cxx source ownership. Other native modes/families/zero-width hints and lifetimes remain unverified.",
       "stackNecessity": "responsibility-split"
+    },
+    {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+      "rationale": "The native ndtxt.cxx pointer-query predicates and traversal are split into a type-import-only module to share the existing node and internet projection lookup without a runtime cycle or exceeding the unchanged1000-line node gate. Vector,dummy and other-family branches remain unverified.",
+      "stackNecessity": "responsibility-split"
     }
   ],
   "entries": [
@@ -4990,6 +4995,42 @@
       ]
     },
     {
+      "localPath": "apps/office/src/sw/inc/swtypes.ts",
+      "upstreamPath": "sw/inc/swtypes.hxx",
+      "localSymbols": [
+        "GetTextAttrMode"
+      ],
+      "upstreamSymbols": [
+        "GetTextAttrMode"
+      ],
+      "classification": "upstream-mechanism",
+      "status": "mapped",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/inc/swtypes.ts",
+            "marker": "GetTextAttrMode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+            "marker": "native ranged pointer query ownership"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+            "marker": "GetTextAttrMode"
+          }
+        ]
+      },
+      "preservedResponsibilities": [
+        "Iteration128 restores GetTextAttrMode Default0/Expand1/Parent2 and SwTextNode.GetTextAttrAt for existing ranged AUTO53/INET54. Native Which/start traversal returns the last matching actual owned attribute without allocation,cloning or DTO authority. Existing internet metadata and partitioned run projection share the native Default query. Direct owned-range mutation tests exercise overwrite behavior;valid adjacent links exercise shell/copy/graph/Worker paths. Native thints.cxx forbids nested hyperlinks,so the existing same-family normalization rejection is preserved. All354 prior tests and238 runtime states/defaults/exceptions remain unchanged;two extracted native modules remain wholly unverified. Full vector/dummy/other-family lookup,same-start native tie ordering,insertion/nesting validation,input inheritance/native caller modes/style clients/UNO/full core/UI parity remain unverified;registered save/open/recovery deviations preserved."
+      ],
+      "omittedResponsibilities": [
+        "Only existing ranged pointer lookup contracts are covered;all other native obligations remain unverified."
+      ]
+    },
+    {
       "classification": "upstream-mechanism",
       "evidence": {
         "local": [
@@ -9050,7 +9091,8 @@
         "Iteration120 restores native secondary maps for existing ranged AUTO53/INET54 hints: m_HintsByEnd uses end ascending/start descending/Which ascending, and m_HintsByWhichAndStart uses Which ascending/start ascending/end descending. All three maps hold the same actual owned objects; replacement/consumption/merge removal keeps their object sets synchronized. Start changes dirty all maps; changed ends accumulate native end and lexicographic Which/start intervals. Independent full/partial lazy resort and binary last-end/lower-Which queries are implemented. Existing projection/caret/character-segment family reads use the Which/start map while preserving current range semantics.75 new literal cases cover both input orders/eight flags, coordinate/family ties, dirty bounds, actual graph cut/transfer, snapshots, undo, foreign copy/rejected adoption and merged removal. All339 prior tests remain byte-identical; all234 runtime fields/statuses/defaults/exceptions stay unchanged apart from this appendix. Number.MAX_SAFE_INTEGER represents the native size-failure sentinel for JS number indexes; native ABI/pointer tie order/debug iteration assertions, full Insert/Delete/nesting/history/refcounts/destruction/listeners/class hierarchy/friend visibility, empty hints/full destination adjustment/same-node split/join and broad core/UI parity remain unverified. Registered save/open/recovery deviations preserved; no module/goal promotion.",
         "Iteration122 excludes INET54 from adjacent value merging per native MergePortions and updates ordinary insert/pure-erase coordinates on actual owned attributes per SwTextNode::Update/default InsertText. Source-owned ndtxt-hint-update decomposition preserves existing1000-line gates. Supported positive/negative ranges,paragraph-start DontExpandStart,end DontExpand reset,INET-first end suppression/AUTO fresh collector and ignored DontMoveAttr match the bounded native non-overlapping AUTO/INET slice. Continuous links keep item/object/map identity;equal adjacent links remain distinct through construction/copy/cut/transfer/history/graph16,even after deleting a gap.322 new literal cases cover both families,eight flags,all boundary relations and mixed end flags. Two old hyperlink expectations correct adjacent Count/comment2 to3 and post-gap-cut Count/end1/6 to2/3;341 other prior tests stay byte-identical. First absent app run2597pass/2fail retained100%coverage;only2failedcases replayed after test-only corrections,no production/full suite/build replay. Explicit formatted insertion/fragment/undo adapters retain their existing contracts.234 existing runtime rows retain statuses/defaults/exceptions except two bounded appendices;one new extracted native helper remains unverified. Native empty-hint retention,full Insert modes/ignore-expand locks/families/BuildPortions/nesting,explicit replacement/copy destination/same-node move/split/join/refcounts/destruction/listeners and broad core/UI parity remain unverified. Registered save/open/recovery deviations preserved;no module/goal promotion.",
         "Iteration123 restores SwTextAttr's protected start-only base and optional end,SwTextAttrEnd's ranged end notifications without range-order rejection,and twelve private native flags/accessors. SwTextAttrNesting initializes DontExpand/LockExpandFlag/DontExpandStart/Nesting true;SwTextINetFormat additionally sets CharFormatAttr and its item's GetTextINetFormat backlink. MakeTextAttr and production hyperlink creation now construct concrete internet attributes;fresh copied AUTO flags are false while INET nesting/char-format defaults are true. This supersedes prior generic false-INET constructor/copy/reset claims in iterations114-122;native locked DontExpand reset remains blocked. Portable snapshots preserve concrete ranged kind and independent supported flags,distinct from native deleted copy construction. Existing generic range fixtures use SwTextAttrEnd;fresh concrete factory expectations and native temporary crossed-end write expectations are corrected without weakening range/value/ownership checks. JavaScript integer guards and public internal friend-storage/projection adapters remain bounded language boundaries. Native item holders/refcounts/destruction/listeners,full ChgTextNode/style clients/visited behavior,empty-hint retention/full nesting insertion/modes,nondefault unsupported graph flags and other attribute families remain unverified. Existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;one new source-owned txtatr2 module remains unverified,no module or goal promotion.",
-        "Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion."
+        "Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion.",
+        "Iteration128 restores GetTextAttrMode Default0/Expand1/Parent2 and SwTextNode.GetTextAttrAt for existing ranged AUTO53/INET54. Native Which/start traversal returns the last matching actual owned attribute without allocation,cloning or DTO authority. Existing internet metadata and partitioned run projection share the native Default query. Direct owned-range mutation tests exercise overwrite behavior;valid adjacent links exercise shell/copy/graph/Worker paths. Native thints.cxx forbids nested hyperlinks,so the existing same-family normalization rejection is preserved. All354 prior tests and238 runtime states/defaults/exceptions remain unchanged;two extracted native modules remain wholly unverified. Full vector/dummy/other-family lookup,same-start native tie ordering,insertion/nesting validation,input inheritance/native caller modes/style clients/UNO/full core/UI parity remain unverified;registered save/open/recovery deviations preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndhints.cxx",
@@ -9132,6 +9174,44 @@
         "HandleSetAttrAtTextNode",
         "HandleResetAttrAtTextNode",
         "HasNumberingWhichNeedsLayoutUpdate"
+      ]
+    },
+    {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+      "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+      "localSymbols": [
+        "GetTextAttrAt",
+        "RangedTextAttribute"
+      ],
+      "upstreamSymbols": [
+        "lcl_GetTextAttrs",
+        "SwTextNode::GetTextAttrAt"
+      ],
+      "classification": "upstream-mechanism",
+      "status": "mapped",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+            "marker": "GetTextAttrAt"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+            "marker": "native ranged pointer query ownership"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "lcl_GetTextAttrs"
+          }
+        ]
+      },
+      "preservedResponsibilities": [
+        "Iteration128 restores GetTextAttrMode Default0/Expand1/Parent2 and SwTextNode.GetTextAttrAt for existing ranged AUTO53/INET54. Native Which/start traversal returns the last matching actual owned attribute without allocation,cloning or DTO authority. Existing internet metadata and partitioned run projection share the native Default query. Direct owned-range mutation tests exercise overwrite behavior;valid adjacent links exercise shell/copy/graph/Worker paths. Native thints.cxx forbids nested hyperlinks,so the existing same-family normalization rejection is preserved. All354 prior tests and238 runtime states/defaults/exceptions remain unchanged;two extracted native modules remain wholly unverified. Full vector/dummy/other-family lookup,same-start native tie ordering,insertion/nesting validation,input inheritance/native caller modes/style clients/UNO/full core/UI parity remain unverified;registered save/open/recovery deviations preserved."
+      ],
+      "omittedResponsibilities": [
+        "Only existing ranged pointer lookup contracts are covered;all other native obligations remain unverified."
       ]
     },
     {
@@ -9772,7 +9852,8 @@
         "Iteration115 reconstructs attributes at actual CloneTo/CopyRange boundaries via MakeTextAttr, including same-document copies with fresh constructor flags. SwpHints.CopyTo explicitly binds destination ownership; same-pool clone/slice/history snapshots retain flags and shared handles. Foreign container ingestion binds both automatic and internet hints; raw foreign automatic arrays convert before empty filtering, dropping foreign parents/state markers through native cross-pool Clone. Tests cover all eight flag masks, destination style reuse, adjacent merging, internet-only imports, marker-only pruning, source isolation, whole moves, continued formatting and graph-codec round trips. Partial MoveText split semantics, native holder/refcount/client/listener ownership and broader module/browser parity remain unverified; registered I/O deviations and all module status/default/exception fields remain unchanged.",
         "Iteration117 restores owned cross-node hint transfer: destructive SwpHints.Cut moves the actual SwTextAttr and format item for strictly interior hints, reconstructs partial/equal-end hints through MakeTextAttr, and updates surviving source hint objects in place. Owned normalization is separated from caller-copy replace. Explicit same-pool replacement transfer consumes its fragment; ordinary snapshots/constructors/copies remain independent. SwTextNode.CutTextFragment owns text/index/notification changes; cross-node MoveRange uses cut/transfer rather than capture/erase/reinsert. EraseText delegates its unchanged bounded replacement behavior to ReplaceRange, retaining the mandatory1000-line node limit. App tests check real object/item/handle ownership, repeated destinations, independent retained undo fragments and restoration, literal cut boundaries/eight flag masks, foreign transfer rejection, no-op/invalid/plain cuts and normalization. Native m_pHints backlinks/refcount/destruction/listeners, source empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join identity remain unverified. Existing234 runtime fields/statuses/defaults/exceptions and registered I/O deviations stay unchanged; no whole-module or goal promotion.",
         "Iteration122 excludes INET54 from adjacent value merging per native MergePortions and updates ordinary insert/pure-erase coordinates on actual owned attributes per SwTextNode::Update/default InsertText. Source-owned ndtxt-hint-update decomposition preserves existing1000-line gates. Supported positive/negative ranges,paragraph-start DontExpandStart,end DontExpand reset,INET-first end suppression/AUTO fresh collector and ignored DontMoveAttr match the bounded native non-overlapping AUTO/INET slice. Continuous links keep item/object/map identity;equal adjacent links remain distinct through construction/copy/cut/transfer/history/graph16,even after deleting a gap.322 new literal cases cover both families,eight flags,all boundary relations and mixed end flags. Two old hyperlink expectations correct adjacent Count/comment2 to3 and post-gap-cut Count/end1/6 to2/3;341 other prior tests stay byte-identical. First absent app run2597pass/2fail retained100%coverage;only2failedcases replayed after test-only corrections,no production/full suite/build replay. Explicit formatted insertion/fragment/undo adapters retain their existing contracts.234 existing runtime rows retain statuses/defaults/exceptions except two bounded appendices;one new extracted native helper remains unverified. Native empty-hint retention,full Insert modes/ignore-expand locks/families/BuildPortions/nesting,explicit replacement/copy destination/same-node move/split/join/refcounts/destruction/listeners and broad core/UI parity remain unverified. Registered save/open/recovery deviations preserved;no module/goal promotion.",
-        "Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion."
+        "Iteration124 restores the native null internet text-node backlink and GetpTextNode/GetTextNode/ChgTextNode contracts. Existing text-node hint assignment binds concrete internet attributes; portable map replacement, removal and consumption detach obsolete backlinks while retaining actual map/item identities during ordinary text updates and owned transfers. Detached snapshots/fragments have no node owner; retained undo paragraph objects still own their live hints through split/join/undo/redo. Source-owned ndtxt-hints decomposition keeps the unchanged1000-line gates and re-exports existing projection APIs. Native InitINetFormat also registers a char style, so pointer binding is not claimed as its full implementation. Full char-style/client/visited/protection/refcount/physical destruction,empty hints,all families and broader core/UI parity remain unverified. Existing runtime statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged;the new extracted helper is unverified,no module or goal promotion.",
+        "Iteration128 restores GetTextAttrMode Default0/Expand1/Parent2 and SwTextNode.GetTextAttrAt for existing ranged AUTO53/INET54. Native Which/start traversal returns the last matching actual owned attribute without allocation,cloning or DTO authority. Existing internet metadata and partitioned run projection share the native Default query. Direct owned-range mutation tests exercise overwrite behavior;valid adjacent links exercise shell/copy/graph/Worker paths. Native thints.cxx forbids nested hyperlinks,so the existing same-family normalization rejection is preserved. All354 prior tests and238 runtime states/defaults/exceptions remain unchanged;two extracted native modules remain wholly unverified. Full vector/dummy/other-family lookup,same-start native tie ordering,insertion/nesting validation,input inheritance/native caller modes/style clients/UNO/full core/UI parity remain unverified;registered save/open/recovery deviations preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

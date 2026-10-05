@@ -13,6 +13,8 @@ import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
 import { UpdateTextHints } from "./ndtxt-hint-update";
+import { GetTextAttrAt } from "./ndtxt-attribute-query";
+import { GetTextAttrMode } from "../../../inc/swtypes";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
@@ -792,6 +794,8 @@ export class SwpHints {
 
   /** Finds a covering hint using the native Which/start map. @param which - Existing supported family. @param start - Inclusive character boundary. @param end - Exclusive character boundary. @returns Covering actual attribute or undefined. */
   private findFamilyHint(which: number, start: number, end: number): RangedTextAttr | undefined {
+    if (which === RES_TXTATR_INETFMT)
+      return GetTextAttrAt(this, start, which, GetTextAttrMode.Default);
     for (let index = this.GetFirstPosSortedByWhichAndStart(which); index < this.Count(); index++) {
       const hint = this.GetSortedByWhichAndStart(index);
       if (hint.Which() !== which || hint.start > start) break;

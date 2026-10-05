@@ -52,6 +52,8 @@ import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
 import type { WriterHyperlink } from "./fmtatr2";
+import { GetTextAttrMode } from "../../../inc/swtypes";
+import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query";
 
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
 import { resolveSwListLevelIndents } from "./ndtxt-list-indent";
@@ -750,6 +752,15 @@ export class SwTextNode extends SwContentNode {
   /** Reads the hyperlink inherited by a caret. @param offset - UTF-16 caret offset. @returns Hyperlink metadata or undefined. */
   public getHyperlinkAt(offset: number): WriterHyperlink | undefined {
     return this.pSwpHints?.getHyperlink(this.mText, offset);
+  }
+
+  /** Queries an existing ranged family without allocating hints. @param index - Native offset. @param which - Attribute family. @param mode - Native containment mode. @returns Actual owned attribute. */
+  public GetTextAttrAt(
+    index: number,
+    which: number,
+    mode: GetTextAttrMode = GetTextAttrMode.Default,
+  ): RangedTextAttribute | undefined {
+    return GetTextAttrAt(this.pSwpHints, index, which, mode);
   }
 
   /** Applies, replaces, or removes one hyperlink over a non-empty range. @param start - Inclusive range start. @param end - Exclusive range end. @param hyperlink - Replacement hyperlink or undefined to remove. @returns Nothing. */
