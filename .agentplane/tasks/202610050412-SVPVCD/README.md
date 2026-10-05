@@ -1,10 +1,11 @@
 ---
 id: "202610050412-SVPVCD"
 title: "Restore native cross-node selected deletion and forced insertion"
-status: "DOING"
+result_summary: "Restored body-text cross-node deletion and native survivor/canonical Undo direction, replacing the fragment-action list with one SwUndoDelete. Selected Insert/Replace/composition use mode5 on the actual survivor.782 independent cases and exact576+1 failed-only closure;first app coverage100%,inventory cumulative closure documented.363 prior files/362 identical,old expectations intact;243 old states/defaults/exceptions retained,new helper unverified. Registered I/O deviations preserved. Full core/UI parity remains unverified; next tasks prioritize upstream-like UI lists/table rendering/editing and removal of TextRun display layers."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "Completed readonly exactSHA audit 07ea47010148bf373c2cb691eb6ce56120109adf: semantic tree matches workspace,six native hashes,all last static outcomes and five restored audits pass,reference restored."
   findings:
     - "Exact semantic tree/10paths reviewed.782 new cases;363 prior files/362 byte-identical/only generic-helper syntax change,all prior expectations unchanged.243 existing states/defaults/exceptions preserved,new docedt wholly unverified. First application coverage100%,unchanged production. Exact failed-only576+1 cases closed,zero passing replays. Audit collector initially exceeded the default git-show buffer on the provenance manifest;only that readonly audit was repeated with a bounded32MiB buffer and passed."
-commit: null
+commit:
+  hash: "5ec95526d89591c81bf078d41abe11bf9078583f"
+  message: "✅ SVPVCD task: record verified native cross-node deletion"
 comments:
   -
     author: "CODER"
     body: "Start: implement native cross-node raw deletion/history and survivor/forced insertion under standing approved iterative goal;single full absent profile and failed/new-only replays,no sources/helpers in Agentplane."
+  -
+    author: "CODER"
+    body: "Verified: native body-text selected deletion uses source-chosen survivor and one SwUndoDelete; selected insertion mode5 and boundary hint/direct/collection history verified, one absent full profile plus exact failed-only closure."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native body-text cross deletion/survivor/history and selected mode5 at 07ea47010148bf373c2cb691eb6ce56120109adf. One full absent profile,application first coverage100%;exact failed-only576+1 closure,zero passing replay. Six static andfive restored audits pass;363 old files/362 identical/only generic-helper syntax. Inventory cumulative source/count closure documented,not fresh full measurement. Same-actor exactSHAquality pass. Registered deviations andexisting243states/defaults/exceptions unchanged,newmoduleunverified. Fullcore/UI parity remainsunverified;TextRun render boundary next priority."
+  -
+    type: "status"
+    at: "2026-10-05T04:51:12.213Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native body-text selected deletion uses source-chosen survivor and one SwUndoDelete; selected insertion mode5 and boundary hint/direct/collection history verified, one absent full profile plus exact failed-only closure."
 doc_version: 3
-doc_updated_at: "2026-10-05T04:50:41.648Z"
+doc_updated_at: "2026-10-05T04:51:12.215Z"
 doc_updated_by: "CODER"
 description: "Replace cross-paragraph fragment-action composition with one SwUndoDelete raw boundary-string/history action, native sw_GetJoinFlags survivor choice and DeleteAndJoin body-text kernel, then forced mode5 selected insertion. Preserve registered document I/O deviations and keep cursor/retained-boundary identity and full native graph/layout responsibilities explicitly unverified."
 sections:
@@ -169,6 +182,10 @@ sections:
     Scope: ten semantic paths,782 new independent cases,363 prior test files with362 byte-identical and the remaining helper changed only in generic type syntax. Existing243 runtime semantic states/defaults/exceptions unchanged, one wholly unverified docedt row added, ten bounded note appendices. Six native file hashes recorded. Doctor0errors/two unchanged warnings; routing passed. Ignored-inclusive Agentplane scan3975 files/zero forbidden before quality. No upstream sources/helpers/Python/native probes/raw diagnostics stored in Agentplane; no network or outside/global file access. Existing broad goal remains active and full core/browser parity remains unverified.
 
     Read-only follow-up finding from user steering: ordinary browser edit events already use BrowserWriterEditWindow -> SwEditWin -> SwWrtShell with actual SwDoc/SwPaM. Presentation still projects nodes into WriterTextRun DTOs for paragraph/table rendering. Next priority is a source-owned layout/text-portion display boundary with browser DOM/event/geometry adaptation; direct mutable React model access alone is not upstream parity. No UI architecture change is included in this leaf.
+extensions:
+  implementation_commit:
+    hash: "07ea47010148bf373c2cb691eb6ce56120109adf"
+    message: "♻️ SVPVCD code: restore native cross-node deletion and selected insertion"
 id_source: "generated"
 ---
 ## Summary
