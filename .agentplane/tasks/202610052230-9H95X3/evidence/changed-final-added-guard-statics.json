@@ -1,0 +1,32 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/core/doc/native-outline-movement.test.ts --max-warnings=0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "inline repository JSDoc validator over changed files",
+    "exit": 0,
+    "errorCount": 0
+  },
+  {
+    "command": "inline TypeScript diagnostics over changed files using actual app tsconfig",
+    "exit": 0,
+    "errorCount": 0,
+    "codes": []
+  },
+  {
+    "command": "changed-file unchanged1000-line source limit",
+    "exit": 0,
+    "counts": {
+      "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts": 397
+    }
+  }
+]
