@@ -39,6 +39,7 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
     const editWindow = {
       InsertText: vi.fn(),
       ReplaceSelection: vi.fn(),
+      InsertParagraph: vi.fn(),
       SplitNode: vi.fn(),
       DeleteLeft: vi.fn(),
       DeleteRight: vi.fn(),
@@ -108,7 +109,8 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
     expect(editWindow.InsertText).toHaveBeenCalledWith("x");
     expect(editWindow.InsertText).toHaveBeenCalledWith("cell");
     expect(editWindow.ReplaceSelection).toHaveBeenCalledWith("x");
-    expect(editWindow.SplitNode).toHaveBeenCalledTimes(2);
+    expect(editWindow.InsertParagraph).toHaveBeenCalledOnce();
+    expect(editWindow.SplitNode).toHaveBeenCalledOnce();
     expect(editWindow.DeleteSelection).toHaveBeenCalledOnce();
     expect(editWindow.ToggleCharacterFormat).toHaveBeenCalledTimes(3);
     expect(editWindow.SetParagraphListKind).toHaveBeenCalledTimes(2);

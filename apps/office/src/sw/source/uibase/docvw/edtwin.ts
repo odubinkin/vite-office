@@ -101,6 +101,16 @@ export class SwEditWin {
     return this.Complete(this.wrtShell.DeleteSelection());
   }
 
+  /** Handles ordinary Enter before deciding whether to split,as native KeyInput does. @returns Whether the document changed. */
+  public InsertParagraph(): boolean {
+    const cursor = this.wrtShell.GetCursor();
+    const node = cursor.GetPoint().GetNode() as SwTextNode;
+    const rule = node.GetNumRule();
+    if (!cursor.HasMark() && node.Len() === 0 && rule !== undefined && !rule.IsOutlineRule())
+      return this.Complete(this.wrtShell.DelNumRules());
+    return this.SplitNode();
+  }
+
   /** Splits the active text node. @returns Whether the document changed. */
   public SplitNode(): boolean {
     return this.Complete(this.wrtShell.SplitNode());

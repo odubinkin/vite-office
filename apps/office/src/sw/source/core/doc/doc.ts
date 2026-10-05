@@ -17,8 +17,15 @@ import { DocumentStylePoolManager } from "./DocumentStylePoolManager";
 import { createStyleManager } from "./swstylemanager";
 import type { IStyleAccess } from "../../../inc/istyleaccess";
 import { SwTextFormatColl, isWriterParagraphStyle, type WriterParagraphStyle } from "./fmtcol";
-import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
-import type { SwNumRuleItem } from "../para/paratr";
+import {
+  RES_PARATR_NUMRULE,
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_RESTARTVALUE,
+  RES_PARATR_LIST_ISCOUNTED,
+} from "../../../inc/hintids";
+import { SwNumRuleItem } from "../para/paratr";
 import type { SwNumRule } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 import type { SwPaM } from "../crsr/pam";
@@ -356,7 +363,7 @@ export class SwDoc {
 
   /** Checks the represented numbering range before changing any level. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */
   public CanNumUpDown(range: SwPaM, down: boolean): boolean {
-    const nodes = this.GetNumUpDownNodes(range);
+    const nodes = this.GetNumberedNodes(range);
     return (
       nodes.length > 0 &&
       nodes.every(
@@ -370,7 +377,7 @@ export class SwDoc {
   /** Changes only list levels in the actual selected node range, including cells. @param range - Native selection. @param down - Demote direction. @returns Whether the supported numbering range changed. */
   public NumUpDown(range: SwPaM, down: boolean): boolean {
     if (!this.CanNumUpDown(range, down)) return false;
-    const nodes = this.GetNumUpDownNodes(range);
+    const nodes = this.GetNumberedNodes(range);
     return this.stateManager.RunModelTransaction(
       /** Applies one fully validated native range. @returns True after mutation. */
       () => {
@@ -381,8 +388,34 @@ export class SwDoc {
     );
   }
 
+  /** Removes numbering over native inclusive node coordinates. @param range - Actual Writer selection. @returns Whether numbered nodes were changed. */
+  public DelNumRules(range: SwPaM): boolean {
+    const nodes = this.GetNumberedNodes(range);
+    if (nodes.length === 0) return false;
+    return this.RunModelTransaction(
+      /** Resets native numbering attributes without recreating a list DTO. @returns True after mutation. */
+      () => {
+        for (const node of nodes) {
+          if (node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) !== undefined)
+            node.ResetAttr(RES_PARATR_NUMRULE);
+          else node.SetAttr(new SwNumRuleItem(""));
+          node.ResetAttr([
+            RES_PARATR_LIST_ID,
+            RES_PARATR_LIST_LEVEL,
+            RES_PARATR_LIST_ISRESTART,
+            RES_PARATR_LIST_RESTARTVALUE,
+            RES_PARATR_LIST_ISCOUNTED,
+          ]);
+          if (node.GetTextFormatColl().IsAssignedToListLevelOfOutlineStyle())
+            node.SetCountedInList(false);
+        }
+        return true;
+      },
+    );
+  }
+
   /** Selects native text owners with rules across inclusive SwNodes coordinates. @param range - Native selection. @returns Selected numbered nodes. */
-  private GetNumUpDownNodes(range: SwPaM): readonly SwTextNode[] {
+  private GetNumberedNodes(range: SwPaM): readonly SwTextNode[] {
     // SwPaM validates both endpoints belong to the same node array.
     if (range.GetPoint().GetNode().GetNodes() !== this.nodes)
       throw new Error("Writer numbering range belongs to another node array.");

@@ -1,0 +1,21 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/editor/browser-writer-edit-window.test.ts src/sw/source/uibase/docvw/native-list-enter.test.ts -t ^(?:browser Writer edit window links routes native editing intents to the platform-neutral edit window|native list Enter uses rule existence when the level has no visible numbering format)$ --coverage --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.thresholds.functions=0 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WD3HVN.app-failed-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 140,
+      "sha256": "c5fef91758e0a72fcda170480566686b2ea192464889be06c696969790af44b8",
+      "selectedNames": [
+        "browser Writer edit window links routes native editing intents to the platform-neutral edit window",
+        "native list Enter uses rule existence when the level has no visible numbering format"
+      ],
+      "failedCases": [],
+      "passed": 2,
+      "skipped": 13,
+      "coverageMapSHA256": "f7c7573d0de547a4b8862d84cc9f249f959f16d4cd6850c132b8b53ab918ca05"
+    }
+  ]
+}

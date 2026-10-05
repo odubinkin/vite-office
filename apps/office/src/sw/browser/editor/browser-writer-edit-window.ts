@@ -220,8 +220,10 @@ export class BrowserWriterEditWindow {
         if (text !== null && text.length > 0) this.editWindow.ReplaceSelection(text);
         break;
       case "insertLineBreak":
-      case "insertParagraph":
         this.editWindow.SplitNode();
+        break;
+      case "insertParagraph":
+        this.editWindow.InsertParagraph();
         break;
       case "deleteContentBackward":
         this.editWindow.DeleteLeft();

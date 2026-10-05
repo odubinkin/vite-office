@@ -2,7 +2,8 @@
 
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
+import type { SwDoc } from "../doc/doc";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 
 /** Shared reversible paragraph list-item transition. */
@@ -53,6 +54,65 @@ export class SwUndoInsNum extends SwUndoParagraphList {
     after: SwUndoCursorState,
   ) {
     super("Numbering", paragraph, beforeList, afterList, before, after);
+  }
+}
+
+/** Numbering deletion history over actual native nodes and direct list attributes. */
+export class SwUndoDelNum extends SwUndo {
+  private readonly nodes: readonly { node: SwTextNode; items: SfxItemSet; level: number }[];
+  /** Captures list-attribute history and the native selection. @param doc - Owning document. @param range - Undo cursor boundary. @returns Nothing. */
+  public constructor(
+    doc: SwDoc,
+    private readonly range: SwUndoCursorState,
+  ) {
+    super("Delete numbering", range, range);
+    const start = Math.min(
+      range.point.node.GetIndex(),
+      range.mark?.node.GetIndex() ?? range.point.node.GetIndex(),
+    );
+    const end = Math.max(
+      range.point.node.GetIndex(),
+      range.mark?.node.GetIndex() ?? range.point.node.GetIndex(),
+    );
+    const nodes: { node: SwTextNode; items: SfxItemSet; level: number }[] = [];
+    for (let index = start; index <= end; index++) {
+      const node = doc.nodes.at(index);
+      if (node instanceof SwTextNode && node.GetNumRule() !== undefined)
+        nodes.push({ node, items: node.CaptureListItems(), level: node.GetActualListLevel() });
+    }
+    this.nodes = nodes;
+  }
+  /** Reports retained node numbering history. @returns Payload units. */
+  public override GetPayloadSize(): number {
+    return 4 + this.nodes.length * 7;
+  }
+  /** Restores recorded list attributes and actual levels. @param context - Active document context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    for (const entry of this.nodes) {
+      const node = GetUndoTextNode(context.GetDoc(), entry.node);
+      node.SetListItems(entry.items);
+      node.SetAttrListLevel(entry.level);
+    }
+  }
+  /** Replays the document-owned numbering deletion. @param context - Active document context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const doc = context.GetDoc();
+    const point = new SwPosition(
+      GetUndoTextNode(doc, this.range.point.node),
+      this.range.point.offset,
+    );
+    const mark =
+      this.range.mark === undefined
+        ? undefined
+        : new SwPosition(GetUndoTextNode(doc, this.range.mark.node), this.range.mark.offset);
+    const range = new SwPaM(point, mark);
+    try {
+      doc.DelNumRules(range);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+      mark?.Dispose();
+    }
   }
 }
 

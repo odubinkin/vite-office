@@ -1,0 +1,106 @@
+{
+  "result": "pass",
+  "base": "52d2d13dc929da1005a34f26bfc8a99c9fc1411f",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-list-enter.test.ts",
+    "apps/office/src/sw/browser/editor/native-cell-list-enter.test.tsx",
+    "apps/office/e2e/writer-cell-list-enter.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts"
+  ],
+  "priorTestFiles": 372,
+  "priorTestFilesByteIdentical": 371,
+  "priorChanges": "Only observed platform mock compatibility:InsertParagraph spy and former two split calls asserted as one paragraph intent and one lower-level split.Every other old assertion/file byte-identical.",
+  "existingRuntimeRows": 244,
+  "newRuntimeRows": 0,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "boundedAppendices": 10,
+  "newAppCases": 13,
+  "newChromiumCases": 1,
+  "newAppCasesPassedFirst": 12,
+  "newAppFailedClosed": 1,
+  "oldMockFailedClosed": 1,
+  "oneFullAbsentProfile": true,
+  "passingTestReplays": 0,
+  "passingFullBuildReplays": 0,
+  "productionUnchangedAfterFirstProfile": true,
+  "appCoverage": {
+    "lines": {
+      "total": 11588,
+      "covered": 11588,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12689,
+      "covered": 12689,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3266,
+      "covered": 3266,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9512,
+      "covered": 9512,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "nativeSHA256": {
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/source/uibase/wrtsh/wrtsh1.cxx": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac",
+    "sw/source/core/doc/docnum.cxx": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4",
+    "sw/source/core/edit/ednumber.cxx": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114",
+    "sw/source/core/undo/unnum.cxx": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9",
+    "sw/inc/strings.hrc": "9ca72c0995255ab87985020606d0626e7998087764a3c150e0b1459925130b5f"
+  },
+  "residual": "NONE display family,ShiftEnter,Backspace,full outline,selection rings,merged/redline paragraph expansion,full native undo/layout/table navigation/UI and broad goal remain unverified."
+}

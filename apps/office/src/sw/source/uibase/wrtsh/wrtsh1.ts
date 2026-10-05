@@ -52,6 +52,7 @@ import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/ed
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
+import { SwUndoDelNum } from "../../core/undo/unnum";
 import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
 
 /** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
@@ -311,6 +312,13 @@ export class SwWrtShell extends SwModify {
   /** Inserts a paragraph break at the persistent Writer cursor. @returns Whether a break was inserted. */
   public SplitNode(): boolean {
     return this.editing.SplitAtCursor();
+  }
+
+  /** Removes numbering through the document range and native attribute history. @returns Whether a numbered node changed. */
+  public DelNumRules(): boolean {
+    if (this.GetActiveParagraph().GetNumRule() === undefined && !this.cursor.HasMark())
+      return false;
+    return this.ApplyAction(new SwUndoDelNum(this.GetDoc(), this.CaptureCursorState()));
   }
 
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
