@@ -1,0 +1,23 @@
+[
+  {
+    "command": "npm exec -- tsx scripts/generate-writer-ui-resources.ts --check",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm run check:source-tree",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 162,
+    "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+  },
+  {
+    "command": "npm run check:source-provenance",
+    "profile": "vendor-restored-source-audit",
+    "exit": 1,
+    "bytes": 1260,
+    "sha256": "26f61fd896c9db6ecd5a6eb848485c25bb3d6f58e57117f64b79611e8d62f69b"
+  }
+]

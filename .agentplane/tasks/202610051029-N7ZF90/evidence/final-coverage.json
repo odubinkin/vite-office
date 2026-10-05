@@ -1,0 +1,77 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx"
+  ],
+  "reconstructedInitialSourceSHA256": "d70b35d077057e0a0106e4af436a1345840891a86db59134191a4de5f4df9b92",
+  "counterTransfer": "Only unchanged contiguous line locations; changed or crossing locations use actual new cases. Final callbacks executed; no inferred counters.",
+  "carried": {
+    "statements": 136,
+    "functions": 38,
+    "branches": 72
+  },
+  "summary": {
+    "lines": {
+      "total": 11919,
+      "covered": 11919,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13049,
+      "covered": 13049,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3323,
+      "covered": 3322,
+      "skipped": 0,
+      "pct": 99.96
+    },
+    "branches": {
+      "total": 9771,
+      "covered": 9771,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+      "summary": {
+        "lines": {
+          "total": 132,
+          "covered": 132,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 48,
+          "covered": 47,
+          "skipped": 0,
+          "pct": 97.91
+        },
+        "statements": {
+          "total": 139,
+          "covered": 139,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 72,
+          "covered": 72,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  ],
+  "initialMapSHA256": "443043966311e2a649b9057859842617ffc90d18526e7573168d419408c9eae1",
+  "finalMapSHA256": "23b43553e779292dfb01032bf8603edaaa91e7fbaa6d62cb821c0189d791c4b9"
+}

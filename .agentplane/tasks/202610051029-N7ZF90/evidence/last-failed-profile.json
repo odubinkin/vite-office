@@ -1,0 +1,22 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "new-app",
+      "command": "sole failed new DOM focus case",
+      "profile": "upstream-absent-failed-or-new-only",
+      "exit": 0,
+      "bytes": 1383,
+      "sha256": "261b3c6bbb76f31e45df55ffd3c4a81e9292d4ca36b205b6e3b973ac2838540e",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 18
+      },
+      "executedCases": [
+        "clicking an already current empty cell focuses the paragraph without a second editing host"
+      ]
+    }
+  ]
+}
