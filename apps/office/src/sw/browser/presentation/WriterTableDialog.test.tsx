@@ -13,6 +13,32 @@ import {
 } from "../../../editeng/source/items/textitem";
 import { WriterEditableTable } from "../editor/WriterEditableTable";
 import { WriterTableDialog } from "./WriterTableDialog";
+import { WriterViewProjection } from "./writer-view-projection";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
+
+/** Projects actual connected table text for the required shared display contract. @param document - Native owner. @param id - Optional fixture identity. @returns Frozen projection map. */
+function paragraphMap(document: ReturnType<typeof createWriterDocument>, id?: string) {
+  const node = document.paragraphs[0];
+  if (node === undefined) throw new Error("Missing body paragraph");
+  const position = new SwPosition(node, 0);
+  const cursor = new SwPaM(position);
+  position.Dispose();
+  const values = new WriterViewProjection().Project(
+    document,
+    node,
+    cursor,
+    createDocument({ id: "table-display", suiteId: "writer", title: "Table" }),
+  ).textNodes;
+  cursor.Dispose();
+  return new Map(
+    values.map(
+      /** Indexes immutable native projections. @param paragraph - Display input. @returns Actual node coordinate and fixture identity. */ (
+        paragraph,
+      ) => [paragraph.nodeIndex, id === undefined ? paragraph : { ...paragraph, id }],
+    ),
+  );
+}
 
 describe("Writer browser table controls", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
   it("offers upstream Insert Table Options and Styles with model-backed values", /** Checks table options and styles. @returns Nothing. */ () => {
@@ -169,13 +195,11 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     node.SetText("start");
     const select = vi.fn(),
       retain = vi.fn();
-    const getId = /** Resolves an actual paragraph identity. @returns Stable display ID. */ () =>
-      "actual-cell";
     const { rerender } = render(
       <WriterEditableTable
         onSelectRow={select}
         table={table}
-        getParagraphId={getId}
+        paragraphs={paragraphMap(document, "actual-cell")}
         retainParagraphElement={retain}
       />,
     );
@@ -196,7 +220,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       <WriterEditableTable
         onSelectRow={select}
         table={table}
-        getParagraphId={getId}
+        paragraphs={paragraphMap(document, "actual-cell")}
         retainParagraphElement={retain}
       />,
     );
@@ -209,7 +233,13 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const table = document.nodes.MakeTableNode("Unsized");
     table.AddColumnWidth(1800);
     document.nodes.AppendTableRow(table, 1);
-    render(<WriterEditableTable onSelectRow={vi.fn()} table={table} />);
+    render(
+      <WriterEditableTable
+        onSelectRow={vi.fn()}
+        table={table}
+        paragraphs={paragraphMap(document)}
+      />,
+    );
     expect(screen.getByRole("table", { name: "Unsized" })).toHaveStyle({ width: "120px" });
   });
 
@@ -223,7 +253,15 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     node.SetText("Styled cell");
     node.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
     node.SetAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
-    render(<WriterEditableTable firstRow={1} lastRow={1} onSelectRow={vi.fn()} table={table} />);
+    render(
+      <WriterEditableTable
+        firstRow={1}
+        lastRow={1}
+        onSelectRow={vi.fn()}
+        table={table}
+        paragraphs={paragraphMap(document)}
+      />,
+    );
     const fragment = screen.getByRole("table", { name: "Split" });
     expect(fragment).toHaveStyle({ marginTop: "0px", marginBottom: "0px" });
     expect(fragment.querySelectorAll("tr")).toHaveLength(1);

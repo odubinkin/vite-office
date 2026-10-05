@@ -1,98 +1,8 @@
 /** @fileoverview Browser table frame over canonical SwTable rows and SwTextNode cell paragraphs. */
 
 import type { SwTable } from "../../source/core/table/swtable";
-import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
-import {
-  SvxFontHeightItem,
-  SvxFontItem,
-  SvxPostureItem,
-  SvxWeightItem,
-} from "../../../editeng/source/items/textitem";
-import { SvxLineSpacingItem } from "../../../editeng/source/items/paraitem";
-import { SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
-import {
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_WEIGHT,
-  RES_PARATR_LINESPACING,
-  RES_UL_SPACE,
-} from "../../inc/hintids";
-import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
-import { WriterTextRunProjection } from "./WriterEditableParagraph";
-import { browserFontFamily } from "./writer-font-family";
-
-/** Keeps the browser caret in a cell while canonical text changes rerender the table frame. @param props - Cell node and position. @returns Editable cell. */
-function WriterEditableTableCell({
-  paragraph,
-  rowIndex,
-  cellIndex,
-  paragraphIndex,
-  paragraphId,
-  retainElement,
-}: Readonly<{
-  paragraph: SwTextNode;
-  rowIndex: number;
-  cellIndex: number;
-  paragraphIndex: number;
-  paragraphId: string;
-  retainElement?: (id: string, element: HTMLParagraphElement | null) => void;
-}>): React.JSX.Element {
-  const font = paragraph.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
-  const fontFamily = font.GetResolvedFamilyName();
-  const fontSizePt = (paragraph.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20;
-  const bold = (paragraph.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue();
-  const italic = (paragraph.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue();
-  const spacing = paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
-  const lineHeight = projectWriterLineHeightItem(
-    paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
-    fontSizePt,
-  );
-  return (
-    <p
-      aria-label={`Row ${rowIndex + 1} column ${cellIndex + 1} paragraph ${paragraphIndex + 1}`}
-      contentEditable
-      data-writer-table-cell={`${rowIndex}:${cellIndex}`}
-      data-writer-paragraph-id={paragraphId}
-      data-writer-node-index={paragraph.GetIndex()}
-      data-writer-fragment-start={0}
-      data-writer-fragment-end={paragraph.Len()}
-      ref={
-        /** Registers the actual editable paragraph projection. @param element - Mounted node or null. @returns Nothing. */
-        (element) => retainElement?.(paragraphId, element)
-      }
-      style={{
-        cursor: "text",
-        fontFamily: browserFontFamily(fontFamily, font.GetGenericFamily()),
-        fontSize: `${fontSizePt}pt`,
-        fontStyle: italic ? "italic" : "normal",
-        fontWeight: bold ? 700 : 400,
-        lineHeight,
-        marginTop: `${spacing.GetUpper() / 20}pt`,
-        marginBottom: `${spacing.GetLower() / 20}pt`,
-        minHeight: `${fontSizePt * lineHeight}pt`,
-        whiteSpace: "pre-wrap",
-        overflowWrap: "break-word",
-      }}
-      suppressContentEditableWarning
-    >
-      {projectWriterTextRuns(paragraph).map(
-        /** Projects attributes for display only; input belongs to the Writer shell. @param run - Text projection. @param index - Portion index. @returns Semantic display. */
-        (run, index) => (
-          <WriterTextRunProjection
-            inheritedBold={bold}
-            inheritedFontFamily={fontFamily}
-            inheritedItalic={italic}
-            key={index}
-            run={run}
-          />
-        ),
-      )}
-      {paragraph.Len() === 0 ? <br /> : null}
-    </p>
-  );
-}
+import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
+import { WriterEditableParagraph } from "./WriterEditableParagraph";
 
 /** Renders one visible, editable Writer table with row selection. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterEditableTable({
@@ -102,7 +12,8 @@ function WriterEditableTableCell({
   firstRow = 0,
   lastRow = table.GetTabLines().length - 1,
   retainElement,
-  getParagraphId,
+  paragraphs,
+  activeParagraphId,
   retainParagraphElement,
 }: Readonly<{
   table: SwTable;
@@ -111,7 +22,8 @@ function WriterEditableTableCell({
   firstRow?: number;
   lastRow?: number;
   retainElement?: (element: HTMLTableElement | null) => void;
-  getParagraphId?: (paragraph: SwTextNode) => string;
+  paragraphs: ReadonlyMap<number, WriterParagraphProjection>;
+  activeParagraphId?: string;
   retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
 }>): React.JSX.Element {
   const format = table.GetFormat();
@@ -224,22 +136,29 @@ function WriterEditableTableCell({
                             /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
                               paragraph,
                               paragraphIndex,
-                            ) => (
-                              <WriterEditableTableCell
-                                cellIndex={cellIndex}
-                                key={paragraphIndex}
-                                paragraph={paragraph}
-                                paragraphId={
-                                  getParagraphId?.(paragraph) ??
-                                  "writer-cell-" + paragraph.GetIndex()
-                                }
-                                {...(retainParagraphElement === undefined
-                                  ? {}
-                                  : { retainElement: retainParagraphElement })}
-                                paragraphIndex={paragraphIndex}
-                                rowIndex={rowIndex}
-                              />
-                            ),
+                            ) => {
+                              const projection = paragraphs.get(paragraph.GetIndex());
+                              if (projection === undefined)
+                                throw new Error(
+                                  "Writer table cell has no connected paragraph projection.",
+                                );
+                              return (
+                                <WriterEditableParagraph
+                                  cellPosition={{ rowIndex, cellIndex, paragraphIndex }}
+                                  index={paragraphIndex}
+                                  isActive={activeParagraphId === projection.id}
+                                  key={projection.id}
+                                  listMarker={projection.listMarker}
+                                  paragraph={projection}
+                                  retainElement={
+                                    /** Registers visible paragraphs;measurement uses the same render without a live selection surface. @param id - Stable display ID. @param element - Paragraph mount or cleanup. @returns Nothing. */ (
+                                      id,
+                                      element,
+                                    ) => retainParagraphElement?.(id, element)
+                                  }
+                                />
+                              );
+                            },
                           )}
                         </CellTag>
                       );

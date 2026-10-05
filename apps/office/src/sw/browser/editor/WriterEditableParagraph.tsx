@@ -11,6 +11,7 @@ import type {
 
 /** Immutable projection properties for one Writer text node. */
 export interface WriterEditableParagraphProps {
+  readonly cellPosition?: Readonly<{ rowIndex: number; cellIndex: number; paragraphIndex: number }>;
   readonly isActive: boolean;
   readonly index: number;
   readonly listMarker: string | undefined;
@@ -26,6 +27,7 @@ export interface WriterEditableParagraphProps {
 /** Renders a paragraph projection that inherits editability from the one document root. @param props - Immutable paragraph projection state. @returns Rendered paragraph projection. */
 export function WriterEditableParagraph({
   index,
+  cellPosition,
   isActive,
   listMarker,
   paragraph,
@@ -37,8 +39,13 @@ export function WriterEditableParagraph({
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
-  const styleDescriptionId = `writer-paragraph-style-${index + 1}`;
-  const label = index === 0 ? "Writer document text" : `Writer paragraph ${index + 1}`;
+  const styleDescriptionId = `writer-paragraph-style-${paragraph.id}`;
+  const label =
+    cellPosition === undefined
+      ? index === 0
+        ? "Writer document text"
+        : `Writer paragraph ${index + 1}`
+      : `Row ${cellPosition.rowIndex + 1} column ${cellPosition.cellIndex + 1} paragraph ${cellPosition.paragraphIndex + 1}`;
   const listLayout = paragraph.listLayout;
   const paragraphIndentWins =
     listLayout !== undefined &&
@@ -61,7 +68,9 @@ export function WriterEditableParagraph({
       className="relative shrink-0"
       data-active={isActive}
       style={{
-        marginBlockStart: `${topSpacingPt ?? 0}pt`,
+        marginBlockStart: `${topSpacingPt ?? (cellPosition === undefined ? 0 : paragraph.computedStyle.upperSpacingPt)}pt`,
+        marginBlockEnd:
+          cellPosition === undefined ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,
       }}
     >
       {lineNumbers?.map(
@@ -126,6 +135,13 @@ export function WriterEditableParagraph({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
+          contentEditable={cellPosition === undefined ? undefined : true}
+          suppressContentEditableWarning={cellPosition !== undefined}
+          data-writer-table-cell={
+            cellPosition === undefined
+              ? undefined
+              : `${cellPosition.rowIndex}:${cellPosition.cellIndex}`
+          }
           className={`whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"}`}
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
@@ -146,6 +162,8 @@ export function WriterEditableParagraph({
           }
           role="textbox"
           style={{
+            whiteSpace: cellPosition === undefined ? undefined : "pre-wrap",
+            overflowWrap: cellPosition === undefined ? undefined : "break-word",
             backgroundColor:
               paragraph.computedStyle.highlight === "transparent"
                 ? undefined
@@ -202,6 +220,7 @@ export function WriterEditableParagraph({
                 </Fragment>
               ),
             )}
+          {cellPosition !== undefined && paragraph.text.length === 0 ? <br /> : null}
         </p>
       </div>
     </div>

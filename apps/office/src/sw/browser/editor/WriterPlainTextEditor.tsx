@@ -138,6 +138,12 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       ) => [paragraph.id, paragraph],
     ),
   );
+  const paragraphByNodeIndex = new Map(
+    (props.textNodes ?? props.paragraphs).map(
+      /** Indexes the common immutable native-node paragraph display. @param paragraph - Current text projection. @returns Actual node coordinate and projection. */
+      (paragraph) => [paragraph.nodeIndex, paragraph],
+    ),
+  );
   const numberedFrames = layout.lineNumbers;
   const lastFrame = new Map<string, string>();
   for (const [pageIndex, page] of pages.entries())
@@ -149,14 +155,8 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       <WriterEditableTable
         key={`${frame.table.GetName()}:${frame.firstRow}`}
         table={frame.table}
-        getParagraphId={
-          /** Resolves the shared presentation identity of a cell node. @param node - Native cell text. @returns Stable display key. */
-          (node) =>
-            props.textNodes?.find(
-              /** Matches current actual node-array coordinates. @param value - Display text. @returns Whether the node matches. */
-              (value) => value.nodeIndex === node.GetIndex(),
-            )?.id ?? "writer-cell-" + node.GetIndex()
-        }
+        paragraphs={paragraphByNodeIndex}
+        activeParagraphId={props.activeParagraphId}
         retainParagraphElement={
           /** Registers cell paragraphs in the same selection surface as body text. @param id - Shared display identity. @param element - Mounted paragraph. @returns Nothing. */
           (id, element) => {
@@ -402,6 +402,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                     <WriterEditableTable
                       key={`measure-${table.GetName()}`}
                       table={table}
+                      paragraphs={paragraphByNodeIndex}
                       /* v8 ignore next -- Hidden measurement tables are never interactive. */
                       onSelectRow={
                         /** callback handles this value. @returns The result. */ () => undefined

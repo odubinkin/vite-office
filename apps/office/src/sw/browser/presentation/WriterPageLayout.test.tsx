@@ -17,6 +17,9 @@ import type { WriterParagraphProjection } from "./writer-view-projection";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { RES_LINENUMBER } from "../../inc/hintids";
+import { WriterViewProjection } from "./writer-view-projection";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
 
 const page = createDefaultWriterPageDescriptor("en-GB").GetValue();
 
@@ -336,6 +339,16 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
       GetDoc: /** GetDoc handles this value. @returns The result. */ () => document,
     } as unknown as SwEditWin;
     const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
+    const position = new SwPosition(first, 0);
+    const cursor = new SwPaM(position);
+    position.Dispose();
+    const textNodes = new WriterViewProjection().Project(
+      document,
+      first,
+      cursor,
+      createDocument({ id: "table-pages", suiteId: "writer", title: "Paged" }),
+    ).textNodes;
+    cursor.Dispose();
     const { container } = render(
       <WriterPlainTextEditor
         activeParagraphId="before"
@@ -343,6 +356,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
         editWindow={editWindow}
         pageDescriptor={shortPage}
         paragraphs={paragraphs}
+        textNodes={textNodes}
       />,
     );
     await waitFor(
