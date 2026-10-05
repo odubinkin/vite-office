@@ -1,0 +1,88 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/txtnode/thints.ts": "c761ce97985eba1b33a2e2d8d5a03fae4db81c182d30fc09edbb627e7d37e4a7",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "4611114e15e8518ac836f1a3ae0fdad34a79c81e9a211bac1a300583f4dfe587",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts": "766465f900007bf27db70ed36c3387e9a790cc4a04d9481b0966d86903eb2fe6",
+    "apps/office/src/sw/source/core/undo/rolbck.ts": "862d3910dd5ae5aaf08862c5a5fb7fbae88a5091069efd375f2ab525c7ba69b5",
+    "apps/office/src/sw/source/core/undo/undel.ts": "96814ba1675e92052604f7793795183a07ad56c932a540197b587440cd268dca",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts": "ba44b09066503bbda9cc56baa9b19620dc55d4cc6e239bee641d8ac060a596b8",
+    "docs/program/source-provenance.json": "7106fd586836e4bec4db14302cdeea6c33dc58f040969e5b598d38025dcfc5f5",
+    "docs/program/parity/runtime-inventory.json": "17d44e25ca49e05e72dc80e097e326a7dde3f423e031867bfd793ced107ddb4b"
+  },
+  "records": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "23f6bc6b3dd4e9c4cb4cf29e3a1cd82f380986dd9ce7a54460c8a815203be329",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 1115745,
+      "sha256": "f91f58b84ebe43d6c2afd6f4df526f85f585531126386873b95ac1ce8681041c",
+      "totals": [
+        "Test Files  3 failed | 277 passed (280)",
+        "Tests  3 failed | 11070 passed (11073)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "FAIL  src/sw/source/core/undo/undobj.test.ts > Writer action-based undo > restores split and join structure, node formatting, and caret",
+        "FAIL  src/sw/source/core/txtnode/internet-node-transitions.test.ts > internet node transition ownership > retains paragraph identity and backlinks through actual split/join undo and redo",
+        "FAIL  src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > merges equal adjacent AUTO portions,skips zero and INET,normalizes nonzero flags"
+      ],
+      "coverage": {
+        "lines": 99.97,
+        "statements": 99.97,
+        "functions": 100,
+        "branches": 99.97
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "92ff8ddcffc1096d3b6a80e16555cc98728d28c9a5b79672484c43e37d93abc9",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "ccd64144e32dadfcaa5a0ac657eba33dacdd33d93894fddda48fc9ee67fe7d79",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13579,
+      "sha256": "55bfc984804d87398911d4cde3b7b14940fe784bd8e36c269c44733a9cf0c127",
+      "totals": [
+        "99 passed (36.7s)"
+      ],
+      "failedCases": []
+    }
+  ]
+}
