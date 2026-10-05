@@ -4,7 +4,7 @@ title: "Use native node ranges and delta undo for Writer list levels"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T06:45:56.616Z"
+  updated_by: "CODER"
+  note: "Verified b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb:native cell/body list-level ranges and signed-delta undo;one absent profile plus exact app/inventory failed-only closure,firstapp100,cumulativeinventory100,102Chromium firstpass. Prior assertions and244states preserved;progress only."
   attempts: 0
 quality_review:
   state: "pass"
@@ -59,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: replace body-only list-level traversal and full-list snapshots with actual document node-range mutation and native range/direction undo;verify bounded cell/body behavior with one absent profile."
+  -
+    type: "verify"
+    at: "2026-10-05T06:45:56.616Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb:native cell/body list-level ranges and signed-delta undo;one absent profile plus exact app/inventory failed-only closure,firstapp100,cumulativeinventory100,102Chromium firstpass. Prior assertions and244states preserved;progress only."
 doc_version: 3
-doc_updated_at: "2026-10-05T06:42:19.472Z"
+doc_updated_at: "2026-10-05T06:45:56.696Z"
 doc_updated_by: "CODER"
 description: "Iteration140:replace body-only list-level traversal and whole-list-item snapshot adaptation with document-owned native SwNodes range mutation and one SwUndoNumUpDown range/direction action;verify actual cell/body range eligibility,attributes,history,UI and ODT while preserving registered deviations."
 sections:
@@ -99,7 +105,41 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Owned literal core,mounted cell and real Chromium list-level/history/ODT contracts. ONE absent full profile,exact failed/new-only closure,zero passing replay,both initial countmaps only ignored appcache.
-  Verification: "Pending implementation and validation."
+  Verification: |-
+    CODER verified progress on semantic b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb:ordinary list-level commands use Doc-owned actual inclusive PaM/SwNodes coordinates and derived-level all-range validation,including cells;SetAttrListLevel changes only level. Body-only ednumber traversal,whole-list-item recreation,SwUndoNumLevel and per-node grouping removed. One native-shaped SwUndoNumUpDown range/direction action uses same document inverse/forward operation,preserves unrelated metadata and cursor direction,and has native labels. Nine new app/one Chromium contracts;all seven native core and one multi-cell UI firstpass,new hover-only case closes failed-only. Six static gates pass after observed new formatting/exact-option/JSDoc and obsolete old import failures;focused edited source/test/doc checks pass. ONE full absent profile:build0,app11891pass/1fail of11892/286files and first100fourmetrics,inventory108pass/1fail of109 with99.59/99.6/99.21/99.9metrics,scripts5pass,Chromium102pass. Exact1app+1inventory failed-only closure passes1/skipped1 and1/skipped2;zero passing/fullbuild repeats. New test corrected to existing native submenu hover;obsolete mapping class marker corrected only,inventory test unchanged. Both initial countmaps only ignored appcache;production source unchanged after firstprofile. Firstapp100 retained;actual unchanged-script first+failed countmaps merge inventory100fourmetrics,no summary substitution. All references restored in finally before five source audits,allpass/semanticviolations0. Scope369priorfiles368byteidentical;remaining old test changes only two class identity tokens. Existing244states/defaults/exceptions unchanged,no newmodule/promotion,sixnotes,sixnativehashes. Exact-SHA same-actor readonly audit exits0 beforequalitypass,not independent review. Quality .agentplane/tasks/202610050616-VQX14V/quality/20261005-064459536-recovery-context/quality-report.json. Doctor0errors/two preexisting warnings,routingpass,ignored-inclusive AP4019files0forbidden beforequality;finalscan follows parent persistence. Full native OutlineUpDown/style reassignment,mixed outline,merged/redline/layout expansion,selection rings,undo lifetime,list Enter/Backspace/continue and wide table navigation remain unverified. Registered I/O/recovery deviations unchanged;oneleaf140only,goalactive.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T06:45:56.616Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb:native cell/body list-level ranges and signed-delta undo;one absent profile plus exact app/inventory failed-only closure,firstapp100,cumulativeinventory100,102Chromium firstpass. Prior assertions and244states preserved;progress only.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T06:45:56.056Z, excerpt_hash=sha256:ec8fc5f5e8bf6395b0e3fb0d662a3248eb8fede9af0a460892516b78ad65473f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050616-VQX14V/blueprint/resolved-snapshot.json
+    - old_digest: c94e6e36725f9100d6c7229eb6f7064517d083068e712d3ea47a3b0a2c2a7d51
+    - current_digest: c94e6e36725f9100d6c7229eb6f7064517d083068e712d3ea47a3b0a2c2a7d51
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610050616-VQX14V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610050616-VQX14V
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without history rewriting."
   Findings: |-
     Iteration139 classified verified progress DONE;current140 preflight clean main5c36a52c9781ce3e0b0c40aea351995217ebd930,direct,only parent active,user-instructions absent,four matched policies loaded. ednumber.getSelectedListNodes currently filters doc.paragraphs,so actual cell-node list level commands are disabled and ignored. It also recreates full list-item sets and groups node-local SwUndoNumLevel actions,unlike pinned docnum.cxx1846 inclusive native-node NumUpDown all-range validation/SetAttrListLevel and unnum.cxx256 SwUndoNumUpDown range/direction inverse operation. List shell and text indent share this owner,so fixing document range/undo improves both UI paths without another React adapter. Existing heading/outline style promotion is incomplete and not certified by this ordinary-list leaf. Standing user goal and explicit UI/list/table instruction authorize safe local correction;preserve all244states and registered deviations.
@@ -154,7 +194,40 @@ Owned literal core,mounted cell and real Chromium list-level/history/ODT contrac
 
 ## Verification
 
-Pending implementation and validation.
+CODER verified progress on semantic b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb:ordinary list-level commands use Doc-owned actual inclusive PaM/SwNodes coordinates and derived-level all-range validation,including cells;SetAttrListLevel changes only level. Body-only ednumber traversal,whole-list-item recreation,SwUndoNumLevel and per-node grouping removed. One native-shaped SwUndoNumUpDown range/direction action uses same document inverse/forward operation,preserves unrelated metadata and cursor direction,and has native labels. Nine new app/one Chromium contracts;all seven native core and one multi-cell UI firstpass,new hover-only case closes failed-only. Six static gates pass after observed new formatting/exact-option/JSDoc and obsolete old import failures;focused edited source/test/doc checks pass. ONE full absent profile:build0,app11891pass/1fail of11892/286files and first100fourmetrics,inventory108pass/1fail of109 with99.59/99.6/99.21/99.9metrics,scripts5pass,Chromium102pass. Exact1app+1inventory failed-only closure passes1/skipped1 and1/skipped2;zero passing/fullbuild repeats. New test corrected to existing native submenu hover;obsolete mapping class marker corrected only,inventory test unchanged. Both initial countmaps only ignored appcache;production source unchanged after firstprofile. Firstapp100 retained;actual unchanged-script first+failed countmaps merge inventory100fourmetrics,no summary substitution. All references restored in finally before five source audits,allpass/semanticviolations0. Scope369priorfiles368byteidentical;remaining old test changes only two class identity tokens. Existing244states/defaults/exceptions unchanged,no newmodule/promotion,sixnotes,sixnativehashes. Exact-SHA same-actor readonly audit exits0 beforequalitypass,not independent review. Quality .agentplane/tasks/202610050616-VQX14V/quality/20261005-064459536-recovery-context/quality-report.json. Doctor0errors/two preexisting warnings,routingpass,ignored-inclusive AP4019files0forbidden beforequality;finalscan follows parent persistence. Full native OutlineUpDown/style reassignment,mixed outline,merged/redline/layout expansion,selection rings,undo lifetime,list Enter/Backspace/continue and wide table navigation remain unverified. Registered I/O/recovery deviations unchanged;oneleaf140only,goalactive.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T06:45:56.616Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb:native cell/body list-level ranges and signed-delta undo;one absent profile plus exact app/inventory failed-only closure,firstapp100,cumulativeinventory100,102Chromium firstpass. Prior assertions and244states preserved;progress only.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T06:45:56.056Z, excerpt_hash=sha256:ec8fc5f5e8bf6395b0e3fb0d662a3248eb8fede9af0a460892516b78ad65473f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050616-VQX14V/blueprint/resolved-snapshot.json
+- old_digest: c94e6e36725f9100d6c7229eb6f7064517d083068e712d3ea47a3b0a2c2a7d51
+- current_digest: c94e6e36725f9100d6c7229eb6f7064517d083068e712d3ea47a3b0a2c2a7d51
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610050616-VQX14V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610050616-VQX14V
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
