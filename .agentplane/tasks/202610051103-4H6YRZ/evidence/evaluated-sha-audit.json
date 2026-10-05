@@ -1,0 +1,50 @@
+{
+  "evaluatedSHA": "2ca6a9de9fdc6c8f6849bdcfbfb046ddd17cf716",
+  "actor": "Same agent, explicit EVALUATOR phase; no independent reviewer claim",
+  "result": "pass",
+  "semanticPaths": 16,
+  "diffSHA256": "730ffb829f9fad80487d26c1d577909c2f30a81518397515ada08112c6b9ab04",
+  "diffBytes": 203545,
+  "sourceOwnership": "Actual circular SwPaM editing ranges; native table selected-box dirty reconciliation; default editing owner separated from displayed owner; character shell ring traversal; table-mode native history state",
+  "evidenceCriteria": "Six static gates, ONE full upstream-absent profile; two failed assertions corrected against pinned native source; two new cases only; actual counter merge for byte-identical production; five restored source audits; exact SHA scope and prior-test preservation",
+  "newAppCases": 14,
+  "newChromiumCases": 1,
+  "uniqueChromiumClosed": 115,
+  "priorTestFilesByteIdentical": 387,
+  "oldTestMigration": "Four existing files change displayed-owner calls. Two parameterized mounted Shift Home/End expectations corrected from unmarked to marked full-cell ordinary cursor per native GetCurAttr/GetCursor/MakeBoxSels. Added full-cell assertions. Every other token equivalent after owner API normalization.",
+  "semanticRecords": 246,
+  "coverage": {
+    "lines": {
+      "total": 11999,
+      "covered": 11999,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13135,
+      "covered": 13135,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3334,
+      "covered": 3334,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9814,
+      "covered": 9814,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "validationLimit": "All final production sources are identical to ONE successful full build and 115-case Chromium profile. Only failed/new test expectations and two new cases changed afterward; exact failed/new-only closure passed.",
+  "residual": "Per-ring selected text insertion/deletion/paste and paragraph/list commands, drag/column gestures, native layout/protection/redlines/merged/nested/unequal cells unverified. Broad goal active."
+}

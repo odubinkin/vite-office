@@ -4,7 +4,7 @@ title: "Materialize native per-cell cursor rings for selected table character fo
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,29 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T11:38:26.948Z"
+  updated_by: "EVALUATOR"
+  note: "Exact-SHA review of2ca6a9de9fdc6c8f6849bdcfbfb046ddd17cf716 passes the bounded native cell cursor-ring task; same-agent EVALUATOR phase."
+  evaluated_sha: "2ca6a9de9fdc6c8f6849bdcfbfb046ddd17cf716"
+  blueprint_digest: "e0d043036dbb210125c69633b1c7647639abe65ed3bbc7ea73381166a7c9a5d9"
+  evidence_refs:
+    - ".agentplane/tasks/202610051103-4H6YRZ/README.md"
+    - ".agentplane/tasks/202610051103-4H6YRZ/quality/20261005-113826948-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610051103-4H6YRZ/quality/20261005-113826948-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610051103-4H6YRZ/quality/20261005-113826948-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610051103-4H6YRZ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610051103-4H6YRZ/evidence/evaluated-sha-audit.json"
+    - ".agentplane/tasks/202610051103-4H6YRZ/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610051103-4H6YRZ/evidence/failed-and-new-profile.json"
+    - ".agentplane/tasks/202610051103-4H6YRZ/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610051103-4H6YRZ/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610051103-4H6YRZ/evidence/restored-source-audits.json"
+  findings:
+    - "Native GetCursor and MakeBoxSels own full selected cell ranges; UI display owner remains table endpoint cursor. Full-cell character formats and table-mode Undo/Redo verified with14new app cases and1new browsercase."
+    - "ONE full upstream-absent build/app/inventory/scripts/Chromium profile. Two obsolete mounted mark expectations corrected against pinned source, with stronger full-cell assertions;4failed/new-only closure passed. Final production byte-identical to successful full build and115-case Chromium profile;100actual-counter coverage."
+    - "Four existing tests migrate displayed-owner calls;387other prior tests byte-identical. All246semantic statuses/defaults/classifications and conscious I/O/recovery exceptions preserved. Five source audits pass; no AP source/helpers/Python/rawframes."
 commit: null
 comments:
   -
