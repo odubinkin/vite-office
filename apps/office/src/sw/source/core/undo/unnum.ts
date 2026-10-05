@@ -4,7 +4,13 @@ import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
-import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
+import {
+  GetUndoTextNode,
+  SwUndRng,
+  SwUndo,
+  type SwUndoCursorState,
+  type SwUndoRedoContext,
+} from "./undobj";
 
 /** Shared reversible paragraph list-item transition. */
 abstract class SwUndoParagraphList extends SwUndo {
@@ -59,14 +65,16 @@ export class SwUndoInsNum extends SwUndoParagraphList {
 
 /** Native numbering on/off history changes only the counted flag. */
 export class SwUndoNumOrNoNum extends SwUndo {
-  /** Retains one node and old/new flags. @param node - Actual numbered paragraph. @param oldNum - Prior counted flag. @param newNum - Next counted flag. @param cursor - Shell selection boundary. @returns Nothing. */
+  private readonly m_nIndex: number;
+  /** Retains one native node index and old/new flags. @param node - Actual numbered paragraph. @param oldNum - Prior counted flag. @param newNum - Next counted flag. @param cursor - Shell selection boundary. @returns Nothing. */
   public constructor(
-    private readonly node: SwTextNode,
+    node: SwTextNode,
     private readonly oldNum: boolean,
     private readonly newNum: boolean,
     cursor: SwUndoCursorState,
   ) {
     super("Number On/Off", cursor, cursor);
+    this.m_nIndex = node.GetIndex();
   }
   /** Reports one node and two flag units. @returns Payload size. */
   public override GetPayloadSize(): number {
@@ -74,36 +82,41 @@ export class SwUndoNumOrNoNum extends SwUndo {
   }
   /** Restores only the counted state. @param context - Active document context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.node).SetCountedInList(this.oldNum);
+    const node = context.GetDoc().GetNodes().at(this.m_nIndex);
+    if (node instanceof SwTextNode) node.SetCountedInList(this.oldNum);
   }
   /** Reapplies only the counted state. @param context - Active document context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.node).SetCountedInList(this.newNum);
+    const node = context.GetDoc().GetNodes().at(this.m_nIndex);
+    if (node instanceof SwTextNode) node.SetCountedInList(this.newNum);
   }
 }
 
 /** Numbering deletion history over actual native nodes and direct list attributes. */
 export class SwUndoDelNum extends SwUndo {
-  private readonly nodes: readonly { node: SwTextNode; items: SfxItemSet; level: number }[];
+  private readonly range: SwUndRng;
+  private readonly nodes: readonly { index: number; items: SfxItemSet; level: number }[];
   /** Captures list-attribute history and the native selection. @param doc - Owning document. @param range - Undo cursor boundary. @returns Nothing. */
-  public constructor(
-    doc: SwDoc,
-    private readonly range: SwUndoCursorState,
-  ) {
+  public constructor(doc: SwDoc, range: SwUndoCursorState) {
     super("Delete numbering", range, range);
-    const start = Math.min(
-      range.point.node.GetIndex(),
-      range.mark?.node.GetIndex() ?? range.point.node.GetIndex(),
-    );
-    const end = Math.max(
-      range.point.node.GetIndex(),
-      range.mark?.node.GetIndex() ?? range.point.node.GetIndex(),
-    );
-    const nodes: { node: SwTextNode; items: SfxItemSet; level: number }[] = [];
+    const point = new SwPosition(range.point.node, range.point.offset),
+      mark =
+        range.mark === undefined ? undefined : new SwPosition(range.mark.node, range.mark.offset),
+      nativeRange = new SwPaM(point, mark);
+    try {
+      this.range = new SwUndRng(nativeRange);
+    } finally {
+      nativeRange.Dispose();
+      point.Dispose();
+      mark?.Dispose();
+    }
+    const start = this.range.m_nSttNode,
+      end = this.range.m_nEndNode === 0 ? start : this.range.m_nEndNode;
+    const nodes: { index: number; items: SfxItemSet; level: number }[] = [];
     for (let index = start; index <= end; index++) {
       const node = doc.nodes.at(index);
       if (node instanceof SwTextNode && node.GetNumRule() !== undefined)
-        nodes.push({ node, items: node.CaptureListItems(), level: node.GetActualListLevel() });
+        nodes.push({ index, items: node.CaptureListItems(), level: node.GetActualListLevel() });
     }
     this.nodes = nodes;
   }
@@ -114,7 +127,7 @@ export class SwUndoDelNum extends SwUndo {
   /** Restores recorded list attributes and actual levels. @param context - Active document context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
     for (const entry of this.nodes) {
-      const node = GetUndoTextNode(context.GetDoc(), entry.node);
+      const node = context.GetDoc().GetNodes().at(entry.index) as SwTextNode;
       node.SetListItems(entry.items);
       node.SetAttrListLevel(entry.level);
     }
@@ -122,33 +135,38 @@ export class SwUndoDelNum extends SwUndo {
   /** Replays the document-owned numbering deletion. @param context - Active document context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     const doc = context.GetDoc();
-    const point = new SwPosition(
-      GetUndoTextNode(doc, this.range.point.node),
-      this.range.point.offset,
-    );
-    const mark =
-      this.range.mark === undefined
-        ? undefined
-        : new SwPosition(GetUndoTextNode(doc, this.range.mark.node), this.range.mark.offset);
-    const range = new SwPaM(point, mark);
+    const point = new SwPosition(doc.GetNodes().at(this.range.m_nSttNode) as SwTextNode, 0);
+    const range = new SwPaM(point);
     try {
+      this.range.SetPaM(range);
       doc.DelNumRules(range);
     } finally {
       range.Dispose();
       point.Dispose();
-      mark?.Dispose();
     }
   }
 }
 
 /** Native-shaped range and signed-direction numbering history;list metadata is never snapshotted. */
 export class SwUndoNumUpDown extends SwUndo {
+  private readonly range: SwUndRng;
   /** Retains one native range and level delta. @param range - Complete shell cursor boundary. @param offset - Down is one,up is minus one. @returns Nothing. */
   public constructor(
-    private readonly range: SwUndoCursorState,
+    range: SwUndoCursorState,
     private readonly offset: 1 | -1,
   ) {
     super(offset > 0 ? "Demote list level" : "Promote list level", range, range);
+    const point = new SwPosition(range.point.node, range.point.offset),
+      mark =
+        range.mark === undefined ? undefined : new SwPosition(range.mark.node, range.mark.offset),
+      nativeRange = new SwPaM(point, mark);
+    try {
+      this.range = new SwUndRng(nativeRange);
+    } finally {
+      nativeRange.Dispose();
+      point.Dispose();
+      mark?.Dispose();
+    }
   }
 
   /** Reports fixed range and direction payload independent of paragraph count. @returns Scalar range units. */
@@ -169,21 +187,14 @@ export class SwUndoNumUpDown extends SwUndo {
   /** Reconstructs a native PaM for the same document mutation as execution. @param context - Active document context. @param down - Demote direction. @returns Nothing. */
   private Apply(context: SwUndoRedoContext, down: boolean): void {
     const doc = context.GetDoc();
-    const point = new SwPosition(
-      GetUndoTextNode(doc, this.range.point.node),
-      this.range.point.offset,
-    );
-    const mark =
-      this.range.mark === undefined
-        ? undefined
-        : new SwPosition(GetUndoTextNode(doc, this.range.mark.node), this.range.mark.offset);
-    const range = new SwPaM(point, mark);
+    const point = new SwPosition(doc.GetNodes().at(this.range.m_nSttNode) as SwTextNode, 0);
+    const range = new SwPaM(point);
     try {
+      this.range.SetPaM(range);
       doc.NumUpDown(range, down);
     } finally {
       range.Dispose();
       point.Dispose();
-      mark?.Dispose();
     }
   }
 }
