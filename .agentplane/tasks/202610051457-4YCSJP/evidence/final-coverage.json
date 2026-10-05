@@ -1,0 +1,84 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/source/core/undo/docundo.ts"
+  ],
+  "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against original base. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
+  "carried": {
+    "statements": 42,
+    "functions": 19,
+    "branches": 17
+  },
+  "summary": {
+    "lines": {
+      "total": 12289,
+      "covered": 12289,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13457,
+      "covered": 13457,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3370,
+      "covered": 3370,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10032,
+      "covered": 10032,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialMapSHA256": "c22f4ff813df35e0c42e0bfaa79df04c37e199a7fa77575fe5438821614c51cc",
+  "finalMapSHA256": "d7994f135dbbb7a24c49ab219a6eb8c85094cf5dd6cf172d6b5f9e51b69ff81e",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "a1a45bca620d5fe66b7cd3f1281f5440f3eb2921662e1217f3a5db75061d25e2",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "e2351bde4a59fea1b295766479f2983b0d5a84f406a8e1cef71c417a740bcd88",
+    "apps/office/src/sw/source/core/undo/undobj.ts": "85c4ba0f680ec06b62711671e70671511b6afeae715c878180efd13128e5cd96",
+    "apps/office/src/sw/source/core/undo/docundo.ts": "45ffe95722f7e1413bb15ace6ee046d1aadc8023ffa51df1e69fd789a78e2ef0"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/txtnode/native-split-attributes.test.ts --testNamePattern=^native moved boundary preserves sparse direct items ranged overrides and independent legacy snapshots$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4YCSJP.last-app-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 0,
+      "bytes": 1109,
+      "sha256": "6cab6d1ba5df19f17ad64b0899a10af0b1ccd6d15d77ee0c1522fd78edd27062",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 20
+      },
+      "failedCases": [],
+      "executedCases": [
+        "native moved boundary preserves sparse direct items ranged overrides and independent legacy snapshots"
+      ],
+      "skippedCases": [
+        "native full-span movement consumes changed AUTO hints into direct items",
+        "native full-span movement preserves hints when direct items do not change",
+        "native full-span movement retains partial AUTO ranges",
+        "native full-span movement retains nonzero AUTO ranges",
+        "native full-span movement retains dontmove AUTO ranges",
+        "native full-span movement stops at a char-format hyperlink before AUTO",
+        "native full-span movement continues past DontMove and unchanged unsupported item",
+        "native full-span traversal skips a nullable end query",
+        "native split moves full-span AUTO into both represented paragraphs at 1",
+        "native split moves full-span AUTO into both represented paragraphs at 2",
+        "native split moves full-span AUTO into both represented paragraphs at 3",
+        "native split moves full-span AUTO into both represented paragraphs at 4",
+        "native split keeps partial and DontMove prefix ownership",
+        "native split keeps partial and DontMove suffix ownership",
+        "native split keeps partial and DontMove crossing ownership",
+        "native document SplitNode inserts native formatted paragraphs without a browser adapter",
+        "native empty split retains DontMove and unchanged direct values while closing DontExpand",
+        "native ASCII read retains boundary paragraph character items through repeated undo and redo",
+        "native selected table plain paste retains both cells character formatting through history"
+      ]
+    }
+  ]
+}
