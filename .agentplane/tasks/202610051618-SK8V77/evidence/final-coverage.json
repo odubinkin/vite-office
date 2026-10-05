@@ -1,0 +1,73 @@
+{
+  "summary": {
+    "lines": {
+      "total": 12319,
+      "covered": 12319,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13489,
+      "covered": 13489,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3373,
+      "covered": 3373,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10055,
+      "covered": 10055,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "method": "Merge actual original full-profile and exactly failed-only closure maps; all production source hashes unchanged after full build. No passing test replay, no generated counters or source remapping.",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/undo/unspnd.ts": "7c8466204edc5749af9d005de48ec1e59a2c6394860301ca2a42c694bd9288dc",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts": "9baa46dbe2ebe09200f764ae667fb9164126f53405aee94e810267b61950974b"
+  },
+  "mergedMapSHA256": "e92575235275089847b85104682186c9da2a325d1ac970e523dcf26475ce9eeb"
+}

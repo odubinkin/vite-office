@@ -1,0 +1,41 @@
+{
+  "base": "b182e8586be7f12f35638474f2cf18df3d46014c",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unspnd.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "apps/office/src/sw/source/core/undo/native-split-history.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts"
+  ],
+  "priorTestFiles": 407,
+  "priorTestFilesByteIdentical": 406,
+  "sourceConfirmedPriorTestCorrections": [
+    "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts"
+  ],
+  "correction": "Only post-Redo hyperlink attribute/item identity and native backlinks changed in one original failed test; retained subsequent join references the fresh attribute; all other assertions byte-identical.",
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/undo/unspnd.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/undo/unspnd.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    }
+  ],
+  "newAppCases": 29,
+  "appCases": 12215,
+  "inventoryCases": 109,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/undo/unspnd.ts": "7c8466204edc5749af9d005de48ec1e59a2c6394860301ca2a42c694bd9288dc",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts": "9baa46dbe2ebe09200f764ae667fb9164126f53405aee94e810267b61950974b"
+  },
+  "validationLimit": "Represented ranged AUTO/INET split history and native state refresh only. Retained paragraph identity is still a bridge for existing pointer-based actions, unverified against native fresh nodes. Native direct heading/list item restoration is not promised by text history; full physical ownership/CutImpl/undo-area/fields/redlines remain unverified. Conscious IO/recovery exceptions preserved; broad UI/table parity remains open."
+}
