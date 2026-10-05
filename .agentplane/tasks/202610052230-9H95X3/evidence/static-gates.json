@@ -1,0 +1,8 @@
+[
+  {
+    "command": "npm run format:check",
+    "exit": 1,
+    "bytes": 220,
+    "sha256": "575743d474bd8fd0dc1d4332faa0543a5068cae40b58ab9f6e985780669ca221"
+  }
+]
