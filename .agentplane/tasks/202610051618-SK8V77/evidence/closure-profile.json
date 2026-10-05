@@ -1,0 +1,32 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/txtnode/internet-node-transitions.test.ts --testNamePattern=^(?:internet node transition ownership retains paragraph identity and backlinks through actual split/join undo and redo)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/SK8V77.closure-app-results.json",
+      "profile": "upstream-absent original failed cases only",
+      "exit": 0,
+      "bytes": 1133,
+      "sha256": "08561a397e70145502c4b1063af402386bd5408cfc17afe620724cea1c1aace1",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 9
+      },
+      "failedCases": [],
+      "executedCases": [
+        "internet node transition ownership retains paragraph identity and backlinks through actual split/join undo and redo"
+      ],
+      "skippedCases": [
+        "internet node transition ownership preserves map/item/node identity through ordinary text coordinates",
+        "internet node transition ownership releases replaced backlinks through format",
+        "internet node transition ownership releases replaced backlinks through hyperlink",
+        "internet node transition ownership releases replaced backlinks through insert",
+        "internet node transition ownership releases replaced backlinks through set-text",
+        "internet node transition ownership creates detached fragments and binds their copied or consumed links",
+        "internet node transition ownership binds split portions and keeps the retained trailing node owner during join",
+        "internet node transition ownership binds graph-decoded links to decoded nodes"
+      ]
+    }
+  ]
+}
