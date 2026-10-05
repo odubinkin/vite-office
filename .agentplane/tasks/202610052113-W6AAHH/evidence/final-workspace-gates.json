@@ -1,0 +1,26 @@
+[
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "bytes": 1616,
+    "sha256": "1508d3777fe8d38390f6d57ecf632f6380da9f5797b4c89cf9ad11bae9282246",
+    "errors": 0,
+    "preexistingWarnings": 2,
+    "warningSummary": [
+      "Managed shim readiness/fallback warning",
+      "Old DONE 202610031635-2Z3962 missing implementation hash"
+    ]
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "bytes": 18,
+    "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  },
+  {
+    "command": "git diff --check",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

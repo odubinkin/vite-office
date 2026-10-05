@@ -1,0 +1,53 @@
+{
+  "base": "e4b111843d51d3a80c6ed6594a8d5e046d9d303e",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/text/atrstck.ts",
+    "apps/office/src/sw/source/core/text/itratr.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+    "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+    "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/parity/writer-command-slice.json"
+  ],
+  "priorTestFiles": 423,
+  "priorTestFilesByteIdentical": 423,
+  "sourceConfirmedPriorTestCorrections": [],
+  "existingSemanticRecordsPreserved": 251,
+  "newPartialUnverifiedNativeModules": [
+    "apps/office/src/sw/source/core/text/atrstck.ts",
+    "apps/office/src/sw/source/core/text/itratr.ts"
+  ],
+  "totalSemanticRecords": 253,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/text/atrstck.ts",
+    "apps/office/src/sw/source/core/text/itratr.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx"
+  ],
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/text/atrstck.ts": "b7a22fdcc4ee4b000acfb47c24c4463641b5f11154c4bc8dae59fdda502dde34",
+    "apps/office/src/sw/source/core/text/itratr.ts": "ffe24fcf6e06fc822e628e66fddf9617fdb863c61b0d9d97101241b2061d9335",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "e893aa58b2fa06bf352e8bf0bdf77c8547e42336cffee2c057b3ff4fdd348807",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "f60f6a46501a4537a9177e3892b37fc522e19dc1ac920bdc5e1d93e331f5b7fa"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 25,
+  "newChromiumCases": 2,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/text/itratr.cxx",
+      "sha256": "4a7c0c9be65c99216b1b3018efa71df414646c62f95f95c08c2f428de0a5bbc8"
+    },
+    {
+      "path": "sw/source/core/text/atrstck.cxx",
+      "sha256": "5659220c734e0f77be8fb6c16c77084ed7fed80d2a6d820482584cbe707a8418"
+    }
+  ],
+  "validationLimit": "Represented unmerged-node automatic per-item native stacks and ranged start/end iteration only; UI primitive display projection directly borrows actual item values and existing INET query. Full native SwFont/device/font-change return/script/language/redline/fields/merged paragraphs/INET styles/visited-color/paragraph mark and full portions/layout/core/list/table/UI parity remain unverified. Existing filter-run boundary still serves other filter/clipboard/editing operations and is not claimed eliminated globally. Conscious save/open/recovery deviations unchanged,parent DOING/goal ACTIVE."
+}
