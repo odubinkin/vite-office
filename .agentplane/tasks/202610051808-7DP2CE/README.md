@@ -1,10 +1,11 @@
 ---
 id: "202610051808-7DP2CE"
 title: "Resolve numbering undo through native node coordinates"
-status: "DOING"
+result_summary: "Represented NumUpDown and DelNum replay native numeric SwUndRng coordinates; NumOrNoNum targets saved numeric node index with counted-only/nontext contracts; DelNum restores current numeric direct-item/actual-level entries. Stale paragraph-object references removed from these3actions.21new native body/cell UndoRedo cases pass;prior410testfiles/250records preserved,all gates pass,exact semantic 93facdef7baf305d671411b01e04bbfb25cf7660 EVALUATOR pass. Goalactive;full SwHistory/other payloads/split physical ownership/broad UI remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610051808-7DP2CE/evidence/final-coverage.json"
   findings:
     - "21new cases,410prior testfiles/250records preserved;12271distinct app/109inventory/5scripts/120Chromium final production. ONEfull absent profile then original1failed-only1pass20skipped; fixture correction only, unchanged production hashes; actual app/inventory100%L/S/F/B;5source audits0violations. Same agent explicit EVALUATOR, no independent review claim."
-commit: null
+commit:
+  hash: "bcb62f27c400822b220b64db61f656d2e0bc518a"
+  message: "🧩 7DP2CE task: record verified numbering ownership"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: numeric numbering payload ownership at current native SwNodes;21new cases,410prior unchanged,12271app/109inventory/5scripts/120Chromium final production,actual100%coverage,onefull absent profile then1failed-only closure. Full native numbering/history/split/UI parity remains open."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Six statics once; ONEfull absent profile and original1failed-only fixture closure1pass20skipped;12271distinct app,109inventory,5scripts,120Chromium exact final production;21new/410prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exact semantic93facdef7baf305d671411b01e04bbfb25cf7660 same-agent EVALUATOR pass; goal active."
+  -
+    type: "status"
+    at: "2026-10-05T18:23:31.401Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: numeric numbering payload ownership at current native SwNodes;21new cases,410prior unchanged,12271app/109inventory/5scripts/120Chromium final production,actual100%coverage,onefull absent profile then1failed-only closure. Full native numbering/history/split/UI parity remains open."
 doc_version: 3
-doc_updated_at: "2026-10-05T18:23:09.492Z"
+doc_updated_at: "2026-10-05T18:23:31.403Z"
 doc_updated_by: "CODER"
 description: "Iteration158: migrate represented NumUpDown, NumOrNoNum and DelNum undo ownership to native numeric SwUndRng/index coordinates, preserving current list semantics and conscious IO exceptions."
 sections:
@@ -121,6 +134,10 @@ sections:
     Actual final app/inventory100%L/S/F/B:app12364lines/13538statements/3376functions/10070branches;inventory1464/1523/384/1080. Merge actual initial and failed-only case counters only after identical statement/function/branch location maps and unchanged final production hashes; no changed-source transfer or fabricated counters. Maps/results only ignored appcache, AP bounded Englishprose/counts/hashes/exactnames/outcomes only.5restored source audits pass0semanticviolations. AP ignoredinclusive scan4257files0forbidden, doctor0errors2oldwarnings,routingOK. Vendor restored infinally aftereach absent execution; no network/outside/global/subagents/upstreamcopies/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics inAP. Initial administrative task dependency incorrectly named the active composite parent as prerequisite, so start-ready refused; corrected dependency through PLANNER CLI and recomputedroute, no force bypass.
     Limits:represented numeric target/history behavior only. DelNum portable direct-item snapshots differ from full native SwHistory and conditional collection restoration; full numbering rule/outline/move/continue/section rings/merged/redline behavior and repeat contracts remain unverified. Other formatting/deletion action object payloads, retained split trailing-node bridge and native fresh-prefix/original-suffix split ownership remain open. Broad UI/list/table merged/nested/protected/layout/clipboard/rendering behavior remains open. Conscious save/open/recovery deviations preserved. Parent DOING/goalactive; no broad/fullmodule promotion.
     Same-agent explicit EVALUATOR exact semantic SHA93facdef7baf305d671411b01e04bbfb25cf7660 pass, quality20261005-182235820-recovery-context; no independent reviewer claimed. Commit-msg rejected generic code scope for lists/parity/undo task intent; route recomputed and same intentional staged change committed under allowed undo scope without bypass. Required evidence and validation limits are recorded in exact-sha-review,scope-audit,final-coverage. Goal remains active.
+extensions:
+  implementation_commit:
+    hash: "93facdef7baf305d671411b01e04bbfb25cf7660"
+    message: "🧩 7DP2CE undo: resolve numbering history through native coordinates"
 id_source: "generated"
 ---
 ## Summary
