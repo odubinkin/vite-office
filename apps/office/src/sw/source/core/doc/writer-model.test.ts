@@ -660,7 +660,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(node.GetText()).toBe("aY");
     expect(trailing.GetText()).toBe("Zd");
     expect(trailing.GetParagraphAlignment()).toBe("justify");
-    expect(trailing.GetParagraphStyle()).toBe("text-body");
+    expect(trailing.GetParagraphStyle()).toBe("heading-1");
     node.AppendTextNode(trailing);
     expect(node.GetText()).toBe("aYZd");
     expect(

@@ -44,7 +44,10 @@ import {
   HandleResetAttrAtTextNode,
   IsOutlineAtTextNode,
 } from "./ndtxt-attribute-handlers";
-import { HandleModifyAtTextNodeFormatChange } from "./ndtxt-format-change";
+import {
+  HandleModifyAtTextNodeFormatChange,
+  PrepareSplitTextNodeFormat,
+} from "./ndtxt-format-change";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
 import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
@@ -58,7 +61,6 @@ import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
 import { resolveSwListLevelIndents } from "./ndtxt-list-indent";
 import { SwpHints } from "./ndhints";
-
 import {
   ReplaceTextNodeHints,
   CopyTextNodeHints,
@@ -812,11 +814,12 @@ export class SwTextNode extends SwContentNode {
     const trailing = new SwTextNode(
       this.GetNodes(),
       this.StartOfSectionNode(),
-      this.GetTextFormatColl().GetNextTextFormatColl(),
+      this.GetTextFormatColl(),
       suffix.text,
     );
     const directAttributes = this.GetpSwAttrSet();
     if (directAttributes !== undefined) trailing.SetAttr(directAttributes);
+    PrepareSplitTextNodeFormat(this, trailing, offset === this.Len());
     trailing.pSwpHints = SplitTextNodeEndHints(this, offset, suffix.hints);
     this.mText = prefix.text;
     this.pSwpHints = prefix.hints.CanBeDeleted() ? undefined : prefix.hints;
@@ -829,7 +832,6 @@ export class SwTextNode extends SwContentNode {
     });
     return trailing;
   }
-
   /** Appends another text node's content while preserving its direct attributes. @param source - Appended text node. @returns Nothing. */
   public AppendTextNode(source: SwTextNode): void {
     if (source === this) throw new Error("SwTextNode cannot append itself.");

@@ -7,10 +7,49 @@ import {
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_LIST_ISCOUNTED,
   RES_PARATR_OUTLINELEVEL,
+  RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SwNumRule } from "../doc/number";
 import type { SwTextNode } from "./ndtxt";
+
+/** Tests native outline direct-level preservation when a collection follows itself. @param node - Original paragraph. @returns Whether its directly assigned list level must survive. */
+export function CopyDirectListLevel(node: SwTextNode): boolean {
+  const collection = node.GetTextFormatColl();
+  return (
+    collection.GetNextTextFormatColl() === collection &&
+    collection.IsAssignedToListLevelOfOutlineStyle() &&
+    node.HasAttrListLevel()
+  );
+}
+
+/** Applies represented MakeNewTextNode and SplitContentNode list/style defaults to logical paragraphs. @param prefix - Leading paragraph retaining original items. @param suffix - Prepared continuation. @param atEnd - Whether the split reaches the original text end. @returns Nothing. */
+export function PrepareSplitTextNodeFormat(
+  prefix: SwTextNode,
+  suffix: SwTextNode,
+  atEnd: boolean,
+): void {
+  const collection = prefix.GetTextFormatColl(),
+    parentIsOutline = prefix.IsOutline(),
+    setListLevel = !CopyDirectListLevel(prefix);
+  prefix.ChgFormatColl(collection, setListLevel);
+  if (atEnd) {
+    const following = collection.GetNextTextFormatColl();
+    if (following !== collection && parentIsOutline && suffix.GetNumRule() !== undefined)
+      suffix.ResetAttr(RES_PARATR_NUMRULE);
+    suffix.ChgFormatColl(following, setListLevel);
+  }
+  for (const which of [
+    RES_PARATR_LIST_ISRESTART,
+    RES_PARATR_LIST_RESTARTVALUE,
+    RES_PARATR_LIST_ISCOUNTED,
+  ])
+    suffix.ResetAttr(which);
+  if (suffix.GetNumRule() === undefined || (parentIsOutline && !suffix.IsOutline())) {
+    suffix.ResetAttr(RES_PARATR_LIST_ID);
+    suffix.ResetAttr(RES_PARATR_LIST_LEVEL);
+  }
+}
 
 /** Resets the five paragraph list attributes after leaving a list style. @param node - Changed paragraph. @returns Nothing. */
 function lcl_ResetParAttrs(node: SwTextNode): void {

@@ -381,11 +381,12 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(secondParagraph).toHaveTextContent("after");
     expect(secondParagraph).toHaveFocus();
     expect(secondParagraph).toHaveStyle({
-      fontSize: "12pt",
+      fontSize: "18pt",
       fontStyle: "normal",
-      fontWeight: "400",
+      fontWeight: "700",
     });
-    expect(Number(secondParagraph.style.lineHeight)).toBeCloseTo(1.3);
+    expect(screen.getByLabelText("Paragraph style")).toHaveValue("heading-1");
+    expect(Number(secondParagraph.style.lineHeight)).toBeCloseTo(1.15);
     expect(secondParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Paragraph 2 is active.")).toBeInTheDocument();
     firstParagraph.focus();
