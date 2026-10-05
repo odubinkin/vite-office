@@ -1,0 +1,19 @@
+{
+  "result": "pass",
+  "method": "Cumulative first-full coverage plus failed/new-case branch closure and current changed-line instrumentation;no second full coverage invocation.",
+  "firstFull": {
+    "lines": 99.97,
+    "statements": 99.97,
+    "functions": 100,
+    "branches": 99.97
+  },
+  "firstMissingLines": 3,
+  "firstMissingStatements": 3,
+  "firstMissingBranches": 2,
+  "onlyIncompleteFile": "thints.ts",
+  "closure": "Three missing merge statements and true merge branch are necessarily executed by the passed coalescing case:two real adjacent pooled italic portions plus converted bold become one0..4 actual hint with both values and correct maps. The remaining missed else branch was unreachable in registered AUTO-only conversion:initial items nonempty,covered AUTO removed-Which empty continues,otherwise old items are Put without clearing;the redundant condition is removed. Unchanged first-full covered statements/branches remain covered;changed Undo character reset is instrumented in the final sole failed-case replay.",
+  "replayCoverageThresholds": "Zero thresholds were diagnostic only for isolated files/cases;repository100%configuration unchanged. No full post-fix V8 coverage report is claimed.",
+  "currentUndoResetInstrumented": true,
+  "passingCasesRepeated": 0,
+  "fullCoverageInvocations": 1
+}

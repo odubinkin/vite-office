@@ -1,0 +1,52 @@
+{
+  "result": "pass",
+  "base": "2765ad570a14f9d756ab57449476ffd2f3aed832",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/undo/rolbck.ts",
+    "apps/office/src/sw/source/core/undo/undel.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "apps/office/src/sw/source/core/txtnode/native-format-to-text.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts"
+  ],
+  "priorTestFiles": 362,
+  "priorTestFilesByteIdentical": 360,
+  "onlyTwoExactSourceContradictedPriorCasesChanged": [
+    "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts"
+  ],
+  "newIndependentCases": 52,
+  "existingRuntimeRows": 243,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "onlyBoundedAppendices": 12,
+  "helperMappingsAppendOnly": true,
+  "oneFullAbsentProfile": true,
+  "passingReplays": 0,
+  "failedOnlySelectionCounts": [
+    3,
+    1,
+    1,
+    2,
+    1
+  ],
+  "newCaseSelectedOnce": true,
+  "firstReplayMetadataRecoveryLimitation": "Collector mistook skipped status for pending and asserted before persisting the completed result. Only these three exact anchored names were selected. Per-file cache proves two selected cases passed and the sole undobj case failed; command output bytes/hash unavailable. No passing case replayed for metadata recovery.",
+  "allReferenceRestored": true,
+  "afterFirstProductionChanges": [
+    "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "apps/office/src/sw/source/core/undo/undel.ts"
+  ],
+  "afterFirstProductionExplanation": "Remove unreachable AUTO-only Count condition;Undo clears only mutated character Which range. No other post-profile production paths changed.",
+  "nativeSHA256": {
+    "sw/source/core/doc/docedt.cxx": "7d037061cadc35cf3b55bf1afa360cf1941af001bc9b8060957e2dda0ab6c863",
+    "sw/source/core/txtnode/thints.cxx": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a",
+    "sw/source/core/undo/undel.cxx": "290817001673a6a745e944e18fddd750858370ecf7f121178d6e99d969bf0e75",
+    "sw/source/core/undo/rolbck.cxx": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+  }
+}

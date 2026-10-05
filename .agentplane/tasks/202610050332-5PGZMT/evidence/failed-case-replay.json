@@ -1,4 +1,36 @@
 {
   "vendorRestored": true,
-  "records": []
+  "records": [
+    {
+      "profile": "upstream-absent-failed-only",
+      "selectedCases": 3,
+      "selectedNamesSHA256": "0a16a8f3438c7959612cd922a97f095be85499b84852a2a5a070bf65021326b0",
+      "passed": 2,
+      "failed": 1,
+      "skipped": 73,
+      "failedCases": [
+        "FAIL  src/sw/source/core/undo/undobj.test.ts > Writer action-based undo > restores split and join structure, node formatting, and caret"
+      ],
+      "statusRecoveredFromVitestFileCache": true,
+      "cacheSHA256": "ada1ea6ce63f2eff0080762c671463f8fee7e7782ea75da99c6688c062d79904",
+      "selectedFileOutcomes": [
+        {
+          "file": "src/sw/source/core/undo/undobj.test.ts",
+          "duration": 22.073832999999922,
+          "failed": true
+        },
+        {
+          "file": "src/sw/source/core/txtnode/internet-node-transitions.test.ts",
+          "duration": 12.038249999999834,
+          "failed": false
+        },
+        {
+          "file": "src/sw/source/core/txtnode/native-format-to-text.test.ts",
+          "duration": 6.501165999999898,
+          "failed": false
+        }
+      ],
+      "limitation": "Collector mistook skipped status for pending and asserted before persisting the completed result. Only these three exact anchored names were selected. Per-file cache proves two selected cases passed and the sole undobj case failed; command output bytes/hash unavailable. No passing case replayed for metadata recovery."
+    }
+  ]
 }

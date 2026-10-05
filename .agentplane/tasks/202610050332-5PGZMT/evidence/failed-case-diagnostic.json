@@ -1,0 +1,22 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- vitest run src/sw/source/core/undo/undobj.test.ts -t ^(?:Writer action-based undo restores split and join structure, node formatting, and caret)$",
+      "cwd": "apps/office",
+      "profile": "upstream-absent-failed-only",
+      "exit": 1,
+      "bytes": 1369,
+      "sha256": "3e432145fee1c26f2f08159c5c6fd5758240db77e4127eb4be9a0289d6b32262",
+      "selectedCases": 1,
+      "failedCases": [
+        "FAIL  src/sw/source/core/undo/undobj.test.ts > Writer action-based undo > restores split and join structure, node formatting, and caret"
+      ],
+      "totals": [
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 15 skipped (16)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ]
+    }
+  ]
+}

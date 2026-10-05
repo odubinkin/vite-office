@@ -1,0 +1,19 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/undo/undobj.test.ts -t ^(?:Writer action-based undo restores split and join structure, node formatting, and caret)$ --reporter=json --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.include=src/sw/source/core/txtnode/thints.ts --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0",
+      "profile": "upstream-absent-failed-only-diagnostic-coverage",
+      "exit": 1,
+      "bytes": 27376,
+      "sha256": "2bafb38ead98a87aa62919c467777dd57429f71090129c8d9a521241d352085b",
+      "selectedCases": 1,
+      "selectedNamesSHA256": "907ee986ae7bba3bb4ef9df503eb16a15d66c0bd36de9cb79c4defb544228203",
+      "passed": 0,
+      "skipped": 15,
+      "failedCases": [
+        "FAIL  src/sw/source/core/undo/undobj.test.ts > Writer action-based undo > restores split and join structure, node formatting, and caret"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/undo/undobj.test.ts src/sw/source/core/txtnode/native-format-to-text.test.ts -t ^(?:Writer action-based undo restores split and join structure, node formatting, and caret|native paragraph character conversion coalesces converted direct weight across adjacent pooled italic spans)$ --reporter=json --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --coverage.include=src/sw/source/core/txtnode/thints.ts --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0",
+      "profile": "upstream-absent-failed-only-diagnostic-coverage",
+      "exit": 1,
+      "bytes": 42629,
+      "sha256": "a64b56e3c7e0f201a8df45313699a6ea52f361d09aae4143034e3dd576326e2c",
+      "selectedCases": 2,
+      "selectedNamesSHA256": "1e5bb953a4c9f2bbd11f87f09ab64ed4536e85ff077ce572df4fe1f11d99727e",
+      "passed": 1,
+      "skipped": 66,
+      "failedCases": [
+        "FAIL  src/sw/source/core/undo/undobj.test.ts > Writer action-based undo > restores split and join structure, node formatting, and caret"
+      ]
+    }
+  ]
+}
