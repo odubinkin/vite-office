@@ -1,0 +1,85 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI uses captured DOM point rather than all-range availability boundary=false"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI uses captured DOM point rather than all-range availability boundary=true"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI keeps no-label numbering outside native list shell context"
+    }
+  ],
+  "originalFailedInventory": [
+    {
+      "file": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+      "name": "pinned LibreOffice ODT feature fixtures continues tdf113213_addToList.odt and restores the original list with one Undo"
+    }
+  ],
+  "originalFailedChromium": [
+    "Writer native list context and point state width=1280",
+    "Writer native list context and point state width=390"
+  ],
+  "newAppCases": [],
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "a83fa087f1263db798d2642f2a92c25706cfb55a547ae3e9b69bab7b9e251031"
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-list-context.test.tsx --testNamePattern=^(?:native list context UI uses captured DOM point rather than all-range availability boundary=false|native list context UI uses captured DOM point rather than all-range availability boundary=true|native list context UI keeps no-label numbering outside native list shell context)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4VZ510.final-closure-app-results.json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1377,
+      "sha256": "e925873f2d04925ac64868bf30aa9fa1996977c77c6392f31aa3d51d859d2285",
+      "caseCounts": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 2,
+        "total": 5
+      },
+      "executedCases": [
+        "native list context UI uses captured DOM point rather than all-range availability boundary=false",
+        "native list context UI uses captured DOM point rather than all-range availability boundary=true",
+        "native list context UI keeps no-label numbering outside native list shell context"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "18d85bfe88a5e20b0a75db636bbec2e72a77553579c19cfdfc50cb125ed1bccc"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-list-context.spec.ts --grep=(?:Writer native list context and point state width=1280|Writer native list context and point state width=390)$ --reporter=list,json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 1,
+      "bytes": 5769,
+      "sha256": "1fcd24c800d3abc7c0c329f2d7b5f80b6e23df64a28e2ec4f69010c97604a56c",
+      "caseCounts": {
+        "startTime": "2026-10-05T23:35:22.366Z",
+        "duration": 61928.913,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer native list context and point state width=1280",
+        "Writer native list context and point state width=390"
+      ],
+      "failedCases": [
+        "Writer native list context and point state width=1280",
+        "Writer native list context and point state width=390"
+      ],
+      "errors": []
+    }
+  ]
+}
