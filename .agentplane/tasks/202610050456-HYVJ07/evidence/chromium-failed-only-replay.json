@@ -1,0 +1,67 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "changed-assets",
+      "command": "npm exec --workspace @vite-office/office -- vite build",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 783,
+      "sha256": "470a04054f71773cff4f54309cd42d7c8dabd03a8595dd34ea4e005018377a7b",
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-editing.spec.ts --grep ^Writer table cell typing, split, join and formatting use document history$ --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 354,
+      "sha256": "2008457a53f43dab9d05b10d5b475a6fba5ed085fad1d3c75f409a9f0f0d5525",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T05:24:27.747Z",
+        "duration": 932.9789999999999,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-editing.spec.ts --grep Writer table cell typing, split, join and formatting use document history --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 3382,
+      "sha256": "5a09a0186e02fefd79d0dad817f2e31767234bfbcea6c1ab8931bc9e7874f248",
+      "failedCases": [
+        "Writer table cell typing, split, join and formatting use document history"
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-05T05:25:09.041Z",
+        "duration": 7846.396,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-editing.spec.ts --grep Writer table cell typing, split, join and formatting use document history --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 553,
+      "sha256": "5b9bccd570d31a9a1506b4d0c1b2a1a368689d0ededbc3da75c5c764a22a625b",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T05:26:20.675Z",
+        "duration": 2613.582,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

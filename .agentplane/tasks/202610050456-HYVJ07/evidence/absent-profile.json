@@ -91,7 +91,7 @@
       "incompleteFiles": {},
       "unhandledErrorCases": [
         "apps/office/src/sw/browser/editor/native-table-editing.test.tsx > native table DOM editing renders cell splits and merges from canonical section history",
-        "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts > BrowserWriterEditWindow routes native editing intents to the platform-neutral edit window"
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts > browser Writer edit window links routes native editing intents to the platform-neutral edit window"
       ]
     },
     {

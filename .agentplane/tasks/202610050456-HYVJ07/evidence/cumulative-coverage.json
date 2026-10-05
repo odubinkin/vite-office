@@ -1,0 +1,166 @@
+{
+  "result": "pass",
+  "method": "First-full counts retained for unchanged production. For two subsequently changed modules,only source-identical contiguous locations align through ordered exact-line LCS;edited or crossing locations use failed/new-case instrumented counts only. No aggregate substitution or passing test replay. Diagnostic replay thresholds0 do not change repository100% policy.",
+  "total": {
+    "lines": {
+      "total": 11531,
+      "covered": 11531,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12629,
+      "covered": 12629,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3256,
+      "covered": 3256,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9467,
+      "covered": 9467,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "changedSourceDetails": [
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "firstSourceSHA256": "10db98eba8ff77a08667c48ba3bd947f4ea173d400fc1613a7be9355d5dcaaeb",
+      "currentSourceSHA256": "ef95b97652e9192df4bbcd7dea5672d72008677ea873f126900b722e7de89d71",
+      "carriedUnchangedLocationCounts": {
+        "statements": 165,
+        "functions": 33,
+        "branches": 71
+      },
+      "summary": {
+        "lines": {
+          "total": 156,
+          "covered": 156,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 169,
+          "covered": 169,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 35,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 75,
+          "covered": 75,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "missingStatements": [],
+      "missingFunctions": [],
+      "missingBranches": []
+    },
+    {
+      "path": "apps/office/src/sw/source/core/crsr/pam.ts",
+      "firstSourceSHA256": "068d2943c200e3dd3b203d7360a79ceeac3046a533af8b1de59d234b27cf63bb",
+      "currentSourceSHA256": "9623f064f0673dc5378812a0099a17f52ebebf49f3cab70bc2552a667c62ba55",
+      "carriedUnchangedLocationCounts": {
+        "statements": 69,
+        "functions": 30,
+        "branches": 49
+      },
+      "summary": {
+        "lines": {
+          "total": 67,
+          "covered": 67,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 71,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 32,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 49,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "missingStatements": [],
+      "missingFunctions": [],
+      "missingBranches": []
+    }
+  ],
+  "inventoryFirstFull": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "passingReplays": 0,
+  "sourceSHA256": {
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "ef95b97652e9192df4bbcd7dea5672d72008677ea873f126900b722e7de89d71",
+    "apps/office/src/sw/source/core/crsr/pam.ts": "9623f064f0673dc5378812a0099a17f52ebebf49f3cab70bc2552a667c62ba55"
+  },
+  "cumulativeMapSHA256": "9d277a5b63111b51716e243119d82e613f7a367470f246bcf105334c6d8771bc"
+}

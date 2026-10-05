@@ -1,0 +1,21 @@
+{
+  "doctor": {
+    "command": "ap doctor",
+    "exit": 0,
+    "errors": 0,
+    "warnings": 2,
+    "unchangedWarnings": [
+      "Managed hook shim readiness/fallback branches outdated.",
+      "DONE202610031635-2Z3962 missing implementation hash."
+    ]
+  },
+  "routing": {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "result": "policy routing OK"
+  },
+  "ignoredInclusiveAgentplaneScan": {
+    "files": 3995,
+    "forbidden": 0
+  }
+}

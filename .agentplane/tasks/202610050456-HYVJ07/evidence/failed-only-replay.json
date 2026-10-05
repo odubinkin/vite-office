@@ -1,0 +1,31 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec --workspace @vite-office/office -- vitest run exact6failed+1errorcausing+2newnames --coverage --coverage.reportOnFailure --isolatedDiagnosticThresholds=0 --reporter=json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 140,
+      "sha256": "43acd90774a49377f71906f9447a27fde3415a3757d3694dcb4a008429f3b1c9",
+      "selectedCount": 9,
+      "selectedNames": [
+        "native table DOM editing renders cell splits and merges from canonical section history",
+        "native table DOM editing routes composition and formatting from cell events to the shell",
+        "Writer browser presentation inserts, selects, edits and reopens a canonical Writer table",
+        "native table cell editing owners reads split/join cell nodes from their section, direction=backward",
+        "native table cell editing owners reads split/join cell nodes from their section, direction=forward",
+        "native table cell editing owners projects the actual active cell without inserting it in the body layout list",
+        "browser Writer edit window links routes native editing intents to the platform-neutral edit window",
+        "native table cell editing owners retains one text paragraph per cell section when removing nodes",
+        "native table cell editing owners formats the actual two-paragraph PaM span within a cell and restores history"
+      ],
+      "failedCases": [],
+      "passed": 9,
+      "skipped": 28,
+      "selectedActualNamesSHA256": "e5e6c91907c8ff6f413e6d9851e2dd240b128bc7be60d8cd168f36fee1c1ac76",
+      "reportSHA256": "80652b82b069bf960b042da20bff542c266249e29686ea155e668ea6db3a1838",
+      "coverageMapSHA256": "03bf39561f228156db7e0da209007caf5e3aac5fc0184b595e42fca1fe114e1f"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/core/docnode/nodes.ts apps/office/src/sw/source/core/crsr/pam.ts apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/core/docnode/nodes.ts apps/office/src/sw/source/core/crsr/pam.ts apps/office/src/sw/browser/presentation/writer-view.test.tsx apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm exec -- tsc --noEmit --project apps/office/tsconfig.json",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 0,
+    "bytes": 119,
+    "sha256": "59c70cd11cdf30411d587a9b5282a7f5637bdcbab0212988f88f17670568153d"
+  },
+  {
+    "command": "npm run check:file-size",
+    "exit": 0,
+    "bytes": 2876,
+    "sha256": "c8f973f9cea8a203aead1e2cdc3c3d312bbeb954c9a5ee7a946df72ef3a07bac"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/uibase/wrtsh/native-table-editing.test.ts apps/office/e2e/writer-native-table-editing.spec.ts",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm exec -- tsc --noEmit --project apps/office/tsconfig.json",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

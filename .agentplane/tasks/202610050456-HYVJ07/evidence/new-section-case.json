@@ -1,0 +1,19 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run exact1new-section-case --coverage --coverage.reportOnFailure --isolatedDiagnosticThresholds=0 --reporter=json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 141,
+      "sha256": "db34f7a14c4b5ea60b2170f2559f23349f7ada3841b75e4719cfec8ead334cb6",
+      "selectedNames": [
+        "native table cell editing owners requires connected cell owners and retargets content indices within that section"
+      ],
+      "failedCases": [],
+      "passed": 1,
+      "skipped": 10,
+      "coverageMapSHA256": "470db5e2857d86954628f9b92e704773e46f5a9000cff8cdf1ec42b7d43a95ca"
+    }
+  ]
+}
