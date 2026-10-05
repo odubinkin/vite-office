@@ -1,10 +1,11 @@
 ---
 id: "202610050803-5J91RE"
 title: "Retain native uncounted list text geometry in body and table cells"
-status: "DOING"
+result_summary: "Retained native uncounted bound-list text-left through actual alignment/legacy core ownership,shared immutable UI projection and body/cell print/render placement;native count/history preserves text and neighbors. One upstream-absent full profile and all source audits passed first;prior tests and registered deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610050803-5J91RE/evidence/restored-source-audits.json"
   findings:
     - "Core owns bound-rule alignment and legacy text-left;uncounted first-line0 and shared presentation preserve actual body/cell geometry/history. Six statics,one absent full11954 app/109 inventory/5 scripts/106 Chromium all firstpass,actual100coverage;378prior tests byte-identical;244states/defaults/deviations unchanged;five restored source audits pass. No passing replay or production edits after profile;no independent review claim."
-commit: null
+commit:
+  hash: "01839ee6c7589a38a539b8fc1bf1117d605bd907"
+  message: "🧩 5J91RE task: record native uncounted list geometry verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement native uncounted list text geometry on actual body and cell nodes under the standing approved parity goal."
+  -
+    author: "CODER"
+    body: "Verified: native uncounted list text-left and zero first-line now shared by body/cell renderer and print bounds;33newcases,106Chromium firstpass,one absent full,100coverage,378prior tests unchanged,244states/defaults/deviations preserved;quality exactSHA pass;full parity unverified."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native uncounted text-left verified on exact semantic SHA7639d7ac:33 new cases and106 Chromium firstpass;one absent full11954/109/5,100coverage,378prior tests unchanged,5restored audits,244states/defaults/deviations preserved.Quality pass;full parity unverified."
+  -
+    type: "status"
+    at: "2026-10-05T08:23:14.750Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native uncounted list text-left and zero first-line now shared by body/cell renderer and print bounds;33newcases,106Chromium firstpass,one absent full,100coverage,378prior tests unchanged,244states/defaults/deviations preserved;quality exactSHA pass;full parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T08:22:50.134Z"
+doc_updated_at: "2026-10-05T08:23:14.751Z"
 doc_updated_by: "CODER"
 description: "Iteration143 shared native alignment and legacy text-left projection for uncounted Writer list paragraphs, browser rendering and print bounds with history and body/cell geometry evidence; preserve registered deviations."
 sections:
@@ -145,6 +158,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic leaf without history rewriting."
   Findings: "Iteration142 verifiedprogress DONE. Currentmain6e0140b clean,parentonlyactive,direct,fourmatchedpolicies,userinstructionsabsent. Pinned ndtxt.cxx3382 GetLeftMarginWithNum(true) retains effective alignment text-left regardless counted and supports legacy absolute/relative spacing;3440 GetFirstLineOfsWithNum writes0 for uncounted. itrcrsr165 SwTextMargin consumes native text-left and0firstline,includingfollow. Local renderer wraps only visiblemarker and applies plainmargin only listkindnone,so uncounted numbered/bullet loses leftgeometry;projectSwTextPrintBounds retains raw/listGeometryWinsheuristic andwronguncountedfirstline. Existing resolveSwListParagraphIndents authoritative independentaxis alreadycountoff0. Standingusergoal/UI instruction authorizessafeinrepo leaf. First compact metadatalookup hit absentsemantic field;read-only boundedlookup correction,no sourceorstatechange. Restored source derivation includes frmtool2440 frame print-left and frmitems815 ResolveLeft:legacy absolute spacing retains negative authored first-line contribution in text-left (AbsLSpace minus min(0,rawfirst));relative spacing adds rawparagraphtextleft. Helper applies exact bounded twip formula,not guessed absolute cancellation. No scope expansion. Closure: sixfirststatics passed;onefullabsent build/app11954/291files/inventory109/36files/scripts5/Chromium106 allpassed first,nofailures/noflakes/no replay. All4app+inventory coverage100 actualfirstmaps. Five restoredsourceaudits passed semanticviolations0. All378priorapp/script testfiles byteidentical;33newappcases+2newChromiumgeometry cases passedfirst. Fourownerrows8boundednotes/localhelper symboladditive;all244states/defaults/deviations preserved;5nativehashes. Doctor0errors2oldwarnings,routing/diffpass;AP4049files0forbidden. Productionunchangedafterfirstprofile. Counted marker/tab layout,RTL/fontrelative/large-indent cell clamping,HomeEnd/table navigation,full frames/outline/history/UI andgoal remainunverified."
+extensions:
+  implementation_commit:
+    hash: "7639d7ac72d809e1891c2a3ebf524f56475b4eb1"
+    message: "🧩 5J91RE code: retain native uncounted list text placement"
 id_source: "generated"
 ---
 ## Summary
