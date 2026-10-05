@@ -4,7 +4,7 @@ title: "Resolve numbering undo through native node coordinates"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T18:23:09.427Z"
+  updated_by: "CODER"
+  note: "Six statics once; ONEfull absent profile and original1failed-only fixture closure1pass20skipped;12271distinct app,109inventory,5scripts,120Chromium exact final production;21new/410prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exact semantic93facdef7baf305d671411b01e04bbfb25cf7660 same-agent EVALUATOR pass; goal active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-05T18:23:09.427Z"
+    author: "CODER"
+    state: "ok"
+    note: "Six statics once; ONEfull absent profile and original1failed-only fixture closure1pass20skipped;12271distinct app,109inventory,5scripts,120Chromium exact final production;21new/410prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exact semantic93facdef7baf305d671411b01e04bbfb25cf7660 same-agent EVALUATOR pass; goal active."
 doc_version: 3
-doc_updated_at: "2026-10-05T18:22:57.070Z"
+doc_updated_at: "2026-10-05T18:23:09.492Z"
 doc_updated_by: "CODER"
 description: "Iteration158: migrate represented NumUpDown, NumOrNoNum and DelNum undo ownership to native numeric SwUndRng/index coordinates, preserving current list semantics and conscious IO exceptions."
 sections:
@@ -72,7 +78,41 @@ sections:
     2. ONE sequential upstream-absent profile: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts. Vendor rename in repository try/finally restore before source audits; tests never invoke/access upstream. Persist exact failures/errors before assertions, failed/new-only repeats, skipped=skipped. Actual app/inventory L/S/F/B100%; maps only ignored appcache.
     3. New native numbering-index cases prove NumUpDown numeric range ownership across replacement of body and actual cell endpoints; reversed/collapsed shell cursor, independent unrelated list metadata and actual delta semantics. DelNum restores current numeric slots' native direct items/actual levels and replays inclusive range; count toggling targets only saved current native slot and ignores structural node as pinned source.410prior testfiles unchanged,250states/defaults/exceptions/prior evidence preserved;4paths/additive unnum owner, no broad promotion.
     4. After restoration run npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Audit scope, prior tests/defaults/AP artifacts, doctor/routing, explicit same-agent EVALUATOR exact semantic SHApass, recordedverify/canonicalfinish/parentcheckpoint clean main.
-  Verification: "Command: six initial statics; ONEfull upstream-absent build/app/inventory/scripts/Chromium; original failed-only case; changed-file statics; five restored source audits; scope/AP/doctor/routing; exact semantic SHA EVALUATOR review. Result: pass after one new fixture-only correction. Evidence:12271distinct app/109inventory/5scripts/120Chromium final production;21new/410prior unchanged/250records preserved;actual100%app/inventory L/S/F/B;review93facdef7baf305d671411b01e04bbfb25cf7660 quality20261005-182235820-recovery-context same agent explicit EVALUATOR. Scope:4paths/additive unnum only, represented native numeric ownership;full native SwHistory/other payload/split/UI parity remains unverified. No passing replay/vendor restored/AP0forbidden/doctor0errors2oldwarnings/routingOK."
+  Verification: |-
+    Command: six initial statics; ONEfull upstream-absent build/app/inventory/scripts/Chromium; original failed-only case; changed-file statics; five restored source audits; scope/AP/doctor/routing; exact semantic SHA EVALUATOR review. Result: pass after one new fixture-only correction. Evidence:12271distinct app/109inventory/5scripts/120Chromium final production;21new/410prior unchanged/250records preserved;actual100%app/inventory L/S/F/B;review93facdef7baf305d671411b01e04bbfb25cf7660 quality20261005-182235820-recovery-context same agent explicit EVALUATOR. Scope:4paths/additive unnum only, represented native numeric ownership;full native SwHistory/other payload/split/UI parity remains unverified. No passing replay/vendor restored/AP0forbidden/doctor0errors2oldwarnings/routingOK.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T18:23:09.427Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Six statics once; ONEfull absent profile and original1failed-only fixture closure1pass20skipped;12271distinct app,109inventory,5scripts,120Chromium exact final production;21new/410prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exact semantic93facdef7baf305d671411b01e04bbfb25cf7660 same-agent EVALUATOR pass; goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T18:22:57.070Z, excerpt_hash=sha256:ab8ea63ef85567afe47341f725ef0a34238cc9bcc13c2273d0d440633e8e1813
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051808-7DP2CE/blueprint/resolved-snapshot.json
+    - old_digest: dca97c760e50ec09dfd433e07b4ac4af3cb0f812927e6a967ee870fe0f1da1e6
+    - current_digest: dca97c760e50ec09dfd433e07b4ac4af3cb0f812927e6a967ee870fe0f1da1e6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051808-7DP2CE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610051808-7DP2CE
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the intentional semantic commit in a separately authorized follow-up task; preserve prior history and conscious IO exceptions."
   Findings: |-
     Iteration158 source-confirmed represented numbering history resolves current native SwNodes coordinates rather than retained SwTextNode objects. SwUndoNumUpDown captures existing SwUndRng and signed direction, Undo/Redo replay document NumUpDown through SetPaM; SwUndoNumOrNoNum stores pinned m_nIndex and changes only old/new counted flags on actual current text nodes, ignores structural nodes as native; SwUndoDelNum stores numeric index/direct-item/actual-level entries and SwUndRng, restores current entries and replays native DelNumRules. Current API/payload sizes/comments/defaults preserved. No new adapter, DTO, shared module or stale identity fallback. Complete native DelNum SwHistory restoration and InsNum/ContinueNumbering payloads remain unverified; this is a prerequisite for later split physical ownership migration, not fullmodule parity.
@@ -108,6 +148,39 @@ Iteration158 migrate represented SwUndoNumUpDown and SwUndoDelNum retained curso
 ## Verification
 
 Command: six initial statics; ONEfull upstream-absent build/app/inventory/scripts/Chromium; original failed-only case; changed-file statics; five restored source audits; scope/AP/doctor/routing; exact semantic SHA EVALUATOR review. Result: pass after one new fixture-only correction. Evidence:12271distinct app/109inventory/5scripts/120Chromium final production;21new/410prior unchanged/250records preserved;actual100%app/inventory L/S/F/B;review93facdef7baf305d671411b01e04bbfb25cf7660 quality20261005-182235820-recovery-context same agent explicit EVALUATOR. Scope:4paths/additive unnum only, represented native numeric ownership;full native SwHistory/other payload/split/UI parity remains unverified. No passing replay/vendor restored/AP0forbidden/doctor0errors2oldwarnings/routingOK.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T18:23:09.427Z — VERIFY — ok
+
+By: CODER
+
+Note: Six statics once; ONEfull absent profile and original1failed-only fixture closure1pass20skipped;12271distinct app,109inventory,5scripts,120Chromium exact final production;21new/410prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exact semantic93facdef7baf305d671411b01e04bbfb25cf7660 same-agent EVALUATOR pass; goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T18:22:57.070Z, excerpt_hash=sha256:ab8ea63ef85567afe47341f725ef0a34238cc9bcc13c2273d0d440633e8e1813
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051808-7DP2CE/blueprint/resolved-snapshot.json
+- old_digest: dca97c760e50ec09dfd433e07b4ac4af3cb0f812927e6a967ee870fe0f1da1e6
+- current_digest: dca97c760e50ec09dfd433e07b4ac4af3cb0f812927e6a967ee870fe0f1da1e6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051808-7DP2CE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610051808-7DP2CE
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
