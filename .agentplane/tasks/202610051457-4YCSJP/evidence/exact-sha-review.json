@@ -1,0 +1,21 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "7a4035b66c11301e681eb6decfa0c68be79d6cee",
+  "base": "2d116b1c4a419f41baa4a608d4dd5b44add83847",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-storage.test.ts",
+    "apps/office/src/sw/source/core/undo/docundo.ts"
+  ],
+  "reviewedSemanticDiffBytes": 138983,
+  "reviewedSemanticDiffSHA256": "5e9bf2feee06d93d431f7de2ab791f228758f923f52f4916c36c6d1ec6346223",
+  "verdict": "pass",
+  "evidence": "Native MoveTextAttr_To_AttrSet predicate ordering and changed-item removal inspected against pinned ndtxt.cxx; both represented split paragraphs use actual native attributes. Empty AUTO-only workaround removed; removed undo boundary actual SwTextNode holds character items and cut hints, native redo consumption preserves sparse item/ranged override state. Dead RetainText copy mode removed after all callers verified default-only.20new cases/12168distinct app,109inventory,5scripts,120Chromium closed, actual final merged100% L/S/F/B; failed/new-only closure,405prior files404unchanged/one exact accessor;250semantic states/defaults/exceptions and prior evidence preserved;5restored audits0violations; AP0forbidden.",
+  "validationLimit": "ONE full initial upstream-absent profile plus failed/new-only closure. Final build predates dead RetainText(copy=false) removal, covered by final changed-file statics and new native sparse-item ownership case. Actual merged counters100% without passing replay. Full native CutImpl/MoveRange/list split resets/zero-prefix CopyAttr/index/frame/lifetime/paragraph-item transfer and physical undo-array owners remain unverified.",
+  "residualRisk": "Full native CutImpl/zero-prefix CopyAttr/list split restart/counting/default/collection/frame/content-index/redline/fly lifetimes and physical undo SwNodes/paragraph-item ownership unverified; point guard test does not represent native point families. Conscious IO/recovery deviations unchanged; broad goal active."
+}
