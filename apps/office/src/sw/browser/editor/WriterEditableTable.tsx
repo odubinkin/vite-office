@@ -28,7 +28,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
 }>): React.JSX.Element {
   const format = table.GetFormat();
   return (
-    <div className="max-w-full" contentEditable={false} data-writer-table={table.GetName()}>
+    <div className="max-w-full" data-writer-table={table.GetName()}>
       <table
         aria-label={table.GetName()}
         className="table-fixed border-collapse"

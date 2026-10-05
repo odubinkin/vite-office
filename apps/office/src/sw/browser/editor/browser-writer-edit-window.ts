@@ -94,6 +94,16 @@ export class BrowserWriterEditWindow {
         event.preventDefault();
         this.editWindow.SelectAll();
       } else if (
+        (event.key === "Home" || event.key === "End") &&
+        (event.ctrlKey || event.metaKey) &&
+        !event.altKey &&
+        !event.nativeEvent.isComposing
+      ) {
+        if (this.SynchronizeSelection()) {
+          this.editWindow.MoveSectionBoundary(event.key === "Home", event.shiftKey);
+          event.preventDefault();
+        }
+      } else if (
         event.key === "Tab" &&
         !event.ctrlKey &&
         !event.metaKey &&

@@ -78,6 +78,13 @@ export class SwEditWin {
     this.invalidateBindings();
   }
 
+  /** Executes Writer section/document boundary intent independently of platform geometry. @param start - Beginning direction. @param select - Extend selection. @returns Native movement result. */
+  public MoveSectionBoundary(start: boolean, select = false): boolean {
+    return this.Complete(
+      start ? this.wrtShell.StartOfSection(select) : this.wrtShell.EndOfSection(select),
+    );
+  }
+
   /** Handles table Tab intent with numbering-at-start priority before cell traversal. @param shift - Previous-cell or list-promote direction. @returns Whether Writer owns this key, including a table boundary no-op. */
   public HandleTableTab(shift = false): boolean {
     const point = this.wrtShell.GetCursor().GetPoint(),

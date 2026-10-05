@@ -126,8 +126,6 @@ export function WriterEditableParagraph({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
-          contentEditable={cellPosition === undefined ? undefined : true}
-          suppressContentEditableWarning={cellPosition !== undefined}
           data-writer-table-cell={
             cellPosition === undefined
               ? undefined
