@@ -1,0 +1,57 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-table-delete.test.ts --testNamePattern=^(?:native table delete deletes every selected cell in one reversible history unit|native table backspace deletes every selected cell in one reversible history unit|native table selection deletes every selected cell in one reversible history unit|native selected cell deletion serializes surviving table structure and resumes input|native empty append merges copied automatic items without retaining duplicate boundaries|native empty append overwrites equal empty internet hints and preserves unrelated boundaries|native hint append retains unformatted empty and nonempty sources without inventing hints|native item copy retains the explicit unsupported nonempty guard and undo insertion priority|native nonempty append preserves independently formatted text on both sides)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WY14DH.closure-app-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 1,
+      "bytes": 5991,
+      "sha256": "fb02f425925e0788bea0a12682f4e40d4ac82e95a540261449614977801dd679",
+      "caseCounts": {
+        "passed": 8,
+        "failed": 1,
+        "total": 16
+      },
+      "failedCases": [
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native selected cell deletion serializes surviving table structure and resumes input"
+      ],
+      "executedCases": [
+        "native empty append merges copied automatic items without retaining duplicate boundaries",
+        "native empty append overwrites equal empty internet hints and preserves unrelated boundaries",
+        "native hint append retains unformatted empty and nonempty sources without inventing hints",
+        "native item copy retains the explicit unsupported nonempty guard and undo insertion priority",
+        "native nonempty append preserves independently formatted text on both sides",
+        "native table delete deletes every selected cell in one reversible history unit",
+        "native table backspace deletes every selected cell in one reversible history unit",
+        "native table selection deletes every selected cell in one reversible history unit",
+        "native selected cell deletion serializes surviving table structure and resumes input"
+      ]
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern=^parity mapping CLI composes the Writer mapping report with owned upstream marker evidence$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WY14DH.closure-inventory-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 0,
+      "bytes": 1240,
+      "sha256": "2386cbb1af9dde90bff9a7334a49c1f5b6e3613a44258a734ac145f279d300a0",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 3
+      },
+      "failedCases": [],
+      "executedCases": [
+        "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ]
+    },
+    {
+      "kind": "chromium",
+      "command": "inline Playwright actual config with dev server; only two exact initially failed new cases",
+      "profile": "upstream-absent failed/new only",
+      "exit": 1,
+      "bytes": 2202,
+      "sha256": "f2f9671c9a25dab187273c43cb3dbfcb036cce597a8bfad01f3f9680f35805e0"
+    }
+  ]
+}
