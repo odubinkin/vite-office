@@ -46,5 +46,29 @@
     "exit": 1,
     "bytes": 3467,
     "sha256": "981f3ce9abdfe7f49b73a7517233045c44b78c8d31eab18116204ca58fd313d1"
+  },
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/core/txtnode/ndtxt.ts --max-warnings 0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm exec -- tsc --project apps/office/tsconfig.json",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm exec -- node scripts/check-jsdoc.mjs",
+    "exit": 1,
+    "bytes": 18028,
+    "sha256": "7bd753086f69419e10700a4aa89cf651c7da635592d5829b852442eb0340ee17"
   }
 ]
