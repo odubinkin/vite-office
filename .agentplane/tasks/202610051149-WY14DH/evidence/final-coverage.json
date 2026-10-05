@@ -1,0 +1,90 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "apps/office/src/sw/inc/swtypes.ts"
+  ],
+  "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against original base. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
+  "carried": {
+    "statements": 455,
+    "functions": 114,
+    "branches": 281
+  },
+  "summary": {
+    "lines": {
+      "total": 12068,
+      "covered": 12068,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13210,
+      "covered": 13210,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3340,
+      "covered": 3340,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9898,
+      "covered": 9898,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialMapSHA256": "daf24995341387a55db65c5afe43472026049596f881ddd486593a23640896d8",
+  "finalMapSHA256": "1f36187760a6c9852ccdddccc283234f3b7aaa6367808065ae2bd696ac07341f",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/edit/eddel.ts": "0e0e85e48aed8f4794e46d24fee2b34906c03b7d918436350ca8e31b73d5ccfc",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts": "8ad6d92c25740090c7e886d46ef1899a5915a73a1589e4079216b92d00bca294",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "a100baf238d30999f63bea1dd91b9fefd1edd96fa9086f3c9f8d13a0ca13a322",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "62c733ae1058f241d66ad7eee538cb4350f861ed5c7c13e877ea67cede831ad2",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "72d0b77d2e3c83cb0254de0c089bc8fbf98f6d97c6795e1a79fdee0fa7ebf1ce",
+    "apps/office/src/sw/source/core/txtnode/thints.ts": "978c1d9ad26b967da75dd335c73a47c246764e7f16d16774a334d80e7b90983b",
+    "apps/office/src/sw/inc/swtypes.ts": "8c76d07aacc4fa307a62415a40d3d76a4301be75db152a783baa3aa8dd7df1e3"
+  }
+}

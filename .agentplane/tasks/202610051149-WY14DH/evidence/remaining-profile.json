@@ -1,0 +1,39 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-table-delete.test.ts --testNamePattern=^native selected cell deletion serializes surviving table structure and resumes input$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WY14DH.remaining-app-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 0,
+      "bytes": 1094,
+      "sha256": "9ac2f973dce5ac55796882306ea4f31cff1ebe429141ac033c3b302192dac1ec",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 16
+      },
+      "failedCases": [],
+      "executedCases": [
+        "native selected cell deletion serializes surviving table structure and resumes input"
+      ]
+    },
+    {
+      "kind": "chromium",
+      "command": "inline Playwright actual config with dev server; only two exact initially failed new cases",
+      "profile": "upstream-absent failed/new only",
+      "exit": 0,
+      "bytes": 763,
+      "sha256": "fe094e0b6f95e1925d657362514a86d2e2b38bb228f46e9678f2b23b701419c4",
+      "caseCounts": {
+        "startTime": "2026-10-05T12:41:58.337Z",
+        "duration": 6196.85,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ]
+}
