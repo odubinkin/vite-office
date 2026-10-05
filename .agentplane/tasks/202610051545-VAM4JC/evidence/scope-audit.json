@@ -1,0 +1,43 @@
+{
+  "base": "7f59db99ed9025798562a83cc11767bae4751c2a",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+    "apps/office/src/sw/source/core/txtnode/native-split-list-defaults.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx"
+  ],
+  "priorTestFiles": 406,
+  "priorTestFilesByteIdentical": 404,
+  "sourceConfirmedPriorTestCorrections": [
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx"
+  ],
+  "correction": "Only source-contradicted interior-heading style/CSS values and one additional literal style selector assertion; all other assertions byte-identical.",
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    }
+  ],
+  "newAppCases": 18,
+  "appCases": 12186,
+  "inventoryCases": 109,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "97e5b11e247fe1809977430da1f30b689acf720393b82b641da87270ad4b2288",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts": "713eac082411c0717cc94bebdd0baf9ecea3bc4c103a08d183ac3597d73fe76e"
+  },
+  "validationLimit": "Represented logical paragraph split defaults only; native original-suffix/new-prefix physical ownership, page/break/keep/split/auto-frame resets, full CutImpl and heading Undo item restoration remain unverified. Conscious IO/recovery exceptions preserved; broad UI/table parity remains open."
+}
