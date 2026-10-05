@@ -1,0 +1,17 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts -t retains empty hints beside positive ranges without hiding overlap family=53$",
+      "profile": "upstream-absent-failed-boundaries",
+      "exit": 0,
+      "bytes": 252,
+      "sha256": "f7a7c87cbb6e5366c4aeb611e997c46a7bed55051a139519d133e7496059014f",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 185 skipped (186)"
+      ],
+      "failedCases": []
+    }
+  ]
+}
