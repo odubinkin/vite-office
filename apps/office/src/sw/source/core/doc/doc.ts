@@ -504,6 +504,24 @@ export class SwDoc {
     );
   }
 
+  /** Changes native restart only on a numbered text node with a different flag. @param position - Actual node position. @param flag - Requested restart state. @returns Whether a flag changed. */
+  public SetNumRuleStart(position: SwPosition, flag: boolean): boolean {
+    const node = position.GetNode();
+    if (node.GetNodes() !== this.nodes)
+      throw new Error("Writer numbering start belongs to another node array.");
+    if (
+      !(node instanceof SwTextNode) ||
+      node.GetNumRule() === undefined ||
+      node.IsListRestart() === flag
+    )
+      return false;
+    return this.RunModelTransaction(
+      /** Applies the represented document flag primitive. @returns True. */ () => {
+        node.SetListRestart(flag);
+        return true;
+      },
+    );
+  }
   /** Sets native counted state independently of applying a list rule. @param range - Inclusive native range. @param counted - Requested count state. @returns Nothing. */
   public SetCounted(range: SwPaM, counted: boolean): void {
     if (range.GetPoint().GetNode().GetNodes() !== this.nodes)

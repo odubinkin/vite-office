@@ -1,6 +1,6 @@
 /** @fileoverview Owns native Writer numbering state, range traversal and editing commands from ednumber.cxx. */
 import { SwModify } from "../../../inc/calbck";
-import { SwUndoNumUpDown, SwUndoInsNum, SwUndoDelNum } from "../undo/unnum";
+import { SwUndoNumUpDown, SwUndoInsNum, SwUndoDelNum, SwUndoNumRuleStart } from "../undo/unnum";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 import { SetNumRuleMode, type SwDoc } from "../doc/doc";
 import { SwNumRule } from "../doc/number";
@@ -157,6 +157,69 @@ export abstract class SwEditShell extends SwModify {
       }
     }
     return result;
+  }
+
+  /** Searches before the first actual cursor start using native family and section policy. @param numbered - Enumeration rather than itemization. @param listId - Output list identity. @returns Nearest eligible rule. */
+  public SearchNumRule(numbered: boolean, listId: { value: string }): SwNumRule | undefined {
+    return this.GetDoc().SearchNumRule(
+      this.GetCursor().Start(),
+      false,
+      numbered,
+      false,
+      -1,
+      listId,
+    );
+  }
+  /** Reads restart on an optional actual native range. @param range - Borrowed selection, otherwise current cursor. @returns Restart flag. */
+  public IsNumRuleStart(range = this.GetCursor()): boolean {
+    const node = range.GetPoint().GetNode();
+    return node instanceof SwTextNode && node.IsListRestart();
+  }
+  /** Changes only restart flags at native normalized range end points. @param flag - Requested restart flag. @param cursor - Optional borrowed actual range. @returns Whether an eligible flag changed. */
+  public SetNumRuleStart(flag: boolean, cursor = this.GetCursor()): boolean {
+    const state = this.CaptureCursorState();
+    if (!cursor.IsMultiSelection()) {
+      const node = cursor.GetPoint().GetNode();
+      if (
+        !(node instanceof SwTextNode) ||
+        node.GetNumRule() === undefined ||
+        node.IsListRestart() === flag
+      )
+        return false;
+      return this.ApplyAction(
+        new SwUndoNumRuleStart(cursor.GetPoint(), flag, state),
+        false,
+        /** Applies the initial flag without restoring or destroying the live cursor ring. @returns Nothing. */ () => {
+          this.GetDoc().SetNumRuleStart(cursor.GetPoint(), flag);
+        },
+      );
+    }
+    const normalized = new SwPamRanges(cursor),
+      range = new SwPaM(cursor.GetPoint()),
+      action = new SfxListUndoAction<SwUndoRedoContext>("Set numbering start");
+    try {
+      for (let index = 0; index < normalized.Count(); index++) {
+        const node = normalized.SetPam(index, range).GetPoint().GetNode();
+        if (
+          node instanceof SwTextNode &&
+          node.GetNumRule() !== undefined &&
+          node.IsListRestart() !== flag
+        )
+          action.AddAction(new SwUndoNumRuleStart(range.GetPoint(), flag, state));
+      }
+      return action.GetActionCount() === 0
+        ? false
+        : this.ApplyAction(
+            action,
+            false,
+            /** Executes the source document primitive at each normalized endpoint while retaining the live cursor. @returns Nothing. */ () => {
+              for (let index = 0; index < normalized.Count(); index++)
+                this.GetDoc().SetNumRuleStart(normalized.SetPam(index, range).GetPoint(), flag);
+            },
+          );
+    } finally {
+      range.Dispose();
+    }
   }
   /** Applies one rule to every native ring range, reusing the first newly created list identity. @param rule - Rule value. @param createNewList - Native new-list mode. @param continuedListId - Existing list identity. @param resetIndentAttrs - Native reset-indent flag. @returns Whether text nodes were represented. */
   public SetCurNumRule(

@@ -4,11 +4,7 @@ import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
-import { SetNumRuleMode } from "../../core/doc/doc";
-import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwUndoInsNum } from "../../core/undo/unnum";
-import type { SwUndoRedoContext } from "../../core/undo/undobj";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterInterface } from "../../../sdi/swriter";
 import type { SwEditShell, WriterListLevelCommand } from "../../core/edit/ednumber";
@@ -16,8 +12,6 @@ import type { SwEditShell, WriterListLevelCommand } from "../../core/edit/ednumb
 /** Native editing-shell surface used directly by the list context. */
 export type SwListShellTarget = Pick<
   SwEditShell,
-  | "ApplyAction"
-  | "CaptureCursorState"
   | "GetCursor"
   | "GetDoc"
   | "SetCurNumRule"
@@ -26,6 +20,9 @@ export type SwListShellTarget = Pick<
   | "NumUpDown"
   | "SelectionHasNumber"
   | "SelectionHasBullet"
+  | "SearchNumRule"
+  | "IsNumRuleStart"
+  | "SetNumRuleStart"
 >;
 
 /** Context-sensitive shell that owns list execution and state. */
@@ -69,48 +66,54 @@ export class SwListShell {
     return this.wrtShell.SetCurNumRule(rule, false, listId.value, true);
   }
 
-  /** Continues the nearest native list across every selected paragraph, including table cells. @returns Whether list attributes changed. */
+  /** Continues the nearest native list through the inherited core rule command and rule-sensitive restart actions. @returns Whether selected list state changed. */
   public ContinueNumbering(): boolean {
     const doc = this.wrtShell.GetDoc(),
       range = this.wrtShell.GetCursor(),
-      cursor = this.wrtShell.CaptureCursorState(),
-      listId = { value: "" };
-    const rule =
-      doc.SearchNumRule(range.Start(), false, true, false, -1, listId) ??
-      doc.SearchNumRule(range.Start(), false, false, false, -1, listId);
+      listId = { value: "" },
+      rule =
+        this.wrtShell.SearchNumRule(true, listId) ?? this.wrtShell.SearchNumRule(false, listId);
     if (rule === undefined) return false;
-    const before: { node: SwTextNode; items: SfxItemSet }[] = [];
     let changed = false;
-    for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
-      const node = doc.GetNodes().at(index);
-      if (!(node instanceof SwTextNode)) continue;
-      changed ||=
-        node.GetNumRule() !== rule || node.GetListId() !== listId.value || !node.IsCountedInList();
-      before.push({ node, items: node.CaptureListItems() });
-    }
+    for (const selected of range.GetRingContainer())
+      for (
+        let index = selected.Start().GetNodeIndex();
+        index <= selected.End().GetNodeIndex();
+        index++
+      ) {
+        const node = doc.GetNodes().at(index);
+        if (node instanceof SwTextNode)
+          changed ||=
+            node.GetNumRule() !== rule ||
+            node.GetListId() !== listId.value ||
+            !node.IsCountedInList();
+      }
     if (!changed) return false;
-    const action = new SfxListUndoAction<SwUndoRedoContext>("Continue Numbering");
-    return this.wrtShell.ApplyAction(
-      action,
-      false,
-      /** Applies native restart/rule/count policy before recording actual attribute history. @returns Nothing. */ () => {
-        for (const entry of before)
-          if (entry.node.IsListRestart() && entry.node.GetNumRule() !== rule)
-            entry.node.SetListRestart(false);
-        doc.SetNumRule(range, rule, SetNumRuleMode.Default, listId.value);
-        doc.SetCounted(range, true);
-        for (const entry of before)
-          action.AddAction(
-            new SwUndoInsNum(
-              entry.node,
-              entry.items,
-              entry.node.CaptureListItems(),
-              cursor,
-              cursor,
-            ),
-          );
-      },
-    );
+    const undo = doc.GetUndoManager();
+    undo.EnterListAction("Continue Numbering");
+    try {
+      for (const selected of range.GetRingContainer())
+        for (
+          let index = selected.Start().GetNodeIndex();
+          index <= selected.End().GetNodeIndex();
+          index++
+        ) {
+          const node = doc.GetNodes().at(index);
+          if (!(node instanceof SwTextNode)) continue;
+          const position = new SwPosition(node),
+            paragraph = new SwPaM(position);
+          try {
+            if (this.wrtShell.IsNumRuleStart(paragraph) && node.GetNumRule() !== rule)
+              this.wrtShell.SetNumRuleStart(false, paragraph);
+          } finally {
+            paragraph.Dispose();
+            position.Dispose();
+          }
+        }
+      return this.wrtShell.SetCurNumRule(rule, false, listId.value);
+    } finally {
+      undo.LeaveListAction();
+    }
   }
 
   /** Returns the native selection list family. @returns Current list kind. */
@@ -122,12 +125,10 @@ export class SwListShell {
 
   /** Reports native continuation availability independently of the active paragraph's list kind. @returns Whether an earlier list was found. */
   public CanContinueNumbering(): boolean {
-    const doc = this.wrtShell.GetDoc(),
-      start = this.wrtShell.GetCursor().Start(),
-      listId = { value: "" };
+    const listId = { value: "" };
     return (
-      (doc.SearchNumRule(start, false, true, false, -1, listId) ??
-        doc.SearchNumRule(start, false, false, false, -1, listId)) !== undefined
+      (this.wrtShell.SearchNumRule(true, listId) ?? this.wrtShell.SearchNumRule(false, listId)) !==
+      undefined
     );
   }
 }

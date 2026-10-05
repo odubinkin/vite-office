@@ -118,9 +118,9 @@ export class SwContentIndex {
   private contentNode: SwContentNode | undefined;
   private index = 0;
 
-  /** Creates and registers a bounded Writer content index. @param node - Content node. @param index - Initial offset. @param ownerKind - Owner category. @param affinity - Boundary affinity. @param onNodeChanged - Optional transfer callback. @returns Nothing. */
+  /** Creates and registers a bounded Writer content index. @param node - Optional content node, absent on structural positions. @param index - Initial offset. @param ownerKind - Owner category. @param affinity - Boundary affinity. @param onNodeChanged - Optional transfer callback. @returns Nothing. */
   public constructor(
-    node: SwContentNode,
+    node: SwContentNode | undefined,
     index = 0,
     private ownerKind: SwContentIndexOwnerKind = "cursor",
     private affinity: SwContentIndexAffinity = "after",
@@ -161,8 +161,8 @@ export class SwContentIndex {
   }
 
   /** Reassigns this index to a validated node/offset pair. @param node - Destination node. @param index - Destination offset. @returns This index. */
-  public Assign(node: SwContentNode, index: number): this {
-    if (!Number.isInteger(index) || index < 0 || index > node.Len())
+  public Assign(node: SwContentNode | undefined, index: number): this {
+    if (!Number.isInteger(index) || index < 0 || index > (node?.Len() ?? 0))
       throw new Error("SwContentIndex offset is outside its node.");
     this.AssignFromRegistry(node, index);
     return this;
@@ -181,12 +181,12 @@ export class SwContentIndex {
   }
 
   /** Registry-only node transfer used by split/merge/removal. @param node - Destination node. @param index - Corrected destination offset. @returns Nothing. */
-  public AssignFromRegistry(node: SwContentNode, index: number): void {
+  public AssignFromRegistry(node: SwContentNode | undefined, index: number): void {
     if (this.contentNode !== node) {
       this.contentNode?.UnregisterContentIndex(this);
       this.contentNode = node;
-      node.RegisterContentIndex(this);
-      this.onNodeChanged?.(node);
+      node?.RegisterContentIndex(this);
+      if (node !== undefined) this.onNodeChanged?.(node);
     }
     this.index = index;
   }

@@ -2,7 +2,7 @@
  * @fileoverview Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.
  */
 
-import type { SwContentNode, SwNode } from "../docnode/node";
+import { SwContentNode, type SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
@@ -47,24 +47,28 @@ export class SwPosition {
   public readonly nContent: SwContentIndex;
 
   /**
-   * Creates a position owned by one content node.
-   * @param node - Positioned content node.
+   * Creates a native position on a content or structural node.
+   * @param node - Positioned native node.
    * @param nContent - UTF-16 offset inside node.
    * @param ownerKind - Registered owner category.
    * @param affinity - Boundary affinity.
    * @returns Nothing; initializes this position.
    */
   public constructor(
-    node: SwContentNode,
+    node: SwNode,
     nContent = 0,
     ownerKind: SwContentIndexOwnerKind = "cursor",
     affinity: SwContentIndexAffinity = "after",
   ) {
-    if (!Number.isInteger(nContent) || nContent < 0 || nContent > node.Len())
+    if (
+      !Number.isInteger(nContent) ||
+      nContent < 0 ||
+      nContent > (node instanceof SwContentNode ? node.Len() : 0)
+    )
       throw new Error("SwPosition content offset is outside its node.");
     this.nNode = new SwNodeIndex(node);
     this.nContent = new SwContentIndex(
-      node,
+      node instanceof SwContentNode ? node : undefined,
       nContent,
       ownerKind,
       affinity,
@@ -91,10 +95,14 @@ export class SwPosition {
 
   /** Changes the content offset inside the current content node. @param offset - New UTF-16 offset. @returns Nothing. */
   public SetContent(offset: number): void {
-    const node = this.GetNode() as SwContentNode;
-    if (!Number.isInteger(offset) || offset < 0 || offset > node.Len())
+    const node = this.GetNode();
+    if (
+      !Number.isInteger(offset) ||
+      offset < 0 ||
+      offset > (node instanceof SwContentNode ? node.Len() : 0)
+    )
       throw new Error("SwPosition content offset is outside its node.");
-    this.nContent.Assign(node, offset);
+    this.Assign(node, offset);
   }
 
   /** Compares model order by node and then content offset. @param other - Position to compare. @returns Signed ordering result. */
@@ -104,9 +112,10 @@ export class SwPosition {
     );
   }
 
-  /** Reassigns both node and registered content index. @param node - Destination content node. @param offset - Destination offset. @returns Nothing. */
-  public Assign(node: SwContentNode, offset: number): void {
-    this.nContent.Assign(node, offset);
+  /** Reassigns both node and registered content index. @param node - Destination native node. @param offset - Destination offset. @returns Nothing. */
+  public Assign(node: SwNode, offset = 0): void {
+    this.nContent.Assign(node instanceof SwContentNode ? node : undefined, offset);
+    this.nNode.Assign(node);
   }
 
   /** Changes the bounded position owner category. @param ownerKind - New owner kind. @returns Nothing. */
@@ -122,7 +131,7 @@ export class SwPosition {
   /** Creates an independent registered position on the same node. @param ownerKind - Optional owner override. @returns Cloned position. */
   public clone(ownerKind = this.nContent.GetOwnerKind()): SwPosition {
     return new SwPosition(
-      this.GetNode() as SwContentNode,
+      this.GetNode(),
       this.GetContentIndex(),
       ownerKind,
       this.nContent.GetAffinity(),

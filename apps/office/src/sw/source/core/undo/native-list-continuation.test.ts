@@ -153,7 +153,7 @@ it.each(commandCases)(
     });
     expect(owner.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
     expect(owner.docShell.GetUndoManager().GetUndoAction()?.GetPayloadSize()).toBe(
-      direction === "collapsed" ? 6 : 12,
+      (direction === "collapsed" ? 1 : 2) * (initial === "different" ? 8 : 6),
     );
     let first = replace(owner.first),
       second = replace(owner.second);

@@ -6789,12 +6789,20 @@
           {
             "marker": "SwContentIndex",
             "path": "apps/office/src/sw/source/core/bastyp/index.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+            "marker": "native nullable content index detaches and re-registers"
           }
         ],
         "upstream": [
           {
             "marker": "SwContentIndexReg::Update",
             "path": "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx",
+            "marker": "SwContentIndex::Assign("
           }
         ]
       },
@@ -6809,7 +6817,8 @@
         "Native intrusive sorted-list storage, debug owner discovery, fieldmark correction, and every owner subtype remain outside the bounded implementation."
       ],
       "preservedResponsibilities": [
-        "Preserves registered content-position correction for insertion, deletion, replacement, split, merge, removal, and node transfer."
+        "Preserves registered content-position correction for insertion, deletion, replacement, split, merge, removal, and node transfer.",
+        "Iteration163 recovery represents generic native structural positions and nullable content-index ownership from pam.cxx and index.cxx; constructor,Assign,clone and zero-content mark detach/register actual owners without table-specific skips. Existing validation,owner/affinity,callback and disposed getter guard retained; full native overloads/comparison/intrusive registry remain unverified. Native restart initial mutation now executes document primitive directly so ordinary history cursor restore cannot destroy the still-live ring;original six failed newcases and genuinelynew generic positions/index/groupedinitialcursor only afterwards,no passing replay. Actual unchanged contiguous hashed source map counters only,changed/crossing/new locations require actual execution."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/bastyp/index.cxx",
@@ -6846,6 +6855,10 @@
           {
             "path": "apps/office/e2e/writer-native-table-cursor-rings.spec.ts",
             "marker": "Writer selected row character formatting covers full cells and survives Undo Redo"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+            "marker": "native generic positions and clones keep structural node identity"
           }
         ],
         "upstream": [
@@ -6876,6 +6889,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx",
             "marker": "GetRingContainer"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
+            "marker": "SwPosition::Assign( const SwNode&"
           }
         ]
       },
@@ -6896,7 +6913,8 @@
         "Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.",
         "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion.",
         "Iteration138 first-profile failures expose the remaining body-only section deletion and selected-range traversal. SwNodes.removeTextNode now derives actual same-section text owners and retains one paragraph per section;SwPaM selected ranges iterate the actual node span and omit non-text sentinels. This enables same-cell split/join Undo and formatting without changing structural table-wide selection policy. First failure names and coverage counts are persisted;only failing cases and newly added section/range cases are replayed. Full native structural lifetime/rings/table navigation and rendering remain unverified;all semantic states/defaults/exceptions and registered I/O deviations remain unchanged.",
-        "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive."
+        "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive.",
+        "Iteration163 recovery represents generic native structural positions and nullable content-index ownership from pam.cxx and index.cxx; constructor,Assign,clone and zero-content mark detach/register actual owners without table-specific skips. Existing validation,owner/affinity,callback and disposed getter guard retained; full native overloads/comparison/intrusive registry remain unverified. Native restart initial mutation now executes document primitive directly so ordinary history cursor restore cannot destroy the still-live ring;original six failed newcases and genuinelynew generic positions/index/groupedinitialcursor only afterwards,no passing replay. Actual unchanged contiguous hashed source map counters only,changed/crossing/new locations require actual execution."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/crsr/pam.cxx",
@@ -7609,6 +7627,14 @@
           {
             "path": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
             "marker": "native document rule operation honors exact flag %s"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+            "marker": "native continuation owns every table ring"
+          },
+          {
+            "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
+            "marker": "Writer table row Add to List"
           }
         ],
         "upstream": [
@@ -7723,6 +7749,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
             "marker": "SwDoc::SetNumRule"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "SwDoc::SetNumRuleStart"
           }
         ]
       },
@@ -7746,7 +7776,8 @@
         "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
         "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
         "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion.",
-        "Iteration161 adds bounded native document SetNumRule/SetCounted operations and SetNumRuleMode0/1/2/4/8 flags. Selected body/cell/mixed list toggles use document-owned rule lookup/add/assignment, native previous-rule search from point, explicit new/continued list identity, collapsed current/style direct-item policy, count reset and label-alignment-only indent reset. Shell toggle and continue record actual execution in shared SfxListUndoAction/SwUndoInsNum numeric original-document targets; retained paragraph base, separate ContinueNumbering action/item interface and direct shell list DTO builder removed. Actual selected native range consensus drives toggle/checked state. Existing public single-node InsNum API and independent item snapshots remain portable; full native SwHistory,document-owned undo,rule rollback/Repeat,client/layout/merged/margin propagation,outline/font/leading whitespace factory nuances and broad UI remain unverified. New exact flag/style/count/indent/native replacement/cursor/history/neighbors/foreign guard and selected body/table Chromium menu/marker/atomic UndoRedo assertions. Six prior test files migrate source-confirmed action-group/API, label-alignment reset-indent and unique level-item expectations;408 prior files byte-identical. Original4failed app/3failed Chromium only and1new explicit-empty style suppression case pass; final production unchanged, no passing replay.250 states/defaults/classifications/IO exceptions/prior evidence preserved;no full module promotion."
+        "Iteration161 adds bounded native document SetNumRule/SetCounted operations and SetNumRuleMode0/1/2/4/8 flags. Selected body/cell/mixed list toggles use document-owned rule lookup/add/assignment, native previous-rule search from point, explicit new/continued list identity, collapsed current/style direct-item policy, count reset and label-alignment-only indent reset. Shell toggle and continue record actual execution in shared SfxListUndoAction/SwUndoInsNum numeric original-document targets; retained paragraph base, separate ContinueNumbering action/item interface and direct shell list DTO builder removed. Actual selected native range consensus drives toggle/checked state. Existing public single-node InsNum API and independent item snapshots remain portable; full native SwHistory,document-owned undo,rule rollback/Repeat,client/layout/merged/margin propagation,outline/font/leading whitespace factory nuances and broad UI remain unverified. New exact flag/style/count/indent/native replacement/cursor/history/neighbors/foreign guard and selected body/table Chromium menu/marker/atomic UndoRedo assertions. Six prior test files migrate source-confirmed action-group/API, label-alignment reset-indent and unique level-item expectations;408 prior files byte-identical. Original4failed app/3failed Chromium only and1new explicit-empty style suppression case pass; final production unchanged, no passing replay.250 states/defaults/classifications/IO exceptions/prior evidence preserved;no full module promotion.",
+        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -9303,6 +9334,14 @@
           {
             "path": "apps/office/e2e/writer-table-row-lists.spec.ts",
             "marker": "Writer table row native list commands"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+            "marker": "native continuation owns every table ring"
+          },
+          {
+            "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
+            "marker": "Writer table row Add to List"
           }
         ],
         "upstream": [
@@ -9313,6 +9352,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
             "marker": "SwEditShell::SelectionHasNumber"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+            "marker": "SwEditShell::SearchNumRule"
           }
         ]
       },
@@ -9328,7 +9371,8 @@
       "preservedResponsibilities": [
         "Changes the supported active list paragraph level through a numbering undo action.",
         "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion.",
-        "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion."
+        "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
+        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/edit/ednumber.cxx",
@@ -12014,6 +12058,14 @@
           {
             "path": "apps/office/e2e/writer-table-row-lists.spec.ts",
             "marker": "Writer table row native list commands"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+            "marker": "native continuation owns every table ring"
+          },
+          {
+            "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
+            "marker": "Writer table row Add to List"
           }
         ],
         "upstream": [
@@ -12068,6 +12120,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
             "marker": "SwUndoNumUpDown::"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+            "marker": "SwUndoNumRuleStart::UndoImpl"
           }
         ]
       },
@@ -12076,7 +12132,8 @@
         "SwUndoInsNum",
         "SwUndoNumUpDown",
         "SwUndoDelNum",
-        "SwUndoNumOrNoNum"
+        "SwUndoNumOrNoNum",
+        "SwUndoNumRuleStart"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwUndoInsNum, SwUndoInsNum::SwUndoInsNum, std::move, SwUndoInsNum::~SwUndoInsNum and the bounded SwUndoInsNum, SwUndoNumUpDown contract remain intentionally omitted."
@@ -12089,7 +12146,8 @@
         "Iteration158 removes retained paragraph identity from represented SwUndoNumUpDown, SwUndoNumOrNoNum and SwUndoDelNum payloads. Pinned unnum.cxx uses SwUndRng coordinates for level/deletion replay, m_nIndex for counted-only flags and numeric m_aNodes index/level entries for deletion restoration. Existing native numeric range infrastructure resolves current SwNodes targets, direction/delta and unrelated metadata contracts remain intact; structural counted-state payload is skipped as native. Actual repeated body/cell section-preserving replacement and shell UndoRedo tests preserve reversed/collapsed endpoints and independent direct list history.410prior tests and250states/defaults/classifications/exceptions/prior evidence preserved. Portable DelNum direct-item snapshots still differ from complete native SwHistory; InsNum/ContinueNumbering payloads, split node identity bridge and broad UI behavior remain unverified. No whole-module/broad promotion.",
         "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion.",
         "Iteration161 adds bounded native document SetNumRule/SetCounted operations and SetNumRuleMode0/1/2/4/8 flags. Selected body/cell/mixed list toggles use document-owned rule lookup/add/assignment, native previous-rule search from point, explicit new/continued list identity, collapsed current/style direct-item policy, count reset and label-alignment-only indent reset. Shell toggle and continue record actual execution in shared SfxListUndoAction/SwUndoInsNum numeric original-document targets; retained paragraph base, separate ContinueNumbering action/item interface and direct shell list DTO builder removed. Actual selected native range consensus drives toggle/checked state. Existing public single-node InsNum API and independent item snapshots remain portable; full native SwHistory,document-owned undo,rule rollback/Repeat,client/layout/merged/margin propagation,outline/font/leading whitespace factory nuances and broad UI remain unverified. New exact flag/style/count/indent/native replacement/cursor/history/neighbors/foreign guard and selected body/table Chromium menu/marker/atomic UndoRedo assertions. Six prior test files migrate source-confirmed action-group/API, label-alignment reset-indent and unique level-item expectations;408 prior files byte-identical. Original4failed app/3failed Chromium only and1new explicit-empty style suppression case pass; final production unchanged, no passing replay.250 states/defaults/classifications/IO exceptions/prior evidence preserved;no full module promotion.",
-        "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion."
+        "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
+        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unnum.cxx",
@@ -12097,7 +12155,8 @@
         "SwUndoInsNum",
         "SwUndoInsNum::SwUndoInsNum",
         "std::move",
-        "SwUndoInsNum::~SwUndoInsNum"
+        "SwUndoInsNum::~SwUndoInsNum",
+        "SwUndoNumRuleStart"
       ]
     },
     {
@@ -13700,6 +13759,14 @@
           {
             "path": "apps/office/e2e/writer-table-row-lists.spec.ts",
             "marker": "Writer table row native list commands"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+            "marker": "native continuation owns every table ring"
+          },
+          {
+            "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
+            "marker": "Writer table row Add to List"
           }
         ],
         "upstream": [
@@ -13728,7 +13795,8 @@
         "Implements bounded SwListShell execution and state for list-kind and promote/demote commands through generated Sfx slots and canonical Writer undo actions.",
         "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion.",
         "Iteration161 adds bounded native document SetNumRule/SetCounted operations and SetNumRuleMode0/1/2/4/8 flags. Selected body/cell/mixed list toggles use document-owned rule lookup/add/assignment, native previous-rule search from point, explicit new/continued list identity, collapsed current/style direct-item policy, count reset and label-alignment-only indent reset. Shell toggle and continue record actual execution in shared SfxListUndoAction/SwUndoInsNum numeric original-document targets; retained paragraph base, separate ContinueNumbering action/item interface and direct shell list DTO builder removed. Actual selected native range consensus drives toggle/checked state. Existing public single-node InsNum API and independent item snapshots remain portable; full native SwHistory,document-owned undo,rule rollback/Repeat,client/layout/merged/margin propagation,outline/font/leading whitespace factory nuances and broad UI remain unverified. New exact flag/style/count/indent/native replacement/cursor/history/neighbors/foreign guard and selected body/table Chromium menu/marker/atomic UndoRedo assertions. Six prior test files migrate source-confirmed action-group/API, label-alignment reset-indent and unique level-item expectations;408 prior files byte-identical. Original4failed app/3failed Chromium only and1new explicit-empty style suppression case pass; final production unchanged, no passing replay.250 states/defaults/classifications/IO exceptions/prior evidence preserved;no full module promotion.",
-        "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion."
+        "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
+        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/listsh.cxx",
