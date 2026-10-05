@@ -18,9 +18,9 @@
     },
     "statements": {
       "total": 14061,
-      "covered": 14060,
+      "covered": 14061,
       "skipped": 0,
-      "pct": 99.99
+      "pct": 100
     },
     "functions": {
       "total": 3418,
@@ -30,9 +30,9 @@
     },
     "branches": {
       "total": 10442,
-      "covered": 10441,
+      "covered": 10442,
       "skipped": 0,
-      "pct": 99.99
+      "pct": 100
     },
     "branchesTrue": {
       "total": 0,
@@ -41,9 +41,7 @@
       "pct": "Unknown"
     }
   },
-  "missing": [
-    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/number.ts"
-  ],
+  "missing": [],
   "inventorySummary": {
     "lines": {
       "total": 1464,
@@ -79,7 +77,7 @@
   "initialInventoryMapSHA256": "440e39c5894533ac963f1e4e55d8bc4f750058dc37001cb74d636c70d0d80449",
   "finalInventoryMapSHA256": "816c43eab4a105c6cbe774f7d45dcf8d2b6590d4f18b2d2b17e5b30cc17ae035",
   "initialMapSHA256": "8b869d7ac583830ab1b530dc3c2dedff977607bc2174434764684b03dd04b1be",
-  "finalMapSHA256": "086b5cb668dfd11f3ac0325f176ca18f7fa04b373e498db0c7ab145e064067ab",
+  "finalMapSHA256": "7005089cf6cba7e6c9cbf80f00c83fd8a75296a877e3c6e91953e9e046c2b6cd",
   "finalProductionSHA256": {
     "apps/office/src/sw/source/core/doc/docnum.ts": "3c9d041bdb73fd9dfc97864eb2a36af8fa58c8c0322b10b786275e11605ebf9c",
     "apps/office/src/sw/source/core/undo/unoutl.ts": "7750174df43e13bc0c12f9a70fd7d63d56791c1c8ed2c3946e7981d59aa4824a",
