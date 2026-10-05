@@ -1,10 +1,11 @@
 ---
 id: "202610050126-3HH6D5"
 title: "Restore node-owned ignore-expansion state and pure hint Update"
-status: "DOING"
+result_summary: "Restored native SwNode ignore-expansion storage/accessors,owner-aware pure hint coordinate updates and DEFAULT insertion adjustment while preserving existing tests/runtime fields/I/O deviations;549literal newcases validated with no passing-case or suite/build replays."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
   findings:
     - "Native SwNode storage/accessors and end-equal ignore bypass match pinned owner contracts. Coordinate-only Update and DEFAULT postphase preserve actual identities,flags and retained values. Comparator extracted unchanged. Seven paths,357prior tests byte-identical,241runtime states/defaults/exceptions unchanged;four bounded appendices/two helper exports only."
     - "One absent-reference full profile:build,app3560(first3559pass/1fixturefail),inventory109,scripts5,Chromium99;app/inventory100%allfourcoverage. Exact firstfailedname captured;only failed locality case replayed twice,finally1passed/548skipped. Corrected AUTO shared-handle merge and native end-descending expectations;production unchanged after fullprofile. Zero passing case/suite/build replays. Static size-only failed recovery passed;five restored audits0semanticviolations;doctor0errors/two unchanged legacywarnings;routingOK;AP3899files0forbidden."
-commit: null
+commit:
+  hash: "149545958c33ea05c9d472a9fde0e1969ff3f2d4"
+  message: "🧩 3HH6D5 task: record verified ignore expansion contract"
 comments:
   -
     author: "CODER"
     body: "Start: port native SwNode ignore-expansion ownership and pure Update/default insertion separation under the standing parity goal;one absent profile and exact failed-name recovery only."
+  -
+    author: "CODER"
+    body: "Verified: node-owned IgnoreDontExpand and pure Update with DEFAULT insertion postphase. One absent full profile and exact failed-only recovery;357prior tests/241runtime states preserved;100%app/inventory coverage and exact-SHAqualitypass. Full modes/core/UI unverified."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Bounded131 leaf verified: native node ignore state,pure coordinate Update and DEFAULT postphase;one absent full profile,one failed-only case resolved,100%app/inventory coverage,357prior tests/241states preserved,restored audits0violations,exact-SHAqualitypass;full flags/core/UI unverified."
+  -
+    type: "status"
+    at: "2026-10-05T01:44:34.326Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: node-owned IgnoreDontExpand and pure Update with DEFAULT insertion postphase. One absent full profile and exact failed-only recovery;357prior tests/241runtime states preserved;100%app/inventory coverage and exact-SHAqualitypass. Full modes/core/UI unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T01:44:11.237Z"
+doc_updated_at: "2026-10-05T01:44:34.327Z"
 doc_updated_by: "CODER"
 description: "Port native SwNode IgnoreDontExpand default/state and separate generic hint Update coordinates from DEFAULT InsertText postprocessing for actual AUTO/INET owners,with source-independent tests and one absent-reference full profile."
 sections:
@@ -164,6 +177,10 @@ sections:
     Preflight131:cleanmain99349e412e50dfcf0e90b3952f3e49dc81d86a52,direct,onlyparentDOING. Iteration130 verified progress,notblocked. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native IgnoreDontExpand lives on SwNode(node.hxx106/accessors168-169),not SwContentNode;all node.cxxconstructors initialize false. SwTextNode::Update ndtxt.cxx1374 expands an end-equal hint when IsIgnoreDontExpand is true,without resetting DontExpand even when locked. Native InsertText saves this state,temporarily overrides it forFORCE,restores it before native end-equal/post-prefix processing. DEFAULT postprocessing can undo nonempty end expansion while preserving DontExpand;current helper handles only zero end-equal hints and mixes insertion postprocessing into genericUpdate. This leaf repairs the owner/coordinate/postphase contract before implementing the flags and callers. CompareSwpHtStart ndhints.cxx33 establishes existing start/end/Which ordering;extraction preserves current bounded comparator body and leaves native pointer-tie/CHARFMT sorting unverified. Standing goal authorizes this safe local implementation/refactoring. Four matched policies read;user-instructions absent. No network/outside/global access.
 
     Implementation131: restored native SwNode IgnoreDontExpand=false and silent accessors, bound positive Update owner state, separate DEFAULT InsertText adjustment, unchanged comparator extraction. Seven semantic paths;357prior test files byte-identical;241runtime rows/status/default/exception fields preserved except four bounded prose appendices and two helper exports. Added549literal app cases. Static6:first five passed,file-size1001failed;only failed size gate repeated after compacting the call and passed,changed file formatting/lint passed. One upstream-absent full profile:buildpassed;app3559pass/1newfixturefail of3560/275files with100%allfourcoverage;inventory109/36files and100%allfourcoverage;scripts5;Chromium99. First exactfailedname saved immediately. AUTO collector shares the previous handle and merges; longer end sorts before shorter INET. Only this failed test repeated twice (first revealed stale order expectation,second passed1/548skipped);zero passing test cases/suites/builds repeated. Production unchanged after full profile. Five restored-source audits passed with0semanticviolations. Seven native source hashes recorded;ignored-inclusiveAPscan3899files/0forbidden. No upstream/code/helper/Python/rawdiagnostic artifacts. Native Insert flags/callers/selection/full3rd-paramAPI follow next leaf;full core/UI and other documented gaps remain unverified.
+extensions:
+  implementation_commit:
+    hash: "5d2851ce11906bdb470530beba6e4c8e83e31171"
+    message: "🧩 3HH6D5 code: restore node-owned ignore expansion and pure Update"
 id_source: "generated"
 ---
 ## Summary
