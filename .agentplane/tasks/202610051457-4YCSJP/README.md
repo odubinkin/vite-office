@@ -1,10 +1,11 @@
 ---
 id: "202610051457-4YCSJP"
 title: "Move split paragraph full-span text attributes into native item sets"
-status: "DOING"
+result_summary: "Both represented split paragraphs now use native full-span attribute-to-item-set traversal; native read Undo retains boundary paragraph character items and Redo consumes them without TextRuns, and obsolete fragment copy mode is removed. Scoped checks and actual merged coverage pass; broad parity remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 39
+revision: 40
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +40,9 @@ quality_review:
     - ".agentplane/tasks/202610051457-4YCSJP/evidence/exact-sha-review.json"
   findings:
     - "20new cases/12168distinct app,109inventory,120Chromium; actual merged100% coverage; only failed/new closure;404prior files unchanged, one accessor migration,250semantic states preserved; final build predates dead snapshot-mode removal with final changed-file and new behavior evidence; full native CutImpl/list/index/undo-area unverified."
-commit: null
+commit:
+  hash: "621e7623476bc9a7bca2ab2563a4a9dc913f45fc"
+  message: "🧩 4YCSJP task: record native split and undo boundary verification"
 comments:
   -
     author: "CODER"
@@ -56,6 +59,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Clarified authoritative prior file count405 with404 unchanged files and exactly one existing owner-accessor migration; scope and every acceptance criterion unchanged."
+  -
+    author: "CODER"
+    body: "Verified: Native split full-span item movement and actual removed boundary character ownership implemented in7a4035b66c11;20new cases,12168distinct app/109inventory/120Chromium closed, actual merged100% coverage, failed/new-only closure,5restored audits; full native split/list/undo-area parity remains unverified."
 events:
   -
     type: "status"
@@ -98,8 +104,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Scoped native split/undo boundary implementation7a4035b66c11 verified:20new/12168distinct app,109inventory,5scripts,120Chromium;100% actual merged coverage; failed/new-only closure;5restored source audits0violations;405prior files404unchanged/one accessor;250states preserved; final build predates dead copy-mode removal with final changed-file/new behavior; broad parity unverified."
+  -
+    type: "status"
+    at: "2026-10-05T15:36:27.282Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native split full-span item movement and actual removed boundary character ownership implemented in7a4035b66c11;20new cases,12168distinct app/109inventory/120Chromium closed, actual merged100% coverage, failed/new-only closure,5restored audits; full native split/list/undo-area parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T15:35:45.107Z"
+doc_updated_at: "2026-10-05T15:36:27.284Z"
 doc_updated_by: "CODER"
 description: "Iteration153 replaces the empty-end AUTO-only split workaround with native MoveTextAttr_To_AttrSet for both represented split paragraphs, retaining source traversal stop conditions, DontMove and changed-item deletion ownership. Preserve conscious IO deviations and all existing semantic states; full native CutText and list split remain separate."
 sections:
@@ -162,6 +175,10 @@ sections:
 
     Verified final outcome:20new app cases,12168distinct app/309files,109inventory/36files,5scripts/2files,120Chromium all closed. ONE full upstream-absent profile only; initial12167app allpassed with one dead snapshot mode branch unexecuted and one inventory class-symbol metadata failure. Only one failed inventory case passed once; one genuinely new sparse native boundary case failed for omitted NORMAL fixture item, corrected explicit native item plus before/after assertions and passed when retried alone. All19 previously passed cases in that file skipped, no passing full/build/suite/case replay. Actual final merged L/S/F/B100%:app12289lines/13457statements/3370functions/10032branches;inventory1464/1523/384/1080. Exact unchanged-location carry42statements/19functions/17branches for final docundo owner, actual maps only ignored appcache. Original three production hashes unchanged after full profile; final docundo dead-mode removal validated changed-file statics and new sparse-item behavior, final build explicitly predates that removal. Vendor restored before all5source audits; allpass/0semantic violations. Scope8paths,405prior test files,404byte-identical and one exact native boundary accessor migration;250prior semantic states/defaults/classifications/exceptions and prior evidence preserved, additive evidence for4existing owners. AP ignored-inclusive scan4176files/0forbidden.
     Residuals: native split still captures independent prefix/suffix rather than complete CutImpl ownership; zero-prefix CopyAttr/full hint identity/strict interior movement, list restart/counting/id/level reset, conditional/outline next-style logic and registered content indices/frame/client/redline/fly lifetimes remain unverified. Removed boundary copies supported direct character items only; noncharacter paragraph/list items and collection swapping/physical undo SwNodes extras/postits ownership remain unverified. Actual disconnected nodes still belong to original SwNodes. Native point/dummy/endless/other-family attributes are not represented; nullable-end query test covers a source guard only. Empty-end copied hint snapshot flags and DontMove collapsed caret inheritance remain partial. Plain clipboard encoding/options/formfeed/native rich/internal/structured table transfer, numbered-cell import/merged/nested/protected/layout and broad UI/list behavior remain unverified. Conscious save/open/recovery deviations preserved. No whole-module or broad goal completion. Next native paragraph split list/default/style ownership or full native CutImpl as one bounded leaf.
+extensions:
+  implementation_commit:
+    hash: "7a4035b66c11301e681eb6decfa0c68be79d6cee"
+    message: "🧩 4YCSJP code: move split paragraph attributes and preserve native undo boundary items"
 id_source: "generated"
 ---
 ## Summary
