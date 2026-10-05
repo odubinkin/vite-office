@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610050828-ZJ34MV",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T08:48:42.019Z",
+  "verdict": "pass",
+  "summary": "Same-actor read-only review of exact semantic SHA ff523141c44ffdf91051eb6f66660aeeee27605e passes independent native list axes shared by body/cell UI and print bounds;full parity unverified.",
+  "evaluated_sha": "ff523141c44ffdf91051eb6f66660aeeee27605e",
+  "blueprint_digest": "672c5ec4ed2bc4460235cd6a75260966270dd485a5dea7e573d43d79e04bc675",
+  "findings": [
+    "Core resolves alignment mask and counted legacy first-line short/compatibility;React paragraphIndentWins and layout listGeometryWins decisions removed.45newappfirstpass,first11998/1failedoldfixture and107/1failednewChromium;exact1+1closure,100actualcoverage,no passing replay.380priorfiles379identical,soleoldfixturetwoexpectednumbers only.244states/defaults/deviations unchanged,fiverestored audits pass;no independent review claim."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610050828-ZJ34MV/README.md",
+    ".agentplane/tasks/202610050828-ZJ34MV/evidence/scope-and-native-hashes.json",
+    ".agentplane/tasks/202610050828-ZJ34MV/evidence/absent-profile.json",
+    ".agentplane/tasks/202610050828-ZJ34MV/evidence/failed-only-replay.json",
+    ".agentplane/tasks/202610050828-ZJ34MV/evidence/restored-source-audits.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "ODF table cell list import is currently rejected and remains a gap;full follower widths/min-gap/wrapping,RTL/fontrelative/cellclamping,HomeEnd/table navigation/fullframes/history/UI and broad goal unverified."
+  ]
+}
