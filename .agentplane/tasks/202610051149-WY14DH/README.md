@@ -4,7 +4,7 @@ title: "Own selected table text deletion in native edit-shell ranges"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T12:52:19.497Z"
+  updated_by: "CODER"
+  note: "Verified bounded selected-cell deletion: native eddel ring/flat-section ownership, sequential SwUndoDelete history, table-mode caret exit/Undo restoration and continued input. Six statics, ONE upstream-absent full profile, exact failed/new closures, changed-file statics and five restored source audits pass;25new app and2new Chromium cases closed,394old test files byte-identical,246old semantic states/defaults/exceptions retained. Actual merged/aligned coverage100. Final empty-source CopyAttr fix verified by focused native/Chromium and changed-source checks after initial build, without successful replay. Exact-SHA EVALUATOR pass on ca83c26ff092, broad residuals recorded; no AP sources/helpers or network/outside access."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T12:51:42.680Z"
+  updated_by: "EVALUATOR"
+  note: "Exact ca83c26ff092 SHA passes bounded selected-cell deletion scope;25new app/2new Chromium cases closed,394prior tests byte-identical,100actual coverage; full/native broader parity remains unverified."
+  evaluated_sha: "ca83c26ff092f7a8a84a1407b0f12bcef599c666"
+  blueprint_digest: "1094067749a1ebe9b06fd1cf54074b79cc422e263629d65d5f5f8a387d3e0556"
+  evidence_refs:
+    - ".agentplane/tasks/202610051149-WY14DH/README.md"
+    - ".agentplane/tasks/202610051149-WY14DH/quality/20261005-125142680-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610051149-WY14DH/quality/20261005-125142680-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610051149-WY14DH/quality/20261005-125142680-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610051149-WY14DH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610051149-WY14DH/evidence/evaluated-sha-audit.json"
+    - ".agentplane/tasks/202610051149-WY14DH/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610051149-WY14DH/evidence/final-coverage.json"
+  findings:
+    - "Same-agent explicit EVALUATOR phase, no independent reviewer claim. Native eddel rings/temporary flat-cell ranges and sequential node-index history remove the private wrtsh selection deletion owner. Empty-source CopyAttr merging fixed from native code. Failed/new-only closures and source audits satisfy approved contract; provenance prior order restored with values unchanged."
 commit: null
 comments:
   -
@@ -37,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native ring/section selected table deletion in core eddel, preserve table structure/history and existing deviations, then one upstream-absent full profile and failed/new-only closure."
+  -
+    type: "verify"
+    at: "2026-10-05T12:52:19.497Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified bounded selected-cell deletion: native eddel ring/flat-section ownership, sequential SwUndoDelete history, table-mode caret exit/Undo restoration and continued input. Six statics, ONE upstream-absent full profile, exact failed/new closures, changed-file statics and five restored source audits pass;25new app and2new Chromium cases closed,394old test files byte-identical,246old semantic states/defaults/exceptions retained. Actual merged/aligned coverage100. Final empty-source CopyAttr fix verified by focused native/Chromium and changed-source checks after initial build, without successful replay. Exact-SHA EVALUATOR pass on ca83c26ff092, broad residuals recorded; no AP sources/helpers or network/outside access."
 doc_version: 3
-doc_updated_at: "2026-10-05T12:50:52.451Z"
+doc_updated_at: "2026-10-05T12:52:19.574Z"
 doc_updated_by: "CODER"
 description: "Move selection deletion from the single-cursor wrtsh editing helper into core eddel ownership; traverse native rings and partition ordinary flat-table cross-cell selections without joining boxes, preserve one history unit and native table-mode exit."
 sections:
@@ -64,7 +88,41 @@ sections:
     3. Native/core cases prove actual ring ownership, DeleteSel marked/nonempty ranges and table section partitions, full multi-paragraph selected boxes and partial cross-cell spans, untouched table/row/column/box identities and neighbors, empty selected cells, normalization/direction and one history unit with repeated Undo/Redo, hints/direct paragraph/list items, native caret/table-mode exit/reconstruction and continued insertion/ODT serialization. Mounted and Chromium actual Delete/Backspace routes prove DOM rendering/selection paint/history/continued input. Existing tests byte-identical unless separately source-confirmed correction approved and recorded.
     4. Restore vendor before five audits: writer resource generation --check, source-tree, source-provenance, inventory invariants and parity; repeat failed audits only. Preserve all246existing semantic states/defaults/classifications/exceptions and register new native eddel module unverified with precise local/upstream/test references. Scope/old-test/changed-file/AP artifact checks, exact-SHA same-agent EVALUATOR phase before quality report, recorded verification and canonical finish, parent progress checkpoint; clean final tracked state. Broad goal remains active.
     5. Failed/new-only closure after the initial profile: four exact new app failures, one exact inventory CLI failure and two exact new Chromium failures. Additional unexecuted zero-length copy/merge and rejected nonempty IS_COPY cases only. Preserve all old test files byte-identical; correct only new browser count to include native header th plus td. Changed-source statics for added four owner paths; final coverage combines real initial/closure counters with exact code-location alignment for changed existing sources. Initial full successful build/115passing Chromium precede this source fix; no successful replay. Final modified native owners are exercised by focused native/mounted/Chromium failed/new closure and type/changed-file checks; report this validation limit.
-  Verification: "Pending authorized implementation and deterministic validation."
+  Verification: |-
+    Pending authorized implementation and deterministic validation.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T12:52:19.497Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified bounded selected-cell deletion: native eddel ring/flat-section ownership, sequential SwUndoDelete history, table-mode caret exit/Undo restoration and continued input. Six statics, ONE upstream-absent full profile, exact failed/new closures, changed-file statics and five restored source audits pass;25new app and2new Chromium cases closed,394old test files byte-identical,246old semantic states/defaults/exceptions retained. Actual merged/aligned coverage100. Final empty-source CopyAttr fix verified by focused native/Chromium and changed-source checks after initial build, without successful replay. Exact-SHA EVALUATOR pass on ca83c26ff092, broad residuals recorded; no AP sources/helpers or network/outside access.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T12:50:52.451Z, excerpt_hash=sha256:7d6c490ace30ebf4a55d0b11ed99cfe1b3283ff64348353247ae01140f291cc7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051149-WY14DH/blueprint/resolved-snapshot.json
+    - old_digest: 1094067749a1ebe9b06fd1cf54074b79cc422e263629d65d5f5f8a387d3e0556
+    - current_digest: 1094067749a1ebe9b06fd1cf54074b79cc422e263629d65d5f5f8a387d3e0556
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051149-WY14DH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610051149-WY14DH -m 🧩 WY14DH task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task semantic commit using a new in-scope task; preserve history and registered conscious deviations."
   Findings: |-
     Read-only preflight: clean main at 3ba3b1f0c4b174354af74199e993a70a0e0d84cd; direct workflow, previous iteration148 verified progress, parent only active. Native eddel.cxx Delete loops GetRingContainer with grouped history; DeleteSel uses temporary section ranges and DeleteAndJoin without crossing boxes. Current wrtsh helper deletes only first ring cursor. Pinned references read in place only.
@@ -117,6 +175,39 @@ Iteration149 atomic CODER leaf under standing upstream UI/refactoring authorizat
 ## Verification
 
 Pending authorized implementation and deterministic validation.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T12:52:19.497Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified bounded selected-cell deletion: native eddel ring/flat-section ownership, sequential SwUndoDelete history, table-mode caret exit/Undo restoration and continued input. Six statics, ONE upstream-absent full profile, exact failed/new closures, changed-file statics and five restored source audits pass;25new app and2new Chromium cases closed,394old test files byte-identical,246old semantic states/defaults/exceptions retained. Actual merged/aligned coverage100. Final empty-source CopyAttr fix verified by focused native/Chromium and changed-source checks after initial build, without successful replay. Exact-SHA EVALUATOR pass on ca83c26ff092, broad residuals recorded; no AP sources/helpers or network/outside access.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T12:50:52.451Z, excerpt_hash=sha256:7d6c490ace30ebf4a55d0b11ed99cfe1b3283ff64348353247ae01140f291cc7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051149-WY14DH/blueprint/resolved-snapshot.json
+- old_digest: 1094067749a1ebe9b06fd1cf54074b79cc422e263629d65d5f5f8a387d3e0556
+- current_digest: 1094067749a1ebe9b06fd1cf54074b79cc422e263629d65d5f5f8a387d3e0556
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051149-WY14DH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610051149-WY14DH -m 🧩 WY14DH task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
