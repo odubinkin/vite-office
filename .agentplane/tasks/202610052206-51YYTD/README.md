@@ -4,7 +4,7 @@ title: "Route Writer paragraph Tab through native numbering ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T22:23:52.694Z"
+  updated_by: "CODER"
+  note: "Verified native paragraph/list/cell Tab routing at semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d; all declared checks and sameagent exactSHA quality 20261005-222309179-recovery-context pass. ONE absent profile; final12536app109inventory5scripts139Chromium,100%app/inventorycoverage.27newapp2newbrowser;426prior tests424identical2exactsourceconfirmed corrections. Outline/fullKeyInput/broadparity unverified; consciousIOdeviations preserved."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved iteration166 native paragraph Tab routing under standing explicit iterative authorization."
+  -
+    type: "verify"
+    at: "2026-10-05T22:23:52.694Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native paragraph/list/cell Tab routing at semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d; all declared checks and sameagent exactSHA quality 20261005-222309179-recovery-context pass. ONE absent profile; final12536app109inventory5scripts139Chromium,100%app/inventorycoverage.27newapp2newbrowser;426prior tests424identical2exactsourceconfirmed corrections. Outline/fullKeyInput/broadparity unverified; consciousIOdeviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T22:21:41.563Z"
+doc_updated_at: "2026-10-05T22:23:52.744Z"
 doc_updated_by: "CODER"
 description: "Iteration166: unify represented ordinary body/list/table Tab and ShiftTab routing, extract native numfunc::NumDownChangesIndent into number.ts, remove table-only event adapter contract; assigned outline style routing remains explicitly unsupported pending native OutlineUpDown. Standing iterative goal authorization; one executable leaf."
 sections:
@@ -80,7 +86,41 @@ sections:
     3. Actual core helper all reachable numbered/none/equal/different indent/current/next types/max level/no-rule, body/list/cell priority, forward/reverse/marked selections/multi-range as supported, top/bottom consumed no-op, literal tab selection insertion/history; mounted real DOM native ranges/rendering/list levels/focus and actual production Chromium at1280/390. Preserve assigned-outline unsupported boundary and modifier/composition/null-selection boundaries. No HandleTableTab remains; no compatibility wrapper; number.ts native responsibility rather than browser heuristic.
     4. 426 prior tests:424 byte-identical; only source-confirmed old body Tab refusal/method rename correction in native-table-traversal.test.ts and native-table-tab.test.tsx. 253 existing semantic records states/defaults/classifications/IOexceptions/evidence preserved; evidence and responsibility append only for three owners, no full-module promotion.
     5. Five restored audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/sourcehash/APignoredinclusive/doctor/routing/diffcheck, sameagent exactsemanticSHA EVALUATOR pass, recordverify/canonicalmeaningfulfinish, parentFindings wholepreserving append; cleantracked/untracked. Overall goal staysACTIVE.
-  Verification: "Pass: six initial declared static gates, changed-file checks, one absent profile with original2failed-only Chromium closure, actual100%app/inventorycoverage, five restored source audits, exact scope/prior-test/metadata/sourcehash/APscan/doctor/routing. Same-agent exact semantic SHA quality and canonicalfinish pending."
+  Verification: |-
+    Verified all approved scope and required checks. Six initial statics, changed-file checks, ONE absent full profile with original2failed-only Chromium closure, actual100%app/inventorycoverage, five restoredsourceaudits, exact scope/prior-test/metadata/sourcehash/APignoredscan/doctor/routingpass. Final12536app109inventory5scripts139distinctChromium,27newapp2newbrowser,0flaky.426prior tests424byteidentical2exactsourceconfirmed corrections;253states/defaults/classes/IOexceptions/evidence preserved. Semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d reviewed by same current agent EVALUATOR quality 20261005-222309179-recovery-context evaluated exact semantic SHA,verdictpass. Full outline/forms/modifier/fullKeyInput/broadparity unverified; consciousIOdeviations unchanged,parentDOING/goalACTIVE.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T22:23:52.694Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native paragraph/list/cell Tab routing at semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d; all declared checks and sameagent exactSHA quality 20261005-222309179-recovery-context pass. ONE absent profile; final12536app109inventory5scripts139Chromium,100%app/inventorycoverage.27newapp2newbrowser;426prior tests424identical2exactsourceconfirmed corrections. Outline/fullKeyInput/broadparity unverified; consciousIOdeviations preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T22:23:51.965Z, excerpt_hash=sha256:297123d206966b9c1c9f7769dd7de8235a5ef14cf89cd14c9c03ad236b1046e8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052206-51YYTD/blueprint/resolved-snapshot.json
+    - old_digest: 5a43157fd4ce3333c2fcbbf30d841b7646bbb69aa43eb18231d5b90b2bec96c0
+    - current_digest: 5a43157fd4ce3333c2fcbbf30d841b7646bbb69aa43eb18231d5b90b2bec96c0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610052206-51YYTD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610052206-51YYTD
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task semantic commit if needed; preserve task traceability and conscious IO deviations."
   Findings: |-
     Iteration166 final verified progress. Native numfunc::NumDownChangesIndent now belongs to number.ts using actual SwEditShell cursor, real numbering rule, current/next types, NUMBER_NONE indentation comparison and maximum level. SwEditWin.HandleTab replaces table-only HandleTableTab without compatibility wrapper. Paragraph-start numbering priority delegates promotion/demotion to existing native NumUpDown/history; identical NONE formats insert literal tab; ordinary body Tab inserts text through native typing, ShiftTab is consumed End no-op; cells retain native traversal. Browser adapter maps actual DOM selection/unmodified noncomposing Tab to the same owner, no browser list heuristic/new model/operation closure.
@@ -88,7 +128,7 @@ sections:
     Command: ONE full upstream-absent build/app/inventory/scripts/Chromium profile, finally restore. Result: app/inventory/scripts/build pass,2 new browser fixture failures closed by failed-only run. Evidence:12536 app/109 inventory/5 scripts pass;137 priorChromium pass and2 new fixtures initially rejected by existing ODF import because no column declarations. Corrected only new fixture with two native column widths, unchanged product bytes/bundle and all assertions. Failed-only2 Chromium pass0failed0flaky at1280/390. Final distinct12536app109inventory5scripts139Chromium pass; no passing/full-profile replay. Native actual body/bullet/numbered/NUMBER_NONE/equal/different indent/current/next types/max/no-rule/selection directions/paragraph ranges/list limits/native history; mounted DOM levels/caret/plain ShiftTab/selected replacement and production list/text/cell focus/typing/UndoRedo prove bounded behavior. All executable source bytes identical to once-built/covered profile.
     Command: actual final coverage integrity audit. Result:100%app/inventoryL/S/F/B. Evidence: app12731L/13952S/3407F/10376B and inventory1464/1523/384/1080; exact original maps/source hashes retain actual counters, no fabricated or merged counters, source bytes unchanged. Actual maps/results only ignored appcache, AP bounded English prose/counts/hashes/outcomes/exactfailednames.
     Command: five restored source audits/scope/prior-test/metadata/sourcehash/APignored-inclusive/doctor/routing/diffcheck. Result: pass. Evidence: source-provenance initially rejected newly appended namespace-qualified marker because C++ defines the function inside namespace without qualifier; corrected only two new metadata symbol strings to exact native NumDownChangesIndent. Only failed provenance gate then remaining first-run invariants/parity, no passing audits replay.253 prior semantic states/defaults/classes/IOexceptions/evidence preserved, evidence/responsibility additions for3 owners; no new modules/full parity promotion. AP4397files0forbidden before closure;doctor0errors2pre-existing warnings; routingpass. No upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/rawdiagnostics in AP, vendor restored.
-    Limits: eligible assigned-outline paragraph-at-start operations remain explicitly unsupported pending native OutlineUpDown, preserving prior fallback rather than silently inserting text. Native null/nontext cursor fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter/full KeyInput and full core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged. Same current agent will perform explicit EVALUATOR exact semantic SHA review, without independent-reviewer claim; parent DOING/goal ACTIVE.
+    Limits: eligible assigned-outline paragraph-at-start operations remain explicitly unsupported pending native OutlineUpDown, preserving prior fallback rather than silently inserting text. Native null/nontext cursor fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter/full KeyInput and full core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged. Same current agent performed explicit EVALUATOR exact semantic SHA 0d207b4ed1130786aa557c92d435cdf6826b6a0d pass via quality 20261005-222309179-recovery-context, without independent-reviewer claim; parent DOING/goal ACTIVE.
 id_source: "generated"
 ---
 ## Summary
@@ -123,7 +163,40 @@ Iteration166 continues standing expressly authorized iterative goal, one atomic 
 
 ## Verification
 
-Pass: six initial declared static gates, changed-file checks, one absent profile with original2failed-only Chromium closure, actual100%app/inventorycoverage, five restored source audits, exact scope/prior-test/metadata/sourcehash/APscan/doctor/routing. Same-agent exact semantic SHA quality and canonicalfinish pending.
+Verified all approved scope and required checks. Six initial statics, changed-file checks, ONE absent full profile with original2failed-only Chromium closure, actual100%app/inventorycoverage, five restoredsourceaudits, exact scope/prior-test/metadata/sourcehash/APignoredscan/doctor/routingpass. Final12536app109inventory5scripts139distinctChromium,27newapp2newbrowser,0flaky.426prior tests424byteidentical2exactsourceconfirmed corrections;253states/defaults/classes/IOexceptions/evidence preserved. Semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d reviewed by same current agent EVALUATOR quality 20261005-222309179-recovery-context evaluated exact semantic SHA,verdictpass. Full outline/forms/modifier/fullKeyInput/broadparity unverified; consciousIOdeviations unchanged,parentDOING/goalACTIVE.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T22:23:52.694Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native paragraph/list/cell Tab routing at semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d; all declared checks and sameagent exactSHA quality 20261005-222309179-recovery-context pass. ONE absent profile; final12536app109inventory5scripts139Chromium,100%app/inventorycoverage.27newapp2newbrowser;426prior tests424identical2exactsourceconfirmed corrections. Outline/fullKeyInput/broadparity unverified; consciousIOdeviations preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T22:23:51.965Z, excerpt_hash=sha256:297123d206966b9c1c9f7769dd7de8235a5ef14cf89cd14c9c03ad236b1046e8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052206-51YYTD/blueprint/resolved-snapshot.json
+- old_digest: 5a43157fd4ce3333c2fcbbf30d841b7646bbb69aa43eb18231d5b90b2bec96c0
+- current_digest: 5a43157fd4ce3333c2fcbbf30d841b7646bbb69aa43eb18231d5b90b2bec96c0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610052206-51YYTD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610052206-51YYTD
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -136,4 +209,4 @@ Command: six initial statics and changed-file checks. Result: pass. Evidence: in
 Command: ONE full upstream-absent build/app/inventory/scripts/Chromium profile, finally restore. Result: app/inventory/scripts/build pass,2 new browser fixture failures closed by failed-only run. Evidence:12536 app/109 inventory/5 scripts pass;137 priorChromium pass and2 new fixtures initially rejected by existing ODF import because no column declarations. Corrected only new fixture with two native column widths, unchanged product bytes/bundle and all assertions. Failed-only2 Chromium pass0failed0flaky at1280/390. Final distinct12536app109inventory5scripts139Chromium pass; no passing/full-profile replay. Native actual body/bullet/numbered/NUMBER_NONE/equal/different indent/current/next types/max/no-rule/selection directions/paragraph ranges/list limits/native history; mounted DOM levels/caret/plain ShiftTab/selected replacement and production list/text/cell focus/typing/UndoRedo prove bounded behavior. All executable source bytes identical to once-built/covered profile.
 Command: actual final coverage integrity audit. Result:100%app/inventoryL/S/F/B. Evidence: app12731L/13952S/3407F/10376B and inventory1464/1523/384/1080; exact original maps/source hashes retain actual counters, no fabricated or merged counters, source bytes unchanged. Actual maps/results only ignored appcache, AP bounded English prose/counts/hashes/outcomes/exactfailednames.
 Command: five restored source audits/scope/prior-test/metadata/sourcehash/APignored-inclusive/doctor/routing/diffcheck. Result: pass. Evidence: source-provenance initially rejected newly appended namespace-qualified marker because C++ defines the function inside namespace without qualifier; corrected only two new metadata symbol strings to exact native NumDownChangesIndent. Only failed provenance gate then remaining first-run invariants/parity, no passing audits replay.253 prior semantic states/defaults/classes/IOexceptions/evidence preserved, evidence/responsibility additions for3 owners; no new modules/full parity promotion. AP4397files0forbidden before closure;doctor0errors2pre-existing warnings; routingpass. No upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/rawdiagnostics in AP, vendor restored.
-Limits: eligible assigned-outline paragraph-at-start operations remain explicitly unsupported pending native OutlineUpDown, preserving prior fallback rather than silently inserting text. Native null/nontext cursor fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter/full KeyInput and full core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged. Same current agent will perform explicit EVALUATOR exact semantic SHA review, without independent-reviewer claim; parent DOING/goal ACTIVE.
+Limits: eligible assigned-outline paragraph-at-start operations remain explicitly unsupported pending native OutlineUpDown, preserving prior fallback rather than silently inserting text. Native null/nontext cursor fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter/full KeyInput and full core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged. Same current agent performed explicit EVALUATOR exact semantic SHA 0d207b4ed1130786aa557c92d435cdf6826b6a0d pass via quality 20261005-222309179-recovery-context, without independent-reviewer claim; parent DOING/goal ACTIVE.
