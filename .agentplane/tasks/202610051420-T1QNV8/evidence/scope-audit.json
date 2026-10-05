@@ -1,0 +1,60 @@
+{
+  "base": "65a7c8c73ae21b4a82f9e6a32e18b8d18017e8ba",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/untblk.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-storage.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/undo/docundo.ts"
+  ],
+  "priorTestFiles": 404,
+  "priorTestFilesByteIdentical": 403,
+  "sourceConfirmedChangedPriorTest": "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+  "changedPriorAssertions": 2,
+  "correction": "Only applied storage count literals9and4 become0; native SetInsertRange records range coordinates without retaining live content.",
+  "existingSemanticRecordsPreserved": 250,
+  "semanticRecords": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/untblk.ts",
+    "apps/office/src/sw/source/core/undo/docundo.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/undo/undobj.cxx",
+      "sha256": "11321551072e2b476934ebd9cb906979de0f5542d45e9e0c7bf06023cfd1f287"
+    },
+    {
+      "path": "sw/source/core/undo/untblk.cxx",
+      "sha256": "dc42485f60714543f84e9dbbcb84d885af811661fad67f8eb164d7aeade3bfcc"
+    },
+    {
+      "path": "sw/source/core/undo/docundo.cxx",
+      "sha256": "25317403b9e01736eef297c38a376c494190f86d8631c4bfaefb576d87e7967d"
+    },
+    {
+      "path": "sw/inc/undobj.hxx",
+      "sha256": "7c5917969334f17845508f25e2b7c84477396c173ab5428e1348f9db45e0c5ed"
+    },
+    {
+      "path": "sw/inc/swtypes.hxx",
+      "sha256": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361"
+    }
+  ],
+  "newAppCases": 12,
+  "newChromiumCases": 0,
+  "appCases": 12148,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/undo/undobj.ts": "9335291d20db6d4aa41b30c7330eec7906a13447b222a461868442d4d9d3b21c",
+    "apps/office/src/sw/source/core/undo/untblk.ts": "d7ad23a511b5ff3abfb81e5ca419989e72e4aebe5459747b33e3135b6a3b5559",
+    "apps/office/src/sw/source/core/undo/docundo.ts": "438eea4939b51f67bab45e2fde670bf65a74b7bd684a15357336e565a43667b9"
+  },
+  "validationLimit": "All final production code passed six statics and ONE successful upstream-absent full build/app/inventory/scripts/Chromium profile; no post-profile production changes or test replay. Complete physical native undo SwNodes sections, non-end/suffix/fly/redline/index/history/cursor supplier/content correction contracts remain unverified."
+}
