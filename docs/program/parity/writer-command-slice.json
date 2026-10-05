@@ -2091,7 +2091,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
-            "marker": "WriterTextRunProjection"
+            "marker": "WriterTextPortionProjection"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -4826,7 +4826,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
-            "marker": "WriterTextRunProjection"
+            "marker": "WriterTextPortionProjection"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",

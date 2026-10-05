@@ -16,8 +16,12 @@ import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
 import type { SfxMediumOperationStatus } from "../../../sfx2/source/doc/docfile";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
-import { SwTextNode, projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
-import { type WriterTextRun } from "../../source/filter/basflt/writer-transfer";
+import { SwTextNode } from "../../source/core/txtnode/ndtxt";
+import { SwAttrIter } from "../../source/core/text/itratr";
+import { GetTextAttrMode } from "../../inc/swtypes";
+import { SwFormatINetFormat } from "../../source/core/txtnode/fmtatr2";
+import { SvxUnderlineItem } from "../../../editeng/source/items/textitem";
+import { RES_CHRATR_UNDERLINE, RES_TXTATR_INETFMT } from "../../inc/hintids";
 import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
@@ -78,7 +82,7 @@ export interface WriterParagraphProjection {
   readonly uncountedListTextLeftPt?: number;
   readonly numRuleName: string;
   readonly nodeIndex: number;
-  readonly runs: readonly WriterProjectedTextRun[];
+  readonly runs: readonly WriterTextPortion[];
   readonly rulerTabStops?:
     | readonly Readonly<{ index: number; positionPt: number; adjustment: SvxTabAdjust }>[]
     | undefined;
@@ -97,9 +101,21 @@ export interface WriterParagraphListLayout {
   readonly listTabPositionPt: number;
 }
 
-/** One text run with its linear-time projection boundary. */
-export interface WriterProjectedTextRun extends WriterTextRun {
+/** One immutable display portion; no filter or transfer record participates in rendering. */
+export interface WriterTextPortion {
+  readonly attributes: Readonly<{
+    bold: boolean;
+    italic: boolean;
+    underline: boolean;
+    color?: string;
+    highlight?: string;
+    fontFamily?: string;
+    fontFamilyGeneric?: string;
+    fontSizeTwips?: number;
+  }>;
+  readonly hyperlink?: Readonly<{ url: string; targetFrame?: string }>;
   readonly startOffset: number;
+  readonly text: string;
 }
 
 /** Browser-ready values projected from effective Writer paragraph items. */
@@ -242,7 +258,6 @@ export class WriterViewProjection {
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
         const fontFamilyGeneric = font.GetGenericFamily();
-        let runOffset = 0;
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
           rulerTabSettings: Object.freeze({
@@ -306,21 +321,7 @@ export class WriterViewProjection {
           ...(listMarker === undefined ? {} : { listMarker }),
           numRuleName: node.GetNumRuleName(),
           nodeIndex: node.GetIndex(),
-          runs: Object.freeze(
-            projectWriterTextRuns(node).map(
-              /** Freezes one primitive text run. @param run - Live run value. @returns Frozen run. */ (
-                run,
-              ) => {
-                const projected = Object.freeze({
-                  ...run,
-                  attributes: Object.freeze({ ...run.attributes }),
-                  startOffset: runOffset,
-                });
-                runOffset += run.text.length;
-                return projected;
-              },
-            ),
-          ),
+          runs: projectTextPortions(node),
           style: node.GetParagraphStyle(),
           styleDisplayName: node.GetTextFormatColl().GetName(),
           text: node.GetText(),
@@ -529,4 +530,67 @@ export class WriterViewStore {
     this.unsubscribe();
     this.listeners.clear();
   }
+}
+
+/** Projects native item stacks at text boundaries into immutable platform display values. @param node - Actual body or cell owner. @returns Frozen display portions. */
+function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
+  const iterator = new SwAttrIter(node),
+    portions: WriterTextPortion[] = [];
+  const inherited = node.GetSwAttrSet(),
+    handler = iterator.GetAttrHandler();
+  /** Tests whether an optional display item is authored or overrides the paragraph default. @param which - Item family. @returns Whether a span needs its value. */
+  function authored(which: number): boolean {
+    return (
+      inherited.GetItemIfSet(which, true) !== undefined ||
+      handler.ReadItem(which) !== node.GetAttr(which)
+    );
+  }
+  for (let start = 0; start < node.Len();) {
+    iterator.Seek(start);
+    const end = iterator.GetNextAttr(),
+      font = handler.ReadItem(RES_CHRATR_FONT) as SvxFontItem;
+    const inet = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default)?.GetAttr();
+    const link = inet instanceof SwFormatINetFormat ? inet.GetHyperlink() : undefined;
+    const generic = font.GetGenericFamily();
+    portions.push(
+      Object.freeze({
+        startOffset: start,
+        text: node.GetText().slice(start, end),
+        attributes: Object.freeze({
+          bold: (handler.ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
+          italic: (handler.ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
+          underline: (handler.ReadItem(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),
+          ...(authored(RES_CHRATR_COLOR)
+            ? { color: (handler.ReadItem(RES_CHRATR_COLOR) as SfxStringItem).GetValue() }
+            : {}),
+          ...(authored(RES_CHRATR_HIGHLIGHT)
+            ? { highlight: (handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue() }
+            : {}),
+          ...(authored(RES_CHRATR_FONT)
+            ? {
+                fontFamily: font.GetResolvedFamilyName(),
+                ...(generic === undefined ? {} : { fontFamilyGeneric: generic }),
+              }
+            : {}),
+          ...(authored(RES_CHRATR_FONTSIZE)
+            ? {
+                fontSizeTwips: (
+                  handler.ReadItem(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
+                ).GetHeight(),
+              }
+            : {}),
+        }),
+        ...(link === undefined
+          ? {}
+          : {
+              hyperlink: Object.freeze({
+                url: link.url,
+                ...(link.targetFrame === undefined ? {} : { targetFrame: link.targetFrame }),
+              }),
+            }),
+      }),
+    );
+    start = end;
+  }
+  return Object.freeze(portions);
 }

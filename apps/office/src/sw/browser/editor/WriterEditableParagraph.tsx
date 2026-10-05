@@ -1,12 +1,11 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
 
 import { Fragment, useRef } from "react";
-import type { WriterTextRun } from "../../source/filter/basflt/writer-transfer";
 import { browserFontFamily } from "./writer-font-family";
 
 import type {
   WriterParagraphProjection as WriterParagraph,
-  WriterProjectedTextRun,
+  WriterTextPortion,
 } from "../presentation/writer-view-projection";
 
 /** Immutable projection properties for one Writer text node. */
@@ -197,8 +196,8 @@ export function WriterEditableParagraph({
               /** Projects one canonical text run with a deterministic view key. @param run - Immutable run. @returns Semantic run projection. */ (
                 run,
               ) => (
-                <Fragment key={getWriterRunProjectionKey(paragraph.id, run)}>
-                  <WriterTextRunProjection
+                <Fragment key={getWriterPortionProjectionKey(paragraph.id, run)}>
+                  <WriterTextPortionProjection
                     inheritedBold={paragraph.computedStyle.fontWeight === 700}
                     inheritedFontFamily={paragraph.computedStyle.fontFamily}
                     inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
@@ -221,7 +220,7 @@ export function WriterEditableParagraph({
 }
 
 /** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
-export function WriterTextRunProjection({
+export function WriterTextPortionProjection({
   inheritedBold,
   inheritedFontFamily,
   inheritedItalic,
@@ -230,7 +229,7 @@ export function WriterTextRunProjection({
   inheritedBold: boolean;
   inheritedFontFamily: string | undefined;
   inheritedItalic: boolean;
-  run: WriterTextRun;
+  run: Pick<WriterTextPortion, "text" | "attributes" | "hyperlink">;
 }>): React.ReactNode {
   let content: React.ReactNode = run.text;
   if (run.attributes.highlight !== undefined)
@@ -257,7 +256,9 @@ export function WriterTextRunProjection({
   const runFamily = run.attributes.fontFamily ?? inheritedFontFamily;
   if (run.attributes.fontFamily !== undefined)
     content = (
-      <span style={{ fontFamily: browserFontFamily(runFamily, undefined) }}>{content}</span>
+      <span style={{ fontFamily: browserFontFamily(runFamily, run.attributes.fontFamilyGeneric) }}>
+        {content}
+      </span>
     );
   if (run.attributes.italic) content = <em>{content}</em>;
   else if (inheritedItalic) content = <span style={{ fontStyle: "normal" }}>{content}</span>;
@@ -278,7 +279,7 @@ export function WriterTextRunProjection({
 }
 
 /** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
-function getWriterRunProjectionKey(paragraphId: string, run: WriterProjectedTextRun): string {
+function getWriterPortionProjectionKey(paragraphId: string, run: WriterTextPortion): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }

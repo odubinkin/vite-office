@@ -2859,6 +2859,18 @@
           {
             "path": "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
             "marker": "inherits one document editing host for table paragraphs and restores a whole cell range"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+            "marker": "native attribute stacks compose independent items"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+            "marker": "native display composes overlapping attributes"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+            "marker": "Writer native body and cell portions"
           }
         ],
         "upstream": [
@@ -2905,6 +2917,14 @@
           {
             "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
             "marker": "SvxTextLeftMarginItem::ResolveLeft"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+            "marker": "SwAttrIter::SeekFwd"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/atrstck.cxx",
+            "marker": "SwAttrHandler::Push"
           }
         ]
       },
@@ -2915,7 +2935,8 @@
         "Iteration99 separates authored raw first-line item values from existing automatic paragraph layout. The font-height calculation moves from the text-node convenience getter to the native core text-margin responsibility itrcrsr, where supported Western automatic values obey the existing true-default disregard-line-space setting and false-compatibility proportional/fixed/minimum/leading rules, including zero percent, minimum50percent and integer truncation. Native rule-present numbering bypass keeps raw/list geometry separate. Frozen resolvedFirstLineIndentPt is populated on actual projections while firstLineIndentPt and automatic mode retain authored ruler/dialog contracts; older detached DTOs fall back to raw values. The shared visible/device-measurement paragraph component uses resolved text indentation for unnumbered master frames and zero on follow fragments, keeping existing list marker precedence intact. Owned actual-session evidence checks independent literal twips, direct/inherited raw item ownership, complete values, formatting/Undo/Redo/no-op, retained snapshots, follow/detached/ruler/dialog behavior; Chromium1280/390 product ODT default cases and explicitly controlled existing Worker graph-setting compatibility cases check actual first-glyph Range geometry, raw authoring, history, independent paragraph and later editing. No false-setting ODT persistence claim is made. All300 prior tests remain byte-identical. Native script/language/device font selection, combined rule groups outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain separately unverified. Registered save/open/recovery deviations unchanged; no promotion.",
         "Iteration139 removes the partial table-cell font/spacing/text-run assembler and synthetic node-index identity fallback. Visible cells and closed-shadow measurement use the common WriterEditableParagraph over the same actual native text-node projections,including effective alignment,style,font,color,indent and native GetListLabel/list-layout inputs. One actual-node map is built at the editor boundary;only cell position,editable island and cell block spacing are platform context. Stable paragraph IDs make accessibility descriptions unique and native identities key DOM reuse. Independent owned core-value/DOM/Chromium cases cover the bounded display/history/ODT path. Full native table frame pagination,spacing collapse,Home/navigation,wide selection,nested/merged cells,portion engine and list structural operations remain unverified;all244existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged,no promotion.",
         "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
-        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged."
+        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged.",
+        "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -4580,6 +4601,18 @@
           {
             "path": "apps/office/e2e/writer-native-table-cursor-rings.spec.ts",
             "marker": "Writer selected row character formatting covers full cells and survives Undo Redo"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+            "marker": "native attribute stacks compose independent items"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+            "marker": "native display composes overlapping attributes"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+            "marker": "Writer native body and cell portions"
           }
         ],
         "upstream": [
@@ -4666,6 +4699,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx",
             "marker": "GetRingContainer"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+            "marker": "SwAttrIter::SeekFwd"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/atrstck.cxx",
+            "marker": "SwAttrHandler::Push"
           }
         ]
       },
@@ -4681,7 +4722,8 @@
         "Iteration99 separates authored raw first-line item values from existing automatic paragraph layout. The font-height calculation moves from the text-node convenience getter to the native core text-margin responsibility itrcrsr, where supported Western automatic values obey the existing true-default disregard-line-space setting and false-compatibility proportional/fixed/minimum/leading rules, including zero percent, minimum50percent and integer truncation. Native rule-present numbering bypass keeps raw/list geometry separate. Frozen resolvedFirstLineIndentPt is populated on actual projections while firstLineIndentPt and automatic mode retain authored ruler/dialog contracts; older detached DTOs fall back to raw values. The shared visible/device-measurement paragraph component uses resolved text indentation for unnumbered master frames and zero on follow fragments, keeping existing list marker precedence intact. Owned actual-session evidence checks independent literal twips, direct/inherited raw item ownership, complete values, formatting/Undo/Redo/no-op, retained snapshots, follow/detached/ruler/dialog behavior; Chromium1280/390 product ODT default cases and explicitly controlled existing Worker graph-setting compatibility cases check actual first-glyph Range geometry, raw authoring, history, independent paragraph and later editing. No false-setting ODT persistence claim is made. All300 prior tests remain byte-identical. Native script/language/device font selection, combined rule groups outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain separately unverified. Registered save/open/recovery deviations unchanged; no promotion.",
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
         "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
-        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged."
+        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged.",
+        "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -9966,6 +10008,102 @@
       "upstreamPath": "sw/source/core/table/swtable.cxx",
       "upstreamSymbols": [
         "SwTable::SwTable"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/text/atrstck.ts",
+            "marker": "SwAttrHandler"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+            "marker": "native attribute stacks compose independent items"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+            "marker": "native display composes overlapping attributes"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+            "marker": "Writer native body and cell portions"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/atrstck.cxx",
+            "marker": "SwAttrHandler::Push"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/text/atrstck.ts",
+      "localSymbols": [
+        "SwAttrHandler",
+        "SwAttributeHint"
+      ],
+      "omittedResponsibilities": [
+        "Full SwFont/device change reporting,script/cache/font shaping,redline/merged paragraph/field/paragraph-mark and INET character-style/visited-color ownership are unrepresented and unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/text/atrstck.cxx",
+      "upstreamSymbols": [
+        "SwAttrHandler::Init",
+        "SwAttrHandler::Reset",
+        "SwAttrHandler::Push",
+        "SwAttrHandler::PushAndChg",
+        "SwAttrHandler::PopAndChg"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/text/itratr.ts",
+            "marker": "SwAttrIter"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+            "marker": "native attribute stacks compose independent items"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+            "marker": "native display composes overlapping attributes"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+            "marker": "Writer native body and cell portions"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/itratr.cxx",
+            "marker": "SwAttrIter::SeekFwd"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/text/itratr.ts",
+      "localSymbols": [
+        "SwAttrIter"
+      ],
+      "omittedResponsibilities": [
+        "Full SwFont/device change reporting,script/cache/font shaping,redline/merged paragraph/field/paragraph-mark and INET character-style/visited-color ownership are unrepresented and unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration165 removes filter WriterTextRun/projectWriterTextRuns dependency from UI display. Native SwAttrIter/SwAttrHandler owners traverse actual unmerged node start/end maps and borrow per-item automatic priority stacks/defaults. Browser primitive display portions are projected directly from native pooled items and existing INET query,retaining physical/generic font metadata,stable IDs and shared body/cell/measurement rendering. Literal overlapping different-Which/priority/equal-start/backward/zero/ignore/end/default cases and actual body/cell DOM,editing/history/Worker/production Chromium prove the bounded slice. No broad native status promotion;full SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/visited-color/paragraph-mark effects and broad list/table/UI parity remain unverified.251prior states/defaults/classes/IOexceptions/evidence and423prior testfiles preserved;2new partial native owners stayunverified;conscioussave/open/recovery deviations unchanged."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/text/itratr.cxx",
+      "upstreamSymbols": [
+        "SwAttrIter::Seek",
+        "SwAttrIter::SeekFwd",
+        "SwAttrIter::GetNextAttr",
+        "GetNextAttrImpl"
       ]
     },
     {
