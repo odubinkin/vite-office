@@ -1,0 +1,202 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "de846c51e8f9b3b0a889456384e1b6b21594974d0a75f654519a2576e104551b",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "39e75523598122e1a5bc5db08b5541ed0d9e112b2e55c63ed1d0261f7b142ec3",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "51e71423bd9d453e07697aa342ae823ab606bfe0a7536765c565c1f3d5652fdb",
+    "docs/program/source-provenance.json": "9e9b21c4f399081be98ddad7d21ce5d2038036a89ddfd6d791a0b19b4b6ae0a9",
+    "docs/program/parity/runtime-inventory.json": "6214b1065f0e27bfa12a09d76f2668b8c68a1d20c63ee868ce169769705b3fa3"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "8e11103e7b54255f0f71add7ae009d7597a3424ef11f9d69c13ae8f87e3a28fc",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WCNKTY.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 57258,
+      "sha256": "cc6706451e5447f2b60f0b1ad593c5fd3c989824fed14b4d046798476adf3687",
+      "totals": [
+        "Test Files  2 failed | 282 passed (284)",
+        "Tests  2 failed | 11881 passed (11883)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx > shared native cell paragraph display keeps style descriptions unique across the body and cell paragraphs",
+        "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx > Writer physical page browser UI places table row fragments on physical pages without a scroll container"
+      ],
+      "caseCounts": {
+        "passed": 11881,
+        "failed": 2,
+        "total": 11883
+      },
+      "coverage": {
+        "lines": 99.99,
+        "statements": 99.99,
+        "functions": 99.96,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 11525,
+          "covered": 11524,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "statements": {
+          "total": 12623,
+          "covered": 12622,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "functions": {
+          "total": 3253,
+          "covered": 3252,
+          "skipped": 0,
+          "pct": 99.96
+        },
+        "branches": {
+          "total": 9477,
+          "covered": 9477,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "3c5834a72e7c111aaa4aec2ceb0fd5f14bb16e9c6e856207d52c421456145aca",
+      "incompleteFiles": {
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": {
+          "lines": {
+            "total": 130,
+            "covered": 129,
+            "skipped": 0,
+            "pct": 99.23
+          },
+          "functions": {
+            "total": 47,
+            "covered": 46,
+            "skipped": 0,
+            "pct": 97.87
+          },
+          "statements": {
+            "total": 137,
+            "covered": 136,
+            "skipped": 0,
+            "pct": 99.27
+          },
+          "branches": {
+            "total": 74,
+            "covered": 74,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WCNKTY.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40604,
+      "sha256": "8ce0a32582a589b9ff56f3d4999f14a7b8d97f0f610da6a8e232921206d1b5e5",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "total": 109
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverageMapSHA256": "bcbd59627dfa89bb7f9bf4589c98269867ce57e6fdc0a0f7aa228c6405b5510f",
+      "incompleteFiles": {}
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 220,
+      "sha256": "13c6a7a20232bf87c2614b392970fb01b9bba40fb1d124584f8d572c550c42d1",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13958,
+      "sha256": "2f4b005e4a50880a629fe2085adbfa27365847bf89d0d5b50b5cda4dda1c6162",
+      "totals": [
+        "101 passed (1.3m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T06:01:41.560Z",
+        "duration": 78914.179,
+        "expected": 101,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
