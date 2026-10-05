@@ -1,0 +1,17 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "93facdef7baf305d671411b01e04bbfb25cf7660",
+  "base": "49e5b68b8028e239b6ab879fd54a672a6f9cd271",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "reviewedSemanticDiffBytes": 35166,
+  "reviewedSemanticDiffSHA256": "0fe17df4477305f2c6f3f7d171081fee4f35ecaeb59f4875e3839fbfed728d00",
+  "verdict": "pass",
+  "evidence": "Pinned unnum.cxx NumUpDown SwUndRng/m_nOffset current document replay, NumOrNoNum m_nIndex/nontext guard and counted-only flags, DelNum SwUndRng/m_aNodes index-level restoration inspected.3represented payloads remove stale native node identity; current native slots/ranges used with finally disposal, no adapter/helper/module added.21new body/cell native section-preserving replacement and real shell UndoRedo contracts, collapsed/forward/reversed selection, both deltas, unrelated metadata and captured direct-item independence verified.410prior testfiles unchanged/250states/defaults/exceptions/prior evidence preserved;4paths/1owner.6statics once, ONEfull absent profile12270app pass1newfixturefail/12271,109inventory,5scripts,120Chromium exact final production; only1failed case retried1pass20skipped, no passing replay. Actual same-source maps merged to app/inventory100% L/S/F/B;5restored source audits0semantic violations, AP scan0forbidden/doctor0errors2oldwarnings/routingOK. Administrative start dependency corrected throughCLI/no force; commit-msg rejected invalid code scope because task tags are lists/parity/undo, route recomputed and unchanged staged semantic changes committed under allowed undo scope. No implementation/test/threshold/gate bypass.",
+  "validationLimit": "Represented NumUpDown native numeric range and delta replay, NumOrNoNum numeric counted-only payload/nontext guard, DelNum numeric item/actual-level history entries and current native range replay.21actual native body/cell section-preserving replacement and shell UndoRedo cases, directions and independent unrelated metadata. DelNum still captures portable direct-item snapshots rather than complete native SwHistory; InsNum/ContinueNumbering and other action payload identities, retained split bridge and native physical split ownership remain unverified.120Chromium passed exact final production variant, only test fixture object-versus-node assertion corrected afterward. Conscious IO/recovery exceptions preserved; no fullmodule/broad parity promotion.",
+  "residualRisk": "Full DelNum native SwHistory/conditional collections and InsNum/ContinueNumbering payloads still unverified, other action node references/retained split trailing identity bridge/native fresh-prefix ownership remain open; broad UI/list/table/rendering/redline/rings/layout behavior incomplete. Conscious IO/recovery deviations retained; parent/goal active."
+}
