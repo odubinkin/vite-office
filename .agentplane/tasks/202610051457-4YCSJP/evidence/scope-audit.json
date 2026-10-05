@@ -1,0 +1,55 @@
+{
+  "base": "2d116b1c4a419f41baa4a608d4dd5b44add83847",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-storage.test.ts",
+    "apps/office/src/sw/source/core/undo/docundo.ts"
+  ],
+  "priorTestFiles": 405,
+  "priorTestFilesByteIdentical": 404,
+  "sourceConfirmedChangedPriorTest": "apps/office/src/sw/source/core/undo/native-insert-storage.test.ts",
+  "changedPriorAssertions": 1,
+  "correction": "Only native boundary ownership accessor changes GetText fragment to GetNode hints; all other assertions byte-identical.",
+  "existingSemanticRecordsPreserved": 250,
+  "semanticRecords": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/docundo.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "sw/source/core/docnode/nodes.cxx",
+      "sha256": "00ed4be35d90fd8921927b767c09d2d6ba6ae352e08fec9f291d5ac21e836a0b"
+    },
+    {
+      "path": "sw/source/core/undo/undobj.cxx",
+      "sha256": "11321551072e2b476934ebd9cb906979de0f5542d45e9e0c7bf06023cfd1f287"
+    }
+  ],
+  "newAppCases": 20,
+  "newChromiumCases": 0,
+  "appCases": 12168,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "a1a45bca620d5fe66b7cd3f1281f5440f3eb2921662e1217f3a5db75061d25e2",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "e2351bde4a59fea1b295766479f2983b0d5a84f406a8e1cef71c417a740bcd88",
+    "apps/office/src/sw/source/core/undo/undobj.ts": "85c4ba0f680ec06b62711671e70671511b6afeae715c878180efd13128e5cd96",
+    "apps/office/src/sw/source/core/undo/docundo.ts": "45ffe95722f7e1413bb15ace6ee046d1aadc8023ffa51df1e69fd789a78e2ef0"
+  },
+  "validationLimit": "ONE full initial upstream-absent profile plus failed/new-only closure. Final build predates dead RetainText(copy=false) removal, covered by final changed-file statics and new native sparse-item ownership case. Actual merged counters100% without passing replay. Full native CutImpl/MoveRange/list split resets/zero-prefix CopyAttr/index/frame/lifetime/paragraph-item transfer and physical undo-array owners remain unverified."
+}
