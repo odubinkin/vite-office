@@ -1,0 +1,43 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "new-app",
+      "command": "new table-selection cases only",
+      "profile": "upstream-absent-failed-or-new-only",
+      "exit": 1,
+      "bytes": 13766,
+      "sha256": "f8059072f7207a1bad91aa589ca01529c0f73add3d450e435c6024390f7fd76d",
+      "failedCases": [
+        "clicking an already current empty cell focuses the paragraph without a second editing host"
+      ],
+      "caseCounts": {
+        "passed": 2,
+        "failed": 1,
+        "total": 18
+      },
+      "executedCases": [
+        "row surface delegates to native selection and caret properties apply to its current row",
+        "clicking an already current empty cell focuses the paragraph without a second editing host",
+        "rejects a row request when retained selected boxes have no endpoint in their table"
+      ]
+    },
+    {
+      "kind": "failed-chromium",
+      "command": "in-memory existing Playwright config, development server; original failed ODT cell case only",
+      "profile": "upstream-absent-failed-or-new-only",
+      "exit": 0,
+      "bytes": 525,
+      "sha256": "466e0d5bc0be5011127d67a8377dacfe0303ca819f2ccebf1b3603cabd787972",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T10:51:07.443Z",
+        "duration": 5533.692,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
