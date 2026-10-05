@@ -1,10 +1,11 @@
 ---
 id: "202610050828-ZJ34MV"
 title: "Project native independent list indent axes into shared UI layout"
-status: "DOING"
+result_summary: "Native independent list axes replace React geometry precedence;body/cell shared UI and UndoRedo verified,broader parity remains active"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610050828-ZJ34MV/evidence/restored-source-audits.json"
   findings:
     - "Core resolves alignment mask and counted legacy first-line short/compatibility;React paragraphIndentWins and layout listGeometryWins decisions removed.45newappfirstpass,first11998/1failedoldfixture and107/1failednewChromium;exact1+1closure,100actualcoverage,no passing replay.380priorfiles379identical,soleoldfixturetwoexpectednumbers only.244states/defaults/deviations unchanged,fiverestored audits pass;no independent review claim."
-commit: null
+commit:
+  hash: "dc00406d68cf5633f037e1f4b40e3b58a61dd030"
+  message: "✅ ZJ34MV task: record native list axes verification"
 comments:
   -
     author: "CODER"
     body: "Start: replace browser list-axis heuristic with native core geometry shared by actual body and table cell presentation and print bounds."
+  -
+    author: "CODER"
+    body: "Verified: Core now owns independent list text-left and first-line offsets; immutable shared body/cell UI consumes them directly and the renderer no longer selects geometry from import metadata.45new native/UI cases firstpass;ONE absent fullprofile with11999 app cases and108 Chromium cases closed via only exact1app/1Chromium failed-case retries,100 actual app/inventory coverage,five restored audits and exact-SHA same-actor quality pass. Old fixture only two expected literals corrected. ODT cell-list import,full follower geometry and table navigation remain unverified."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native independent list left/first axes and direct shared UI consumption. ONE absent fullprofile;45new app cases firstpass,11999 total app cases and108 Chromium cases closed by exact1app/1Chromium failed-only retries;100 actual app/inventory coverage. Five restored audits,scope/native hashes and exact-SHA same-actor quality pass. Old renderer fixture changed only two expected literals;ODT cell-list import and table navigation remain unverified. Custom CODER Verification recorded before this verdict."
+  -
+    type: "status"
+    at: "2026-10-05T08:53:35.095Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Core now owns independent list text-left and first-line offsets; immutable shared body/cell UI consumes them directly and the renderer no longer selects geometry from import metadata.45new native/UI cases firstpass;ONE absent fullprofile with11999 app cases and108 Chromium cases closed via only exact1app/1Chromium failed-case retries,100 actual app/inventory coverage,five restored audits and exact-SHA same-actor quality pass. Old fixture only two expected literals corrected. ODT cell-list import,full follower geometry and table navigation remain unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T08:53:14.245Z"
+doc_updated_at: "2026-10-05T08:53:35.096Z"
 doc_updated_by: "CODER"
 description: "Iteration144 remove React paragraph-versus-list and listGeometryWins layout decisions;core owns effective counted first-line and text-left for alignment/legacy modes;shared body/cell projection and print bounds with native literal/history/browser evidence and preserved intentional deviations."
 sections:
@@ -147,6 +160,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic leaf without rewriting history."
   Findings: "Previous143 verifiedprogress DONE. Currentmain7bb6f6fb clean,parentonlyactive,direct,fourmatchedpolicies,userinstructionsabsent. Native ndtxt3382/3440 selects left/first independently and legacy short/IGNORE/count semantics;itrcrsr/frmtool consume resolved geometry. Local React paragraphIndentWins makes bothaxes follow rawparagraphleft or legacyflag,despite native mask helper alreadypresent;printbounds similarlyheuristic. Initial targeted query guessed missingportab.cxx;bounded actualcoretext search found txtfld/porfld/txttab;readonly,no mutation. Native labelportion/fontwidth/taborigin mechanics widerthan thissingleaxis correction,remainunverified. StandingUI/goal authorization applies;no userreapproval needed forroutineinrepo scope. Firstformat gate failed only new apps/office/e2e/writer-counted-list-layout.spec.ts after first formatting command. Correct formatter output,rerun failedformat then run first unexecuted lint/type/dependency/docs/size;no passing gates replayed,no semantic change. Firstfullabsent buildpass,app11998pass/1oldfixturefailof11999/292files,new45allpass,100all4coverage;inventory109/scripts5pass;Chromium107pass/1newcellfixturefailof108,noflakes. Exactnamespersistedbeforeassertions. Soleoldcase expectsrawReact margin113.4/width28.35;resolvedlistLayout itself requires17.85/width2. Changeonlytwo literals,retaincase/assertions. NewcellODTfixture hit existing Unsupported ODF table cell list guard beforegeometry;importplaincell and applyOrderedList through actualUI,retainmarker88/120pixel/history/text/neighbor assertions. BodyChromium casepassed andwillnotrepeat. ODTcelllist import remainsunverifiedgap,not promotedtobrowserexception. No production edits afterfullprofile. Closure:exactfailedapp1pass/6skipped;exactfailedChromiumcell1pass/no flakes. Passing bodycase andallpassedtests/build neverreplayed. Actualfirst+solefailedappmap andfirstinventorymap100allfour;production4sourcesunchangedafterprofile. Five restoredsourceaudits pass/semanticviolations0. All380prior tests:379byteidentical,soleoldrenderfiletwoexpectedliteralchanges only/allassertionsretained.45newappcasesallfirstpass;twoChromiumcases bodyfirst/cellfailed-onlyclosure. Four ownerrows8notes/helper symbolonly,all244states/defaults/deviations unchanged;5nativehashes. Doctor0errors2oldwarnings/routing/diffpass;AP4062files0forbiddenprequality. Full label/tab/space/nothing width/min-gap/wrapping,ODFcelllist import guard,RTL/fontrelative/cellclamping,HomeEnd/table navigation,fullnativeframes/history/UI andgoalunverified."
+extensions:
+  implementation_commit:
+    hash: "ff523141c44ffdf91051eb6f66660aeeee27605e"
+    message: "🧩 ZJ34MV code: use native independent list indent axes"
 id_source: "generated"
 ---
 ## Summary
