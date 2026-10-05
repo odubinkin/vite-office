@@ -180,17 +180,21 @@ export function WriterEditableParagraph({
             lineHeight: paragraph.computedStyle.lineHeight,
             minHeight: `${paragraph.computedStyle.fontSizePt * paragraph.computedStyle.lineHeight}pt`,
             marginInlineStart:
-              paragraph.list.kind === "none" && paragraph.textLeftMargin > 0
-                ? `${paragraph.textLeftMargin / 20}pt`
-                : undefined,
+              paragraph.uncountedListTextLeftPt !== undefined
+                ? `${paragraph.uncountedListTextLeftPt}pt`
+                : paragraph.list.kind === "none" && paragraph.textLeftMargin > 0
+                  ? `${paragraph.textLeftMargin / 20}pt`
+                  : undefined,
             marginInlineEnd: `${paragraph.computedStyle.rightMarginPt}pt`,
             textAlign: paragraph.alignment,
             // SwNumFormat already places a list's first line; applying the
             // paragraph indent here moves its text back into the marker slot.
             textIndent:
-              paragraph.list.kind === "none"
-                ? `${isFollow ? 0 : (paragraph.computedStyle.resolvedFirstLineIndentPt ?? paragraph.computedStyle.firstLineIndentPt)}pt`
-                : undefined,
+              paragraph.uncountedListTextLeftPt !== undefined
+                ? "0pt"
+                : paragraph.list.kind === "none"
+                  ? `${isFollow ? 0 : (paragraph.computedStyle.resolvedFirstLineIndentPt ?? paragraph.computedStyle.firstLineIndentPt)}pt`
+                  : undefined,
           }}
           tabIndex={-1}
         >

@@ -3,6 +3,7 @@
 import type { WriterPageDescriptorValue } from "./pagedesc";
 import { WRITER_PAPER_SIZES } from "./pagedesc";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import { resolveSwListTextLeftMargin } from "../txtnode/ndtxt-list-indent";
 import type { SwDoc } from "../doc/doc";
 import { SwTableNode } from "../docnode/node";
 import type { SwTable } from "../table/swtable";
@@ -60,14 +61,19 @@ export function projectSwTextPrintBounds(
   page: WriterPageDescriptorValue,
 ): SwTextPrintBounds {
   const format = paragraph.GetNumRule()?.Get(paragraph.GetAttrListLevel());
+  const uncountedTextLeft = paragraph.IsCountedInList()
+    ? undefined
+    : resolveSwListTextLeftMargin(paragraph);
   const left =
-    format !== undefined &&
-    (paragraph.DoesListGeometryWin() || paragraph.GetParagraphTextLeftMargin() === 0)
-      ? format.GetAbsLSpace() +
-        (format.GetPositionAndSpaceMode() === "label-width-and-position"
-          ? format.GetFirstLineOffset()
-          : 0)
-      : paragraph.GetParagraphTextLeftMargin() + paragraph.GetParagraphFirstLineIndent();
+    uncountedTextLeft !== undefined
+      ? uncountedTextLeft
+      : format !== undefined &&
+          (paragraph.DoesListGeometryWin() || paragraph.GetParagraphTextLeftMargin() === 0)
+        ? format.GetAbsLSpace() +
+          (format.GetPositionAndSpaceMode() === "label-width-and-position"
+            ? format.GetFirstLineOffset()
+            : 0)
+        : paragraph.GetParagraphTextLeftMargin() + paragraph.GetParagraphFirstLineIndent();
   const physicalWidth =
     page.paperFormat === "A4" &&
     page.width === (page.landscape ? WRITER_PAPER_SIZES.A4.height : WRITER_PAPER_SIZES.A4.width)

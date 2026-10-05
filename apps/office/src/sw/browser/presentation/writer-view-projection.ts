@@ -5,6 +5,7 @@ import {
 } from "../../../svx/browser/tbxctrls/style-toolbox-control";
 import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterNumFormatBullet } from "../../source/core/doc/number";
+import { resolveSwListTextLeftMargin } from "../../source/core/txtnode/ndtxt-list-indent";
 
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwLineNumberInfoValue } from "../../inc/lineinfo";
@@ -70,6 +71,7 @@ export interface WriterParagraphProjection {
   readonly listId: string;
   readonly listMarker?: string;
   readonly textLeftMargin: number;
+  readonly uncountedListTextLeftPt?: number;
   readonly numRuleName: string;
   readonly nodeIndex: number;
   readonly runs: readonly WriterProjectedTextRun[];
@@ -200,6 +202,9 @@ export class WriterViewProjection {
             ? getWriterNumFormatBullet(node.GetNumRule()?.Get(list.level))
             : undefined;
         const listMarker = node.GetListLabel();
+        const uncountedTextLeft = node.IsCountedInList()
+          ? undefined
+          : resolveSwListTextLeftMargin(node);
         const listFormat = list.kind === "none" ? undefined : node.GetNumRule()?.Get(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
@@ -316,6 +321,9 @@ export class WriterViewProjection {
           styleDisplayName: node.GetTextFormatColl().GetName(),
           text: node.GetText(),
           textLeftMargin: node.GetParagraphTextLeftMargin(),
+          ...(uncountedTextLeft === undefined
+            ? {}
+            : { uncountedListTextLeftPt: uncountedTextLeft / 20 }),
         });
       },
     );

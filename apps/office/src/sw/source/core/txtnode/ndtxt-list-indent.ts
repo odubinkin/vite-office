@@ -66,3 +66,21 @@ export function resolveSwListParagraphIndents(
       mask & ListLevelIndents.LeftMargin ? format.GetIndentAt() : node.GetParagraphTextLeftMargin(),
   };
 }
+
+/** Resolves native list text-left placement independently of label visibility. @param node - Canonical text node. @returns Text-left position in twips, or no bound rule. */
+export function resolveSwListTextLeftMargin(node: SwTextNode): number | undefined {
+  const rule = node.GetNum()?.GetNumRule();
+  if (rule === undefined) return undefined;
+  const alignment = resolveSwListParagraphIndents(node);
+  if (alignment !== undefined) return alignment.textLeft;
+  const format = rule.Get(Math.max(0, Math.min(9, node.GetActualListLevel())));
+  const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
+  // Absolute legacy spacing subtracts ResolveLeft, including its hanging
+  // first-line part, from the caller's text-left margin.
+  return (
+    format.GetAbsLSpace() +
+    (rule.IsAbsSpaces()
+      ? -Math.min(0, firstLine.ResolveTextFirstLineOffset())
+      : node.GetParagraphTextLeftMargin())
+  );
+}
