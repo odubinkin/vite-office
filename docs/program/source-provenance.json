@@ -6934,6 +6934,10 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
             "marker": "native cross-node selected deletion"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-split-history.test.ts",
+            "marker": "native table cell Enter restores original ranged history and leaves adjacent cells intact"
           }
         ],
         "upstream": [
@@ -6948,6 +6952,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/docedt.cxx",
             "marker": "sw_GetJoinFlags"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx",
+            "marker": "SwUndoSplitNode::SwUndoSplitNode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx",
+            "marker": "void SwUndoSplitNode::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx",
+            "marker": "void SwUndoSplitNode::RedoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx",
+            "marker": "void SwHistory::CopyAttr"
           }
         ]
       },
@@ -6966,7 +6986,8 @@
         "Iteration117 restores owned cross-node hint transfer: destructive SwpHints.Cut moves the actual SwTextAttr and format item for strictly interior hints, reconstructs partial/equal-end hints through MakeTextAttr, and updates surviving source hint objects in place. Owned normalization is separated from caller-copy replace. Explicit same-pool replacement transfer consumes its fragment; ordinary snapshots/constructors/copies remain independent. SwTextNode.CutTextFragment owns text/index/notification changes; cross-node MoveRange uses cut/transfer rather than capture/erase/reinsert. EraseText delegates its unchanged bounded replacement behavior to ReplaceRange, retaining the mandatory1000-line node limit. App tests check real object/item/handle ownership, repeated destinations, independent retained undo fragments and restoration, literal cut boundaries/eight flag masks, foreign transfer rejection, no-op/invalid/plain cuts and normalization. Native m_pHints backlinks/refcount/destruction/listeners, source empty hints, destination Update/BuildPortions/merge identity, same-node move and split/join identity remain unverified. Existing234 runtime fields/statuses/defaults/exceptions and registered I/O deviations stay unchanged; no whole-module or goal promotion.",
         "Iteration132 restores native SwInsertFlags DEFAULT0/EMPTYEXPAND1/NOHINTEXPAND2/FORCEHINTEXPAND4 at IDocumentContentOperations.hxx ownership and the native third-mode InsertText signature;portable explicit items/link move to fourth/fifth positions. Manager InsertString defaults EMPTYEXPAND and forwards explicit modes. Bound node FORCE temporarily overrides Ignore during coordinate Update and restores old state before mode postprocessing;NOHINT wins end-equal restoration,EMPTY expands eligible zero hints and continues,NOHINT blocks paragraph-prefix. Source-owned insertion preparation and unchanged comparator extraction retain1000-line gates. Literal mode/mask/family/lock/oldIgnore/boundary matrices cover actual objects/maps/items/backlinks/7INETvalues/IDs and manager defaults/temporary restoration/adapters. Five prior fixtures and existing typed undo receive syntax-only DEFAULT positional migration;353other prior tests remain byte-identical. Existing241runtime states/defaults/exceptions and registered I/O deviations preserved;new enum module remains wholly unverified. Native collapsed EMPTY/selection FORCE shell callers and stored undo flags are next dependent work;full manager undo/grouping/redline/multicursor/native SwContentIndex arguments/GCAttr/COPY/BuildPortions/families/style clients/UNO/refcounts/full core/UI remain unverified,no module or goal promotion.",
         "Iteration136 restores registered direct character FormatToTextAttr: five source/main SET pairs,duplicate clearing,AUTO span/gap conversion with old ranged items winning,MakeTextAttr insertion and adjacent equal pooled AUTO merging/FormatIgnore normalization. INET and zero portions retain owners;inherited collections and paragraph items are not converted. JoinTextNodes now applies nonempty-leading conversion or empty-leading character-only clear/copy. SwHistorySetFormat clones explicit items and releases destructive rollback;SwHistoryChangeFormatColl checks live text collection pointer/type. Join history records both boundaries' hints/direct items/collections;undo reconstructs fresh native hints,redo resets temporary end. This supersedes earlier absent format/coll conversion claims only for registered text/AUTO/INET paths. Undo clears only mutated character items before direct-item history rather than resetting unrelated paragraph items. Live assigned heading collection restoration uses native default SetListLevel=true and can add direct level0 even for the same collection. Two exact first-profile source-contradicted old expectations are corrected: fresh INET history owner and heading direct level0;all other old test cases are untouched. Full unpooled equal-value AUTO/CHARFMT/RSID/overlapping-family/notification/lifetime/layout history,table format variants,retained structural identity/AppendTextNode cloning,and cross-node selected deletion survivor/force/adapter remain unverified and require dependent work. Existing semantic states/defaults/exceptions and registered I/O/recovery deviations unchanged;whole-module and overall parity unverified,no promotion.",
-        "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion."
+        "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion.",
+        "Iteration155 restores native represented SwUndoSplitNode conditional whole-node ranged SwHistory capture, empty history discard, Undo full represented ranged reset and forward TmpRollback(doc,0,false), Redo SetTmpEnd(Count) and destructor history release. History records native items/coordinates/format-ignore flags and restores constructor expansion defaults. Existing source-owned SwHistory and txtedt reset responsibility reused; no blanket direct paragraph/list snapshot because native split action does not promise that restoration. Existing provisional redo identity bridge now uses actual fresh core collection/direct items/native hint maps and existing node replacement, removing two CaptureTextFragment snapshots and obsolete full hint-equality comparison; ownership/text mismatch guards preserved. Native metadata/flags may change through reconstruction legitimately. Portable retained identities remain necessary for existing pointer-based undo actions, not full native fresh-node parity or a conscious exception. All250 module states/defaults/classifications/exceptions/prior evidence preserved, additive only. Full physical split/CutImpl/paragraph item/heading list history/table/redline/RSID/field/Repeat and broad native/UI parity remain unverified; conscious IO/recovery deviations preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
@@ -11926,12 +11947,32 @@
           {
             "marker": "SwUndoSplitNode",
             "path": "apps/office/src/sw/source/core/undo/unspnd.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-split-history.test.ts",
+            "marker": "native table cell Enter restores original ranged history and leaves adjacent cells intact"
           }
         ],
         "upstream": [
           {
             "marker": "SwUndoSplitNode",
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx",
+            "marker": "SwUndoSplitNode::SwUndoSplitNode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx",
+            "marker": "void SwUndoSplitNode::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx",
+            "marker": "void SwUndoSplitNode::RedoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx",
+            "marker": "void SwHistory::CopyAttr"
           }
         ]
       },
@@ -11943,7 +11984,8 @@
         "Upstream obligations outside SwUndoSplitNode, SwUndoSplitNode::SwUndoSplitNode, SwUndoSplitNode::~SwUndoSplitNode, SwUndoSplitNode::UndoImpl and the bounded SwUndoSplitNode contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements the bounded SwUndoSplitNode action from pinned LibreOffice unspnd.cxx."
+        "Implements the bounded SwUndoSplitNode action from pinned LibreOffice unspnd.cxx.",
+        "Iteration155 restores native represented SwUndoSplitNode conditional whole-node ranged SwHistory capture, empty history discard, Undo full represented ranged reset and forward TmpRollback(doc,0,false), Redo SetTmpEnd(Count) and destructor history release. History records native items/coordinates/format-ignore flags and restores constructor expansion defaults. Existing source-owned SwHistory and txtedt reset responsibility reused; no blanket direct paragraph/list snapshot because native split action does not promise that restoration. Existing provisional redo identity bridge now uses actual fresh core collection/direct items/native hint maps and existing node replacement, removing two CaptureTextFragment snapshots and obsolete full hint-equality comparison; ownership/text mismatch guards preserved. Native metadata/flags may change through reconstruction legitimately. Portable retained identities remain necessary for existing pointer-based undo actions, not full native fresh-node parity or a conscious exception. All250 module states/defaults/classifications/exceptions/prior evidence preserved, additive only. Full physical split/CutImpl/paragraph item/heading list history/table/redline/RSID/field/Repeat and broad native/UI parity remain unverified; conscious IO/recovery deviations preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unspnd.cxx",
@@ -11951,7 +11993,8 @@
         "SwUndoSplitNode",
         "SwUndoSplitNode::SwUndoSplitNode",
         "SwUndoSplitNode::~SwUndoSplitNode",
-        "SwUndoSplitNode::UndoImpl"
+        "SwUndoSplitNode::UndoImpl",
+        "SwUndoSplitNode::RedoImpl"
       ]
     },
     {

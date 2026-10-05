@@ -139,20 +139,20 @@ export class DocumentContentOperationsManager {
     preceding.GetNodes().insertTextNodeAfter(preceding, trailing);
   }
 
-  /** Replaces a provisional split result with the retained undo node identity. @param provisional - Newly connected split node. @param retained - Detached node retained by undo. @returns Nothing. */
+  /** Applies the freshly reconstructed native split state before retaining the identity needed by existing undo callers. @param provisional - Newly connected split node. @param retained - Detached node retained by undo. @returns Nothing. */
   public RestoreSplitTextNode(provisional: SwTextNode, retained: SwTextNode): void {
     this.AssertConnectedTextNode(provisional, "split redo");
     if (retained.GetDoc() !== this.document)
       throw new Error("Writer split redo node belongs to another document.");
     if (retained.GetNodes().indexOfOrUndefined(retained) !== undefined)
       throw new Error("Writer split redo requires a detached retained SwTextNode.");
-    const provisionalFragment = provisional.CaptureTextFragment(0, provisional.Len());
-    const retainedFragment = retained.CaptureTextFragment(0, retained.Len());
-    if (
-      provisionalFragment.text !== retainedFragment.text ||
-      !provisionalFragment.hints.equals(retainedFragment.hints)
-    )
+    if (provisional.GetText() !== retained.GetText())
       throw new Error("Writer split redo retained node does not match the provisional split.");
+    retained.ResetAllAttr();
+    retained.ChgFormatColl(provisional.GetTextFormatColl(), false);
+    const direct = provisional.GetpSwAttrSet();
+    if (direct !== undefined) retained.SetAttr(direct);
+    retained.SetTextHints(provisional.GetOrCreateSwpHints());
     provisional.GetNodes().replaceTextNode(provisional, retained);
   }
 

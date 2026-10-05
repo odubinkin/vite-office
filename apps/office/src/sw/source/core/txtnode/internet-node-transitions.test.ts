@@ -157,11 +157,15 @@ describe("internet node transition ownership", /** Registers actual existing tra
     expect(links(trailing)[0]).toBe(tail);
     expect(shell.Redo()).toBe(true);
     expect(doc.paragraphs[1]).toBe(trailing);
-    expect(links(trailing)[0]).toBe(tail);
+    const redoTail = required(links(trailing)[0]);
+    expect(redoTail).not.toBe(tail);
+    expect(redoTail.format).not.toBe(tail?.format);
+    expect(redoTail.GetTextNode()).toBe(trailing);
+    expect(redoTail.format.GetTextINetFormat()).toBe(redoTail);
     fixtureMergeParagraphWithPrevious(shell, id);
     expect(doc.paragraphs).toHaveLength(1);
     links(node);
-    expect(links(trailing)[0]).toBe(tail);
+    expect(links(trailing)[0]).toBe(redoTail);
     expect(shell.Undo()).toBe(true);
     expect(doc.paragraphs[1]).toBe(trailing);
     links(node);

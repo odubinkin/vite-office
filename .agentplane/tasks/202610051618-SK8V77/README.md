@@ -4,7 +4,7 @@ title: "Restore native text attribute history for paragraph split Undo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -50,7 +50,7 @@ events:
     to: "DOING"
     note: "Start: source-confirmed single failed hyperlink identity assertion refinement; no passing profile replay."
 doc_version: 3
-doc_updated_at: "2026-10-05T16:44:01.827Z"
+doc_updated_at: "2026-10-05T16:47:23.330Z"
 doc_updated_by: "CODER"
 description: "Iteration155 native conditional SwHistory capture/rollback/rearm and provisional redo native state ownership; removes obsolete fragment snapshot comparison."
 sections:
@@ -66,7 +66,10 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only scoped semantic implementation commit in a new task; no history rewrite."
-  Findings: "Native source inspected read-only. Constructor captures ranged SwHistory only, not blanket paragraph/list attributes. Native resets and forward temporary rollback followed by Redo rearm are missing in current implementation. Portable retained redo node is still needed for existing pointer-based action references, physical identity parity remains unverified. Standing user safe UI/refactoring authorization applies."
+  Findings: |-
+    Iteration155 verified represented ranged split history only. Native conditional SwHistory.CopyAttr(original hints,node,0,Len,false), empty discard, JoinNext then whole represented ranged reset and forward TmpRollback(doc,0,false), redo SetTmpEnd(Count), destructor release implemented in existing unspnd owner. Existing RestoreSplitTextNode removes two captured text/hint snapshots and complete equality adapter, copies fresh core direct items/collection/maps with existing owner lifecycle; text/foreign/connected guards retained. No TextRuns or DTO adapter added. Native fresh redo attribute/item identity intentionally replaces stale pointer expectation; retained paragraph identity remains an unverified bridge, not an upstream exception. Native text history does not promise original direct paragraph/list level restoration.
+    29 new cases initially passed across AUTO/INET boundaries/flags/format-ignore bits/metadata/three cycles/payload/destructor/full-span promotion and actual SwEditWin table-cell Enter; adjacent cells/body intact. ONE full upstream-absent build/app/inventory/scripts/Chromium profile;12214 app passed/1 old hyperlink pointer failure of12215,109 inventory,5 scripts,120 Chromium passed. Original exact failure saved before assertion. Source-confirmed refinement only one old test changes fresh Redo identity/item/backlinks and following retained join pointer;407 prior files406 byte-identical. Failed-only one-case closure passed with8 skipped; no passing test/build/suite/browser/inventory replay. All production hashes equal initial full build/profile; actual app/inventory L/S/F/B100%, maps only ignored appcache. Six static gates passed; initial typecheck four missing pending-itemset arguments in new tests fixed, only failed gate repeated; changed-file statics passed. Five source audits after vendor restored passed,0semantic violations.250 states/defaults/classifications/exceptions/prior evidence preserved; additive2owner evidence only; scope6paths. AP ignored-inclusive scan4208 files0forbidden before quality, no upstream copies/helpers/Python/native probes/raw diffs/source frames/diagnostics. No network/outside/global/subagents.
+    Residuals: native new-prefix/original-suffix physical ownership versus retained portable prefix identity, native redo fresh node/undo-area, full CutImpl/page-break/frame/client/redline/field lifetimes and broad UI lists/table behavior remain unverified. Conscious save/open/recovery deviations preserved; parent goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -99,4 +102,6 @@ Revert only scoped semantic implementation commit in a new task; no history rewr
 
 ## Findings
 
-Native source inspected read-only. Constructor captures ranged SwHistory only, not blanket paragraph/list attributes. Native resets and forward temporary rollback followed by Redo rearm are missing in current implementation. Portable retained redo node is still needed for existing pointer-based action references, physical identity parity remains unverified. Standing user safe UI/refactoring authorization applies.
+Iteration155 verified represented ranged split history only. Native conditional SwHistory.CopyAttr(original hints,node,0,Len,false), empty discard, JoinNext then whole represented ranged reset and forward TmpRollback(doc,0,false), redo SetTmpEnd(Count), destructor release implemented in existing unspnd owner. Existing RestoreSplitTextNode removes two captured text/hint snapshots and complete equality adapter, copies fresh core direct items/collection/maps with existing owner lifecycle; text/foreign/connected guards retained. No TextRuns or DTO adapter added. Native fresh redo attribute/item identity intentionally replaces stale pointer expectation; retained paragraph identity remains an unverified bridge, not an upstream exception. Native text history does not promise original direct paragraph/list level restoration.
+29 new cases initially passed across AUTO/INET boundaries/flags/format-ignore bits/metadata/three cycles/payload/destructor/full-span promotion and actual SwEditWin table-cell Enter; adjacent cells/body intact. ONE full upstream-absent build/app/inventory/scripts/Chromium profile;12214 app passed/1 old hyperlink pointer failure of12215,109 inventory,5 scripts,120 Chromium passed. Original exact failure saved before assertion. Source-confirmed refinement only one old test changes fresh Redo identity/item/backlinks and following retained join pointer;407 prior files406 byte-identical. Failed-only one-case closure passed with8 skipped; no passing test/build/suite/browser/inventory replay. All production hashes equal initial full build/profile; actual app/inventory L/S/F/B100%, maps only ignored appcache. Six static gates passed; initial typecheck four missing pending-itemset arguments in new tests fixed, only failed gate repeated; changed-file statics passed. Five source audits after vendor restored passed,0semantic violations.250 states/defaults/classifications/exceptions/prior evidence preserved; additive2owner evidence only; scope6paths. AP ignored-inclusive scan4208 files0forbidden before quality, no upstream copies/helpers/Python/native probes/raw diffs/source frames/diagnostics. No network/outside/global/subagents.
+Residuals: native new-prefix/original-suffix physical ownership versus retained portable prefix identity, native redo fresh node/undo-area, full CutImpl/page-break/frame/client/redline/field lifetimes and broad UI lists/table behavior remain unverified. Conscious save/open/recovery deviations preserved; parent goal remains active.

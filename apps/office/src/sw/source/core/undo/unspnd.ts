@@ -3,6 +3,8 @@
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwPosition } from "../crsr/pam";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
+import { SwHistory } from "./rolbck";
+import { resetParagraphTextAttributes } from "../txtnode/txtedt";
 
 /** Reversible paragraph split retaining node references and one content offset. */
 export class SwUndoSplitNode extends SwUndo {
@@ -14,11 +16,22 @@ export class SwUndoSplitNode extends SwUndo {
     after: SwUndoCursorState,
   ) {
     super("Split Paragraph", before, after);
+    const hints = sourceParagraph.GetpSwpHints();
+    if (hints !== undefined) {
+      const history = new SwHistory();
+      history.CopyAttr(hints, sourceParagraph.GetIndex(), 0, sourceParagraph.Len(), false);
+      if (history.Count() !== 0) this.m_pHistory = history;
+    }
   }
 
-  /** Reports one retained node reference plus one offset, independent of document size. @returns Approximate payload units. */
+  /** Reports retained native history entries without retaining a full document snapshot. @returns Approximate payload units. */
   public override GetPayloadSize(): number {
-    return 1;
+    return 1 + (this.m_pHistory?.Count() ?? 0) * 4;
+  }
+
+  /** Releases native ranged attribute history when the action is discarded. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pHistory = undefined;
   }
 
   /** Joins the split trailing node back into the leading node. @param context - Active Writer context. @returns Nothing. */
@@ -29,6 +42,10 @@ export class SwUndoSplitNode extends SwUndo {
     if (trailing === undefined)
       throw new Error("SwUndoSplitNode has not created its trailing node.");
     document.GetDocumentContentOperationsManager().JoinTextNodes(source, trailing);
+    if (this.m_pHistory !== undefined) {
+      resetParagraphTextAttributes(source);
+      this.m_pHistory.TmpRollback(document, 0, false);
+    }
   }
 
   /** Splits the leading node at the retained content offset. @param context - Active Writer context. @returns Nothing. */
@@ -41,6 +58,7 @@ export class SwUndoSplitNode extends SwUndo {
     splitPosition.Dispose();
     if (this.trailingParagraph === undefined) this.trailingParagraph = provisional;
     else operations.RestoreSplitTextNode(provisional, this.trailingParagraph);
+    this.m_pHistory?.SetTmpEnd(this.m_pHistory.Count());
     const trailing = this.trailingParagraph;
     const after = this.GetAfterCursorState();
     this.SetAfterCursor({
@@ -51,4 +69,5 @@ export class SwUndoSplitNode extends SwUndo {
   }
 
   private trailingParagraph: SwTextNode | undefined;
+  private m_pHistory: SwHistory | undefined;
 }
