@@ -1,0 +1,27 @@
+{
+  "vendorRestored": true,
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-list-tab.spec.ts --reporter=list,json",
+  "profile": "original-still-failed-Chromium-only-upstream-absent",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/doc/number.ts": "780457a366b1e1f346bd5158d53c23ffbc2c24faa1a543e2bae02cfdd90b0158",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "04ff11b264b9f91d01ef81c74909c9c67612f453c12746835b37f360c1b19bff",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "b63d46090f6c5c16742424c20be23905342f1b905056167befb740d12b4f5c82"
+  },
+  "exit": 0,
+  "bytes": 672,
+  "sha256": "fd81a7b9c2e4da39cbd418e97f2bf344faab5e9a95f729d01196eade00a3dca7",
+  "caseCounts": {
+    "startTime": "2026-10-05T22:18:19.825Z",
+    "duration": 3370.729,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "executedCases": [
+    "Writer body list and table Tab retain editing focus width=1280",
+    "Writer body list and table Tab retain editing focus width=390"
+  ],
+  "failedCases": [],
+  "errors": []
+}

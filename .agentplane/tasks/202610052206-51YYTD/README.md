@@ -4,7 +4,7 @@ title: "Route Writer paragraph Tab through native numbering ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: implement approved iteration166 native paragraph Tab routing under standing explicit iterative authorization."
 doc_version: 3
-doc_updated_at: "2026-10-05T22:07:07.519Z"
+doc_updated_at: "2026-10-05T22:18:04.211Z"
 doc_updated_by: "CODER"
 description: "Iteration166: unify represented ordinary body/list/table Tab and ShiftTab routing, extract native numfunc::NumDownChangesIndent into number.ts, remove table-only event adapter contract; assigned outline style routing remains explicitly unsupported pending native OutlineUpDown. Standing iterative goal authorization; one executable leaf."
 sections:
@@ -63,7 +63,12 @@ sections:
     5. Five restored audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/sourcehash/APignoredinclusive/doctor/routing/diffcheck, sameagent exactsemanticSHA EVALUATOR pass, recordverify/canonicalmeaningfulfinish, parentFindings wholepreserving append; cleantracked/untracked. Overall goal staysACTIVE.
   Verification: "Pending declared checks; no parity claim."
   Rollback Plan: "Revert only the task semantic commit if needed; preserve task traceability and conscious IO deviations."
-  Findings: "Read-only evidence: pinned numfunc::NumDownChangesIndent and SwEditWin::KeyInput show numbering priority before cell traversal and ordinary body InsTab/ShiftTab End. Existing browser/core table-only guard wrongly drops ordinary body/list Tab. OutlineUpDown owner is absent; eligible assigned-outline start routing remains explicitly unrepresented, not silently substituted."
+  Findings: |-
+    Read-only evidence: pinned numfunc::NumDownChangesIndent and SwEditWin::KeyInput show numbering priority before cell traversal and ordinary body InsTab/ShiftTab End. Existing browser/core table-only guard wrongly drops ordinary body/list Tab. OutlineUpDown owner is absent; eligible assigned-outline start routing remains explicitly unrepresented, not silently substituted.
+
+    - Observation: ONE full absent profile: buildpass12536apppass109inventorypass5scriptspass; app/inventory100%L/S/F/B;137priorChromiumpass2newfixturefail. Both new Open dialogs explicitly report ODF table has no declared columns.
+      Impact: New production browser behavior remains unverified until a valid native ODT fixture reaches editing; no product regression indicated.
+      Resolution: Add two native column widths to new E2E fixture only; retain import refusal, all assertions, unchanged product bytes/bundle, and rerun only these two originalfailed Chromium cases. No passing/full/static replay.
 id_source: "generated"
 ---
 ## Summary
@@ -107,3 +112,7 @@ Revert only the task semantic commit if needed; preserve task traceability and c
 ## Findings
 
 Read-only evidence: pinned numfunc::NumDownChangesIndent and SwEditWin::KeyInput show numbering priority before cell traversal and ordinary body InsTab/ShiftTab End. Existing browser/core table-only guard wrongly drops ordinary body/list Tab. OutlineUpDown owner is absent; eligible assigned-outline start routing remains explicitly unrepresented, not silently substituted.
+
+- Observation: ONE full absent profile: buildpass12536apppass109inventorypass5scriptspass; app/inventory100%L/S/F/B;137priorChromiumpass2newfixturefail. Both new Open dialogs explicitly report ODF table has no declared columns.
+  Impact: New production browser behavior remains unverified until a valid native ODT fixture reaches editing; no product regression indicated.
+  Resolution: Add two native column widths to new E2E fixture only; retain import refusal, all assertions, unchanged product bytes/bundle, and rerun only these two originalfailed Chromium cases. No passing/full/static replay.
