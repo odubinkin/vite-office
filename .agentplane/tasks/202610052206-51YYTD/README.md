@@ -4,7 +4,7 @@ title: "Route Writer paragraph Tab through native numbering ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,25 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T22:23:09.179Z"
+  updated_by: "EVALUATOR"
+  note: "Same current agent EVALUATOR exact semantic SHA 0d207b4ed1130786aa557c92d435cdf6826b6a0d: represented paragraph/list/cell Tab native ownership verified; broad parity remains unverified."
+  evaluated_sha: "0d207b4ed1130786aa557c92d435cdf6826b6a0d"
+  blueprint_digest: "5a43157fd4ce3333c2fcbbf30d841b7646bbb69aa43eb18231d5b90b2bec96c0"
+  evidence_refs:
+    - ".agentplane/tasks/202610052206-51YYTD/README.md"
+    - ".agentplane/tasks/202610052206-51YYTD/quality/20261005-222309179-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610052206-51YYTD/quality/20261005-222309179-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610052206-51YYTD/quality/20261005-222309179-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610052206-51YYTD/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610052206-51YYTD/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610052206-51YYTD/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610052206-51YYTD/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610052206-51YYTD/evidence/browser-closure-profile.json"
+  findings:
+    - "Native number.ts owns actual NumDownChangesIndent; SwEditWin unifies body/list/cell key priority, native typing/numbering/traversal/history, removes old table-only contract and embedded heuristic.27 newapp2 newChromium cases pass; final12536app109inventory5scripts139distinctChromium. ONE absent full profile plus only2failedfixture cases; productionbytesunchanged actual100%app/inventorycoverage.426prior tests424identical2exact sourceconfirmed corrections;253states/defaults/classes/IOexceptions/evidence preserved; sixstatics/five restoredsourceaudits/scope/APscan/doctor/routingpass. No independent reviewer claimed."
 commit: null
 comments:
   -
