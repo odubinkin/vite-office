@@ -1,10 +1,11 @@
 ---
 id: "202610050149-HENBJ9"
 title: "Restore native text insertion flags and manager defaults"
-status: "DOING"
+result_summary: "Restored native SwInsertFlags0/1/2/4,FORCE temporary owner state restoration,NOHINT priority/EMPTY zero expansion,node third-mode API and managerEMPTYEXPAND default.4127newliteral cases validated;five prior fixture files/typedundo syntax-only migrations,353other priorfiles unchanged;full shell caller modes/core/UI remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -60,11 +61,16 @@ quality_review:
   findings:
     - "Pinned enum0/1/2/4,actual node thirdmodeDEFAULT and managerEMPTYEXPAND default restored. Native FORCE temporarily sets node Ignore around pure Update and restores before NOHINT/EMPTY/prefix postphase;NOHINT precedence and zero EMPTY continuation preserved. Literal matrix verifies supported bound AUTO/INET values/flags/owners and all0..7 combinations,old state true/false,locks,manager and adapters. Source-owned preparation and three unchanged comparator extractions satisfy existing line limits."
     - "One sequential absent-reference full profile allfirstpass:build1,app7687/276files,inventory109/36files,scripts5,Chromium99;app/inventory100%allfourcoverage. No test replay or passing suite/build repeats;production unchanged afterprofile. Static type/docs failures recovered only those gates;no pass criteria weakened. Sixteenpaths;353priorfilesbyteidentical,five fixturefiles/typedundo ASTprove11syntax-only DEFAULT migrations with expectationsunchanged;241priorsemantic/status/default/exception rows preserved,sixappendices/fourhelperexports,onewhollyunverified enumrow. Five restored audits0violations,eightnativehashes,AP3910files0forbidden,doctor0errors/two unchangedlegacywarnings,routingOK."
-commit: null
+commit:
+  hash: "1278264bc51b412180b9a9da091cccb4b6ba845d"
+  message: "🧩 HENBJ9 task: record verified native insertion modes"
 comments:
   -
     author: "CODER"
     body: "Start: restore native insertion mode contract and all supported flag combinations with one upstream-absent validation profile;preserve registered deviations and existing shell callers for their dependent leaf."
+  -
+    author: "CODER"
+    body: "Verified: pinned native insertion modes,node third-modeDEFAULT and managerEMPTYEXPAND default with actual bound hint ownership. One absent full profile allfirstpass,100%coverage,0testreplays and exactSHAqualitypass;previous fixture expectations/runtime statuses/deviations retained."
 events:
   -
     type: "status"
@@ -79,8 +85,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Bounded132 native insertion flags/API/defaults verified;one absent full profile allfirstpass,100%app/inventory,0testreplays,353priorfilesbyteidentical/5ASTsyntax-only,241statesretained,newunverifiedenum;restored audits0violations,exactSHAqualitypass;native shell modes/fullcore/UI unverified."
+  -
+    type: "status"
+    at: "2026-10-05T02:08:33.176Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned native insertion modes,node third-modeDEFAULT and managerEMPTYEXPAND default with actual bound hint ownership. One absent full profile allfirstpass,100%coverage,0testreplays and exactSHAqualitypass;previous fixture expectations/runtime statuses/deviations retained."
 doc_version: 3
-doc_updated_at: "2026-10-05T02:08:11.845Z"
+doc_updated_at: "2026-10-05T02:08:33.177Z"
 doc_updated_by: "CODER"
 description: "Restore pinned SwInsertFlags and actual third-argument mode/default contract,full supported hint flag combinations and manager EMPTYEXPAND default;move explicit attributes/link adapters to fourth/fifth positions,retaining existing shell caller behavior for the next dependent leaf. Source-independent tests only,no upstream/helper/code artifacts."
 sections:
@@ -182,6 +195,10 @@ sections:
     Preflight132:cleanmain35f1a0e9048e23a88ea20fe2754d57ba0633a6c7,direct,onlyparentactive. Iteration131 verified progress,notblocked. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native IDocumentContentOperations.hxx57 flags0/1/2/4 and167 managerdefaultEMPTY;ndtxt.hxx287 node thirdmodeDEFAULT. ndtxt.cxx2449 saves old Ignore,temporarily forces aroundUpdate,restores before end-equal mode processing;NOHINT overridesFORCE,EMPTY eligiblezero expansion continues,prefix requires!NOHINT. Current node thirdparameter isSfxItemSet and manager passes nodeDEFAULT incorrectly. SwUndoInsert typed redo andfive oldtestfiles useportableattrs thirdposition and need syntax-only migration. Shell editsh.cxx98 normalEMPTY/forced5,selectionwrtsh1.cxx240..288 deleteplusforced insertion and undo storedflags are next dependent leaf. Existing131 owner/coordinate/postphase mechanism established;registered I/O deviations preserved. Fourmatched policies read;user-instructions absent;standing goal authorizes safe local scope;no network/outside/globalaccess.
 
     Implementation132: native flags0/1/2/4 and full0..7bound-node modes restored. InsertText thirdmodeDEFAULT;portable explicit items/link positions4/5. Manager mode defaultsEMPTYEXPAND. FORCE temporary Ignore state restored before NOHINT/EMPTY/prefix postphase and on thrown coordinate updates. Native NOHINT priority and EMPTY continuation verified. Existing source-owned hint preparation and three unchanged comparator extractions preserve file-size gates;no new helper module. Six responsibility appendices/four helper exports;one unverified enum row,242totalrows with241prior semantic/status/default/exception fields preserved. AST comparison proves five prior fixture files and typed undo differ only by11DEFAULT positional migrations/imports;353other prior testfiles byte-identical. Pure UpdateTextHints/EraseTextHints and comparator bodies unchanged.4127newliteral app cases. Static firstformat/lintpass,typecheckfailed on new fixture getter/combined enum literal;failedtype gate only recovered. Dependencycheckpass,docsfailed missing@parammode;faileddocs gate recovered,sizepass. Changed-file format/lintpass. One full sequential upstream-absent profile allpassed first:build1,app7687/276files and100%allfourcoverage,inventory109/36files and100%allfourcoverage,scripts5,Chromium99. Zero test replays and no passing suite/build repeats. No production edit afterfullprofile. Vendor restored before5sourceaudits;allpass,0semanticviolations. Eight nativehashes;ignored-inclusiveAPscan3909files/0forbidden before scope evidence addition. Scope audit compared AST after removing only explicitDEFAULT/import migration,retaining all previous fixture expectations. No network/outside/global/upstreamexecution/source/helper/code/Python/rawdiagnostic artifacts. Native shell collapsedEMPTY,selectionFORCE andstoredUndo flags remain next dependent leaf;broader native manager/default/profile/code/UI obligations remain unverified;registered I/O/recovery deviations preserved.
+extensions:
+  implementation_commit:
+    hash: "2234c71fc2553e865d9e0ed1c098cfccbc6259f4"
+    message: "🧩 HENBJ9 code: restore native insertion flags and manager defaults"
 id_source: "generated"
 ---
 ## Summary
