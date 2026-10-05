@@ -1,0 +1,22 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-delete.spec.ts writer-native-table-tab.spec.ts --grep=^(?:Writer selected row Delete preserves table cells and native Undo Redo|Writer selected row Backspace preserves table cells and native Undo Redo|Writer Tab traverses native cell sections and appends one row with history)$ --reporter=list,json",
+      "profile": "upstream-absent original3failed Chromium cases only",
+      "exit": 1,
+      "bytes": 354,
+      "sha256": "49bb7794d16b29f04cca78be48120b93c66e68c7cc01063a6f625ffef3a680ba",
+      "caseCounts": {
+        "startTime": "2026-10-05T17:19:29.175Z",
+        "duration": 946.5269999999999,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": [],
+      "executedCases": []
+    }
+  ]
+}
