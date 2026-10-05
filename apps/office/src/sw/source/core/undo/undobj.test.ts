@@ -278,12 +278,9 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoJoinParagraphs);
     expect(document.paragraphs).toHaveLength(1);
     shell.Undo();
-    // Native collection history calls ChgFormatColl with default SetListLevel=true,
-    // so restoring this assigned heading collection also writes its direct level 0.
-    expect(encodeWriterDocument(document).textNodes[1]).toEqual({
-      ...trailingSnapshot,
-      autoAttributes: [...(trailingSnapshot?.autoAttributes ?? []), { value: 0, which: 84 }],
-    });
+    // Native list activation already writes this heading collection's unique direct level 0.
+    expect(trailingSnapshot?.autoAttributes).toContainEqual({ value: 0, which: 84 });
+    expect(encodeWriterDocument(document).textNodes[1]).toEqual(trailingSnapshot);
     shell.Redo();
     expect(
       document.paragraphs.map(
@@ -317,7 +314,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.SetParagraphStyle("heading-1");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
     shell.SetParagraphListKind("numbered");
-    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsNum);
+    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
     shell.ChangeParagraphListLevel("demote");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoNumUpDown);
     expect(paragraph.GetParagraphAlignment()).toBe("left");

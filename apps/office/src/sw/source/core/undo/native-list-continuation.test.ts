@@ -5,7 +5,8 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { SwPosition } from "../crsr/pam";
 import { applyWriterParagraphList } from "../doc/list";
 import { SwNumRuleType } from "../doc/number";
-import { SwUndoContinueNumbering } from "./unnum";
+import { SwUndoInsNum } from "./unnum";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -150,9 +151,9 @@ it.each(commandCases)(
       status: "executed",
       value: true,
     });
-    expect(owner.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoContinueNumbering);
+    expect(owner.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
     expect(owner.docShell.GetUndoManager().GetUndoAction()?.GetPayloadSize()).toBe(
-      direction === "collapsed" ? 12 : 24,
+      direction === "collapsed" ? 6 : 12,
     );
     let first = replace(owner.first),
       second = replace(owner.second);
@@ -342,8 +343,11 @@ it("numeric continuation history owns independent tuples and rejects foreign rep
   owner.shell.FocusNode(owner.first);
   const before = owner.first.CaptureListItems(),
     after = owner.previous.CaptureListItems(),
-    action = new SwUndoContinueNumbering(
-      [{ paragraph: owner.first, before, after }],
+    action = new SwUndoInsNum(
+      owner.first,
+      before,
+      after,
+      owner.shell.CaptureCursorState(),
       owner.shell.CaptureCursorState(),
     );
   before.ClearItem(RES_PARATR_LIST_RESTARTVALUE);

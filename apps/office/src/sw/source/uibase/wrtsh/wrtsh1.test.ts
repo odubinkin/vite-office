@@ -208,7 +208,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetParagraphListKind("numbered")).toBe(true);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
     expect(projectWriterParagraphList(paragraph)).toMatchObject({ kind: "numbered", level: 1 });
-    expect(paragraph.GetParagraphTextLeftMargin()).toBe(1134);
+    // Native list activation resets direct margins; list-level changes keep them reset.
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(0);
   });
 
   it("validates canonical cursor offsets against the owning node", /** Covers integer and node-bound offset validation. @returns Nothing. */ () => {

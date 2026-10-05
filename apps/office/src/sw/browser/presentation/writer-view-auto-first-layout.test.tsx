@@ -151,8 +151,9 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
       const owner = fixture(false, "leading", 900);
       expect(owner.shell.SetParagraphListKind(kind)).toBe(true);
       const projected = owner.store.GetSnapshot().activeParagraph;
-      expect(owner.shell.GetActiveParagraph().GetParagraphFirstLineIndent()).toBe(367);
-      expect(projected.computedStyle.resolvedFirstLineIndentPt).toBe(18.35);
+      // Native SetCurNumRule resets direct first-line indentation for label-alignment rules.
+      expect(owner.shell.GetActiveParagraph().GetParagraphFirstLineIndent()).toBe(0);
+      expect(projected.computedStyle.resolvedFirstLineIndentPt).toBe(0);
       render(
         <WriterEditableParagraph
           index={0}
@@ -164,7 +165,7 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
       );
       expect(screen.getByRole("textbox").style.textIndent).toBe("");
       expect(projected.listLayout).toBeDefined();
-      expect(projected.computedStyle.autoFirstLineIndent).toBe(true);
+      expect(projected.computedStyle.autoFirstLineIndent).toBe(false);
     });
 
   it("reprojects font-dependent layout through grouped item Undo and Redo without changing the raw tuple", /** Checks actual font-size item history, no-op and frozen retained values. @returns Nothing. */ function tracksAutomaticFontLayout() {

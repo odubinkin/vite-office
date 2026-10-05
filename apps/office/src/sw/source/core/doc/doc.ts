@@ -24,8 +24,12 @@ import {
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_LIST_ISCOUNTED,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_RIGHT,
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../para/paratr";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import type { SwNumRule } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -44,6 +48,15 @@ export interface SwDocOptions {
   readonly createInitialTextNode?: boolean;
   readonly defaultFontDevice?: DefaultFontDevice;
   readonly locale?: string;
+}
+
+/** Native SetNumRule operation flags from doc.hxx. */
+export enum SetNumRuleMode {
+  Default = 0,
+  CreateNewList = 1,
+  DontSetItem = 2,
+  ResetIndentAttrs = 4,
+  DontSetIfAlreadyApplied = 8,
 }
 
 /** One package-backed Writer font face; bytes are attached only after manifest and ZIP validation. */
@@ -405,6 +418,108 @@ export class SwDoc {
   /** Returns numbering rules. @returns Rule table. */
   public GetNumRuleTable(): readonly SwNumRule[] {
     return this.listsManager.GetNumRuleTable();
+  }
+
+  /** Applies native numbering rule and list identities over an inclusive node range. @param range - Actual native range. @param rule - Source rule value. @param mode - Native operation flags. @param continuedListId - Optional existing list identity. @returns Explicit list identity applied, otherwise empty. */
+  public SetNumRule(
+    range: SwPaM,
+    rule: SwNumRule,
+    mode = SetNumRuleMode.Default,
+    continuedListId = "",
+  ): string {
+    if (range.GetPoint().GetNode().GetNodes() !== this.nodes)
+      throw new Error("Writer numbering range belongs to another node array.");
+    return this.RunModelTransaction(
+      /** Applies native rule ownership before paragraph attributes. @returns Applied explicit list identity. */ () => {
+        let stored = this.FindNumRulePtr(rule.GetName());
+        const created = stored === undefined;
+        if (stored === undefined) {
+          stored = this.listsManager.AddNumRule(rule);
+          if (stored.GetDefaultListId().length === 0)
+            stored.SetDefaultListId(
+              this.listsManager.GetListForListStyle(stored.GetName()).GetListId(),
+            );
+        } else if (!stored.Equals(rule)) {
+          stored.Assign(rule);
+          this.listsManager.InvalidateAllLists();
+        }
+        let listId = "";
+        if (!(mode & SetNumRuleMode.DontSetItem)) {
+          if (mode & SetNumRuleMode.CreateNewList)
+            listId = created
+              ? stored.GetDefaultListId()
+              : this.listsManager.CreateList(stored.GetName()).GetListId();
+          else if (continuedListId.length > 0) listId = continuedListId;
+        }
+        const start = range.Start().GetNodeIndex(),
+          end = range.End().GetNodeIndex();
+        if (listId.length > 0) {
+          for (let index = start; index <= end; index++) {
+            const node = this.nodes.at(index);
+            if (node instanceof SwTextNode)
+              node.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, listId));
+          }
+        }
+        let flags = mode;
+        if (!range.HasMark()) {
+          const node = range.GetPoint().GetNode();
+          if (node instanceof SwTextNode) {
+            const current = node.GetNumRule();
+            if (current?.GetName() === stored.GetName()) {
+              flags |= SetNumRuleMode.DontSetItem;
+              if (!node.IsInList()) node.AddToList();
+            } else if (
+              current === undefined &&
+              this.FindNumRulePtr(node.GetTextFormatColl().GetNumRule().GetValue()) === stored
+            ) {
+              node.ResetAttr(RES_PARATR_NUMRULE);
+              flags |= SetNumRuleMode.DontSetItem;
+            }
+          }
+        }
+        if (!(flags & SetNumRuleMode.DontSetItem)) {
+          for (let index = start; index <= end; index++) {
+            const node = this.nodes.at(index);
+            if (
+              node instanceof SwTextNode &&
+              (!(flags & SetNumRuleMode.DontSetIfAlreadyApplied) ||
+                node.GetNumRule(true) !== stored)
+            )
+              node.SetAttr(new SwNumRuleItem(stored.GetName()));
+          }
+        }
+        if (
+          flags & SetNumRuleMode.ResetIndentAttrs &&
+          stored.Get(0).GetPositionAndSpaceMode() === "label-alignment"
+        ) {
+          for (let index = start; index <= end; index++) {
+            const node = this.nodes.at(index);
+            if (node instanceof SwTextNode)
+              node.ResetAttr([RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT]);
+          }
+        }
+        this.NotifyModelChange({ kind: "numbering-changed", ruleName: stored.GetName() });
+        return listId;
+      },
+    );
+  }
+
+  /** Sets native counted state independently of applying a list rule. @param range - Inclusive native range. @param counted - Requested count state. @returns Nothing. */
+  public SetCounted(range: SwPaM, counted: boolean): void {
+    if (range.GetPoint().GetNode().GetNodes() !== this.nodes)
+      throw new Error("Writer numbering range belongs to another node array.");
+    this.RunModelTransaction(
+      /** Mutates only counted attributes on current text nodes. @returns Nothing. */ () => {
+        for (
+          let index = range.Start().GetNodeIndex();
+          index <= range.End().GetNodeIndex();
+          index++
+        ) {
+          const node = this.nodes.at(index);
+          if (node instanceof SwTextNode) node.SetCountedInList(counted);
+        }
+      },
+    );
   }
 
   /** Checks the represented numbering range before changing any level. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */

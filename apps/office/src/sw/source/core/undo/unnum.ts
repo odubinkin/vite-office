@@ -1,7 +1,8 @@
 /** @fileoverview Implements bounded numbering and list-level undo from pinned LibreOffice unnum.cxx. */
 
+import { RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT } from "../../../inc/hintids";
 import { SwPaM, SwPosition } from "../crsr/pam";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
 import {
@@ -12,46 +13,14 @@ import {
   type SwUndoRedoContext,
 } from "./undobj";
 
-/** Shared reversible paragraph list-item transition. */
-abstract class SwUndoParagraphList extends SwUndo {
-  private afterList: SfxItemSet;
+/** Numeric native paragraph numbering history; represented attribute tuples remain independently owned. */
+export class SwUndoInsNum extends SwUndo {
+  private readonly afterList: SfxItemSet;
+  private readonly m_rDoc: SwDoc;
+  private readonly m_nNode: number;
   private readonly beforeList: SfxItemSet;
 
-  /** Creates one list transition. @param comment - Command label. @param paragraph - Target node. @param beforeList - Original list items. @param afterList - New list items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
-  protected constructor(
-    comment: string,
-    private readonly paragraph: SwTextNode,
-    beforeList: SfxItemSet,
-    afterList: SfxItemSet,
-    before: SwUndoCursorState,
-    after: SwUndoCursorState,
-  ) {
-    super(comment, before, after);
-    this.beforeList = beforeList.Clone();
-    this.afterList = afterList.Clone();
-  }
-
-  /** Reports the two bounded list item tuples. @returns Payload units. */
-  public override GetPayloadSize(): number {
-    return 6;
-  }
-
-  /** Restores prior paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
-  protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).SetListItems(this.beforeList);
-  }
-
-  /** Reapplies paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
-  protected override RedoImpl(context: SwUndoRedoContext): void {
-    const paragraph = GetUndoTextNode(context.GetDoc(), this.paragraph);
-    paragraph.SetListItems(this.afterList);
-    this.afterList = paragraph.CaptureListItems();
-  }
-}
-
-/** Reversible bullet, numbering, or remove-numbering command. */
-export class SwUndoInsNum extends SwUndoParagraphList {
-  /** Creates one list-kind action. @param paragraph - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
+  /** Creates one list transition. @param paragraph - Target node. @param beforeList - Original list items and optional indent history. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   public constructor(
     paragraph: SwTextNode,
     beforeList: SfxItemSet,
@@ -59,7 +28,43 @@ export class SwUndoInsNum extends SwUndoParagraphList {
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
-    super("Numbering", paragraph, beforeList, afterList, before, after);
+    super("Numbering", before, after);
+    this.m_rDoc = paragraph.GetDoc();
+    this.m_nNode = paragraph.GetIndex();
+    this.beforeList = beforeList.Clone();
+    this.afterList = afterList.Clone();
+  }
+
+  /** Reports the two bounded list item tuples. @returns Payload units. */
+  public override GetPayloadSize(): number {
+    let size = 6;
+    for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT])
+      if (this.beforeList.GetItemState(which, false) !== SfxItemState.UNKNOWN) size += 2;
+    return size;
+  }
+
+  /** Restores prior paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    const paragraph = GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    );
+    for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT])
+      if (this.beforeList.GetItemState(which, false) !== SfxItemState.UNKNOWN)
+        paragraph.ResetAttr(which);
+    paragraph.SetListItems(this.beforeList);
+  }
+
+  /** Reapplies paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const paragraph = GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    );
+    for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT])
+      if (this.afterList.GetItemState(which, false) !== SfxItemState.UNKNOWN)
+        paragraph.ResetAttr(which);
+    paragraph.SetListItems(this.afterList);
   }
 }
 
@@ -195,65 +200,6 @@ export class SwUndoNumUpDown extends SwUndo {
     } finally {
       range.Dispose();
       point.Dispose();
-    }
-  }
-}
-
-/** One selected paragraph's list state before and after continuing an earlier list. */
-export interface SwContinuedListItem {
-  readonly paragraph: SwTextNode;
-  readonly before: SfxItemSet;
-  readonly after: SfxItemSet;
-}
-
-/** Reassigns a selected list range as one reversible Continue Numbering command. */
-export class SwUndoContinueNumbering extends SwUndo {
-  private readonly items: readonly {
-    index: number;
-    document: SwDoc;
-    before: SfxItemSet;
-    after: SfxItemSet;
-  }[];
-
-  /** Retains independent item sets for one atomic list join. @param items - Selected list transitions. @param cursor - Persistent shell selection. @returns Nothing. */
-  public constructor(items: readonly SwContinuedListItem[], cursor: SwUndoCursorState) {
-    super("Continue Numbering", cursor, cursor);
-    this.items = items.map(
-      /** Captures one independent transition. @param item - Source transition. @returns Owned transition. */ (
-        item,
-      ) => ({
-        index: item.paragraph.GetIndex(),
-        document: item.paragraph.GetDoc(),
-        before: item.before.Clone(),
-        after: item.after.Clone(),
-      }),
-    );
-  }
-
-  /** Estimates retained list-item payload. @returns Scalar item units. */
-  public override GetPayloadSize(): number {
-    return this.items.length * 12;
-  }
-
-  /** Restores all selected paragraphs to their original list. @param context - Active Writer context. @returns Nothing. */
-  protected override UndoImpl(context: SwUndoRedoContext): void {
-    for (const item of this.items) {
-      const node = GetUndoTextNode(
-        context.GetDoc(),
-        item.document.GetNodes().at(item.index) as SwTextNode,
-      );
-      node.SetListItems(item.before);
-    }
-  }
-
-  /** Continues the earlier list across the selected range. @param context - Active Writer context. @returns Nothing. */
-  protected override RedoImpl(context: SwUndoRedoContext): void {
-    for (const item of this.items) {
-      const node = GetUndoTextNode(
-        context.GetDoc(),
-        item.document.GetNodes().at(item.index) as SwTextNode,
-      );
-      node.SetListItems(item.after);
     }
   }
 }

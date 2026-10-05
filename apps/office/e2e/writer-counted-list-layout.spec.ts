@@ -81,7 +81,8 @@ for (const cell of [false, true])
             return marker.getBoundingClientRect().left - outer.getBoundingClientRect().left;
           },
         );
-    await expect.poll(measure).toBeCloseTo(88, 1);
+    // Native label-alignment activation resets cell direct margins; imported body margins remain.
+    await expect.poll(measure).toBeCloseTo(cell ? 24 : 88, 1);
     await paragraph.click();
     await page.getByRole("button", { name: "Format", exact: true }).click();
     await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
@@ -89,11 +90,11 @@ for (const cell of [false, true])
     await dialog.getByLabel("First line indent (pt)").fill("6");
     await dialog.getByRole("button", { name: "OK", exact: true }).click();
     await expect(dialog).toHaveCount(0);
-    await expect.poll(measure).toBeCloseTo(120, 1);
+    await expect.poll(measure).toBeCloseTo(cell ? 56 : 120, 1);
     await paragraph.press("Control+z");
-    await expect.poll(measure).toBeCloseTo(88, 1);
+    await expect.poll(measure).toBeCloseTo(cell ? 24 : 88, 1);
     await paragraph.press("Control+Shift+z");
-    await expect.poll(measure).toBeCloseTo(120, 1);
+    await expect.poll(measure).toBeCloseTo(cell ? 56 : 120, 1);
     await expect(paragraph).toHaveText("CountedGeometryProof");
     await expect(neighbor).toHaveText("NeighborProof");
     await expect(paragraph).toHaveAttribute("data-list-kind", "numbered");

@@ -7,7 +7,9 @@ import { describe, expect, it, vi } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SwPosition } from "../../core/crsr/pam";
-import { SwUndoContinueNumbering } from "../../core/undo/unnum";
+import { SwUndoInsNum } from "../../core/undo/unnum";
+import type { SwUndoRedoContext } from "../../core/undo/undobj";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -35,19 +37,19 @@ describe("Writer Continue Numbering ODT regression", /** Groups real ODT command
       const originalListId = last.GetListId();
       expect(last.GetListLabel()).toBe("1.");
       shell.SetPaM(new SwPosition(last, last.Len()), new SwPosition(penultimate, 0));
-      expect(
-        new SwUndoContinueNumbering(
-          [
-            {
-              paragraph: penultimate,
-              before: penultimate.CaptureListItems(),
-              after: penultimate.CaptureListItems(),
-            },
-            { paragraph: last, before: last.CaptureListItems(), after: last.CaptureListItems() },
-          ],
-          shell.CaptureCursorState(),
-        ).GetPayloadSize(),
-      ).toBe(24);
+      const history = new SfxListUndoAction<SwUndoRedoContext>("Continue Numbering");
+      for (const node of [penultimate, last])
+        history.AddAction(
+          new SwUndoInsNum(
+            node,
+            node.CaptureListItems(),
+            node.CaptureListItems(),
+            shell.CaptureCursorState(),
+            shell.CaptureCursorState(),
+          ),
+        );
+      expect(history.GetActionCount()).toBe(2);
+      expect(history.GetPayloadSize()).toBe(12);
       const slot = shell
         .GetListShell()
         .GetCommandShell()
