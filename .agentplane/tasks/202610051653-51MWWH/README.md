@@ -1,10 +1,11 @@
 ---
 id: "202610051653-51MWWH"
 title: "Reconstruct undo cursors from native numeric ranges"
-status: "DOING"
+result_summary: "Shared Writer undo cursor history now uses existing SwUndRng numeric coordinates and resolves current native nodes after payload execution. Removed cloneCursorState and private foreign graph fallbacks; actual post-delete/connected-row/split endpoints recorded.23new tests,408old files unchanged;12238distinct app,109inventory,5scripts,120Chromium closed; actual app/inventory100% coverage. Conscious IO/recovery exceptions preserved. Broader parity remains open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -43,7 +44,9 @@ quality_review:
     - ".agentplane/tasks/202610051653-51MWWH/evidence/restored-source-audits.json"
   findings:
     - "Same agent in explicit EVALUATOR role reviewed exact semantic diff and concrete maps/results.23new cases;408prior tests byte-identical;250states/defaults/exceptions preserved;12238distinct app,109inventory,5scripts,120Chromium closed. ONE absent full profile and failed/new-only remediation, no passing replay; final bundle production hashes agree; app/inventory100% actual source-aligned counters."
-commit: null
+commit:
+  hash: "13bcda7721828861c26b8c2ea738ce2b663263ed"
+  message: "🧩 51MWWH task: record exact commit verification"
 comments:
   -
     author: "CODER"
@@ -54,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Start: remove obsolete private foreign cursor fallback, one genuinely new replacement/composition/current-native-history case, final changed bundle for3failed Chromium only."
+  -
+    author: "CODER"
+    body: "Verified: Shared numeric native cursor history replaces retained node-reference boundaries; represented selected deletion/table row/split current endpoints and private shell cleanup verified.23new cases;408prior tests unchanged;12238distinct app,109inventory,5scripts,120Chromium closed. App/inventory actual100%L/S/F/B, ONE absent full profile and only failed/new cases,5restored source audits0violations. Exact semantic EVALUATOR pass; full list/table/UI parity and action payload identity migration remain open."
 events:
   -
     type: "status"
@@ -82,8 +88,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified numeric SwUndRng cursor history and represented UI current-node boundaries at112f42df336efcf8d624a573d7e6183141df1310.23new;408old tests unchanged;250metadata states/defaults/exceptions preserved.12238distinct app,109inventory,5scripts,120Chromium closed using ONE absent full profile plus failed/new-only closure. Six statics finalpass, changed-file checks, final changed bundle, actual app/inventory100%L/S/F/B,5restored source audits0violations. Source maps only ignored appcache; no AP source/helper artifacts. Same-agent EVALUATOR pass exact semantic SHA. Existing payload identities/portable shell adjunct/full list/table/UI parity remain open; conscious IO/recovery exceptions preserved."
+  -
+    type: "status"
+    at: "2026-10-05T17:38:03.546Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Shared numeric native cursor history replaces retained node-reference boundaries; represented selected deletion/table row/split current endpoints and private shell cleanup verified.23new cases;408prior tests unchanged;12238distinct app,109inventory,5scripts,120Chromium closed. App/inventory actual100%L/S/F/B, ONE absent full profile and only failed/new cases,5restored source audits0violations. Exact semantic EVALUATOR pass; full list/table/UI parity and action payload identity migration remain open."
 doc_version: 3
-doc_updated_at: "2026-10-05T17:37:20.111Z"
+doc_updated_at: "2026-10-05T17:38:03.547Z"
 doc_updated_by: "CODER"
 description: "Replace retained SwTextNode cursor snapshots in shared SwUndo with native SwUndRng numeric coordinates and current-document reconstruction, preserving direction, active node, pending items and table mode. Necessary prerequisite to removing retained split identity bridge; physical split and action payload references remain separate unverified work."
 sections:
@@ -139,6 +152,10 @@ sections:
     Final distinct12238app in312files,109inventory in36files,5scripts in2files,120Chromium. Actual app/inventory100%L/S/F/B; app12355lines/13527statements/3376functions/10067branches;inventory1464/1523/384/1080. Changed source counter audit initially merged old/new shell maps and showed obsolete prior locations; fixed by excluding obsolete shell map, using current actual extra-case map and exact hashed contiguous unchanged initial source locations. No fabricated counters; maps/local initial source variants only ignored appcache. Browser closure actual failure names match original file/leaf titles, preserving ancestry in original record. Five restored source audits pass0semantic violations. Ignored-inclusive AP scan4229files0forbidden before semantic review,doctor0errors2pre-existingwarnings,routingOK. No upstream copies/helpers/Python/native probes/binaries/raw diffs/source frames/diagnostics in AP; vendor finally restored after all profiles; no network/outside/global/subagents.
 
     Limits:SwUndo still owns portable before/after shell adjuncts unlike native base; numeric shared cursor reconstruction does not remove existing action payload paragraph/row/table node identity bridges. Native split physical node ownership, complete undo-area/CutImpl/client/frame/redline/field lifetimes and broad UI/list/table merged/nested/protected/layout/clipboard remain unverified. Conscious save/open/recovery deviations unchanged. No whole-module or broad parity promotion; parent DOING,goal active.
+extensions:
+  implementation_commit:
+    hash: "112f42df336efcf8d624a573d7e6183141df1310"
+    message: "🧩 51MWWH code: restore undo cursors from native numeric ranges"
 id_source: "generated"
 ---
 ## Summary
