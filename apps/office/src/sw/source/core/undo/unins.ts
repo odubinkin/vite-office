@@ -24,7 +24,7 @@ export class SwUndoInsert extends SwUndo {
   private insertedFragment: SwTextFragment;
   private readonly insertionItems: SfxItemSet | undefined;
 
-  /** Creates one insert action before it is first redone. @param paragraph - Target node. @param offset - Insertion start. @param insertedFragment - Inserted native fragment. @param group - Optional grouping class. @param before - Cursor before insertion. @param after - Cursor after insertion. @param insertionItems - Pending character items for native text insertion;omitted for explicit fragment adapters. @returns Nothing. */
+  /** Creates one insert action before it is first redone. @param paragraph - Target node. @param offset - Insertion start. @param insertedFragment - Inserted native fragment. @param group - Optional grouping class. @param before - Cursor before insertion. @param after - Cursor after insertion. @param m_nInsertFlags - Native insertion mode retained for redo. @param insertionItems - Pending character items for native text insertion;omitted for explicit fragment adapters. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly offset: number,
@@ -32,6 +32,7 @@ export class SwUndoInsert extends SwUndo {
     private readonly group: SwUndoInsertGroup | undefined,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
+    private readonly m_nInsertFlags: SwInsertFlags,
     insertionItems?: SfxItemSet,
   ) {
     super("Insert", before, after);
@@ -45,6 +46,7 @@ export class SwUndoInsert extends SwUndo {
   public override Merge(nextAction: SfxUndoAction<SwUndoRedoContext>): boolean {
     if (
       !(nextAction instanceof SwUndoInsert) ||
+      (nextAction.m_nInsertFlags & SwInsertFlags.FORCEHINTEXPAND) !== 0 ||
       this.group === undefined ||
       nextAction.group !== this.group ||
       nextAction.paragraph !== this.paragraph ||
@@ -83,7 +85,7 @@ export class SwUndoInsert extends SwUndo {
     if (this.insertionItems !== undefined) {
       const node = GetUndoTextNode(context.GetDoc(), this.paragraph);
       const text = this.insertedFragment.text;
-      node.InsertText(text, this.offset, SwInsertFlags.DEFAULT, this.insertionItems);
+      node.InsertText(text, this.offset, this.m_nInsertFlags, this.insertionItems);
       this.insertedFragment = node.CaptureTextFragment(this.offset, this.offset + text.length);
       return;
     }

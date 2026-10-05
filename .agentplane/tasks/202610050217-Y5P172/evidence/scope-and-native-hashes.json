@@ -1,0 +1,70 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/source/core/edit/editsh.ts",
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-typing-internet-ownership.test.ts",
+    "apps/office/src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-shell-insert-modes.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 359,
+  "priorByteIdentical": 356,
+  "syntaxOnlyPriorFiles": 2,
+  "defaultConstructorMigrations": 5,
+  "syntaxOnlyExpectationsUnchanged": true,
+  "oneObservedEmptyHistoryFixtureCorrected": true,
+  "otherHistoryFixtureCasesUnchanged": true,
+  "newAppCases": 1547,
+  "runtimeRows": 242,
+  "allRuntimeStatesDefaultsExceptionsPreserved": true,
+  "threeResponsibilityAppendicesAndOneFactoryMappingOnly": true,
+  "selectionAdaptersUnchanged": true,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx",
+      "sha256": "73025af65692efee4e3d59d565c1597958092657bd751077afaf168c7f751f08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx",
+      "sha256": "519f2521b38582e84ce91f10fb717ef27f37590ca36a905be769c828bb95d8e4"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "sha256": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "sha256": "cfbc09c7a7413e29dc3320c46eac6b4c706e9f805f0b90436ec636f9bc2bdb08"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx",
+      "sha256": "290817001673a6a745e944e18fddd750858370ecf7f121178d6e99d969bf0e75"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx",
+      "sha256": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/inc/rolbck.hxx",
+      "sha256": "4feca27662f31a13bb082a0e5e3af7289b0aecedec0e9c30e78acd3d055690bf"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/IDocumentContentOperations.hxx",
+      "sha256": "6b76664cf6d35e619674cc3c090a131342ad0e99bf4282a8cd3164a43546582a"
+    }
+  ],
+  "oneFullAbsentProfile": true,
+  "failedCaseReplays": 161,
+  "failedCaseReplayRuns": 1,
+  "newEmptyErasureFixtureCasesCorrected": 160,
+  "passingCaseSuiteOrBuildReplays": 0,
+  "vendorRestored": true,
+  "fullParityPromotion": false
+}

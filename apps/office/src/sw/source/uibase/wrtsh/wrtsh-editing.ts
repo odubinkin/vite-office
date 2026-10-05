@@ -12,7 +12,7 @@ import {
   SwUndoReplace,
   type SwUndoDeleteDirection,
 } from "../../core/undo/undel";
-import { SwUndoInsert } from "../../core/undo/unins";
+import { createWriterInsertTextAction } from "../../core/edit/editsh";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
@@ -114,14 +114,14 @@ export class SwWrtShellEditingOperations {
     const offset = point.GetContentIndex();
     const group = allowGrouping ? getWriterTypingCharacterClass(text) : undefined;
     return this.port.applyAction(
-      new SwUndoInsert(
+      createWriterInsertTextAction(
         paragraph,
         offset,
-        paragraph.CreateTextFragmentFromText(text, this.port.getPendingCharacterItems()),
+        text,
+        this.port.getPendingCharacterItems(),
         group,
         before,
         this.port.createCollapsedCursorState(paragraph, offset + text.length),
-        this.port.getPendingCharacterItems(),
       ),
       group !== undefined,
     );

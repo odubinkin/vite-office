@@ -342,7 +342,7 @@ describe("native empty ranged ownership", /** Registers independent literals and
       }
     },
   );
-  it("retains the same empty internet item through actual typing undo and redo", /** Checks default shell input and native history erasure. @returns Nothing. */ function historyCase(): void {
+  it("retains the same empty internet item through actual typing undo and redo", /** Checks EMPTYEXPAND shell input and native history erasure. @returns Nothing. */ function historyCase(): void {
     const owner = fixture(54, 0, 2, 6),
       shell = new SwWrtShell(
         new SwDocShell(
@@ -353,11 +353,18 @@ describe("native empty ranged ownership", /** Registers independent literals and
     owner.node.EraseText(2, 4);
     setTestCursor(shell, "p-1", 2);
     expect(shell.Insert("XY")).toBe(true);
-    owned(owner, 0, 4, 4);
+    owned(owner, 0, 2, 4);
     expect(shell.Undo()).toBe(true);
     owned(owner, 0, 2, 2);
     expect(shell.Redo()).toBe(true);
-    owned(owner, 0, 4, 4);
-    inactive(owner);
+    owned(owner, 0, 2, 4);
+    expect(owner.node.getHyperlinkAt(3)).toEqual({
+      url: "url",
+      targetFrame: "target",
+      name: "name",
+      styleName: "normal",
+      visitedStyleName: "visited",
+    });
+    expect(owner.node.GetTextAttrAt(3, 54)).toBe(owner.hint);
   });
 });

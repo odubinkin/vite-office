@@ -332,6 +332,7 @@ describe("native typed internet item ownership", /** Registers real history and 
       "word",
       before,
       before,
+      SwInsertFlags.DEFAULT,
       items,
     );
     items.ClearItem();
@@ -363,6 +364,7 @@ describe("native typed internet item ownership", /** Registers real history and 
           "word",
           before,
           before,
+          SwInsertFlags.DEFAULT,
           firstTyped ? items : undefined,
         ),
         next = new SwUndoInsert(
@@ -372,6 +374,7 @@ describe("native typed internet item ownership", /** Registers real history and 
           "word",
           before,
           before,
+          SwInsertFlags.DEFAULT,
           firstTyped ? undefined : items,
         );
       expect(first.Merge(next)).toBe(false);

@@ -1,0 +1,19 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts src/sw/source/uibase/wrtsh/native-shell-insert-modes.test.ts -t <anchored union of 161 recorded exact failed full names>",
+      "profile": "upstream-absent-failed-cases-only",
+      "selectedCases": 161,
+      "selectedNamesSHA256": "2a4123e7dac4e496de4ad49ed8b55e6f21e06e95464ba038b00bd8a35a5679f4",
+      "exit": 0,
+      "bytes": 258,
+      "sha256": "6c2f4169f844527c5d56367fc520f8b2f0d0be88df00507cece4541fa69eb6b1",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  161 passed | 1572 skipped (1733)"
+      ],
+      "failedCases": []
+    }
+  ]
+}

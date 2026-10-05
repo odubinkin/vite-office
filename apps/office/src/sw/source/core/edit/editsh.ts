@@ -1,5 +1,6 @@
 /** @fileoverview Implements Writer hyperlink shell operations from pinned LibreOffice `sw/source/core/edit/editsh.cxx`. */
 
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwDoc as WriterDocument } from "../doc/doc";
@@ -9,9 +10,35 @@ import type { WriterHyperlink } from "../txtnode/fmtatr2";
 import type { SwPaM } from "../crsr/pam";
 import { equalWriterHyperlinks } from "../txtnode/fmtatr2";
 import { SwUndoAttr } from "../undo/unattr";
-import { SwUndoInsert } from "../undo/unins";
+import { SwUndoInsert, type SwUndoInsertGroup } from "../undo/unins";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 import { getWriterSelectedTextRange, type WriterTextRange } from "../crsr/pam";
+
+/** Creates the bounded SwEditShell::Insert2 text action with native expansion policy. @param paragraph - Target text node. @param offset - Insertion position. @param text - Non-empty inserted text. @param items - Pending character items. @param group - Optional typing class. @param before - Cursor before insertion. @param after - Cursor after insertion. @param forceExpand - Whether deletion requires forced hint expansion. @returns Native text insertion action. */
+export function createWriterInsertTextAction(
+  paragraph: WriterParagraph,
+  offset: number,
+  text: string,
+  items: SfxItemSet,
+  group: SwUndoInsertGroup | undefined,
+  before: SwUndoCursorState,
+  after: SwUndoCursorState,
+  forceExpand = false,
+): SwUndoInsert {
+  const flags = forceExpand
+    ? SwInsertFlags.FORCEHINTEXPAND | SwInsertFlags.EMPTYEXPAND
+    : SwInsertFlags.EMPTYEXPAND;
+  return new SwUndoInsert(
+    paragraph,
+    offset,
+    paragraph.CreateTextFragmentFromText(text, items),
+    group,
+    before,
+    after,
+    flags,
+    items,
+  );
+}
 
 /** Reads one uniform selected or caret hyperlink. @param document - Active Writer document. @param selection - Persistent cursor selection. @returns Hyperlink metadata or undefined. */
 export function getWriterHyperlinkAtCursor(
@@ -87,6 +114,7 @@ export function createWriterHyperlinkAction(
       pendingCharacterItems: pendingItems.Clone(),
       point: { node: paragraph, offset: offset + value.length },
     },
+    SwInsertFlags.DEFAULT,
   );
 }
 

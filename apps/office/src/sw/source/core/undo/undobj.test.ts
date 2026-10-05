@@ -1,5 +1,6 @@
 /** @fileoverview Verifies semantic Writer actions, grouping, cursor restoration, lifecycle, limits, and payload scaling. */
 
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
 import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -479,6 +480,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       "word",
       state,
       cursorState(target, 1),
+      SwInsertFlags.DEFAULT,
     );
     const deletion = new SwUndoDelete(
       target,
@@ -570,7 +572,16 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     ).toBe(false);
     expect(
       /** Constructs an insertion without domain payload. @returns Invalid construction that never returns. */
-      () => new SwUndoInsert(target, 0, fragment(target, []), undefined, state, state),
+      () =>
+        new SwUndoInsert(
+          target,
+          0,
+          fragment(target, []),
+          undefined,
+          state,
+          state,
+          SwInsertFlags.DEFAULT,
+        ),
     ).toThrow("non-empty text");
     expect(
       /** Constructs a deletion without domain payload. @returns Invalid construction that never returns. */

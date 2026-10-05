@@ -8604,30 +8604,41 @@
           {
             "marker": "createWriterHyperlinkAction",
             "path": "apps/office/src/sw/source/core/edit/editsh.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/edit/editsh.ts",
+            "marker": "createWriterInsertTextAction"
           }
         ],
         "upstream": [
           {
             "marker": "SwEditShell::InsertURL",
             "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx",
+            "marker": "SwEditShell::Insert2"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/core/edit/editsh.ts",
       "localSymbols": [
         "getWriterHyperlinkAtCursor",
-        "createWriterHyperlinkAction"
+        "createWriterHyperlinkAction",
+        "createWriterInsertTextAction"
       ],
       "omittedResponsibilities": [
         "Native field selection, macro events, and URL execution outside bounded same-paragraph text links remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Owns supported selection-aware SwEditShell hyperlink editing and undo actions."
+        "Owns supported selection-aware SwEditShell hyperlink editing and undo actions.",
+        "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/edit/editsh.cxx",
       "upstreamSymbols": [
-        "SwEditShell::InsertURL"
+        "SwEditShell::InsertURL",
+        "SwEditShell::Insert2"
       ]
     },
     {
@@ -10645,7 +10656,8 @@
       ],
       "preservedResponsibilities": [
         "Implements the bounded SwUndoInsert action from pinned LibreOffice unins.cxx.",
-        "Iteration129 restores collapsed typing and SwUndoInsert text-mode redo through SwTextNode.InsertText/owned Update. Character-items-only insertion overlays existing automatic portions while retaining actual internet attribute/item/map/backlinks,seven native fields and Update boundary flags;no inherited hyperlink DTO reconstruction. Typed actions clone pending items,capture inserted native fragments for bounded grouping payload and reject grouping with explicit fragment mode;legacy fragment/link adapters retained. Existing range clipping is extracted unchanged to ndhints-range under the1000-line gate. Literal flag/boundary,real shell/undo/redo/grouping/live item/composition/Worker and pending ownership checks cover this bounded path. All355 prior tests and240 existing runtime states/defaults/exceptions and I/O deviations retained;new range helper whollyunverified. Selection FORCE/EMPTY/native Insert flags,empty hints,full BuildPortions/other families/style clients/UNO/refcounts/full core/UI remain unverified;no module/goal promotion."
+        "Iteration129 restores collapsed typing and SwUndoInsert text-mode redo through SwTextNode.InsertText/owned Update. Character-items-only insertion overlays existing automatic portions while retaining actual internet attribute/item/map/backlinks,seven native fields and Update boundary flags;no inherited hyperlink DTO reconstruction. Typed actions clone pending items,capture inserted native fragments for bounded grouping payload and reject grouping with explicit fragment mode;legacy fragment/link adapters retained. Existing range clipping is extracted unchanged to ndhints-range under the1000-line gate. Literal flag/boundary,real shell/undo/redo/grouping/live item/composition/Worker and pending ownership checks cover this bounded path. All355 prior tests and240 existing runtime states/defaults/exceptions and I/O deviations retained;new range helper whollyunverified. Selection FORCE/EMPTY/native Insert flags,empty hints,full BuildPortions/other families/style clients/UNO/refcounts/full core/UI remain unverified;no module/goal promotion.",
+        "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unins.cxx",
@@ -12425,7 +12437,8 @@
       "preservedResponsibilities": [
         "Separates Writer text, range, paste, split, and join algorithms from the SwWrtShell cursor identity and undo-notification orchestration boundary.",
         "Required iteration64 decomposition moves the three unchanged browser grapheme boundary helpers from SwTextNode into their sole SwWrtShell editing consumer as private functions. The core no longer exports unrelated editing helpers and no forwarding/re-export shim is retained. All helper bodies,existing editing method bodies and prior test/spec files are unchanged; native notification ownership remains in SwTextNode. This resolves the enforced1000-line text-node limit without changing any limit,grapheme behavior,registered IO/recovery decision or semantic status/default. Existing browser Intl/code-point adapter behavior is retained; complete native cursor/grapheme lifetime is not newly certified.",
-        "Iteration129 restores collapsed typing and SwUndoInsert text-mode redo through SwTextNode.InsertText/owned Update. Character-items-only insertion overlays existing automatic portions while retaining actual internet attribute/item/map/backlinks,seven native fields and Update boundary flags;no inherited hyperlink DTO reconstruction. Typed actions clone pending items,capture inserted native fragments for bounded grouping payload and reject grouping with explicit fragment mode;legacy fragment/link adapters retained. Existing range clipping is extracted unchanged to ndhints-range under the1000-line gate. Literal flag/boundary,real shell/undo/redo/grouping/live item/composition/Worker and pending ownership checks cover this bounded path. All355 prior tests and240 existing runtime states/defaults/exceptions and I/O deviations retained;new range helper whollyunverified. Selection FORCE/EMPTY/native Insert flags,empty hints,full BuildPortions/other families/style clients/UNO/refcounts/full core/UI remain unverified;no module/goal promotion."
+        "Iteration129 restores collapsed typing and SwUndoInsert text-mode redo through SwTextNode.InsertText/owned Update. Character-items-only insertion overlays existing automatic portions while retaining actual internet attribute/item/map/backlinks,seven native fields and Update boundary flags;no inherited hyperlink DTO reconstruction. Typed actions clone pending items,capture inserted native fragments for bounded grouping payload and reject grouping with explicit fragment mode;legacy fragment/link adapters retained. Existing range clipping is extracted unchanged to ndhints-range under the1000-line gate. Literal flag/boundary,real shell/undo/redo/grouping/live item/composition/Worker and pending ownership checks cover this bounded path. All355 prior tests and240 existing runtime states/defaults/exceptions and I/O deviations retained;new range helper whollyunverified. Selection FORCE/EMPTY/native Insert flags,empty hints,full BuildPortions/other families/style clients/UNO/refcounts/full core/UI remain unverified;no module/goal promotion.",
+        "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
