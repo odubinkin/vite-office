@@ -10,5 +10,15 @@
     "exit": 0,
     "bytes": 0,
     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx docs/program/parity/writer-command-slice.json docs/program/writer-paragraph-lists.md",
+    "exit": 0,
+    "evidence": "All matched files use Prettier code style;observed after hover/marker/doc changes."
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+    "exit": 0,
+    "evidence": "No findings;observed after hover gesture correction."
   }
 ]

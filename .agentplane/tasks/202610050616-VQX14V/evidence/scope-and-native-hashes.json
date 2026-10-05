@@ -1,0 +1,107 @@
+{
+  "result": "pass",
+  "base": "5c36a52c9781ce3e0b0c40aea351995217ebd930",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+    "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+    "apps/office/e2e/writer-cell-list-level.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts",
+    "docs/program/parity/writer-command-slice.json",
+    "docs/program/writer-paragraph-lists.md"
+  ],
+  "priorTestFiles": 369,
+  "priorTestFilesByteIdentical": 368,
+  "priorChanges": "Only exact firststatic obsolete undo-class import/instance identity replaced;every other prior assertion/file byte-identical. Inventory case retained unchanged;obsolete mapping class marker corrected only.",
+  "newApplicationCases": 9,
+  "newChromiumCases": 1,
+  "newAppCasesPassedFirstProfile": 8,
+  "newAppFailuresClosed": 1,
+  "inventoryFailuresClosed": 1,
+  "existingRuntimeRows": 244,
+  "newRuntimeRows": 0,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "boundedAppendices": 6,
+  "oneFullAbsentProfile": true,
+  "passingTestReplays": 0,
+  "passingFullBuildGateReplays": 0,
+  "productionUnchangedAfterFirstProfile": true,
+  "appCoverage": {
+    "lines": {
+      "total": 11542,
+      "covered": 11542,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12641,
+      "covered": 12641,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3258,
+      "covered": 3258,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9486,
+      "covered": 9486,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "allReferencesRestored": true,
+  "nativeSHA256": {
+    "sw/source/core/doc/docnum.cxx": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4",
+    "sw/source/core/edit/ednumber.cxx": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114",
+    "sw/source/core/undo/unnum.cxx": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9",
+    "sw/source/core/undo/undobj.cxx": "11321551072e2b476934ebd9cb906979de0f5542d45e9e0c7bf06023cfd1f287",
+    "sw/inc/strings.hrc": "9ca72c0995255ab87985020606d0626e7998087764a3c150e0b1459925130b5f",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+  },
+  "residualUI": "Native OutlineUpDown/style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings,full undo/lifetime/layout,list Enter/Backspace/continue and wide cell navigation remain unverified. No full native/UI/goal claim."
+}

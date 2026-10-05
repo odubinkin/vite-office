@@ -1,0 +1,35 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/editor/native-cell-list-level.test.tsx -t ^(?:native cell list level UI enables and renders demote,promote and indent on the actual cell with Undo/Redo)$ --coverage --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.thresholds.functions=0 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VQX14V.app-failed-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 140,
+      "sha256": "33af4ca2ab315a3df3fdd385cb5f42b593a380a11a5364bd08278935d26f2d2f",
+      "selectedNames": [
+        "native cell list level UI enables and renders demote,promote and indent on the actual cell with Undo/Redo"
+      ],
+      "failedCases": [],
+      "passed": 1,
+      "skipped": 1,
+      "coverageMapSHA256": "532e5522ea9eae8e0c88f4fac5625d1f17ed1f78a7b18aadc9e7f3bdcab8c43b"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm exec -- vitest run scripts/libreoffice-inventory/parity-mapping-cli.test.ts --config scripts/libreoffice-inventory/vitest.config.ts -t ^(?:parity mapping CLI composes the Writer mapping report with owned upstream marker evidence)$ --coverage --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.thresholds.functions=0 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VQX14V.inventory-failed-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 146,
+      "sha256": "968ebb9f8ff78ea4e2f02574b38b85d4604c925369f47370b3b095fc36058493",
+      "selectedNames": [
+        "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ],
+      "failedCases": [],
+      "passed": 1,
+      "skipped": 2,
+      "coverageMapSHA256": "97251dc8b8020b8c9ce55d99f428eaf7ab858f9af8bb87241aa0618925ff53db"
+    }
+  ]
+}
