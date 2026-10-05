@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "lines": {
+      "total": 12597,
+      "covered": 12597,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13804,
+      "covered": 13804,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3382,
+      "covered": 3382,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10262,
+      "covered": 10262,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "sourceChangedAfterInitialProfile": [],
+  "counterTransfer": "Actual initial app and two genuinely new cursor-only API cases plus originally failed new marked case counters merged only with identical maps; inventory initial and single originally failed case counters merged only with identical maps. All final production hashes equal full absent profile. No passing replay or changed-source counter transfer.",
+  "initialMapSHA256": "118b6c3aa734cde369c4918b740f9d123c51cde2029873eb1dfd57abb7f930ae",
+  "finalMapSHA256": "973f0cf3091021fd10dd060fc970e51ba8633a9fd54e55d89dc23349c45ec8a8",
+  "initialInventoryMapSHA256": "d23197c7cbc265ea00175812782b970b5d5dbb7cb87bde9fec8e5873a6a332ad",
+  "finalInventoryMapSHA256": "00aa193ce8b189cdb55e337a06640aed92122f0cc44d66c7b3ae5c47ff0de7c3",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "3947af9d3a368fe3a4694bfff4b5567826a89e984a0a733952c123e5d9a92b32",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "5561e9f602712c418aad6fe92f482e3a853024e4a634f293e3c18ff3accd2449",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "a2bcb70f7ae1491ab752073bd987a0b4e126f55609b538a4dd47f63c85a76149",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts": "bb91bd19713973a4b12d9485ae4b4bbe7c8b145d995d8c582369339df7d9272f",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "fc09e9fece00d3abf677b585ff7f52cd540d718629c4284e9a734a33bddba824"
+  }
+}

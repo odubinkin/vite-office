@@ -1,0 +1,66 @@
+{
+  "base": "b6c3233bfe3511f504ce66a369c170042751c6fa",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+    "apps/office/e2e/writer-table-row-lists.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 416,
+  "priorTestFilesByteIdentical": 414,
+  "sourceConfirmedPriorTestCorrections": [
+    "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts"
+  ],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "exportAndDeletedHelperAnchorMigration": "apps/office/src/sw/source/core/edit/ednumber.ts",
+  "obsoleteFunctionalMutationInventoryEntryRemoved": "writer.internal.change-writer-paragraph-list-level",
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts"
+  ],
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "3947af9d3a368fe3a4694bfff4b5567826a89e984a0a733952c123e5d9a92b32",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "5561e9f602712c418aad6fe92f482e3a853024e4a634f293e3c18ff3accd2449",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "a2bcb70f7ae1491ab752073bd987a0b4e126f55609b538a4dd47f63c85a76149",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts": "bb91bd19713973a4b12d9485ae4b4bbe7c8b145d995d8c582369339df7d9272f",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "fc09e9fece00d3abf677b585ff7f52cd540d718629c4284e9a734a33bddba824"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/edit/ednumber.cxx",
+      "sha256": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114"
+    },
+    {
+      "path": "sw/inc/edimp.hxx",
+      "sha256": "d35d4edf0a84f8b65568275aec94bdaa2f5c22e60b8c201dcab0a1a690fe0716"
+    },
+    {
+      "path": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "sha256": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac"
+    },
+    {
+      "path": "sw/source/uibase/shells/textsh1.cxx",
+      "sha256": "ff294d3cc9b7cdb11af4aca02c44987e7b506488a6bbaa84781c3227019a8f0d"
+    },
+    {
+      "path": "sw/source/core/undo/unnum.cxx",
+      "sha256": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9"
+    }
+  ],
+  "validationLimit": "Inherited bounded SwEditShell list state/rule/removal/level owner and actual ring traversal,sorted native range normalization,current numeric history and actual table row/column selection only. Full SwCursorShell hierarchy,document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and ContinueNumbering rings remain unverified;no whole module/status/default/IO exception promotion,parentDOING/goalACTIVE."
+}

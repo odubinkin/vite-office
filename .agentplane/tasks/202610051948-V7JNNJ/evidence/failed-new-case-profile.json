@@ -1,0 +1,23 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/edit/native-list-ring.test.ts --testNamePattern=^native numbering history retains its public cursor-only API marked=true$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/V7JNNJ.retry-app-results.json",
+      "profile": "upstream-absent new cursor-only API cases and original failed inventory case only",
+      "exit": 0,
+      "bytes": 1061,
+      "sha256": "aa53aaba4209bea8f6b863c42e7c7deec9dc794bcadb919d8e807b6196c7d25e",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 50
+      },
+      "failedCases": [],
+      "executedCases": [
+        "native numbering history retains its public cursor-only API marked=true"
+      ],
+      "skipped": 49
+    }
+  ]
+}

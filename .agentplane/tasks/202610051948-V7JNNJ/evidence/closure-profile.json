@@ -1,0 +1,44 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/edit/native-list-ring.test.ts --testNamePattern=^native numbering history retains its public cursor-only API marked= --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/V7JNNJ.closure-app-results.json",
+      "profile": "upstream-absent new cursor-only API cases and original failed inventory case only",
+      "exit": 1,
+      "bytes": 6677,
+      "sha256": "f7bab38cad4ab7f4e4a2e495ae3e750c42e6be770a25d61bf464fbe8a42fe28f",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 1,
+        "total": 50
+      },
+      "failedCases": [
+        "native numbering history retains its public cursor-only API marked=true"
+      ],
+      "executedCases": [
+        "native numbering history retains its public cursor-only API marked=false",
+        "native numbering history retains its public cursor-only API marked=true"
+      ],
+      "skipped": 48
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern=^(?:parity mapping CLI composes the Writer mapping report with owned upstream marker evidence)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/V7JNNJ.closure-inventory-results.json",
+      "profile": "upstream-absent new cursor-only API cases and original failed inventory case only",
+      "exit": 0,
+      "bytes": 1244,
+      "sha256": "0dd78152b3691981eecfeee9710bb1f082ff8fc46e4ca1115cd619ce9968f65a",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 3
+      },
+      "failedCases": [],
+      "executedCases": [
+        "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ],
+      "skipped": 2
+    }
+  ]
+}
