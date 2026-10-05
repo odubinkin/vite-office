@@ -1,10 +1,11 @@
 ---
 id: "202610051545-VAM4JC"
 title: "Apply native list and follow-style defaults when splitting paragraphs"
-status: "DOING"
+result_summary: "Applied native end-only follow style and continuation list restart/count/identity/level defaults through existing core owners.18new cases and exact2source style test corrections verified; final build code identical, app/inventory100% L/S/F/B and120Chromium passed. Physical split/heading Undo history and broader UI/table parity remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -45,7 +46,9 @@ quality_review:
   findings:
     - "Native end-only follow style, conditional direct outline level preservation, restart/count reset and rule/outline departure list reset inspected against pinned ndtxt.cxx.18new tests plus exactly2source-contradicted prior style assertions;406prior404unchanged,250states/defaults/evidence preserved."
     - "ONE full absent build/profile plus only original2failed/remaining1failed app retries.12186distinct app,109inventory,5scripts,120Chromium, actual merged100% L/S/F/B. Final production identical to full build."
-commit: null
+commit:
+  hash: "80888328de221a5df4981e904e3091a4c1094c77"
+  message: "🧩 VAM4JC task: record verified native split list and style defaults"
 comments:
   -
     author: "CODER"
@@ -56,6 +59,9 @@ comments:
   -
     author: "CODER"
     body: "Start: authoritative406prior files,404unchanged and2bounded source style corrections; verification criteria unchanged."
+  -
+    author: "CODER"
+    body: "Verified: native logical split list/style defaults,18new tests,12186distinct app and120Chromium; actual100% coverage, one absent profile and failed-only closure; semantic1213bf81."
 events:
   -
     type: "status"
@@ -84,8 +90,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified semantic1213bf81 native logical split list/style defaults.18new/12186distinct app,109inventory,5scripts,120Chromium,6statics and5restored source audits pass; actual100% L/S/F/B, final code hashes equal full build. ONE absent profile then only original2failed/remaining1failed retries.406prior404unchanged/2exactsource style contracts,250states/defaults/evidence preserved. Same-agent exact-SHA EVALUATOR pass;0forbidden AP artifacts. Physical split/heading Undo history/full UI/table parity open."
+  -
+    type: "status"
+    at: "2026-10-05T16:10:13.299Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native logical split list/style defaults,18new tests,12186distinct app and120Chromium; actual100% coverage, one absent profile and failed-only closure; semantic1213bf81."
 doc_version: 3
-doc_updated_at: "2026-10-05T16:09:40.006Z"
+doc_updated_at: "2026-10-05T16:10:13.301Z"
 doc_updated_by: "CODER"
 description: "Iteration154 source-confirmed core split defaults serving UI Enter; logical prefix/suffix list ownership, conditional follow style, source-independent history evidence."
 sections:
@@ -143,6 +156,10 @@ sections:
     - Observation: Two old tests assumed follow-body styles for an interior heading split; first failed-only retry also exposed its old line-height expectation.
       Impact: Existing style expectations contradicted native end-only bChgFollow. Full profile18new passed and2oldfailed; passing profiles/cases were not replayed.
       Resolution: Native style behavior retained; bounded literal heading CSS/style assertions corrected under approved scope, each remaining failure retested only. Actual maps merged100%; final production unchanged after original build. Residual physical ownership and heading Undo history documented.
+extensions:
+  implementation_commit:
+    hash: "1213bf81d4eeaf886cf3b43cbd1d24b104674263"
+    message: "🧩 VAM4JC code: apply native split list and follow-style defaults"
 id_source: "generated"
 ---
 ## Summary
