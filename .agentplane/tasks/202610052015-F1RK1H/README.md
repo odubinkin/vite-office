@@ -4,7 +4,7 @@ title: "Continue numbering through native ring commands"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T20:44:38.342Z"
+  updated_by: "CODER"
+  note: "Verified native all-ring Add to List and removed UI attribute/history builder. Six statics and changed-file checks, ONE absent profile plus six failed/three new app cases and one supported new browser case only;12470app/109inventory/5scripts/133committedChromium passed,actual coverage100%. Six-owner final source/bundle hashes and exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b EVALUATOR pass 20261005-204422908-recovery-context. Unsupported browser cell-list ODT probe retained as gap; no passing replay. Five restored audits/scope/AP/doctor/routing pass; conscious IO deviations unchanged."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: source-confirmed native continuation ring dispatch and restart flag history under standing iterative user authorization; preserve conscious IO exceptions and one absent profile."
+  -
+    type: "verify"
+    at: "2026-10-05T20:44:38.342Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native all-ring Add to List and removed UI attribute/history builder. Six statics and changed-file checks, ONE absent profile plus six failed/three new app cases and one supported new browser case only;12470app/109inventory/5scripts/133committedChromium passed,actual coverage100%. Six-owner final source/bundle hashes and exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b EVALUATOR pass 20261005-204422908-recovery-context. Unsupported browser cell-list ODT probe retained as gap; no passing replay. Five restored audits/scope/AP/doctor/routing pass; conscious IO deviations unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-05T20:43:03.865Z"
+doc_updated_at: "2026-10-05T20:44:52.746Z"
 doc_updated_by: "CODER"
 description: "Iteration163: remove duplicated UI rule/history application and repair Add to List across actual selected table rows and columns; native rule-sensitive restart history and inherited SetCurNumRule own execution."
 sections:
@@ -79,7 +85,41 @@ sections:
     3. Source-owned native rule search/outline stop,alltable row/column/sparse rings,rule-sensitive restart prepass,flag-only numeric history/current replacement,restart-value/indents/metadata/neighbors preserved,oneUndo restores original table cursor;UI delegates finalrule/count to inherited SetCurNumRule(no indentreset).418priorfiles417byteidentical1bounded old payload correction;250states/defaults/classes/IOexceptions/prior evidence preserved,9paths/4owners/nativeboolhistoryexport. Column UI selector absent;corecolumn tested and Chromium row only. API/macro,numericrestartvalue overload,full hierarchy/history/Repeat/layout unverified.
     4. After vendorrestore: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Exact scope/oldtest/metadata/defaults/APignoredinclusive audit,doctor/routing;explicit same-agentEVALUATOR exactSHApass,recordverify,meaningfulfinish,wholeparentcheckpoint/cleantracked+untracked.
     5. Recovery root scope adds pam.ts/index.ts generic native structural position and nullable content-index ownership,not a table guard. Native initial restart mutation preserves live ring;original6failednewapp plus genuinelynew generic-position/index/groupedinitialcursor cases only;132passedChromiumnotreplayed. Honest contiguous unchanged/hash/map coverage transfer;changed/crossing/new locations require actualfailed/newcounters,all100% unchangedcriteria.11paths6owners418prior417unchanged1boundedpayload. One final newly changed unbuilt production bundle maybuildonce;new unexecutedbrowserrestartscenario only ifneeded.
-  Verification: "Pending declared checks; no unverified full parity claim."
+  Verification: |-
+    Pending declared checks; no unverified full parity claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T20:44:38.342Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native all-ring Add to List and removed UI attribute/history builder. Six statics and changed-file checks, ONE absent profile plus six failed/three new app cases and one supported new browser case only;12470app/109inventory/5scripts/133committedChromium passed,actual coverage100%. Six-owner final source/bundle hashes and exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b EVALUATOR pass 20261005-204422908-recovery-context. Unsupported browser cell-list ODT probe retained as gap; no passing replay. Five restored audits/scope/AP/doctor/routing pass; conscious IO deviations unchanged.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T20:43:03.865Z, excerpt_hash=sha256:b134d07d587ffd3e9e35eb71be6a90ff8bc3941809cfba6e67058815791d7b6d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052015-F1RK1H/blueprint/resolved-snapshot.json
+    - old_digest: eeda51e132486949b2a0d786eefe6d4961075b19ff54246f528917e8599efb0a
+    - current_digest: eeda51e132486949b2a0d786eefe6d4961075b19ff54246f528917e8599efb0a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610052015-F1RK1H
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610052015-F1RK1H
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic commit if necessary; preserve prior history and registered save/open/recovery exceptions."
   Findings: |-
     Iteration163 verified progress for the existing Add to List command. Pin LibreOffice26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65 retained; parent DOING and broad goal ACTIVE.
@@ -104,7 +144,7 @@ sections:
     Command: five vendor-restored source audits UI resource/source-tree/provenance/invariants/parity.
     Result: all5pass first final attempts0semantic violations. Scope audit11intentional paths/6owner records,418prior testfiles417byteidentical1exact source-confirmed native restart-action payload correction; all behavior assertions retained.250states/defaults/classifications/conscious save/open/recovery exceptions and prior evidence preserved; only native SwUndoNumRuleStart symbol appended. AP ignored-inclusive4332files0forbidden. No upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/raw diagnostics. Doctor0errors2pre-existing warnings; routingOK.
 
-    Limits: UI existing command behavior and core generic structural positions/nullable index/native boolean restart history only. SfxRequest.IsAPI/macro semantics, native StartUndo ID/rewriter, numeric restart-value overload/Repeat/document-owned auto append/SwHistory/full shell hierarchy/client/layout/merged/rule factory remain unverified. Column selector absent: corecolumn tested,Chromiumrows only. ODT table-cell list import and UI restart control remain missing existing gaps; broad table/list rendering/editing/protection/clipboard/layout/UI parity open. Conscious IO/recovery deviations unchanged. Same-agent explicit EVALUATOR exact semantic SHA review required; no independent reviewer claimed. One leaf per goal turn.
+    Limits: UI existing command behavior and core generic structural positions/nullable index/native boolean restart history only. SfxRequest.IsAPI/macro semantics, native StartUndo ID/rewriter, numeric restart-value overload/Repeat/document-owned auto append/SwHistory/full shell hierarchy/client/layout/merged/rule factory remain unverified. Column selector absent: corecolumn tested,Chromiumrows only. ODT table-cell list import and UI restart control remain missing existing gaps; broad table/list rendering/editing/protection/clipboard/layout/UI parity open. Conscious IO/recovery deviations unchanged. Same-agent explicit EVALUATOR pass 20261005-204422908-recovery-context bound to exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b; recorded verification OK, no independent reviewer claimed. One leaf per goal turn.
 id_source: "generated"
 ---
 ## Summary
@@ -141,6 +181,39 @@ Iteration163 continues standing iterative user-authorized core/UI/refactor goal,
 
 Pending declared checks; no unverified full parity claim.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T20:44:38.342Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native all-ring Add to List and removed UI attribute/history builder. Six statics and changed-file checks, ONE absent profile plus six failed/three new app cases and one supported new browser case only;12470app/109inventory/5scripts/133committedChromium passed,actual coverage100%. Six-owner final source/bundle hashes and exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b EVALUATOR pass 20261005-204422908-recovery-context. Unsupported browser cell-list ODT probe retained as gap; no passing replay. Five restored audits/scope/AP/doctor/routing pass; conscious IO deviations unchanged.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T20:43:03.865Z, excerpt_hash=sha256:b134d07d587ffd3e9e35eb71be6a90ff8bc3941809cfba6e67058815791d7b6d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052015-F1RK1H/blueprint/resolved-snapshot.json
+- old_digest: eeda51e132486949b2a0d786eefe6d4961075b19ff54246f528917e8599efb0a
+- current_digest: eeda51e132486949b2a0d786eefe6d4961075b19ff54246f528917e8599efb0a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610052015-F1RK1H
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610052015-F1RK1H
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only this leaf semantic commit if necessary; preserve prior history and registered save/open/recovery exceptions.
@@ -169,4 +242,4 @@ Result: final bundle built once upstream absent, current6owner hashes match fina
 Command: five vendor-restored source audits UI resource/source-tree/provenance/invariants/parity.
 Result: all5pass first final attempts0semantic violations. Scope audit11intentional paths/6owner records,418prior testfiles417byteidentical1exact source-confirmed native restart-action payload correction; all behavior assertions retained.250states/defaults/classifications/conscious save/open/recovery exceptions and prior evidence preserved; only native SwUndoNumRuleStart symbol appended. AP ignored-inclusive4332files0forbidden. No upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/raw diagnostics. Doctor0errors2pre-existing warnings; routingOK.
 
-Limits: UI existing command behavior and core generic structural positions/nullable index/native boolean restart history only. SfxRequest.IsAPI/macro semantics, native StartUndo ID/rewriter, numeric restart-value overload/Repeat/document-owned auto append/SwHistory/full shell hierarchy/client/layout/merged/rule factory remain unverified. Column selector absent: corecolumn tested,Chromiumrows only. ODT table-cell list import and UI restart control remain missing existing gaps; broad table/list rendering/editing/protection/clipboard/layout/UI parity open. Conscious IO/recovery deviations unchanged. Same-agent explicit EVALUATOR exact semantic SHA review required; no independent reviewer claimed. One leaf per goal turn.
+Limits: UI existing command behavior and core generic structural positions/nullable index/native boolean restart history only. SfxRequest.IsAPI/macro semantics, native StartUndo ID/rewriter, numeric restart-value overload/Repeat/document-owned auto append/SwHistory/full shell hierarchy/client/layout/merged/rule factory remain unverified. Column selector absent: corecolumn tested,Chromiumrows only. ODT table-cell list import and UI restart control remain missing existing gaps; broad table/list rendering/editing/protection/clipboard/layout/UI parity open. Conscious IO/recovery deviations unchanged. Same-agent explicit EVALUATOR pass 20261005-204422908-recovery-context bound to exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b; recorded verification OK, no independent reviewer claimed. One leaf per goal turn.
