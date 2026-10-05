@@ -4,7 +4,7 @@ title: "Share Writer paragraph rendering between body text and table cells"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T06:11:22.330Z"
+  updated_by: "CODER"
+  note: "Verified 41c08db25de40c8c822bdd7e89df1da7b02139be:shared body/cell paragraph display;one absent profile plus exact2failed closure,100 cumulative coverage,101 first-pass Chromium,prior assertions retained. Progress only;full parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -59,8 +59,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: remove the partial table cell renderer and share actual paragraph projection, native list labels and display behavior with body and measurement text."
+  -
+    type: "verify"
+    at: "2026-10-05T06:11:22.330Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified 41c08db25de40c8c822bdd7e89df1da7b02139be:shared body/cell paragraph display;one absent profile plus exact2failed closure,100 cumulative coverage,101 first-pass Chromium,prior assertions retained. Progress only;full parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T06:09:06.166Z"
+doc_updated_at: "2026-10-05T06:11:22.404Z"
 doc_updated_by: "CODER"
 description: "Remove the partial cell font/spacing renderer and identity fallback; render actual cell paragraph projections and native list labels through the same paragraph component on visible and measurement surfaces. Preserve shared input/history ownership, registered I/O deviations and all semantic statuses."
 sections:
@@ -97,7 +103,41 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Owned literal native-node projection,mounted cell/body and Chromium format/list/history/ODT contracts. ONE absent full profile,exact failed/new-only closure,no passing replay. Both first countmaps retained only in ignored appcache. All244states/defaults/exceptions remain unchanged.
-  Verification: "Pending implementation and validation."
+  Verification: |-
+    CODER verified progress on semantic 41c08db25de40c8c822bdd7e89df1da7b02139be against approved shared body/cell paragraph display scope. Private cell attribute/font/spacing/text-run assembler and synthetic ID fallback removed;visible and measurement use common immutable actual-node projection and renderer. Actual shell edits/history unchanged. Six declared static gates pass after observed new formatting/constructor and fixture plumbing failures;focused changed tests and final typecheck pass. ONE sequential full upstream-absent profile:build0,app11881pass/2fail of11883/284files,inventory109pass and first100fourmetrics,scripts5pass,Chromium101pass including the new ODT/history case. Exact2failed replay closes2pass/24skipped,zero passing or full-build replays;production unchanged after firstprofile. Newapp12cases,11firstpass/1failed-only closure;Heading1 native360twips/18pt expected. Actual source-identical Istanbul map merge app100lines/statements/functions/branches,firstinventory100;both first countmaps only ignored appcache. All vendor renames restored in finally before five passing source audits/semanticviolations0. Scope367priorfiles365byteidentical;two old fixture files receive plumbing only,all original assertions retained by inverse proof. Existing244states/defaults/exceptions unchanged,no newrow/promotion,six bounded notes,five native hashes. Exact-SHA same-actor readonly audit exited0 before qualitypass;not independent review. Quality .agentplane/tasks/202610050543-WCNKTY/quality/20261005-061046246-recovery-context/quality-report.json. Doctor0errors/two preexisting warnings,routingpass,ignored-inclusive AP4006files0forbidden before quality;finalscan follows parent persistence. Native full table frames/pagination,spacing collapse,Home/navigation/wide selection,nested/merged cells,portion engine and list structural editing remain unverified. Readonly WriterTextRun projection remains. Registered I/O/recovery decisions untouched;one leaf only,goal active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T06:11:22.330Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified 41c08db25de40c8c822bdd7e89df1da7b02139be:shared body/cell paragraph display;one absent profile plus exact2failed closure,100 cumulative coverage,101 first-pass Chromium,prior assertions retained. Progress only;full parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T06:11:21.813Z, excerpt_hash=sha256:0dcd204e24fa84e23b12e459c6a0f28b1d3fb30d470adf883ae3b4c7ea6a118e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050543-WCNKTY/blueprint/resolved-snapshot.json
+    - old_digest: 55005116749c53ae7708b00bbf9e6cf8d171a1eee21d1974e54e483815e4c654
+    - current_digest: 55005116749c53ae7708b00bbf9e6cf8d171a1eee21d1974e54e483815e4c654
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610050543-WCNKTY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610050543-WCNKTY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without history rewriting."
   Findings: |-
     Iteration139 preflight clean main beae94174aaffd5afdb6121f2d8718069a7976dc,direct,only parent active;previous138 classified verified progress DONE. Four matched policies loaded,user-instructions absent. Actual cell renderer still independently reads font/height/weight/posture/spacing and text runs,omits paragraph alignment,common direct/inherited style/color/indent and native list label display. WriterViewProjection already projects all connected text and actual native GetListLabel values,so no new core projection is needed. Pinned tabfrm.cxx5804/5817 SwCellFrame inserts native cell content through InsertCnt_;frmtool.cxx1622 chooses MakeTextFrame;txtfrm.cxx762/916 constructs the ordinary SwTextFrame for the node;itrcrsr.cxx uses common paragraph/list margins with table-specific guards. This is a concrete shared text-display owner gap,not a claim of full native table layout equivalence. Standing user goal and explicit UI/list/table instruction authorize safe local correction. Preserve all244 semantic states/defaults/exceptions and registered I/O/recovery decisions.
@@ -150,7 +190,40 @@ Owned literal native-node projection,mounted cell/body and Chromium format/list/
 
 ## Verification
 
-Pending implementation and validation.
+CODER verified progress on semantic 41c08db25de40c8c822bdd7e89df1da7b02139be against approved shared body/cell paragraph display scope. Private cell attribute/font/spacing/text-run assembler and synthetic ID fallback removed;visible and measurement use common immutable actual-node projection and renderer. Actual shell edits/history unchanged. Six declared static gates pass after observed new formatting/constructor and fixture plumbing failures;focused changed tests and final typecheck pass. ONE sequential full upstream-absent profile:build0,app11881pass/2fail of11883/284files,inventory109pass and first100fourmetrics,scripts5pass,Chromium101pass including the new ODT/history case. Exact2failed replay closes2pass/24skipped,zero passing or full-build replays;production unchanged after firstprofile. Newapp12cases,11firstpass/1failed-only closure;Heading1 native360twips/18pt expected. Actual source-identical Istanbul map merge app100lines/statements/functions/branches,firstinventory100;both first countmaps only ignored appcache. All vendor renames restored in finally before five passing source audits/semanticviolations0. Scope367priorfiles365byteidentical;two old fixture files receive plumbing only,all original assertions retained by inverse proof. Existing244states/defaults/exceptions unchanged,no newrow/promotion,six bounded notes,five native hashes. Exact-SHA same-actor readonly audit exited0 before qualitypass;not independent review. Quality .agentplane/tasks/202610050543-WCNKTY/quality/20261005-061046246-recovery-context/quality-report.json. Doctor0errors/two preexisting warnings,routingpass,ignored-inclusive AP4006files0forbidden before quality;finalscan follows parent persistence. Native full table frames/pagination,spacing collapse,Home/navigation/wide selection,nested/merged cells,portion engine and list structural editing remain unverified. Readonly WriterTextRun projection remains. Registered I/O/recovery decisions untouched;one leaf only,goal active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T06:11:22.330Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified 41c08db25de40c8c822bdd7e89df1da7b02139be:shared body/cell paragraph display;one absent profile plus exact2failed closure,100 cumulative coverage,101 first-pass Chromium,prior assertions retained. Progress only;full parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T06:11:21.813Z, excerpt_hash=sha256:0dcd204e24fa84e23b12e459c6a0f28b1d3fb30d470adf883ae3b4c7ea6a118e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050543-WCNKTY/blueprint/resolved-snapshot.json
+- old_digest: 55005116749c53ae7708b00bbf9e6cf8d171a1eee21d1974e54e483815e4c654
+- current_digest: 55005116749c53ae7708b00bbf9e6cf8d171a1eee21d1974e54e483815e4c654
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610050543-WCNKTY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610050543-WCNKTY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
