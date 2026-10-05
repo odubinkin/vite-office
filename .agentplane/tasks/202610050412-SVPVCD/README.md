@@ -4,7 +4,7 @@ title: "Restore native cross-node selected deletion and forced insertion"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T04:50:41.558Z"
+  updated_by: "CODER"
+  note: "Verified native body-text cross deletion/survivor/history and selected mode5 at 07ea47010148bf373c2cb691eb6ce56120109adf. One full absent profile,application first coverage100%;exact failed-only576+1 closure,zero passing replay. Six static andfive restored audits pass;363 old files/362 identical/only generic-helper syntax. Inventory cumulative source/count closure documented,not fresh full measurement. Same-actor exactSHAquality pass. Registered deviations andexisting243states/defaults/exceptions unchanged,newmoduleunverified. Fullcore/UI parity remainsunverified;TextRun render boundary next priority."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native cross-node raw deletion/history and survivor/forced insertion under standing approved iterative goal;single full absent profile and failed/new-only replays,no sources/helpers in Agentplane."
+  -
+    type: "verify"
+    at: "2026-10-05T04:50:41.558Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native body-text cross deletion/survivor/history and selected mode5 at 07ea47010148bf373c2cb691eb6ce56120109adf. One full absent profile,application first coverage100%;exact failed-only576+1 closure,zero passing replay. Six static andfive restored audits pass;363 old files/362 identical/only generic-helper syntax. Inventory cumulative source/count closure documented,not fresh full measurement. Same-actor exactSHAquality pass. Registered deviations andexisting243states/defaults/exceptions unchanged,newmoduleunverified. Fullcore/UI parity remainsunverified;TextRun render boundary next priority."
 doc_version: 3
-doc_updated_at: "2026-10-05T04:50:15.284Z"
+doc_updated_at: "2026-10-05T04:50:41.648Z"
 doc_updated_by: "CODER"
 description: "Replace cross-paragraph fragment-action composition with one SwUndoDelete raw boundary-string/history action, native sw_GetJoinFlags survivor choice and DeleteAndJoin body-text kernel, then forced mode5 selected insertion. Preserve registered document I/O deviations and keep cursor/retained-boundary identity and full native graph/layout responsibilities explicitly unverified."
 sections:
@@ -118,6 +124,39 @@ sections:
     Result: pass;doctor0errors/two unchanged warnings;routingpass;3975files/zero forbidden before quality.
     Evidence: scope-and-native-hashes.json;.agentplane/tasks/202610050412-SVPVCD/quality/20261005-044921712-recovery-context/quality-report.json. Completed same-actor read-only review of exact 07ea47010148bf373c2cb691eb6ce56120109adf,not independent evaluation. Collector initially exceeded default git-show buffer on provenance JSON;only readonly audit retried with32MiB andpassed,latest quality report supersedes earlier prematurely recorded report. Ten semantic paths;363 prior files/362 byte-identical/only generic helper syntax changed,all old expectations intact.782 newcases;243 old runtime states/defaults/exceptions unchanged,new docedt wholly unverified,ten bounded note appendices,six native hashes.
     Scope: native body-text join flags/survivor selection,raw-boundary single SwUndoDelete history and selected insertion mode5. Existing boundary object identity/cursor references,AppendTextNode cloning,zero-length CopyAttr,full native structural/ring/redline/bookmark/field/layout history remain unverified. UI editing already routes to real SwEditWin/SwWrtShell/SwDoc;TextRun display projection remains and is next priority. Registered save/open/recovery deviations unchanged;whole-module and overall core/UI parity unverified;goalactive.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T04:50:41.558Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native body-text cross deletion/survivor/history and selected mode5 at 07ea47010148bf373c2cb691eb6ce56120109adf. One full absent profile,application first coverage100%;exact failed-only576+1 closure,zero passing replay. Six static andfive restored audits pass;363 old files/362 identical/only generic-helper syntax. Inventory cumulative source/count closure documented,not fresh full measurement. Same-actor exactSHAquality pass. Registered deviations andexisting243states/defaults/exceptions unchanged,newmoduleunverified. Fullcore/UI parity remainsunverified;TextRun render boundary next priority.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T04:50:15.284Z, excerpt_hash=sha256:79c83b98cbd225b9aed7d89740a8edba5778059d697a7b5886df88b2c859a094
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050412-SVPVCD/blueprint/resolved-snapshot.json
+    - old_digest: 0772bc3c216d62244be9fbbb1e426cc06ce42207bcb6828a71f8a5a444eb6364
+    - current_digest: 0772bc3c216d62244be9fbbb1e426cc06ce42207bcb6828a71f8a5a444eb6364
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610050412-SVPVCD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610050412-SVPVCD
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without history rewriting."
   Findings: |-
     Iteration137preflight clean main fa31cccfa1af22bd3320c081a43706c30a314d73,direct,onlyparentactive;136verifiedprogress DONE. Four matched policies loaded,user-instructions absent. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Existingcross deletes multiple fragment SwUndoReplace actions then repeatedly joins into firstnode;selectedcross Insert passes falseforce. Native docedt.cxx329 normalizespoint/mark andchooses end survivor whenstart0/endleavessuffix,360joinPrev Break/PageDesc andchar preparation. DocumentContentOperationsManager.cxx4557 flags thenDeleteRangeImpl andJoinText;undel.cxx247 JoinNext flag,455rawfirsttail/endhead+wholeboundaryhints/directsets,269collectionhistory,1043freshhistory,1233TmpEnd reset. Existingcursor/retainedboundaryidentity/AppendTextNodeclone mechanisms remain source gaps and will be explicitly retainedunverified for this bounded body-text deletion correction.136fullcoverage measured99.97 withcumulativeproof only;137firstcoverageJSONwill preserve countmap for instrumented cumulative closure rather than lose payload. No old test edits before first-profile observations.
@@ -202,6 +241,39 @@ Command: ap doctor; node .agentplane/policy/check-routing.mjs; scope/native hash
 Result: pass;doctor0errors/two unchanged warnings;routingpass;3975files/zero forbidden before quality.
 Evidence: scope-and-native-hashes.json;.agentplane/tasks/202610050412-SVPVCD/quality/20261005-044921712-recovery-context/quality-report.json. Completed same-actor read-only review of exact 07ea47010148bf373c2cb691eb6ce56120109adf,not independent evaluation. Collector initially exceeded default git-show buffer on provenance JSON;only readonly audit retried with32MiB andpassed,latest quality report supersedes earlier prematurely recorded report. Ten semantic paths;363 prior files/362 byte-identical/only generic helper syntax changed,all old expectations intact.782 newcases;243 old runtime states/defaults/exceptions unchanged,new docedt wholly unverified,ten bounded note appendices,six native hashes.
 Scope: native body-text join flags/survivor selection,raw-boundary single SwUndoDelete history and selected insertion mode5. Existing boundary object identity/cursor references,AppendTextNode cloning,zero-length CopyAttr,full native structural/ring/redline/bookmark/field/layout history remain unverified. UI editing already routes to real SwEditWin/SwWrtShell/SwDoc;TextRun display projection remains and is next priority. Registered save/open/recovery deviations unchanged;whole-module and overall core/UI parity unverified;goalactive.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T04:50:41.558Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native body-text cross deletion/survivor/history and selected mode5 at 07ea47010148bf373c2cb691eb6ce56120109adf. One full absent profile,application first coverage100%;exact failed-only576+1 closure,zero passing replay. Six static andfive restored audits pass;363 old files/362 identical/only generic-helper syntax. Inventory cumulative source/count closure documented,not fresh full measurement. Same-actor exactSHAquality pass. Registered deviations andexisting243states/defaults/exceptions unchanged,newmoduleunverified. Fullcore/UI parity remainsunverified;TextRun render boundary next priority.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T04:50:15.284Z, excerpt_hash=sha256:79c83b98cbd225b9aed7d89740a8edba5778059d697a7b5886df88b2c859a094
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050412-SVPVCD/blueprint/resolved-snapshot.json
+- old_digest: 0772bc3c216d62244be9fbbb1e426cc06ce42207bcb6828a71f8a5a444eb6364
+- current_digest: 0772bc3c216d62244be9fbbb1e426cc06ce42207bcb6828a71f8a5a444eb6364
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610050412-SVPVCD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610050412-SVPVCD
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
