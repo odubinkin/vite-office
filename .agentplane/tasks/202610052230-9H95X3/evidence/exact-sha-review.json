@@ -1,0 +1,25 @@
+{
+  "reviewer": "Same current coding agent in explicit EVALUATOR role; no independent reviewer claimed.",
+  "semanticCommit": "ef1417a98ff8314c2897f32dadacb50f465dd3b3",
+  "base": "7a2d8645a8a061e443511f67bc7dac5af42becd4",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/docnum.ts",
+    "apps/office/src/sw/source/core/undo/unoutl.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+    "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+    "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+    "apps/office/e2e/writer-native-outline-tab.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/doc/number.ts"
+  ],
+  "reviewedSemanticDiffBytes": 185068,
+  "reviewedSemanticDiffSHA256": "88e0f611e1d6085b1c4cfbe620a82d50d32dfd79f4ca3a33f124f909a9154a9e",
+  "verdict": "pass",
+  "evidence": "Native docnum.cxx complete represented unmerged OutlineUpDown: actual sorted outline Seek_Entry/predecessor/end range, creation-order assigned style ties, lazy next/previous pool heading admission with actual assignment tests, signed steps across occupied levels, assigned/direct whole-range preflight, ChgFormatColl/SetAttrOutlineLevel. Native unoutl range+delta inverse/same primitive UndoRedo and ednumber default displacement1/normalized ring bRet short-circuit retain earlier changes. SwEditWin actual eligible heading Tab owns this native primitive while preserving list/table priority and native boundary/literal Tab rules. Native MAXLEVEL10 count corrected against local maximum index9, genuine NONE/equal-indent level8 literal Tab and highest-level guard without nonexistent format read. No snapshot/preparation/no-op callback/browser heuristic/new model.33 new actual core/DOM and4 new production1280/390 ordinary ODT Open/heading Tab/ShiftTab/typing/UndoRedo/export/fresh-context reopen/boundary cases. One initial absent profile retained6exactappfailures; original failed6andgenuine4newapp only recovered, production rebuilt onceafteractualchangedowners,2newboundaryChromiumonly afterwards. Final distinct12569app109inventory5scripts143Chromiumpass0flaky; no passing/fullprofile replay,skippedrecordedasskipped. Actual finalapp/inventory100%L/S/F/B, source/map identity or contiguous unchanged source locations only, changed locations actual executed counters.429 prior tests428byteidentical1exactsource-confirmed obsolete unsupported outline expectations.253prior states/defaults/classes/IOexceptions/evidence preserved,2newpartialunverifiedowners255modules. Sixstatics/changedfilechecks/five restored audits/scope/APscan/doctor/routingpass. Metadata bounded prose normalized to existing fields and exact prior schemas/prefixes preserved without passing audit replay.",
+  "validationLimit": "Represented unmerged native outline movement, inverse history, normalized ring short-circuit and eligible heading Tab plus native level-count guard only. Direct document auto-history/framework Repeat/failed-operation dirty flag/native layout batching/merged props/conditional collections/full KeyInput and full core/UI/list/table parity remain unverified. Conscious IO deviations unchanged,parent DOING/goal ACTIVE.",
+  "residualRisk": "Direct document auto-history/framework Repeat/failed-operation dirty flag/native StartAllAction layout batching/merged paragraph props/conditional collections/full KeyInput and full native core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged; no full-module/broad parity promotion,parent DOING,goal ACTIVE."
+}
