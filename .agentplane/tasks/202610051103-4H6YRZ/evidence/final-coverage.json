@@ -1,0 +1,40 @@
+{
+  "productionUnchangedAfterFullProfile": true,
+  "counterTransfer": "Direct merge of actual counters for identical production sources; no inferred counts or passing-case replay",
+  "summary": {
+    "lines": {
+      "total": 11999,
+      "covered": 11999,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13135,
+      "covered": 13135,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3334,
+      "covered": 3334,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9814,
+      "covered": 9814,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "initialMapSHA256": "93ee0ca6e5931b3b2574abf6892a7103857c763bad4e47d0685663be0983f509",
+  "closureMapSHA256": "49b6246221ccc9742acac9d0ef1a3d6794f01f27c705d2a3756bda076d302732",
+  "finalMapSHA256": "2d7f0b45c38f21ebb200a27ec78c2513d9102d1dd9e82b9f1f628260539d3fc9"
+}

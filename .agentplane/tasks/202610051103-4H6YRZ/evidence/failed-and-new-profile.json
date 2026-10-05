@@ -1,0 +1,25 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "failed-and-new-app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-section-navigation.test.tsx src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts --testNamePattern=^(?:native section navigation UI Shift Home retains cell mark then activates table cursor|native section navigation UI Shift End retains cell mark then activates table cursor|mixed native rings ignore collapsed owners without expanding selected text|dirty duplicate boxes retain selected owners and detach an unrelated marked range)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4H6YRZ.closure-results.json",
+      "profile": "upstream-absent failed/new only",
+      "exit": 0,
+      "bytes": 1637,
+      "sha256": "e30744ee23454df7b03dd73a8cb2a53f3821e4aea0114da3061b47e69927c26a",
+      "caseCounts": {
+        "passed": 4,
+        "failed": 0,
+        "total": 19
+      },
+      "failedCases": [],
+      "executedCases": [
+        "native section navigation UI Shift Home retains cell mark then activates table cursor",
+        "native section navigation UI Shift End retains cell mark then activates table cursor",
+        "mixed native rings ignore collapsed owners without expanding selected text",
+        "dirty duplicate boxes retain selected owners and detach an unrelated marked range"
+      ]
+    }
+  ]
+}
