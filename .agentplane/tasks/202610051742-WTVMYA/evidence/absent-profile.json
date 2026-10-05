@@ -1,0 +1,177 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/undo/unins.ts": "3746dbf48e2f1019c4980ae8bbbacb46e220baf8bb1c958cab1c2af923729893"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "c821901eccf1f319994c2ff57ab27313e95cd33be6e1755c0a93f537955a417f",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WTVMYA.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 657229,
+      "sha256": "8226c336013dea330aab1041e1747bc33a619ef345ad574d89453d3689a1beb8",
+      "totals": [
+        "Test Files  2 failed | 311 passed (313)",
+        "Tests  4 failed | 12245 passed (12249)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts > actual shell typing targets replaced native history nodes first",
+        "apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts > actual shell typing targets replaced native history nodes cell",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native reversed table point exits at its own surviving cell rather than ring order",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native partial cross-cell backspace preserves both cell boundaries"
+      ],
+      "errors": [],
+      "caseCounts": {
+        "passed": 12245,
+        "failed": 4,
+        "skipped": 0,
+        "total": 12249
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 12356,
+          "covered": 12356,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 13528,
+          "covered": 13528,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3376,
+          "covered": 3376,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10068,
+          "covered": 10068,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "b9b167d8c848ed47e558a973d273607a8c456e96af0ad20914fa6c1b44695d22",
+      "incompleteFiles": {}
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WTVMYA.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "abfcbdeb9463f69bfe38144d4076498e62042cda1b2f60a419c1f4cd7f0b4d6c",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverageMapSHA256": "b2a5aa6355cb8e74e47d6d7cddadc093ad10a47368c020b33d671970c7885354",
+      "incompleteFiles": {}
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "6c32140be8a72d5fe1da7a8e04493f0d18aee18d88b42b045c8c9d29209f7dba",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 17006,
+      "sha256": "98879d8a6a1db6a1e8eedc35d00fa8942096a4cbb5bf132863a06669b466f6f5",
+      "totals": [
+        "120 passed (43.0s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T17:51:29.670Z",
+        "duration": 42968.08,
+        "expected": 120,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
