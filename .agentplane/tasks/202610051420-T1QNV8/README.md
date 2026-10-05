@@ -4,7 +4,7 @@ title: "Move inserted table content into native undo storage only during Undo"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -18,11 +18,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T14:48:13.040Z"
+  updated_by: "CODER"
+  note: "Verified semantic53bb1b81b06fa09a3da0f0d061c2255ba53f512d: numeric SwUndRng coordinates and actual cut/move/consume lifecycle replace eager live insertion retention. Six statics and ONE upstream-absent full build/profile first-pass:12148app/109inventory/5scripts/120Chromium,100%app/inventory L/S/F/B,0fail/flake/skip/replay. Five restored source audits0semantic violations;403old tests unchanged,2source-confirmed count literals corrected;250states/defaults/classifications preserved. Exact-SHA same-agent EVALUATOR pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T14:48:10.923Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent explicit EVALUATOR review of 53bb1b81b06fa09a3da0f0d061c2255ba53f512d: represented native numeric insertion range and removed-only content lifecycle pass approved contract. No whole-module or broad parity claim."
+  evaluated_sha: "53bb1b81b06fa09a3da0f0d061c2255ba53f512d"
+  blueprint_digest: "92f1624a747a652aa19d7b7aa661b9c80c1c43074e78043674cbf9c5cbc20752"
+  evidence_refs:
+    - ".agentplane/tasks/202610051420-T1QNV8/README.md"
+    - ".agentplane/tasks/202610051420-T1QNV8/quality/20261005-144810923-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610051420-T1QNV8/quality/20261005-144810923-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610051420-T1QNV8/quality/20261005-144810923-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610051420-T1QNV8/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610051420-T1QNV8/evidence/exact-sha-evaluation.json"
+    - ".agentplane/tasks/202610051420-T1QNV8/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610051420-T1QNV8/evidence/absent-profile.json"
+  findings:
+    - "Six statics and ONE full absent build/app/inventory/scripts/Chromium pass first attempt;12148app/120Chromium/100%L/S/F/B,12new native tests,0replays,0post-profile code edits. Five restored audits pass0semantic violations.403of404prior tests byte-identical; exactly2native-source storage count literals corrected in remaining file.250statuses/defaults/classifications and prior evidence preserved; native symbols/evidence only extended for3owners."
 commit: null
 comments:
   -
@@ -46,8 +64,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: Consume actual cut hints through existing undo storage without an extra historical clone; prior RetainText defaults preserved."
+  -
+    type: "verify"
+    at: "2026-10-05T14:48:13.040Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified semantic53bb1b81b06fa09a3da0f0d061c2255ba53f512d: numeric SwUndRng coordinates and actual cut/move/consume lifecycle replace eager live insertion retention. Six statics and ONE upstream-absent full build/profile first-pass:12148app/109inventory/5scripts/120Chromium,100%app/inventory L/S/F/B,0fail/flake/skip/replay. Five restored source audits0semantic violations;403old tests unchanged,2source-confirmed count literals corrected;250states/defaults/classifications preserved. Exact-SHA same-agent EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-05T14:46:26.927Z"
+doc_updated_at: "2026-10-05T14:48:13.116Z"
 doc_updated_by: "CODER"
 description: "Iteration152: replace eager plain table import snapshots/retained live nodes with native SwUndRng coordinates and SwUndoSaveContent move lifecycle; record native range in SetInsertRange, cut/detach into storage during Undo, consume/reconnect and release storage during Redo. Preserve current table UI behavior, old content/list/format/selection and registered I/O exceptions."
 sections:
@@ -67,7 +91,41 @@ sections:
     2. ONE sequential upstream-absent full profile: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts. Rename vendor inside repository and restore in finally. Persist exact failure/error names before assertions, use skipped Vitest status, no tests access or invoke upstream. Repeat only failed gates/cases and genuinely new cases; never passing full/build/suite/case replay. Actual initial maps ignored appcache only.
     3. Source-independent new native tests prove SetInsertRange allocation-free numeric range ownership; native Undo cut/detach to storage and Redo consume/reconnect/release, applied0storage/undone removed-only payload, blank and text imports, actual node/list/format identities, repeated history navigation, disposal and redo discard, ordered later edit cancellation and re-capture, native source guard/default contracts. Existing mounted/Chromium selected-table clipboard flows remain unchanged. Exactly two prior151storage expected counts9and4 become0 based on native source; 403other prior test files and every other assertion byte-identical. No whole-module promotion.
     4. Restore vendor before five source audits: writer resource generation --check, source-tree, source-provenance, inventory invariants and parity. Preserve all250 prior module statuses/defaults/classifications and all prior evidence, additive native facet symbols/evidence only for three owners. Scope/test correction/AP scan, exact-SHA same-agent EVALUATOR review, recorded verification/canonical finish/parent checkpoint; clean final tracked state. Broad goal stays active.
-  Verification: "Pending declared checks. No whole-module or broad parity completion claim."
+  Verification: |-
+    Pending declared checks. No whole-module or broad parity completion claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T14:48:13.040Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified semantic53bb1b81b06fa09a3da0f0d061c2255ba53f512d: numeric SwUndRng coordinates and actual cut/move/consume lifecycle replace eager live insertion retention. Six statics and ONE upstream-absent full build/profile first-pass:12148app/109inventory/5scripts/120Chromium,100%app/inventory L/S/F/B,0fail/flake/skip/replay. Five restored source audits0semantic violations;403old tests unchanged,2source-confirmed count literals corrected;250states/defaults/classifications preserved. Exact-SHA same-agent EVALUATOR pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T14:46:26.927Z, excerpt_hash=sha256:e309996685f2807d121c7af4265bc19c8e3fa466118ea1827a3fc942e784ea90
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051420-T1QNV8/blueprint/resolved-snapshot.json
+    - old_digest: 92f1624a747a652aa19d7b7aa661b9c80c1c43074e78043674cbf9c5cbc20752
+    - current_digest: 92f1624a747a652aa19d7b7aa661b9c80c1c43074e78043674cbf9c5cbc20752
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051420-T1QNV8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610051420-T1QNV8 -m 🧩 T1QNV8 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Use a new task and revert only this leaf semantic commit if native lifetime regression is demonstrated; preserve task evidence and unrelated work, no history rewrite."
   Findings: |-
     Pinned sources read in place: LibreOffice26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native undobj.cxx SwUndRng45-100 stores absolute sorted start/end node/content indices; no-mark uses endnode0/COMPLETE_STRING, and reconstruction resolves current indices. Native swtypes.hxx55 COMPLETE_STRING=SAL_MAX_INT32. Native untblk.cxx SetInsertRange118 records range coordinates, UndoImpl318 MoveToUndoNds removes content, RedoImpl404 detaches undo index before MoveFromUndoNds consumes it. Source comments explicitly resolve numeric indices, rather than retained node identity. Native undobj.cxx MoveToUndoNds787/MoveFromUndoNds823 own content movement and undo-area cleanup.
@@ -81,6 +139,10 @@ sections:
     Command: restore vendor, then five declared source audits. Result: pass/0semanticViolationCount. Evidence: restored-source-audits.json. Scope:250runtime records; all prior states/statuses/defaults/classifications/exceptions preserved. Native symbols/evidence/responsibility prose extended only for undobj/untblk/docundo, all prior evidence preserved; overbroad omitted-responsibility prose for undobj updated to represented facets. Whole modules remain unverified. scope-audit.json records exact corrected test, hashes and comparison limits. Ignored-inclusive AP scan4163files/0forbidden; no upstream copies/helpers/Python/probes/raw frames.
 
     Residuals: undo area remains existing portable Map of actual disconnected native text/nodes, not a complete physical native SwNodes extras/postits array; disconnected paragraphs still refer to original SwNodes owner, complete MoveRange/MoveNodes boundary join and registered content/node index lifetimes unverified. Append-only represented reader path only: full nonend/suffix/fly/redline/protection/conditional styles, format-collection swap, native cursor supplier, history placement in SwUndoSaveContent and SwUndRng nontext-sentinel content correction remain unverified. Existing SwUndo cursor display-state boundary still retains node identities separately; only content span coordinates moved native. Browser plain parsing/encoding/page-break, rich/internal/structured table clipboard and complete list/layout/rendering contracts remain unverified. Conscious save/open/recovery deviations unchanged; broad parent/goal active, no module or broad parity completion claim.
+
+    - Observation: Native SetInsertRange records coordinates; Undo removes content into undo nodes; Redo consumes/reconnects it and releases storage. Prior implementation retained live nodes/text at read completion and stored first-node identity instead of numeric span.
+      Impact: Removes premature duplicate document ownership and permits repeated range recording without extra retained payload, while preserving current table/list/format/selection and history behavior.
+      Resolution: Native SwUndRng/SwUndoSaveContent facets now own represented numeric span/content movement. All tests first-pass. Full physical native undo sections, non-end/suffix/fly/redline/history/cursor supplier/index contracts remain unverified; broad goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -113,6 +175,39 @@ Iteration152 atomic native document-read undo content lifecycle. Add native SwUn
 
 Pending declared checks. No whole-module or broad parity completion claim.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T14:48:13.040Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified semantic53bb1b81b06fa09a3da0f0d061c2255ba53f512d: numeric SwUndRng coordinates and actual cut/move/consume lifecycle replace eager live insertion retention. Six statics and ONE upstream-absent full build/profile first-pass:12148app/109inventory/5scripts/120Chromium,100%app/inventory L/S/F/B,0fail/flake/skip/replay. Five restored source audits0semantic violations;403old tests unchanged,2source-confirmed count literals corrected;250states/defaults/classifications preserved. Exact-SHA same-agent EVALUATOR pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T14:46:26.927Z, excerpt_hash=sha256:e309996685f2807d121c7af4265bc19c8e3fa466118ea1827a3fc942e784ea90
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051420-T1QNV8/blueprint/resolved-snapshot.json
+- old_digest: 92f1624a747a652aa19d7b7aa661b9c80c1c43074e78043674cbf9c5cbc20752
+- current_digest: 92f1624a747a652aa19d7b7aa661b9c80c1c43074e78043674cbf9c5cbc20752
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051420-T1QNV8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610051420-T1QNV8 -m 🧩 T1QNV8 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Use a new task and revert only this leaf semantic commit if native lifetime regression is demonstrated; preserve task evidence and unrelated work, no history rewrite.
@@ -130,3 +225,7 @@ Command: ONE sequential full upstream-absent build/app/inventory/scripts/Chromiu
 Command: restore vendor, then five declared source audits. Result: pass/0semanticViolationCount. Evidence: restored-source-audits.json. Scope:250runtime records; all prior states/statuses/defaults/classifications/exceptions preserved. Native symbols/evidence/responsibility prose extended only for undobj/untblk/docundo, all prior evidence preserved; overbroad omitted-responsibility prose for undobj updated to represented facets. Whole modules remain unverified. scope-audit.json records exact corrected test, hashes and comparison limits. Ignored-inclusive AP scan4163files/0forbidden; no upstream copies/helpers/Python/probes/raw frames.
 
 Residuals: undo area remains existing portable Map of actual disconnected native text/nodes, not a complete physical native SwNodes extras/postits array; disconnected paragraphs still refer to original SwNodes owner, complete MoveRange/MoveNodes boundary join and registered content/node index lifetimes unverified. Append-only represented reader path only: full nonend/suffix/fly/redline/protection/conditional styles, format-collection swap, native cursor supplier, history placement in SwUndoSaveContent and SwUndRng nontext-sentinel content correction remain unverified. Existing SwUndo cursor display-state boundary still retains node identities separately; only content span coordinates moved native. Browser plain parsing/encoding/page-break, rich/internal/structured table clipboard and complete list/layout/rendering contracts remain unverified. Conscious save/open/recovery deviations unchanged; broad parent/goal active, no module or broad parity completion claim.
+
+- Observation: Native SetInsertRange records coordinates; Undo removes content into undo nodes; Redo consumes/reconnects it and releases storage. Prior implementation retained live nodes/text at read completion and stored first-node identity instead of numeric span.
+  Impact: Removes premature duplicate document ownership and permits repeated range recording without extra retained payload, while preserving current table/list/format/selection and history behavior.
+  Resolution: Native SwUndRng/SwUndoSaveContent facets now own represented numeric span/content movement. All tests first-pass. Full physical native undo sections, non-end/suffix/fly/redline/history/cursor supplier/index contracts remain unverified; broad goal active.

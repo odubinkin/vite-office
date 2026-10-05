@@ -1,0 +1,34 @@
+{
+  "evaluatedSHA": "53bb1b81b06fa09a3da0f0d061c2255ba53f512d",
+  "result": "pass",
+  "actor": "Same agent, explicit EVALUATOR phase; no independent reviewer claim",
+  "diffSHA256": "031cc04add3d7676fad146cd06c0f7fa14672b46673f0e296cac953f4b04ae50",
+  "diffBytes": 56171,
+  "semanticPaths": 7,
+  "newAppCases": 12,
+  "newChromiumCases": 0,
+  "appCases": 12148,
+  "chromiumCases": 120,
+  "priorTestFilesByteIdentical": 403,
+  "existingSemanticRecordsPreserved": 250,
+  "newNativeModuleCount": 0,
+  "allPriorStatesDefaultsClassificationsPreserved": true,
+  "sourceConfirmedOldAssertionCorrections": 2,
+  "fullAbsentProfileCount": 1,
+  "testReplays": 0,
+  "appCoverage": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "inventoryCoverage": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "sourceOwnership": "Native SwUndRng coordinates replace retained first-node identity for insertion spans. SetInsertRange records no document content; native SwUndoSaveContent cuts/moves actual inserted text/hints/nodes only when Undo removes it, then Redo consumes/reconnects/releases storage. Actual native hint ownership transfers without another snapshot; old RetainText defaults preserved. UI/context boundaries unchanged.",
+  "residual": "Portable Map undo area still differs complete native SwNodes extras/postits sections and disconnected-node/index ownership. Full non-end/suffix/fly/redline/history/cursor supplier/format-collection/sentinel correction contracts remain unverified. Native multiple-base facets use composition; native content movement timing/ownership verified only for represented append-only path. No module or broad parity completion.",
+  "validationLimit": "All final production code passed six statics and ONE successful upstream-absent full build/app/inventory/scripts/Chromium profile; no post-profile production changes or test replay. Complete physical native undo SwNodes sections, non-end/suffix/fly/redline/index/history/cursor supplier/content correction contracts remain unverified."
+}
