@@ -4,7 +4,7 @@ import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
+import { subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
@@ -24,7 +24,7 @@ import type {
 } from "../../core/txtnode/ndtxt";
 import { WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell } from "../shells/listsh";
-import type { WriterListLevelCommand } from "../../core/edit/ednumber";
+import { SwEditShell, type WriterListLevelCommand } from "../../core/edit/ednumber";
 import { SwTextShell, type WriterParagraphFormatValue } from "../shells/textsh1";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
 import type { SwDocShell } from "../app/docsh";
@@ -56,7 +56,7 @@ import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/ed
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
-import { SwUndoDelNum, SwUndoNumOrNoNum } from "../../core/undo/unnum";
+import { SwUndoNumOrNoNum } from "../../core/undo/unnum";
 import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
 import { createWriterReadFragmentAction } from "../../filter/basflt/shellio";
 
@@ -76,7 +76,7 @@ interface WriterCompositionState {
 }
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
-export class SwWrtShell extends SwModify {
+export class SwWrtShell extends SwEditShell {
   private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
   private cursor: SwCursor;
@@ -500,13 +500,6 @@ export class SwWrtShell extends SwModify {
     return this.editing.SplitAtCursor();
   }
 
-  /** Removes numbering through the document range and native attribute history. @returns Whether a numbered node changed. */
-  public DelNumRules(): boolean {
-    if (this.GetActiveParagraph().GetNumRule() === undefined && !this.getShellCursor().HasMark())
-      return false;
-    return this.ApplyAction(new SwUndoDelNum(this.GetDoc(), this.CaptureCursorState()));
-  }
-
   /** Changes numbering at an unselected paragraph start. @param numOn - Count the current item when true. @returns Whether numbering changed. */
   public NumOrNoNum(numOn = true): boolean {
     const point = this.getShellCursor().GetPoint(),
@@ -781,10 +774,6 @@ export class SwWrtShell extends SwModify {
     return isMoveLeftMargin(this.GetDoc(), this.getShellCursor(), right, modulus);
   }
 
-  /** Changes a list paragraph by one numbering level. @param down - Demote when true. @returns Whether changed. */
-  public NumUpDown(down: boolean): boolean {
-    return this.listShell.Execute(down ? "demote" : "promote");
-  }
   /** Applies named page geometry as one Writer undo action. @param value - Replacement geometry. @param descriptorName - Target identity. @returns Whether it changed. */
   public SetPageDescriptor(value: WriterPageDescriptorValue, descriptorName = value.name): boolean {
     const descriptor = this.GetDoc().FindPageDesc(descriptorName);

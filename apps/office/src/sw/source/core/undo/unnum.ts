@@ -101,15 +101,15 @@ export class SwUndoNumOrNoNum extends SwUndo {
 export class SwUndoDelNum extends SwUndo {
   private readonly range: SwUndRng;
   private readonly nodes: readonly { index: number; items: SfxItemSet; level: number }[];
-  /** Captures list-attribute history and the native selection. @param doc - Owning document. @param range - Undo cursor boundary. @returns Nothing. */
-  public constructor(doc: SwDoc, range: SwUndoCursorState) {
+  /** Captures list-attribute history and the native selection. @param doc - Owning document. @param range - Undo cursor boundary. @param selectedRange - Optional borrowed actual editing range captured numerically. @returns Nothing. */
+  public constructor(doc: SwDoc, range: SwUndoCursorState, selectedRange?: SwPaM) {
     super("Delete numbering", range, range);
     const point = new SwPosition(range.point.node, range.point.offset),
       mark =
         range.mark === undefined ? undefined : new SwPosition(range.mark.node, range.mark.offset),
       nativeRange = new SwPaM(point, mark);
     try {
-      this.range = new SwUndRng(nativeRange);
+      this.range = new SwUndRng(selectedRange ?? nativeRange);
     } finally {
       nativeRange.Dispose();
       point.Dispose();
@@ -155,10 +155,11 @@ export class SwUndoDelNum extends SwUndo {
 /** Native-shaped range and signed-direction numbering history;list metadata is never snapshotted. */
 export class SwUndoNumUpDown extends SwUndo {
   private readonly range: SwUndRng;
-  /** Retains one native range and level delta. @param range - Complete shell cursor boundary. @param offset - Down is one,up is minus one. @returns Nothing. */
+  /** Retains one native range and level delta. @param range - Complete shell cursor boundary. @param offset - Down is one,up is minus one. @param selectedRange - Optional actual editing range separate from the command cursor. @returns Nothing. */
   public constructor(
     range: SwUndoCursorState,
     private readonly offset: 1 | -1,
+    selectedRange?: SwPaM,
   ) {
     super(offset > 0 ? "Demote list level" : "Promote list level", range, range);
     const point = new SwPosition(range.point.node, range.point.offset),
@@ -166,7 +167,7 @@ export class SwUndoNumUpDown extends SwUndo {
         range.mark === undefined ? undefined : new SwPosition(range.mark.node, range.mark.offset),
       nativeRange = new SwPaM(point, mark);
     try {
-      this.range = new SwUndRng(nativeRange);
+      this.range = new SwUndRng(selectedRange ?? nativeRange);
     } finally {
       nativeRange.Dispose();
       point.Dispose();

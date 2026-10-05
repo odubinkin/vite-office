@@ -52,7 +52,6 @@ import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undob
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import type { WriterBookmarkDialogResult } from "../dialog/writer-dialog-controller";
-import { canChangeWriterParagraphListLevel } from "../../core/edit/ednumber";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
 import {
@@ -83,6 +82,7 @@ export interface SwTextShellTarget {
   readonly MoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
   readonly NotifySelectionChanged: () => void;
   readonly NumUpDown: (down: boolean) => boolean;
+  readonly CanNumUpDown: (down: boolean) => boolean;
   readonly Redo: () => boolean;
   readonly SetPaM: (point: SwPosition, mark?: SwPosition) => boolean;
   readonly SplitNode: () => boolean;
@@ -674,8 +674,7 @@ export class SwTextShell {
   /** Reports whether the text indent command has an available transition. @param increase - Direction. @returns Whether enabled. */
   public CanChangeParagraphIndent(increase: boolean): boolean {
     const paragraph = this.target.GetActiveParagraph();
-    if (paragraph.GetListKind() !== "none")
-      return canChangeWriterParagraphListLevel(this.target, increase ? "demote" : "promote");
+    if (paragraph.GetListKind() !== "none") return this.target.CanNumUpDown(increase);
     return this.target.IsMoveLeftMargin(increase);
   }
 

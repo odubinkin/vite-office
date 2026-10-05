@@ -4,39 +4,29 @@ import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
-import { SetNumRuleMode, type SwDoc } from "../../core/doc/doc";
-import type { SwPaM } from "../../core/crsr/pam";
-import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import {
-  RES_MARGIN_FIRSTLINE,
-  RES_MARGIN_TEXTLEFT,
-  RES_MARGIN_RIGHT,
-  WRITER_TEXT_NODE_WHICH_RANGES,
-} from "../../../inc/hintids";
-import { SwUndoDelNum, SwUndoInsNum } from "../../core/undo/unnum";
-import type { SwUndoCursorState } from "../../core/undo/undobj";
+import { SetNumRuleMode } from "../../core/doc/doc";
+import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwUndoInsNum } from "../../core/undo/unnum";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterInterface } from "../../../sdi/swriter";
-import {
-  canChangeWriterParagraphListLevel,
-  changeWriterParagraphListLevel,
-  type WriterListLevelCommand,
-} from "../../core/edit/ednumber";
+import type { SwEditShell, WriterListLevelCommand } from "../../core/edit/ednumber";
 
-/** Minimal SwWrtShell surface consumed by the active list context. */
-export interface SwListShellTarget {
-  readonly ApplyAction: (
-    action: SfxUndoAction<SwUndoRedoContext>,
-    tryMerge?: boolean,
-    execute?: () => void,
-  ) => boolean;
-  readonly CaptureCursorState: () => SwUndoCursorState;
-  readonly GetActiveParagraph: () => SwTextNode;
-  readonly GetCursor: () => SwPaM;
-  readonly GetDoc: () => SwDoc;
-}
+/** Native editing-shell surface used directly by the list context. */
+export type SwListShellTarget = Pick<
+  SwEditShell,
+  | "ApplyAction"
+  | "CaptureCursorState"
+  | "GetCursor"
+  | "GetDoc"
+  | "SetCurNumRule"
+  | "DelNumRules"
+  | "CanNumUpDown"
+  | "NumUpDown"
+  | "SelectionHasNumber"
+  | "SelectionHasBullet"
+>;
 
 /** Context-sensitive shell that owns list execution and state. */
 export class SwListShell {
@@ -54,12 +44,14 @@ export class SwListShell {
 
   /** Executes a list-level operation. @param command - Promote or demote. @returns Whether changed. */
   public Execute(command: WriterListLevelCommand): boolean {
-    return changeWriterParagraphListLevel(this.wrtShell, command);
+    if (command !== "demote" && command !== "promote")
+      throw new Error("Unsupported Writer list-level command: " + command);
+    return this.wrtShell.NumUpDown(command === "demote");
   }
 
-  /** Reports whether every selected list node can move in this direction. @param command - Level direction. @returns Whether enabled. */
+  /** Reports whether a native normalized range can move in this direction. @param command - Level direction. @returns Whether enabled. */
   public CanExecute(command: WriterListLevelCommand): boolean {
-    return canChangeWriterParagraphListLevel(this.wrtShell, command);
+    return this.wrtShell.CanNumUpDown(command === "demote");
   }
 
   /** Applies or removes numbering over every selected native paragraph. @param kind - Requested list kind. @returns Whether a command changed list state. */
@@ -67,60 +59,14 @@ export class SwListShell {
     if (!isWriterParagraphListKind(kind))
       throw new Error("Unsupported Writer paragraph list kind: " + kind);
     const doc = this.wrtShell.GetDoc(),
-      range = this.wrtShell.GetCursor(),
-      cursor = this.wrtShell.CaptureCursorState();
-    const nodes: SwTextNode[] = [];
-    for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
-      const node = doc.GetNodes().at(index);
-      if (node instanceof SwTextNode) nodes.push(node);
-    }
-    if (kind === "none") {
-      if (
-        !nodes.some(
-          /** Checks native numbering presence. @param node - Selected node. @returns Whether numbered. */ (
-            node,
-          ) => node.GetNumRule() !== undefined,
-        )
-      )
-        return false;
-      return this.wrtShell.ApplyAction(new SwUndoDelNum(doc, cursor));
-    }
+      range = this.wrtShell.GetCursor();
+    if (kind === "none") return this.wrtShell.DelNumRules();
     if (this.GetKind() === kind) return false;
     const listId = { value: "" },
       rule =
         doc.SearchNumRule(range.GetPoint(), false, kind === "numbered", false, 0, listId) ??
         doc.GetDocumentListsManager().CreateAutomaticNumRule(kind);
-    const action = new SfxListUndoAction<SwUndoRedoContext>("Numbering");
-    return this.wrtShell.ApplyAction(
-      action,
-      false,
-      /** Executes the document range operation and records its actual direct attribute results. @returns Nothing. */ () => {
-        const before = nodes.map(
-          /** Captures supported native list and indent items. @param node - Current node. @returns Independent history. */ (
-            node,
-          ) => {
-            const items = new SfxItemSet(doc.GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES);
-            items.PutSet(node.CaptureListItems());
-            for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT]) {
-              const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
-              if (item !== undefined) items.Put(item);
-            }
-            return { node, items };
-          },
-        );
-        doc.SetNumRule(range, rule, SetNumRuleMode.ResetIndentAttrs, listId.value);
-        doc.SetCounted(range, true);
-        for (const entry of before) {
-          const after = new SfxItemSet(doc.GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES);
-          after.PutSet(entry.node.CaptureListItems());
-          for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT]) {
-            const item = entry.node.GetpSwAttrSet()?.GetItemIfSet(which, false);
-            if (item !== undefined) after.Put(item);
-          }
-          action.AddAction(new SwUndoInsNum(entry.node, entry.items, after, cursor, cursor));
-        }
-      },
-    );
+    return this.wrtShell.SetCurNumRule(rule, false, listId.value, true);
   }
 
   /** Continues the nearest native list across every selected paragraph, including table cells. @returns Whether list attributes changed. */
@@ -167,19 +113,11 @@ export class SwListShell {
     );
   }
 
-  /** Returns the active paragraph list family. @returns Current list kind. */
+  /** Returns the native selection list family. @returns Current list kind. */
   public GetKind(): WriterParagraphListKind {
-    const doc = this.wrtShell.GetDoc(),
-      range = this.wrtShell.GetCursor();
-    let kind: WriterParagraphListKind | undefined;
-    for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
-      const node = doc.GetNodes().at(index);
-      if (!(node instanceof SwTextNode)) continue;
-      const current = node.GetListKind();
-      if (kind !== undefined && kind !== current) return "none";
-      kind = current;
-    }
-    return kind ?? "none";
+    if (this.wrtShell.SelectionHasNumber()) return "numbered";
+    if (this.wrtShell.SelectionHasBullet()) return "bullet";
+    return "none";
   }
 
   /** Reports native continuation availability independently of the active paragraph's list kind. @returns Whether an earlier list was found. */

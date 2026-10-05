@@ -7,7 +7,6 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwUndoNumUpDown } from "../undo/unnum";
-import { canChangeWriterParagraphListLevel } from "../edit/ednumber";
 
 const documents: ReturnType<typeof createWriterDocument>[] = [];
 afterEach(
@@ -73,7 +72,7 @@ describe("native list-level node ranges", /** Registers actual range contracts. 
       );
       const ids = [owner.first.GetListId(), owner.second.GetListId()];
       expect(owner.doc.paragraphs).not.toContain(owner.first);
-      expect(canChangeWriterParagraphListLevel(owner.shell, "demote")).toBe(true);
+      expect(owner.shell.CanNumUpDown(true)).toBe(true);
       expect(owner.shell.ChangeParagraphIndent(true)).toBe(true);
       expect([owner.first.GetAttrListLevel(), owner.second.GetAttrListLevel()]).toEqual([3, 5]);
       expect(owner.outside.GetAttrListLevel()).toBe(0);

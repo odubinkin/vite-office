@@ -11,6 +11,7 @@ import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { SwListShell } from "../../uibase/shells/listsh";
+import { SwEditShell } from "../edit/ednumber";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   RES_PARATR_NUMRULE,
@@ -427,14 +428,26 @@ it("native structural ranges ignore text-only rule and count payloads", /** Chec
     pam.GetPoint().nNode.Assign(owner.table.GetTableNode());
     owner.doc.SetNumRule(pam, rule, SetNumRuleMode.ResetIndentAttrs, "structural");
     owner.doc.SetCounted(pam, true);
-    const target = new SwListShell({
-      ApplyAction: /** No execution needed for state query. @returns False. */ () => false,
-      CaptureCursorState: /** Supplies current native text adjunct. @returns State. */ () =>
-        owner.shell.CaptureCursorState(),
-      GetActiveParagraph: /** Supplies a live text node. @returns Node. */ () => owner.first,
-      GetCursor: /** Supplies structural range. @returns Range. */ () => pam,
-      GetDoc: /** Supplies owner. @returns Document. */ () => owner.doc,
-    });
+    const nativeOwner =
+      new /** Actual native state owner for this structural fixture. */ (class extends SwEditShell {
+        /** Supplies a real structural native range. @returns Range. */
+        public GetCursor(): SwPaM {
+          return pam;
+        }
+        /** Supplies the actual document. @returns Document. */
+        public GetDoc(): SwDoc {
+          return owner.doc;
+        }
+        /** Supplies existing native cursor adjuncts. @returns State. */
+        public CaptureCursorState() {
+          return owner.shell.CaptureCursorState();
+        }
+        /** State queries execute no mutation. @returns False. */
+        public ApplyAction(): boolean {
+          return false;
+        }
+      })();
+    const target = new SwListShell(nativeOwner);
     expect(target.GetKind()).toBe("none");
   } finally {
     pam.Dispose();

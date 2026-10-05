@@ -1,37 +1,278 @@
-/** @fileoverview Routes represented Writer NumUpDown commands to the document-owned native node range and delta history. */
-import { SwUndoNumUpDown } from "../undo/unnum";
-import type { SwUndoCursorState } from "../undo/undobj";
-import type { SwDoc } from "../doc/doc";
-import type { SwPaM } from "../crsr/pam";
-
-/** Supported direction for the bounded NumUpDown operation. */
+/** @fileoverview Owns native Writer numbering state, range traversal and editing commands from ednumber.cxx. */
+import { SwModify } from "../../../inc/calbck";
+import { SwUndoNumUpDown, SwUndoInsNum, SwUndoDelNum } from "../undo/unnum";
+import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
+import { SetNumRuleMode, type SwDoc } from "../doc/doc";
+import { SwNumRule } from "../doc/number";
+import { SwPaM } from "../crsr/pam";
+import type { SwNode } from "../docnode/node";
+import { SwTextNode } from "../txtnode/ndtxt";
+import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import {
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_RIGHT,
+  WRITER_TEXT_NODE_WHICH_RANGES,
+} from "../../../inc/hintids";
+/** Supported direction at the existing browser command boundary. */
 export type WriterListLevelCommand = "demote" | "promote";
-
-/** Shell state and history boundary for the document-owned numbering operation. */
-export interface WriterIndentTarget {
-  ApplyAction(action: SwUndoNumUpDown): boolean;
-  CaptureCursorState(): SwUndoCursorState;
-  GetCursor(): SwPaM;
-  GetDoc(): SwDoc;
+/** Native ordered paragraph node interval from edimp.hxx. */
+interface SwPamRange {
+  nStart: number;
+  nEnd: number;
 }
-
-/** Queries the native document range used by execution. @param target - Editing shell. @param command - Level direction. @returns Whether eligible. */
-export function canChangeWriterParagraphListLevel(
-  target: WriterIndentTarget,
-  command: WriterListLevelCommand,
-): boolean {
-  return target.GetDoc().CanNumUpDown(target.GetCursor(), command === "demote");
+/** Native numeric ring range normalization; exact same-start and containment policy is preserved. */
+export class SwPamRanges {
+  private readonly maVector: SwPamRange[] = [];
+  /** Captures ring node endpoints without retaining paragraph objects. @param ring - Actual native ring. @returns Nothing. */
+  public constructor(ring: SwPaM) {
+    for (const range of ring.GetRingContainer())
+      this.Insert(range.GetMark().GetNode(), range.GetPoint().GetNode());
+  }
+  /** Inserts an interval using native sorted-vector adjacency and containment rules. @param first - First endpoint. @param second - Second endpoint. @returns Nothing. */
+  public Insert(first: SwNode, second: SwNode): void {
+    const interval = { nStart: first.GetIndex(), nEnd: second.GetIndex() };
+    if (interval.nEnd < interval.nStart) {
+      interval.nStart = interval.nEnd;
+      interval.nEnd = first.GetIndex();
+    }
+    let position = 0;
+    while (
+      position < this.maVector.length &&
+      (this.maVector[position] as SwPamRange).nStart < interval.nStart
+    )
+      position++;
+    if (
+      position < this.maVector.length &&
+      (this.maVector[position] as SwPamRange).nStart === interval.nStart
+    ) {
+      const found = this.maVector[position] as SwPamRange;
+      if (found.nEnd < interval.nEnd) {
+        interval.nEnd = found.nEnd;
+        this.maVector.splice(position, 1);
+      } else return;
+    }
+    let end: boolean;
+    do {
+      end = true;
+      if (position > 0) {
+        const found = this.maVector[position - 1] as SwPamRange;
+        if (found.nEnd === interval.nStart || found.nEnd + 1 === interval.nStart) {
+          interval.nStart = found.nStart;
+          end = false;
+          this.maVector.splice(--position, 1);
+        } else if (found.nStart <= interval.nStart && interval.nEnd <= found.nEnd) return;
+      }
+      if (position < this.maVector.length) {
+        const found = this.maVector[position] as SwPamRange;
+        if (found.nStart === interval.nEnd || found.nStart === interval.nEnd + 1) {
+          interval.nEnd = found.nEnd;
+          end = false;
+          this.maVector.splice(position, 1);
+        }
+        // lower_bound and predecessor merging keep this successor's start strictly greater;
+        // the native repeated containment check cannot succeed for a sorted native vector.
+      }
+    } while (!end);
+    this.maVector.splice(position, 0, interval);
+  }
+  /** Returns normalized interval count. @returns Count. */
+  public Count(): number {
+    return this.maVector.length;
+  }
+  /** Assigns native zero-content point and mark endpoints. @param index - Sorted interval. @param range - Borrowed destination. @returns Destination. */
+  public SetPam(index: number, range: SwPaM): SwPaM {
+    const interval = this.maVector[index];
+    if (interval === undefined)
+      throw new Error("Writer normalized numbering range index is invalid.");
+    const nodes = range.GetPoint().GetNode().GetNodes();
+    range.GetPoint().Assign(nodes.at(interval.nStart) as SwTextNode, 0);
+    range.SetMark();
+    range.GetPoint().Assign(nodes.at(interval.nEnd) as SwTextNode, 0);
+    return range;
+  }
 }
-
-/** Applies one range-and-direction numbering undo action. @param target - Shell operation target. @param command - Level transition. @returns Whether changed. */
-export function changeWriterParagraphListLevel(
-  target: WriterIndentTarget,
-  command: WriterListLevelCommand,
-): boolean {
-  if (command !== "demote" && command !== "promote")
-    throw new Error(`Unsupported Writer list-level command: ${command}`);
-  if (!canChangeWriterParagraphListLevel(target, command)) return false;
-  return target.ApplyAction(
-    new SwUndoNumUpDown(target.CaptureCursorState(), command === "demote" ? 1 : -1),
-  );
+/** Core editing shell owns numbering commands; the represented broadcaster base preserves existing subscriptions. */
+export abstract class SwEditShell extends SwModify {
+  /** Returns the native document owner. @returns Document. */
+  public abstract GetDoc(): SwDoc;
+  /** Returns the actual editing selection ring. @returns Native cursor. */
+  public abstract GetCursor(): SwPaM;
+  /** Captures displayed command cursor and pending item ownership. @returns Command boundary. */
+  public abstract CaptureCursorState(): SwUndoCursorState;
+  /** Executes existing native action orchestration. @param action - History. @param tryMerge - Grouping policy. @param execute - Initial native mutation. @returns Whether changed. */
+  public abstract ApplyAction(
+    action: SfxUndoAction<SwUndoRedoContext>,
+    tryMerge?: boolean,
+    execute?: () => void,
+  ): boolean;
+  /** Queries numbering on the actual point node with native outline counted policy. @returns Numbering presence. */
+  public HasNumber(): boolean {
+    const node = this.GetCursor().GetPoint().GetNode();
+    return (
+      node instanceof SwTextNode &&
+      node.HasNumber() &&
+      !(
+        node.GetNumRule() === this.GetDoc().FindNumRulePtr(SwNumRule.GetOutlineRuleName()) &&
+        !node.IsCountedInList()
+      )
+    );
+  }
+  /** Queries itemization on the actual point node. @returns Bullet presence. */
+  public HasBullet(): boolean {
+    const node = this.GetCursor().GetPoint().GetNode();
+    return node instanceof SwTextNode && node.HasBullet();
+  }
+  /** Queries every ring range, preserving native empty-paragraph and per-ring break order. @returns Numbering state. */
+  public SelectionHasNumber(): boolean {
+    let result = false;
+    for (const range of this.GetCursor().GetRingContainer()) {
+      for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+        const node = this.GetDoc().GetNodes().at(index);
+        if (node instanceof SwTextNode && (!result || node.Len() !== 0)) {
+          result = node.HasNumber();
+          if (
+            result &&
+            node.GetNumRule() === this.GetDoc().FindNumRulePtr(SwNumRule.GetOutlineRuleName()) &&
+            !node.IsCountedInList()
+          )
+            result = false;
+          if (!result && node.Len() !== 0) break;
+        }
+      }
+    }
+    return result;
+  }
+  /** Queries native bullet state over the ring, independently of numbering. @returns Itemization state. */
+  public SelectionHasBullet(): boolean {
+    let result = false;
+    for (const range of this.GetCursor().GetRingContainer()) {
+      for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+        const node = this.GetDoc().GetNodes().at(index);
+        if (node instanceof SwTextNode && (!result || node.Len() !== 0)) {
+          result = node.HasBullet();
+          if (!result && node.Len() !== 0) break;
+        }
+      }
+    }
+    return result;
+  }
+  /** Applies one rule to every native ring range, reusing the first newly created list identity. @param rule - Rule value. @param createNewList - Native new-list mode. @param continuedListId - Existing list identity. @param resetIndentAttrs - Native reset-indent flag. @returns Whether text nodes were represented. */
+  public SetCurNumRule(
+    rule: SwNumRule,
+    createNewList = false,
+    continuedListId = "",
+    resetIndentAttrs = false,
+  ): boolean {
+    const doc = this.GetDoc(),
+      ranges = [...this.GetCursor().GetRingContainer()],
+      cursor = this.CaptureCursorState(),
+      before: { node: SwTextNode; items: SfxItemSet }[] = [];
+    for (const range of ranges)
+      for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+        const node = doc.GetNodes().at(index);
+        if (node instanceof SwTextNode)
+          before.push({ node, items: this.CaptureNumRuleItems(node, resetIndentAttrs) });
+      }
+    if (before.length === 0) return false;
+    const action = new SfxListUndoAction<SwUndoRedoContext>("Numbering");
+    return this.ApplyAction(
+      action,
+      false,
+      /** Executes source-owned list/rule/count policy before capturing actual final values. @returns Nothing. */ () => {
+        let create = createNewList,
+          listId = continuedListId;
+        for (const range of ranges) {
+          const applied = doc.SetNumRule(
+            range,
+            rule,
+            (create ? SetNumRuleMode.CreateNewList : SetNumRuleMode.Default) |
+              (resetIndentAttrs ? SetNumRuleMode.ResetIndentAttrs : SetNumRuleMode.Default),
+            listId,
+          );
+          if (create) {
+            listId = applied;
+            create = false;
+          }
+          doc.SetCounted(range, true);
+        }
+        for (const entry of before)
+          action.AddAction(
+            new SwUndoInsNum(
+              entry.node,
+              entry.items,
+              this.CaptureNumRuleItems(entry.node, resetIndentAttrs),
+              cursor,
+              cursor,
+            ),
+          );
+      },
+    );
+  }
+  /** Deletes numbering over all actual editing ranges while retaining the displayed cursor boundary. @returns Whether numbering existed. */
+  public DelNumRules(): boolean {
+    const doc = this.GetDoc(),
+      ranges = [...this.GetCursor().GetRingContainer()],
+      cursor = this.CaptureCursorState();
+    let changed = false;
+    for (const range of ranges)
+      for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+        const node = doc.GetNodes().at(index);
+        if (node instanceof SwTextNode && node.GetNumRule() !== undefined) changed = true;
+      }
+    if (!changed) return false;
+    if (ranges.length === 1) return this.ApplyAction(new SwUndoDelNum(doc, cursor, ranges[0]));
+    const action = new SfxListUndoAction<SwUndoRedoContext>("Delete numbering");
+    for (const range of ranges) action.AddAction(new SwUndoDelNum(doc, cursor, range));
+    return this.ApplyAction(action);
+  }
+  /** Reports represented level availability over the same native normalized ranges as execution. @param down - Demote direction. @returns Whether any range can change. */
+  public CanNumUpDown(down: boolean): boolean {
+    const cursor = this.GetCursor();
+    if (!cursor.IsMultiSelection()) return this.GetDoc().CanNumUpDown(cursor, down);
+    const normalized = new SwPamRanges(cursor),
+      range = new SwPaM(cursor.GetPoint());
+    try {
+      for (let index = 0; index < normalized.Count(); index++)
+        if (this.GetDoc().CanNumUpDown(normalized.SetPam(index, range), down)) return true;
+      return false;
+    } finally {
+      range.Dispose();
+    }
+  }
+  /** Changes numbering levels using native multi-range normalization and range-specific delta history. @param down - Demote direction. @returns Whether a represented range changed. */
+  public NumUpDown(down: boolean): boolean {
+    if (!this.CanNumUpDown(down)) return false;
+    const cursor = this.GetCursor(),
+      before = this.CaptureCursorState();
+    if (!cursor.IsMultiSelection())
+      return this.ApplyAction(new SwUndoNumUpDown(before, down ? 1 : -1, cursor));
+    const normalized = new SwPamRanges(cursor),
+      range = new SwPaM(cursor.GetPoint()),
+      action = new SfxListUndoAction<SwUndoRedoContext>(
+        down ? "Demote list level" : "Promote list level",
+      );
+    try {
+      for (let index = 0; index < normalized.Count(); index++) {
+        normalized.SetPam(index, range);
+        if (this.GetDoc().CanNumUpDown(range, down))
+          action.AddAction(new SwUndoNumUpDown(before, down ? 1 : -1, range));
+      }
+    } finally {
+      range.Dispose();
+    }
+    return this.ApplyAction(action);
+  }
+  /** Captures represented numbering and optionally reset indentation as independently owned native items. @param node - Actual text node. @param includeIndents - Whether command owns reset-indent payload. @returns Owned items. */
+  private CaptureNumRuleItems(node: SwTextNode, includeIndents: boolean): SfxItemSet {
+    if (!includeIndents) return node.CaptureListItems();
+    const items = new SfxItemSet(this.GetDoc().GetAttrPool(), WRITER_TEXT_NODE_WHICH_RANGES);
+    items.PutSet(node.CaptureListItems());
+    for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT]) {
+      const item = node.GetpSwAttrSet()?.GetItemIfSet(which, false);
+      if (item !== undefined) items.Put(item);
+    }
+    return items;
+  }
 }
