@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610052048-10K5MK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T21:09:55.597Z",
+  "verdict": "pass",
+  "summary": "Shared native body/table-cell import ownership and export identity catalogue satisfy approved iteration164 scope on c7c8fce25fc9265591ea11fb2d4bd07b59900529",
+  "evaluated_sha": "c7c8fce25fc9265591ea11fb2d4bd07b59900529",
+  "blueprint_digest": "135afe91bd62cd146153834eb2527498b2d2f74b3c8f782626dba6b01b2da760",
+  "findings": [
+    "Same coding agent in explicit EVALUATOR role reviewed exact semantic commit and actual evidence:12484 application,109 distinct inventory,5 scripts,135 Chromium pass;14 new application/2 browser. ONE upstream-absent full profile and only failed inventory ordering case repeated;100% actual application/inventory coverage;419 prior files unchanged and one exact obsolete rejection correction;250 prior states/defaults/IO exceptions preserved, new partial native module unverified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610052048-10K5MK/README.md",
+    ".agentplane/tasks/202610052048-10K5MK/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610052048-10K5MK/evidence/final-coverage.json",
+    ".agentplane/tasks/202610052048-10K5MK/evidence/scope-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native dispatcher/types/sections/nested tables/UNO/cursor/export policy/layout and broad core/UI parity remain unverified; conscious save/open/recovery deviations unchanged."
+  ]
+}

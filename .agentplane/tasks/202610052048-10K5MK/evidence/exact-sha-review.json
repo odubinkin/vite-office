@@ -1,0 +1,23 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "c7c8fce25fc9265591ea11fb2d4bd07b59900529",
+  "base": "e10b37d38871b79fcf5440a500710cdb3801e7dc",
+  "scopePaths": [
+    "apps/office/src/xmloff/source/text/txtimp.ts",
+    "apps/office/src/xmloff/source/text/txtparai.ts",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+    "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+    "apps/office/src/xmloff/source/text/txtimp.test.ts",
+    "apps/office/e2e/writer-imported-table-lists.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/xmloff/source/text/txtparae.ts"
+  ],
+  "reviewedSemanticDiffBytes": 201617,
+  "reviewedSemanticDiffSHA256": "6725d521d394458f8247632b8a0f270a4fec7deefe1470b155a09d6a86a3e719",
+  "verdict": "pass",
+  "evidence": "Shared native represented Body/Cell XMLTextImportHelper and processed-root ownership inspected; body/table/header/row/cell share existing real contexts and canonical Writer cell nodes. Duplicate cell paragraph dispatcher and obsolete cell-list refusal removed. One export-pass identity catalogue mirrors native helper lifetime across text/table enumeration.14 new application and2 production Chromium cases pass;12484 application/109 distinct inventory/5 scripts/135 Chromium pass. ONE upstream-absent full profile; only failed inventory ordering case rerun (1 pass2 skipped), no passing replay. Product bytes unchanged since initial profile; actual app map byte-identical and inventory map identity-checked merge,100%L/S/F/B.419 of420 old testfiles byte-identical, one exact obsolete rejection correction.250 prior semantic records preserved by path identity including defaults/states/classes/IO exceptions/evidence; new251st helper partial and unverified. Six statics/changed-file checks/five restored audits/scope/APscan/doctor/routing pass.",
+  "validationLimit": "Shared represented Body/Cell text/list dispatcher and stream processed-root catalogue,actual existing SwXMLImport cell graph ownership,shared export-pass identity catalogue only. Literal native body/cell continuations,nesting/header/restart/count/label/default IDs/owned copies/Worker/ODT reopen and real browser restarted-row continuation/Enter/history verified. Full native text types/numberedparagraph/section/nestedtable/UNO/cursor/list identity suppression/random/last-continuation/style/layout contracts and broad UI/list/table parity remainunverified. Conscious save/open/recovery deviations unchanged,parentDOING/goalACTIVE.",
+  "residualRisk": "Full native text types/numbered-paragraph/sections/nested tables/UNO/cursor/export list-ID suppression/random/last-continuation/style/layout and broad core/UI/table/list parity remain unverified. No full-module or overall parity promotion. Conscious IO/recovery deviations unchanged; parent DOING/goal ACTIVE."
+}
