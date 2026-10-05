@@ -2847,6 +2847,14 @@
           {
             "path": "apps/office/e2e/writer-uncounted-list-layout.spec.ts",
             "marker": "Writer uncounted list keeps native text-left through history"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+            "marker": "native counted list axes"
+          },
+          {
+            "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
+            "marker": "Writer counted axes stay independent through paragraph history"
           }
         ],
         "upstream": [
@@ -2881,6 +2889,18 @@
           {
             "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
             "marker": "SvxTextLeftMarginItem::ResolveLeft"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetLeftMarginWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetFirstLineOfsWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+            "marker": "SvxTextLeftMarginItem::ResolveLeft"
           }
         ]
       },
@@ -2890,7 +2910,8 @@
         "Projects paragraph attributes and formatted runs without owning input or document mutation.",
         "Iteration99 separates authored raw first-line item values from existing automatic paragraph layout. The font-height calculation moves from the text-node convenience getter to the native core text-margin responsibility itrcrsr, where supported Western automatic values obey the existing true-default disregard-line-space setting and false-compatibility proportional/fixed/minimum/leading rules, including zero percent, minimum50percent and integer truncation. Native rule-present numbering bypass keeps raw/list geometry separate. Frozen resolvedFirstLineIndentPt is populated on actual projections while firstLineIndentPt and automatic mode retain authored ruler/dialog contracts; older detached DTOs fall back to raw values. The shared visible/device-measurement paragraph component uses resolved text indentation for unnumbered master frames and zero on follow fragments, keeping existing list marker precedence intact. Owned actual-session evidence checks independent literal twips, direct/inherited raw item ownership, complete values, formatting/Undo/Redo/no-op, retained snapshots, follow/detached/ruler/dialog behavior; Chromium1280/390 product ODT default cases and explicitly controlled existing Worker graph-setting compatibility cases check actual first-glyph Range geometry, raw authoring, history, independent paragraph and later editing. No false-setting ODT persistence claim is made. All300 prior tests remain byte-identical. Native script/language/device font selection, combined rule groups outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain separately unverified. Registered save/open/recovery deviations unchanged; no promotion.",
         "Iteration139 removes the partial table-cell font/spacing/text-run assembler and synthetic node-index identity fallback. Visible cells and closed-shadow measurement use the common WriterEditableParagraph over the same actual native text-node projections,including effective alignment,style,font,color,indent and native GetListLabel/list-layout inputs. One actual-node map is built at the editor boundary;only cell position,editable island and cell block spacing are platform context. Stable paragraph IDs make accessibility descriptions unique and native identities key DOM reuse. Independent owned core-value/DOM/Chromium cases cover the bounded display/history/ODT path. Full native table frame pagination,spacing collapse,Home/navigation,wide selection,nested/merged cells,portion engine and list structural operations remain unverified;all244existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged,no promotion.",
-        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged."
+        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
+        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -4460,6 +4481,14 @@
           {
             "path": "apps/office/e2e/writer-uncounted-list-layout.spec.ts",
             "marker": "Writer uncounted list keeps native text-left through history"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+            "marker": "native counted list axes"
+          },
+          {
+            "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
+            "marker": "Writer counted axes stay independent through paragraph history"
           }
         ],
         "upstream": [
@@ -4494,6 +4523,18 @@
           {
             "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
             "marker": "SvxTextLeftMarginItem::ResolveLeft"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetLeftMarginWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetFirstLineOfsWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+            "marker": "SvxTextLeftMarginItem::ResolveLeft"
           }
         ]
       },
@@ -4508,7 +4549,8 @@
         "Iteration97 projects the effective SvxFirstLineIndentItem IsAutoFirst flag as a frozen primitive autoFirstLineIndent and excludes the first-line ruler marker from DOM drawing and hit admission when automatic, following Writer StateTabWin, SvxRuler UpdatePara and Ruler invisible-indent drawing/hit exclusion. Manual and older detached DTOs retain their existing marker; logical offset values remain precise. Owned actual Writer cases cover signed/zero values, inherited style, direct override, retained immutable DTOs, rendering without mutation, dialog cancel/accept and one Undo/Redo. Chromium at 1280/390 imports an owned automatic ODT, verifies absence of the hidden control, restores the manual integer anchor and real hit target, exercises mode/history and later editing; screenshots stay outside Agentplane. All 296 prior tests remain byte-identical. This bounded visibility correction does not certify native automatic layout computation, indent mutation metadata, RTL/vertical/system DPI/theme/hit priority/modifier/snap/capture/full ruler or parent parity. Registered save/open/recovery deviations are preserved and no native status is promoted.",
         "Iteration99 separates authored raw first-line item values from existing automatic paragraph layout. The font-height calculation moves from the text-node convenience getter to the native core text-margin responsibility itrcrsr, where supported Western automatic values obey the existing true-default disregard-line-space setting and false-compatibility proportional/fixed/minimum/leading rules, including zero percent, minimum50percent and integer truncation. Native rule-present numbering bypass keeps raw/list geometry separate. Frozen resolvedFirstLineIndentPt is populated on actual projections while firstLineIndentPt and automatic mode retain authored ruler/dialog contracts; older detached DTOs fall back to raw values. The shared visible/device-measurement paragraph component uses resolved text indentation for unnumbered master frames and zero on follow fragments, keeping existing list marker precedence intact. Owned actual-session evidence checks independent literal twips, direct/inherited raw item ownership, complete values, formatting/Undo/Redo/no-op, retained snapshots, follow/detached/ruler/dialog behavior; Chromium1280/390 product ODT default cases and explicitly controlled existing Worker graph-setting compatibility cases check actual first-glyph Range geometry, raw authoring, history, independent paragraph and later editing. No false-setting ODT persistence claim is made. All300 prior tests remain byte-identical. Native script/language/device font selection, combined rule groups outside the four local modes, font-relative units/RTL/tables/redlines/full numbering/layout and parent parity remain separately unverified. Registered save/open/recovery deviations unchanged; no promotion.",
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
-        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged."
+        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
+        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -9059,6 +9101,14 @@
           {
             "path": "apps/office/e2e/writer-uncounted-list-layout.spec.ts",
             "marker": "Writer uncounted list keeps native text-left through history"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+            "marker": "native counted list axes"
+          },
+          {
+            "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
+            "marker": "Writer counted axes stay independent through paragraph history"
           }
         ],
         "upstream": [
@@ -9113,6 +9163,18 @@
           {
             "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
             "marker": "SvxTextLeftMarginItem::ResolveLeft"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetLeftMarginWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetFirstLineOfsWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+            "marker": "SvxTextLeftMarginItem::ResolveLeft"
           }
         ]
       },
@@ -9129,7 +9191,8 @@
       "preservedResponsibilities": [
         "Keeps a persistent root over supported page and text frames, uses model/device revisions and typed geometry comparisons for invalidation, reconciles unchanged frame identity, and projects line numbers.",
         "Declared levels retain independent native legacy and alignment geometry with zero defaults; only exact label-alignment selects modern mode. SvxNumberFormat in editeng owns positional state, signed widths and mode-dependent getters; Writer inherits and copies all fields. xmlnumi owns level/property contexts and MM100 legacy parsing/assembly. Writer conversion precedes core application, and xmlnume emits the selected group with native signs and omission predicates. Thirteen literal common/automatic ODT cases verify mode spellings/absence, child presence, independent state, signed/bounded/partial/invalid legacy fields, exact XML and reopen. Clone and browser snapshots preserve inactive fields; primitive browser geometry selects the active group. Full line layout, numbering families, omitted-level construction, native UNO replacement failures (including signed SymbolTextDistance narrowing), extensions and wider contracts/defaults remain separately unverified. No whole-module promotion.",
-        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged."
+        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
+        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/layout/newfrm.cxx",
@@ -9894,6 +9957,14 @@
           {
             "path": "apps/office/e2e/writer-uncounted-list-layout.spec.ts",
             "marker": "Writer uncounted list keeps native text-left through history"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+            "marker": "native counted list axes"
+          },
+          {
+            "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
+            "marker": "Writer counted axes stay independent through paragraph history"
           }
         ],
         "upstream": [
@@ -9920,6 +9991,18 @@
           {
             "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
             "marker": "SvxTextLeftMarginItem::ResolveLeft"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetLeftMarginWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetFirstLineOfsWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+            "marker": "SvxTextLeftMarginItem::ResolveLeft"
           }
         ]
       },
@@ -9928,14 +10011,16 @@
         "resolveSwListLevelIndents",
         "resolveSwListParagraphIndents",
         "SwListParagraphIndents",
-        "resolveSwListTextLeftMargin"
+        "resolveSwListTextLeftMargin",
+        "resolveSwListFirstLineIndent"
       ],
       "omittedResponsibilities": [
         "Complete imported custom-style/sideband/legacy/tab/device/RTL/table/redline/frame layout and native const/out-parameter lifetime remain separately unverified."
       ],
       "preservedResponsibilities": [
         "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion.",
-        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged."
+        "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
+        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

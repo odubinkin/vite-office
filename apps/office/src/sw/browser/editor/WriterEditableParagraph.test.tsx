@@ -120,8 +120,8 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
       />,
     );
     const marker = screen.getByTestId("writer-list-marker-color-paragraph");
-    expect(marker.parentElement).toHaveStyle({ marginInlineStart: "113.4pt" });
-    expect(Number.parseFloat(marker.style.width)).toBeCloseTo(28.35);
+    expect(marker.parentElement).toHaveStyle({ marginInlineStart: "17.85pt" });
+    expect(Number.parseFloat(marker.style.width)).toBeCloseTo(2);
     view.rerender(
       <WriterEditableParagraph
         index={0}

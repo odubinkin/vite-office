@@ -47,19 +47,10 @@ export function WriterEditableParagraph({
         : `Writer paragraph ${index + 1}`
       : `Row ${cellPosition.rowIndex + 1} column ${cellPosition.cellIndex + 1} paragraph ${cellPosition.paragraphIndex + 1}`;
   const listLayout = paragraph.listLayout;
-  const paragraphIndentWins =
-    listLayout !== undefined &&
-    paragraph.listGeometryWins !== true &&
-    paragraph.textLeftMargin !== 0;
   const markerStartPt =
-    listLayout === undefined
-      ? 0
-      : paragraphIndentWins
-        ? paragraph.textLeftMargin / 20 + paragraph.computedStyle.firstLineIndentPt
-        : listLayout.indentAtPt + listLayout.firstLineIndentPt;
-  const contentStartPt = paragraphIndentWins
-    ? paragraph.textLeftMargin / 20
-    : listLayout?.labelFollowedBy === "listtab"
+    listLayout === undefined ? 0 : listLayout.indentAtPt + listLayout.firstLineIndentPt;
+  const contentStartPt =
+    listLayout?.labelFollowedBy === "listtab"
       ? listLayout.listTabPositionPt
       : (listLayout?.indentAtPt ?? 0);
   const markerWidthPt = Math.max(0, contentStartPt - markerStartPt);

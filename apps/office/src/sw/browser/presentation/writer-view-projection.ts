@@ -5,7 +5,10 @@ import {
 } from "../../../svx/browser/tbxctrls/style-toolbox-control";
 import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterNumFormatBullet } from "../../source/core/doc/number";
-import { resolveSwListTextLeftMargin } from "../../source/core/txtnode/ndtxt-list-indent";
+import {
+  resolveSwListTextLeftMargin,
+  resolveSwListFirstLineIndent,
+} from "../../source/core/txtnode/ndtxt-list-indent";
 
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwLineNumberInfoValue } from "../../inc/lineinfo";
@@ -205,7 +208,9 @@ export class WriterViewProjection {
         const uncountedTextLeft = node.IsCountedInList()
           ? undefined
           : resolveSwListTextLeftMargin(node);
-        const listFormat = list.kind === "none" ? undefined : node.GetNumRule()?.Get(list.level);
+        const listFormat =
+          list.kind === "none" ? undefined : node.GetNum()?.GetNumRule()?.Get(list.level);
+        const listTextLeft = resolveSwListTextLeftMargin(node) ?? node.GetParagraphTextLeftMargin();
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
         const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
@@ -282,11 +287,8 @@ export class WriterViewProjection {
             ? {}
             : {
                 listLayout: Object.freeze({
-                  firstLineIndentPt: listFormat.GetFirstLineOffset() / 20,
-                  indentAtPt:
-                    (listFormat.GetPositionAndSpaceMode() === "label-alignment"
-                      ? listFormat.GetIndentAt()
-                      : listFormat.GetAbsLSpace()) / 20,
+                  firstLineIndentPt: resolveSwListFirstLineIndent(node) / 20,
+                  indentAtPt: listTextLeft / 20,
                   labelFollowedBy:
                     listFormat.GetPositionAndSpaceMode() === "label-alignment"
                       ? listFormat.GetLabelFollowedBy()

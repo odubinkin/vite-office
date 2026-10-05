@@ -84,3 +84,20 @@ export function resolveSwListTextLeftMargin(node: SwTextNode): number | undefine
       : node.GetParagraphTextLeftMargin())
   );
 }
+
+/** Resolves native first-line placement through bound list ownership or ordinary paragraph layout. @param node - Canonical text node. @returns First-line offset in twips. */
+export function resolveSwListFirstLineIndent(node: SwTextNode): number {
+  const rule = node.GetNum()?.GetNumRule();
+  if (rule === undefined) return node.GetParagraphFirstLineIndent();
+  const alignment = resolveSwListParagraphIndents(node);
+  if (alignment !== undefined) return alignment.firstLine;
+  if (!node.IsCountedInList()) return 0;
+  const format = rule.Get(Math.max(0, Math.min(9, node.GetActualListLevel())));
+  const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
+  const value =
+    format.GetFirstLineOffset() +
+    (node.GetDoc().GetDocumentSettingManager().get("IGNORE_FIRST_LINE_INDENT_IN_NUMBERING")
+      ? 0
+      : firstLine.ResolveTextFirstLineOffset());
+  return (value << 16) >> 16;
+}
