@@ -1,0 +1,39 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "new-app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-section-navigation.test.tsx --testNamePattern ^inherits one document editing host for table paragraphs and restores a whole cell range$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9AG4D7.new-app-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 730,
+      "sha256": "7d363118aa918a15f4312232a5b6aafcffcb4bbe88fac77f85eac21427dc18f5",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 7,
+        "skipped": 6
+      }
+    },
+    {
+      "kind": "failed-chromium",
+      "command": "Inline Playwright runner; existing config in memory with development server; sole failed case and one new unexecuted case",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 3347,
+      "sha256": "855316dd7f03337bdb994684e909fd4152cd6cbf4a1626027794532b8dd5f1d5",
+      "failedCases": [
+        "writer-native-section-navigation.spec.ts > Writer inherited table editing host keeps split join and typing history"
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-05T10:11:29.493Z",
+        "duration": 11344.205,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    }
+  ]
+}
