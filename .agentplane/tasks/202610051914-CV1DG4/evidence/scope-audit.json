@@ -1,0 +1,87 @@
+{
+  "base": "1c0f41d87ea02d4143f86888123fb722036f14db",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+    "apps/office/e2e/writer-counted-list-layout.spec.ts",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+    "apps/office/e2e/writer-selected-list-toggle.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 414,
+  "priorTestFilesByteIdentical": 408,
+  "sourceConfirmedPriorTestCorrections": [
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "reason": "Removed separate ContinueNumbering action becomes native grouped numeric InsNum;exact bounded formatted transform verified,behavioral assertions retained."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+      "reason": "Removed separate ContinueNumbering action becomes native grouped numeric InsNum;exact bounded formatted transform verified,behavioral assertions retained."
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+      "reason": "Native list activation already writes unique direct level0; structural history must equal original complete snapshot, not append duplicate84. Action class expectation becomes native group."
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+      "reason": "Native label-alignment SetCurNumRule resets direct first-line item and its auto flag;raw/resolved0 and auto=false, all other assertions intact."
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+      "reason": "Native activation resets direct left margin; subsequent level increment keeps reset0 instead of old1134."
+    },
+    {
+      "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
+      "reason": "Actual imported body88/120px unchanged; native cell activation resets direct margins giving24/56px, atomic dialog Undo/Redo retained."
+    }
+  ],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts"
+  ],
+  "nativeSourceHashes": [
+    {
+      "path": "sw/inc/doc.hxx",
+      "sha256": "e1607dcbe67d2e53c8e2100b2a23c9cb2ea78fe24317c6c288112170d0b759d0"
+    },
+    {
+      "path": "sw/source/core/doc/docnum.cxx",
+      "sha256": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4"
+    },
+    {
+      "path": "sw/source/core/edit/ednumber.cxx",
+      "sha256": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114"
+    },
+    {
+      "path": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "sha256": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac"
+    },
+    {
+      "path": "sw/source/core/undo/unnum.cxx",
+      "sha256": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9"
+    }
+  ],
+  "newAppCases": 36,
+  "newChromiumCases": 4,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "846f7bc1234f5dab25e354eae7787aae3d03a7f1eca562f12707020c26666588",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "efaa14161b86cec7f6a3c3b6a81588f18858ef0bb82b71c33fc5b9c08392707e",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "35825a6e4f4cd88544cddba82222d2b7ad6c5d66989fb1e81f303caf9fb9a591"
+  },
+  "coverageMapPolicy": "Actual initial and four originally failed cases and one genuinely new explicit suppression case counters merged only with identical statement/function/branch maps; final production hashes equal initial full absent profile. No passing replay or changed-source counter transfer.",
+  "validationLimit": "Represented native SetNumRule0/1/2/4/8 flags and SetCounted, inclusive current body/cell/mixed ranges, rule/list ID/count/indent/style ownership and numeric grouped history only. Public single-node InsNum constructor and independent direct-item snapshots remain portable; full native SwHistory/document-owned undo/rule rollback/Repeat/client/layout/merged/margin propagation and factory outline/font/leading whitespace are unverified. Selected native range consensus supports UI commands; full numbered/bullet/outline eligibility and broad UI/list/table rendering/protection/clipboard/layout remain unverified. No whole-module promotion or conscious save/open/recovery changes. Goal active."
+}
