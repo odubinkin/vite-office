@@ -1,10 +1,11 @@
 ---
 id: "202610052230-9H95X3"
 title: "Implement native Writer outline level movement for paragraph Tab"
-status: "DOING"
+result_summary: "Implemented native represented SwDoc::OutlineUpDown and SwUndoOutlineLeftRight, normalized shell ring short-circuit/default offset and heading Tab routing. Corrected tenth-level count guard; direct document auto-history/Repeat/layout/merged/conditional props/full core/UI/list/table parity remain unverified. Scope verified, registered IO deviations unchanged."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610052230-9H95X3/evidence/final-coverage.json"
   findings:
     - "33 new core/DOM and4 new browser cases;12569 distinct app109inventory5scripts143Chromium pass;actual100%L/S/F/B. One full absent profile,only6originalfailed and genuinelynew cases afterward.429prior tests428byteidentical1source-confirmed correction;253prior semantic states preserved2newpartialunverifiedowners255modules. Native direct document auto-history/Repeat/layout batching/merged props/conditional collections and full UI/core/list/table parity unverified; registered IO exceptions preserved."
-commit: null
+commit:
+  hash: "dec1f3bfc04f94c8a04c01586e8d93e647c14960"
+  message: "🧩 9H95X3 task: record verified native outline Tab"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved iteration167 native outline movement and heading Tab behavior under standing explicit iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: native represented outline movement and inverse numeric history drive eligible heading Tab; count10/list index9 guard corrected.33newapp4newbrowser;12569distinctapp109inventory5scripts143Chromiumpass;actual100%L/S/F/B. One absent full profile,failed/new-only recovery;all declared gates pass. Same-agent exact semantic EVALUATOR pass. Conscious IO deviations and unverified full parity preserved."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact semantic ef1417a98ff8314c2897f32dadacb50f465dd3b3; same-agent EVALUATOR pass 20261005-225810135-recovery-context. Native outline Tab/history/rings/count boundaries;33newapp4newbrowser12569distinctapp109inventory5scripts143Chromiumpass;actual100%L/S/F/B. One full absent profile,onlyoriginalfailed/genuinelynew afterward;allstatics/restoredsourceaudits/scope/AP/doctor/routingpass.429prior tests428byteidentical1source-confirmed correction;253prior states preserved2newunverifiedowners255modules. Conscious IOexceptions preserved;fullgoalparityunverified."
+  -
+    type: "status"
+    at: "2026-10-05T22:58:50.889Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native represented outline movement and inverse numeric history drive eligible heading Tab; count10/list index9 guard corrected.33newapp4newbrowser;12569distinctapp109inventory5scripts143Chromiumpass;actual100%L/S/F/B. One absent full profile,failed/new-only recovery;all declared gates pass. Same-agent exact semantic EVALUATOR pass. Conscious IO deviations and unverified full parity preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T22:58:35.207Z"
+doc_updated_at: "2026-10-05T22:58:50.890Z"
 doc_updated_by: "CODER"
 description: "Iteration167: native docnum outline style move-table and range preflight, SwUndoOutlineLeftRight inverse-delta history, SwEditShell normalized ring execution and SwEditWin assigned-heading Tab routing. Remove unsupported outline fallback. One bounded executable leaf under standing explicit iterative core/UI/refactor authorization."
 sections:
@@ -136,6 +149,10 @@ sections:
     - Observation: Initial6newapp failures identified count10/index9 defect and invalid DOM/item identity assertions; source-confirmed fixes, failed-only/genuine new tests passed.
       Impact: Native represented outline move algorithm now owns eligible heading Tab with numeric inverse history; no browser conversion or snapshot adapter.
       Resolution: Scope verified and source/map counters checked; direct document auto-history/Repeat/layout batching/merged/conditional props/full UI parity stay unverified.
+extensions:
+  implementation_commit:
+    hash: "ef1417a98ff8314c2897f32dadacb50f465dd3b3"
+    message: "🧩 9H95X3 code: implement native Writer outline movement for Tab"
 id_source: "generated"
 ---
 ## Summary
