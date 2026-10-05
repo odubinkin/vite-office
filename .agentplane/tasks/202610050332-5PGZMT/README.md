@@ -1,10 +1,11 @@
 ---
 id: "202610050332-5PGZMT"
 title: "Restore native paragraph character conversion and join history"
-status: "DOING"
+result_summary: "Restored five direct-item FormatToTextAttr pairs,AUTO span/gap precedence and pooled portion merging,empty/nonempty join preparation,and both-boundary freshhint/directitem/livecollection UndoRedo history. Registered deviations and243semanticrows preserved;fullcross-node/core/UI parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "All3first-profile failures closed by exact failed-only cases;52newindependentcases,360of362priorfilesbyte-identical,onlytwo exact nativecontradicted priorcases changed. Six static gates eventuallypass,five sourceauditspass/0semanticviolations,inventory100%109/scripts5/Chromium99 firstpass.243states/defaults/exceptions unchanged,12appendices/helpermappings only."
     - "Firstfullappcoverage measured99.97,functions100. Three missing merge statements/truebranch necessarilyexecuted by passed real conversioncoalescingcase;unreachableAUTO-onlyCountelse deleted;currentUndoResetchar instrumented. Cumulative source/targeted closure passes;no secondfullgate and no freshfullV8report claimed. Isolated0thresholds diagnostic only,config100unchanged."
     - "Firstfailed-only collector assertion preceded ledgerwrite due skipped/pending confusion;3anchored outcomes recovered from Vitest filecache hash:2pass/1fail,bytes/hash unavailable. Remainingfailedcase finallypass;no passingreplay for metadata. Limitation retained."
-commit: null
+commit:
+  hash: "0d0a592b07c368e6a2466bc1d4a0130844e68f45"
+  message: "🧩 5PGZMT task: record character conversion verification"
 comments:
   -
     author: "CODER"
     body: "Start: restore the approved registered native character conversion and boundary format/text/collection history prerequisite, with one upstream-absent profile and failed-only repeats; broader structural selection remains unverified."
+  -
+    author: "CODER"
+    body: "Verified: registered pooled paragraph character conversion and native direct-item/text-collection join history;one full absent profile/all3failuresclosed/52newcases/zero passingreplays,cumulative sourcecoverage closure with firstfull99.97 retained,five restoredsource audits and exactSHA sameactor qualitypass."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Registered character conversion/join history verified at 098392165273481ddbf4e2224588261865cd293f;one full absent profile,all3failuresclosed,52newcases,zero passingreplays;bounded cumulative coverage closure with firstfull99.97 retained,not freshfullmeasurement;five sourceauditspass,exactSHA sameactor qualitypass."
+  -
+    type: "status"
+    at: "2026-10-05T04:05:44.676Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: registered pooled paragraph character conversion and native direct-item/text-collection join history;one full absent profile/all3failuresclosed/52newcases/zero passingreplays,cumulative sourcecoverage closure with firstfull99.97 retained,five restoredsource audits and exactSHA sameactor qualitypass."
 doc_version: 3
-doc_updated_at: "2026-10-05T04:05:24.578Z"
+doc_updated_at: "2026-10-05T04:05:44.678Z"
 doc_updated_by: "CODER"
 description: "Iteration136: prerequisite for cross-node selected deletion. Port the registered AUTO/INET FormatToTextAttr conversion and AUTO MergePortions, wire native join character-item preparation, and restore changed boundary attributes through native format/text/collection history. Preserve registered I/O deviations; one upstream-absent profile only."
 sections:
@@ -169,6 +182,10 @@ sections:
     - Observation: Firstfailed-only collector result recovered from filecache;bytes/hash unavailable. FullpostfixV8measurement not repeated under usercontract;coverage gaps closed by source/targeted proof. Fullcross-node/core/UI parity remains unverified.
       Impact: Task bounded to registered pooled AUTO/text history;native structural survivor/force/layout/history/lifetime mechanisms remain dependent work.
       Resolution: Preserve limitations,all243semanticstates/defaults/exceptions and I/Odeviations;continue one dependentleaf next iteration.
+extensions:
+  implementation_commit:
+    hash: "098392165273481ddbf4e2224588261865cd293f"
+    message: "🧩 5PGZMT code: restore paragraph character conversion and join history"
 id_source: "generated"
 ---
 ## Summary
