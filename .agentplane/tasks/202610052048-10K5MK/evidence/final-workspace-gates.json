@@ -1,0 +1,16 @@
+[
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "errors": 0,
+    "warnings": 2,
+    "priorWarnings": [
+      "Managed hook shim readiness/fallback",
+      "Older DONE 202610031635-2Z3962 missing implementation hash"
+    ]
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0
+  }
+]

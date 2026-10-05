@@ -1,0 +1,59 @@
+{
+  "base": "e10b37d38871b79fcf5440a500710cdb3801e7dc",
+  "scopePaths": [
+    "apps/office/src/xmloff/source/text/txtimp.ts",
+    "apps/office/src/xmloff/source/text/txtparai.ts",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+    "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+    "apps/office/src/xmloff/source/text/txtimp.test.ts",
+    "apps/office/e2e/writer-imported-table-lists.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/xmloff/source/text/txtparae.ts"
+  ],
+  "priorTestFiles": 420,
+  "priorTestFilesByteIdentical": 419,
+  "sourceConfirmedPriorTestCorrections": [
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+      "reason": "Remove only obsolete cell list rejection; section/nested-table rejection and every other behavior assertion retained."
+    }
+  ],
+  "existingSemanticRecordsPreserved": 250,
+  "newPartialUnverifiedNativeModule": "apps/office/src/xmloff/source/text/txtimp.ts",
+  "totalSemanticRecords": 251,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/xmloff/source/text/txtparai.ts",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+    "apps/office/src/xmloff/source/text/txtparae.ts",
+    "apps/office/src/xmloff/source/text/txtimp.ts"
+  ],
+  "productionSHA256": {
+    "apps/office/src/xmloff/source/text/txtimp.ts": "cd4832a3eb8179e75a21c834c28304c5949cf5c4ba0fdd30e5d6dfb32ca6c196",
+    "apps/office/src/xmloff/source/text/txtparai.ts": "289968633793d514a4f9d108e6d5828ca8b5e5a075597ee4ea0dd90f41f2659b",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts": "13ca97264b755b063b66cfd4d0b94251fdb74d2c5b2fa5b245a9d23239ea30c6",
+    "apps/office/src/xmloff/source/text/txtparae.ts": "52932c08f155abac0ae38210a5683f56b03628c64510d5d37853791b9ff68a21"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 14,
+  "newChromiumCases": 2,
+  "nativeSourceHashes": [
+    {
+      "path": "xmloff/source/text/txtimp.cxx",
+      "sha256": "7de482763b65a723370f05145060dc4a65a103a8fdae775bcb4f7c951b605e21"
+    },
+    {
+      "path": "sw/source/filter/xml/xmltbli.cxx",
+      "sha256": "eb46a2cbffc3700ed24c9099ec86e888bbdfa3a7b3a920de1356e4a98f264fab"
+    },
+    {
+      "path": "xmloff/source/text/txtparae.cxx",
+      "sha256": "601bb521f1acb8c21fb1e29c5b11ad369a64e892124d3733b63c6c5b07ffb2ff"
+    }
+  ],
+  "validationLimit": "Shared represented Body/Cell text/list dispatcher and stream processed-root catalogue,actual existing SwXMLImport cell graph ownership,shared export-pass identity catalogue only. Literal native body/cell continuations,nesting/header/restart/count/label/default IDs/owned copies/Worker/ODT reopen and real browser restarted-row continuation/Enter/history verified. Full native text types/numberedparagraph/section/nestedtable/UNO/cursor/list identity suppression/random/last-continuation/style/layout contracts and broad UI/list/table parity remainunverified. Conscious save/open/recovery deviations unchanged,parentDOING/goalACTIVE."
+}
