@@ -1,0 +1,40 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/browser/editor/WriterEditableParagraph.test.tsx -t ^(?:Writer editable paragraph colors positions list markers from the paragraph or list style according to ODT precedence)$ --coverage --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/ZJ34MV.app-failed-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 140,
+      "sha256": "f52d45ba783b2baa6f1fe3d2da5957360f7209301af9f29584633dcca461cf90",
+      "selectedNames": [
+        "Writer editable paragraph colors positions list markers from the paragraph or list style according to ODT precedence"
+      ],
+      "failedCases": [],
+      "passed": 1,
+      "skipped": 6,
+      "coverageMapSHA256": "47ad7645f7df3738a7c7f90ab8c4608dfe3010c2b39a260ffa0e463e70736a3a"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-counted-list-layout.spec.ts --grep Writer counted axes stay independent through paragraph history cell=true --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 552,
+      "sha256": "737c583c29707001d3948efeeaa156247f8e7a6c4b2035e2e61fab0960e0c98a",
+      "selectedNames": [
+        "Writer counted axes stay independent through paragraph history cell=true"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T08:44:17.069Z",
+        "duration": 2342.205,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
