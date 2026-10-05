@@ -4,7 +4,7 @@ title: "Resolve formatting history through current native coordinates"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T18:46:06.059Z"
+  updated_by: "CODER"
+  note: "6statics afteronlyfailedlint retry;ONEfull absent profile thenoriginal4failed-only fixture closure4pass41skipped;12316distinctapp/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exactsemantic40d686bd38b065db764953faeec7121cc7d315e1 sameagent EVALUATORpass;fullnativehistory/payload/split/UI unverified,goalactive."
   attempts: 0
 quality_review:
   state: "pass"
@@ -56,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: native formatting coordinate ownership migration under standing iterative authorization."
+  -
+    type: "verify"
+    at: "2026-10-05T18:46:06.059Z"
+    author: "CODER"
+    state: "ok"
+    note: "6statics afteronlyfailedlint retry;ONEfull absent profile thenoriginal4failed-only fixture closure4pass41skipped;12316distinctapp/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exactsemantic40d686bd38b065db764953faeec7121cc7d315e1 sameagent EVALUATORpass;fullnativehistory/payload/split/UI unverified,goalactive."
 doc_version: 3
-doc_updated_at: "2026-10-05T18:45:51.786Z"
+doc_updated_at: "2026-10-05T18:46:06.114Z"
 doc_updated_by: "CODER"
 description: "Iteration159 migrate formatting/reset/style history node ownership to native numeric targets and range replay; remove retained paragraph identities blocking native split ownership migration."
 sections:
@@ -74,7 +80,41 @@ sections:
     2. ONE sequential upstream-absent profile: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts. Vendor rename in repository try/finally restore before source audits; tests never invoke/access upstream. Persist exact failures/errors before assertions, failed/new-only repeats, skipped=skipped. Actual app/inventory L/S/F/B100%; maps only ignored appcache.
     3. New native formatting-index cases prove each represented character/item/alignment/margin/reset/style action and real composite style history targets current body/cell native slots after repeated physical replacement; current inclusive range and original cursor direction/pending state, independent retained values and untouched neighbor.411prior testfiles byte-identical/250states/defaults/classifications/exceptions/prior evidence preserved;5paths/additive2owners only. No full native SwHistory/attribute payload/split/UI promotion.
     4. After restoration: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/prior tests/defaults/APartifact audit,doctor/routing, same-agent explicit EVALUATOR exact semantic SHApass,recordedverify/meaningfulfinish/parentcheckpoint clean main.
-  Verification: "Command:6statics(onlyfailedlint repeated),ONEfullupstreamabsent build/app/inventory/scripts/Chromium,original4failed-onlyclosure,changed-file statics,5restored source audits,scope/AP/doctor/routing,exactsemanticSHAEVALUATORreview. Result:pass afternewfixture correction only. Evidence:12316distinct app/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%app/inventory L/S/F/B;sourcehashes unchanged since fullprofile;exact review40d686bd38b065db764953faeec7121cc7d315e1 quality20261005-184526445-recovery-context sameagent explicitEVALUATOR. Scope:5paths/2owners,numericformat/reset/styleownership;wholefragment/directitem/fullhint/style/docguard portable contracts/fullnative SwHistory/client/delta/payload/split/UI parity remainsunverified. No passingreplay/vendor restored/AP0forbidden/doctor0errors2oldwarnings/routingOK."
+  Verification: |-
+    Command:6statics(onlyfailedlint repeated),ONEfullupstreamabsent build/app/inventory/scripts/Chromium,original4failed-onlyclosure,changed-file statics,5restored source audits,scope/AP/doctor/routing,exactsemanticSHAEVALUATORreview. Result:pass afternewfixture correction only. Evidence:12316distinct app/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%app/inventory L/S/F/B;sourcehashes unchanged since fullprofile;exact review40d686bd38b065db764953faeec7121cc7d315e1 quality20261005-184526445-recovery-context sameagent explicitEVALUATOR. Scope:5paths/2owners,numericformat/reset/styleownership;wholefragment/directitem/fullhint/style/docguard portable contracts/fullnative SwHistory/client/delta/payload/split/UI parity remainsunverified. No passingreplay/vendor restored/AP0forbidden/doctor0errors2oldwarnings/routingOK.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T18:46:06.059Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 6statics afteronlyfailedlint retry;ONEfull absent profile thenoriginal4failed-only fixture closure4pass41skipped;12316distinctapp/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exactsemantic40d686bd38b065db764953faeec7121cc7d315e1 sameagent EVALUATORpass;fullnativehistory/payload/split/UI unverified,goalactive.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T18:45:51.786Z, excerpt_hash=sha256:eff64fbccc78c41d41f181764e9dcd090ab6c1fd012a60f32fc30eec24950b65
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051828-ZP2MJZ/blueprint/resolved-snapshot.json
+    - old_digest: 3706543d79113fd072ca5b5835cf72d81631600df5e9432030b69c661d5b5293
+    - current_digest: 3706543d79113fd072ca5b5835cf72d81631600df5e9432030b69c661d5b5293
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051828-ZP2MJZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610051828-ZP2MJZ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional semantic implementation commit in a separately authorized follow-up task; preserve lifecycle history and registered exceptions."
   Findings: |-
     Iteration159 source-confirmed represented formatting history ownership now resolves current numeric native nodes. SwUndoAttr, SwUndoParagraphItem, SwUndoParagraphFormat and SwUndoMoveLeftMargin capture numeric node indices; existing original document/foreign-context boundary remains explicit through retained document and existing GetUndoTextNode. SwUndoResetAttr records numeric range/entry indices, recaptures current native hint owners at ApplyExact, reconstructs SwUndRng/PaM/current inclusive nodes for non-exact redo. SwUndoFormatColl records numeric rollback entries and native SwUndRng; named redo reconstructs current range/nodes rather than retaining old paragraph list. All temporary replay PaMs/positions disposed finally. No new adapter/helper/sharedmodule/DTO/TextRuns/stale node fallback. Existing comments/payload sizes/defaults and portable fragment/directitem/fullhint/style identifier snapshots preserved; complete native SwHistory/client/delta/attribute payload/base document ownership still unverified. Pinned unattr SwUndoAttr/ResetAttr range constructors/Undo/Redo and unfmco SwUndRng/name/DoSetFormatColl inspected. Full native payload migration deferred, not fullmodulepromotion.
@@ -111,6 +151,39 @@ Iteration159 remove retained paragraph-object identities from represented direct
 ## Verification
 
 Command:6statics(onlyfailedlint repeated),ONEfullupstreamabsent build/app/inventory/scripts/Chromium,original4failed-onlyclosure,changed-file statics,5restored source audits,scope/AP/doctor/routing,exactsemanticSHAEVALUATORreview. Result:pass afternewfixture correction only. Evidence:12316distinct app/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%app/inventory L/S/F/B;sourcehashes unchanged since fullprofile;exact review40d686bd38b065db764953faeec7121cc7d315e1 quality20261005-184526445-recovery-context sameagent explicitEVALUATOR. Scope:5paths/2owners,numericformat/reset/styleownership;wholefragment/directitem/fullhint/style/docguard portable contracts/fullnative SwHistory/client/delta/payload/split/UI parity remainsunverified. No passingreplay/vendor restored/AP0forbidden/doctor0errors2oldwarnings/routingOK.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T18:46:06.059Z — VERIFY — ok
+
+By: CODER
+
+Note: 6statics afteronlyfailedlint retry;ONEfull absent profile thenoriginal4failed-only fixture closure4pass41skipped;12316distinctapp/109inventory/5scripts/120Chromium exactfinalproduction;45new/411prior unchanged/250records preserved;actual100%L/S/F/B;5restored audits0violations;exactsemantic40d686bd38b065db764953faeec7121cc7d315e1 sameagent EVALUATORpass;fullnativehistory/payload/split/UI unverified,goalactive.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T18:45:51.786Z, excerpt_hash=sha256:eff64fbccc78c41d41f181764e9dcd090ab6c1fd012a60f32fc30eec24950b65
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051828-ZP2MJZ/blueprint/resolved-snapshot.json
+- old_digest: 3706543d79113fd072ca5b5835cf72d81631600df5e9432030b69c661d5b5293
+- current_digest: 3706543d79113fd072ca5b5835cf72d81631600df5e9432030b69c661d5b5293
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051828-ZP2MJZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610051828-ZP2MJZ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
