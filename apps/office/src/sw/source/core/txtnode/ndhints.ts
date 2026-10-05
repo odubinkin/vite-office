@@ -12,8 +12,8 @@ import type { SwTextNode } from "./ndtxt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
-import { UpdateTextHints } from "./ndtxt-hint-update";
-import { clipHintOutsideRange } from "./ndhints-range";
+import { EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
+import { assertTextRange, clipHintOutsideRange } from "./ndhints-range";
 import { GetTextAttrAt } from "./ndtxt-attribute-query";
 import { GetTextAttrMode } from "../../../inc/swtypes";
 import {
@@ -212,6 +212,11 @@ export class SwpHints {
   /** Returns the number of ranged attributes. @returns Hint count. */
   public Count(): number {
     return this.m_HintsByStart.length;
+  }
+
+  /** Reports whether native ownership can release this empty map. @returns Whether no attributes remain. */
+  public CanBeDeleted(): boolean {
+    return this.Count() === 0;
   }
 
   /** Returns one attribute in start-sorted order. @param position - Sorted hint position. @returns Hint at position. */
@@ -463,6 +468,14 @@ export class SwpHints {
     return this;
   }
 
+  /** Removes interior supported hints before native negative coordinate updating. @param textLength - Original text length. @param offset - Erase start. @param length - Erased length. @returns This owned container. */
+  public EraseText(textLength: number, offset: number, length: number): SwpHints {
+    assertTextRange(textLength, offset, offset + length);
+    if (length > 0)
+      this.assignOwned(EraseTextHints(this.pool.GetDoc(), this.hintsByStart, offset, length));
+    return this;
+  }
+
   /** Toggles one supported character item over a native hint range. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param format - Supported item group. @param inherited - Node/style items. @returns Updated independent hints. */
   public toggleCharacterFormat(
     textLength: number,
@@ -623,9 +636,9 @@ export class SwpHints {
   private assignOwned(hints: readonly RangedTextAttr[]): void {
     const sorted = hints
       .filter(
-        /** Keeps only non-empty supported hints. @param hint - Candidate attribute. @returns Whether meaningful. */
+        /** Keeps meaningful supported items, including native empty ranges. @param hint - Candidate attribute. @returns Whether meaningful. */
         (hint) =>
-          hint.end > hint.start &&
+          hint.end >= hint.start &&
           ((hint.format instanceof SwFormatAutoFormat &&
             hint.format.GetStyleHandle().Count() > 0) ||
             (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0)),
@@ -635,10 +648,14 @@ export class SwpHints {
     sorted.forEach(
       /** Appends or merges one ordered non-overlapping hint. @param hint - Sorted hint. @returns Nothing. */
       (hint) => {
+        if (hint.start === hint.end) {
+          normalized.push(hint);
+          return;
+        }
         let previous: RangedTextAttr | undefined;
         for (let index = normalized.length - 1; index >= 0; index -= 1) {
           const candidate = normalized[index];
-          if (candidate?.Which() !== hint.Which()) continue;
+          if (candidate?.Which() !== hint.Which() || candidate.start === candidate.end) continue;
           previous = candidate;
           break;
         }
@@ -855,20 +872,6 @@ interface CharacterSegment {
   readonly attributes: WriterCharacterAttributes;
   readonly end: number;
   readonly start: number;
-}
-
-/** Validates a bounded text range. @param textLength - Complete text length. @param start - Inclusive start. @param end - Exclusive end. @returns Nothing. */
-function assertTextRange(textLength: number, start: number, end: number): void {
-  if (
-    !Number.isInteger(textLength) ||
-    !Number.isInteger(start) ||
-    !Number.isInteger(end) ||
-    textLength < 0 ||
-    start < 0 ||
-    end < start ||
-    end > textLength
-  )
-    throw new Error("Writer hint range is outside the text node.");
 }
 
 /** Minimal complete run shape used by browser boundaries. */

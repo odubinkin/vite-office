@@ -17,7 +17,7 @@ interface Boundary {
 const cases: readonly Boundary[] = [
   { source: [4, 6], moved: [1, 3], transfer: true },
   { source: [3, 6], moved: [0, 3], transfer: true },
-  { source: [3, 7], moved: [0, 4] },
+  { source: [3, 7], moved: [0, 4], remaining: [3, 3] },
   { source: [4, 9], moved: [1, 4], remaining: [3, 5] },
   { source: [1, 5], moved: [0, 2], remaining: [1, 3] },
   { source: [1, 9], moved: [0, 4], remaining: [1, 5] },

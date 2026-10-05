@@ -121,7 +121,11 @@ describe("real owned text moves", /** Registers node and document operation owne
             expect(f.source.GetpSwpHints()).toBe(sourceContainer);
             expectHints(f.source, 1, 5, mask);
             for (let i = 0; i < 2; i++) expect(owned(f.source)[i]).toBe(actual[i]);
-          } else expect(f.source.GetpSwpHints()).toBeUndefined();
+          } else {
+            expect(f.source.GetpSwpHints()).toBe(sourceContainer);
+            expectHints(f.source, 3, 3, mask);
+            for (let i = 0; i < 2; i++) expect(owned(f.source)[i]).toBe(actual[i]);
+          }
         }
         expect((required(transferred[1]).format as SwFormatAutoFormat).GetStyleHandle()).toBe(
           sourceHandle,

@@ -241,7 +241,8 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
           new SwPosition(target, 1),
         );
       expect(f.node.GetText()).toBe("aef");
-      expect(f.node.GetpSwpHints()).toBeUndefined();
+      expectFlags(f.node, 1, 1, mask);
+      expect(handle(f.node)).toBe(original);
       expect(target.GetText()).toBe("XbcdY");
       expectFlags(target, 1, 4, 0, true);
       expect(handle(target)).toBe(original);

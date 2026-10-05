@@ -32,8 +32,32 @@ export function UpdateTextHints(
       else hint.SetEnd(hint.end + length);
     }
   }
-  // Default InsertText expands starts only at paragraph start, after Update.
+  // Default InsertText restores DontExpand empty points before paragraph-start expansion.
+  if (!negative)
+    for (const hint of hints)
+      if (hint.start === hint.end && hint.end === offset + length && hint.dontExpand) {
+        hint.SetStart(offset);
+        hint.SetEnd(offset);
+      }
+  // Empty end-equal attributes continue before the native paragraph-start branch.
   if (!negative && offset === 0)
-    for (const hint of hints) if (hint.start === length && !hint.dontExpandStart) hint.SetStart(0);
+    for (const hint of hints)
+      if (hint.start !== hint.end && hint.start === length && !hint.dontExpandStart)
+        hint.SetStart(0);
   return [...hints, ...collector.values()];
+}
+
+/** Collects interior no-dummy ranged hints before EraseText updates coordinates. @param doc - Owning document. @param hints - Actual supported attributes. @param offset - Erase start. @param length - Erased length. @returns Retained actual attributes after negative Update. */
+export function EraseTextHints(
+  doc: SwDoc,
+  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[],
+  offset: number,
+  length: number,
+): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[] {
+  const end = offset + length;
+  const retained = hints.filter(
+    /** Preserves attributes outside the native interior-GC condition. @param hint - Actual attribute. @returns Whether retained. */
+    (hint) => !(hint.start >= offset && hint.start <= end && hint.end < end),
+  );
+  return UpdateTextHints(doc, retained, offset, length, true);
 }

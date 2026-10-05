@@ -67,7 +67,8 @@ describe("owned hint notification transfer", /** Registers literal node and pack
         } else {
           for (let i = 0; i < 2; i++) {
             expect(moved[i]).not.toBe(actual[i]);
-            expect(actual[i]?.m_pHints).toBe(kind === "partial" ? sourceOwner : undefined);
+            expect(actual[i]?.m_pHints).toBe(sourceOwner);
+            if (kind === "exact") expect(actual[i]).toMatchObject({ start: 3, end: 3 });
           }
           expect(sourceEnds).toHaveBeenCalledTimes(2);
         }

@@ -86,7 +86,11 @@ describe("secondary hint map transfer", /** Registers actual graph and ownership
           expect(packet.hints.GetSortedByWhichAndStart(1)).toBe(original[0]);
         } else {
           for (const hint of moved) expect(original).not.toContain(hint);
-          expect(sourceOwner.Count()).toBe(kind === "partial" ? 2 : 0);
+          expect(sourceOwner.Count()).toBe(2);
+          if (kind === "exact") {
+            for (const hint of original) expect(hint).toMatchObject({ start: 3, end: 3 });
+            expect(sourceOwner.entries()).toEqual(original);
+          }
         }
         expect(packet.hints.GetLastPosSortedByEnd(kind === "interior" ? 2 : 3)).toBe(-1);
         const packetStarts = vi.spyOn(packet.hints, "StartPosChanged"),

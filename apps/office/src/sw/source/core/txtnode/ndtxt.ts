@@ -156,7 +156,7 @@ export class SwTextNode extends SwContentNode {
   /** Replaces canonical ranged attributes without accepting a browser run projection. @param hints - Writer text attributes. @returns Nothing. */
   public SetTextHints(hints: SwpHints): void {
     const replacement = CopyTextNodeHints(this, hints);
-    this.pSwpHints = replacement.Count() === 0 ? undefined : replacement;
+    this.pSwpHints = replacement.CanBeDeleted() ? undefined : replacement;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -597,7 +597,7 @@ export class SwTextNode extends SwContentNode {
       hyperlink,
     );
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
-    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
+    this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.UpdateContentIndices(offset, text.length);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -611,7 +611,10 @@ export class SwTextNode extends SwContentNode {
     const end = Math.min(this.mText.length, start + count);
     this.assertRange(start, end);
     const removedLength = end - start;
-    if (removedLength === 0) return;
+    if (removedLength === 0) {
+      if (this.pSwpHints?.CanBeDeleted()) this.pSwpHints = undefined;
+      return;
+    }
     this.ReplaceRange(start, end, { text: "", hints: new SwpHints(this.GetDoc().GetAttrPool()) });
   }
 
@@ -623,7 +626,7 @@ export class SwTextNode extends SwContentNode {
     const remaining = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
     const hints = remaining.Cut(start, end);
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
-    this.pSwpHints = remaining.Count() === 0 ? undefined : remaining;
+    this.pSwpHints = remaining.CanBeDeleted() ? undefined : remaining;
     this.UpdateContentIndices(start, end - start, SwContentIndexUpdateMode.Negative);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -648,7 +651,7 @@ export class SwTextNode extends SwContentNode {
       replacement.hints.Count() === 0 &&
       removedLength > 0 &&
       replacementText.length === 0
-        ? existing.Update(this.mText.length, start, removedLength, true)
+        ? existing.EraseText(this.mText.length, start, removedLength)
         : existing.replaceRange(
             this.mText.length,
             start,
@@ -658,7 +661,7 @@ export class SwTextNode extends SwContentNode {
             transferHints,
           );
     this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
-    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
+    this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     if (removedLength > replacementText.length) {
       this.UpdateContentIndices(
         start + replacementText.length,
@@ -713,7 +716,7 @@ export class SwTextNode extends SwContentNode {
       format,
       this.GetSwAttrSet(),
     );
-    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
+    this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -768,7 +771,7 @@ export class SwTextNode extends SwContentNode {
     this.assertRange(start, end);
     if (start === end) return;
     const hints = this.GetTextHints().setHyperlink(this.mText.length, start, end, hyperlink);
-    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
+    this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -788,9 +791,9 @@ export class SwTextNode extends SwContentNode {
     );
     const directAttributes = this.GetpSwAttrSet();
     if (directAttributes !== undefined) trailing.SetAttr(directAttributes);
-    trailing.pSwpHints = suffix.hints.Count() === 0 ? undefined : suffix.hints;
+    trailing.pSwpHints = suffix.hints.CanBeDeleted() ? undefined : suffix.hints;
     this.mText = prefix.text;
-    this.pSwpHints = prefix.hints.Count() === 0 ? undefined : prefix.hints;
+    this.pSwpHints = prefix.hints.CanBeDeleted() ? undefined : prefix.hints;
     this.MoveContentIndicesFrom(trailing, offset);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -810,7 +813,7 @@ export class SwTextNode extends SwContentNode {
       ...source.GetTextHints().shifted(offset).entries(),
     ]);
     this.mText += source.mText;
-    this.pSwpHints = joinedHints.Count() === 0 ? undefined : joinedHints;
+    this.pSwpHints = joinedHints.CanBeDeleted() ? undefined : joinedHints;
     source.MoveAllContentIndicesTo(this, offset);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",

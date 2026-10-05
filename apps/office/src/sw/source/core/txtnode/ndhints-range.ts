@@ -22,3 +22,17 @@ export function clipHintOutsideRange<T extends SwFormatAutoFormat | SwFormatINet
   }
   return retained;
 }
+
+/** Validates a bounded text range. @param textLength - Complete text length. @param start - Inclusive start. @param end - Exclusive end. @returns Nothing. */
+export function assertTextRange(textLength: number, start: number, end: number): void {
+  if (
+    !Number.isInteger(textLength) ||
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    textLength < 0 ||
+    start < 0 ||
+    end < start ||
+    end > textLength
+  )
+    throw new Error("Writer hint range is outside the text node.");
+}

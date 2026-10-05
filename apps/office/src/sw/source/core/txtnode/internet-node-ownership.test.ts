@@ -135,9 +135,9 @@ describe("internet text node ownership", /** Registers actual node ownership bou
   it.each([
     { start: 3, end: 6, transfer: true, remaining: false },
     { start: 1, end: 9, transfer: false, remaining: true },
-    { start: 3, end: 7, transfer: false, remaining: false },
+    { start: 3, end: 7, transfer: false, remaining: true },
   ])(
-    "detaches and rebinds cut $start..$end with actual transfer=$transfer",
+    "detaches and rebinds cut $start..$end with actual transfer=$transfer case=%#",
     /** Checks literal owned cut and destination links. @param boundary - Literal cut relation. @returns Nothing. */ function cutToNode(
       boundary,
     ): void {
@@ -154,8 +154,10 @@ describe("internet text node ownership", /** Registers actual node ownership bou
         moved = link(fragment.hints);
       expect(moved.GetpTextNode()).toBeUndefined();
       expect(moved === original).toBe(boundary.transfer);
-      if (boundary.remaining) owned(original, a, required(a.GetpSwpHints()));
-      else expect(original.GetpTextNode()).toBeUndefined();
+      if (boundary.remaining) {
+        owned(original, a, required(a.GetpSwpHints()));
+        if (boundary.end === 7) expect([original.start, original.end]).toEqual([3, 3]);
+      } else expect(original.GetpTextNode()).toBeUndefined();
       b.ReplaceRange(1, 1, fragment, true);
       expect(fragment.hints.Count()).toBe(0);
       owned(moved, b, required(b.GetpSwpHints()));
