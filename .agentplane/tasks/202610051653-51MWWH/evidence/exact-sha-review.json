@@ -1,0 +1,23 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "112f42df336efcf8d624a573d7e6183141df1310",
+  "base": "07c5a469bcbf078efd786dfc64f975a2080fbc46",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/core/undo/undel.ts",
+    "apps/office/src/sw/source/core/undo/unspnd.ts",
+    "apps/office/src/sw/source/core/undo/native-cursor-range-history.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/edit/eddel.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+  ],
+  "reviewedSemanticDiffBytes": 121602,
+  "reviewedSemanticDiffSHA256": "7d81aafa1c78d2151b273bfdc6fb9c0a842d97b216a65690b7bffc08024efb89",
+  "verdict": "pass",
+  "evidence": "Pinned SwUndRng scalar range/COMPLETE_STRING/SetPaM and current context inspected. Shared node-reference cursor history replaced by existing numeric ranges; current PaM reconstruction after payload, direction/mark/active/table adjuncts and pending independence verified. Actual mutation point recording fixes selected delete/cell ring/table row connection/split offset0 dependencies without changing old tests. Private foreign graph fallbacks removed with public replacement/composition cancellation case.23new app cases,408prior files byte-identical,250states/defaults/exceptions/prior evidence preserved. ONE absent full profile,155failed-only app closure and1new case,3failed-only Chromium closure against final changed bundle; no passing replay.12238distinct app/312files,109inventory,5scripts,120Chromium; actual app/inventory100%L/S/F/B. Old shell coverage map excluded from changed-source merge; initial counters used only exact hashed unchanged contiguous locations.5restored audits0semantic violations; safe AP bounded evidence only. No whole-module/broad completion.",
+  "validationLimit": "Numeric shared cursor history and represented body/cell/current-document behavior only. SwUndo still owns portable direction/active/pending/table adjuncts. Existing payload paragraph/table section identities and split physical ownership remain unverified against native fresh nodes; broad list/table/UI and complete undo/client/frame/field/redline lifetimes remain open. Conscious IO/recovery exceptions preserved; no whole-module promotion.",
+  "residualRisk": "Portable base before/after shell adjunct ownership remains different from native SwUndo base. Existing action payload paragraph/table/row identities and native split physical fresh-node ownership remain to migrate. Complete CutImpl/undo-area/client/frame/redline/field lifetimes and broad list/table/browser behavior remain unverified. Conscious save/open/recovery deviations preserved."
+}

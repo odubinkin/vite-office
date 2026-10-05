@@ -4,7 +4,7 @@ title: "Reconstruct undo cursors from native numeric ranges"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T17:37:20.044Z"
+  updated_by: "CODER"
+  note: "Verified numeric SwUndRng cursor history and represented UI current-node boundaries at112f42df336efcf8d624a573d7e6183141df1310.23new;408old tests unchanged;250metadata states/defaults/exceptions preserved.12238distinct app,109inventory,5scripts,120Chromium closed using ONE absent full profile plus failed/new-only closure. Six statics finalpass, changed-file checks, final changed bundle, actual app/inventory100%L/S/F/B,5restored source audits0violations. Source maps only ignored appcache; no AP source/helper artifacts. Same-agent EVALUATOR pass exact semantic SHA. Existing payload identities/portable shell adjunct/full list/table/UI parity remain open; conscious IO/recovery exceptions preserved."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T17:37:18.632Z"
+  updated_by: "EVALUATOR"
+  note: "Exact semantic112f42df336e passes bounded numeric cursor history and current native UI boundary contract; broader parity remains open."
+  evaluated_sha: "112f42df336efcf8d624a573d7e6183141df1310"
+  blueprint_digest: "afb770965a00bb72f9d346c89ca0c93673bc6ec26a4aaa26a9ccbe9c0afec36a"
+  evidence_refs:
+    - ".agentplane/tasks/202610051653-51MWWH/README.md"
+    - ".agentplane/tasks/202610051653-51MWWH/quality/20261005-173718632-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610051653-51MWWH/quality/20261005-173718632-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610051653-51MWWH/quality/20261005-173718632-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610051653-51MWWH/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610051653-51MWWH/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610051653-51MWWH/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610051653-51MWWH/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610051653-51MWWH/evidence/browser-final-profile.json"
+    - ".agentplane/tasks/202610051653-51MWWH/evidence/final-bundle-build.json"
+    - ".agentplane/tasks/202610051653-51MWWH/evidence/restored-source-audits.json"
+  findings:
+    - "Same agent in explicit EVALUATOR role reviewed exact semantic diff and concrete maps/results.23new cases;408prior tests byte-identical;250states/defaults/exceptions preserved;12238distinct app,109inventory,5scripts,120Chromium closed. ONE absent full profile and failed/new-only remediation, no passing replay; final bundle production hashes agree; app/inventory100% actual source-aligned counters."
 commit: null
 comments:
   -
@@ -55,8 +76,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: remove obsolete private foreign cursor fallback, one genuinely new replacement/composition/current-native-history case, final changed bundle for3failed Chromium only."
+  -
+    type: "verify"
+    at: "2026-10-05T17:37:20.044Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified numeric SwUndRng cursor history and represented UI current-node boundaries at112f42df336efcf8d624a573d7e6183141df1310.23new;408old tests unchanged;250metadata states/defaults/exceptions preserved.12238distinct app,109inventory,5scripts,120Chromium closed using ONE absent full profile plus failed/new-only closure. Six statics finalpass, changed-file checks, final changed bundle, actual app/inventory100%L/S/F/B,5restored source audits0violations. Source maps only ignored appcache; no AP source/helper artifacts. Same-agent EVALUATOR pass exact semantic SHA. Existing payload identities/portable shell adjunct/full list/table/UI parity remain open; conscious IO/recovery exceptions preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T17:35:25.188Z"
+doc_updated_at: "2026-10-05T17:37:20.111Z"
 doc_updated_by: "CODER"
 description: "Replace retained SwTextNode cursor snapshots in shared SwUndo with native SwUndRng numeric coordinates and current-document reconstruction, preserving direction, active node, pending items and table mode. Necessary prerequisite to removing retained split identity bridge; physical split and action payload references remain separate unverified work."
 sections:
@@ -72,6 +99,36 @@ sections:
     6. Remove unreachable private foreign cursor fallback now all history boundaries resolve current-context nodes and model replacement cancels composition/history. New public model replacement/composition cancellation/current native history case executes once absent. Final changed-source app bundle must be rebuilt for preview-based3failed Chromium closure; no repeat full profile/static gates/passed tests. Actual final coverage100% via unchanged source identity and new/failed-only counters.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T17:37:20.044Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified numeric SwUndRng cursor history and represented UI current-node boundaries at112f42df336efcf8d624a573d7e6183141df1310.23new;408old tests unchanged;250metadata states/defaults/exceptions preserved.12238distinct app,109inventory,5scripts,120Chromium closed using ONE absent full profile plus failed/new-only closure. Six statics finalpass, changed-file checks, final changed bundle, actual app/inventory100%L/S/F/B,5restored source audits0violations. Source maps only ignored appcache; no AP source/helper artifacts. Same-agent EVALUATOR pass exact semantic SHA. Existing payload identities/portable shell adjunct/full list/table/UI parity remain open; conscious IO/recovery exceptions preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T17:35:25.188Z, excerpt_hash=sha256:19b5d43b6750ec07a466c5edb57cde1caf80e2e0808cfc95681f7541bc13b7e3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051653-51MWWH/blueprint/resolved-snapshot.json
+    - old_digest: afb770965a00bb72f9d346c89ca0c93673bc6ec26a4aaa26a9ccbe9c0afec36a
+    - current_digest: afb770965a00bb72f9d346c89ca0c93673bc6ec26a4aaa26a9ccbe9c0afec36a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051653-51MWWH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610051653-51MWWH -m 🧩 51MWWH task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic commit through a new approved task; preserve all other iteration history and conscious IO/recovery deviations."
   Findings: |-
@@ -108,6 +165,36 @@ Iteration156 replace shared undo cursor node retention with represented native n
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T17:37:20.044Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified numeric SwUndRng cursor history and represented UI current-node boundaries at112f42df336efcf8d624a573d7e6183141df1310.23new;408old tests unchanged;250metadata states/defaults/exceptions preserved.12238distinct app,109inventory,5scripts,120Chromium closed using ONE absent full profile plus failed/new-only closure. Six statics finalpass, changed-file checks, final changed bundle, actual app/inventory100%L/S/F/B,5restored source audits0violations. Source maps only ignored appcache; no AP source/helper artifacts. Same-agent EVALUATOR pass exact semantic SHA. Existing payload identities/portable shell adjunct/full list/table/UI parity remain open; conscious IO/recovery exceptions preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T17:35:25.188Z, excerpt_hash=sha256:19b5d43b6750ec07a466c5edb57cde1caf80e2e0808cfc95681f7541bc13b7e3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051653-51MWWH/blueprint/resolved-snapshot.json
+- old_digest: afb770965a00bb72f9d346c89ca0c93673bc6ec26a4aaa26a9ccbe9c0afec36a
+- current_digest: afb770965a00bb72f9d346c89ca0c93673bc6ec26a4aaa26a9ccbe9c0afec36a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051653-51MWWH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610051653-51MWWH -m 🧩 51MWWH task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
