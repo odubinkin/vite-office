@@ -4,7 +4,7 @@ title: "Align native Writer list context dispatch and current-level command stat
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 29
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T23:43:02.057Z"
+  updated_by: "CODER"
+  note: "One full upstream-absent profile and original-failed-only recovery passed; final distinct12588app109inventory5scripts145Chromium0flaky,actual100%L/S/F/B,all static/source/scope/AP/doctor/routing gates passed. Same-agent EVALUATOR pass evaluated exact ae17337742d3b1abd21d76b738a04b13f0bb4a88. Full native/core/UI/list/table and ODT NONE codec remain unverified; conscious IO deviations preserved."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement source-owned text/list command context and current-point native level state under standing approved iteration; preserve IO exceptions and one absent-profile verification."
+  -
+    type: "verify"
+    at: "2026-10-05T23:43:02.057Z"
+    author: "CODER"
+    state: "ok"
+    note: "One full upstream-absent profile and original-failed-only recovery passed; final distinct12588app109inventory5scripts145Chromium0flaky,actual100%L/S/F/B,all static/source/scope/AP/doctor/routing gates passed. Same-agent EVALUATOR pass evaluated exact ae17337742d3b1abd21d76b738a04b13f0bb4a88. Full native/core/UI/list/table and ODT NONE codec remain unverified; conscious IO deviations preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T23:40:57.131Z"
+doc_updated_at: "2026-10-05T23:43:02.113Z"
 doc_updated_by: "CODER"
 description: "Iteration168: move existing list creation/removal/continuation commands from permanent list shell into existing native text shell; select actual native numbered context using represented SwWrtShell GetSelectionType, activate SwListShell below SwTextShell through SwView SelectShell, and use native GetNumLevel current-point state for existing single-level commands. Source-shaped responsibility splits retain mandatory1000-line limits. No new list/subpoint feature or IO policy change; verify actual core/DOM/production behavior with one full upstream-absent profile and failed/new-only recovery."
 sections:
@@ -90,9 +96,48 @@ sections:
     3. Actual native point/sentinel/rule/list membership/NONE/complete enum identity/table/selected-row/ring/current-point forward-reverse rejected-range/menu context/undo-redo/document replacement checks; mounted DOM actual selectionchange, native bindings/state/history; real Chromium1280/390 ordinary ODT Open/plain/list boundary/context/menu changes/list exit-reentry/typing/Undo/neighbors.19 new app cases and2 new browser cases. Existing ODT NONE export remains unverified follow-up; no codec change.
     4.432prior tests426byte-identical;6 exact owner migrations only,all other behavior assertions preserved.255prior semantic states/defaults/classes/IO exceptions/evidence retained; one registry localSymbol relocation,3newpartialunverified owners258modules. No full-module parity promotion or conscious IO deviation change.
     5. Five restored source audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Exact scope/prior-test/metadata/sourcehash/AP ignored-inclusive/doctor/routing/diffcheck evidence. Same-agent EVALUATOR exact semantic SHA pass; record verify and canonical meaningful finish; preserve whole parent Findings; clean tracked/untracked main. Full native/core/UI/list/table objective remains ACTIVE and unverified.
-  Verification: "Pending six statics,one upstream-absent profile,source audits and exact-SHA same-agent review."
+  Verification: |-
+    Pending six statics,one upstream-absent profile,source audits and exact-SHA same-agent review.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T23:43:02.057Z — VERIFY — ok
+
+    By: CODER
+
+    Note: One full upstream-absent profile and original-failed-only recovery passed; final distinct12588app109inventory5scripts145Chromium0flaky,actual100%L/S/F/B,all static/source/scope/AP/doctor/routing gates passed. Same-agent EVALUATOR pass evaluated exact ae17337742d3b1abd21d76b738a04b13f0bb4a88. Full native/core/UI/list/table and ODT NONE codec remain unverified; conscious IO deviations preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T23:40:57.131Z, excerpt_hash=sha256:8a1fd96ef688cad7ce42f5266b512c780eefddb08218755d54a6c2905b7f00e5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052306-4VZ510/blueprint/resolved-snapshot.json
+    - old_digest: 797510b56fa4fde5a72c8f8ecb5a852e019e87ec3a673c0fbdbd79f0005dd1ee
+    - current_digest: 797510b56fa4fde5a72c8f8ecb5a852e019e87ec3a673c0fbdbd79f0005dd1ee
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610052306-4VZ510
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610052306-4VZ510
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the intentional semantic commit through a new executable task if needed; DONE task artifacts remain immutable."
-  Findings: "Implemented native current-point list state and conditional list-before-text context; moved list-kind/continuation operations intact to the existing text shell and removed old ownership. Supported inactive menu commands remain visible and disabled through bindings, matching upstream default.19 new app and2 browser cases;432 prior tests426 byte-identical and6 exact owner migrations.255 prior semantic states/defaults/classes/IO deviations/evidence preserved;3 new partial unverified modules=258. One full absent profile initially had7 new app failures,1 old inventory owner failure and2 new browser fixture failures; exact failed names/counts/errors/hashes retained in evidence. Failed-only recovery: first4/7app and1inventory passed, then3 remaining app passed after actual menu visibility correction and selectionchange fixture;2 original browser cases finally passed after native radio role correction. No passing/full replay; one rebuild followed actual production change. Final distinct12588app109inventory5scripts145Chromium,0flaky;actual app100%12879L14117S3424F10472B,inventory100%1464L1523S384F1080B. Source/map identity and contiguous unchanged locations only; changed menu locations actual failed-case counters. Six initial statics plus failed typecheck and changed-file checks passed;five restored audits passed,semanticViolations0. Scope/provenance/prior-state/sourcehash/APignoredscan4436files0forbidden/doctor0errors2knownwarnings/routing/diffcheck passed. Same-agent EVALUATOR exact SHA review required before finish. Other selection contexts/table row-column subtypes/framework/layout/readonly/toolbar gating/full KeyInput/core/UI/list/table and ODT NONE serialization remain unverified. Pinned SDI IncrementLevel/DecrementLevel are correctly NumUpDown; separate outline/sublevel commands are future scope. Conscious save/open/recovery deviations unchanged;parent DOING/goalACTIVE."
+  Findings: |-
+    Implemented native current-point list state and conditional list-before-text context; moved list-kind/continuation operations intact to the existing text shell and removed old ownership. Supported inactive menu commands remain visible and disabled through bindings, matching upstream default.19 new app and2 browser cases;432 prior tests426 byte-identical and6 exact owner migrations.255 prior semantic states/defaults/classes/IO deviations/evidence preserved;3 new partial unverified modules=258. One full absent profile initially had7 new app failures,1 old inventory owner failure and2 new browser fixture failures; exact failed names/counts/errors/hashes retained in evidence. Failed-only recovery: first4/7app and1inventory passed, then3 remaining app passed after actual menu visibility correction and selectionchange fixture;2 original browser cases finally passed after native radio role correction. No passing/full replay; one rebuild followed actual production change. Final distinct12588app109inventory5scripts145Chromium,0flaky;actual app100%12879L14117S3424F10472B,inventory100%1464L1523S384F1080B. Source/map identity and contiguous unchanged locations only; changed menu locations actual failed-case counters. Six initial statics plus failed typecheck and changed-file checks passed;five restored audits passed,semanticViolations0. Scope/provenance/prior-state/sourcehash/APignoredscan4436files0forbidden/doctor0errors2knownwarnings/routing/diffcheck passed. Same-agent EVALUATOR exact SHA review required before finish. Other selection contexts/table row-column subtypes/framework/layout/readonly/toolbar gating/full KeyInput/core/UI/list/table and ODT NONE serialization remain unverified. Pinned SDI IncrementLevel/DecrementLevel are correctly NumUpDown; separate outline/sublevel commands are future scope. Conscious save/open/recovery deviations unchanged;parent DOING/goalACTIVE.
+
+    - Observation: Inactive supported menu commands were hidden by an old descriptor-presence gate; six old callers retained obsolete list ownership.
+      Impact: Menu composition differed from native disabled-entry default and prior continuation tests used the wrong shell.
+      Resolution: Supported resources now render through actual bindings; text-shell owner migrations retain assertions. All original failures recovered without passing/full test replay.
 id_source: "generated"
 ---
 ## Summary
@@ -140,6 +185,39 @@ Iteration168 under the standing approved iterative native core/UI convergence go
 
 Pending six statics,one upstream-absent profile,source audits and exact-SHA same-agent review.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T23:43:02.057Z — VERIFY — ok
+
+By: CODER
+
+Note: One full upstream-absent profile and original-failed-only recovery passed; final distinct12588app109inventory5scripts145Chromium0flaky,actual100%L/S/F/B,all static/source/scope/AP/doctor/routing gates passed. Same-agent EVALUATOR pass evaluated exact ae17337742d3b1abd21d76b738a04b13f0bb4a88. Full native/core/UI/list/table and ODT NONE codec remain unverified; conscious IO deviations preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T23:40:57.131Z, excerpt_hash=sha256:8a1fd96ef688cad7ce42f5266b512c780eefddb08218755d54a6c2905b7f00e5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052306-4VZ510/blueprint/resolved-snapshot.json
+- old_digest: 797510b56fa4fde5a72c8f8ecb5a852e019e87ec3a673c0fbdbd79f0005dd1ee
+- current_digest: 797510b56fa4fde5a72c8f8ecb5a852e019e87ec3a673c0fbdbd79f0005dd1ee
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610052306-4VZ510
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610052306-4VZ510
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the intentional semantic commit through a new executable task if needed; DONE task artifacts remain immutable.
@@ -147,3 +225,7 @@ Revert only the intentional semantic commit through a new executable task if nee
 ## Findings
 
 Implemented native current-point list state and conditional list-before-text context; moved list-kind/continuation operations intact to the existing text shell and removed old ownership. Supported inactive menu commands remain visible and disabled through bindings, matching upstream default.19 new app and2 browser cases;432 prior tests426 byte-identical and6 exact owner migrations.255 prior semantic states/defaults/classes/IO deviations/evidence preserved;3 new partial unverified modules=258. One full absent profile initially had7 new app failures,1 old inventory owner failure and2 new browser fixture failures; exact failed names/counts/errors/hashes retained in evidence. Failed-only recovery: first4/7app and1inventory passed, then3 remaining app passed after actual menu visibility correction and selectionchange fixture;2 original browser cases finally passed after native radio role correction. No passing/full replay; one rebuild followed actual production change. Final distinct12588app109inventory5scripts145Chromium,0flaky;actual app100%12879L14117S3424F10472B,inventory100%1464L1523S384F1080B. Source/map identity and contiguous unchanged locations only; changed menu locations actual failed-case counters. Six initial statics plus failed typecheck and changed-file checks passed;five restored audits passed,semanticViolations0. Scope/provenance/prior-state/sourcehash/APignoredscan4436files0forbidden/doctor0errors2knownwarnings/routing/diffcheck passed. Same-agent EVALUATOR exact SHA review required before finish. Other selection contexts/table row-column subtypes/framework/layout/readonly/toolbar gating/full KeyInput/core/UI/list/table and ODT NONE serialization remain unverified. Pinned SDI IncrementLevel/DecrementLevel are correctly NumUpDown; separate outline/sublevel commands are future scope. Conscious save/open/recovery deviations unchanged;parent DOING/goalACTIVE.
+
+- Observation: Inactive supported menu commands were hidden by an old descriptor-presence gate; six old callers retained obsolete list ownership.
+  Impact: Menu composition differed from native disabled-entry default and prior continuation tests used the wrong shell.
+  Resolution: Supported resources now render through actual bindings; text-shell owner migrations retain assertions. All original failures recovered without passing/full test replay.
