@@ -10,5 +10,35 @@
     "exit": 1,
     "bytes": 384,
     "sha256": "d9e09488dff3fa305dbaa127b168af298ff212d97ae6cdf70c534dee1fa0365f"
+  },
+  {
+    "command": "npm run lint",
+    "exit": 0,
+    "bytes": 55,
+    "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "bytes": 240,
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "command": "npm run check:dependencies",
+    "exit": 0,
+    "bytes": 189,
+    "sha256": "a99a71dad6839688dddff965f6371118adddb7010b9092ca18634abd8a708e1a"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 0,
+    "bytes": 119,
+    "sha256": "43bf189f19b3318c15ecf54062b9a949e6dbc72210f4e285c5a4aadd3efdfcb2"
+  },
+  {
+    "command": "npm run check:file-size",
+    "exit": 0,
+    "bytes": 3037,
+    "sha256": "0f3e1927b52ed0565d301c2c34ee6e74f1368144cd8c0c74344e445ec570c579"
   }
 ]
