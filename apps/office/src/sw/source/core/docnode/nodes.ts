@@ -15,6 +15,12 @@ import {
   type SwTableLineFormat,
 } from "../table/swtable";
 
+/** Actual row/cell section nodes retained by table insertion history. */
+export interface SwTableRowSection {
+  readonly line: SwTableLine;
+  readonly nodes: readonly SwNode[];
+}
+
 /** Owns every Writer model node and the fixed non-content/content section sentinels. */
 export class SwNodes {
   private readonly nodeArray: SwNode[] = [];
@@ -198,6 +204,82 @@ export class SwNodes {
     this.InsertOutlineNode(paragraph);
     this.document.NotifyModelChange({ index: paragraph.GetIndex(), kind: "node-inserted" });
     return paragraph;
+  }
+
+  /** Prepares an empty row with native source row/cell formats and first-paragraph attributes. @param table - Connected table. @param source - Source row. @returns Detached actual sections. */
+  public PrepareTableRow(table: SwTable, source: SwTableLine): SwTableRowSection {
+    const tableNode = table.GetTableNode();
+    if (tableNode.GetNodes() !== this || !table.GetTabLines().includes(source))
+      throw new Error("Writer table row belongs to another table.");
+    const line = new SwTableLine(source.GetFormat()),
+      nodes: SwNode[] = [];
+    for (const box of source.GetTabBoxes()) {
+      const start = new SwTableBoxStartNode(this, tableNode),
+        original = this.at(box.GetStartNode().GetIndex() + 1) as SwTextNode,
+        paragraph = new SwTextNode(this, start, original.GetTextFormatColl()),
+        end = new SwEndNode(this, start);
+      start.setEndOfSection(end);
+      const items = original.GetpSwAttrSet();
+      if (items !== undefined) paragraph.SetAttr(items);
+      nodes.push(start, paragraph, end);
+      line.AddBox(new SwTableBox(start, box.GetFormat()));
+    }
+    return { line, nodes };
+  }
+
+  /** Connects an appended row's retained sections atomically with its table line. @param table - Target table. @param section - Prepared or retained row. @returns Nothing. */
+  public InsertTableRow(table: SwTable, section: SwTableRowSection): void {
+    const tableNode = table.GetTableNode();
+    if (
+      tableNode.GetNodes() !== this ||
+      section.nodes.some(
+        /** Rejects foreign or already connected section owners. @param node - Section node. @returns Whether ownership is invalid. */
+        (node) => node.GetNodes() !== this || this.indexOfOrUndefined(node) !== undefined,
+      )
+    )
+      throw new Error("Writer table row is not detached from this document.");
+    const index = tableNode.EndOfSectionNode().GetIndex();
+    this.nodeArray.splice(index, 0, ...section.nodes);
+    table.AddLine(section.line);
+    for (const node of section.nodes)
+      if (node instanceof SwTextNode) {
+        node.AddToList();
+        this.InsertOutlineNode(node);
+      }
+    this.document.NotifyModelChange({ index, kind: "node-inserted" });
+  }
+
+  /** Disconnects an inserted row while preserving its identities for Redo. @param table - Owning table. @param section - Connected inserted row. @param target - Surviving cursor owner. @param offset - Retargeted registered offset. @returns Nothing. */
+  public RemoveTableRow(
+    table: SwTable,
+    section: SwTableRowSection,
+    target: SwTextNode,
+    offset: number,
+  ): void {
+    if (table.GetTableNode().GetNodes() !== this || target.GetNodes() !== this)
+      throw new Error("Writer table history belongs to another document.");
+    if (!table.GetTabLines().includes(section.line))
+      throw new Error("Writer table row is not connected.");
+    const boxes = section.line.GetTabBoxes(),
+      index = (boxes[0] as SwTableBox).GetStartNode().GetIndex(),
+      end = (boxes.at(-1) as SwTableBox).GetStartNode().EndOfSectionNode().GetIndex();
+    if (
+      section.nodes.length !== end - index + 1 ||
+      section.nodes.some(
+        /** Requires the exact connected native section sequence. @param node - Retained node. @param delta - Section offset. @returns Whether sequence differs. */
+        (node, delta) => this.nodeArray[index + delta] !== node,
+      )
+    )
+      throw new Error("Writer table row is not connected.");
+    for (const node of section.nodes)
+      if (node instanceof SwTextNode) {
+        node.CollapseContentIndicesTo(target, offset);
+        this.m_aOutlineNodes.erase(node);
+        node.RemoveFromList();
+      }
+    this.nodeArray.splice(index, section.nodes.length);
+    table.RemoveLine(section.line);
+    this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
   /** Inserts a new text node immediately before the content end sentinel. @param text - Initial text. @returns Inserted text node. */

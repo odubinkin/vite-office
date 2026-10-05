@@ -6,7 +6,11 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
-import { SwPaM, SwPosition, type WriterTextRange } from "../../core/crsr/pam";
+import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
+import { SwCursor } from "../../core/crsr/swcrsr";
+import { SwTableBoxStartNode, SwTableNode } from "../../core/docnode/node";
+import { SwUndoTableNdsChg } from "../../core/undo/untbl";
+import type { SwTableLine } from "../../core/table/swtable";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
@@ -75,7 +79,7 @@ export class SwWrtShell extends SwModify {
   private activeParagraph: WriterParagraph;
   private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
-  private readonly cursor: SwPaM;
+  private readonly cursor: SwCursor;
   private readonly docShellSubscription: () => void;
   private readonly editing: SwWrtShellEditingOperations;
   private readonly listShell: SwListShell;
@@ -89,7 +93,7 @@ export class SwWrtShell extends SwModify {
     super();
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraph = paragraph;
-    this.cursor = new SwPaM(new SwPosition(paragraph, paragraph.Len()));
+    this.cursor = new SwCursor(new SwPosition(paragraph, paragraph.Len()));
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
     this.undoContext = {
       GetDoc: /** Returns the shell's current SwDoc. @returns Active document. */ () =>
@@ -161,8 +165,49 @@ export class SwWrtShell extends SwModify {
     return this.SetLineNumberInfo(info);
   }
   /** Returns the persistent point-and-mark cursor identity. @returns Current SwPaM. */
-  public GetCursor(): SwPaM {
+  public GetCursor(): SwCursor {
     return this.cursor;
+  }
+
+  /** Traverses to the next cell and appends one row only at an unmarked table end. @param appendLine - Native append permission. @returns Whether cursor moved. */
+  public GoNextCell(appendLine = true): boolean {
+    if (this.cursor.GoNextCell()) {
+      this.UpdateTableCursor();
+      return true;
+    }
+    const section = this.cursor.GetPoint().GetNode().StartOfSectionNode();
+    if (!(section instanceof SwTableBoxStartNode) || this.cursor.HasMark() || !appendLine)
+      return false;
+    const tableNode = section.StartOfSectionNode() as SwTableNode;
+    const table = tableNode.GetTable(),
+      source = table.GetTabLines().at(-1) as SwTableLine;
+    return this.RunNotificationTransaction(
+      /** Brackets preparation and row/history publication. @returns Whether applied. */ () =>
+        this.GetDoc().RunModelTransaction(
+          /** Prepares actual empty sections and records one row insertion. @returns Whether applied. */ () => {
+            const before = this.CaptureCursorState(),
+              row = this.GetDoc().nodes.PrepareTableRow(table, source),
+              first = row.nodes[1] as WriterParagraph,
+              after = createWriterCollapsedCursorState(first, 0, first.GetCharacterItemsAt(0));
+            return this.ApplyAction(new SwUndoTableNdsChg(table, row, before, after));
+          },
+        ),
+    );
+  }
+
+  /** Traverses to the previous cell without leaving the table or changing its content. @returns Whether cursor moved. */
+  public GoPrevCell(): boolean {
+    if (!this.cursor.GoPrevCell()) return false;
+    this.UpdateTableCursor();
+    return true;
+  }
+
+  /** Refreshes shell-owned input/bindings after core cell traversal. @returns Nothing. */
+  private UpdateTableCursor(): void {
+    this.activeParagraph = this.cursor.GetPoint().GetNode() as WriterParagraph;
+    this.pendingCharacterItems = this.activeParagraph.GetCharacterItemsAt(0);
+    this.docShell.GetUndoManager().BreakUndoGrouping();
+    this.NotifySelection();
   }
   /** Creates a model-based transfer object over the current persistent selection. @returns Transfer object. */
   public CreateTransferable(): SwTransferable {

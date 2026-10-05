@@ -10,6 +10,8 @@ import type { WriterClipboardSelection, WriterTransferDocument } from "../dochdl
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwTextNode as SwTextNodeClass } from "../../core/txtnode/ndtxt";
+import { SwTableBoxStartNode } from "../../core/docnode/node";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -74,6 +76,28 @@ export class SwEditWin {
   public SelectAll(): void {
     this.wrtShell.SelectAll();
     this.invalidateBindings();
+  }
+
+  /** Handles table Tab intent with numbering-at-start priority before cell traversal. @param shift - Previous-cell or list-promote direction. @returns Whether Writer owns this key, including a table boundary no-op. */
+  public HandleTableTab(shift = false): boolean {
+    const point = this.wrtShell.GetCursor().GetPoint(),
+      node = point.GetNode() as SwTextNode;
+    if (!(node.StartOfSectionNode() instanceof SwTableBoxStartNode)) return false;
+    const rule = node.GetNumRule();
+    if (rule !== undefined && point.GetContentIndex() === 0) {
+      const level = node.GetActualListLevel(),
+        oldFormat = rule.Get(level),
+        newFormat = level < 9 ? rule.Get(level + 1) : oldFormat;
+      const changesIndent =
+        level >= 9 ||
+        oldFormat.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE ||
+        newFormat.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE ||
+        oldFormat.GetIndentAt() !== newFormat.GetIndentAt();
+      this.Complete(
+        shift || changesIndent ? this.wrtShell.NumUpDown(!shift) : this.wrtShell.Insert("\t"),
+      );
+    } else this.Complete(shift ? this.wrtShell.GoPrevCell() : this.wrtShell.GoNextCell());
+    return true;
   }
 
   /** Inserts ordinary text through Writer typing semantics. @param text - Inserted text. @returns Whether the document changed. */

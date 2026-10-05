@@ -3073,6 +3073,18 @@
           {
             "path": "apps/office/e2e/writer-cell-list-backspace.spec.ts",
             "marker": "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+            "marker": "native table traversal"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+            "marker": "native table Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+            "marker": "Writer Tab traverses native cell sections and appends one row with history"
           }
         ]
       },
@@ -3082,7 +3094,8 @@
         "Translates DOM selection, beforeinput, composition, pointer, clipboard, drag/drop, and focus events into SwEditWin operations.",
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
         "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
-        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged."
+        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
+        "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -8707,6 +8720,18 @@
           {
             "path": "apps/office/e2e/writer-native-table-editing.spec.ts",
             "marker": "Writer table cell typing, split, join and formatting use document history"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+            "marker": "native table traversal"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+            "marker": "native table Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+            "marker": "Writer Tab traverses native cell sections and appends one row with history"
           }
         ],
         "upstream": [
@@ -8797,12 +8822,33 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/docedt.cxx",
             "marker": "sw_GetJoinFlags"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+            "marker": "SwCursor::GoPrevNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+            "marker": "SwCursorShell::GoNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+            "marker": "void InsTableBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+            "marker": "SwUndoTableNdsChg::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case KEY_TAB:"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/core/docnode/nodes.ts",
       "localSymbols": [
-        "SwNodes"
+        "SwNodes",
+        "SwTableRowSection"
       ],
       "omittedResponsibilities": [
         "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
@@ -8813,7 +8859,8 @@
         "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
         "Iteration137 restores body-text cross-node selection flags and JoinPrev/JoinNext survivor choice through source-owned docedt helpers and actual SwPaM Exchange. DeleteAndJoin erases raw first-tail/last-head strings and removes intact middle nodes before joining. One SwUndoDelete retains both boundary whole-hint/direct-item/live-collection history and middle content; Undo reconstructs fresh native hints with NOHINTEXPAND, Redo resets temporary history end. Cross-node Undo direction follows the normalized native join flag. Selected Insert/Replace/composition use the deletion result and actual survivor for FORCEHINTEXPAND plus EMPTYEXPAND mode5 inside the common Replace list. Existing boundary object identity/cursor references, AppendTextNode cloning and zero-length CopyAttr remain bounded adapters requiring subsequent refactoring; full native node-index/ring/bookmark/redline/field/layout and structural section history remain unverified. SwNodes insertion accepts an actual SwNode predecessor, including the body start sentinel, without a temporary paragraph. Literal real-owner boundary/direction/middle-node/family/history/survivor/input tests exercise the registered profile. Existing243 semantic states/defaults/exceptions and registered I/O/recovery deviations are unchanged; new docedt module remains wholly unverified, no whole-module or goal promotion.",
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
-        "Iteration138 first-profile failures expose the remaining body-only section deletion and selected-range traversal. SwNodes.removeTextNode now derives actual same-section text owners and retains one paragraph per section;SwPaM selected ranges iterate the actual node span and omit non-text sentinels. This enables same-cell split/join Undo and formatting without changing structural table-wide selection policy. First failure names and coverage counts are persisted;only failing cases and newly added section/range cases are replayed. Full native structural lifetime/rings/table navigation and rendering remain unverified;all semantic states/defaults/exceptions and registered I/O deviations remain unchanged."
+        "Iteration138 first-profile failures expose the remaining body-only section deletion and selected-range traversal. SwNodes.removeTextNode now derives actual same-section text owners and retains one paragraph per section;SwPaM selected ranges iterate the actual node span and omit non-text sentinels. This enables same-cell split/join Undo and formatting without changing structural table-wide selection policy. First failure names and coverage counts are persisted;only failing cases and newly added section/range cases are replayed. Full native structural lifetime/rings/table navigation and rendering remain unverified;all semantic states/defaults/exceptions and registered I/O deviations remain unchanged.",
+        "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/docnode/nodes.cxx",
@@ -9317,12 +9364,44 @@
           {
             "path": "apps/office/e2e/writer-native-table-editing.spec.ts",
             "marker": "Writer table cell typing, split, join and formatting use document history"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+            "marker": "native table traversal"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+            "marker": "native table Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+            "marker": "Writer Tab traverses native cell sections and appends one row with history"
           }
         ],
         "upstream": [
           {
             "marker": "SwTable::SwTable",
             "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+            "marker": "SwCursor::GoPrevNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+            "marker": "SwCursorShell::GoNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+            "marker": "void InsTableBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+            "marker": "SwUndoTableNdsChg::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case KEY_TAB:"
           }
         ]
       },
@@ -9337,7 +9416,8 @@
       ],
       "preservedResponsibilities": [
         "Owns ordered Writer table rows, cells, geometry and pagination boundaries.",
-        "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion."
+        "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
+        "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/table/swtable.cxx",
@@ -12762,6 +12842,18 @@
           {
             "path": "apps/office/e2e/writer-cell-list-backspace.spec.ts",
             "marker": "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+            "marker": "native table traversal"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+            "marker": "native table Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+            "marker": "Writer Tab traverses native cell sections and appends one row with history"
           }
         ],
         "upstream": [
@@ -12792,6 +12884,26 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
             "marker": "SwUndoNumOrNoNum::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+            "marker": "SwCursor::GoPrevNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+            "marker": "SwCursorShell::GoNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+            "marker": "void InsTableBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+            "marker": "SwUndoTableNdsChg::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case KEY_TAB:"
           }
         ]
       },
@@ -12806,7 +12918,8 @@
         "Owns platform-neutral edit, selection, composition, transfer, and history operations over one persistent SwWrtShell.",
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
         "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
-        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged."
+        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
+        "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
@@ -13399,6 +13512,18 @@
           {
             "path": "apps/office/e2e/writer-cell-list-backspace.spec.ts",
             "marker": "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+            "marker": "native table traversal"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+            "marker": "native table Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+            "marker": "Writer Tab traverses native cell sections and appends one row with history"
           }
         ],
         "upstream": [
@@ -13457,6 +13582,26 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
             "marker": "SwUndoNumOrNoNum::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+            "marker": "SwCursor::GoPrevNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/trvltbl.cxx",
+            "marker": "SwCursorShell::GoNextCell"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
+            "marker": "void InsTableBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+            "marker": "SwUndoTableNdsChg::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case KEY_TAB:"
           }
         ]
       },
@@ -13479,7 +13624,8 @@
         "Iteration109 carries explicit unsigned UNO KeyModifier metadata separately from slot arguments to zero-default SfxRequest and document-owned paragraph StyleApply. Only native KEY_MOD1 triggers initial full-character/list reset. The existing content-manager owner constructs the registered native deletion set excluding list83..87; docfmt uses selective node reset with protected nonempty numbering/page/non-NONE break and Ctrl repeated-list eligibility. txtedt removes common automatic-style items while retaining unrelated items, exact flags and internet hints. Collection history owns hints before initial selective reset; the separate exact-reset owner captures after collection processing. Native redo retains list eligibility but omits the initial full-character flag and uses default non-exact hint reset, including repeated-style level asymmetry. Actual request/core/frame/mounted UI/ODT tests cover mask literals, filtering, ordinary/URL separation, protected defaults, inclusive empty/end-zero spans, untouched neighbors, partial/whole hints, history ownership, three cycles and continued input/export. Every prior test is byte-identical. Language/direction/fields/marks/layout/redlines/rings/inline headings, full UNO transforms/style families/native defaults/history and complete UI parity remain unverified; no status/default/exception promotion or registered save/open/recovery change. Older missing-modifier/deletion-set claims are superseded only for this bounded registered operation.",
         "Iteration135 replaces same-node selected Insert/Replace/composition fragment replacement with native ordered SwUndoDelete and forced SwUndoInsert mode5 inside one Replace list and shell notification transaction. Successful deletion captures whole-node old AUTO/INET history; undo runs insert removal before history restoration,redo runs deletion then stored forced insertion. Empty marked range uses mode1. Surrounding typing remains separate; cross-node and paste/range adapters retained. Literal source-independent range/flags/history/ownership/direction/input/nesting/retention/notification evidence covers this bounded correction. Full native selection options/redline/rings/overwrite/comments/list IDs and remaining core/UI remain unverified; existing semantic statuses/defaults/exceptions and registered I/O/recovery deviations preserved,no promotion.",
         "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
-        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged."
+        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
+        "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
@@ -16037,6 +16183,104 @@
         "XMLImpSpanContext_Impl::XMLImpSpanContext_Impl",
         "XMLImpSpanContext_Impl::characters",
         "XMLImpSpanContext_Impl::createFastChildContext"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/crsr/swcrsr.ts",
+            "marker": "SwCursor"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+            "marker": "native table traversal"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+            "marker": "native table Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+            "marker": "Writer Tab traverses native cell sections and appends one row with history"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx",
+            "marker": "SwCursor::GoPrevNextCell"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/crsr/swcrsr.ts",
+      "localSymbols": [
+        "SwCursor"
+      ],
+      "omittedResponsibilities": [
+        "Full native merged/protected/nested table,selection rings,layout and undo node-array lifetimes remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/crsr/swcrsr.cxx",
+      "upstreamSymbols": [
+        "SwCursor::GoPrevNextCell"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+            "marker": "SwUndoTableNdsChg"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+            "marker": "native table traversal"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+            "marker": "native table Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-tab.spec.ts",
+            "marker": "Writer Tab traverses native cell sections and appends one row with history"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+            "marker": "SwUndoTableNdsChg::SwUndoTableNdsChg"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+            "marker": "SwUndoTableNdsChg::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/untbl.cxx",
+            "marker": "SwUndoTableNdsChg::RedoImpl"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/untbl.ts",
+      "localSymbols": [
+        "SwUndoTableNdsChg"
+      ],
+      "omittedResponsibilities": [
+        "Full native merged/protected/nested table,selection rings,layout and undo node-array lifetimes remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/untbl.cxx",
+      "upstreamSymbols": [
+        "SwUndoTableNdsChg::SwUndoTableNdsChg",
+        "SwUndoTableNdsChg::UndoImpl",
+        "SwUndoTableNdsChg::RedoImpl"
       ]
     }
   ]

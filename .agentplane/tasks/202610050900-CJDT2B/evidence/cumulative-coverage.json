@@ -1,0 +1,86 @@
+{
+  "result": "pass",
+  "method": "Actual initial maps plus only exact failed-case maps. For corrected nodes.ts only exact source-identical contiguous locations align by ordered-line LCS;new/edited/crossing locations use actual failed-case counts. Sixotherproductionfiles byte-identical afterfirstprofile. Replaythresholds0 are diagnostic;actual cumulative allfour100 remains mandatory. No passing replay.",
+  "total": {
+    "lines": {
+      "total": 11761,
+      "covered": 11761,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12877,
+      "covered": 12877,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3295,
+      "covered": 3295,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9675,
+      "covered": 9675,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventory": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "changedSourceDetails": {
+    "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "firstSHA256": "1873b54d2e9b284a89e38c9c295947682607128fb1304a35535435aeaabc4430",
+    "currentSHA256": "febf09fe4d0063f85fe8016c8986de838de60815c725b85a6ba80d180d193a22",
+    "carriedUnchangedLocationCounts": {
+      "statements": 212,
+      "functions": 39,
+      "branches": 97
+    },
+    "missing": {
+      "statements": [],
+      "functions": [],
+      "branches": []
+    }
+  },
+  "passingReplays": 0,
+  "appCumulativeSHA256": "2ead4bd2b3ee5f9519d692be5564014408941350e6b136087afd920500e34a1c",
+  "inventoryCumulativeSHA256": "84bd5e49e47a6c292620d8deb9ab32270455d25178bef8a26b861d7f8fbc6973"
+}

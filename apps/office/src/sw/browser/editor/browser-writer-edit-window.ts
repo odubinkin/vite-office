@@ -87,12 +87,21 @@ export class BrowserWriterEditWindow {
     };
 
   public readonly HandleKeyDown =
-    /** Translates Select All and Backspace keys to the platform-neutral edit-window owner. @param event - React keyboard event. @returns Nothing. */ (
+    /** Translates selection, deletion and table traversal keys to the platform-neutral edit-window owner. @param event - React keyboard event. @returns Nothing. */ (
       event: React.KeyboardEvent<HTMLElement>,
     ): void => {
       if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "a") {
         event.preventDefault();
         this.editWindow.SelectAll();
+      } else if (
+        event.key === "Tab" &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey &&
+        !event.nativeEvent.isComposing
+      ) {
+        if (this.SynchronizeSelection() && this.editWindow.HandleTableTab(event.shiftKey))
+          event.preventDefault();
       } else if (
         event.key === "Backspace" &&
         !event.ctrlKey &&

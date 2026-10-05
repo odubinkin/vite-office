@@ -1,0 +1,46 @@
+{
+  "result": "pass",
+  "base": "86365df349d2659932bff05b304087647fd1368c",
+  "paths": [
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+    "apps/office/e2e/writer-native-table-tab.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 382,
+  "priorTestFilesByteIdentical": 382,
+  "oldTestChanges": 0,
+  "newAppCases": 23,
+  "newAppFirstPass": 22,
+  "newAppFirstFailed": 1,
+  "newChromiumCases": 1,
+  "boundedAppendices": 10,
+  "existingRuntimeRows": 244,
+  "addedUnverifiedRuntimeRows": 2,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "nativeSHA256": {
+    "sw/source/core/crsr/swcrsr.cxx": "682cbb23cd826925fbf67362f31e7a9903cce89863fa6263aa08675ef9516644",
+    "sw/source/core/crsr/trvltbl.cxx": "b881919f93573f3e68c82429bbc360b47b1c97aa0c265d970fc4f43817a79444",
+    "sw/source/core/table/swtable.cxx": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/doc/tblrwcl.cxx": "f4d7786b18f6c011e66eee4332e2e44aaef9ad8d0480d6bfa5a6f065e836508a",
+    "sw/source/core/undo/untbl.cxx": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/source/core/doc/number.cxx": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129",
+    "sw/inc/swcrsr.hxx": "94e0514eab361a36a526d621929b73aeaa484de3cdd75e9eb6139f4dbaa7500c"
+  },
+  "productionChangedAfterFirstProfile": [
+    "apps/office/src/sw/source/core/docnode/nodes.ts"
+  ],
+  "otherSixProductionFilesUnchanged": true,
+  "guardCorrection": "RemoveTableRow derives exact span from actual first/last box owners,checks complete length and node sequence;only sole failed native ownership case reexecuted. FirstChromium normal traversal/append/history behavior retained;no passing build/browser replay.",
+  "residual": "HomeEnd,merged/nested/protected/form/autocorrect/border/autoformat/formula/redline,full native SwCursorShell/Doc InsertRow/undo lifetimes,multi-count failure transient start-node position,fullUI/layout and goal unverified."
+}

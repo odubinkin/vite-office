@@ -1,0 +1,35 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/uibase/wrtsh/native-table-traversal.test.ts -t ^(?:native table traversal rejects cross-document or duplicate retained row ownership)$ --coverage --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/CJDT2B.app-failed-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 140,
+      "sha256": "7847dc285952893662a4755ee3792b5fcb5f93de3d0961953cf6308ccc77d9b3",
+      "selectedNames": [
+        "native table traversal rejects cross-document or duplicate retained row ownership"
+      ],
+      "failedCases": [],
+      "passed": 1,
+      "skipped": 16,
+      "coverageMapSHA256": "f33af1dcdb2c0e105e7ce8acfd55637218d2bfd0d265a3aee56981f3d9a27ee1"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm exec -- vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t ^(?:parity mapping CLI composes the Writer mapping report with owned upstream marker evidence)$ --coverage --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/CJDT2B.inventory-failed-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 146,
+      "sha256": "dcd96176d789df7e8f5945ed7514d5e7013aaf6c68f7c6eef39594778c099420",
+      "selectedNames": [
+        "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ],
+      "failedCases": [],
+      "passed": 1,
+      "skipped": 2,
+      "coverageMapSHA256": "1773539c49ac28b567f74b1b19a3f1f443e72d2efd6957a64f8ae1a08bbce731"
+    }
+  ]
+}

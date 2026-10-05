@@ -147,6 +147,13 @@ export class SwTable {
     this.lines.push(line);
   }
 
+  /** Removes a retained row during native table history. @param line - Connected row. @returns Nothing. */
+  public RemoveLine(line: SwTableLine): void {
+    const index = this.lines.indexOf(line);
+    if (index < 0) throw new Error("Writer table row is not connected.");
+    this.lines.splice(index, 1);
+  }
+
   /** Returns ordered rows. @returns Rows. */
   public GetTabLines(): readonly SwTableLine[] {
     return this.lines;
