@@ -1,0 +1,84 @@
+{
+  "base": "7a2d8645a8a061e443511f67bc7dac5af42becd4",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/docnum.ts",
+    "apps/office/src/sw/source/core/undo/unoutl.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+    "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+    "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+    "apps/office/e2e/writer-native-outline-tab.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/doc/number.ts"
+  ],
+  "priorTestFiles": 429,
+  "priorTestFilesByteIdentical": 428,
+  "sourceConfirmedPriorTestCorrections": [
+    "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts"
+  ],
+  "existingSemanticRecordsPreserved": 253,
+  "totalSemanticRecords": 255,
+  "newPartialUnverifiedOwners": [
+    "apps/office/src/sw/source/core/doc/docnum.ts",
+    "apps/office/src/sw/source/core/undo/unoutl.ts"
+  ],
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/doc/docnum.ts",
+    "apps/office/src/sw/source/core/undo/unoutl.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/source/core/doc/number.ts"
+  ],
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/doc/docnum.ts": "3c9d041bdb73fd9dfc97864eb2a36af8fa58c8c0322b10b786275e11605ebf9c",
+    "apps/office/src/sw/source/core/undo/unoutl.ts": "7750174df43e13bc0c12f9a70fd7d63d56791c1c8ed2c3946e7981d59aa4824a",
+    "apps/office/src/sw/source/core/doc/doc.ts": "000071d0b9b126178fcb0d61844ca3f8427d0bfe437769f73dc4a93858f0763e",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "95fdb36c6fdb7223007c960e452928f68d7798ae0d7363c8f11f4823473ebe9a",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "9f409473a71d8b1f1c3136a734d4f01b3678a72bb811b6e4100aacc36ed3dc9e",
+    "apps/office/src/sw/source/core/doc/number.ts": "123c0fc22b3e9c71de553cc0f6ece8fffff1e024427e414ce1eb03a9f611f292"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 33,
+  "newChromiumCases": 4,
+  "finalDistinctPassed": {
+    "app": 12569,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 143
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/doc/docnum.cxx",
+      "sha256": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4"
+    },
+    {
+      "path": "sw/source/core/undo/unoutl.cxx",
+      "sha256": "8402882a690b57f969bc695811215691acea927fcabffcc67d47fe444e849dd4"
+    },
+    {
+      "path": "sw/source/core/edit/ednumber.cxx",
+      "sha256": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114"
+    },
+    {
+      "path": "sw/source/uibase/docvw/edtwin.cxx",
+      "sha256": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3"
+    },
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "sha256": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129"
+    },
+    {
+      "path": "sw/inc/swtypes.hxx",
+      "sha256": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361"
+    }
+  ],
+  "metadataRecovery": "Source audit inputs for declarations/paths/markers/classifications/states/defaults/violations remain identical; appended bounded number-owner prose is normalized into existing preservedResponsibilities/semantic.justification fields, prior prefixes and exact schemas preserved, changed JSON formatting verified without passing full audit replay.",
+  "validationLimit": "Represented unmerged native outline movement, inverse history, normalized ring short-circuit and eligible heading Tab plus native level-count guard only. Direct document auto-history/framework Repeat/failed-operation dirty flag/native layout batching/merged props/conditional collections/full KeyInput and full core/UI/list/table parity remain unverified. Conscious IO deviations unchanged,parent DOING/goal ACTIVE."
+}
