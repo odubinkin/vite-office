@@ -1,0 +1,71 @@
+{
+  "base": "c74da1ac637d73fb796feaa45b8c422853d80aaf",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "apps/office/e2e/writer-cell-list-continue.spec.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 412,
+  "priorTestFilesByteIdentical": 411,
+  "sourceConfirmedPriorTestCorrections": [
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+      "reason": "FN_NUM_CONTINUE textsh1 and SetCurNumRule ednumber apply found rule to every selected paragraph, including plain nodes. Two old false expectations corrected with actual rule/listID/Undo assertions; all other bytes and export/history checks preserved."
+    }
+  ],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts"
+  ],
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/doc/docnum.cxx",
+      "sha256": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4"
+    },
+    {
+      "path": "sw/source/core/edit/ednumber.cxx",
+      "sha256": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114"
+    },
+    {
+      "path": "sw/source/uibase/shells/textsh1.cxx",
+      "sha256": "ff294d3cc9b7cdb11af4aca02c44987e7b506488a6bbaa84781c3227019a8f0d"
+    },
+    {
+      "path": "sw/source/core/undo/unnum.cxx",
+      "sha256": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "sw/source/core/docnode/nodes.cxx",
+      "sha256": "00ed4be35d90fd8921927b767c09d2d6ba6ae352e08fec9f291d5ac21e836a0b"
+    }
+  ],
+  "newAppCases": 43,
+  "newChromiumCases": 2,
+  "appCases": 12359,
+  "inventoryCases": 109,
+  "scriptsCases": 5,
+  "chromiumCases": 122,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "staticFailure": "Only initial typecheck failed for new test calling nonexistent Undo/Redo instead of UndoWithContext/RedoWithContext; corrected testAPI,failedtypecheck only repeated,remaining3statics firstexecutions. Changed test file5statics and later browserfixture5statics pass.",
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "fd7ce36fdda8c96afd845a6094c178e578313368d581c52d08917ffc50a6a3f8",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "603ec1c9f2b2c53299a82b00e7eece3f90e3591cb1a3d3527ce04d3204471603",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "054a9ce8c6e88e97eadcec1151b34aa14b74219c2f6ff6772dae377d8f0a9215"
+  },
+  "coverageMapPolicy": "Actual initial finalproduction map100%; no merge/countertransfer, maps/results only ignored appcache.",
+  "validationLimit": "Native SearchNumRule and represented Continue Numbering policy/current-slot ownership only. Search is over actual native nodes, no layout/merged/hide-redline/margin propagation/complete fixed extras semantics claim; represented body/table/postit section boundaries and raw enumeration/itemization/outline contracts verified. Shell applies found rule/list ID to inclusive native text range, numbered-first/bullet fallback/enabledstate,counted reset and rule-sensitive restart flag retaining restart value. Continue numeric history preserves existing independent direct item tuples/originaldocument guards/payload/comment; full native SetNumRule/SwHistory/registered deltas/client/undo classification/Repeat unavailable. Other InsNum shallow abstraction and retained split physical bridge/list creation body-only projection remainopen, broadUI/list/table nested/merged/protected/rendering/clipboard/layout unverified. Registered save/open/recovery deviations preserved. One source-confirmed old ODT expectation correction includes result/Undo checks,411other prior testfiles byte-identical;43newapp/2newChromium. Initial2newbrowser focus assertions corrected to actual singleeditinghost/selection/currentcaret plus immediatekeyboard insertion and undo, production unchanged, only original2failed retried. No app/inventory/build/passingbrowser replays or coveragecountertransfer;100%actual currentproduction app/inventory. No wholemodule or broad parity claim."
+}

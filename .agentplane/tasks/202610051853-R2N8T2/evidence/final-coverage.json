@@ -1,0 +1,76 @@
+{
+  "summary": {
+    "lines": {
+      "total": 12411,
+      "covered": 12411,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13589,
+      "covered": 13589,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3372,
+      "covered": 3372,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10103,
+      "covered": 10103,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "sourceChangedAfterInitialProfile": [],
+  "counterTransfer": "None; final production source hashes equal original full absent profile.",
+  "initialMapSHA256": "fe138a5e655d8f479fce2ef254f1641b2878a88555221f0213844b3b1d098eb9",
+  "finalMapSHA256": "fe138a5e655d8f479fce2ef254f1641b2878a88555221f0213844b3b1d098eb9",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "fd7ce36fdda8c96afd845a6094c178e578313368d581c52d08917ffc50a6a3f8",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "603ec1c9f2b2c53299a82b00e7eece3f90e3591cb1a3d3527ce04d3204471603",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "054a9ce8c6e88e97eadcec1151b34aa14b74219c2f6ff6772dae377d8f0a9215"
+  }
+}

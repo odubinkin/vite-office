@@ -1,0 +1,25 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-cell-list-continue.spec.ts --grep=(?:^|\\s)(?:Writer Continue Numbering joins a plain table cell to the preceding list|Writer Continue Numbering joins a bullet table cell to the preceding list)$ --reporter=list,json",
+      "profile": "upstream-absent original2failed Chromium cases only",
+      "exit": 0,
+      "bytes": 699,
+      "sha256": "cb950fe52739de2133684ae20831c15639fe872cde5768f0fb2e1c02c56f1cc6",
+      "caseCounts": {
+        "startTime": "2026-10-05T19:04:22.680Z",
+        "duration": 3925.4509999999996,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": [],
+      "executedCases": [
+        "writer-cell-list-continue.spec.ts > Writer Continue Numbering joins a bullet table cell to the preceding list",
+        "writer-cell-list-continue.spec.ts > Writer Continue Numbering joins a plain table cell to the preceding list"
+      ]
+    }
+  ]
+}
