@@ -1,0 +1,57 @@
+{
+  "base": "88f6138159ca6a21db5935c83d032c8deec224a0",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+    "apps/office/e2e/writer-native-table-selection.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFilesByteIdentical": 388,
+  "changedPriorTests": [],
+  "semanticRecords": 246,
+  "semanticStatesDefaultsClassificationsAndExceptionsUnchanged": true,
+  "changedFileStatics": [
+    {
+      "commands": "final changed test and metadata Prettier; final changed test ESLint",
+      "result": "pass during initial scope audit before additional compiler audit failed on nonexistent config path; passing checks not repeated"
+    }
+  ],
+  "typeDiagnostics": 0,
+  "auditHarnessRecovery": "Additional audit first referenced nonexistent tsconfig.app.json; actual apps/office/tsconfig.json corrected. Existing npm typecheck gate had passed; no source changes.",
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/crsr/swcrsr.cxx",
+      "sha256": "682cbb23cd826925fbf67362f31e7a9903cce89863fa6263aa08675ef9516644"
+    },
+    {
+      "path": "sw/source/core/crsr/trvltbl.cxx",
+      "sha256": "b881919f93573f3e68c82429bbc360b47b1c97aa0c265d970fc4f43817a79444"
+    },
+    {
+      "path": "sw/source/uibase/wrtsh/select.cxx",
+      "sha256": "e52314599cd686635085927f18a311cf742424076e052a2770d0a8b46eff67d0"
+    },
+    {
+      "path": "sw/source/core/table/swnewtable.cxx",
+      "sha256": "222899c5938f08cf797c5e552ff5a9307a591e173e0708ac6f2efdf4f84a19da"
+    },
+    {
+      "path": "sw/source/core/crsr/crsrsh.cxx",
+      "sha256": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a"
+    },
+    {
+      "path": "sw/inc/swcrsr.hxx",
+      "sha256": "94e0514eab361a36a526d621929b73aeaa484de3cdd75e9eb6139f4dbaa7500c"
+    }
+  ],
+  "validationLimit": "Full static/build/full Chromium precede only the click-focus wrapper and three new cases. Final wrapper validated by new mounted cases and the original failed Chromium ODT case via development server; successful full/build/suites/cases not replayed."
+}

@@ -1,0 +1,49 @@
+{
+  "evaluatedSHA": "48804c121de7fa288070253f798bbfea17985e1f",
+  "actor": "same agent, explicit EVALUATOR phase; no independent reviewer claim",
+  "result": "pass",
+  "semanticPaths": 13,
+  "diffSHA256": "b3918ccc17b366964c9a416f8bb69d24888c65e4d6aac5b3a63f418dcba70195",
+  "diffBytes": 197778,
+  "sourceOwnership": "Native table/cursor/shell selected boxes; immutable presentation painting; DOM click focus preserves shared editing host",
+  "evidenceCriteria": "Six statics, ONE full upstream-absent profile; actual-counter failed/new-only closure; five restored audits; exact-SHA scope and old-test preservation",
+  "newAppCases": 19,
+  "newChromiumCases": 2,
+  "uniqueChromiumClosed": 114,
+  "priorTestFilesByteIdentical": 388,
+  "semanticRecords": 246,
+  "coverage": {
+    "lines": {
+      "total": 11919,
+      "covered": 11919,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13049,
+      "covered": 13049,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3323,
+      "covered": 3323,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9771,
+      "covered": 9771,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "validationLimit": "Full static/build/full Chromium precede only the click-focus wrapper and three new cases. Final wrapper validated by new mounted cases and the original failed Chromium ODT case via development server; successful full/build/suites/cases not replayed.",
+  "residual": "Full cursor rings/per-box selection edits, native layout and drag/column/merged/nested/protected/hidden selection unverified; broad goal active"
+}
