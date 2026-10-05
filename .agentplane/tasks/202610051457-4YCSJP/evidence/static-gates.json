@@ -1,0 +1,50 @@
+[
+  {
+    "command": "npm run format:check",
+    "exit": 0,
+    "bytes": 122,
+    "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+  },
+  {
+    "command": "npm run lint",
+    "exit": 1,
+    "bytes": 291,
+    "sha256": "ae0c088e9574fc6420bb018d7543eccb7960b152fc624431ff22a30f6a40c7c0"
+  },
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm run lint",
+    "exit": 0,
+    "bytes": 55,
+    "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "bytes": 240,
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "command": "npm run check:dependencies",
+    "exit": 0,
+    "bytes": 189,
+    "sha256": "cfe7f82df2a0265ecbf4026679a4e52894d1681c0f0ea9777dcfb2750bce93f6"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 0,
+    "bytes": 119,
+    "sha256": "0524fd08aa6217e9fe24431fc35acec74c6ef0e95381efc8dd5bc525e522ad90"
+  },
+  {
+    "command": "npm run check:file-size",
+    "exit": 1,
+    "bytes": 3467,
+    "sha256": "981f3ce9abdfe7f49b73a7517233045c44b78c8d31eab18116204ca58fd313d1"
+  }
+]
