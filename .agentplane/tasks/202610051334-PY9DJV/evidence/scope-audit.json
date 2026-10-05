@@ -1,0 +1,69 @@
+{
+  "base": "6483c183a4f7c6ce183d710bdb6d26029dad3d70",
+  "scopePaths": [
+    "apps/office/src/sw/source/filter/ascii/parasc.ts",
+    "apps/office/src/sw/source/core/undo/untblk.ts",
+    "apps/office/src/sw/source/filter/basflt/shellio.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+    "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx",
+    "apps/office/e2e/writer-native-table-plain-paste.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts"
+  ],
+  "priorTestFilesByteIdentical": 401,
+  "changedPriorTests": [],
+  "existingSemanticRecordsPreserved": 248,
+  "semanticRecords": 250,
+  "newNativeModulesUnverified": 2,
+  "priorProvenanceEntriesByteIdentical": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/filter/ascii/parasc.cxx",
+      "sha256": "2a4d959a52789fa2d5475925904c7f16c4d3716a701cfcbc5d0fca1928a763e1"
+    },
+    {
+      "path": "sw/source/filter/basflt/shellio.cxx",
+      "sha256": "702ce4064eea861f83d03fe6f09c7d0c6e998c24c3ed541cf36f833258550e48"
+    },
+    {
+      "path": "sw/source/core/undo/untblk.cxx",
+      "sha256": "dc42485f60714543f84e9dbbcb84d885af811661fad67f8eb164d7aeade3bfcc"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "sw/source/uibase/dochdl/swdtflvr.cxx",
+      "sha256": "78895e81d445a0c60a1793e91a90598718072d4c41d43fc6c7287fdd464059ee"
+    }
+  ],
+  "newAppCases": 23,
+  "newChromiumCases": 2,
+  "appCases": 12136,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "initialAppFailures": 6,
+  "initialChromiumFailures": 2,
+  "closurePassedAppCases": 8,
+  "closurePassedChromiumCases": 2,
+  "productionSHA256": {
+    "apps/office/src/sw/source/filter/ascii/parasc.ts": "6e54ae1ec7f98bc8b8203842788937fabd418db9834f1648fd1bae5dd3d7a3f2",
+    "apps/office/src/sw/source/core/undo/untblk.ts": "bd9e414e6dd94459c99c4c40899b7810f44e5f15dcca888165bc8d899bab6d32",
+    "apps/office/src/sw/source/filter/basflt/shellio.ts": "0c350b6e4e9dbb8de53c92f9e38a5dc61879f582b6bda7c5b7c1d25bb50f38b5",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "fb0bb2b9a729201f96c4fddbc795491a816123646fce10b223e2d3ce62178efc",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts": "6dd9e5cc72551fbd3d05ab2c056402832fe236db5bc39ec69641258a580c0bfe",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "bde496dd91cd1d551e3418990bc0130f2ba1484ee31b7a1c2006d5ff7fdeaec6",
+    "apps/office/src/sw/browser/editor/writer-clipboard-events.ts": "5467e05c8ae80cd5f0ce693c806e0407f4ddedb0b91eef33a2e7f39178b5d8a6",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "ab46923b12b53853a929622a1cfee6b56e99da2c5aa452803c8a2ebecbfdf31c",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "12dda3e3b97306638d7af0934f272bd3a137ae501b883baecae6f78b3b71ca2f"
+  },
+  "validationLimit": "ONE initial absent build/full suites. Six initially failed app cases and two new split cases only subsequently executed; failed new split retried alone. Two initially failed Chromium cases only retried. Inline first Chromium closure syntax error executed zero cases. No passing tests replayed. Existing ndtxt owners changed after initial build; changed-file statics and exact failed/new-only coverage exercise final changes, unchanged contiguous counters carried explicitly. Full native reader/undo lifetime/structural/encoding/layout contracts remain unverified."
+}
