@@ -4,7 +4,7 @@ title: "Restore node-owned ignore-expansion state and pure hint Update"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,27 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T01:43:27.502Z"
+  updated_by: "EVALUATOR"
+  note: "Same-actor read-only review of exact semantic SHA 5d2851ce11906bdb470530beba6e4c8e83e31171 passes the bounded131leaf;full parity not promoted."
+  evaluated_sha: "5d2851ce11906bdb470530beba6e4c8e83e31171"
+  blueprint_digest: "d3fcdbe59a4a9d445a4e3a0aa14793cfcc8629123a43b2ecfb8806fd3c34d03d"
+  evidence_refs:
+    - ".agentplane/tasks/202610050126-3HH6D5/README.md"
+    - ".agentplane/tasks/202610050126-3HH6D5/quality/20261005-014327502-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610050126-3HH6D5/quality/20261005-014327502-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610050126-3HH6D5/quality/20261005-014327502-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610050126-3HH6D5/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610050126-3HH6D5/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610050126-3HH6D5/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610050126-3HH6D5/evidence/failed-only-replay-2.json"
+    - ".agentplane/tasks/202610050126-3HH6D5/evidence/restored-source-audits.json"
+    - "git exact SHA 5d2851ce11906bdb470530beba6e4c8e83e31171 source bytes and seven native hashes checked"
+  findings:
+    - "Native SwNode storage/accessors and end-equal ignore bypass match pinned owner contracts. Coordinate-only Update and DEFAULT postphase preserve actual identities,flags and retained values. Comparator extracted unchanged. Seven paths,357prior tests byte-identical,241runtime states/defaults/exceptions unchanged;four bounded appendices/two helper exports only."
+    - "One absent-reference full profile:build,app3560(first3559pass/1fixturefail),inventory109,scripts5,Chromium99;app/inventory100%allfourcoverage. Exact firstfailedname captured;only failed locality case replayed twice,finally1passed/548skipped. Corrected AUTO shared-handle merge and native end-descending expectations;production unchanged after fullprofile. Zero passing case/suite/build replays. Static size-only failed recovery passed;five restored audits0semanticviolations;doctor0errors/two unchanged legacywarnings;routingOK;AP3899files0forbidden."
 commit: null
 comments:
   -
