@@ -1,10 +1,11 @@
 ---
 id: "202610050456-HYVJ07"
 title: "Route table cell editing through the persistent Writer shell"
-status: "DOING"
+result_summary: "Removed table DOM-diff/innerHTML/event bypass and duplicate paragraph ownership. Actual cell text sections now support shared typing, selection, composition, formatting, split/join and UndoRedo with body/neighbor isolation and ODT persistence. One absent full profile plus failed/new-only closure, cumulative coverage100%,244statuses and I/O deviations preserved. Full UI/native parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -47,7 +48,9 @@ quality_review:
     - "Actual diff has18approvedpaths. Cell DOM-diff/innerHTML/bypass/cache layers removed;actual section nodes,PaM text traversal and common shell own input,format,split/join and Undo. Native shape reviewed against7pinned source hashes without upstream execution."
     - "ONE full absent build/app/inventory/scripts/Chromium profile;initial6failed and1uniqueerror-causingcase plus3newcases close by selected9+1. Browser sole failedcase closes after physical native DOM caret assertion;99passing cases never replay. Application cumulative source/countcoverage100%allfour,inventory first100%."
     - "364priorfiles361byteidentical;only3exact observed legacycelladaptercases changed.244states/defaults/knownexceptions/classifications preserved,22bounded appendices,stale deleted symbol removed only. Doctor0errors/twoexisting warnings,routingpass,Agentplane3995files0forbidden."
-commit: null
+commit:
+  hash: "83bee69aa5acf5edf0566cc87f01651298540012"
+  message: "🧩 HYVJ07 task: record verified table editing"
 comments:
   -
     author: "CODER"
@@ -55,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Start: close observed connected-cell section and formatting failures in the existing approved UI editing scope."
+  -
+    author: "CODER"
+    body: "Verified: table cells use shared Writer input, PaM, formatting, section nodes and history; exact failed/new-only closure and restored audits pass."
 events:
   -
     type: "status"
@@ -76,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Connected-cell shared input/history,canonical section ownership and real PaM formatting pass. ONE absent full profile plus exact failed/error-causing/new-only closure;current cumulative coverage100%allfour,100Chromium unique cases,restored source audits,244states/deviations preserved. Exact31ce9a867534 same-actor readonly qualitypass;full native/UI parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-05T05:38:03.079Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: table cells use shared Writer input, PaM, formatting, section nodes and history; exact failed/new-only closure and restored audits pass."
 doc_version: 3
-doc_updated_at: "2026-10-05T05:36:59.707Z"
+doc_updated_at: "2026-10-05T05:38:03.081Z"
 doc_updated_by: "CODER"
 description: "Remove browser cell DOM-diff/direct mutation and input bypass, use canonical Writer cursor/input/Undo owners, and derive cell paragraphs from SwNodes sections."
 sections:
@@ -183,6 +196,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic leaf commit without history rewriting."
   Findings: "Iteration138 previous137 verified progress DONE,clean main fe80a59b9d37a21c99b91f47968eb52213adacac,direct,only parent active. Four matched policies loaded,user-instructions absent. User prioritizes upstream UI/list/table behavior and removal of unnecessary layers. Current cell independently changes DOM then editWriterTableCell diffs text and directly erases/inserts SwTextNode;controller bypasses table beforeinput and cell suppresses key/paste/pointer propagation,selection restoration skips table focus. SwEditWin rejects cell nodes through body-only paragraph membership. SwTableBox duplicates paragraph ownership in an array,so native Split/Join history cannot update it. Upstream edtwin.cxx FlushInBuffer calls actual SwWrtShell Insert at1072;wrtsh1.cxx241 native selection->DelRight->Insert2 uses common cursor/history,without cell DOM diff. swtable.cxx135/1801 cell text/ranges come from GetSttNd native section nodes;docedt.cxx joins adjacent same-section content. These are the executable owner/path discrepancies,not cosmetic DTO renaming. Existing244 runtime statuses/defaults/exceptions and registered I/O deviations preserved. Full rendering/native portions/table navigation/selection/merged cells/list UI remain unverified. First absent profile: build pass,11862 app cases pass/6 fail with two uncaught errors,app100%allfour,inventory109pass100%allfour,scripts5pass,Chromium99pass/1fail. Observed body-only SwNodes.removeTextNode blocks cell split undo/join;getWriterSelectedTextRanges excludes cell formatting. Legacy writer-view cell post-DOM edit and browser-window bypass reflect the removed adapter;the latter unbound method causes uncaught error. Scope addition remains same approved connected-cell input/history contract;no full suites replay. Closure: static6latestpass,firsttypecheck obsolete helper import observed then sole old display case migrated. ONE full absent build pass,app11862pass/6failof11868/283files with2uncaught errors,inventory109pass/36files100%allfour,scripts5pass,Chromium99pass/1fail. App exact6failed+1uniqueerror-causing+2new cases9pass/28skipped;one further new connected-cell membership/index case1pass/10skipped;15newappcases total. No passing test/full static-build gate replay. Vite assets alone regenerated once for two subsequently modified core owners. Chromium wrong full-title anchor selected0 cases (collection error,not execution),then sole failedcase reproduced Home assumption and finally passes with independently asserted physical ArrowLeft caret and explicit real DOM selection for formatting. Home/native platform navigation remains a future gap,not newly certified. Both first100%coverage countmaps stay only in ignored appcache;current source cumulative100%allfour uses exact contiguous source-identical LCS locations from first map plus edited/crossing locations solely from failed/new instrumentation,empty branch sentinels and generated anonymous ordinal normalization corrected without test replay. Five restored source audits pass0semanticviolations;364priorfiles361byteidentical,only3exactobserved old cell-adapter cases change;22bounded notes,all244states/defaults/exceptions retained,no newmodule/promotion. Seven pinned native hashes recorded. Doctor0errors/two unchanged warnings oldhookshim and DONE2Z3962 missingimplementation hash,routingpass,ignored-inclusiveAgentplane3995files0forbidden. Readonly text-run display,body ordinal sidebar context,native list UI/table Home/navigation/fullselection/mergedcells/layout remain unverified;goalactive."
+extensions:
+  implementation_commit:
+    hash: "31ce9a86753410efec8a9b189e155d8ad48ad0df"
+    message: "🧩 HYVJ07 code: route table input through Writer shell"
 id_source: "generated"
 ---
 ## Summary
