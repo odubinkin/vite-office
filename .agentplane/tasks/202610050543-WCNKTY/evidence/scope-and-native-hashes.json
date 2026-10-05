@@ -1,0 +1,78 @@
+{
+  "result": "pass",
+  "base": "beae94174aaffd5afdb6121f2d8718069a7976dc",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+    "apps/office/e2e/writer-cell-paragraph-format.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx"
+  ],
+  "priorTestFiles": 367,
+  "priorTestFilesByteIdentical": 365,
+  "priorChanges": "Only two observed table-display fixtures receive required native projection plumbing;inverse reconstruction proves all prior pagination,style,selection,identity and model assertions unchanged.",
+  "newApplicationCases": 12,
+  "newChromiumCases": 1,
+  "newAppCasesPassedFirstProfile": 11,
+  "newAppFailuresClosed": 1,
+  "legacyFixtureFailuresClosed": 1,
+  "existingRuntimeRows": 244,
+  "newRuntimeRows": 0,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "boundedAppendices": 6,
+  "oneFullAbsentProfile": true,
+  "passingTestReplays": 0,
+  "passingFullBuildGateReplays": 0,
+  "productionUnchangedAfterFirstProfile": true,
+  "appCoverage": {
+    "lines": {
+      "total": 11525,
+      "covered": 11525,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12623,
+      "covered": 12623,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3253,
+      "covered": 3253,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9477,
+      "covered": 9477,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryFirstFullCoverage": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "allReferencesRestored": true,
+  "nativeSHA256": {
+    "sw/source/core/layout/tabfrm.cxx": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+    "sw/source/core/layout/frmtool.cxx": "6ce439b0e3081aeace445255ef29938e3deef0b4c5223445274d1042acb71ecf",
+    "sw/source/core/text/txtfrm.cxx": "91c953faffb9f277b92308a5f7167cb5e3aaae5c5a5e37fee809925b305fa998",
+    "sw/source/core/text/itrcrsr.cxx": "862315cefee568e882f24e64226664227fd06a672640493ebc0c48d107389ee2",
+    "sw/source/core/doc/DocumentStylePoolManager.cxx": "214b7fe64a2bb165fe6a977cdc9c83e7b6c8b1f5e9cf96dd83720e2f462b880c"
+  },
+  "residualUI": "Native table frame pagination,spacing collapse,Home/navigation,wide selection,nested/merged cells,portion engine and list structural operations remain unverified. Shared read-only WriterTextRun display remains;no full native/UI/goal claim."
+}

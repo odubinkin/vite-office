@@ -1,0 +1,24 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec --workspace @vite-office/office -- vitest run exact2failednames --coverage --coverage.reportOnFailure --isolatedDiagnosticThresholds=0 --reporter=json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 140,
+      "sha256": "ce22e9381d43615b81b955c64433d4cfefe6bbf310a05184df2773a004692f25",
+      "selectedCount": 2,
+      "selectedNames": [
+        "shared native cell paragraph display keeps style descriptions unique across the body and cell paragraphs",
+        "Writer physical page browser UI places table row fragments on physical pages without a scroll container"
+      ],
+      "failedCases": [],
+      "passed": 2,
+      "skipped": 24,
+      "selectedActualNamesSHA256": "446c36208b9f2f011a448a4c340ab3728e81b7ad8d4b9f01716411bd15a4867b",
+      "reportSHA256": "6e4e89d4fffd913eb920563a6acf9148552110c6afd94b1fea7cd6036ef062f6",
+      "coverageMapSHA256": "afe54c593e8c356bd5891b654eeec9416c9e5f08d8dd6b90f75593e4d6c2c89b"
+    }
+  ]
+}
