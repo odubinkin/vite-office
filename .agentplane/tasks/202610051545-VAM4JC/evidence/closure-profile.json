@@ -1,0 +1,52 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/WriterPlainTextEditor.test.tsx src/sw/source/core/doc/writer-model.test.ts --testNamePattern=^(?:Writer paragraph breaks creates and focuses an adjacent Writer paragraph through Enter|Writer SwTextNode and content manager keeps text and auto-format hints coherent through insert, erase, replace, split, and join)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VAM4JC.closure-app-results.json",
+      "profile": "upstream-absent original failed cases only",
+      "exit": 1,
+      "bytes": 4371,
+      "sha256": "73c8bdc0ffc67148dd244fea797b3246ee1da00bf63339f3960f018911f609b2",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 1,
+        "total": 27
+      },
+      "failedCases": [
+        "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx > Writer paragraph breaks creates and focuses an adjacent Writer paragraph through Enter"
+      ],
+      "executedCases": [
+        "Writer paragraph breaks creates and focuses an adjacent Writer paragraph through Enter",
+        "Writer SwTextNode and content manager keeps text and auto-format hints coherent through insert, erase, replace, split, and join"
+      ],
+      "skippedCases": [
+        "Writer paragraph breaks projects direct paragraph indentation from the persistent toolbar",
+        "Writer paragraph breaks routes a native same-paragraph Paste event through the immutable Writer document body",
+        "Writer paragraph breaks pastes semantic nested lists as separate Writer paragraphs",
+        "Writer paragraph breaks keeps the typing caret stable and routes Ctrl/Cmd+A to Writer Select All",
+        "Writer paragraph breaks prevents unsupported DOM mutation and keeps React as the rendering owner",
+        "Writer paragraph breaks projects direct non-bold and non-italic runs over an inherited heading style",
+        "Writer paragraph breaks executes beforeinput against SwPaM and deletes complete Unicode graphemes",
+        "Writer paragraph breaks keeps IME updates temporary and commits composition as one undo unit",
+        "Writer paragraph breaks groups adjacent typing and deletion at LibreOffice undo boundaries",
+        "Writer paragraph breaks intercepts native Cut and Paste without allowing browser contenteditable mutation",
+        "Writer paragraph breaks routes native drag formats and drop insertion through the Writer transfer boundary",
+        "Writer paragraph breaks uses one editing host and deletes a cross-paragraph SwPaM through beforeinput",
+        "Writer SwNodes graph creates the fixed Writer sections and tracks node indices through structural changes",
+        "Writer SwNodes graph guards node ownership, identity, and the non-empty body invariant",
+        "Writer SwPosition and SwPaM orders point and mark while preserving selection direction",
+        "Writer SwPosition and SwPaM rejects invalid content offsets and cross-document selections",
+        "Writer SwTextAttr and SwpHints owns, normalizes, compares, and restores hyperlink pool items",
+        "Writer SwTextAttr and SwpHints projects overlapping character formatting and hyperlink ranges",
+        "Writer SwTextAttr and SwpHints sorts, merges, clones, serializes, and projects auto-format hints",
+        "Writer SwTextAttr and SwpHints normalizes run and snapshot inputs while rejecting overlapping hints",
+        "Writer SwTextAttr and SwpHints mutates native hint fragments across clipped and empty ranges",
+        "Writer SwTextNode and content manager applies and removes hyperlinks without changing character formatting",
+        "Writer SwTextNode and content manager applies insert, delete, and replacement operations through SwPosition and SwPaM",
+        "Writer SwTextNode and content manager rejects unsupported content-operation ranges before mutation",
+        "Writer SwTextNode and content manager round-trips the current SwDoc schema and rejects obsolete roots"
+      ]
+    }
+  ]
+}
