@@ -1,10 +1,11 @@
 ---
 id: "202610050616-VQX14V"
 title: "Use native node ranges and delta undo for Writer list levels"
-status: "DOING"
+result_summary: "Writer list-level and indent commands now reach actual cell/body ranges;native delta undo preserves unrelated list metadata and removes old snapshot/group adapters."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
   findings:
     - "Eleven approved semantic paths only. Doc-owned inclusive SwNodes range and all-node derived-level validation replace body-only traversal. Level setter preserves rule/listID/restart/count metadata. One SwUndoNumUpDown range/direction action replaces complete list snapshots and per-node grouping;inverse/forward history and native captions retained. Nine new app and one real cell Chromium contracts cover supported branch."
     - "369priorfiles368byteidentical;remaining old test has only obsolete->native class identity tokens. Mapping has one exact obsolete local class marker replacement;inventory test unchanged. App11891pass/1newgesturefail with first100fourmetrics,inventory108pass/1stale-markerfail;exact1+1failed closure passes with1+2skipped.102Chromium firstpass. Production unchanged after firstprofile;firstapp100 and actual unchanged-script cumulativeinventory100. All244states/defaults/exceptions unchanged,six native hashes."
-commit: null
+commit:
+  hash: "1e99065e466554d98318454ea910eedca1d0327a"
+  message: "✅ VQX14V task: record native list-level range verification"
 comments:
   -
     author: "CODER"
     body: "Start: replace body-only list-level traversal and full-list snapshots with actual document node-range mutation and native range/direction undo;verify bounded cell/body behavior with one absent profile."
+  -
+    author: "CODER"
+    body: "Verified: b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb replaces body-only list traversal and complete list-level snapshots with Doc-owned actual node ranges and one native signed-delta undo. ONE absent profile,exact app/inventory closure,firstapp100,cumulativeinventory100 and102Chromium firstpass. Prior assertions and244states preserved;progress only,full parity unverified,goal active."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb:native cell/body list-level ranges and signed-delta undo;one absent profile plus exact app/inventory failed-only closure,firstapp100,cumulativeinventory100,102Chromium firstpass. Prior assertions and244states preserved;progress only."
+  -
+    type: "status"
+    at: "2026-10-05T06:46:31.871Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb replaces body-only list traversal and complete list-level snapshots with Doc-owned actual node ranges and one native signed-delta undo. ONE absent profile,exact app/inventory closure,firstapp100,cumulativeinventory100 and102Chromium firstpass. Prior assertions and244states preserved;progress only,full parity unverified,goal active."
 doc_version: 3
-doc_updated_at: "2026-10-05T06:45:56.696Z"
+doc_updated_at: "2026-10-05T06:46:31.874Z"
 doc_updated_by: "CODER"
 description: "Iteration140:replace body-only list-level traversal and whole-list-item snapshot adaptation with document-owned native SwNodes range mutation and one SwUndoNumUpDown range/direction action;verify actual cell/body range eligibility,attributes,history,UI and ODT while preserving registered deviations."
 sections:
@@ -145,6 +158,10 @@ sections:
     Iteration139 classified verified progress DONE;current140 preflight clean main5c36a52c9781ce3e0b0c40aea351995217ebd930,direct,only parent active,user-instructions absent,four matched policies loaded. ednumber.getSelectedListNodes currently filters doc.paragraphs,so actual cell-node list level commands are disabled and ignored. It also recreates full list-item sets and groups node-local SwUndoNumLevel actions,unlike pinned docnum.cxx1846 inclusive native-node NumUpDown all-range validation/SetAttrListLevel and unnum.cxx256 SwUndoNumUpDown range/direction inverse operation. List shell and text indent share this owner,so fixing document range/undo improves both UI paths without another React adapter. Existing heading/outline style promotion is incomplete and not certified by this ordinary-list leaf. Standing user goal and explicit UI/list/table instruction authorize safe local correction;preserve all244states and registered deviations.
 
     Iteration140 implements actual document-owned inclusive PaM/SwNodes numbering traversal,including cells and structural gaps,validates every selected derived list level before mutation and sets only native level. ednumber no longer filters body paragraphs or recreates whole list item sets. SwUndoNumLevel and per-node SfxListUndoAction grouping removed;one SwUndoNumUpDown retains range and direction,uses same Doc.NumUpDown inverse/forward operation and native Demote/Promote list level labels. Unrelated direct restart/count/rule/listID metadata survives level history;selection direction and constant five-unit range payload retained. Existing shell cursor protocol remains;full OutlineUpDown/style reassignment,mixed outline,merged/redline/layout expansion,selection rings and full native undo lifetime remain unverified. First static new formatting/TestingLibrary exact option and old undo-class import errors corrected;old test changed only two class-identity tokens,all other assertions retained. Two missing new JSDoc callbacks repaired. Six static gates pass;focused modified source/test formatting/lint and last metadata/test/doc checks pass. ONE full absent profile:buildpass,app11891pass/1fail of11892/286files with first100fourmetrics,inventory108pass/1fail of109 with99.59lines/99.6statements/99.21functions/99.9branches,scripts5pass,Chromium102pass including new actual cell list-level/indent/history/ODT case. Exact names persisted before collectors,both first JSON countmaps only ignored appcache. Newapp9cases8firstpass/1failed closure;all native core and multi-cell bindings contracts firstpass. Sole mounted failure used click instead of current submenu hover gesture;native same-menu Chromium passed,gesture fixed with assertions retained. Inventory failure identified obsolete mapping marker class SwUndoNumLevel;only local class marker renamed in existing mapping,docs/one omitted-name reference aligned,no inventory test changes. Exact1app+1inventory replay closes1pass/1skipped and1pass/2skipped,zero passing/fullbuild repeats and no production changes after firstprofile. Firstapp100 retained;actual unchanged-script first+failed countmap merge closesinventory100fourmetrics,no summary substitution. All renames restored in finally before five source audits,allpass/semanticviolations0. Scope369priorfiles368byteidentical;remaining old file differs only obsolete->native undo class name. All244states/defaults/exceptions/classifications unchanged,no newmodule/promotion,six bounded appendices,six native hashes;mapping otherwise byteidentical. Doctor0errors/two unchanged oldwarnings,routingpass,ignored-inclusive AP4019files0forbidden beforequality. Progress only,goalactive. No upstream/AP sources/helpers/Python/rawdiagnostics/probes added. AP persistence request with no remaining changed task artifacts returned E_COMMIT_ALLOW_NO_MATCH;route recomputed direct_execution,no retry/no source scope widening.
+extensions:
+  implementation_commit:
+    hash: "b1ea7a3e9e0c3e0c3f2d6ddeba09304dc3efb1cb"
+    message: "♻️ VQX14V code: use native list-level ranges and delta undo"
 id_source: "generated"
 ---
 ## Summary
