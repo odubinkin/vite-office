@@ -1,0 +1,104 @@
+---
+id: "202610052048-10K5MK"
+title: "Import table lists through the native text owner"
+status: "DOING"
+priority: "med"
+owner: "CODER"
+revision: 10
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+task_kind: "code"
+mutation_scope: "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-05T20:48:35.779Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: Implement standing user-authorized native shared text import owner and table-cell list parity; preserve intentional IO deviations and execute one upstream-absent verification profile."
+events:
+  -
+    type: "status"
+    at: "2026-10-05T20:48:37.019Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: Implement standing user-authorized native shared text import owner and table-cell list parity; preserve intentional IO deviations and execute one upstream-absent verification profile."
+doc_version: 3
+doc_updated_at: "2026-10-05T20:48:37.019Z"
+doc_updated_by: "CODER"
+description: "Iteration164 continues standing explicitly authorized iterative existing-functionality core/UI/refactor goal,one CODER executable leaf. Remove measured ODT table-cell list rejection and duplicate body/cell paragraph dispatch by representing native XMLTextImportHelper in correct xmloff/source/text/txtimp.ts. One helper per body stream owns existing XMLTextListsHelper; XMLTextBodyContext and every table,row,header,cell delegate shared native CreateTextChildContext for represented Body/Cell types. Reuse actual XMLParaContext/XMLTextListBlockContext/XMLTextListItemContext and SwXMLImport active-cell canonical creation; no TextRuns,new schema,duplicate list parser,new adapter,per-cell processed root catalogue or testbackdoor. Pass same helper through table children; retain public2argument standalone table construction with bounded helper default. Native cell dispatcher routes text:list exactly as body,continues processed root IDs across cells/body and preserves level/restart/header/count/native DefaultListId behavior. Unsupported sections/nested tables remain explicit unrelated unimplemented gaps,not conscious exceptions newly added. Literal synthetic locally generated ODT common/automatic numbered/bullet nested/header/restart/plain/multiple paragraphs/explicit and implicit body-cell and cell-cell continuation,source rule defaults/neighbors/table geometry/native node ownership/copy/Worker codec/export/reopen evidence. Real production Chromium locally generated restarted cells,Add to List all selected boxes,markers/3UndoRedo cycles/live selection/neighbors and Enter editing as relevant.9scopepaths3productionowners,2existing plus1new native partial unverified metadata module; all250existing states/defaults/classes/conscioussave/open/recovery exceptions/prior evidence preserved,explicit additions only,modules251.420prior testfiles419byteidentical1bounded old unsupportedcell-list assertion correction (remove list only,error text retains section/nestedtable). No changes to save/open UI/recovery/settings. Sixstatics first then ONE full upstream-absent build/app/inventory/scripts/Chromium profile via in-repo vendor rename try/finally restore; never tests withupstreampresent,exactfailure/errors/countshashespersistedbeforeassertions,skipped=skipped. Onlyoriginalfailed/newcases/failedgates afterwards,no passing/fullprofile replay,actual100%app/inventoryL/S/F/Bmaps onlyignoredappcache. Fivevendor-restored sourceaudits then exact scope/APignoredinclusive/doctor/routing, sameagent explicit EVALUATOR exactsemanticSHApass/recordverify/canonicalmeaningfulfinish/wholeparentcheckpointcleanmain. APonly boundedEnglishprose/counts/hashes/outcomes/exactfailednames;no sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. No network/outside/global/subagents. Full text dispatcher/types,section/nested-table/numbered-paragraph/UNO/cursor/list/style/layout contracts remain unverified;no broad paritypromotion. Previous163verifiedprogress,parentDOING/goalACTIVE."
+sections:
+  Summary: "Remove measured ODT table-cell list rejection through native shared text import ownership; previous163verifiedprogress,broadgoalACTIVE."
+  Scope: |-
+    apps/office/src/xmloff/source/text/txtimp.ts
+    apps/office/src/xmloff/source/text/txtparai.ts
+    apps/office/src/xmloff/source/table/XMLTableImport.ts
+    apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts
+    apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts
+    apps/office/src/xmloff/source/text/txtimp.test.ts
+    apps/office/e2e/writer-imported-table-lists.spec.ts
+    docs/program/source-provenance.json
+    docs/program/parity/runtime-inventory.json
+  Plan: "Iteration164 continues standing explicitly authorized iterative existing-functionality core/UI/refactor goal,one CODER executable leaf. Remove measured ODT table-cell list rejection and duplicate body/cell paragraph dispatch by representing native XMLTextImportHelper in correct xmloff/source/text/txtimp.ts. One helper per body stream owns existing XMLTextListsHelper; XMLTextBodyContext and every table,row,header,cell delegate shared native CreateTextChildContext for represented Body/Cell types. Reuse actual XMLParaContext/XMLTextListBlockContext/XMLTextListItemContext and SwXMLImport active-cell canonical creation; no TextRuns,new schema,duplicate list parser,new adapter,per-cell processed root catalogue or testbackdoor. Pass same helper through table children; retain public2argument standalone table construction with bounded helper default. Native cell dispatcher routes text:list exactly as body,continues processed root IDs across cells/body and preserves level/restart/header/count/native DefaultListId behavior. Unsupported sections/nested tables remain explicit unrelated unimplemented gaps,not conscious exceptions newly added. Literal synthetic locally generated ODT common/automatic numbered/bullet nested/header/restart/plain/multiple paragraphs/explicit and implicit body-cell and cell-cell continuation,source rule defaults/neighbors/table geometry/native node ownership/copy/Worker codec/export/reopen evidence. Real production Chromium locally generated restarted cells,Add to List all selected boxes,markers/3UndoRedo cycles/live selection/neighbors and Enter editing as relevant.9scopepaths3productionowners,2existing plus1new native partial unverified metadata module; all250existing states/defaults/classes/conscioussave/open/recovery exceptions/prior evidence preserved,explicit additions only,modules251.420prior testfiles419byteidentical1bounded old unsupportedcell-list assertion correction (remove list only,error text retains section/nestedtable). No changes to save/open UI/recovery/settings. Sixstatics first then ONE full upstream-absent build/app/inventory/scripts/Chromium profile via in-repo vendor rename try/finally restore; never tests withupstreampresent,exactfailure/errors/countshashespersistedbeforeassertions,skipped=skipped. Onlyoriginalfailed/newcases/failedgates afterwards,no passing/fullprofile replay,actual100%app/inventoryL/S/F/Bmaps onlyignoredappcache. Fivevendor-restored sourceaudits then exact scope/APignoredinclusive/doctor/routing, sameagent explicit EVALUATOR exactsemanticSHApass/recordverify/canonicalmeaningfulfinish/wholeparentcheckpointcleanmain. APonly boundedEnglishprose/counts/hashes/outcomes/exactfailednames;no sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. No network/outside/global/subagents. Full text dispatcher/types,section/nested-table/numbered-paragraph/UNO/cursor/list/style/layout contracts remain unverified;no broad paritypromotion. Previous163verifiedprogress,parentDOING/goalACTIVE."
+  Verify Steps: |-
+    1. Six initial statics: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size. Failed gates or changed-file remediation only repeated.
+    2. ONE sequential upstream-absent profile: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts. Rename vendor within repository,try/finallyrestore before audits;tests neverread/invoke/compileupstream. Persist exact failures/errors/counts/output hashes beforeassertions;skipped=skipped. Only failed or genuinely new unexecuted cases/gates afterwards,no passing/fullprofile replay. Actual100%app/inventoryL/S/F/B,maps/results onlyignoredappcache,changed/new coverage requires actualcounters.
+    3. Source-shaped shared XMLTextImportHelper routes represented Body/Cell paragraph/list children,one native processed-root catalog;existing actual canonical SwXMLImport cell owner unchanged. Literal common/automatic numbered/bullet nested/header/restart/plain/tails/body-cell/cell-cell continuation/defaultListId/native section ownership/neighbors/geometry/copy/Worker/export/reopen;realChromium imported restarted-cell row Add to List markers/menu/atomicUndoRedo/selection.420priorfiles419unchanged1exact obsolete list rejection correction;250existingstates/defaults/classes/IOexceptions/evidencepreserved,add1partial unverifiednativeowner=251modules. No IO UI/recovery/settings changes,no broadmodulepromotion.
+    4. Afterrestore: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/sourcehash/APignoredinclusive audit,ap doctor,node .agentplane/policy/check-routing.mjs. Sameagent explicit EVALUATOR exactSHApass,recordverify,canonical meaningful finish,wholeparentFindingsappend/cleantracked+untracked. Full native text dispatcher/types/sections/nestedtables/numberedparagraph/UNO/cursor/layout remainunverified.
+  Verification: "Pending approved implementation and actual upstream-absent evidence."
+  Rollback Plan: "Revert only this leaf semantic commit after review; preserve prior task history and conscious IO/recovery deviations."
+  Findings: "Source SwXMLTableCellContext_Impl calls XMLTextImportHelper::CreateTextChildContext with XMLTextType::Cell; native common helper routes text:list. Local XMLTableCellContext instead rejects the implemented list mechanism. Duplicate body/cell dispatch and per-stream list catalog ownership will be replaced by native shared helper."
+id_source: "generated"
+---
+## Summary
+
+Remove measured ODT table-cell list rejection through native shared text import ownership; previous163verifiedprogress,broadgoalACTIVE.
+
+## Scope
+
+apps/office/src/xmloff/source/text/txtimp.ts
+apps/office/src/xmloff/source/text/txtparai.ts
+apps/office/src/xmloff/source/table/XMLTableImport.ts
+apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts
+apps/office/src/sw/source/filter/xml/odt-table-cell-lists.test.ts
+apps/office/src/xmloff/source/text/txtimp.test.ts
+apps/office/e2e/writer-imported-table-lists.spec.ts
+docs/program/source-provenance.json
+docs/program/parity/runtime-inventory.json
+
+## Plan
+
+Iteration164 continues standing explicitly authorized iterative existing-functionality core/UI/refactor goal,one CODER executable leaf. Remove measured ODT table-cell list rejection and duplicate body/cell paragraph dispatch by representing native XMLTextImportHelper in correct xmloff/source/text/txtimp.ts. One helper per body stream owns existing XMLTextListsHelper; XMLTextBodyContext and every table,row,header,cell delegate shared native CreateTextChildContext for represented Body/Cell types. Reuse actual XMLParaContext/XMLTextListBlockContext/XMLTextListItemContext and SwXMLImport active-cell canonical creation; no TextRuns,new schema,duplicate list parser,new adapter,per-cell processed root catalogue or testbackdoor. Pass same helper through table children; retain public2argument standalone table construction with bounded helper default. Native cell dispatcher routes text:list exactly as body,continues processed root IDs across cells/body and preserves level/restart/header/count/native DefaultListId behavior. Unsupported sections/nested tables remain explicit unrelated unimplemented gaps,not conscious exceptions newly added. Literal synthetic locally generated ODT common/automatic numbered/bullet nested/header/restart/plain/multiple paragraphs/explicit and implicit body-cell and cell-cell continuation,source rule defaults/neighbors/table geometry/native node ownership/copy/Worker codec/export/reopen evidence. Real production Chromium locally generated restarted cells,Add to List all selected boxes,markers/3UndoRedo cycles/live selection/neighbors and Enter editing as relevant.9scopepaths3productionowners,2existing plus1new native partial unverified metadata module; all250existing states/defaults/classes/conscioussave/open/recovery exceptions/prior evidence preserved,explicit additions only,modules251.420prior testfiles419byteidentical1bounded old unsupportedcell-list assertion correction (remove list only,error text retains section/nestedtable). No changes to save/open UI/recovery/settings. Sixstatics first then ONE full upstream-absent build/app/inventory/scripts/Chromium profile via in-repo vendor rename try/finally restore; never tests withupstreampresent,exactfailure/errors/countshashespersistedbeforeassertions,skipped=skipped. Onlyoriginalfailed/newcases/failedgates afterwards,no passing/fullprofile replay,actual100%app/inventoryL/S/F/Bmaps onlyignoredappcache. Fivevendor-restored sourceaudits then exact scope/APignoredinclusive/doctor/routing, sameagent explicit EVALUATOR exactsemanticSHApass/recordverify/canonicalmeaningfulfinish/wholeparentcheckpointcleanmain. APonly boundedEnglishprose/counts/hashes/outcomes/exactfailednames;no sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. No network/outside/global/subagents. Full text dispatcher/types,section/nested-table/numbered-paragraph/UNO/cursor/list/style/layout contracts remain unverified;no broad paritypromotion. Previous163verifiedprogress,parentDOING/goalACTIVE.
+
+## Verify Steps
+
+1. Six initial statics: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size. Failed gates or changed-file remediation only repeated.
+2. ONE sequential upstream-absent profile: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts. Rename vendor within repository,try/finallyrestore before audits;tests neverread/invoke/compileupstream. Persist exact failures/errors/counts/output hashes beforeassertions;skipped=skipped. Only failed or genuinely new unexecuted cases/gates afterwards,no passing/fullprofile replay. Actual100%app/inventoryL/S/F/B,maps/results onlyignoredappcache,changed/new coverage requires actualcounters.
+3. Source-shaped shared XMLTextImportHelper routes represented Body/Cell paragraph/list children,one native processed-root catalog;existing actual canonical SwXMLImport cell owner unchanged. Literal common/automatic numbered/bullet nested/header/restart/plain/tails/body-cell/cell-cell continuation/defaultListId/native section ownership/neighbors/geometry/copy/Worker/export/reopen;realChromium imported restarted-cell row Add to List markers/menu/atomicUndoRedo/selection.420priorfiles419unchanged1exact obsolete list rejection correction;250existingstates/defaults/classes/IOexceptions/evidencepreserved,add1partial unverifiednativeowner=251modules. No IO UI/recovery/settings changes,no broadmodulepromotion.
+4. Afterrestore: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/sourcehash/APignoredinclusive audit,ap doctor,node .agentplane/policy/check-routing.mjs. Sameagent explicit EVALUATOR exactSHApass,recordverify,canonical meaningful finish,wholeparentFindingsappend/cleantracked+untracked. Full native text dispatcher/types/sections/nestedtables/numberedparagraph/UNO/cursor/layout remainunverified.
+
+## Verification
+
+Pending approved implementation and actual upstream-absent evidence.
+
+## Rollback Plan
+
+Revert only this leaf semantic commit after review; preserve prior task history and conscious IO/recovery deviations.
+
+## Findings
+
+Source SwXMLTableCellContext_Impl calls XMLTextImportHelper::CreateTextChildContext with XMLTextType::Cell; native common helper routes text:list. Local XMLTableCellContext instead rejects the implemented list mechanism. Duplicate body/cell dispatch and per-stream list catalog ownership will be replaced by native shared helper.
