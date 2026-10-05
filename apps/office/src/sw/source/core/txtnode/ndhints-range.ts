@@ -44,3 +44,27 @@ export function compareHints(
 ): number {
   return left.start - right.start || right.end - left.end || right.Which() - left.Which();
 }
+
+/** Compares native lexicographic boundaries. @param left - First boundary. @param right - Second boundary. @returns Signed order. */
+export function compareWhichStartPairs(
+  left: readonly [number, number],
+  right: readonly [number, number],
+): number {
+  return left[0] - right[0] || left[1] - right[1];
+}
+
+/** Compares supported ranges in native end/start-reverse/Which order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
+export function compareHintsByEnd(
+  left: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+  right: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+): number {
+  return left.end - right.end || right.start - left.start || left.Which() - right.Which();
+}
+
+/** Compares supported ranges in native Which/start/end-reverse order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
+export function compareHintsByWhichAndStart(
+  left: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+  right: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+): number {
+  return left.Which() - right.Which() || left.start - right.start || right.end - left.end;
+}

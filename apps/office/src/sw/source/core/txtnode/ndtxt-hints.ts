@@ -1,4 +1,5 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwTextNode, SwTextFragment } from "./ndtxt";
 import type { WriterHyperlink } from "./fmtatr2";
@@ -56,5 +57,29 @@ export function projectWriterTextRuns(node: SwTextNode | undefined): readonly Wr
   return (node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool())).toTextRuns(
     node.GetText(),
     node.GetSwAttrSet(),
+  );
+}
+
+/** Prepares owned insertion hints using native modes and optional portable explicit values. @param node - Actual owner. @param text - Inserted text. @param offset - Position. @param mode - Native flags. @param attributes - Optional explicit items. @param hyperlink - Optional explicit link. @returns Updated owned map. */
+export function InsertTextNodeHints(
+  node: SwTextNode,
+  text: string,
+  offset: number,
+  mode: SwInsertFlags,
+  attributes?: SfxItemSet,
+  hyperlink?: WriterHyperlink,
+): SwpHints {
+  const hints = node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool());
+  hints.BindToTextNode(node);
+  return hints.insertText(
+    node.Len(),
+    offset,
+    text.length,
+    attributes === undefined && hyperlink === undefined
+      ? undefined
+      : projectWriterCharacterAttributes(attributes ?? node.GetCharacterItemsAt(offset)),
+    node.GetSwAttrSet(),
+    hyperlink,
+    mode,
   );
 }

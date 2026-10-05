@@ -1,0 +1,73 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "81cc73fdb7f8384b6861d4367ab1e664ce31069c4a77026b9e58f224b59147b7",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1035,
+      "sha256": "9c7ad0665e75c8f2f8d238346479184d3294b8eb0eb498a0db706cf9623059a8",
+      "totals": [
+        "Test Files  276 passed (276)",
+        "Tests  7687 passed (7687)"
+      ],
+      "failedCases": [],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "ee755416393fd2923b8543d241866241674676665d48616bbef9d16893b785a6",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "093baeb57e696c23eda72c9b9d6e8d1d6aaa6846959d51d691ca6ccbf64672eb",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13577,
+      "sha256": "a73903e5e93ba99955754d49c6440243f6e4b9e09a8f9d742614d3a2e3d83802",
+      "totals": [
+        "99 passed (36.8s)"
+      ],
+      "failedCases": []
+    }
+  ]
+}

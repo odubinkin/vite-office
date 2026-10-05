@@ -1,4 +1,5 @@
 /** @fileoverview Verifies existing formatting, text, split/join, graph and undo node ownership. */
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
 import { SwDoc, createWriterDocument } from "../doc/doc";
 import type { SwTextNode } from "./ndtxt";
@@ -76,7 +77,9 @@ describe("internet node transition ownership", /** Registers actual existing tra
       if (kind === "format") node.ToggleTextRangeFormat(1, 5, "bold");
       else if (kind === "hyperlink") node.SetHyperlink(1, 5, { url: "changed" });
       else if (kind === "insert")
-        node.InsertText("X", 2, node.GetCharacterItemsAt(2), { url: "inserted" });
+        node.InsertText("X", 2, SwInsertFlags.DEFAULT, node.GetCharacterItemsAt(2), {
+          url: "inserted",
+        });
       else node.SetText("plain");
       expect(old?.GetpTextNode()).toBeUndefined();
       if (kind === "set-text") expect(node.GetpSwpHints()).toBeUndefined();

@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   RES_TXTATR_AUTOFMT,
@@ -13,7 +14,14 @@ import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
 import { AdjustInsertTextHints, EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
-import { assertTextRange, clipHintOutsideRange, compareHints } from "./ndhints-range";
+import {
+  assertTextRange,
+  clipHintOutsideRange,
+  compareHints,
+  compareHintsByEnd,
+  compareHintsByWhichAndStart,
+  compareWhichStartPairs,
+} from "./ndhints-range";
 import { GetTextAttrAt } from "./ndtxt-attribute-query";
 import { GetTextAttrMode } from "../../../inc/swtypes";
 import {
@@ -412,7 +420,7 @@ export class SwpHints {
     return new SwpHints(this.pool, hints);
   }
 
-  /** Inserts ordinary text through owned native coordinates or an explicitly formatted fragment. @param textLength - Original text length. @param offset - Insertion offset. @param insertedLength - Inserted text length. @param attributes - Optional explicit character state. @param inherited - Node/style items. @param hyperlink - Optional explicit inserted hyperlink. @returns Updated owned or explicit-fragment hints. */
+  /** Inserts ordinary text through owned native coordinates or an explicitly formatted fragment. @param textLength - Original text length. @param offset - Insertion offset. @param insertedLength - Inserted text length. @param attributes - Optional explicit character state. @param inherited - Node/style items. @param hyperlink - Optional explicit inserted hyperlink. @param mode - Native insertion flags. @returns Updated owned or explicit-fragment hints. */
   public insertText(
     textLength: number,
     offset: number,
@@ -420,12 +428,13 @@ export class SwpHints {
     attributes: WriterCharacterAttributes | undefined,
     inherited: SfxItemSet,
     hyperlink?: WriterHyperlink,
+    mode = SwInsertFlags.DEFAULT,
   ): SwpHints {
     assertTextRange(textLength, offset, offset);
     if (attributes === undefined && hyperlink === undefined)
-      return this.UpdateForInsert(textLength, offset, insertedLength);
+      return this.InsertUpdate(textLength, offset, insertedLength, mode);
     if (attributes !== undefined && hyperlink === undefined) {
-      this.UpdateForInsert(textLength, offset, insertedLength);
+      this.InsertUpdate(textLength, offset, insertedLength, mode);
       if (insertedLength === 0) return this;
       const end = offset + insertedLength;
       const retained = this.hintsByStart.flatMap(
@@ -468,10 +477,17 @@ export class SwpHints {
     return this;
   }
 
-  /** Coordinates ordinary insertion before its DEFAULT postphase. @param textLength - Original length. @param offset - Position. @param length - Inserted length. @returns This container. */
-  private UpdateForInsert(textLength: number, offset: number, length: number): SwpHints {
-    this.Update(textLength, offset, length);
-    if (length > 0) this.assignOwned(AdjustInsertTextHints(this.hintsByStart, offset, length));
+  /** Coordinates insertion with temporary FORCE state before its mode postphase. @param size - Original len. @param pos - Position. @param len - Inserted len. @param mode - Native flags. @returns This container. */
+  private InsertUpdate(size: number, pos: number, len: number, mode: SwInsertFlags): SwpHints {
+    const node = this.m_pTextNode,
+      oldIgnore = node?.IsIgnoreDontExpand() ?? false;
+    if (mode & SwInsertFlags.FORCEHINTEXPAND) node?.SetIgnoreDontExpand(true);
+    try {
+      this.Update(size, pos, len);
+    } finally {
+      if (mode & SwInsertFlags.FORCEHINTEXPAND) node?.SetIgnoreDontExpand(oldIgnore);
+    }
+    if (len > 0) this.assignOwned(AdjustInsertTextHints(this.hintsByStart, pos, len, mode));
     return this;
   }
 
@@ -893,21 +909,6 @@ export interface WriterTextRunLike {
 
 /** Native Which/start sorting boundary. */
 type WhichStartPair = [number, number];
-
-/** Compares native lexicographic boundaries. @param left - First boundary. @param right - Second boundary. @returns Signed order. */
-function compareWhichStartPairs(left: WhichStartPair, right: WhichStartPair): number {
-  return left[0] - right[0] || left[1] - right[1];
-}
-
-/** Compares supported ranges in native end/start-reverse/Which order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
-function compareHintsByEnd(left: RangedTextAttr, right: RangedTextAttr): number {
-  return left.end - right.end || right.start - left.start || left.Which() - right.Which();
-}
-
-/** Compares supported ranges in native Which/start/end-reverse order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
-function compareHintsByWhichAndStart(left: RangedTextAttr, right: RangedTextAttr): number {
-  return left.Which() - right.Which() || left.start - right.start || right.end - left.end;
-}
 
 /** Finds native lower/upper Which/start bounds without comparing ends. @param hints - Which map. @param position - Lexicographic boundary. @param upper - Include equals before the bound. @returns Insertion index. */
 function hintWhichStartBound(

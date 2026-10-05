@@ -1,0 +1,20 @@
+[
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "bytes": 240,
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "command": "npm run check:dependencies",
+    "exit": 0,
+    "bytes": 189,
+    "sha256": "4f9d4d9064fbf4c30a1b40d34917d048f174f6a440a372135457dcef27e1350f"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 1,
+    "bytes": 537,
+    "sha256": "b71dc4ac0c0b9afb542788c3cb3b364d49c8dd0db9e01050d8ee7e315f30ad00"
+  }
+]

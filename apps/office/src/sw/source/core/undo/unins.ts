@@ -1,5 +1,6 @@
 /** @fileoverview Implements the bounded SwUndoInsert action from pinned LibreOffice unins.cxx. */
 
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SwTextFragment, SwTextNode } from "../txtnode/ndtxt";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -82,7 +83,7 @@ export class SwUndoInsert extends SwUndo {
     if (this.insertionItems !== undefined) {
       const node = GetUndoTextNode(context.GetDoc(), this.paragraph);
       const text = this.insertedFragment.text;
-      node.InsertText(text, this.offset, this.insertionItems);
+      node.InsertText(text, this.offset, SwInsertFlags.DEFAULT, this.insertionItems);
       this.insertedFragment = node.CaptureTextFragment(this.offset, this.offset + text.length);
       return;
     }

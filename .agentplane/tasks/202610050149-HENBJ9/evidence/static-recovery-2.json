@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm run check:docs",
+    "exit": 0,
+    "bytes": 119,
+    "sha256": "acd17c3546abb604a9d36fad70c0faf3c36536bb9516cb154312aa8de0fe9fa7"
+  },
+  {
+    "command": "npm run check:file-size",
+    "exit": 0,
+    "bytes": 2799,
+    "sha256": "cb72424e0e1f771ce6083bad82a6e41adca591521d3ddb12e01738df0c3e76b6"
+  }
+]

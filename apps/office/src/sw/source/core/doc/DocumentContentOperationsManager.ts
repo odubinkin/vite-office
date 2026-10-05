@@ -3,6 +3,7 @@
  * LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` ownership boundary.
  */
 
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
@@ -27,12 +28,16 @@ export class DocumentContentOperationsManager {
     return true;
   }
 
-  /** Inserts plain text at the point of one Writer range. @param range - Collapsed or selected model range. @param text - Inserted plain text. @returns Whether content changed. */
-  public InsertString(range: SwPaM | SwPosition, text: string): boolean {
+  /** Inserts plain text at the point of one Writer range. @param range - Collapsed or selected model range. @param text - Inserted plain text. @param mode - Native flags,default EMPTYEXPAND. @returns Whether content changed. */
+  public InsertString(
+    range: SwPaM | SwPosition,
+    text: string,
+    mode = SwInsertFlags.EMPTYEXPAND,
+  ): boolean {
     if (text.length === 0) return false;
     const position = range instanceof SwPaM ? range.GetPoint() : range;
     const node = this.GetTextNode(position, "insertion");
-    node.InsertText(text, position.GetContentIndex());
+    node.InsertText(text, position.GetContentIndex(), mode);
     return true;
   }
 

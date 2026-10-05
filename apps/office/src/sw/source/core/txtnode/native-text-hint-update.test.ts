@@ -1,4 +1,5 @@
 /** @fileoverview Verifies literal native AUTO/INET text-update coordinates and actual ownership without upstream access. */
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
@@ -197,6 +198,7 @@ describe("native owned text hint updates", /** Registers literal boundary and fl
     node.InsertText(
       "abcd",
       0,
+      SwInsertFlags.DEFAULT,
       createWriterCharacterItemSet(doc.GetAttrPool(), {
         bold: true,
         italic: false,
@@ -213,6 +215,7 @@ describe("native owned text hint updates", /** Registers literal boundary and fl
     node.InsertText(
       "Y",
       3,
+      SwInsertFlags.DEFAULT,
       createWriterCharacterItemSet(doc.GetAttrPool(), {
         bold: false,
         italic: true,
@@ -221,7 +224,7 @@ describe("native owned text hint updates", /** Registers literal boundary and fl
     );
     expect(node.getHyperlinkAt(4)?.url).toBe("explicit");
     const plain = doc.GetNodes().MakeTextNode();
-    plain.InsertText("link", 0, undefined, { url: "link-only" });
+    plain.InsertText("link", 0, SwInsertFlags.DEFAULT, undefined, { url: "link-only" });
     expect(required(plain.GetpSwpHints()).Count()).toBe(1);
     expect(plain.getHyperlinkAt(4)?.url).toBe("link-only");
     const direct = new SwpHints(doc.GetAttrPool());

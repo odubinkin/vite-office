@@ -1,5 +1,6 @@
 /** @fileoverview Verifies the LibreOffice-shaped Writer node graph, model positions, selections, hints, and content-operation ownership. */
 
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
 import {
   decodeSwFormatINetFormat as restoreSwFormatINetFormat,
@@ -623,7 +624,12 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     writer.EnsureNumRule("Conflicting Bullet", "bullet", 2);
     applyWriterParagraphList(node, { kind: "numbered", level: 2, styleId: "Conflicting Bullet" });
     expect(projectWriterParagraphList(node)).toEqual({ kind: "numbered", level: 2 });
-    node.InsertText("abcd", 0, createWriterCharacterItemSet(writer.GetAttrPool(), bold));
+    node.InsertText(
+      "abcd",
+      0,
+      SwInsertFlags.DEFAULT,
+      createWriterCharacterItemSet(writer.GetAttrPool(), bold),
+    );
     node.InsertText("X", 2);
     expect(node.GetText()).toBe("abXcd");
     expect(projectWriterTextRuns(node)).toMatchObject([{ attributes: bold, text: "abXcd" }]);
@@ -641,7 +647,12 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
       underline: true,
     });
     const direct = createModelFixture().paragraphs[0] as SwTextNode;
-    direct.InsertText("bold", 0, createWriterCharacterItemSet(direct.GetDoc().GetAttrPool(), bold));
+    direct.InsertText(
+      "bold",
+      0,
+      SwInsertFlags.DEFAULT,
+      createWriterCharacterItemSet(direct.GetDoc().GetAttrPool(), bold),
+    );
     direct.ToggleTextRangeFormat(0, 4, "bold");
     expect(direct.GetpSwpHints()).toBeUndefined();
     const trailing = node.SplitContent(2);

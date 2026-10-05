@@ -58,9 +58,15 @@ import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
 import { resolveSwListLevelIndents } from "./ndtxt-list-indent";
 import { SwpHints } from "./ndhints";
-import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
+import { createWriterCharacterItemSet } from "./txatbase";
 
-import { ReplaceTextNodeHints, CopyTextNodeHints, CreateTextNodeFragment } from "./ndtxt-hints";
+import {
+  ReplaceTextNodeHints,
+  CopyTextNodeHints,
+  CreateTextNodeFragment,
+  InsertTextNodeHints,
+} from "./ndtxt-hints";
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 export { copyWriterTextRangeRuns, projectWriterTextRuns } from "./ndtxt-hints";
 
 /** Names the bounded direct character attributes currently supported by the browser Writer. */
@@ -577,25 +583,17 @@ export class SwTextNode extends SwContentNode {
     return rule.MakeNumString(this.GetNumberVector(), level);
   }
 
-  /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @param hyperlink - Optional inherited hyperlink. @returns Inserted text. */
+  /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param mode - Native insertion flags. @param attributes - Optional explicit character items. @param hyperlink - Optional explicit hyperlink. @returns Inserted text. */
   public InsertText(
     text: string,
     offset: number,
+    mode = SwInsertFlags.DEFAULT,
     attributes?: SfxItemSet,
     hyperlink?: WriterHyperlink,
   ): string {
     if (text.length === 0) return text;
     this.assertRange(offset, offset);
-    const hints = (this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool())).insertText(
-      this.mText.length,
-      offset,
-      text.length,
-      attributes === undefined && hyperlink === undefined
-        ? undefined
-        : projectWriterCharacterAttributes(attributes ?? this.GetCharacterItemsAt(offset)),
-      this.GetSwAttrSet(),
-      hyperlink,
-    );
+    const hints = InsertTextNodeHints(this, text, offset, mode, attributes, hyperlink);
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.UpdateContentIndices(offset, text.length);

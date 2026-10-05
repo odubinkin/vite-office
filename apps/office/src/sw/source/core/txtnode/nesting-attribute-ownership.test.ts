@@ -1,4 +1,5 @@
 /** @fileoverview Checks concrete native internet attributes through real factories, text updates, copies, cuts and retained undo. */
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
@@ -120,7 +121,7 @@ describe("native nesting attribute ownership", /** Registers independent real-ow
         node = required(doc.paragraphs[0]);
       node.SetText("abcd");
       if (length === 0) {
-        node.InsertText("link", 0, undefined, { url: "inserted" });
+        node.InsertText("link", 0, SwInsertFlags.DEFAULT, undefined, { url: "inserted" });
         native(required(node.GetpSwpHints()).Get(0));
         node.InsertText("X", 4);
         expect(required(node.GetpSwpHints()).Get(0).end).toBe(4);

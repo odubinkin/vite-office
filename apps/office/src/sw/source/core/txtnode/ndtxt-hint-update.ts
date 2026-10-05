@@ -1,4 +1,5 @@
 /** @fileoverview Ports owned AUTO/INET coordinate updates from pinned SwTextNode::Update and default InsertText in ndtxt.cxx. */
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SwDoc } from "../doc/doc";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { MakeTextAttr } from "./thints";
@@ -37,20 +38,33 @@ export function UpdateTextHints(
   return [...hints, ...collector.values()];
 }
 
-/** Applies DEFAULT InsertText adjustment after coordinate Update. @param hints - Actual updated attributes. @param offset - Original insertion position. @param length - Inserted length. @returns The same actual attribute array. */
+/** Applies native InsertText mode adjustment after coordinate Update. @param hints - Actual updated attributes. @param offset - Original insertion position. @param length - Inserted length. @param mode - Native insertion flags. @returns The same actual attribute array. */
 export function AdjustInsertTextHints(
   hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[],
   offset: number,
   length: number,
+  mode = SwInsertFlags.DEFAULT,
 ): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[] {
   for (const hint of hints) {
     if (hint.end === offset + length) {
-      if (hint.dontExpand) {
+      if (
+        mode & SwInsertFlags.NOHINTEXPAND ||
+        (!(mode & SwInsertFlags.FORCEHINTEXPAND) && hint.dontExpand)
+      ) {
         if (hint.start === hint.end) hint.SetStart(hint.start - length);
         hint.SetEnd(hint.end - length);
+      } else if (mode & SwInsertFlags.EMPTYEXPAND && hint.start === hint.end) {
+        hint.SetStart(hint.start - length);
+        continue;
       } else continue;
     }
-    if (offset === 0 && hint.start === length && !hint.dontExpandStart) hint.SetStart(0);
+    if (
+      !(mode & SwInsertFlags.NOHINTEXPAND) &&
+      offset === 0 &&
+      hint.start === length &&
+      !hint.dontExpandStart
+    )
+      hint.SetStart(0);
   }
   return hints;
 }

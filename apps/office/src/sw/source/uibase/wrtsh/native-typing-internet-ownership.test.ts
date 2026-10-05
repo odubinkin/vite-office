@@ -1,4 +1,5 @@
 /** @fileoverview Checks native owned text insertion through real Writer typing,undo and Worker without upstream execution. */
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
@@ -111,7 +112,7 @@ describe.each([0, 1, 2, 3, 4, 5, 6, 7])(
         for (const direct of [true, false]) {
           const owner = fixture(start, mask, 65000, 65535, (mask & 1) === 0 || label === "end"),
             items = bold(owner.doc);
-          if (direct) owner.node.InsertText("XY", offset, items);
+          if (direct) owner.node.InsertText("XY", offset, SwInsertFlags.DEFAULT, items);
           else {
             setTestCursor(owner.shell, "p-1", offset);
             owner.shell.SetPendingCharacterItems(items);
@@ -242,6 +243,7 @@ describe("native typed internet item ownership", /** Registers real history and 
     owner.node.InsertText(
       "XY",
       4,
+      SwInsertFlags.DEFAULT,
       createWriterCharacterItemSet(owner.doc.GetAttrPool(), {
         bold: false,
         italic: true,
@@ -271,6 +273,7 @@ describe("native typed internet item ownership", /** Registers real history and 
     owner.node.InsertText(
       "XY",
       3,
+      SwInsertFlags.DEFAULT,
       createWriterCharacterItemSet(owner.doc.GetAttrPool(), {
         bold: false,
         italic: true,
