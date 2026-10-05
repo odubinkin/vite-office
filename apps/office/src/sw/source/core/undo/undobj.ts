@@ -10,6 +10,128 @@ import type { SwTextFragment } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
 
+/** Native numeric range coordinates; content correction for nontext sentinels remains unverified. */
+export class SwUndRng {
+  public m_nSttNode = 0;
+  public m_nEndNode = 0;
+  public m_nSttContent = 0;
+  public m_nEndContent = 0;
+
+  /** Captures optional native PaM coordinates. @param range - Optional current range. @returns Nothing. */
+  public constructor(range?: SwPaM) {
+    if (range !== undefined) this.SetValues(range);
+  }
+
+  /** Stores sorted absolute indices without retaining registered positions or content. @param range - Actual native range. @returns Nothing. */
+  public SetValues(range: SwPaM): void {
+    const start = range.Start(),
+      end = range.End();
+    this.m_nSttNode = start.GetNodeIndex();
+    this.m_nSttContent = start.GetContentIndex();
+    this.m_nEndNode = range.HasMark() ? end.GetNodeIndex() : 0;
+    this.m_nEndContent = range.HasMark() ? end.GetContentIndex() : 0x7fffffff;
+  }
+
+  /** Reconstructs range endpoints against current native document indices. @param range - Destination native PaM in the document. @returns Nothing. */
+  public SetPaM(range: SwPaM): void {
+    const nodes = range.GetPoint().GetNode().GetNodes();
+    range.DeleteMark();
+    range.GetPoint().Assign(nodes.at(this.m_nSttNode) as SwTextNode, this.m_nSttContent);
+    if (this.m_nEndNode === 0 && this.m_nEndContent === 0x7fffffff) return;
+    range.SetMark();
+    if (this.m_nSttNode === this.m_nEndNode && this.m_nSttContent === this.m_nEndContent) return;
+    range.GetPoint().Assign(nodes.at(this.m_nEndNode) as SwTextNode, this.m_nEndContent);
+  }
+}
+
+/** Owns removed append-only content until the native move from undo storage consumes it. Full SwNodes undo sections and non-end moves remain unverified. */
+export class SwUndoSaveContent {
+  private fragmentId: number | undefined;
+  private readonly nodeIds: number[] = [];
+
+  /** Cuts a represented trailing range and moves actual paragraphs out of the live section. @param range - Actual insertion span. @returns Nothing. */
+  public MoveToUndoNds(range: SwPaM): void {
+    const start = range.Start(),
+      end = range.End();
+    const first = start.GetNode() as SwTextNode,
+      last = end.GetNode() as SwTextNode;
+    if (
+      first.StartOfSectionNode() !== last.StartOfSectionNode() ||
+      end.GetContentIndex() !== last.Len()
+    )
+      throw new Error("Writer undo content move requires an end-of-section text range.");
+    const added = first
+      .GetNodes()
+      .entries()
+      .slice(first.GetIndex() + 1, last.GetIndex() + 1);
+    if (
+      added.some(
+        /** Performs a native undo ownership check. @param node - Native input. @returns Native operation result. */ (
+          node,
+        ) => !(node instanceof SwTextNode),
+      )
+    )
+      throw new Error("Writer nontext undo content move is not implemented.");
+    const undoNodes = first.GetDoc().GetUndoManager().GetUndoNodes();
+    if (start.GetContentIndex() !== first.Len())
+      this.fragmentId = undoNodes.RetainText(
+        first.CutTextFragment(start.GetContentIndex(), first.Len()),
+        false,
+      );
+    const ids: number[] = [];
+    for (const node of [...added].reverse()) {
+      first.GetNodes().removeTextNode(node as SwTextNode);
+      ids.unshift(undoNodes.RetainNode(node as SwTextNode));
+    }
+    this.nodeIds.push(...ids);
+  }
+
+  /** Moves retained content back to the live document and releases consumed storage. @param position - Current insertion boundary. @returns Nothing. */
+  public MoveFromUndoNds(position: SwPosition): void {
+    let previous = position.GetNode() as SwTextNode;
+    const undoNodes = previous.GetDoc().GetUndoManager().GetUndoNodes();
+    if (this.fragmentId !== undefined) {
+      previous.ReplaceRange(
+        position.GetContentIndex(),
+        position.GetContentIndex(),
+        undoNodes.GetText(this.fragmentId),
+        true,
+      );
+      undoNodes.Release(this.fragmentId);
+      this.fragmentId = undefined;
+    }
+    for (const id of this.nodeIds.splice(0)) {
+      const node = undoNodes.GetNode(id);
+      previous.GetNodes().insertTextNodeAfter(previous, node);
+      undoNodes.Release(id);
+      previous = node;
+    }
+  }
+
+  /** Counts only actually removed content retained in undo storage. @param doc - Owning document. @returns Payload units. */
+  public GetPayloadSize(doc: SwDoc): number {
+    const undoNodes = doc.GetUndoManager().GetUndoNodes();
+    let size =
+      this.fragmentId === undefined
+        ? 0
+        : GetFragmentPayloadSize(undoNodes.GetText(this.fragmentId));
+    for (const id of this.nodeIds) {
+      const node = undoNodes.GetNode(id);
+      size +=
+        node.Len() + (node.GetpSwpHints()?.Count() ?? 0) * 4 + (node.GetpSwAttrSet()?.Count() ?? 0);
+    }
+    return size;
+  }
+
+  /** Drops only removed content when its history owner is discarded. @param doc - Owning document. @returns Nothing. */
+  public Dispose(doc: SwDoc): void {
+    const undoNodes = doc.GetUndoManager().GetUndoNodes();
+    if (this.fragmentId !== undefined) undoNodes.Release(this.fragmentId);
+    this.fragmentId = undefined;
+    for (const id of this.nodeIds.splice(0)) undoNodes.Release(id);
+  }
+}
+
 /** Identifies one stable text-node content position without retaining a node graph. */
 export interface SwUndoCursorPosition {
   /** Canonical SwTextNode identity retained like an upstream node index. */

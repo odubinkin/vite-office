@@ -13,10 +13,10 @@ export class SwUndoNodes {
   private readonly entries = new Map<number, SwTextFragment | SwTextNode>();
   private nextId = 0;
 
-  /** Retains a formatted text fragment in the document undo area. @param fragment - Removed text. @returns Stable undo node ID. */
-  public RetainText(fragment: SwTextFragment): number {
+  /** Retains removed text, cloning historical snapshots by default or consuming actual native cut ownership. @param fragment - Removed text. @param copy - Whether to make an independent snapshot. @returns Stable undo node ID. */
+  public RetainText(fragment: SwTextFragment, copy = true): number {
     const id = ++this.nextId;
-    this.entries.set(id, CopyUndoFragment(fragment));
+    this.entries.set(id, copy ? CopyUndoFragment(fragment) : fragment);
     return id;
   }
 

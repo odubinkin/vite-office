@@ -271,7 +271,7 @@ for (const reverse of [false, true])
           ),
         ).toEqual(f.boxes);
         expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(1);
-        expect(f.doc.GetUndoManager().GetUndoNodes().Count()).toBe(9);
+        expect(f.doc.GetUndoManager().GetUndoNodes().Count()).toBe(0);
         expect(f.doc.GetUndoManager().GetHistoryPayloadSize()).toBeGreaterThan(9);
         const after = f.shell.CaptureCursorState();
         if (reverse) expect(after.point.node).toBe(required(required(inserted[2])[3]));
@@ -556,7 +556,7 @@ it("native blank plain paragraphs retain minimal history in default empty cells"
     ["", ""],
   ]);
   expect(doc.GetUndoManager().GetHistoryPayloadSize()).toBe(0);
-  expect(doc.GetUndoManager().GetUndoNodes().Count()).toBe(4);
+  expect(doc.GetUndoManager().GetUndoNodes().Count()).toBe(0);
   expect(shell.Undo()).toBe(true);
   expect(
     row
