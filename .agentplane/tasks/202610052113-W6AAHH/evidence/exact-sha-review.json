@@ -1,0 +1,23 @@
+{
+  "reviewer": "same current coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "9f8f98affdd3fbc2084f0b15f573b05cfa33d56a",
+  "base": "e4b111843d51d3a80c6ed6594a8d5e046d9d303e",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/text/atrstck.ts",
+    "apps/office/src/sw/source/core/text/itratr.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/source/core/text/native-attribute-iteration.test.ts",
+    "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+    "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/parity/writer-command-slice.json"
+  ],
+  "reviewedSemanticDiffBytes": 122986,
+  "reviewedSemanticDiffSHA256": "c4b35a313d2a4fed0384a5b076e6092c3a4a71416eb77160dabd198cf8a29e40",
+  "verdict": "pass",
+  "evidence": "Actual native SwAttrIter start/end map traversal/default0/reset/backward/ignore/end ordering and SwAttrHandler per-Which borrowed priority stack identity/default fallback inspected against pinned sources. Small native Init refreshes defaults without extra Reset; actual new reinitialization case proves active-owner survival. Browser projection consumes actual iterator items and INET query without filter WriterTextRun inheritance/import or projectWriterTextRuns; shared body/cell renderer consumes frozen browser primitives and preserves physical/generic font metadata.17 initial core cases,7 distinct display/canonical Worker/copy/history cases and1 new Init case=25 new app cases pass. Real1280/390 ODT import,DOM ab selection,Bold,UndoRedo,neighbors,export/fresh-storage production reopen,caret6 typing/history pass. Fresh storage retains registered duplicate-name IO policy; no test runtime injection. Final distinct12509 app/109 inventory/5 scripts/137 Chromium pass,0flaky;ONE absent full profile,onlyoriginalfailed/genuinelynew cases afterward. Changed handler source aligns actual counters only at contiguous unchanged locations against exact initial hash; new Init executes its own counter. Actual app/inventory100%L/S/F/B.423 prior testfiles all byte-identical;251 prior semantic states/defaults/classes/IO exceptions/evidence preserved,2new partial unverified native owners=253modules;exact2stale command-slice renderer marker replacements. Six initial statics,changed-file checks,five restored sourceaudits,finalchanged-owner provenance,scope/APscan/doctor/routing pass.",
+  "validationLimit": "Represented unmerged-node automatic per-item native stacks and ranged start/end iteration only; UI primitive display projection directly borrows actual item values and existing INET query. Full native SwFont/device/font-change return/script/language/redline/fields/merged paragraphs/INET styles/visited-color/paragraph mark and full portions/layout/core/list/table/UI parity remain unverified. Existing filter-run boundary still serves other filter/clipboard/editing operations and is not claimed eliminated globally. Conscious save/open/recovery deviations unchanged,parent DOING/goal ACTIVE.",
+  "residualRisk": "Full native SwFont/device/font-change return/scripts/cache/shaping/redline/fields/merged paragraphs/INET styles/visited-color/paragraph mark and full portions/layout/core/UI/list/table parity remain unverified. Other filter-run boundary consumers remain. No broad or full-module parity promotion; conscious IO/recovery deviations unchanged; parent DOING/goal ACTIVE."
+}
