@@ -1,0 +1,14 @@
+[
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "bytes": 1616,
+    "sha256": "e129b626088ce9ad80e85c0b5fcc8e465e180de796ab35bf9567126d7029bf3c"
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "bytes": 18,
+    "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  }
+]
