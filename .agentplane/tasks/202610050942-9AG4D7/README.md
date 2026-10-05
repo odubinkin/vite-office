@@ -4,7 +4,7 @@ title: "Own Ctrl Home End cell and table section selection in native cursor and 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T10:19:35.502Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent read-only exact-SHA review passes for native CtrlHomeEnd section/table cursor ownership and removal of nested table editing hosts; broad parity remains unverified."
+  evaluated_sha: "a0faca4f67f585c96fcf866df59df71f663f105e"
+  blueprint_digest: "1c8d5b725b587691261f679f4166a068b232ca8a522f070ee311971ec5802e99"
+  evidence_refs:
+    - ".agentplane/tasks/202610050942-9AG4D7/README.md"
+    - ".agentplane/tasks/202610050942-9AG4D7/quality/20261005-101935502-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610050942-9AG4D7/quality/20261005-101935502-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610050942-9AG4D7/quality/20261005-101935502-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610050942-9AG4D7/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610050942-9AG4D7/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610050942-9AG4D7/evidence/cumulative-coverage.json"
+    - ".agentplane/tasks/202610050942-9AG4D7/evidence/restored-source-audits.json"
+  findings:
+    - "Twenty-five new app cases and three new browser cases close the bounded contracts;385 previous testfiles unchanged,246runtime states/defaults/exceptions preserved,actual cumulative app/inventory100percent,five restored source audits pass. Original failing browser selection now spans actual cell paragraphs;only failed/new cases ran after two renderer attribute removals."
 commit: null
 comments:
   -

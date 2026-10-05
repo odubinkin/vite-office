@@ -1,0 +1,17 @@
+{
+  "result": "pass",
+  "evaluatedSHA": "a0faca4f67f585c96fcf866df59df71f663f105e",
+  "actor": "Same current agent, separate read-only EVALUATOR phase; no independent reviewer claimed",
+  "changedSemanticPaths": 11,
+  "priorTestsUnchanged": 385,
+  "newAppCases": 25,
+  "uniqueChromiumCasesClosed": 112,
+  "existingRuntimeRowsUnchanged": 246,
+  "sourceAuditGates": 5,
+  "passingReplays": 0,
+  "appCoverage": 100,
+  "inventoryCoverage": 100,
+  "contract": "Actual node identity and section boundaries; native marked table cursor conversion and selected point ownership; shared inherited document editing host. Assertions retained for selection,typing,join,UndoRedo and independent neighbors.",
+  "validationLimit": "One initial full absent static build/browser profile preceded two rendering attribute removals. Final source was validated by one new mounted case and failed/new Chromium development-server cases only; no successful build or suite rerun. Isolated coverage thresholds diagnostic only; actual source-aligned cumulative metrics remain100.",
+  "residual": "Plain visual-line HomeEnd,full selected-box painting/cursor rings/layout/native SwCursorShell,protected/merged/nested/redline/fullcore/UI and parent objective remain unverified."
+}
