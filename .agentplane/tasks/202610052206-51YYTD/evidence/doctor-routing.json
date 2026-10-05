@@ -1,0 +1,20 @@
+[
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "bytes": 1616,
+    "sha256": "e36d117ebc1fa9ce39bda9270a76975c1c90c8b09cf861d6cb7d45fb80f57dbc",
+    "summary": [
+      "warning: doctor findings: errors=0 warnings=2 info=2"
+    ]
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "bytes": 18,
+    "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "summary": [
+      "policy routing OK"
+    ]
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "base": "54df5dfd11890d5939f47f77ec61e0762605fc05",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/number.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx",
+    "apps/office/src/sw/source/uibase/docvw/native-list-tab.test.ts",
+    "apps/office/src/sw/browser/editor/native-list-tab.test.tsx",
+    "apps/office/e2e/writer-native-list-tab.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 426,
+  "priorTestFilesByteIdentical": 424,
+  "sourceConfirmedPriorTestCorrections": [
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-tab.test.tsx"
+  ],
+  "existingSemanticRecordsPreserved": 253,
+  "totalSemanticRecords": 253,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "priorEvidencePreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/doc/number.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts"
+  ],
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/doc/number.ts": "780457a366b1e1f346bd5158d53c23ffbc2c24faa1a543e2bae02cfdd90b0158",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "04ff11b264b9f91d01ef81c74909c9c67612f453c12746835b37f360c1b19bff",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "b63d46090f6c5c16742424c20be23905342f1b905056167befb740d12b4f5c82"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 27,
+  "newChromiumCases": 2,
+  "finalDistinctPassed": {
+    "app": 12536,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 139
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "sha256": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129"
+    },
+    {
+      "path": "sw/source/uibase/docvw/edtwin.cxx",
+      "sha256": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3"
+    }
+  ],
+  "validationLimit": "Represented ordinary body/list/cell Tab and ShiftTab only. Eligible assigned-outline routing remains unrepresented pending native OutlineUpDown. Null/nontext cursors, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter/full KeyInput and full core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged,parent DOING/goal ACTIVE."
+}

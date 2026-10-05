@@ -1,0 +1,26 @@
+[
+  {
+    "command": "npm run check:source-provenance",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 205,
+    "sha256": "d0008ebc9e42cc0b90cbbd4c9291d042ad47ca7511c6d2d40bdff504c119012f"
+  },
+  {
+    "command": "npm run inventory:invariants",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 136,
+    "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe"
+  },
+  {
+    "command": "npm run inventory:parity",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 1462972,
+    "sha256": "5a5dda77d0f6c77aba9b4cd5a2863accc0cd4d1a004bb05fda66e0ada444ac1e",
+    "semanticViolationCounts": [
+      0
+    ]
+  }
+]
