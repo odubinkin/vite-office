@@ -32,6 +32,7 @@ import { SwNumRuleItem } from "../para/paratr";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import type { SwNumRule } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
+import { OutlineUpDown as moveOutlineLevels } from "./docnum";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
@@ -565,6 +566,11 @@ export class SwDoc {
         return true;
       },
     );
+  }
+
+  /** Moves outline levels through the source-owned docnum method body. @param range - Actual native selection. @param offset - Signed short displacement. @returns Native whole-range applicability. */
+  public OutlineUpDown(range: SwPaM, offset: number): boolean {
+    return moveOutlineLevels(this, range, offset);
   }
 
   /** Applies native numbering visibility or removes an already uncounted direct list. @param node - Actual document node. @param del - Hide numbering when true. @returns Whether numbering changed. */

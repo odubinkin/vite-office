@@ -203,13 +203,13 @@ describe("native ordinary paragraph Tab", /** Registers native ownership and his
     f.shell.Close();
   });
   it.each([
-    ["heading-1", false, false],
-    ["heading-2", true, false],
+    ["heading-1", false, true],
+    ["heading-2", true, true],
     ["heading-1", true, true],
     ["heading-10", false, true],
   ] as const)(
-    "preserves explicit unsupported outline boundary %s shift=%s",
-    /** Checks no fake OutlineUpDown and supported outline limits. @param style - Assigned style. @param shift - Direction. @param owned - Whether no outline operation is needed. @returns Nothing. */ (
+    "routes native assigned outline boundary %s shift=%s",
+    /** Checks actual native outline movement and supported outline limits. @param style - Assigned style. @param shift - Direction. @param owned - Whether no outline operation is needed. @returns Nothing. */ (
       style,
       shift,
       owned,
@@ -220,8 +220,14 @@ describe("native ordinary paragraph Tab", /** Registers native ownership and his
       f.doc.GetUndoManager().Clear();
       expect(f.body.GetNumRule()).toBeUndefined();
       expect(f.edit.HandleTab(shift)).toBe(owned);
-      expect(f.body.GetText()).toBe(owned && !shift ? "\tbody" : "body");
-      expect(f.body.GetParagraphStyle()).toBe(style);
+      expect(f.body.GetText()).toBe(style === "heading-10" && !shift ? "\tbody" : "body");
+      expect(f.body.GetParagraphStyle()).toBe(
+        style === "heading-1" && !shift
+          ? "heading-2"
+          : style === "heading-2" && shift
+            ? "heading-1"
+            : style,
+      );
       f.shell.Close();
     },
   );

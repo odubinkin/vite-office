@@ -7859,6 +7859,18 @@
           {
             "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
             "marker": "Writer table row Add to List"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+            "marker": "native outline movement"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+            "marker": "native outline Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+            "marker": "Writer native heading Tab retains styles and history"
           }
         ],
         "upstream": [
@@ -7977,6 +7989,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
             "marker": "SwDoc::SetNumRuleStart"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "bool SwDoc::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx",
+            "marker": "SwUndoOutlineLeftRight::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+            "marker": "bool SwEditShell::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case SwKeyState::OutlineDown:"
           }
         ]
       },
@@ -8001,7 +8029,8 @@
         "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
         "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion.",
         "Iteration161 adds bounded native document SetNumRule/SetCounted operations and SetNumRuleMode0/1/2/4/8 flags. Selected body/cell/mixed list toggles use document-owned rule lookup/add/assignment, native previous-rule search from point, explicit new/continued list identity, collapsed current/style direct-item policy, count reset and label-alignment-only indent reset. Shell toggle and continue record actual execution in shared SfxListUndoAction/SwUndoInsNum numeric original-document targets; retained paragraph base, separate ContinueNumbering action/item interface and direct shell list DTO builder removed. Actual selected native range consensus drives toggle/checked state. Existing public single-node InsNum API and independent item snapshots remain portable; full native SwHistory,document-owned undo,rule rollback/Repeat,client/layout/merged/margin propagation,outline/font/leading whitespace factory nuances and broad UI remain unverified. New exact flag/style/count/indent/native replacement/cursor/history/neighbors/foreign guard and selected body/table Chromium menu/marker/atomic UndoRedo assertions. Six prior test files migrate source-confirmed action-group/API, label-alignment reset-indent and unique level-item expectations;408 prior files byte-identical. Original4failed app/3failed Chromium only and1new explicit-empty style suppression case pass; final production unchanged, no passing replay.250 states/defaults/classifications/IO exceptions/prior evidence preserved;no full module promotion.",
-        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion."
+        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion.",
+        "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -8175,6 +8204,62 @@
       "upstreamPath": "sw/source/core/doc/docfmt.cxx",
       "upstreamSymbols": [
         "SwDoc::MoveLeftMargin"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/docnum.ts",
+            "marker": "OutlineUpDown"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+            "marker": "native outline movement"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+            "marker": "native outline Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+            "marker": "Writer native heading Tab retains styles and history"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "bool SwDoc::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx",
+            "marker": "SwUndoOutlineLeftRight::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+            "marker": "bool SwEditShell::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case SwKeyState::OutlineDown:"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/docnum.ts",
+      "localSymbols": [
+        "OutlineUpDown"
+      ],
+      "omittedResponsibilities": [
+        "Native merged paragraph props/layout/conditional collections/direct document auto-history/framework Repeat/failed-operation dirty flag and full module behavior remain unrepresented and unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/docnum.cxx",
+      "upstreamSymbols": [
+        "SwDoc::OutlineUpDown"
       ]
     },
     {
@@ -8720,6 +8805,10 @@
           {
             "path": "apps/office/e2e/writer-native-list-tab.spec.ts",
             "marker": "Writer body list and table Tab retain editing focus"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+            "marker": "preserves tenth-level NONE equal-indent literal Tab without demoting"
           }
         ],
         "upstream": [
@@ -8902,6 +8991,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
             "marker": "case KEY_TAB:"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+            "marker": "MAXLEVEL = 10"
           }
         ]
       },
@@ -8926,7 +9019,8 @@
         "Iteration47 restores the complete selected SwNumRule copy/operator=/Reset/operator== lifecycle and native scalar defaults/accessors. Copy constructs independent owned formats and resets phantom-count/redline flags to true/false with no clients. Assignment uses pointer Set for all10 raw slots, retains recipient mode/default-list/client containers/countPhantoms/usedByRedline and copies source name/type/automatic/continuous/absSpaces/hidden/pool metadata, invalidating nonself even for equal values. Reset clears all10 slots, accepts empty/repeated names and restores exact UNKNOWN65535/help65535/helpfile255 while retaining recipient-only state. Equality compares the native selected metadata and effective formats, ignoring hidden/validity/countPhantoms/redline/list ID/raw presence directly. Native ushort/byte narrowing is preserved. Optional graph16 scalarState validates exact booleans/unsigned ranges and restores the actual document owner after native copy construction; legacy omissions use native defaults. Complete unchanged pinned source bodies and inline definitions emit432 states,18 equality branches and7 narrowing profiles under ASan/UBSan, with full hashes and prior native format profiles. Source client/style-container vector inputs,invalid-flag inputs,ASCII UIName,family-only Font/COW and platform/graphics/null-style/service aliases explicitly limit proof. Actual same-name document client/list/registry,Worker16 and supported genuine ODT fields are exercised; no invented native name-map rebind. Full native name-map/paragraph-style/GrabBag/grf links/client destruction/Font/graphics/service lifetime,nondefault continuous/phantom counter/rendering consumers and wider enum/style families remain individually unverified. Scalar metadata restoration does not certify those consumers or full ODT rule metadata. No whole-module/status/goal promotion or registered IO/recovery/dependency/policy/coverage change.",
         "Iteration48 restores complete selected native continuous/phantom tree policy: bound rule flags, parent continuous fallback and orphan defaults, protected continuous prefix validation/last-descendant traversal, public predecessor modes excluding the root, continuous suffix invalidation and upward cache/notification propagation. SwList validation follows NotifyInvalidChildren under actual document reading policy rather than eager hierarchical recursion; legacy callers resolve client document context. Continuous legacy numeric markers select the current level, while explicit ListFormat behavior and measured NONE guards remain unchanged.42 complete unchanged pinned native definitions produce960 sequences/69120 record states,5 policy profiles and64 full marker states under ASan/UBSan. Literal project tests compare real connected attributes,raw prefix caches,ordered reads,notifications,client lists and numbered registry through insertion,restart,count/reparent/removal/flag changes and reading transitions; source-body hashes and literal result integrity revalidated after deletion of source copies. Native bound start/type/raw format presence,pool,string/document-position/range/style,shown/no-layout/no-redline/dtor/fuzz/field/raw callback/broadcaster/static-service/decimal formatter aliases explicitly limit the proof;prior complete selected rule/format defaults remain separately supported. Actual Worker owners retain continuous/phantom flags and nested counters;copy/reset retain native scalar boundaries and supported genuine ODT level fields. No upstream code is invoked by project tests or persisted in task artifacts;manual probes generate only ignored scratch source. Full native layout/redline/original root arrays,live style/Font/graphics/other numeric families,service/global/destructor/name-map/GrabBag/UNO/full ODT metadata/UI lifetimes remain individually unverified. No whole-module,status,goal or registered IO/recovery/dependency/policy/coverage promotion.",
         "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
-        "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged."
+        "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
+        " Iteration167 corrects native NumDownChangesIndent maximum level guard: upstream MAXLEVEL10 is a count while local WRITER_MAX_LIST_LEVEL9 is the maximum zero-based index. Level8 NONE/equal-indent must retain literal Tab rather than demotion. New actual native regression and tenth-level outline boundary cases; no semantic/default/classification promotion or IO changes."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
@@ -9665,6 +9759,18 @@
           {
             "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
             "marker": "Writer table row Add to List"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+            "marker": "native outline movement"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+            "marker": "native outline Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+            "marker": "Writer native heading Tab retains styles and history"
           }
         ],
         "upstream": [
@@ -9679,6 +9785,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
             "marker": "SwEditShell::SearchNumRule"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "bool SwDoc::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx",
+            "marker": "SwUndoOutlineLeftRight::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+            "marker": "bool SwEditShell::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case SwKeyState::OutlineDown:"
           }
         ]
       },
@@ -9695,7 +9817,8 @@
         "Changes the supported active list paragraph level through a numbering undo action.",
         "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion.",
         "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
-        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion."
+        "Iteration163 removes duplicated direct rule/count/item history from UI ContinueNumbering. Source-shaped core SearchNumRule and restart state/flag commands use actual native positions; document SetNumRuleStart guards text/rule/changed flags. Native boolean SwUndoNumRuleStart retains index and flag only and replays the same document primitive, preserving start value,list identity,level,count and indents. UI prepass visits every actual selected ring and clears restart only for a changed rule before shared inherited SetCurNumRule(rule,false,foundID), native default no-indent-reset. Existing document Sfx manager groups restart deltas and common rule history into one Undo preserving displayed table cursor/current slots/neighbors.418prior testfiles417unchanged1bounded native restart payload correction;actual row/column/sparse/search/restart/structural/flag history and real Chromium row Add to List assertions. API/macro,numeric restart-value overload,Repeat,full native history/hierarchy/client/layout/factory remain unverified;250states/defaults/classes/consciousIOexceptions preserved,no broad promotion.",
+        "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/edit/ednumber.cxx",
@@ -12583,6 +12706,64 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/sw/source/core/undo/unoutl.ts",
+            "marker": "SwUndoOutlineLeftRight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+            "marker": "native outline movement"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+            "marker": "native outline Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+            "marker": "Writer native heading Tab retains styles and history"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "bool SwDoc::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx",
+            "marker": "SwUndoOutlineLeftRight::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+            "marker": "bool SwEditShell::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case SwKeyState::OutlineDown:"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/unoutl.ts",
+      "localSymbols": [
+        "SwUndoOutlineLeftRight"
+      ],
+      "omittedResponsibilities": [
+        "Native merged paragraph props/layout/conditional collections/direct document auto-history/framework Repeat/failed-operation dirty flag and full module behavior remain unrepresented and unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/unoutl.cxx",
+      "upstreamSymbols": [
+        "SwUndoOutlineLeftRight::SwUndoOutlineLeftRight",
+        "SwUndoOutlineLeftRight::UndoImpl",
+        "SwUndoOutlineLeftRight::RedoImpl"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SwUndoSplitNode",
             "path": "apps/office/src/sw/source/core/undo/unspnd.ts"
           },
@@ -14280,6 +14461,18 @@
           {
             "path": "apps/office/e2e/writer-native-list-tab.spec.ts",
             "marker": "Writer body list and table Tab retain editing focus"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+            "marker": "native outline movement"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+            "marker": "native outline Tab UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+            "marker": "Writer native heading Tab retains styles and history"
           }
         ],
         "upstream": [
@@ -14394,6 +14587,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
             "marker": "case KEY_TAB:"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "bool SwDoc::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unoutl.cxx",
+            "marker": "SwUndoOutlineLeftRight::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx",
+            "marker": "bool SwEditShell::OutlineUpDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "case SwKeyState::OutlineDown:"
           }
         ]
       },
@@ -14413,7 +14622,8 @@
         "Iteration146 routes Ctrl/Meta HomeEnd through SwEditWin and native shell section movement. SwCursor resolves actual cell,table and document sentinel endpoints,first0/lastLen;MoveSection reports unchanged false,raw MoveTable accepts unchanged but rejects marked ordinary cursors,SttEndDoc accepts current document boundary. Shell owns cell then table then document order,independent bounded SwTableCursor conversion using current cell boundary as native table mark,ordinary cursor mark deletion,selection setup and pending/history refresh. DOM translates intent and direction only,no ordinal,sibling,TextRuns or navigation DTO decisions. Native,mounted and Chromium cases cover represented flat-table behavior. Full selected-box painting,cursor rings,protected/merged/nested/redline/layout selection and visual-line HomeEnd remain unverified;all existing246states/defaults/classifications and registered save/open/recovery deviations preserved.",
         "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion.",
         "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive.",
-        "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged."
+        "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
+        "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",

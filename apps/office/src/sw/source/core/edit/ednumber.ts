@@ -1,6 +1,7 @@
 /** @fileoverview Owns native Writer numbering state, range traversal and editing commands from ednumber.cxx. */
 import { SwModify } from "../../../inc/calbck";
 import { SwUndoNumUpDown, SwUndoInsNum, SwUndoDelNum, SwUndoNumRuleStart } from "../undo/unnum";
+import { SwUndoOutlineLeftRight } from "../undo/unoutl";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 import { SetNumRuleMode, type SwDoc } from "../doc/doc";
 import { SwNumRule } from "../doc/number";
@@ -326,6 +327,44 @@ export abstract class SwEditShell extends SwModify {
       range.Dispose();
     }
     return this.ApplyAction(action);
+  }
+  /** Moves outline levels with native normalized range short-circuit and inverse-delta history. @param offset - Signed displacement, default one. @returns Whether every normalized range succeeded, retaining earlier successful ranges on later failure. */
+  public OutlineUpDown(offset = 1): boolean {
+    const doc = this.GetDoc(),
+      cursor = this.GetCursor(),
+      before = this.CaptureCursorState(),
+      manager = doc.GetUndoManager();
+    return this.RunNotificationTransaction(
+      /** Batches actual shell and model notifications. @returns Native range result. */ () =>
+        doc.RunModelTransaction(
+          /** Records successful native range deltas in one command group. @returns Whole command result. */ () => {
+            manager.StartUndo("Outline level");
+            let result = true;
+            const range = new SwPaM(cursor.GetPoint());
+            try {
+              if (!cursor.IsMultiSelection()) {
+                result = doc.OutlineUpDown(cursor, offset);
+                if (result)
+                  manager.AddUndoAction(new SwUndoOutlineLeftRight(cursor, offset, before));
+              } else {
+                const normalized = new SwPamRanges(cursor);
+                for (let index = 0; index < normalized.Count(); index++) {
+                  if (result) {
+                    normalized.SetPam(index, range);
+                    result = doc.OutlineUpDown(range, offset);
+                    if (result)
+                      manager.AddUndoAction(new SwUndoOutlineLeftRight(range, offset, before));
+                  }
+                }
+              }
+              return result;
+            } finally {
+              range.Dispose();
+              manager.EndUndo();
+            }
+          },
+        ),
+    );
   }
   /** Captures represented numbering and optionally reset indentation as independently owned native items. @param node - Actual text node. @param includeIndents - Whether command owns reset-indent payload. @returns Owned items. */
   private CaptureNumRuleItems(node: SwTextNode, includeIndents: boolean): SfxItemSet {

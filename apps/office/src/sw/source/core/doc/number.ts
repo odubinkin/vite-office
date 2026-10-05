@@ -631,7 +631,7 @@ export function NumDownChangesIndent(shell: Pick<SwEditShell, "GetCursor">): boo
   if (rule === undefined) return true;
   const oldLevel = node.GetActualListLevel(),
     newLevel = oldLevel + 1;
-  if (newLevel >= WRITER_MAX_LIST_LEVEL) return true;
+  if (newLevel > WRITER_MAX_LIST_LEVEL) return true;
   const oldFormat = rule.Get(oldLevel);
   if (oldFormat.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE) return true;
   const newFormat = rule.Get(newLevel);

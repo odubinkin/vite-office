@@ -98,7 +98,7 @@ export class SwEditWin {
     }
   }
 
-  /** Handles represented paragraph Tab with native numbering, cell and ordinary text priority. @param shift - Promote, previous-cell or consumed body no-op direction. @returns Whether Writer owns the key, including supported boundary no-ops; eligible outline operations remain unrepresented. */
+  /** Handles represented paragraph Tab with native numbering, cell and ordinary text priority. @param shift - Promote, previous-cell or consumed body no-op direction. @returns Whether Writer owns the key, including supported boundary no-ops. */
   public HandleTab(shift = false): boolean {
     const point = this.wrtShell.getShellCursor().GetPoint(),
       node = point.GetNode() as SwTextNode;
@@ -117,8 +117,8 @@ export class SwEditWin {
         coll.IsAssignedToListLevelOfOutlineStyle() &&
         (shift ? coll.GetAssignedOutlineStyleLevel() > 0 : coll.GetAssignedOutlineStyleLevel() < 9)
       )
-        return false;
-      if (!shift) this.Complete(this.wrtShell.Insert("\t"));
+        this.Complete(this.wrtShell.OutlineUpDown(shift ? -1 : 1));
+      else if (!shift) this.Complete(this.wrtShell.Insert("\t"));
     }
     return true;
   }
