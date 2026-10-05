@@ -163,7 +163,7 @@ describe("native table Tab UI", /** Registers actual mounted cell traversal cont
     expect(fireEvent.keyDown(cell, { key: "Tab", shiftKey: true })).toBe(false);
     expect(node.GetActualListLevel()).toBe(2);
   });
-  it("leaves body,modified,composing and unavailable DOM Tab outside table ownership", /** Checks event translation only handles valid unmodified cell intent. @returns Nothing. */ () => {
+  it("handles body Tab while preserving modified,composing and unavailable DOM boundaries", /** Checks event translation owns ordinary body and cell Tab while retaining platform boundaries. @returns Nothing. */ () => {
     const f = fixture(),
       cell = screen.getByLabelText("Row 1 column 1 paragraph 1");
     for (const modifiers of [
@@ -177,7 +177,8 @@ describe("native table Tab UI", /** Registers actual mounted cell traversal cont
     }
     const body = screen.getByRole("textbox", { name: "Writer document text" });
     window.getSelection()?.setBaseAndExtent(body, 0, body, 0);
-    expect(fireEvent.keyDown(body, { key: "Tab" })).toBe(true);
+    expect(fireEvent.keyDown(body, { key: "Tab" })).toBe(false);
+    expect(body.textContent).toBe("\t");
     window.getSelection()?.removeAllRanges();
     expect(fireEvent.keyDown(cell, { key: "Tab" })).toBe(true);
     expect(f.table.GetTabLines()).toHaveLength(2);

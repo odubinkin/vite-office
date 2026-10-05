@@ -11,7 +11,7 @@ import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwTextNode as SwTextNodeClass } from "../../core/txtnode/ndtxt";
 import { SwTableBoxStartNode } from "../../core/docnode/node";
-import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import * as numfunc from "../../core/doc/number";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */
 function ignoreEditWindowInvalidation(): void {}
@@ -98,25 +98,28 @@ export class SwEditWin {
     }
   }
 
-  /** Handles table Tab intent with numbering-at-start priority before cell traversal. @param shift - Previous-cell or list-promote direction. @returns Whether Writer owns this key, including a table boundary no-op. */
-  public HandleTableTab(shift = false): boolean {
+  /** Handles represented paragraph Tab with native numbering, cell and ordinary text priority. @param shift - Promote, previous-cell or consumed body no-op direction. @returns Whether Writer owns the key, including supported boundary no-ops; eligible outline operations remain unrepresented. */
+  public HandleTab(shift = false): boolean {
     const point = this.wrtShell.getShellCursor().GetPoint(),
       node = point.GetNode() as SwTextNode;
-    if (!(node.StartOfSectionNode() instanceof SwTableBoxStartNode)) return false;
-    const rule = node.GetNumRule();
-    if (rule !== undefined && point.GetContentIndex() === 0) {
-      const level = node.GetActualListLevel(),
-        oldFormat = rule.Get(level),
-        newFormat = level < 9 ? rule.Get(level + 1) : oldFormat;
-      const changesIndent =
-        level >= 9 ||
-        oldFormat.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE ||
-        newFormat.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE ||
-        oldFormat.GetIndentAt() !== newFormat.GetIndentAt();
+    if (node.GetNumRule() !== undefined && point.GetContentIndex() === 0) {
       this.Complete(
-        shift || changesIndent ? this.wrtShell.NumUpDown(!shift) : this.wrtShell.Insert("\t"),
+        shift || numfunc.NumDownChangesIndent(this.wrtShell)
+          ? this.wrtShell.NumUpDown(!shift)
+          : this.wrtShell.Insert("\t"),
       );
-    } else this.Complete(shift ? this.wrtShell.GoPrevCell() : this.wrtShell.GoNextCell());
+    } else if (node.StartOfSectionNode() instanceof SwTableBoxStartNode) {
+      this.Complete(shift ? this.wrtShell.GoPrevCell() : this.wrtShell.GoNextCell());
+    } else {
+      const coll = node.GetTextFormatColl();
+      if (
+        point.GetContentIndex() === 0 &&
+        coll.IsAssignedToListLevelOfOutlineStyle() &&
+        (shift ? coll.GetAssignedOutlineStyleLevel() > 0 : coll.GetAssignedOutlineStyleLevel() < 9)
+      )
+        return false;
+      if (!shift) this.Complete(this.wrtShell.Insert("\t"));
+    }
     return true;
   }
 

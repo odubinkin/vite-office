@@ -17,6 +17,7 @@ import { SwClient, type SwModify } from "../../../inc/calbck";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
+import type { SwEditShell } from "../edit/ednumber";
 import type { SwList, WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
@@ -621,4 +622,19 @@ export function getWriterParagraphListMarker(
   const documentNumber = paragraph.GetListItemNumber?.();
   if (documentNumber !== undefined) return `${documentNumber}.`;
   return undefined;
+}
+
+/** Resolves native numfunc::NumDownChangesIndent for the represented nonnull text cursor. @param shell - Actual edit shell cursor owner. @returns Whether demotion takes priority over literal tab insertion. */
+export function NumDownChangesIndent(shell: Pick<SwEditShell, "GetCursor">): boolean {
+  const node = shell.GetCursor().GetPoint().GetNode() as SwTextNode,
+    rule = node.GetNumRule();
+  if (rule === undefined) return true;
+  const oldLevel = node.GetActualListLevel(),
+    newLevel = oldLevel + 1;
+  if (newLevel >= WRITER_MAX_LIST_LEVEL) return true;
+  const oldFormat = rule.Get(oldLevel);
+  if (oldFormat.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE) return true;
+  const newFormat = rule.Get(newLevel);
+  if (newFormat.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE) return true;
+  return oldFormat.GetIndentAt() !== newFormat.GetIndentAt();
 }

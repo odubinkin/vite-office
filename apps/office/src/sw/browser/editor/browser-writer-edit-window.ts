@@ -110,7 +110,7 @@ export class BrowserWriterEditWindow {
         !event.altKey &&
         !event.nativeEvent.isComposing
       ) {
-        if (this.SynchronizeSelection() && this.editWindow.HandleTableTab(event.shiftKey))
+        if (this.SynchronizeSelection() && this.editWindow.HandleTab(event.shiftKey))
           event.preventDefault();
       } else if (
         event.key === "Backspace" &&

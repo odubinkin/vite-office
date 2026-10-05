@@ -99,7 +99,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       cell2 = required(f.cells[2]);
     expect(cursor).toBeInstanceOf(SwCursor);
     place(f, cell0, 3);
-    expect(f.edit.HandleTableTab()).toBe(true);
+    expect(f.edit.HandleTab()).toBe(true);
     point(f, cell1);
     place(f, f.extra, 4);
     expect(f.shell.GoNextCell(false)).toBe(true);
@@ -165,12 +165,16 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
         place(f, f.body, 2);
         expect(f.shell.GoNextCell()).toBe(false);
         expect(f.shell.GoPrevCell()).toBe(false);
-        expect(f.edit.HandleTableTab()).toBe(false);
+        expect(f.edit.HandleTab()).toBe(true);
+        expect(f.body.GetText()).toBe("bo\tdy");
+        point(f, f.body, 3);
+        expect(f.edit.Undo()).toBe(true);
+        expect(f.body.GetText()).toBe("body");
         point(f, f.body, 2);
       } else if (boundary === "first") {
         place(f, first, 2);
         expect(f.shell.GoPrevCell()).toBe(false);
-        expect(f.edit.HandleTableTab(true)).toBe(true);
+        expect(f.edit.HandleTab(true)).toBe(true);
         point(f, first, 2);
       } else {
         place(f, last, 2, boundary === "marked-last" ? last : undefined, 1);
@@ -197,7 +201,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       unsubscribe = f.shell.Subscribe(notify),
       projection = new WriterViewProjection(),
       before = projection.Project(f.doc, last, f.shell.GetCursor(), f.metadata);
-    expect(f.edit.HandleTableTab()).toBe(true);
+    expect(f.edit.HandleTab()).toBe(true);
     const row = required(f.table.GetTabLines()[2]),
       fresh = required(row.GetTabBoxes()[0]?.GetParagraphs()[0]),
       second = required(row.GetTabBoxes()[1]?.GetParagraphs()[0]),
@@ -259,7 +263,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
     const f = fixture();
     place(f, required(f.cells[0]), 1);
     f.edit.InsertText("A");
-    f.edit.HandleTableTab();
+    f.edit.HandleTab();
     f.edit.InsertText("B");
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(2);
     expect(f.edit.Undo()).toBe(true);
@@ -279,10 +283,10 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       f.shell.SetParagraphListKind(kind);
       node.SetAttrListLevel(2);
       f.doc.GetUndoManager().Clear();
-      expect(f.edit.HandleTableTab()).toBe(true);
+      expect(f.edit.HandleTab()).toBe(true);
       expect(node.GetActualListLevel()).toBe(3);
       point(f, node);
-      expect(f.edit.HandleTableTab(true)).toBe(true);
+      expect(f.edit.HandleTab(true)).toBe(true);
       expect(node.GetActualListLevel()).toBe(2);
       expect(f.table.GetTabLines()).toHaveLength(2);
       expect(f.edit.Undo()).toBe(true);
@@ -290,7 +294,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       expect(f.edit.Redo()).toBe(true);
       expect(node.GetActualListLevel()).toBe(2);
       place(f, node, 1);
-      expect(f.edit.HandleTableTab()).toBe(true);
+      expect(f.edit.HandleTab()).toBe(true);
       expect(f.table.GetTabLines()).toHaveLength(3);
       f.shell.Close();
     },
@@ -327,7 +331,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
         );
       node.SetAttrListLevel(level);
       f.doc.GetUndoManager().Clear();
-      expect(f.edit.HandleTableTab()).toBe(true);
+      expect(f.edit.HandleTab()).toBe(true);
       expect(node.GetActualListLevel()).toBe(changes ? (level === 9 ? 9 : level + 1) : level);
       expect(node.GetText()).toBe(changes ? "cell3" : "\tcell3");
       expect(f.table.GetTabLines()).toHaveLength(2);
