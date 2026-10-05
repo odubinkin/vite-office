@@ -1,0 +1,226 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "a1a45bca620d5fe66b7cd3f1281f5440f3eb2921662e1217f3a5db75061d25e2",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "e2351bde4a59fea1b295766479f2983b0d5a84f406a8e1cef71c417a740bcd88",
+    "apps/office/src/sw/source/core/undo/undobj.ts": "85c4ba0f680ec06b62711671e70671511b6afeae715c878180efd13128e5cd96"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "852f47c6a32b8f0b1ac274a60744e6551f857d268d06dca058615a82281b7a38",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4YCSJP.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 58987,
+      "sha256": "2046f5e4109e295bf2fb8d0bb5d07221e873ac0ba663b905f0c7722af7ddfa22",
+      "totals": [
+        "Test Files  309 passed (309)",
+        "Tests  12167 passed (12167)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 12167,
+        "failed": 0,
+        "total": 12167
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.99
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 12289,
+          "covered": 12289,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 13457,
+          "covered": 13457,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3370,
+          "covered": 3370,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10035,
+          "covered": 10034,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "c22f4ff813df35e0c42e0bfaa79df04c37e199a7fa77575fe5438821614c51cc",
+      "incompleteFiles": {
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/docundo.ts": {
+          "lines": {
+            "total": 40,
+            "covered": 40,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 43,
+            "covered": 43,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 20,
+            "covered": 19,
+            "skipped": 0,
+            "pct": 95
+          }
+        }
+      }
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4YCSJP.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 42201,
+      "sha256": "00e27de024256157e2faca6fa8fa4a06319128de82e54dc695e156d0bce544ce",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ],
+      "caseCounts": {
+        "passed": 108,
+        "failed": 1,
+        "total": 109
+      },
+      "coverage": {
+        "lines": 99.93,
+        "statements": 99.93,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1463,
+          "skipped": 0,
+          "pct": 99.93
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1522,
+          "skipped": 0,
+          "pct": 99.93
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverageMapSHA256": "d03964da5ff030720b407ed8b2effcfc8172202979a73b50771336cfdb5a1853",
+      "incompleteFiles": {
+        "/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-cli.ts": {
+          "lines": {
+            "total": 31,
+            "covered": 30,
+            "skipped": 0,
+            "pct": 96.77
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 33,
+            "covered": 32,
+            "skipped": 0,
+            "pct": 96.96
+          },
+          "branches": {
+            "total": 24,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 220,
+      "sha256": "dadb9e34a36c4349b9826280894ec98661d6378dbf2cb8dda9f734899e626824",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 16965,
+      "sha256": "2fe5987556667e3eb4a4ec334ab80843f5a19e8b7bf0711a812d75a2270e7465",
+      "totals": [
+        "120 passed (1.7m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T15:20:28.900Z",
+        "duration": 102101.546,
+        "expected": 120,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
