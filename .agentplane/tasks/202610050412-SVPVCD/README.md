@@ -4,7 +4,7 @@ title: "Restore native cross-node selected deletion and forced insertion"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T04:49:21.712Z"
+  updated_by: "EVALUATOR"
+  note: "Completed same-actor read-only audit of exact 07ea47010148bf373c2cb691eb6ce56120109adf: bounded native body-text cross deletion/history/survivor/mode5 passes; full core/UI parity unverified. Supersedes the earlier report recorded before its collector completed."
+  evaluated_sha: "07ea47010148bf373c2cb691eb6ce56120109adf"
+  blueprint_digest: "0772bc3c216d62244be9fbbb1e426cc06ce42207bcb6828a71f8a5a444eb6364"
+  evidence_refs:
+    - ".agentplane/tasks/202610050412-SVPVCD/README.md"
+    - ".agentplane/tasks/202610050412-SVPVCD/quality/20261005-044921712-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610050412-SVPVCD/quality/20261005-044921712-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610050412-SVPVCD/quality/20261005-044921712-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610050412-SVPVCD/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610050412-SVPVCD/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610050412-SVPVCD/evidence/failed-only-replay.json"
+    - ".agentplane/tasks/202610050412-SVPVCD/evidence/inventory-cumulative-coverage.json"
+    - "Completed readonly exactSHA audit 07ea47010148bf373c2cb691eb6ce56120109adf: semantic tree matches workspace,six native hashes,all last static outcomes and five restored audits pass,reference restored."
+  findings:
+    - "Exact semantic tree/10paths reviewed.782 new cases;363 prior files/362 byte-identical/only generic-helper syntax change,all prior expectations unchanged.243 existing states/defaults/exceptions preserved,new docedt wholly unverified. First application coverage100%,unchanged production. Exact failed-only576+1 cases closed,zero passing replays. Audit collector initially exceeded the default git-show buffer on the provenance manifest;only that readonly audit was repeated with a bounded32MiB buffer and passed."
 commit: null
 comments:
   -
@@ -36,7 +55,7 @@ events:
     to: "DOING"
     note: "Start: implement native cross-node raw deletion/history and survivor/forced insertion under standing approved iterative goal;single full absent profile and failed/new-only replays,no sources/helpers in Agentplane."
 doc_version: 3
-doc_updated_at: "2026-10-05T04:47:04.595Z"
+doc_updated_at: "2026-10-05T04:50:15.284Z"
 doc_updated_by: "CODER"
 description: "Replace cross-paragraph fragment-action composition with one SwUndoDelete raw boundary-string/history action, native sw_GetJoinFlags survivor choice and DeleteAndJoin body-text kernel, then forced mode5 selected insertion. Preserve registered document I/O deviations and keep cursor/retained-boundary identity and full native graph/layout responsibilities explicitly unverified."
 sections:
@@ -74,7 +93,31 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Literal independent selected cross-node contracts;firstcoverage JSON plus failed/new-case cumulative data,never passingreplays. Source audits only after restore. All existing statuses/defaults/exceptions remain unchanged;newmoduleunverified.
-  Verification: "Pending implementation and validation."
+  Verification: |-
+    Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+    Result: pass after only failed typecheck/documentation corrections.
+    Evidence: static-gates.json preserves initial failures and final successful outcomes. changed-test-static-checks.json verifies changed-test formatting/lint and application type syntax after the test probe correction.
+    Scope: ten semantic paths; prior transition helper syntax is generic, all prior test expectations unchanged.
+
+    Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+    Result: one sequential full upstream-absent profile; all first observed failures closed by exact failed-only selection.
+    Evidence: absent-profile.json records first buildpass, application11280pass/576fail of11856 in281 files, first instrumented100%lines/statements/functions/branches,inventory108pass/1fail of109 in36files,scripts5pass,Chromium99pass. failed-only-replay.json records exact576 new failed app names once passed576/skipped206 and exact sole inventory failed name once passed1/skipped2. Selected-name hashes agree with first failed names.782 independent new cases;206 passed first and576 passed once after correcting the test to observe actual surviving-node InsertText mode5. Inventory row inserted in canonical lexical order. Production hashes unchanged after the full profile. All references restored in finally;no source/scope/Agentplane audits concurrent with tests,zero passing-case/suite/build replays.
+    Scope: registered body-text boundary selection in both directions,0/1/3 middle nodes,AUTO/INET whole-hint fresh history,live collections/direct items,survivor,canonical Undo direction,two cycles and Delete/Insert/Replace/composition inputs,retention disposal,nested history and structural guards.
+
+    Command: first-full application coverage plus failed-only inventory instrumented cumulative closure.
+    Result: pass for unchanged application production100%and documented inventory cumulative closure.
+    Evidence: initial-coverage-counts.json application100%allfour/no incomplete files;full count-map retained only in ignored application cache and its hash preserved. inventory-initial-coverage-counts.json records first lines99.72/statements99.73/functions99.21/branches100. inventory-cumulative-coverage.json records sole incomplete unchanged parity-mapping-cli source:four missing statement/line positions125,130,140,159 instrumented with positive counts by sole failed-case replay;all six functions instrumented,three previously missed functions closed;first-full100%branches retained. First inventory raw count-map was not exported;no raw map union or fresh full post-fix V8 report claimed. Isolated diagnostic thresholds0 leave repository100%configuration unchanged.
+    Scope: no inventory production edits or passing replay.
+
+    Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+    Result: five passed after reference restoration.
+    Evidence: restored-source-audits.json;semantic violations0.
+    Scope: source-only audits;test/runtime/E2E do not use pinned upstream.
+
+    Command: ap doctor; node .agentplane/policy/check-routing.mjs; scope/native hash/readonly exact semanticSHA audit;ignored-inclusiveAgentplane scan.
+    Result: pass;doctor0errors/two unchanged warnings;routingpass;3975files/zero forbidden before quality.
+    Evidence: scope-and-native-hashes.json;.agentplane/tasks/202610050412-SVPVCD/quality/20261005-044921712-recovery-context/quality-report.json. Completed same-actor read-only review of exact 07ea47010148bf373c2cb691eb6ce56120109adf,not independent evaluation. Collector initially exceeded default git-show buffer on provenance JSON;only readonly audit retried with32MiB andpassed,latest quality report supersedes earlier prematurely recorded report. Ten semantic paths;363 prior files/362 byte-identical/only generic helper syntax changed,all old expectations intact.782 newcases;243 old runtime states/defaults/exceptions unchanged,new docedt wholly unverified,ten bounded note appendices,six native hashes.
+    Scope: native body-text join flags/survivor selection,raw-boundary single SwUndoDelete history and selected insertion mode5. Existing boundary object identity/cursor references,AppendTextNode cloning,zero-length CopyAttr,full native structural/ring/redline/bookmark/field/layout history remain unverified. UI editing already routes to real SwEditWin/SwWrtShell/SwDoc;TextRun display projection remains and is next priority. Registered save/open/recovery deviations unchanged;whole-module and overall core/UI parity unverified;goalactive.
   Rollback Plan: "Revert the semantic leaf commit without history rewriting."
   Findings: |-
     Iteration137preflight clean main fa31cccfa1af22bd3320c081a43706c30a314d73,direct,onlyparentactive;136verifiedprogress DONE. Four matched policies loaded,user-instructions absent. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Existingcross deletes multiple fragment SwUndoReplace actions then repeatedly joins into firstnode;selectedcross Insert passes falseforce. Native docedt.cxx329 normalizespoint/mark andchooses end survivor whenstart0/endleavessuffix,360joinPrev Break/PageDesc andchar preparation. DocumentContentOperationsManager.cxx4557 flags thenDeleteRangeImpl andJoinText;undel.cxx247 JoinNext flag,455rawfirsttail/endhead+wholeboundaryhints/directsets,269collectionhistory,1043freshhistory,1233TmpEnd reset. Existingcursor/retainedboundaryidentity/AppendTextNodeclone mechanisms remain source gaps and will be explicitly retainedunverified for this bounded body-text deletion correction.136fullcoverage measured99.97 withcumulativeproof only;137firstcoverageJSONwill preserve countmap for instrumented cumulative closure rather than lose payload. No old test edits before first-profile observations.
@@ -135,7 +178,30 @@ Literal independent selected cross-node contracts;firstcoverage JSON plus failed
 
 ## Verification
 
-Pending implementation and validation.
+Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size.
+Result: pass after only failed typecheck/documentation corrections.
+Evidence: static-gates.json preserves initial failures and final successful outcomes. changed-test-static-checks.json verifies changed-test formatting/lint and application type syntax after the test probe correction.
+Scope: ten semantic paths; prior transition helper syntax is generic, all prior test expectations unchanged.
+
+Command: npm run test:static; npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json; npm run test:inventory:coverage -- --coverage.reportOnFailure; npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts; npm exec -- playwright test --config apps/office/playwright.config.ts.
+Result: one sequential full upstream-absent profile; all first observed failures closed by exact failed-only selection.
+Evidence: absent-profile.json records first buildpass, application11280pass/576fail of11856 in281 files, first instrumented100%lines/statements/functions/branches,inventory108pass/1fail of109 in36files,scripts5pass,Chromium99pass. failed-only-replay.json records exact576 new failed app names once passed576/skipped206 and exact sole inventory failed name once passed1/skipped2. Selected-name hashes agree with first failed names.782 independent new cases;206 passed first and576 passed once after correcting the test to observe actual surviving-node InsertText mode5. Inventory row inserted in canonical lexical order. Production hashes unchanged after the full profile. All references restored in finally;no source/scope/Agentplane audits concurrent with tests,zero passing-case/suite/build replays.
+Scope: registered body-text boundary selection in both directions,0/1/3 middle nodes,AUTO/INET whole-hint fresh history,live collections/direct items,survivor,canonical Undo direction,two cycles and Delete/Insert/Replace/composition inputs,retention disposal,nested history and structural guards.
+
+Command: first-full application coverage plus failed-only inventory instrumented cumulative closure.
+Result: pass for unchanged application production100%and documented inventory cumulative closure.
+Evidence: initial-coverage-counts.json application100%allfour/no incomplete files;full count-map retained only in ignored application cache and its hash preserved. inventory-initial-coverage-counts.json records first lines99.72/statements99.73/functions99.21/branches100. inventory-cumulative-coverage.json records sole incomplete unchanged parity-mapping-cli source:four missing statement/line positions125,130,140,159 instrumented with positive counts by sole failed-case replay;all six functions instrumented,three previously missed functions closed;first-full100%branches retained. First inventory raw count-map was not exported;no raw map union or fresh full post-fix V8 report claimed. Isolated diagnostic thresholds0 leave repository100%configuration unchanged.
+Scope: no inventory production edits or passing replay.
+
+Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity.
+Result: five passed after reference restoration.
+Evidence: restored-source-audits.json;semantic violations0.
+Scope: source-only audits;test/runtime/E2E do not use pinned upstream.
+
+Command: ap doctor; node .agentplane/policy/check-routing.mjs; scope/native hash/readonly exact semanticSHA audit;ignored-inclusiveAgentplane scan.
+Result: pass;doctor0errors/two unchanged warnings;routingpass;3975files/zero forbidden before quality.
+Evidence: scope-and-native-hashes.json;.agentplane/tasks/202610050412-SVPVCD/quality/20261005-044921712-recovery-context/quality-report.json. Completed same-actor read-only review of exact 07ea47010148bf373c2cb691eb6ce56120109adf,not independent evaluation. Collector initially exceeded default git-show buffer on provenance JSON;only readonly audit retried with32MiB andpassed,latest quality report supersedes earlier prematurely recorded report. Ten semantic paths;363 prior files/362 byte-identical/only generic helper syntax changed,all old expectations intact.782 newcases;243 old runtime states/defaults/exceptions unchanged,new docedt wholly unverified,ten bounded note appendices,six native hashes.
+Scope: native body-text join flags/survivor selection,raw-boundary single SwUndoDelete history and selected insertion mode5. Existing boundary object identity/cursor references,AppendTextNode cloning,zero-length CopyAttr,full native structural/ring/redline/bookmark/field/layout history remain unverified. UI editing already routes to real SwEditWin/SwWrtShell/SwDoc;TextRun display projection remains and is next priority. Registered save/open/recovery deviations unchanged;whole-module and overall core/UI parity unverified;goalactive.
 
 ## Rollback Plan
 
