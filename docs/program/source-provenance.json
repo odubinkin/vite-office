@@ -7601,6 +7601,10 @@
           {
             "path": "apps/office/e2e/writer-cell-list-backspace.spec.ts",
             "marker": "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+            "marker": "native rule search respects direction family and nonempty allowance %s/%s/%s"
           }
         ],
         "upstream": [
@@ -7703,6 +7707,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
             "marker": "SwUndoNumOrNoNum::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "SwDoc::SearchNumRule"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "SwDoc::SetCounted"
           }
         ]
       },
@@ -7723,7 +7735,8 @@
         "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged.",
         "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion.",
         "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
-        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged."
+        "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
+        "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -11963,6 +11976,10 @@
           {
             "path": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
             "marker": "numeric list-level history targets current native slots %s/%s/%s"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+            "marker": "numeric continuation history owns independent tuples and rejects foreign replay"
           }
         ],
         "upstream": [
@@ -12005,6 +12022,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
             "marker": "SwUndoDelNum::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+            "marker": "SwUndoInsNum::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+            "marker": "SwUndoInsNum::RedoImpl"
           }
         ]
       },
@@ -12023,7 +12048,8 @@
         "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion.",
         "Iteration141 moves ordinary Enter empty-list termination into SwEditWin using the actual unmarked PaM,empty node and non-outline rule,then native shell/document DelNumRules. Numbering deletion traverses actual inclusive SwNodes,including cells,resets native list attributes and respects inherited rules;SwUndoDelNum retains direct list history and replays the document operation. Browser input translates insertParagraph intent only;React contains no list editing decision. Owned native,mounted cell and Chromium cases cover termination without split,history,metadata and followup ordinary Enter. ShiftEnter,Backspace,full outline,redline/merged paragraph expansion,selection rings and full native undo/layout/UI remain unverified;existing states/defaults/exceptions unchanged.",
         "Iteration142 aligns Backspace at a native paragraph start with edit-window indent/count ordering:TryRemoveIndent for ordinary or uncounted nodes,NumOrNoNum counted flag by Shift direction,empty ordinary uncounted removal,and final native text deletion. Browser keyboard and virtual beforeinput share SwEditWin;plain and ShiftBackspace modifiers remain distinct,no React list decision. SwUndoNumOrNoNum stores one node/two flags and UndoRedo changes only counted state;actual metadata survives. Doc.NumOrNoNum and native direct-rule fallback retain actual nodes. Owned body/cell/history/indent and Chromium cases cover represented behavior. RecentTab state counters,label-caret,zero-length marked PaM equivalence,full outline/redline/rings/history/layout/UI remain unverified;existing244states/defaults/deviations unchanged.",
-        "Iteration158 removes retained paragraph identity from represented SwUndoNumUpDown, SwUndoNumOrNoNum and SwUndoDelNum payloads. Pinned unnum.cxx uses SwUndRng coordinates for level/deletion replay, m_nIndex for counted-only flags and numeric m_aNodes index/level entries for deletion restoration. Existing native numeric range infrastructure resolves current SwNodes targets, direction/delta and unrelated metadata contracts remain intact; structural counted-state payload is skipped as native. Actual repeated body/cell section-preserving replacement and shell UndoRedo tests preserve reversed/collapsed endpoints and independent direct list history.410prior tests and250states/defaults/classifications/exceptions/prior evidence preserved. Portable DelNum direct-item snapshots still differ from complete native SwHistory; InsNum/ContinueNumbering payloads, split node identity bridge and broad UI behavior remain unverified. No whole-module/broad promotion."
+        "Iteration158 removes retained paragraph identity from represented SwUndoNumUpDown, SwUndoNumOrNoNum and SwUndoDelNum payloads. Pinned unnum.cxx uses SwUndRng coordinates for level/deletion replay, m_nIndex for counted-only flags and numeric m_aNodes index/level entries for deletion restoration. Existing native numeric range infrastructure resolves current SwNodes targets, direction/delta and unrelated metadata contracts remain intact; structural counted-state payload is skipped as native. Actual repeated body/cell section-preserving replacement and shell UndoRedo tests preserve reversed/collapsed endpoints and independent direct list history.410prior tests and250states/defaults/classifications/exceptions/prior evidence preserved. Portable DelNum direct-item snapshots still differ from complete native SwHistory; InsNum/ContinueNumbering payloads, split node identity bridge and broad UI behavior remain unverified. No whole-module/broad promotion.",
+        "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unnum.cxx",
@@ -13610,12 +13636,24 @@
           {
             "marker": "export class SwListShell",
             "path": "apps/office/src/sw/source/uibase/shells/listsh.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+            "marker": "native continuation adopts every current selected slot %s/%s/%s"
+          },
+          {
+            "path": "apps/office/e2e/writer-cell-list-continue.spec.ts",
+            "marker": "Writer Continue Numbering joins a "
           }
         ],
         "upstream": [
           {
             "marker": "SwListShell::InitInterface_Impl",
             "path": "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+            "marker": "case FN_NUM_CONTINUE:"
           }
         ]
       },
@@ -13627,7 +13665,8 @@
         "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand identity remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements bounded SwListShell execution and state for list-kind and promote/demote commands through generated Sfx slots and canonical Writer undo actions."
+        "Implements bounded SwListShell execution and state for list-kind and promote/demote commands through generated Sfx slots and canonical Writer undo actions.",
+        "Iteration160 repairs represented Continue Numbering across actual inclusive native body/cell ranges. SwDoc.SearchNumRule follows pinned native backward/forward,start-excluded/default,nearest-rule-stop,enumeration/itemization/outline,nonempty allowance and document section policy; native layout/merged/redline/margin propagation remains unverified. Shell numbered-first/bullet fallback and enabled state use native selection start; every selected text node adopts rule/list ID,counted flag resets to native default,restart flag removed only when restarting and rule differs,restart value retained. Continue history stores numeric index/original-document guard/independent direct-item tuples rather than retained paragraph objects. Body-only slice/filter/reverse/current-kind adapter removed. Full native SetNumRule/SwHistory/undo classification/client architecture not claimed; other InsNum abstraction remains. New native body/cell/mixed/plain/rule/count/restart/search/current-slot history and Chromium cell menu/label/history assertions;source-confirmed old ODT continuation expectations may be updated narrowly.250states/defaults/classifications/IO exceptions/prior evidence preserved,no fullmodule or broadUI promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/listsh.cxx",

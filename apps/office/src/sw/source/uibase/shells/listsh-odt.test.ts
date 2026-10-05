@@ -71,11 +71,20 @@ describe("Writer Continue Numbering ODT regression", /** Groups real ODT command
       const separator = imported.document.paragraphs[3];
       if (separator === undefined) throw new Error("Continue Numbering fixture has no separator");
       shell.SetPaM(new SwPosition(last, last.Len()), new SwPosition(separator, 0));
-      expect(shell.ContinueNumbering()).toBe(false);
+      // Native FN_NUM_CONTINUE applies the found rule to every selected paragraph.
+      expect(shell.ContinueNumbering()).toBe(true);
+      expect(separator.GetNumRule()).toBe(first.GetNumRule());
+      expect(separator.GetListId()).toBe(first.GetListId());
+      expect(shell.Undo()).toBe(true);
+      expect(separator.GetListKind()).toBe("none");
       const plain = imported.document.paragraphs[2];
       if (plain === undefined) throw new Error("Continue Numbering fixture has no plain paragraph");
       shell.FocusNode(plain);
-      expect(shell.ContinueNumbering()).toBe(false);
+      expect(shell.ContinueNumbering()).toBe(true);
+      expect(plain.GetNumRule()).toBe(first.GetNumRule());
+      expect(plain.GetListId()).toBe(first.GetListId());
+      expect(shell.Undo()).toBe(true);
+      expect(plain.GetListKind()).toBe("none");
       const reopened = await readOdtDocument(
         writeOdtDocument(imported.document, { title: imported.title }),
         metadata,

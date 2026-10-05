@@ -7,7 +7,7 @@ import {
   createWriterListItemSet,
   type WriterParagraphListKind,
 } from "../../core/doc/list";
-import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwPaM } from "../../core/crsr/pam";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
@@ -15,7 +15,7 @@ import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISRESTART,
-  RES_PARATR_LIST_RESTARTVALUE,
+  RES_PARATR_LIST_ISCOUNTED,
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { SwUndoContinueNumbering, SwUndoInsNum } from "../../core/undo/unnum";
@@ -81,45 +81,32 @@ export class SwListShell {
     );
   }
 
-  /** Continues the nearest preceding compatible list for the current selected list range. @returns Whether a list was joined. */
+  /** Continues the nearest native list across every selected paragraph, including table cells. @returns Whether list attributes changed. */
   public ContinueNumbering(): boolean {
-    const paragraphs = this.wrtShell.GetDoc().paragraphs;
+    const doc = this.wrtShell.GetDoc();
     const cursor = this.wrtShell.GetCursor();
-    const pointIndex = paragraphs.indexOf(cursor.GetPoint().GetNode() as SwTextNode);
-    const markIndex = paragraphs.indexOf(cursor.GetMark().GetNode() as SwTextNode);
-    /* v8 ignore next -- Shell cursor endpoints always belong to the live document. */
-    if (pointIndex < 0 || markIndex < 0) return false;
-    const start = Math.min(pointIndex, markIndex);
-    const end = Math.max(pointIndex, markIndex);
-    const active = this.wrtShell.GetActiveParagraph();
-    const currentId = active.GetListId();
-    const kind = active.GetListKind();
-    if (kind === "none") return false;
-    const selected = paragraphs.slice(start, end + 1).filter(
-      /** Keeps only items belonging to the active list. @param node - Candidate paragraph. @returns Whether selected. */
-      (node) => node.GetListId() === currentId && node.GetListKind() === kind,
-    );
-    const first = paragraphs.indexOf(selected[0] as SwTextNode);
-    const previous = paragraphs
-      .slice(0, first)
-      .reverse()
-      .find(
-        /** Finds the nearest different list with the same marker family. @param node - Earlier paragraph. @returns Whether compatible. */
-        (node) => node.GetListKind() === kind && node.GetListId() !== currentId,
-      );
-    if (previous === undefined) return false;
-    const items = selected.map(
-      /** Builds one exact list-item transition. @param node - Selected paragraph. @returns Before and after sets. */
-      (node) => {
-        const before = node.CaptureListItems();
-        const after = before.Clone();
-        after.Put(new SwNumRuleItem(previous.GetNumRuleName()));
-        after.Put(new SfxStringItem(RES_PARATR_LIST_ID, previous.GetListId()));
+    const listId = { value: "" };
+    const rule =
+      doc.SearchNumRule(cursor.Start(), false, true, false, -1, listId) ??
+      doc.SearchNumRule(cursor.Start(), false, false, false, -1, listId);
+    if (rule === undefined) return false;
+    const items = [];
+    let changed = false;
+    for (let index = cursor.Start().GetNodeIndex(); index <= cursor.End().GetNodeIndex(); index++) {
+      const node = doc.GetNodes().at(index);
+      if (!(node instanceof SwTextNode)) continue;
+      const before = node.CaptureListItems(),
+        after = before.Clone();
+      if (node.IsListRestart() && node.GetNumRule() !== rule) {
         after.ClearItem(RES_PARATR_LIST_ISRESTART);
-        after.ClearItem(RES_PARATR_LIST_RESTARTVALUE);
-        return { paragraph: node, before, after };
-      },
-    );
+      }
+      after.Put(new SwNumRuleItem(rule.GetName()));
+      after.Put(new SfxStringItem(RES_PARATR_LIST_ID, listId.value));
+      after.ClearItem(RES_PARATR_LIST_ISCOUNTED);
+      changed ||= !before.Equals(after, true);
+      items.push({ paragraph: node, before, after });
+    }
+    if (!changed) return false;
     return this.wrtShell.ApplyAction(
       new SwUndoContinueNumbering(items, this.wrtShell.CaptureCursorState()),
     );
@@ -130,9 +117,15 @@ export class SwListShell {
     return this.wrtShell.GetActiveParagraph().GetListKind();
   }
 
-  /** Reports whether the active paragraph belongs to a list. @returns Whether in a list. */
-  public IsInList(): boolean {
-    return this.wrtShell.GetActiveParagraph().GetListKind() !== "none";
+  /** Reports native continuation availability independently of the active paragraph's list kind. @returns Whether an earlier list was found. */
+  public CanContinueNumbering(): boolean {
+    const doc = this.wrtShell.GetDoc(),
+      start = this.wrtShell.GetCursor().Start(),
+      listId = { value: "" };
+    return (
+      (doc.SearchNumRule(start, false, true, false, -1, listId) ??
+        doc.SearchNumRule(start, false, false, false, -1, listId)) !== undefined
+    );
   }
 }
 
@@ -184,8 +177,8 @@ function createListCommandRegistry(target: SwListShell): SfxInterface<SwListShel
           target.ContinueNumbering(),
       id: WRITER_COMMAND_IDS.continueNumbering,
       isEnabled:
-        /** Checks that the active paragraph has a list. @returns Whether eligible. */ () =>
-          target.IsInList(),
+        /** Reads native preceding-list search availability. @returns Whether eligible. */ () =>
+          target.CanContinueNumbering(),
     },
   ]);
 }

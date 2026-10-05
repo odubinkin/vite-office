@@ -356,6 +356,52 @@ export class SwDoc {
   public FindNumRulePtr(name: string): SwNumRule | undefined {
     return this.listsManager.FindNumRulePtr(name);
   }
+
+  /** Searches native ordered text nodes, stopping at the nearest rule even when incompatible. @param position - Search origin. @param forward - Search direction. @param numbered - Enumeration rather than itemization. @param outline - Required rule classification. @param nonEmptyAllowed - Plain nonempty paragraphs allowed, minus one for unlimited. @param listId - Caller-owned output list identity. @param investigateStart - Include the origin, false by default. @returns Matching native rule, if any. */
+  public SearchNumRule(
+    position: SwPosition,
+    forward: boolean,
+    numbered: boolean,
+    outline: boolean,
+    nonEmptyAllowed: number,
+    listId: { value: string },
+    investigateStart = false,
+  ): SwNumRule | undefined {
+    const origin = position.GetNode();
+    if (!(origin instanceof SwTextNode)) return undefined;
+    if (origin.GetDoc() !== this) throw new Error("Numbering search belongs to another document.");
+    const root = this.nodes.at(0);
+    let section = origin.StartOfSectionNode();
+    while (section !== root && section.StartOfSectionNode() !== root)
+      section = section.StartOfSectionNode();
+    const start = section.GetIndex(),
+      end = section.EndOfSectionNode().GetIndex(),
+      step = forward ? 1 : -1;
+    for (
+      let index = origin.GetIndex() + (investigateStart ? 0 : step);
+      index > start && index < end;
+      index += step
+    ) {
+      const node = this.nodes.at(index);
+      if (!(node instanceof SwTextNode)) continue;
+      const rule = node.GetNumRule();
+      if (rule !== undefined) {
+        if (
+          rule.IsOutlineRule() === outline &&
+          (numbered ? rule.Get(0).IsEnumeration() : rule.Get(0).IsItemize())
+        ) {
+          listId.value = node.GetListId();
+          return rule;
+        }
+        return undefined;
+      }
+      if (node.Len() > 0) {
+        if (nonEmptyAllowed === 0) return undefined;
+        nonEmptyAllowed = Math.max(-1, nonEmptyAllowed - 1);
+      }
+    }
+    return undefined;
+  }
   /** Returns numbering rules. @returns Rule table. */
   public GetNumRuleTable(): readonly SwNumRule[] {
     return this.listsManager.GetNumRuleTable();

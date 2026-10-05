@@ -208,7 +208,12 @@ export interface SwContinuedListItem {
 
 /** Reassigns a selected list range as one reversible Continue Numbering command. */
 export class SwUndoContinueNumbering extends SwUndo {
-  private readonly items: readonly SwContinuedListItem[];
+  private readonly items: readonly {
+    index: number;
+    document: SwDoc;
+    before: SfxItemSet;
+    after: SfxItemSet;
+  }[];
 
   /** Retains independent item sets for one atomic list join. @param items - Selected list transitions. @param cursor - Persistent shell selection. @returns Nothing. */
   public constructor(items: readonly SwContinuedListItem[], cursor: SwUndoCursorState) {
@@ -217,7 +222,8 @@ export class SwUndoContinueNumbering extends SwUndo {
       /** Captures one independent transition. @param item - Source transition. @returns Owned transition. */ (
         item,
       ) => ({
-        paragraph: item.paragraph,
+        index: item.paragraph.GetIndex(),
+        document: item.paragraph.GetDoc(),
         before: item.before.Clone(),
         after: item.after.Clone(),
       }),
@@ -231,13 +237,23 @@ export class SwUndoContinueNumbering extends SwUndo {
 
   /** Restores all selected paragraphs to their original list. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    for (const item of this.items)
-      GetUndoTextNode(context.GetDoc(), item.paragraph).SetListItems(item.before);
+    for (const item of this.items) {
+      const node = GetUndoTextNode(
+        context.GetDoc(),
+        item.document.GetNodes().at(item.index) as SwTextNode,
+      );
+      node.SetListItems(item.before);
+    }
   }
 
   /** Continues the earlier list across the selected range. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    for (const item of this.items)
-      GetUndoTextNode(context.GetDoc(), item.paragraph).SetListItems(item.after);
+    for (const item of this.items) {
+      const node = GetUndoTextNode(
+        context.GetDoc(),
+        item.document.GetNodes().at(item.index) as SwTextNode,
+      );
+      node.SetListItems(item.after);
+    }
   }
 }
