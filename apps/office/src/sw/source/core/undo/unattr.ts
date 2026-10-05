@@ -2,7 +2,8 @@
 
 import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import type { SwPaM } from "../crsr/pam";
+import { SwPaM, SwPosition } from "../crsr/pam";
+import type { SwDoc } from "../doc/doc";
 import { getTextFormatCollNodes } from "../doc/docfmt";
 import { SwpHints } from "../txtnode/ndhints";
 import { resetFullParagraphAutoFormat, resetParagraphTextAttributes } from "../txtnode/txtedt";
@@ -13,6 +14,7 @@ import {
   GetUndoFragmentLength,
   GetUndoTextNode,
   ReplaceUndoRange,
+  SwUndRng,
   SwUndo,
   type SwUndoCursorState,
   type SwUndoRedoContext,
@@ -20,15 +22,19 @@ import {
 
 /** Native RES_CHRFMT reset history for StyleApply's full-node range, separate from collection history. */
 export class SwUndoResetAttr extends SwUndo {
-  private history: readonly Readonly<{ node: SwTextNode; hints: SwpHints }>[];
+  private readonly m_rDoc: SwDoc;
+  private readonly range: SwUndRng;
+  private history: readonly Readonly<{ index: number; hints: SwpHints }>[];
 
   /** Captures the expanded range before initial exact text reset. @param range - Original inclusive paragraph range. @param state - Expanded full-node cursor state. @returns Nothing. */
   public constructor(range: SwPaM, state: SwUndoCursorState) {
     super("Reset Attributes", state, state);
+    this.m_rDoc = state.point.node.GetDoc();
+    this.range = new SwUndRng(range);
     this.history = getTextFormatCollNodes(state.point.node.GetDoc(), range).map(
       /** Captures independent native hint payload. @param node - Owned text node. @returns Hint history. */
       (node) => ({
-        node,
+        index: node.GetIndex(),
         hints: node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool()),
       }),
     );
@@ -38,12 +44,16 @@ export class SwUndoResetAttr extends SwUndo {
   public ApplyExact(): void {
     this.history = this.history.map(
       /** Captures text reset at its own native boundary after collection/delete-set processing. @param entry - Range node. @returns Current hint history. */
-      ({ node }) => ({
-        node,
-        hints: node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool()),
-      }),
+      ({ index }) => {
+        const node = this.m_rDoc.GetNodes().at(index) as SwTextNode;
+        return {
+          index,
+          hints: node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool()),
+        };
+      },
     );
-    for (const { node } of this.history) resetFullParagraphAutoFormat(node);
+    for (const { index } of this.history)
+      resetFullParagraphAutoFormat(this.m_rDoc.GetNodes().at(index) as SwTextNode);
   }
 
   /** Reports retained hint payload only. @returns Payload units. */
@@ -58,27 +68,42 @@ export class SwUndoResetAttr extends SwUndo {
   /** Restores original hints before collection history rollback. @param context - Current native owner. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
     for (const entry of this.history)
-      GetUndoTextNode(context.GetDoc(), entry.node).SetTextHints(entry.hints);
+      GetUndoTextNode(
+        context.GetDoc(),
+        this.m_rDoc.GetNodes().at(entry.index) as SwTextNode,
+      ).SetTextHints(entry.hints);
   }
 
   /** Uses native RES_CHRFMT redo's default non-exact reset, independent of collection name lookup. @param context - Current native owner. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    const nodes = this.history.map(
-      /** Validates all nodes before mutation. @param entry - Hint owner. @returns Owned node. */
-      (entry) => GetUndoTextNode(context.GetDoc(), entry.node),
-    );
-    for (const node of nodes) resetParagraphTextAttributes(node);
+    const document = context.GetDoc(),
+      node = GetUndoTextNode(
+        document,
+        this.m_rDoc.GetNodes().at(this.range.m_nSttNode) as SwTextNode,
+      ),
+      point = new SwPosition(node, 0),
+      range = new SwPaM(point);
+    try {
+      this.range.SetPaM(range);
+      for (const current of getTextFormatCollNodes(document, range))
+        resetParagraphTextAttributes(current);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+    }
   }
 }
 
 /** Reversible direct character formatting over one same-node range. */
 export class SwUndoAttr extends SwUndo {
+  private readonly m_rDoc: SwDoc;
+  private readonly m_nNode: number;
   private readonly afterFragment: SwTextFragment;
   private readonly beforeFragment: SwTextFragment;
 
   /** Creates a direct-format action. @param paragraph - Target node. @param start - Formatted range start. @param beforeFragment - Original native fragment. @param afterFragment - Resulting native fragment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
-    private readonly paragraph: SwTextNode,
+    paragraph: SwTextNode,
     private readonly start: number,
     beforeFragment: SwTextFragment,
     afterFragment: SwTextFragment,
@@ -86,6 +111,8 @@ export class SwUndoAttr extends SwUndo {
     after: SwUndoCursorState,
   ) {
     super("Character Formatting", before, after);
+    this.m_rDoc = paragraph.GetDoc();
+    this.m_nNode = paragraph.GetIndex();
     this.beforeFragment = CopyUndoFragment(beforeFragment);
     this.afterFragment = CopyUndoFragment(afterFragment);
   }
@@ -99,7 +126,7 @@ export class SwUndoAttr extends SwUndo {
   protected override UndoImpl(context: SwUndoRedoContext): void {
     ReplaceUndoRange(
       context.GetDoc(),
-      this.paragraph,
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
       this.start,
       this.start + GetUndoFragmentLength(this.afterFragment),
       this.beforeFragment,
@@ -110,7 +137,7 @@ export class SwUndoAttr extends SwUndo {
   protected override RedoImpl(context: SwUndoRedoContext): void {
     ReplaceUndoRange(
       context.GetDoc(),
-      this.paragraph,
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
       this.start,
       this.start + GetUndoFragmentLength(this.beforeFragment),
       this.afterFragment,
@@ -120,15 +147,19 @@ export class SwUndoAttr extends SwUndo {
 
 /** Reversible replacement of one direct paragraph item, retaining inherited state. */
 export class SwUndoParagraphItem extends SwUndo {
+  private readonly m_rDoc: SwDoc;
+  private readonly m_nNode: number;
   /** Stores the direct item before and after a paragraph edit. @param paragraph - Target node. @param beforeItem - Previous direct item. @param afterItem - Replacement item. @param before - Prior cursor. @param after - Result cursor. */
   /** Handles Writer formatting state. @param paragraph - Input value. @param beforeItem - Input value. @param afterItem - Input value. @param before - Input value. @param after - Input value. @returns Callback result. */ public constructor(
-    private readonly paragraph: SwTextNode,
+    paragraph: SwTextNode,
     private readonly beforeItem: SfxPoolItem | undefined,
     private readonly afterItem: SfxPoolItem,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Paragraph Formatting", before, after);
+    this.m_rDoc = paragraph.GetDoc();
+    this.m_nNode = paragraph.GetIndex();
   }
 
   /** Reports the scalar item pair. @returns Payload units. */
@@ -138,14 +169,20 @@ export class SwUndoParagraphItem extends SwUndo {
 
   /** Restores the previous direct or inherited item. @param context - Undo context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    const node = GetUndoTextNode(context.GetDoc(), this.paragraph);
+    const node = GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    );
     if (this.beforeItem === undefined) node.ResetAttr(this.afterItem.Which());
     else node.SetAttr(this.beforeItem);
   }
 
   /** Applies the replacement item. @param context - Undo context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).SetAttr(this.afterItem);
+    GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    ).SetAttr(this.afterItem);
   }
 }
 
@@ -183,15 +220,19 @@ export function CreateWriterFontSizeUndo(
 
 /** Reversible RES_PARATR_ADJUST change for one paragraph. */
 export class SwUndoParagraphFormat extends SwUndo {
+  private readonly m_rDoc: SwDoc;
+  private readonly m_nNode: number;
   /** Creates one alignment action. @param paragraph - Target node. @param beforeAlignment - Original adjustment. @param afterAlignment - New adjustment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
-    private readonly paragraph: SwTextNode,
+    paragraph: SwTextNode,
     private readonly beforeAlignment: WriterParagraphAlignment,
     private readonly afterAlignment: WriterParagraphAlignment,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Paragraph Formatting", before, after);
+    this.m_rDoc = paragraph.GetDoc();
+    this.m_nNode = paragraph.GetIndex();
   }
 
   /** Reports two scalar item values. @returns Payload units. */
@@ -201,26 +242,36 @@ export class SwUndoParagraphFormat extends SwUndo {
 
   /** Restores the previous paragraph adjustment. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphAlignment(this.beforeAlignment);
+    GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    ).SetParagraphAlignment(this.beforeAlignment);
   }
 
   /** Reapplies the paragraph adjustment. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphAlignment(this.afterAlignment);
+    GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    ).SetParagraphAlignment(this.afterAlignment);
   }
 }
 
 /** Reversible direct text-left margin change for one paragraph. */
 export class SwUndoMoveLeftMargin extends SwUndo {
+  private readonly m_rDoc: SwDoc;
+  private readonly m_nNode: number;
   /** Creates a margin action. @param paragraph - Target paragraph. @param beforeMargin - Original twip margin. @param afterMargin - New twip margin. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
-    private readonly paragraph: SwTextNode,
+    paragraph: SwTextNode,
     private readonly beforeMargin: number,
     private readonly afterMargin: number,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Move Left Margin", before, after);
+    this.m_rDoc = paragraph.GetDoc();
+    this.m_nNode = paragraph.GetIndex();
   }
 
   /** Reports two scalar margin values. @returns Payload units. */
@@ -230,11 +281,17 @@ export class SwUndoMoveLeftMargin extends SwUndo {
 
   /** Restores the previous direct text-left margin. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphTextLeftMargin(this.beforeMargin);
+    GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    ).SetParagraphTextLeftMargin(this.beforeMargin);
   }
 
   /** Reapplies the direct text-left margin. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphTextLeftMargin(this.afterMargin);
+    GetUndoTextNode(
+      context.GetDoc(),
+      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+    ).SetParagraphTextLeftMargin(this.afterMargin);
   }
 }

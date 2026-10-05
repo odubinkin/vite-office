@@ -2,16 +2,23 @@
 
 import type { SwTextFormatColl, WriterParagraphStyle } from "../doc/fmtcol";
 import type { SwTextNode } from "../txtnode/ndtxt";
-import type { SwPaM } from "../crsr/pam";
+import { SwPaM, SwPosition } from "../crsr/pam";
+import type { SwDoc } from "../doc/doc";
 import { getTextFormatCollNodes, setTextFormatCollAtNode } from "../doc/docfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
 import { SwpHints } from "../txtnode/ndhints";
-import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
+import {
+  GetUndoTextNode,
+  SwUndRng,
+  SwUndo,
+  type SwUndoCursorState,
+  type SwUndoRedoContext,
+} from "./undobj";
 
 /** Captured paragraph collection and direct item history for one native range node. */
 interface FormatCollHistory {
-  readonly paragraph: SwTextNode;
+  readonly index: number;
   readonly beforeStyle: WriterParagraphStyle;
   readonly beforeItems: SfxItemSet;
   readonly beforeEmptyListStyle: boolean;
@@ -20,6 +27,8 @@ interface FormatCollHistory {
 
 /** Reversible SwTextFormatColl assignment for the inclusive native paragraph range. */
 export class SwUndoFormatColl extends SwUndo {
+  private readonly m_rDoc: SwDoc;
+  private readonly range: SwUndRng;
   private readonly history: readonly FormatCollHistory[];
   private readonly formatName: string;
   /** Captures one native range and requested collection display name. @param range - Target point/mark. @param collection - Requested collection. @param before - Cursor before formatting. @param after - Cursor after formatting. @param resetListAttrs - Native list-reset eligibility retained for redo. @param resetAllCharAttrs - Whether initial collection processing owns original hints; the flag is not retained for redo. @returns Nothing. */
@@ -32,11 +41,13 @@ export class SwUndoFormatColl extends SwUndo {
     resetAllCharAttrs = false,
   ) {
     super("Paragraph Style", before, after);
+    this.m_rDoc = collection.GetAttrSet().GetDoc();
+    this.range = new SwUndRng(range);
     this.formatName = collection.GetName();
     this.history = getTextFormatCollNodes(collection.GetAttrSet().GetDoc(), range).map(
       /** Captures actual per-node style/list ownership before application. @param paragraph - Selected node. @returns Original history. */
       (paragraph) => ({
-        paragraph,
+        index: paragraph.GetIndex(),
         beforeStyle: paragraph.GetParagraphStyle(),
         beforeItems:
           paragraph.GetpSwAttrSet()?.Clone() ??
@@ -62,7 +73,10 @@ export class SwUndoFormatColl extends SwUndo {
   protected override UndoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
     for (const entry of this.history) {
-      const paragraph = GetUndoTextNode(document, entry.paragraph);
+      const paragraph = GetUndoTextNode(
+        document,
+        this.m_rDoc.GetNodes().at(entry.index) as SwTextNode,
+      );
       paragraph.ChgFormatColl(document.GetTextFormatColl(entry.beforeStyle));
       paragraph.ResetAllAttr();
       if (entry.beforeItems.Count() !== 0) paragraph.SetAttr(entry.beforeItems);
@@ -73,14 +87,22 @@ export class SwUndoFormatColl extends SwUndo {
 
   /** Reapplies the paragraph style collection. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    const document = context.GetDoc();
-    const nodes = this.history.map(
-      /** Retains the undo graph guard before native named redo lookup. @param entry - Original range node. @returns Owned target. */
-      (entry) => GetUndoTextNode(document, entry.paragraph),
-    );
-    const collection = document.FindTextFormatCollByName(this.formatName);
-    if (collection !== undefined)
-      for (const paragraph of nodes)
-        setTextFormatCollAtNode(paragraph, collection, this.resetListAttrs);
+    const document = context.GetDoc(),
+      node = GetUndoTextNode(
+        document,
+        this.m_rDoc.GetNodes().at(this.range.m_nSttNode) as SwTextNode,
+      ),
+      point = new SwPosition(node, 0),
+      range = new SwPaM(point);
+    try {
+      this.range.SetPaM(range);
+      const collection = document.FindTextFormatCollByName(this.formatName);
+      if (collection !== undefined)
+        for (const paragraph of getTextFormatCollNodes(document, range))
+          setTextFormatCollAtNode(paragraph, collection, this.resetListAttrs);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+    }
   }
 }
