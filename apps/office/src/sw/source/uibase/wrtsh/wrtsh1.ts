@@ -119,6 +119,10 @@ export class SwWrtShell extends SwModify {
         this.GetPendingCharacterItems(),
       getUndoManager: /** Returns document history. @returns Undo manager. */ () =>
         this.docShell.GetUndoManager(),
+      runNotificationTransaction:
+        /** Brackets one native shell edit. @param operation - Editing operation. @returns Whether changed. */ (
+          operation,
+        ) => this.RunNotificationTransaction(operation),
       setCursor:
         /** Moves the persistent cursor. @param position - Canonical position. @returns Whether changed. */ (
           position,

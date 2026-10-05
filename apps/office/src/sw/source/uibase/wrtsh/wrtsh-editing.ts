@@ -71,6 +71,7 @@ export interface SwWrtShellEditingPort {
   readonly getDoc: () => WriterDocument;
   readonly getPendingCharacterItems: () => SfxItemSet;
   readonly getUndoManager: () => UndoManager;
+  readonly runNotificationTransaction: (operation: () => boolean) => boolean;
   readonly setCursor: (position: SwPosition) => boolean;
 }
 
@@ -98,17 +99,28 @@ export class SwWrtShellEditingOperations {
         }
       }
       const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
-      const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
-      return this.port.applyAction(
-        new SwUndoReplace(
-          paragraph,
-          start,
-          paragraph.CaptureTextFragment(start, end),
-          paragraph.CreateTextFragmentFromText(text, this.port.getPendingCharacterItems()),
-          "Replace",
-          before,
-          this.port.createCollapsedCursorState(paragraph, start + text.length),
-        ),
+      return this.port.runNotificationTransaction(
+        /** Brackets native deletion and forced insertion as one shell action. @returns Whether inserted. */ () => {
+          const manager = this.port.getUndoManager();
+          manager.StartUndo("Replace");
+          try {
+            const deleted = this.DeleteAtCursor("delete");
+            return this.port.applyAction(
+              createWriterInsertTextAction(
+                paragraph,
+                start,
+                text,
+                this.port.getPendingCharacterItems(),
+                undefined,
+                this.port.captureCursorState(),
+                this.port.createCollapsedCursorState(paragraph, start + text.length),
+                deleted,
+              ),
+            );
+          } finally {
+            manager.EndUndo();
+          }
+        },
       );
     }
     const offset = point.GetContentIndex();
