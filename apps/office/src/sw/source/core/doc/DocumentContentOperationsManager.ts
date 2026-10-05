@@ -8,6 +8,7 @@ import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { sw_GetJoinFlags, sw_JoinText } from "./docedt";
 import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISCOUNTED,
@@ -56,6 +57,37 @@ export class DocumentContentOperationsManager {
     const { end, node, start } = this.GetSameTextNodeRange(range, "deletion");
     if (start === end) return false;
     node.EraseText(start, end - start);
+    return true;
+  }
+
+  /** Deletes a registered body-text selection and joins its boundaries in native order. Nontext sections/redlines/marks and native Undo construction remain outside this kernel. @param range - Actual selected range. @returns Whether deleted. */
+  public DeleteAndJoin(range: SwPaM): boolean {
+    if (!range.HasMark()) return false;
+    const { joinText, joinPrev } = sw_GetJoinFlags(range);
+    if (!joinText) return this.DeleteRange(range);
+    const start = range.Start(),
+      end = range.End();
+    const first = this.GetTextNode(start, "deletion"),
+      last = this.GetTextNode(end, "deletion");
+    const startOffset = start.GetContentIndex(),
+      endOffset = end.GetContentIndex();
+    const selected = this.document.nodes.entries().slice(first.GetIndex(), last.GetIndex() + 1);
+    if (
+      selected.some(
+        /** Rejects unimplemented structural selection before mutation. @param node - Selected node. @returns Unsupported node or section. */
+        (node) => !(node instanceof SwTextNode),
+      )
+    )
+      throw new Error("Writer DeleteAndJoin requires text nodes in one section.");
+    first.EraseText(startOffset);
+    last.EraseText(0, endOffset);
+    for (const node of selected.slice(1, -1))
+      this.document.nodes.removeTextNode(node as SwTextNode);
+    range.GetPoint().Assign(first, startOffset);
+    sw_JoinText(range, joinPrev);
+    const survivor = joinPrev ? last : first;
+    range.GetPoint().Assign(survivor, startOffset);
+    range.GetMark().Assign(survivor, startOffset);
     return true;
   }
 

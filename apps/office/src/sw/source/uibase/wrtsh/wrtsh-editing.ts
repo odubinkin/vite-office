@@ -13,6 +13,7 @@ import {
   type SwUndoDeleteDirection,
 } from "../../core/undo/undel";
 import { createWriterInsertTextAction } from "../../core/edit/editsh";
+import { sw_GetJoinFlags } from "../../core/doc/docedt";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
@@ -88,32 +89,24 @@ export class SwWrtShellEditingOperations {
     const paragraph = point.GetNode() as WriterParagraph;
     const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
     if (mark !== undefined) {
-      if (mark.GetNode() !== paragraph) {
-        const manager = this.port.getUndoManager();
-        manager.EnterListAction("Replace");
-        try {
-          this.DeleteCrossParagraphSelection();
-          return this.InsertAtCursor(text, false);
-        } finally {
-          manager.LeaveListAction();
-        }
-      }
-      const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
       return this.port.runNotificationTransaction(
         /** Brackets native deletion and forced insertion as one shell action. @returns Whether inserted. */ () => {
           const manager = this.port.getUndoManager();
           manager.StartUndo("Replace");
           try {
             const deleted = this.DeleteAtCursor("delete");
+            const position = this.port.getCursor().GetPoint();
+            const target = position.GetNode() as WriterParagraph,
+              start = position.GetContentIndex();
             return this.port.applyAction(
               createWriterInsertTextAction(
-                paragraph,
+                target,
                 start,
                 text,
                 this.port.getPendingCharacterItems(),
                 undefined,
                 this.port.captureCursorState(),
-                this.port.createCollapsedCursorState(paragraph, start + text.length),
+                this.port.createCollapsedCursorState(target, start + text.length),
                 deleted,
               ),
             );
@@ -334,44 +327,24 @@ export class SwWrtShellEditingOperations {
   /** Deletes a cross-node selection and joins its boundaries. @returns Whether changed. */
   private DeleteCrossParagraphSelection(): boolean {
     const cursor = this.port.getCursor();
-    const point = cursor.GetPoint();
-    const mark = cursor.GetMark();
-    const document = this.port.getDoc();
-    const pointNode = point.GetNode() as WriterParagraph;
-    const markNode = mark.GetNode() as WriterParagraph;
-    const pointIndex = document.paragraphs.indexOf(pointNode);
-    const markIndex = document.paragraphs.indexOf(markNode);
-    const startsAtPoint = pointIndex < markIndex;
-    const startNode = startsAtPoint ? pointNode : markNode;
-    const endNode = startsAtPoint ? markNode : pointNode;
-    const startOffset = startsAtPoint ? point.GetContentIndex() : mark.GetContentIndex();
-    const endOffset = startsAtPoint ? mark.GetContentIndex() : point.GetContentIndex();
-    const selectedNodes = document.paragraphs.slice(
-      Math.min(pointIndex, markIndex),
-      Math.max(pointIndex, markIndex) + 1,
+    const { joinPrev } = sw_GetJoinFlags(cursor);
+    const start = cursor.Start(),
+      end = cursor.End();
+    const first = start.GetNode() as WriterParagraph,
+      last = end.GetNode() as WriterParagraph;
+    const offset = start.GetContentIndex();
+    return this.port.applyAction(
+      new SwUndoDelete(
+        first,
+        offset,
+        first.GetText().slice(offset),
+        "delete",
+        undefined,
+        this.port.captureCursorState(),
+        this.port.createCollapsedCursorState(joinPrev ? last : first, offset),
+        cursor,
+      ),
     );
-    const manager = this.port.getUndoManager();
-    manager.EnterListAction("Delete");
-    try {
-      this.ReplaceRange(
-        { end: startNode.Len(), node: startNode, start: startOffset },
-        startNode.CaptureTextFragment(startOffset, startOffset),
-      );
-      for (const selected of selectedNodes.slice(1, -1))
-        this.ReplaceRange(
-          { end: selected.Len(), node: selected, start: 0 },
-          selected.CaptureTextFragment(0, 0),
-        );
-      this.ReplaceRange(
-        { end: endOffset, node: endNode, start: 0 },
-        endNode.CaptureTextFragment(0, 0),
-      );
-      for (const selected of selectedNodes.slice(1)) this.MergeParagraphWithPrevious(selected);
-    } finally {
-      manager.LeaveListAction();
-    }
-    this.port.setCursor(new SwPosition(startNode, startOffset));
-    return true;
   }
 
   /** Applies imported list metadata through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether changed. */

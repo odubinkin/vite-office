@@ -17,7 +17,7 @@ import {
 } from "../../../browser/filter/xml/writer-document-codec";
 
 /** Requires one test node. @param node - Optional node. @returns Node. */
-function required(node: SwTextNode | undefined): SwTextNode {
+function required<T>(node: T | undefined): T {
   if (node === undefined) throw new Error("Missing transition node");
   return node;
 }

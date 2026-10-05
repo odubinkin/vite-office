@@ -216,8 +216,8 @@ export class SwNodes {
     return node;
   }
 
-  /** Inserts one prepared text node directly after an existing body text node. @param source - Existing predecessor. @param node - Prepared new node. @returns Nothing. */
-  public insertTextNodeAfter(source: SwTextNode, node: SwTextNode): void {
+  /** Inserts one prepared text node after an existing node,including the actual body start sentinel during undo. @param source - Existing predecessor. @param node - Prepared new node. @returns Nothing. */
+  public insertTextNodeAfter(source: SwNode, node: SwTextNode): void {
     if (source.GetNodes() !== this || node.GetNodes() !== this)
       throw new Error("SwTextNode belongs to another SwNodes array.");
     this.nodeArray.splice(source.GetIndex() + 1, 0, node);

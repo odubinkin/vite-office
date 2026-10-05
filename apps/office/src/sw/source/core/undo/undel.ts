@@ -1,7 +1,8 @@
 /** @fileoverview Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx. */
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
-import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
+import { RES_CHRATR_BEGIN, RES_CHRATR_END, RES_BREAK, RES_PAGEDESC } from "../../../inc/hintids";
+import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwHistory } from "./rolbck";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
@@ -24,12 +25,17 @@ export type SwUndoDeleteDirection = "backspace" | "delete";
 /** Character class retained by SwUndoDelete::CanGrouping. */
 export type SwUndoDeleteGroup = "delimiter" | "word";
 
-/** Reversible same-node deletion retaining native removed text and original attribute history. */
+/** Reversible registered text deletion retaining raw boundary strings and original native attribute history. */
 export class SwUndoDelete extends SwUndo {
   private m_aSttStr: string;
+  private m_aEndStr: string | undefined;
   private m_pHistory: SwHistory | undefined;
+  private m_bJoinNext = true;
+  private m_nEndContent = 0;
+  private m_aSelectedNodes: readonly SwTextNode[] | undefined;
+  private readonly m_aUndoNodeIds: number[] = [];
 
-  /** Creates one delete action. @param paragraph - Target node. @param start - Deleted range start. @param deletedText - Removed native text. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Cursor before deletion. @param after - Cursor after deletion. @returns Nothing. */
+  /** Creates one delete action. @param paragraph - First boundary. @param start - Deleted range start. @param deletedText - Removed native start string. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Normalized cursor before deletion. @param after - Cursor after deletion. @param selection - Optional cross-node selection with native join direction. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private start: number,
@@ -38,12 +44,45 @@ export class SwUndoDelete extends SwUndo {
     private readonly group: SwUndoDeleteGroup | undefined,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
+    selection?: SwPaM,
   ) {
     super("Delete", before, after);
-    if (deletedText.length === 0) throw new Error("SwUndoDelete requires non-empty text.");
+    if (deletedText.length === 0 && selection === undefined)
+      throw new Error("SwUndoDelete requires non-empty text.");
     this.m_aSttStr = deletedText;
     const history = new SwHistory();
     history.CopyAttr(paragraph.GetpSwpHints(), paragraph.GetIndex(), 0, paragraph.Len(), true);
+    if (selection !== undefined) {
+      const end = selection.End(),
+        last = end.GetNode() as SwTextNode;
+      const selected = paragraph
+        .GetNodes()
+        .entries()
+        .slice(paragraph.GetIndex(), last.GetIndex() + 1);
+      if (
+        selected.length < 2 ||
+        selected.some(
+          /** Validates the current registered structural history profile. @param node - Selected model node. @returns Unsupported family/section. */
+          (node) => !(node instanceof SwTextNode),
+        )
+      )
+        throw new Error("SwUndoDelete selection requires text nodes in one section.");
+      this.m_aSelectedNodes = selected as SwTextNode[];
+      this.m_nEndContent = end.GetContentIndex();
+      this.m_aEndStr = last.GetText().slice(0, this.m_nEndContent);
+      this.m_bJoinNext = selection.GetPoint() === end;
+      const firstDirect = paragraph.GetpSwAttrSet(),
+        lastDirect = last.GetpSwAttrSet();
+      if (firstDirect !== undefined) history.CopyFormatAttr(firstDirect, paragraph.GetIndex());
+      history.CopyAttr(last.GetpSwpHints(), last.GetIndex(), 0, last.Len(), true);
+      if (lastDirect !== undefined) history.CopyFormatAttr(lastDirect, last.GetIndex());
+      history.AddColl(paragraph.GetTextFormatColl(), paragraph.GetIndex(), paragraph.GetNodeType());
+      history.AddColl(last.GetTextFormatColl(), last.GetIndex(), last.GetNodeType());
+      const undoNodes = paragraph.GetDoc().GetUndoManager().GetUndoNodes();
+      for (const node of selected)
+        if (node !== (this.m_bJoinNext ? paragraph : last))
+          this.m_aUndoNodeIds.push(undoNodes.RetainNode(node as SwTextNode));
+    }
     this.m_pHistory = history.Count() === 0 ? undefined : history;
   }
 
@@ -72,17 +111,33 @@ export class SwUndoDelete extends SwUndo {
 
   /** Reports retained deleted text and native hint history without a document snapshot. @returns Approximate payload units. */
   public override GetPayloadSize(): number {
-    return this.m_aSttStr.length + (this.m_pHistory?.Count() ?? 0) * 4;
+    let middle = 0;
+    for (const node of this.m_aSelectedNodes?.slice(1, -1) ?? [])
+      middle += node.Len() + (node.GetpSwpHints()?.Count() ?? 0) * 4;
+    return (
+      this.m_aSttStr.length +
+      (this.m_aEndStr?.length ?? 0) +
+      middle +
+      (this.m_pHistory?.Count() ?? 0) * 4
+    );
   }
 
   /** Releases removed text when history drops this action. @returns Nothing. */
   public override Dispose(): void {
+    const undoNodes = this.paragraph.GetDoc().GetUndoManager().GetUndoNodes();
+    for (const id of this.m_aUndoNodeIds.splice(0)) undoNodes.Release(id);
+    this.m_aSelectedNodes = undefined;
+    this.m_aEndStr = undefined;
     this.m_pHistory = undefined;
     this.m_aSttStr = "";
   }
 
   /** Restores removed text and hints. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
+    if (this.m_aSelectedNodes !== undefined) {
+      this.UndoSelectedNodes(context);
+      return;
+    }
     const node = GetUndoTextNode(context.GetDoc(), this.paragraph);
     node.ClearSwpHintsArr(true);
     node.InsertText(this.m_aSttStr, this.start, SwInsertFlags.NOHINTEXPAND);
@@ -92,12 +147,52 @@ export class SwUndoDelete extends SwUndo {
   /** Deletes the retained range again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     this.m_pHistory?.SetTmpEnd(this.m_pHistory.Count());
+    if (this.m_aSelectedNodes !== undefined) {
+      const last = this.m_aSelectedNodes[this.m_aSelectedNodes.length - 1] as SwTextNode;
+      const point = new SwPosition(this.paragraph, this.start, "redline"),
+        mark = new SwPosition(last, this.m_nEndContent, "redline"),
+        range = new SwPaM(point, mark);
+      try {
+        context.GetDoc().GetDocumentContentOperationsManager().DeleteAndJoin(range);
+      } finally {
+        range.Dispose();
+        point.Dispose();
+        mark.Dispose();
+      }
+      return;
+    }
     DeleteUndoRange(
       context.GetDoc(),
       this.paragraph,
       this.start,
       this.start + this.m_aSttStr.length,
     );
+  }
+
+  /** Restores raw native boundary strings and fresh whole-node history around intact middle undo nodes. Boundary object identity remains the existing cursor adapter,not native recreated node indices. @param context - Writer graph. @returns Nothing. */
+  private UndoSelectedNodes(context: SwUndoRedoContext): void {
+    const selected = this.m_aSelectedNodes as readonly SwTextNode[],
+      first = this.paragraph,
+      last = selected[selected.length - 1] as SwTextNode;
+    for (const node of [first, last]) {
+      node.ClearSwpHintsArr(true);
+      node.ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END - 1);
+      node.ResetAttr([RES_BREAK, RES_PAGEDESC]);
+    }
+    if (this.m_bJoinNext) {
+      const suffix = first.GetText().slice(this.start);
+      first.EraseText(this.start);
+      last.SetText(suffix);
+    }
+    first.InsertText(this.m_aSttStr, this.start, SwInsertFlags.NOHINTEXPAND);
+    last.InsertText(this.m_aEndStr as string, 0, SwInsertFlags.NOHINTEXPAND);
+    const nodes = context.GetDoc().GetNodes();
+    let previous = this.m_bJoinNext ? first : nodes.at(last.GetIndex() - 1);
+    for (const node of selected) {
+      if (nodes.indexOfOrUndefined(node) === undefined) nodes.insertTextNodeAfter(previous, node);
+      previous = node;
+    }
+    this.m_pHistory?.TmpRollback(context.GetDoc(), 0, false);
   }
 }
 

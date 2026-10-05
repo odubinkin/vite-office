@@ -175,6 +175,11 @@ export class SwPaM {
     return this.mark !== undefined;
   }
 
+  /** Exchanges actual point and mark owners as native SwPaM::Exchange does. @returns Nothing. */
+  public Exchange(): void {
+    if (this.mark !== undefined) [this.point, this.mark] = [this.mark, this.point];
+  }
+
   /** Sets mark to the current point. @returns Nothing. */
   public SetMark(): void {
     this.mark?.Dispose();
