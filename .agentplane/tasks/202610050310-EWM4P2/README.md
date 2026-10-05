@@ -1,10 +1,11 @@
 ---
 id: "202610050310-EWM4P2"
 title: "Restore native same-node selected insertion undo sequence"
-status: "DOING"
+result_summary: "Same-node selected insertion uses ordered deletion and forced native text insertion with atomic undo and history restoration.869new independent cases and all361prior test files verified;one full upstream-absent profile with only failed-case repetitions,100%coverage and preserved registered deviations. Broader core/UI parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Five approved semantic paths and exact committed bytes checked;361 prior test/spec files byte-identical;869 new cases,243 runtime rows/statuses/defaults/exceptions and registered I/O deviations retained. Native range/history/mode/order/ownership/input/direction/notification/nesting/retention evidence reviewed against eight source hashes."
     - "Six static gates passed;one full upstream-absent build/app/inventory/scripts/Chromium profile;app10854pass/168fail first with100%coverage,inventory109/100%,scripts5,Chromium99. Only168 exact failed names replayed,156passed/12failed,then only12 replayed and passed;no passing replay. Production/docs hashes unchanged. Five restored audits passed,zero semantic violations."
     - "AUTO identity fixture assumptions corrected to reconstructed portions and literal per-character formatting;all old tests untouched. Scope audit caught overwritten first replay ledger;two bounded records restored from completed tool evidence without reruns. Doctor zero errors/two unchanged warnings,routing and ignored-inclusive forbidden-artifact scan passed."
-commit: null
+commit:
+  hash: "eff1c84ec17feb7155f541dcba158f88784bdca5"
+  message: "🧩 EWM4P2 task: record verified selected insertion sequence"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved same-node native delete-plus-forced insertion sequence and independent literal application tests; preserve registered deviations and execute one upstream-absent profile only."
+  -
+    author: "CODER"
+    body: "Verified: same-node selected Insert/Replace/composition now uses native deletion plus stored forced insertion mode5 in one Replace list and shell transaction. All new cases and prior suites passed with failed-only repetitions; restored source audits and exact semantic quality review passed."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native same-node selected deletion plus forced mode5 insertion at 207d82ff77a81ab96b246513597e4bbf0288eaf0. One absent full profile, only168 then12failed cases replayed,100%coverage;restored audits,exact scope and same-actor quality passed. Broader parity unverified."
+  -
+    type: "status"
+    at: "2026-10-05T03:25:39.761Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: same-node selected Insert/Replace/composition now uses native deletion plus stored forced insertion mode5 in one Replace list and shell transaction. All new cases and prior suites passed with failed-only repetitions; restored source audits and exact semantic quality review passed."
 doc_version: 3
-doc_updated_at: "2026-10-05T03:25:25.812Z"
+doc_updated_at: "2026-10-05T03:25:39.762Z"
 doc_updated_by: "CODER"
 description: "Iteration135: replace same-node selected typing fragment replacement with native deletion and forced text insertion in one Writer undo list, retaining old attribute history and mode5. Preserve cross-node/paste adapters and registered I/O deviations; independent tests, one absent full profile, no upstream test dependency."
 sections:
@@ -154,6 +167,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic leaf commit without rewriting history."
   Findings: "Iteration134 made verified progress and is DONE; current clean main baseline 26805a98703fa8f905daffd8b2e1da7029137eb1. Direct mode, only parent active before leaf creation, four matched policies loaded, user-instructions absent. Pin26.8.0.2/9bc445578031fecf56086729d8e4940c77e14d65. Native wrtsh1.cxx241-305 starts REPLACE undo list, deletes same-node selection, clears mark then Insert2 passes deletion result; editsh.cxx98 selects flags5 after successful deletion versus1. Native docundo.cxx269/301 delegates StartUndo/EndUndo to Sfx list actions; undo.cxx1018/1096 retains composite order. Current same-node branch uses SwUndoReplace with portable fragments, bypassing forced insertion and whole-node attribute history. Existing history/action machinery now supports native sequence. Cross-node/redline/multicursor/overwrite/selection options/content controls/list IDs/native comment rewriting remain unverified. Implemented same-node native delete-plus-forced insertion inside Replace StartUndo/EndUndo and existing shell transaction port; five semantic paths including shell notification binding. All 361 prior test/spec files byte-identical. 869 new cases: three real input paths, both directions, AUTO/INET, nine literal ranges and eight flag masks with locks/old IgnoreDontExpand; native action order/history/maps/backlinks/item identity and constructor defaults, selected versus empty mark modes5/1, one aggregate notification, surrounding typing isolation, nested lists and zero retention. Six static gates passed first. One absent profile: build pass, app10854pass/168fail of11022 in279files and100%allfourcoverage, inventory109/36files/100%allfour, scripts5,Chromium99 all first-pass. All failures new AUTO portion identity expectations; native BuildPortions permits replacing/splitting AUTO portions. Tests corrected to assert detached original, actual reconstructed ownership and per-character effective formatting. Production/docs byte hashes unchanged after first profile. Exact failed-only replay168 =>156pass/12fail/701skip; remaining12 repeated =>12pass/857skip. Zero passing replays. Second orchestration mistakenly overwrote first bounded ledger; scope audit caught missing distinct ledger. Preserved second record and recovered first exact hashes/counts/names from observed completed tool result, no rerun or production edits; ledger-recovery.json records process correction. Vendor restored finally before five source audits, all passed/0semanticviolations. All243runtime rows/states/defaults/exceptions retained; onlyfour bounded appendices. Scope/nativehash checks passed for8sources and unchanged cross-node/collapsed/remaining editing bodies. Doctor0errors/two unchangedlegacywarnings,routingpassed,ignored-inclusiveAP3943files0forbidden beforequality. Full native selection options/redlines/multicursor/overwrite/comments/listIDs/BuildPortions/history/core/UI remain unverified;registered I/O deviations preserved,no promotion. Next dependent source audit: cross-node selected insertion deletion result propagation/forced mode and structural history, while full native cross-node deletion rollback is still unverified. Goal active, iteration135 verified progress, no blocker."
+extensions:
+  implementation_commit:
+    hash: "207d82ff77a81ab96b246513597e4bbf0288eaf0"
+    message: "🧩 EWM4P2 code: restore native selected insertion undo sequence"
 id_source: "generated"
 ---
 ## Summary
