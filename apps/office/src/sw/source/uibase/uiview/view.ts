@@ -21,11 +21,13 @@ import { SwViewCommandShell } from "../shells/view";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwRootFrame } from "../../core/layout/newfrm";
+import { SelectionType } from "../inc/wrtsh";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
   private readonly dialogController = new WriterDialogController();
   private frame: SfxViewFrame<SwView> | undefined;
+  private selectionType: SelectionType | undefined;
   private readonly viewCommandShell: SwViewCommandShell;
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
@@ -72,6 +74,20 @@ export class SwView {
   public AttachFrame(frame: SfxViewFrame<SwView>): void {
     if (this.frame !== undefined) throw new Error("SwView is already attached to an SfxViewFrame.");
     this.frame = frame;
+  }
+  /** Selects represented native text/list contexts in list-before-text dispatcher order. @returns Nothing. */
+  public SelectShell(): void {
+    if (this.frame === undefined || this.frame.GetActiveView() !== this) return;
+    const selectionType = this.wrtShell.GetSelectionType() & ~SelectionType.TableCell;
+    if (selectionType === this.selectionType) return;
+    this.selectionType = selectionType;
+    const dispatcher = this.frame.GetDispatcher(),
+      list = this.wrtShell.GetListShell().GetCommandShell(),
+      text = this.wrtShell.GetCommandShell();
+    dispatcher.Pop(text);
+    dispatcher.Pop(list);
+    if ((selectionType & SelectionType.NumberList) !== 0) dispatcher.Push(list);
+    dispatcher.Push(text);
   }
 
   /** Returns the active document shell. @returns Persistent SwDocShell. */
@@ -211,6 +227,7 @@ export class SwView {
   /** Invalidates command state through the frame dispatcher. @param dependencies - Changed state labels. @returns Nothing. */
   private Invalidate(...dependencies: readonly string[]): void {
     if (this.frame === undefined) return;
+    this.SelectShell();
     this.GetDispatcher().Invalidate(...dependencies);
   }
 }

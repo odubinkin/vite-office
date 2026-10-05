@@ -10,7 +10,6 @@ import { SwUndoInsNum, SwUndoDelNum } from "./unnum";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
-import { SwListShell } from "../../uibase/shells/listsh";
 import { SwEditShell } from "../edit/ednumber";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import {
@@ -188,7 +187,7 @@ it.each(commandCases)(
         );
         expect(owner.shell.GetCursor().GetMark().GetContentIndex()).toBe(0);
       }
-      expect(owner.shell.GetListShell().GetKind()).toBe(kind);
+      expect(owner.shell.GetTextShell().GetListKind()).toBe(kind);
       expect(owner.previous.GetListKind()).toBe("none");
       expect(owner.outside.GetListKind()).toBe("none");
       current = current.map(replace);
@@ -447,8 +446,8 @@ it("native structural ranges ignore text-only rule and count payloads", /** Chec
           return false;
         }
       })();
-    const target = new SwListShell(nativeOwner);
-    expect(target.GetKind()).toBe("none");
+    expect(nativeOwner.SelectionHasNumber()).toBe(false);
+    expect(nativeOwner.SelectionHasBullet()).toBe(false);
   } finally {
     pam.Dispose();
     point.Dispose();
@@ -521,8 +520,8 @@ it("native list state reports mixed marker families before applying a range rule
   } finally {
     pam.Dispose();
   }
-  expect(owner.shell.GetListShell().GetKind()).toBe("none");
+  expect(owner.shell.GetTextShell().GetListKind()).toBe("none");
   expect(owner.shell.SetParagraphListKind("numbered")).toBe(true);
-  expect(owner.shell.GetListShell().GetKind()).toBe("numbered");
+  expect(owner.shell.GetTextShell().GetListKind()).toBe("numbered");
   expect(owner.first.GetNumRule()).toBe(owner.second.GetNumRule());
 });

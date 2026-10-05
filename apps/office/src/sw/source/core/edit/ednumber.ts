@@ -5,6 +5,7 @@ import { SwUndoOutlineLeftRight } from "../undo/unoutl";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 import { SetNumRuleMode, type SwDoc } from "../doc/doc";
 import { SwNumRule } from "../doc/number";
+import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
 import { SwPaM } from "../crsr/pam";
 import type { SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -96,6 +97,14 @@ export class SwPamRanges {
 }
 /** Core editing shell owns numbering commands; the represented broadcaster base preserves existing subscriptions. */
 export abstract class SwEditShell extends SwModify {
+  /** Reads native current-point numbering state independently of normalized range applicability. @returns Actual nonnegative list level or native MAXLEVEL count sentinel10. */
+  public GetNumLevel(): number {
+    const node = this.GetCursor().GetPoint().GetNode();
+    if (!(node instanceof SwTextNode) || node.GetNumRule() === undefined)
+      return WRITER_MAX_LIST_LEVEL + 1;
+    const level = node.GetActualListLevel();
+    return level >= 0 ? level : WRITER_MAX_LIST_LEVEL + 1;
+  }
   /** Returns the native document owner. @returns Document. */
   public abstract GetDoc(): SwDoc;
   /** Returns the actual editing selection ring. @returns Native cursor. */

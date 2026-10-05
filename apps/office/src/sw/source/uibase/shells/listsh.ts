@@ -2,28 +2,13 @@
 
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
-import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
-import { SwTextNode } from "../../core/txtnode/ndtxt";
-import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterInterface } from "../../../sdi/swriter";
 import type { SwEditShell, WriterListLevelCommand } from "../../core/edit/ednumber";
 
 /** Native editing-shell surface used directly by the list context. */
-export type SwListShellTarget = Pick<
-  SwEditShell,
-  | "GetCursor"
-  | "GetDoc"
-  | "SetCurNumRule"
-  | "DelNumRules"
-  | "CanNumUpDown"
-  | "NumUpDown"
-  | "SelectionHasNumber"
-  | "SelectionHasBullet"
-  | "SearchNumRule"
-  | "IsNumRuleStart"
-  | "SetNumRuleStart"
->;
+export type SwListShellTarget = Pick<SwEditShell, "GetNumLevel" | "NumUpDown">;
 
 /** Context-sensitive shell that owns list execution and state. */
 export class SwListShell {
@@ -46,118 +31,15 @@ export class SwListShell {
     return this.wrtShell.NumUpDown(command === "demote");
   }
 
-  /** Reports whether a native normalized range can move in this direction. @param command - Level direction. @returns Whether enabled. */
+  /** Reads native current-point level state independently of range execution preflight. @param command - Level direction. @returns Whether enabled. */
   public CanExecute(command: WriterListLevelCommand): boolean {
-    return this.wrtShell.CanNumUpDown(command === "demote");
-  }
-
-  /** Applies or removes numbering over every selected native paragraph. @param kind - Requested list kind. @returns Whether a command changed list state. */
-  public SetParagraphListKind(kind: WriterParagraphListKind): boolean {
-    if (!isWriterParagraphListKind(kind))
-      throw new Error("Unsupported Writer paragraph list kind: " + kind);
-    const doc = this.wrtShell.GetDoc(),
-      range = this.wrtShell.GetCursor();
-    if (kind === "none") return this.wrtShell.DelNumRules();
-    if (this.GetKind() === kind) return false;
-    const listId = { value: "" },
-      rule =
-        doc.SearchNumRule(range.GetPoint(), false, kind === "numbered", false, 0, listId) ??
-        doc.GetDocumentListsManager().CreateAutomaticNumRule(kind);
-    return this.wrtShell.SetCurNumRule(rule, false, listId.value, true);
-  }
-
-  /** Continues the nearest native list through the inherited core rule command and rule-sensitive restart actions. @returns Whether selected list state changed. */
-  public ContinueNumbering(): boolean {
-    const doc = this.wrtShell.GetDoc(),
-      range = this.wrtShell.GetCursor(),
-      listId = { value: "" },
-      rule =
-        this.wrtShell.SearchNumRule(true, listId) ?? this.wrtShell.SearchNumRule(false, listId);
-    if (rule === undefined) return false;
-    let changed = false;
-    for (const selected of range.GetRingContainer())
-      for (
-        let index = selected.Start().GetNodeIndex();
-        index <= selected.End().GetNodeIndex();
-        index++
-      ) {
-        const node = doc.GetNodes().at(index);
-        if (node instanceof SwTextNode)
-          changed ||=
-            node.GetNumRule() !== rule ||
-            node.GetListId() !== listId.value ||
-            !node.IsCountedInList();
-      }
-    if (!changed) return false;
-    const undo = doc.GetUndoManager();
-    undo.EnterListAction("Continue Numbering");
-    try {
-      for (const selected of range.GetRingContainer())
-        for (
-          let index = selected.Start().GetNodeIndex();
-          index <= selected.End().GetNodeIndex();
-          index++
-        ) {
-          const node = doc.GetNodes().at(index);
-          if (!(node instanceof SwTextNode)) continue;
-          const position = new SwPosition(node),
-            paragraph = new SwPaM(position);
-          try {
-            if (this.wrtShell.IsNumRuleStart(paragraph) && node.GetNumRule() !== rule)
-              this.wrtShell.SetNumRuleStart(false, paragraph);
-          } finally {
-            paragraph.Dispose();
-            position.Dispose();
-          }
-        }
-      return this.wrtShell.SetCurNumRule(rule, false, listId.value);
-    } finally {
-      undo.LeaveListAction();
-    }
-  }
-
-  /** Returns the native selection list family. @returns Current list kind. */
-  public GetKind(): WriterParagraphListKind {
-    if (this.wrtShell.SelectionHasNumber()) return "numbered";
-    if (this.wrtShell.SelectionHasBullet()) return "bullet";
-    return "none";
-  }
-
-  /** Reports native continuation availability independently of the active paragraph's list kind. @returns Whether an earlier list was found. */
-  public CanContinueNumbering(): boolean {
-    const listId = { value: "" };
-    return (
-      (this.wrtShell.SearchNumRule(true, listId) ?? this.wrtShell.SearchNumRule(false, listId)) !==
-      undefined
-    );
+    return this.wrtShell.GetNumLevel() !== (command === "demote" ? WRITER_MAX_LIST_LEVEL : 0);
   }
 }
 
 /** Builds the bounded list toolbar registry using generated slot/resource identity. @param target - Active list shell. @returns Command registry. */
 function createListCommandRegistry(target: SwListShell): SfxInterface<SwListShell> {
   return createWriterInterface([
-    ...(["bullet", "numbered", "none"] as const).map(
-      /** Creates one list-kind command owned by listsh. @param kind - Requested list kind. @returns Descriptor. */ (
-        kind,
-      ) => {
-        const id = {
-          bullet: WRITER_COMMAND_IDS.unorderedList,
-          none: WRITER_COMMAND_IDS.removeBullets,
-          numbered: WRITER_COMMAND_IDS.orderedList,
-        }[kind];
-        return {
-          capabilityId: "CAP-0105" as const,
-          execute:
-            /** Applies or toggles the captured list kind. @returns Whether changed. */ (): boolean =>
-              target.SetParagraphListKind(
-                kind !== "none" && target.GetKind() === kind ? "none" : kind,
-              ),
-          id,
-          isChecked: /** Reads active list kind. @returns Checked state. */ (): boolean =>
-            target.GetKind() === kind,
-        };
-      },
-    ),
     ...(["promote", "demote"] as const).map(
       /** Creates one list command descriptor. @param command - List-level operation. @returns Command descriptor. */ (
         command,
@@ -174,15 +56,5 @@ function createListCommandRegistry(target: SwListShell): SfxInterface<SwListShel
         };
       },
     ),
-    {
-      capabilityId: "CAP-0105" as const,
-      execute:
-        /** Joins the selected list to the nearest earlier one. @returns Whether changed. */ () =>
-          target.ContinueNumbering(),
-      id: WRITER_COMMAND_IDS.continueNumbering,
-      isEnabled:
-        /** Reads native preceding-list search availability. @returns Whether eligible. */ () =>
-          target.CanContinueNumbering(),
-    },
   ]);
 }

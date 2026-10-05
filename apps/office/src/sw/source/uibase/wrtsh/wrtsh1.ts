@@ -58,6 +58,8 @@ import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
 import { SwUndoNumOrNoNum } from "../../core/undo/unnum";
 import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
+import { GetSelectionType } from "./wrtsh-selection";
+import type { SelectionType } from "../inc/wrtsh";
 import { createWriterReadFragmentAction } from "../../filter/basflt/shellio";
 
 /** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
@@ -198,6 +200,10 @@ export class SwWrtShell extends SwEditShell {
   /** Reports the bounded shell table-selection mode. @returns Whether a native table cursor is active. */
   public HasBoxSelection(): boolean {
     return this.tableCursor !== undefined;
+  }
+  /** Queries native flag identities through the source-owned represented selection body. @returns Text/table/list flags. */
+  public GetSelectionType(): SelectionType {
+    return GetSelectionType(this);
   }
   /** Resolves native table context from selected boxes or the ordinary point section. @returns Current table node. */
   public IsCursorInTable(): SwTableNode | undefined {
@@ -340,6 +346,10 @@ export class SwWrtShell extends SwEditShell {
   /** Returns the Writer editing command shell for top-priority frame registration. @returns SfxShell adapter. */
   public GetCommandShell(): SfxShell {
     return this.textShell.GetShell();
+  }
+  /** Returns the existing native text command owner. @returns Text shell. */
+  public GetTextShell(): SwTextShell {
+    return this.textShell;
   }
   /** Returns the context shell that owns list toolbar execution and state. @returns Active list shell. */
   public GetListShell(): SwListShell {
@@ -739,12 +749,12 @@ export class SwWrtShell extends SwEditShell {
 
   /** Applies or removes the active paragraph's default list. @param kind - Next list kind. @returns Whether content changed. */
   public SetParagraphListKind(kind: WriterParagraphListKind): boolean {
-    return this.listShell.SetParagraphListKind(kind);
+    return this.textShell.SetParagraphListKind(kind);
   }
 
   /** Continues the selected list from the nearest earlier list. @returns Whether a list was joined. */
   public ContinueNumbering(): boolean {
-    return this.listShell.ContinueNumbering();
+    return this.textShell.ContinueNumbering();
   }
 
   /** Promotes or demotes the active list paragraph. @param command - Level transition. @returns Whether content changed. */

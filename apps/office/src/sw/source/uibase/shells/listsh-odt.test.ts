@@ -51,12 +51,11 @@ describe("Writer Continue Numbering ODT regression", /** Groups real ODT command
       expect(history.GetActionCount()).toBe(2);
       expect(history.GetPayloadSize()).toBe(12);
       const slot = shell
-        .GetListShell()
         .GetCommandShell()
         .GetInterface()
         .GetSlot(WRITER_COMMAND_IDS.continueNumbering);
       if (slot === undefined) throw new Error("Continue Numbering slot is missing");
-      const command = shell.GetListShell().GetCommandShell().ResolveSlot(slot.slotId);
+      const command = shell.GetCommandShell().ResolveSlot(slot.slotId);
       expect(command?.execute(new SfxRequest(slot.slotId))).toMatchObject({
         status: "executed",
         value: true,

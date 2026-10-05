@@ -196,15 +196,11 @@ it.each(cases)(
     expect([...owner.shell.GetCursor().GetRingContainer()]).toHaveLength(3);
     expect(owner.shell.SearchNumRule(kind === "numbered", listId)).toBe(previous.GetNumRule());
     expect(listId.value).toBe("prior");
-    expect(owner.shell.GetListShell().CanContinueNumbering()).toBe(true);
+    expect(owner.shell.GetTextShell().CanContinueNumbering()).toBe(true);
     const slot = required(
-        owner.shell
-          .GetListShell()
-          .GetCommandShell()
-          .GetInterface()
-          .GetSlot(WRITER_COMMAND_IDS.continueNumbering),
+        owner.shell.GetCommandShell().GetInterface().GetSlot(WRITER_COMMAND_IDS.continueNumbering),
       ),
-      command = required(owner.shell.GetListShell().GetCommandShell().ResolveSlot(slot.slotId));
+      command = required(owner.shell.GetCommandShell().ResolveSlot(slot.slotId));
     expect(command.execute(new SfxRequest(slot.slotId))).toMatchObject({
       status: "executed",
       value: true,
@@ -388,7 +384,7 @@ it("native restart guards ignore structural and plain positions and reject forei
         other.doc.SetNumRuleStart(position, true),
     ).toThrow(/another node array/);
     owner.shell.GetCursor().GetPoint().nNode.Assign(owner.table.GetTableNode());
-    expect(owner.shell.GetListShell().CanContinueNumbering()).toBe(false);
+    expect(owner.shell.GetTextShell().CanContinueNumbering()).toBe(false);
     expect(owner.shell.ContinueNumbering()).toBe(false);
   } finally {
     range.Dispose();
@@ -401,7 +397,7 @@ it("native continuation stops at an outline list rather than skipping to an olde
   applyWriterParagraphList(owner.secondBody, { kind: "numbered", styleId: "OutlineStop" });
   required(owner.secondBody.GetNumRule()).SetRuleType(SwNumRuleType.OUTLINE_RULE);
   owner.shell.FocusNode(owner.lastBody);
-  expect(owner.shell.GetListShell().CanContinueNumbering()).toBe(false);
+  expect(owner.shell.GetTextShell().CanContinueNumbering()).toBe(false);
   expect(owner.shell.ContinueNumbering()).toBe(false);
   expect(owner.lastBody.GetListKind()).toBe("none");
   expect(owner.docShell.GetUndoManager().GetUndoActionCount()).toBe(0);

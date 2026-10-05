@@ -138,15 +138,11 @@ it.each(commandCases)(
       beforeFirst = owner.first.CaptureListItems(),
       beforeSecond = owner.second.CaptureListItems();
     select(owner.shell, owner.first, owner.second, direction);
-    expect(owner.shell.GetListShell().CanContinueNumbering()).toBe(true);
+    expect(owner.shell.GetTextShell().CanContinueNumbering()).toBe(true);
     const slot = required(
-        owner.shell
-          .GetListShell()
-          .GetCommandShell()
-          .GetInterface()
-          .GetSlot(WRITER_COMMAND_IDS.continueNumbering),
+        owner.shell.GetCommandShell().GetInterface().GetSlot(WRITER_COMMAND_IDS.continueNumbering),
       ),
-      command = required(owner.shell.GetListShell().GetCommandShell().ResolveSlot(slot.slotId));
+      command = required(owner.shell.GetCommandShell().ResolveSlot(slot.slotId));
     expect(command.execute(new SfxRequest(slot.slotId))).toMatchObject({
       status: "executed",
       value: true,
@@ -266,11 +262,11 @@ it.each(["body", "cells"] as const)(
       previous = owner.previous;
     previous.GetNumRule()?.SetRuleType(SwNumRuleType.OUTLINE_RULE);
     owner.shell.FocusNode(owner.first);
-    expect(owner.shell.GetListShell().CanContinueNumbering()).toBe(false);
+    expect(owner.shell.GetTextShell().CanContinueNumbering()).toBe(false);
     expect(owner.shell.ContinueNumbering()).toBe(false);
     previous.GetNumRule()?.SetRuleType(SwNumRuleType.NUM_RULE);
     applyWriterParagraphList(previous, { kind: "bullet", styleId: "Bullets", listId: "bullets" });
-    expect(owner.shell.GetListShell().CanContinueNumbering()).toBe(true);
+    expect(owner.shell.GetTextShell().CanContinueNumbering()).toBe(true);
     expect(owner.shell.ContinueNumbering()).toBe(true);
     expect(owner.first.GetListKind()).toBe("bullet");
     expect(owner.first.GetListId()).toBe("bullets");
@@ -335,7 +331,7 @@ it("native continuation retains restart values and returns false for an unchange
   expect(owner.first.IsListRestart()).toBe(true);
   expect(owner.first.GetAttrListRestartValue()).toBe(7);
   owner.shell.FocusNode(owner.previous);
-  expect(owner.shell.GetListShell().CanContinueNumbering()).toBe(false);
+  expect(owner.shell.GetTextShell().CanContinueNumbering()).toBe(false);
   expect(owner.shell.ContinueNumbering()).toBe(false);
 });
 it("numeric continuation history owns independent tuples and rejects foreign replay", /** Checks no retained node identity or caller item-set ownership. @returns Nothing. */ () => {

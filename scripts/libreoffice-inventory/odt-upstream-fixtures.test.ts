@@ -212,13 +212,12 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
     expect(last.IsListRestart()).toBe(true);
     shell.SetPaM(new SwPosition(last, last.Len()), new SwPosition(penultimate, 0));
     const slot = shell
-      .GetListShell()
       .GetCommandShell()
       .GetInterface()
       .GetSlot(WRITER_COMMAND_IDS.continueNumbering);
     expect(slot).toBeDefined();
     if (slot === undefined) throw new Error("Continue Numbering slot was not generated");
-    const command = shell.GetListShell().GetCommandShell().ResolveSlot(slot.slotId);
+    const command = shell.GetCommandShell().ResolveSlot(slot.slotId);
     expect(command?.execute(new SfxRequest(slot.slotId))).toMatchObject({
       status: "executed",
       value: true,

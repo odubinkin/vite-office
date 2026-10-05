@@ -401,9 +401,6 @@ export function CommandMenuBar({
             </div>
           );
         }
-        const command = commandSource.QueryCommand(item.commandId);
-        /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
-        if (command === undefined) return null;
         return (
           <BindingsMenuCommand
             closeMenu={closeMenu}

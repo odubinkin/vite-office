@@ -99,8 +99,8 @@ export function createWriterDocumentSession(
     view.GetCommandShell(),
     workflowCommandShell.GetShell(),
     view.GetWrtShell().GetCommandShell(),
-    view.GetWrtShell().GetListShell().GetCommandShell(),
   ]);
+  view.SelectShell();
   const viewStore = new WriterViewStore(view);
   const autosave =
     services.odtStore === undefined

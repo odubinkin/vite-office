@@ -202,7 +202,7 @@ it.each(commandCases)(
       }
       expect(owner.shell.HasBoxSelection()).toBe(true);
       expect([...owner.shell.GetCursor().GetRingContainer()]).toHaveLength(3);
-      expect(owner.shell.GetListShell().GetKind()).toBe(kind);
+      expect(owner.shell.GetTextShell().GetListKind()).toBe(kind);
       for (const node of neighbors) expect(node.GetListKind()).toBe("none");
       expect(owner.body.GetListKind()).toBe("none");
       expect(owner.outside.GetListKind()).toBe("none");
@@ -352,7 +352,7 @@ it.each(stateCases)(
     expect(owner.shell.HasBullet()).toBe(first === "bullet");
     expect(owner.shell.SelectionHasNumber()).toBe(last === "numbered");
     expect(owner.shell.SelectionHasBullet()).toBe(last === "bullet");
-    expect(owner.shell.GetListShell().GetKind()).toBe(last);
+    expect(owner.shell.GetTextShell().GetListKind()).toBe(last);
     expect(owner.secondBody.GetListKind()).toBe("none");
     other.Dispose();
   },
@@ -394,7 +394,7 @@ it.each(emptyCases)(
     }
     expect(owner.shell.SelectionHasNumber()).toBe(kind === "numbered" && shape !== "mixed");
     expect(owner.shell.SelectionHasBullet()).toBe(kind === "bullet" && shape !== "mixed");
-    expect(owner.shell.GetListShell().GetKind()).toBe(shape === "mixed" ? "none" : kind);
+    expect(owner.shell.GetTextShell().GetListKind()).toBe(shape === "mixed" ? "none" : kind);
   },
 );
 it.each([false, true])(
