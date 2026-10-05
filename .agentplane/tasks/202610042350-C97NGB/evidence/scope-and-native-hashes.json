@@ -1,0 +1,63 @@
+{
+  "semanticPaths": [
+    "apps/office/src/sw/inc/swtypes.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-attribute-query.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 354,
+  "priorByteIdentical": 354,
+  "newAppCases": 48,
+  "existingRuntimeRows": 238,
+  "newUnverifiedRuntimeRows": 2,
+  "currentRuntimeRows": 240,
+  "existingStatusesDefaultsExceptionsPreserved": true,
+  "twoResponsibilityAppendicesAndQuerySplitOnly": true,
+  "staticChecks": 6,
+  "absentProfile": {
+    "build": 1,
+    "appTests": 2764,
+    "appFiles": 272,
+    "firstPassAppTests": 2761,
+    "firstFailedNewFixtureCases": 3,
+    "inventoryTests": 109,
+    "inventoryFiles": 36,
+    "scriptsTests": 5,
+    "chromium": 99
+  },
+  "appCoverage100": true,
+  "inventoryCoverage100": true,
+  "failedCaseReplayAttempts": 1,
+  "failedCasesOnlyPassed": 3,
+  "productionUnchangedAfterFullProfile": true,
+  "noPassingSuiteOrBuildReplay": true,
+  "vendorRestored": true,
+  "restoredSourceAudits": 5,
+  "semanticViolations": 0,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+      "sha256": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+      "sha256": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+      "sha256": "b59e66c9c5d31bf6fc0416a160e1584e465c4d2ac8e37ddf08607d9b570fbb60"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    }
+  ],
+  "nativeReview": "Iteration128 restores GetTextAttrMode Default0/Expand1/Parent2 and SwTextNode.GetTextAttrAt for existing ranged AUTO53/INET54. Native Which/start traversal returns the last matching actual owned attribute without allocation,cloning or DTO authority. Existing internet metadata and partitioned run projection share the native Default query. Direct owned-range mutation tests exercise overwrite behavior;valid adjacent links exercise shell/copy/graph/Worker paths. Native thints.cxx forbids nested hyperlinks,so the existing same-family normalization rejection is preserved. All354 prior tests and238 runtime states/defaults/exceptions remain unchanged;two extracted native modules remain wholly unverified. Full vector/dummy/other-family lookup,same-start native tie ordering,insertion/nesting validation,input inheritance/native caller modes/style clients/UNO/full core/UI parity remain unverified;registered save/open/recovery deviations preserved."
+}

@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+      "exit": 0
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+      "exit": 0
+    },
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "errors": 0,
+      "unchangedLegacyWarnings": 2
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0
+    }
+  ],
+  "manifestAdjustment": "Restored original filename exception order;scope audit proves all prior manifest fields retained except two declared bounded appendices.",
+  "productionUnchangedAfterFullProfile": true
+}
