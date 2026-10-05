@@ -1,0 +1,33 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run exact576failednames --reporter=json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 132,
+      "sha256": "3a734256f30ccdd1945a86799ee9370b936336505f282361a38f7ceeb3845eff",
+      "selectedCount": 576,
+      "selectedNamesSHA256": "15b6a6f38ce08676c93829f8da24aaae8497bba3ddc8e8d93648fbde086859b7",
+      "passed": 576,
+      "failedCases": [],
+      "skipped": 206,
+      "selectedActualNamesSHA256": "15b6a6f38ce08676c93829f8da24aaae8497bba3ddc8e8d93648fbde086859b7",
+      "reportSHA256": "f3ae3897292b25c1ae72dd9b6976529756805f5164ba44d94abcd03141e21919"
+    },
+    {
+      "command": "npm exec -- vitest run inventory exact1failedname --coverage --coverage.reportOnFailure --isolatedDiagnosticThresholds=0 --reporter=json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 138,
+      "sha256": "582d8a8d9ea8b6b05294784bee7c8f22f5857cd06e71850676114f1735059c5e",
+      "selectedCount": 1,
+      "selectedNamesSHA256": "a2c17ca9b407d7e698203cb7e100cf9788daf265bc5a9913436e92fb0c9129e4",
+      "passed": 1,
+      "failedCases": [],
+      "skipped": 2,
+      "selectedActualNamesSHA256": "a2c17ca9b407d7e698203cb7e100cf9788daf265bc5a9913436e92fb0c9129e4",
+      "reportSHA256": "7e69786fda4758f3b0ff65b03ee497f6a91ea4e0946b842394fcf98541449a34"
+    }
+  ]
+}

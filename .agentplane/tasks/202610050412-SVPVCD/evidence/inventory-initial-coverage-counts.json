@@ -1,0 +1,63 @@
+{
+  "total": {
+    "lines": {
+      "total": 1464,
+      "covered": 1460,
+      "skipped": 0,
+      "pct": 99.72
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1519,
+      "skipped": 0,
+      "pct": 99.73
+    },
+    "functions": {
+      "total": 384,
+      "covered": 381,
+      "skipped": 0,
+      "pct": 99.21
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "incompleteFiles": {
+    "/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/parity-mapping-cli.ts": {
+      "lines": {
+        "total": 31,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 87.09
+      },
+      "functions": {
+        "total": 6,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 50
+      },
+      "statements": {
+        "total": 33,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 87.87
+      },
+      "branches": {
+        "total": 24,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "summarySHA256": "54d38a94f3d343b653628a3fa90925b866528078c4754b23579bb04a57ea456d"
+}
