@@ -1,0 +1,7 @@
+{
+  "command": "npm run check:source-provenance",
+  "reason": "Changed native SwAttrHandler Init owner after original restored audit; check final owner and evidence anchors only.",
+  "exit": 0,
+  "bytes": 205,
+  "sha256": "d0008ebc9e42cc0b90cbbd4c9291d042ad47ca7511c6d2d40bdff504c119012f"
+}
