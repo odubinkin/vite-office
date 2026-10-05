@@ -1,10 +1,11 @@
 ---
 id: "202610052015-F1RK1H"
 title: "Continue numbering through native ring commands"
-status: "DOING"
+result_summary: "Continue native list numbering across every selected table/body ring, remove UI direct attribute/history builder, preserve live cursor during restart, and support structural native positions."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610052015-F1RK1H/evidence/browser-final-profile.json"
   findings:
     - "All actual selected native rings delegated to core; removed UI attribute/history builder. Initial six new failures repaired with six failed plus three new app cases only; final coverage actual100%.133 committed Chromium scenarios verified without passing replay; unsupported restarted-cell ODT probe retained as a limitation."
-commit: null
+commit:
+  hash: "75f4bb058764271d01abd7d2fd56fafe1cd3c5d0"
+  message: "🧩 F1RK1H task: record verified native ring continuation"
 comments:
   -
     author: "CODER"
     body: "Start: source-confirmed native continuation ring dispatch and restart flag history under standing iterative user authorization; preserve conscious IO exceptions and one absent profile."
+  -
+    author: "CODER"
+    body: "Verified: Add to List delegates all native selection rings and rule-sensitive restart to core, with atomic history and table cursor preserved.12470app/109inventory/5scripts/133committedChromium,actual100%coverage,static/source/scope/AP gates pass; same-agent exact-SHA EVALUATOR pass. Broad goal remains active."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native all-ring Add to List and removed UI attribute/history builder. Six statics and changed-file checks, ONE absent profile plus six failed/three new app cases and one supported new browser case only;12470app/109inventory/5scripts/133committedChromium passed,actual coverage100%. Six-owner final source/bundle hashes and exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b EVALUATOR pass 20261005-204422908-recovery-context. Unsupported browser cell-list ODT probe retained as gap; no passing replay. Five restored audits/scope/AP/doctor/routing pass; conscious IO deviations unchanged."
+  -
+    type: "status"
+    at: "2026-10-05T20:44:56.332Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Add to List delegates all native selection rings and rule-sensitive restart to core, with atomic history and table cursor preserved.12470app/109inventory/5scripts/133committedChromium,actual100%coverage,static/source/scope/AP gates pass; same-agent exact-SHA EVALUATOR pass. Broad goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-05T20:44:52.746Z"
+doc_updated_at: "2026-10-05T20:44:56.333Z"
 doc_updated_by: "CODER"
 description: "Iteration163: remove duplicated UI rule/history application and repair Add to List across actual selected table rows and columns; native rule-sensitive restart history and inherited SetCurNumRule own execution."
 sections:
@@ -145,6 +158,10 @@ sections:
     Result: all5pass first final attempts0semantic violations. Scope audit11intentional paths/6owner records,418prior testfiles417byteidentical1exact source-confirmed native restart-action payload correction; all behavior assertions retained.250states/defaults/classifications/conscious save/open/recovery exceptions and prior evidence preserved; only native SwUndoNumRuleStart symbol appended. AP ignored-inclusive4332files0forbidden. No upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/raw diagnostics. Doctor0errors2pre-existing warnings; routingOK.
 
     Limits: UI existing command behavior and core generic structural positions/nullable index/native boolean restart history only. SfxRequest.IsAPI/macro semantics, native StartUndo ID/rewriter, numeric restart-value overload/Repeat/document-owned auto append/SwHistory/full shell hierarchy/client/layout/merged/rule factory remain unverified. Column selector absent: corecolumn tested,Chromiumrows only. ODT table-cell list import and UI restart control remain missing existing gaps; broad table/list rendering/editing/protection/clipboard/layout/UI parity open. Conscious IO/recovery deviations unchanged. Same-agent explicit EVALUATOR pass 20261005-204422908-recovery-context bound to exact semantic SHA 643bd96a97e6188a21f23aa282c4050ec390654b; recorded verification OK, no independent reviewer claimed. One leaf per goal turn.
+extensions:
+  implementation_commit:
+    hash: "643bd96a97e6188a21f23aa282c4050ec390654b"
+    message: "🧩 F1RK1H code: continue lists through native selection rings"
 id_source: "generated"
 ---
 ## Summary
