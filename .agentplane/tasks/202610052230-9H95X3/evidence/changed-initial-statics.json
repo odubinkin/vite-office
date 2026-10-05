@@ -1,0 +1,8 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/browser/editor/native-outline-tab.test.tsx",
+    "exit": 1,
+    "bytes": 176,
+    "sha256": "101ab0bd443220c34ed04731fb0371b95fc76c65e3fb0e1f11b49cdb1ad76e8b"
+  }
+]
