@@ -1,10 +1,11 @@
 ---
 id: "202610051618-SK8V77"
 title: "Restore native text attribute history for paragraph split Undo"
-status: "DOING"
+result_summary: "Represented SwUndoSplitNode now records original ranged attributes through SwHistory, restores native ranges/metadata with forward temporary rollback, rearms on Redo and releases history. Fresh native redo state replaces two fragment snapshots and hint-equality adapter.406of407prior files unchanged;one stale pointer expectation corrected. Native physical node identity and broad UI list/table parity remain open."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -46,7 +47,9 @@ quality_review:
     - ".agentplane/tasks/202610051618-SK8V77/evidence/closure-profile.json"
   findings:
     - "29new cases pass;12215distinct app/109inventory/5scripts/120Chromium. One source-contradicted stale hyperlink pointer expectation closed failed-only with8skipped;406of407prior files byte-identical. Actual100% app/inventory L/S/F/B; production hashes unchanged after full build. Six statics final pass and5restored audits0violations.250states/defaults/exceptions/prior evidence preserved. Removed two fragment snapshots/equality adapter, no TextRuns layer added."
-commit: null
+commit:
+  hash: "055b8bd7214200617dbd2006e459618a03fc1b9c"
+  message: "🧩 SK8V77 task: record verified native split history"
 comments:
   -
     author: "CODER"
@@ -54,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Start: source-confirmed single failed hyperlink identity assertion refinement; no passing profile replay."
+  -
+    author: "CODER"
+    body: "Verified: native ranged split history and fresh redo core state;29new cases,12215distinct app/109inventory/5scripts/120Chromium;actual100%coverage,one failed-only closure,conscious exceptions preserved."
 events:
   -
     type: "status"
@@ -75,8 +81,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic1f2931231ee6 same-agent EVALUATOR pass.12215distinct app,109inventory,5scripts,120Chromium;29new cases. One failed-only closure,8skipped, no passing replay; initial100%app/inventory counters preserved with unchanged production hashes. Six statics finalpass,5restoredsourceaudits0violations,406of407priorfiles unchanged/1native fresh pointer correction,250records/defaults/exceptions preserved."
+  -
+    type: "status"
+    at: "2026-10-05T16:49:19.160Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native ranged split history and fresh redo core state;29new cases,12215distinct app/109inventory/5scripts/120Chromium;actual100%coverage,one failed-only closure,conscious exceptions preserved."
 doc_version: 3
-doc_updated_at: "2026-10-05T16:48:36.989Z"
+doc_updated_at: "2026-10-05T16:49:19.161Z"
 doc_updated_by: "CODER"
 description: "Iteration155 native conditional SwHistory capture/rollback/rearm and provisional redo native state ownership; removes obsolete fragment snapshot comparison."
 sections:
@@ -126,6 +139,10 @@ sections:
     Iteration155 verified represented ranged split history only. Native conditional SwHistory.CopyAttr(original hints,node,0,Len,false), empty discard, JoinNext then whole represented ranged reset and forward TmpRollback(doc,0,false), redo SetTmpEnd(Count), destructor release implemented in existing unspnd owner. Existing RestoreSplitTextNode removes two captured text/hint snapshots and complete equality adapter, copies fresh core direct items/collection/maps with existing owner lifecycle; text/foreign/connected guards retained. No TextRuns or DTO adapter added. Native fresh redo attribute/item identity intentionally replaces stale pointer expectation; retained paragraph identity remains an unverified bridge, not an upstream exception. Native text history does not promise original direct paragraph/list level restoration.
     29 new cases initially passed across AUTO/INET boundaries/flags/format-ignore bits/metadata/three cycles/payload/destructor/full-span promotion and actual SwEditWin table-cell Enter; adjacent cells/body intact. ONE full upstream-absent build/app/inventory/scripts/Chromium profile;12214 app passed/1 old hyperlink pointer failure of12215,109 inventory,5 scripts,120 Chromium passed. Original exact failure saved before assertion. Source-confirmed refinement only one old test changes fresh Redo identity/item/backlinks and following retained join pointer;407 prior files406 byte-identical. Failed-only one-case closure passed with8 skipped; no passing test/build/suite/browser/inventory replay. All production hashes equal initial full build/profile; actual app/inventory L/S/F/B100%, maps only ignored appcache. Six static gates passed; initial typecheck four missing pending-itemset arguments in new tests fixed, only failed gate repeated; changed-file statics passed. Five source audits after vendor restored passed,0semantic violations.250 states/defaults/classifications/exceptions/prior evidence preserved; additive2owner evidence only; scope6paths. AP ignored-inclusive scan4208 files0forbidden before quality, no upstream copies/helpers/Python/native probes/raw diffs/source frames/diagnostics. No network/outside/global/subagents.
     Residuals: native new-prefix/original-suffix physical ownership versus retained portable prefix identity, native redo fresh node/undo-area, full CutImpl/page-break/frame/client/redline/field lifetimes and broad UI lists/table behavior remain unverified. Conscious save/open/recovery deviations preserved; parent goal remains active.
+extensions:
+  implementation_commit:
+    hash: "1f2931231ee6a1aaf7f759b9f34e18b6dc4c5e13"
+    message: "🧩 SK8V77 code: restore native ranged split history and fresh redo state"
 id_source: "generated"
 ---
 ## Summary
