@@ -1,0 +1,121 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI dispatches actual level menus through list context and preserves text with native history"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI uses captured DOM point rather than all-range availability boundary=false"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI uses captured DOM point rather than all-range availability boundary=true"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI keeps no-label numbering outside native list shell context"
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+      "name": "native list context UI restores native list shell after text-shell removal and UndoRedo"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+      "name": "native list context does not let another eligible ring enable a boundary current point"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+      "name": "native list context retains native table and selected-cell flags while masking cell mode for shell selection"
+    }
+  ],
+  "originalFailedInventory": [
+    {
+      "file": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+      "name": "pinned LibreOffice ODT feature fixtures continues tdf113213_addToList.odt and restores the original list with one Undo"
+    }
+  ],
+  "originalFailedChromium": [
+    "Writer native list context and point state width=1280",
+    "Writer native list context and point state width=390"
+  ],
+  "newAppCases": [],
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-list-context.test.tsx src/sw/source/uibase/shells/native-list-context.test.ts --testNamePattern=^(?:native list context UI dispatches actual level menus through list context and preserves text with native history|native list context UI uses captured DOM point rather than all-range availability boundary=false|native list context UI uses captured DOM point rather than all-range availability boundary=true|native list context UI keeps no-label numbering outside native list shell context|native list context UI restores native list shell after text-shell removal and UndoRedo|native list context does not let another eligible ring enable a boundary current point|native list context retains native table and selected-cell flags while masking cell mode for shell selection)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4VZ510.closure-app-results.json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 1,
+      "bytes": 134398,
+      "sha256": "25f5e96eef6fab3239d1c0241350cd8300a0dcdbd83f97a2d36d12208cdedeec",
+      "caseCounts": {
+        "passed": 4,
+        "failed": 3,
+        "skipped": 12,
+        "total": 19
+      },
+      "executedCases": [
+        "native list context UI dispatches actual level menus through list context and preserves text with native history",
+        "native list context UI uses captured DOM point rather than all-range availability boundary=false",
+        "native list context UI uses captured DOM point rather than all-range availability boundary=true",
+        "native list context UI keeps no-label numbering outside native list shell context",
+        "native list context UI restores native list shell after text-shell removal and UndoRedo",
+        "native list context does not let another eligible ring enable a boundary current point",
+        "native list context retains native table and selected-cell flags while masking cell mode for shell selection"
+      ],
+      "failedCases": [
+        "native list context UI uses captured DOM point rather than all-range availability boundary=false",
+        "native list context UI uses captured DOM point rather than all-range availability boundary=true",
+        "native list context UI keeps no-label numbering outside native list shell context"
+      ],
+      "errors": [],
+      "coverageMapSHA256": "b5183d5b423979c0b991f4e49851328ea6bf63a97fbca121416dccf237f38f66"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts --testNamePattern=^(?:pinned LibreOffice ODT feature fixtures continues tdf113213_addToList\\.odt and restores the original list with one Undo)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/4VZ510.closure-inventory-results.json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 8906,
+      "sha256": "02fe13268cf7f02b512f619fe0ade5698d9f7f49b6bc5638998c9638505a0ab1",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 9,
+        "total": 10
+      },
+      "executedCases": [
+        "pinned LibreOffice ODT feature fixtures continues tdf113213_addToList.odt and restores the original list with one Undo"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "4a0d4ba5d7fcb32663abbc292251c032333c337ba1d03a1f781f4a5180d439d4"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-list-context.spec.ts --grep=(?:Writer native list context and point state width=1280|Writer native list context and point state width=390)$ --reporter=list,json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 1,
+      "bytes": 6599,
+      "sha256": "2b5dd1eaaa381a75ba1705395f48006b9eab4ccb7baaea560d9787ca938121d4",
+      "caseCounts": {
+        "startTime": "2026-10-05T23:31:51.336Z",
+        "duration": 13376.983,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer native list context and point state width=1280",
+        "Writer native list context and point state width=390"
+      ],
+      "failedCases": [
+        "Writer native list context and point state width=1280",
+        "Writer native list context and point state width=390"
+      ],
+      "errors": []
+    }
+  ]
+}
