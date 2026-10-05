@@ -246,11 +246,12 @@ export function getWriterSelectedTextRanges(cursor: SwPaM): readonly WriterTextR
   const lastNode = last.GetNode() as SwTextNode;
   // SwPaM.Assign validates that both endpoints belong to one SwNodes graph.
   return firstNode
-    .GetDoc()
-    .paragraphs.filter(
-      /** Keeps only body paragraphs within the inclusive Writer node span. @param node - Body paragraph. @returns Whether selected. */ (
-        node,
-      ) => node.GetIndex() >= firstNode.GetIndex() && node.GetIndex() <= lastNode.GetIndex(),
+    .GetNodes()
+    .entries()
+    .slice(firstNode.GetIndex(), lastNode.GetIndex() + 1)
+    .filter(
+      /** Selects actual text nodes within the native PaM span, including cell text. @param node - Connected node. @returns Whether it contains editable text. */
+      (node): node is SwTextNode => node.IsTextNode(),
     )
     .map(
       /** Converts one selected paragraph to its local bounded range. @param node - Selected paragraph. @returns Local range. */ (

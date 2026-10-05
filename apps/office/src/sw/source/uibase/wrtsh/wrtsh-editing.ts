@@ -5,7 +5,11 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition, type SwPaM, type WriterTextRange } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import { createWriterListItemSet } from "../../core/doc/list";
-import type { SwTextFragment, SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
+import {
+  SwTextNode,
+  type SwTextFragment,
+  type SwTextNode as WriterParagraph,
+} from "../../core/txtnode/ndtxt";
 import {
   SwUndoDelete,
   SwUndoJoinParagraphs,
@@ -301,15 +305,19 @@ export class SwWrtShellEditingOperations {
   /** Joins a paragraph into its predecessor. @param paragraph - Removed trailing paragraph. @returns Whether changed. */
   public MergeParagraphWithPrevious(paragraph: WriterParagraph): boolean {
     const document = this.port.getDoc();
-    const index = document.paragraphs.indexOf(paragraph);
-    if (index <= 0) return false;
-    const preceding = document.paragraphs[index - 1] as WriterParagraph;
+    const index = paragraph.GetIndex();
+    const preceding = document.nodes.at(index - 1);
+    if (
+      !(preceding instanceof SwTextNode) ||
+      preceding.StartOfSectionNode() !== paragraph.StartOfSectionNode()
+    )
+      return false;
     const offset = preceding.Len();
     return this.port.applyAction(
       new SwUndoJoinParagraphs(
         preceding,
         offset,
-        document.paragraphs[index] as WriterParagraph,
+        paragraph,
         this.port.captureCursorState(),
         this.port.createCollapsedCursorState(preceding, offset),
       ),
@@ -319,9 +327,13 @@ export class SwWrtShellEditingOperations {
   /** Joins the following paragraph into the selected node. @param paragraph - Preceding paragraph. @returns Whether changed. */
   public MergeParagraphWithNext(paragraph: WriterParagraph): boolean {
     const document = this.port.getDoc();
-    const index = document.paragraphs.indexOf(paragraph);
-    if (index < 0 || index === document.paragraphs.length - 1) return false;
-    return this.MergeParagraphWithPrevious(document.paragraphs[index + 1] as WriterParagraph);
+    const next = document.nodes.at(paragraph.GetIndex() + 1);
+    if (
+      !(next instanceof SwTextNode) ||
+      next.StartOfSectionNode() !== paragraph.StartOfSectionNode()
+    )
+      return false;
+    return this.MergeParagraphWithPrevious(next);
   }
 
   /** Deletes a cross-node selection and joins its boundaries. @returns Whether changed. */

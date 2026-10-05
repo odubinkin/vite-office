@@ -11,8 +11,8 @@ import type { SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
 import type { SfxMediumOperationStatus } from "../../../sfx2/source/doc/docfile";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
-import type { SwTextNode, WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
+import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
+import { SwTextNode, projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
 import { type WriterTextRun } from "../../source/filter/basflt/writer-transfer";
 import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
@@ -133,6 +133,7 @@ export interface WriterPresentationProjection {
   readonly lineNumberInfo: SwLineNumberInfoValue;
   readonly modelRevision: number;
   readonly paragraphs: readonly WriterParagraphProjection[];
+  readonly textNodes: readonly WriterParagraphProjection[];
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   readonly pageDescriptor: WriterPageDescriptorValue;
   readonly pageDescriptors: readonly Readonly<{
@@ -185,7 +186,11 @@ export class WriterViewProjection {
     const tabsRelativeToIndent = document
       .GetDocumentSettingManager()
       .get("TABS_RELATIVE_TO_INDENT");
-    const paragraphs = document.paragraphs.map(
+    const nodes = document.nodes.entries().filter(
+      /** Selects connected text owners across body and cell sections. @param node - Actual node. @returns Whether text. */
+      (node): node is SwTextNode => node instanceof SwTextNode,
+    );
+    const textNodes = nodes.map(
       /** Projects one canonical text node. @param node - Live node. @returns Frozen primitive paragraph. */ (
         node,
       ) => {
@@ -314,7 +319,12 @@ export class WriterViewProjection {
         });
       },
     );
-    const activeParagraphIndex = document.paragraphs.indexOf(activeParagraph);
+    const bodyNodes = document.paragraphs;
+    const paragraphs = bodyNodes.map(
+      /** Keeps body layout separate from cell text owners. @param node - Body node. @returns Immutable display paragraph. */
+      (node) => textNodes[nodes.indexOf(node)] as WriterParagraphProjection,
+    );
+    const activeParagraphIndex = bodyNodes.indexOf(activeParagraph);
     const point = cursor.GetPoint();
     const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
     const cursorSelection: WriterCursorSelection = {
@@ -334,13 +344,14 @@ export class WriterViewProjection {
       },
     };
     return Object.freeze({
-      activeParagraph: paragraphs[activeParagraphIndex] as WriterParagraphProjection,
+      activeParagraph: textNodes[nodes.indexOf(activeParagraph)] as WriterParagraphProjection,
       activeParagraphIndex,
       cursorSelection: Object.freeze(cursorSelection),
       documentState: Object.freeze({ ...documentState }),
       lineNumberInfo: Object.freeze(document.GetLineNumberInfo().QueryValue()),
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),
       paragraphs: Object.freeze(paragraphs),
+      textNodes: Object.freeze(textNodes),
       paragraphStyleOptions: createParagraphStyleOptions(document),
       pageDescriptor: document.GetPageDesc().GetValue(),
       pageDescriptors: Object.freeze(

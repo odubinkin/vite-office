@@ -11,7 +11,7 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
-import { WriterEditableTable, editWriterTableCell } from "../editor/WriterEditableTable";
+import { WriterEditableTable } from "../editor/WriterEditableTable";
 import { WriterTableDialog } from "./WriterTableDialog";
 
 describe("Writer browser table controls", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
@@ -159,7 +159,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     expect(submit).not.toHaveBeenCalled();
   });
 
-  it("renders row selection and edits text through the canonical cell node", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("renders row selection and registers canonical cell text without a write adapter", /** Checks declarative display and shared selection metadata. @returns Nothing. */ () => {
     const document = createWriterDocument();
     const table = document.nodes.MakeTableNode("Table1", { width: 5000 });
     table.AddColumnWidth(5000);
@@ -167,37 +167,41 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const node = row.GetTabBoxes()[0]?.GetParagraphs()[0];
     if (node === undefined) throw new Error("Writer test cell is missing.");
     node.SetText("start");
-    const select = vi.fn();
-    const { rerender } = render(<WriterEditableTable onSelectRow={select} table={table} />);
+    const select = vi.fn(),
+      retain = vi.fn();
+    const getId = /** Resolves an actual paragraph identity. @returns Stable display ID. */ () =>
+      "actual-cell";
+    const { rerender } = render(
+      <WriterEditableTable
+        onSelectRow={select}
+        table={table}
+        getParagraphId={getId}
+        retainParagraphElement={retain}
+      />,
+    );
     const rendered = screen.getByRole("table", { name: "Table1" });
     expect(within(rendered).getByRole("cell")).toHaveStyle({ padding: "5.333333333333333px" });
     fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Table1" }));
     expect(select).toHaveBeenCalledWith(0);
     const editor = screen.getByLabelText("Row 1 column 1 paragraph 1");
-    editor.textContent = "started";
-    fireEvent.input(editor);
-    expect(node.GetText()).toBe("started");
-    editWriterTableCell(node, "start");
-    expect(node.GetText()).toBe("start");
-    editWriterTableCell(node, "start");
-    editWriterTableCell(node, "xstart");
-    expect(node.GetText()).toBe("xstart");
-    fireEvent.keyDown(editor, { key: "ArrowLeft" });
-    fireEvent.mouseDown(editor);
-    fireEvent.paste(editor);
+    expect(editor).toHaveTextContent("start");
+    expect(editor).toHaveAttribute("data-writer-paragraph-id", "actual-cell");
+    expect(editor).toHaveAttribute("data-writer-node-index", String(node.GetIndex()));
+    expect(retain).toHaveBeenCalledWith("actual-cell", editor);
     const selectionsBeforeCellClick = select.mock.calls.length;
     fireEvent.click(editor);
     expect(select).toHaveBeenCalledTimes(selectionsBeforeCellClick);
-    editor.focus();
-    editor.textContent = "draft";
-    rerender(<WriterEditableTable onSelectRow={select} table={table} />);
-    expect(editor).toHaveTextContent("draft");
-    editor.blur();
-    rerender(<WriterEditableTable onSelectRow={select} table={table} />);
-    expect(editor).toHaveTextContent("xstart");
-    editor.focus();
-    editor.blur();
-    expect(editor).toHaveTextContent("xstart");
+    node.SetText("canonical");
+    rerender(
+      <WriterEditableTable
+        onSelectRow={select}
+        table={table}
+        getParagraphId={getId}
+        retainParagraphElement={retain}
+      />,
+    );
+    expect(editor).toHaveTextContent("canonical");
+    expect(editor).toHaveAttribute("data-writer-fragment-end", "9");
   });
 
   it("uses declared column widths when the table has no explicit width", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {

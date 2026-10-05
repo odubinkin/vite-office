@@ -30,6 +30,7 @@ export interface WriterPlainTextEditorProps {
   readonly editingHostRef?: RefObject<HTMLElement | null>;
   readonly layout?: SwRootFrame;
   readonly paragraphs: readonly WriterParagraph[];
+  readonly textNodes?: readonly WriterParagraph[];
   readonly pageDescriptor: WriterPageDescriptorValue;
   readonly pageDescriptors?: SwPageDescriptorLayout["descriptors"];
   readonly paragraphSpacingSettings?: SwTextFrameSettings;
@@ -148,6 +149,21 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       <WriterEditableTable
         key={`${frame.table.GetName()}:${frame.firstRow}`}
         table={frame.table}
+        getParagraphId={
+          /** Resolves the shared presentation identity of a cell node. @param node - Native cell text. @returns Stable display key. */
+          (node) =>
+            props.textNodes?.find(
+              /** Matches current actual node-array coordinates. @param value - Display text. @returns Whether the node matches. */
+              (value) => value.nodeIndex === node.GetIndex(),
+            )?.id ?? "writer-cell-" + node.GetIndex()
+        }
+        retainParagraphElement={
+          /** Registers cell paragraphs in the same selection surface as body text. @param id - Shared display identity. @param element - Mounted paragraph. @returns Nothing. */
+          (id, element) => {
+            if (element === null) paragraphElements.delete(id);
+            else paragraphElements.set(id, element);
+          }
+        }
         firstRow={frame.firstRow}
         lastRow={frame.lastRow}
         selectedRow={props.selectedTable === frame.table ? props.selectedTableRow : undefined}
@@ -270,8 +286,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         return;
       }
       selectionRestorePending.current = false;
-      /* c8 ignore next -- Chromium table editing verifies native focus retention. */
-      if (rootElement.current?.querySelector("[data-writer-table-cell]:focus") !== null) return;
       controller.RestoreSelection(props.cursorSelection);
       // Selection APIs may focus the contenteditable host. Keep toolbar navigation
       // intact while still projecting commands such as Select All into the DOM.

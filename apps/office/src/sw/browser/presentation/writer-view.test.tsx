@@ -215,8 +215,22 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(table?.GetTabLines()[1]?.GetFormat().minHeight).toBe(567);
     expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetFormat().verticalAlign).toBe("bottom");
     const cell = screen.getByLabelText("Row 2 column 1 paragraph 1");
-    cell.textContent = "Edited cell";
-    fireEvent.input(cell);
+    cell.focus();
+    const selection = window.getSelection();
+    if (selection === null) throw new Error("Missing table DOM selection.");
+    selection.setBaseAndExtent(cell, 0, cell, 0);
+    act(
+      /** Routes actual browser input through the shared edit window. @returns Nothing. */ () => {
+        cell.dispatchEvent(
+          new InputEvent("beforeinput", {
+            bubbles: true,
+            cancelable: true,
+            data: "Edited cell",
+            inputType: "insertText",
+          }),
+        );
+      },
+    );
     expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe(
       "Edited cell",
     );

@@ -175,13 +175,13 @@ export class SwEditWin {
     return new SwPosition(node, position.contentIndex);
   }
 
-  /** Resolves a current body text-node index. @param nodeIndex - Current SwNodes index. @returns Owned text node or undefined. */
+  /** Resolves an actual connected text node, including table-cell sections. @param nodeIndex - Current SwNodes index. @returns Owned text node or undefined. */
   private ResolveTextNode(nodeIndex: number): SwTextNode | undefined {
     if (!Number.isInteger(nodeIndex)) return undefined;
     const document = this.wrtShell.GetDoc();
     if (nodeIndex < 0 || nodeIndex >= document.nodes.Count()) return undefined;
     const node = document.nodes.at(nodeIndex);
-    return node instanceof SwTextNodeClass && document.paragraphs.includes(node) ? node : undefined;
+    return node instanceof SwTextNodeClass ? node : undefined;
   }
 
   /** Publishes final history/selection state after a completed operation. @param changed - Operation result. @returns Same result. */

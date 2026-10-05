@@ -1,8 +1,5 @@
 /** @fileoverview Browser table frame over canonical SwTable rows and SwTextNode cell paragraphs. */
-/* eslint-disable react-refresh/only-export-components -- Editing helper is exported for model-boundary tests. */
 
-import { useLayoutEffect, useRef } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import type { SwTable } from "../../source/core/table/swtable";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
@@ -26,39 +23,22 @@ import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
 import { WriterTextRunProjection } from "./WriterEditableParagraph";
 import { browserFontFamily } from "./writer-font-family";
 
-/** Applies a minimal contiguous edit so Writer's ranged hints and positions adjust normally. */
-/** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ export function editWriterTableCell(
-  node: SwTextNode,
-  next: string,
-): void {
-  const previous = node.GetText();
-  if (previous === next) return;
-  let start = 0;
-  while (start < previous.length && start < next.length && previous[start] === next[start])
-    start += 1;
-  let oldEnd = previous.length;
-  let newEnd = next.length;
-  while (oldEnd > start && newEnd > start && previous[oldEnd - 1] === next[newEnd - 1]) {
-    oldEnd -= 1;
-    newEnd -= 1;
-  }
-  if (oldEnd > start) node.EraseText(start, oldEnd - start);
-  if (newEnd > start) node.InsertText(next.slice(start, newEnd), start);
-}
-
 /** Keeps the browser caret in a cell while canonical text changes rerender the table frame. @param props - Cell node and position. @returns Editable cell. */
 function WriterEditableTableCell({
   paragraph,
   rowIndex,
   cellIndex,
   paragraphIndex,
+  paragraphId,
+  retainElement,
 }: Readonly<{
   paragraph: SwTextNode;
   rowIndex: number;
   cellIndex: number;
   paragraphIndex: number;
+  paragraphId: string;
+  retainElement?: (id: string, element: HTMLParagraphElement | null) => void;
 }>): React.JSX.Element {
-  const element = useRef<HTMLDivElement>(null);
   const font = paragraph.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
   const fontFamily = font.GetResolvedFamilyName();
   const fontSizePt = (paragraph.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20;
@@ -69,69 +49,19 @@ function WriterEditableTableCell({
     paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
     fontSizePt,
   );
-  const formattedText = renderToStaticMarkup(
-    <>
-      {projectWriterTextRuns(paragraph).map(
-        /** map handles this value. @param run - Input 1. @param index - Input 2. @returns The result. */ (
-          run,
-          index,
-        ) => (
-          <WriterTextRunProjection
-            inheritedBold={bold}
-            inheritedFontFamily={fontFamily}
-            inheritedItalic={italic}
-            key={index}
-            run={run}
-          />
-        ),
-      )}
-    </>,
-  );
-  useLayoutEffect(
-    /** Synchronizes formatted unfocused cell text from Writer. @returns Nothing. */ () => {
-      const cell = element.current as HTMLDivElement;
-      if (cell === document.activeElement) return;
-      if (cell.innerHTML !== formattedText) cell.innerHTML = formattedText;
-    },
-  );
   return (
-    <div
+    <p
       aria-label={`Row ${rowIndex + 1} column ${cellIndex + 1} paragraph ${paragraphIndex + 1}`}
       contentEditable
       data-writer-table-cell={`${rowIndex}:${cellIndex}`}
-      onInput={
-        /** Commits native cell input. @param event - Input event. @returns Nothing. */ (event) =>
-          editWriterTableCell(paragraph, event.currentTarget.textContent)
+      data-writer-paragraph-id={paragraphId}
+      data-writer-node-index={paragraph.GetIndex()}
+      data-writer-fragment-start={0}
+      data-writer-fragment-end={paragraph.Len()}
+      ref={
+        /** Registers the actual editable paragraph projection. @param element - Mounted node or null. @returns Nothing. */
+        (element) => retainElement?.(paragraphId, element)
       }
-      onBlur={
-        /** Restores Writer run markup after native editing finishes. @param event - Blur event. @returns Nothing. */ (
-          event,
-        ) => {
-          if (event.currentTarget.innerHTML !== formattedText)
-            event.currentTarget.innerHTML = formattedText;
-        }
-      }
-      onClick={
-        /** Keeps a cell click out of row selection. @param event - Click event. @returns Nothing. */ (
-          event,
-        ) => event.stopPropagation()
-      }
-      onKeyDown={
-        /** Keeps cell keys out of paragraph shortcuts. @param event - Key event. @returns Nothing. */ (
-          event,
-        ) => event.stopPropagation()
-      }
-      onMouseDown={
-        /** Keeps cell pointer edits out of paragraph selection. @param event - Pointer event. @returns Nothing. */ (
-          event,
-        ) => event.stopPropagation()
-      }
-      onPaste={
-        /** Lets the cell own pasted text. @param event - Paste event. @returns Nothing. */ (
-          event,
-        ) => event.stopPropagation()
-      }
-      ref={element}
       style={{
         cursor: "text",
         fontFamily: browserFontFamily(fontFamily, font.GetGenericFamily()),
@@ -146,7 +76,21 @@ function WriterEditableTableCell({
         overflowWrap: "break-word",
       }}
       suppressContentEditableWarning
-    />
+    >
+      {projectWriterTextRuns(paragraph).map(
+        /** Projects attributes for display only; input belongs to the Writer shell. @param run - Text projection. @param index - Portion index. @returns Semantic display. */
+        (run, index) => (
+          <WriterTextRunProjection
+            inheritedBold={bold}
+            inheritedFontFamily={fontFamily}
+            inheritedItalic={italic}
+            key={index}
+            run={run}
+          />
+        ),
+      )}
+      {paragraph.Len() === 0 ? <br /> : null}
+    </p>
   );
 }
 
@@ -158,6 +102,8 @@ function WriterEditableTableCell({
   firstRow = 0,
   lastRow = table.GetTabLines().length - 1,
   retainElement,
+  getParagraphId,
+  retainParagraphElement,
 }: Readonly<{
   table: SwTable;
   selectedRow?: number | undefined;
@@ -165,6 +111,8 @@ function WriterEditableTableCell({
   firstRow?: number;
   lastRow?: number;
   retainElement?: (element: HTMLTableElement | null) => void;
+  getParagraphId?: (paragraph: SwTextNode) => string;
+  retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
 }>): React.JSX.Element {
   const format = table.GetFormat();
   return (
@@ -215,8 +163,14 @@ function WriterEditableTableCell({
                   data-writer-table-row={firstRow + fragmentRowIndex}
                   key={firstRow + fragmentRowIndex}
                   onClick={
-                    /** Handles the browser table interaction.  @returns Callback result. */ () =>
-                      onSelectRow(firstRow + fragmentRowIndex)
+                    /** Selects row surfaces without intercepting text editing. @param event - Row click. @returns Nothing. */
+                    (event) => {
+                      if (
+                        !(event.target instanceof Element) ||
+                        event.target.closest("[data-writer-table-cell]") === null
+                      )
+                        onSelectRow(firstRow + fragmentRowIndex);
+                    }
                   }
                   style={{ height: (row.GetFormat().minHeight ?? 0) / 15 }}
                 >
@@ -275,6 +229,13 @@ function WriterEditableTableCell({
                                 cellIndex={cellIndex}
                                 key={paragraphIndex}
                                 paragraph={paragraph}
+                                paragraphId={
+                                  getParagraphId?.(paragraph) ??
+                                  "writer-cell-" + paragraph.GetIndex()
+                                }
+                                {...(retainParagraphElement === undefined
+                                  ? {}
+                                  : { retainElement: retainParagraphElement })}
                                 paragraphIndex={paragraphIndex}
                                 rowIndex={rowIndex}
                               />

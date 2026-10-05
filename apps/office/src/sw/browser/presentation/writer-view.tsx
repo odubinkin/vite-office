@@ -553,6 +553,7 @@ export function WriterWorkbench({
           pageDescriptors={snapshot.pageDescriptors}
           paragraphSpacingSettings={snapshot.paragraphSpacingSettings}
           paragraphs={snapshot.paragraphs}
+          textNodes={snapshot.textNodes}
           {...(currentTable === undefined ? {} : { selectedTable: currentTable })}
           {...(selectedTableRow === undefined ? {} : { selectedTableRow })}
           onSelectTableRow={

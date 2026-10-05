@@ -181,7 +181,6 @@ export class SwNodes {
       this.nodeArray.splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, paragraph, end);
       this.InsertOutlineNode(paragraph);
       const box = new SwTableBox(start, boxFormats[column]);
-      box.AddParagraph(paragraph);
       line.AddBox(box);
     }
     table.AddLine(line);
@@ -197,7 +196,6 @@ export class SwNodes {
     const paragraph = new SwTextNode(this, start, this.document.GetDfltTextFormatColl());
     this.nodeArray.splice(start.EndOfSectionNode().GetIndex(), 0, paragraph);
     this.InsertOutlineNode(paragraph);
-    box.AddParagraph(paragraph);
     this.document.NotifyModelChange({ index: paragraph.GetIndex(), kind: "node-inserted" });
     return paragraph;
   }
@@ -229,13 +227,17 @@ export class SwNodes {
     });
   }
 
-  /** Removes one body text node while retaining Writer's non-empty content invariant. @param node - Removed text node. @returns Nothing. */
+  /** Removes one connected text node while retaining its section's non-empty content invariant. @param node - Removed text node. @returns Nothing. */
   public removeTextNode(node: SwTextNode): void {
     if (node.GetNodes() !== this) throw new Error("SwTextNode belongs to another SwNodes array.");
-    const textNodes = this.getTextNodes();
+    const textNodes = this.nodeArray.filter(
+      /** Keeps actual text owners in the removed node section. @param candidate - Connected node. @returns Whether it belongs to this text section. */
+      (candidate): candidate is SwTextNode =>
+        candidate.IsTextNode() && candidate.StartOfSectionNode() === node.StartOfSectionNode(),
+    );
     if (textNodes.length === 1) throw new Error("Writer document must retain one paragraph.");
     const textIndex = textNodes.indexOf(node);
-    if (textIndex < 0) throw new Error("SwTextNode is not body content.");
+    if (textIndex < 0) throw new Error("SwTextNode is not body content or connected cell text.");
     const next = textNodes[textIndex + 1];
     const previous = textNodes[textIndex - 1];
     if (next !== undefined) node.CollapseContentIndicesTo(next, 0);

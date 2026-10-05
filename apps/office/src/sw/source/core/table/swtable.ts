@@ -1,7 +1,7 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
 
 import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
 export interface SwTableFormat {
@@ -30,8 +30,6 @@ export interface SwTableBoxFormat {
 
 /** Owns one cell section and its ordered paragraphs. */
 export class SwTableBox {
-  private readonly paragraphs: SwTextNode[] = [];
-
   /** Creates a cell. @param format - Imported cell geometry. @returns Nothing. */
   /** Projects one canonical Writer table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ public constructor(
     private readonly startNode: SwTableBoxStartNode,
@@ -53,14 +51,16 @@ export class SwTableBox {
     this.format = { ...value };
   }
 
-  /** Adds one canonical text node to this cell. @param paragraph - Cell text node. @returns Nothing. */
-  public AddParagraph(paragraph: SwTextNode): void {
-    this.paragraphs.push(paragraph);
-  }
-
-  /** Returns cell text nodes in document order. @returns Paragraphs. */
+  /** Reads the cell's current native node-array section, including split/join history changes. @returns Text nodes in document order. */
   public GetParagraphs(): readonly SwTextNode[] {
-    return this.paragraphs;
+    const nodes = this.startNode.GetNodes();
+    return nodes
+      .entries()
+      .slice(this.startNode.GetIndex() + 1, this.startNode.EndOfSectionNode().GetIndex())
+      .filter(
+        /** Selects actual cell text owners. @param node - Section member. @returns Whether text. */
+        (node): node is SwTextNode => node instanceof SwTextNode,
+      );
   }
 }
 
