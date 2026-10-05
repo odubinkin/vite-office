@@ -6,6 +6,10 @@ import { SwTable, type SwTableBox } from "../table/swtable";
 
 /** Persistent Writer cursor; cell navigation never uses body ordinals or display paragraphs. */
 export class SwCursor extends SwPaM {
+  /** Creates a native editing cursor attached to an existing selection ring. @param ring - Native ring owner. @returns New registered cursor. */
+  public Create(ring: SwPaM): SwCursor {
+    return new SwCursor(this.GetPoint(), undefined, ring);
+  }
   /** Moves to a current section endpoint, reporting false if already there. @param start - Beginning direction. @returns Whether the point changed. */
   public MoveSection(start: boolean): boolean {
     return this.MoveToBoundary(this.GetPoint().GetNode().StartOfSectionNode(), start);
@@ -73,9 +77,75 @@ export class SwCursor extends SwPaM {
   }
 }
 
-/** Owns native table endpoints and sorted actual selected boxes; native cursor rings remain pending. */
+/** Owns native table endpoints, sorted selected boxes and editing-ring synchronization. */
 export class SwTableCursor extends SwCursor {
   private readonly selectedBoxes: SwTableBox[] = [];
+  private changed = false;
+  private tablePointNode = 0;
+  private tableMarkNode = 0;
+  private tablePointContent = 0;
+  private tableMarkContent = 0;
+  /** Reports selected-box differences pending editing-ring synchronization. @returns Change flag. */
+  public IsChgd(): boolean {
+    return this.changed;
+  }
+  /** Records endpoint movement independently of selected-box differences. @returns Whether moved. */
+  public IsCursorMovedUpdate(): boolean {
+    const point = this.GetPoint(),
+      mark = this.GetMark();
+    if (
+      point.GetNodeIndex() === this.tablePointNode &&
+      mark.GetNodeIndex() === this.tableMarkNode &&
+      point.GetContentIndex() === this.tablePointContent &&
+      mark.GetContentIndex() === this.tableMarkContent
+    )
+      return false;
+    this.tablePointNode = point.GetNodeIndex();
+    this.tableMarkNode = mark.GetNodeIndex();
+    this.tablePointContent = point.GetContentIndex();
+    this.tableMarkContent = mark.GetContentIndex();
+    return true;
+  }
+  /** Reconciles persistent editing cursors with complete selected cell sections. @param current - Ordinary shell cursor ring. @returns Current retained editing cursor. */
+  public MakeBoxSels(current: SwCursor): SwCursor {
+    if (!this.changed) return current;
+    this.changed = false;
+    const remaining = [...this.selectedBoxes];
+    for (const range of [...current.GetRingContainer()]) {
+      const start = range.GetPoint().GetNode().StartOfSectionNode();
+      const index =
+        range.HasMark() && start === range.GetMark().GetNode().StartOfSectionNode()
+          ? remaining.findIndex(
+              /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
+                box,
+              ) => box.GetStartNode() === start,
+            )
+          : -1;
+      if (index >= 0) {
+        const box = remaining[index] as SwTableBox,
+          paragraphs = box.GetParagraphs(),
+          first = paragraphs[0] as SwTextNode,
+          last = paragraphs.at(-1) as SwTextNode;
+        range.GetMark().Assign(first, 0);
+        range.GetPoint().Assign(last, last.Len());
+        remaining.splice(index, 1);
+      } else if (!range.IsMultiSelection()) range.DeleteMark();
+      else {
+        if (range === current) current = range.GetPrev() as SwCursor;
+        range.Dispose();
+      }
+    }
+    for (const box of remaining) {
+      const first = box.GetParagraphs()[0] as SwTextNode,
+        last = box.GetParagraphs().at(-1) as SwTextNode;
+      const range =
+        !current.IsMultiSelection() && !current.HasMark() ? current : current.Create(current);
+      range.GetPoint().Assign(first, 0);
+      range.SetMark();
+      range.GetPoint().Assign(last, last.Len());
+    }
+    return current;
+  }
   /** Returns the native selected-box count. @returns Count. */
   public GetSelectedBoxesCount(): number {
     return this.selectedBoxes.length;
@@ -86,6 +156,7 @@ export class SwTableCursor extends SwCursor {
   }
   /** Inserts one identity into the native sorted set. @param box - Box owner. @returns Nothing. */
   public InsertBox(box: SwTableBox): void {
+    this.changed = true;
     if (this.selectedBoxes.includes(box)) return;
     const index = this.selectedBoxes.findIndex(
       /** Projects actual native table ownership. @param existing - Current owner. @returns Operation result. */ (
@@ -97,6 +168,7 @@ export class SwTableCursor extends SwCursor {
   /** Removes one native selection entry. @param index - Sorted position. @returns Nothing. */
   public DeleteBox(index: number): void {
     this.selectedBoxes.splice(index, 1);
+    this.changed = true;
   }
   /** Reconciles old and new sorted native identities using upstream's difference order. @param boxes - New sorted set. @returns Nothing. */
   public ActualizeSelection(boxes: readonly SwTableBox[]): void {

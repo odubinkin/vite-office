@@ -79,7 +79,7 @@ export class SwWrtShell extends SwModify {
   private activeParagraph: WriterParagraph;
   private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
-  private readonly cursor: SwCursor;
+  private cursor: SwCursor;
   private tableCursor: SwTableCursor | undefined;
   private readonly docShellSubscription: () => void;
   private readonly editing: SwWrtShellEditingOperations;
@@ -119,7 +119,7 @@ export class SwWrtShell extends SwModify {
         ) => this.CreateCollapsedCursorState(target, offset),
       getActiveParagraph: /** Returns the shell target. @returns Active paragraph. */ () =>
         this.GetActiveParagraph(),
-      getCursor: /** Returns the persistent PaM. @returns Cursor. */ () => this.GetCursor(),
+      getCursor: /** Returns the native editing PaM. @returns Cursor. */ () => this.GetCursor(),
       getDoc: /** Returns the active document. @returns Writer document. */ () => this.GetDoc(),
       getPendingCharacterItems: /** Returns caret items. @returns Copied item set. */ () =>
         this.GetPendingCharacterItems(),
@@ -165,8 +165,17 @@ export class SwWrtShell extends SwModify {
     info.SetPaintLineNumbers(paint);
     return this.SetLineNumberInfo(info);
   }
-  /** Returns the persistent point-and-mark cursor identity. @returns Current SwPaM. */
-  public GetCursor(): SwCursor {
+  /** Returns native editing cursors, materializing selected full-cell rings by default. @param makeTableCursor - Refresh boxes after displayed endpoint movement. @returns Current ordinary editing cursor. */
+  public GetCursor(makeTableCursor = true): SwCursor {
+    if (this.tableCursor !== undefined) {
+      if (makeTableCursor && this.tableCursor.IsCursorMovedUpdate())
+        this.tableCursor.NewTableSelection();
+      if (this.tableCursor.IsChgd()) this.cursor = this.tableCursor.MakeBoxSels(this.cursor);
+    }
+    return this.cursor;
+  }
+  /** Returns the native cursor used to display point and mark. @returns Table or ordinary display owner. */
+  public getShellCursor(): SwCursor {
     return this.tableCursor ?? this.cursor;
   }
 
@@ -186,7 +195,7 @@ export class SwWrtShell extends SwModify {
   public IsCursorInTable(): SwTableNode | undefined {
     const node =
       this.tableCursor?.GetSelectedBoxes()[0]?.GetStartNode() ??
-      this.GetCursor().GetPoint().GetNode();
+      this.getShellCursor().GetPoint().GetNode();
     const section = node instanceof SwTableBoxStartNode ? node : node.StartOfSectionNode();
     return section instanceof SwTableBoxStartNode
       ? (section.StartOfSectionNode() as SwTableNode)
@@ -196,7 +205,7 @@ export class SwWrtShell extends SwModify {
   public SelectTableRow(): boolean {
     const table = this.IsCursorInTable();
     if (table === undefined) return false;
-    const cursor = this.GetCursor(),
+    const cursor = this.getShellCursor(),
       point = cursor.GetPoint().GetNode().StartOfSectionNode(),
       mark = cursor.GetMark().GetNode().StartOfSectionNode();
     if (!(point instanceof SwTableBoxStartNode) || !(mark instanceof SwTableBoxStartNode))
@@ -222,6 +231,7 @@ export class SwWrtShell extends SwModify {
   }
   /** Releases the table cursor without changing the persistent ordinary cursor. @returns Nothing. */
   private ClearTableCursor(): void {
+    while (this.cursor.IsMultiSelection()) this.cursor.GetNext().Dispose();
     this.tableCursor?.Dispose();
     this.tableCursor = undefined;
   }
@@ -233,12 +243,13 @@ export class SwWrtShell extends SwModify {
           if (this.tableCursor !== undefined) this.cursor.Assign(this.tableCursor.GetPoint());
           this.ClearTableCursor();
           this.cursor.DeleteMark();
-        } else if (!this.GetCursor().HasMark()) this.GetCursor().SetMark();
+        } else if (!this.getShellCursor().HasMark()) this.getShellCursor().SetMark();
         let moved = false;
         if (
-          this.GetCursor().GetPoint().GetNode().StartOfSectionNode() instanceof SwTableBoxStartNode
+          this.getShellCursor().GetPoint().GetNode().StartOfSectionNode() instanceof
+          SwTableBoxStartNode
         ) {
-          if ((!start || !this.HasBoxSelection()) && this.GetCursor().MoveSection(start))
+          if ((!start || !this.HasBoxSelection()) && this.getShellCursor().MoveSection(start))
             moved = true;
           else moved = this.MoveCurrentTable(start);
         }
@@ -247,7 +258,7 @@ export class SwWrtShell extends SwModify {
           this.ClearTableCursor();
           moved = this.cursor.SttEndDoc(start);
         }
-        const point = this.GetCursor().GetPoint();
+        const point = this.getShellCursor().GetPoint();
         this.activeParagraph = point.GetNode() as WriterParagraph;
         this.pendingCharacterItems = this.activeParagraph.GetCharacterItemsAt(
           point.GetContentIndex(),
@@ -267,7 +278,7 @@ export class SwWrtShell extends SwModify {
       this.tableCursor.SetMark();
       checkPosition = false;
     }
-    const cursor = this.GetCursor(),
+    const cursor = this.getShellCursor(),
       point = cursor.GetPoint(),
       node = point.GetNode(),
       offset = point.GetContentIndex();
@@ -279,12 +290,12 @@ export class SwWrtShell extends SwModify {
 
   /** Traverses to the next cell and appends one row only at an unmarked table end. @param appendLine - Native append permission. @returns Whether cursor moved. */
   public GoNextCell(appendLine = true): boolean {
-    if (this.GetCursor().GoNextCell()) {
+    if (this.getShellCursor().GoNextCell()) {
       this.UpdateTableCursor();
       return true;
     }
-    const section = this.GetCursor().GetPoint().GetNode().StartOfSectionNode();
-    if (!(section instanceof SwTableBoxStartNode) || this.GetCursor().HasMark() || !appendLine)
+    const section = this.getShellCursor().GetPoint().GetNode().StartOfSectionNode();
+    if (!(section instanceof SwTableBoxStartNode) || this.getShellCursor().HasMark() || !appendLine)
       return false;
     const tableNode = section.StartOfSectionNode() as SwTableNode;
     const table = tableNode.GetTable(),
@@ -305,14 +316,14 @@ export class SwWrtShell extends SwModify {
 
   /** Traverses to the previous cell without leaving the table or changing its content. @returns Whether cursor moved. */
   public GoPrevCell(): boolean {
-    if (!this.GetCursor().GoPrevCell()) return false;
+    if (!this.getShellCursor().GoPrevCell()) return false;
     this.UpdateTableCursor();
     return true;
   }
 
   /** Refreshes shell-owned input/bindings after core cell traversal. @returns Nothing. */
   private UpdateTableCursor(): void {
-    this.activeParagraph = this.GetCursor().GetPoint().GetNode() as WriterParagraph;
+    this.activeParagraph = this.getShellCursor().GetPoint().GetNode() as WriterParagraph;
     this.pendingCharacterItems = this.activeParagraph.GetCharacterItemsAt(0);
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.NotifySelection();
@@ -416,8 +427,10 @@ export class SwWrtShell extends SwModify {
       (markNode !== undefined && markNode.GetDoc() !== this.GetDoc())
     )
       return false;
-    const currentPoint = this.GetCursor().GetPoint();
-    const currentMark = this.GetCursor().HasMark() ? this.GetCursor().GetMark() : undefined;
+    const currentPoint = this.getShellCursor().GetPoint();
+    const currentMark = this.getShellCursor().HasMark()
+      ? this.getShellCursor().GetMark()
+      : undefined;
     if (
       currentPoint.GetNode() === pointNode &&
       currentPoint.GetContentIndex() === point.GetContentIndex() &&
@@ -436,7 +449,7 @@ export class SwWrtShell extends SwModify {
   /** Focuses a canonical text node without accepting a UI key. @param paragraph - Document-owned node. @returns Nothing. */
   public FocusNode(paragraph: WriterParagraph): void {
     if (paragraph.GetDoc() !== this.GetDoc()) return;
-    if (this.GetCursor().GetPoint().GetNode() === paragraph) {
+    if (this.getShellCursor().GetPoint().GetNode() === paragraph) {
       this.activeParagraph = paragraph;
       return;
     }
@@ -471,17 +484,17 @@ export class SwWrtShell extends SwModify {
 
   /** Removes numbering through the document range and native attribute history. @returns Whether a numbered node changed. */
   public DelNumRules(): boolean {
-    if (this.GetActiveParagraph().GetNumRule() === undefined && !this.GetCursor().HasMark())
+    if (this.GetActiveParagraph().GetNumRule() === undefined && !this.getShellCursor().HasMark())
       return false;
     return this.ApplyAction(new SwUndoDelNum(this.GetDoc(), this.CaptureCursorState()));
   }
 
   /** Changes numbering at an unselected paragraph start. @param numOn - Count the current item when true. @returns Whether numbering changed. */
   public NumOrNoNum(numOn = true): boolean {
-    const point = this.GetCursor().GetPoint(),
+    const point = this.getShellCursor().GetPoint(),
       node = point.GetNode() as WriterParagraph;
     if (
-      this.GetCursor().HasMark() ||
+      this.getShellCursor().HasMark() ||
       point.GetContentIndex() !== 0 ||
       node.GetNumRule() === undefined ||
       (!node.HasNumber() && !node.HasBullet())
@@ -563,7 +576,7 @@ export class SwWrtShell extends SwModify {
 
   /** Deletes the canonical visible selection, including ranges spanning text nodes. @returns Whether content changed. */
   public DeleteSelection(): boolean {
-    return this.GetCursor().HasMark() && this.editing.DeleteAtCursor("delete");
+    return this.getShellCursor().HasMark() && this.editing.DeleteAtCursor("delete");
   }
 
   /** Replaces one same-paragraph range with a native Writer text fragment. @param range - Target range. @param replacement - Inserted native fragment. @returns Whether document content changed. */
@@ -705,7 +718,7 @@ export class SwWrtShell extends SwModify {
       throw new Error(`Unsupported Writer paragraph style: ${style}`);
     const operation = createTextFormatCollAction(
       document,
-      this.GetCursor(),
+      this.getShellCursor(),
       document.GetTextFormatColl(style),
       this.CaptureCursorState(),
       resetAllCharAttrs,
@@ -737,7 +750,7 @@ export class SwWrtShell extends SwModify {
   public MoveLeftMargin(right: boolean, modulus = true): boolean {
     const action = createMoveLeftMarginAction(
       this.GetDoc(),
-      this.GetCursor(),
+      this.getShellCursor(),
       right,
       modulus,
       this.CaptureCursorState(),
@@ -747,7 +760,7 @@ export class SwWrtShell extends SwModify {
 
   /** Reports upstream edit-shell margin availability for the selected node range. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether enabled. */
   public IsMoveLeftMargin(right: boolean, modulus = true): boolean {
-    return isMoveLeftMargin(this.GetDoc(), this.GetCursor(), right, modulus);
+    return isMoveLeftMargin(this.GetDoc(), this.getShellCursor(), right, modulus);
   }
 
   /** Changes a list paragraph by one numbering level. @param down - Demote when true. @returns Whether changed. */
@@ -878,16 +891,19 @@ export class SwWrtShell extends SwModify {
 
   /** Captures point, mark direction, active paragraph, and pending attributes for one action boundary. @returns Complete cursor state. */
   public CaptureCursorState(): SwUndoCursorState {
-    const point = this.GetCursor().GetPoint();
-    const mark = this.GetCursor().HasMark() ? this.GetCursor().GetMark() : undefined;
-    return createWriterUndoCursorState(
-      point.GetNode() as WriterParagraph,
-      point.GetContentIndex(),
-      mark?.GetNode() as WriterParagraph | undefined,
-      mark?.GetContentIndex(),
-      this.GetActiveParagraph(),
-      this.pendingCharacterItems,
-    );
+    const point = this.getShellCursor().GetPoint();
+    const mark = this.getShellCursor().HasMark() ? this.getShellCursor().GetMark() : undefined;
+    return {
+      ...(this.tableCursor === undefined ? {} : { tableSelection: true }),
+      ...createWriterUndoCursorState(
+        point.GetNode() as WriterParagraph,
+        point.GetContentIndex(),
+        mark?.GetNode() as WriterParagraph | undefined,
+        mark?.GetContentIndex(),
+        this.GetActiveParagraph(),
+        this.pendingCharacterItems,
+      ),
+    };
   }
 
   /** Creates a collapsed action endpoint while retaining pending direct attributes. @param paragraph - Target node. @param offset - Target content offset. @returns Complete cursor state. */
@@ -917,6 +933,14 @@ export class SwWrtShell extends SwModify {
     this.pendingCharacterItems = state.pendingCharacterItems.Clone();
     this.ClearTableCursor();
     this.cursor.Assign(point, mark);
+    if (state.tableSelection === true) {
+      this.tableCursor = new SwTableCursor(point);
+      this.tableCursor.Assign(point, mark);
+      this.tableCursor.NewTableSelection();
+      this.cursor.DeleteMark();
+    }
+    point.Dispose();
+    mark?.Dispose();
   }
 
   /** Mutates the existing PaM identity to a collapsed model position. @param paragraph - Target node. @param offset - UTF-16 content offset. @returns Nothing. */

@@ -500,7 +500,7 @@ export class WriterViewStore {
       const projected = this.projection.Project(
         document,
         wrtShell.GetActiveParagraph(),
-        wrtShell.GetCursor(),
+        wrtShell.getShellCursor(),
         this.view.GetDocShell().GetDocumentState(),
       );
       this.cachedSnapshot = Object.freeze({

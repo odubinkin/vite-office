@@ -217,7 +217,7 @@ export function WriterWorkbench({
             index,
           ) => currentTable.SetColumnWidth(index, width),
         );
-        const cursor = view.GetWrtShell().GetCursor(),
+        const cursor = view.GetWrtShell().getShellCursor(),
           section = cursor.GetPoint().GetNode().StartOfSectionNode();
         const rows = currentTable
           .GetTabLines()

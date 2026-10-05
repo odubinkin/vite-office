@@ -132,6 +132,8 @@ export class SwPosition {
 
 /** Represents Writer's direction-preserving Point-and-Mark selection. */
 export class SwPaM {
+  private next: SwPaM = this;
+  private previous: SwPaM = this;
   private point: SwPosition;
   private mark: SwPosition | undefined;
 
@@ -139,12 +141,39 @@ export class SwPaM {
    * Creates a collapsed position or an explicit mark-to-point selection.
    * @param point - Moving point endpoint.
    * @param mark - Optional fixed mark endpoint.
+   * @param ring - Optional existing circular selection owner.
    * @returns Nothing; initializes this range.
    */
-  public constructor(point: SwPosition, mark?: SwPosition) {
+  public constructor(point: SwPosition, mark?: SwPosition, ring?: SwPaM) {
     this.point = point.clone();
     this.mark = undefined;
     this.Assign(point, mark);
+    if (ring !== undefined) {
+      this.next = ring;
+      this.previous = ring.previous;
+      ring.previous.next = this;
+      ring.previous = this;
+    }
+  }
+
+  /** Returns the next native range in the circular selection. @returns Next owner. */
+  public GetNext(): SwPaM {
+    return this.next;
+  }
+  /** Returns the previous native range in the circular selection. @returns Previous owner. */
+  public GetPrev(): SwPaM {
+    return this.previous;
+  }
+  /** Reports multiple actual selection owners. @returns Whether ring is nontrivial. */
+  public IsMultiSelection(): boolean {
+    return this.next !== this;
+  }
+  /** Iterates actual PaMs once around their native ring. @returns Native range iterator. */
+  public *GetRingContainer(): IterableIterator<SwPaM> {
+    yield this;
+    for (let current = this.next; current !== this; current = current.next) {
+      yield current;
+    }
   }
 
   /** Repositions this persistent PaM after cursor movement or atomic document replacement. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns Nothing. */
@@ -194,6 +223,10 @@ export class SwPaM {
 
   /** Unregisters both persistent PaM endpoints. @returns Nothing. */
   public Dispose(): void {
+    this.previous.next = this.next;
+    this.next.previous = this.previous;
+    this.next = this;
+    this.previous = this;
     this.point.Dispose();
     this.mark?.Dispose();
     this.mark = undefined;
@@ -237,6 +270,17 @@ export function isWriterCursorOffset(paragraph: SwTextNode, offset: number): boo
 
 /** Returns every non-empty paragraph-local range covered by an ordered Writer selection. @param cursor - Writer selection. @returns Selected paragraph ranges or undefined. */
 export function getWriterSelectedTextRanges(cursor: SwPaM): readonly WriterTextRange[] | undefined {
+  if (cursor.IsMultiSelection()) {
+    const ranges: WriterTextRange[] = [];
+    for (const current of cursor.GetRingContainer())
+      ranges.push(...(getWriterSinglePaMTextRanges(current) ?? []));
+    return ranges;
+  }
+  return getWriterSinglePaMTextRanges(cursor);
+}
+
+/** Resolves one native PaM while ring traversal remains outside its linear span. @param cursor - Native range owner. @returns Paragraph-local ranges. */
+function getWriterSinglePaMTextRanges(cursor: SwPaM): readonly WriterTextRange[] | undefined {
   if (!cursor.HasMark()) return undefined;
   const point = cursor.GetPoint();
   const mark = cursor.GetMark();

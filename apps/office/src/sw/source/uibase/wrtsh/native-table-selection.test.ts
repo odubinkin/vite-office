@@ -160,11 +160,11 @@ describe("native table selection", /** Checks actual table selection behavior.  
   });
   it("selects actual row with last-paragraph endpoints and no content history", /** Checks actual table selection behavior.  @returns Operation result. */ () => {
     const f = fixture(),
-      ordinary = f.shell.GetCursor();
+      ordinary = f.shell.getShellCursor();
     expect(
       f.edit.SelectTableRow(required(required(f.boxes[4]).GetParagraphs()[0]).GetIndex()),
     ).toBe(true);
-    const c = f.shell.GetCursor();
+    const c = f.shell.getShellCursor();
     expect(c).toBeInstanceOf(SwTableCursor);
     expect((c as SwTableCursor).GetSelectedBoxes()).toEqual(f.boxes.slice(3, 6));
     expect(c.GetPoint().GetNode()).toBe(f.tail);
@@ -177,7 +177,7 @@ describe("native table selection", /** Checks actual table selection behavior.  
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     expect(f.invalidate).toHaveBeenCalledTimes(1);
     expect(f.shell.SelectTableRow()).toBe(true);
-    expect(f.shell.GetCursor()).toBe(c);
+    expect(f.shell.getShellCursor()).toBe(c);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     f.edit.SetSelection({ point: { nodeIndex: f.body.GetIndex(), contentIndex: 2 } });
     expect(f.shell.HasBoxSelection()).toBe(false);
@@ -190,7 +190,7 @@ describe("native table selection", /** Checks actual table selection behavior.  
   it("updates native selected boxes when table endpoints move", /** Checks actual table selection behavior.  @returns Operation result. */ () => {
     const f = fixture();
     f.edit.SelectTableRow(required(required(f.boxes[3]).GetParagraphs()[0]).GetIndex());
-    const c = f.shell.GetCursor() as SwTableCursor;
+    const c = f.shell.getShellCursor() as SwTableCursor;
     expect(f.shell.StartOfSection(true)).toBe(true);
     expect(c.GetSelectedBoxes()).toEqual(f.boxes.slice(0, 6));
     f.shell.EndOfSection(false);
@@ -218,7 +218,7 @@ it("rejects a row request when retained selected boxes have no endpoint in their
   const other = f.doc.nodes.MakeTableNode("Other"),
     row = f.doc.nodes.AppendTableRow(other, 1),
     node = required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]),
-    c = f.shell.GetCursor() as SwTableCursor;
+    c = f.shell.getShellCursor() as SwTableCursor;
   c.GetPoint().Assign(node, 0);
   c.GetMark().Assign(node, 0);
   expect(f.shell.IsCursorInTable()).toBe(f.table.GetTableNode());

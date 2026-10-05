@@ -4,7 +4,7 @@ title: "Materialize native per-cell cursor rings for selected table character fo
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved iterative UI refactoring; native per-cell formatting cursor ring leaf148."
 doc_version: 3
-doc_updated_at: "2026-10-05T11:35:42.124Z"
+doc_updated_at: "2026-10-05T11:36:36.079Z"
 doc_updated_by: "CODER"
 description: "Iteration148 under 202609240501-C9TN6M. Port native GetCursor default and separate displayed table cursor from editing cursor rings, so selected table character commands cover full cells and preserve selection through history."
 sections:
@@ -58,6 +58,10 @@ sections:
     - Observation: ONE upstream-absent full profile: build pass; app 12075 pass and 2 failed mounted Shift Home/End expectations out of12077; initial branchcoverage99.97 with2 uncoveredbranches; inventory109/36coverage100; scripts5/2; Chromium115pass noflakes. Exact failed names recorded before assertions. Native GetCurAttr/GetCursor/MakeBoxSels confirms ordinary cursor reuses full marked cell ranges, invalidating prior unmarked assertion.
       Impact: Existing UI state queries now correctly materialize native cell rings. Preserving obsolete unmarked assertions would require a production workaround inconsistent with upstream. Initial scope-token audit also detected only Prettier trailing call-comma punctuation.
       Resolution: Within standing upstream UI authorization and same16paths, revised taskplan and VerifySteps, reapproved sequentially. Corrected exactly two parameterized expectations and added full-cell assertions. Added two new ring reconciliation/collapsed-owner cases. Failed/new-only closure4pass; final actual-counter coverage100 across lines11999 statements13135 functions3334 branches9814. No final production source changed after full build/Chromium; no passing gate/suite/case replay. Scope token audit normalizes optional trailing call commas only; all other old-test tokens must remain equivalent after owner API migration.
+
+    - Observation: Bounded implementation completed: circular SwPaM ownership/traversal/disposal; SwTableCursor native dirty/movement/full-cell MakeBoxSels retain/reconcile; GetCursor defaults to editing ring, getShellCursor displays table endpoints. Full-cell character formatting reaches only actual selected boxes, including multi-paragraph text. Native table-mode history survives Undo/Redo without UI TextRuns editing.
+      Impact: Four old tests migrate displayed-owner calls; only two obsolete mounted mark expectations change as explicitly documented, with stronger full-cell assertions. Other387prior testfiles byte-identical. All246semantic states/defaults/classifications and conscious I/O/recovery exceptions unchanged. No wholemodule promotion or broad parity claim.
+      Resolution: All six static gates closed;14new appcases and1new Chromiumcase;115unique Chromiumcases pass. ONE full absent profile plus4failed/new-only cases; production unchanged after full build and Chromium. Appcoverage100 actual counters; inventory100. Five restored source audits pass with semanticViolationCount0. Scope/changed-testformat/lint/docs/types pass. AP ignored-inclusive scan4113files no forbidden source/helper/Python/rawframe/binary. Residual: selected-cell text insertion/deletion/paste and paragraph/list commands still require native per-ring operation ownership; selection drag/column gestures, native layout/protection/redlines/merged/nested/unequal cells unverified. Broad goalactive.
 id_source: "generated"
 ---
 ## Summary
@@ -95,3 +99,7 @@ Current selected-box painting uses table owner, but character commands consume o
 - Observation: ONE upstream-absent full profile: build pass; app 12075 pass and 2 failed mounted Shift Home/End expectations out of12077; initial branchcoverage99.97 with2 uncoveredbranches; inventory109/36coverage100; scripts5/2; Chromium115pass noflakes. Exact failed names recorded before assertions. Native GetCurAttr/GetCursor/MakeBoxSels confirms ordinary cursor reuses full marked cell ranges, invalidating prior unmarked assertion.
   Impact: Existing UI state queries now correctly materialize native cell rings. Preserving obsolete unmarked assertions would require a production workaround inconsistent with upstream. Initial scope-token audit also detected only Prettier trailing call-comma punctuation.
   Resolution: Within standing upstream UI authorization and same16paths, revised taskplan and VerifySteps, reapproved sequentially. Corrected exactly two parameterized expectations and added full-cell assertions. Added two new ring reconciliation/collapsed-owner cases. Failed/new-only closure4pass; final actual-counter coverage100 across lines11999 statements13135 functions3334 branches9814. No final production source changed after full build/Chromium; no passing gate/suite/case replay. Scope token audit normalizes optional trailing call commas only; all other old-test tokens must remain equivalent after owner API migration.
+
+- Observation: Bounded implementation completed: circular SwPaM ownership/traversal/disposal; SwTableCursor native dirty/movement/full-cell MakeBoxSels retain/reconcile; GetCursor defaults to editing ring, getShellCursor displays table endpoints. Full-cell character formatting reaches only actual selected boxes, including multi-paragraph text. Native table-mode history survives Undo/Redo without UI TextRuns editing.
+  Impact: Four old tests migrate displayed-owner calls; only two obsolete mounted mark expectations change as explicitly documented, with stronger full-cell assertions. Other387prior testfiles byte-identical. All246semantic states/defaults/classifications and conscious I/O/recovery exceptions unchanged. No wholemodule promotion or broad parity claim.
+  Resolution: All six static gates closed;14new appcases and1new Chromiumcase;115unique Chromiumcases pass. ONE full absent profile plus4failed/new-only cases; production unchanged after full build and Chromium. Appcoverage100 actual counters; inventory100. Five restored source audits pass with semanticViolationCount0. Scope/changed-testformat/lint/docs/types pass. AP ignored-inclusive scan4113files no forbidden source/helper/Python/rawframe/binary. Residual: selected-cell text insertion/deletion/paste and paragraph/list commands still require native per-ring operation ownership; selection drag/column gestures, native layout/protection/redlines/merged/nested/unequal cells unverified. Broad goalactive.

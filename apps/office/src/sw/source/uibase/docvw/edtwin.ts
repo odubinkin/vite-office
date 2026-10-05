@@ -100,7 +100,7 @@ export class SwEditWin {
 
   /** Handles table Tab intent with numbering-at-start priority before cell traversal. @param shift - Previous-cell or list-promote direction. @returns Whether Writer owns this key, including a table boundary no-op. */
   public HandleTableTab(shift = false): boolean {
-    const point = this.wrtShell.GetCursor().GetPoint(),
+    const point = this.wrtShell.getShellCursor().GetPoint(),
       node = point.GetNode() as SwTextNode;
     if (!(node.StartOfSectionNode() instanceof SwTableBoxStartNode)) return false;
     const rule = node.GetNumRule();
@@ -132,7 +132,7 @@ export class SwEditWin {
 
   /** Handles Backspace numbering and indentation before text deletion. @param shift - ShiftBackspace restores numbering. @returns Whether the document changed. */
   public DeleteLeft(shift = false): boolean {
-    const cursor = this.wrtShell.GetCursor(),
+    const cursor = this.wrtShell.getShellCursor(),
       point = cursor.GetPoint(),
       node = point.GetNode() as SwTextNode;
     if (!cursor.HasMark() && point.GetContentIndex() === 0) {
@@ -163,7 +163,7 @@ export class SwEditWin {
 
   /** Handles ordinary Enter before deciding whether to split,as native KeyInput does. @returns Whether the document changed. */
   public InsertParagraph(): boolean {
-    const cursor = this.wrtShell.GetCursor();
+    const cursor = this.wrtShell.getShellCursor();
     const node = cursor.GetPoint().GetNode() as SwTextNode;
     const rule = node.GetNumRule();
     if (!cursor.HasMark() && node.Len() === 0 && rule !== undefined && !rule.IsOutlineRule())

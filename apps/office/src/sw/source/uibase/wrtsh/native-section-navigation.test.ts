@@ -66,8 +66,8 @@ function place(
 }
 /** Checks literal point,active owner and pending values. @param f - Owners. @param node - Expected text. @param offset - Expected offset. @returns Nothing. */
 function point(f: ReturnType<typeof fixture>, node: SwTextNode, offset: number) {
-  expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(node);
-  expect(f.shell.GetCursor().GetPoint().GetContentIndex()).toBe(offset);
+  expect(f.shell.getShellCursor().GetPoint().GetNode()).toBe(node);
+  expect(f.shell.getShellCursor().GetPoint().GetContentIndex()).toBe(offset);
   expect(f.shell.GetActiveParagraph()).toBe(node);
 }
 describe("native section navigation", /** Registers actual cursor contracts. @returns Nothing. */ () => {
@@ -78,7 +78,7 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
     ) => {
       const f = fixture(),
         cell = required(f.cells[1]),
-        ordinary = f.shell.GetCursor();
+        ordinary = f.shell.getShellCursor();
       place(f, f.tail, 2);
       expect(f.edit.MoveSectionBoundary(start)).toBe(true);
       point(f, start ? cell : f.tail, start ? 0 : 4);
@@ -88,7 +88,7 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
       point(f, start ? f.body : f.after, start ? 0 : 5);
       expect(f.edit.MoveSectionBoundary(start)).toBe(true);
       point(f, start ? f.body : f.after, start ? 0 : 5);
-      expect(f.shell.GetCursor()).toBe(ordinary);
+      expect(f.shell.getShellCursor()).toBe(ordinary);
       expect(f.shell.HasBoxSelection()).toBe(false);
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
       expect(f.table.GetTabLines()).toHaveLength(2);
@@ -104,10 +104,10 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
       const f = fixture(),
         cell = required(f.cells[1]);
       place(f, f.tail, 2, cell, 3);
-      const mark = f.shell.GetCursor().GetMark();
+      const mark = f.shell.getShellCursor().GetMark();
       expect(f.edit.MoveSectionBoundary(start, true)).toBe(true);
       point(f, start ? cell : f.tail, start ? 0 : 4);
-      expect(f.shell.GetCursor().GetMark()).toBe(mark);
+      expect(f.shell.getShellCursor().GetMark()).toBe(mark);
       expect(mark.GetNode()).toBe(cell);
       expect(mark.GetContentIndex()).toBe(3);
       expect(f.shell.HasBoxSelection()).toBe(false);
@@ -122,13 +122,13 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
       const f = fixture(),
         cell = required(f.cells[1]);
       place(f, f.tail, 2);
-      const ordinary = f.shell.GetCursor();
+      const ordinary = f.shell.getShellCursor();
       f.edit.MoveSectionBoundary(start, true);
       expect(ordinary.HasMark()).toBe(true);
       expect(ordinary.GetMark().GetNode()).toBe(f.tail);
       expect(ordinary.GetMark().GetContentIndex()).toBe(2);
       f.edit.MoveSectionBoundary(start, true);
-      const table = f.shell.GetCursor();
+      const table = f.shell.getShellCursor();
       expect(table).toBeInstanceOf(SwTableCursor);
       expect(table).not.toBe(ordinary);
       expect(ordinary.HasMark()).toBe(false);
@@ -142,7 +142,7 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
       // Native document fallback uses the ordinary cursor, whose mark was deleted during conversion.
       f.edit.MoveSectionBoundary(start, true);
       point(f, start ? f.body : f.after, start ? 0 : 5);
-      expect(f.shell.GetCursor()).toBe(ordinary);
+      expect(f.shell.getShellCursor()).toBe(ordinary);
       expect(ordinary.HasMark()).toBe(false);
       f.shell.Close();
     },
@@ -152,13 +152,13 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
     place(f, required(f.cells[1]), 2);
     f.shell.StartOfSection(true);
     f.shell.StartOfSection(true);
-    const table = f.shell.GetCursor();
+    const table = f.shell.getShellCursor();
     expect(f.shell.EndOfSection(true)).toBe(true);
     point(f, required(f.cells[0]), 5);
-    expect(f.shell.GetCursor()).toBe(table);
+    expect(f.shell.getShellCursor()).toBe(table);
     expect(f.shell.EndOfSection(true)).toBe(true);
     point(f, f.lastTail, 8);
-    expect(f.shell.GetCursor()).toBe(table);
+    expect(f.shell.getShellCursor()).toBe(table);
     f.shell.Close();
   });
   it.each([true, false])(
@@ -168,12 +168,12 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
     ) => {
       const f = fixture();
       place(f, f.tail, 2);
-      const ordinary = f.shell.GetCursor();
+      const ordinary = f.shell.getShellCursor();
       f.shell.StartOfSection(true);
       f.shell.StartOfSection(true);
       expect(f.shell.HasBoxSelection()).toBe(true);
       f.edit.MoveSectionBoundary(start);
-      expect(f.shell.GetCursor()).toBe(ordinary);
+      expect(f.shell.getShellCursor()).toBe(ordinary);
       expect(ordinary.HasMark()).toBe(false);
       point(f, start ? f.body : required(f.cells[0]), start ? 0 : 5);
       f.shell.Close();
@@ -182,14 +182,14 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
   it("preserves table owner for equal synchronized endpoints and clears it for a new selection", /** Checks browser coordinate synchronization does not discard native mode. @returns Nothing. */ () => {
     const f = fixture();
     place(f, f.tail, 2);
-    const ordinary = f.shell.GetCursor();
+    const ordinary = f.shell.getShellCursor();
     f.shell.StartOfSection(true);
     f.shell.StartOfSection(true);
-    const table = f.shell.GetCursor();
+    const table = f.shell.getShellCursor();
     expect(f.shell.SetPaM(table.GetPoint(), table.GetMark())).toBe(false);
-    expect(f.shell.GetCursor()).toBe(table);
+    expect(f.shell.getShellCursor()).toBe(table);
     place(f, required(f.cells[2]), 3);
-    expect(f.shell.GetCursor()).toBe(ordinary);
+    expect(f.shell.getShellCursor()).toBe(ordinary);
     expect(f.shell.HasBoxSelection()).toBe(false);
     point(f, required(f.cells[2]), 3);
     f.shell.Close();
@@ -199,7 +199,7 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
     place(f, required(f.cells[1]), 0, f.tail, 3);
     f.shell.EndOfSection();
     point(f, f.tail, 4);
-    expect(f.shell.GetCursor().HasMark()).toBe(false);
+    expect(f.shell.getShellCursor().HasMark()).toBe(false);
     f.shell.Close();
   });
   it.each([true, false])(
@@ -209,7 +209,7 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
     ) => {
       const f = fixture();
       place(f, f.body, 3);
-      const ordinary = f.shell.GetCursor();
+      const ordinary = f.shell.getShellCursor();
       f.edit.MoveSectionBoundary(start, true);
       point(f, start ? f.body : f.after, start ? 0 : 5);
       expect(ordinary.GetMark().GetNode()).toBe(f.body);
@@ -222,7 +222,7 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
   );
   it("uses raw cursor mark restrictions and native accepted-versus-changed results", /** Checks core table/section/document return contracts. @returns Nothing. */ () => {
     const f = fixture(),
-      cursor = f.shell.GetCursor();
+      cursor = f.shell.getShellCursor();
     expect(cursor).toBeInstanceOf(SwCursor);
     place(f, f.body, 3);
     expect(cursor.MoveTable(true)).toBe(false);
@@ -302,10 +302,10 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
   it("closes an active table selection and unregisters both cursor owners", /** Checks bounded table lifetime without editing the selected boxes. @returns Nothing. */ () => {
     const f = fixture();
     place(f, f.tail, 2);
-    const ordinary = f.shell.GetCursor();
+    const ordinary = f.shell.getShellCursor();
     f.shell.StartOfSection(true);
     f.shell.StartOfSection(true);
-    const table = f.shell.GetCursor();
+    const table = f.shell.getShellCursor();
     f.shell.Close();
     expect(ordinary.HasMark()).toBe(false);
     expect(table.HasMark()).toBe(false);

@@ -68,7 +68,7 @@ it("row gesture paints actual selected boxes and body cursor removes stale row a
   expect(button).toHaveAttribute("contenteditable", "false");
   expect(fireEvent.mouseDown(button)).toBe(false);
   fireEvent.click(button);
-  const c = f.shell.GetCursor() as SwTableCursor;
+  const c = f.shell.getShellCursor() as SwTableCursor;
   expect(c).toBeInstanceOf(SwTableCursor);
   expect(c.GetSelectedBoxes()).toEqual(f.boxes.slice(2));
   expect(painted("First")).toHaveLength(2);
@@ -136,7 +136,9 @@ it("keyboard escalation paints only native rectangle and ordinary caret clears i
     },
   );
   expect(painted("First")).toHaveLength(2);
-  expect((f.shell.GetCursor() as SwTableCursor).GetSelectedBoxes()).toEqual(f.boxes.slice(0, 2));
+  expect((f.shell.getShellCursor() as SwTableCursor).GetSelectedBoxes()).toEqual(
+    f.boxes.slice(0, 2),
+  );
   act(
     /** Checks actual table selection behavior.  @returns Operation result. */ () => {
       f.edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 1 } });
@@ -205,7 +207,7 @@ it("clicking an already current empty cell focuses the paragraph without a secon
   fireEvent.click(cell);
   expect(cell).toHaveFocus();
   expect(cell).not.toHaveAttribute("contenteditable");
-  expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(node);
-  expect(f.shell.GetCursor().GetPoint().GetContentIndex()).toBe(0);
+  expect(f.shell.getShellCursor().GetPoint().GetNode()).toBe(node);
+  expect(f.shell.getShellCursor().GetPoint().GetContentIndex()).toBe(0);
   expect(f.shell.HasBoxSelection()).toBe(false);
 });

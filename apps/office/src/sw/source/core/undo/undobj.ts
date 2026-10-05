@@ -20,6 +20,8 @@ export interface SwUndoCursorPosition {
 
 /** Stores all Writer cursor state needed after Undo or Redo. */
 export interface SwUndoCursorState {
+  /** Retains native table-mode endpoints separately from editing cell rings. */
+  readonly tableSelection?: boolean;
   /** Command-target paragraph identity. */
   readonly activeParagraph: SwTextNode;
   /** Optional fixed selection endpoint; its presence retains direction. */
@@ -195,6 +197,7 @@ export function GetFragmentPayloadSize(fragment: SwTextFragment): number {
 /** Clones one complete action cursor boundary. @param state - Stored state. @returns Independent state. */
 function cloneCursorState(state: SwUndoCursorState): SwUndoCursorState {
   return {
+    ...(state.tableSelection === undefined ? {} : { tableSelection: state.tableSelection }),
     activeParagraph: state.activeParagraph,
     ...(state.mark === undefined ? {} : { mark: { ...state.mark, node: state.mark.node } }),
     pendingCharacterItems: state.pendingCharacterItems.Clone(),

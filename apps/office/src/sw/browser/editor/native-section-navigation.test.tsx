@@ -64,8 +64,8 @@ function select(element: HTMLElement, point: number, mark = point) {
 }
 /** Checks native and DOM point identity. @param f - Fixture. @param label - Mounted paragraph label. @param node - Native text owner. @param offset - Literal offset. @returns Nothing. */
 function caret(f: ReturnType<typeof fixture>, label: string, node: typeof f.body, offset: number) {
-  expect(f.shell.GetCursor().GetPoint().GetNode()).toBe(node);
-  expect(f.shell.GetCursor().GetPoint().GetContentIndex()).toBe(offset);
+  expect(f.shell.getShellCursor().GetPoint().GetNode()).toBe(node);
+  expect(f.shell.getShellCursor().GetPoint().GetContentIndex()).toBe(offset);
   const element = screen.getByLabelText(label),
     selection = window.getSelection();
   expect(element.contains(selection?.focusNode ?? null)).toBe(true);
@@ -100,7 +100,7 @@ describe("native section navigation UI", /** Registers native selection and brow
           }),
         ).toBe(false);
       }
-      const point = f.shell.GetCursor().GetPoint();
+      const point = f.shell.getShellCursor().GetPoint();
       expect(point.GetNode()).toBe(key === "Home" ? f.body : f.after);
       expect(point.GetContentIndex()).toBe(key === "Home" ? 0 : 5);
       expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
@@ -115,7 +115,7 @@ describe("native section navigation UI", /** Registers native selection and brow
         tail = screen.getByLabelText("Row 1 column 2 paragraph 2");
       select(tail, 2);
       expect(fireEvent.keyDown(tail, { key, ctrlKey: true, shiftKey: true })).toBe(false);
-      const ordinary = f.shell.GetCursor();
+      const ordinary = f.shell.getShellCursor();
       expect(ordinary.GetMark().GetNode()).toBe(f.tail);
       expect(ordinary.GetMark().GetContentIndex()).toBe(2);
       expect(window.getSelection()?.anchorOffset).toBe(2);
@@ -123,12 +123,19 @@ describe("native section navigation UI", /** Registers native selection and brow
       expect(
         fireEvent.keyDown(screen.getByLabelText(label), { key, ctrlKey: true, shiftKey: true }),
       ).toBe(false);
-      expect(f.shell.GetCursor()).toBeInstanceOf(SwTableCursor);
-      expect(f.shell.GetCursor()).not.toBe(ordinary);
+      expect(f.shell.getShellCursor()).toBeInstanceOf(SwTableCursor);
+      expect(f.shell.getShellCursor()).not.toBe(ordinary);
       expect(f.shell.HasBoxSelection()).toBe(true);
-      expect(ordinary.HasMark()).toBe(false);
-      expect(f.shell.GetCursor().GetMark().GetNode()).toBe(key === "Home" ? f.second : f.tail);
-      expect(f.shell.GetCursor().GetMark().GetContentIndex()).toBe(key === "Home" ? 0 : 4);
+      expect(ordinary.HasMark()).toBe(true);
+      expect(ordinary.GetMark().GetContentIndex()).toBe(0);
+      expect(ordinary.GetPoint().GetContentIndex()).toBe(
+        key === "Home" ? f.first.Len() : f.tail.Len(),
+      );
+      expect(ordinary.GetPoint().GetNode().StartOfSectionNode()).toBe(
+        ordinary.GetMark().GetNode().StartOfSectionNode(),
+      );
+      expect(f.shell.getShellCursor().GetMark().GetNode()).toBe(key === "Home" ? f.second : f.tail);
+      expect(f.shell.getShellCursor().GetMark().GetContentIndex()).toBe(key === "Home" ? 0 : 4);
       expect(
         fireEvent.keyDown(
           screen.getByLabelText(key === "Home" ? "Row 1 column 1 paragraph 1" : label),
@@ -136,7 +143,7 @@ describe("native section navigation UI", /** Registers native selection and brow
         ),
       ).toBe(false);
       expect(f.shell.HasBoxSelection()).toBe(false);
-      expect(f.shell.GetCursor()).toBe(ordinary);
+      expect(f.shell.getShellCursor()).toBe(ordinary);
     },
   );
   it("accepts Meta intent and leaves visual-line,Alt,composition and unavailable selection unhandled", /** Checks translation does not guess native cursor from DOM siblings. @returns Nothing. */ () => {
@@ -162,7 +169,7 @@ describe("native section navigation UI", /** Registers native selection and brow
       tail = screen.getByLabelText("Row 1 column 2 paragraph 2");
     select(tail, 1, 3);
     expect(fireEvent.keyDown(tail, { key: "End", ctrlKey: true, shiftKey: true })).toBe(false);
-    expect(f.shell.GetCursor().GetMark().GetContentIndex()).toBe(3);
+    expect(f.shell.getShellCursor().GetMark().GetContentIndex()).toBe(3);
     caret(f, "Row 1 column 2 paragraph 2", f.tail, 4);
     expect(window.getSelection()?.anchorOffset).toBe(3);
     expect(fireEvent.keyDown(tail, { key: "Home", ctrlKey: true })).toBe(false);
@@ -192,6 +199,6 @@ it("inherits one document editing host for table paragraphs and restores a whole
   caret(f, "Row 1 column 2 paragraph 1", f.second, 0);
   expect(window.getSelection()?.toString()).toContain("Second");
   expect(window.getSelection()?.toString()).toContain("Tail");
-  expect(f.shell.GetCursor().GetMark().GetNode()).toBe(f.tail);
-  expect(f.shell.GetCursor().GetMark().GetContentIndex()).toBe(4);
+  expect(f.shell.getShellCursor().GetMark().GetNode()).toBe(f.tail);
+  expect(f.shell.getShellCursor().GetMark().GetContentIndex()).toBe(4);
 });
