@@ -1,0 +1,12 @@
+{
+  "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/txtnode/text-attribute-lookup.test.ts -t overwrites outer matches|uses the inner link|restores adjacent actual owners",
+  "profile": "upstream-absent-failed-cases-only",
+  "exit": 0,
+  "bytes": 251,
+  "sha256": "68261819d19ee9cb56fd2d13467b8befda9f9b43926bfb21017ef1393d2f1cc2",
+  "totals": [
+    "Test Files  1 passed (1)",
+    "Tests  3 passed | 45 skipped (48)"
+  ],
+  "vendorRestored": true
+}
