@@ -11822,12 +11822,32 @@
           {
             "marker": "SwUndoInsertGroup",
             "path": "apps/office/src/sw/source/core/undo/unins.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts",
+            "marker": "numeric insertion mutates current native slot after replacement %s/%s"
           }
         ],
         "upstream": [
           {
             "marker": "SwUndoInsert",
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx",
+            "marker": "SwUndoInsert::SwUndoInsert"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx",
+            "marker": "SwUndoInsert::CanGrouping"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx",
+            "marker": "SwUndoInsert::UndoImpl"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx",
+            "marker": "SwUndoInsert::RedoImpl"
           }
         ]
       },
@@ -11842,7 +11862,8 @@
       "preservedResponsibilities": [
         "Implements the bounded SwUndoInsert action from pinned LibreOffice unins.cxx.",
         "Iteration129 restores collapsed typing and SwUndoInsert text-mode redo through SwTextNode.InsertText/owned Update. Character-items-only insertion overlays existing automatic portions while retaining actual internet attribute/item/map/backlinks,seven native fields and Update boundary flags;no inherited hyperlink DTO reconstruction. Typed actions clone pending items,capture inserted native fragments for bounded grouping payload and reject grouping with explicit fragment mode;legacy fragment/link adapters retained. Existing range clipping is extracted unchanged to ndhints-range under the1000-line gate. Literal flag/boundary,real shell/undo/redo/grouping/live item/composition/Worker and pending ownership checks cover this bounded path. All355 prior tests and240 existing runtime states/defaults/exceptions and I/O deviations retained;new range helper whollyunverified. Selection FORCE/EMPTY/native Insert flags,empty hints,full BuildPortions/other families/style clients/UNO/refcounts/full core/UI remain unverified;no module/goal promotion.",
-        "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved."
+        "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved.",
+        "Iteration157 resolves represented insertion targets through native m_nNode and m_rDoc from pinned unins.cxx, removing retained paragraph-object payload ownership. Undo/Redo target current actual SwNodes slots, grouping compares numeric node index/document and resolves current cursor boundaries; physical replacement no longer edits detached originals or breaks typing grouping. Actual body/cell native and explicit formatted insertion paths, pending/fragment ownership, repeated native replacement and real shell evidence. Existing fragment/start-offset/native insertion flags behavior is preserved; complete native maText/MoveToUndoNds/RSID/redline/nontext/append ownership, other action payload node identities and retained split node bridge remain unverified.409prior test files and250states/defaults/classifications/exceptions/prior evidence preserved; no whole-module/broad promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unins.cxx",
@@ -14219,6 +14240,10 @@
           {
             "path": "apps/office/src/sw/source/core/undo/native-cursor-range-history.test.ts",
             "marker": "numeric shell history remains current after document replacement cancels composition"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts",
+            "marker": "current native shell paragraph follows cursor navigation and model replacement"
           }
         ],
         "upstream": [
@@ -14373,6 +14398,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx",
             "marker": "SwUndRng::SetPaM"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
+            "marker": "SwCursor* GetCursor"
           }
         ]
       },
@@ -14401,7 +14430,8 @@
         "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion.",
         "Iteration148 ports actual SwPaM circular range owners/traversal/disposal, SwCursor.Create and SwTableCursor change/movement state plus full-cell MakeBoxSels reconciliation. Native default GetCursor(makeTableCursor=true) returns ordinary editing ring; getShellCursor owns displayed table endpoints. Shared selected-text traversal reads each actual PaM so represented Bold/Italic/font family/size/color/highlight cover entire selected cells and all nonempty cell paragraphs, excluding unselected columns. Native history state retains table endpoint mode and rebuilds selected boxes/rings through formatting Undo/Redo. Existing display/navigation tests only switch owner API calls and keep assertion values; no projected text editing. Full ring insertion/deletion/paste/list/paragraph operations, native shellcursor geometry/protection/redlines/complex cells remain unverified. Existing246semanticstates/defaults/classifications and conscious I/O/recovery exceptions preserved; broad goalactive.",
         "Iteration149 moves selected text deletion into native core eddel ownership. Actual SwPaM rings and temporary flat-table section ranges delete each selected box without joining cells. Multi-range initial history is captured sequentially after preceding structural mutations, retaining correct SwHistory node indices, then recorded as one Sfx list undo unit; redo reuses the recorded children. Existing wrtsh applyAction forwards the actual undo context for initial execution. Full-cell and partial cross-cell deletion, empty selected cells, native caret/table-mode exit, hints/list/paragraph history, DOM input and Chromium Undo/Redo/continued input have source-independent tests. Full native history recreated boundary identities, insertion/paste/ring paragraph commands, protected/redline/layout/nested/merged/general structural select-all behavior remain unverified. Existing semantic statuses/defaults/classifications and conscious I/O/recovery deviations preserved.",
-        "Iteration156 shared numeric history resolves only current-context nodes; private RestoreCursorState no longer substitutes a first paragraph or active target from foreign graph references. Shell composition remains current-document-local and model replacement cancels composition before fresh history. Native full shell cursor/ViewShell lifetimes and remaining action payload references/physical split identity stay unverified. One genuinely new public replacement/composition/current-history case validates the final private boundary; no existing test expectation changed. Browser preview requires final changed-source bundle, then only original3failed Chromium cases.250states/defaults/classifications/exceptions/prior evidence preserved."
+        "Iteration156 shared numeric history resolves only current-context nodes; private RestoreCursorState no longer substitutes a first paragraph or active target from foreign graph references. Shell composition remains current-document-local and model replacement cancels composition before fresh history. Native full shell cursor/ViewShell lifetimes and remaining action payload references/physical split identity stay unverified. One genuinely new public replacement/composition/current-history case validates the final private boundary; no existing test expectation changed. Browser preview requires final changed-source bundle, then only original3failed Chromium cases.250states/defaults/classifications/exceptions/prior evidence preserved.",
+        "Iteration157 removes shell activeParagraph cached object ownership; active paragraph resolves from actual persistent native displayed cursor, including physical node replacement, table movement and document replacement. Sequential selected deletion carries the chosen final registered SwPosition across real mutations and records completed numeric after point; reversed own-cell and partial backspace direction remain correct without ignored tests or copied node coordinates. Full native cursor/ViewShell ownership and complete UI/table semantics remain unverified;409prior tests/250states/defaults/exceptions/prior evidence preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
@@ -17198,7 +17228,8 @@
       ],
       "preservedResponsibilities": [
         "Iteration149 moves selected text deletion into native core eddel ownership. Actual SwPaM rings and temporary flat-table section ranges delete each selected box without joining cells. Multi-range initial history is captured sequentially after preceding structural mutations, retaining correct SwHistory node indices, then recorded as one Sfx list undo unit; redo reuses the recorded children. Existing wrtsh applyAction forwards the actual undo context for initial execution. Full-cell and partial cross-cell deletion, empty selected cells, native caret/table-mode exit, hints/list/paragraph history, DOM input and Chromium Undo/Redo/continued input have source-independent tests. Full native history recreated boundary identities, insertion/paste/ring paragraph commands, protected/redline/layout/nested/merged/general structural select-all behavior remain unverified. Existing semantic statuses/defaults/classifications and conscious I/O/recovery deviations preserved.",
-        "Iteration156 integration records numeric cursor coordinates at actual completed native mutations: selected deletion captures live collapsed post-delete point once, sequential per-cell children use local current active nodes and final native outer point instead of removed forecast references. Table row history saves original numeric point and owns only after offset/items until new cells are connected, then records live first cell. Split Redo uses native new-paragraph content0. Original155failed app and3Chromium cases are retried only,408prior test files unchanged. Full physical split/payload node identity, native full table SaveTable/SwNodes sections and complete native action/shell cursor lifetimes remain unverified;250states/defaults/classifications/exceptions/prior evidence preserved."
+        "Iteration156 integration records numeric cursor coordinates at actual completed native mutations: selected deletion captures live collapsed post-delete point once, sequential per-cell children use local current active nodes and final native outer point instead of removed forecast references. Table row history saves original numeric point and owns only after offset/items until new cells are connected, then records live first cell. Split Redo uses native new-paragraph content0. Original155failed app and3Chromium cases are retried only,408prior test files unchanged. Full physical split/payload node identity, native full table SaveTable/SwNodes sections and complete native action/shell cursor lifetimes remain unverified;250states/defaults/classifications/exceptions/prior evidence preserved.",
+        "Iteration157 removes shell activeParagraph cached object ownership; active paragraph resolves from actual persistent native displayed cursor, including physical node replacement, table movement and document replacement. Sequential selected deletion carries the chosen final registered SwPosition across real mutations and records completed numeric after point; reversed own-cell and partial backspace direction remain correct without ignored tests or copied node coordinates. Full native cursor/ViewShell ownership and complete UI/table semantics remain unverified;409prior tests/250states/defaults/exceptions/prior evidence preserved."
       ],
       "omittedResponsibilities": [
         "Read-only/protected/hidden sections, redlines, input fields, formula save, extended select-all and nested/merged table behavior remain unverified."
@@ -17228,6 +17259,10 @@
           {
             "path": "apps/office/src/sw/browser/editor/native-table-delete.test.tsx",
             "marker": "deletes selected row cells and reconstructs one Undo boundary"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+            "marker": "native reversed table point exits at its own surviving cell rather than ring order"
           }
         ],
         "upstream": [

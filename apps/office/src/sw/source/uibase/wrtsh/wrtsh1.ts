@@ -77,7 +77,6 @@ interface WriterCompositionState {
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
-  private activeParagraph: WriterParagraph;
   private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
   private cursor: SwCursor;
@@ -94,7 +93,6 @@ export class SwWrtShell extends SwModify {
   ) {
     super();
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
-    this.activeParagraph = paragraph;
     this.cursor = new SwCursor(new SwPosition(paragraph, paragraph.Len()));
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
     this.undoContext = {
@@ -233,7 +231,6 @@ export class SwWrtShell extends SwModify {
     this.tableCursor.SetMark();
     this.tableCursor.GetPoint().Assign(first, first.Len());
     this.tableCursor.ActualizeSelection(boxes);
-    this.activeParagraph = first;
     this.pendingCharacterItems = first.GetCharacterItemsAt(first.Len());
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.NotifySelection();
@@ -269,8 +266,7 @@ export class SwWrtShell extends SwModify {
           moved = this.cursor.SttEndDoc(start);
         }
         const point = this.getShellCursor().GetPoint();
-        this.activeParagraph = point.GetNode() as WriterParagraph;
-        this.pendingCharacterItems = this.activeParagraph.GetCharacterItemsAt(
+        this.pendingCharacterItems = this.GetActiveParagraph().GetCharacterItemsAt(
           point.GetContentIndex(),
         );
         this.docShell.GetUndoManager().BreakUndoGrouping();
@@ -333,8 +329,7 @@ export class SwWrtShell extends SwModify {
 
   /** Refreshes shell-owned input/bindings after core cell traversal. @returns Nothing. */
   private UpdateTableCursor(): void {
-    this.activeParagraph = this.getShellCursor().GetPoint().GetNode() as WriterParagraph;
-    this.pendingCharacterItems = this.activeParagraph.GetCharacterItemsAt(0);
+    this.pendingCharacterItems = this.GetActiveParagraph().GetCharacterItemsAt(0);
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.NotifySelection();
   }
@@ -352,7 +347,7 @@ export class SwWrtShell extends SwModify {
   }
   /** Returns the active document-owned paragraph. @returns Active text node. */
   public GetActiveParagraph(): WriterParagraph {
-    return this.activeParagraph;
+    return this.getShellCursor().GetPoint().GetNode() as WriterParagraph;
   }
   /** Returns pending direct attributes for a collapsed caret. @returns Copied attribute state. */
   public GetPendingCharacterItems(): SfxItemSet {
@@ -411,7 +406,6 @@ export class SwWrtShell extends SwModify {
   /** Rebinds the persistent PaM after explicit document replacement. @returns Nothing. */
   public DocumentReplaced(): void {
     const paragraph = this.GetDoc().paragraphs[0] as WriterParagraph;
-    this.activeParagraph = paragraph;
     this.composition = undefined;
     this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
     this.AssignCursor(paragraph, paragraph.Len());
@@ -448,7 +442,6 @@ export class SwWrtShell extends SwModify {
       currentMark?.GetContentIndex() === mark?.GetContentIndex()
     )
       return false;
-    this.activeParagraph = pointNode;
     this.pendingCharacterItems = pointNode.GetCharacterItemsAt(point.GetContentIndex());
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.ClearTableCursor();
@@ -460,7 +453,6 @@ export class SwWrtShell extends SwModify {
   public FocusNode(paragraph: WriterParagraph): void {
     if (paragraph.GetDoc() !== this.GetDoc()) return;
     if (this.getShellCursor().GetPoint().GetNode() === paragraph) {
-      this.activeParagraph = paragraph;
       return;
     }
     this.SetPaM(new SwPosition(paragraph, paragraph.Len()));
@@ -950,7 +942,6 @@ export class SwWrtShell extends SwModify {
       state.mark === undefined || markNode === undefined
         ? undefined
         : new SwPosition(markNode, Math.min(state.mark.offset, markNode.Len()));
-    this.activeParagraph = state.activeParagraph;
     this.pendingCharacterItems = state.pendingCharacterItems.Clone();
     this.ClearTableCursor();
     this.cursor.Assign(point, mark);

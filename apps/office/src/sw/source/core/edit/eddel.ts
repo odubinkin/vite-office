@@ -70,6 +70,7 @@ export function createWriterDeleteSelectionOperation(
           context,
         ) => {
           const currentRanges = collectDeleteRanges(cursor);
+          const finalPoint = new SwPosition(final.point.node, final.point.offset);
           try {
             for (let index = 0; index < currentRanges.length; index++) {
               const range = currentRanges[index] as SwPaM;
@@ -85,17 +86,18 @@ export function createWriterDeleteSelectionOperation(
               );
               context.GetDoc().GetDocumentContentOperationsManager().DeleteAndJoin(range);
               action.SetAfterDelete(
-                index === currentRanges.length - 1 ? cursor.GetPoint() : range.GetPoint(),
+                index === currentRanges.length - 1 ? finalPoint : range.GetPoint(),
               );
               group.AddAction(action);
             }
-            const point = cursor.GetPoint();
+            const point = finalPoint;
             context.RestoreCursor({
               ...final,
               activeParagraph: point.GetNode() as SwTextNode,
               point: { node: point.GetNode() as SwTextNode, offset: point.GetContentIndex() },
             });
           } finally {
+            finalPoint.Dispose();
             for (const range of currentRanges) range.Dispose();
           }
         },
