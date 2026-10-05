@@ -1,0 +1,31 @@
+{
+  "vendorRestored": true,
+  "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-attribute-portions.spec.ts --reporter=list,json",
+  "profile": "original-still-failed-Chromium-only-upstream-absent",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/text/atrstck.ts": "b7a22fdcc4ee4b000acfb47c24c4463641b5f11154c4bc8dae59fdda502dde34",
+    "apps/office/src/sw/source/core/text/itratr.ts": "ffe24fcf6e06fc822e628e66fddf9617fdb863c61b0d9d97101241b2061d9335",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "e893aa58b2fa06bf352e8bf0bdf77c8547e42336cffee2c057b3ff4fdd348807",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "f60f6a46501a4537a9177e3892b37fc522e19dc1ac920bdc5e1d93e331f5b7fa"
+  },
+  "exit": 1,
+  "bytes": 6779,
+  "sha256": "08dbd7f4aa6b0c522b8753cabb0d3ce13c846e02d81bb6f6158ed22efb72d007",
+  "caseCounts": {
+    "startTime": "2026-10-05T21:44:53.923Z",
+    "duration": 14611.214,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "executedCases": [
+    "Writer native body and cell portions retain formatting and editing width=1280",
+    "Writer native body and cell portions retain formatting and editing width=390"
+  ],
+  "failedCases": [
+    "Writer native body and cell portions retain formatting and editing width=1280",
+    "Writer native body and cell portions retain formatting and editing width=390"
+  ],
+  "errors": []
+}
