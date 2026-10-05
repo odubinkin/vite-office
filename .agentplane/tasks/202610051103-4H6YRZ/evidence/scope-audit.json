@@ -1,0 +1,57 @@
+{
+  "base": "989f48e1417f2ecbe2db3485a750ba9592ddddf7",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/undo/undobj.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts",
+    "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx",
+    "apps/office/e2e/writer-native-table-cursor-rings.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 391,
+  "priorTestFilesByteIdentical": 387,
+  "changedPriorTests": [
+    "apps/office/src/sw/browser/editor/native-section-navigation.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts"
+  ],
+  "oldTestMigration": "Four existing files change displayed-owner calls. Two parameterized mounted Shift Home/End expectations corrected from unmarked to marked full-cell ordinary cursor per native GetCurAttr/GetCursor/MakeBoxSels. Added full-cell assertions. Every other token equivalent after owner API normalization.",
+  "semanticRecords": 246,
+  "semanticStatesDefaultsClassificationsAndExceptionsUnchanged": true,
+  "changedFileStatics": {
+    "format": 0,
+    "eslint": 0,
+    "jsdocErrors": 0,
+    "typeDiagnostics": 0
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/inc/pam.hxx",
+      "sha256": "261e281789f347d0b5fe4d75c6187ad0279f9716b5f344b3e3a5b2cdc0905290"
+    },
+    {
+      "path": "sw/source/core/crsr/crsrsh.cxx",
+      "sha256": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a"
+    },
+    {
+      "path": "sw/source/core/crsr/swcrsr.cxx",
+      "sha256": "682cbb23cd826925fbf67362f31e7a9903cce89863fa6263aa08675ef9516644"
+    },
+    {
+      "path": "sw/source/core/edit/edattr.cxx",
+      "sha256": "c12c601bd4f1e660bd7cc9d54a3a8b1bab5b11fba5ac1ea3ad3d5f791e6e8a1c"
+    }
+  ],
+  "validationLimit": "All final production sources are identical to ONE successful full build and 115-case Chromium profile. Only failed/new test expectations and two new cases changed afterward; exact failed/new-only closure passed."
+}

@@ -4,7 +4,7 @@ title: "Materialize native per-cell cursor rings for selected table character fo
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: approved iterative UI refactoring; native per-cell formatting cursor ring leaf148."
 doc_version: 3
-doc_updated_at: "2026-10-05T11:29:46.846Z"
+doc_updated_at: "2026-10-05T11:35:42.124Z"
 doc_updated_by: "CODER"
 description: "Iteration148 under 202609240501-C9TN6M. Port native GetCursor default and separate displayed table cursor from editing cursor rings, so selected table character commands cover full cells and preserve selection through history."
 sections:
@@ -52,7 +52,12 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert intentional semantic change through a new authorized leaf; no history rewrite."
-  Findings: "Current selected-box painting uses table owner, but character commands consume one linear endpoint span and can omit first-cell text. Pinned SwCursorShell::GetCursor(makeTableCursor=true) returns ordinary current cursor, materializes MakeBoxSels; getShellCursor owns display cursor. SwTableCursor::MakeBoxSels creates whole-cell mark-first0/point-lastLen ranges and retains matching cursors. SwEditShell formatting traverses GetRingContainer. Port actual native ring mechanism, preserve displayed selection and history; full per-ring structural edits remain separate."
+  Findings: |-
+    Current selected-box painting uses table owner, but character commands consume one linear endpoint span and can omit first-cell text. Pinned SwCursorShell::GetCursor(makeTableCursor=true) returns ordinary current cursor, materializes MakeBoxSels; getShellCursor owns display cursor. SwTableCursor::MakeBoxSels creates whole-cell mark-first0/point-lastLen ranges and retains matching cursors. SwEditShell formatting traverses GetRingContainer. Port actual native ring mechanism, preserve displayed selection and history; full per-ring structural edits remain separate.
+
+    - Observation: ONE upstream-absent full profile: build pass; app 12075 pass and 2 failed mounted Shift Home/End expectations out of12077; initial branchcoverage99.97 with2 uncoveredbranches; inventory109/36coverage100; scripts5/2; Chromium115pass noflakes. Exact failed names recorded before assertions. Native GetCurAttr/GetCursor/MakeBoxSels confirms ordinary cursor reuses full marked cell ranges, invalidating prior unmarked assertion.
+      Impact: Existing UI state queries now correctly materialize native cell rings. Preserving obsolete unmarked assertions would require a production workaround inconsistent with upstream. Initial scope-token audit also detected only Prettier trailing call-comma punctuation.
+      Resolution: Within standing upstream UI authorization and same16paths, revised taskplan and VerifySteps, reapproved sequentially. Corrected exactly two parameterized expectations and added full-cell assertions. Added two new ring reconciliation/collapsed-owner cases. Failed/new-only closure4pass; final actual-counter coverage100 across lines11999 statements13135 functions3334 branches9814. No final production source changed after full build/Chromium; no passing gate/suite/case replay. Scope token audit normalizes optional trailing call commas only; all other old-test tokens must remain equivalent after owner API migration.
 id_source: "generated"
 ---
 ## Summary
@@ -86,3 +91,7 @@ Revert intentional semantic change through a new authorized leaf; no history rew
 ## Findings
 
 Current selected-box painting uses table owner, but character commands consume one linear endpoint span and can omit first-cell text. Pinned SwCursorShell::GetCursor(makeTableCursor=true) returns ordinary current cursor, materializes MakeBoxSels; getShellCursor owns display cursor. SwTableCursor::MakeBoxSels creates whole-cell mark-first0/point-lastLen ranges and retains matching cursors. SwEditShell formatting traverses GetRingContainer. Port actual native ring mechanism, preserve displayed selection and history; full per-ring structural edits remain separate.
+
+- Observation: ONE upstream-absent full profile: build pass; app 12075 pass and 2 failed mounted Shift Home/End expectations out of12077; initial branchcoverage99.97 with2 uncoveredbranches; inventory109/36coverage100; scripts5/2; Chromium115pass noflakes. Exact failed names recorded before assertions. Native GetCurAttr/GetCursor/MakeBoxSels confirms ordinary cursor reuses full marked cell ranges, invalidating prior unmarked assertion.
+  Impact: Existing UI state queries now correctly materialize native cell rings. Preserving obsolete unmarked assertions would require a production workaround inconsistent with upstream. Initial scope-token audit also detected only Prettier trailing call-comma punctuation.
+  Resolution: Within standing upstream UI authorization and same16paths, revised taskplan and VerifySteps, reapproved sequentially. Corrected exactly two parameterized expectations and added full-cell assertions. Added two new ring reconciliation/collapsed-owner cases. Failed/new-only closure4pass; final actual-counter coverage100 across lines11999 statements13135 functions3334 branches9814. No final production source changed after full build/Chromium; no passing gate/suite/case replay. Scope token audit normalizes optional trailing call commas only; all other old-test tokens must remain equivalent after owner API migration.
