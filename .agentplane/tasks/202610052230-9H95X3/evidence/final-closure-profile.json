@@ -1,0 +1,37 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [],
+  "originalFailedInventory": [],
+  "newChromiumCases": [
+    "Writer native tenth heading boundary width=1280",
+    "Writer native tenth heading boundary width=390"
+  ],
+  "newAppCases": [
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-outline-movement.test.ts",
+      "name": "native outline movement consumes actual tenth list level Tab without reading an unavailable format"
+    }
+  ],
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/doc/native-outline-movement.test.ts --testNamePattern=^native outline movement consumes actual tenth list level Tab without reading an unavailable format$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/9H95X3.final-closure-app-results.json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1116,
+      "sha256": "3df5a570b8a7039c01eadc35ba420568ac61ba770b581070c6e19d3eab7b7089",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 27,
+        "total": 28
+      },
+      "executedCases": [
+        "native outline movement consumes actual tenth list level Tab without reading an unavailable format"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "04d3c17e70670c64a0f8310a2fc0b4caf0108286923b9db86c2918e2aa678bdf"
+    }
+  ]
+}
