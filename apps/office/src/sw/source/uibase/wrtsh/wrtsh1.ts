@@ -58,6 +58,7 @@ import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
 import { SwUndoDelNum, SwUndoNumOrNoNum } from "../../core/undo/unnum";
 import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
+import { createWriterReadFragmentAction } from "../../filter/basflt/shellio";
 
 /** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
 export interface WriterParagraphIndentValue {
@@ -473,6 +474,17 @@ export class SwWrtShell extends SwModify {
   }
   /** Pastes at the current canonical PaM without a projected string selection. @param paste - Parsed clipboard content. @returns Whether content changed. */
   public PasteAtCursor(paste: WriterPasteDocument): boolean {
+    const first = paste.paragraphs[0];
+    if (
+      this.HasBoxSelection() &&
+      !paste.isBlock &&
+      paste.paragraphs.length === 1 &&
+      first?.listKind === "none"
+    ) {
+      const before = this.CaptureCursorState();
+      const action = createWriterReadFragmentAction(this.GetCursor(), first.fragment, before);
+      return action === undefined ? false : this.ApplyAction(action);
+    }
     return this.editing.Paste(paste);
   }
 

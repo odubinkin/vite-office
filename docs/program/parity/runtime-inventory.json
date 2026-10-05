@@ -7806,6 +7806,41 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/filter/basflt/shellio.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0102"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/basflt/shellio.ts#createWriterReadFragmentAction",
+          "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts#native clipboard preserves selected cell content and repeated history",
+          "apps/office/src/sw/browser/editor/native-table-paste.test.tsx#mounted %s paste appends to every selected row cell in one native Undo",
+          "apps/office/e2e/writer-native-table-paste.spec.ts#Writer selected row paste appends in every cell and retains native Undo selection",
+          "vendor/libreoffice-reference/sw/source/filter/basflt/shellio.cxx#SwReader::Read",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::PasteFileContent",
+          "vendor/libreoffice-reference/sw/source/core/crsr/swcrsr.cxx#SwTableCursor::MakeBoxSels"
+        ],
+        "justification": "Iteration150 routes a single non-block non-list clipboard paragraph in table mode through native SwReader cursor-ring point ownership. Existing content and earlier paragraphs remain intact, the explicit imported text/hint fragment is cloned independently into every selected cell at its last-paragraph end, and one grouped native insertion history retains table selection through Undo/Redo. This bounded fragment payload reuses existing SwUndoInsert; complete native SwUndoInsDoc and ASCII/filter-default formatting, multiline/list/table transfer, nested/merged/protected/redline behavior and native history lifetimes remain unverified. Existing semantic states/defaults/classifications and conscious I/O/recovery deviations are unchanged.",
+        "knownViolations": [],
+        "localSymbols": [
+          "createWriterReadFragmentAction"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/filter/basflt/shellio.cxx",
+        "upstreamSymbols": [
+          "SwReader::Read"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
       "classification": "local-infrastructure",
       "state": "active",
