@@ -1,0 +1,26 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "c655f5118b2422e3c878a0c55e4f00422863d333",
+  "base": "1c0f41d87ea02d4143f86888123fb722036f14db",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts",
+    "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+    "apps/office/e2e/writer-counted-list-layout.spec.ts",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+    "apps/office/e2e/writer-selected-list-toggle.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "reviewedSemanticDiffBytes": 125589,
+  "reviewedSemanticDiffSHA256": "579e5bb8c8b56f482d4341e6280900add701edd6a8e02646ebee3f70d2fc9165",
+  "verdict": "pass",
+  "evidence": "Pinned doc.hxx SetNumRuleMode,docnum SetNumRule/SetCounted,ednumber SetCurNumRule,wrtsh1 NumOrBulletOn and native InsNum inspected. Represented flag/rule/listID/style/count/indent policy and inclusive current range execution use native document owners;removed retained paragraph base and separate continuation class/item interface/shell list DTO path. Shared SfxListUndoAction with numeric InsNum owns actual independent values and cursor endpoints, native DelNum handles removal.36new nativeapp/4new Chromium;12395distinctapp/109inventory/5scripts/126distinctChromium allpassed.6statics firstpass and5changedteststatics pass;ONEfullabsentprofile followedoriginal4failedapp+1new suppression/original3failedChromium only,exact executedsets verified. Production unchanged; identical maps actual counters merged,app/inventory100%L/S/F/B,no passingreplays.6boundedsource-confirmed prior testcorrections,408priorfilesunchanged,250states/defaults/classifications/IOexceptions/prior evidence preserved,3owners13paths.5restoredsourceaudits0violations,APscan0forbidden,doctor0errors2oldwarnings/routingOK. No broadmodule promotion.",
+  "validationLimit": "Represented native SetNumRule0/1/2/4/8 flags and SetCounted, inclusive current body/cell/mixed ranges, rule/list ID/count/indent/style ownership and numeric grouped history only. Public single-node InsNum constructor and independent direct-item snapshots remain portable; full native SwHistory/document-owned undo/rule rollback/Repeat/client/layout/merged/margin propagation and factory outline/font/leading whitespace are unverified. Selected native range consensus supports UI commands; full numbered/bullet/outline eligibility and broad UI/list/table rendering/protection/clipboard/layout remain unverified. No whole-module promotion or conscious save/open/recovery changes. Goal active.",
+  "residualRisk": "Public single-node InsNum API and snapshots remain portable; document-owned native undo/SwHistory/rule rollback/Repeat/registered deltas/client/layout/merged/marginpropagation and listfactory outline/font/leadingwhitespace not certified. Current selected-family consensus remains narrower than full native numbered/bullet/outline eligibility. BroadUI/list/table architecture/behavior and split physical bridge remainopen;conscious IO/recovery deviations preserved,parentDOING/goalactive."
+}
