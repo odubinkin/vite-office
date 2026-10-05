@@ -1,0 +1,19 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "1f2931231ee6a1aaf7f759b9f34e18b6dc4c5e13",
+  "base": "b182e8586be7f12f35638474f2cf18df3d46014c",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unspnd.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "apps/office/src/sw/source/core/undo/native-split-history.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts"
+  ],
+  "reviewedSemanticDiffBytes": 59131,
+  "reviewedSemanticDiffSHA256": "c715ad1e0d2a0dbf3ed1f42173b13596f73a97e365f3aad0d2427e45c036ddb3",
+  "verdict": "pass",
+  "evidence": "Pinned SwUndoSplitNode constructor/UndoImpl/RedoImpl and SwHistorySetText native fresh InsertItem inspected. Conditional original whole-range CopyAttr false field policy, empty discard, native represented reset and forward temporary rollback/rearm, destructor release implemented with existing native owners. Two fragment snapshots and complete hint-equality adapter removed; existing text/foreign/connected guards retained, fresh core items/maps copied before retained paragraph replacement.29new cases passed first profile, one source-contradicted old pointer expectation corrected with stronger fresh item/backlinks checks and only original failed case retried.12215distinct app/311files,109inventory,5scripts,120Chromium; actual app/inventory100%L/S/F/B. Full build has unchanged final production hashes.407prior files406unchanged/1exact pointer contract;250states/defaults/exceptions/prior evidence preserved;5restored source audits0violations. No broad completion.",
+  "validationLimit": "Represented ranged AUTO/INET split history and native state refresh only. Retained paragraph identity is still a bridge for existing pointer-based actions, unverified against native fresh nodes. Native direct heading/list item restoration is not promised by text history; full physical ownership/CutImpl/undo-area/fields/redlines remain unverified. Conscious IO/recovery exceptions preserved; broad UI/table parity remains open.",
+  "residualRisk": "Retained paragraph node identity remains a bridge for existing pointer-based actions, unverified against native fresh redo nodes; native physical prefix/suffix identity, full CutImpl/undo-area/client/frame/redline/field lifetimes and broad UI/list/table parity remain open. Native text history does not promise restoration of direct paragraph/list levels. Conscious IO/recovery deviations preserved."
+}
