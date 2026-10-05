@@ -1,0 +1,24 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "80d342e5871de27ffd71e3f4662f490604aa71b4",
+  "base": "b6c3233bfe3511f504ce66a369c170042751c6fa",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+    "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+    "apps/office/e2e/writer-table-row-lists.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "reviewedSemanticDiffBytes": 179572,
+  "reviewedSemanticDiffSHA256": "e746a5b71ef2dff32440edfdbcd879a87fddc7d35df5b2a8c1859cebd6409def",
+  "verdict": "pass",
+  "evidence": "Pinned SwEditShell state/ring/SetCurNumRule/NumUpDown and SwPamRanges inspected. Actual inherited core owner replaces functional/cyclic level routing; native rings include all selected table boxes, correct per-ring break/empty/Outline counted state, shared created identity, numeric actual range-specific grouped history and preserved displayed cursor/current replacement/neighbors.50newapp/2newChromium,12445distinctapp/109inventory/5scripts/128Chromium passed. Six statics and changed owner/new test/metadata checks finalpass. ONEfullabsentprofile,only2genuinelynew fallback API cases/original1failedinventory/original1failednewmarked case thereafter;no passing/browser/build/profile replay. Actual identical-map counters app/inventory100%L/S/F/B,product unchanged since fullprofile.414of416prior testfiles unchanged,2exactAPI/ownerfixture transforms,250states/defaults/classes/IOexceptions preserved,explicitdeletedhelper evidence/export/internal-operation migration only. Five restored audits0violations,APignoredscan0forbidden,doctor0errors2oldwarnings/routingOK.",
+  "validationLimit": "Inherited bounded SwEditShell list state/rule/removal/level owner and actual ring traversal,sorted native range normalization,current numeric history and actual table row/column selection only. Full SwCursorShell hierarchy,document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and ContinueNumbering rings remain unverified;no whole module/status/default/IO exception promotion,parentDOING/goalACTIVE.",
+  "residualRisk": "Full native SwCursorShell hierarchy and document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory remain unverified. ContinueNumbering still first range only; reserved Outline identity uses existing named-rule lookup. Broad list/table rendering/editing/protection/clipboard/layout and UI parity remain open. Conscious save/open/recovery deviations unchanged,parentDOING/goalACTIVE."
+}

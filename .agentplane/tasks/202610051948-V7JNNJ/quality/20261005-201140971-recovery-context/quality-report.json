@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610051948-V7JNNJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T20:11:40.971Z",
+  "verdict": "pass",
+  "summary": "Exact-SHA review passes bounded native editing-shell ring list parity; broad parity remains open.",
+  "evaluated_sha": "80d342e5871de27ffd71e3f4662f490604aa71b4",
+  "blueprint_digest": "7f2d349c88e003da8cb1bec8c24d881f0418132a17d7a7e1a681326950ed5d89",
+  "findings": [
+    "Inherited core numbering owner removes cyclic and functional adapters; actual selected row/column rings apply shared list identity, native state and normalized level changes with atomic numeric history. All declared checks final pass; 12445 distinct app,109 inventory,128 Chromium cases pass,100 percent coverage with identical actual maps and no passing replay. Explicit deleted-helper metadata migration and all250 states/defaults/IO exceptions preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610051948-V7JNNJ/README.md",
+    ".agentplane/tasks/202610051948-V7JNNJ/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full cursor shell hierarchy,document-owned undo,SwHistory,layout,rule factory,ContinueNumbering rings and broad table/UI parity remain unverified."
+  ]
+}

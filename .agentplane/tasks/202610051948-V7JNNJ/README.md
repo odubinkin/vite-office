@@ -4,7 +4,7 @@ title: "Own table ring list commands in the native editing shell"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T20:11:54.576Z"
+  updated_by: "CODER"
+  note: "Verified inherited native ring numbering owner and table row/column atomic history; 12445 distinct app,109 inventory,128 Chromium and5 scripts pass, actual100 percent app/inventory coverage. Six statics and5 restored audits finalpass. One full upstream-absent profile; only new/failed cases afterwards. Exact-SHA EVALUATOR pass 20261005-201140971-recovery-context; 414 prior testfiles unchanged,2 bounded API corrections,250 states/defaults/IO exceptions preserved. Full hierarchy/history/factory/ContinueNumbering rings remain open."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T20:11:40.971Z"
+  updated_by: "EVALUATOR"
+  note: "Exact-SHA review passes bounded native editing-shell ring list parity; broad parity remains open."
+  evaluated_sha: "80d342e5871de27ffd71e3f4662f490604aa71b4"
+  blueprint_digest: "7f2d349c88e003da8cb1bec8c24d881f0418132a17d7a7e1a681326950ed5d89"
+  evidence_refs:
+    - ".agentplane/tasks/202610051948-V7JNNJ/README.md"
+    - ".agentplane/tasks/202610051948-V7JNNJ/quality/20261005-201140971-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610051948-V7JNNJ/quality/20261005-201140971-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610051948-V7JNNJ/quality/20261005-201140971-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610051948-V7JNNJ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610051948-V7JNNJ/evidence/exact-sha-review.json"
+  findings:
+    - "Inherited core numbering owner removes cyclic and functional adapters; actual selected row/column rings apply shared list identity, native state and normalized level changes with atomic numeric history. All declared checks final pass; 12445 distinct app,109 inventory,128 Chromium cases pass,100 percent coverage with identical actual maps and no passing replay. Explicit deleted-helper metadata migration and all250 states/defaults/IO exceptions preserved."
 commit: null
 comments:
   -
@@ -36,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: repair native table-ring list commands and editing-shell ownership under existing iterative user authorization;one scoped leaf,full goal remainsactive."
+  -
+    type: "verify"
+    at: "2026-10-05T20:11:54.576Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified inherited native ring numbering owner and table row/column atomic history; 12445 distinct app,109 inventory,128 Chromium and5 scripts pass, actual100 percent app/inventory coverage. Six statics and5 restored audits finalpass. One full upstream-absent profile; only new/failed cases afterwards. Exact-SHA EVALUATOR pass 20261005-201140971-recovery-context; 414 prior testfiles unchanged,2 bounded API corrections,250 states/defaults/IO exceptions preserved. Full hierarchy/history/factory/ContinueNumbering rings remain open."
 doc_version: 3
-doc_updated_at: "2026-10-05T20:10:34.034Z"
+doc_updated_at: "2026-10-05T20:11:54.627Z"
 doc_updated_by: "CODER"
 description: "Iteration162 repair actual table row/column/disjoint ring list commands, native numbering state and redundant level route under standing user authorization;previous161verifiedprogress;parent202609240501-C9TN6M remainsDOING."
 sections:
@@ -62,7 +84,41 @@ sections:
     3. Native document rule0/1/2/4/8flags, lookup/add/assignment/listID, collapsed direct/style rule policy, inclusive body/cell/mixed ranges, counted reset, indent reset only labelalignment;actualshell toggle/continue grouped currentnumeric InsNum history,cursor/native replacement/independence/foreigndoc/neighbors.416prior testfiles:414byteidentical,2bounded source-confirmed API/owner fixture corrections;250states/defaults/classifications/consciousIOexceptions/prior evidence preserved;11paths/additive5owners. ActualChromium selectedrange labels/menu/undo/redo/currentcaret. Fullnative SwHistory/documentundo/client/layout/merged/Repeat/broadUI unverified.
     4. After restoration: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/prior tests/defaults/APartifact audit,doctor/routing, same-agent explicit EVALUATOR exact semantic SHApass,recordedverify/meaningfulfinish/parentcheckpoint clean main.
     5. Native core editing owner and exact SwPamRanges/ring state,SetCurNumRule one-list-ID,DelNumRules/NumUpDown disjoint actual table boxes;no cyclic/helper level adapters. Five owner symbols/evidence migration only;414prior tests unchanged,2boundedAPI corrections. Full history/factory/client/layout/ContinueNumbering rings unverified.
-  Verification: "Pending declared checks; no upstream test/runtime dependency."
+  Verification: |-
+    Pending declared checks; no upstream test/runtime dependency.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T20:11:54.576Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified inherited native ring numbering owner and table row/column atomic history; 12445 distinct app,109 inventory,128 Chromium and5 scripts pass, actual100 percent app/inventory coverage. Six statics and5 restored audits finalpass. One full upstream-absent profile; only new/failed cases afterwards. Exact-SHA EVALUATOR pass 20261005-201140971-recovery-context; 414 prior testfiles unchanged,2 bounded API corrections,250 states/defaults/IO exceptions preserved. Full hierarchy/history/factory/ContinueNumbering rings remain open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T20:11:53.866Z, excerpt_hash=sha256:faf5513caa9d62263451dd5c5af9aafe172fda69f7864cceb97f4cc52ca75cbf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051948-V7JNNJ/blueprint/resolved-snapshot.json
+    - old_digest: 7f2d349c88e003da8cb1bec8c24d881f0418132a17d7a7e1a681326950ed5d89
+    - current_digest: 7f2d349c88e003da8cb1bec8c24d881f0418132a17d7a7e1a681326950ed5d89
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051948-V7JNNJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610051948-V7JNNJ -m 🧩 V7JNNJ task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional semantic task commit; retain lifecycle evidence and recorded limitations."
   Findings: |-
     Iteration162 verified progress. Pinned LibreOffice26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65 retained.
@@ -77,7 +133,7 @@ sections:
     Evidence: actual initial and new-only/original-failed-only counters merged with identical statement/function/branch maps. AppL12597/S13804/F3382/B10262 and inventory1464/1523/384/1080 all100%. Initial appmap118b6c3aa734cde369c4918b740f9d123c51cde2029873eb1dfd57abb7f930ae;final973f0cf3091021fd10dd060fc970e51ba8633a9fd54e55d89dc23349c45ec8a8. No changed-source counter transfer; maps/results/initial source copies only ignored appcache.
     Scope:11intentional paths,5owner metadata records.414of416prior testfiles byteidentical;2exact bounded old corrections only removed function availability API→native method and structural fixture→actual inherited SwEditShell owner;all behavior assertions retained.250states/defaults/classifications/conscious save/open/recovery exceptions preserved, prior evidence preserved except explicitly migrated deleted-helper source marker. One obsolete functional internal operation removed without module promotion. Scope-validator checked wrong field name target instead of actual wrtShell; validator-only correction then exact pass, no code/test change.
     Five restored source audits final pass0violations. Changed owner/test/metadata statics pass. AP ignored-inclusive4316files0forbidden; no upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. Doctor0errors2pre-existing warnings; policy routingOK.
-    Limits: SwEditShell currently extends represented SwModify broadcaster; full native SwCursorShell hierarchy remains unverified. Existing native numeric history and portable independently owned item snapshots remain; full document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory/outline fonts and whitespace remain unverified. ContinueNumbering still first-range only. Full native outline factory uses named reserved rule lookup instead of complete GetOutlineNumRule implementation. Broad UI/list/table rendering/editing/protection/clipboard/layout and split physical bridge remain open. Conscious IO/recovery deviations unchanged,parentDOING/goalACTIVE. Exact-SHA same-agent EVALUATOR review and recorded verification/meaningful finish next.
+    Limits: SwEditShell currently extends represented SwModify broadcaster; full native SwCursorShell hierarchy remains unverified. Existing native numeric history and portable independently owned item snapshots remain; full document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory/outline fonts and whitespace remain unverified. ContinueNumbering still first-range only. Full native outline factory uses named reserved rule lookup instead of complete GetOutlineNumRule implementation. Broad UI/list/table rendering/editing/protection/clipboard/layout and split physical bridge remain open. Conscious IO/recovery deviations unchanged,parentDOING/goalACTIVE. Exact-SHA same-agent EVALUATOR pass 20261005-201140971-recovery-context bound to 80d342e5871de27ffd71e3f4662f490604aa71b4; no independent reviewer claimed. Recorded verification and meaningful finish next.
 id_source: "generated"
 ---
 ## Summary
@@ -115,6 +171,39 @@ Iteration162 repair existing table-row/ring list commands and native numbering s
 
 Pending declared checks; no upstream test/runtime dependency.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T20:11:54.576Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified inherited native ring numbering owner and table row/column atomic history; 12445 distinct app,109 inventory,128 Chromium and5 scripts pass, actual100 percent app/inventory coverage. Six statics and5 restored audits finalpass. One full upstream-absent profile; only new/failed cases afterwards. Exact-SHA EVALUATOR pass 20261005-201140971-recovery-context; 414 prior testfiles unchanged,2 bounded API corrections,250 states/defaults/IO exceptions preserved. Full hierarchy/history/factory/ContinueNumbering rings remain open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T20:11:53.866Z, excerpt_hash=sha256:faf5513caa9d62263451dd5c5af9aafe172fda69f7864cceb97f4cc52ca75cbf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051948-V7JNNJ/blueprint/resolved-snapshot.json
+- old_digest: 7f2d349c88e003da8cb1bec8c24d881f0418132a17d7a7e1a681326950ed5d89
+- current_digest: 7f2d349c88e003da8cb1bec8c24d881f0418132a17d7a7e1a681326950ed5d89
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051948-V7JNNJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610051948-V7JNNJ -m 🧩 V7JNNJ task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only intentional semantic task commit; retain lifecycle evidence and recorded limitations.
@@ -133,4 +222,4 @@ Closure: two genuinely new cursor-only public history tests executed1passed1fail
 Evidence: actual initial and new-only/original-failed-only counters merged with identical statement/function/branch maps. AppL12597/S13804/F3382/B10262 and inventory1464/1523/384/1080 all100%. Initial appmap118b6c3aa734cde369c4918b740f9d123c51cde2029873eb1dfd57abb7f930ae;final973f0cf3091021fd10dd060fc970e51ba8633a9fd54e55d89dc23349c45ec8a8. No changed-source counter transfer; maps/results/initial source copies only ignored appcache.
 Scope:11intentional paths,5owner metadata records.414of416prior testfiles byteidentical;2exact bounded old corrections only removed function availability API→native method and structural fixture→actual inherited SwEditShell owner;all behavior assertions retained.250states/defaults/classifications/conscious save/open/recovery exceptions preserved, prior evidence preserved except explicitly migrated deleted-helper source marker. One obsolete functional internal operation removed without module promotion. Scope-validator checked wrong field name target instead of actual wrtShell; validator-only correction then exact pass, no code/test change.
 Five restored source audits final pass0violations. Changed owner/test/metadata statics pass. AP ignored-inclusive4316files0forbidden; no upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. Doctor0errors2pre-existing warnings; policy routingOK.
-Limits: SwEditShell currently extends represented SwModify broadcaster; full native SwCursorShell hierarchy remains unverified. Existing native numeric history and portable independently owned item snapshots remain; full document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory/outline fonts and whitespace remain unverified. ContinueNumbering still first-range only. Full native outline factory uses named reserved rule lookup instead of complete GetOutlineNumRule implementation. Broad UI/list/table rendering/editing/protection/clipboard/layout and split physical bridge remain open. Conscious IO/recovery deviations unchanged,parentDOING/goalACTIVE. Exact-SHA same-agent EVALUATOR review and recorded verification/meaningful finish next.
+Limits: SwEditShell currently extends represented SwModify broadcaster; full native SwCursorShell hierarchy remains unverified. Existing native numeric history and portable independently owned item snapshots remain; full document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory/outline fonts and whitespace remain unverified. ContinueNumbering still first-range only. Full native outline factory uses named reserved rule lookup instead of complete GetOutlineNumRule implementation. Broad UI/list/table rendering/editing/protection/clipboard/layout and split physical bridge remain open. Conscious IO/recovery deviations unchanged,parentDOING/goalACTIVE. Exact-SHA same-agent EVALUATOR pass 20261005-201140971-recovery-context bound to 80d342e5871de27ffd71e3f4662f490604aa71b4; no independent reviewer claimed. Recorded verification and meaningful finish next.
