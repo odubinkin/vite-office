@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610052306-4VZ510",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T23:42:36.150Z",
+  "verdict": "pass",
+  "summary": "Same-agent exact semantic SHA review passed for native list context and inactive menu state",
+  "evaluated_sha": "ae17337742d3b1abd21d76b738a04b13f0bb4a88",
+  "blueprint_digest": "797510b56fa4fde5a72c8f8ecb5a852e019e87ec3a673c0fbdbd79f0005dd1ee",
+  "findings": [
+    "Current point state, actual conditional shell stack, text command ownership and bindings-driven disabled menu entries match represented pinned behavior; full core/UI/list/table and NONE codec remain unverified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610052306-4VZ510/README.md",
+    ".agentplane/tasks/202610052306-4VZ510/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610052306-4VZ510/evidence/scope-audit.json",
+    ".agentplane/tasks/202610052306-4VZ510/evidence/final-coverage.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Other native contexts and framework/table behaviors plus ODT NONE serialization remain unverified; conscious IO deviations preserved."
+  ]
+}
