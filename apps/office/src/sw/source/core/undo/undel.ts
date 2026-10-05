@@ -1,5 +1,7 @@
 /** @fileoverview Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx. */
 
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { SwHistory } from "./rolbck";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import type { SwUndoNodes } from "./docundo";
@@ -21,26 +23,27 @@ export type SwUndoDeleteDirection = "backspace" | "delete";
 /** Character class retained by SwUndoDelete::CanGrouping. */
 export type SwUndoDeleteGroup = "delimiter" | "word";
 
-/** Reversible same-node deletion retaining only removed formatted fragments. */
+/** Reversible same-node deletion retaining native removed text and original attribute history. */
 export class SwUndoDelete extends SwUndo {
-  private readonly undoNodes: SwUndoNodes;
-  private deletedNodeId: number;
+  private m_aSttStr: string;
+  private m_pHistory: SwHistory | undefined;
 
-  /** Creates one delete action. @param paragraph - Target node. @param start - Deleted range start. @param deletedFragment - Removed native fragment. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Cursor before deletion. @param after - Cursor after deletion. @returns Nothing. */
+  /** Creates one delete action. @param paragraph - Target node. @param start - Deleted range start. @param deletedText - Removed native text. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Cursor before deletion. @param after - Cursor after deletion. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private start: number,
-    deletedFragment: SwTextFragment,
+    deletedText: string,
     private readonly direction: SwUndoDeleteDirection,
     private readonly group: SwUndoDeleteGroup | undefined,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Delete", before, after);
-    if (GetUndoFragmentLength(deletedFragment) === 0)
-      throw new Error("SwUndoDelete requires non-empty text.");
-    this.undoNodes = paragraph.GetDoc().GetUndoManager().GetUndoNodes();
-    this.deletedNodeId = this.undoNodes.RetainText(deletedFragment);
+    if (deletedText.length === 0) throw new Error("SwUndoDelete requires non-empty text.");
+    this.m_aSttStr = deletedText;
+    const history = new SwHistory();
+    history.CopyAttr(paragraph.GetpSwpHints(), paragraph.GetIndex(), 0, paragraph.Len(), true);
+    this.m_pHistory = history.Count() === 0 ? undefined : history;
   }
 
   /** Absorbs adjacent same-direction single-character deletions. @param nextAction - Newer action candidate. @returns True when grouped. */
@@ -55,61 +58,45 @@ export class SwUndoDelete extends SwUndo {
       return false;
     if (
       this.direction === "backspace" &&
-      nextAction.start + GetUndoFragmentLength(nextAction.GetDeletedFragment()) === this.start
+      nextAction.start + nextAction.m_aSttStr.length === this.start
     ) {
       this.start = nextAction.start;
-      this.ReplaceDeletedFragment(
-        joinFragments(nextAction.GetDeletedFragment(), this.GetDeletedFragment()),
-      );
+      this.m_aSttStr = nextAction.m_aSttStr + this.m_aSttStr;
     } else if (this.direction === "delete" && nextAction.start === this.start) {
-      this.ReplaceDeletedFragment(
-        joinFragments(this.GetDeletedFragment(), nextAction.GetDeletedFragment()),
-      );
+      this.m_aSttStr += nextAction.m_aSttStr;
     } else return false;
     this.SetAfterCursor(nextAction.GetAfterCursorState());
     return true;
   }
 
-  /** Reports retained deleted runs rather than document size. @returns Approximate payload units. */
+  /** Reports retained deleted text and native hint history without a document snapshot. @returns Approximate payload units. */
   public override GetPayloadSize(): number {
-    return GetFragmentPayloadSize(this.GetDeletedFragment());
+    return this.m_aSttStr.length + (this.m_pHistory?.Count() ?? 0) * 4;
   }
 
   /** Releases removed text when history drops this action. @returns Nothing. */
   public override Dispose(): void {
-    this.undoNodes.Release(this.deletedNodeId);
+    this.m_pHistory = undefined;
+    this.m_aSttStr = "";
   }
 
   /** Restores removed text and hints. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(
-      context.GetDoc(),
-      this.paragraph,
-      this.start,
-      this.start,
-      this.GetDeletedFragment(),
-    );
+    const node = GetUndoTextNode(context.GetDoc(), this.paragraph);
+    node.ClearSwpHintsArr(true);
+    node.InsertText(this.m_aSttStr, this.start, SwInsertFlags.NOHINTEXPAND);
+    this.m_pHistory?.TmpRollback(context.GetDoc(), 0, false);
   }
 
   /** Deletes the retained range again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
+    this.m_pHistory?.SetTmpEnd(this.m_pHistory.Count());
     DeleteUndoRange(
       context.GetDoc(),
       this.paragraph,
       this.start,
-      this.start + GetUndoFragmentLength(this.GetDeletedFragment()),
+      this.start + this.m_aSttStr.length,
     );
-  }
-
-  /** Resolves text owned by the Writer undo node array. @returns Retained fragment. */
-  private GetDeletedFragment(): SwTextFragment {
-    return this.undoNodes.GetText(this.deletedNodeId);
-  }
-
-  /** Replaces grouped removal payload in the Writer undo node array. @param fragment - Grouped text. @returns Nothing. */
-  private ReplaceDeletedFragment(fragment: SwTextFragment): void {
-    this.undoNodes.Release(this.deletedNodeId);
-    this.deletedNodeId = this.undoNodes.RetainText(fragment);
   }
 }
 
@@ -169,14 +156,6 @@ export class SwUndoReplace extends SwUndo {
       this.insertedFragment,
     );
   }
-}
-
-/** Concatenates native text and rebased hints for grouped delete payloads. @param left - Leading fragment. @param right - Trailing fragment. @returns Combined fragment. */
-function joinFragments(left: SwTextFragment, right: SwTextFragment): SwTextFragment {
-  return {
-    text: left.text + right.text,
-    hints: left.hints.concat(right.hints, left.text.length),
-  };
 }
 
 /** Reversible paragraph join retaining only the removed trailing node snapshot. */

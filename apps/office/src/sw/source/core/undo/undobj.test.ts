@@ -70,7 +70,7 @@ function cursorState(paragraph: SwTextNode, offset = 0): SwUndoCursorState {
 }
 
 describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance coverage. @returns Nothing. */, function defineWriterUndoTests(): void {
-  it("owns removed text and paragraphs in Writer history and releases them with discarded actions" /** Verifies undo-node retention follows stack truncation, grouping, and clearing. @returns Nothing. */, function ownsUndoNodes(): void {
+  it("owns removed text and paragraphs in Writer history and releases them with discarded actions" /** Verifies native action-owned deletion text and undo-node replacement/join retention across stack disposal. @returns Nothing. */, function ownsUndoNodes(): void {
     const { docShell, document, shell } = createSession("abcd");
     const manager = docShell.GetUndoManager();
     expect(manager).toBeInstanceOf(UndoManager);
@@ -79,10 +79,10 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     handleTestInput(shell, "deleteContentBackward", null);
     handleTestInput(shell, "deleteContentBackward", null);
     expect(manager.GetUndoActionCount()).toBe(1);
-    expect(undoNodes.Count()).toBe(1);
+    expect(undoNodes.Count()).toBe(0);
     expect(shell.Undo()).toBe(true);
     expect(document.paragraphs[0]?.GetText()).toBe("abcd");
-    expect(undoNodes.Count()).toBe(1);
+    expect(undoNodes.Count()).toBe(0);
     shell.Insert("X");
     expect(undoNodes.Count()).toBe(0);
     expect(manager.GetRedoActionCount()).toBe(0);
@@ -485,7 +485,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const deletion = new SwUndoDelete(
       target,
       0,
-      fragment(target, [run("a")]),
+      fragment(target, [run("a")]).text,
       "delete",
       "word",
       cursorState(target, 1),
@@ -554,7 +554,15 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(insert.Merge(deletion)).toBe(false);
     expect(
       deletion.Merge(
-        new SwUndoDelete(target, 2, fragment(target, [run("b")]), "delete", "word", state, state),
+        new SwUndoDelete(
+          target,
+          2,
+          fragment(target, [run("b")]).text,
+          "delete",
+          "word",
+          state,
+          state,
+        ),
       ),
     ).toBe(false);
     expect(
@@ -562,7 +570,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
         new SwUndoDelete(
           target,
           0,
-          fragment(target, [run(" ")]),
+          fragment(target, [run(" ")]).text,
           "backspace",
           "delimiter",
           state,
@@ -585,7 +593,8 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     ).toThrow("non-empty text");
     expect(
       /** Constructs a deletion without domain payload. @returns Invalid construction that never returns. */
-      () => new SwUndoDelete(target, 0, fragment(target, []), "delete", undefined, state, state),
+      () =>
+        new SwUndoDelete(target, 0, fragment(target, []).text, "delete", undefined, state, state),
     ).toThrow("non-empty text");
   });
 

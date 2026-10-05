@@ -9,3 +9,19 @@ export enum GetTextAttrMode {
   /** Excludes both endpoints. */
   Parent,
 }
+
+/** Native text-attribute insertion flags;the current InsertItem port implements undo NOHINTADJUST only. */
+export enum SetAttrMode {
+  DEFAULT = 0,
+  DONTEXPAND = 1,
+  DONTREPLACE = 2,
+  NOTXTATRCHR = 4,
+  NOHINTADJUST = 8,
+  NOFORMATATTR = 16,
+  APICALL = 32,
+  FORCEHINTEXPAND = 64,
+  IS_COPY = 128,
+  NOHINTEXPAND = 256,
+  NO_CURSOR_CHANGE = 512,
+  REMOVE_ALL_ATTR = 1024,
+}

@@ -52,20 +52,25 @@ import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
 import type { WriterHyperlink } from "./fmtatr2";
-import { GetTextAttrMode } from "../../../inc/swtypes";
+import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
 import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query";
 
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
 import { resolveSwListLevelIndents } from "./ndtxt-list-indent";
 import { SwpHints } from "./ndhints";
-import { createWriterCharacterItemSet } from "./txatbase";
 
 import {
   ReplaceTextNodeHints,
   CopyTextNodeHints,
   CreateTextNodeFragment,
   InsertTextNodeHints,
+  GetTextNodeCharacterItems,
+  CreateTextNodeToggledFragment,
+  CreateTextNodeHyperlinkFragment,
 } from "./ndtxt-hints";
+import { InsertTextNodeItem, ClearTextNodeHints } from "./thints";
+import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import type { SwFormatINetFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 export { copyWriterTextRangeRuns, projectWriterTextRuns } from "./ndtxt-hints";
 
@@ -167,6 +172,21 @@ export class SwTextNode extends SwContentNode {
       kind: "attribute-set-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
     });
+  }
+
+  /** Inserts a supported native item through the undo NOHINTADJUST path. @param attr - Ranged item. @param start - Start offset. @param end - End offset. @param mode - Native insertion flags. @returns Fresh actual owned attribute. */
+  public InsertItem(
+    attr: SfxPoolItem,
+    start: number,
+    end: number,
+    mode = SetAttrMode.DEFAULT,
+  ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+    return InsertTextNodeItem(this, attr, start, end, mode);
+  }
+
+  /** Clears implemented text attributes while retaining the allocated map. @param deleteFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
+  public ClearSwpHintsArr(deleteFields: boolean): void {
+    ClearTextNodeHints(this, deleteFields);
   }
 
   /** Returns the paragraph adjustment item as a view-friendly value. @returns Paragraph alignment. */
@@ -723,15 +743,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
   public GetCharacterItemsAt(offset: number): SfxItemSet {
-    const attributes =
-      this.pSwpHints === undefined
-        ? new SwpHints(this.GetDoc().GetAttrPool()).getCharacterAttributes(
-            this.mText,
-            offset,
-            this.GetSwAttrSet(),
-          )
-        : this.pSwpHints.getCharacterAttributes(this.mText, offset, this.GetSwAttrSet());
-    return createWriterCharacterItemSet(this.GetDoc().GetAttrPool(), attributes);
+    return GetTextNodeCharacterItems(this, offset);
   }
 
   /** Queries one direct character item over a native text range. @param start - Inclusive range start. @param end - Exclusive range end. @param format - Queried item group. @returns Uniform or mixed state. */
@@ -858,17 +870,7 @@ export class SwTextNode extends SwContentNode {
     end: number,
     format: WriterCharacterFormat,
   ): SwTextFragment {
-    const fragment = this.CaptureTextFragment(start, end);
-    return {
-      text: fragment.text,
-      hints: fragment.hints.toggleCharacterFormat(
-        fragment.text.length,
-        0,
-        fragment.text.length,
-        format,
-        this.GetSwAttrSet(),
-      ),
-    };
+    return CreateTextNodeToggledFragment(this, start, end, format);
   }
 
   /** Creates a native fragment with a requested font family. @param start - Inclusive source offset. @param end - Exclusive source offset. @param family - Requested serialized family. @returns Native formatted fragment. */
@@ -932,11 +934,7 @@ export class SwTextNode extends SwContentNode {
     end: number,
     hyperlink: WriterHyperlink | undefined,
   ): SwTextFragment {
-    const fragment = this.CaptureTextFragment(start, end);
-    return {
-      text: fragment.text,
-      hints: fragment.hints.setHyperlink(fragment.text.length, 0, fragment.text.length, hyperlink),
-    };
+    return CreateTextNodeHyperlinkFragment(this, start, end, hyperlink);
   }
 
   /** Returns an independent native hint container, including the empty case. @returns Independent hints. */

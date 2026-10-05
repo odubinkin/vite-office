@@ -1,0 +1,89 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/swtypes.ts": "8412279d838d3abc44900aecd811b18117913ec05f2042f0a9c8ca410924f52c",
+    "apps/office/src/sw/source/core/undo/rolbck.ts": "9dde4cc2a0ef0592e192ab56a0ba6f82a3169aee53a75af1097c81abb4c05a19",
+    "apps/office/src/sw/source/core/undo/undel.ts": "5a667b3161b865004706684fd31230577eaefad4d7f8982f088aa30bba5bf8a5",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts": "3ade1a3bf34856cc71ed8f5854202eb4ddc67d8e444dea711ee5b5f7beb92de8",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "092e3e2fe9e95f155bc4e9cfe32469afba00c3caac6d111cd848705433d43e52",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts": "af694e7d9742bb05211c516f234d26a438a03b3c92e9bfbd3251cffdade32422",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts": "2d392405186861f80a06b1ed301c05c6b3ef76bc9d0cab84bfa7f074fb65ba1a",
+    "apps/office/src/sw/source/core/txtnode/ndhints-range.ts": "d2e216ccf86f95a0d531777bcd8f413ff4355e19ea8255384acab4bd2920c3b4",
+    "apps/office/src/sw/source/core/txtnode/thints.ts": "45b1cdc16c364824efa5f9f2e236b681ea0fccfdd2ed10da42a86ef8d690107e",
+    "docs/program/source-provenance.json": "193fc356a5c5c6cd6d8dfb71cb0067b8c636cbfb055bd41bb1df2f368a74e97f",
+    "docs/program/parity/runtime-inventory.json": "41e651c39b7676cef8bb8444694231b0e5dcf0e201499dd9b0d7b88a41e66eea"
+  },
+  "records": [
+    {
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "d5cc2d4263a3244b995e08efe452a73aa74cb6162821759f4aa516eb8160f5b5",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 2389,
+      "sha256": "3f29be8cecbe5239af1b2be4493004b46bae955944d201117424c72887448c87",
+      "totals": [
+        "Test Files  1 failed | 277 passed (278)",
+        "Tests  1 failed | 10152 passed (10153)",
+        "⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "FAIL  src/sw/source/core/undo/undobj.test.ts > Writer action-based undo > owns removed text and paragraphs in Writer history and releases them with discarded actions"
+      ],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1062,
+      "sha256": "acaf44f9ff4dd7c3ea8c72a181c62eebf0befb6f8584825d2b22a15ed297a908",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    {
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "5fe906d9f957cb488c4b67d4b45744013b057c433dd63bba08f61d601e495ee9",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 13579,
+      "sha256": "1d19e5829d8f7ce0054b3f431422d7c7f6e1e9c849949c5dc4a06378833be5e6",
+      "totals": [
+        "99 passed (35.7s)"
+      ],
+      "failedCases": []
+    }
+  ]
+}

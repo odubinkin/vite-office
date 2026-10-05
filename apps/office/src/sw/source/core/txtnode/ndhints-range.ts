@@ -68,3 +68,40 @@ export function compareHintsByWhichAndStart(
 ): number {
   return left.Which() - right.Which() || left.start - right.start || right.end - left.end;
 }
+
+/** Finds native lower/upper Which/start bounds without comparing ends. @param hints - Which map. @param position - Lexicographic boundary. @param upper - Include equals before the bound. @returns Insertion index. */
+export function hintWhichStartBound(
+  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[],
+  position: readonly [number, number],
+  upper: boolean,
+): number {
+  let first = 0,
+    last = hints.length;
+  while (first < last) {
+    const middle = Math.floor((first + last) / 2),
+      hint = hints[middle] as SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
+    const order = hint.Which() - position[0] || hint.start - position[1];
+    if (order < 0 || (upper && order === 0)) first = middle + 1;
+    else last = middle;
+  }
+  return first;
+}
+
+/** Finds native lower/upper position bounds in a map ordered by that coordinate. @param hints - Start or end map. @param position - Boundary. @param upper - Include equals before the bound. @param byEnd - Whether to compare ends instead of starts. @returns Insertion index. */
+export function hintPositionBound(
+  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>[],
+  position: number,
+  upper: boolean,
+  byEnd = false,
+): number {
+  let first = 0,
+    last = hints.length;
+  while (first < last) {
+    const middle = Math.floor((first + last) / 2);
+    const hint = hints[middle] as SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
+    const coordinate = byEnd ? hint.end : hint.start;
+    if (coordinate < position || (upper && coordinate === position)) first = middle + 1;
+    else last = middle;
+  }
+  return first;
+}

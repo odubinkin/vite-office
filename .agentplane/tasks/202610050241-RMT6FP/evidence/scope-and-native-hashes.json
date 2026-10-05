@@ -1,0 +1,74 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/inc/swtypes.ts",
+    "apps/office/src/sw/source/core/undo/rolbck.ts",
+    "apps/office/src/sw/source/core/undo/undel.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/source/core/txtnode/ndhints-range.ts",
+    "apps/office/src/sw/source/core/txtnode/thints.ts",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts",
+    "apps/office/src/sw/source/core/undo/native-delete-history.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTests": 360,
+  "priorByteIdentical": 359,
+  "syntaxOnlyConstructorMigrations": 4,
+  "otherPriorExpectationsUnchanged": true,
+  "oneObservedUndoNodeOwnershipCaseCorrected": true,
+  "existingRuntimeRows": 242,
+  "totalRuntimeRows": 243,
+  "newHistoryModuleUnverified": true,
+  "existingStatesDefaultsExceptionsPreserved": true,
+  "boundedAppendicesAndEightHelperOrFlagMappingsOnly": true,
+  "twoSearchBodiesAndThreeNodeBodiesUnchanged": true,
+  "characterItemsGetterCachedWithoutBehaviorChange": true,
+  "selectionInsertAdaptersUnchanged": true,
+  "productionAndDocsUnchangedAfterFullProfile": true,
+  "newAppCases": 919,
+  "failedOnlyCaseReplays": 1,
+  "nativeHashes": [
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx",
+      "sha256": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/inc/rolbck.hxx",
+      "sha256": "4feca27662f31a13bb082a0e5e3af7289b0aecedec0e9c30e78acd3d055690bf"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx",
+      "sha256": "290817001673a6a745e944e18fddd750858370ecf7f121178d6e99d969bf0e75"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+      "sha256": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+      "sha256": "b59e66c9c5d31bf6fc0416a160e1584e465c4d2ac8e37ddf08607d9b570fbb60"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx",
+      "sha256": "b83817ffc841f87d867b4e44b8d8f7b192182ff2e430387db75b304ee041e9ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtatr2.cxx",
+      "sha256": "0834ec1af0972001223cc0790fe609f331e3e6fdb036752109d9533921cf8de8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
+      "sha256": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361"
+    }
+  ],
+  "oneFullAbsentProfile": true,
+  "passingCaseSuiteOrBuildReplays": 0,
+  "fullParityPromotion": false
+}

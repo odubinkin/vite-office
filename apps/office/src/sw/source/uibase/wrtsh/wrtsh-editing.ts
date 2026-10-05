@@ -143,7 +143,7 @@ export class SwWrtShellEditingOperations {
         new SwUndoDelete(
           paragraph,
           start,
-          paragraph.CaptureTextFragment(start, end),
+          paragraph.GetText().slice(start, end),
           direction,
           undefined,
           before,
@@ -177,7 +177,7 @@ export class SwWrtShellEditingOperations {
       new SwUndoDelete(
         paragraph,
         start,
-        paragraph.CaptureTextFragment(start, end),
+        paragraph.GetText().slice(start, end),
         direction,
         group,
         before,

@@ -15,6 +15,8 @@ import { MakeTextAttr } from "./thints";
 import { SwTextINetFormat } from "./txtatr2";
 import { AdjustInsertTextHints, EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
 import {
+  hintWhichStartBound,
+  hintPositionBound,
   assertTextRange,
   clipHintOutsideRange,
   compareHints,
@@ -215,6 +217,22 @@ export class SwpHints {
     hints: readonly RangedTextAttr[] = [],
   ) {
     this.replace(hints);
+  }
+
+  /** Owns one actual attribute in all native maps without merging portions. @param hint - Fresh detached attribute. @returns Nothing. */
+  public Insert(hint: RangedTextAttr): void {
+    if (hint.m_pHints !== undefined) throw new Error("Writer hint is already owned.");
+    this.hintsByStart = [...this.hintsByStart, hint].sort(compareHints);
+  }
+
+  /** Releases an actual attribute from the three owned maps. @param position - Native start-map offset. @returns Nothing. */
+  public DeleteAtPos(position: number): void {
+    const hint = this.Get(position);
+    this.hintsByStart = this.hintsByStart.filter(
+      /** Keeps the other actual attributes. @param entry - Map attribute. @returns Whether retained. */ (
+        entry,
+      ) => entry !== hint,
+    );
   }
 
   /** Returns the number of ranged attributes. @returns Hint count. */
@@ -909,43 +927,6 @@ export interface WriterTextRunLike {
 
 /** Native Which/start sorting boundary. */
 type WhichStartPair = [number, number];
-
-/** Finds native lower/upper Which/start bounds without comparing ends. @param hints - Which map. @param position - Lexicographic boundary. @param upper - Include equals before the bound. @returns Insertion index. */
-function hintWhichStartBound(
-  hints: readonly RangedTextAttr[],
-  position: WhichStartPair,
-  upper: boolean,
-): number {
-  let first = 0,
-    last = hints.length;
-  while (first < last) {
-    const middle = Math.floor((first + last) / 2),
-      hint = hints[middle] as RangedTextAttr;
-    const order = hint.Which() - position[0] || hint.start - position[1];
-    if (order < 0 || (upper && order === 0)) first = middle + 1;
-    else last = middle;
-  }
-  return first;
-}
-
-/** Finds native lower/upper position bounds in a map ordered by that coordinate. @param hints - Start or end map. @param position - Boundary. @param upper - Include equals before the bound. @param byEnd - Whether to compare ends instead of starts. @returns Insertion index. */
-function hintPositionBound(
-  hints: readonly RangedTextAttr[],
-  position: number,
-  upper: boolean,
-  byEnd = false,
-): number {
-  let first = 0,
-    last = hints.length;
-  while (first < last) {
-    const middle = Math.floor((first + last) / 2);
-    const hint = hints[middle] as RangedTextAttr;
-    const coordinate = byEnd ? hint.end : hint.start;
-    if (coordinate < position || (upper && coordinate === position)) first = middle + 1;
-    else last = middle;
-  }
-  return first;
-}
 
 /** Copies and merges adjacent equal browser runs. @param runs - Generated runs. @returns Independent normalized runs. */
 function mergeTextRuns(runs: readonly WriterTextRunLike[]): readonly WriterTextRunLike[] {

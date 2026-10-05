@@ -1,0 +1,19 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/core/undo/undobj.test.ts -t <anchored union of 1 recorded exact failed full names>",
+      "profile": "upstream-absent-failed-cases-only",
+      "selectedCases": 1,
+      "selectedNamesSHA256": "7065fc1b275f8b8039916feaac7f3d6c0beb2d75f8fca4e5ba56118b3a5f723b",
+      "exit": 0,
+      "bytes": 251,
+      "sha256": "e28c9ca1f61fbb451193d79ff8b0399be6087fa2bdfaad34cef640c87f5e470a",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 15 skipped (16)"
+      ],
+      "failedCases": []
+    }
+  ]
+}

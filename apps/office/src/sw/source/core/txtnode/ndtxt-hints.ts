@@ -1,10 +1,10 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SwTextNode, SwTextFragment } from "./ndtxt";
+import type { SwTextNode, SwTextFragment, WriterCharacterFormat } from "./ndtxt";
 import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
-import { projectWriterCharacterAttributes } from "./txatbase";
+import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
 
 /** Rebinds replacement maps before releasing old node backlinks. @param node - Owner. @param previous - Old map. @param next - New map. @returns New owned map, including allocated empty maps. */
 export function ReplaceTextNodeHints(
@@ -82,4 +82,52 @@ export function InsertTextNodeHints(
     hyperlink,
     mode,
   );
+}
+
+/** Reads direct attributes inherited by a collapsed caret. @param node - Native owner. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
+export function GetTextNodeCharacterItems(node: SwTextNode, offset: number): SfxItemSet {
+  const hints = node.GetpSwpHints();
+  const attributes =
+    hints === undefined
+      ? new SwpHints(node.GetDoc().GetAttrPool()).getCharacterAttributes(
+          node.GetText(),
+          offset,
+          node.GetSwAttrSet(),
+        )
+      : hints.getCharacterAttributes(node.GetText(), offset, node.GetSwAttrSet());
+  return createWriterCharacterItemSet(node.GetDoc().GetAttrPool(), attributes);
+}
+
+/** Creates a native fragment with one toggled character item. @param node - Native owner. @param start - Inclusive source offset. @param end - Exclusive source offset. @param format - Toggled item group. @returns Native formatted fragment. */
+export function CreateTextNodeToggledFragment(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  format: WriterCharacterFormat,
+): SwTextFragment {
+  const fragment = node.CaptureTextFragment(start, end);
+  return {
+    text: fragment.text,
+    hints: fragment.hints.toggleCharacterFormat(
+      fragment.text.length,
+      0,
+      fragment.text.length,
+      format,
+      node.GetSwAttrSet(),
+    ),
+  };
+}
+
+/** Creates a native fragment with replacement hyperlink metadata. @param node - Native owner. @param start - Inclusive source offset. @param end - Exclusive source offset. @param hyperlink - Replacement hyperlink or undefined. @returns Native formatted fragment. */
+export function CreateTextNodeHyperlinkFragment(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  hyperlink: WriterHyperlink | undefined,
+): SwTextFragment {
+  const fragment = node.CaptureTextFragment(start, end);
+  return {
+    text: fragment.text,
+    hints: fragment.hints.setHyperlink(fragment.text.length, 0, fragment.text.length, hyperlink),
+  };
 }
