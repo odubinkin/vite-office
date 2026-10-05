@@ -1,0 +1,56 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/undo/native-insert-node-index.test.ts src/sw/source/uibase/wrtsh/native-table-delete.test.ts --testNamePattern=^(?:actual shell typing targets replaced native history nodes first|actual shell typing targets replaced native history nodes cell|native reversed table point exits at its own surviving cell rather than ring order|native partial cross-cell backspace preserves both cell boundaries|current native shell paragraph follows cursor navigation and model replacement)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WTVMYA.closure-app-results.json",
+      "profile": "upstream-absent original failed cases only",
+      "exit": 0,
+      "bytes": 1512,
+      "sha256": "22b8afabc55844c76f00efa6f7c87648caf38e73d94ceb28e72811caede0d26f",
+      "caseCounts": {
+        "passed": 5,
+        "failed": 0,
+        "total": 28
+      },
+      "failedCases": [],
+      "executedCases": [
+        "actual shell typing targets replaced native history nodes first",
+        "actual shell typing targets replaced native history nodes cell",
+        "current native shell paragraph follows cursor navigation and model replacement",
+        "native reversed table point exits at its own surviving cell rather than ring order",
+        "native partial cross-cell backspace preserves both cell boundaries"
+      ],
+      "skippedCases": [
+        "numeric insertion mutates current native slot after replacement first/false",
+        "numeric insertion mutates current native slot after replacement first/true",
+        "numeric insertion mutates current native slot after replacement second/false",
+        "numeric insertion mutates current native slot after replacement second/true",
+        "numeric insertion mutates current native slot after replacement cell/false",
+        "numeric insertion mutates current native slot after replacement cell/true",
+        "numeric typing groups the current replacement slot first",
+        "numeric typing groups the current replacement slot cell",
+        "numeric typing keeps different documents and node indices separate",
+        "native empty append merges copied automatic items without retaining duplicate boundaries",
+        "native empty append overwrites equal empty internet hints and preserves unrelated boundaries",
+        "native hint append retains unformatted empty and nonempty sources without inventing hints",
+        "native item copy retains the explicit unsupported nonempty guard and undo insertion priority",
+        "native nonempty append preserves independently formatted text on both sides",
+        "native table delete deletes every selected cell in one reversible history unit",
+        "native table backspace deletes every selected cell in one reversible history unit",
+        "native table selection deletes every selected cell in one reversible history unit",
+        "native empty selected boxes leave standard-mode caret without a content undo unit",
+        "native one selected multi-paragraph cell keeps SwUndoDelete and table-mode undo",
+        "native partial cross-cell delete preserves both cell boundaries",
+        "native separator-only cross-cell delete clears selection without erasing cells",
+        "native separator-only cross-cell backspace clears selection without erasing cells",
+        "native selected cell deletion serializes surviving table structure and resumes input"
+      ],
+      "productionSHA256": {
+        "apps/office/src/sw/source/core/undo/unins.ts": "3746dbf48e2f1019c4980ae8bbbacb46e220baf8bb1c958cab1c2af923729893",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "c547be0809d1abb88f0011b4fc979ebbddb2f7aa36a49a76c31ded3b29b0f888",
+        "apps/office/src/sw/source/core/edit/eddel.ts": "6df419df352f08e10e7d42f5a9910bdb46bbad8758924e4e9af9a083b3ea35f1"
+      }
+    }
+  ]
+}

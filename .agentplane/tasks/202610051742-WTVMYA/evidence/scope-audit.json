@@ -1,0 +1,41 @@
+{
+  "base": "730f9dfb70294c1f77311f0a74bb977cddfabceb",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/edit/eddel.ts"
+  ],
+  "priorTestFiles": 409,
+  "priorTestFilesByteIdentical": 409,
+  "sourceConfirmedPriorTestCorrections": [],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/edit/eddel.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/undo/unins.cxx",
+      "sha256": "519f2521b38582e84ce91f10fb717ef27f37590ca36a905be769c828bb95d8e4"
+    }
+  ],
+  "newAppCases": 12,
+  "appCases": 12250,
+  "inventoryCases": 109,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/undo/unins.ts": "3746dbf48e2f1019c4980ae8bbbacb46e220baf8bb1c958cab1c2af923729893",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "c547be0809d1abb88f0011b4fc979ebbddb2f7aa36a49a76c31ded3b29b0f888",
+    "apps/office/src/sw/source/core/edit/eddel.ts": "6df419df352f08e10e7d42f5a9910bdb46bbad8758924e4e9af9a083b3ea35f1"
+  },
+  "coverageMapPolicy": "Actual initial and failed/new-only counters; changed2owners align exact hashed unchanged contiguous source locations, changed/crossing/new locations require actual closure counters. Maps and local initial sources only ignored appcache.",
+  "validationLimit": "Represented insertion target numeric ownership and current body/cell grouping/history behavior only. Existing formatted fragment/start-offset/native insertion items remain portable payload contracts; full maText/MoveToUndoNds/nontext/append/RSID/redline lifetimes, other action payload identities and retained split node bridge remain unverified. Shell redundant active paragraph cache completely removed, actual displayed cursor owns current paragraph. Sequential deletion carries chosen registered final SwPosition through mutation, reversed/partial caret verified without old test edits.120Chromium pass at initial variant; final shell/deletion changes validated by failed/new-only native cases and changed no-emit statics, browser passing cases not replayed. Conscious IO/recovery exceptions retained; no whole-module/broad promotion."
+}

@@ -2,11 +2,13 @@
   {
     "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
     "initialSHA256": "def92f0d1073269b7cf8e0958ad9b707b3bb3a30a1ebb4595425e56a622b9972",
-    "initialIdentity": "Unchanged at original full profile, exact base byte identity checked before edits."
+    "initialIdentity": "Unchanged at original full profile, exact base byte identity checked before edits.",
+    "finalSHA256": "c547be0809d1abb88f0011b4fc979ebbddb2f7aa36a49a76c31ded3b29b0f888"
   },
   {
     "path": "apps/office/src/sw/source/core/edit/eddel.ts",
     "initialSHA256": "26e861061a6794c489fcf25b2825ffcf1471f961d25412f90c4549c4ef8f2756",
-    "initialIdentity": "Unchanged at original full profile, exact base byte identity checked before edits."
+    "initialIdentity": "Unchanged at original full profile, exact base byte identity checked before edits.",
+    "finalSHA256": "6df419df352f08e10e7d42f5a9910bdb46bbad8758924e4e9af9a083b3ea35f1"
   }
 ]

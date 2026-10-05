@@ -1,0 +1,84 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/edit/eddel.ts"
+  ],
+  "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against exact initial variant source hashes; new scope owners retain original base bytes. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
+  "carried": {
+    "statements": 399,
+    "functions": 109,
+    "branches": 242
+  },
+  "summary": {
+    "lines": {
+      "total": 12350,
+      "covered": 12350,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13522,
+      "covered": 13522,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3376,
+      "covered": 3376,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10068,
+      "covered": 10068,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialMapSHA256": "b9b167d8c848ed47e558a973d273607a8c456e96af0ad20914fa6c1b44695d22",
+  "finalMapSHA256": "f7a267457456a552cfd6b8e7f89b02a8731436709442985c015e59f39eece44c",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/undo/unins.ts": "3746dbf48e2f1019c4980ae8bbbacb46e220baf8bb1c958cab1c2af923729893",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "c547be0809d1abb88f0011b4fc979ebbddb2f7aa36a49a76c31ded3b29b0f888",
+    "apps/office/src/sw/source/core/edit/eddel.ts": "6df419df352f08e10e7d42f5a9910bdb46bbad8758924e4e9af9a083b3ea35f1"
+  }
+}
