@@ -4,7 +4,7 @@ title: "Render Writer text from native attribute iteration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T21:55:35.552Z"
+  updated_by: "CODER"
+  note: "Verified native attribute iteration display scope at semantic 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a with same-agent EVALUATOR pass 20261005-215501550-recovery-context;12509app/109inventory/5scripts/137Chromium distinct pass,25new app and2browser. Sixstatics/changed-file checks/sourceaudits/scope/APignoredscan/doctor/routing pass;actual app/inventory100%L/S/F/B,oneupstream-absentfull profile,failed/new-onlyclosures.423old tests byte-identical,251prior semantic records preserved,2new partial unverified owners=253;IO/recovery deviations unchanged,parent DOING/goal ACTIVE."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement the approved native attribute iteration leaf under standing explicit user authorization; source-confirmed overlap/UI filter adapter only, registered IO deviations unchanged."
+  -
+    type: "verify"
+    at: "2026-10-05T21:55:35.552Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native attribute iteration display scope at semantic 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a with same-agent EVALUATOR pass 20261005-215501550-recovery-context;12509app/109inventory/5scripts/137Chromium distinct pass,25new app and2browser. Sixstatics/changed-file checks/sourceaudits/scope/APignoredscan/doctor/routing pass;actual app/inventory100%L/S/F/B,oneupstream-absentfull profile,failed/new-onlyclosures.423old tests byte-identical,251prior semantic records preserved,2new partial unverified owners=253;IO/recovery deviations unchanged,parent DOING/goal ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-05T21:51:43.153Z"
+doc_updated_at: "2026-10-05T21:55:35.621Z"
 doc_updated_by: "CODER"
 description: "Iteration165 removes the browser dependency on filter TextRuns by representing native SwAttrIter/SwAttrHandler ownership and direct effective item projection; fixes overlapping automatic formatting and preserves body/cell editing/history without changing registered IO deviations."
 sections:
@@ -80,7 +86,41 @@ sections:
     4. Afterrestore five source audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Scope/sourcehash/APignoredinclusive/doctor/routing. Sameagent EVALUATOR exactSHApass, recordverify,canonicalmeaningfulfinish,wholeparentFindingsappend/cleantracked+untracked. Full native SwFont/device/scripts/redline/fields/merged paragraphs/INET styles/paragraph mark and broad core/UI/list/table parity remain unverified.
     5. Source-confirmed failed-only recovery: exactly two stale renderer markers updated in writer-command-slice.json (10th semantic path), all semantic statuses/defaults/justifications/evidence otherwise unchanged. Preserve raw overlapping AUTO display checks and existing Worker refusal; add genuinely new normalized native body/cell Worker/copy/editing/history cases. Repeat only original4failed app plus2new app, original1failed inventory and original2failed Chromium on unchanged once-built production bytes; app/inventory coverage maps identity-checked, no full/passing replay.
     6. Final source-confirmed Init correction: actual new reinitialization case must preserve active hint identity while updating defaults and restore new defaults after pop/Reset. No original passing core cases replay. Final rebuild and the two original still-failed Chromium cases only with explicit real DOM selected ab precondition; map/source-identity guarded actual coverage closure, no full/passing tests replay.
-  Verification: "Pending actual deterministic profile and exact semantic-SHA review."
+  Verification: |-
+    Pending actual deterministic profile and exact semantic-SHA review.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T21:55:35.552Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native attribute iteration display scope at semantic 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a with same-agent EVALUATOR pass 20261005-215501550-recovery-context;12509app/109inventory/5scripts/137Chromium distinct pass,25new app and2browser. Sixstatics/changed-file checks/sourceaudits/scope/APignoredscan/doctor/routing pass;actual app/inventory100%L/S/F/B,oneupstream-absentfull profile,failed/new-onlyclosures.423old tests byte-identical,251prior semantic records preserved,2new partial unverified owners=253;IO/recovery deviations unchanged,parent DOING/goal ACTIVE.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T21:51:43.153Z, excerpt_hash=sha256:e60e158c52bfb71271b588f0d5f006dacf835de9938fa9923270e818f5487e9f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052113-W6AAHH/blueprint/resolved-snapshot.json
+    - old_digest: 43e687cf4fd883dd65c995f4640bf2ac991c9debe72946cacded33f338a24841
+    - current_digest: 43e687cf4fd883dd65c995f4640bf2ac991c9debe72946cacded33f338a24841
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610052113-W6AAHH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610052113-W6AAHH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic commit; retain immutable completed task evidence and all prior parent findings."
   Findings: |-
     ONE full upstream-absent profile terminal, vendor restored finally. Buildpass;12502app pass/4new raw-overlap copy cases fail, actual app100%L/S/F/B;108inventorypass/1failed stale renderer marker,5scriptspass;135oldChromiumpass/2new fixture construction failures. Exactnames/counts/errors/hashes persisted. Raw stack display assertions passed before unsupported Worker decode; existing copy/history contract rejects same-family overlap. Preserve display assertions and assert this refusal,add genuine canonical body/cell Worker/copy/history evidence. E2E initial native fixture InsertItem used DEFAULT adjustment which is unimplemented; use supported NOHINTADJUST rather than bypass runtime. Two writer-command-slice renderer marker references must follow real rename;10scopepaths and no semantic promotion. Product unchanged since full profile; only originalfailed/newcases rerun. Prior format/typecheck failures corrected within new interface/fixture public APIs; all statics pass.
@@ -127,6 +167,39 @@ Iteration165 continues standing explicitly authorized iterative existing-functio
 ## Verification
 
 Pending actual deterministic profile and exact semantic-SHA review.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T21:55:35.552Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native attribute iteration display scope at semantic 9f8f98affdd3fbc2084f0b15f573b05cfa33d56a with same-agent EVALUATOR pass 20261005-215501550-recovery-context;12509app/109inventory/5scripts/137Chromium distinct pass,25new app and2browser. Sixstatics/changed-file checks/sourceaudits/scope/APignoredscan/doctor/routing pass;actual app/inventory100%L/S/F/B,oneupstream-absentfull profile,failed/new-onlyclosures.423old tests byte-identical,251prior semantic records preserved,2new partial unverified owners=253;IO/recovery deviations unchanged,parent DOING/goal ACTIVE.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T21:51:43.153Z, excerpt_hash=sha256:e60e158c52bfb71271b588f0d5f006dacf835de9938fa9923270e818f5487e9f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052113-W6AAHH/blueprint/resolved-snapshot.json
+- old_digest: 43e687cf4fd883dd65c995f4640bf2ac991c9debe72946cacded33f338a24841
+- current_digest: 43e687cf4fd883dd65c995f4640bf2ac991c9debe72946cacded33f338a24841
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610052113-W6AAHH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610052113-W6AAHH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
