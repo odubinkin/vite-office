@@ -1,10 +1,11 @@
 ---
 id: "202610052048-10K5MK"
 title: "Import table lists through the native text owner"
-status: "DOING"
+result_summary: "Native shared body/cell list import and export identity ownership verified; restarted table-list UI and Enter/history pass, broad parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610052048-10K5MK/evidence/scope-audit.json"
   findings:
     - "Same coding agent in explicit EVALUATOR role reviewed exact semantic commit and actual evidence:12484 application,109 distinct inventory,5 scripts,135 Chromium pass;14 new application/2 browser. ONE upstream-absent full profile and only failed inventory ordering case repeated;100% actual application/inventory coverage;419 prior files unchanged and one exact obsolete rejection correction;250 prior states/defaults/IO exceptions preserved, new partial native module unverified."
-commit: null
+commit:
+  hash: "7087c8c55d634e31d1eea06181390e765a66f285"
+  message: "🧩 10K5MK task: record verified native table-cell list import"
 comments:
   -
     author: "CODER"
     body: "Start: Implement standing user-authorized native shared text import owner and table-cell list parity; preserve intentional IO deviations and execute one upstream-absent verification profile."
+  -
+    author: "CODER"
+    body: "Verified: Shared native body/table-cell list import and export-pass identity catalogue satisfy iteration164 scope.12484 app/109 inventory/5 scripts/135 Chromium pass;14 new app/2 browser;ONE upstream-absent full profile with only failed inventory ordering case repeated;100% actual coverage and clean scope. Conscious IO/recovery deviations preserved; full native/core/UI parity remains unverified."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified shared native body/cell list dispatcher and export-pass list identity catalogue on semantic c7c8fce25fc9265591ea11fb2d4bd07b59900529.12484 app/109 distinct inventory/5 scripts/135 Chromium pass;14 new app/2 browser. ONE upstream-absent full profile; only sole failed ordering case repeated,2 skipped. Actual app/inventory100%L/S/F/B, unchanged product hashes after initial profile. Statics,restored source audits,scope,AP scan,doctor/routing pass.420 old tests419unchanged1obsolete rejection correction;250 states/defaults/classes/IO exceptions preserved plus1partial native owner unverified. Full native/core/UI parity still unverified."
+  -
+    type: "status"
+    at: "2026-10-05T21:10:31.854Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Shared native body/table-cell list import and export-pass identity catalogue satisfy iteration164 scope.12484 app/109 inventory/5 scripts/135 Chromium pass;14 new app/2 browser;ONE upstream-absent full profile with only failed inventory ordering case repeated;100% actual coverage and clean scope. Conscious IO/recovery deviations preserved; full native/core/UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T21:10:04.576Z"
+doc_updated_at: "2026-10-05T21:10:31.855Z"
 doc_updated_by: "CODER"
 description: "Iteration164 continues standing explicitly authorized iterative existing-functionality core/UI/refactor goal,one CODER executable leaf. Remove measured ODT table-cell list rejection and duplicate body/cell paragraph dispatch by representing native XMLTextImportHelper in correct xmloff/source/text/txtimp.ts. One helper per body stream owns existing XMLTextListsHelper; XMLTextBodyContext and every table,row,header,cell delegate shared native CreateTextChildContext for represented Body/Cell types. Reuse actual XMLParaContext/XMLTextListBlockContext/XMLTextListItemContext and SwXMLImport active-cell canonical creation; no TextRuns,new schema,duplicate list parser,new adapter,per-cell processed root catalogue or testbackdoor. Pass same helper through table children; retain public2argument standalone table construction with bounded helper default. Native cell dispatcher routes text:list exactly as body,continues processed root IDs across cells/body and preserves level/restart/header/count/native DefaultListId behavior. Unsupported sections/nested tables remain explicit unrelated unimplemented gaps,not conscious exceptions newly added. Literal synthetic locally generated ODT common/automatic numbered/bullet nested/header/restart/plain/multiple paragraphs/explicit and implicit body-cell and cell-cell continuation,source rule defaults/neighbors/table geometry/native node ownership/copy/Worker codec/export/reopen evidence. Real production Chromium locally generated restarted cells,Add to List all selected boxes,markers/3UndoRedo cycles/live selection/neighbors and Enter editing as relevant.9scopepaths3productionowners,2existing plus1new native partial unverified metadata module; all250existing states/defaults/classes/conscioussave/open/recovery exceptions/prior evidence preserved,explicit additions only,modules251.420prior testfiles419byteidentical1bounded old unsupportedcell-list assertion correction (remove list only,error text retains section/nestedtable). No changes to save/open UI/recovery/settings. Sixstatics first then ONE full upstream-absent build/app/inventory/scripts/Chromium profile via in-repo vendor rename try/finally restore; never tests withupstreampresent,exactfailure/errors/countshashespersistedbeforeassertions,skipped=skipped. Onlyoriginalfailed/newcases/failedgates afterwards,no passing/fullprofile replay,actual100%app/inventoryL/S/F/Bmaps onlyignoredappcache. Fivevendor-restored sourceaudits then exact scope/APignoredinclusive/doctor/routing, sameagent explicit EVALUATOR exactsemanticSHApass/recordverify/canonicalmeaningfulfinish/wholeparentcheckpointcleanmain. APonly boundedEnglishprose/counts/hashes/outcomes/exactfailednames;no sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/diagnostics. No network/outside/global/subagents. Full text dispatcher/types,section/nested-table/numbered-paragraph/UNO/cursor/list/style/layout contracts remain unverified;no broad paritypromotion. Previous163verifiedprogress,parentDOING/goalACTIVE."
 sections:
@@ -121,6 +134,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic commit after review; preserve prior task history and conscious IO/recovery deviations."
   Findings: "Iteration164 implements the represented native XMLTextImportHelper owner and shared Body/Cell child dispatcher. Body, table/header/row/cell reuse one XMLTextListsHelper processed-root catalogue and existing actual paragraph/list contexts; duplicate cell paragraph dispatch and obsolete cell-list rejection removed. Existing SwXMLImport canonical cell nodes remain the document owners. Export-pass list identity/XML ID catalogues now span body runs and cells, preventing duplicate IDs and lost continuation, without new adapter/schema. Literal common/automatic numbered/bullet explicit/implicit continuations, nested/header/uncounted/plain/restart0/default IDs/native section ownership/independent copies/Worker graph/three ODT reopen cycles verified. Real production Chromium proves imported cell restarts7/11, selected-row Add to List2/3, three atomic UndoRedo cycles with selection/neighbors, and cell Enter5/6 with typing/history. ONE full upstream-absent profile: build pass,12484 app pass,108 inventory pass/1 initial failure,5 script pass,135 Chromium pass/no flaky. Sole inventory failure was manifest lexical path ordering; sorted metadata entries, preserved records by stable path identity. Only original failed inventory case rerun upstream-absent:1 pass,2 skipped,0 failures;109 distinct inventory cases now pass. Product bytes unchanged after full profile; app coverage map copied byte-identically, inventory counters merged only with identical statement/function/branch maps. Actual app/inventory100%L/S/F/B, exact hashes/counts recorded. Six initial statics pass after only failed lint/size and changed-file repairs; five vendor-restored source audits pass; scope/AP ignored-inclusive scan/doctor/routing pass, doctor0errors2pre-existing warnings.420 prior testfiles419byte-identical and one exact obsolete unsupported-cell-list assertion correction.250 existing semantic states/defaults/classifications/conscious IO exceptions/prior evidence preserved;251 modules with new native helper partial and unverified.10 semantic paths,4 production owners,14 new app and2 new browser cases. No upstream sources or executable helpers in AP; ignored caches only hold maps/results/local initial-source bytes. No passing/full profile replay. Full native text types/numbered-paragraph/sections/nested tables/UNO/cursor/export suppression/random/last-continuation/style/layout and broad core/UI/table/list parity remain unverified. Conscious save/open/recovery deviations unchanged; parent DOING and goal ACTIVE."
+extensions:
+  implementation_commit:
+    hash: "c7c8fce25fc9265591ea11fb2d4bd07b59900529"
+    message: "🧩 10K5MK code: share native body and table-cell list import ownership"
 id_source: "generated"
 ---
 ## Summary
