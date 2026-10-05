@@ -1,0 +1,44 @@
+{
+  "base": "318e41bd51b9fd20a03f6ae81c7aa7786e65a452",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unattr.ts",
+    "apps/office/src/sw/source/core/undo/unfmco.ts",
+    "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 411,
+  "priorTestFilesByteIdentical": 411,
+  "sourceConfirmedPriorTestCorrections": [],
+  "existingSemanticRecordsPreserved": 250,
+  "allStatesDefaultsClassificationsPreserved": true,
+  "ownerEvidenceExtended": [
+    "apps/office/src/sw/source/core/undo/unattr.ts",
+    "apps/office/src/sw/source/core/undo/unfmco.ts"
+  ],
+  "priorEvidencePreserved": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/undo/unattr.cxx",
+      "sha256": "18888b58d07725197cb70b069c2e11e90c4aaa8cf8c43f288017d3cefdd65786"
+    },
+    {
+      "path": "sw/source/core/undo/unfmco.cxx",
+      "sha256": "b74cf639a6b928c1e86528cf655c9c5256624554ef37713d231dd0dbaa89b684"
+    }
+  ],
+  "newAppCases": 45,
+  "appCases": 12316,
+  "inventoryCases": 109,
+  "scriptsCases": 5,
+  "chromiumCases": 120,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "staticFailure": "One new test Kind alias missing JSDoc; fixed comment then failed lint repeated, other5gates executed once. Changed-file format and5checks pass.",
+  "productionSHA256": {
+    "apps/office/src/sw/source/core/undo/unattr.ts": "a74074921c7655a1f78d2fc0c4de3ea393bf6023ff1aaaafb947e9fff195fb9d",
+    "apps/office/src/sw/source/core/undo/unfmco.ts": "125b4e478767cc1dbc83eab3bf2c9ec662cb8c751c0640cdc3d8762378fb53ee"
+  },
+  "coverageMapPolicy": "Actual initial and original4failed case counters merged only after identical statement/function/branch maps and unchanged production hashes. Maps only ignored appcache; no changed-source counter transfer/fabricatedcounter.",
+  "validationLimit": "Sixrepresented direct character/item/alignment/margin/reset/style actions resolve current numeric native nodes; Reset exact capture resolves current entry indices, FormatColl and Reset redo rebuild native numeric SwUndRng/PaM current inclusive nodes. Current document guard adjunct retained; native base ownership remains unverified. Wholefragment/directitems/fullhints/style identifier snapshots remain portable, full native SwHistory/client/registered delta/attribute payloads/reset ranges/undo area not implemented.45distinct native body/cell section-preserving replacement, shell cursor/pending/neighbors/foreignguards/direct/composite/standalone history cases;4new collapsed composite failures corrected fixture CopyTo fresh constructor flags to same-pool state-preserving clone, assertions kept.411prior testfiles unchanged/250records prior evidence/state/defaults/exceptions retained.120Chromium passed exact final production; only newtest fixture changed afterward. Other action node references/split physical bridge and broad UI/list/table behavior remainopen, conscious IO/recovery exceptions preserved, no broad/fullmodule promotion."
+}

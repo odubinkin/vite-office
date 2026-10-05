@@ -1,0 +1,72 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/undo/native-format-node-index.test.ts --testNamePattern=^(?:numeric composite style history targets current slots body/collapsed/false|numeric composite style history targets current slots body/collapsed/true|numeric composite style history targets current slots cells/collapsed/false|numeric composite style history targets current slots cells/collapsed/true)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/ZP2MJZ.closure-app-results.json",
+      "profile": "upstream-absent original failed cases only",
+      "exit": 0,
+      "bytes": 1313,
+      "sha256": "b275da7a38dd90536858c37e971fb9294ab66ad4759e9ddc9ab07607953cc112",
+      "caseCounts": {
+        "passed": 4,
+        "failed": 0,
+        "total": 45
+      },
+      "failedCases": [],
+      "executedCases": [
+        "numeric composite style history targets current slots body/collapsed/false",
+        "numeric composite style history targets current slots body/collapsed/true",
+        "numeric composite style history targets current slots cells/collapsed/false",
+        "numeric composite style history targets current slots cells/collapsed/true"
+      ],
+      "skippedCases": [
+        "numeric direct formatting history targets current slots body/character/false",
+        "numeric direct formatting history targets current slots body/character/true",
+        "numeric direct formatting history targets current slots body/item-inherited/false",
+        "numeric direct formatting history targets current slots body/item-inherited/true",
+        "numeric direct formatting history targets current slots body/item-direct/false",
+        "numeric direct formatting history targets current slots body/item-direct/true",
+        "numeric direct formatting history targets current slots body/alignment/false",
+        "numeric direct formatting history targets current slots body/alignment/true",
+        "numeric direct formatting history targets current slots body/margin/false",
+        "numeric direct formatting history targets current slots body/margin/true",
+        "numeric direct formatting history targets current slots cells/character/false",
+        "numeric direct formatting history targets current slots cells/character/true",
+        "numeric direct formatting history targets current slots cells/item-inherited/false",
+        "numeric direct formatting history targets current slots cells/item-inherited/true",
+        "numeric direct formatting history targets current slots cells/item-direct/false",
+        "numeric direct formatting history targets current slots cells/item-direct/true",
+        "numeric direct formatting history targets current slots cells/alignment/false",
+        "numeric direct formatting history targets current slots cells/alignment/true",
+        "numeric direct formatting history targets current slots cells/margin/false",
+        "numeric direct formatting history targets current slots cells/margin/true",
+        "numeric composite style history targets current slots body/forward/false",
+        "numeric composite style history targets current slots body/forward/true",
+        "numeric composite style history targets current slots body/reversed/false",
+        "numeric composite style history targets current slots body/reversed/true",
+        "numeric composite style history targets current slots cells/forward/false",
+        "numeric composite style history targets current slots cells/forward/true",
+        "numeric composite style history targets current slots cells/reversed/false",
+        "numeric composite style history targets current slots cells/reversed/true",
+        "numeric reset captures current owners at the exact reset boundary body/false",
+        "numeric reset captures current owners at the exact reset boundary body/true",
+        "numeric reset captures current owners at the exact reset boundary cells/false",
+        "numeric reset captures current owners at the exact reset boundary cells/true",
+        "numeric paired style redo retains independent reset when style name disappears body",
+        "numeric paired style redo retains independent reset when style name disappears cells",
+        "numeric direct format history retains foreign-document boundary character",
+        "numeric direct format history retains foreign-document boundary item-inherited",
+        "numeric direct format history retains foreign-document boundary item-direct",
+        "numeric direct format history retains foreign-document boundary alignment",
+        "numeric direct format history retains foreign-document boundary margin",
+        "numeric standalone collection history rebuilds the current range body",
+        "numeric standalone collection history rebuilds the current range cells"
+      ],
+      "productionSHA256": {
+        "apps/office/src/sw/source/core/undo/unattr.ts": "a74074921c7655a1f78d2fc0c4de3ea393bf6023ff1aaaafb947e9fff195fb9d",
+        "apps/office/src/sw/source/core/undo/unfmco.ts": "125b4e478767cc1dbc83eab3bf2c9ec662cb8c751c0640cdc3d8762378fb53ee"
+      }
+    }
+  ]
+}
