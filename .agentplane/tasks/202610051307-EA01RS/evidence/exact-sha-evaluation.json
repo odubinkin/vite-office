@@ -1,0 +1,32 @@
+{
+  "evaluatedSHA": "aa62e7c9617a96e46e955c7cf3108ba32fd4703b",
+  "result": "pass",
+  "actor": "Same agent, explicit EVALUATOR phase; no independent reviewer claim",
+  "diffSHA256": "84260bc529336ff8285a6184856da7e5eaa84385eea820f5d6ed0f7a536f69b7",
+  "diffBytes": 29124,
+  "semanticPaths": 7,
+  "newAppCases": 9,
+  "newChromiumCases": 1,
+  "appCases": 12113,
+  "chromiumCases": 118,
+  "priorTestFilesByteIdentical": 398,
+  "existingSemanticRecordsPreserved": 247,
+  "newNativeModuleUnverified": true,
+  "fullAbsentProfileCount": 1,
+  "testReplays": 0,
+  "appCoverage": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "inventoryCoverage": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100
+  },
+  "sourceOwnership": "Single non-block non-list external paragraph dispatches directly to native filter/basflt reader ring point ownership; actual selected boxes are not deleted, explicit native fragment payloads use existing grouped insert history and displayed table endpoint restoration. No new UI/context adapter or runtime upstream dependency.",
+  "residual": "Native reader/ASCII formatting defaults, complete SwUndoInsDoc, same-node ordinary multiple cursors, multiline/list/table transfer, nested/merged/protected/redline history/layout and native lifetime behavior remain unverified. No whole-module promotion.",
+  "validationLimit": "All final production code exercised by the single successful upstream-absent full build/app/inventory/scripts/Chromium profile. No post-profile production edits or test replay. Broader native reader/ASCII defaults, SwUndoInsDoc, multiline/list/structural/nested/merged/protected/redline and native history lifetimes remain unverified."
+}
