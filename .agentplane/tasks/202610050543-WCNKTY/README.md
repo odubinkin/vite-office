@@ -1,10 +1,11 @@
 ---
 id: "202610050543-WCNKTY"
 title: "Share Writer paragraph rendering between body text and table cells"
-status: "DOING"
+result_summary: "Shared body/cell paragraph rendering now displays native alignment,style,indent,color and list labels;duplicate cell assembler removed and supported history/ODT path verified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
   findings:
     - "Exact SHA contains only nine approved semantic paths. Cell-only attribute/text-run assembler and synthetic fallback removed;visible and measurement tables consume common actual native projections with native stable IDs. Shell edit/history owners unchanged. Twelve new app and one real Chromium contracts verify supported display;all101browser cases passed firstprofile."
     - "All367prior test files preserved except two observed fixtures with required native projection plumbing;inverse reconstruction proves prior assertions unchanged. Fullapp11881pass/2fail;two exact failed cases close2pass/24skipped. Production identical after firstprofile,zero passing/fullbuild replays. Actual Istanbul countmap merge closes100fourmetrics;firstinventory100. All244states/defaults/exceptions unchanged;five native hashes."
-commit: null
+commit:
+  hash: "2267abb0e9fadf1eb82be51adf8031cacff176b8"
+  message: "✅ WCNKTY task: record shared paragraph display verification"
 comments:
   -
     author: "CODER"
     body: "Start: remove the partial table cell renderer and share actual paragraph projection, native list labels and display behavior with body and measurement text."
+  -
+    author: "CODER"
+    body: "Verified: 41c08db25de40c8c822bdd7e89df1da7b02139be shares body/cell native paragraph display,removes partial cell assembler and synthetic ID fallback. One absent profile and exact2failed closure pass;101Chromium firstpass,cumulative app100,prior assertions and244states preserved. Verified progress;full native/UI parity unverified,goal active."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified 41c08db25de40c8c822bdd7e89df1da7b02139be:shared body/cell paragraph display;one absent profile plus exact2failed closure,100 cumulative coverage,101 first-pass Chromium,prior assertions retained. Progress only;full parity unverified."
+  -
+    type: "status"
+    at: "2026-10-05T06:11:46.139Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 41c08db25de40c8c822bdd7e89df1da7b02139be shares body/cell native paragraph display,removes partial cell assembler and synthetic ID fallback. One absent profile and exact2failed closure pass;101Chromium firstpass,cumulative app100,prior assertions and244states preserved. Verified progress;full native/UI parity unverified,goal active."
 doc_version: 3
-doc_updated_at: "2026-10-05T06:11:22.404Z"
+doc_updated_at: "2026-10-05T06:11:46.141Z"
 doc_updated_by: "CODER"
 description: "Remove the partial cell font/spacing renderer and identity fallback; render actual cell paragraph projections and native list labels through the same paragraph component on visible and measurement surfaces. Preserve shared input/history ownership, registered I/O deviations and all semantic statuses."
 sections:
@@ -143,6 +156,10 @@ sections:
     Iteration139 preflight clean main beae94174aaffd5afdb6121f2d8718069a7976dc,direct,only parent active;previous138 classified verified progress DONE. Four matched policies loaded,user-instructions absent. Actual cell renderer still independently reads font/height/weight/posture/spacing and text runs,omits paragraph alignment,common direct/inherited style/color/indent and native list label display. WriterViewProjection already projects all connected text and actual native GetListLabel values,so no new core projection is needed. Pinned tabfrm.cxx5804/5817 SwCellFrame inserts native cell content through InsertCnt_;frmtool.cxx1622 chooses MakeTextFrame;txtfrm.cxx762/916 constructs the ordinary SwTextFrame for the node;itrcrsr.cxx uses common paragraph/list margins with table-specific guards. This is a concrete shared text-display owner gap,not a claim of full native table layout equivalence. Standing user goal and explicit UI/list/table instruction authorize safe local correction. Preserve all244 semantic states/defaults/exceptions and registered I/O/recovery decisions.
 
     Implementation139 removes the private partial cell font/spacing/text-run assembler and synthetic node-index identity fallback. One immutable actual-node map and common WriterEditableParagraph now render body,visible cells and closed-shadow measurement,including effective alignment,style,font,color/highlight,manual/signed/automatic indent and native GetListLabel geometry. Native stable IDs key paragraphs and accessibility descriptions;shared shell editing/history remains unchanged. First static formatting failure and incorrect new item-constructor/Dispose calls were corrected;standalone old table fixtures received required projection plumbing after observed type failures. All six static gates passed;focused changed-test formatting/lint and final typecheck passed. ONE sequential full vendor-absent profile:build pass,app11881pass/2fail of11883 across284files,inventory109pass/100fourmetrics,scripts5pass,Chromium101pass including new real cell format/list/history/ODT case. Exact failed names persisted immediately before collection. First app coverage lines/statements99.99/functions99.96/branches100;both first JSON countmaps preserved only ignored appcache. Newapp12cases,11firstpass;new inherited Heading1 expectation corrected24pt to literal native360twips/18pt bold from pinned DocumentStylePoolManager headline sizes. Sole old table-pagination failure required actual full textNodes;its pagination assertions unchanged. Exact2failed replay passed2/skipped24;zero passing replays or full build repeats,production source unchanged after firstprofile. Native source-identical Istanbul countmap merge closes app100fourmetrics without summary substitution;inventory retainsfirst100. Both absent scopes restored references in finally. Five restored source audits pass,semanticviolations0. Scope proof367priorfiles365byteidentical;inverse reconstruction proves both old fixture files retain all prior assertions. All244semanticstates/defaults/exceptions/classifications and I/O/recovery decisions unchanged,no newrow/promotion,six bounded notes,five native hashes. Doctor0errors/two unchanged oldwarnings,routingpass;ignored-inclusive AP4006files0forbidden. Full native table frames/pagination,spacing collapse,Home/navigation/wide selection,nested/merged cells,portion engine and list structural operations remain unverified;shared readonly WriterTextRun display remains. Verified progress only,goalactive.
+extensions:
+  implementation_commit:
+    hash: "41c08db25de40c8c822bdd7e89df1da7b02139be"
+    message: "♻️ WCNKTY code: share native paragraph display with table cells"
 id_source: "generated"
 ---
 ## Summary
