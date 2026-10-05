@@ -1,0 +1,113 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+      "name": "native display composes overlapping attributes cell=false/generic=false"
+    },
+    {
+      "file": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+      "name": "native display composes overlapping attributes cell=false/generic=true"
+    },
+    {
+      "file": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+      "name": "native display composes overlapping attributes cell=true/generic=false"
+    },
+    {
+      "file": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+      "name": "native display composes overlapping attributes cell=true/generic=true"
+    }
+  ],
+  "originalFailedInventory": [
+    {
+      "file": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+      "name": "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+    }
+  ],
+  "originalFailedChromium": [
+    "Writer native body and cell portions retain formatting and editing width=1280",
+    "Writer native body and cell portions retain formatting and editing width=390"
+  ],
+  "newAppCases": [
+    {
+      "file": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+      "name": "native canonical display survives owned copies Worker and edit history cell=false"
+    },
+    {
+      "file": "apps/office/src/sw/browser/presentation/native-attribute-portions.test.tsx",
+      "name": "native canonical display survives owned copies Worker and edit history cell=true"
+    }
+  ],
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/native-attribute-portions.test.tsx --testNamePattern=^(?:native display composes overlapping attributes cell=false/generic=false|native display composes overlapping attributes cell=false/generic=true|native display composes overlapping attributes cell=true/generic=false|native display composes overlapping attributes cell=true/generic=true|native canonical display survives owned copies Worker and edit history cell=false|native canonical display survives owned copies Worker and edit history cell=true)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/W6AAHH.closure-app-results.json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1557,
+      "sha256": "9a9cd11aaa0a208d7662a585374ef8d460f30d8eff5e63a002d34c2cc688e937",
+      "caseCounts": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 1,
+        "total": 7
+      },
+      "executedCases": [
+        "native display composes overlapping attributes cell=false/generic=false",
+        "native display composes overlapping attributes cell=false/generic=true",
+        "native display composes overlapping attributes cell=true/generic=false",
+        "native display composes overlapping attributes cell=true/generic=true",
+        "native canonical display survives owned copies Worker and edit history cell=false",
+        "native canonical display survives owned copies Worker and edit history cell=true"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "febb07915caa7ae73c827a0f86de83b727ad2abd938264a04d445e6dfe7223cd"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern=^parity mapping CLI composes the Writer mapping report with owned upstream marker evidence$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/W6AAHH.closure-inventory-results.json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1240,
+      "sha256": "be2fc6c6020d31ac9a90c7bf914c38c5518e88e3521cde0e31d9d0c18f9cccea",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "executedCases": [
+        "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "ba50852b032d0f5b2fe5925ac83795cf3bdc83cddd10dbca393a596e5173eccb"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-attribute-portions.spec.ts --grep=(?:Writer native body and cell portions retain formatting and editing width=1280|Writer native body and cell portions retain formatting and editing width=390)$ --reporter=list,json",
+      "profile": "failed-and-new-only-upstream-absent",
+      "exit": 1,
+      "bytes": 6487,
+      "sha256": "b14a9bff5d117f904c57a78e3b9699190b85bc02cf00cc564439da7a6d2dec61",
+      "caseCounts": {
+        "startTime": "2026-10-05T21:34:41.052Z",
+        "duration": 13322.503,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer native body and cell portions retain formatting and editing width=1280",
+        "Writer native body and cell portions retain formatting and editing width=390"
+      ],
+      "failedCases": [
+        "Writer native body and cell portions retain formatting and editing width=1280",
+        "Writer native body and cell portions retain formatting and editing width=390"
+      ],
+      "errors": []
+    }
+  ]
+}
