@@ -1,0 +1,36 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/WriterPlainTextEditor.test.tsx --testNamePattern=^(?:Writer paragraph breaks creates and focuses an adjacent Writer paragraph through Enter)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/VAM4JC.last-app-results.json",
+      "profile": "upstream-absent remaining failed case only",
+      "exit": 0,
+      "bytes": 1169,
+      "sha256": "40220b477609885088db84bc55a06855687bd331d950177997d2e0be3198d434",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "total": 13
+      },
+      "failedCases": [],
+      "executedCases": [
+        "Writer paragraph breaks creates and focuses an adjacent Writer paragraph through Enter"
+      ],
+      "skippedCases": [
+        "Writer paragraph breaks projects direct paragraph indentation from the persistent toolbar",
+        "Writer paragraph breaks routes a native same-paragraph Paste event through the immutable Writer document body",
+        "Writer paragraph breaks pastes semantic nested lists as separate Writer paragraphs",
+        "Writer paragraph breaks keeps the typing caret stable and routes Ctrl/Cmd+A to Writer Select All",
+        "Writer paragraph breaks prevents unsupported DOM mutation and keeps React as the rendering owner",
+        "Writer paragraph breaks projects direct non-bold and non-italic runs over an inherited heading style",
+        "Writer paragraph breaks executes beforeinput against SwPaM and deletes complete Unicode graphemes",
+        "Writer paragraph breaks keeps IME updates temporary and commits composition as one undo unit",
+        "Writer paragraph breaks groups adjacent typing and deletion at LibreOffice undo boundaries",
+        "Writer paragraph breaks intercepts native Cut and Paste without allowing browser contenteditable mutation",
+        "Writer paragraph breaks routes native drag formats and drop insertion through the Writer transfer boundary",
+        "Writer paragraph breaks uses one editing host and deletes a cross-paragraph SwPaM through beforeinput"
+      ]
+    }
+  ]
+}

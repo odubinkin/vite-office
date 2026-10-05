@@ -1,0 +1,73 @@
+{
+  "summary": {
+    "lines": {
+      "total": 12306,
+      "covered": 12306,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13474,
+      "covered": 13474,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3372,
+      "covered": 3372,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10047,
+      "covered": 10047,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "method": "Merge actual original full-profile and exactly failed-only closure maps; all production source hashes unchanged after full build. No passing test replay, no generated counters or source remapping.",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "97e5b11e247fe1809977430da1f30b689acf720393b82b641da87270ad4b2288",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts": "713eac082411c0717cc94bebdd0baf9ecea3bc4c103a08d183ac3597d73fe76e"
+  },
+  "mergedMapSHA256": "f3e2d125a09bc6e86743953b17349e6e105900ebe74308e61955162804261487"
+}
