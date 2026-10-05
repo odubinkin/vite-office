@@ -1,0 +1,56 @@
+{
+  "result": "pass",
+  "base": "fa31cccfa1af22bd3320c081a43706c30a314d73",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/docedt.ts",
+    "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/undo/undel.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/txtnode/internet-node-transitions.test.ts"
+  ],
+  "priorTestFiles": 363,
+  "priorTestFilesByteIdentical": 362,
+  "onlyPriorChange": "Generic required<T> helper syntax correction observed by first typecheck;all prior expectations unchanged.",
+  "newIndependentCases": 782,
+  "newCasesPassedFirstProfile": 206,
+  "newCasesPassedFailedOnlyReplay": 576,
+  "existingRuntimeRows": 243,
+  "newRuntimeRows": 1,
+  "newModuleWhollyUnverified": true,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "onlyBoundedAppendices": 10,
+  "oneFullAbsentProfile": true,
+  "passingReplays": 0,
+  "fullFailedCases": [
+    576,
+    1
+  ],
+  "failedOnlyClosure": [
+    576,
+    1
+  ],
+  "productionUnchangedAfterFirstProfile": true,
+  "applicationCoverage": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "method": "First full instrumented profile;unchanged production after profile."
+  },
+  "inventoryCoverage": "First-full count totals plus sole failed-case instrumented cumulative source closure;raw first map unavailable,not a fresh full measurement.",
+  "allReferencesRestored": true,
+  "nativeSHA256": {
+    "sw/source/core/doc/docedt.cxx": "7d037061cadc35cf3b55bf1afa360cf1941af001bc9b8060957e2dda0ab6c863",
+    "sw/source/core/doc/DocumentContentOperationsManager.cxx": "cfbc09c7a7413e29dc3320c46eac6b4c706e9f805f0b90436ec636f9bc2bdb08",
+    "sw/source/core/undo/undel.cxx": "290817001673a6a745e944e18fddd750858370ecf7f121178d6e99d969bf0e75",
+    "sw/source/core/undo/rolbck.cxx": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17",
+    "sw/inc/pam.hxx": "261e281789f347d0b5fe4d75c6187ad0279f9716b5f344b3e3a5b2cdc0905290",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+  },
+  "uiBoundaryReadOnlyFinding": "Edit events already route BrowserWriterEditWindow->SwEditWin->SwWrtShell with actual SwPaM/SwDoc;writer-view-projection and editable paragraph/table render still use projected WriterTextRun DTOs. Native layout/text-portion display boundary is next priority,not changed in this leaf."
+}
