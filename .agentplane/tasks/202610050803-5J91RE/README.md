@@ -4,7 +4,7 @@ title: "Retain native uncounted list text geometry in body and table cells"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T08:22:50.079Z"
+  updated_by: "CODER"
+  note: "Native uncounted text-left verified on exact semantic SHA7639d7ac:33 new cases and106 Chromium firstpass;one absent full11954/109/5,100coverage,378prior tests unchanged,5restored audits,244states/defaults/deviations preserved.Quality pass;full parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -53,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native uncounted list text geometry on actual body and cell nodes under the standing approved parity goal."
+  -
+    type: "verify"
+    at: "2026-10-05T08:22:50.079Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native uncounted text-left verified on exact semantic SHA7639d7ac:33 new cases and106 Chromium firstpass;one absent full11954/109/5,100coverage,378prior tests unchanged,5restored audits,244states/defaults/deviations preserved.Quality pass;full parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T08:20:38.750Z"
+doc_updated_at: "2026-10-05T08:22:50.134Z"
 doc_updated_by: "CODER"
 description: "Iteration143 shared native alignment and legacy text-left projection for uncounted Writer list paragraphs, browser rendering and print bounds with history and body/cell geometry evidence; preserve registered deviations."
 sections:
@@ -90,7 +96,53 @@ sections:
     - `node .agentplane/policy/check-routing.mjs`
 
     Literal native text-left/zero first-line,body/cell rendered geometry,Backspace count/history and neighbor preservation;one absent full profile,failed/new-only closure,actual100coverage.
-  Verification: "Pending implementation and validation."
+  Verification: |-
+    Implementation: 7639d7ac72d809e1891c2a3ebf524f56475b4eb1. Exact-SHA same-actor read-only quality review passed before recording evaluator verdict; no independent review claim. Quality: .agentplane/tasks/202610050803-5J91RE/quality/20261005-082146650-recovery-context/quality-report.json.
+
+    - Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size. Result: pass, six first executions. Evidence: evidence/static-gates.json. Scope: represented native geometry helper,print bounds,immutable browser projection and shared body/cell renderer,new tests and metadata.
+    - Command: npm run test:static. Result: pass. Evidence: evidence/absent-profile.json build record. Scope: local static build while upstream unavailable.
+    - Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure (JSON reporter options recorded in absent-profile). Result: pass,11954 cases/291 files first,33 new cases;100% lines/statements/functions/branches. Evidence: evidence/absent-profile.json and cumulative-coverage.json. Scope: complete application,actual native body/cell text-left,independent zero/negative/direct/style axes,legacy absolute/relative spacing,follow fragments,count UndoRedo and neighbor preservation.
+    - Command: npm run test:inventory:coverage -- --coverage.reportOnFailure (JSON reporter options recorded in absent-profile). Result: pass,109 cases/36 files first;100% all four metrics. Evidence: same actual first absent countmap summaries and hashes. Scope: inventory invariants and semantic data.
+    - Command: npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts. Result: pass,5 cases/2files first. Evidence: absent-profile scripts record. Scope: local script contracts.
+    - Command: npm exec -- playwright test --config apps/office/playwright.config.ts (JSON reporter options recorded in absent-profile). Result: pass,106 first,nofailures/noflakes;2 new body/cell actual DOM rectangle and glyph-position cases. Evidence: absent-profile Chromium record. Scope: native Backspace/ShiftBackspace count transitions,UndoRedo,stable rendered text-left,no marker or neighbor/text corruption.
+    - Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Result: pass,5 restored-source audits,semanticViolationCount0. Evidence: evidence/restored-source-audits.json. Scope: pinned-source references and metadata after vendor restored.
+    - Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass. Evidence: doctor0errors/2previouswarnings;policy routing OK;no whitespace errors. Scope: repository workflow and diff.
+    - Command: exact scope/native-hash audit and ignored-inclusive Agentplane scan. Result: pass. Evidence: evidence/scope-and-native-hashes.json;4049 AP files/0forbidden before quality. Scope: all378prior app/script testfiles byte-identical,four ownershiprows8bounded appendices and one local helper symbol,all244states/defaults/exceptions/classifications unchanged,5nativehashes.
+
+    One full sequential absent profile;finally restored vendor. No failed cases,no replays,no production changes after profile. First app and inventory Istanbul maps remain only in ignored appcache;actual maps prove100 coverage. No upstream source/helper/Python/probe/binary/rawdiagnostic artifacts. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,full native frames,HomeEnd/table navigation,zero-mark/recentTab counters,outline/history/UI and broad goal remain unverified. Canonical finish and final clean-state audit follow.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T08:22:50.079Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native uncounted text-left verified on exact semantic SHA7639d7ac:33 new cases and106 Chromium firstpass;one absent full11954/109/5,100coverage,378prior tests unchanged,5restored audits,244states/defaults/deviations preserved.Quality pass;full parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T08:22:49.281Z, excerpt_hash=sha256:d2ef50768c7c2656302f812efd6c20cb1a092c64f9c5a2d397581eb010e9156b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050803-5J91RE/blueprint/resolved-snapshot.json
+    - old_digest: ab4d2a169dd271ded500db4c0118c5ff5a32004733bb4b32fdd8f5c271a415f8
+    - current_digest: ab4d2a169dd271ded500db4c0118c5ff5a32004733bb4b32fdd8f5c271a415f8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610050803-5J91RE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610050803-5J91RE
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert semantic leaf without history rewriting."
   Findings: "Iteration142 verifiedprogress DONE. Currentmain6e0140b clean,parentonlyactive,direct,fourmatchedpolicies,userinstructionsabsent. Pinned ndtxt.cxx3382 GetLeftMarginWithNum(true) retains effective alignment text-left regardless counted and supports legacy absolute/relative spacing;3440 GetFirstLineOfsWithNum writes0 for uncounted. itrcrsr165 SwTextMargin consumes native text-left and0firstline,includingfollow. Local renderer wraps only visiblemarker and applies plainmargin only listkindnone,so uncounted numbered/bullet loses leftgeometry;projectSwTextPrintBounds retains raw/listGeometryWinsheuristic andwronguncountedfirstline. Existing resolveSwListParagraphIndents authoritative independentaxis alreadycountoff0. Standingusergoal/UI instruction authorizessafeinrepo leaf. First compact metadatalookup hit absentsemantic field;read-only boundedlookup correction,no sourceorstatechange. Restored source derivation includes frmtool2440 frame print-left and frmitems815 ResolveLeft:legacy absolute spacing retains negative authored first-line contribution in text-left (AbsLSpace minus min(0,rawfirst));relative spacing adds rawparagraphtextleft. Helper applies exact bounded twip formula,not guessed absolute cancellation. No scope expansion. Closure: sixfirststatics passed;onefullabsent build/app11954/291files/inventory109/36files/scripts5/Chromium106 allpassed first,nofailures/noflakes/no replay. All4app+inventory coverage100 actualfirstmaps. Five restoredsourceaudits passed semanticviolations0. All378priorapp/script testfiles byteidentical;33newappcases+2newChromiumgeometry cases passedfirst. Fourownerrows8boundednotes/localhelper symboladditive;all244states/defaults/deviations preserved;5nativehashes. Doctor0errors2oldwarnings,routing/diffpass;AP4049files0forbidden. Productionunchangedafterfirstprofile. Counted marker/tab layout,RTL/fontrelative/large-indent cell clamping,HomeEnd/table navigation,full frames/outline/history/UI andgoal remainunverified."
 id_source: "generated"
@@ -139,7 +191,52 @@ Literal native text-left/zero first-line,body/cell rendered geometry,Backspace c
 
 ## Verification
 
-Pending implementation and validation.
+Implementation: 7639d7ac72d809e1891c2a3ebf524f56475b4eb1. Exact-SHA same-actor read-only quality review passed before recording evaluator verdict; no independent review claim. Quality: .agentplane/tasks/202610050803-5J91RE/quality/20261005-082146650-recovery-context/quality-report.json.
+
+- Command: npm run format:check; npm run lint; npm run typecheck; npm run check:dependencies; npm run check:docs; npm run check:file-size. Result: pass, six first executions. Evidence: evidence/static-gates.json. Scope: represented native geometry helper,print bounds,immutable browser projection and shared body/cell renderer,new tests and metadata.
+- Command: npm run test:static. Result: pass. Evidence: evidence/absent-profile.json build record. Scope: local static build while upstream unavailable.
+- Command: npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure (JSON reporter options recorded in absent-profile). Result: pass,11954 cases/291 files first,33 new cases;100% lines/statements/functions/branches. Evidence: evidence/absent-profile.json and cumulative-coverage.json. Scope: complete application,actual native body/cell text-left,independent zero/negative/direct/style axes,legacy absolute/relative spacing,follow fragments,count UndoRedo and neighbor preservation.
+- Command: npm run test:inventory:coverage -- --coverage.reportOnFailure (JSON reporter options recorded in absent-profile). Result: pass,109 cases/36 files first;100% all four metrics. Evidence: same actual first absent countmap summaries and hashes. Scope: inventory invariants and semantic data.
+- Command: npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts. Result: pass,5 cases/2files first. Evidence: absent-profile scripts record. Scope: local script contracts.
+- Command: npm exec -- playwright test --config apps/office/playwright.config.ts (JSON reporter options recorded in absent-profile). Result: pass,106 first,nofailures/noflakes;2 new body/cell actual DOM rectangle and glyph-position cases. Evidence: absent-profile Chromium record. Scope: native Backspace/ShiftBackspace count transitions,UndoRedo,stable rendered text-left,no marker or neighbor/text corruption.
+- Command: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Result: pass,5 restored-source audits,semanticViolationCount0. Evidence: evidence/restored-source-audits.json. Scope: pinned-source references and metadata after vendor restored.
+- Command: ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass. Evidence: doctor0errors/2previouswarnings;policy routing OK;no whitespace errors. Scope: repository workflow and diff.
+- Command: exact scope/native-hash audit and ignored-inclusive Agentplane scan. Result: pass. Evidence: evidence/scope-and-native-hashes.json;4049 AP files/0forbidden before quality. Scope: all378prior app/script testfiles byte-identical,four ownershiprows8bounded appendices and one local helper symbol,all244states/defaults/exceptions/classifications unchanged,5nativehashes.
+
+One full sequential absent profile;finally restored vendor. No failed cases,no replays,no production changes after profile. First app and inventory Istanbul maps remain only in ignored appcache;actual maps prove100 coverage. No upstream source/helper/Python/probe/binary/rawdiagnostic artifacts. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,full native frames,HomeEnd/table navigation,zero-mark/recentTab counters,outline/history/UI and broad goal remain unverified. Canonical finish and final clean-state audit follow.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T08:22:50.079Z — VERIFY — ok
+
+By: CODER
+
+Note: Native uncounted text-left verified on exact semantic SHA7639d7ac:33 new cases and106 Chromium firstpass;one absent full11954/109/5,100coverage,378prior tests unchanged,5restored audits,244states/defaults/deviations preserved.Quality pass;full parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T08:22:49.281Z, excerpt_hash=sha256:d2ef50768c7c2656302f812efd6c20cb1a092c64f9c5a2d397581eb010e9156b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610050803-5J91RE/blueprint/resolved-snapshot.json
+- old_digest: ab4d2a169dd271ded500db4c0118c5ff5a32004733bb4b32fdd8f5c271a415f8
+- current_digest: ab4d2a169dd271ded500db4c0118c5ff5a32004733bb4b32fdd8f5c271a415f8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610050803-5J91RE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610050803-5J91RE
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
