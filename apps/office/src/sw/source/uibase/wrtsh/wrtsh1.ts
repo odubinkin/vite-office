@@ -106,10 +106,19 @@ export class SwWrtShell extends SwModify {
     };
     this.editing = new SwWrtShellEditingOperations({
       applyAction:
-        /** Applies one editing action through shell notification orchestration. @param action - Undo action. @param tryMerge - Whether history grouping is allowed. @returns Whether applied. */ (
+        /** Applies one editing action through shell notification orchestration. @param action - Undo action. @param tryMerge - Whether history grouping is allowed. @param execute - Optional sequential native initial operation. @returns Whether applied. */ (
           action,
           tryMerge,
-        ) => this.ApplyAction(action, tryMerge),
+          execute,
+        ) =>
+          this.ApplyAction(
+            action,
+            tryMerge,
+            execute === undefined
+              ? undefined
+              : /** Runs the native initial operation with the actual undo context. @returns Nothing. */ () =>
+                  execute(this.undoContext),
+          ),
       captureCursorState: /** Captures the shell cursor boundary. @returns Cursor state. */ () =>
         this.CaptureCursorState(),
       createCollapsedCursorState:

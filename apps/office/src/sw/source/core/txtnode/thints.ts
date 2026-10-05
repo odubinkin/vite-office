@@ -35,7 +35,7 @@ export function MakeTextAttr(
   throw new Error("MakeTextAttr hint type is not implemented.");
 }
 
-/** Owns the implemented SwTextNode::InsertItem undo path without merging automatic portions. @param node - Destination. @param attr - Native item. @param start - Inclusive offset. @param end - Exclusive offset. @param mode - Native flags;NOHINTADJUST is currently required. @returns Fresh actual attribute. */
+/** Owns undo insertion and the zero-length CopyAttr path, merging equal-boundary automatic items. @param node - Destination. @param attr - Native item. @param start - Inclusive offset. @param end - Exclusive offset. @param mode - NOHINTADJUST or zero-length IS_COPY. @returns Fresh actual attribute. */
 export function InsertTextNodeItem(
   node: SwTextNode,
   attr: SfxPoolItem,
@@ -44,12 +44,27 @@ export function InsertTextNodeItem(
   mode: SetAttrMode,
 ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
   assertTextRange(node.Len(), start, end);
-  if (!(mode & SetAttrMode.NOHINTADJUST))
+  const copyEmpty =
+    !(mode & SetAttrMode.NOHINTADJUST) && (mode & SetAttrMode.IS_COPY) !== 0 && start === end;
+  if (!(mode & SetAttrMode.NOHINTADJUST) && !copyEmpty)
     throw new Error("Writer InsertItem without NOHINTADJUST is not implemented.");
   if (attr.Which() >= RES_CHRATR_BEGIN && attr.Which() < RES_CHRATR_END)
     throw new Error("Writer InsertItem requires a text-attribute item.");
-  const hint = MakeTextAttr(node.GetDoc(), attr, start, end);
-  node.GetOrCreateSwpHints().Insert(hint);
+  let hint = MakeTextAttr(node.GetDoc(), attr, start, end);
+  const hints = node.GetOrCreateSwpHints();
+  if (copyEmpty) {
+    for (const previous of hints.entries()) {
+      if (previous.start !== start || previous.end !== end || previous.Which() !== hint.Which())
+        continue;
+      if (previous.format instanceof SwFormatAutoFormat) {
+        const merged = previous.format.GetStyleHandle().Clone();
+        merged.PutSet((hint.format as SwFormatAutoFormat).GetStyleHandle());
+        hint = MakeTextAttr(node.GetDoc(), merged, start, end);
+      }
+      hints.DeleteAtPos(hints.entries().indexOf(previous));
+    }
+  }
+  hints.Insert(hint);
   node.GetDoc().NotifyModelChange({
     kind: "attribute-set-changed",
     nodeIndex: node.GetNodes().indexOfOrUndefined(node),

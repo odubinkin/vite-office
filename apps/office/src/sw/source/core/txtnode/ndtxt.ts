@@ -67,6 +67,7 @@ import {
   GetTextNodeCharacterItems,
   CreateTextNodeToggledFragment,
   CreateTextNodeHyperlinkFragment,
+  AppendTextNodeHints,
 } from "./ndtxt-hints";
 import { InsertTextNodeItem, ClearTextNodeHints, FormatTextNodeToTextAttr } from "./thints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
@@ -824,10 +825,7 @@ export class SwTextNode extends SwContentNode {
     if (source.GetNodes() !== this.GetNodes())
       throw new Error("Joined SwTextNodes belong to different documents.");
     const offset = this.Len();
-    const joinedHints = new SwpHints(this.GetDoc().GetAttrPool(), [
-      ...this.GetTextHints().entries(),
-      ...source.GetTextHints().shifted(offset).entries(),
-    ]);
+    const joinedHints = AppendTextNodeHints(this, source, offset);
     this.mText += source.mText;
     this.pSwpHints = joinedHints.CanBeDeleted() ? undefined : joinedHints;
     source.MoveAllContentIndicesTo(this, offset);

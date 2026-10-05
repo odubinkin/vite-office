@@ -17,7 +17,7 @@ import {
   type SwUndoDeleteDirection,
 } from "../../core/undo/undel";
 import { createWriterInsertTextAction } from "../../core/edit/editsh";
-import { sw_GetJoinFlags } from "../../core/doc/docedt";
+import { createWriterDeleteSelectionOperation } from "../../core/edit/eddel";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
@@ -65,7 +65,11 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
 }
 /** Cursor, history, and notification operations retained by SwWrtShell. */
 export interface SwWrtShellEditingPort {
-  readonly applyAction: (action: SfxUndoAction<SwUndoRedoContext>, tryMerge?: boolean) => boolean;
+  readonly applyAction: (
+    action: SfxUndoAction<SwUndoRedoContext>,
+    tryMerge?: boolean,
+    execute?: (context: SwUndoRedoContext) => void,
+  ) => boolean;
   readonly captureCursorState: () => SwUndoCursorState;
   readonly createCollapsedCursorState: (
     paragraph: WriterParagraph,
@@ -143,22 +147,29 @@ export class SwWrtShellEditingOperations {
     const point = cursor.GetPoint();
     const paragraph = point.GetNode() as WriterParagraph;
     const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
-    if (mark !== undefined) {
-      if (mark.GetNode() !== paragraph) return this.DeleteCrossParagraphSelection();
-      const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
-      const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
-      if (start === end) return false;
-      return this.port.applyAction(
-        new SwUndoDelete(
-          paragraph,
-          start,
-          paragraph.GetText().slice(start, end),
-          direction,
-          undefined,
-          before,
-          this.port.createCollapsedCursorState(paragraph, start),
-        ),
-      );
+    if (mark !== undefined || cursor.IsMultiSelection()) {
+      const target =
+        before.tableSelection === true
+          ? (before.point.node
+              .GetNodes()
+              .at(before.point.node.StartOfSectionNode().GetIndex() + 1) as SwTextNode)
+          : undefined;
+      const after =
+        target === undefined ? undefined : this.port.createCollapsedCursorState(target, 0);
+      const operation = createWriterDeleteSelectionOperation(cursor, direction, before, after);
+      if (operation !== undefined)
+        return this.port.applyAction(operation.action, false, operation.execute);
+      if (target === undefined && (mark === undefined || point.compare(mark) === 0)) return false;
+      const endpoint = direction === "backspace" ? cursor.Start() : cursor.End();
+      const position =
+        target === undefined
+          ? new SwPosition(endpoint.GetNode() as SwTextNode, endpoint.GetContentIndex())
+          : new SwPosition(target, 0);
+      try {
+        return this.port.setCursor(position);
+      } finally {
+        position.Dispose();
+      }
     }
     const offset = point.GetContentIndex();
     if (direction === "backspace" && offset === 0)
@@ -334,29 +345,6 @@ export class SwWrtShellEditingOperations {
     )
       return false;
     return this.MergeParagraphWithPrevious(next);
-  }
-
-  /** Deletes a cross-node selection and joins its boundaries. @returns Whether changed. */
-  private DeleteCrossParagraphSelection(): boolean {
-    const cursor = this.port.getCursor();
-    const { joinPrev } = sw_GetJoinFlags(cursor);
-    const start = cursor.Start(),
-      end = cursor.End();
-    const first = start.GetNode() as WriterParagraph,
-      last = end.GetNode() as WriterParagraph;
-    const offset = start.GetContentIndex();
-    return this.port.applyAction(
-      new SwUndoDelete(
-        first,
-        offset,
-        first.GetText().slice(offset),
-        "delete",
-        undefined,
-        this.port.captureCursorState(),
-        this.port.createCollapsedCursorState(joinPrev ? last : first, offset),
-        cursor,
-      ),
-    );
   }
 
   /** Applies imported list metadata through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether changed. */

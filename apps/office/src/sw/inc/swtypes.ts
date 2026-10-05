@@ -10,7 +10,7 @@ export enum GetTextAttrMode {
   Parent,
 }
 
-/** Native text-attribute insertion flags;the current InsertItem port implements undo NOHINTADJUST only. */
+/** Native text-attribute insertion flags; supported modes are enforced by InsertItem. */
 export enum SetAttrMode {
   DEFAULT = 0,
   DONTEXPAND = 1,

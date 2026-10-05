@@ -5,6 +5,25 @@ import type { SwTextNode, SwTextFragment, WriterCharacterFormat } from "./ndtxt"
 import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
+import { SetAttrMode } from "../../../inc/swtypes";
+
+/** Prepares joined hints, using native CutImpl's CopyAttr branch for an empty source. Full nonempty CutImpl ownership remains unverified. @param node - Surviving node. @param source - Trailing source. @param offset - Destination boundary. @returns Joined native hints. */
+export function AppendTextNodeHints(
+  node: SwTextNode,
+  source: SwTextNode,
+  offset: number,
+): SwpHints {
+  const pool = node.GetDoc().GetAttrPool();
+  if (source.Len() === 0) {
+    for (const hint of source.GetpSwpHints()?.entries() ?? [])
+      node.InsertItem(hint.format, offset, offset, SetAttrMode.IS_COPY);
+    return node.GetpSwpHints() ?? new SwpHints(pool);
+  }
+  return new SwpHints(pool, [
+    ...(node.GetpSwpHints()?.entries() ?? []),
+    ...(source.GetpSwpHints()?.shifted(offset).entries() ?? []),
+  ]);
+}
 
 /** Rebinds replacement maps before releasing old node backlinks. @param node - Owner. @param previous - Old map. @param next - New map. @returns New owned map, including allocated empty maps. */
 export function ReplaceTextNodeHints(
