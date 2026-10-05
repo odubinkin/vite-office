@@ -1,0 +1,107 @@
+{
+  "result": "pass",
+  "base": "8a8017ab87150b53832ed054bbf8cd83a9123e12",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/unnum.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+    "apps/office/src/sw/browser/editor/native-cell-list-backspace.test.tsx",
+    "apps/office/e2e/writer-cell-list-backspace.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFiles": 375,
+  "priorTestFilesByteIdentical": 375,
+  "oldTestChanges": 0,
+  "newAppCases": 16,
+  "newAppCasesPassedFirst": 15,
+  "newChromiumCases": 1,
+  "appFailuresClosed": 1,
+  "ChromiumFailuresClosed": 1,
+  "existingRuntimeRows": 244,
+  "newRuntimeRows": 0,
+  "boundedAppendices": 10,
+  "existingStatesDefaultsExceptionsUnchanged": true,
+  "oneFullAbsentProfile": true,
+  "passingTestReplays": 0,
+  "passingFullBuildReplays": 0,
+  "productionUnchangedAfterFirstProfile": true,
+  "appCoverage": {
+    "lines": {
+      "total": 11638,
+      "covered": 11638,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 12742,
+      "covered": 12742,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3274,
+      "covered": 3274,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9585,
+      "covered": 9585,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "nativeSHA256": {
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/source/uibase/wrtsh/delete.cxx": "ad0cf9a7c733660d3f5513b08caaaeb2420c7dc6c0cc93956a790178eff30e57",
+    "sw/source/core/doc/docnum.cxx": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4",
+    "sw/source/core/edit/ednumber.cxx": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114",
+    "sw/source/core/undo/unnum.cxx": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9",
+    "sw/inc/strings.hrc": "9ca72c0995255ab87985020606d0626e7998087764a3c150e0b1459925130b5f",
+    "sw/source/core/doc/number.cxx": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129",
+    "editeng/source/items/frmitems.cxx": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f"
+  },
+  "residual": "Native Home/End and wide table navigation,recentTab state/label caret,zero-length marked PaM equivalence,uncounted list layout,full outline/redline/rings/undo/layout/UI and broad goal unverified."
+}

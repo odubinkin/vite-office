@@ -1,0 +1,40 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm exec --workspace @vite-office/office -- vitest run src/sw/source/uibase/docvw/native-list-backspace.test.ts -t ^(?:native list Backspace uses native numbering capabilities and handles document noops and ownership)$ --coverage --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/Z5PVZ9.app-failed-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 140,
+      "sha256": "7e4841e2cf28f32c091b5dd7c72633dd5140c179fc91064aa0e3ad8f484f71e2",
+      "selectedNames": [
+        "native list Backspace uses native numbering capabilities and handles document noops and ownership"
+      ],
+      "failedCases": [],
+      "passed": 1,
+      "skipped": 11,
+      "coverageMapSHA256": "f231dffd7eb35119d023e962e1c1363333d8535c414324e013455ac9d1accd03"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-cell-list-backspace.spec.ts --grep Writer Backspace hides a cell marker and ShiftBackspace restores native numbering --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 560,
+      "sha256": "5f340705c3f000d41b79735f77cf116f901488cfbf574382330b0f0430e5a1d8",
+      "selectedNames": [
+        "Writer Backspace hides a cell marker and ShiftBackspace restores native numbering"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-05T07:47:23.368Z",
+        "duration": 3238.249,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

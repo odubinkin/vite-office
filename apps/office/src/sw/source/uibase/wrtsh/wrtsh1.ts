@@ -18,7 +18,7 @@ import type {
   WriterCharacterFormat,
   WriterParagraphAlignment,
 } from "../../core/txtnode/ndtxt";
-import type { WriterParagraphListKind } from "../../core/doc/list";
+import { WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell } from "../shells/listsh";
 import type { WriterListLevelCommand } from "../../core/edit/ednumber";
 import { SwTextShell, type WriterParagraphFormatValue } from "../shells/textsh1";
@@ -52,7 +52,7 @@ import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/ed
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
-import { SwUndoDelNum } from "../../core/undo/unnum";
+import { SwUndoDelNum, SwUndoNumOrNoNum } from "../../core/undo/unnum";
 import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
 
 /** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
@@ -319,6 +319,52 @@ export class SwWrtShell extends SwModify {
     if (this.GetActiveParagraph().GetNumRule() === undefined && !this.cursor.HasMark())
       return false;
     return this.ApplyAction(new SwUndoDelNum(this.GetDoc(), this.CaptureCursorState()));
+  }
+
+  /** Changes numbering at an unselected paragraph start. @param numOn - Count the current item when true. @returns Whether numbering changed. */
+  public NumOrNoNum(numOn = true): boolean {
+    const point = this.cursor.GetPoint(),
+      node = point.GetNode() as WriterParagraph;
+    if (
+      this.cursor.HasMark() ||
+      point.GetContentIndex() !== 0 ||
+      node.GetNumRule() === undefined ||
+      (!node.HasNumber() && !node.HasBullet())
+    )
+      return false;
+    if (node.IsCountedInList() === numOn) {
+      return !numOn &&
+        node.GetNumRule(false) !== undefined &&
+        node.GetActualListLevel() >= 0 &&
+        node.GetActualListLevel() <= WRITER_MAX_LIST_LEVEL
+        ? this.DelNumRules()
+        : false;
+    }
+    return this.ApplyAction(
+      new SwUndoNumOrNoNum(node, node.IsCountedInList(), numOn, this.CaptureCursorState()),
+      false,
+      /** Executes the native document operation while retaining its boolean-only history. @returns Nothing. */
+      () => {
+        this.GetDoc().NumOrNoNum(node, !numOn);
+      },
+    );
+  }
+
+  /** Removes paragraph-start indentation in the native firstline/hanging/left order. @returns Whether a paragraph item changed. */
+  public TryRemoveIndent(): boolean {
+    const node = this.GetActiveParagraph();
+    const first = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
+    const left = node.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem;
+    const offset = first.ResolveTextFirstLineOffset(),
+      margin = left.ResolveTextLeft();
+    if (offset === 0 && margin === 0) return false;
+    return this.SetParagraphItems([
+      new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE, first.IsAutoFirst()),
+      new SvxTextLeftMarginItem(
+        offset < 0 ? margin + offset : offset > 0 ? margin : 0,
+        RES_MARGIN_TEXTLEFT,
+      ),
+    ]);
   }
 
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */

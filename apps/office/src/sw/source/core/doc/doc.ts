@@ -4,7 +4,7 @@ import { SwAttrPool } from "../attr/swatrset";
 import type { SwFormat } from "../attr/format";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
-import { SwTableNode } from "../docnode/node";
+import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTable } from "../table/swtable";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
@@ -28,7 +28,7 @@ import {
 import { SwNumRuleItem } from "../para/paratr";
 import type { SwNumRule } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
-import type { SwPaM } from "../crsr/pam";
+import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
 import type { DefaultFontDevice } from "./default-font";
@@ -386,6 +386,38 @@ export class SwDoc {
         return true;
       },
     );
+  }
+
+  /** Applies native numbering visibility or removes an already uncounted direct list. @param node - Actual document node. @param del - Hide numbering when true. @returns Whether numbering changed. */
+  public NumOrNoNum(node: SwNode, del = false): boolean {
+    if (node.GetNodes() !== this.nodes)
+      throw new Error("Writer numbering node belongs to another node array.");
+    if (
+      !(node instanceof SwTextNode) ||
+      node.GetNumRule() === undefined ||
+      (!node.HasNumber() && !node.HasBullet())
+    )
+      return false;
+    if (node.IsCountedInList() === del) {
+      node.SetCountedInList(!del);
+      return true;
+    }
+    if (
+      del &&
+      node.GetNumRule(false) !== undefined &&
+      node.GetActualListLevel() >= 0 &&
+      node.GetActualListLevel() <= WRITER_MAX_LIST_LEVEL
+    ) {
+      const point = new SwPosition(node, 0),
+        range = new SwPaM(point);
+      try {
+        return this.DelNumRules(range);
+      } finally {
+        range.Dispose();
+        point.Dispose();
+      }
+    }
+    return false;
   }
 
   /** Removes numbering over native inclusive node coordinates. @param range - Actual Writer selection. @returns Whether numbered nodes were changed. */

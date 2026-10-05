@@ -87,12 +87,21 @@ export class BrowserWriterEditWindow {
     };
 
   public readonly HandleKeyDown =
-    /** Handles Select All and leaves other keyboard commands to Sfx accelerators. @param event - React keyboard event. @returns Nothing. */ (
+    /** Translates Select All and Backspace keys to the platform-neutral edit-window owner. @param event - React keyboard event. @returns Nothing. */ (
       event: React.KeyboardEvent<HTMLElement>,
     ): void => {
       if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "a") {
         event.preventDefault();
         this.editWindow.SelectAll();
+      } else if (
+        event.key === "Backspace" &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey &&
+        !event.nativeEvent.isComposing
+      ) {
+        event.preventDefault();
+        if (this.SynchronizeSelection()) this.editWindow.DeleteLeft(event.shiftKey);
       }
     };
 

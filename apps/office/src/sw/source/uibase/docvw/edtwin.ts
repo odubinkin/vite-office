@@ -86,8 +86,24 @@ export class SwEditWin {
     return this.Complete(this.wrtShell.Replace(text));
   }
 
-  /** Deletes before the current cursor. @returns Whether the document changed. */
-  public DeleteLeft(): boolean {
+  /** Handles Backspace numbering and indentation before text deletion. @param shift - ShiftBackspace restores numbering. @returns Whether the document changed. */
+  public DeleteLeft(shift = false): boolean {
+    const cursor = this.wrtShell.GetCursor(),
+      point = cursor.GetPoint(),
+      node = point.GetNode() as SwTextNode;
+    if (!cursor.HasMark() && point.GetContentIndex() === 0) {
+      const rule = node.GetNumRule(),
+        noNum = !node.IsCountedInList();
+      if ((rule === undefined || (noNum && !shift)) && this.wrtShell.TryRemoveIndent())
+        return this.Complete(true);
+      if (
+        (!shift && !noNum) ||
+        (shift && noNum) ||
+        (!shift && node.Len() === 0 && rule !== undefined && !rule.IsOutlineRule())
+      ) {
+        if (this.wrtShell.NumOrNoNum(shift)) return this.Complete(true);
+      }
+    }
     return this.Complete(this.wrtShell.DelLeft());
   }
 

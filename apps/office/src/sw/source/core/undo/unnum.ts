@@ -57,6 +57,31 @@ export class SwUndoInsNum extends SwUndoParagraphList {
   }
 }
 
+/** Native numbering on/off history changes only the counted flag. */
+export class SwUndoNumOrNoNum extends SwUndo {
+  /** Retains one node and old/new flags. @param node - Actual numbered paragraph. @param oldNum - Prior counted flag. @param newNum - Next counted flag. @param cursor - Shell selection boundary. @returns Nothing. */
+  public constructor(
+    private readonly node: SwTextNode,
+    private readonly oldNum: boolean,
+    private readonly newNum: boolean,
+    cursor: SwUndoCursorState,
+  ) {
+    super("Number On/Off", cursor, cursor);
+  }
+  /** Reports one node and two flag units. @returns Payload size. */
+  public override GetPayloadSize(): number {
+    return 3;
+  }
+  /** Restores only the counted state. @param context - Active document context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    GetUndoTextNode(context.GetDoc(), this.node).SetCountedInList(this.oldNum);
+  }
+  /** Reapplies only the counted state. @param context - Active document context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    GetUndoTextNode(context.GetDoc(), this.node).SetCountedInList(this.newNum);
+  }
+}
+
 /** Numbering deletion history over actual native nodes and direct list attributes. */
 export class SwUndoDelNum extends SwUndo {
   private readonly nodes: readonly { node: SwTextNode; items: SfxItemSet; level: number }[];
