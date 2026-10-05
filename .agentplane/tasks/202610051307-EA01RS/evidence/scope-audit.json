@@ -1,0 +1,43 @@
+{
+  "base": "90573949d1cd58547d6120e451f3e94f8f8c60f7",
+  "scopePaths": [
+    "apps/office/src/sw/source/filter/basflt/shellio.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-paste.test.tsx",
+    "apps/office/e2e/writer-native-table-paste.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "priorTestFilesByteIdentical": 398,
+  "changedPriorTests": [],
+  "existingSemanticRecordsPreserved": 247,
+  "semanticRecords": 248,
+  "newNativeModuleUnverified": true,
+  "priorProvenanceEntriesByteIdentical": true,
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/filter/basflt/shellio.cxx",
+      "sha256": "702ce4064eea861f83d03fe6f09c7d0c6e998c24c3ed541cf36f833258550e48"
+    },
+    {
+      "path": "sw/source/uibase/dochdl/swdtflvr.cxx",
+      "sha256": "78895e81d445a0c60a1793e91a90598718072d4c41d43fc6c7287fdd464059ee"
+    },
+    {
+      "path": "sw/source/core/crsr/swcrsr.cxx",
+      "sha256": "682cbb23cd826925fbf67362f31e7a9903cce89863fa6263aa08675ef9516644"
+    }
+  ],
+  "newAppCases": 9,
+  "newChromiumCases": 1,
+  "appCases": 12113,
+  "chromiumCases": 118,
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "productionSHA256": {
+    "apps/office/src/sw/source/filter/basflt/shellio.ts": "79fcb5901f804c387c62ad799ff8624bc82901743093bc925fb27474544966bf",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "1d5c2812b6b0d72718368c754b75c4123fd93919e7dd3e6ab86498e4236fa663"
+  },
+  "validationLimit": "All final production code exercised by the single successful upstream-absent full build/app/inventory/scripts/Chromium profile. No post-profile production edits or test replay. Broader native reader/ASCII defaults, SwUndoInsDoc, multiline/list/structural/nested/merged/protected/redline and native history lifetimes remain unverified."
+}
