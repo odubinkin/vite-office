@@ -1,0 +1,255 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "d6c0ece00139f85fa0ba07fc3e47371aa15780916cac26d061e77c5c78fcf05f",
+    "apps/office/src/sw/source/core/crsr/swcrsr.ts": "6a317268053ad231cbe935af24792e2efd6e74e95edf142636ae23f80701b79b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "8698b258f53b636a835a00718aff763be99d58bde009431c07875dded5886f27",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "d96f5b4483e7a97597859150133716a6619f55397df75dacf67ce2c9143d2c35",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "bb7f97685a8337c3150ea082e3e93ec4484b03fa24018f0bddeed26cbadad52d",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "69e2d63cf20ffe94ff78275a234ba11beb1f671fdd34a3cb5dd412a8634fef67",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "d70b35d077057e0a0106e4af436a1345840891a86db59134191a4de5f4df9b92",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "b85a5dbfabe9daf28bb7ba15eb8e36b09229a28723486cfc3662667688b015fc"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "49dfa028f53b812e2b06b1f4075181fdb3822fb805fa6b0d4d102a99f9a93e87",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/N7ZF90.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 55490,
+      "sha256": "2f9050350e33150c27ffb99aa3774ab201f8dfa1556ede4548cf9bbe1d643b12",
+      "totals": [
+        "Test Files  298 passed (298)",
+        "Tests  12062 passed (12062)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 12062,
+        "failed": 0,
+        "total": 12062
+      },
+      "coverage": {
+        "lines": 99.99,
+        "statements": 99.98,
+        "functions": 100,
+        "branches": 99.96
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 11917,
+          "covered": 11916,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "statements": {
+          "total": 13047,
+          "covered": 13045,
+          "skipped": 0,
+          "pct": 99.98
+        },
+        "functions": {
+          "total": 3322,
+          "covered": 3322,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 9771,
+          "covered": 9768,
+          "skipped": 0,
+          "pct": 99.96
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "443043966311e2a649b9057859842617ffc90d18526e7573168d419408c9eae1",
+      "incompleteFiles": {
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/WriterEditableTable.tsx": {
+          "lines": {
+            "total": 21,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 95.23
+          },
+          "functions": {
+            "total": 11,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 21,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 95.23
+          },
+          "branches": {
+            "total": 44,
+            "covered": 43,
+            "skipped": 0,
+            "pct": 97.72
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/writer-view.tsx": {
+          "lines": {
+            "total": 153,
+            "covered": 153,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 68,
+            "covered": 68,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 163,
+            "covered": 163,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 116,
+            "covered": 115,
+            "skipped": 0,
+            "pct": 99.13
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": {
+          "lines": {
+            "total": 316,
+            "covered": 316,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 113,
+            "covered": 113,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 335,
+            "covered": 334,
+            "skipped": 0,
+            "pct": 99.7
+          },
+          "branches": {
+            "total": 180,
+            "covered": 179,
+            "skipped": 0,
+            "pct": 99.44
+          }
+        }
+      }
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/N7ZF90.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40681,
+      "sha256": "3c4cfa80d930674b3cfa26f5b18e149de10aae81420daac8b619f33557a4d95f",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "total": 109
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverageMapSHA256": "90e9b65d2e1d43fd272646269006b70f151d5a8e218f3f03331e4dbb5e593905",
+      "incompleteFiles": {}
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 221,
+      "sha256": "efa1cf5ebd069afdff236136ddd2a3c75390aef7e5fcc1da165498d0b7008ddd",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 19061,
+      "sha256": "8b16f332434fcc8c4ddad6d1e5afb397cd6e758ddf0ff3b65f704def64ad539f",
+      "totals": [
+        "113 passed (1.5m)"
+      ],
+      "failedCases": [
+        "writer-odt-file.spec.ts > Writer types in a table cell and reopens the edited ODT"
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-05T10:46:01.433Z",
+        "duration": 90048.701,
+        "expected": 113,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    }
+  ]
+}
