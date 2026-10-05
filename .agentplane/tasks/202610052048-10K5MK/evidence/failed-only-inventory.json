@@ -1,0 +1,30 @@
+{
+  "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern=^parity mapping CLI composes the Writer mapping report with owned upstream marker evidence$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/10K5MK.closure-inventory-results.json",
+  "profile": "failed-only-upstream-absent",
+  "originalFailed": [
+    {
+      "file": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+      "name": "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence"
+    }
+  ],
+  "exit": 0,
+  "bytes": 1240,
+  "sha256": "1c8c1ff7ed1b3807afda0477ec265d48866f5c2b2e9838bdd08ac9aaeacfce15",
+  "caseCounts": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 2,
+    "total": 3
+  },
+  "executed": [
+    {
+      "file": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+      "name": "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+      "status": "passed"
+    }
+  ],
+  "failedCases": [],
+  "errors": [],
+  "coverageMapSHA256": "8032a9a06e63df29bd637ec79cae71c6edcc39a41d142eda41d2ae0b5e9767bb",
+  "vendorRestored": true
+}

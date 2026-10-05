@@ -1,0 +1,79 @@
+{
+  "sourceChangedAfterInitialProfile": [],
+  "counterTransfer": "Initial application map copied byte-identically. Inventory failed-only actual counters merged only after deep equality of statement/function/branch maps; production bytes unchanged. No location transfer, synthetic counters or passing replay.",
+  "summary": {
+    "lines": {
+      "total": 12652,
+      "covered": 12652,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13860,
+      "covered": 13860,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3395,
+      "covered": 3395,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10300,
+      "covered": 10300,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "initialMapSHA256": "0d90dc7ed2f5282826d9c20c7d437132b116197ba39fdf9c5e3c6439f352ddbb",
+  "finalMapSHA256": "0d90dc7ed2f5282826d9c20c7d437132b116197ba39fdf9c5e3c6439f352ddbb",
+  "initialInventoryMapSHA256": "f3ba8a24b085dd4c5265a3868c91b97594878a17f01dda78afddd4b008a739ab",
+  "finalInventoryMapSHA256": "8cea6fdddd3ebb4ec613fa0060c21dbe2b59689d2280d6191b427b79c3db2360",
+  "finalProductionSHA256": {
+    "apps/office/src/xmloff/source/text/txtimp.ts": "cd4832a3eb8179e75a21c834c28304c5949cf5c4ba0fdd30e5d6dfb32ca6c196",
+    "apps/office/src/xmloff/source/text/txtparai.ts": "289968633793d514a4f9d108e6d5828ca8b5e5a075597ee4ea0dd90f41f2659b",
+    "apps/office/src/xmloff/source/table/XMLTableImport.ts": "13ca97264b755b063b66cfd4d0b94251fdb74d2c5b2fa5b245a9d23239ea30c6",
+    "apps/office/src/xmloff/source/text/txtparae.ts": "52932c08f155abac0ae38210a5683f56b03628c64510d5d37853791b9ff68a21"
+  }
+}
