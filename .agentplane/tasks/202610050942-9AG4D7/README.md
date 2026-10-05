@@ -1,10 +1,11 @@
 ---
 id: "202610050942-9AG4D7"
 title: "Own Ctrl Home End cell and table section selection in native cursor and shell"
-status: "DOING"
+result_summary: "CtrlHomeEnd follows actual cell/table/document cursor owners and marked table mode;table paragraphs inherit one editing host,fixing real cross-paragraph selection,with typed input,split/join and UndoRedo verified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610050942-9AG4D7/evidence/restored-source-audits.json"
   findings:
     - "Twenty-five new app cases and three new browser cases close the bounded contracts;385 previous testfiles unchanged,246runtime states/defaults/exceptions preserved,actual cumulative app/inventory100percent,five restored source audits pass. Original failing browser selection now spans actual cell paragraphs;only failed/new cases ran after two renderer attribute removals."
-commit: null
+commit:
+  hash: "bda15ba13c8bc1bd22c2104ff25e1dbbab76eed1"
+  message: "🧩 9AG4D7 code: record verified section cursor and editing host evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved native section boundary cursor and marked table escalation with actual node identities; preserve registered deviations and absent-only verification."
+  -
+    author: "CODER"
+    body: "Verified: Native CtrlHomeEnd section/table cursor ownership and shared table editing host are implemented and checked at a0faca4f67f585c96fcf866df59df71f663f105e. Twenty-five new app cases,three browser cases and actual cumulative100percent app/inventory cover the bounded behavior;385prior testfiles unchanged,only failed/new cases repeated. Full native table/UI parity remains unverified."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Bounded native section cursor and shared table editing host verified at a0faca4f67f585c96fcf866df59df71f663f105e;actual app/inventory100percent,385prior testfiles unchanged,112uniqueChromium closed,only failed/new source cases repeated. Full native table/UI parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-05T10:21:14.094Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native CtrlHomeEnd section/table cursor ownership and shared table editing host are implemented and checked at a0faca4f67f585c96fcf866df59df71f663f105e. Twenty-five new app cases,three browser cases and actual cumulative100percent app/inventory cover the bounded behavior;385prior testfiles unchanged,only failed/new cases repeated. Full native table/UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-05T10:20:46.031Z"
+doc_updated_at: "2026-10-05T10:21:14.095Z"
 doc_updated_by: "CODER"
 description: "Repair browser-owned document boundary keys through actual SwNodes cell section, table and document cursor contracts. Preserve fixed selection marks and native marked table restrictions; no TextRuns navigation or registered I/O deviation changes."
 sections:
@@ -125,6 +138,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the scoped implementation commit and retain task evidence; no history rewrite or registered deviation changes."
   Findings: "Previous goal turn145 was verified progress. Current upstream move.cxx, txtcrsr.cxx, select.cxx, pam.cxx, swcrsr.cxx and trvltbl.cxx show cell-section first, table cursor conversion on marked escalation, then document bounds. Browser currently delegates these keys. Native raw MoveTable rejects marked ordinary cursors; shell converts to a table cursor. This task implements the existing flat cell graph and direction-preserving endpoints; complete selected-box painting/rings/protected/merged/nested behavior remains unverified. No network, outside-repository access, subagents, upstream execution or Agentplane code artifacts. Six statics passed after one unused-import lint failure; only failed lint repeated. First ONE absent profile: build pass;12046 app/296 files and109 inventory/36 files pass with100 percent allfour metrics;scripts5pass;Chromium110pass/1failed/no flakes. Failed exact case is Writer Shift Ctrl Home selects cell paragraphs through native point and mark;selected browser text was Tail instead of containing Second. Actual old table wrapper contentEditable=false and per-cell-paragraph contentEditable=true create independent editing hosts. Remove those adapters inside existing UI authorization, retain original range assertion and add native host checks. No production core/shell changes are needed. Final closures: initial failed ShiftCtrlHome case passes against final source after shared host fix;one new mounted host/range case passes with6prior cases skipped. New Chromium split/join case initially used visual Home,which did not move the macOS browser caret and Backspace deleted the final character;the unsupported visual Home gap remains explicit. Replace only failed-case fixture placement with two ArrowLeft keys and retain all actual join,Undo,Redo and neighbor assertions. Sole failed new case passes;no passing case replay. Existing config was loaded in memory with development server for changed UI,so no successful static build was repeated. The first build/full Chromiums predate the two attribute-removal corrections;final source selection/typing/split/join/history were checked in real Chromium. Final production core/shell/editwin/adapter four hashes match first profile;only two renderer attributes changed. Actual initial/new-case Istanbul maps align only exact contiguous source-identical locations;changed/crossing locations use final counters,app11826lines/12946statements/3307functions/9728branches andinventory1464/1523/384/1080 all100percent. Five restored source audits pass,semantic violations0. Scope audit:385prior app/script testfiles byte-identical;25new app cases and3new Chromium cases,total112 unique Chromium closed;246existing runtime states/defaults/classifications/deviations retained,12bounded notes across6owners,8native source hashes. AP ignored-inclusive scan4085files/0forbidden;doctor0errors/2preexistingwarnings,routing/diffcheckpass. Full selected-box painting/cursor rings/layout/native SwCursorShell,visual-line HomeEnd,protected/merged/nested/redline/fullUI and parentgoal remain unverified."
+extensions:
+  implementation_commit:
+    hash: "a0faca4f67f585c96fcf866df59df71f663f105e"
+    message: "🧩 9AG4D7 code: own section cursor navigation and shared table editing host"
 id_source: "generated"
 ---
 ## Summary
