@@ -20,6 +20,8 @@ import { SwTextFormatColl, isWriterParagraphStyle, type WriterParagraphStyle } f
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import type { SwNumRuleItem } from "../para/paratr";
 import type { SwNumRule } from "./number";
+import { WRITER_MAX_LIST_LEVEL } from "./list";
+import type { SwPaM } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
 import type { DefaultFontDevice } from "./default-font";
@@ -350,6 +352,46 @@ export class SwDoc {
   /** Returns numbering rules. @returns Rule table. */
   public GetNumRuleTable(): readonly SwNumRule[] {
     return this.listsManager.GetNumRuleTable();
+  }
+
+  /** Checks the represented numbering range before changing any level. @param range - Native selection. @param down - Demote direction. @returns Whether every numbered node can move. */
+  public CanNumUpDown(range: SwPaM, down: boolean): boolean {
+    const nodes = this.GetNumUpDownNodes(range);
+    return (
+      nodes.length > 0 &&
+      nodes.every(
+        /** Checks the actual list-tree level. @param node - Selected numbered node. @returns Whether within native limits. */
+        (node) =>
+          down ? node.GetActualListLevel() < WRITER_MAX_LIST_LEVEL : node.GetActualListLevel() > 0,
+      )
+    );
+  }
+
+  /** Changes only list levels in the actual selected node range, including cells. @param range - Native selection. @param down - Demote direction. @returns Whether the supported numbering range changed. */
+  public NumUpDown(range: SwPaM, down: boolean): boolean {
+    if (!this.CanNumUpDown(range, down)) return false;
+    const nodes = this.GetNumUpDownNodes(range);
+    return this.stateManager.RunModelTransaction(
+      /** Applies one fully validated native range. @returns True after mutation. */
+      () => {
+        for (const node of nodes)
+          node.SetAttrListLevel(node.GetActualListLevel() + (down ? 1 : -1));
+        return true;
+      },
+    );
+  }
+
+  /** Selects native text owners with rules across inclusive SwNodes coordinates. @param range - Native selection. @returns Selected numbered nodes. */
+  private GetNumUpDownNodes(range: SwPaM): readonly SwTextNode[] {
+    // SwPaM validates both endpoints belong to the same node array.
+    if (range.GetPoint().GetNode().GetNodes() !== this.nodes)
+      throw new Error("Writer numbering range belongs to another node array.");
+    const nodes: SwTextNode[] = [];
+    for (let index = range.Start().GetNodeIndex(); index <= range.End().GetNodeIndex(); index++) {
+      const node = this.nodes.at(index);
+      if (node instanceof SwTextNode && node.GetNumRule() !== undefined) nodes.push(node);
+    }
+    return nodes;
   }
   /** Finds or creates a compatible numbering rule. @param name - Rule name. @param kind - Rule family. @param level - Checked level. @returns Document rule. */
   public EnsureNumRule(name: string, kind: "bullet" | "numbered", level = 0): SwNumRule {

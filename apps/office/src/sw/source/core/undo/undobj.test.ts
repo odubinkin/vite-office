@@ -18,7 +18,7 @@ import { SwUndoFormatColl } from "./unfmco";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SwUndoInsert } from "./unins";
 import { SwUndoAttr, SwUndoMoveLeftMargin, SwUndoParagraphFormat } from "./unattr";
-import { SwUndoInsNum, SwUndoNumLevel } from "./unnum";
+import { SwUndoInsNum, SwUndoNumUpDown } from "./unnum";
 import { SwUndoSplitNode } from "./unspnd";
 import { GetUndoTextNode, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 import { UndoManager } from "./docundo";
@@ -319,7 +319,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.SetParagraphListKind("numbered");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsNum);
     shell.ChangeParagraphListLevel("demote");
-    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoNumLevel);
+    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoNumUpDown);
     expect(paragraph.GetParagraphAlignment()).toBe("left");
     expect(paragraph.GetParagraphStyle()).toBe("heading-1");
     expect(projectWriterParagraphList(paragraph)).toMatchObject({ kind: "numbered", level: 1 });

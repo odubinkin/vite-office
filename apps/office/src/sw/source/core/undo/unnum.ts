@@ -1,5 +1,6 @@
 /** @fileoverview Implements bounded numbering and list-level undo from pinned LibreOffice unnum.cxx. */
 
+import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
@@ -55,17 +56,50 @@ export class SwUndoInsNum extends SwUndoParagraphList {
   }
 }
 
-/** Reversible promote or demote command retaining only old and new list items. */
-export class SwUndoNumLevel extends SwUndoParagraphList {
-  /** Creates one list-level action. @param paragraph - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
+/** Native-shaped range and signed-direction numbering history;list metadata is never snapshotted. */
+export class SwUndoNumUpDown extends SwUndo {
+  /** Retains one native range and level delta. @param range - Complete shell cursor boundary. @param offset - Down is one,up is minus one. @returns Nothing. */
   public constructor(
-    paragraph: SwTextNode,
-    beforeList: SfxItemSet,
-    afterList: SfxItemSet,
-    before: SwUndoCursorState,
-    after: SwUndoCursorState,
+    private readonly range: SwUndoCursorState,
+    private readonly offset: 1 | -1,
   ) {
-    super("List Level", paragraph, beforeList, afterList, before, after);
+    super(offset > 0 ? "Demote list level" : "Promote list level", range, range);
+  }
+
+  /** Reports fixed range and direction payload independent of paragraph count. @returns Scalar range units. */
+  public override GetPayloadSize(): number {
+    return 5;
+  }
+
+  /** Reverses only native levels over the retained range. @param context - Active document context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    this.Apply(context, this.offset !== 1);
+  }
+
+  /** Reapplies the native direction over the retained range. @param context - Active document context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    this.Apply(context, this.offset === 1);
+  }
+
+  /** Reconstructs a native PaM for the same document mutation as execution. @param context - Active document context. @param down - Demote direction. @returns Nothing. */
+  private Apply(context: SwUndoRedoContext, down: boolean): void {
+    const doc = context.GetDoc();
+    const point = new SwPosition(
+      GetUndoTextNode(doc, this.range.point.node),
+      this.range.point.offset,
+    );
+    const mark =
+      this.range.mark === undefined
+        ? undefined
+        : new SwPosition(GetUndoTextNode(doc, this.range.mark.node), this.range.mark.offset);
+    const range = new SwPaM(point, mark);
+    try {
+      doc.NumUpDown(range, down);
+    } finally {
+      range.Dispose();
+      point.Dispose();
+      mark?.Dispose();
+    }
   }
 }
 

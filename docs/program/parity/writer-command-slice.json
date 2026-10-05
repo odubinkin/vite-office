@@ -1555,7 +1555,7 @@
           },
           {
             "path": "apps/office/src/sw/source/core/undo/unnum.ts",
-            "marker": "class SwUndoNumLevel"
+            "marker": "class SwUndoNumUpDown"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",

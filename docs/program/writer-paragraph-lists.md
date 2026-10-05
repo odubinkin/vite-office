@@ -15,7 +15,7 @@ separate items, and `SwDoc` owns the referenced bounded `SwNumRule` with one
 `{ kind, level, styleId }` object consumed by browser controls and marker
 rendering is derived from those items and the rule table.
 
-The browser places the actions in **Format → Bullets and Numbering** and, for
+The browser places the actions in **Format → Lists** and, for
 the two toggles, directly after paragraph alignment in the formatting toolbar.
 Markers are visible beside an editable paragraph rather than inside its
 `textContent`; accessibility describes its current list type without adding
@@ -24,11 +24,17 @@ source paragraph list state. Merging paragraphs keeps the preceding paragraph's
 list state.
 
 The same submenu also implements `.uno:DecrementLevel` (**Demote**) and
-`.uno:IncrementLevel` (**Promote**) for the active list paragraph.
-`SwWrtShell.ChangeParagraphListLevel` applies `SwUndoNumLevel`, whose before and
-after payloads are cloned `SfxItemSet` instances containing the numbering/list
-WhichIds rather than `WriterParagraphList` DTOs. The latter exists only as an
-outer projection for rendering, clipboard, and filter conversion. Meanwhile,
+`.uno:IncrementLevel` (**Promote**) for selected ordinary list paragraphs.
+`SwDoc.NumUpDown` traverses the inclusive native `SwPaM`/`SwNodes` range,
+including actual text nodes in table cells and structural gaps. It validates
+every selected list level before changing any node, then changes only the
+level through `SetAttrListLevel`. `SwWrtShell.ChangeParagraphListLevel` applies
+one `SwUndoNumUpDown` action that retains the range and signed direction;
+Undo and Redo call the same document operation with inverse and forward
+directions. Unrelated rule, list identity, restart and counted state are
+preserved rather than restored from old complete list-item snapshots.
+`WriterParagraphList` remains an outer projection for rendering, clipboard,
+and filter conversion. Meanwhile,
 [`listsh.ts`](../../apps/office/src/sw/source/uibase/shells/listsh.ts) retains
 the bounded command identity from `listsh.cxx`. Demote raises the bounded nesting
 level by one; Promote lowers it by one. The browser allows levels 0 through 9,
@@ -46,7 +52,8 @@ flattening markers into paragraph text.
 
 ## Deliberate current boundary
 
-This is not full Writer list parity. Range and table-cell selection, complete
+This is not full Writer list parity. Ordinary list-level range commands in
+body and cell text are covered; broader range and table-cell editing, complete
 numbering semantics, prefixes and suffixes, custom glyphs and numeric formats,
 explicit restart values, automatic list detection, outline numbering, RTF
 clipboard transfer, Paste, and DOCX import/export remain separately mapped

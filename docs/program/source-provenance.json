@@ -7250,6 +7250,18 @@
           {
             "path": "apps/office/e2e/writer-style-selector.spec.ts",
             "marker": "Writer live style selector width"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+            "marker": "native list-level node ranges"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+            "marker": "native cell list level UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-cell-list-level.spec.ts",
+            "marker": "Writer cell list levels use native commands and survive history and ODT reopen"
           }
         ],
         "upstream": [
@@ -7324,6 +7336,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
             "marker": "mbDtor = true;"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+            "marker": "SwDoc::NumUpDown"
           }
         ]
       },
@@ -7341,7 +7357,8 @@
         "Iteration64 restores text-owned numbering notification policy: SwTextNode private true-default m_bNotifiable and independent public zero-argument IsNotifiable/IsNotificationEnabled; real SwNodeNum records delegate separately to the owner, while roots/phantoms short-circuit required caller reading then destruction. SwDoc private mbDtor defaults false and is set before existing document list/undo/state teardown,with public zero-argument IsInDtor and no public flag setters. Eight owned tests/type checks cover constructor/clone defaults,reading/dtor call order,independent owner predicates versus foreign context,private diagnostic blocker short circuit,actual blocked traversal/prefix/topology,teardown suppression/raw counters/detachment and exact existing manager order. All eight final authored tests fail baseline,including independent-owner,blocked callback,Dispose callback and phantom-dtor runtime mismatches; old tests/literals unchanged. Fresh six-file/manual span hashes only, no native execution or source/helper artifacts. Project tests never read/compile/invoke upstream. Full native temporary suppressor/autoattribute constructor,complete client/destructor/undo/nonshown/redline/range/word-count/layout/final-private-const/browser lifetimes remain separately unverified. Retained browser object flag queries do not certify native post-destruction object lifetime. No whole-module/status/default/goal,registered IO/recovery or gate promotion.",
         "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
         "Iteration103 restores the Writer toolbar style population inspected in SvxStyleToolBoxControl InitializeStyles/FillStyleBox: ten flat native defaults precede actual used and user-defined collections, with exact-name deduplication and four true Common configuration defaults. The generic detached population adapter accepts favourite vectors, while actual favourite storage remains unimplemented. SwDoc.IsUsed supplies bounded regular paragraph-node identity and derived-owner usage, including table nodes and excluding detached/foreign/undo-only nodes. Projection reads never materialize unused defaults and retain only immutable primitive identities/names; actual custom and renamed names dispatch through existing StyleApply and update on model/bindings invalidation, document replacement and Undo/Redo. Unchanged builtins retain existing localized resources. Independent owned population/actual-frame tests and desktop/mobile ODT browser history evidence cover the bounded correction; all306 other prior tests stay byte-identical; one existing selector test expects ten initial styles and admits non-default choices through the unchanged Styles menu while retaining all nine font-size literals. Complete native broadcaster/EE/comment usage, favourite/hidden storage, editable creation, previews/context menus, Clear/More actions, keyboard/focus style control and full native/widget/parent parity remain unverified. No status/default/exception promotion; registered save/open/recovery deviations unchanged.",
-        "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged."
+        "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged.",
+        "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -8844,6 +8861,18 @@
           {
             "marker": "changeWriterParagraphListLevel",
             "path": "apps/office/src/sw/source/core/edit/ednumber.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+            "marker": "native list-level node ranges"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+            "marker": "native cell list level UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-cell-list-level.spec.ts",
+            "marker": "Writer cell list levels use native commands and survive history and ODT reopen"
           }
         ],
         "upstream": [
@@ -8864,7 +8893,8 @@
         "Multiple selection rings and unsupported native list-rule operations remain outside the browser slice."
       ],
       "preservedResponsibilities": [
-        "Changes the supported active list paragraph level through a numbering undo action."
+        "Changes the supported active list paragraph level through a numbering undo action.",
+        "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/edit/ednumber.cxx",
@@ -11023,25 +11053,42 @@
           {
             "marker": "SwUndoInsNum",
             "path": "apps/office/src/sw/source/core/undo/unnum.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+            "marker": "native list-level node ranges"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+            "marker": "native cell list level UI"
+          },
+          {
+            "path": "apps/office/e2e/writer-cell-list-level.spec.ts",
+            "marker": "Writer cell list levels use native commands and survive history and ODT reopen"
           }
         ],
         "upstream": [
           {
             "marker": "SwUndoInsNum",
             "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx",
+            "marker": "SwUndoNumUpDown::SwUndoNumUpDown"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/core/undo/unnum.ts",
       "localSymbols": [
         "SwUndoInsNum",
-        "SwUndoNumLevel"
+        "SwUndoNumUpDown"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwUndoInsNum, SwUndoInsNum::SwUndoInsNum, std::move, SwUndoInsNum::~SwUndoInsNum and the bounded SwUndoInsNum, SwUndoNumLevel contract remain intentionally omitted."
+        "Upstream obligations outside SwUndoInsNum, SwUndoInsNum::SwUndoInsNum, std::move, SwUndoInsNum::~SwUndoInsNum and the bounded SwUndoInsNum, SwUndoNumUpDown contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements bounded numbering and list-level undo from pinned LibreOffice unnum.cxx."
+        "Implements bounded numbering and list-level undo from pinned LibreOffice unnum.cxx.",
+        "Iteration140 replaces body-only list-level traversal and whole-list-item recreation with document-owned inclusive SwPaM/SwNodes range validation and SetAttrListLevel mutation,including table cells and structural gaps. ednumber delegates shared list and indent state/execution to the native document range. One SwUndoNumUpDown retains range and signed direction instead of per-node list tuples/group adapters;inverse and forward history invoke the same document operation and preserve unrelated list metadata. Owned core,mounted bindings/geometry and real Chromium/ODT cases cover the represented ordinary-list branch and zero/nine limits. Native OutlineUpDown style reassignment,mixed outline ranges,merged/redline paragraph expansion,selection rings and complete native undo/lifetime/layout/UI remain unverified. Existing244states/defaults/exceptions and registered I/O/recovery choices unchanged;no whole-module promotion."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/unnum.cxx",
