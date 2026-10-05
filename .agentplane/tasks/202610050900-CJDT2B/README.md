@@ -4,7 +4,7 @@ title: "Route table Tab traversal and appended row history through native cursor
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,29 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-05T09:32:26.124Z"
+  updated_by: "EVALUATOR"
+  note: "Exact implementation b250bc7bbdc5c6b967357fc41614364fa271bd7b passed same-actor read-only audit before this verdict;no independent review claim. Native flat table Tab traversal and appended row history verified within approved scope,broad goal remains active."
+  evaluated_sha: "b250bc7bbdc5c6b967357fc41614364fa271bd7b"
+  blueprint_digest: "e3661c298382bb9ee6e3f56af63041ea584374aafbb0ef720113dab5805c9821"
+  evidence_refs:
+    - ".agentplane/tasks/202610050900-CJDT2B/README.md"
+    - ".agentplane/tasks/202610050900-CJDT2B/quality/20261005-093226124-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610050900-CJDT2B/quality/20261005-093226124-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610050900-CJDT2B/quality/20261005-093226124-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610050900-CJDT2B/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610050900-CJDT2B/evidence/scope-and-native-hashes.json"
+    - ".agentplane/tasks/202610050900-CJDT2B/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610050900-CJDT2B/evidence/failed-only-replay.json"
+    - ".agentplane/tasks/202610050900-CJDT2B/evidence/cumulative-coverage.json"
+    - ".agentplane/tasks/202610050900-CJDT2B/evidence/restored-source-audits.json"
+    - ".agentplane/tasks/202610050900-CJDT2B/evidence/static-gates.json"
+    - "Exact-SHA read-only audit exit0;ap doctor0errors/2oldwarnings,routingOK,diffclean;ignored-inclusiveAP4072files0forbidden;vendor restored."
+  findings:
+    - "Persistent SwCursor traverses actual sections,first paragraph offset0 and retained fixed mark. SwEditWin owns numbering-start priority and core next/previous;BrowserWriterEditWindow translates valid keyboard intent only. Unmarked last-cell append retains actual row/cell/node sections through SwUndoTableNdsChg and refreshes cursor/input/history state."
+    - "ONE absent fullprofile:12021app pass/1newguard fail of12022,108inventory pass/1orderingfailof109,scripts5pass,Chromium109firstpass/noflakes. Exact1app/1inventoryfailed-only closure passes;all382prior testfiles byteidentical. Actual cumulative app/inventory allfour100. Corrected nodes.ts range guard uses only actual new failed-case counts plus source-identical contiguous location alignment;no passing tests/build/browser replay. Five restored audits and9nativehashes pass;244oldsemantic states preserved,2newunverifiedrows."
 commit: null
 comments:
   -
