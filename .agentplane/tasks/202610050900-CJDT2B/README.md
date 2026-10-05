@@ -1,0 +1,140 @@
+---
+id: "202610050900-CJDT2B"
+title: "Route table Tab traversal and appended row history through native cursor owners"
+status: "DOING"
+priority: "med"
+owner: "CODER"
+revision: 5
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-05T09:01:06.098Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: Implement native table Tab traversal and append history under standing goal/UI authorization;preserve registered deviations and all prior tests,run ONE absent profile with failed/new-only closure."
+events:
+  -
+    type: "status"
+    at: "2026-10-05T09:01:10.866Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: Implement native table Tab traversal and append history under standing goal/UI authorization;preserve registered deviations and all prior tests,run ONE absent profile with failed/new-only closure."
+doc_version: 3
+doc_updated_at: "2026-10-05T09:01:10.866Z"
+doc_updated_by: "CODER"
+description: "Iteration145 remove browser-default table Tab behavior;native cursor traversal,table row append and Writer history,without React table navigation decisions. Standing goal/UI mandate authorizes safe in-repo edits. Preserve registered I/O/recovery deviations."
+sections:
+  Summary: "Route table Tab traversal and appended row history through native cursor owners."
+  Scope: |-
+    - apps/office/src/sw/source/core/crsr/swcrsr.ts
+    - apps/office/src/sw/source/core/undo/untbl.ts
+    - apps/office/src/sw/source/core/docnode/nodes.ts
+    - apps/office/src/sw/source/core/table/swtable.ts
+    - apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts
+    - apps/office/src/sw/source/uibase/docvw/edtwin.ts
+    - apps/office/src/sw/browser/editor/browser-writer-edit-window.ts
+    - apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts
+    - apps/office/src/sw/browser/editor/native-table-tab.test.tsx
+    - apps/office/e2e/writer-native-table-tab.spec.ts
+    - docs/program/source-provenance.json
+    - docs/program/parity/runtime-inventory.json
+  Plan: "Iteration145 native table Tab traversal/history. Replace shell persistent PaM with SwCursor subclass matching swcrsr GoPrevNextCell;actual SwNodes section traversal,counter/default1,firstparagraph offset0,mark preservation,boundaryfailure without body/table escape. Shell GoNextCell defaultappendtrue and GoPrevCell consume cursor movement,refresh active/pending/historygrouping and notifications. Last-cell unmarked forwardappend uses prepared real row sections copied from native source row/firstcell paragraph style+directitems,empty text,no text/hints clone;SwUndoTableNdsChg retains actual inserted row/sections and before/after cursor,Undo disconnects and collapses registered indices,Redo reconnects same identities. Extend actual SwNodes/tableline insertion/removal owners,not snapshotdoc/React. Flat implemented cells only;merged/nested/protected/nativeform/autocorrect/autoformat/border/formula/redline/lifetimes remainunverified. Browser only translates unmodified Tab/ShiftTab intent after DOM synchronization;SwEditWin decides liststart priority via native NumDownChangesIndent represented formats or table next/previous,no DOM sibling/bodyordinal/DTO layer. Ordinary bodyTab unchanged. Real native/mounted/Chromium tests include multipleparagraphs,rows,emptycells,selectiondirection,boundaries,append history,typing thenUndoRedo,pendingformat/modelnotifications and ignored modifiers/composition. Preserve all oldtests byteidentical. Add2unverified native ownership rows for cursor/undo with matching evidence;existing244states/classifications/defaults/exceptions unchanged;boundednotes existing5rows only. Sixstaticsfirst;ONE sequential full absent build/app/inventory/scripts/Chromium reportOnFailure,exactfailednames persistedbeforeassertions,initialmaps ignoredappcacheonly;only failed/newunexecuted closure,actual100coverage,no passing replay. finallyrestore beforefive sourceaudits,scope/nativehash audit,semantic exactSHA sameactorreadonlyquality,CODERVerification beforeverify,canonicalfinish/cleanmain,parentcheckpoint. No network/global/outside/subagents/APsources/helpers/Python/probes/binaries/rawdiagnostics."
+  Verify Steps: |-
+    - `npm run format:check`
+    - `npm run lint`
+    - `npm run typecheck`
+    - `npm run check:dependencies`
+    - `npm run check:docs`
+    - `npm run check:file-size`
+    - `npm run test:static`
+    - `npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure`
+    - `npm run test:inventory:coverage -- --coverage.reportOnFailure`
+    - `npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts`
+    - `npm exec -- playwright test --config apps/office/playwright.config.ts`
+    - `npm exec -- tsx scripts/generate-writer-ui-resources.ts --check`
+    - `npm run check:source-tree`
+    - `npm run check:source-provenance`
+    - `npm run inventory:invariants`
+    - `npm run inventory:parity`
+    - `ap doctor`
+    - `node .agentplane/policy/check-routing.mjs`
+
+    Actual table section traversal/firstparagraph0,selectiondirection,boundaries,append native history and DOM restoration. ONE absent fullprofile,failed/new-only closures,actual100coverage,no passing replay.
+  Verification: "Pending implementation and validation."
+  Rollback Plan: "Revert semantic task without rewriting history."
+  Findings: "Previous144 verifiedprogress DONE;currentmain86365df3 clean,parentonlyactive,direct,userinstructionsabsent,fourmatchedpolicies. Native edtwin2146/2223 gives liststart priority then tableNextCell/PrevCell,2801 callsGoNextCell(!readonly). trvltbl39 forbidsappendwithmark/appendfalse,appendslastrow then moves;swcrsr2198 traverses actualcellsections/count and landsfirstcontent0,markretained. ndtbl1871/untbl1502 ownnative row/undo,swtable130 copies firstparagraph style/directitems,emptycontent;tblrwcl349 copiesrowgeometry. Local hasno tableTab owner,solebrowserdefaultfocus,table model AppendRow only. First guessed wrtsh-table-cursor andnativeport paths absent;bounded actualfiles resolved,read-onlyqueries,no mutation. Scope uses nativeflatcellboundary and retainedsectionhistory;full nativeSwCursorShell/DocInsertRow/merged/protected/formula/border/redline remainunverified,not goalpromotion. Standing usergoal/UI mandate authorizes thisinrepo localtask."
+id_source: "generated"
+---
+## Summary
+
+Route table Tab traversal and appended row history through native cursor owners.
+
+## Scope
+
+- apps/office/src/sw/source/core/crsr/swcrsr.ts
+- apps/office/src/sw/source/core/undo/untbl.ts
+- apps/office/src/sw/source/core/docnode/nodes.ts
+- apps/office/src/sw/source/core/table/swtable.ts
+- apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts
+- apps/office/src/sw/source/uibase/docvw/edtwin.ts
+- apps/office/src/sw/browser/editor/browser-writer-edit-window.ts
+- apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts
+- apps/office/src/sw/browser/editor/native-table-tab.test.tsx
+- apps/office/e2e/writer-native-table-tab.spec.ts
+- docs/program/source-provenance.json
+- docs/program/parity/runtime-inventory.json
+
+## Plan
+
+Iteration145 native table Tab traversal/history. Replace shell persistent PaM with SwCursor subclass matching swcrsr GoPrevNextCell;actual SwNodes section traversal,counter/default1,firstparagraph offset0,mark preservation,boundaryfailure without body/table escape. Shell GoNextCell defaultappendtrue and GoPrevCell consume cursor movement,refresh active/pending/historygrouping and notifications. Last-cell unmarked forwardappend uses prepared real row sections copied from native source row/firstcell paragraph style+directitems,empty text,no text/hints clone;SwUndoTableNdsChg retains actual inserted row/sections and before/after cursor,Undo disconnects and collapses registered indices,Redo reconnects same identities. Extend actual SwNodes/tableline insertion/removal owners,not snapshotdoc/React. Flat implemented cells only;merged/nested/protected/nativeform/autocorrect/autoformat/border/formula/redline/lifetimes remainunverified. Browser only translates unmodified Tab/ShiftTab intent after DOM synchronization;SwEditWin decides liststart priority via native NumDownChangesIndent represented formats or table next/previous,no DOM sibling/bodyordinal/DTO layer. Ordinary bodyTab unchanged. Real native/mounted/Chromium tests include multipleparagraphs,rows,emptycells,selectiondirection,boundaries,append history,typing thenUndoRedo,pendingformat/modelnotifications and ignored modifiers/composition. Preserve all oldtests byteidentical. Add2unverified native ownership rows for cursor/undo with matching evidence;existing244states/classifications/defaults/exceptions unchanged;boundednotes existing5rows only. Sixstaticsfirst;ONE sequential full absent build/app/inventory/scripts/Chromium reportOnFailure,exactfailednames persistedbeforeassertions,initialmaps ignoredappcacheonly;only failed/newunexecuted closure,actual100coverage,no passing replay. finallyrestore beforefive sourceaudits,scope/nativehash audit,semantic exactSHA sameactorreadonlyquality,CODERVerification beforeverify,canonicalfinish/cleanmain,parentcheckpoint. No network/global/outside/subagents/APsources/helpers/Python/probes/binaries/rawdiagnostics.
+
+## Verify Steps
+
+- `npm run format:check`
+- `npm run lint`
+- `npm run typecheck`
+- `npm run check:dependencies`
+- `npm run check:docs`
+- `npm run check:file-size`
+- `npm run test:static`
+- `npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure`
+- `npm run test:inventory:coverage -- --coverage.reportOnFailure`
+- `npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts`
+- `npm exec -- playwright test --config apps/office/playwright.config.ts`
+- `npm exec -- tsx scripts/generate-writer-ui-resources.ts --check`
+- `npm run check:source-tree`
+- `npm run check:source-provenance`
+- `npm run inventory:invariants`
+- `npm run inventory:parity`
+- `ap doctor`
+- `node .agentplane/policy/check-routing.mjs`
+
+Actual table section traversal/firstparagraph0,selectiondirection,boundaries,append native history and DOM restoration. ONE absent fullprofile,failed/new-only closures,actual100coverage,no passing replay.
+
+## Verification
+
+Pending implementation and validation.
+
+## Rollback Plan
+
+Revert semantic task without rewriting history.
+
+## Findings
+
+Previous144 verifiedprogress DONE;currentmain86365df3 clean,parentonlyactive,direct,userinstructionsabsent,fourmatchedpolicies. Native edtwin2146/2223 gives liststart priority then tableNextCell/PrevCell,2801 callsGoNextCell(!readonly). trvltbl39 forbidsappendwithmark/appendfalse,appendslastrow then moves;swcrsr2198 traverses actualcellsections/count and landsfirstcontent0,markretained. ndtbl1871/untbl1502 ownnative row/undo,swtable130 copies firstparagraph style/directitems,emptycontent;tblrwcl349 copiesrowgeometry. Local hasno tableTab owner,solebrowserdefaultfocus,table model AppendRow only. First guessed wrtsh-table-cursor andnativeport paths absent;bounded actualfiles resolved,read-onlyqueries,no mutation. Scope uses nativeflatcellboundary and retainedsectionhistory;full nativeSwCursorShell/DocInsertRow/merged/protected/formula/border/redline remainunverified,not goalpromotion. Standing usergoal/UI mandate authorizes thisinrepo localtask.
