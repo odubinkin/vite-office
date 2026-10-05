@@ -1,0 +1,19 @@
+{
+  "reviewer": "same coding agent in explicit EVALUATOR role; no independent reviewer claimed",
+  "semanticCommit": "5ac7b6f5bb2a5eecbfe1f650394c2297fdd140a2",
+  "base": "730f9dfb70294c1f77311f0a74bb977cddfabceb",
+  "scopePaths": [
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/core/undo/native-insert-node-index.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/edit/eddel.ts"
+  ],
+  "reviewedSemanticDiffBytes": 83933,
+  "reviewedSemanticDiffSHA256": "fd22d4d49f179e9934bdcc9c80f0ae447e4135cc239d8ad7a18852d660bf603d",
+  "verdict": "pass",
+  "evidence": "Pinned native unins constructor m_nNode/m_rDoc, CanGrouping numeric index/content and Undo/Redo node resolution inspected. Represented insertion no longer targets retained paragraph object, current replacement/native body and cell paths/grouping/format/pending snapshots verified. Entire shell activeParagraph cache plus8writes removed; native displayed persistent cursor owns current paragraph. Registered final SwPosition preserves reversed own-cell and partial table deletion through mutation with finally disposal.12new cases,409prior test files byte-identical,250states/defaults/exceptions/prior evidence preserved;6paths/3owners. ONE absent full profile:12245app pass4fail/12249,109inventory,5scripts,120Chromium; only4failed plus1new closure5pass23skipped. Actual final app/inventory100% L/S/F/B from source-identified initial/current closure counters; no passing replay.5restored audits0semantic violations, doctor/routing pass, AP bounded evidence. No fullmodule/broad completion.",
+  "validationLimit": "Represented insertion target numeric ownership and current body/cell grouping/history behavior only. Existing formatted fragment/start-offset/native insertion items remain portable payload contracts; full maText/MoveToUndoNds/nontext/append/RSID/redline lifetimes, other action payload identities and retained split node bridge remain unverified. Shell redundant active paragraph cache completely removed, actual displayed cursor owns current paragraph. Sequential deletion carries chosen registered final SwPosition through mutation, reversed/partial caret verified without old test edits.120Chromium pass at initial variant; final shell/deletion changes validated by failed/new-only native cases and changed no-emit statics, browser passing cases not replayed. Conscious IO/recovery exceptions retained; no whole-module/broad promotion.",
+  "residualRisk": "120Chromium passed initial variant; final shell/deletion changes checked by native failed/new-only cases and no-emit changed statics, no passing Chromium replay and no full final browser source variant claim. Complete native insertion maText/undo-area/nontext/append/RSID/redline semantics, other action payload identities and retained split trailing bridge remain open. Conscious IO/recovery exceptions preserved."
+}

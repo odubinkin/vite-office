@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610051742-WTVMYA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-05T18:02:33.997Z",
+  "verdict": "pass",
+  "summary": "Exact semantic5ac7b6f5bb2a passes bounded native insertion/current shell owner and represented table endpoint integration contract; broad parity remains open.",
+  "evaluated_sha": "5ac7b6f5bb2a5eecbfe1f650394c2297fdd140a2",
+  "blueprint_digest": "82cd5e66aeed960d65938add86099ed5d358209a9f52a2f0cf1c0469b21abbf2",
+  "findings": [
+    "Same-agent EVALUATOR reviewed exact semantic diff and evidence.12new,409prior tests unchanged,250metadata states/defaults/exceptions preserved. ONE absent full profile and4failed+1new closure, no passing replay. Actual app/inventory100% source-aligned counters,6paths/3owners,5restored source audits0violations.120Chromium initial variant evidence bounded explicitly."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610051742-WTVMYA/README.md",
+    ".agentplane/tasks/202610051742-WTVMYA/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610051742-WTVMYA/evidence/scope-audit.json",
+    ".agentplane/tasks/202610051742-WTVMYA/evidence/final-coverage.json",
+    ".agentplane/tasks/202610051742-WTVMYA/evidence/closure-profile.json",
+    ".agentplane/tasks/202610051742-WTVMYA/evidence/restored-source-audits.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Final shell/deletion integration after120passed initial Chromium checked only via native failed/new cases and changed no-emit statics; passing browser cases not replayed, no full final browser variant claim. Full insertion undo-area/maText/nontext/append/RSID/redline, other payload identities and retained split node bridge remain unverified."
+  ]
+}
