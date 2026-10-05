@@ -1,0 +1,46 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-table-ring-continue.spec.ts --grep=^Writer restarted table row Add to List retains live selection and atomic history$ --reporter=list,json",
+      "profile": "upstream-absent genuinely new restart browser case only on final changed-source bundle",
+      "exit": 1,
+      "bytes": 354,
+      "sha256": "8c2cbd8f75af994850808b0fda53ac8cbc3cb00b5b20cc18500c58c577cf2dba",
+      "caseCounts": {
+        "startTime": "2026-10-05T20:34:47.917Z",
+        "duration": 595.672,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "executedCases": [],
+      "failedCases": [],
+      "errors": [
+        "No tests found: strict title anchor did not match Playwright full title."
+      ]
+    },
+    {
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-table-ring-continue.spec.ts --grep=(?:^|\\s)Writer restarted table row Add to List retains live selection and atomic history$ --reporter=list,json",
+      "profile": "upstream-absent genuinely new restart browser case only on final changed-source bundle",
+      "exit": 1,
+      "bytes": 3234,
+      "sha256": "a5c15868b233ee563075b7098bb18c70c38ab6af5c22c75921c162fa4424870f",
+      "caseCounts": {
+        "startTime": "2026-10-05T20:35:38.167Z",
+        "duration": 31205.563000000002,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer restarted table row Add to List retains live selection and atomic history"
+      ],
+      "failedCases": [
+        "writer-table-ring-continue.spec.ts > Writer restarted table row Add to List retains live selection and atomic history"
+      ]
+    }
+  ]
+}

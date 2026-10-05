@@ -1,0 +1,20 @@
+[
+  {
+    "path": "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "initialSHA256": "7509308bb9b3454b010787a6a51cffa191abf0982845c5730f2dd0244e0be2b8",
+    "initialSourceOrigin": "actual initial profile source copy in ignored appcache",
+    "finalSHA256": "5945065a64f27089a644ad3b8bd04eb0f4494b2223539dd97adf0f018e20bcfb"
+  },
+  {
+    "path": "apps/office/src/sw/source/core/crsr/pam.ts",
+    "initialSHA256": "95f06a1ea58302a42918dff923e1ad6b7bce46972219cfe34d03fd6ab49b3766",
+    "initialSourceOrigin": "exact initial unchanged base blob c2d9b3d9c3ddd1e5e47c5bee7117a7a1bdbd3ae3",
+    "finalSHA256": "0c545e10373d983eb01d64bbff44c63b4b11786924943e431bc596b9b4075c5b"
+  },
+  {
+    "path": "apps/office/src/sw/source/core/bastyp/index.ts",
+    "initialSHA256": "21eba98bffc6ba1eb8969caa9748982574734de19eb1ea0ca14a5ef9d88c1fc2",
+    "initialSourceOrigin": "exact initial unchanged base blob c2d9b3d9c3ddd1e5e47c5bee7117a7a1bdbd3ae3",
+    "finalSHA256": "0d7b227a3d57a69eae9faaaa7a5fea6f42002cb8d3cc52db02a05a987ddb5943"
+  }
+]

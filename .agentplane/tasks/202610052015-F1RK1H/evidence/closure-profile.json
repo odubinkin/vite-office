@@ -1,0 +1,56 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/edit/native-list-continuation-ring.test.ts --testNamePattern=^(?:native continuation owns every table ring row/numbered/different|native continuation owns every table ring row/bullet/different|native continuation owns every table ring column/numbered/different|native continuation owns every table ring column/bullet/different|native continuation traverses sparse body rings without changing intervening sections|native normalized restart flags reject structural ring end points without publishing history|native generic positions and clones keep structural node identity without a content registry|native nullable content index detaches and re-registers its native callback owner|native grouped restart initialization retains the displayed cursor and all live table rings)$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/F1RK1H.closure-app-results.json",
+      "profile": "upstream-absent original failed cases only",
+      "exit": 0,
+      "bytes": 1731,
+      "sha256": "4a335e8dd12e9f36745a9498baf1db1dcf17b37e0de949e98240d1d31ba87f05",
+      "caseCounts": {
+        "passed": 9,
+        "failed": 0,
+        "total": 25
+      },
+      "failedCases": [],
+      "executedCases": [
+        "native continuation owns every table ring row/numbered/different",
+        "native continuation owns every table ring row/bullet/different",
+        "native continuation owns every table ring column/numbered/different",
+        "native continuation owns every table ring column/bullet/different",
+        "native continuation traverses sparse body rings without changing intervening sections",
+        "native normalized restart flags reject structural ring end points without publishing history",
+        "native generic positions and clones keep structural node identity without a content registry",
+        "native nullable content index detaches and re-registers its native callback owner",
+        "native grouped restart initialization retains the displayed cursor and all live table rings"
+      ],
+      "skippedCases": [
+        "native continuation owns every table ring row/numbered/same",
+        "native continuation owns every table ring row/numbered/plain",
+        "native continuation owns every table ring row/bullet/same",
+        "native continuation owns every table ring row/bullet/plain",
+        "native continuation owns every table ring column/numbered/same",
+        "native continuation owns every table ring column/numbered/plain",
+        "native continuation owns every table ring column/bullet/same",
+        "native continuation owns every table ring column/bullet/plain",
+        "native restart flag primitive and numeric history preserve unrelated values flag=false",
+        "native restart flag primitive and numeric history preserve unrelated values flag=true",
+        "native restart flags use normalized ring end points row",
+        "native restart flags use normalized ring end points column",
+        "native restart guards ignore structural and plain positions and reject foreign ownership",
+        "native continuation stops at an outline list rather than skipping to an older ordinary list",
+        "native continuation notices a changed later table ring when the first box is already in the prior list",
+        "native normalized restart flags skip plain table endpoints and retain eligible history"
+      ],
+      "productionSHA256": {
+        "apps/office/src/sw/source/core/edit/ednumber.ts": "5945065a64f27089a644ad3b8bd04eb0f4494b2223539dd97adf0f018e20bcfb",
+        "apps/office/src/sw/source/core/doc/doc.ts": "762de2ed866665696051b0cfed9fd0f9df9d6fb28dcdc8e675bc3b744d233fe2",
+        "apps/office/src/sw/source/core/undo/unnum.ts": "148445011285fa774ab7cafdd57988f030dcf40c076ddd723f3ca7444334a837",
+        "apps/office/src/sw/source/uibase/shells/listsh.ts": "205459a947aed25e4dc8232ed830fa686099672af20010bf5ab62d499c090d48",
+        "apps/office/src/sw/source/core/crsr/pam.ts": "0c545e10373d983eb01d64bbff44c63b4b11786924943e431bc596b9b4075c5b",
+        "apps/office/src/sw/source/core/bastyp/index.ts": "0d7b227a3d57a69eae9faaaa7a5fea6f42002cb8d3cc52db02a05a987ddb5943"
+      }
+    }
+  ]
+}

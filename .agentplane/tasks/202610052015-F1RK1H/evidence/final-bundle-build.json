@@ -1,0 +1,20 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run build --workspace @vite-office/office",
+      "profile": "upstream-absent final changed-source bundle for preview-only genuinely new restart Chromium case",
+      "exit": 0,
+      "bytes": 848,
+      "sha256": "6708ff93d5d070f495dd8bb0b00829a7ee6966db6651e402379df3894f403b0a",
+      "productionSHA256": {
+        "apps/office/src/sw/source/core/edit/ednumber.ts": "5945065a64f27089a644ad3b8bd04eb0f4494b2223539dd97adf0f018e20bcfb",
+        "apps/office/src/sw/source/core/doc/doc.ts": "762de2ed866665696051b0cfed9fd0f9df9d6fb28dcdc8e675bc3b744d233fe2",
+        "apps/office/src/sw/source/core/undo/unnum.ts": "148445011285fa774ab7cafdd57988f030dcf40c076ddd723f3ca7444334a837",
+        "apps/office/src/sw/source/uibase/shells/listsh.ts": "205459a947aed25e4dc8232ed830fa686099672af20010bf5ab62d499c090d48",
+        "apps/office/src/sw/source/core/crsr/pam.ts": "0c545e10373d983eb01d64bbff44c63b4b11786924943e431bc596b9b4075c5b",
+        "apps/office/src/sw/source/core/bastyp/index.ts": "0d7b227a3d57a69eae9faaaa7a5fea6f42002cb8d3cc52db02a05a987ddb5943"
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/bastyp/index.ts"
+  ],
+  "counterTransfer": "Only actual counters; changed existing owners align unchanged contiguous locations against exact initial variant source hashes; new scope owners retain original base bytes. Changed/crossing and new helper locations require actual failed/new-only closure counters; no passing replay.",
+  "carried": {
+    "statements": 327,
+    "functions": 67,
+    "branches": 200
+  },
+  "summary": {
+    "lines": {
+      "total": 12644,
+      "covered": 12644,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 13853,
+      "covered": 13853,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3393,
+      "covered": 3393,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10302,
+      "covered": 10302,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialMapSHA256": "1768fe0068abd3ebfb4b5577b6b732f918e6c5253beed00437c458d3a6d8dfe6",
+  "finalMapSHA256": "009149f8ef801dd4046889de8c7bd0c862a29678ef70c9e5453b9056b7b33c92",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "5945065a64f27089a644ad3b8bd04eb0f4494b2223539dd97adf0f018e20bcfb",
+    "apps/office/src/sw/source/core/doc/doc.ts": "762de2ed866665696051b0cfed9fd0f9df9d6fb28dcdc8e675bc3b744d233fe2",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "148445011285fa774ab7cafdd57988f030dcf40c076ddd723f3ca7444334a837",
+    "apps/office/src/sw/source/uibase/shells/listsh.ts": "205459a947aed25e4dc8232ed830fa686099672af20010bf5ab62d499c090d48",
+    "apps/office/src/sw/source/core/crsr/pam.ts": "0c545e10373d983eb01d64bbff44c63b4b11786924943e431bc596b9b4075c5b",
+    "apps/office/src/sw/source/core/bastyp/index.ts": "0d7b227a3d57a69eae9faaaa7a5fea6f42002cb8d3cc52db02a05a987ddb5943"
+  }
+}
