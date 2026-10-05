@@ -1,0 +1,64 @@
+{
+  "vendorRestored": true,
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/text/atrstck.ts": "b7a22fdcc4ee4b000acfb47c24c4463641b5f11154c4bc8dae59fdda502dde34",
+    "apps/office/src/sw/source/core/text/itratr.ts": "ffe24fcf6e06fc822e628e66fddf9617fdb863c61b0d9d97101241b2061d9335",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts": "e893aa58b2fa06bf352e8bf0bdf77c8547e42336cffee2c057b3ff4fdd348807",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "f60f6a46501a4537a9177e3892b37fc522e19dc1ac920bdc5e1d93e331f5b7fa"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "genuinely-new-and-still-failed-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "79cd92760870b247691c74b22e92ac3f8aa1e8f7589f565b2e29ca4697f01693"
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/text/native-attribute-iteration.test.ts --testNamePattern=^native attribute handler reinitializes defaults without clearing active owners$ --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/W6AAHH.final-closure-app-results.json",
+      "profile": "genuinely-new-and-still-failed-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1102,
+      "sha256": "f1bd06ee6f964c4f95c8cdba50c8f6407ccd284f94747624e413ae7292042b81",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 17,
+        "total": 18
+      },
+      "executedCases": [
+        "native attribute handler reinitializes defaults without clearing active owners"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "1dcce21aa5a087fc70d5bedcb990129e41005f128bb4b0da1793da73c4b14d73"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-attribute-portions.spec.ts --reporter=list,json",
+      "profile": "genuinely-new-and-still-failed-only-upstream-absent",
+      "exit": 1,
+      "bytes": 12535,
+      "sha256": "4ae1b54a8d05a52fe84682d9ddefa310b9a72f8d31c17bb81ec28ba9c0a48c1f",
+      "caseCounts": {
+        "startTime": "2026-10-05T21:42:16.752Z",
+        "duration": 62164.585,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer native body and cell portions retain formatting and editing width=1280",
+        "Writer native body and cell portions retain formatting and editing width=390"
+      ],
+      "failedCases": [
+        "Writer native body and cell portions retain formatting and editing width=1280",
+        "Writer native body and cell portions retain formatting and editing width=390"
+      ],
+      "errors": []
+    }
+  ]
+}
