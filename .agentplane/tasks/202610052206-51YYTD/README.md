@@ -1,10 +1,11 @@
 ---
 id: "202610052206-51YYTD"
 title: "Route Writer paragraph Tab through native numbering ownership"
-status: "DOING"
+result_summary: "Implemented represented native ordinary paragraph Tab routing: remove table-only HandleTableTab contract and embedded numbering heuristic; number.ts NumDownChangesIndent owns actual format decision, SwEditWin owns body/list/cell priority and existing shell typing/NumUpDown/traversal/history.27newapp2newChromium cases pass; final12536app109inventory5scripts139distinctChromium,100%app/inventorycoverage. ONE absent profile then2originalfailedfixture scenarios only; final product bytes unchanged.426prior tests424identical2exactsourceconfirmed corrections;253semantic states/defaults/classes/IOexceptions/evidence preserved; all statics/sourceaudits/scope/APscan/doctor/routingpass and sameagent quality 20261005-222309179-recovery-context at exact semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d. Outline/fullKeyInput/full core/UI/list/table parity remainunverified,conscioussave/open/recovery deviations preserved,parentDOING/goalACTIVE."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610052206-51YYTD/evidence/browser-closure-profile.json"
   findings:
     - "Native number.ts owns actual NumDownChangesIndent; SwEditWin unifies body/list/cell key priority, native typing/numbering/traversal/history, removes old table-only contract and embedded heuristic.27 newapp2 newChromium cases pass; final12536app109inventory5scripts139distinctChromium. ONE absent full profile plus only2failedfixture cases; productionbytesunchanged actual100%app/inventorycoverage.426prior tests424identical2exact sourceconfirmed corrections;253states/defaults/classes/IOexceptions/evidence preserved; sixstatics/five restoredsourceaudits/scope/APscan/doctor/routingpass. No independent reviewer claimed."
-commit: null
+commit:
+  hash: "56ae393aac9f9d71a488f427c7ffdb7aaa4ace72"
+  message: "🧩 51YYTD task: record verified native paragraph Tab result"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved iteration166 native paragraph Tab routing under standing explicit iterative authorization."
+  -
+    author: "CODER"
+    body: "Verified: native body/list/cell Tab now shares SwEditWin ownership and native numbering decision, with real history and DOM/browser evidence."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native paragraph/list/cell Tab routing at semantic 0d207b4ed1130786aa557c92d435cdf6826b6a0d; all declared checks and sameagent exactSHA quality 20261005-222309179-recovery-context pass. ONE absent profile; final12536app109inventory5scripts139Chromium,100%app/inventorycoverage.27newapp2newbrowser;426prior tests424identical2exactsourceconfirmed corrections. Outline/fullKeyInput/broadparity unverified; consciousIOdeviations preserved."
+  -
+    type: "status"
+    at: "2026-10-05T22:24:12.563Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native body/list/cell Tab now shares SwEditWin ownership and native numbering decision, with real history and DOM/browser evidence."
 doc_version: 3
-doc_updated_at: "2026-10-05T22:23:52.744Z"
+doc_updated_at: "2026-10-05T22:24:12.565Z"
 doc_updated_by: "CODER"
 description: "Iteration166: unify represented ordinary body/list/table Tab and ShiftTab routing, extract native numfunc::NumDownChangesIndent into number.ts, remove table-only event adapter contract; assigned outline style routing remains explicitly unsupported pending native OutlineUpDown. Standing iterative goal authorization; one executable leaf."
 sections:
@@ -129,6 +142,10 @@ sections:
     Command: actual final coverage integrity audit. Result:100%app/inventoryL/S/F/B. Evidence: app12731L/13952S/3407F/10376B and inventory1464/1523/384/1080; exact original maps/source hashes retain actual counters, no fabricated or merged counters, source bytes unchanged. Actual maps/results only ignored appcache, AP bounded English prose/counts/hashes/outcomes/exactfailednames.
     Command: five restored source audits/scope/prior-test/metadata/sourcehash/APignored-inclusive/doctor/routing/diffcheck. Result: pass. Evidence: source-provenance initially rejected newly appended namespace-qualified marker because C++ defines the function inside namespace without qualifier; corrected only two new metadata symbol strings to exact native NumDownChangesIndent. Only failed provenance gate then remaining first-run invariants/parity, no passing audits replay.253 prior semantic states/defaults/classes/IOexceptions/evidence preserved, evidence/responsibility additions for3 owners; no new modules/full parity promotion. AP4397files0forbidden before closure;doctor0errors2pre-existing warnings; routingpass. No upstream sources/helpers/Python/probes/binaries/rawdiffs/sourceframes/rawdiagnostics in AP, vendor restored.
     Limits: eligible assigned-outline paragraph-at-start operations remain explicitly unsupported pending native OutlineUpDown, preserving prior fallback rather than silently inserting text. Native null/nontext cursor fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter/full KeyInput and full core/UI/list/table parity remain unverified. Conscious save/open/recovery deviations unchanged. Same current agent performed explicit EVALUATOR exact semantic SHA 0d207b4ed1130786aa557c92d435cdf6826b6a0d pass via quality 20261005-222309179-recovery-context, without independent-reviewer claim; parent DOING/goal ACTIVE.
+extensions:
+  implementation_commit:
+    hash: "0d207b4ed1130786aa557c92d435cdf6826b6a0d"
+    message: "🧩 51YYTD code: route paragraph Tab through native numbering owners"
 id_source: "generated"
 ---
 ## Summary
