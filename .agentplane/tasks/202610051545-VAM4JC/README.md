@@ -4,7 +4,7 @@ title: "Apply native list and follow-style defaults when splitting paragraphs"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-05T16:09:39.919Z"
+  updated_by: "CODER"
+  note: "Verified semantic1213bf81 native logical split list/style defaults.18new/12186distinct app,109inventory,5scripts,120Chromium,6statics and5restored source audits pass; actual100% L/S/F/B, final code hashes equal full build. ONE absent profile then only original2failed/remaining1failed retries.406prior404unchanged/2exactsource style contracts,250states/defaults/evidence preserved. Same-agent exact-SHA EVALUATOR pass;0forbidden AP artifacts. Physical split/heading Undo history/full UI/table parity open."
   attempts: 0
 quality_review:
   state: "pass"
@@ -78,8 +78,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: authoritative406prior files,404unchanged and2bounded source style corrections; verification criteria unchanged."
+  -
+    type: "verify"
+    at: "2026-10-05T16:09:39.919Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified semantic1213bf81 native logical split list/style defaults.18new/12186distinct app,109inventory,5scripts,120Chromium,6statics and5restored source audits pass; actual100% L/S/F/B, final code hashes equal full build. ONE absent profile then only original2failed/remaining1failed retries.406prior404unchanged/2exactsource style contracts,250states/defaults/evidence preserved. Same-agent exact-SHA EVALUATOR pass;0forbidden AP artifacts. Physical split/heading Undo history/full UI/table parity open."
 doc_version: 3
-doc_updated_at: "2026-10-05T16:07:30.247Z"
+doc_updated_at: "2026-10-05T16:09:40.006Z"
 doc_updated_by: "CODER"
 description: "Iteration154 source-confirmed core split defaults serving UI Enter; logical prefix/suffix list ownership, conditional follow style, source-independent history evidence."
 sections:
@@ -95,6 +101,36 @@ sections:
     6. Authoritative baseline count406prior test files;404byte-identical and exactly2source-confirmed correction files. Numerical clarification only, no verification/scope relaxation.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-05T16:09:39.919Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified semantic1213bf81 native logical split list/style defaults.18new/12186distinct app,109inventory,5scripts,120Chromium,6statics and5restored source audits pass; actual100% L/S/F/B, final code hashes equal full build. ONE absent profile then only original2failed/remaining1failed retries.406prior404unchanged/2exactsource style contracts,250states/defaults/evidence preserved. Same-agent exact-SHA EVALUATOR pass;0forbidden AP artifacts. Physical split/heading Undo history/full UI/table parity open.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T16:07:30.247Z, excerpt_hash=sha256:d1f8b03118804a25a7366047a07c6dee421512621291420ff1813ee9a32df27f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051545-VAM4JC/blueprint/resolved-snapshot.json
+    - old_digest: 062fa7c3f46c556b7c299e39f9dda8a48285ab9511ee644e9541045cff13bc3a
+    - current_digest: 062fa7c3f46c556b7c299e39f9dda8a48285ab9511ee644e9541045cff13bc3a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610051545-VAM4JC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610051545-VAM4JC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the scoped semantic implementation commit and record follow-up through a new task; no history rewrite."
   Findings: |-
@@ -103,6 +139,10 @@ sections:
     Command: ONE sequential full upstream-absent build/app/inventory/scripts/Chromium profile with coverage.reportOnFailure. Result: build passed; app12184passed/2failed of12186,109inventory,5scripts,120Chromium passed. Exact failures persisted before assertions in absent-profile.json. Two prior cases encoded source-contradicted interior heading follow-style defaults. Native ndtxt.cxx MakeNewTextNode returns before follow change when !bChgFollow, while SplitContentNode sets bChgFollow only at end. writer-model exact trailing style expectation becomesheading-1; browser exact continuation CSS becomes18pt/normal/700 and literalheading-1selector. Failed-only closure: core case passed once; UI exposed remaining old line-height1.3 expectation, changed to existing heading1.15 under same approved CSS refinement, then exactly that remaining case passed. Other25/12cases correctly recordedskipped; no passed old/new/native/inventory/browser/build/gate replay. All18new passed initial cases untouched. All final production hashes equal original full build/profile, so final code fully covered by initial build. Actual unchanged-source coverage counters merged initial+2failed-only+1remaining-failed-only maps: app/inventory L/S/F/B100%, app12306lines/13474statements/3372functions/10047branches. All maps only ignored appcache; no fabricated counters/remapping.
     Command: restored source resources --check/source-tree/source-provenance/invariants/parity. Result: all5pass,0semantic violations. Evidence: restored-source-audits.json. Scope audit:406prior test files,404byte-identical; exact only allowed style/CSS values and one selector assertion in remaining2;250semantic states/defaults/classifications/exceptions and prior evidence preserved. Earlier count405was previous153base before new153test; corrected to154authoritative406without relaxed criteria. AP scanner first inline call used ESM for a CJS snippet and failed before inspection; CJS bounded fallback passed4191files/0forbidden. No upstream copies/helpers/Python/probes/scripts/raw diffs/diagnostics saved in AP. Vendor restored after every profile, no outside/global/network/subagents.
     Residuals: native physical new-prefix/original-suffix node identity remains opposite portable original-prefix/new-suffix. Complete CutImpl/index/frame/client/redline/fly lifetimes and native undo-area remain unverified. Native page/break/keep/split/auto-frame resets not implemented by this bounded list/style leaf. Heading split Undo must restore source normalization attribute history, stillunverified. Full list editing/selection/indent/empty-item behavior and table merged/nested/protected/layout/import/clipboard remain unverified. Conscious save/open/recovery deviations preserved. No whole-module or broad goal completion. Next bounded heading split Undo native attribute history or native physical split ownership/UI list behavior.
+
+    - Observation: Two old tests assumed follow-body styles for an interior heading split; first failed-only retry also exposed its old line-height expectation.
+      Impact: Existing style expectations contradicted native end-only bChgFollow. Full profile18new passed and2oldfailed; passing profiles/cases were not replayed.
+      Resolution: Native style behavior retained; bounded literal heading CSS/style assertions corrected under approved scope, each remaining failure retested only. Actual maps merged100%; final production unchanged after original build. Residual physical ownership and heading Undo history documented.
 id_source: "generated"
 ---
 ## Summary
@@ -129,6 +169,36 @@ Iteration154 atomic represented paragraph split list/style defaults. Source ndtx
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-05T16:09:39.919Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified semantic1213bf81 native logical split list/style defaults.18new/12186distinct app,109inventory,5scripts,120Chromium,6statics and5restored source audits pass; actual100% L/S/F/B, final code hashes equal full build. ONE absent profile then only original2failed/remaining1failed retries.406prior404unchanged/2exactsource style contracts,250states/defaults/evidence preserved. Same-agent exact-SHA EVALUATOR pass;0forbidden AP artifacts. Physical split/heading Undo history/full UI/table parity open.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-05T16:07:30.247Z, excerpt_hash=sha256:d1f8b03118804a25a7366047a07c6dee421512621291420ff1813ee9a32df27f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610051545-VAM4JC/blueprint/resolved-snapshot.json
+- old_digest: 062fa7c3f46c556b7c299e39f9dda8a48285ab9511ee644e9541045cff13bc3a
+- current_digest: 062fa7c3f46c556b7c299e39f9dda8a48285ab9511ee644e9541045cff13bc3a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610051545-VAM4JC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610051545-VAM4JC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -142,3 +212,7 @@ Command: six declared npm statics. Result: pass all6first runs. Evidence: static
 Command: ONE sequential full upstream-absent build/app/inventory/scripts/Chromium profile with coverage.reportOnFailure. Result: build passed; app12184passed/2failed of12186,109inventory,5scripts,120Chromium passed. Exact failures persisted before assertions in absent-profile.json. Two prior cases encoded source-contradicted interior heading follow-style defaults. Native ndtxt.cxx MakeNewTextNode returns before follow change when !bChgFollow, while SplitContentNode sets bChgFollow only at end. writer-model exact trailing style expectation becomesheading-1; browser exact continuation CSS becomes18pt/normal/700 and literalheading-1selector. Failed-only closure: core case passed once; UI exposed remaining old line-height1.3 expectation, changed to existing heading1.15 under same approved CSS refinement, then exactly that remaining case passed. Other25/12cases correctly recordedskipped; no passed old/new/native/inventory/browser/build/gate replay. All18new passed initial cases untouched. All final production hashes equal original full build/profile, so final code fully covered by initial build. Actual unchanged-source coverage counters merged initial+2failed-only+1remaining-failed-only maps: app/inventory L/S/F/B100%, app12306lines/13474statements/3372functions/10047branches. All maps only ignored appcache; no fabricated counters/remapping.
 Command: restored source resources --check/source-tree/source-provenance/invariants/parity. Result: all5pass,0semantic violations. Evidence: restored-source-audits.json. Scope audit:406prior test files,404byte-identical; exact only allowed style/CSS values and one selector assertion in remaining2;250semantic states/defaults/classifications/exceptions and prior evidence preserved. Earlier count405was previous153base before new153test; corrected to154authoritative406without relaxed criteria. AP scanner first inline call used ESM for a CJS snippet and failed before inspection; CJS bounded fallback passed4191files/0forbidden. No upstream copies/helpers/Python/probes/scripts/raw diffs/diagnostics saved in AP. Vendor restored after every profile, no outside/global/network/subagents.
 Residuals: native physical new-prefix/original-suffix node identity remains opposite portable original-prefix/new-suffix. Complete CutImpl/index/frame/client/redline/fly lifetimes and native undo-area remain unverified. Native page/break/keep/split/auto-frame resets not implemented by this bounded list/style leaf. Heading split Undo must restore source normalization attribute history, stillunverified. Full list editing/selection/indent/empty-item behavior and table merged/nested/protected/layout/import/clipboard remain unverified. Conscious save/open/recovery deviations preserved. No whole-module or broad goal completion. Next bounded heading split Undo native attribute history or native physical split ownership/UI list behavior.
+
+- Observation: Two old tests assumed follow-body styles for an interior heading split; first failed-only retry also exposed its old line-height expectation.
+  Impact: Existing style expectations contradicted native end-only bChgFollow. Full profile18new passed and2oldfailed; passing profiles/cases were not replayed.
+  Resolution: Native style behavior retained; bounded literal heading CSS/style assertions corrected under approved scope, each remaining failure retested only. Actual maps merged100%; final production unchanged after original build. Residual physical ownership and heading Undo history documented.
