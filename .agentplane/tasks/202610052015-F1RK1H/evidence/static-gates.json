@@ -1,0 +1,44 @@
+[
+  {
+    "command": "npm run format:check",
+    "exit": 0,
+    "bytes": 122,
+    "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+  },
+  {
+    "command": "npm run lint",
+    "exit": 0,
+    "bytes": 55,
+    "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 2,
+    "bytes": 847,
+    "sha256": "1f361ef19bca9671880252cb845aecfb61db188e0bac25181eb3ecb2865045e2"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "bytes": 240,
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "command": "npm run check:dependencies",
+    "exit": 0,
+    "bytes": 189,
+    "sha256": "d9985ec111244d64ff4efd09d55da19d7e3c6ac5aa403286b744fa29e3e09569"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 0,
+    "bytes": 119,
+    "sha256": "d185a167c665aca0c01d3052dc8fb5c4bce7ccb7551c83fc4199d3667b1767fa"
+  },
+  {
+    "command": "npm run check:file-size",
+    "exit": 0,
+    "bytes": 3320,
+    "sha256": "5fe3d346fe679c95290a28a24d2023cdcef2e168d4f748929a05e8834df27d3e"
+  }
+]
