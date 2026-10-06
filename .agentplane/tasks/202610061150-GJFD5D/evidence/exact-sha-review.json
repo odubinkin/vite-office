@@ -1,0 +1,161 @@
+{
+  "evaluatedSHA": "0258f8f37a5bed79fd39c15c34a6b789e44181f4",
+  "reviewer": "Same current agent in EVALUATOR role; no independent review claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12878,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 202
+  },
+  "originalFullProfile": {
+    "applicationPassed": 12870,
+    "applicationFailed": 4,
+    "chromiumPassed": 200,
+    "chromiumFailed": 2
+  },
+  "focusedClosureScope": {
+    "originalAppFailures": 4,
+    "newGenuineCases": 4,
+    "originalChromeFailures": 2,
+    "appClosures": [
+      {
+        "kind": "app-closure1",
+        "actualCompletedCases": 6,
+        "filterSkips": 3,
+        "passed": 6,
+        "failed": 0
+      },
+      {
+        "kind": "app-closure2",
+        "actualCompletedCases": 2,
+        "filterSkips": 9,
+        "passed": 0,
+        "failed": 2
+      },
+      {
+        "kind": "app-closure3",
+        "actualCompletedCases": 2,
+        "filterSkips": 9,
+        "passed": 2,
+        "failed": 0
+      }
+    ],
+    "filterSkipsRetained": true,
+    "passingOrFullCaseReplays": 0
+  },
+  "caseIdentity": "file+fullName/title+project when applicable+occurrence; filtered skips never converted to passes",
+  "caseMatrixFailures": [],
+  "initialRuntimeErrors": 0,
+  "implementationSHA256": {
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "dbc860f53ed0dc01299020b6de2d4fa5ac81a4c8c29283c6528fa7829a994109",
+    "apps/office/src/framework/browser/app/desktop.test.tsx": "1f0bb09dacc49922c55750401ba68cab42497b1e8d019f98ba9eb8302c58651d",
+    "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx": "040985dbf39b623b6b5f6d6deb8c4cd7d39a24ee39280abba525354f5f666223",
+    "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx": "07978d5f1ee0ca764e26244c9ae7cb466176207e98a72a7a236ebce2005432eb",
+    "apps/office/e2e/writer-lists.spec.ts": "9033c51bc8ed50fb847c5f67acb6961291c6440a37d3cb51eddefc09b39da79c",
+    "apps/office/e2e/writer-cell-paragraph-format.spec.ts": "ecc61d635b537bd9c8c87cd4310af45ea0a2267ec4556a93a1ff5dc838b039b7",
+    "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx": "07311f6ec6ce07bb693511191ef2f285654dd26c4c12e48c7b02477428818629",
+    "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts": "6f17a715f7eb4ca792cc99ccf687acb95bfdc1274b7ae1b15771f30f990ab506",
+    "docs/program/source-provenance.json": "8db422a1893557179b8f1fa22e146bc0cb65530b3cbd4f929583cb9ddded56c5",
+    "docs/program/parity/runtime-inventory.json": "cf6e51bdcd6f1caa629e3ad9a931ac4325b5f3a59941675641c84809f96fd674",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "5f6a0070ce2f6b98b84f598e83f90cc2f407357f7779fd2eb96654ad2fbde01b"
+  },
+  "coverage": {
+    "application": {
+      "coverage": {
+        "lines": {
+          "total": 13854,
+          "covered": 13854,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15188,
+          "covered": 15188,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3605,
+          "covered": 3605,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11314,
+          "covered": 11314,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "3ee0d795456ba76531b5d77efa64d0fe81f31c83935be48b19fa221c3ecb16a2",
+      "files": 267
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "d5f2a1fd000b5462a8188590d16ab00b4ac2a10e769752172eb72f78196dbd86",
+      "files": 38
+    }
+  },
+  "coverageProof": "266 entire byte-identical source/maps plus4 complete contiguous byte-identical native transfer ranges. Full function declaration/body and enclosing branch/location maps verified; actual counters only; changed ranges use actual focused raw counters.",
+  "pinnedSourceFiles": 3,
+  "priorSemanticRecordsPreserved": 270,
+  "currentSemanticRecords": 270,
+  "oldTestFilesByteIdentical": 480,
+  "sourceContradictingOldDescriptionAssertionFiles": 5,
+  "totalCurrentTestFiles": 487,
+  "parentFindingsPrefix": {
+    "parent": "202609240501-C9TN6M",
+    "prefixLength": 469641,
+    "prefixSHA256": "acbc68e3bf708ac69c96d436f7aefcd2557527573bf1ec64e0de6a7be91ed893",
+    "terminatorRemoved": "Exactly one known CLI output newline; original content preserved."
+  },
+  "findings": [
+    "Synthetic hidden paragraph style/list metadata and per-occurrence description registry removed from shared body/cell/measurement/repeated headline rendering; source accessible description is empty.",
+    "Original cell copy failures exposed body-only document.paragraphs/orderPositions adapter. Native PaM.Start/End/connected text nodes now own transfer range ordering; existing MIME writers retained.",
+    "Actual body/cell forward/reverse selection and clipboard, Ctrl/Meta cell selection, replacement/history, mixed structural graph, empty/foreign/collapsed ranges and complete/partial list transfer exercised.",
+    "New list plain-text oracle initially expected a marker for one complete item; bounded existing ASCII expectation corrected, rich structure/partial assertions retained. Source ASCII export/single-paragraph flags differ from unchanged local multiple-complete-item heuristic; next refactor candidate.",
+    "One full upstream-absent profile, original failures/four genuine new cases only; actual100 coverage; no full/passing replay. Entire prior270 states/defaults/evidence prefixes and conscious I/O/recovery deviations preserved.",
+    "Complete native ASCII/HTML/table topology/ring clipboard, numbering-label selection, line decorations/accessibility/core/UI parity remain unverified."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}
