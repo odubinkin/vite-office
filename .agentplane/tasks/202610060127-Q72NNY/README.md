@@ -4,7 +4,7 @@ title: "Restore native repeated table headlines across page fragments"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T01:56:14.651Z"
+  updated_by: "CODER"
+  note: "Verified native repeated headline count and bounded whole-row follow height/group/fallback,original-node UI painting/editing/cursor and UndoRedo. One full absent profile plus original-failed/new-only and failed-only closure; final12665app109inventory5scripts154Chrome,actual100percent coverage,446prior files unchanged258semantic records preserved. Statics/five restored source audits/scope/AP/governance passed. Same current agent EVALUATOR exact semanticdbd5b849d87364ab88da2775456737db655d52a6 pass. Full native frame/table/core/UI parity unverified,IO deviations unchanged."
   attempts: 0
 quality_review:
   state: "pass"
@@ -52,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Restore source-shaped repeated table headlines in existing native model,page formatter and browser owners under standing approved convergence scope; preserve old tests and IO exceptions."
+  -
+    type: "verify"
+    at: "2026-10-06T01:56:14.651Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native repeated headline count and bounded whole-row follow height/group/fallback,original-node UI painting/editing/cursor and UndoRedo. One full absent profile plus original-failed/new-only and failed-only closure; final12665app109inventory5scripts154Chrome,actual100percent coverage,446prior files unchanged258semantic records preserved. Statics/five restored source audits/scope/AP/governance passed. Same current agent EVALUATOR exact semanticdbd5b849d87364ab88da2775456737db655d52a6 pass. Full native frame/table/core/UI parity unverified,IO deviations unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-06T01:54:58.863Z"
+doc_updated_at: "2026-10-06T01:56:14.709Z"
 doc_updated_by: "CODER"
 description: "Iteration173: source-confirmed existing repeatHeaderRows is ignored by core page flow and browser fragments. Restore native repeated headline count, follow-frame geometry, shared-node painting/editing and source-shaped no repeated row gutter; preserve all previous tests and registered IO exceptions."
 sections:
@@ -78,6 +84,36 @@ sections:
     5. Vendor restored before five source audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Same-agent EVALUATOR exact semantic SHA then recordedverification,meaningfulfinish and whole parent checkpoint; parentDOINGgoalACTIVE.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T01:56:14.651Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native repeated headline count and bounded whole-row follow height/group/fallback,original-node UI painting/editing/cursor and UndoRedo. One full absent profile plus original-failed/new-only and failed-only closure; final12665app109inventory5scripts154Chrome,actual100percent coverage,446prior files unchanged258semantic records preserved. Statics/five restored source audits/scope/AP/governance passed. Same current agent EVALUATOR exact semanticdbd5b849d87364ab88da2775456737db655d52a6 pass. Full native frame/table/core/UI parity unverified,IO deviations unchanged.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T01:54:58.863Z, excerpt_hash=sha256:85f048fa8de49d3a7f6c9578569e2a5e49409b2878011bce59b012d2ec0a9c30
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060127-Q72NNY/blueprint/resolved-snapshot.json
+    - old_digest: 064817806c334040eeda98bed94abc409ae6709663e42610adec7bd01cf329f6
+    - current_digest: 064817806c334040eeda98bed94abc409ae6709663e42610adec7bd01cf329f6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060127-Q72NNY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060127-Q72NNY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's semantic commit; preserve prior task history,old tests and conscious IO exceptions."
   Findings: |-
@@ -120,6 +156,36 @@ Iteration173 under standing approved iterative native core/UI convergence goal, 
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T01:56:14.651Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native repeated headline count and bounded whole-row follow height/group/fallback,original-node UI painting/editing/cursor and UndoRedo. One full absent profile plus original-failed/new-only and failed-only closure; final12665app109inventory5scripts154Chrome,actual100percent coverage,446prior files unchanged258semantic records preserved. Statics/five restored source audits/scope/AP/governance passed. Same current agent EVALUATOR exact semanticdbd5b849d87364ab88da2775456737db655d52a6 pass. Full native frame/table/core/UI parity unverified,IO deviations unchanged.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T01:54:58.863Z, excerpt_hash=sha256:85f048fa8de49d3a7f6c9578569e2a5e49409b2878011bce59b012d2ec0a9c30
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060127-Q72NNY/blueprint/resolved-snapshot.json
+- old_digest: 064817806c334040eeda98bed94abc409ae6709663e42610adec7bd01cf329f6
+- current_digest: 064817806c334040eeda98bed94abc409ae6709663e42610adec7bd01cf329f6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060127-Q72NNY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060127-Q72NNY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
