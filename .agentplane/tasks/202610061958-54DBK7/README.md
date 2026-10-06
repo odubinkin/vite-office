@@ -1,10 +1,11 @@
 ---
 id: "202610061958-54DBK7"
 title: "Port native table text-flow headline state"
-status: "DOING"
+result_summary: "Ported canonical headline Reset/saved-value FillItemSet/range1..100/sensitivity through one native Repeat header control, removed artificial Header and fallback defaults. Tests run once without upstream. Original graph/history/ODT/input verified; approved11paths and prior contracts/exceptions intact. Actual source commit retained; AP-only verification tail06197628e7cf is not implementation."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "Pinned Reset/saved checkbox/count/FillItemSet/sensitivity/native1..100/rounding contracts mapped to core page and one native browser Repeat header control; inherited unchanged original count preserved. Original table/list/cursor/grouped3UndoRedo/ODT/input and Chromium1280/390 evidence passes."
     - "ONE upstream-absent profile13118app109inventory5scripts235Chromium passes0skip/flaky. Initial coverage threshold branch gap closed only using verified whole byte-identical editing-host source/maps with real earlier counters; actual100 app/inventory, no passing/full replay. Provenance callback macro spelling corrected only in two metadata files; original failed gate and changed JSON closure pass, validator unchanged."
     - "11approvedpaths,519old516byte-identical+3known control migrations and only2obsolete source assertion updates;4new523total.276metadata complete prefixes/contracts/defaults/statuses/classifications and registered exceptions intact; complete parent prefix retained; doctor0errors2existing warnings, routing/diff pass; deferred stash retained."
-commit: null
+commit:
+  hash: "3d42da6c92ab390a0cdc4370c39cd70dc17ac939"
+  message: "🚧 54DBK7 code: port native table text-flow headline state"
 comments:
   -
     author: "CODER"
     body: "Start: port native headline checkbox/count Reset and Fill ownership, remove duplicate properties Header layer/default insertion, preserve insertion/old literal acceptance except explicit source migrations; one absent full profile."
+  -
+    author: "CODER"
+    body: "Verified: native table Text Flow headline subset at actual implementation3d42da6c92ab390a0cdc4370c39cd70dc17ac939; one absent profile13118app109inventory5scripts235ChromiumPASS, actual100coverage and same-agent exactSHA qualityPASS, scope/source/DoD clean. Whole parity unverified, parent/goal active."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native headline subset verified at implementation3d42da6c92ab390a0cdc4370c39cd70dc17ac939. Single upstream-absent build13118app109inventory5scripts235ChromiumPASS0skip/flaky; actual100 app/inventory coverage, exact-SHA same-agent EVALUATOR explicitly not independent PASS; source/scope/DoD PASS,17current artifacts0forbidden. Whole parity unverified, parent/goal active."
+  -
+    type: "status"
+    at: "2026-10-06T20:27:04.542Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native table Text Flow headline subset at actual implementation3d42da6c92ab390a0cdc4370c39cd70dc17ac939; one absent profile13118app109inventory5scripts235ChromiumPASS, actual100coverage and same-agent exactSHA qualityPASS, scope/source/DoD clean. Whole parity unverified, parent/goal active."
 doc_version: 3
-doc_updated_at: "2026-10-06T20:26:24.303Z"
+doc_updated_at: "2026-10-06T20:27:04.544Z"
 doc_updated_by: "CODER"
 description: "Replace browser-only dual Header controls in existing Table Properties with native SwTextFlowPage headline checkbox/count Reset/saved-value/FillItemSet contract, sourced from canonical GetRowsToRepeat. Preserve insertion and registered deviations."
 sections:
