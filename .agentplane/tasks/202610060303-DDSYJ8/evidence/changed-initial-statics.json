@@ -1,0 +1,40 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/source/core/undo/untbl.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts apps/office/src/sw/browser/presentation/native-table-properties.test.tsx apps/office/e2e/writer-table-properties-history.spec.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/shells/tabsh.ts apps/office/src/sw/source/core/undo/untbl.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts apps/office/src/sw/browser/presentation/native-table-properties.test.tsx apps/office/e2e/writer-table-properties-history.spec.ts --max-warnings=0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "inline repository JSDoc validator over changed files",
+    "exit": 0,
+    "errorCount": 0
+  },
+  {
+    "command": "inline TypeScript diagnostics over changed files using actual app tsconfig",
+    "exit": 0,
+    "errorCount": 0,
+    "codes": []
+  },
+  {
+    "command": "changed-file unchanged1000-line source limit",
+    "exit": 0,
+    "counts": {
+      "apps/office/src/sw/source/core/frmedt/fetab.ts": 155,
+      "apps/office/src/sw/source/uibase/shells/tabsh.ts": 49,
+      "apps/office/src/sw/source/core/undo/untbl.ts": 155,
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 999,
+      "apps/office/src/sw/browser/presentation/writer-view.tsx": 819,
+      "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": 465,
+      "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": 200,
+      "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": 92,
+      "apps/office/e2e/writer-table-properties-history.spec.ts": 97
+    }
+  }
+]

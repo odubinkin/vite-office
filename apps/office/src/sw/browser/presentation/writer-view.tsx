@@ -46,7 +46,7 @@ import type { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
-import { SwTableCursor } from "../../source/core/crsr/swcrsr";
+import { ItemSetToTableParam } from "../../source/uibase/shells/tabsh";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../sdi/swriter";
@@ -210,55 +210,7 @@ export function WriterWorkbench({
             ).GetIndex(),
           );
       } else if (currentTable !== undefined) {
-        currentTable.SetFormat({
-          ...currentTable.GetFormat(),
-          width: value.width,
-          headerRows: value.headerRows,
-          repeatHeaderRows: value.repeatHeaderRows,
-        });
-        value.columnWidths.forEach(
-          /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-            width,
-            index,
-          ) => currentTable.SetColumnWidth(index, width),
-        );
-        const cursor = view.GetWrtShell().getShellCursor(),
-          section = cursor.GetPoint().GetNode().StartOfSectionNode();
-        const rows = currentTable
-          .GetTabLines()
-          .filter(
-            /** Projects actual native table ownership. @param row - Current owner. @returns Operation result. */ (
-              row,
-            ) =>
-              row
-                .GetTabBoxes()
-                .some(
-                  /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
-                    box,
-                  ) =>
-                    cursor instanceof SwTableCursor
-                      ? cursor.GetSelectedBoxes().includes(box)
-                      : box.GetStartNode() === section,
-                ),
-          );
-        for (const row of rows) {
-          row.SetFormat({
-            ...row.GetFormat(),
-            minHeight: value.minRowHeight,
-            keepTogether: value.dontSplit,
-          });
-          for (const cell of row.GetTabBoxes())
-            cell.SetFormat({
-              ...cell.GetFormat(),
-              padding: value.padding,
-              border: value.border,
-              verticalAlign: value.verticalAlign,
-            });
-        }
-        activeDocument.NotifyModelChange({
-          kind: "node-content-changed",
-          nodeIndex: currentTable.GetTableNode().GetIndex(),
-        });
+        ItemSetToTableParam(view.GetWrtShell(), value);
       }
       setTableDialog(undefined);
     };

@@ -1,0 +1,32 @@
+{
+  "result": "pass",
+  "approvedSemanticPaths": [
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx",
+    "apps/office/e2e/writer-table-properties-history.spec.ts"
+  ],
+  "productionOwners": 6,
+  "newNativeOwners": 2,
+  "priorTestsByteIdentical": 456,
+  "priorSemanticContractsPreserved": 259,
+  "finalModules": 261,
+  "sourceSHA256": {
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "cafcf6f6fd738734307bb81300aa83f3fa53e9d18158c2da3f6d621f0afc4519",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "3d2eec2b43ccca8f730902e09bcfab13d19a8f29c5dcf259ce6683c0298f4028",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "872e8f0a727531bf8fc4cce18bb98b0bdf0724e1b922ecab5f92363a3d3f0cf4",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "efcf7f823a95e9904a8cbae2a20a00f26aac5eb5a5b7eccca91219f20c473003",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "804d71c1b56f1c8d9cd43256d51b4393e0bec137aa8bc184341995aaaebc62b1",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "b96ff378a752d1abd2635f630833d8e0c609376a6f67070398fd6f94f6ce09b2"
+  },
+  "registeredIOExceptions": "unchanged",
+  "fullGoal": "ACTIVE",
+  "completeCoreUIParity": "UNVERIFIED"
+}

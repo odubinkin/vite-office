@@ -2,21 +2,13 @@
 
 import { useState } from "react";
 import type { SwTable } from "../../source/core/table/swtable";
+import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
 
 /** Editable table geometry expressed in Writer twips. */
-export interface WriterTableDialogValue {
+export interface WriterTableDialogValue extends SwTableProperties {
   readonly name: string;
   readonly rows: number;
   readonly columns: number;
-  readonly width: number;
-  readonly columnWidths: readonly number[];
-  readonly minRowHeight: number;
-  readonly padding: number;
-  readonly border: string;
-  readonly verticalAlign: "top" | "middle" | "bottom";
-  readonly headerRows: number;
-  readonly repeatHeaderRows: boolean;
-  readonly dontSplit: boolean;
 }
 
 /** Collects supported Insert Table and Table Properties fields. */

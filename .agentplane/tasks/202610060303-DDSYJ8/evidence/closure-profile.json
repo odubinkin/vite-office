@@ -1,0 +1,39 @@
+{
+  "vendorRestored": true,
+  "failedOnly": true,
+  "noRebuildProductionUnchanged": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts --testNamePattern=uses native selection scope and one attribute history selected=(false|true) --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/DDSYJ8.closure-app-results.json",
+      "exit": 1,
+      "bytes": 2122,
+      "sha256": "645866dc569d58894166cc27ef0a80d8d8e6d78b3a43d8f41d73305406f5f699",
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 5,
+        "total": 7
+      },
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "7be48749830b1c8561f293c9950371105f90f7b06ad92cc1a6e31b75b29f2c85"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-table-properties-history.spec.ts --reporter=list,json",
+      "exit": 0,
+      "bytes": 663,
+      "sha256": "de2ff9d586f1c48ce304cf87643e8106d8edb0fa084c235f3dbcecbcc7f905ba",
+      "caseCounts": {
+        "startTime": "2026-10-06T03:20:04.888Z",
+        "duration": 5436.903,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ]
+}

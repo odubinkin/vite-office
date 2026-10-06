@@ -4,7 +4,7 @@ title: "Route table properties through native editing and history owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: implement native table-property ownership under standing iterative approval."
 doc_version: 3
-doc_updated_at: "2026-10-06T03:04:10.303Z"
+doc_updated_at: "2026-10-06T04:48:32.800Z"
 doc_updated_by: "CODER"
 description: "Iteration176: remove React table-property mutations through source-shaped SwFEShell and ItemSetToTableParam; grouped native attribute history and correct selection ownership. Full alignment controls remain a subsequent atomic task."
 sections:
@@ -62,7 +62,11 @@ sections:
     3. Independent literal assertions for actual selection ownership, grouped single Undo/Redo, modified/save-position lifecycle, cursor/ring and native table,row,box,text identity, row height/split/borders/box align/header/column/width values, non-table admission and invalid columns before partial mutation. Mounted actual workbench and real Chromium1280/390 Table Properties changes/Cancel/UndoRedo retain neighboring text. No old test/oracle changes.
     4. Preserve456prior testfiles byte-identical and259semantic states/defaults/classes/registeredIOexceptions/evidence prefixes;11approvedsemanticpaths; append evidence only,new native owner remains partial/unverified. AP ignored-inclusive no sources/helpers/Python/rawdiagnostics;doctor/routing/diff.
     5. After vendor restored, five source audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. ExactSHA sameagent EVALUATOR,no independent reviewer claim,semanticcommit,recordverify,meaningfulfinish,wholeparentcheckpoint;parentDOINGgoalACTIVE.
-  Verification: "Pending execution."
+  Verification: |-
+    Command: six initial static gates and changed-file Prettier/ESLint/JSDoc/TypeScript/physical-line checks. Result: pass after only failed format/typecheck recovery; remaining initial gates executed once. Evidence: static-gates.json,changed-initial-statics.json,changed-failure-statics.json. Scope: approved11semantic paths.
+    Command: ONE upstream-absent full build/app/inventory/scripts/Chromium profile and original-failure-only app/Chrome closure. Result: pass,actual distinct12731app109inventory5scripts167Chrome,0flaky. Initial2app+2Chrome failures are documented fixture subscription/tag-selection errors; original2app PASS5skip7total and2Chrome PASS. Coverage-only subset exit1 reflects unchanged global100threshold; final exact-source/map actualcounter merge100L/S/F/B. No prodchange/rebuild or passing/full replay. Evidence: absent-profile.json,closure-profile.json,final-coverage.json. Scope: native/mounted/production cases using owned classes only; vendor restored finally.
+    Command: five restored source audits,scopeprefix/testidentity,doctor,routing,diff,ignored-inclusive AP scan. Result: pass;0semantic violations,456prior testfiles byte-identical,259prior semantic contracts preserved,261modules with2new unverified owners,doctor0errors2knownwarnings,4578APfiles0forbidden. Evidence: restored-source-audits.json,scope-audit.json,governance.json,artifact-audit.json. Scope: no upstream sources/helpers/Python/rawdiagnostics in AP,no policy/IOexceptions changes.
+    Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pending final SHA. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
   Rollback Plan: "Revert the semantic commit; retain task evidence and registered I/O exceptions."
   Findings: |-
     Read-only discovery found React property mutation without native grouped history and row-wide box alignment. Three bounded guessed-path errors occurred (tabsh under ui/shells twice,wrtsh under sw/inc once); route recomputed and actual native uibase/core paths located, no source mutation after failures. Earlier summary discovery was read-only. Full goal remains ACTIVE and parity UNVERIFIED.
@@ -70,6 +74,26 @@ sections:
     - Observation: Plan approval rejected because full-doc Summary used level1 heading; start-ready then rejected before any source mutation.
       Impact: No implementation started; task remains TODO.
       Resolution: Recomputed route, filled canonical Summary section and follow sequential successful approval/start.
+
+    - Observation: Initial format gate failed only new E2E and undo file; metadata update initially rejected browser entries lacking preservedResponsibilities before any JSON write; added shell import made wrtsh1 physical1000lines.
+      Impact: No full test profile started; raw source never stored in AgentPlane.
+      Resolution: Recomputed route, reused existing browser responsibilities arrays, removed one redundant source header blank line and reformatted new files; run failed format and remaining initial gates only.
+
+    - Observation: Initial typecheck failed new test API: Testing Library ByRoleOptions has no exact field; Vitest it.each expands array tuple elements.
+      Impact: Production files had no reported TypeScript errors; full profile not yet started.
+      Resolution: Removed unsupported mounted test option and wrapped invalid-column vectors as single tuple arguments; retain all literal assertions; run failed typecheck and remaining initial gates only.
+
+    - Observation: ONE absentprofile terminal: build PASS; app12729PASS2newFAIL0skip12731total (both uses native selection scope and one attribute history selected=false/true: vi.fn expected1 received0); inventory109PASS100coverage;scripts5PASS;Chrome165oldPASS2newFAIL0flaky (both Writer table properties native history width1280/390: padding7.53333px expected,3.33333px received). Vendor restored finally. Appcoverage99.97L99.97S99.91F100B,onlynew attribute payload getters unexecuted after earlier assertions.
+      Impact: No old app or Chromium cases failed. Core fixture observed SwEditWin input-completion callback rather than shell broadcaster. Chrome td-only locator skipped first row after existing dialog header default changes it to th.
+      Resolution: Use actual shell broadcaster subscription and canonical data-writer-table-box cell identity covering th and td. Retain all literal scope,geometry,history and lifecycle assertions; no production change or rebuild. Run only original2app failures and2newChrome failures. One bounded guessed browser filename miss was corrected via rg files; no source mutation after that read failure.
+
+    - Observation: Failed-only closure terminal: original2app cases PASS5skip7total and original2Chrome PASS0flaky; no inventory replay, no rebuild and six production hashes unchanged. Coverage-only subset command exit1 reflects unchanged global100threshold; actual2cases passed and final standard Istanbul merge proves100L/S/F/B for app13212L14483S3496F10799B and inventory1464L1523S384F1080B. App258per-file statement/function/branch maps exact; inventories retain initial100counts.
+      Impact: Actual distinct final outcomes12731app109inventory5scripts167Chrome PASS, no passing/full replay. All456prior testfiles byte-identical;259prior semantic contracts/statuses/defaults/classes/IOexceptions/evidence prefixes preserved;261modules with2new native owners unverified.
+      Resolution: Five restored source audits PASS with0semantic violations; same-agent exactSHA evaluation and meaningful semantic finish follow. Complete table alignment/spacing/relative-width controls,native item and differentiated undo ownership,complex tables,insertion and fullUI/core parity remain UNVERIFIED; goalACTIVE,parentDOING.
+
+    - Observation: Semantic commit rejected by commit-msg: scope table is not one of task intents code/parity/task/close/integrate.
+      Impact: All tests and direct governance checks remain verified; no commit created or production changes.
+      Resolution: Recomputed route, use parity intent in semantic commit and retain exact source/counter evidence; no tests or passing gates replayed.
 id_source: "generated"
 ---
 ## Summary
@@ -104,7 +128,10 @@ Iteration176 ONE direct CODER leaf under standing user approval. Restore represe
 
 ## Verification
 
-Pending execution.
+Command: six initial static gates and changed-file Prettier/ESLint/JSDoc/TypeScript/physical-line checks. Result: pass after only failed format/typecheck recovery; remaining initial gates executed once. Evidence: static-gates.json,changed-initial-statics.json,changed-failure-statics.json. Scope: approved11semantic paths.
+Command: ONE upstream-absent full build/app/inventory/scripts/Chromium profile and original-failure-only app/Chrome closure. Result: pass,actual distinct12731app109inventory5scripts167Chrome,0flaky. Initial2app+2Chrome failures are documented fixture subscription/tag-selection errors; original2app PASS5skip7total and2Chrome PASS. Coverage-only subset exit1 reflects unchanged global100threshold; final exact-source/map actualcounter merge100L/S/F/B. No prodchange/rebuild or passing/full replay. Evidence: absent-profile.json,closure-profile.json,final-coverage.json. Scope: native/mounted/production cases using owned classes only; vendor restored finally.
+Command: five restored source audits,scopeprefix/testidentity,doctor,routing,diff,ignored-inclusive AP scan. Result: pass;0semantic violations,456prior testfiles byte-identical,259prior semantic contracts preserved,261modules with2new unverified owners,doctor0errors2knownwarnings,4578APfiles0forbidden. Evidence: restored-source-audits.json,scope-audit.json,governance.json,artifact-audit.json. Scope: no upstream sources/helpers/Python/rawdiagnostics in AP,no policy/IOexceptions changes.
+Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pending final SHA. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
 
 ## Rollback Plan
 
@@ -117,3 +144,23 @@ Read-only discovery found React property mutation without native grouped history
 - Observation: Plan approval rejected because full-doc Summary used level1 heading; start-ready then rejected before any source mutation.
   Impact: No implementation started; task remains TODO.
   Resolution: Recomputed route, filled canonical Summary section and follow sequential successful approval/start.
+
+- Observation: Initial format gate failed only new E2E and undo file; metadata update initially rejected browser entries lacking preservedResponsibilities before any JSON write; added shell import made wrtsh1 physical1000lines.
+  Impact: No full test profile started; raw source never stored in AgentPlane.
+  Resolution: Recomputed route, reused existing browser responsibilities arrays, removed one redundant source header blank line and reformatted new files; run failed format and remaining initial gates only.
+
+- Observation: Initial typecheck failed new test API: Testing Library ByRoleOptions has no exact field; Vitest it.each expands array tuple elements.
+  Impact: Production files had no reported TypeScript errors; full profile not yet started.
+  Resolution: Removed unsupported mounted test option and wrapped invalid-column vectors as single tuple arguments; retain all literal assertions; run failed typecheck and remaining initial gates only.
+
+- Observation: ONE absentprofile terminal: build PASS; app12729PASS2newFAIL0skip12731total (both uses native selection scope and one attribute history selected=false/true: vi.fn expected1 received0); inventory109PASS100coverage;scripts5PASS;Chrome165oldPASS2newFAIL0flaky (both Writer table properties native history width1280/390: padding7.53333px expected,3.33333px received). Vendor restored finally. Appcoverage99.97L99.97S99.91F100B,onlynew attribute payload getters unexecuted after earlier assertions.
+  Impact: No old app or Chromium cases failed. Core fixture observed SwEditWin input-completion callback rather than shell broadcaster. Chrome td-only locator skipped first row after existing dialog header default changes it to th.
+  Resolution: Use actual shell broadcaster subscription and canonical data-writer-table-box cell identity covering th and td. Retain all literal scope,geometry,history and lifecycle assertions; no production change or rebuild. Run only original2app failures and2newChrome failures. One bounded guessed browser filename miss was corrected via rg files; no source mutation after that read failure.
+
+- Observation: Failed-only closure terminal: original2app cases PASS5skip7total and original2Chrome PASS0flaky; no inventory replay, no rebuild and six production hashes unchanged. Coverage-only subset command exit1 reflects unchanged global100threshold; actual2cases passed and final standard Istanbul merge proves100L/S/F/B for app13212L14483S3496F10799B and inventory1464L1523S384F1080B. App258per-file statement/function/branch maps exact; inventories retain initial100counts.
+  Impact: Actual distinct final outcomes12731app109inventory5scripts167Chrome PASS, no passing/full replay. All456prior testfiles byte-identical;259prior semantic contracts/statuses/defaults/classes/IOexceptions/evidence prefixes preserved;261modules with2new native owners unverified.
+  Resolution: Five restored source audits PASS with0semantic violations; same-agent exactSHA evaluation and meaningful semantic finish follow. Complete table alignment/spacing/relative-width controls,native item and differentiated undo ownership,complex tables,insertion and fullUI/core parity remain UNVERIFIED; goalACTIVE,parentDOING.
+
+- Observation: Semantic commit rejected by commit-msg: scope table is not one of task intents code/parity/task/close/integrate.
+  Impact: All tests and direct governance checks remain verified; no commit created or production changes.
+  Resolution: Recomputed route, use parity intent in semantic commit and retain exact source/counter evidence; no tests or passing gates replayed.

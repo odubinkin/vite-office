@@ -4637,13 +4637,18 @@
           {
             "marker": "WriterTableDialog",
             "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+            "marker": "native table property application"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
       "rationale": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
       "responsibilities": [
-        "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph."
+        "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -5369,6 +5374,10 @@
           {
             "path": "apps/office/e2e/writer-list-label-drag.spec.ts",
             "marker": "Writer native label document ruler width="
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+            "marker": "native table property application"
           }
         ]
       },
@@ -5382,7 +5391,8 @@
         "Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
         "Existing visible Paragraph panel Escape follows pinned FocusManager: unconsumed content cancellation focuses the expanded panel title; title/toolbar cancellation returns to its own document without closing or dispatch. Child-consumed keys remain owned by that child and a detached header without document ownership leaves Escape unconsumed. Owned retained-draft/controls/modifier/frame/model checks and rebuilt desktop/mobile focus-plus-editing cases cover this branch only. Full Tab/arrows/F6/other panels/hidden-title fallback/Help/settings/native sizing/context-profile persistence remain unverified.",
         "Iteration138 removes the table-cell post-DOM diff/direct text mutation, imperative innerHTML synchronization and event isolation. Cell paragraphs use shared DOM selection identities and BrowserWriterEditWindow -> SwEditWin -> actual SwWrtShell input/history. Connected cell text is admitted by SwNodes ownership; active/all-text identities come from native nodes while body layout stays separate. SwTableBox derives text from its start/end section instead of a duplicate paragraph array; boundary joins require adjacent text in the same section. Real-owner core, mounted DOM and Chromium tests cover this bounded path. React text-run display, body ordinal sidebar context, table-wide selection/navigation, nested or merged cells, native table layout/text portions and list UI remain unverified. All existing semantic states/defaults/exceptions and registered I/O/recovery deviations remain unchanged; no whole-module or goal promotion.",
-        "Iteration172 restores native document-origin list-label ruler admission through the existing browser ruler tracking owner. Actual label identity resolves an actual SwTextNode only while copying StateTabWin geometry; pinned edtwin clears this borrowed node immediately after StartDocDrag. Signed-short offset and native SetLeft negative-first adjustment feed bottom-indent document hit testing with explicit tab precedence and right-before-left order. Accepted changed copied geometry applies to current paragraph selection through existing SetParagraphRulerIndents and real item UndoRedo, not a retained label rule update. Native mouse admission preserves cursor and label rule/list ownership; cancellation, zero movement, hide/inactive/unmount/document replacement discard preview and history. No synthetic handle event, text-run conversion, new DTO/model or competing gesture owner. Prior contracts/evidence and conscious IO exceptions retained. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/platform/framework/ruler/list/table/core/UI behavior remains unverified."
+        "Iteration172 restores native document-origin list-label ruler admission through the existing browser ruler tracking owner. Actual label identity resolves an actual SwTextNode only while copying StateTabWin geometry; pinned edtwin clears this borrowed node immediately after StartDocDrag. Signed-short offset and native SetLeft negative-first adjustment feed bottom-indent document hit testing with explicit tab precedence and right-before-left order. Accepted changed copied geometry applies to current paragraph selection through existing SetParagraphRulerIndents and real item UndoRedo, not a retained label rule update. Native mouse admission preserves cursor and label rule/list ownership; cancellation, zero movement, hide/inactive/unmount/document replacement discard preview and history. No synthetic handle event, text-run conversion, new DTO/model or competing gesture owner. Prior contracts/evidence and conscious IO exceptions retained. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/platform/framework/ruler/list/table/core/UI behavior remains unverified.",
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -10337,6 +10347,42 @@
     },
     {
       "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/frmedt/fetab.cxx",
+      "localSymbols": [
+        "SwFEShell"
+      ],
+      "upstreamSymbols": [
+        "void SwFEShell::SetTableAttr"
+      ],
+      "preservedResponsibilities": [
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
+      ],
+      "omittedResponsibilities": [
+        "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "SwFEShell"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+            "marker": "native table property application"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "void SwFEShell::SetTableAttr"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "upstream-mechanism",
       "evidence": {
         "local": [
           {
@@ -13454,6 +13500,10 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-traversal.test.ts",
             "marker": "appends empty sections with native style/direct items and restores their identities through history"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+            "marker": "native table property application"
           }
         ],
         "upstream": [
@@ -13484,7 +13534,8 @@
       ],
       "preservedResponsibilities": [
         "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained.",
-        "Iteration156 integration records numeric cursor coordinates at actual completed native mutations: selected deletion captures live collapsed post-delete point once, sequential per-cell children use local current active nodes and final native outer point instead of removed forecast references. Table row history saves original numeric point and owns only after offset/items until new cells are connected, then records live first cell. Split Redo uses native new-paragraph content0. Original155failed app and3Chromium cases are retried only,408prior test files unchanged. Full physical split/payload node identity, native full table SaveTable/SwNodes sections and complete native action/shell cursor lifetimes remain unverified;250states/defaults/classifications/exceptions/prior evidence preserved."
+        "Iteration156 integration records numeric cursor coordinates at actual completed native mutations: selected deletion captures live collapsed post-delete point once, sequential per-cell children use local current active nodes and final native outer point instead of removed forecast references. Table row history saves original numeric point and owns only after offset/items until new cells are connected, then records live first cell. Split Redo uses native new-paragraph content0. Original155failed app and3Chromium cases are retried only,408prior test files unchanged. Full physical split/payload node identity, native full table SaveTable/SwNodes sections and complete native action/shell cursor lifetimes remain unverified;250states/defaults/classifications/exceptions/prior evidence preserved.",
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/undo/untbl.cxx",
@@ -15570,6 +15621,42 @@
     },
     {
       "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/shells/tabsh.cxx",
+      "localSymbols": [
+        "ItemSetToTableParam"
+      ],
+      "upstreamSymbols": [
+        "void ItemSetToTableParam"
+      ],
+      "preservedResponsibilities": [
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
+      ],
+      "omittedResponsibilities": [
+        "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+            "marker": "ItemSetToTableParam"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+            "marker": "native table property application"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
+            "marker": "void ItemSetToTableParam"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "upstream-mechanism",
       "evidence": {
         "local": [
           {
@@ -16505,6 +16592,10 @@
           {
             "path": "apps/office/e2e/writer-headline-selection.spec.ts",
             "marker": "Writer native table range"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+            "marker": "native table property application"
           }
         ],
         "upstream": [
@@ -16739,7 +16830,8 @@
         "Iteration157 removes shell activeParagraph cached object ownership; active paragraph resolves from actual persistent native displayed cursor, including physical node replacement, table movement and document replacement. Sequential selected deletion carries the chosen final registered SwPosition across real mutations and records completed numeric after point; reversed own-cell and partial backspace direction remain correct without ignored tests or copied node coordinates. Full native cursor/ViewShell ownership and complete UI/table semantics remain unverified;409prior tests/250states/defaults/exceptions/prior evidence preserved.",
         "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
         "Iteration168 gives list-kind and continuation operations to existing SwTextShell, retaining their bounded semantics while removing the old list-owner forwarding. SwListShell current-point GetNumLevel state preserves native MAXLEVEL10 sentinel and independent whole-range execution rejection. Represented SwWrtShell SelectionType requires actual rule, list membership and non-NONE level format; SwView conditionally places list shell below text shell using cached selection flags and TableCell masking. Source-owned registry/query splits retain the1000-line gate without compatibility wrappers or new models. Actual native, mounted DOM and Chromium cases cover the bounded flow. Other selection contexts, table row-column subtypes, native framework/layout/readonly gates and full core/UI/list/table behavior remain unverified; prior semantic/default/classification/IO deviations and evidence are preserved.",
-        "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved."
+        "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",

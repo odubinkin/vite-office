@@ -1,5 +1,4 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
-
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -24,7 +23,8 @@ import type {
 } from "../../core/txtnode/ndtxt";
 import { WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell } from "../shells/listsh";
-import { SwEditShell, type WriterListLevelCommand } from "../../core/edit/ednumber";
+import type { WriterListLevelCommand } from "../../core/edit/ednumber";
+import { SwFEShell } from "../../core/frmedt/fetab";
 import { SwTextShell, type WriterParagraphFormatValue } from "../shells/textsh1";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
 import type { SwDocShell } from "../app/docsh";
@@ -80,7 +80,7 @@ interface WriterCompositionState {
   text: string;
 }
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
-export class SwWrtShell extends SwEditShell {
+export class SwWrtShell extends SwFEShell {
   private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
   private cursor: SwCursor;
