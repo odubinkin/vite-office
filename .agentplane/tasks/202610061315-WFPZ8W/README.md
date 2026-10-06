@@ -1,10 +1,11 @@
 ---
 id: "202610061315-WFPZ8W"
 title: "Replace table row widget with native table mouse selection"
-status: "DOING"
+result_summary: "Removed the row-selection widget and adapter. Native Writer table ownership now drives edge selection, drag capture, and table cursor ranges; retained historical acceptance assertions pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610061315-WFPZ8W/evidence/scope-audit.json"
   findings:
     - "Native geometry selects actual row/column/table owners and projected drag; artificial arrow/onSelectRow/edit row-index adapter removed.12934 app109 inventory5 scripts212 Chromium aggregate PASS; original failed cases or2 genuinely new cases only, focused skips retained. Actual100 app/inventory coverage proven from source bytes/maps/full function and branch locations.52 semantic paths,454 prior acceptance files identical,36 declared migrations,493 total,271 prior semantic states/full prefixes retained plus1 unverified owner272. Pinned sources read only; no AP source/helper artifacts; I/O/recovery exceptions unchanged."
-commit: null
+commit:
+  hash: "8eade5e1bf32bf4cb9dd69abb7681bc5c693d976"
+  message: "🚧 WFPZ8W code: use native table edge mouse selection"
 comments:
   -
     author: "CODER"
     body: "Start: Implement source-owned table edge mouse selection under standing iterative refactor authorization; no upstream runtime dependency."
+  -
+    author: "CODER"
+    body: "Verified: native table edge mouse selection replaces the synthetic row widget and index adapter; one upstream-absent profile plus only original failures and two new regressions completed; actual application and inventory coverage is 100 percent. Same-agent exact-SHA evaluator passed; full upstream parity remains unverified."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native table mouse ownership verified at implementation8eade5e1bf32bf4cb9dd69abb7681bc5c693d976:12934app109inventory5scripts212Chromium aggregatePASS, actual100app/inventory, one full absent profile and only failed/genuine-new closures, source/scope/static/governance/same-agent exact-SHA qualityPASS; full parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T14:30:38.023Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native table edge mouse selection replaces the synthetic row widget and index adapter; one upstream-absent profile plus only original failures and two new regressions completed; actual application and inventory coverage is 100 percent. Same-agent exact-SHA evaluator passed; full upstream parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T14:08:46.201Z"
+doc_updated_at: "2026-10-06T14:30:38.027Z"
 doc_updated_by: "CODER"
 description: "Iteration188: select actual Writer rows, columns and entire tables at native frame edges, extend selection by dragging, remove React row callback/button and edit-window row-index adapter, preserve native cursor rings/history and conscious I/O exceptions."
 sections:
