@@ -1,5 +1,6 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
 import type { SwTable } from "../table/swtable";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 
 /** Table print bounds relative to its upper frame, in twips. */
 export interface SwTablePrintArea {
@@ -22,19 +23,23 @@ export class SwTabFrame {
     );
     let left = 0;
     let right = 0;
-    if (format.align === "margins" || (format.align === "left" && format.width === undefined)) {
+    const orient = this.table.GetHoriOrient();
+    if (orient === HoriOrientation.NONE) {
       left = format.marginLeft ?? 0;
       right = format.marginRight ?? 0;
-    } else if (format.width !== undefined) {
-      switch (format.align) {
-        case "left":
+    } else {
+      switch (orient) {
+        case HoriOrientation.LEFT_AND_WIDTH:
           left = format.marginLeft ?? 0;
           right = upperWidth - left - wished;
           break;
-        case "center":
+        case HoriOrientation.LEFT:
+          right = upperWidth - wished;
+          break;
+        case HoriOrientation.CENTER:
           left = right = Math.trunc((upperWidth - wished) / 2);
           break;
-        case "right":
+        case HoriOrientation.RIGHT:
           left = upperWidth - wished;
           break;
       }

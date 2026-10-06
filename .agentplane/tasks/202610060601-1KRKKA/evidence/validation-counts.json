@@ -1,0 +1,14 @@
+{
+  "applicationDistinctPassed": 12773,
+  "inventoryDistinctPassed": 109,
+  "scriptsPassed": 5,
+  "chromiumDistinctPassed": 181,
+  "chromiumFlaky": 0,
+  "skippedInClosure": 41,
+  "skippedInLastRetry": 10,
+  "skippedInInventoryClosure": 2,
+  "fullProfileCount": 1,
+  "vendorRestored": true,
+  "wholeGoalParity": "unverified",
+  "ioRecoveryExceptions": "preserved"
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "command": "ap doctor",
+    "exit": 0,
+    "bytes": 1616,
+    "sha256": "13f64edc7f96e4a18d7a89a4cde637c1c35bc2d00881a266fd043c16ef7f75c1",
+    "summary": [
+      "warning: doctor findings: errors=0 warnings=2 info=2",
+      "doctor (OK)"
+    ]
+  },
+  {
+    "command": "node .agentplane/policy/check-routing.mjs",
+    "exit": 0,
+    "bytes": 18,
+    "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "summary": [
+      "policy routing OK"
+    ]
+  },
+  {
+    "command": "git diff --check",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "summary": []
+  }
+]

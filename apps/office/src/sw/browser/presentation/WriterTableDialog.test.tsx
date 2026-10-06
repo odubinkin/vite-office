@@ -136,6 +136,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     );
     expect(screen.getByRole("dialog", { name: "Table Properties" })).toBeInTheDocument();
     expect(screen.queryByRole("spinbutton", { name: "Rows" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("radio", { name: /^Left$/ }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Table width (cm)" }), {
       target: { value: "12" },
     });

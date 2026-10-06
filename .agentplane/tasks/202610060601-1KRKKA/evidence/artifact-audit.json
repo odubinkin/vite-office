@@ -1,0 +1,9 @@
+{
+  "ignoredInclusiveTaskFiles": 4457,
+  "forbidden": [],
+  "ignoredInclusiveFiles": 4596,
+  "canonicalInfrastructureExecutablePaths": [
+    ".agentplane/policy/check-routing.mjs",
+    ".agentplane/.upgrade/baseline/policy/check-routing.mjs"
+  ]
+}

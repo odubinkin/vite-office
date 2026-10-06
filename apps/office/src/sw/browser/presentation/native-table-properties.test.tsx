@@ -50,7 +50,19 @@ it("accepts native properties as one history action and retains real selected ce
     target: { value: "0.2" },
   });
   fireEvent.click(screen.getByRole("button", { name: "OK" }));
-  expect(setter).toHaveBeenCalledWith({ width: 4535 });
+  expect(setter).toHaveBeenCalledWith({
+    width: 4535,
+    horiOrient: 3,
+    marginLeft: 0,
+    marginRight:
+      f.doc.GetPageDesc().GetValue().width -
+      f.doc.GetPageDesc().GetValue().leftMargin -
+      f.doc.GetPageDesc().GetValue().rightMargin -
+      4535,
+    marginTop: 0,
+    marginBottom: 0,
+    align: undefined,
+  });
   expect(f.table.GetFormat().width).toBe(4535);
   expect(f.table.GetTabLines()[0]?.GetTabBoxes()[0]?.GetFormat().padding).toBe(113);
   expect(f.table.GetTabLines()[1]?.GetTabBoxes()[0]?.GetFormat().padding).toBe(50);

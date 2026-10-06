@@ -23,7 +23,7 @@ function fixture() {
   const doc = session.docShell.GetDoc(),
     body = required(doc.paragraphs[0]);
   body.SetText("Body");
-  const table = doc.nodes.MakeTableNode("First", { width: 4000 }, body);
+  const table = doc.nodes.MakeTableNode("First", { width: 4000, align: "left" }, body);
   table.AddColumnWidth(2000);
   table.AddColumnWidth(2000);
   doc.nodes.AppendTableRow(table, 2);
@@ -41,7 +41,7 @@ function fixture() {
       i,
     ) => required(box.GetParagraphs()[0]).SetText("Cell" + i),
   );
-  const other = doc.nodes.MakeTableNode("Second", { width: 7000 });
+  const other = doc.nodes.MakeTableNode("Second", { width: 7000, align: "left" });
   other.AddColumnWidth(4000);
   doc.nodes.AppendTableRow(other, 1);
   render(<WriterWorkbench isActive view={session.view} />);

@@ -1088,6 +1088,39 @@
     },
     {
       "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/offapi/com/sun/star/text/HoriOrientation.ts",
+      "status": "mapped",
+      "upstreamPath": "offapi/com/sun/star/text/HoriOrientation.idl",
+      "localSymbols": [
+        "HoriOrientation"
+      ],
+      "upstreamSymbols": [
+        "const short LEFT_AND_WIDTH"
+      ],
+      "preservedResponsibilities": [
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved.",
+        "Retains the eight actual numeric horizontal orientation IDs: NONE0,RIGHT1,CENTER2,LEFT3,INSIDE4,OUTSIDE5,FULL6,LEFT_AND_WIDTH7."
+      ],
+      "omittedResponsibilities": [
+        "Full native contracts remain unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/offapi/com/sun/star/text/HoriOrientation.ts",
+            "marker": "HoriOrientation"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/HoriOrientation.idl",
+            "marker": "const short LEFT_AND_WIDTH"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "upstream-mechanism",
       "evidence": {
         "local": [
           {
@@ -4648,7 +4681,8 @@
       "rationale": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
       "responsibilities": [
         "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
-        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged.",
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -10596,7 +10630,8 @@
         "SwTabFrame::Format"
       ],
       "preservedResponsibilities": [
-        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
       ],
       "omittedResponsibilities": [
         "Complete native layout frame construction,fly/border offsets,vertical/RTL/merged/nested/rowspan/split-row and relative-width semantics remain unverified."
@@ -10823,7 +10858,8 @@
         "Iteration145 routes unmodified table Tab/ShiftTab through SwEditWin and a persistent SwCursor. Core traverses actual flat SwNodes cell sections and selects first paragraph offset0 while retaining native mark;no DOM sibling/body ordinal/navigation DTO. Shell refreshes active/pending/history grouping after movement;unmarked last-cell Tab prepares an empty source-formatted row and records SwUndoTableNdsChg retaining actual row/cell/node identities. Undo disconnects sections and retargets live indices;Redo reconnects them. List-at-start priority compares represented native numbering types/indent before level change or literal Tab insertion. Owned native,mounted and Chromium evidence covers represented behavior. Full native SwCursorShell/Doc InsertRow,merged/nested/protected/form/formula/autoformat/redline/border/autocorrect,HomeEnd/fulllayout/history/UI remainunverified;existing244semantic states/defaults/classifications and registered I/O/recovery deviations retained.",
         "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion.",
         "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved.",
-        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged."
+        "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/table/swtable.cxx",
@@ -14407,7 +14443,8 @@
         "XMLTextNumRuleInfo now owns independent numbered/restart/direct-start/format-start metadata with native absent-1 and Reset retention. Writer projects direct start only when restart and the direct item exist; actual format start no longer substitutes for absence. Same/decreasing nested implicit restart closes/reopens text:list without item start; root restart and newly opened/re-entered levels follow native conditional fallback, while first unprocessed root can omit restart. Uncounted restart/start are omitted. Unmodified pinned exportListChange and metadata excerpts match 2403 structural/start sequences and 288 metadata states with explicit typed-property/platform/string/export/identity/style adapters; 12 valid Writer projections match the primary raw getter against 48 normative native states. Fifty-two genuine common/automatic numbered/bullet ODT scenarios and thirty-two repeated-sublist cases assert literal state, vectors/labels, owned copies, Worker16, selected XML and manually specified native reopen omissions/gains. Full UNO Set/lifetimes, processed-list identity/continue-numbering/style overrides, missing-rule factories, numbered-paragraph and wider architecture/defaults remain unverified. No whole-module promotion or registered save/open/recovery change.",
         "Iteration37 admits the existing named paragraph list/outline items after source-owned heading level restoration. The xmloff helper emits direct positive outline levels,ODF1.3 empty zero values,explicit empty numbering and normal names while suppressing the reserved Outline rule. Writer emits referenced common numbering definitions through the existing level exporter so styles whose rules are absent from current body retain resolvable references. Named style parsing preserves supported outline values and list-style names. Existing assigned heading levels without numbering do not trigger the no-rule/list-level export diagnostic. Literal native attribute predicates and real ODT/Worker/reopen/undo tests cover this dependency slice;full XMLStyleExport inheritance fallback,UNO style machinery,style-name encoding,outline export,automatic/direct-outline properties and native lifetime/compatibility remain separately unverified. IO settings and Worker16/ODF1.3 remain unchanged.",
         "Iteration102 materializes document-owned named paragraph collections instead of flattening common styles into direct node items. Supported own paragraph/character/list fields, raw names, parent/follow links and automatic deltas survive graph16, ODT cycles and actual history. Native name lookup and bounded custom CopyTextColl preserve destination ownership and manual rule handling; the prior builtin copy adapter remains unchanged. Literal zero/per-axis list masks and the project tdf114287 fixture distinguish inherited margins from hard rule overrides. Writer export retains original named parents and emits actual direct numbering items; generic legacy export remains compatible. Default paragraph items are retained on the existing Standard root adapter only. All303other prior tests remain unchanged; one inherited common-style XML assertion moves to styles.xml and one existing project fixture now asserts its actual custom owner/parent, with numeric literals unchanged. Native list display-name resolution, invalid/cyclic parent detachment, direct empty rule suppression and supported composite item subfield inheritance are retained. Full native global default pools, conditional styles, pool/help IDs, creation undo, complete UNO/style UI, collisions and geometry consumers remain separately unverified. No existing status/default/exception or registered I/O/recovery promotion.",
-        "Iteration169 preserves native NumberingType NONE through represented XML conversion and numeric property propagation into UNO/core and fresh ODT reopening. Empty num-format imports NUMBER_NONE with native permission; absent format retains ARABIC. Actual native export writes empty NONE format and suppresses display-levels while preserving independent start/affixes. SwXNumberingRules now copy constructs SwNumFormat and applies supported native setters, removing raw-field/factory reconstruction and preserving inactive geometry, font/glyph/symbol/client fields with invalid-property atomicity. Existing kind input remains an optional bounded caller boundary; actual XML uses numeric type. Native mounted DOM and ordinary Chromium Open/typing/history cases verify this slice. Unrepresented letters/Roman/custom/bitmap types, full native UNO/XML families and full core/UI/list/table remain unverified; prior semantic/default/classification/IO deviations/evidence are preserved."
+        "Iteration169 preserves native NumberingType NONE through represented XML conversion and numeric property propagation into UNO/core and fresh ODT reopening. Empty num-format imports NUMBER_NONE with native permission; absent format retains ARABIC. Actual native export writes empty NONE format and suppresses display-levels while preserving independent start/affixes. SwXNumberingRules now copy constructs SwNumFormat and applies supported native setters, removing raw-field/factory reconstruction and preserving inactive geometry, font/glyph/symbol/client fields with invalid-property atomicity. Existing kind input remains an optional bounded caller boundary; actual XML uses numeric type. Native mounted DOM and ordinary Chromium Open/typing/history cases verify this slice. Unrepresented letters/Roman/custom/bitmap types, full native UNO/XML families and full core/UI/list/table remain unverified; prior semantic/default/classification/IO deviations/evidence are preserved.",
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
@@ -14924,6 +14961,38 @@
       "upstreamSymbols": [
         "SwXMLTableContext"
       ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+      "status": "mapped",
+      "upstreamPath": "sw/source/ui/table/tabledlg.cxx",
+      "localSymbols": [
+        "SwFormatTablePage"
+      ],
+      "upstreamSymbols": [
+        "SwFormatTablePage::SwFormatTablePage"
+      ],
+      "preservedResponsibilities": [
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
+      ],
+      "omittedResponsibilities": [
+        "Full native contracts remain unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+            "marker": "SwFormatTablePage"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/ui/table/tabledlg.cxx",
+            "marker": "SwFormatTablePage::SwFormatTablePage"
+          }
+        ]
+      }
     },
     {
       "classification": "upstream-mechanism",
@@ -15631,7 +15700,8 @@
         "void ItemSetToTableParam"
       ],
       "preservedResponsibilities": [
-        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged."
+        "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged.",
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -15951,6 +16021,38 @@
         "rationale": "The TypeScript command composition has no single native implementation unit."
       },
       "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "localPath": "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/table/swtablerep.cxx",
+      "localSymbols": [
+        "SwTableRep"
+      ],
+      "upstreamSymbols": [
+        "SwTableRep::SwTableRep"
+      ],
+      "preservedResponsibilities": [
+        "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved."
+      ],
+      "omittedResponsibilities": [
+        "Full native contracts remain unverified."
+      ],
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+            "marker": "SwTableRep"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/table/swtablerep.cxx",
+            "marker": "SwTableRep::SwTableRep"
+          }
+        ]
+      }
     },
     {
       "classification": "upstream-mechanism",

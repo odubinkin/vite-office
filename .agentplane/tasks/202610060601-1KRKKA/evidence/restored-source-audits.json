@@ -1,0 +1,57 @@
+[
+  {
+    "command": "npm run check:source-tree",
+    "exit": 0,
+    "bytes": 162,
+    "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+    "summary": [
+      "LibreOffice source-tree check passed for 114 required paths and 33 retired roots."
+    ]
+  },
+  {
+    "command": "npm run check:source-provenance",
+    "exit": 1,
+    "bytes": 687,
+    "sha256": "a40c584dab490f2560b9eba6768e027a5cd448ea4065c8fa604dd4b005dae9a8",
+    "summary": []
+  },
+  {
+    "command": "npm run check:source-provenance",
+    "exit": 0,
+    "bytes": 205,
+    "sha256": "d7693d65b29556a9a09522d07d73242392202c27f9194c2600f7ca8825b7d3ba",
+    "summary": [
+      "Source provenance check passed for 264 runtime modules (181 mapped, 67 browser adaptations, 16 local infrastructure)."
+    ]
+  },
+  {
+    "command": "npm run inventory:invariants",
+    "exit": 0,
+    "bytes": 136,
+    "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe",
+    "summary": []
+  },
+  {
+    "command": "npm run inventory:parity",
+    "exit": 0,
+    "bytes": 1571817,
+    "sha256": "6ccac381c49cbee64da44b7fffcbf66de98e8633d29a5bec5b68ed377a0b820b",
+    "summary": [
+      "    \"modules\": [",
+      "          \"knownViolations\": [],",
+      "          \"knownViolations\": [],",
+      "          \"knownViolations\": [],",
+      "          \"knownViolations\": [],",
+      "          \"knownViolations\": [],",
+      "          \"knownViolations\": [],",
+      "          \"knownViolations\": [],"
+    ]
+  },
+  {
+    "command": "npm exec -- tsx scripts/generate-writer-ui-resources.ts --check",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "summary": []
+  }
+]

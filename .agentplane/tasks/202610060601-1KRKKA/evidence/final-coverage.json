@@ -1,0 +1,163 @@
+{
+  "summary": {
+    "lines": {
+      "total": 13372,
+      "covered": 13372,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14656,
+      "covered": 14656,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3517,
+      "covered": 3517,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10940,
+      "covered": 10940,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "coverageMapSHA256": "5f25eaa61aba5783a1d5c936685a4f645a5a22a75feac514b538de6e62a615f4",
+  "proof": {
+    "exactFiles": 260,
+    "rebasedFiles": [
+      {
+        "path": "apps/office/src/sw/source/ui/table/tabledlg.ts",
+        "originalSHA256": "756f4d77bcc4a4bbc20a2e4aeb8a00c587636a39dd250c38417a83db858556e6",
+        "currentSHA256": "13df44756572c7ebd246e40ee1d2d892cc68edd289a515a646a640011a356739",
+        "statements": 104,
+        "functions": 5,
+        "branches": 31,
+        "skipped": 5,
+        "contiguousRanges": [
+          {
+            "oldStart": 1,
+            "oldEnd": 11,
+            "newStart": 1,
+            "newEnd": 11,
+            "sha256": "058f9e234ec52a56411d1352b22f452625f9730dc97b46a7bb617b2fbbff10ff"
+          },
+          {
+            "oldStart": 12,
+            "oldEnd": 18,
+            "newStart": 13,
+            "newEnd": 19,
+            "sha256": "9c802397b3e95daf545cde1f023236ad634309ff22a856e9425b777c1bf323bc"
+          },
+          {
+            "oldStart": 19,
+            "oldEnd": 63,
+            "newStart": 21,
+            "newEnd": 65,
+            "sha256": "d7513759b5cddd63057ebf9ec1dda141a298ef32e63a940d01354fdc6e32e793"
+          },
+          {
+            "oldStart": 68,
+            "oldEnd": 167,
+            "newStart": 67,
+            "newEnd": 166,
+            "sha256": "db7da95dca8d45349a4390b936a41a7bda95510edef113607b6fd3405fdd2436"
+          }
+        ]
+      }
+    ],
+    "newFiles": []
+  },
+  "incomplete": {},
+  "app": {
+    "summary": {
+      "lines": {
+        "total": 13372,
+        "covered": 13372,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14656,
+        "covered": 14656,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3517,
+        "covered": 3517,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10940,
+        "covered": 10940,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageMapSHA256": "5f25eaa61aba5783a1d5c936685a4f645a5a22a75feac514b538de6e62a615f4",
+    "exactMaps": 261
+  },
+  "inventory": {
+    "summary": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageMapSHA256": "d5c7c29a3b8cf1a6c5ba322b130c83f9cdf2d1a779f29c4c9ea6081b1b9791ba",
+    "exactMaps": 38
+  },
+  "finalProductionSHA256": {
+    "apps/office/src/offapi/com/sun/star/text/HoriOrientation.ts": "16374e06e2f1191e5189a31f45e657591becad202f62184c30cb0e7539fd1047",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "26ad5a1aa15cd3d47f8313801cd34da0b60a1b103ee8589c6ac39e52f1d7f701",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "13df44756572c7ebd246e40ee1d2d892cc68edd289a515a646a640011a356739",
+    "apps/office/src/sw/source/core/table/swtable.ts": "14fa5c3650bc25abee5f3e16b25edd22a6bbdf5e3684cd0ecaac22db95334aeb",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "034ec120e2bed3d88c420ff4f0117fb29659f0cdaebe390a88f6400bde1c42e5",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "925d2acb9b11fdddc0ec0af81298fe1044b297f79dcb25ad70c16188ec39250d",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "ccb26aedec3446936134e2680c5ec3b77d6c9bed763bf32d94f300769d587abf",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "42ccdb0e929f614df8e83d7e463549bc0eabb33ba925ce8f3b833985cbbf7941"
+  }
+}

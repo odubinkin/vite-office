@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { SwTable } from "../../source/core/table/swtable";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
+import { SwFormatTablePage } from "../../source/ui/table/tabledlg";
+import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
 
 /** Editable table geometry expressed in Writer twips. */
 export interface WriterTableDialogValue extends SwTableProperties {
@@ -29,10 +31,29 @@ export interface WriterTableDialogValue extends SwTableProperties {
   const [name, setName] = useState(table?.GetName() ?? suggestedName);
   const [rowCount, setRowCount] = useState(rows?.length ?? 2);
   const [columnCount, setColumnCount] = useState(table?.GetColumnWidths().length ?? 2);
-  const [width, setWidth] = useState(table?.GetFormat().width ?? availableWidth);
-  const [columnWidths, setColumnWidths] = useState<readonly number[]>(
+  const [formatPage] = useState(
+    /** Creates the native draft once per mounted dialog. @returns Format page or insert mode. */
+    () => (table === undefined ? undefined : new SwFormatTablePage(table, availableWidth)),
+  );
+  const [, refreshPage] = useState(0);
+  const width = formatPage?.data.width ?? availableWidth;
+  const [insertColumnWidths, setInsertColumnWidths] = useState<readonly number[]>(
     table?.GetColumnWidths() ?? [availableWidth / 2, availableWidth / 2],
   );
+  const columnWidths = formatPage?.data.columns ?? insertColumnWidths;
+  const setColumnWidths =
+    /** Writes column drafts without replacing the table graph. @param values - Widths. @returns Nothing. */ (
+      values: readonly number[],
+    ): void => {
+      if (formatPage === undefined) setInsertColumnWidths(values);
+      else {
+        formatPage.data.columns.splice(0, formatPage.data.columns.length, ...values);
+        refreshPage(
+          /** Invalidates column draft values. @param version - Current version. @returns Next version. */
+          (version) => version + 1,
+        );
+      }
+    };
   const [minRowHeight, setMinRowHeight] = useState(rows?.[0]?.GetFormat().minHeight ?? 0);
   const [padding, setPadding] = useState(rows?.[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100);
   const [border, setBorder] = useState(
@@ -60,17 +81,20 @@ export interface WriterTableDialogValue extends SwTableProperties {
       cm: number,
     ): number => Math.round((cm * 1440) / 2.54);
   const field =
-    /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @param argument3 - Callback input. @returns Callback result. */ (
+    /** Renders a metric field. @param label - Accessible label. @param twips - Current value. @param change - Owner handler. @param disabled - Sensitivity. @param signed - Allows negative spacing. @returns Input. */ (
       label: string,
       twips: number,
       change: (value: number) => void,
+      disabled = false,
+      signed = false,
     ): React.JSX.Element => (
       <label className="grid gap-1 text-sm font-medium text-slate-700" key={label}>
         {label}
         <input
           aria-label={label}
           className="rounded border border-slate-300 px-2 py-1"
-          min="0"
+          disabled={disabled}
+          min={signed ? "-999999" : "0"}
           onChange={
             /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
               event,
@@ -119,11 +143,21 @@ export interface WriterTableDialogValue extends SwTableProperties {
               setError("Enter valid table dimensions and positive column widths.");
               return;
             }
+            formatPage?.DeactivatePage();
             onSubmit({
               name: name.trim(),
               rows: rowCount,
               columns: columnCount,
               width,
+              ...(formatPage === undefined
+                ? {}
+                : {
+                    horiOrient: formatPage.data.align,
+                    marginLeft: formatPage.data.left,
+                    marginRight: formatPage.data.right,
+                    marginTop: formatPage.above,
+                    marginBottom: formatPage.below,
+                  }),
               columnWidths,
               minRowHeight,
               padding,
@@ -314,7 +348,83 @@ export interface WriterTableDialogValue extends SwTableProperties {
               )}
             </div>
             <div className="grid min-w-0 flex-1 content-start gap-3" role="tabpanel">
-              {activeTab === "table" ? <>{field("Table width (cm)", width, setWidth)}</> : null}
+              {activeTab === "table" && formatPage !== undefined ? (
+                <>
+                  <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
+                    <legend className="text-sm font-bold">Alignment</legend>
+                    {(
+                      [
+                        [HoriOrientation.FULL, "Automatic"],
+                        [HoriOrientation.LEFT, "Left"],
+                        [HoriOrientation.LEFT_AND_WIDTH, "From left"],
+                        [HoriOrientation.RIGHT, "Right"],
+                        [HoriOrientation.CENTER, "Center"],
+                        [HoriOrientation.NONE, "Manual"],
+                      ] as const
+                    ).map(
+                      /** Renders a native orientation radio. @param entry - ID and label. @returns Control. */
+                      ([align, label]) => (
+                        <label key={align} className="flex items-center gap-2 text-sm">
+                          <input
+                            type="radio"
+                            name="table-alignment"
+                            checked={formatPage.data.align === align}
+                            onChange={
+                              /** Dispatches the native radio transition. @returns Nothing. */ () => {
+                                formatPage.AutoClickHdl(align);
+                                refreshPage(
+                                  /** Refreshes metric sensitivity and values. @param version - Current version. @returns Next version. */
+                                  (version) => version + 1,
+                                );
+                              }
+                            }
+                          />
+                          {label}
+                        </label>
+                      ),
+                    )}
+                  </fieldset>
+                  {field(
+                    "Table width (cm)",
+                    width,
+                    /** Dispatches native width editing. @param value - Twips. @returns Nothing. */ (
+                      value,
+                    ) => {
+                      formatPage.ValueChangedHdl("width", value);
+                      refreshPage(
+                        /** Refreshes linked native metrics. @param version - Current version. @returns Next version. */
+                        (version) => version + 1,
+                      );
+                    },
+                    !formatPage.IsSensitive("width"),
+                  )}
+                  <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
+                    <legend className="text-sm font-bold">Spacing</legend>
+                    {(["left", "right", "above", "below"] as const).map(
+                      /** Renders the native metric field. @param metric - Native field. @returns Input. */
+                      (metric) =>
+                        field(
+                          `${metric.charAt(0).toUpperCase()}${metric.slice(1)} (cm)`,
+                          metric === "above" || metric === "below"
+                            ? formatPage[metric]
+                            : formatPage.data[metric],
+                          /** Dispatches spacing editing. @param value - Twips. @returns Nothing. */ (
+                            value,
+                          ) => {
+                            formatPage.ValueChangedHdl(metric, value);
+                            refreshPage(
+                              /** Refreshes linked geometry. @param version - Current version. @returns Next version. */
+                              (version) => version + 1,
+                            );
+                          },
+                          (metric === "left" || metric === "right") &&
+                            !formatPage.IsSensitive(metric),
+                          metric === "left" || metric === "right",
+                        ),
+                    )}
+                  </fieldset>
+                </>
+              ) : null}
               {activeTab === "columns" ? (
                 <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
                   <legend className="text-sm font-bold">Columns</legend>

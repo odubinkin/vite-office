@@ -1,0 +1,51 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/ui/table/tabledlg.ts apps/office/src/sw/source/ui/table/native-table-format-page.test.ts apps/office/src/sw/browser/editor/native-table-selection.test.tsx apps/office/e2e/writer-table-alignment.spec.ts",
+    "exit": 1,
+    "bytes": 161,
+    "sha256": "3a5ae86bb900e21011a1cec0992ffe8800d04eb2b33a1186263c0e498f3e1133"
+  },
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/source/ui/table/tabledlg.ts apps/office/src/sw/source/ui/table/native-table-format-page.test.ts apps/office/src/sw/browser/editor/native-table-selection.test.tsx apps/office/e2e/writer-table-alignment.spec.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/source/ui/table/tabledlg.ts apps/office/src/sw/source/ui/table/native-table-format-page.test.ts apps/office/src/sw/browser/editor/native-table-selection.test.tsx apps/office/e2e/writer-table-alignment.spec.ts --max-warnings 0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "bytes": 240,
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "command": "native JSDoc validateSourceFile declarations: four changed paths, scoped entrypoint only",
+    "exit": 0,
+    "bytes": 24,
+    "sha256": "2f66541f9439d6e1b8ecd50702192f531ac51e47b2b7a3384ca4b7d60fa2d783",
+    "result": {
+      "files": 4,
+      "errors": []
+    }
+  },
+  {
+    "command": "physical newline counts: four changed paths, native <1000 limit",
+    "exit": 0,
+    "bytes": 278,
+    "sha256": "864d3ef29b3d976d156b41d320aaf8035a7bc78211eb4db82ccabc98736533cd",
+    "result": {
+      "counts": {
+        "apps/office/src/sw/source/ui/table/tabledlg.ts": 166,
+        "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts": 199,
+        "apps/office/src/sw/browser/editor/native-table-selection.test.tsx": 213,
+        "apps/office/e2e/writer-table-alignment.spec.ts": 126
+      },
+      "limit": 1000
+    }
+  }
+]

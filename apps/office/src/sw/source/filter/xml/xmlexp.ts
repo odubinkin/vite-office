@@ -2,6 +2,7 @@
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 
 import {
   SvxAdjust,
@@ -267,11 +268,31 @@ function exportWriterText(
             continue;
           }
           const table = block.GetTable();
+          const format = table.GetFormat();
+          const orient = format.horiOrient;
           yield {
             kind: "table" as const,
             table: {
               name: table.GetName(),
-              format: table.GetFormat(),
+              format:
+                orient === undefined
+                  ? format
+                  : {
+                      ...format,
+                      align:
+                        orient === HoriOrientation.LEFT || orient === HoriOrientation.LEFT_AND_WIDTH
+                          ? "left"
+                          : orient === HoriOrientation.RIGHT
+                            ? "right"
+                            : orient === HoriOrientation.CENTER
+                              ? "center"
+                              : "margins",
+                      marginLeft:
+                        orient === HoriOrientation.NONE || orient === HoriOrientation.LEFT_AND_WIDTH
+                          ? format.marginLeft
+                          : undefined,
+                      marginRight: orient === HoriOrientation.NONE ? format.marginRight : undefined,
+                    },
               columnWidths: table.GetColumnWidths(),
               softPageBreakRows: table.GetSoftPageBreakRows(),
               rows: table.GetTabLines().map(

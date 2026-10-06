@@ -1,9 +1,15 @@
 /** @fileoverview Applies represented table dialog attributes through native ItemSetToTableParam ownership from tabsh.cxx. */
 import type { SwFEShell } from "../../core/frmedt/fetab";
+import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
 export interface SwTableProperties {
   readonly width: number;
+  readonly horiOrient?: HoriOrientation;
+  readonly marginLeft?: number;
+  readonly marginRight?: number;
+  readonly marginTop?: number;
+  readonly marginBottom?: number;
   readonly columnWidths: readonly number[];
   readonly minRowHeight: number;
   readonly padding: number;
@@ -38,7 +44,19 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
         shell.SetRowHeight(value.minRowHeight);
         shell.SetBoxAlign(value.verticalAlign);
         shell.SetTabCols(value.columnWidths);
-        shell.SetTableAttr({ width: value.width });
+        shell.SetTableAttr({
+          width: value.width,
+          ...(value.horiOrient === undefined
+            ? {}
+            : {
+                horiOrient: value.horiOrient,
+                marginLeft: value.marginLeft,
+                marginRight: value.marginRight,
+                marginTop: value.marginTop,
+                marginBottom: value.marginBottom,
+                align: undefined,
+              }),
+        });
         return true;
       } finally {
         undo.EndUndo();

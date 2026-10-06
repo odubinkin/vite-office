@@ -1,6 +1,7 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
 
 import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
@@ -8,6 +9,7 @@ export interface SwTableFormat {
   readonly headerRows?: number | undefined;
   readonly repeatHeaderRows?: boolean | undefined;
   readonly width?: number | undefined;
+  readonly horiOrient?: HoriOrientation | undefined;
   readonly align?: "left" | "center" | "right" | "margins" | undefined;
   readonly marginLeft?: number | undefined;
   readonly marginRight?: number | undefined;
@@ -121,6 +123,31 @@ export class SwTable {
   /** Returns table geometry. @returns Immutable values. */
   public GetFormat(): SwTableFormat {
     return { ...this.format };
+  }
+
+  /** Reads native orientation, admitting historical ODF geometry at the table boundary. @returns Frame orientation. */
+  public GetHoriOrient(): HoriOrientation {
+    if (this.format.horiOrient !== undefined) return this.format.horiOrient;
+    switch (this.format.align) {
+      case "left":
+        return this.format.width === undefined
+          ? this.format.marginLeft !== undefined || this.format.marginRight !== undefined
+            ? HoriOrientation.NONE
+            : HoriOrientation.FULL
+          : this.format.marginLeft !== undefined || this.format.marginRight !== undefined
+            ? HoriOrientation.LEFT_AND_WIDTH
+            : HoriOrientation.LEFT;
+      case "center":
+        return this.format.width === undefined ? HoriOrientation.FULL : HoriOrientation.CENTER;
+      case "right":
+        return this.format.width === undefined ? HoriOrientation.FULL : HoriOrientation.RIGHT;
+      case "margins":
+        return this.format.marginLeft !== undefined || this.format.marginRight !== undefined
+          ? HoriOrientation.NONE
+          : HoriOrientation.FULL;
+      default:
+        return HoriOrientation.FULL;
+    }
   }
 
   /** Replaces table geometry. @param value - New values. @returns Nothing. */

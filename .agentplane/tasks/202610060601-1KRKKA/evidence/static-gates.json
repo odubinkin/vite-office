@@ -1,0 +1,86 @@
+[
+  {
+    "command": "npm run format:check",
+    "exit": 1,
+    "bytes": 217,
+    "sha256": "f20761ebebe18637954a9f8925cdc8a7612c6e2ebf0e93cb6577b5f80d0a8cc3"
+  },
+  {
+    "command": "npm run format:check",
+    "exit": 0,
+    "bytes": 122,
+    "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116"
+  },
+  {
+    "command": "npm run lint",
+    "exit": 0,
+    "bytes": 55,
+    "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 2,
+    "bytes": 2248,
+    "sha256": "3f07fcd88b30b45763d27e1a7013e06f2e6ded8c6a75c1659680377fcf40f882"
+  },
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx --max-warnings 0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "bytes": 240,
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "command": "npm run check:dependencies",
+    "exit": 0,
+    "bytes": 189,
+    "sha256": "7ed6d14cba070dd852ac0cbe661bc790930cb4cc1f41fc74f02451d32673f56b"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 1,
+    "bytes": 548,
+    "sha256": "11da276c77f0fff5b0f565d1a2516adc85831e4ed18346f86e4cba9eef235211"
+  },
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/source/ui/table/native-table-format-page.test.ts",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/WriterTableDialog.tsx apps/office/src/sw/source/ui/table/native-table-format-page.test.ts --max-warnings 0",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm run typecheck",
+    "exit": 0,
+    "bytes": 240,
+    "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  },
+  {
+    "command": "npm run check:docs",
+    "exit": 0,
+    "bytes": 119,
+    "sha256": "c46a502050e31a76cbbc897451f083648099210d3da87d0272da2df281e38220"
+  },
+  {
+    "command": "npm run check:file-size",
+    "exit": 0,
+    "bytes": 3478,
+    "sha256": "41827972519242fe9fad671796c27ca63a951c7e6d7524b58af565a5604f706f"
+  }
+]

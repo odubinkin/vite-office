@@ -1,0 +1,181 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/offapi/com/sun/star/text/HoriOrientation.ts": "16374e06e2f1191e5189a31f45e657591becad202f62184c30cb0e7539fd1047",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "26ad5a1aa15cd3d47f8313801cd34da0b60a1b103ee8589c6ac39e52f1d7f701",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "13df44756572c7ebd246e40ee1d2d892cc68edd289a515a646a640011a356739",
+    "apps/office/src/sw/source/core/table/swtable.ts": "14fa5c3650bc25abee5f3e16b25edd22a6bbdf5e3684cd0ecaac22db95334aeb",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "034ec120e2bed3d88c420ff4f0117fb29659f0cdaebe390a88f6400bde1c42e5",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "925d2acb9b11fdddc0ec0af81298fe1044b297f79dcb25ad70c16188ec39250d",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "ccb26aedec3446936134e2680c5ec3b77d6c9bed763bf32d94f300769d587abf",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "42ccdb0e929f614df8e83d7e463549bc0eabb33ba925ce8f3b833985cbbf7941"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/1KRKKA.last.app-results.json src/framework/browser/app/desktop.test.tsx -t opens an ODT through the computer tab and exports a parseable package",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 27273,
+      "sha256": "16e82491ec63ef47f35c5d5c8b6bcb76a14693a49a5adcb0b0f56e93acd6e2e5",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 10 skipped (11)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 10,
+        "total": 11
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 13372,
+          "covered": 4478,
+          "skipped": 0,
+          "pct": 33.48
+        },
+        "statements": {
+          "total": 14656,
+          "covered": 4635,
+          "skipped": 0,
+          "pct": 31.62
+        },
+        "functions": {
+          "total": 3517,
+          "covered": 1262,
+          "skipped": 0,
+          "pct": 35.88
+        },
+        "branches": {
+          "total": 10940,
+          "covered": 2319,
+          "skipped": 0,
+          "pct": 21.19
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 33.48,
+        "statements": 31.62,
+        "functions": 35.88,
+        "branches": 21.19
+      },
+      "incompleteFiles": {
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/presentation/WriterFileDialog.tsx": {
+          "lines": {
+            "total": 76,
+            "covered": 37,
+            "skipped": 0,
+            "pct": 48.68
+          },
+          "functions": {
+            "total": 28,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 39.28
+          },
+          "statements": {
+            "total": 85,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 44.7
+          },
+          "branches": {
+            "total": 76,
+            "covered": 42,
+            "skipped": 0,
+            "pct": 55.26
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/workflows/writer-document-io.ts": {
+          "lines": {
+            "total": 6,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 50
+          },
+          "functions": {
+            "total": 5,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 40
+          },
+          "statements": {
+            "total": 6,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 50
+          },
+          "branches": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/workflows/writer-workflows.ts": {
+          "lines": {
+            "total": 21,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 28.57
+          },
+          "functions": {
+            "total": 14,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 35.71
+          },
+          "statements": {
+            "total": 21,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 28.57
+          },
+          "branches": {
+            "total": 2,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/ui/table/tabledlg.ts": {
+          "lines": {
+            "total": 96,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "functions": {
+            "total": 7,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "statements": {
+            "total": 107,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "branches": {
+            "total": 67,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          }
+        }
+      },
+      "coverageMapSHA256": "ed2440d61b72f50026ccb8321e97094248384ce6e2bd6e1eff7c764a54fe42ee",
+      "incompleteFileCount": 234
+    }
+  ]
+}
