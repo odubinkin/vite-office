@@ -13,6 +13,19 @@ import { SwUndoAttrTable } from "../undo/untbl";
 
 /** Native frame-editing shell inherits the existing editing shell without an operation adapter. */
 export abstract class SwFEShell extends SwEditShell {
+  /** Recognizes native whole-table mode from the first and last selected section boundaries. @returns Whether table edges are selected. */
+  public HasWholeTabSelection(): boolean {
+    if (!this.HasBoxSelection()) return false;
+    const boxes = this.GetTableSel(),
+      table = this.IsCursorInTable();
+    return (
+      boxes.length > 0 &&
+      table !== undefined &&
+      (boxes[0] as SwTableBox).GetStartNode().GetIndex() - 1 === table.GetIndex() &&
+      (boxes.at(-1) as SwTableBox).GetStartNode().EndOfSectionNode().GetIndex() + 1 ===
+        table.EndOfSectionNode().GetIndex()
+    );
+  }
   /** Returns original selected native boxes without a projection. @param search - Native rectangle, row or column expansion. @returns Actual box owners. */
   public override GetTableSel(search: 0 | 1 | 2 = SwTable.SEARCH_NONE): readonly SwTableBox[] {
     const table = this.IsCursorInTable()?.GetTable();

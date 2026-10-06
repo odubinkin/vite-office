@@ -395,12 +395,48 @@ export class SwWrtShell extends SwFEShell {
     }
     this.SetPaM(new SwPosition(paragraph, paragraph.Len()));
   }
-  /** Selects the complete current Writer body through the persistent shell cursor. @returns Nothing. */
+  /** Selects the current native cell, then table, then surrounding text from actual range state. @returns Nothing. */
   public SelectAll(): void {
-    const document = this.GetDoc();
-    const first = document.paragraphs[0] as WriterParagraph;
-    const last = document.paragraphs[document.paragraphs.length - 1] as WriterParagraph;
-    this.SetPaM(new SwPosition(last, last.Len()), new SwPosition(first, 0));
+    this.RunNotificationTransaction(
+      /** Publishes only final native selection and pending attributes. @returns Nothing. */ () => {
+        const inTable = this.IsCursorInTable() !== undefined;
+        if (
+          this.HasWholeTabSelection() ||
+          (inTable &&
+            this.getShellCursor().GetMark().GetNode().StartOfSectionNode() instanceof
+              SwTableBoxStartNode &&
+            this.ExtendedSelectedAll() !== undefined)
+        ) {
+          if (this.MoveOutOfTable()) {
+            this.EnterStdMode();
+            this.MoveStartText();
+            this.cursor.SetMark();
+            this.cursor.MoveSection(false);
+          }
+        } else {
+          const cursor = this.getShellCursor();
+          if (cursor.HasMark() && cursor.GetPoint() === cursor.End()) cursor.Exchange();
+          const saved = new SwCursor(
+            cursor.GetPoint(),
+            cursor.HasMark() ? cursor.GetMark() : undefined,
+          );
+          let full = !saved.MoveSection(true);
+          saved.Exchange();
+          full = !saved.MoveSection(false) && full;
+          saved.Dispose();
+          if (inTable && (full || this.HasBoxSelection())) this.SelTable();
+          else {
+            if (inTable) cursor.MoveSection(true);
+            else this.MoveStartText();
+            cursor.SetMark();
+            cursor.MoveSection(false);
+          }
+        }
+        if (this.StartsWith_() !== "none" && (!inTable || !this.HasWholeTabSelection()))
+          this.ExtendedSelectAll(false);
+        this.UpdateTableCursor();
+      },
+    );
   }
   /** Pastes at the current canonical PaM without a projected string selection. @param paste - Parsed clipboard content. @returns Whether content changed. */
   public PasteAtCursor(paste: WriterPasteDocument): boolean {

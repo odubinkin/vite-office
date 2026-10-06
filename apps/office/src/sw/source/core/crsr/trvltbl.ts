@@ -1,12 +1,15 @@
 /** @fileoverview Owns native table-cell shell traversal from LibreOffice trvltbl.cxx. */
 import { SwModify } from "../../../inc/calbck";
-import { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
+import { SwTableBoxStartNode, SwTableNode, type SwNode, type SwStartNode } from "../docnode/node";
 import { SwCursor, SwTableCursor } from "./swcrsr";
 import { SwTable, type SwTableBox } from "../table/swtable";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
 import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTableLine } from "../table/swtable";
+
+/** Native extended range retains the first structural node and trailing table owners. */
+export type ExtendedSelection = readonly [SwNode, readonly SwTableNode[]];
 
 /** Core cursor shell precedes editing/frame shells and owns actual table movement. */
 export abstract class SwCursorShell extends SwModify {
@@ -22,6 +25,127 @@ export abstract class SwCursorShell extends SwModify {
   public abstract CaptureCursorState(): SwUndoCursorState;
   /** Reconciles shell input and bindings after native movement. @returns Nothing. */
   protected abstract UpdateTableCursor(): void;
+
+  /** Finds the common represented XText owner, retaining cells and skipping table sections. @returns Containing text section. */
+  private FindParentText(): SwStartNode {
+    const cursor = this.getShellCursor();
+    let parent = cursor.Start().GetNode().StartOfSectionNode();
+    while (parent.EndOfSectionNode().GetIndex() < cursor.End().GetNodeIndex())
+      parent = parent.StartOfSectionNode();
+    while (parent instanceof SwTableNode) parent = parent.StartOfSectionNode();
+    return parent;
+  }
+  /** Moves to current text start, leaving leading tables for the first outer paragraph. @returns Whether the actual point changed. */
+  protected MoveStartText(): boolean {
+    const cursor = this.getShellCursor(),
+      point = cursor.GetPoint(),
+      oldNode = point.GetNode(),
+      oldOffset = point.GetContentIndex(),
+      parent = this.FindParentText(),
+      nodes = parent.GetNodes(),
+      ownTable = parent instanceof SwTableBoxStartNode ? parent.StartOfSectionNode() : undefined;
+    let index = parent.GetIndex() + 1;
+    while (!nodes.at(index).IsTextNode()) index++;
+    point.Assign(nodes.at(index), 0);
+    while (point.GetNode().StartOfSectionNode() instanceof SwTableBoxStartNode) {
+      if (
+        point.GetNode().StartOfSectionNode().StartOfSectionNode() === ownTable ||
+        !this.MoveOutOfTable()
+      )
+        break;
+    }
+    this.UpdateTableCursor();
+    return oldNode !== point.GetNode() || oldOffset !== point.GetContentIndex();
+  }
+  /** Reports a table at either edge of the current text, excluding ranges spanning extras. @returns Represented native boundary kind. */
+  public StartsWith_(): "none" | "table" {
+    const cursor = this.getShellCursor(),
+      extras = this.GetDoc().nodes.GetEndOfExtras().GetIndex();
+    if (cursor.Start().GetNodeIndex() <= extras && extras < cursor.End().GetNodeIndex())
+      return "none";
+    const parent = this.FindParentText(),
+      nodes = parent.GetNodes(),
+      first = nodes.at(parent.GetIndex() + 1),
+      last = nodes.at(parent.EndOfSectionNode().GetIndex() - 1);
+    return first instanceof SwTableNode ||
+      (last.IsEndNode() && last.StartOfSectionNode() instanceof SwTableNode)
+      ? "table"
+      : "none";
+  }
+  /** Selects real content boundaries of the current text, optionally including native extra sections. @param footnotes - Include extras by native default. @returns Nothing. */
+  public ExtendedSelectAll(footnotes = true): void {
+    const parent = this.FindParentText(),
+      nodes = this.GetDoc().nodes,
+      start = footnotes ? nodes.GetEndOfPostIts().GetIndex() : parent.GetIndex(),
+      end = footnotes ? nodes.GetEndOfContent().GetIndex() : parent.EndOfSectionNode().GetIndex(),
+      contents = nodes
+        .entries()
+        .slice(start + 1, end)
+        .filter(
+          /** Keeps native content owners. @param node - Native node. @returns Whether text. */
+          (node): node is SwTextNode => node instanceof SwTextNode,
+        ),
+      first = contents[0] as SwTextNode,
+      last = contents.at(-1) as SwTextNode;
+    this.ClearTableCursor();
+    this.cursor.GetPoint().Assign(first, 0);
+    this.cursor.SetMark();
+    this.cursor.GetMark().Assign(last, last.Len());
+    this.UpdateTableCursor();
+  }
+  /** Recognizes a full extended ordinary range and retains structural boundary owners. @returns Native extended selection or undefined. */
+  public ExtendedSelectedAll(): ExtendedSelection | undefined {
+    if (this.HasBoxSelection()) return undefined;
+    const parent = this.FindParentText(),
+      nodes = parent.GetNodes(),
+      contents = nodes
+        .entries()
+        .slice(parent.GetIndex() + 1, parent.EndOfSectionNode().GetIndex())
+        .filter(
+          /** Keeps actual content endpoints. @param node - Native node. @returns Whether text. */
+          (node): node is SwTextNode => node instanceof SwTextNode,
+        ),
+      first = contents[0] as SwTextNode,
+      last = contents.at(-1) as SwTextNode,
+      cursor = this.getShellCursor();
+    if (
+      cursor.Start().GetNode() !== first ||
+      cursor.Start().GetContentIndex() !== 0 ||
+      cursor.End().GetNode() !== last ||
+      cursor.End().GetContentIndex() !== last.Len() ||
+      this.StartsWith_() === "none"
+    )
+      return undefined;
+    const tables: SwTableNode[] = [];
+    let node = nodes.at(parent.EndOfSectionNode().GetIndex() - 1);
+    while (node.IsEndNode() && node.StartOfSectionNode() instanceof SwTableNode) {
+      const table = node.StartOfSectionNode() as SwTableNode;
+      tables.push(table);
+      node = nodes.at(table.GetIndex() - 1);
+    }
+    return [nodes.at(parent.GetIndex() + 1), tables];
+  }
+  /** Leaves a flat table toward previous outer text, then tries following text, preserving failed selection. @returns Whether outer text exists. */
+  public MoveOutOfTable(): boolean {
+    const table = this.IsCursorInTable();
+    if (table === undefined) return false;
+    const parent = table.StartOfSectionNode(),
+      nodes = parent.GetNodes();
+    for (const direction of [-1, 1]) {
+      let index = direction < 0 ? table.GetIndex() - 1 : table.EndOfSectionNode().GetIndex() + 1;
+      while (parent.GetIndex() < index && index < parent.EndOfSectionNode().GetIndex()) {
+        const node = nodes.at(index);
+        if (node instanceof SwTextNode && node.StartOfSectionNode() === parent) {
+          const cursor = this.getShellCursor();
+          cursor.DeleteMark();
+          cursor.GetPoint().Assign(node, direction < 0 ? node.Len() : 0);
+          return true;
+        }
+        index += direction;
+      }
+    }
+    return false;
+  }
 
   /** Returns native editing cursors, materializing selected full-cell rings by default. @param makeTableCursor - Refresh boxes after displayed endpoint movement. @returns Current ordinary editing cursor. */
   public GetCursor(makeTableCursor = true): SwCursor {

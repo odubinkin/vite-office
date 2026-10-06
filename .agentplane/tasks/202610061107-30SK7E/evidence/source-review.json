@@ -1,0 +1,23 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/uibase/wrtsh/select.cxx": "e52314599cd686635085927f18a311cf742424076e052a2770d0a8b46eff67d0",
+    "sw/source/uibase/wrtsh/move.cxx": "266b3e88648bdecb5a9d98ddf6d1d7189763a6a4d0a428e06e793c12a31699e8",
+    "sw/source/core/crsr/crsrsh.cxx": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a",
+    "sw/source/core/crsr/pam.cxx": "6b88edc57ef122759003e459fd0b43bb9b1ff409b89238b7c598ab291dbf4f77",
+    "sw/source/core/crsr/paminit.cxx": "f1237b0ab9f50ab521d449e5b53b497839e31b3055fe7a11f64a9c97fe2729a5",
+    "sw/source/core/docnode/nodes.cxx": "00ed4be35d90fd8921927b767c09d2d6ba6ae352e08fec9f291d5ac21e836a0b",
+    "sw/source/core/crsr/swcrsr.cxx": "682cbb23cd826925fbf67362f31e7a9903cce89863fa6263aa08675ef9516644",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016"
+  },
+  "reviewer": "Same current agent; source reading only, no upstream execution",
+  "contracts": [
+    "SelAll uses actual full-section/whole-table and mark owner state; source MoveStartText skips leading tables into surrounding text before GoEnd.",
+    "HasWholeTabSelection compares original first/last cell section edges, not a synthetic click count or UI paragraph total.",
+    "MoveOutOfTable prefers backward then forward outer text and scans adjacent table sections; failed exit preserves original range.",
+    "ExtendedSelectAll default includes extras; false uses common XText boundaries and reverses ordinary point/mark. ExtendedSelection retains first structural node and trailing native table owners.",
+    "A leading table with a mark in trailing outer text expands to that first table on the next command; table boundaries at both ends use ExtendedSelectedAll outer-text path.",
+    "Current represented flat graph is source-backed; hidden/nested/protected/layout modes, GoCurrSection table-skip refinements outside this body MoveStartText path, PrepareSelAll and extended structural deletion remain unverified."
+  ]
+}

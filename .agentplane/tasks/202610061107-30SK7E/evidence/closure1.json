@@ -1,0 +1,57 @@
+{
+  "profile": "upstream-absent original failures and three genuine new cases only",
+  "records": [
+    {
+      "kind": "build-changed",
+      "command": "npm run test:static",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "72763d2afec0491b33d0b810afc79e1ab3fc9eb1e7d7e79157f88f5846ace6b1",
+      "failedCases": []
+    },
+    {
+      "kind": "app-closure1",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-select-all.test.ts src/sw/browser/editor/native-select-all.test.tsx --testNamePattern ctrlKey synchronizes cell text|metaKey synchronizes cell text|includes actual table text at (leading|both) document edges|leaves toward previous text and falls forward|native text start|native table exit skips adjacent --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/30SK7E.app-closure1-results.json",
+      "exit": 1,
+      "bytes": 1950,
+      "sha256": "fd1536bfd698a8e78cc5d692f679f3b032c6094209e77b22a6074da39521272e",
+      "failedCases": [
+        {
+          "file": "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+          "name": "native contextual Select All includes actual table text at both document edges",
+          "message": "AssertionError: expected false to be true // Object.is equality\n    at /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts:194:48\n    at file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/runner/dist/chunk-artifact.js:302:1"
+        }
+      ],
+      "counts": {
+        "passed": 7,
+        "failed": 1,
+        "skipped": 17,
+        "total": 25
+      },
+      "mapSHA256": "d48ad4dd64b9e3838a8d5cd7695e8724a34ba56193a3ce51412d978d29370f7f"
+    },
+    {
+      "kind": "chromium-closure1",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-select-all.spec.ts --reporter=list,json",
+      "exit": 0,
+      "bytes": 822,
+      "sha256": "869b9b15efaf453c4cbc4a892225181905b22ad754318d437b5a06c368a200de",
+      "failedCases": [],
+      "counts": {
+        "startTime": "2026-10-06T11:33:20.647Z",
+        "duration": 3788.19,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ],
+  "vendorRestored": true,
+  "sourceSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "acba82dafc417b0e50af7b5a4064cf50226b0f7e89013bf04dae10e03e37ff15",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "f6d93753f3bb0dcc3fc3aeb766c38ed0d7e33c53eda2f4ea71346a2e20d9f36b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "3a66bb24bbc8a04bafabb2853b0e71a952f035a42d804b292971ae9d974cbda0",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "d40bfb41a3bc1dea4b9b0cfc9ae2e5d9bab8433cb11f650fa708f934fdab86c5"
+  }
+}

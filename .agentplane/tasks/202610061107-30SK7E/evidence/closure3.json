@@ -1,0 +1,27 @@
+{
+  "profile": "upstream-absent one genuine new repeated table-only/ring/history case for changed enclosing native branch only",
+  "records": [
+    {
+      "kind": "app-closure3",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-select-all.test.ts --testNamePattern native repeated Select All on table-only text --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/30SK7E.app-closure3-results.json",
+      "exit": 0,
+      "bytes": 692,
+      "sha256": "088df7e6861587763fa7f9da98e048d971f417d8d4e851592e4302eda023f2bb",
+      "failedCases": [],
+      "counts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 20,
+        "total": 21
+      },
+      "mapSHA256": "17208374951e5c32a037a16fca56fcf7e19b1090ced1ca805d75e1101042a39a"
+    }
+  ],
+  "vendorRestored": true,
+  "sourceSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "acba82dafc417b0e50af7b5a4064cf50226b0f7e89013bf04dae10e03e37ff15",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "f6d93753f3bb0dcc3fc3aeb766c38ed0d7e33c53eda2f4ea71346a2e20d9f36b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "3a66bb24bbc8a04bafabb2853b0e71a952f035a42d804b292971ae9d974cbda0",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "d40bfb41a3bc1dea4b9b0cfc9ae2e5d9bab8433cb11f650fa708f934fdab86c5"
+  }
+}

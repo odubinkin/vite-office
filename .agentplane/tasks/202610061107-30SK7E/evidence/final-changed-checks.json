@@ -1,0 +1,33 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator and physical-line check on all seven changed implementation/acceptance paths",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/crsr/trvltbl.ts": 290,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 215,
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 946,
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": 361,
+        "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts": 369,
+        "apps/office/src/sw/browser/editor/native-select-all.test.tsx": 149,
+        "apps/office/e2e/writer-native-select-all.spec.ts": 94
+      }
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts apps/office/src/sw/browser/editor/native-select-all.test.tsx apps/office/e2e/writer-native-select-all.spec.ts --max-warnings 0",
+      "exit": 0
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts apps/office/src/sw/browser/editor/native-select-all.test.tsx apps/office/e2e/writer-native-select-all.spec.ts",
+      "exit": 0
+    },
+    {
+      "command": "npm exec -- tsc --noEmit --project apps/office/tsconfig.json",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

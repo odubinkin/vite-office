@@ -99,6 +99,7 @@ export class BrowserWriterEditWindow {
     ): void => {
       if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "a") {
         event.preventDefault();
+        this.SynchronizeSelection();
         this.editWindow.SelectAll();
       } else if (
         (event.key === "Home" || event.key === "End") &&

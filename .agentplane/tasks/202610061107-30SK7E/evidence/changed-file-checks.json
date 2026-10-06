@@ -1,0 +1,31 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on four changed source paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/crsr/trvltbl.ts": 290,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 215,
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": 946,
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": 361
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/crsr/trvltbl.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/crsr/trvltbl.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

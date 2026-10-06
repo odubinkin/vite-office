@@ -1,0 +1,27 @@
+{
+  "base": "7bd7e3fbfd95aa9b60ba7964f2e5d39a8b0ebaab",
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+    "apps/office/src/sw/browser/editor/native-select-all.test.tsx",
+    "apps/office/e2e/writer-native-select-all.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "oldTestFiles": 482,
+  "byteIdenticalOldTestFiles": 482,
+  "changedOldTests": [],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts",
+    "apps/office/src/sw/browser/editor/native-select-all.test.tsx",
+    "apps/office/e2e/writer-native-select-all.spec.ts"
+  ],
+  "priorSemanticModules": 270,
+  "currentSemanticModules": 270,
+  "priorStatesDefaultsClassificationsAndJustificationPreserved": true,
+  "evidenceChange": "All existing evidence/responsibilities/justification prefixes retained; source-backed contextual selection additions only.",
+  "failures": []
+}
