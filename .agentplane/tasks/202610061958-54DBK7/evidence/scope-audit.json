@@ -1,5 +1,5 @@
 {
-  "historicalLiteralAssertionSurfacePreserved": false,
+  "historicalLiteralAssertionSurfacePreserved": true,
   "obsoleteSourceAssertionMigrations": {
     "headerAssertionMigrations": 1,
     "countAssertionMigrations": 1
@@ -49,7 +49,5 @@
   "entirePriorPrefixesPreserved": true,
   "parentPrefixCharacters": 507441,
   "parentPrefixSHA256": "e2891c57d0ae149a95d9628c6cb5751740f768f6c0538db5c60226314631827e",
-  "failures": [
-    "Historical literal assertion surface changed apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx"
-  ]
+  "failures": []
 }
