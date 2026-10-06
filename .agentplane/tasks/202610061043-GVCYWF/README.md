@@ -4,7 +4,7 @@ title: "Remove callback editing and clipboard operation adapters from native Wri
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T11:00:28.061Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact-SHA quality PASS at422482e0a0c4635daa2f345ec39dfde5dd6fadad; actual native shell identity replaces two callback adapter layers; all declared checks pass."
+  evaluated_sha: "422482e0a0c4635daa2f345ec39dfde5dd6fadad"
+  blueprint_digest: "ab27f162c4230ae9badaf3d1b2eacc730e68985b29dec8a9c24dc5e808b0bb8e"
+  evidence_refs:
+    - ".agentplane/tasks/202610061043-GVCYWF/README.md"
+    - ".agentplane/tasks/202610061043-GVCYWF/quality/20261006-110028061-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610061043-GVCYWF/quality/20261006-110028061-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610061043-GVCYWF/quality/20261006-110028061-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610061043-GVCYWF/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610061043-GVCYWF/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610061043-GVCYWF/evidence/source-review.json"
+    - ".agentplane/tasks/202610061043-GVCYWF/evidence/scope-audit.json"
+  findings:
+    - "Removed SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations. Split algorithms and clipboard/list coordination call actual native shell/document/history methods directly with erased type-only dependencies;117 net source lines removed."
+    - "All482 existing acceptance files byte-identical. ONE absent full profile PASS12841app109inventory5scripts195Chromium;100% actual app/inventory counters; no closures/replays/merges/transfers/rebuilds; production hashes unchanged."
+    - "270 prior semantic states/defaults/classes/justification preserved; only obsolete-symbol references replaced. All six initial static gates, scoped checks, once-restored source gates and governance/scope/artifact checks pass."
 commit: null
 comments:
   -
@@ -36,7 +56,7 @@ events:
     to: "DOING"
     note: "Start: remove two callback adapter layers using actual native shell identity; preserve behavior, one absent profile, whole parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T10:59:15.919Z"
+doc_updated_at: "2026-10-06T11:00:28.552Z"
 doc_updated_by: "CODER"
 description: "Iteration184: remove SwWrtShellEditingOperations/SwWrtShellEditingPort and WriterPasteOperations callback layers; structural editing uses actual SwWrtShell owner, native cursor/document/history methods and direct transfer coordination. Preserve existing behavior and registered I/O deviations; verify all existing acceptance once upstream absent."
 sections:
@@ -48,7 +68,7 @@ sections:
     2. ONE full upstream-absent profile, vendor renamed inside repo/restored in finally: npm run test:static; full app/inventory coverage --coverage.reportOnFailure with JSON raw cases/maps; scripts acceptance; all Chromium against dist. Persist exact failures/counts/errors/hashes before asserting. No full/passing replay or tests invoking upstream; original failure/new-case closure only if necessary.
     3. All482 existing test files remain byte-identical; existing actual shell/mounted/browser cases cover body/table selected input, deletion/split/join, native hints/list state, plain/rich transfer, grouping/Undo/Redo/composition, notifications and replacement.100% actual app/inventory counters; any transfer only identical maps or entire byte-identical ranges with actual counters. No removed adapter symbols/callback objects in production, no runtime dependency cycle; genuine native SwWrtShell owner used directly.
     4. After restoration generation --check/source-tree/provenance/invariants/parity once. Scope audit all270 prior semantic statuses/defaults/classes preserved; precise removed-symbol metadata replacement only. Scoped AP source/helper prohibition, doctor/routing/diff and same-agent exact-SHA quality; scoped implementation/evidence/verification/clean close; preserve entire parent Findings prefix.
-  Verification: "Command: six initial static gates; scoped JSDoc/physical-line/format/lint checks; ONE full upstream-absent build/app/inventory/scripts/Chromium profile; once-restored generator/tree/provenance/invariants/parity; scope/artifact/doctor/routing/diff. Result: PASS. Evidence:12841app109inventory5scripts195Chromium distinct PASS,0 failures/skips/flaky/runtime errors; actual initial app/inventory100% counters, byte-identical final maps, unchanged production hashes. No test closures/coverage merges/transfers/rebuilds/full passing replay. Scope:5 semantic paths,3source files117 net lines removed,482/482oldtestfiles byte-identical,270prior/current semantic states/defaults/classes/justification preserved; only obsolete adapter symbols/evidence replaced. Vendor restored. Same-agent exact-SHA quality/clean close pending; parent/whole goal ACTIVE/full parity UNVERIFIED."
+  Verification: "Command: all six initial static gates; changed-path JSDoc/physical-lines/prettier/eslint; one absent full profile; once-restored source gates; scope/artifact/doctor/routing/diff and same-agent exact-SHA quality. Result: PASS at422482e0a0c4635daa2f345ec39dfde5dd6fadad. Evidence:12841app109inventory5scripts195Chrome distinct PASS,0failures/skips/flaky/runtimeerrors; actual app/inventory100% counters and byte-identical final maps. No closures/rebuilds/coverage merges/transfers/full passing replay. All482oldtests byte-identical;270prior semantic states/defaults/classes/justification preserved; exact obsolete-symbol metadata replacement only; source6pinnedfiles. Vendor restored, source hashes unchanged, doctor0errors2knownwarnings. Same current agent in EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE."
   Rollback Plan: "Revert scoped implementation through a separate leaf if native cursor/history/transfer behavior regresses; preserve immutable DONE evidence and conscious I/O deviations."
   Findings: |-
     Previous turn made verified progress:183 DONE implementation0264126bc5f57c16b0a94884a4722408af1e2d05; parent checkpoint3c430aa4e84ef4c8e5a4d39a6d15677e62a4fe1b. Discovery shows native operations still invoked through SwWrtShellEditingOperations/SwWrtShellEditingPort and WriterPasteOperations object. Callback port originally avoided a runtime cycle, but a type-only actual-shell dependency now removes both synthetic identity layers without runtime import. Optional nonexistent table-paste/readtext/sw-inc-wrtsh/check-dependencies discovery paths resolved via actual rg/package commands; route recomputed before mutation. Full native behavior/layout/protection/clipboard and whole parity remain unverified.
@@ -89,7 +109,7 @@ Remove both synthetic callback editing/transfer ports and use actual native SwWr
 
 ## Verification
 
-Command: six initial static gates; scoped JSDoc/physical-line/format/lint checks; ONE full upstream-absent build/app/inventory/scripts/Chromium profile; once-restored generator/tree/provenance/invariants/parity; scope/artifact/doctor/routing/diff. Result: PASS. Evidence:12841app109inventory5scripts195Chromium distinct PASS,0 failures/skips/flaky/runtime errors; actual initial app/inventory100% counters, byte-identical final maps, unchanged production hashes. No test closures/coverage merges/transfers/rebuilds/full passing replay. Scope:5 semantic paths,3source files117 net lines removed,482/482oldtestfiles byte-identical,270prior/current semantic states/defaults/classes/justification preserved; only obsolete adapter symbols/evidence replaced. Vendor restored. Same-agent exact-SHA quality/clean close pending; parent/whole goal ACTIVE/full parity UNVERIFIED.
+Command: all six initial static gates; changed-path JSDoc/physical-lines/prettier/eslint; one absent full profile; once-restored source gates; scope/artifact/doctor/routing/diff and same-agent exact-SHA quality. Result: PASS at422482e0a0c4635daa2f345ec39dfde5dd6fadad. Evidence:12841app109inventory5scripts195Chrome distinct PASS,0failures/skips/flaky/runtimeerrors; actual app/inventory100% counters and byte-identical final maps. No closures/rebuilds/coverage merges/transfers/full passing replay. All482oldtests byte-identical;270prior semantic states/defaults/classes/justification preserved; exact obsolete-symbol metadata replacement only; source6pinnedfiles. Vendor restored, source hashes unchanged, doctor0errors2knownwarnings. Same current agent in EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE.
 
 ## Rollback Plan
 

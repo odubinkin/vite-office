@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610061043-GVCYWF",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T11:00:28.061Z",
+  "verdict": "pass",
+  "summary": "Same-agent exact-SHA quality PASS at422482e0a0c4635daa2f345ec39dfde5dd6fadad; actual native shell identity replaces two callback adapter layers; all declared checks pass.",
+  "evaluated_sha": "422482e0a0c4635daa2f345ec39dfde5dd6fadad",
+  "blueprint_digest": "ab27f162c4230ae9badaf3d1b2eacc730e68985b29dec8a9c24dc5e808b0bb8e",
+  "findings": [
+    "Removed SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations. Split algorithms and clipboard/list coordination call actual native shell/document/history methods directly with erased type-only dependencies;117 net source lines removed.",
+    "All482 existing acceptance files byte-identical. ONE absent full profile PASS12841app109inventory5scripts195Chromium;100% actual app/inventory counters; no closures/replays/merges/transfers/rebuilds; production hashes unchanged.",
+    "270 prior semantic states/defaults/classes/justification preserved; only obsolete-symbol references replaced. All six initial static gates, scoped checks, once-restored source gates and governance/scope/artifact checks pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610061043-GVCYWF/README.md",
+    ".agentplane/tasks/202610061043-GVCYWF/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610061043-GVCYWF/evidence/source-review.json",
+    ".agentplane/tasks/202610061043-GVCYWF/evidence/scope-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Filename source split and browser clipboard/grapheme representation remain; complete native clipboard/layout/protection/selection modes/complex tables and full parity unverified. Parent and whole goal active."
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "evaluatedSHA": "422482e0a0c4635daa2f345ec39dfde5dd6fadad",
+  "reviewer": "Same current agent in EVALUATOR role; no independent review claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12841,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 195
+  },
+  "caseIdentity": "file+fullName/title+project when applicable+occurrence; skips retained as skips",
+  "caseResults": {
+    "application": {
+      "passed": 12841,
+      "failed": [],
+      "skipped": [],
+      "runtimeErrorSuites": 0
+    },
+    "inventory": {
+      "passed": 109,
+      "failed": [],
+      "skipped": [],
+      "runtimeErrorSuites": 0
+    },
+    "chromium": {
+      "passed": 195,
+      "failed": [],
+      "skipped": [],
+      "flaky": 0
+    }
+  },
+  "implementationSHA256": {
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts": "8900e9799453555de62d14699723fcd621f1233a10522e997726efa07bfb35a0",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "0fe7beae39ef610519c2da90bf2cbaca856d9a9eae7b53cd070001962570d8cd",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "03f521e0d5693e785da8bb0392997a07891249f3df7757a0a9aa2c27bcc4d871",
+    "docs/program/source-provenance.json": "82e1072a4616a998001a09d6d3263faee92f2c45eafd2ea46fb07478cd2ea61c",
+    "docs/program/parity/runtime-inventory.json": "1f09078111f3d69aa2524afb4f521425b545ba4c0f7470a6c5e12277508a007d"
+  },
+  "coverage": {
+    "application": {
+      "coverage": {
+        "lines": {
+          "total": 13762,
+          "covered": 13762,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15087,
+          "covered": 15087,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3595,
+          "covered": 3595,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11248,
+          "covered": 11248,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "583eeb75931aa122900d652f041cbadde517dc04935081c37a990d0c47da3e8a",
+      "files": 267,
+      "byteIdenticalRawMap": true
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "0e952f8bb062c2131d3d0e03f77e5e44d11b2df5afa38a6cd5d7bc8dd9a95078",
+      "files": 38,
+      "byteIdenticalRawMap": true
+    }
+  },
+  "coverageProof": "267 application and38 inventory actual raw maps copied byte-for-byte; no merges/transfers/test replay; production hashes unchanged since one full absent profile.",
+  "pinnedSourceFiles": 6,
+  "priorSemanticRecordsPreserved": 270,
+  "currentSemanticRecords": 270,
+  "oldTestFilesByteIdentical": 482,
+  "totalPriorTestFiles": 482,
+  "findings": [
+    "Removed synthetic editing object/port and clipboard callback port; eight structural algorithms and transfer/list coordination borrow actual SwWrtShell identity with type-only imports.",
+    "Shell itself supplies actual undo context; native cursors/document/history/notifications remain authoritative. Three source files shrink117 net lines without new DTO or forwarding shim.",
+    "All482 existing acceptance files byte-identical; actual native shell/mounted/browser typing/table/list/clipboard/history/composition cases pass once upstream absent. All270 semantic states/defaults/classifications preserved with exact obsolete-symbol metadata replacement only.",
+    "Filename split, browser clipboard/grapheme representations and complete native layout/protection/selection-mode/complex table/clipboard parity remain unverified."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}
