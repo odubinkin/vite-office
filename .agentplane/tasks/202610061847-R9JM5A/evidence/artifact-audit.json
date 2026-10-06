@@ -1,6 +1,7 @@
 {
-  "scope": "Current leaf and generated quality only; no historical census replay",
-  "filesAudited": 11,
-  "forbiddenArtifacts": [],
-  "vendorRestored": true
+  "filesAudited": 16,
+  "forbiddenArtifacts": [
+    ".agentplane/tasks/202610061847-R9JM5A/blueprint/resolved-snapshot.json"
+  ],
+  "qualityReportPresent": true
 }
