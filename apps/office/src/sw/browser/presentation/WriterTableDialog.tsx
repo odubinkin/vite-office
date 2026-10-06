@@ -4,7 +4,7 @@ import { useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
 import type { SwTable } from "../../source/core/table/swtable";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
-import { SwFormatTablePage } from "../../source/ui/table/tabledlg";
+import { SwFormatTablePage, SwTableColumnPage } from "../../source/ui/table/tabledlg";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
 
 /** Editable table geometry expressed in Writer twips. */
@@ -18,6 +18,7 @@ export interface WriterTableDialogValue extends SwTableProperties {
 export function WriterTableDialog(
   props: Readonly<{
     table?: SwTable;
+    lineSelected?: boolean;
     suggestedName?: string;
     occupiedNames?: readonly string[];
     availableWidth: number;
@@ -36,10 +37,12 @@ export function WriterTableDialog(
 function WriterTablePropertiesDialog({
   table,
   availableWidth,
+  lineSelected = false,
   onCancel,
   onSubmit,
 }: Readonly<{
   table: SwTable;
+  lineSelected?: boolean;
   availableWidth: number;
   onCancel: () => void;
   onSubmit: (value: WriterTableDialogValue) => void;
@@ -50,20 +53,19 @@ function WriterTablePropertiesDialog({
   const columnCount = table.GetColumnWidths().length;
   const [formatPage] = useState(
     /** Creates the native draft once per mounted dialog. @returns Format page or insert mode. */
-    () => new SwFormatTablePage(table, availableWidth),
+    () => {
+      const page = new SwFormatTablePage(table, availableWidth);
+      page.data.SetLineSelected(lineSelected);
+      return page;
+    },
+  );
+  const [columnPage] = useState(
+    /** Binds the columns page to the shared native table-dialog draft. @returns Native column owner. */
+    () => new SwTableColumnPage(formatPage.data),
   );
   const [, refreshPage] = useState(0);
   const width = formatPage.data.width;
   const columnWidths = formatPage.data.columns;
-  /** Changes the native columns draft and refreshes its presentation. @param values - New widths. @returns Nothing. */
-  function setColumnWidths(values: readonly number[]): void {
-    formatPage.data.columns.splice(0, formatPage.data.columns.length, ...values);
-    refreshPage(
-      /** Advances the display version. @param version - Current version. @returns Next version. */ (
-        version,
-      ) => version + 1,
-    );
-  }
   const [minRowHeight, setMinRowHeight] = useState(rows?.[0]?.GetFormat().minHeight ?? 0);
   const [padding, setPadding] = useState(rows?.[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100);
   const [border, setBorder] = useState(
@@ -132,13 +134,15 @@ function WriterTablePropertiesDialog({
             event,
           ) => {
             event.preventDefault();
+            if (activeTab === "table") formatPage.DeactivatePage();
+            if (activeTab === "columns") columnPage.DeactivatePage();
             if (
               !Number.isInteger(rowCount) ||
               !Number.isInteger(columnCount) ||
               rowCount < 1 ||
               columnCount < 1 ||
               name.trim().length === 0 ||
-              width <= 0 ||
+              formatPage.data.width <= 0 ||
               columnWidths.some(
                 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
                   value,
@@ -151,12 +155,11 @@ function WriterTablePropertiesDialog({
               setError("Enter valid table dimensions and positive column widths.");
               return;
             }
-            formatPage.DeactivatePage();
             onSubmit({
               name: name.trim(),
               rows: rowCount,
               columns: columnCount,
-              width,
+              width: formatPage.data.width,
               horiOrient: formatPage.data.align,
               marginLeft: formatPage.data.left,
               marginRight: formatPage.data.right,
@@ -197,7 +200,18 @@ function WriterTablePropertiesDialog({
                   aria-selected={activeTab === id}
                   className={`shrink-0 border-b-2 px-3 py-2 text-left text-sm sm:border-b-0 sm:border-r-2 ${activeTab === id ? "border-indigo-700 font-semibold" : "border-transparent"}`}
                   key={id}
-                  onClick={/** Opens the selected tab. @returns Nothing. */ () => setActiveTab(id)}
+                  onClick={
+                    /** Deactivates and activates the shared native pages. @returns Nothing. */ () => {
+                      if (activeTab === "table") formatPage.DeactivatePage();
+                      if (activeTab === "columns") columnPage.DeactivatePage();
+                      if (id === "columns") columnPage.ActivatePage();
+                      setActiveTab(id);
+                      refreshPage(
+                        /** Presents accepted shared geometry. @param version - Display version. @returns Next version. */
+                        (version) => version + 1,
+                      );
+                    }
+                  }
                   role="tab"
                   type="button"
                 >
@@ -285,31 +299,110 @@ function WriterTablePropertiesDialog({
               </>
             ) : null}
             {activeTab === "columns" ? (
-              <fieldset className="grid grid-cols-2 gap-2 rounded border p-3">
+              <fieldset className="grid min-w-0 gap-2 rounded border p-3">
                 <legend className="text-sm font-bold">Columns</legend>
-                {Array.from(
-                  { length: columnCount },
-                  /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                    _,
-                    index,
-                  ) =>
-                    field(
-                      `Column ${index + 1} width (cm)`,
-                      columnWidths[index] as number,
-                      /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
-                        value,
-                      ) =>
-                        setColumnWidths(
-                          Array.from(
-                            { length: columnCount },
-                            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                              _,
-                              column,
-                            ) => (column === index ? value : (columnWidths[column] as number)),
-                          ),
-                        ),
-                    ),
+                {(
+                  [
+                    ["adapt", "Adapt table width"],
+                    ["proportional", "Adjust columns proportionally"],
+                  ] as const
+                ).map(
+                  /** Presents the native checkbox coupling and sensitivity. @param entry - Mode and source label. @returns Control. */
+                  ([mode, label]) => (
+                    <label key={mode} className="flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={columnPage.IsChecked(mode)}
+                        disabled={!columnPage.IsSensitive(mode)}
+                        onChange={
+                          /** Dispatches the native mode transition. @param event - Checkbox event. @returns Nothing. */
+                          (event) => {
+                            columnPage.ModeHdl(mode, event.target.checked);
+                            refreshPage(
+                              /** Refreshes source mode coupling. @param version - Display version. @returns Next version. */
+                              (version) => version + 1,
+                            );
+                          }
+                        }
+                      />
+                      {label}
+                    </label>
+                  ),
                 )}
+                <div className="text-sm">
+                  Remaining space:{" "}
+                  <output aria-label="Remaining space (cm)">
+                    {toCm(columnPage.GetRemainingSpace())}
+                  </output>{" "}
+                  cm
+                </div>
+                <div className="flex gap-2">
+                  {(["back", "next"] as const).map(
+                    /** Presents source one-column paging. @param direction - Window direction. @returns Button. */
+                    (direction) => (
+                      <button
+                        key={direction}
+                        type="button"
+                        aria-label={direction === "back" ? "Previous columns" : "Next columns"}
+                        disabled={!columnPage.CanScroll(direction)}
+                        onClick={
+                          /** Dispatches native field-window navigation. @returns Nothing. */
+                          () => {
+                            columnPage.AutoClickHdl(direction);
+                            refreshPage(
+                              /** Refreshes native field labels and values. @param version - Display version. @returns Next version. */
+                              (version) => version + 1,
+                            );
+                          }
+                        }
+                        className="rounded border px-3 py-1 disabled:opacity-40"
+                      >
+                        {direction === "back" ? "←" : "→"}
+                      </button>
+                    ),
+                  )}
+                </div>
+                <div className="grid min-w-0 grid-cols-2 gap-2">
+                  {Array.from(
+                    { length: SwTableColumnPage.MET_FIELDS },
+                    /** Renders the native fixed metric slots, including blank disabled fields. @param _unused - Array entry. @param slot - Native field index. @returns Metric input. */
+                    (_unused, slot) => {
+                      const value = columnPage.GetFieldValue(slot),
+                        label = `Column ${columnPage.GetFieldColumn(slot) + 1} width (cm)`;
+                      return (
+                        <label
+                          className="grid min-w-0 gap-1 text-sm font-medium text-slate-700"
+                          key={slot}
+                        >
+                          {label}
+                          <input
+                            type="number"
+                            aria-label={label}
+                            className="min-w-0 rounded border border-slate-300 px-2 py-1"
+                            disabled={value === undefined}
+                            min={toCm(columnPage.GetMinimum())}
+                            max={toCm(columnPage.GetMaximum())}
+                            step="0.01"
+                            value={value === undefined ? "" : toCm(value)}
+                            onChange={
+                              /** Dispatches metric edits directly to the source policy owner. @param event - Input event. @returns Nothing. */
+                              (event) => {
+                                columnPage.ValueChangedHdl(
+                                  slot,
+                                  toTwips(Number(event.target.value)),
+                                );
+                                refreshPage(
+                                  /** Presents native neighbor compensation. @param version - Display version. @returns Next version. */
+                                  (version) => version + 1,
+                                );
+                              }
+                            }
+                          />
+                        </label>
+                      );
+                    },
+                  )}
+                </div>
               </fieldset>
             ) : null}
             {activeTab === "text-flow" ? (

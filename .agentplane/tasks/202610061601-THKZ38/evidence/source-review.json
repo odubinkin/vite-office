@@ -1,0 +1,20 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sw/source/uibase/table/swtablerep.cxx": "c68f5e0baaf04f92c1c473c7ccaec1616cd318c8827003ba4c4da7067895a17a",
+    "sw/source/uibase/table/tablepg.hxx": "8d4c29f899899ac1866976a9af53c5dd1fe3369db0316f86fd5e62c443484703",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/uibase/inc/swtablerep.hxx": "fdc0f0fc924ff99a58b377f36243ab6dec90f80d16191568707819438bc0f112"
+  },
+  "contracts": [
+    "SwTableRep independent copy and Assign retain the original shared pointer/vector and native LineSelected/WidthChanged/ColsChanged defaults. Existing native table/frame initialization and FillTabCols retained.",
+    "Native absolute SwTableColumnPage retains five fixed metric fields, disabled blank slots, reset copy ownership, native minimum23-or-smaller and initial maximum, field-window guards and remaining space. Constant-width edits consume following columns, wrap and preserve source two-wrap limit; adapt-table edits cap at available width; proportional edits round integer twips and floor MINLAY23.",
+    "ModeHdl couples proportional/adapt state. ActivatePage retains the native imperative sensitivity reset, automatic and partial-table suppression, shared-width reconciliation and the source fourth checkbox state. DeactivatePage retains all supported native orientation/LR-spacing branches and change flags.",
+    "React presents shared SwTableRep/SwTableColumnPage fields without a duplicated browser column-width array state. Switching tabs deactivates and activates native pages; OK reads current shared width. Actual WrtShell IsTableMode and HasWholeTabSelection provide LineSelected exactly like tabsh.cxx. Original native property application/history retained.",
+    "ONE full upstream-absent profile: buildPASS,13076appPASS1new mounted fixtureFAIL,109inventoryPASS,5scriptsPASS,227ChromiumPASS. Focused closures cover only that original failure or genuinely new cases, retain filtered skips, and preserve raw counters. Corrected test-only SwPosition ingress and native FULL-width expectation; production source unchanged after full profile. Complete unchanged source/maps additionally reuse one previously verified current browser-edit-window map, without replaying passing cases.",
+    "507 of508 old acceptance files byte-identical; one approved zero-column-width rejection migrated to native minimum-clipping expectation;4new=512. All276 prior metadata classifications/defaults/statuses/full prefixes and registered filename/I/O exceptions preserved. Native percentage widths, hidden/per-row columns, full SfxItemSet/frame-format notifications, adaptive preferred-width SizeHdl and whole module/parent/goal parity remain UNVERIFIED. Deferred original stash retained."
+  ]
+}

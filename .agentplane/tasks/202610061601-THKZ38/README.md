@@ -4,7 +4,7 @@ title: "Port native absolute Writer column-page behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on:
@@ -49,7 +49,7 @@ events:
     to: "DOING"
     note: "Start: resume the approved native absolute column-page draft on the clean post-priority baseline, preserving all row/column drag and list fixes; same semantic paths and verification criteria, updated authoritative counts only."
 doc_version: 3
-doc_updated_at: "2026-10-06T18:01:42.235Z"
+doc_updated_at: "2026-10-06T18:38:23.940Z"
 doc_updated_by: "CODER"
 description: "Iteration191 under the active upstream parity goal: replace React width-array edits with connected native SwTableColumnPage constant-width/adapt-table/proportional policies, modes and native field-window controls over SwTableRep. Preserve conscious save/open/recovery deviations; one approved leaf and one full absent profile, then only failed/new closures."
 sections:
@@ -81,13 +81,41 @@ sections:
     3. Literal SwTableRep copy/default flags/Assign independent vectors and Reset pointer ownership; source five field slots/default modes/native min23-or-smaller/max/min clipping/window guards; constant-width next-column compensation/wrap/minimum remainder/tiny-table source loop bound, adapt-table space cap and proportional integer-round/MINLAY23 behavior. Activate/source selection-sensitive modes/remaining space; Deactivate native orientation/side-spacing and width/column flags; tab reactivation and source Reset restore. Existing508 acceptance files507 byte-identical plus one native minimum migration;4new files512total. All historical selection/history/content/input/width assertions retained except the explicitly obsolete zero-width rejection replaced by source clamp contract.
     4. Actual shell/doc property application after native page edits: shared canonical table/row/box/text identities, cursor/list preservation, grouped UndoRedo3cycles, continued input and ODT roundtrip. Mounted/Chromium1280/390 modes, default neighbor balancing, proportional bounds, partial versus whole native selection sensitivity, window navigation across>5 columns, page switching/Cancel/OK/read-only Reset and no horizontal viewport escape. Build serves dist; rebuild only after production changes.
     5. Once restored resource generation --check/source-tree/provenance/invariants/parity. Preserve276 prior metadata states/defaults/classifications/full evidence/responsibility/justification/symbol prefixes, append only native column-page symbols/evidence in existing modules; I/O/recovery mappings byte-identical. Doctor/routing/diff/pinned source hashes/current leaf/generated quality census0forbidden. Same-agent EVALUATOR exact implementation-SHA review explicitly not independent; clean final tracked state. Parent entire498326-character prefix SHA 8e681957baed7400f5dd4741dcafa425137b093a530b89e753948c3c134db654 preserved. Parent/goal ACTIVE, full parity UNVERIFIED.
-  Verification: "Pending implementation and declared verification. No completion or independent review claim."
+  Verification: |-
+    Command: npm run format:check/lint/typecheck/check:dependencies/check:docs/check:file-size.
+    Result: pass after original failed typecheck and genuinely changed-test type closure; initial six once.
+    Evidence: static-gates.json/static-closure1.json and final failure-closure2.json typecheck record; changed-file-checks.json and changed-file-closure1/2/3.json.
+    Scope: approved production and acceptance paths, unchanged JSDoc and physical lines<1000.
+
+    Command: ONE upstream-absent npm run test:static; application and inventory coverage; scripts/check-source-provenance.test.ts and scripts/writer-ui-resource-model.test.ts; full Chromium via apps/office/playwright.config.ts.
+    Result: pass for current case identities; initial mounted fixture failure corrected by failed/new-only focused closures.
+    Evidence: absent-profile.json, failure-closure1/2.json, final-coverage.json, coverage-source-proof.json. Current13079app/109inventory/5scripts/227Chromium passed;65 focused skips retained.
+    Scope: absolute native column modes/window/selection, canonical history/input/ODT, Chromium1280/390. Actual coverage100 L/S/F/B via identical source/maps only, including one verified prior identical editing-host map. Runtime never invokes upstream; restored finally.
+
+    Command: restored npm resource generation --check/check:source-tree/check:source-provenance/inventory:invariants/inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+    Result: pass.
+    Evidence: source-gates.json, scope-audit.json, source-review.json, governance.json, artifact-audit.json.
+    Scope:276 preserved contracts/full prefixes;507old files byte-identical+1native-minimum migration+4new=512; registered deviations unchanged; parent full prefix retained;0forbidden current artifacts;0doctor errors and2known warnings.
+
+    Command: same-agent EVALUATOR exact implementation-SHA review and ap evaluator run.
+    Result: exact SHA result recorded after implementation commit; explicitly not independent review.
+    Evidence: exact-sha-review.json and generated quality report.
+    Scope: approved leaf only; parent/goal and whole parity remain ACTIVE/UNVERIFIED.
   Rollback Plan: |-
     Before implementation, preserve clean base138b1606d6178e3ca841597ada11fbcc67e1a500. Keep one scoped source commit and AP-only checkpoints; revert only this leaf's intentional paths if repair is necessary. Never reset unrelated work, edit DONE tasks or modify registered save/open/recovery deviations.
     Resume only this leaf's five draft paths on clean a5eec831c16ec5ea92f965c2435fc6383204affe; preserve the stash until leaf closure. Do not undo the priority mouse/list fixes.
   Findings: |-
-    Previous goal turn classified as progress: iteration190 DONE with implementation9911d7d81c1975c8d6eb79c3e7638f1270b12546 and parent checkpoint138b1606d6178e3ca841597ada11fbcc67e1a500; current checkout/main clean and only parent C9TN6M remains active. Confirmed current browser Columns directly replaces one width array entry and lacks native mode/remaining-space/window controls. Pinned tabledlg.cxx733..1225 and tablepg.hxx103 define SwTableColumnPage/MET_FIELDS5, constant-width next-column compensation, adapt-table width cap, proportional source round/MINLAY23 scaling, mode coupling and page spacing updates. Native tabsh.cxx272 sets line-selected from IsTableMode and !HasWholeTabSelection, both existing native queries already represented. Source Reset copies original SwTableRep and restores shared data; source native minimum controls clip zero widths rather than raising current React inline error. Platform SizeHdl preferred-width event, native percentages, full hidden/per-row table graph/frame notifications and broad UI/core parity remain unverified; this leaf makes the existing absolute column interaction directly native-owned.
-    Resume checkpoint after priority leaves192/193/194: previous goal turn is progress, native row resizing444b39c61bbd0b21187d4fa2083b24b2d9434e4e verified DONE; clean main a5eec831c16ec5ea92f965c2435fc6383204affe. Deferred five-path draft is retained in stash c85f4a0e453dfd06d6e199554784f2c286737472. No tests/static/profile executed for this leaf before interruption. Rebase the same approved semantics/paths/criteria to current508acceptancefiles and276metadata records, current entire498326-character parent prefixSHA8e681957baed7400f5dd4741dcafa425137b093a530b89e753948c3c134db654. No material scope/risk/verification change; standing explicit iterative authorization applies.
+    Implemented the native absolute SwTableColumnPage over the existing shared SwTableRep. React now presents source-owned metric values, compensation, modes, window navigation and remaining space. Native partial-table classification comes directly from IsTableMode/HasWholeTabSelection. SwTableRep copies and Assign retain independent reset ownership and the original shared vector; change flags use native defaults. Existing native property application, canonical table/row/box/text identities, list/cursor preservation, one grouped history, three UndoRedo cycles, continued input and ODT roundtrip are verified.
+
+    ONE full upstream-absent profile: build passed; application 13076 passed and one new mounted fixture failed; inventory109, scripts5 and Chromium227 passed. Focused closure1 ran only that failure and two genuinely new cases: retained validation passed; the fixture used an ordinary object instead of SwPosition and the automatic-width case expected the pre-normalized width. Closure2 corrected those test-only errors and both passed. Current identity union: application13079, inventory109, scripts5, Chromium227 passed. Filtered65 skips remain skips. All runtime/tests/E2E ran without canonical upstream; restored finally. No production changes after the full profile; no historical passing/full replay.
+
+    Initial static gates ran once. Format/lint/dependencies/docs/file-size passed. Initial type errors in new metric/test declarations were corrected; final typecheck passes. Unchanged scoped JSDoc, formatting, lint and physical line limits pass. Restored resource generation/source-tree/provenance/invariants/parity pass. A bounded read-only symbol lookup had no matches; route was recomputed and the actual declaration inspected. Initial metadata construction stopped before writes on missing optional browser fields; corrected optional evidence/rationale handling preserves all prior prefixes.
+
+    Actual coverage100 in all four dimensions: application273 files L14724/S16155/F3744/B12002, map8b000cbbca0eac5a4b5f1b1749a1ce7803a64195c5034face8e79407010b231a; inventory38 files L1464/S1523/F384/B1080, map11dc2864301bd08eb0d3af37129a6e7172aaa51c74a3e0b38e22735eaae6cee6. Counters use entire identical source/maps. One unchanged editing-host map additionally reuses previously verified counters with complete source/map and prior map/proof digest checks, avoiding passing-case replay. Application proof087f386e722705ebee4cd0f69c56b6c461a51bd2aece7b6b290ea99bbc4b1566; inventory proofbba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222. Raw source/maps/results/proofs stay only in ignored app cache; AP stores bounded outcomes/digests.
+
+    Scope11 approved semantic paths;508 historical acceptance files507 byte-identical plus one explicit minimum-clipping migration;4new=512. All276 prior metadata contracts/full symbol/evidence/responsibility/rationale/justification prefixes, classifications/defaults/statuses and registered filename/I/O/recovery exceptions preserved. Parent full498326-character prefix SHA8e681957baed7400f5dd4741dcafa425137b093a530b89e753948c3c134db654 retained. Original deferred stash c85f4a0e453dfd06d6e199554784f2c286737472 retained. Doctor0errors2known warnings; routing/diff pass; current leaf census0forbidden.
+
+    Same current-agent EVALUATOR exact implementation-SHA review is explicitly not independent review. Native percentage widths, hidden/per-row column graphs, full SfxItemSet/frame-format notifications and native adaptive preferred-width SizeHdl remain UNVERIFIED. Parent and goal ACTIVE; whole implemented-runtime parity remains UNVERIFIED.
 id_source: "generated"
 ---
 ## Summary
@@ -129,7 +157,25 @@ Resume the approved interrupted draft against clean a5eec831c16ec5ea92f965c2435f
 
 ## Verification
 
-Pending implementation and declared verification. No completion or independent review claim.
+Command: npm run format:check/lint/typecheck/check:dependencies/check:docs/check:file-size.
+Result: pass after original failed typecheck and genuinely changed-test type closure; initial six once.
+Evidence: static-gates.json/static-closure1.json and final failure-closure2.json typecheck record; changed-file-checks.json and changed-file-closure1/2/3.json.
+Scope: approved production and acceptance paths, unchanged JSDoc and physical lines<1000.
+
+Command: ONE upstream-absent npm run test:static; application and inventory coverage; scripts/check-source-provenance.test.ts and scripts/writer-ui-resource-model.test.ts; full Chromium via apps/office/playwright.config.ts.
+Result: pass for current case identities; initial mounted fixture failure corrected by failed/new-only focused closures.
+Evidence: absent-profile.json, failure-closure1/2.json, final-coverage.json, coverage-source-proof.json. Current13079app/109inventory/5scripts/227Chromium passed;65 focused skips retained.
+Scope: absolute native column modes/window/selection, canonical history/input/ODT, Chromium1280/390. Actual coverage100 L/S/F/B via identical source/maps only, including one verified prior identical editing-host map. Runtime never invokes upstream; restored finally.
+
+Command: restored npm resource generation --check/check:source-tree/check:source-provenance/inventory:invariants/inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+Result: pass.
+Evidence: source-gates.json, scope-audit.json, source-review.json, governance.json, artifact-audit.json.
+Scope:276 preserved contracts/full prefixes;507old files byte-identical+1native-minimum migration+4new=512; registered deviations unchanged; parent full prefix retained;0forbidden current artifacts;0doctor errors and2known warnings.
+
+Command: same-agent EVALUATOR exact implementation-SHA review and ap evaluator run.
+Result: exact SHA result recorded after implementation commit; explicitly not independent review.
+Evidence: exact-sha-review.json and generated quality report.
+Scope: approved leaf only; parent/goal and whole parity remain ACTIVE/UNVERIFIED.
 
 ## Rollback Plan
 
@@ -138,5 +184,14 @@ Resume only this leaf's five draft paths on clean a5eec831c16ec5ea92f965c2435fc6
 
 ## Findings
 
-Previous goal turn classified as progress: iteration190 DONE with implementation9911d7d81c1975c8d6eb79c3e7638f1270b12546 and parent checkpoint138b1606d6178e3ca841597ada11fbcc67e1a500; current checkout/main clean and only parent C9TN6M remains active. Confirmed current browser Columns directly replaces one width array entry and lacks native mode/remaining-space/window controls. Pinned tabledlg.cxx733..1225 and tablepg.hxx103 define SwTableColumnPage/MET_FIELDS5, constant-width next-column compensation, adapt-table width cap, proportional source round/MINLAY23 scaling, mode coupling and page spacing updates. Native tabsh.cxx272 sets line-selected from IsTableMode and !HasWholeTabSelection, both existing native queries already represented. Source Reset copies original SwTableRep and restores shared data; source native minimum controls clip zero widths rather than raising current React inline error. Platform SizeHdl preferred-width event, native percentages, full hidden/per-row table graph/frame notifications and broad UI/core parity remain unverified; this leaf makes the existing absolute column interaction directly native-owned.
-Resume checkpoint after priority leaves192/193/194: previous goal turn is progress, native row resizing444b39c61bbd0b21187d4fa2083b24b2d9434e4e verified DONE; clean main a5eec831c16ec5ea92f965c2435fc6383204affe. Deferred five-path draft is retained in stash c85f4a0e453dfd06d6e199554784f2c286737472. No tests/static/profile executed for this leaf before interruption. Rebase the same approved semantics/paths/criteria to current508acceptancefiles and276metadata records, current entire498326-character parent prefixSHA8e681957baed7400f5dd4741dcafa425137b093a530b89e753948c3c134db654. No material scope/risk/verification change; standing explicit iterative authorization applies.
+Implemented the native absolute SwTableColumnPage over the existing shared SwTableRep. React now presents source-owned metric values, compensation, modes, window navigation and remaining space. Native partial-table classification comes directly from IsTableMode/HasWholeTabSelection. SwTableRep copies and Assign retain independent reset ownership and the original shared vector; change flags use native defaults. Existing native property application, canonical table/row/box/text identities, list/cursor preservation, one grouped history, three UndoRedo cycles, continued input and ODT roundtrip are verified.
+
+ONE full upstream-absent profile: build passed; application 13076 passed and one new mounted fixture failed; inventory109, scripts5 and Chromium227 passed. Focused closure1 ran only that failure and two genuinely new cases: retained validation passed; the fixture used an ordinary object instead of SwPosition and the automatic-width case expected the pre-normalized width. Closure2 corrected those test-only errors and both passed. Current identity union: application13079, inventory109, scripts5, Chromium227 passed. Filtered65 skips remain skips. All runtime/tests/E2E ran without canonical upstream; restored finally. No production changes after the full profile; no historical passing/full replay.
+
+Initial static gates ran once. Format/lint/dependencies/docs/file-size passed. Initial type errors in new metric/test declarations were corrected; final typecheck passes. Unchanged scoped JSDoc, formatting, lint and physical line limits pass. Restored resource generation/source-tree/provenance/invariants/parity pass. A bounded read-only symbol lookup had no matches; route was recomputed and the actual declaration inspected. Initial metadata construction stopped before writes on missing optional browser fields; corrected optional evidence/rationale handling preserves all prior prefixes.
+
+Actual coverage100 in all four dimensions: application273 files L14724/S16155/F3744/B12002, map8b000cbbca0eac5a4b5f1b1749a1ce7803a64195c5034face8e79407010b231a; inventory38 files L1464/S1523/F384/B1080, map11dc2864301bd08eb0d3af37129a6e7172aaa51c74a3e0b38e22735eaae6cee6. Counters use entire identical source/maps. One unchanged editing-host map additionally reuses previously verified counters with complete source/map and prior map/proof digest checks, avoiding passing-case replay. Application proof087f386e722705ebee4cd0f69c56b6c461a51bd2aece7b6b290ea99bbc4b1566; inventory proofbba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222. Raw source/maps/results/proofs stay only in ignored app cache; AP stores bounded outcomes/digests.
+
+Scope11 approved semantic paths;508 historical acceptance files507 byte-identical plus one explicit minimum-clipping migration;4new=512. All276 prior metadata contracts/full symbol/evidence/responsibility/rationale/justification prefixes, classifications/defaults/statuses and registered filename/I/O/recovery exceptions preserved. Parent full498326-character prefix SHA8e681957baed7400f5dd4741dcafa425137b093a530b89e753948c3c134db654 retained. Original deferred stash c85f4a0e453dfd06d6e199554784f2c286737472 retained. Doctor0errors2known warnings; routing/diff pass; current leaf census0forbidden.
+
+Same current-agent EVALUATOR exact implementation-SHA review is explicitly not independent review. Native percentage widths, hidden/per-row column graphs, full SfxItemSet/frame-format notifications and native adaptive preferred-width SizeHdl remain UNVERIFIED. Parent and goal ACTIVE; whole implemented-runtime parity remains UNVERIFIED.

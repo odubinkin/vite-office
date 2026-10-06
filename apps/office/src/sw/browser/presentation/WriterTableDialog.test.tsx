@@ -118,7 +118,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     expect(cancel).toHaveBeenCalledOnce();
   });
 
-  it("edits an existing selected table and rejects invalid columns", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+  it("edits an existing selected table and clips native minimum columns", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
     const document = createWriterDocument();
     const table = document.nodes.MakeTableNode("Table1", { width: 5000 });
     table.AddColumnWidth(2500);
@@ -184,8 +184,10 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
       target: { value: "0" },
     });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
-    expect(screen.getByText(/positive column widths/u)).toBeInTheDocument();
-    expect(submit).not.toHaveBeenCalled();
+    expect(screen.getByRole("spinbutton", { name: "Column 1 width (cm)" })).toHaveValue(0.04);
+    expect(submit).toHaveBeenCalledWith(
+      expect.objectContaining({ width: 6803, columnWidths: [23, 6780] }),
+    );
   });
 
   it("renders row selection and registers canonical cell text without a write adapter", /** Checks declarative display and shared selection metadata. @returns Nothing. */ () => {

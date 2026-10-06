@@ -575,6 +575,9 @@ export function WriterWorkbench({
           {...(tableDialog === "properties" && currentTable !== undefined
             ? { table: currentTable }
             : {})}
+          lineSelected={
+            view.GetWrtShell().IsTableMode() && !view.GetWrtShell().HasWholeTabSelection()
+          }
           availableWidth={availableTableWidth}
           onCancel={
             /** Handles the browser table interaction.  @returns Callback result. */ () =>
