@@ -1,0 +1,56 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 226,
+      "sha256": "d0125307377abdd5c4b1338d6aff42100da313c6f28268df81d029590c13c617",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-list-marker-width.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "eb2ef93e1a909c2b060f8bb6912ec8546389114a17b9d0287129957ff707344d",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 619,
+      "sha256": "44c0aaabdcf570b8801b6555bd0424c7031697378650d52826827981368234db",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/e2e/writer-native-list-marker-width.spec.ts:36 function is missing JSDoc",
+        "apps/office/e2e/writer-native-list-marker-width.spec.ts:37 function is missing JSDoc"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3598,
+      "sha256": "fd2caccd61c23b0811ce652d3d51a5e53f14f9f22a081a41d8f37613c8da1f5a",
+      "diagnostics": []
+    }
+  ]
+}

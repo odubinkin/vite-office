@@ -69,6 +69,8 @@ export type WriterParagraphStyleOption = StyleToolboxEntry;
 
 /** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
 export interface WriterParagraphProjection {
+  /** Minimum occupied label gap, separate from authored list indentation. */
+  readonly listMarkerMinimumDistancePt?: number;
   readonly alignment: WriterParagraphAlignment;
   readonly bulletChar?: string;
   readonly computedStyle: WriterParagraphComputedStyle;
@@ -303,6 +305,10 @@ export class WriterViewProjection {
           ...(listFormat === undefined
             ? {}
             : {
+                listMarkerMinimumDistancePt:
+                  listFormat.GetPositionAndSpaceMode() === "label-alignment"
+                    ? 0
+                    : listFormat.GetCharTextDistance() / 20,
                 listLayout: Object.freeze({
                   firstLineIndentPt: resolveSwListFirstLineIndent(node) / 20,
                   indentAtPt: listTextLeft / 20,

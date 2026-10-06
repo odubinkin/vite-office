@@ -1,0 +1,97 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "typecheck",
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "failedCases": [],
+      "diagnostics": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts src/sw/browser/editor/native-list-marker-width.test.tsx -t ^selects native mode independently of child geometry through common and automatic ODT cycles$|^projects label minimum separately from authored layout cell= --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/BNNDEG.app-closure1-results.json",
+      "exit": 0,
+      "bytes": 796,
+      "sha256": "7a419bea68e1a735b10cc2b2f608ae9f41586212ac6e992bfa1761c709e8103f",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 2,
+        "total": 11
+      },
+      "coverageMapSHA256": "77e2d0f6b574094bbca9a905476794f465e31914ccdc48f61f99f6544af20789"
+    },
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "89b0501049ce18241a6959628b793706585dd3aba7fbfaa924d0f1431b37e49c",
+      "failedCases": [],
+      "diagnostics": [
+        "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+      ]
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-list-marker-width.spec.ts --reporter=list,json",
+      "exit": 1,
+      "bytes": 10902,
+      "sha256": "f705eaa1af3d20dd4f88db28319ae243a5524766e00b0bc8ada8bec5f35a32dc",
+      "failedCases": [
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=1280 cell=false",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m",
+              "Expected: < \u001b[32m0.1\u001b[39m",
+              "Received:   \u001b[31m515.46875\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=1280 cell=true",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m",
+              "Expected: < \u001b[32m0.1\u001b[39m",
+              "Received:   \u001b[31m499.46875\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=390 cell=false",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m",
+              "Expected: < \u001b[32m0.1\u001b[39m",
+              "Received:   \u001b[31m515.46875\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=390 cell=true",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m",
+              "Expected: < \u001b[32m0.1\u001b[39m",
+              "Received:   \u001b[31m499.46875\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T17:01:45.431Z",
+        "duration": 5478.6179999999995,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 4,
+        "flaky": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "app": {
+    "files": 272,
+    "wholeIdenticalFiles": 270,
+    "completeRegionFiles": 2,
+    "proofSHA256": "8a4baa6ac19263e42e10b72163f5ff92a62fa78d2c6feb6a2bc89eea29ce7c68",
+    "mapSHA256": "9fe0761d10f8d10359add7d2bd0e4651a529363c69590dfdb141bd7cd052f5dd"
+  },
+  "inventory": {
+    "files": 38,
+    "proofSHA256": "b1662f9d320f06d26815b24845b2b5c8d10e74f29ad002812c630a3f38a2d606",
+    "mapSHA256": "2bb3c6c1d2293b5a4d2df8c7d4ba57c96e51ee48176a56fc3c7894eb0f56e1e7"
+  },
+  "rawProofLocation": "Ignored application cache only; AP retains counts and hashes",
+  "noFabricatedCounters": true
+}

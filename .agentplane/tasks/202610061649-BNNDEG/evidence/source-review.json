@@ -1,0 +1,17 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned source read-only, no upstream execution",
+  "contracts": [
+    "SwNumberPortion::Format bounds occupied width below by measured m_nFixWidth plus m_nMinDist. NewNumberPortion supplies minimum0 for label-alignment, otherwise GetCharTextDistance. Browser CSS intrinsic max-content minimum and native legacy padding implement this bounded rule; native rules/defaults/nodes/geometry remain unchanged.",
+    "Native minimum label distance is projected separately from the existing four-field listLayout contract. The original exact ODT position-mode test remains byte-identical and passes. Eight draft new tests of the superseded nested-field contract were replaced with eight genuinely new separate-contract cases; one additional detached/follow compatibility case covers current changed enclosing branches. Focused skips stay skipped.",
+    "ONE full absent profile:13009appPASS1oldexact-layoutFAIL,109inventoryPASS,5scriptsPASS,217historicalChromePASS4newfixtureFAIL. Closure1:oldfailed1+newseparatecontract8PASS,2skips; newChrome4FAIL on wrap fragment measurement. Closure2:newcompatibility1PASS8skips,newChrome4FAIL on platform End-position expectation. Closure3:originalnewChrome4PASS. No passing/full replay; source contract relocation required one rebuilt dist; later closures changed acceptance fixtures only.",
+    "Final current acceptance union13011app109inventory5scripts221ChromePASS. Actual100 app/inventory counters only; source-identical whole maps or complete contiguous byte-identical regions, entire function declarations/bodies and complete enclosing branches/locations admit initial counters. Current altered expressions use raw focused counters. No manufactured coverage.",
+    "Browser1280/390 measures real label text ranges,first text glyphs,normal18pt slot,collapsed/narrow slots,36pt labels,nested level2,legacy10.8pt gap,numbered control,body/cell wrapping,typing and3UndoRedo cycles. Fixture sets all3 script font heights; editing uses ordinary DOM collapsed caret rather than platform-specific End semantics. Complete native font/style/RTL/alignment,next-tab fallback,continued-line indentation,clipping and wider list layout remain unverified.",
+    "All502 prior acceptance files remain byte-identical;275 metadata states/defaults/evidence/responsibility/justification/symbol prefixes and I/O exception mapping preserved. Only bounded evidence appended to existing browser boundary records. Full goal and parent remain UNVERIFIED/ACTIVE; row mouse resize next; THKZ38 stash retained."
+  ],
+  "sourceSHA256": {
+    "sw/source/core/text/porfld.cxx": "a53a623e4e806998b066926ab943594e5a2ca308b94d27bb4bd7e2739faebb9b",
+    "sw/source/core/text/txtfld.cxx": "121d478dbc68755ea0869d2a91c3f24bb8df72547e9671c41cb381bd3b06e2dd"
+  }
+}

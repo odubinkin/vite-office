@@ -1,0 +1,77 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-list-marker-width.test.tsx -t ^retains omitted label-gap compatibility and follow suppression$ --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/BNNDEG.app-closure2-results.json",
+      "exit": 0,
+      "bytes": 639,
+      "sha256": "c5b1494a29805b24772ba155f10eb898eb824add9edfee72a670ffbb35167f9b",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 8,
+        "total": 9
+      },
+      "coverageMapSHA256": "b91f146cff3258f7719e0d51b9bfdfa66bff06f8fd9dad09d9b75c9ad2cc4389"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-list-marker-width.spec.ts --reporter=list,json",
+      "exit": 1,
+      "bytes": 12062,
+      "sha256": "891cf7406cea81b990b2662f694adb969e8fd8d90c9b38afdc5e87d7e29c37f0",
+      "failedCases": [
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=1280 cell=false",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"CollapsedProof!\"\u001b[39m",
+              "Error: element(s) not found"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=1280 cell=true",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"CollapsedProof!\"\u001b[39m",
+              "Error: element(s) not found"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=390 cell=false",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"CollapsedProof!\"\u001b[39m",
+              "Error: element(s) not found"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-list-marker-width.spec.ts > Writer native label width prevents overlap width=390 cell=true",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"CollapsedProof!\"\u001b[39m",
+              "Error: element(s) not found"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T17:04:35.497Z",
+        "duration": 26013.435,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 4,
+        "flaky": 0
+      }
+    }
+  ]
+}

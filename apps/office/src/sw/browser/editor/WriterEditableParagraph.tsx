@@ -100,6 +100,10 @@ export function WriterEditableParagraph({
               /* v8 ignore next -- Space-follow numbering is imported but not exposed by the current command surface. */
               marginInlineEnd: listLayout?.labelFollowedBy === "space" ? "0.25em" : undefined,
               width: listLayout?.labelFollowedBy === "listtab" ? `${markerWidthPt}pt` : undefined,
+              // SwNumberPortion::Format never reserves less than the measured
+              // label plus its native minimum distance, even at a narrow tab.
+              minWidth: "max-content",
+              paddingInlineEnd: `${paragraph.listMarkerMinimumDistancePt ?? 0}pt`,
               textAlign: "left",
               fontFamily: browserFontFamily(
                 paragraph.computedStyle.fontFamily,

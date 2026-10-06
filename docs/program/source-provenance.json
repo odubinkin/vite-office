@@ -2990,6 +2990,18 @@
           {
             "path": "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts",
             "marker": "Writer native text surface cell="
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-list-marker-width.test.tsx",
+            "marker": "projects label minimum separately from authored layout"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-list-marker-width.spec.ts",
+            "marker": "Writer native label width prevents overlap"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+            "marker": "listMarkerMinimumDistancePt"
           }
         ],
         "upstream": [
@@ -3072,6 +3084,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/access/accpara.cxx",
             "marker": "SwAccessibleParagraph::getCharacterAttributes"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/porfld.cxx",
+            "marker": "SwNumberPortion::Format"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/txtfld.cxx",
+            "marker": "SwTextFormatter::NewNumberPortion"
           }
         ]
       },
@@ -5214,6 +5234,18 @@
           {
             "path": "apps/office/e2e/writer-native-attribute-portions.spec.ts",
             "marker": "Writer native body and cell portions"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-list-marker-width.test.tsx",
+            "marker": "projects label minimum separately from authored layout"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-list-marker-width.spec.ts",
+            "marker": "Writer native label width prevents overlap"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+            "marker": "listMarkerMinimumDistancePt"
           }
         ],
         "upstream": [
@@ -5308,6 +5340,14 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/text/atrstck.cxx",
             "marker": "SwAttrHandler::Push"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/porfld.cxx",
+            "marker": "SwNumberPortion::Format"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/text/txtfld.cxx",
+            "marker": "SwTextFormatter::NewNumberPortion"
           }
         ]
       },

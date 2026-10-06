@@ -1,0 +1,32 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/browser/editor/native-list-marker-width.test.tsx",
+    "apps/office/e2e/writer-native-list-marker-width.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-list-marker-width.spec.ts",
+    "apps/office/src/sw/browser/editor/native-list-marker-width.test.tsx"
+  ],
+  "oldAcceptanceFiles": 502,
+  "oldAcceptanceChanged": [],
+  "oldAcceptanceByteIdentical": 502,
+  "newTests": [
+    "apps/office/e2e/writer-native-list-marker-width.spec.ts",
+    "apps/office/src/sw/browser/editor/native-list-marker-width.test.tsx"
+  ],
+  "totalAcceptanceFiles": 504,
+  "priorSemanticRecords": 275,
+  "semanticRecords": 275,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 490339,
+  "parentPrefixSHA256": "aa8171859946508666e5c18c0f73a2f1a985fbf47f35b4bbeb16e40e0d8fbaec",
+  "failures": []
+}

@@ -1,0 +1,30 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "typecheck",
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "failedCases": [],
+      "diagnostics": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-list-marker-width.spec.ts --reporter=list,json",
+      "exit": 0,
+      "bytes": 987,
+      "sha256": "0a968ba325790dce2514d3a6f74af7aba1a30833f934773c46fc6dcff1fd9a42",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T17:06:44.996Z",
+        "duration": 4487.628000000001,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
