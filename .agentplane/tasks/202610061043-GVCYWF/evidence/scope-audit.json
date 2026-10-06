@@ -1,0 +1,20 @@
+{
+  "base": "3c430aa4e84ef4c8e5a4d39a6d15677e62a4fe1b",
+  "semanticPaths": [
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "oldTestFiles": 482,
+  "byteIdenticalOldTestFiles": 482,
+  "changedOldTests": [],
+  "newAcceptanceFiles": [],
+  "priorSemanticModules": 270,
+  "currentSemanticModules": 270,
+  "priorStatesDefaultsClassificationsAndJustificationPreserved": true,
+  "evidenceChange": "Only removed SwWrtShellEditingOperations evidence marker replaced by actual InsertAtCursor; all other prior evidence/order retained.",
+  "nativeSymbolsChange": "Removed two editing port/object symbols and one paste port symbol replaced by actual eight native-owner functions and one private list import helper; no forwarding shims.",
+  "failures": []
+}

@@ -23,6 +23,8 @@ import {
   type WriterTextRun,
 } from "../../filter/basflt/writer-transfer";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
+import { createWriterListItemSet } from "../../core/doc/list";
+import { SwUndoInsNum } from "../../core/undo/unnum";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {
@@ -292,56 +294,60 @@ export interface WriterPasteDocument {
   readonly paragraphs: readonly WriterPasteParagraph[];
 }
 
-/** Narrow shell operations required by clipboard insertion. */
-export interface WriterPasteOperations {
-  readonly applyParagraphList: (paragraph: WriterPasteParagraph) => boolean;
-  readonly beginUndoGroup: () => void;
-  readonly deleteSelection: () => void;
-  readonly endUndoGroup: () => void;
-  readonly getInsertionPoint: () => SwPosition;
-  readonly hasSelection: () => boolean;
-  readonly replaceRange: (range: WriterTextRange, replacement: SwTextFragment) => boolean;
-  readonly setCursor: (position: SwPosition) => void;
-  readonly splitParagraph: (position: SwPosition) => WriterParagraph;
-}
-
-/** Inserts one sanitized transfer document while the owning shell supplies cursor and undo operations. @param paste - Parsed clipboard content. @param operations - Narrow shell coordination surface. @returns Whether content or list formatting changed. */
-export function pasteWriterTransfer(
-  paste: WriterPasteDocument,
-  operations: WriterPasteOperations,
-): boolean {
-  const first = paste.paragraphs[0];
+/** Inserts one sanitized transfer document through its actual native shell owner. @param paste - Parsed clipboard content. @param shell - Actual native cursor, document and history owner. @returns Whether content or list formatting changed. */
+export function pasteWriterTransfer(paste: WriterPasteDocument, shell: SwWrtShell): boolean {
+  const manager = shell.GetDoc().GetUndoManager(),
+    cursor = shell.GetCursor(),
+    first = paste.paragraphs[0];
   if (first === undefined) return false;
   let changed = false;
-  operations.beginUndoGroup();
+  manager.EnterListAction("Paste");
   try {
-    if (operations.hasSelection()) {
-      operations.deleteSelection();
+    if (cursor.HasMark()) {
+      shell.DelRight();
       changed = true;
     }
-    const insertionPoint = operations.getInsertionPoint();
+    const insertionPoint = cursor.GetPoint();
     const range: WriterTextRange = {
       end: insertionPoint.GetContentIndex(),
       node: insertionPoint.GetNode() as WriterParagraph,
       start: insertionPoint.GetContentIndex(),
     };
     const firstFragment = first.fragment;
-    changed = operations.replaceRange(range, firstFragment) || changed;
+    changed = shell.ReplaceRange(range, firstFragment) || changed;
     let paragraph = range.node;
     let offset = range.start + firstFragment.text.length;
-    operations.setCursor(new SwPosition(paragraph, offset));
-    if (paste.isBlock) changed = operations.applyParagraphList(first) || changed;
+    shell.SetCursor(new SwPosition(paragraph, offset));
+    if (paste.isBlock) changed = applyPastedParagraphList(shell, first) || changed;
     for (const pastedParagraph of paste.paragraphs.slice(1)) {
-      paragraph = operations.splitParagraph(new SwPosition(paragraph, offset));
+      paragraph = shell.SplitParagraph(new SwPosition(paragraph, offset));
       changed = true;
       const fragment = pastedParagraph.fragment;
-      changed = operations.replaceRange({ end: 0, node: paragraph, start: 0 }, fragment) || changed;
+      changed = shell.ReplaceRange({ end: 0, node: paragraph, start: 0 }, fragment) || changed;
       offset = fragment.text.length;
-      operations.setCursor(new SwPosition(paragraph, offset));
-      changed = operations.applyParagraphList(pastedParagraph) || changed;
+      shell.SetCursor(new SwPosition(paragraph, offset));
+      changed = applyPastedParagraphList(shell, pastedParagraph) || changed;
     }
   } finally {
-    operations.endUndoGroup();
+    manager.LeaveListAction();
   }
   return changed;
+}
+
+/** Applies imported list metadata through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @param shell - Actual native list and history owner. @returns Whether changed. */
+function applyPastedParagraphList(shell: SwWrtShell, paragraph: WriterPasteParagraph): boolean {
+  const target = shell.GetActiveParagraph();
+  const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
+  if (target.GetListKind() === nextList.kind && target.GetAttrListLevel() === nextList.level)
+    return false;
+  const cursor = shell.CaptureCursorState();
+  return shell.ApplyAction(
+    new SwUndoInsNum(
+      target,
+      target.CaptureListItems(),
+      createWriterListItemSet(target, nextList),
+      cursor,
+      cursor,
+    ),
+  );
 }

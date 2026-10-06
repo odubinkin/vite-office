@@ -1,0 +1,7 @@
+{
+  "scope": "Only new current leaf, including ignored files; no historical census replay",
+  "fileCount": 8,
+  "forbiddenArtifacts": [],
+  "vendorRestored": true,
+  "allowed": "Bounded prose/counts/hashes/outcomes/exact failures only; no upstream source/helper/Python/probe/raw map/report or diagnostic dumps"
+}

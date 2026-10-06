@@ -1,10 +1,6 @@
-/** @fileoverview Owns structural text-edit algorithms invoked by the cursor/undo-orchestrating SwWrtShell. */
+/** @fileoverview Implements structural Writer shell algorithms using the actual native SwWrtShell owner directly. */
 
-import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwPosition, type SwPaM, type WriterTextRange } from "../../core/crsr/pam";
-import type { SwDoc as WriterDocument } from "../../core/doc/doc";
-import { createWriterListItemSet } from "../../core/doc/list";
+import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import {
   SwTextNode,
   type SwTextFragment,
@@ -19,16 +15,9 @@ import {
 import { createWriterInsertTextAction } from "../../core/edit/editsh";
 import { createWriterDeleteSelectionOperation } from "../../core/edit/eddel";
 import { createWriterReadTextOperation } from "../../filter/basflt/shellio";
-import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
-import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
-import type { UndoManager } from "../../core/undo/docundo";
 import { getWriterTypingCharacterClass } from "./delete";
-import {
-  pasteWriterTransfer,
-  type WriterPasteDocument,
-  type WriterPasteParagraph,
-} from "../dochdl/swdtflvr";
+import type { SwWrtShell } from "./wrtsh1";
 
 /** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
 function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
@@ -64,314 +53,228 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
   }
   return boundaries;
 }
-/** Cursor, history, and notification operations retained by SwWrtShell. */
-export interface SwWrtShellEditingPort {
-  readonly applyAction: (
-    action: SfxUndoAction<SwUndoRedoContext>,
-    tryMerge?: boolean,
-    execute?: (context: SwUndoRedoContext) => void,
-  ) => boolean;
-  readonly captureCursorState: () => SwUndoCursorState;
-  readonly createCollapsedCursorState: (
-    paragraph: WriterParagraph,
-    offset: number,
-  ) => SwUndoCursorState;
-  readonly getActiveParagraph: () => WriterParagraph;
-  readonly getCursor: () => SwPaM;
-  readonly getDoc: () => WriterDocument;
-  readonly getPendingCharacterItems: () => SfxItemSet;
-  readonly getUndoManager: () => UndoManager;
-  readonly runNotificationTransaction: (operation: () => boolean) => boolean;
-  readonly setCursor: (position: SwPosition) => boolean;
+
+/** Inserts text at the persistent point, replacing any selection. @param text - Inserted text. @param allowGrouping - Whether typing may merge with the preceding action. @param shell - Actual native cursor, document and history owner. @returns Whether changed. */
+export function InsertAtCursor(shell: SwWrtShell, text: string, allowGrouping: boolean): boolean {
+  const before = shell.CaptureCursorState();
+  const cursor = shell.GetCursor();
+  const point = cursor.GetPoint();
+  const paragraph = point.GetNode() as WriterParagraph;
+  const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
+  if (mark !== undefined) {
+    return shell.RunNotificationTransaction(
+      /** Brackets native deletion and forced insertion as one shell action. @returns Whether inserted. */ () => {
+        const manager = shell.GetDoc().GetUndoManager();
+        manager.StartUndo("Replace");
+        try {
+          const deleted = DeleteAtCursor(shell, "delete");
+          const position = shell.GetCursor().GetPoint();
+          const target = position.GetNode() as WriterParagraph,
+            start = position.GetContentIndex();
+          return shell.ApplyAction(
+            createWriterInsertTextAction(
+              target,
+              start,
+              text,
+              shell.GetPendingCharacterItems(),
+              undefined,
+              shell.CaptureCursorState(),
+              shell.CreateCollapsedCursorState(target, start + text.length),
+              deleted,
+            ),
+          );
+        } finally {
+          manager.EndUndo();
+        }
+      },
+    );
+  }
+  const offset = point.GetContentIndex();
+  const group = allowGrouping ? getWriterTypingCharacterClass(text) : undefined;
+  return shell.ApplyAction(
+    createWriterInsertTextAction(
+      paragraph,
+      offset,
+      text,
+      shell.GetPendingCharacterItems(),
+      group,
+      before,
+      shell.CreateCollapsedCursorState(paragraph, offset + text.length),
+    ),
+    group !== undefined,
+  );
 }
 
-/** Performs text, range, paste, split, and join algorithms without owning shell identity. */
-export class SwWrtShellEditingOperations {
-  /** Creates operations over the shell-owned cursor/history port. @param port - Shell orchestration callbacks. @returns Nothing. */
-  public constructor(private readonly port: SwWrtShellEditingPort) {}
-
-  /** Inserts text at the persistent point, replacing any selection. @param text - Inserted text. @param allowGrouping - Whether typing may merge with the preceding action. @returns Whether changed. */
-  public InsertAtCursor(text: string, allowGrouping: boolean): boolean {
-    const before = this.port.captureCursorState();
-    const cursor = this.port.getCursor();
-    const point = cursor.GetPoint();
-    const paragraph = point.GetNode() as WriterParagraph;
-    const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
-    if (mark !== undefined) {
-      return this.port.runNotificationTransaction(
-        /** Brackets native deletion and forced insertion as one shell action. @returns Whether inserted. */ () => {
-          const manager = this.port.getUndoManager();
-          manager.StartUndo("Replace");
-          try {
-            const deleted = this.DeleteAtCursor("delete");
-            const position = this.port.getCursor().GetPoint();
-            const target = position.GetNode() as WriterParagraph,
-              start = position.GetContentIndex();
-            return this.port.applyAction(
-              createWriterInsertTextAction(
-                target,
-                start,
-                text,
-                this.port.getPendingCharacterItems(),
-                undefined,
-                this.port.captureCursorState(),
-                this.port.createCollapsedCursorState(target, start + text.length),
-                deleted,
-              ),
-            );
-          } finally {
-            manager.EndUndo();
-          }
-        },
-      );
-    }
-    const offset = point.GetContentIndex();
-    const group = allowGrouping ? getWriterTypingCharacterClass(text) : undefined;
-    return this.port.applyAction(
-      createWriterInsertTextAction(
-        paragraph,
-        offset,
-        text,
-        this.port.getPendingCharacterItems(),
-        group,
-        before,
-        this.port.createCollapsedCursorState(paragraph, offset + text.length),
-      ),
-      group !== undefined,
-    );
-  }
-
-  /** Deletes the active selection or one adjacent grapheme. @param direction - Logical direction. @returns Whether changed. */
-  public DeleteAtCursor(direction: SwUndoDeleteDirection): boolean {
-    const before = this.port.captureCursorState();
-    const cursor = this.port.getCursor();
-    const point = cursor.GetPoint();
-    const paragraph = point.GetNode() as WriterParagraph;
-    const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
-    if (mark !== undefined || cursor.IsMultiSelection()) {
-      const target =
-        before.tableSelection === true
-          ? (before.point.node
-              .GetNodes()
-              .at(before.point.node.StartOfSectionNode().GetIndex() + 1) as SwTextNode)
-          : undefined;
-      const after =
-        target === undefined ? undefined : this.port.createCollapsedCursorState(target, 0);
-      const operation = createWriterDeleteSelectionOperation(cursor, direction, before, after);
-      if (operation !== undefined)
-        return this.port.applyAction(operation.action, false, operation.execute);
-      if (target === undefined && (mark === undefined || point.compare(mark) === 0)) return false;
-      const endpoint = direction === "backspace" ? cursor.Start() : cursor.End();
-      const position =
-        target === undefined
-          ? new SwPosition(endpoint.GetNode() as SwTextNode, endpoint.GetContentIndex())
-          : new SwPosition(target, 0);
-      try {
-        return this.port.setCursor(position);
-      } finally {
-        position.Dispose();
-      }
-    }
-    const offset = point.GetContentIndex();
-    if (direction === "backspace" && offset === 0)
-      return this.MergeParagraphWithPrevious(paragraph);
-    if (direction === "delete" && offset === paragraph.Len())
-      return this.MergeParagraphWithNext(paragraph);
-    const start =
-      direction === "backspace"
-        ? getWriterPreviousGraphemeBoundary(paragraph.GetText(), offset)
-        : offset;
-    const end =
-      direction === "backspace"
-        ? offset
-        : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
-    /* v8 ignore next -- Valid non-boundary cursor offsets still lie inside one grapheme. */
-    if (start === end) return false;
-    const deletedText = paragraph.GetText().slice(start, end);
-    const group =
-      deletedText.length === 1
-        ? /[\p{L}\p{N}]/u.test(deletedText)
-          ? "word"
-          : "delimiter"
+/** Deletes the active selection or one adjacent grapheme. @param direction - Logical direction. @param shell - Actual native cursor, document and history owner. @returns Whether changed. */
+export function DeleteAtCursor(shell: SwWrtShell, direction: SwUndoDeleteDirection): boolean {
+  const before = shell.CaptureCursorState();
+  const cursor = shell.GetCursor();
+  const point = cursor.GetPoint();
+  const paragraph = point.GetNode() as WriterParagraph;
+  const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
+  if (mark !== undefined || cursor.IsMultiSelection()) {
+    const target =
+      before.tableSelection === true
+        ? (before.point.node
+            .GetNodes()
+            .at(before.point.node.StartOfSectionNode().GetIndex() + 1) as SwTextNode)
         : undefined;
-    return this.port.applyAction(
-      new SwUndoDelete(
-        paragraph,
-        start,
-        paragraph.GetText().slice(start, end),
-        direction,
-        group,
-        before,
-        this.port.createCollapsedCursorState(paragraph, start),
-      ),
-      group !== undefined,
-    );
-  }
-
-  /** Splits at the caret after replacing a selected range. @returns Whether changed. */
-  public SplitAtCursor(): boolean {
-    const cursor = this.port.getCursor();
-    if (cursor.HasMark()) {
-      const manager = this.port.getUndoManager();
-      manager.EnterListAction("Split Paragraph");
-      try {
-        this.DeleteAtCursor("delete");
-        this.SplitParagraph(cursor.GetPoint());
-      } finally {
-        manager.LeaveListAction();
-      }
-      return true;
+    const after = target === undefined ? undefined : shell.CreateCollapsedCursorState(target, 0);
+    const operation = createWriterDeleteSelectionOperation(cursor, direction, before, after);
+    if (operation !== undefined)
+      return shell.ApplyAction(operation.action, false, operation.execute);
+    if (target === undefined && (mark === undefined || point.compare(mark) === 0)) return false;
+    const endpoint = direction === "backspace" ? cursor.Start() : cursor.End();
+    const position =
+      target === undefined
+        ? new SwPosition(endpoint.GetNode() as SwTextNode, endpoint.GetContentIndex())
+        : new SwPosition(target, 0);
+    try {
+      return shell.SetCursor(position);
+    } finally {
+      position.Dispose();
     }
-    this.SplitParagraph(cursor.GetPoint());
+  }
+  const offset = point.GetContentIndex();
+  if (direction === "backspace" && offset === 0)
+    return MergeParagraphWithPrevious(shell, paragraph);
+  if (direction === "delete" && offset === paragraph.Len())
+    return MergeParagraphWithNext(shell, paragraph);
+  const start =
+    direction === "backspace"
+      ? getWriterPreviousGraphemeBoundary(paragraph.GetText(), offset)
+      : offset;
+  const end =
+    direction === "backspace" ? offset : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
+  /* v8 ignore next -- Valid non-boundary cursor offsets still lie inside one grapheme. */
+  if (start === end) return false;
+  const deletedText = paragraph.GetText().slice(start, end);
+  const group =
+    deletedText.length === 1
+      ? /[\p{L}\p{N}]/u.test(deletedText)
+        ? "word"
+        : "delimiter"
+      : undefined;
+  return shell.ApplyAction(
+    new SwUndoDelete(
+      paragraph,
+      start,
+      paragraph.GetText().slice(start, end),
+      direction,
+      group,
+      before,
+      shell.CreateCollapsedCursorState(paragraph, start),
+    ),
+    group !== undefined,
+  );
+}
+
+/** Splits at the caret after replacing a selected range. @param shell - Actual native cursor, document and history owner. @returns Whether changed. */
+export function SplitAtCursor(shell: SwWrtShell): boolean {
+  const cursor = shell.GetCursor();
+  if (cursor.HasMark()) {
+    const manager = shell.GetDoc().GetUndoManager();
+    manager.EnterListAction("Split Paragraph");
+    try {
+      DeleteAtCursor(shell, "delete");
+      SplitParagraph(shell, cursor.GetPoint());
+    } finally {
+      manager.LeaveListAction();
+    }
     return true;
   }
+  SplitParagraph(shell, cursor.GetPoint());
+  return true;
+}
 
-  /** Replaces one same-paragraph range with a native Writer text fragment. @param range - Target range. @param replacement - Inserted native fragment. @returns Whether changed. */
-  public ReplaceRange(range: WriterTextRange, replacement: SwTextFragment): boolean {
-    const paragraph = range.node;
-    if (paragraph.GetDoc() !== this.port.getDoc()) throw new Error("Writer text range is foreign.");
-    if (
-      !Number.isInteger(range.start) ||
-      !Number.isInteger(range.end) ||
-      range.start < 0 ||
-      range.end < range.start ||
-      range.end > paragraph.Len()
-    )
-      throw new Error("Writer text range is outside the paragraph.");
-    const removedFragment = paragraph.CaptureTextFragment(range.start, range.end);
-    if (
-      removedFragment.text === replacement.text &&
-      removedFragment.hints.equals(replacement.hints)
-    )
-      return false;
-    const nextOffset = range.start + replacement.text.length;
-    return this.port.applyAction(
-      new SwUndoReplace(
-        paragraph,
-        range.start,
-        removedFragment,
-        replacement,
-        replacement.text.length === 0 ? "Delete" : "Paste",
-        this.port.captureCursorState(),
-        this.port.createCollapsedCursorState(paragraph, nextOffset),
-      ),
-    );
-  }
+/** Replaces one same-paragraph range with a native Writer text fragment. @param range - Target range. @param replacement - Inserted native fragment. @param shell - Actual native cursor, document and history owner. @returns Whether changed. */
+export function ReplaceRange(
+  shell: SwWrtShell,
+  range: WriterTextRange,
+  replacement: SwTextFragment,
+): boolean {
+  const paragraph = range.node;
+  if (paragraph.GetDoc() !== shell.GetDoc()) throw new Error("Writer text range is foreign.");
+  if (
+    !Number.isInteger(range.start) ||
+    !Number.isInteger(range.end) ||
+    range.start < 0 ||
+    range.end < range.start ||
+    range.end > paragraph.Len()
+  )
+    throw new Error("Writer text range is outside the paragraph.");
+  const removedFragment = paragraph.CaptureTextFragment(range.start, range.end);
+  if (removedFragment.text === replacement.text && removedFragment.hints.equals(replacement.hints))
+    return false;
+  const nextOffset = range.start + replacement.text.length;
+  return shell.ApplyAction(
+    new SwUndoReplace(
+      paragraph,
+      range.start,
+      removedFragment,
+      replacement,
+      replacement.text.length === 0 ? "Delete" : "Paste",
+      shell.CaptureCursorState(),
+      shell.CreateCollapsedCursorState(paragraph, nextOffset),
+    ),
+  );
+}
 
-  /** Reads plain clipboard text through native cursor rings and document-insertion history. @param text - Plain clipboard text. @returns Whether imported. */
-  public PastePlainText(text: string): boolean {
-    const before = this.port.captureCursorState();
-    const operation = createWriterReadTextOperation(this.port.getCursor(), text, before);
-    return operation === undefined
-      ? false
-      : this.port.applyAction(operation.action, false, operation.execute);
-  }
+/** Reads plain clipboard text through native cursor rings and document-insertion history. @param text - Plain clipboard text. @param shell - Actual native cursor, document and history owner. @returns Whether imported. */
+export function PastePlainText(shell: SwWrtShell, text: string): boolean {
+  const before = shell.CaptureCursorState();
+  const operation = createWriterReadTextOperation(shell.GetCursor(), text, before);
+  return operation === undefined
+    ? false
+    : shell.ApplyAction(operation.action, false, operation.execute);
+}
 
-  /** Pastes one safe transfer document as a compound Writer action. @param paste - Parsed clipboard content. @returns Whether changed. */
-  public Paste(paste: WriterPasteDocument): boolean {
-    const manager = this.port.getUndoManager();
-    const cursor = this.port.getCursor();
-    return pasteWriterTransfer(paste, {
-      applyParagraphList:
-        /** Applies imported list state. @param paragraph - Clipboard paragraph. @returns Whether changed. */ (
-          paragraph,
-        ) => this.ApplyPastedParagraphList(paragraph),
-      beginUndoGroup: /** Opens the paste compound action. @returns Nothing. */ () =>
-        manager.EnterListAction("Paste"),
-      deleteSelection: /** Removes the active selection. @returns Nothing. */ () => {
-        this.DeleteAtCursor("delete");
-      },
-      endUndoGroup: /** Closes the paste compound action. @returns Nothing. */ () =>
-        manager.LeaveListAction(),
-      getInsertionPoint:
-        /** Returns the current insertion point. @returns Canonical position. */ () =>
-          cursor.GetPoint(),
-      hasSelection: /** Reports mark state. @returns Whether selected. */ () => cursor.HasMark(),
-      replaceRange:
-        /** Replaces a paragraph range. @param range - Target range. @param replacement - Inserted native fragment. @returns Whether changed. */ (
-          range,
-          replacement,
-        ) => this.ReplaceRange(range, replacement),
-      setCursor:
-        /** Moves the shell cursor. @param position - Canonical position. @returns Whether changed. */ (
-          position,
-        ) => this.port.setCursor(position),
-      splitParagraph:
-        /** Splits a paragraph. @param position - Split point. @returns Trailing paragraph. */ (
-          position,
-        ) => this.SplitParagraph(position),
-    });
-  }
+/** Splits one paragraph at a canonical position. @param position - Split point. @param shell - Actual native cursor, document and history owner. @returns New trailing paragraph. */
+export function SplitParagraph(shell: SwWrtShell, position: SwPosition): WriterParagraph {
+  const paragraph = position.GetNode() as WriterParagraph;
+  const offset = position.GetContentIndex();
+  if (paragraph.GetDoc() !== shell.GetDoc()) throw new Error("Writer split position is foreign.");
+  /* v8 ignore next 2 -- SwPosition validates the same node bounds. */
+  if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.Len())
+    throw new Error("Split offset is outside the paragraph.");
+  shell.ApplyAction(
+    new SwUndoSplitNode(
+      paragraph,
+      offset,
+      shell.CaptureCursorState(),
+      shell.CreateCollapsedCursorState(paragraph, 0),
+    ),
+  );
+  return shell.GetActiveParagraph();
+}
 
-  /** Splits one paragraph at a canonical position. @param position - Split point. @returns New trailing paragraph. */
-  public SplitParagraph(position: SwPosition): WriterParagraph {
-    const paragraph = position.GetNode() as WriterParagraph;
-    const offset = position.GetContentIndex();
-    if (paragraph.GetDoc() !== this.port.getDoc())
-      throw new Error("Writer split position is foreign.");
-    /* v8 ignore next 2 -- SwPosition validates the same node bounds. */
-    if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.Len())
-      throw new Error("Split offset is outside the paragraph.");
-    this.port.applyAction(
-      new SwUndoSplitNode(
-        paragraph,
-        offset,
-        this.port.captureCursorState(),
-        this.port.createCollapsedCursorState(paragraph, 0),
-      ),
-    );
-    return this.port.getActiveParagraph();
-  }
+/** Joins a paragraph into its predecessor. @param paragraph - Removed trailing paragraph. @param shell - Actual native cursor, document and history owner. @returns Whether changed. */
+export function MergeParagraphWithPrevious(shell: SwWrtShell, paragraph: WriterParagraph): boolean {
+  const document = shell.GetDoc();
+  const index = paragraph.GetIndex();
+  const preceding = document.nodes.at(index - 1);
+  if (
+    !(preceding instanceof SwTextNode) ||
+    preceding.StartOfSectionNode() !== paragraph.StartOfSectionNode()
+  )
+    return false;
+  const offset = preceding.Len();
+  return shell.ApplyAction(
+    new SwUndoJoinParagraphs(
+      preceding,
+      offset,
+      paragraph,
+      shell.CaptureCursorState(),
+      shell.CreateCollapsedCursorState(preceding, offset),
+    ),
+  );
+}
 
-  /** Joins a paragraph into its predecessor. @param paragraph - Removed trailing paragraph. @returns Whether changed. */
-  public MergeParagraphWithPrevious(paragraph: WriterParagraph): boolean {
-    const document = this.port.getDoc();
-    const index = paragraph.GetIndex();
-    const preceding = document.nodes.at(index - 1);
-    if (
-      !(preceding instanceof SwTextNode) ||
-      preceding.StartOfSectionNode() !== paragraph.StartOfSectionNode()
-    )
-      return false;
-    const offset = preceding.Len();
-    return this.port.applyAction(
-      new SwUndoJoinParagraphs(
-        preceding,
-        offset,
-        paragraph,
-        this.port.captureCursorState(),
-        this.port.createCollapsedCursorState(preceding, offset),
-      ),
-    );
-  }
-
-  /** Joins the following paragraph into the selected node. @param paragraph - Preceding paragraph. @returns Whether changed. */
-  public MergeParagraphWithNext(paragraph: WriterParagraph): boolean {
-    const document = this.port.getDoc();
-    const next = document.nodes.at(paragraph.GetIndex() + 1);
-    if (
-      !(next instanceof SwTextNode) ||
-      next.StartOfSectionNode() !== paragraph.StartOfSectionNode()
-    )
-      return false;
-    return this.MergeParagraphWithPrevious(next);
-  }
-
-  /** Applies imported list metadata through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether changed. */
-  private ApplyPastedParagraphList(paragraph: WriterPasteParagraph): boolean {
-    const target = this.port.getActiveParagraph();
-    const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
-    if (target.GetListKind() === nextList.kind && target.GetAttrListLevel() === nextList.level)
-      return false;
-    const cursor = this.port.captureCursorState();
-    return this.port.applyAction(
-      new SwUndoInsNum(
-        target,
-        target.CaptureListItems(),
-        createWriterListItemSet(target, nextList),
-        cursor,
-        cursor,
-      ),
-    );
-  }
+/** Joins the following paragraph into the selected node. @param paragraph - Preceding paragraph. @param shell - Actual native cursor, document and history owner. @returns Whether changed. */
+export function MergeParagraphWithNext(shell: SwWrtShell, paragraph: WriterParagraph): boolean {
+  const document = shell.GetDoc();
+  const next = document.nodes.at(paragraph.GetIndex() + 1);
+  if (!(next instanceof SwTextNode) || next.StartOfSectionNode() !== paragraph.StartOfSectionNode())
+    return false;
+  return MergeParagraphWithPrevious(shell, next);
 }

@@ -49,9 +49,18 @@ import {
 } from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
-import { SwWrtShellEditingOperations } from "./wrtsh-editing";
+import {
+  InsertAtCursor,
+  DeleteAtCursor,
+  SplitAtCursor,
+  ReplaceRange,
+  PastePlainText,
+  SplitParagraph,
+  MergeParagraphWithPrevious,
+  MergeParagraphWithNext,
+} from "./wrtsh-editing";
 import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/edattr";
-import type { WriterPasteDocument } from "../dochdl/swdtflvr";
+import { pasteWriterTransfer, type WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
 import { SwUndoNumOrNoNum } from "../../core/undo/unnum";
@@ -82,7 +91,6 @@ export class SwWrtShell extends SwFEShell {
   private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
   private readonly docShellSubscription: () => void;
-  private readonly editing: SwWrtShellEditingOperations;
   private readonly listShell: SwListShell;
   private pendingCharacterItems: SfxItemSet;
   private readonly undoContext: SwUndoRedoContext;
@@ -103,45 +111,6 @@ export class SwWrtShell extends SwFEShell {
           state,
         ) => this.RestoreCursorState(state),
     };
-    this.editing = new SwWrtShellEditingOperations({
-      applyAction:
-        /** Applies one editing action through shell notification orchestration. @param action - Undo action. @param tryMerge - Whether history grouping is allowed. @param execute - Optional sequential native initial operation. @returns Whether applied. */ (
-          action,
-          tryMerge,
-          execute,
-        ) =>
-          this.ApplyAction(
-            action,
-            tryMerge,
-            execute === undefined
-              ? undefined
-              : /** Runs the native initial operation with the actual undo context. @returns Nothing. */ () =>
-                  execute(this.undoContext),
-          ),
-      captureCursorState: /** Captures the shell cursor boundary. @returns Cursor state. */ () =>
-        this.CaptureCursorState(),
-      createCollapsedCursorState:
-        /** Creates a collapsed action endpoint. @param target - Target paragraph. @param offset - Content offset. @returns Cursor state. */ (
-          target,
-          offset,
-        ) => this.CreateCollapsedCursorState(target, offset),
-      getActiveParagraph: /** Returns the shell target. @returns Active paragraph. */ () =>
-        this.GetActiveParagraph(),
-      getCursor: /** Returns the native editing PaM. @returns Cursor. */ () => this.GetCursor(),
-      getDoc: /** Returns the active document. @returns Writer document. */ () => this.GetDoc(),
-      getPendingCharacterItems: /** Returns caret items. @returns Copied item set. */ () =>
-        this.GetPendingCharacterItems(),
-      getUndoManager: /** Returns document history. @returns Undo manager. */ () =>
-        this.docShell.GetUndoManager(),
-      runNotificationTransaction:
-        /** Brackets one native shell edit. @param operation - Editing operation. @returns Whether changed. */ (
-          operation,
-        ) => this.RunNotificationTransaction(operation),
-      setCursor:
-        /** Moves the persistent cursor. @param position - Canonical position. @returns Whether changed. */ (
-          position,
-        ) => this.SetCursor(position),
-    });
     this.textShell = new SwTextShell(this, dialogController);
     this.listShell = new SwListShell(this);
     this.docShellSubscription = docShell.Subscribe(
@@ -446,27 +415,27 @@ export class SwWrtShell extends SwFEShell {
       const action = createWriterReadFragmentAction(this.GetCursor(), first.fragment, before);
       return action === undefined ? false : this.ApplyAction(action);
     }
-    return this.editing.Paste(paste);
+    return pasteWriterTransfer(paste, this);
   }
 
   /** Reads plain clipboard text at native selected-cell points. @param text - Plain clipboard text. @returns Whether imported. */
   public PastePlainTextAtCursor(text: string): boolean {
-    return this.editing.PastePlainText(text);
+    return PastePlainText(this, text);
   }
 
   /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
   public Insert(text: string): boolean {
-    return text.length > 0 && this.editing.InsertAtCursor(text, true);
+    return text.length > 0 && InsertAtCursor(this, text, true);
   }
 
   /** Replaces the current Writer selection without joining ordinary typing undo groups. @param text - Replacement text. @returns Whether content changed. */
   public Replace(text: string): boolean {
-    return text.length > 0 && this.editing.InsertAtCursor(text, false);
+    return text.length > 0 && InsertAtCursor(this, text, false);
   }
 
   /** Inserts a paragraph break at the persistent Writer cursor. @returns Whether a break was inserted. */
   public SplitNode(): boolean {
-    return this.editing.SplitAtCursor();
+    return SplitAtCursor(this);
   }
 
   /** Changes numbering at an unselected paragraph start. @param numOn - Count the current item when true. @returns Whether numbering changed. */
@@ -517,12 +486,12 @@ export class SwWrtShell extends SwFEShell {
 
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
   public DelLeft(): boolean {
-    return this.editing.DeleteAtCursor("backspace");
+    return DeleteAtCursor(this, "backspace");
   }
 
   /** Deletes the following grapheme or the current selection. @returns Whether content changed. */
   public DelRight(): boolean {
-    return this.editing.DeleteAtCursor("delete");
+    return DeleteAtCursor(this, "delete");
   }
 
   /** Begins browser extended text input while retaining the exact Writer selection it may replace. @returns Nothing. */
@@ -548,7 +517,7 @@ export class SwWrtShell extends SwFEShell {
       this.NotifySelection();
       return false;
     }
-    const changed = this.editing.InsertAtCursor(composition.text, false);
+    const changed = InsertAtCursor(this, composition.text, false);
     /* v8 ignore next -- non-empty composition at a valid registered cursor always inserts. */
     if (!changed) this.NotifySelection();
     return changed;
@@ -556,32 +525,32 @@ export class SwWrtShell extends SwFEShell {
 
   /** Deletes the canonical visible selection, including ranges spanning text nodes. @returns Whether content changed. */
   public DeleteSelection(): boolean {
-    return this.getShellCursor().HasMark() && this.editing.DeleteAtCursor("delete");
+    return this.getShellCursor().HasMark() && DeleteAtCursor(this, "delete");
   }
 
   /** Replaces one same-paragraph range with a native Writer text fragment. @param range - Target range. @param replacement - Inserted native fragment. @returns Whether document content changed. */
   public ReplaceRange(range: WriterTextRange, replacement: SwTextFragment): boolean {
-    return this.editing.ReplaceRange(range, replacement);
+    return ReplaceRange(this, range, replacement);
   }
 
   /** Pastes one safe transfer document at the persistent SwPaM as a single Writer undo transaction. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
   public Paste(paste: WriterPasteDocument): boolean {
-    return this.editing.Paste(paste);
+    return pasteWriterTransfer(paste, this);
   }
 
   /** Splits one paragraph at a canonical Writer position. @param position - Source node and content offset. @returns New trailing paragraph. */
   public SplitParagraph(position: SwPosition): WriterParagraph {
-    return this.editing.SplitParagraph(position);
+    return SplitParagraph(this, position);
   }
 
   /** Joins a non-first paragraph into its preceding node. @param paragraph - Paragraph whose preceding break is removed. @returns Whether a merge occurred. */
   public MergeParagraphWithPrevious(paragraph: WriterParagraph): boolean {
-    return this.editing.MergeParagraphWithPrevious(paragraph);
+    return MergeParagraphWithPrevious(this, paragraph);
   }
 
   /** Joins the following paragraph into the selected node. @param paragraph - Paragraph whose following break is removed. @returns Whether a merge occurred. */
   public MergeParagraphWithNext(paragraph: WriterParagraph): boolean {
-    return this.editing.MergeParagraphWithNext(paragraph);
+    return MergeParagraphWithNext(this, paragraph);
   }
 
   /** Toggles direct character formatting over a range or pending caret state. @param format - Writer character format. @param range - Optional same-paragraph selection. @returns Whether document content changed. */
@@ -843,11 +812,19 @@ export class SwWrtShell extends SwFEShell {
   public ApplyAction(
     action: SfxUndoAction<SwUndoRedoContext>,
     tryMerge = false,
-    execute?: () => void,
+    execute?: (context: SwUndoRedoContext) => void,
   ): boolean {
     return this.RunNotificationTransaction(
       /** Aggregates model, lifecycle, and cursor changes. @returns True after execution. */ () => {
-        this.docShell.ApplyUndoAction(action, this.undoContext, tryMerge, execute);
+        this.docShell.ApplyUndoAction(
+          action,
+          this.undoContext,
+          tryMerge,
+          execute === undefined
+            ? undefined
+            : /** Runs initial native work with the shell-owned history context. @returns Nothing. */ () =>
+                execute(this.undoContext),
+        );
         this.NotifySelection();
         return true;
       },
@@ -883,10 +860,7 @@ export class SwWrtShell extends SwFEShell {
   }
 
   /** Creates a collapsed action endpoint while retaining pending direct attributes. @param paragraph - Target node. @param offset - Target content offset. @returns Complete cursor state. */
-  private CreateCollapsedCursorState(
-    paragraph: WriterParagraph,
-    offset: number,
-  ): SwUndoCursorState {
+  public CreateCollapsedCursorState(paragraph: WriterParagraph, offset: number): SwUndoCursorState {
     if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer cursor node is foreign.");
     return createWriterCollapsedCursorState(paragraph, offset, this.pendingCharacterItems);
   }

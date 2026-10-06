@@ -1,0 +1,18 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/uibase/wrtsh/wrtsh1.cxx": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac",
+    "sw/source/uibase/wrtsh/delete.cxx": "ad0cf9a7c733660d3f5513b08caaaeb2420c7dc6c0cc93956a790178eff30e57",
+    "sw/source/uibase/dochdl/swdtflvr.cxx": "78895e81d445a0c60a1793e91a90598718072d4c41d43fc6c7287fdd464059ee",
+    "sw/source/core/edit/eddel.cxx": "fb8da38059d71b0ac944f13c669df51e1af701c1e04d8e2760605c66feb0aab4",
+    "sw/source/core/undo/docundo.cxx": "25317403b9e01736eef297c38a376c494190f86d8631c4bfaefb576d87e7967d",
+    "sw/source/core/crsr/crsrsh.cxx": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a"
+  },
+  "ownership": "Pinned SwWrtShell Insert/SplitNode and DelLeft/DelRight call actual native shell, cursor, document and history owners. SwTransferable::Paste/PasteData accept actual SwWrtShell& and coordinate native insertion; synthetic editing and clipboard callback ports have no corresponding native lifetime owner.",
+  "change": "Removed SwWrtShellEditingPort, SwWrtShellEditingOperations and WriterPasteOperations. Eight structural algorithms accept actual native shell with type-only dependency. Transfer and list history use actual shell; initial operation receives real undo context from SwWrtShell.ApplyAction. No new editing object, callback object, forwarding shim or TextRuns conversion.",
+  "representation": "Source split remains a filename responsibility exception under1000-line gate. Existing clipboard/filter DTOs, Unicode/grapheme adaptation and native action payloads remain represented behavior; this task does not claim full native insertion/clipboard/mode parity.",
+  "proof": "482 unchanged existing tests, one absent full profile, actual shell/mounted/browser text/table/list/history/composition/transfer coverage and dependency-cycle check.",
+  "residual": "Complete native layout/protection/selection modes, clipboard format import/export, complex merged/nested/frame table behavior, native action hierarchy and whole-core/UI upstream parity remain unverified.",
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED"
+}
