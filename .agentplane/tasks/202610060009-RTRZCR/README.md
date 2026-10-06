@@ -4,7 +4,7 @@ title: "Align table cell pointer hits and row selector ownership with native UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T00:27:54.272Z"
+  updated_by: "CODER"
+  note: "Verified bounded table pointer/gutter scope on implementation ce67593eb276b41faf574365f3f4d59e72ea15fa. Six statics, one full upstream-absent profile12605app109inventory5scripts and147browser pass with2initial invalid marker-oracle failures; exact2failed-only browser recovery passed after native-source oracle correction.149distinctbrowser0flaky; actual app/inventory100%L/S/F/B via source/map identity, no passing/full replay/rebuild/counter transfer. Five restored source audits, exact scope/prior-test/metadata preservation, AP hygiene/governance and same-agent exact-SHA EVALUATOR pass. Native label indent drag/full table/core/UI unverified; conscious IO deviations unchanged."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: correct table interior pointer ownership and explicit row gutter selection through existing browser/native boundaries."
+  -
+    type: "verify"
+    at: "2026-10-06T00:27:54.272Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified bounded table pointer/gutter scope on implementation ce67593eb276b41faf574365f3f4d59e72ea15fa. Six statics, one full upstream-absent profile12605app109inventory5scripts and147browser pass with2initial invalid marker-oracle failures; exact2failed-only browser recovery passed after native-source oracle correction.149distinctbrowser0flaky; actual app/inventory100%L/S/F/B via source/map identity, no passing/full replay/rebuild/counter transfer. Five restored source audits, exact scope/prior-test/metadata preservation, AP hygiene/governance and same-agent exact-SHA EVALUATOR pass. Native label indent drag/full table/core/UI unverified; conscious IO deviations unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-06T00:27:00.004Z"
+doc_updated_at: "2026-10-06T00:27:54.330Z"
 doc_updated_by: "CODER"
 description: "Fix ordinary cell padding clicks being interpreted as whole-row selection; use existing browser pointer geometry and native selection owners, with explicit row selection in the table gutter."
 sections:
@@ -82,6 +88,36 @@ sections:
     6. Native IsNumLabel/RulerMarginDrag source confirmation corrects the initial marker-to-text oracle: original failed two Chromium cases retain all cell/gutter/input/Undo assertions and assert marker does not synthetically select a row or mutate text; exclude the incorrect MKeep typing expectation. Record this correction and preserve exact original failures. Native label StartDocDrag(Indent), ruler binding and cursor semantics remain unverified; no production fix or browser workaround for that independent behavior in this leaf.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T00:27:54.272Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified bounded table pointer/gutter scope on implementation ce67593eb276b41faf574365f3f4d59e72ea15fa. Six statics, one full upstream-absent profile12605app109inventory5scripts and147browser pass with2initial invalid marker-oracle failures; exact2failed-only browser recovery passed after native-source oracle correction.149distinctbrowser0flaky; actual app/inventory100%L/S/F/B via source/map identity, no passing/full replay/rebuild/counter transfer. Five restored source audits, exact scope/prior-test/metadata preservation, AP hygiene/governance and same-agent exact-SHA EVALUATOR pass. Native label indent drag/full table/core/UI unverified; conscious IO deviations unchanged.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T00:27:00.004Z, excerpt_hash=sha256:cf29df4b725b7401f3be7baa76ab95612d3fde93d8250625fafd1f44bd53e53d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060009-RTRZCR/blueprint/resolved-snapshot.json
+    - old_digest: 44ac5e62cd6b14d95d991ff877cf712b1d8f1c536512ca7e6ad09ac8c6e27073
+    - current_digest: 44ac5e62cd6b14d95d991ff877cf712b1d8f1c536512ca7e6ad09ac8c6e27073
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060009-RTRZCR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060009-RTRZCR
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this leaf semantic commit; preserve prior verified task evidence and registered IO policies."
   Findings: |-
@@ -123,6 +159,36 @@ Iteration170 one atomic CODER leaf under standing approved native UI/core conver
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T00:27:54.272Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified bounded table pointer/gutter scope on implementation ce67593eb276b41faf574365f3f4d59e72ea15fa. Six statics, one full upstream-absent profile12605app109inventory5scripts and147browser pass with2initial invalid marker-oracle failures; exact2failed-only browser recovery passed after native-source oracle correction.149distinctbrowser0flaky; actual app/inventory100%L/S/F/B via source/map identity, no passing/full replay/rebuild/counter transfer. Five restored source audits, exact scope/prior-test/metadata preservation, AP hygiene/governance and same-agent exact-SHA EVALUATOR pass. Native label indent drag/full table/core/UI unverified; conscious IO deviations unchanged.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T00:27:00.004Z, excerpt_hash=sha256:cf29df4b725b7401f3be7baa76ab95612d3fde93d8250625fafd1f44bd53e53d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060009-RTRZCR/blueprint/resolved-snapshot.json
+- old_digest: 44ac5e62cd6b14d95d991ff877cf712b1d8f1c536512ca7e6ad09ac8c6e27073
+- current_digest: 44ac5e62cd6b14d95d991ff877cf712b1d8f1c536512ca7e6ad09ac8c6e27073
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060009-RTRZCR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060009-RTRZCR
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
