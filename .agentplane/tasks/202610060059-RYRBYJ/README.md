@@ -4,7 +4,7 @@ title: "Restore document label ruler drag admission and native cursor ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T01:23:47.869Z"
+  updated_by: "CODER"
+  note: "Verified native horizontal document-label ruler admission, copied state and immediate target clear preserving current cursor; actual current paragraph history and cancellation. One full upstream-absent profile plus original-failed/new-only closure; final12644app109inventory5scripts151Chromium passed, actual100percent coverage,443prior tests unchanged258semantic records preserved. Six statics,five restored audits,scope/hygiene/governance passed. Same-agent EVALUATOR exact1874805e7d9d25af14487df1ee398a60af5adacf pass; full framework/list/table/core/UI parity unverified,IO exceptions unchanged."
   attempts: 0
 quality_review:
   state: "pass"
@@ -52,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved native document label ruler admission and copied indent state using existing browser tracking and paragraph item history; preserve all previous tests/contracts and conscious IO exceptions."
+  -
+    type: "verify"
+    at: "2026-10-06T01:23:47.869Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native horizontal document-label ruler admission, copied state and immediate target clear preserving current cursor; actual current paragraph history and cancellation. One full upstream-absent profile plus original-failed/new-only closure; final12644app109inventory5scripts151Chromium passed, actual100percent coverage,443prior tests unchanged258semantic records preserved. Six statics,five restored audits,scope/hygiene/governance passed. Same-agent EVALUATOR exact1874805e7d9d25af14487df1ee398a60af5adacf pass; full framework/list/table/core/UI parity unverified,IO exceptions unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-06T01:22:55.893Z"
+doc_updated_at: "2026-10-06T01:23:47.967Z"
 doc_updated_by: "CODER"
 description: "Iteration172 under standing approved iterative core/UI convergence authorization, one atomic CODER leaf direct main. Previous171 is PROGRESS evidenced by semantic180f7bbc6b3c3af7d7fc0488745953999195b978 and DONE verification. Restore native document-origin indent drag for real Writer list-label DOM hits using one existing ruler tracking owner. Source-confirmed edtwin3254 sets numbering node only to update ruler bindings, calls StartDocDrag then clears it immediately even on admission; do not invent retained label rule ownership or force SetIndent at later acceptance. Snapshot native StateTabWin label geometry from actual SwTextNode and current paragraph items, signed-short left offset, native SetLeft/ResolveTextLeft negative-first adjustment. StartDocDrag admits single left document input, matches Bottom indent horizontal hit policy, tab precedence and right-before-left order, preserves actual cursor instead of pointer text normalization. Reuse startDrag/useRulerTracking and existing cancellation/key priority/guides; transient copied indent painting and accepted changed-position application through existing SetParagraphRulerIndents actual item/history owner. No change on unmoved or cancelled input; accepted current-selection semantics match source after immediate node clear. Existing ruler direct gestures remain unchanged. Cancel tracking on hide/inactive/unmount/document owner replacement. Four existing browser production files, two metadata,three new tests (ruler native admission, mounted actual Writer model/history/cursor/list identity, ordinary Open Chromium1280/390),9 paths. All443 prior tests byte-identical and258runtime state/default/class/IOexception/evidence prefixes retained, no module promotion. Six statics then ONE full upstream-absent build/app/inventory/scripts/Chromium, failed/new-only recovery afterward; actual100%maps only ignored appcache with exact source/map identity proof if needed. AP never sources/helpers/Python/probes/rawdiagnostics. Five restored source audits, scope/sourcehash/prior-tests/metadata/AP/doctor/routing/diff, same-agent exact-SHA EVALUATOR, canonical meaningful verify/finish and whole parent checkpoint. No network/outside/global/subagents. Conscious save/open/recovery exceptions unchanged. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/framework/ruler/label/list/table/core/UI remains unverified."
 sections:
@@ -78,6 +84,36 @@ sections:
     5. Vendor restored before five source-dependent audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Same-agent EVALUATOR exact semantic SHA, canonical meaningful finish and whole parent checkpoint; broad goalACTIVE.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T01:23:47.869Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native horizontal document-label ruler admission, copied state and immediate target clear preserving current cursor; actual current paragraph history and cancellation. One full upstream-absent profile plus original-failed/new-only closure; final12644app109inventory5scripts151Chromium passed, actual100percent coverage,443prior tests unchanged258semantic records preserved. Six statics,five restored audits,scope/hygiene/governance passed. Same-agent EVALUATOR exact1874805e7d9d25af14487df1ee398a60af5adacf pass; full framework/list/table/core/UI parity unverified,IO exceptions unchanged.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T01:22:55.893Z, excerpt_hash=sha256:dd930495caab19d6f6f3d03be4d72f9438f2051392537d8eb86042a2bfedb647
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060059-RYRBYJ/blueprint/resolved-snapshot.json
+    - old_digest: b4d6ef3e82866a1989ed1ab96338cd8f27e603fc43e76b386ba96b6a596c9c4d
+    - current_digest: b4d6ef3e82866a1989ed1ab96338cd8f27e603fc43e76b386ba96b6a596c9c4d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060059-RYRBYJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060059-RYRBYJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task semantic commit using a new approved task; do not rewrite history or mutate closed task evidence."
   Findings: |-
@@ -120,6 +156,36 @@ Iteration172 under standing approved iterative core/UI convergence authorization
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T01:23:47.869Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native horizontal document-label ruler admission, copied state and immediate target clear preserving current cursor; actual current paragraph history and cancellation. One full upstream-absent profile plus original-failed/new-only closure; final12644app109inventory5scripts151Chromium passed, actual100percent coverage,443prior tests unchanged258semantic records preserved. Six statics,five restored audits,scope/hygiene/governance passed. Same-agent EVALUATOR exact1874805e7d9d25af14487df1ee398a60af5adacf pass; full framework/list/table/core/UI parity unverified,IO exceptions unchanged.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T01:22:55.893Z, excerpt_hash=sha256:dd930495caab19d6f6f3d03be4d72f9438f2051392537d8eb86042a2bfedb647
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060059-RYRBYJ/blueprint/resolved-snapshot.json
+- old_digest: b4d6ef3e82866a1989ed1ab96338cd8f27e603fc43e76b386ba96b6a596c9c4d
+- current_digest: b4d6ef3e82866a1989ed1ab96338cd8f27e603fc43e76b386ba96b6a596c9c4d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060059-RYRBYJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060059-RYRBYJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
