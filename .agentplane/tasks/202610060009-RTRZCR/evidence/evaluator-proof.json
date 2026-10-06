@@ -1,0 +1,15 @@
+{
+  "evaluatedSHA": "ce67593eb276b41faf574365f3f4d59e72ea15fa",
+  "sameCurrentAgentEvaluator": true,
+  "independentReviewerClaim": false,
+  "semanticChangedPaths": 10,
+  "taskEvidencePathsInSameSemanticCommit": 10,
+  "scopeEvidenceSHA256": "fd6740cb6b3f22ff55d51c3c5ac6c274708f5eee440c8bd8447dd28116d2586e",
+  "diffSHA256": "ecbaf36f70ccfca16b345724e38b83be5aff7ce2c5bbd12625859acd481d86d5",
+  "sourceIdentityVerified": true,
+  "mapIdentityVerified": true,
+  "allRequiredEvidenceVerified": true,
+  "fullProfileCount": 1,
+  "passingReplays": 0,
+  "residualRisk": "Represented flat LTR table interior pointer geometry, actual projected paragraph caret, explicit row gutter/native box ownership and history only. Native number-label RulerMarginDrag/StartDocDrag(Indent) is a separately identified unverified behavior. Initial MKeep browser oracle corrected against native source; no caret workaround or production change after initial profile. Injected marker caret covers browser geometry only. RTL/vertical/nested/merged/protected/column/resizing/full native framework/layout/portion/core/UI/list/table parity remains unverified. Conscious IO deviations unchanged;parent DOING and goal ACTIVE."
+}

@@ -4,7 +4,7 @@ title: "Align table cell pointer hits and row selector ownership with native UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,25 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T00:27:27.376Z"
+  updated_by: "EVALUATOR"
+  note: "Bounded flat LTR table pointer and native row ownership verified on ce67593eb276b41faf574365f3f4d59e72ea15fa by same current agent; no independent review."
+  evaluated_sha: "ce67593eb276b41faf574365f3f4d59e72ea15fa"
+  blueprint_digest: "44ac5e62cd6b14d95d991ff877cf712b1d8f1c536512ca7e6ad09ac8c6e27073"
+  evidence_refs:
+    - ".agentplane/tasks/202610060009-RTRZCR/README.md"
+    - ".agentplane/tasks/202610060009-RTRZCR/quality/20261006-002727376-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060009-RTRZCR/quality/20261006-002727376-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060009-RTRZCR/quality/20261006-002727376-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060009-RTRZCR/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060009-RTRZCR/evidence/evaluator-proof.json"
+    - ".agentplane/tasks/202610060009-RTRZCR/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610060009-RTRZCR/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610060009-RTRZCR/evidence/browser-closure-profile.json"
+  findings:
+    - "Exact10 semantic paths;438 prior tests437 byte-identical with one source-confirmed row fixture migration;258 semantic states/defaults/IOexceptions preserved. One full upstream-absent profile and only two original failed browser cases recovered after native-source marker oracle correction. Native label indent drag remains unverified; no workaround or full parity claim."
 commit: null
 comments:
   -
