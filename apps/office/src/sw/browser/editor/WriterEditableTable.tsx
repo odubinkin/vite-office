@@ -86,13 +86,16 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
               const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
               return (
                 <tr
-                  aria-selected={row
-                    .GetTabBoxes()
-                    .every(
-                      /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
-                        box,
-                      ) => selectedBoxes?.includes(box.GetStartNode().GetIndex()) === true,
-                    )}
+                  aria-selected={
+                    !isRepeatedHeadline &&
+                    row
+                      .GetTabBoxes()
+                      .every(
+                        /** Projects actual native table ownership. @param box - Current owner. @returns Operation result. */ (
+                          box,
+                        ) => selectedBoxes?.includes(box.GetStartNode().GetIndex()) === true,
+                      )
+                  }
                   data-writer-table-row={rowIndex}
                   data-writer-repeated-headline={isRepeatedHeadline ? "true" : undefined}
                   key={rowIndex}
@@ -109,6 +112,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                         <CellTag
                           data-writer-table-box={cell.GetStartNode().GetIndex()}
                           data-writer-editor-selected={
+                            !isRepeatedHeadline &&
                             selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
                               ? "true"
                               : undefined
@@ -119,6 +123,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                               : undefined
                           }
                           className={
+                            !isRepeatedHeadline &&
                             selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
                               ? "relative bg-indigo-50 outline outline-1 outline-indigo-300"
                               : "relative"

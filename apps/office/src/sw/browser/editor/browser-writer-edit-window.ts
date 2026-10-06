@@ -323,7 +323,13 @@ export class BrowserWriterEditWindow {
   ): SwEditWindowSelection["point"] | undefined {
     return position.nodeIndex === undefined
       ? undefined
-      : { contentIndex: position.offset, nodeIndex: position.nodeIndex };
+      : {
+          contentIndex: position.offset,
+          nodeIndex: position.nodeIndex,
+          ...(position.inRepeatedHeadline === undefined
+            ? {}
+            : { inRepeatedHeadline: position.inRepeatedHeadline }),
+        };
   }
 
   /** Writes a Writer selection into a clipboard event. @param event - React clipboard event. @param cut - Whether to remove the selection after writing. @returns Nothing. */

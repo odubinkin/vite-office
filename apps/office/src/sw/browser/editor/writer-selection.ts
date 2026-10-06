@@ -269,6 +269,12 @@ function getWriterDomPosition(
         ...(paragraph.dataset.writerNodeIndex === undefined
           ? {}
           : { nodeIndex: Number(paragraph.dataset.writerNodeIndex) }),
+        ...(paragraph.closest("[data-writer-table-box]") === null
+          ? {}
+          : {
+              inRepeatedHeadline:
+                paragraph.closest('[data-writer-repeated-headline="true"]') !== null,
+            }),
         offset: writerOffset + Number(paragraph.dataset.writerFragmentStart ?? 0),
         paragraphId: paragraph.dataset.writerParagraphId as string,
       };

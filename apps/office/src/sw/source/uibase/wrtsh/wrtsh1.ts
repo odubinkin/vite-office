@@ -58,17 +58,20 @@ import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
 import { SwUndoNumOrNoNum } from "../../core/undo/unnum";
 import { SwUndoPageDesc } from "../../core/undo/SwUndoPageDesc";
-import { GetSelectionType } from "./wrtsh-selection";
+import {
+  GetSelectionType,
+  IsTableSelection,
+  IsCursorInTable,
+  RejectRepeatedHeadlineSelection,
+} from "./wrtsh-selection";
 import type { SelectionType } from "../inc/wrtsh";
 import { createWriterReadFragmentAction } from "../../filter/basflt/shellio";
-
 /** Logical paragraph indentation values accepted by the browser ruler shell boundary. */
 export interface WriterParagraphIndentValue {
   readonly firstLine: number;
   readonly left: number;
   readonly right: number;
 }
-
 /** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
 interface WriterCompositionState {
   /** Cursor or selection replaced when the composition is committed. */
@@ -207,13 +210,7 @@ export class SwWrtShell extends SwEditShell {
   }
   /** Resolves native table context from selected boxes or the ordinary point section. @returns Current table node. */
   public IsCursorInTable(): SwTableNode | undefined {
-    const node =
-      this.tableCursor?.GetSelectedBoxes()[0]?.GetStartNode() ??
-      this.getShellCursor().GetPoint().GetNode();
-    const section = node instanceof SwTableBoxStartNode ? node : node.StartOfSectionNode();
-    return section instanceof SwTableBoxStartNode
-      ? (section.StartOfSectionNode() as SwTableNode)
-      : undefined;
+    return IsCursorInTable(this);
   }
   /** Selects the current flat row using native boxes and endpoint direction. @returns Whether a row was selected. */
   public SelectTableRow(): boolean {
@@ -458,6 +455,32 @@ export class SwWrtShell extends SwEditShell {
     this.cursor.Assign(point, mark);
     this.NotifySelection();
     return true;
+  }
+  /** Applies interactive table-mode admission separately from low-level PaM assignment, as native UpdateCursor does. @param point - Moving hit. @param mark - Fixed hit. @param inRepeatedHeadline - Actual follow headline occurrence. @returns Whether cursor changed. */
+  public UpdateCursor(point: SwPosition, mark?: SwPosition, inRepeatedHeadline = false): boolean {
+    const doc = this.GetDoc();
+    if (point.GetNode().GetDoc() !== doc || (mark !== undefined && mark.GetNode().GetDoc() !== doc))
+      return false;
+    const tableSelection = IsTableSelection(point, mark),
+      section = point.GetNode().StartOfSectionNode();
+    if (
+      inRepeatedHeadline &&
+      mark !== undefined &&
+      section instanceof SwTableBoxStartNode &&
+      (section.StartOfSectionNode() as SwTableNode).GetTable().GetRowsToRepeat() > 0 &&
+      (tableSelection || this.HasBoxSelection())
+    )
+      return RejectRepeatedHeadlineSelection(this, point, mark);
+    return this.RunNotificationTransaction(
+      /** Publishes only the final native cursor ownership. @returns Whether changed. */ () => {
+        const changed = this.SetPaM(point, mark);
+        if (!tableSelection || this.HasBoxSelection()) return changed;
+        this.tableCursor = new SwTableCursor(point, mark);
+        this.cursor.DeleteMark();
+        this.NotifySelection();
+        return true;
+      },
+    );
   }
   /** Focuses a canonical text node without accepting a UI key. @param paragraph - Document-owned node. @returns Nothing. */
   public FocusNode(paragraph: WriterParagraph): void {

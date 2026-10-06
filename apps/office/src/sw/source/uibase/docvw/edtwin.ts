@@ -20,6 +20,8 @@ function ignoreEditWindowInvalidation(): void {}
 export interface SwEditWindowPosition {
   readonly contentIndex: number;
   readonly nodeIndex: number;
+  /** Actual table-cell frame classification; absent for model positions without view geometry. */
+  readonly inRepeatedHeadline?: boolean;
 }
 
 /** Direction-preserving edit-window selection used by outer platform adapters. */
@@ -56,7 +58,18 @@ export class SwEditWin {
     const mark = selection.mark === undefined ? undefined : this.ResolvePosition(selection.mark);
     if (point === undefined || (selection.mark !== undefined && mark === undefined)) return false;
     try {
-      this.wrtShell.SetPaM(point, mark);
+      if (
+        selection.point.inRepeatedHeadline === undefined &&
+        selection.mark?.inRepeatedHeadline === undefined
+      )
+        this.wrtShell.SetPaM(point, mark);
+      else
+        this.wrtShell.UpdateCursor(
+          point,
+          mark,
+          selection.point.inRepeatedHeadline === true ||
+            selection.mark?.inRepeatedHeadline === true,
+        );
       return true;
     } finally {
       point.Dispose();
