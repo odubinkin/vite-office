@@ -1,0 +1,30 @@
+{
+  "base": "5b81a30f40f498dbfc1377ec313873c1a90c8bad",
+  "oldTestFiles": 470,
+  "byteIdenticalOldTestFiles": 469,
+  "changedOldTests": [
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts"
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+    "apps/office/e2e/writer-native-document-row.spec.ts"
+  ],
+  "priorSemanticModules": 268,
+  "currentSemanticModules": 269,
+  "priorStatesDefaultsClassificationsAndEvidencePreserved": true,
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-document-row.test.tsx",
+    "apps/office/e2e/writer-native-document-row.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts"
+  ],
+  "failures": []
+}

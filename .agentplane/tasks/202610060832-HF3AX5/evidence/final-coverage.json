@@ -1,0 +1,71 @@
+{
+  "merge": "Actual maximum counters on complete exactly identical maps; all five changed production sources match full-profile SHA256; all other sources protected by scope audit.",
+  "exactMapOwners": 266,
+  "application": {
+    "lines": {
+      "total": 13510,
+      "covered": 13510,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14803,
+      "covered": 14803,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3553,
+      "covered": 3553,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 11030,
+      "covered": 11030,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventory": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "applicationMapSHA256": "0aa8f3f65d027571e0b36f2323053e273a2ab18c166c95ee05b55806a783ec12",
+  "inventoryMapSHA256": "b4474402ec685c90ab9cf28255cfade80e492c49a97d7c31ec792c17baf41ceb",
+  "distinctApplicationCases": 12816
+}

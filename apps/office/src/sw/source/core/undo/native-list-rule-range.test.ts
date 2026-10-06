@@ -429,6 +429,12 @@ it("native structural ranges ignore text-only rule and count payloads", /** Chec
     owner.doc.SetCounted(pam, true);
     const nativeOwner =
       new /** Actual native state owner for this structural fixture. */ (class extends SwEditShell {
+        /** Supplies the inherited displayed cursor without changing the structural state-query range. @returns Cursor. */
+        public getShellCursor() {
+          return owner.shell.getShellCursor();
+        }
+        /** State-only fixture performs no table movement. @returns Nothing. */
+        protected UpdateTableCursor(): void {}
         /** Supplies a real structural native range. @returns Range. */
         public GetCursor(): SwPaM {
           return pam;

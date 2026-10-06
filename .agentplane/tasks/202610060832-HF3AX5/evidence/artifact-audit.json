@@ -1,0 +1,12 @@
+{
+  "fileCount": 4659,
+  "forbiddenArtifacts": [],
+  "allowedExistingArtifacts": [
+    ".agentplane/policy/check-routing.mjs",
+    ".agentplane/.upgrade/baseline/policy/check-routing.mjs",
+    ".agentplane/tasks/202610010156-ZDTVKE/browser-failure/test-failed-1.png"
+  ],
+  "historicalScreenshot": "Existing tracked application QA screenshot visually verified in iteration178; unchanged DONE owner.",
+  "scope": "Ignored-inclusive filename/type census; current task AP evidence is bounded prose, counts and hashes; raw diagnostics and coverage stay in ignored application cache.",
+  "vendorRestored": true
+}

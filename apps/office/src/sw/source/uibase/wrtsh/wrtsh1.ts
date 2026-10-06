@@ -8,8 +8,7 @@ import type { SwModelHint } from "../../../inc/hints";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
 import { SwTableBoxStartNode, SwTableNode } from "../../core/docnode/node";
-import { SwUndoTableNdsChg } from "../../core/undo/untbl";
-import { SwTable, type SwTableBox, type SwTableLine } from "../../core/table/swtable";
+import { SwTable, type SwTableBox } from "../../core/table/swtable";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
@@ -296,41 +295,8 @@ export class SwWrtShell extends SwFEShell {
     );
   }
 
-  /** Traverses to the next cell and appends one row only at an unmarked table end. @param appendLine - Native append permission. @returns Whether cursor moved. */
-  public GoNextCell(appendLine = true): boolean {
-    if (this.getShellCursor().GoNextCell()) {
-      this.UpdateTableCursor();
-      return true;
-    }
-    const section = this.getShellCursor().GetPoint().GetNode().StartOfSectionNode();
-    if (!(section instanceof SwTableBoxStartNode) || this.getShellCursor().HasMark() || !appendLine)
-      return false;
-    const tableNode = section.StartOfSectionNode() as SwTableNode;
-    const table = tableNode.GetTable(),
-      source = table.GetTabLines().at(-1) as SwTableLine;
-    return this.RunNotificationTransaction(
-      /** Brackets preparation and row/history publication. @returns Whether applied. */ () =>
-        this.GetDoc().RunModelTransaction(
-          /** Prepares actual empty sections and records one row insertion. @returns Whether applied. */ () => {
-            const before = this.CaptureCursorState(),
-              row = this.GetDoc().nodes.PrepareTableRow(table, source),
-              first = row.nodes[1] as WriterParagraph,
-              after = createWriterCollapsedCursorState(first, 0, first.GetCharacterItemsAt(0));
-            return this.ApplyAction(new SwUndoTableNdsChg(table, row, before, after));
-          },
-        ),
-    );
-  }
-
-  /** Traverses to the previous cell without leaving the table or changing its content. @returns Whether cursor moved. */
-  public GoPrevCell(): boolean {
-    if (!this.getShellCursor().GoPrevCell()) return false;
-    this.UpdateTableCursor();
-    return true;
-  }
-
   /** Refreshes shell-owned input/bindings after core cell traversal. @returns Nothing. */
-  private UpdateTableCursor(): void {
+  protected override UpdateTableCursor(): void {
     this.pendingCharacterItems = this.GetActiveParagraph().GetCharacterItemsAt(0);
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.NotifySelection();

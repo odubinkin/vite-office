@@ -1,5 +1,5 @@
 /** @fileoverview Owns native Writer numbering state, range traversal and editing commands from ednumber.cxx. */
-import { SwModify } from "../../../inc/calbck";
+import { SwCursorShell } from "../crsr/trvltbl";
 import { SwUndoNumUpDown, SwUndoInsNum, SwUndoDelNum, SwUndoNumRuleStart } from "../undo/unnum";
 import { SwUndoOutlineLeftRight } from "../undo/unoutl";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
@@ -96,7 +96,7 @@ export class SwPamRanges {
   }
 }
 /** Core editing shell owns numbering commands; the represented broadcaster base preserves existing subscriptions. */
-export abstract class SwEditShell extends SwModify {
+export abstract class SwEditShell extends SwCursorShell {
   /** Changes an explicit position's rule through native first-current-cursor policy and DontSetItem ownership. @param indent - Native signed16 target. @param position - Borrowed actual label position. @returns Whether a numbered rule operation was admitted. */
   public SetIndent(indent: number, position: SwPosition): boolean {
     const node = position.GetNode();
@@ -137,11 +137,11 @@ export abstract class SwEditShell extends SwModify {
     return level >= 0 ? level : WRITER_MAX_LIST_LEVEL + 1;
   }
   /** Returns the native document owner. @returns Document. */
-  public abstract GetDoc(): SwDoc;
+  public abstract override GetDoc(): SwDoc;
   /** Returns the actual editing selection ring. @returns Native cursor. */
   public abstract GetCursor(): SwPaM;
   /** Captures displayed command cursor and pending item ownership. @returns Command boundary. */
-  public abstract CaptureCursorState(): SwUndoCursorState;
+  public abstract override CaptureCursorState(): SwUndoCursorState;
   /** Executes existing native action orchestration. @param action - History. @param tryMerge - Grouping policy. @param execute - Initial native mutation. @returns Whether changed. */
   public abstract ApplyAction(
     action: SfxUndoAction<SwUndoRedoContext>,

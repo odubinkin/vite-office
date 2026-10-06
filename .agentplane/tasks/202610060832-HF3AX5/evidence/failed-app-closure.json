@@ -1,0 +1,73 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "946da8b35d5d2365daab5adf041bb4e268b1447ee7ffa9aeee8fdd4b3b43b965",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "91caf5abdc8afdbdf23a58230876f88e7668503c11e6f680d08e23d7c93f147b",
+    "apps/office/src/sw/source/core/doc/doc.ts": "7c04a861166a78b394a69b9505f4144e8c0acc48d407f7b9b01932a650b7eaec",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "e63cf3f09d88949f31818bf918ee79658351046a595d94f89ae81c51e3719325",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "dd7e9ae7d99e0be8e3631e750af8fe2714393ae32e99df319c8820e2d081a93d"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-document-row.test.tsx -t renders default Tab append through document insertion without action replay --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/HF3AX5-closure.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 27760,
+      "sha256": "24a291ea08846ee54feb6a55b60ebcedd33b0742c142516a227379cf1248fcae",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed (1)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "total": 1
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 13510,
+          "covered": 3487,
+          "skipped": 0,
+          "pct": 25.81
+        },
+        "statements": {
+          "total": 14803,
+          "covered": 3630,
+          "skipped": 0,
+          "pct": 24.52
+        },
+        "functions": {
+          "total": 3553,
+          "covered": 1060,
+          "skipped": 0,
+          "pct": 29.83
+        },
+        "branches": {
+          "total": 11030,
+          "covered": 1765,
+          "skipped": 0,
+          "pct": 16
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 25.81,
+        "statements": 24.52,
+        "functions": 29.83,
+        "branches": 16
+      },
+      "coverageMapSHA256": "d127824cfafe7b50dadb8c523c48052c3718109787e061e03f7b051fae2ac567",
+      "incompleteFileCount": 239,
+      "exitInterpretation": "One original failed case passed; exit1 is solely the partial run's global coverage thresholds. Full initial coverage100% and exact-map real-counter merge establish final100%."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/crsr/trvltbl.cxx": "b881919f93573f3e68c82429bbc360b47b1c97aa0c265d970fc4f43817a79444",
+    "sw/inc/crsrsh.hxx": "d5b15bac7672883e45c63022c5f3b188d210373651dcf2895115b1a019af0503",
+    "sw/inc/editsh.hxx": "b928e3ad82ba7a7391afacbcc32ae3a44d3fbcd6039ec05d17b18eb075429f1f",
+    "sw/inc/doc.hxx": "e1607dcbe67d2e53c8e2100b2a23c9cb2ea78fe24317c6c288112170d0b759d0",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/undo/untbl.cxx": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b"
+  },
+  "requirements": [
+    "SwEditShell inherits SwCursorShell; table next/previous traversal belongs to trvltbl.cxx",
+    "At final unmarked cell, default GoNextCell asks document InsertRow under an action boundary, then calls native cursor GoNextCell",
+    "SwDoc selected-box InsertRow defaults count1, behindtrue, insertDummytrue; document mutates table then saves new boxes and appends its undo",
+    "Row history owns numeric current table location and connected after-cursor coordinates"
+  ],
+  "omissions": [
+    "SwCursorShell still uses represented broadcaster SwModify base; full native SwViewShell/layout hierarchy remains unverified",
+    "Only existing flat final-row default insertion is represented; nondefault counts, before insertion, drag action, general selection and cursor overload remain unimplemented",
+    "Optional browser cursor state retains pending attributes; native SwSelBoxes container, document undo guard/DoesUndo, formulas, autoformat/redline/protection/DDE/merged/nested/rowspan/layout lifetimes remain unverified",
+    "Full native row/undo content reconstruction, Repeat and complete UI/core parity remain unverified"
+  ],
+  "statuses": "Prior268 semantic statuses/defaults/classifications/evidence preserved; new core cursor owner remains unverified; parent and whole goal ACTIVE."
+}

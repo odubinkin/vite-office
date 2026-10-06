@@ -205,6 +205,10 @@ export class SwUndoTableNdsChg extends SwUndo {
     )
       this.section = nodes.PrepareTableRow(table, table.GetTabLines().at(-1) as SwTableLine);
     nodes.InsertTableRow(table, this.section);
+    this.SaveNewBoxes();
+  }
+  /** Records the connected inserted boxes after document mutation or redo. @returns Nothing. */
+  public SaveNewBoxes(): void {
     this.SetAfterCursor(
       createWriterCollapsedCursorState(
         this.section.nodes[1] as SwTextNode,

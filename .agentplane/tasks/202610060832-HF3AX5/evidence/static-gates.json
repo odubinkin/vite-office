@@ -1,0 +1,54 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 989,
+      "sha256": "3fdb07ae2dbd9e5b0a1d68533db5a89eb306af87847362b7b83c78bc99134060",
+      "diagnostics": [
+        "apps/office/src/sw/source/core/edit/ednumber.ts(140,19): error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'SwCursorShell'.",
+        "apps/office/src/sw/source/core/edit/ednumber.ts(144,19): error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'SwCursorShell'.",
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts(67,23): error TS2445: Property 'UpdateCursor' is protected and only accessible within class 'SwWrtShell' and its subclasses.",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts(299,22): error TS2393: Duplicate function implementation.",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts(425,10): error TS2393: Duplicate function implementation."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "a8f7d0805761482655403216dd2b6940013ef3cd34cf8fc3ab21c963518abb9f",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "3f96df0f45320a86a16e69f0a0f8c14a09cfa676117b0b736d71827793035bb2",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3405,
+      "sha256": "0ec4e574f68bee9a525ce3c4428c52fc0fe4d1c9adda935856a191dccdbc67d6",
+      "diagnostics": []
+    }
+  ]
+}

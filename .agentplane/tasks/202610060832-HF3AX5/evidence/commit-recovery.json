@@ -1,0 +1,7 @@
+{
+  "initialExit": 5,
+  "error": "E_GIT: staged semantic paths were outside the task-only allowlist",
+  "resolution": "Route recomputed; commit retried with an explicit allowlist of the eleven approved semantic paths and the task subtree.",
+  "scopeChanged": false,
+  "checksRepeated": false
+}
