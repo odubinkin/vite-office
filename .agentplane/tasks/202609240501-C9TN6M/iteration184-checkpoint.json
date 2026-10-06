@@ -1,0 +1,148 @@
+{
+  "iteration": 184,
+  "leaf": "202610061043-GVCYWF",
+  "leafState": "DONE",
+  "implementation": "422482e0a0c4635daa2f345ec39dfde5dd6fadad",
+  "quality": "35dc5261a067",
+  "verificationTail": "87c5d0092d07",
+  "close": "35441c80fd66f53b4dffeb5987ca80f533b7b48d",
+  "parentState": "DOING",
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "priorFindings": {
+    "characters": 464606,
+    "sha256": "956cac25b9694e871ca210d57ea817f4cab379ef429f475863a486d68f21f5f3"
+  },
+  "updatedFindings": {
+    "characters": 467061,
+    "sha256": "a417f129865ac314398baf987d312bb0f228b98f2e1726daed084d36a20dedfa",
+    "entirePriorPrefixPreserved": true
+  },
+  "profile": {
+    "count": 1,
+    "upstreamAbsent": true,
+    "vendorRestored": true,
+    "distinctCases": {
+      "application": 12841,
+      "inventory": 109,
+      "scripts": 5,
+      "chromium": 195
+    },
+    "testClosures": 0,
+    "testReplays": 0,
+    "coverageTransfers": 0,
+    "coverageMerges": 0,
+    "rebuildsAfterProfile": 0,
+    "failures": [],
+    "runtimeErrors": 0,
+    "flaky": 0,
+    "skipped": 0
+  },
+  "coverage": {
+    "source": "Single upstream-absent full profile; actual raw Istanbul counters, no merge/transfer/replay",
+    "productionUnchanged": true,
+    "vendorRestored": true,
+    "failures": [],
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 13762,
+          "covered": 13762,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15087,
+          "covered": 15087,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3595,
+          "covered": 3595,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11248,
+          "covered": 11248,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "583eeb75931aa122900d652f041cbadde517dc04935081c37a990d0c47da3e8a",
+      "files": 267,
+      "byteIdenticalRawMap": true
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "0e952f8bb062c2131d3d0e03f77e5e44d11b2df5afa38a6cd5d7bc8dd9a95078",
+      "files": 38,
+      "byteIdenticalRawMap": true
+    }
+  },
+  "scope": {
+    "base": "3c430aa4e84ef4c8e5a4d39a6d15677e62a4fe1b",
+    "semanticPaths": [
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+      "docs/program/source-provenance.json",
+      "docs/program/parity/runtime-inventory.json"
+    ],
+    "oldTestFiles": 482,
+    "byteIdenticalOldTestFiles": 482,
+    "changedOldTests": [],
+    "newAcceptanceFiles": [],
+    "priorSemanticModules": 270,
+    "currentSemanticModules": 270,
+    "priorStatesDefaultsClassificationsAndJustificationPreserved": true,
+    "evidenceChange": "Only removed SwWrtShellEditingOperations evidence marker replaced by actual InsertAtCursor; all other prior evidence/order retained.",
+    "nativeSymbolsChange": "Removed two editing port/object symbols and one paste port symbol replaced by actual eight native-owner functions and one private list import helper; no forwarding shims.",
+    "failures": []
+  },
+  "closeoutArtifactAudit": {
+    "scope": "Only current leaf quality/exact-review/closeout, no historical census replay",
+    "fileCount": 5,
+    "forbidden": []
+  },
+  "constraints": "Conscious I/O/recovery deviations preserved; no upstream source/helper/Python/raw dumps in AP; no network/subagent/outside access",
+  "remaining": "Complete native layout/protection/selection modes, clipboard format import/export, complex merged/nested/frame table behavior, native action hierarchy and whole-core/UI upstream parity remain unverified."
+}
