@@ -39,6 +39,8 @@ export class BrowserWriterEditWindow {
   private suppressNextCommittedInput = false;
   private root: HTMLElement | undefined;
   private tableCapture = false;
+  private columnGuide: HTMLDivElement | undefined;
+  private suppressColumnClick = false;
 
   /** Creates a browser edit window. @param editWindow - Writer-owned operation boundary. @param environment - Browser selection surface. @param resolveParagraph - Mounted projection lookup. @returns Nothing. */
   public constructor(
@@ -79,28 +81,56 @@ export class BrowserWriterEditWindow {
         if (!this.tableCapture) return;
         this.MeasureTableFrames();
         this.editWindow.MouseMove({ x: event.clientX, y: event.clientY });
+        this.PaintColumnGuide();
         event.preventDefault();
       };
     const up =
-      /** Releases platform and Writer capture together. @returns Nothing. */
-      (): void => {
-        this.tableCapture = false;
-        this.editWindow.MouseButtonUp();
+      /** Accepts the final native mouse position and releases browser capture. @param event - Device release. @returns Nothing. */
+      (event: MouseEvent): void => {
+        if (this.tableCapture) event.preventDefault();
+        this.EndTableCapture(false, { x: event.clientX, y: event.clientY });
       };
+    const cancel =
+      /** Discards a preview when platform focus is lost. @returns Nothing. */
+      (): void => this.EndTableCapture(true);
+    const key =
+      /** Gives native border tracking priority over document editing and shortcuts. @param event - Platform key. @returns Nothing. */
+      (event: KeyboardEvent): void => {
+        if (this.editWindow.GetTableColumnDragPosition() === undefined) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        if (event.key === "Escape" || event.key === "Enter")
+          this.EndTableCapture(event.key === "Escape");
+      };
+    const click =
+      /** Suppresses the release-generated click that would refocus text after a border gesture. @param event - Native click. @returns Nothing. */
+      (event: MouseEvent): void => {
+        if (!this.suppressColumnClick) return;
+        this.suppressColumnClick = false;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      };
+    root.addEventListener("click", click, true);
+    this.environment.document.addEventListener("keydown", key, true);
     this.environment.document.addEventListener("mousemove", move);
     this.environment.document.addEventListener("mouseup", up);
-    this.environment.document.defaultView?.addEventListener("blur", up);
+    this.environment.document.defaultView?.addEventListener("blur", cancel);
     const unsubscribeSelection = this.selectionMapper.Subscribe(
       /** Publishes one native selection to SwEditWin. @param selection - DOM selection projection. @returns Nothing. */ (
         selection,
-      ) => void this.ApplySelection(selection),
+      ) => {
+        if (!this.tableCapture) this.ApplySelection(selection);
+      },
     );
     return /** Removes native edit-window subscriptions. @returns Nothing. */ () => {
       root.removeEventListener("beforeinput", handleBeforeInput);
       this.environment.document.removeEventListener("mousemove", move);
       this.environment.document.removeEventListener("mouseup", up);
-      this.environment.document.defaultView?.removeEventListener("blur", up);
-      up();
+      this.environment.document.defaultView?.removeEventListener("blur", cancel);
+      this.environment.document.removeEventListener("keydown", key, true);
+      root.removeEventListener("click", click, true);
+      cancel();
+      this.suppressColumnClick = false;
       this.root = undefined;
       this.editWindow.SetTableMouseFrames([]);
       unsubscribeSelection();
@@ -210,6 +240,10 @@ export class BrowserWriterEditWindow {
     /** Writes the current Writer transfer into a native drag operation. @param event - React drag event. @returns Nothing. */ (
       event: React.DragEvent<HTMLElement>,
     ): void => {
+      if (this.tableCapture) {
+        event.preventDefault();
+        return;
+      }
       if (!this.SynchronizeSelection()) return;
       const payload = this.editWindow.CreateSelectionTransfer();
       if (payload !== undefined) this.SetTransferData(event.dataTransfer, payload);
@@ -243,9 +277,10 @@ export class BrowserWriterEditWindow {
     /** Starts pointer selection stabilization. @param event - React mouse event. @returns Nothing. */ (
       event: React.MouseEvent<HTMLElement>,
     ): void => {
+      this.EndTableCapture(true);
+      this.suppressColumnClick = false;
       this.MeasureTableFrames();
       this.pointerSelection.End();
-      this.tableCapture = false;
       if (
         this.editWindow.MouseButtonDown(
           { x: event.clientX, y: event.clientY },
@@ -256,6 +291,10 @@ export class BrowserWriterEditWindow {
         this.tableCapture =
           this.editWindow.WhichMouseTabCol({ x: event.clientX, y: event.clientY }) !==
           SwTab.SEL_HORI;
+        if (this.editWindow.GetTableColumnDragPosition() !== undefined) {
+          this.suppressColumnClick = true;
+          this.PaintColumnGuide();
+        }
         event.preventDefault();
         return;
       }
@@ -287,6 +326,33 @@ export class BrowserWriterEditWindow {
       if (this.pointerSelection.End()) event.preventDefault();
       /* c8 ignore stop */
     };
+
+  /** Releases the native draft and its device-only guide together. @param cancelled - Discard the draft. @param point - Final mouse position. @returns Nothing. */
+  private EndTableCapture(
+    cancelled: boolean,
+    point?: { readonly x: number; readonly y: number },
+  ): void {
+    this.tableCapture = false;
+    this.editWindow.MouseButtonUp(cancelled, point);
+    this.columnGuide?.remove();
+    this.columnGuide = undefined;
+  }
+
+  /** Paints only the transient native drag coordinate; table widths remain document-owned. @returns Nothing. */
+  private PaintColumnGuide(): void {
+    const x = this.editWindow.GetTableColumnDragPosition();
+    if (x === undefined) return;
+    if (this.columnGuide === undefined) {
+      const guide = this.environment.document.createElement("div");
+      guide.setAttribute("aria-hidden", "true");
+      guide.dataset.writerTableColumnGuide = "true";
+      guide.style.cssText =
+        "position:fixed;top:0;bottom:0;width:1px;background:#4f46e5;pointer-events:none;z-index:40";
+      this.environment.document.body.append(guide);
+      this.columnGuide = guide;
+    }
+    this.columnGuide.style.left = x + "px";
+  }
 
   /** Measures live table frames over canonical model boxes; the browser owns only device rectangles. @returns Nothing. */
   private MeasureTableFrames(): void {

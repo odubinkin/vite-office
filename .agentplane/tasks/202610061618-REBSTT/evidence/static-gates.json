@@ -1,0 +1,71 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 226,
+      "sha256": "caa326604026c62c4b541869268f05d29b74e2b679394d33dce15e4f9f192526",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-table-column-drag.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 556,
+      "sha256": "dc806e1af32ad8face52cc9811fabd221a541922f1a28aa2e2f51c9418876154",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  145:18  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  218:3  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  219:3  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "✖ 3 problems (3 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1289,
+      "sha256": "bcb0e37eee378044f8d3deee6bf70aa7a36eb2e37a09cf9a02e0eb377e4e5b6e",
+      "diagnostics": [
+        "src/sw/browser/editor/native-table-column-drag.test.tsx(60,83): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/source/uibase/docvw/native-table-column-drag.test.ts(212,40): error TS2551: Property 'splice' does not exist on type 'readonly SwTextNode[]'. Did you mean 'slice'?",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "eb2ef93e1a909c2b060f8bb6912ec8546389114a17b9d0287129957ff707344d",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 534,
+      "sha256": "fc9f659c2218dc710dceaf34a0b53a5d5ab5e360816558a4f43e92b59a1e987f",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/e2e/writer-native-table-column-drag.spec.ts:55 function is missing JSDoc"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3598,
+      "sha256": "01a928b93e294cbd19f27f1edfc86c0a36d85a7d25409ddd7b3a8680ae6903f9",
+      "diagnostics": []
+    }
+  ]
+}

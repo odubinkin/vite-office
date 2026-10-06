@@ -44,7 +44,7 @@ export abstract class SwFEShell extends SwEditShell {
   }
 
   /** Finds the native table-edge box, giving resize geometry its source priority. @param point - Device position. @param selection - Enhanced selection rather than border movement. @returns Actual hit or undefined. */
-  private GetBox(point: SwTableMousePoint, selection: boolean): SwTableMouseHit | undefined {
+  public GetBox(point: SwTableMousePoint, selection = false): SwTableMouseHit | undefined {
     for (const frame of this.tableMouseFrames) {
       if (!this.GetDoc().GetTables().includes(frame.GetTable())) continue;
       const geometry = frame.mouseGeometry;
@@ -241,6 +241,11 @@ export abstract class SwFEShell extends SwEditShell {
         ) => box.GetParagraphs().includes(this.GetCursor().GetPoint().GetNode() as SwTextNode),
       );
     if (start === undefined) return false;
+    return this.GetTabCols_(result, table, start);
+  }
+
+  /** Reads print geometry over the actual native cell-frame owner. @param result - Output geometry. @param table - Connected table. @param start - Actual cell. @returns Whether admitted. */
+  private GetTabCols_(result: SwTabCols, table: SwTable, start: SwTableBox): boolean {
     const page = this.GetDoc().GetPageDesc().GetValue();
     const upperWidth = page.width - page.leftMargin - page.rightMargin;
     const area = new SwTabFrame(table).Format(upperWidth);
@@ -276,6 +281,38 @@ export abstract class SwFEShell extends SwEditShell {
           next,
           previous,
           start as SwTableBox,
+          currentRowOnly,
+          this.CaptureCursorState(),
+        ),
+    );
+  }
+
+  /** Reads native columns at the captured document border without moving the text cursor. @param result - Output carrier. @param point - Device hit position. @returns Whether an actual column frame owns it. */
+  public GetMouseTabCols(result: SwTabCols, point: SwTableMousePoint): boolean {
+    const hit = this.GetBox(point);
+    return (
+      hit !== undefined && !hit.row && this.GetTabCols_(result, hit.frame.GetTable(), hit.cell.box)
+    );
+  }
+
+  /** Applies mouse geometry through the same native document and history owner. @param next - Accepted columns. @param currentRowOnly - Independent row graph request. @param point - Captured document hit. @returns Whether admitted. */
+  public SetMouseTabCols(
+    next: SwTabCols,
+    currentRowOnly: boolean,
+    point: SwTableMousePoint,
+  ): boolean {
+    const hit = this.GetBox(point);
+    if (hit === undefined || hit.row) return false;
+    const previous = new SwTabCols();
+    this.GetTabCols_(previous, hit.frame.GetTable(), hit.cell.box);
+    return this.RunNotificationTransaction(
+      /** Publishes a single document-owned mouse resize without moving the PaM. @returns Whether accepted. */
+      () =>
+        this.GetDoc().SetTabCols(
+          hit.frame.GetTable(),
+          next,
+          previous,
+          hit.cell.box,
           currentRowOnly,
           this.CaptureCursorState(),
         ),

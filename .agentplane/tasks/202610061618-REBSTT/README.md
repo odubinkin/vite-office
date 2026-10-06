@@ -4,7 +4,7 @@ title: "Restore native Writer mouse column-border tracking"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: restore the user-reported mouse column-border gesture with native position-based separator ownership, capture and deferred history; preserve THKZ38 stash and every historical acceptance case."
 doc_version: 3
-doc_updated_at: "2026-10-06T16:20:09.274Z"
+doc_updated_at: "2026-10-06T16:40:54.273Z"
 doc_updated_by: "CODER"
 description: "Fix the reported column-resize gesture falling through to browser text drag or selection. Preserve unfinished THKZ38 in its recorded stash; implement this higher-priority isolated leaf using native GetMouseTabCols/SetMouseTabCols, deferred release history, cancellation and device capture."
 sections:
@@ -66,7 +66,14 @@ sections:
     5. Once restored resource generation--check/source-tree/provenance/invariants/parity; doctor/routing/diff/pinned hashes/current-leaf quality census0forbidden. Same-agent EVALUATOR exact implementation SHA explicitly not independent, verification tail before finish(actual implementationSHA), clean final tracked state. Parent entire486687-character prefix SHA f43a559b2f5deeae908a43fe1dac08394c620b329caf5e25127f59be8961265d preserved; whole parity remains UNVERIFIED.
   Verification: "Pending. No tests have run for this leaf; THKZ38 also has no verification profile. User authorization is the concrete resize bug report and the standing iterative parity instruction."
   Rollback Plan: "Revert only this leaf implementation commit through a new executable task if needed. Preserve THKZ38 stash and existing historical acceptance/evidence; never rewrite history or change registered I/O deviations."
-  Findings: "Root cause confirmed read-only: edtwin.ts MouseButtonDown rejects SwTab.COL_HORI, and BrowserWriterEditWindow falls through to pointerSelection.Start. Source edtwin.cxx admits borders outside native table mode, edtwin3.cxx tries ruler Border then Margin1/Margin2 with5px tolerance, fetab.cxx provides position-based GetMouseTabCols/SetMouseTabCols. Source SvxRuler uses glMinFrame5 pixels and nEndMin/nEndMax bounds. Complete SvxRuler machinery remains unverified; no whole-status promotion."
+  Findings: |-
+    Root cause confirmed read-only: edtwin.ts MouseButtonDown rejects SwTab.COL_HORI, and BrowserWriterEditWindow falls through to pointerSelection.Start. Source edtwin.cxx admits borders outside native table mode, edtwin3.cxx tries ruler Border then Margin1/Margin2 with5px tolerance, fetab.cxx provides position-based GetMouseTabCols/SetMouseTabCols. Source SvxRuler uses glMinFrame5 pixels and nEndMin/nEndMax bounds. Complete SvxRuler machinery remains unverified; no whole-status promotion.
+
+    Verification closure: ONE full upstream-absent profile: build PASS, application13001PASS1FAIL, inventory109PASS actual100, scripts5PASS, Chromium216PASS. The sole original failure used stale one-column device geometry after a left-edge resize; refreshing the literal frame closes it1PASS11filteredSKIPS. A source-shaped SetMouseTabCols unreachable re-admission guard was removed; one changed production dist rebuild PASS. New real Enter/outer-left case initially selected0 because Playwright grep matches full title, then1FAIL because fixed ruler occluded the edge; existing real edge-exposure helper closes1PASS. No full/passing test replay. Final case identity union13002application109inventory5scripts217ChromiumPASS. Finalactual100272app/38inventory maps; raw counters/source proofs stay in ignored app cache, AP only bounded counts/hashes/outcomes.
+
+    Initial static format/lint/typecheck/JSDoc fixture errors closed only failed gates; dependency and file-size passed once. Scoped final validator/format/lint PASS. Once-restored resource generation/source-tree/provenance/invariants/parity PASS. Read-only scope helper first failed on an optional evidence array; corrected audit preserves all275 prior complete metadata/status/default/evidence/symbol prefixes,499 old acceptance files byte-identical+3new502total, registered I/O mappings unchanged. Governance helper syntax construction was corrected before any command ran. Doctor0errors2known warnings; routing/diff PASS. No upstream execution/source storage in AP.
+
+    Upstream row confirmation: ROW_HORI enters the vertical ruler in edtwin.cxx; fetab.cxx and viewtab.cxx use GetMouseTabRows/SetMouseTabRows with native row constraints/following separators. Row-height mouse resize is next priority. THKZ38 five-path unfinished column-page draft is retained in Git stash c85f4a0e453dfd06d6e199554784f2c286737472; no verification was run for that draft. Complete native ruler/SfxColumnItem snapping/modifiers/current-row/vertical/RTL/row-height/full layout remain unverified. Whole goal and parent remain ACTIVE/unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -112,3 +119,9 @@ Revert only this leaf implementation commit through a new executable task if nee
 ## Findings
 
 Root cause confirmed read-only: edtwin.ts MouseButtonDown rejects SwTab.COL_HORI, and BrowserWriterEditWindow falls through to pointerSelection.Start. Source edtwin.cxx admits borders outside native table mode, edtwin3.cxx tries ruler Border then Margin1/Margin2 with5px tolerance, fetab.cxx provides position-based GetMouseTabCols/SetMouseTabCols. Source SvxRuler uses glMinFrame5 pixels and nEndMin/nEndMax bounds. Complete SvxRuler machinery remains unverified; no whole-status promotion.
+
+Verification closure: ONE full upstream-absent profile: build PASS, application13001PASS1FAIL, inventory109PASS actual100, scripts5PASS, Chromium216PASS. The sole original failure used stale one-column device geometry after a left-edge resize; refreshing the literal frame closes it1PASS11filteredSKIPS. A source-shaped SetMouseTabCols unreachable re-admission guard was removed; one changed production dist rebuild PASS. New real Enter/outer-left case initially selected0 because Playwright grep matches full title, then1FAIL because fixed ruler occluded the edge; existing real edge-exposure helper closes1PASS. No full/passing test replay. Final case identity union13002application109inventory5scripts217ChromiumPASS. Finalactual100272app/38inventory maps; raw counters/source proofs stay in ignored app cache, AP only bounded counts/hashes/outcomes.
+
+Initial static format/lint/typecheck/JSDoc fixture errors closed only failed gates; dependency and file-size passed once. Scoped final validator/format/lint PASS. Once-restored resource generation/source-tree/provenance/invariants/parity PASS. Read-only scope helper first failed on an optional evidence array; corrected audit preserves all275 prior complete metadata/status/default/evidence/symbol prefixes,499 old acceptance files byte-identical+3new502total, registered I/O mappings unchanged. Governance helper syntax construction was corrected before any command ran. Doctor0errors2known warnings; routing/diff PASS. No upstream execution/source storage in AP.
+
+Upstream row confirmation: ROW_HORI enters the vertical ruler in edtwin.cxx; fetab.cxx and viewtab.cxx use GetMouseTabRows/SetMouseTabRows with native row constraints/following separators. Row-height mouse resize is next priority. THKZ38 five-path unfinished column-page draft is retained in Git stash c85f4a0e453dfd06d6e199554784f2c286737472; no verification was run for that draft. Complete native ruler/SfxColumnItem snapping/modifiers/current-row/vertical/RTL/row-height/full layout remain unverified. Whole goal and parent remain ACTIVE/unverified.

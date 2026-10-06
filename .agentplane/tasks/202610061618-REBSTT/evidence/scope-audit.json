@@ -1,0 +1,37 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx",
+    "apps/office/e2e/writer-native-table-column-drag.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-table-column-drag.spec.ts",
+    "apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts"
+  ],
+  "oldAcceptanceFiles": 499,
+  "oldAcceptanceChanged": [],
+  "oldAcceptanceByteIdentical": 499,
+  "newTests": [
+    "apps/office/e2e/writer-native-table-column-drag.spec.ts",
+    "apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts"
+  ],
+  "totalAcceptanceFiles": 502,
+  "priorSemanticRecords": 275,
+  "semanticRecords": 275,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 486687,
+  "parentPrefixSHA256": "f43a559b2f5deeae908a43fe1dac08394c620b329caf5e25127f59be8961265d",
+  "failures": []
+}

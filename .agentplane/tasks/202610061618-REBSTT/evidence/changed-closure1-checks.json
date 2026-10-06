@@ -1,0 +1,34 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 420,
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 470,
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": 554,
+        "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts": 252,
+        "apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx": 131,
+        "apps/office/e2e/writer-native-table-column-drag.spec.ts": 181
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx apps/office/e2e/writer-native-table-column-drag.spec.ts",
+      "exit": 1,
+      "bytes": 170,
+      "sha256": "cc4af82e5d13f9382db33e1bc9ad1915717a1be9e4aa1f6ab26642405db1834e",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-table-column-drag.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx apps/office/e2e/writer-native-table-column-drag.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

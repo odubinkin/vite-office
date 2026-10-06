@@ -1,0 +1,8 @@
+{
+  "appProofSHA256": "d409420b1522df4ce1b1b3ad4eb4562b3f11aa9c79990d0213cb47c3fe1c1756",
+  "inventoryProofSHA256": "e86ead1ae4552ad7178f6a2705284325618a7ef69e22579dee1928a30971dec2",
+  "appSourceFiles": 272,
+  "inventorySourceFiles": 38,
+  "totalSourceFiles": 310,
+  "proof": "Complete identical source/maps or contiguous unchanged regions with whole function declaration/body and complete enclosing branch/location maps; actual counters only, skips remain skipped."
+}

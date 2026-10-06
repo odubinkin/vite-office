@@ -1,0 +1,32 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-column-drag.spec.ts --grep native outer-left tracking accepts Enter and preserves the editing cursor$ --reporter=list,json",
+      "exit": 1,
+      "bytes": 3033,
+      "sha256": "9834b5820dbdddbdd61c97547085178a765a9804fae8c0f258269f5734e8017e",
+      "failedCases": [
+        {
+          "name": "writer-native-table-column-drag.spec.ts > native outer-left tracking accepts Enter and preserves the editing cursor",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeCloseTo\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m, \u001b[22mprecision\u001b[2m)\u001b[22m",
+              "Expected: \u001b[32m84.65625\u001b[39m",
+              "Received: \u001b[31m99.65625\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T16:36:54.850Z",
+        "duration": 7110.814,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      }
+    }
+  ]
+}

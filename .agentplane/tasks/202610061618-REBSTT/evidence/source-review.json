@@ -1,0 +1,21 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/source/uibase/docvw/edtwin3.cxx": "c31fb7bdad5a1e9cd5f7e33a939796945222a8066d27f431d180426d0707fd6f",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/inc/fesh.hxx": "1eba45926daa128a0d127b509ea94584dd6e9dce7d156f9c2c54249344d710fc",
+    "sw/source/uibase/uiview/viewtab.cxx": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1",
+    "svx/source/dialog/svxruler.cxx": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+  },
+  "reviewer": "Same current agent; pinned read-only sources, no upstream execution",
+  "contracts": [
+    "Root cause: hover selected COL_HORI/HSizeBar but native MouseButtonDown rejected every resize kind, allowing browser pointer text selection/transfer. Source edtwin.cxx3206-3252 admits border tracking outside native IsTableMode; edtwin3.cxx86 tries ruler Border/Margin1/Margin2 at5px tolerance.",
+    "Native GetMouseTabCols/SetMouseTabCols use actual hit SwTabFrame/SwTableBox and a shared GetTabCols_ print-geometry ingress. Mutation uses existing SwDoc.SetTabCols/native SwUndoAttrTable/notification transaction without moving text PaM or translating to a UI width-array operation. Source SetMouseTabCols does not re-test the already admitted frame; one unreachable local conditional was removed.",
+    "Bounded horizontal flat LTR RulerColumnDrag owns an independent SwTabCols copy, nearest native separator/outer-edge admission and5-device-pixel minimum bounds scaled from actual measured print area. Preview changes the draft/guide only; accepted release/Enter publishes once, unchanged positions create no history. Escape/blur/teardown cancel, stale release inert. Three UndoRedo cycles preserve actual graph/cursor/list identities, continued input and ODT. Exact full SvxRuler/SfxColumnItem snapping, drag modifiers and all native lifecycle contracts remain unverified.",
+    "Browser owns device listeners and a transient noninteractive guide only, prevents default text selection/dragstart, ignores selectionchange while captured, suppresses the release-generated cell-focus click and prioritizes border-tracking keys. Existing enhanced row/column/table selection behavior and499 historical acceptance files remain byte-identical.",
+    "ONE full absent profile13001appPASS1newfixtureFAIL,109inventoryPASS/actual100,5scriptsPASS,216ChromePASS. Only original one-column fixture is rerun after refreshing its accepted physical frame:1PASS11skips. New real outer-left Enter case first0selected due anchored grep, then1FAIL due fixed ruler occlusion, then1PASS using existing real edge exposure helper. No passing/full replay; total13002app109inventory5scripts217ChromePASS. One production conditional removal required one dist rebuild. Final actual100 app/inventory counters transferred only through complete source/map proof.",
+    "Rows also resize in pinned upstream: edtwin.cxx routes ROW_HORI through vertical ruler; fesh.hxx declares GetMouseTabRows/SetMouseTabRows; fetab.cxx904-919 and viewtab.cxx1043-1103 apply native row geometry. SvxRuler row drag shifts following row separators/table end. This leaf fixes columns only; source row-height resize is the next priority, not falsely claimed completed. THKZ38 column-page draft remains preserved in recorded Git stash. All275 prior semantic states/defaults/evidence/responsibility/justification/symbol prefixes and registered save/open/recovery mappings retained; whole parity UNVERIFIED."
+  ]
+}

@@ -3523,6 +3523,10 @@
           {
             "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
             "marker": "Writer native table mouse edge and drag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx",
+            "marker": "mounted editable-text border owns mouse down, dragstart, selectionchange and the generated click"
           }
         ],
         "upstream": [
@@ -3565,6 +3569,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx",
             "marker": "pTab->IsFollow() && pTab->IsInHeadline"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "SwEditWin::MouseButtonDown"
           }
         ]
       },
@@ -10703,10 +10711,16 @@
       "status": "mapped",
       "upstreamPath": "sw/source/core/frmedt/fetab.cxx",
       "localSymbols": [
-        "SwFEShell"
+        "SwFEShell",
+        "GetMouseTabCols",
+        "SetMouseTabCols",
+        "GetTabCols_"
       ],
       "upstreamSymbols": [
-        "void SwFEShell::SetTableAttr"
+        "void SwFEShell::SetTableAttr",
+        "SwFEShell::GetMouseTabCols",
+        "SwFEShell::SetMouseTabCols",
+        "SwFEShell::GetTabCols_"
       ],
       "preservedResponsibilities": [
         "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged.",
@@ -10742,6 +10756,10 @@
           {
             "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
             "marker": "Writer native table mouse edge and drag"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+            "marker": "native border drag preserves the outside-table cursor, list and original graph through3 undo cycles"
           }
         ],
         "upstream": [
@@ -10752,6 +10770,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
             "marker": "SwFEShell::HasWholeTabSelection"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetMouseTabCols"
           }
         ]
       },
@@ -15897,6 +15919,10 @@
           {
             "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
             "marker": "Writer native table mouse edge and drag"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
+            "marker": "native no-motion and cancelled releases leave no history and reject stale motion"
           }
         ],
         "upstream": [
@@ -16043,12 +16069,26 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx",
             "marker": "pTab->IsFollow() && pTab->IsInHeadline"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "SwEditWin::MouseButtonDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin3.cxx",
+            "marker": "SwEditWin::RulerColumnDrag"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+            "marker": "SvxRuler::CalcMinMax"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
       "localSymbols": [
-        "SwEditWin"
+        "SwEditWin",
+        "RulerColumnDrag",
+        "GetTableColumnDragPosition"
       ],
       "omittedResponsibilities": [
         "Native VCL painting, accessibility, drag services, and platform event classes remain in the browser adapter."
