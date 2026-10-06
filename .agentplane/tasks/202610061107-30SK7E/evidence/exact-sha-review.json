@@ -1,0 +1,150 @@
+{
+  "evaluatedSHA": "324f8c3e3984fddb682a3739f7dfeac145e0e3bf",
+  "reviewer": "Same current agent in EVALUATOR role; no independent review claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12867,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 198
+  },
+  "originalFullProfile": {
+    "applicationPassed": 12858,
+    "applicationFailed": 5,
+    "chromiumPassed": 195,
+    "chromiumFailed": 3
+  },
+  "focusedClosureScope": {
+    "originalAppFailures": 5,
+    "newGenuineCases": 4,
+    "originalChromeFailures": 3,
+    "appClosures": [
+      {
+        "kind": "app-closure1",
+        "actualCompletedCases": 8,
+        "filterSkips": 17,
+        "passed": 7,
+        "failed": 1
+      },
+      {
+        "kind": "app-closure2",
+        "actualCompletedCases": 1,
+        "filterSkips": 19,
+        "passed": 1,
+        "failed": 0
+      },
+      {
+        "kind": "app-closure3",
+        "actualCompletedCases": 1,
+        "filterSkips": 20,
+        "passed": 1,
+        "failed": 0
+      }
+    ],
+    "filterSkipsRetained": true,
+    "passingOrFullCaseReplays": 0
+  },
+  "caseIdentity": "file+fullName/title+project when applicable+occurrence; filtered skips never converted to passes",
+  "caseMatrixFailures": [],
+  "initialRuntimeErrors": 0,
+  "implementationSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "acba82dafc417b0e50af7b5a4064cf50226b0f7e89013bf04dae10e03e37ff15",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "f6d93753f3bb0dcc3fc3aeb766c38ed0d7e33c53eda2f4ea71346a2e20d9f36b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "3a66bb24bbc8a04bafabb2853b0e71a952f035a42d804b292971ae9d974cbda0",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "d40bfb41a3bc1dea4b9b0cfc9ae2e5d9bab8433cb11f650fa708f934fdab86c5",
+    "apps/office/src/sw/source/uibase/wrtsh/native-select-all.test.ts": "d03727d5bd03575cbac412c053887b28433834ec9789b04cd8d47ff15d338a64",
+    "apps/office/src/sw/browser/editor/native-select-all.test.tsx": "4e56e9d463582fa822908bc2e2a6fa32d46712897935fc6fa4208a6286d73808",
+    "apps/office/e2e/writer-native-select-all.spec.ts": "2044320bab751351de6579e50252ffc45c4bd718baab0e9c377975d89106b309",
+    "docs/program/source-provenance.json": "e77a3f3dcb313cf0ee9b925ec930f75ae1d332179ea9071999f346a1eb9c27e3",
+    "docs/program/parity/runtime-inventory.json": "103838fbf4eaa3decb41d79abdf9013fc5326371249651f19976c0074641b174"
+  },
+  "coverage": {
+    "application": {
+      "coverage": {
+        "lines": {
+          "total": 13861,
+          "covered": 13861,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15194,
+          "covered": 15194,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3605,
+          "covered": 3605,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11327,
+          "covered": 11327,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "98281636c181e76d4e4a31dd57755894bdb1875eca459b3080df5d74e549d627",
+      "files": 267
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "8a65741c198fd8b071712d0f33194dbaadf49946b26470e8a1bcc80688158487",
+      "files": 38
+    }
+  },
+  "coverageProof": "265 whole byte-identical production files/maps; two changed source files use complete contiguous byte-identical regions. Full function decl/body and enclosing branch/location maps verified; changed regions use actual focused counters. No endpoint-only transfer or fabricated count.",
+  "pinnedSourceFiles": 8,
+  "priorSemanticRecordsPreserved": 270,
+  "currentSemanticRecords": 270,
+  "oldTestFilesByteIdentical": 482,
+  "totalCurrentTestFiles": 485,
+  "findings": [
+    "Body-only paragraph selection removed; actual native cell/table/text owners and current DOM coordinates drive Select All.",
+    "Native full/partial/reversed/empty cells, original ordinary/table owners, box rings, leading/trailing tables and failed outer text exit are exercised; source MoveStartText correction covers first-table boundaries.",
+    "One full upstream-absent profile plus original failures/four genuine cases only; actual100 coverage, no full/passing replay. Three new Chromium cases prove input and native two-action replacement history.",
+    "Current flat graph covered; paragraph metadata DOM leakage, GoCurrSection skip refinements, PrepareSelAll, full hidden/nested/protected/layout/footnote/extended structural deletion and complete core/UI parity remain unverified. Conscious I/O/recovery deviations preserved."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}
