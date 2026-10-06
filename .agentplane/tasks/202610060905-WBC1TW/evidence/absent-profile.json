@@ -1,0 +1,191 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "f18439e60b01dd1b36253ab1130ddc7ccf67adce6d988b06205dd6a1fa403ecf",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "80c0ce3b10a7ccae10857a3f6190af9b134d03d6847eae82b752a9d9c44c3ce6",
+    "apps/office/src/sw/source/core/table/swtable.ts": "98f2613344a83f4ea1709ca581b69e18f281a148841becaa8308dfa568934f7d",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "378d2f3d644ec620db79e7c7c0016d2db243ced6f2ce38a88c4b10c4b43a5083",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "e3d0e8fe5793a15053a17851810ca9d559c721788395a8a69684684ff612c983",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "c45c53f230de3662d6adacd4e9e62df2294adfe9fd23879234aaf2def1de5910",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "a29bcef2d6b9cb7fe6b6aea939757eb377e483ee497c24d44e8aa372675e1950"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "7874575301bc8abf819c414a56ffedfe6b0f93a2293d8e617ca1e9e6827ffb67",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WBC1TW.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 70667,
+      "sha256": "a4812bebba1236d4fc4852e0c34623322706dc57e574543888cabca4db59adeb",
+      "totals": [
+        "Test Files  1 failed | 356 passed (357)",
+        "Tests  1 failed | 12822 passed (12823)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts > native list context retains native table and selected-cell flags while masking cell mode for shell selection",
+          "assertion": [
+            "AssertionError: expected { …(2) } to be { …(2) } // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 12822,
+        "failed": 1,
+        "skipped": 0,
+        "total": 12823
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 13566,
+          "covered": 13566,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14866,
+          "covered": 14866,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3571,
+          "covered": 3571,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11073,
+          "covered": 11073,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFiles": {},
+      "coverageMapSHA256": "b9850b24cf5715d645564aaafd628a99bd21e3a9504150e3ae49a7630ae9693b"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WBC1TW.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 41914,
+      "sha256": "e949e995eb4d05154e5b30fbd6078df01c088e9b5fe8eac19085024f4a5e1149",
+      "totals": [
+        "Test Files  1 failed | 35 passed (36)",
+        "Tests  1 failed | 108 passed (109)"
+      ],
+      "failedCases": [
+        {
+          "name": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts > parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": [
+            "AssertionError: expected { …(22) } to match object { …(19) }"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 108,
+        "failed": 1,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFiles": {},
+      "coverageMapSHA256": "c6dc7fae3e05bbd52d5f61afa7ff8d08f7004b1630548fd567a2fa43a9af29c0"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 220,
+      "sha256": "3d480767aadfed0e7b63023b1a8b711df9aa5ade9b3349ab7a301b6bd8fa5b5e",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 26225,
+      "sha256": "12c9f045901dbcb2529f7f049f1f68acfec328822916b7858f0bd4a0a5a0445c",
+      "totals": [
+        "191 passed (2.8m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T09:24:17.424Z",
+        "duration": 170932.3,
+        "expected": 191,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

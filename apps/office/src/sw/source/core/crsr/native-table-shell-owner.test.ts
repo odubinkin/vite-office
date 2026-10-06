@@ -92,23 +92,25 @@ it("allows direct document default insertion without a view mutation or immediat
     f.shell.Close();
   }
 });
-it("rejects unsupported row shapes and modes without history or node mutation", /** Exercises document admission with actual foreign and nonfinal owners. @returns Nothing. */ () => {
+it("rejects invalid row counts and foreign owners without history or node mutation", /** Exercises document admission with actual foreign and nonfinal owners. @returns Nothing. */ () => {
   const f = fixture(),
     other = fixture();
   try {
     const nodes = [...f.doc.nodes.entries()];
     expect(f.doc.InsertRow([])).toBe(false);
-    expect(f.doc.InsertRow(f.last.GetTabBoxes(), 2)).toBe(false);
-    expect(f.doc.InsertRow(f.last.GetTabBoxes(), 1, false)).toBe(false);
-    expect(f.doc.InsertRow(f.last.GetTabBoxes(), 1, true, false)).toBe(false);
+    expect(f.doc.InsertRow(f.last.GetTabBoxes(), 0)).toBe(false);
+    expect(f.doc.InsertRow(f.last.GetTabBoxes(), -1)).toBe(false);
+    expect(f.doc.InsertRow(f.last.GetTabBoxes(), 1.5)).toBe(false);
     expect(f.doc.InsertRow(other.last.GetTabBoxes())).toBe(false);
     expect(
       f.doc.InsertRow([
         new SwTableBox(required(f.doc.paragraphs[0]).StartOfSectionNode() as SwTableBoxStartNode),
       ]),
     ).toBe(false);
-    expect(f.doc.InsertRow(f.first.GetTabBoxes())).toBe(false);
-    expect(f.doc.InsertRow([required(f.last.GetTabBoxes()[0])])).toBe(false);
+    expect(f.doc.InsertRow(f.first.GetTabBoxes(), 65536)).toBe(false);
+    expect(
+      f.doc.InsertRow([required(f.last.GetTabBoxes()[0]), required(other.first.GetTabBoxes()[0])]),
+    ).toBe(false);
     f.table.RemoveLine(f.first);
     f.table.RemoveLine(f.last);
     expect(f.doc.InsertRow(f.last.GetTabBoxes())).toBe(false);

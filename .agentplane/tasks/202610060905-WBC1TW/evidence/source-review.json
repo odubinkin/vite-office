@@ -1,0 +1,23 @@
+{
+  "sourceSHA256": {
+    "sw/source/core/table/swnewtable.cxx": "222899c5938f08cf797c5e552ff5a9307a591e173e0708ac6f2efdf4f84a19da",
+    "sw/source/core/doc/tblrwcl.cxx": "f4d7786b18f6c011e66eee4332e2e44aaef9ad8d0480d6bfa5a6f065e836508a",
+    "sw/source/core/table/swtable.cxx": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/undo/untbl.cxx": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/uibase/uiview/view.cxx": "a1d685a3d98ff12eeee129ab9513b4f384bda8ada598ecf3a820ed73b68ba469",
+    "sw/inc/doc.hxx": "e1607dcbe67d2e53c8e2100b2a23c9cb2ea78fe24317c6c288112170d0b759d0",
+    "sw/sdi/swriter.sdi": "8ac7ed3ea9adb1b4cb61600726ebd1a6c6990e09bb9a54d88ef03b1cbcbc8f30"
+  },
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "observations": [
+    "Native SwTable new-model insertion chooses the selected min/max row edge and copies the full source row count times with empty cells.",
+    "Native SwDoc constructs undo before table mutation, saves connected new boxes and appends history after successful insertion; defaults count1, behindtrue, insertDummytrue.",
+    "Native SwTableShell derives menu count from selected row coordinates; new SDI before/after slots are void actions without formal arguments.",
+    "Native SwFEShell insertion does not explicitly move the current cursor; native SwView pushes list, text, table contexts in that order.",
+    "Full native merged/nested/rowspan/redline/formula/layout/protection/repeated-headline and undo-section reconstruction remain unverified."
+  ],
+  "sourceCopiesStored": false
+}

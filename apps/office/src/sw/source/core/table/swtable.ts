@@ -1,6 +1,7 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
 
 import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
+import type { SwDoc } from "../doc/doc";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
 
@@ -187,9 +188,45 @@ export class SwTable {
     this.columnWidths[index] = twips;
   }
 
-  /** Adds one row to the canonical table. @param line - Row. @returns Nothing. */
-  public AddLine(line: SwTableLine): void {
-    this.lines.push(line);
+  /** Adds one row at its native table position. @param line - Row. @param index - Insertion position. @returns Nothing. */
+  public AddLine(line: SwTableLine, index = this.lines.length): void {
+    this.lines.splice(index, 0, line);
+  }
+
+  /** Inserts counted flat rows from the selected native edge, as in swnewtable.cxx. @param document - Owning document. @param boxes - Actual selected boxes. @param count - Native unsigned row count. @param behind - Select the trailing edge. @param insertDummy - Native tracked-change policy, unrepresented locally. @returns Whether inserted. */
+  public InsertRow(
+    document: SwDoc,
+    boxes: readonly SwTableBox[],
+    count = 1,
+    behind = true,
+    insertDummy = true,
+  ): boolean {
+    void insertDummy;
+    if (
+      !Number.isInteger(count) ||
+      count < 1 ||
+      count > 0xffff ||
+      boxes.length === 0 ||
+      this.tableNode.GetNodes() !== document.GetNodes()
+    )
+      return false;
+    const selected = boxes.map(
+      /** Locates an original box in the native row vector. @param box - Selected box. @returns Row index. */
+      (box) =>
+        this.lines.findIndex(
+          /** Tests actual ownership. @param line - Native row. @returns Whether the box belongs. */
+          (line) => line.GetTabBoxes().includes(box),
+        ),
+    );
+    if (selected.includes(-1)) return false;
+    const row = behind ? Math.max(...selected) : Math.min(...selected),
+      source = this.lines[row] as SwTableLine,
+      index = row + (behind ? 1 : 0);
+    for (let i = 0; i < count; i++)
+      document
+        .GetNodes()
+        .InsertTableRow(this, document.GetNodes().PrepareTableRow(this, source), index + i);
+    return true;
   }
 
   /** Removes a retained row during native table history. @param line - Connected row. @returns Nothing. */

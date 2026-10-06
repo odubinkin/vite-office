@@ -1,0 +1,19 @@
+{
+  "records": [
+    {
+      "command": "ap doctor",
+      "exit": 0,
+      "summary": "Zero errors; two known warnings (old managed hook shim and historical DONE task without implementation hash)."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exit": 0,
+      "summary": "Routing OK"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "summary": "Diff whitespace check pass"
+    }
+  ]
+}

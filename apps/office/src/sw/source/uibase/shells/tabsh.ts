@@ -1,4 +1,7 @@
 /** @fileoverview Applies represented table dialog attributes through native ItemSetToTableParam ownership from tabsh.cxx. */
+import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
+import { createWriterInterface } from "../../../sdi/swriter";
+import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwFEShell } from "../../core/frmedt/fetab";
 import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 
@@ -63,4 +66,52 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
       }
     },
   );
+}
+
+/** Native table context owns represented row insertion slots and state. */
+export class SwTableShell {
+  private readonly commandShell: SfxShell;
+  /** Creates a table slot owner over the actual frame-editing shell. @param wrtShell - Native editing shell. @returns Nothing. */
+  public constructor(private readonly wrtShell: SwFEShell) {
+    this.commandShell = createSfxShell(
+      this,
+      createWriterInterface(
+        [WRITER_COMMAND_IDS.insertRowsBefore, WRITER_COMMAND_IDS.insertRowsAfter].map(
+          /** Binds native void row slots. @param id - Generated command. @returns Slot handler. */
+          (id) => ({
+            id,
+            capabilityId: "CAP-0137" as const,
+            /** Executes the native table command. @returns Whether inserted. */
+            execute: () => this.Execute(id === WRITER_COMMAND_IDS.insertRowsAfter),
+            /** Reads current native table state. @returns Whether available. */
+            isEnabled: () => this.wrtShell.IsCursorInTable() !== undefined,
+          }),
+        ),
+      ),
+    );
+  }
+  /** Returns the native dispatcher shell. @returns Command shell. */
+  public GetCommandShell(): SfxShell {
+    return this.commandShell;
+  }
+  /** Derives native count from actual selected row coordinates. @param behind - Trailing edge. @returns Whether inserted. */
+  public Execute(behind: boolean): boolean {
+    const table = this.wrtShell.IsCursorInTable()?.GetTable();
+    if (table === undefined) return false;
+    const boxes = this.wrtShell.GetTableSel(),
+      selected = table.GetTabLines().flatMap(
+        /** Resolves rows containing selected native boxes. @param row - Original row. @param index - Row coordinate. @returns Selected coordinate. */
+        (row, index) =>
+          row.GetTabBoxes().some(
+            /** Tests actual selection identity. @param box - Original box. @returns Whether selected. */
+            (box) => boxes.includes(box),
+          )
+            ? [index]
+            : [],
+      );
+    return (
+      selected.length !== 0 &&
+      this.wrtShell.InsertRow(Math.max(...selected) - Math.min(...selected) + 1, behind)
+    );
+  }
 }

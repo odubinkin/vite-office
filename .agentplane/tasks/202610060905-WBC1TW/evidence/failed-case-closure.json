@@ -1,0 +1,136 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "f18439e60b01dd1b36253ab1130ddc7ccf67adce6d988b06205dd6a1fa403ecf",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "80c0ce3b10a7ccae10857a3f6190af9b134d03d6847eae82b752a9d9c44c3ce6",
+    "apps/office/src/sw/source/core/table/swtable.ts": "98f2613344a83f4ea1709ca581b69e18f281a148841becaa8308dfa568934f7d",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "378d2f3d644ec620db79e7c7c0016d2db243ced6f2ce38a88c4b10c4b43a5083",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "e3d0e8fe5793a15053a17851810ca9d559c721788395a8a69684684ff612c983",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "c45c53f230de3662d6adacd4e9e62df2294adfe9fd23879234aaf2def1de5910",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "a29bcef2d6b9cb7fe6b6aea939757eb377e483ee497c24d44e8aa372675e1950"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/shells/native-list-context.test.ts -t retains native table and selected-cell flags while masking cell mode for shell selection --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WBC1TW-closure.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 28612,
+      "sha256": "52c6a1b11c0bbbf897dc6adbf5eda1f5d7697266f34f23251b30c4de3c695076",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 13 skipped (14)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 13,
+        "total": 14
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 13566,
+          "covered": 2659,
+          "skipped": 0,
+          "pct": 19.6
+        },
+        "statements": {
+          "total": 14866,
+          "covered": 2783,
+          "skipped": 0,
+          "pct": 18.72
+        },
+        "functions": {
+          "total": 3571,
+          "covered": 676,
+          "skipped": 0,
+          "pct": 18.93
+        },
+        "branches": {
+          "total": 11073,
+          "covered": 1224,
+          "skipped": 0,
+          "pct": 11.05
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 19.6,
+        "statements": 18.72,
+        "functions": 18.93,
+        "branches": 11.05
+      },
+      "coverageMapSHA256": "fb991c00fda8d2580a2d166deec634d9b4bdec5933afb4d4fcb2b6d1c03628b6",
+      "incompleteFileCount": 250,
+      "exitInterpretation": "Original failed case passed; exit1 is partial-run global coverage thresholds; skipped cases remain skipped. Complete exact-map actual-counter merge validates final coverage."
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WBC1TW-closure.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 5271,
+      "sha256": "f0ecdd3f91fc8ac1970bc76dc9a8e97408235d9401a179df35e6dcea20514dd1",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 2 skipped (3)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 433,
+          "skipped": 0,
+          "pct": 29.57
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 439,
+          "skipped": 0,
+          "pct": 28.82
+        },
+        "functions": {
+          "total": 384,
+          "covered": 120,
+          "skipped": 0,
+          "pct": 31.25
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 401,
+          "skipped": 0,
+          "pct": 37.12
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 29.57,
+        "statements": 28.82,
+        "functions": 31.25,
+        "branches": 37.12
+      },
+      "coverageMapSHA256": "148d991d0fff74eeb930c20a0592ec7ab2e895d729acb6bb84f7968286a44bb9",
+      "incompleteFileCount": 38,
+      "exitInterpretation": "Original failed case passed; exit1 is partial-run global coverage thresholds; skipped cases remain skipped. Complete exact-map actual-counter merge validates final coverage."
+    }
+  ]
+}

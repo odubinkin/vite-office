@@ -255,8 +255,12 @@ export class SwNodes {
     return { line, nodes };
   }
 
-  /** Connects an appended row's retained sections atomically with its table line. @param table - Target table. @param section - Prepared or retained row. @returns Nothing. */
-  public InsertTableRow(table: SwTable, section: SwTableRowSection): void {
+  /** Connects a row's retained sections at its native boundary. @param table - Target table. @param section - Prepared or retained row. @param rowIndex - Native row position. @returns Nothing. */
+  public InsertTableRow(
+    table: SwTable,
+    section: SwTableRowSection,
+    rowIndex = table.GetTabLines().length,
+  ): void {
     const tableNode = table.GetTableNode();
     if (
       tableNode.GetNodes() !== this ||
@@ -266,9 +270,15 @@ export class SwNodes {
       )
     )
       throw new Error("Writer table row is not detached from this document.");
-    const index = tableNode.EndOfSectionNode().GetIndex();
+    if (!Number.isInteger(rowIndex) || rowIndex < 0 || rowIndex > table.GetTabLines().length)
+      throw new Error("Writer table row position is invalid.");
+    const next = table.GetTabLines()[rowIndex],
+      index =
+        next === undefined
+          ? tableNode.EndOfSectionNode().GetIndex()
+          : (next.GetTabBoxes()[0] as SwTableBox).GetStartNode().GetIndex();
     this.nodeArray.splice(index, 0, ...section.nodes);
-    table.AddLine(section.line);
+    table.AddLine(section.line, rowIndex);
     for (const node of section.nodes)
       if (node instanceof SwTextNode) {
         node.AddToList();

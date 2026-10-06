@@ -1,0 +1,77 @@
+{
+  "merge": "Actual maximum counters on complete exactly identical statement/function/branch maps, unchanged seven production source hashes. No fabricated counters or endpoint-only transfer.",
+  "distinctApplicationCases": 12823,
+  "distinctInventoryCases": 109,
+  "app": {
+    "exactMapOwners": 266,
+    "coverage": {
+      "lines": {
+        "total": 13566,
+        "covered": 13566,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14866,
+        "covered": 14866,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3571,
+        "covered": 3571,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 11073,
+        "covered": 11073,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "783801f44fdc0a1ddc5393cebbb7f3a5e7a0c1898702185efb196a4bc3b79cbc"
+  },
+  "inventory": {
+    "exactMapOwners": 38,
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "9d6e0d84c0277722a8cceb282686e23fad17f5143c4b36a2139b6e0de759e783"
+  }
+}

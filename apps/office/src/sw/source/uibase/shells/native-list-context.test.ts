@@ -240,7 +240,10 @@ describe("native list context", /** Registers actual source-owned context contra
     expect(f.shell.GetSelectionType()).toBe(
       SelectionType.Text | SelectionType.Table | SelectionType.TableCell | SelectionType.NumberList,
     );
-    expect(f.dispatcher.GetShell(0)).toBe(f.shell.GetCommandShell());
-    expect(f.dispatcher.GetShell(1)).toBe(f.shell.GetListShell().GetCommandShell());
+    expect(
+      f.dispatcher.GetShell(0)?.GetInterface().GetSlot(WRITER_COMMAND_IDS.insertRowsBefore),
+    ).toBeDefined();
+    expect(f.dispatcher.GetShell(1)).toBe(f.shell.GetCommandShell());
+    expect(f.dispatcher.GetShell(2)).toBe(f.shell.GetListShell().GetCommandShell());
   });
 });

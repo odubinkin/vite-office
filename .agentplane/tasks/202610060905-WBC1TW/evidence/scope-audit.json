@@ -1,0 +1,39 @@
+{
+  "base": "cc1dd22a8d6bcc0770f09c77e9d956c343944236",
+  "oldTestFiles": 473,
+  "byteIdenticalOldTestFiles": 470,
+  "changedOldTests": [
+    "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+    "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx",
+    "apps/office/e2e/writer-native-row-commands.spec.ts"
+  ],
+  "priorSemanticModules": 269,
+  "currentSemanticModules": 269,
+  "priorStatesDefaultsClassificationsAndEvidencePreserved": true,
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "scripts/generate-writer-ui-resources.ts",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/parity/writer-command-slice.json",
+    "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx",
+    "apps/office/e2e/writer-native-row-commands.spec.ts",
+    "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+  ],
+  "failures": []
+}

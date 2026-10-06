@@ -17,6 +17,7 @@ import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwEditWin } from "../docvw/edtwin";
+import { SwTableShell } from "../shells/tabsh";
 import { SwViewCommandShell } from "../shells/view";
 import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -29,6 +30,7 @@ export class SwView {
   private frame: SfxViewFrame<SwView> | undefined;
   private selectionType: SelectionType | undefined;
   private readonly viewCommandShell: SwViewCommandShell;
+  private readonly tableShell: SwTableShell;
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
   private readonly editWindow: SwEditWin;
@@ -51,6 +53,7 @@ export class SwView {
       /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
     );
     this.viewCommandShell = new SwViewCommandShell(this);
+    this.tableShell = new SwTableShell(this.wrtShell);
     this.wrtShellSubscription = this.wrtShell.Subscribe(
       /** Converts typed Writer hints into dispatcher dependency invalidation. @param hint - Typed Writer hint. @returns Nothing. */ (
         hint,
@@ -75,19 +78,22 @@ export class SwView {
     if (this.frame !== undefined) throw new Error("SwView is already attached to an SfxViewFrame.");
     this.frame = frame;
   }
-  /** Selects represented native text/list contexts in list-before-text dispatcher order. @returns Nothing. */
+  /** Selects represented native text/list/table contexts in list-before-text dispatcher order. @returns Nothing. */
   public SelectShell(): void {
     if (this.frame === undefined || this.frame.GetActiveView() !== this) return;
     const selectionType = this.wrtShell.GetSelectionType() & ~SelectionType.TableCell;
     if (selectionType === this.selectionType) return;
     this.selectionType = selectionType;
     const dispatcher = this.frame.GetDispatcher(),
+      table = this.tableShell.GetCommandShell(),
       list = this.wrtShell.GetListShell().GetCommandShell(),
       text = this.wrtShell.GetCommandShell();
+    dispatcher.Pop(table);
     dispatcher.Pop(text);
     dispatcher.Pop(list);
     if ((selectionType & SelectionType.NumberList) !== 0) dispatcher.Push(list);
     dispatcher.Push(text);
+    if ((selectionType & SelectionType.Table) !== 0) dispatcher.Push(table);
   }
 
   /** Returns the active document shell. @returns Persistent SwDocShell. */

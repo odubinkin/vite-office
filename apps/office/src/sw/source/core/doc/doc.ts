@@ -665,34 +665,24 @@ export class SwDoc {
         ) => (node instanceof SwTableNode ? [node.GetTable()] : []),
       );
   }
-  /** Inserts the existing flat final-row default and publishes document-owned history after mutation. Other native row modes remain unimplemented. @param boxes - Actual selected final-line boxes. @param count - Native count, currently one. @param behind - Native trailing insertion, currently true. @param insertDummy - Native drag-action policy, currently true. @param cursorState - Optional browser shell cursor attributes. @returns Whether this supported native operation was admitted. */
+  /** Inserts native counted flat rows and publishes one document-owned history record. @param boxes - Actual selected boxes. @param count - Native row count. @param behind - Insert after the selected edge. @param insertDummy - Native tracked-change policy. @param cursorState - Original browser cursor attributes. @param afterCursor - Optional unchanged live selection after insertion. @returns Whether admitted. */
   public InsertRow(
     boxes: readonly SwTableBox[],
     count = 1,
     behind = true,
     insertDummy = true,
     cursorState?: SwUndoCursorState,
+    afterCursor?: SwUndoCursorState,
   ): boolean {
-    if (boxes.length === 0 || count !== 1 || !behind || !insertDummy) return false;
+    if (boxes.length === 0) return false;
     const section = (boxes[0] as SwTableBox).GetStartNode(),
       tableNode = section.StartOfSectionNode();
     if (!(tableNode instanceof SwTableNode) || tableNode.GetNodes() !== this.nodes) return false;
-    const table = tableNode.GetTable(),
-      source = table.GetTabLines().at(-1);
-    if (
-      source === undefined ||
-      boxes.length !== source.GetTabBoxes().length ||
-      boxes.some(
-        /** Rejects boxes outside the actual selected final row. @param box - Selected box. @returns Whether unsupported. */
-        (box) => !source.GetTabBoxes().includes(box),
-      )
-    )
-      return false;
+    const table = tableNode.GetTable();
     return this.RunModelTransaction(
-      /** Connects actual row sections before publishing their undo record. @returns Whether inserted. */ () => {
-        const last = (source.GetTabBoxes().at(-1) as SwTableBox)
-            .GetParagraphs()
-            .at(-1) as SwTextNode,
+      /** Lets the table own insertion before publishing its native undo record. @returns Whether inserted. */
+      () => {
+        const last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as SwTextNode,
           before =
             cursorState ??
             createWriterCollapsedCursorState(
@@ -700,12 +690,9 @@ export class SwDoc {
               last.Len(),
               last.GetCharacterItemsAt(last.Len()),
             ),
-          row = this.nodes.PrepareTableRow(table, source),
-          first = row.nodes[1] as SwTextNode,
-          after = createWriterCollapsedCursorState(first, 0, first.GetCharacterItemsAt(0)),
-          action = new SwUndoTableNdsChg(table, row, before, after);
-        this.nodes.InsertTableRow(table, row);
-        action.SaveNewBoxes();
+          action = new SwUndoTableNdsChg(table, boxes, before, count, behind);
+        if (!table.InsertRow(this, boxes, count, behind, insertDummy)) return false;
+        action.SaveNewBoxes(table, afterCursor);
         this.undoManager.AddUndoAction(action);
         return true;
       },

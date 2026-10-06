@@ -17,6 +17,22 @@ export abstract class SwFEShell extends SwEditShell {
   /** Reports native selected-box mode. @returns Whether boxes are selected. */
   public abstract HasBoxSelection(): boolean;
 
+  /** Returns original selected native boxes without a projection. @returns Actual box owners. */
+  public GetTableSel(): readonly SwTableBox[] {
+    const table = this.IsCursorInTable()?.GetTable();
+    return table === undefined ? [] : this.GetTableBoxes(table, false);
+  }
+  /** Inserts rows through native document ownership, retaining the original selection. @param count - Row count. @param behind - Insert after the selected edge. @returns Whether inserted. */
+  public InsertRow(count: number, behind = true): boolean {
+    return this.RunNotificationTransaction(
+      /** Captures current native cursor attributes and lets the document insert. @returns Whether admitted. */
+      () => {
+        const before = this.CaptureCursorState();
+        return this.GetDoc().InsertRow(this.GetTableSel(), count, behind, true, before, before);
+      },
+    );
+  }
+
   /** Changes table-frame attributes through native attribute history. @param value - Represented frame attributes. @returns Whether admitted. */
   public SetTableAttr(value: SwTableFormat): boolean {
     const table = this.IsCursorInTable()?.GetTable();
