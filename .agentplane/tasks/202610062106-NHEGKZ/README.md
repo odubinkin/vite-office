@@ -1,10 +1,11 @@
 ---
 id: "202610062106-NHEGKZ"
 title: "Port native table and row split controls"
-status: "DOING"
+result_summary: "Native table and row split UI contracts aligned; obsolete properties dontSplit adapter removed. Full row splitting and native setter ownership remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "ONE upstream-absent build/app/browser profile13157app5scripts241Chromium PASS0skip/flaky; inventory108initial PASS+original failed1closure PASS109. Focused2skips retained, no passing/full/build/app/browser replay. Actual100 verified source/maps counters."
     - "21approvedpaths;527old acceptance519byte-identical+8explicit limited migrations,4new531.276old metadata full prefixes/contracts/defaults/classifications/registered exceptions retained+1new partial ndtbl1 module277 unverified. Source5gates, scoped/static checks and doctor/routing/diff PASS. Original native graph/list/cursor/grouped3UndoRedo/ODT/input and mixed controls retained."
-commit: null
+commit:
+  hash: "4b698a7165909943fb9380f7c9ec78e38e0593f6"
+  message: "🚧 NHEGKZ code: separate native table and row split controls"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native table/row split controls, changed items and document-owned selected row state; standing iterative authorization, one leaf, native graph/insert/storage exceptions retained."
+  -
+    author: "CODER"
+    body: "Verified: native independent table/row split controls, mixed native row aggregation and changed-only publication.13157app109inventory5scripts241Chromium PASS without upstream; actual100 source/maps counters proof, same-agent quality PASS. Whole parity active."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native separate table/row split controls verified on implementation4b698a7165909943fb9380f7c9ec78e38e0593f6. ONE upstream-absent profile13157app109inventory5scripts241Chromium PASS; actual100 coverage verified. Same-agent exact-SHA EVALUATOR pass explicitly not independent. Parent/goal active."
+  -
+    type: "status"
+    at: "2026-10-06T21:30:52.194Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native independent table/row split controls, mixed native row aggregation and changed-only publication.13157app109inventory5scripts241Chromium PASS without upstream; actual100 source/maps counters proof, same-agent quality PASS. Whole parity active."
 doc_version: 3
-doc_updated_at: "2026-10-06T21:30:33.074Z"
+doc_updated_at: "2026-10-06T21:30:52.196Z"
 doc_updated_by: "CODER"
 description: "Iteration199 under standing user authorization: remove conflated dontSplit properties adapter; native Text Flow changed-item table/row controls, true default/mixed row state/sensitivity/Reset, native document selection aggregation and independent shell publication. Preserve insertion/storage exceptions and historical acceptance except explicit contract migrations; parent goal active."
 sections:
