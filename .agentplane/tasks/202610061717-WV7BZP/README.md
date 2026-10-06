@@ -1,10 +1,11 @@
 ---
 id: "202610061717-WV7BZP"
 title: "Port native Writer mouse row-border resizing"
-status: "DOING"
+result_summary: "Native Writer mouse row-border resizing and document focus implemented and verified at444b39c61bbd0b21187d4fa2083b24b2d9434e4e;ONE full absent profile and failed/new-only closures, actual100app/inventory coverage, unchanged prior contracts and clean scoped quality."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on:
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610061717-WV7BZP/evidence/exact-sha-review.json"
   findings:
     - "Native carrier/row attributes, deferred history, browser GrabFocus, physical1280/390 geometry, continued input and3UndoRedo pass. Current acceptance13040app109inventory5scripts223Chromium; actual100coverage;504 old acceptance files unchanged;275 old contracts retained plus1native owner. Full wider parity remains unverified."
-commit: null
+commit:
+  hash: "444b39c61bbd0b21187d4fa2083b24b2d9434e4e"
+  message: "🚧 WV7BZP code: port native Writer mouse row-border resizing"
 comments:
   -
     author: "CODER"
     body: "Start: explicitly authorized priority row-border resizing, source-owned SwTabCols geometry and deferred native row history; prior column/bullet leaves remain unchanged."
+  -
+    author: "CODER"
+    body: "Verified: native horizontal row carriers and original owner history, shared axis capture and source GrabFocus;current13040app109inventory5scripts223Chromium pass with actual100coverage. Registered exceptions and504oldacceptancefiles unchanged;whole parity remains unverified."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified implementation444b39c61bbd0b21187d4fa2083b24b2d9434e4e: native row carriers/history and GrabFocus;current acceptance13040app109inventory5scripts223Chromium;actual100coverage,unchanged504oldtests and275oldcontracts;source/static/scope gates pass. ONE full absent profile and originalfailed/new closures only. Same-agent EVALUATOR explicitly not independent; whole parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T17:58:32.903Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native horizontal row carriers and original owner history, shared axis capture and source GrabFocus;current13040app109inventory5scripts223Chromium pass with actual100coverage. Registered exceptions and504oldacceptancefiles unchanged;whole parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T17:57:44.578Z"
+doc_updated_at: "2026-10-06T17:58:32.905Z"
 doc_updated_by: "CODER"
 description: "Iteration194 user-priority: native GetTabRows/SetTabRows and row ruler tracking shift following boundaries and table bottom, preserve actual owners/history and prevent browser text drag/selection."
 sections:
