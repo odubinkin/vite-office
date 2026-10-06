@@ -1,10 +1,11 @@
 ---
 id: "202610061601-THKZ38"
 title: "Port native absolute Writer column-page behavior"
-status: "DOING"
+result_summary: "Ported native absolute SwTableColumnPage and shared SwTableRep ownership to browser table properties; native field/mode/window/selection/spacing behavior and canonical grouped history verified without upstream runtime dependencies. Registered deviations and all prior metadata prefixes preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on:
@@ -44,7 +45,9 @@ quality_review:
     - "Current case identities 13079 application, 109 inventory, 5 scripts and 227 Chromium pass; 65 filtered skips retained. Actual100 coverage uses complete identical source/maps and verified prior editing-host counters. No passing/full replay."
     - "507 historical acceptance files byte-identical, one native-minimum migration, four new files; all276 prior metadata/full prefixes and registered deviations preserved; parent full prefix intact."
     - "Source-shaped column-page modes, metric/window bounds, Reset ownership, selected-table sensitivity, tab/Cancel/OK behavior and canonical grouped history match the represented upstream scope."
-commit: null
+commit:
+  hash: "7a6b96fdc3f6aea5d181fad1825a43a92e78fc83"
+  message: "🚧 THKZ38 code: port native absolute Writer column-page state"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: resume the approved native absolute column-page draft on the clean post-priority baseline, preserving all row/column drag and list fixes; same semantic paths and verification criteria, updated authoritative counts only."
+  -
+    author: "CODER"
+    body: "Verified: native absolute Writer column-page behavior is implemented in 7a6b96fdc3f6aea5d181fad1825a43a92e78fc83; current13079app109inventory5scripts227Chromium pass, actual100 coverage,65 filtered skips retained, approved source/scope/governance and exact-SHA review pass. Whole parity remains unverified."
 events:
   -
     type: "status"
@@ -73,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native absolute Writer column-page behavior at implementation 7a6b96fdc3f6aea5d181fad1825a43a92e78fc83: 13079 app,109 inventory,5 scripts,227 Chromium pass; actual100 coverage,65 filtered skips retained; scoped/static/source/governance/full-prefix checks pass. Same-agent EVALUATOR pass explicitly not independent review. Runtime/tests upstream-absent; registered deviations unchanged; whole parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-06T18:40:51.166Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native absolute Writer column-page behavior is implemented in 7a6b96fdc3f6aea5d181fad1825a43a92e78fc83; current13079app109inventory5scripts227Chromium pass, actual100 coverage,65 filtered skips retained, approved source/scope/governance and exact-SHA review pass. Whole parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T18:40:08.983Z"
+doc_updated_at: "2026-10-06T18:40:51.169Z"
 doc_updated_by: "CODER"
 description: "Iteration191 under the active upstream parity goal: replace React width-array edits with connected native SwTableColumnPage constant-width/adapt-table/proportional policies, modes and native field-window controls over SwTableRep. Preserve conscious save/open/recovery deviations; one approved leaf and one full absent profile, then only failed/new closures."
 sections:
