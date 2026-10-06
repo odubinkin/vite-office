@@ -1,0 +1,21 @@
+{
+  "scope": "Original failed provenance gate and genuinely changed two metadata files only; exact source IMPL_LINK callback spelling corrected, validator unchanged",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "fc99588f9796cb4967c180eabbd1b200daccaa48a64b401a00500093a3bee7dd",
+      "diagnostics": []
+    }
+  ]
+}

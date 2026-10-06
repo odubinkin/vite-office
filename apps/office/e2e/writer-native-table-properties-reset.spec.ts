@@ -72,7 +72,7 @@ for (const viewport of [1280, 390]) {
     );
     await page.getByRole("spinbutton", { name: "Table width (cm)", exact: true }).fill("5");
     await page.getByRole("tab", { name: "Text Flow", exact: true }).click();
-    const header = page.getByRole("checkbox", { name: "Header", exact: true });
+    const header = page.getByRole("checkbox", { name: "Repeat header", exact: true });
     const originalHeader = await header.isChecked();
     await header.setChecked(!originalHeader);
     await page.getByRole("spinbutton", { name: "Minimum row height (cm)", exact: true }).fill("1");

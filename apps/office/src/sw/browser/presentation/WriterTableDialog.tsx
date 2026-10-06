@@ -4,7 +4,11 @@ import { useState } from "react";
 import { WriterInsertTableDialog } from "./WriterInsertTableDialog";
 import type { SwTable } from "../../source/core/table/swtable";
 import type { SwTableProperties } from "../../source/uibase/shells/tabsh";
-import { SwFormatTablePage, SwTableColumnPage } from "../../source/ui/table/tabledlg";
+import {
+  SwFormatTablePage,
+  SwTableColumnPage,
+  SwTextFlowPage,
+} from "../../source/ui/table/tabledlg";
 import { HoriOrientation } from "../../../offapi/com/sun/star/text/HoriOrientation";
 
 /** Editable table geometry expressed in Writer twips. */
@@ -61,6 +65,10 @@ function WriterTablePropertiesDialog({
     /** Binds the columns page to the shared native table-dialog draft. @returns Native column owner. */
     () => new SwTableColumnPage(formatPage.data),
   );
+  const [textFlowPage] = useState(
+    /** Captures the native initial headline item once per dialog. @returns Native Text Flow headline owner. */
+    () => new SwTextFlowPage(table),
+  );
   const [, refreshPage] = useState(0);
   const width = formatPage.GetFieldValue("width");
   const columnWidths = formatPage.data.columns;
@@ -71,8 +79,6 @@ function WriterTablePropertiesDialog({
       padding: rows[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100,
       border: rows[0]?.GetTabBoxes()[0]?.GetFormat().border ?? "0.5pt solid #666666",
       verticalAlign: rows[0]?.GetTabBoxes()[0]?.GetFormat().verticalAlign ?? "top",
-      headerRows: table.GetFormat().headerRows ?? 1,
-      repeatHeaderRows: table.GetFormat().repeatHeaderRows ?? true,
       dontSplit: rows[0]?.GetFormat().keepTogether ?? false,
     }),
   );
@@ -86,9 +92,6 @@ function WriterTablePropertiesDialog({
   const [activeTab, setActiveTab] = useState<"table" | "columns" | "text-flow" | "borders">(
     "table",
   );
-  const [hasHeader, setHasHeader] = useState(initial.headerRows > 0);
-  const [headerRows, setHeaderRows] = useState(initial.headerRows);
-  const [repeatHeaderRows, setRepeatHeaderRows] = useState(initial.repeatHeaderRows);
   const [dontSplit, setDontSplit] = useState(initial.dontSplit);
   const toCm =
     /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
@@ -162,8 +165,7 @@ function WriterTablePropertiesDialog({
                 ) => value <= 0,
               ) ||
               minRowHeight < 0 ||
-              padding < 0 ||
-              (hasHeader && (headerRows < 1 || headerRows > rowCount))
+              padding < 0
             ) {
               setError("Enter valid table dimensions and positive column widths.");
               return;
@@ -183,8 +185,8 @@ function WriterTablePropertiesDialog({
               padding,
               border,
               verticalAlign,
-              headerRows: hasHeader ? headerRows : 0,
-              repeatHeaderRows: hasHeader && repeatHeaderRows,
+              headerRows: textFlowPage.GetRowsToRepeat(),
+              repeatHeaderRows: textFlowPage.GetRowsToRepeat() > 0,
               dontSplit,
             });
           }
@@ -425,45 +427,45 @@ function WriterTablePropertiesDialog({
                 <legend className="text-sm font-bold">Text Flow</legend>
                 <label className="flex items-center gap-2 text-sm">
                   <input
-                    checked={hasHeader}
+                    checked={textFlowPage.IsHeadline()}
                     onChange={
-                      /** Toggles header rows. @param event - Checkbox event. @returns Nothing. */ (
+                      /** Dispatches the source headline checkbox and sensitivity. @param event - Checkbox input. @returns Nothing. */ (
                         event,
-                      ) => setHasHeader(event.target.checked)
+                      ) => {
+                        textFlowPage.HeadLineCBClickHdl(event.target.checked);
+                        refreshPage(
+                          /** Presents native headline widgets. @param version - Current version. @returns Next version. */
+                          (version) => version + 1,
+                        );
+                      }
                     }
                     type="checkbox"
                   />
-                  Header
+                  Repeat header
                 </label>
                 <label className="flex items-center gap-2 text-sm">
-                  <input
-                    checked={repeatHeaderRows}
-                    disabled={!hasHeader}
-                    onChange={
-                      /** Toggles repeated headers. @param event - Checkbox event. @returns Nothing. */ (
-                        event,
-                      ) => setRepeatHeaderRows(event.target.checked)
-                    }
-                    type="checkbox"
-                  />
-                  Repeat header rows on new pages
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  Header rows
+                  The first
                   <input
                     aria-label="Header rows"
                     className="w-16 rounded border px-2 py-1"
-                    disabled={!hasHeader || !repeatHeaderRows}
-                    max={rowCount}
+                    disabled={!textFlowPage.IsSensitive()}
+                    max="100"
                     min="1"
                     onChange={
-                      /** Updates repeated header count. @param event - Number input. @returns Nothing. */ (
+                      /** Dispatches source integer editing. @param event - Number input. @returns Nothing. */ (
                         event,
-                      ) => setHeaderRows(Number(event.target.value))
+                      ) => {
+                        textFlowPage.ValueChangedHdl(Number(event.target.value));
+                        refreshPage(
+                          /** Presents accepted source count. @param version - Current version. @returns Next version. */
+                          (version) => version + 1,
+                        );
+                      }
                     }
                     type="number"
-                    value={headerRows}
+                    value={textFlowPage.GetHeaderRows()}
                   />
+                  rows
                 </label>
                 {field("Minimum row height (cm)", minRowHeight, setMinRowHeight)}
                 <label className="flex items-center gap-2 text-sm">
@@ -535,9 +537,7 @@ function WriterTablePropertiesDialog({
                 if (activeTab === "table") formatPage.Reset();
                 else if (activeTab === "columns") columnPage.Reset();
                 else if (activeTab === "text-flow") {
-                  setHasHeader(initial.headerRows > 0);
-                  setHeaderRows(initial.headerRows);
-                  setRepeatHeaderRows(initial.repeatHeaderRows);
+                  textFlowPage.Reset();
                   setDontSplit(initial.dontSplit);
                   setMinRowHeight(initial.minRowHeight);
                   setVerticalAlign(initial.verticalAlign);

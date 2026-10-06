@@ -105,7 +105,7 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
     target: { value: "none" },
   });
   tab("Text Flow");
-  fireEvent.click(screen.getByRole("checkbox", { name: "Repeat header rows on new pages" }));
+  fireEvent.click(screen.getByRole("checkbox", { name: "Repeat header" }));
   fireEvent.change(screen.getByRole("spinbutton", { name: "Header rows" }), {
     target: { value: "2" },
   });
@@ -115,10 +115,8 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
     target: { value: "top" },
   });
   reset();
-  expect(screen.getByRole("checkbox", { name: "Header" })).toBeChecked();
-  expect(
-    screen.getByRole("checkbox", { name: "Repeat header rows on new pages" }),
-  ).not.toBeChecked();
+  expect(screen.queryByRole("checkbox", { name: "Header" })).not.toBeInTheDocument();
+  expect(screen.getByRole("checkbox", { name: "Repeat header" })).not.toBeChecked();
   expect(screen.getByRole("spinbutton", { name: "Header rows" })).toHaveValue(1);
   expect(screen.getByRole("spinbutton", { name: "Minimum row height (cm)" })).toHaveValue(0.53);
   expect(screen.getByRole("checkbox", { name: "Don’t split table over pages" })).toBeChecked();
@@ -135,7 +133,7 @@ it("Text Flow and Borders Reset each restore their initial controls and preserve
       minRowHeight: 1134,
       padding: 80,
       border: "1pt solid #000000",
-      headerRows: 1,
+      headerRows: 0,
       repeatHeaderRows: false,
       dontSplit: true,
       verticalAlign: "bottom",

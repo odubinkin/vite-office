@@ -1,10 +1,60 @@
-/** @fileoverview Absolute SwFormatTablePage state and handlers ported from pinned tabledlg.cxx. */
+/** @fileoverview Native absolute Writer format/column and represented Text Flow headline page state from pinned tabledlg.cxx. */
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import type { SwTable } from "../../core/table/swtable";
 import { SwTableRep } from "../../uibase/table/swtablerep";
 
 /** Native table-manager automatic width sentinel, INVALID_TWIPS/LONG_MAX. */
 const lAutoWidth = Number(0x7fffffffffffffffn);
+
+/** Owns the represented native Text Flow headline widgets and original FN_PARAM_TABLE_HEADLINE input. */
+export class SwTextFlowPage {
+  private readonly originalHeadline: number;
+  private headline = false;
+  private headerRows = 1;
+  private savedHeadline = false;
+  private savedHeaderRows = 1;
+
+  /** Captures the canonical initial headline item. @param table - Original table owner. @returns Nothing. */
+  public constructor(table: SwTable) {
+    this.originalHeadline = table.GetRowsToRepeat();
+    this.Reset();
+  }
+  /** Restores source checkbox/count widgets and their saved values. @returns Nothing. */
+  public Reset(): void {
+    this.headline = this.savedHeadline = this.originalHeadline > 0;
+    this.headerRows = this.savedHeaderRows = Math.max(1, Math.min(100, this.originalHeadline));
+  }
+  /** Reads the native Repeat header checkbox. @returns Checked state. */
+  public IsHeadline(): boolean {
+    return this.headline;
+  }
+  /** Reads the displayed source integer field. @returns Header row count. */
+  public GetHeaderRows(): number {
+    return this.headerRows;
+  }
+  /** Reads source numeric-group sensitivity. @returns Whether the count is editable. */
+  public IsSensitive(): boolean {
+    return this.headline;
+  }
+  /** Dispatches the native headline checkbox handler. @param checked - Checkbox value. @returns Nothing. */
+  public HeadLineCBClickHdl(checked: boolean): void {
+    this.headline = checked;
+  }
+  /** Admits an integer through the source widget range, independent of table row count. @param value - Authored count. @returns Nothing. */
+  public ValueChangedHdl(value: number): void {
+    this.headerRows = Math.max(1, Math.min(100, Math.round(value)));
+  }
+  /** Emits FN_PARAM_TABLE_HEADLINE only when its saved widgets changed. @returns Changed native item or no publication. */
+  public FillItemSet(): number | undefined {
+    if (this.headline === this.savedHeadline && this.headerRows === this.savedHeaderRows)
+      return undefined;
+    return this.headline ? this.headerRows : 0;
+  }
+  /** Resolves the current item over the original native input set. @returns Accepted headline count. */
+  public GetRowsToRepeat(): number {
+    return this.FillItemSet() ?? this.originalHeadline;
+  }
+}
 
 /** Owns source widget-local metric/radio state and the shared committed native table representation. */
 export class SwFormatTablePage {
