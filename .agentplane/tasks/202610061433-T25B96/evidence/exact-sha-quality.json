@@ -1,0 +1,135 @@
+{
+  "implementationCommit": "da4164f194218a31f1dc43d682ecb8ea2ab42227",
+  "reviewer": "Same current agent in EVALUATOR phase; not independent review",
+  "verdict": "pass",
+  "counts": {
+    "application": 12954,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 212
+  },
+  "originalAppFailures": 0,
+  "originalInventoryFailures": 1,
+  "originalChromeFailures": 2,
+  "focusedInventoryPassed": 1,
+  "focusedInventorySkipped": 2,
+  "focusedChromePassed": 2,
+  "coverage": {
+    "proof": "App entire source unchanged since initial profile. Inventory entire source and complete statement/function/branch maps byte-identical; only actual focused counters added. No synthesized coverage or passing replay; focused2skips remain skipped.",
+    "app": {
+      "files": 271,
+      "mapSHA256": "476ff9006130f78b6cf20fb70fd6878cf6e2ea916770d7c42f53c5b806b8e75b",
+      "coverage": {
+        "lines": {
+          "total": 14110,
+          "covered": 14110,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15469,
+          "covered": 15469,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3643,
+          "covered": 3643,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11538,
+          "covered": 11538,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    },
+    "inventory": {
+      "files": 38,
+      "mapSHA256": "ec335e880c41fac2f2f0594de0bf4960b18d292e0c4317dd6dbcc1f7637b3480",
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    },
+    "wholeSourceProof": {
+      "files": 309,
+      "sha256": "cff410c70beadcc15bf4cc4c7b69d7720efdc4bcf49bbb9ec57503c5eeb3bad2"
+    }
+  },
+  "implementationSHA256": {
+    "apps/office/e2e/writer-native-table-mouse.spec.ts": "fa0224b443dd6cc0d556f731c161d45f0764580643f28db9fa2072cbcdcec210",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "3f3334072668603831c314ef2b6cc22b47487128bcbade0a950b1109b76adf26",
+    "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx": "ce35f66e16bf12258dd1912c3ec4ae34073c6bcea8cedecc0c6a1ab90d8bdaaf",
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "912146a89c7dc95f174510fd83de60bab81e89619d2c5afa7ae98ae6bc4aa2bd",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "028def3cd75df19afd295bcabd48ed9245593ac711c6de02a0fd8c9cdfa20b58",
+    "docs/program/parity/runtime-inventory.json": "6c9f6cebb93b67f3b7e5df6b0517945b5f55d6fc916b31f4a36afb99d9449a1d",
+    "docs/program/source-provenance.json": "1454373514b0adfa51e43deb22fff89f8c9862f7bee52b73ea7d2a58e8f187f8",
+    "apps/office/src/sw/source/uibase/docvw/native-table-pointer.test.ts": "12f5789e153c17808e39572ea67f5bcc20d65ed0ba21ecd89f82ebf957cf5049",
+    "apps/office/src/vcl/browser/cursors/tblsele.svg": "d505f01ca6d31b9c0afc6edb4f51690cb391a639741bff9f022a6bd702639407",
+    "apps/office/src/vcl/browser/cursors/tblsels.svg": "169d2df87bcd0dad9987e947f61fa9a3c7e0dfd6b32948b7ad9ebdd6e5a5c4cd",
+    "apps/office/src/vcl/browser/cursors/tblselse.svg": "feb022a0c74eb20d1ebc23b79efad89e92c3eb1263975e7ed3af879429c5fc95",
+    "apps/office/src/vcl/browser/cursors/tblselsw.svg": "7a75a74b350f05cd8091b74724317b6856e27e03447cf537ff91f2ba329c960c",
+    "apps/office/src/vcl/browser/cursors/tblselw.svg": "54f9b26c25096e2a4326b49d3fb29e21e71e21462f9f795067d71d6477b207e1",
+    "apps/office/src/vcl/browser/pointer.test.ts": "59b1670af00d3eb71e985facb422f973d9a823a4f2583b4bd3b89ed3d4bf6cc9",
+    "apps/office/src/vcl/browser/pointer.ts": "bd239f8ed5a570c34941f915878c29bd9a4e6fa13cdafa8bf17ee7624024b6e2",
+    "apps/office/src/vcl/ptrstyle.ts": "4b26d3e387d4a672b6cfad53c4526fc7748cbd2b0ce21da47ab5f854f6554a1e"
+  },
+  "sourceSHA256": {
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/inc/crsrsh.hxx": "d5b15bac7672883e45c63022c5f3b188d210373651dcf2895115b1a019af0503",
+    "include/vcl/ptrstyle.hxx": "9fdbbc78763cae705b4d79523986e7c9aee08e67fbc5b01ebc655a80fed59c5a",
+    "offapi/com/sun/star/awt/SystemPointer.idl": "a83f2f7792503e1130cb900cbbd73552d4a0bded1cf78a1d8672036ab83596f4",
+    "vcl/unx/gtk3/gtkdata.cxx": "1f8f0899c686dcd901094d313556d7fc3efd7cecf52b8701b84fa93870e9a7d9",
+    "vcl/unx/generic/app/saldisp.cxx": "19ba81545f3e580bab7771d12e769d953fe74e784d1d3c40391ed5dd08933143"
+  },
+  "priorSemanticStatesDefaultsClassificationsAndEntirePrefixesPreserved": true,
+  "oldAcceptanceByteIdentical": 491,
+  "totalAcceptanceFiles": 495,
+  "semanticRecords": 274,
+  "parentPrefixLength": 478980,
+  "parentPrefixSHA256": "e5f2aaf634a89e6734ed9fae3e06d35245b64c43f7ab4312c4ee812696e0bff7",
+  "artifactFilesAudited": 14,
+  "forbiddenArtifacts": [],
+  "initialFullProfileCount": 1,
+  "passingCaseReplay": false,
+  "vendorRestored": true,
+  "fullParity": "unverified",
+  "failures": []
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610061433-T25B96",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T14:51:59.336Z",
+  "verdict": "pass",
+  "summary": "Same-agent exact-SHA native table pointer review PASS at da4164f194218a31f1dc43d682ecb8ea2ab42227; not independent review.",
+  "evaluated_sha": "da4164f194218a31f1dc43d682ecb8ea2ab42227",
+  "blueprint_digest": "f7cae7371e6712a2699af9adfb8922181410b69c92ea17bb1d30d2c2b3695320",
+  "findings": [
+    "Native edit-window policy replaces browser pointer switch; actual table-mode guard, exact native IDs, five X11 masks/hotspots and platform projection verified.12954app109inventory5scripts212Chromium aggregate PASS, actual100 app/inventory coverage; only original1inventory and2Chrome failures replayed,2focused skips retained.16semantic paths,491 old acceptance files byte-identical,495total;272 old semantic fields/full prefixes preserved plus2 explicitly unverified owners274. No upstream source/helper artifacts in AP; registered I/O/recovery exceptions unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610061433-T25B96/README.md",
+    ".agentplane/tasks/202610061433-T25B96/evidence/exact-sha-quality.json",
+    ".agentplane/tasks/202610061433-T25B96/evidence/source-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Resize dragging, object/list/LOK/general native UpdatePointer, GTK themed/high-DPI shapes, physical RTL/vertical/complex tables and full core/UI parity remain UNVERIFIED. Parent and goal remain ACTIVE."
+  ]
+}
