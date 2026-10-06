@@ -1,10 +1,11 @@
 ---
 id: "202610061150-GJFD5D"
 title: "Remove synthetic paragraph descriptions from Writer text surfaces"
-status: "DOING"
+result_summary: "Removed hidden paragraph style/list metadata and per-occurrence description registry; native PaM/SwNodes replaces body-only transfer array ordering so cell copy preserves native text/offsets. Aggregate12878app109inventory5scripts202Chromium cases, one full upstream-absent profile with failed/new-case closures only; actual100 app/inventory coverage and270 states/defaults/prefixes preserved. Full ASCII/HTML/table/accessibility/core/UI parity remains UNVERIFIED; conscious I/O/recovery deviations unchanged."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -45,7 +46,9 @@ quality_review:
   findings:
     - "Synthetic hidden paragraph descriptions and body-only transfer ordering removed; actual body/cell range and clipboard/history acceptance passed with actual100 coverage and no full/passing replay."
     - "270 prior semantic states/defaults/classes/prefixes preserved;480 old files byte-identical, five source-contradicting description assertion files corrected, two new files; conscious I/O/recovery deviations unchanged."
-commit: null
+commit:
+  hash: "0258f8f37a5bed79fd39c15c34a6b789e44181f4"
+  message: "🧩 GJFD5D code: use native Writer paragraph text and transfer ranges"
 comments:
   -
     author: "CODER"
@@ -53,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Source-reviewed original cell-copy failures require one bounded native transfer range correction; standing iterative UI/adaptor scope retained."
+  -
+    author: "CODER"
+    body: "Verified: Native Writer paragraph text surfaces and cell transfer ranges; source/scoped/actual100 coverage and same-agent exact-SHA quality PASS."
 events:
   -
     type: "status"
@@ -74,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native paragraph text/transfer scope at0258f8f37a5bed79fd39c15c34a6b789e44181f4:12878app109inventory5scripts202Chrome completed cases, actual100 coverage, one full upstream-absent profile plus failures/new cases only; source/scope/governance and same-agent exact-SHA quality PASS. Full parity remains UNVERIFIED."
+  -
+    type: "status"
+    at: "2026-10-06T12:18:32.581Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Writer paragraph text surfaces and cell transfer ranges; source/scoped/actual100 coverage and same-agent exact-SHA quality PASS."
 doc_version: 3
-doc_updated_at: "2026-10-06T12:18:13.356Z"
+doc_updated_at: "2026-10-06T12:18:32.583Z"
 doc_updated_by: "CODER"
 description: "Iteration186: source accessible paragraph descriptions are empty; remove browser-only hidden style/list text and describedby adapter so native DOM ranges contain document content, with precise old assertion correction and real body/cell/browser acceptance."
 sections:
