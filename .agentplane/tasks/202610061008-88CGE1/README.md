@@ -4,7 +4,7 @@ title: "Move native table selection ownership into cursor shell and expose upstr
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T10:39:58.166Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact-SHA quality PASS at0264126bc5f57c16b0a94884a4722408af1e2d05;12841app109inventory5scripts195Chromium distinct PASS; full parity unverified."
+  evaluated_sha: "0264126bc5f57c16b0a94884a4722408af1e2d05"
+  blueprint_digest: "305b743dcc6fa466ac94cfe8658139ca447eeb1f14e63aaa1b4354bc46170d03"
+  evidence_refs:
+    - ".agentplane/tasks/202610061008-88CGE1/README.md"
+    - ".agentplane/tasks/202610061008-88CGE1/quality/20261006-103958166-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610061008-88CGE1/quality/20261006-103958166-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610061008-88CGE1/quality/20261006-103958166-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610061008-88CGE1/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610061008-88CGE1/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610061008-88CGE1/evidence/source-review.json"
+    - ".agentplane/tasks/202610061008-88CGE1/evidence/failed-case-closure.json"
+  findings:
+    - "Actual ordinary/table cursor ownership moved into SwCursorShell; duplicate row selection removed; native menu selection slots use actual point/mark and box owners, standard reset and one-point insertion after selected content deletion."
+    - "One full absent profile and only five original failed fixture closures; no full/passing replay/rebuild/coverage transfer. Initial actual counters100%, production hashes unchanged, partial skipped cases stay skipped."
+    - "270 prior semantic records preserved;477/479 old test files identical, two related fixtures preserve assertions except command count51to55. All declared gates and scope/artifact checks pass."
 commit: null
 comments:
   -
@@ -36,7 +56,7 @@ events:
     to: "DOING"
     note: "Start: iteration183 source-owned cursor selection and upstream menu parity with one absent profile; whole parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T10:38:47.446Z"
+doc_updated_at: "2026-10-06T10:40:11.035Z"
 doc_updated_by: "CODER"
 description: "Iteration183: refactor actual ordinary/table cursor ownership and row selection from SwWrtShell into source-owned SwCursorShell; native row/column/cell/table selection through upstream contextual slots with no React selection state, TextRuns conversion or document mutation; one absent verification profile."
 sections:
@@ -48,7 +68,7 @@ sections:
     2. ONE full profile while vendor renamed inside repository and restored in finally: npm run test:static; full app/inventory coverage --coverage.reportOnFailure and JSON cases; scripts acceptance; all Chromium against dist. Persist exact failures/counts/errors/hashes before assertions. No passing/full/source replay; only original failures or genuinely new cases.
     3. Actual core/mounted/browser acceptance proves core cursor owner inheritance, actual row/column/cell/table native selected boxes and endpoint offsets, multi-paragraph cells, ordinary mark clearing and existing table cursor reuse, no document/history/dirty mutation, ring disposal and body cleanup, contextual command enablement/order and standard reset, formatting/paste/insertion after selection, undo restoration.100%actual-counter app/inventory coverage; map transfer only exact unchanged maps or entire byte-identical ranges with counters.
     4. After restoration run generator --check/source-tree/provenance/invariants/parity once; preserved prior semantic/test prefix and scoped AP source/helper prohibition audit; doctor/routing/diff and same-agent exact-SHA review. Explicit scoped implementation, evidence, verification tail and clean direct close; parent/goal active full parity unverified.
-  Verification: "Command: six initial static gates and only failed type closures; scoped changed-path checks; ONE full upstream-absent build/app/inventory/scripts/Chromium profile plus ONLY original failed cases; once-restored generation/source-tree/provenance/invariants/parity; scope/artifact/doctor/routing/diff. Result: PASS after source-backed new-fixture assertion closure. Evidence:12841 application,109 inventory,5 scripts,195 Chromium distinct PASS;0 remaining failures/runtime errors/flaky. Partial failed-case app run3PASS2SKIPPED exits1 only global coverage thresholds; no skips counted as passes. Actual initial app/inventory maps100%lines/statements/functions/branches, unchanged production hashes, no coverage merges/transfers/rebuild/full passing replays. Scope:14 semantic paths,270 prior/current semantic states/defaults preserved,477/479 old tests identical and2 related fixtures preserve assertions except count51->55,3 new files482 total. Vendor restored. Exact-SHA same-agent quality and clean committed leaf close pending; whole goal ACTIVE/full parity UNVERIFIED."
+  Verification: "Command: declared static/scoped checks, one full upstream-absent profile, original failed-case closures, once-restored source audits and same-agent exact-SHA review. Result: PASS at implementation0264126bc5f57c16b0a94884a4722408af1e2d05. Evidence:12841app109inventory5scripts195Chromium distinct PASS; no failures/runtime errors/flaky; partial closure3appPASS2SKIPPED, only global coverage threshold exit. Actual initial app/inventory maps100% with byte-identical final maps and unchanged production hashes. No rebuild/merge/transfer/full passing replay. Scope270semantic records preserved,477/479oldtests identical,3newfiles482total. Source/quality/AP audit PASS, doctor0errors2knownwarnings, vendor restored. Same current agent EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE."
   Rollback Plan: "Revert scoped implementation through a separate leaf if actual selection owners/endpoints/rings or contextual commands regress. Preserve immutable DONE evidence and conscious I/O deviations."
   Findings: |-
     Previous iteration182 DONE: implementation2c76be1460f59495b7ab618efa8babf2e7870c3d, checkpoint184aeff391048b252dc4a4734f86c479bb8018c7. Native table selection responsibilities belonged locally to SwWrtShell, while pinned trvltbl.cxx and crsrsh.hxx assign cursor storage/materialization and SelTableRowOrCol/SelTable/SelTableBox to SwCursorShell. This iteration moves those actual owners, removes duplicated high-level row selection, adds thin SwWrtShell entry points and four argument-free native table selection slots. GetTableSel expands displayed point/mark instead of projected editing-ring extremes. EntireCell skips standard reset; row/column/table commands enter standard mode as pinned tabsh.cxx does. React reads original selected boxes and cursor endpoints; no new selection adapter, UI state or TextRuns conversion.
@@ -91,7 +111,7 @@ Standing iterative UI/refactor authorization applies. Core SwCursorShell owns ac
 
 ## Verification
 
-Command: six initial static gates and only failed type closures; scoped changed-path checks; ONE full upstream-absent build/app/inventory/scripts/Chromium profile plus ONLY original failed cases; once-restored generation/source-tree/provenance/invariants/parity; scope/artifact/doctor/routing/diff. Result: PASS after source-backed new-fixture assertion closure. Evidence:12841 application,109 inventory,5 scripts,195 Chromium distinct PASS;0 remaining failures/runtime errors/flaky. Partial failed-case app run3PASS2SKIPPED exits1 only global coverage thresholds; no skips counted as passes. Actual initial app/inventory maps100%lines/statements/functions/branches, unchanged production hashes, no coverage merges/transfers/rebuild/full passing replays. Scope:14 semantic paths,270 prior/current semantic states/defaults preserved,477/479 old tests identical and2 related fixtures preserve assertions except count51->55,3 new files482 total. Vendor restored. Exact-SHA same-agent quality and clean committed leaf close pending; whole goal ACTIVE/full parity UNVERIFIED.
+Command: declared static/scoped checks, one full upstream-absent profile, original failed-case closures, once-restored source audits and same-agent exact-SHA review. Result: PASS at implementation0264126bc5f57c16b0a94884a4722408af1e2d05. Evidence:12841app109inventory5scripts195Chromium distinct PASS; no failures/runtime errors/flaky; partial closure3appPASS2SKIPPED, only global coverage threshold exit. Actual initial app/inventory maps100% with byte-identical final maps and unchanged production hashes. No rebuild/merge/transfer/full passing replay. Scope270semantic records preserved,477/479oldtests identical,3newfiles482total. Source/quality/AP audit PASS, doctor0errors2knownwarnings, vendor restored. Same current agent EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE.
 
 ## Rollback Plan
 

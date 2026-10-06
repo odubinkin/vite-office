@@ -1,0 +1,150 @@
+{
+  "evaluatedSHA": "0264126bc5f57c16b0a94884a4722408af1e2d05",
+  "reviewer": "Same current agent in EVALUATOR role; no independent review claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12841,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 195
+  },
+  "caseIdentity": "file+fullName/title+project when applicable+occurrence; partial skips retained as skips, only original failed identities replaced by actual passing closure results",
+  "caseResults": {
+    "application": {
+      "passed": 12841,
+      "failed": [],
+      "skipped": []
+    },
+    "inventory": {
+      "passed": 109,
+      "failed": [],
+      "skipped": []
+    },
+    "chromium": {
+      "passed": 195,
+      "failed": [],
+      "skipped": []
+    }
+  },
+  "closedOriginalCases": {
+    "application": [
+      "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Row occurrence=1",
+      "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Column occurrence=1",
+      "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Table occurrence=1"
+    ],
+    "chromium": [
+      "writer-native-table-selection-commands.spec.ts > writer-native-table-selection-commands.spec.ts > native table selection menu width=1280 project= occurrence=1",
+      "writer-native-table-selection-commands.spec.ts > writer-native-table-selection-commands.spec.ts > native table selection menu width=390 project= occurrence=1"
+    ],
+    "partialAppSkipped": [
+      "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Cell occurrence=1",
+      "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu standard reset selects current column after a wider row selection occurrence=1"
+    ]
+  },
+  "implementationSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "d390dbe8b4efedfb6d9b23b0fcb091fb5c84fa4ddfe3d8e88dd24d17b591af0b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "9f5a937bfdee5f5c2a93aef79886dea7e7dbd3f6a8c2ee1ee0c25ce25232ae1f",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "1d35dc89bd9bfe1ba4ddfac8bb612d704340ff4e555cfc8dbe122c2ec985b970",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "10bfd28788f360d43a6fc56c15caf3454c668667918fe9bc7181cc3349586c3a",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "e63d9e8d877a71b43ac280557b81648861ca98c6cbb0816abb701da6eedd573d",
+    "scripts/generate-writer-ui-resources.ts": "773e4082bd29d91d9ed083a14d6452acac0daf7415eff4c5f03f8ecc73e6b233",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json": "6267075df9412745e15329751f19ad19acd8640daed6d5b4ebac04dd477d1053",
+    "docs/program/source-provenance.json": "2011a5d52055cabb88b43b9d3b30c49be2531cf463e27d6bff4cdbeb68202ae8",
+    "docs/program/parity/runtime-inventory.json": "4012db1cab84d1c2cb2079bf949e5465c95b1ba5afd95e0517f5b2918cb52876",
+    "apps/office/src/sw/source/core/crsr/native-table-selection-ownership.test.ts": "abf8b33a5cf4b2d484b8a15e2ed96837f624726c8faecd0b9a46126b931d1c6f",
+    "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx": "4fb9d284c5eae71e24075b6ecf6da279a931b3f7e76aa8ff7d08f480b7eb1060",
+    "apps/office/e2e/writer-native-table-selection-commands.spec.ts": "9549592fe19ee7af92927f4d4fb6c505002d0eecf55ecf36eecdbdf01951cdda",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts": "5cd1d404b9a270a5c6d641130be9a3c93c6fd90184c215fd13fcd9e9b7618bb3",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts": "20038cf878fd6bfe3e6252c6bdbf96288c79a2ecaa49bb9d469caa9e3a10ad16"
+  },
+  "coverage": {
+    "application": {
+      "coverage": {
+        "lines": {
+          "total": 13785,
+          "covered": 13785,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15109,
+          "covered": 15109,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3616,
+          "covered": 3616,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11248,
+          "covered": 11248,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "264e7dd8270eb5053b3608f99e57e8a06822ceddb02a5813ee5ea0dee56b0eb3",
+      "rawMaps": 267
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "8e6fae6a004c2eb8593e0015a8d25470b9708a1eb914139154c3ffc219cd0def",
+      "rawMaps": 38
+    }
+  },
+  "coverageProof": "267 app and38 inventory initial actual full-source maps copied byte-for-byte. No merge/transfer/full or passing replay/rebuild. Only new fixture assertions corrected; production five-file hashes unchanged.",
+  "pinnedSourceFiles": 12,
+  "priorSemanticRecordsPreserved": 270,
+  "currentSemanticRecords": 270,
+  "oldTestFilesByteIdentical": 477,
+  "totalPriorTestFiles": 479,
+  "findings": [
+    "Actual core cursor ownership and selection rings are inherited; duplicate high-level row implementation removed.",
+    "Four native menu slots preserve standard reset, actual selected boxes and source-defined point/mark endpoints; native input inserts once at point after selected content deletion.",
+    "Real multi-paragraph attributes, ring reuse/cleanup, selection without document mutation, Undo/Redo, mounted context/order and desktop/mobile Chromium are verified.",
+    "55native commands; all270 prior semantic states/defaults/classes/evidence and deliberate I/O deviations preserved.",
+    "Complex frame/protection/enhanced selection-mode/merged/nested/full clipboard and complete upstream parity remain unverified."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}
