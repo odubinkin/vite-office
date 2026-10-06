@@ -1,0 +1,43 @@
+{
+  "historicalLiteralAssertionSurfacePreserved": true,
+  "approvedPaths": [
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts",
+    "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+    "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts",
+    "apps/office/e2e/writer-native-table-format-lifecycle.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-table-format-lifecycle.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+    "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts"
+  ],
+  "oldAcceptanceFiles": 512,
+  "oldAcceptanceChanged": [
+    "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts"
+  ],
+  "oldAcceptanceByteIdentical": 511,
+  "newTests": [
+    "apps/office/e2e/writer-native-table-format-lifecycle.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+    "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts"
+  ],
+  "totalAcceptanceFiles": 516,
+  "priorSemanticRecords": 276,
+  "semanticRecords": 276,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 501129,
+  "parentPrefixSHA256": "fcdbc287e6ea6bf80372807db2d304e26270c01575d873f60f5f6648172cd100",
+  "failures": []
+}
