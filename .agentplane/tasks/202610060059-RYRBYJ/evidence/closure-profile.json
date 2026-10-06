@@ -1,0 +1,47 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx",
+      "name": "native document ruler indent drag copies bottom-left geometry and applies changed acceptance once without first-line projection"
+    },
+    {
+      "file": "apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx",
+      "name": "native document ruler indent drag cancels copied document state on pointercancel"
+    }
+  ],
+  "newCases": [
+    "native document ruler indent drag rejects document points outside both native horizontal ruler extents",
+    "native document ruler indent drag honors frame-relative explicit tab priority",
+    "native document ruler indent drag accepts older omitted ruler settings using the existing relative default"
+  ],
+  "productionChanged": false,
+  "rebuild": false,
+  "fixtureCorrection": "Provide actual canvas clip rectangle in native guide fixtures. Add genuinely missing native outside-first and frame-relative/omitted-settings domains. No production change, passing replay or browser rebuild.",
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/WriterRulers-document-drag.test.tsx --testNamePattern=native document ruler indent drag copies bottom-left geometry and applies changed acceptance once without first-line projection|native document ruler indent drag cancels copied document state on pointercancel|native document ruler indent drag rejects document points outside both native horizontal ruler extents|native document ruler indent drag honors frame-relative explicit tab priority|native document ruler indent drag accepts older omitted ruler settings using the existing relative default --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/RYRBYJ.closure-app-results.json",
+      "profile": "original-failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1520,
+      "sha256": "93f18f4ee61274c1e83a8cc0ef5369cd703fc5db4ed9048a71b5c5aa027b0869",
+      "caseCounts": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 14,
+        "total": 19
+      },
+      "executedCases": [
+        "native document ruler indent drag rejects document points outside both native horizontal ruler extents",
+        "native document ruler indent drag honors frame-relative explicit tab priority",
+        "native document ruler indent drag accepts older omitted ruler settings using the existing relative default",
+        "native document ruler indent drag copies bottom-left geometry and applies changed acceptance once without first-line projection",
+        "native document ruler indent drag cancels copied document state on pointercancel"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "33887a2443c22b23e93e2935dedf9c81f9257dbbc14aa006178132badf1d4c06"
+    }
+  ]
+}

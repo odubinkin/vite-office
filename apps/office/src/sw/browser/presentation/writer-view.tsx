@@ -1,6 +1,5 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
 import type { SwTableLine, SwTableBox } from "../../source/core/table/swtable";
-import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { TableProperties } from "lucide-react";
@@ -21,7 +20,12 @@ import type {
 } from "../workflows/writer-file-dialog-controller";
 import type { WriterSessionServices } from "../workflows/writer-workflows";
 import type { WriterAutosaveController } from "../workflows/writer-autosave";
-import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";
+import { WriterRulers, WriterVerticalRuler, type WriterRulerDocumentDrag } from "./WriterRulers";
+import { SwTextNode } from "../../source/core/txtnode/ndtxt";
+import {
+  resolveSwListTextLeftMargin,
+  resolveSwListFirstLineIndent,
+} from "../../source/core/txtnode/ndtxt-list-indent";
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
@@ -84,6 +88,7 @@ export function WriterWorkbench({
 }: WriterWorkbenchProps): React.JSX.Element {
   const localization = useBrowserLocalization();
   const editingHostRef = useRef<HTMLElement | null>(null);
+  const documentRuler = useRef<WriterRulerDocumentDrag | null>(null);
   const [presentationStore] = useState(
     /** Reuses the session store or owns one browser-local store for an injected view. @returns Presentation store. */ () =>
       viewStore ?? new WriterViewStore(view),
@@ -521,7 +526,16 @@ export function WriterWorkbench({
         }
         rulers={
           <WriterRulers
-            horizontalVisible={snapshot.isHorizontalRulerVisible}
+            documentDragRef={documentRuler}
+            documentOwner={activeDocument}
+            horizontalVisible={snapshot.isHorizontalRulerVisible && isActive}
+            onDocumentIndentChange={
+              /** Applies copied native ruler items after immediate label-node reset. @param value - Accepted indent geometry. @returns Nothing. */ (
+                value,
+              ) => {
+                view.GetWrtShell().SetParagraphRulerIndents(value);
+              }
+            }
             onPageChange={
               /** Applies a page ruler gesture. @param edge - Dragged margin. @param delta - Twip delta. @returns Nothing. */ (
                 edge,
@@ -572,6 +586,39 @@ export function WriterWorkbench({
         }
       >
         <WriterPlainTextEditor
+          onNumLabelMouseDown={
+            /** Uses an actual label node only while updating ruler state and admitting the native document gesture. @param event - Actual document mouse input. @returns Whether ordinary pointer selection is bypassed. */ (
+              event,
+            ) => {
+              const marker = (event.target as HTMLElement).closest<HTMLElement>(
+                "[data-writer-list-marker]",
+              );
+              if (marker === null || event.button !== 0 || event.detail !== 1) return false;
+              const projected = snapshot.textNodes.find(
+                /** Resolves a mounted label's existing node coordinate. @param candidate - Immutable node identity. @returns Whether it owns the hit label. */
+                (candidate) => candidate.id === marker.dataset.writerListMarker,
+              );
+              if (projected === undefined) return false;
+              const node = activeDocument.GetNodes().at(projected.nodeIndex) as SwTextNode;
+              if (node.GetNum() === undefined) return false;
+              const currentLeft = view
+                .GetWrtShell()
+                .GetActiveParagraph()
+                .GetParagraphTextLeftMargin();
+              const offset =
+                ((currentLeft +
+                  (resolveSwListTextLeftMargin(node) as number) -
+                  node.GetParagraphTextLeftMargin()) <<
+                  16) >>
+                16;
+              const firstLine = snapshot.activeParagraph.computedStyle.firstLineIndentPt * 20;
+              const textLeft = offset + resolveSwListFirstLineIndent(node) - Math.min(0, firstLine);
+              return (documentRuler.current as WriterRulerDocumentDrag).StartDocDrag(
+                event,
+                textLeft,
+              );
+            }
+          }
           activeParagraphId={snapshot.activeParagraph.id}
           cursorSelection={snapshot.cursorSelection}
           editWindow={view.GetEditWin()}

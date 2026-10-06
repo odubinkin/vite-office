@@ -25,6 +25,7 @@ import { createWriterLineMeasurements, measureWriterTextLines } from "./writer-l
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
 export interface WriterPlainTextEditorProps {
+  readonly onNumLabelMouseDown?: (event: React.MouseEvent<HTMLElement>) => boolean;
   readonly activeParagraphId: string;
   readonly cursorSelection: WriterCursorSelection;
   readonly editWindow: SwEditWin;
@@ -461,7 +462,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           }
         }
         onKeyDown={controller.HandleKeyDown}
-        onMouseDown={controller.HandlePointerDown}
+        onMouseDown={
+          /** Routes admitted native label gestures before pointer text selection. @param event - Actual document mouse input. @returns Nothing. */ (
+            event,
+          ) => {
+            if (props.onNumLabelMouseDown?.(event)) return;
+            controller.HandlePointerDown(event);
+          }
+        }
         onMouseMove={controller.HandlePointerMove}
         onMouseUp={controller.HandlePointerUp}
         onPaste={controller.HandlePaste}

@@ -1,5 +1,11 @@
 /** @fileoverview Owns browser ruler tracking admission, input priority and termination. */
-import { useCallback, useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  type PointerEvent as ReactPointerEvent,
+  type MouseEvent as ReactMouseEvent,
+} from "react";
 
 const trackingWindows = new WeakMap<Window, () => void>();
 
@@ -14,16 +20,17 @@ export interface RulerTrackingCallbacks {
 export interface RulerTracking {
   readonly IsTracking: () => boolean;
   readonly StartTracking: (
-    event: ReactPointerEvent<HTMLElement>,
+    event: ReactPointerEvent<HTMLElement> | ReactMouseEvent<HTMLElement>,
     callbacks: RulerTrackingCallbacks,
   ) => (() => void) | undefined;
 }
 
 /** Projects Ruler admission and VCL tracking-key priority onto an owned browser window.
  * @param enabled - Whether the owning ruler is currently visible.
+ * @param owner - Optional document lifetime owning the copied ruler state.
  * @returns Stable tracking admission for one mounted ruler.
  */
-export function useRulerTracking(enabled = true): RulerTracking {
+export function useRulerTracking(enabled = true, owner?: object): RulerTracking {
   const cancelCurrent = useRef<(() => void) | undefined>(undefined);
   const StartTracking = useCallback(
     /** Starts a left-button gesture unless this ruler already owns tracking.
@@ -31,12 +38,15 @@ export function useRulerTracking(enabled = true): RulerTracking {
      * @param callbacks - Ruler-specific painting and commit callbacks.
      * @returns Idempotent cancellation for the initiating handle, or no admitted gesture.
      */
-    (event: ReactPointerEvent<HTMLElement>, callbacks: RulerTrackingCallbacks) => {
+    (
+      event: ReactPointerEvent<HTMLElement> | ReactMouseEvent<HTMLElement>,
+      callbacks: RulerTrackingCallbacks,
+    ) => {
       if (event.button !== 0 || event.detail > 1 || cancelCurrent.current !== undefined) return;
       event.preventDefault();
       const host = event.currentTarget.ownerDocument.defaultView as Window;
       trackingWindows.get(host)?.();
-      const pointerId = event.pointerId;
+      const pointerId = "pointerId" in event ? event.pointerId : undefined;
       let ended = false;
 
       /** Releases ownership before notifying ruler painting or application callbacks.
@@ -62,15 +72,21 @@ export function useRulerTracking(enabled = true): RulerTracking {
       }
       /** Delivers only the initiating pointer's movement. @param pointer - Window input. @returns Nothing. */
       function move(pointer: PointerEvent): void {
-        if (pointer.pointerId === pointerId) callbacks.onMove(pointer);
+        if (matches(pointer)) callbacks.onMove(pointer);
       }
       /** Accepts the initiating pointer's final position. @param pointer - Window input. @returns Nothing. */
       function finish(pointer: PointerEvent): void {
-        if (pointer.pointerId === pointerId) EndTracking(false, pointer);
+        if (matches(pointer)) EndTracking(false, pointer);
       }
       /** Cancels only the initiating pointer. @param pointer - Window input. @returns Nothing. */
       function cancelPointer(pointer: PointerEvent): void {
-        if (pointer.pointerId === pointerId) cancel();
+        if (matches(pointer)) cancel();
+      }
+      /** Matches a captured pointer or the native document mouse domain. @param pointer - Window input. @returns Whether this gesture owns it. */
+      function matches(pointer: PointerEvent): boolean {
+        return pointerId === undefined
+          ? !pointer.pointerType || pointer.pointerType === "mouse"
+          : pointer.pointerId === pointerId;
       }
       /** Owns all key input while tracking, including modified Escape and Return.
        * @param key - Browser input before widget/document fallback.
@@ -97,7 +113,7 @@ export function useRulerTracking(enabled = true): RulerTracking {
   useEffect(
     /** Drops DOM callbacks when their ruler owner disappears. @returns Owner cleanup. */
     () => /** Cancels retained tracking. @returns Nothing. */ () => cancelCurrent.current?.(),
-    [],
+    [owner],
   );
   useEffect(
     /** Drops a hidden ruler's transient tracking owner. @returns Nothing. */

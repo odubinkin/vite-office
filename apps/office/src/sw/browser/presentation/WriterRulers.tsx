@@ -1,20 +1,37 @@
 /** @fileoverview Browser projection of Writer's SwRuler/SvxRuler page and paragraph handles. */
 
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type MouseEvent as ReactMouseEvent,
+  type Ref,
+} from "react";
 import { createPortal } from "react-dom";
 import { SvxTabAdjust } from "../../../editeng/source/items/paraitem";
 
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import type { WriterParagraphProjection } from "./writer-view-projection";
 import { useRulerTracking, type RulerTracking } from "./use-ruler-tracking";
+import type { WriterParagraphIndentValue } from "../../source/uibase/wrtsh/wrtsh1";
 
 const TWIPS_PER_CSS_PIXEL = 15;
 // LibreOffice's centimetre ruler uses a 1 mm nTick1 division (svtools/source/control/ruler.cxx).
 const MINOR_TICK_TWIPS = 1440 / 2.54 / 10;
 const MINOR_TICK_PIXELS = MINOR_TICK_TWIPS / TWIPS_PER_CSS_PIXEL;
 
+/** Native document-origin indent entry point; copied geometry outlives only the gesture. */
+export interface WriterRulerDocumentDrag {
+  readonly StartDocDrag: (event: ReactMouseEvent<HTMLElement>, textLeft: number) => boolean;
+}
+
 /** Model values and Writer command callbacks consumed by both rulers. */
 export interface WriterRulersProps {
+  readonly documentDragRef?: Ref<WriterRulerDocumentDrag>;
+  readonly documentOwner?: object;
+  readonly onDocumentIndentChange?: (value: WriterParagraphIndentValue) => void;
   readonly horizontalVisible: boolean;
   readonly onPageChange: (edge: "left" | "right" | "top" | "bottom", deltaTwips: number) => void;
   readonly onParagraphIndentChange: (
@@ -29,14 +46,119 @@ export interface WriterRulersProps {
 
 /** Renders physical centimetre ticks and draggable Writer margin/indent markers. @param props - Geometry, paragraph, visibility, and commit callbacks. @returns Writer rulers. */
 export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
-  const tracking = useRulerTracking(props.horizontalVisible);
+  const tracking = useRulerTracking(props.horizontalVisible, props.documentOwner);
+  const rulerSurface = useRef<HTMLDivElement | null>(null);
+  const [documentIndent, setDocumentIndent] = useState<WriterParagraphIndentValue | null>(null);
+  const [documentDragEdge, setDocumentDragEdge] = useState<"left" | "right">("left");
   const [newTab, setNewTab] = useState<number | null>(null);
   const [newTabWorkspace, setNewTabWorkspace] = useState<HTMLElement | null>(null);
+  useImperativeHandle(
+    props.documentDragRef,
+    /** Supplies native StartDocDrag without synthetic handle events. @returns Document gesture entry point. */ () => ({
+      /** Tests bottom indents after tab precedence and starts existing ruler tracking. @param event - Actual document mouse input. @param textLeft - Copied StateTabWin text-left geometry. @returns Whether tracking was admitted. */
+      StartDocDrag: (event, textLeft) => {
+        const surface = rulerSurface.current,
+          apply = props.onDocumentIndentChange;
+        if (
+          surface === null ||
+          apply === undefined ||
+          event.button !== 0 ||
+          event.detail !== 1 ||
+          tracking.IsTracking()
+        )
+          return false;
+        const page = event.currentTarget.querySelectorAll<HTMLElement>("[data-writer-page]");
+        const targetPage = (event.target as HTMLElement).closest<HTMLElement>("[data-writer-page]");
+        if (targetPage === null || ![...page].includes(targetPage)) return false;
+        const x = event.clientX - targetPage.getBoundingClientRect().left;
+        const height = surface.getBoundingClientRect().height || 32;
+        // Ruler::ImplDoHitTest uses (virHeight/2)-4 on each side, inclusive.
+        const halfWidth = Math.trunc((height - 6) / 2) - 4;
+        if (x < -halfWidth || x > props.page.width / TWIPS_PER_CSS_PIXEL + halfWidth) return false;
+        const right = props.paragraph.computedStyle.rightMarginPt * 20;
+        const firstLine = props.paragraph.computedStyle.firstLineIndentPt * 20;
+        const tabOrigin =
+          props.page.leftMargin +
+          ((props.paragraph.rulerTabSettings?.relativeToIndent ?? true) ? textLeft : 0);
+        if (
+          (props.paragraph.rulerTabStops ?? []).some(
+            /** Gives explicit tabs native precedence over indent hits. @param stop - Stored visible tab. @returns Whether its horizontal hit rectangle contains the document point. */ (
+              stop,
+            ) => {
+              const anchor = toRulerPixel(tabOrigin + stop.positionPt * 20);
+              const offset =
+                stop.adjustment === SvxTabAdjust.Left
+                  ? 0
+                  : stop.adjustment === SvxTabAdjust.Right
+                    ? -8
+                    : -3;
+              const width =
+                stop.adjustment === SvxTabAdjust.Left
+                  ? 7
+                  : stop.adjustment === SvxTabAdjust.Right
+                    ? 9
+                    : 8;
+              return x >= anchor + offset && x <= anchor + offset + width - 1;
+            },
+          )
+        )
+          return false;
+        const rightPosition = toRulerPixel(props.page.width - props.page.rightMargin - right);
+        const leftPosition = toRulerPixel(props.page.leftMargin + textLeft);
+        const edge =
+          Math.abs(x - rightPosition) <= halfWidth
+            ? "right"
+            : Math.abs(x - leftPosition) <= halfWidth
+              ? "left"
+              : undefined;
+        if (edge === undefined) return false;
+        const position = edge === "left" ? leftPosition : rightPosition;
+        const initial = { left: textLeft, firstLine, right };
+        return (
+          startDrag(
+            event,
+            "x",
+            position,
+            props.page.leftMargin / TWIPS_PER_CSS_PIXEL,
+            /** Paints copied indent geometry without retaining a label node. @param delta - Preview distance or release. @returns Nothing. */ (
+              delta,
+            ) =>
+              setDocumentIndent(
+                delta === null
+                  ? null
+                  : {
+                      ...initial,
+                      ...(edge === "left"
+                        ? { left: initial.left + delta * TWIPS_PER_CSS_PIXEL }
+                        : { right: initial.right - delta * TWIPS_PER_CSS_PIXEL }),
+                    },
+              ),
+            /** Applies only changed accepted geometry to current selection as after native immediate label-node reset. @param delta - Final twip distance. @returns Nothing. */ (
+              delta,
+            ) => {
+              if (delta !== 0)
+                apply({
+                  ...initial,
+                  ...(edge === "left"
+                    ? { left: initial.left + delta }
+                    : { right: initial.right - delta }),
+                });
+            },
+            tracking,
+            /** Captures existing workspace guide ownership. @returns Nothing. */ () => {
+              setDocumentDragEdge(edge);
+              setNewTabWorkspace(surface.closest('[aria-label="Writer workspace"]'));
+            },
+          ) !== undefined
+        );
+      },
+    }),
+  );
   const pageWidth = props.page.width / TWIPS_PER_CSS_PIXEL;
-  const paragraphLeft = props.paragraph.textLeftMargin;
+  const paragraphLeft = documentIndent?.left ?? props.paragraph.textLeftMargin;
   const rulerTabStops = props.paragraph.rulerTabStops ?? [];
   const firstLine = props.paragraph.computedStyle.firstLineIndentPt * 20;
-  const paragraphRight = props.paragraph.computedStyle.rightMarginPt * 20;
+  const paragraphRight = documentIndent?.right ?? props.paragraph.computedStyle.rightMarginPt * 20;
   const tabOriginIndent =
     (props.paragraph.rulerTabSettings?.relativeToIndent ?? true) ? paragraphLeft : 0;
   const tabOrigin = props.page.leftMargin + tabOriginIndent;
@@ -56,6 +178,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
           role="toolbar"
         >
           <div
+            ref={rulerSurface}
             className="relative mx-auto h-full bg-white text-[9px] text-slate-500"
             style={{ width: pageWidth }}
             onPointerDown={
@@ -231,6 +354,21 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
       ) : null}
       {newTab !== null && newTabWorkspace !== null
         ? createPortal(renderDragGuides(newTabWorkspace, "x", newTab, null), document.body)
+        : null}
+      {documentIndent !== null && newTabWorkspace !== null
+        ? createPortal(
+            renderDragGuides(
+              newTabWorkspace,
+              "x",
+              toRulerPixel(
+                documentDragEdge === "left"
+                  ? props.page.leftMargin + documentIndent.left
+                  : props.page.width - props.page.rightMargin - documentIndent.right,
+              ),
+              null,
+            ),
+            document.body,
+          )
         : null}
     </>
   );
@@ -581,7 +719,7 @@ function renderDragGuides(
 
 /** Paints one admitted gesture and converts its selected-axis delta to twips. @param event - Pointer-down event. @param axis - Active axis. @param position - Handle position in pixels. @param origin - Tick origin in pixels. @param onPreview - Transient pixel delta callback. @param onCommit - Final twip delta callback. @param tracking - Owning ruler tracking. @param onBegin - Captures presentation ownership. @returns Admitted gesture cancellation. */
 function startDrag(
-  event: ReactPointerEvent<HTMLElement>,
+  event: ReactPointerEvent<HTMLElement> | ReactMouseEvent<HTMLElement>,
   axis: "x" | "y",
   position: number,
   origin: number,

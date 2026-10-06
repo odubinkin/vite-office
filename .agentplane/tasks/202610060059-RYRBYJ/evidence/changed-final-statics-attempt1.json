@@ -1,0 +1,14 @@
+[
+  {
+    "command": "npm exec -- prettier --check apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx",
+    "exit": 0,
+    "bytes": 66,
+    "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  {
+    "command": "npm exec -- eslint apps/office/src/sw/browser/presentation/WriterRulers-document-drag.test.tsx --max-warnings=0",
+    "exit": 1,
+    "bytes": 333,
+    "sha256": "077ba2b6975c88a87f592f549dbab7735851f7984ade9c9b8b66d9af55826f76"
+  }
+]
