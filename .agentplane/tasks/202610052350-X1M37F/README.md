@@ -1,10 +1,11 @@
 ---
 id: "202610052350-X1M37F"
 title: "Preserve native NONE numbering through ODT and remove UNO format reconstruction"
-status: "DOING"
+result_summary: "Preserved native NumberingType NONE through ODT and removed redundant UNO format reconstruction; native/DOM/Chromium list ownership/context/history verified, registered IO deviations preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610052350-X1M37F/evidence/final-coverage.json"
   findings:
     - "All12597app109inventory5scripts147Chromium passed,0flaky; actual100%L/S/F/B app/inventory.14 semantic paths8 existing owners;435 prior tests434 unchanged,one exact numeric property migration;258 prior runtime states/defaults/classifications/evidence/IO exceptions preserved. UNO reconstruction removed in favor of native copy/setter application. All required statics/restored audits/governance passed. Native letters/Roman/custom/bitmap/full UNO/XML/core/UI/list/table parity remains unverified and goal ACTIVE."
-commit: null
+commit:
+  hash: "50efcc8ae943ec62f0254a78f7464f61a1cfcfb6"
+  message: "🧩 X1M37F task: record verified native NONE numbering evidence"
 comments:
   -
     author: "CODER"
     body: "Start: apply native NONE numbering XML/UNO correction and remove redundant format reconstruction under standing approved scope."
+  -
+    author: "CODER"
+    body: "Verified: native NONE numbering now survives represented XML/UNO/core ODT reopening and native property application uses SwNumFormat copies and setters;12597app109inventory5scripts147Chromium pass with100%coverage in ONE upstream-absent profile;full UI/core/table convergence remains ACTIVE."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: six initial static gates with failed-only repair,changed-file validators,ONE full upstream-absent build/app/inventory/scripts/Chromium profile,five restored source audits,scope/metadata/prior-tests/map identity/AP/governance audits. Result:pass. Evidence:12597app109inventory5scripts147Chromium0flaky,100%L/S/F/B app/inventory; all source/map hashes tied to semantic dac0dd5edbf855e1298a53746660882b79682386;same-current-agent EVALUATOR exact SHA pass20261006-000500191-recovery-context. Scope: native NONE XML/UNO/core roundtrip and copy/setter ownership with mounted/browser list history,14semanticpaths. No passing/full replay or IO-policy change; full core/UI/list/table remains unverified ACTIVE."
+  -
+    type: "status"
+    at: "2026-10-06T00:05:41.150Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native NONE numbering now survives represented XML/UNO/core ODT reopening and native property application uses SwNumFormat copies and setters;12597app109inventory5scripts147Chromium pass with100%coverage in ONE upstream-absent profile;full UI/core/table convergence remains ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-06T00:05:22.045Z"
+doc_updated_at: "2026-10-06T00:05:41.151Z"
 doc_updated_by: "CODER"
 description: "One native list serialization and property-application correction under the approved UI/core convergence goal; preserve actual NumberingType NONE through XML/UNO/core and browser reopening, replacing redundant UNO format reconstruction with native copy/setter ownership."
 sections:
@@ -128,6 +141,10 @@ sections:
     14 semantic paths:8 existing production owners,2 metadata,1 exact xmlnumi expected-property migration,3 new test files.435 prior tests434 byte-identical; only expected NumberingType4/6 fields added in one old XML ownership test. All258 existing runtime records, states, defaults, classifications, IO exceptions and old evidence prefixes retained, no blanket module promotion.9 new app cases7native2mountedDOM and2 Chromium1280/390 verify converter NONE permission/defaults/unsupported scope, XML precedence/start/affixes/display, UNO copy/native setter/narrowing/client/font/glyph/visibility/atomicity, alias conflict, genuine export/reimport/Worker graph, empty marker list ownership/inactive level menu/native UndoRedo, ordinary browser Open/typing/Undo/removal/native Arabic neighbor.
     Six initial static gates passed after only failed typecheck fixture repair and failed dependency repair using source-native integer UNO boundary; changed-file Prettier/ESLint/JSDoc/app TypeScript/1000-line checks passed. ONE full upstream-absent profile:build pass12597app109inventory5scripts147Chromium pass,0failed0flaky. Actual app100%12912L14157S3432F10508B;inventory100%1464L1523S384F1080B. No closure/test replay/counter transfer/production change after initial profile; exact actual initial source/map hashes retained. Vendor restored in finally before source audits. Five restored source audits passed,semantic violations0; scope audit/artifact ignored-inclusive4452files0forbidden/doctor0errors2knownwarnings/routing/diffcheck passed. Raw maps/results/local initial source copies only ignored appcache; AP only bounded English prose/counts/hashes/outcomes, no upstream source/helpers/Python/probes/rawdiagnostics. No network/outside/global/subagents.
     Bounded construction source-marker assertion failed before metadata writes; corrected to exact observed native spelling. Initial typecheck failed3testing-library exact-option errors; fixed fixture only and reran failed gate. Dependencies initially failed4xmloff->editeng edges; removed incorrect enum imports, retained native numeric UNO properties and reran failed gate. Artifact-only persistence command initially returned E_GIT because approved semantic work was dirty after evidence creation; it staged only intended task evidence, route recomputed to direct execution, final code/evidence commit will include only approved semantic/task paths. No passing/static/full replay. Independent reviewer not claimed; current agent switches to EVALUATOR and evaluates exact semantic commit. Full native letters/Roman/custom/bitmap/UNO/XML/framework/layout/core/UI/list/table behavior remains unverified; registered IO deviations unchanged, parent DOING and goal ACTIVE.
+extensions:
+  implementation_commit:
+    hash: "dac0dd5edbf855e1298a53746660882b79682386"
+    message: "🧩 X1M37F code: preserve native NONE numbering and apply UNO properties to native format copies"
 id_source: "generated"
 ---
 ## Summary
