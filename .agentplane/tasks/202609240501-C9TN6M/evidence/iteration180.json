@@ -1,0 +1,27 @@
+{
+  "iteration": 180,
+  "parent": "202609240501-C9TN6M",
+  "leaf": "202610060832-HF3AX5",
+  "leafStatus": "DONE",
+  "implementation": "642c72010a7146b4dcd01d29b778533cd84b0caf",
+  "close": "f369d4ca1db97403cdb2f7b074ca6e10167d69b8",
+  "previousFindingsLength": 453057,
+  "previousFindingsSha256": "a1da7f57b78c91b1bdd447924142d27b1f71d3b74a57c2ac173e26755721da9d",
+  "updatedFindingsLength": 457241,
+  "updatedFindingsSha256": "9ac23d430c24642491199efaacacbc4863144fc178d8a9eb39ff19f2186f2935",
+  "cases": {
+    "application": 12816,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 189
+  },
+  "coverage": {
+    "applicationPercent": 100,
+    "inventoryPercent": 100
+  },
+  "moduleOwners": 269,
+  "testFiles": 473,
+  "remainingFailures": 0,
+  "goalStatus": "ACTIVE",
+  "fullParity": "UNVERIFIED"
+}
