@@ -1,0 +1,9 @@
+{
+  "scope": "Current leaf and generated exact-SHA quality only",
+  "filesAudited": 22,
+  "forbiddenArtifacts": [],
+  "implementationCommit": "951af363f422df0b485a0ab61491c317cf532652",
+  "qualityReportSHA256": "fb8cf02873f459d68bab7ad13c7af9ab59b476d4d8275b5152c2802f0023a6a2",
+  "vendorRestored": true,
+  "draftStashRetained": true
+}

@@ -1,0 +1,145 @@
+{
+  "implementationCommit": "951af363f422df0b485a0ab61491c317cf532652",
+  "reviewer": "Same current agent in EVALUATOR phase; not independent review",
+  "verdict": "pass",
+  "counts": {
+    "application": 13002,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 217
+  },
+  "initialAppFailures": 1,
+  "focusedAppPassed": 1,
+  "focusedAppSkipped": 11,
+  "newChromiumPassed": 1,
+  "coverage": {
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 14425,
+          "covered": 14425,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15820,
+          "covered": 15820,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3688,
+          "covered": 3688,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11785,
+          "covered": 11785,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "e7c5b90b6473b3ea4a06e1465d70b4bc51abe2a8c40c3cb21b99a1bc6991db8f",
+      "files": 272
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "707383edf7c60e3c312e0991b6131fa8109e70d5e4d253c5a40cf60dbb030fbc",
+      "files": 38
+    },
+    "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+    "transfers": [
+      {
+        "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+        "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+        "initialSourceSHA256": "2d14adc3393c27a7358a1e21f5f843d874a5df2b3ede2383f941ed8d26573b35",
+        "currentSourceSHA256": "478424767ab2d3bffef92ea504cd87bf1fa88aadd2cbc8dd6da1a737891ff500",
+        "regionCount": 2,
+        "transferredActualCounters": {
+          "statements": 171,
+          "functions": 40,
+          "branches": 67
+        }
+      }
+    ],
+    "wholeIdenticalFileCount": 271,
+    "gaps": []
+  },
+  "sourceProof": {
+    "appProofSHA256": "d409420b1522df4ce1b1b3ad4eb4562b3f11aa9c79990d0213cb47c3fe1c1756",
+    "inventoryProofSHA256": "e86ead1ae4552ad7178f6a2705284325618a7ef69e22579dee1928a30971dec2",
+    "appSourceFiles": 272,
+    "inventorySourceFiles": 38,
+    "totalSourceFiles": 310,
+    "proof": "Complete identical source/maps or contiguous unchanged regions with whole function declaration/body and complete enclosing branch/location maps; actual counters only, skips remain skipped."
+  },
+  "implementationSHA256": {
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "b6aee532b25555d1310a9be8bb8a2cf2bfa43e31f5049e1ba115480f67a611c2",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "478424767ab2d3bffef92ea504cd87bf1fa88aadd2cbc8dd6da1a737891ff500",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "26b8318cd209d1b9615352addbf39e7cb0b60b998288391dac4e2038c261b28f",
+    "docs/program/parity/runtime-inventory.json": "f3901eecec7f60c62c8c8395b55fc32f77680bf6049dccc556aa0ad7b73faaad",
+    "docs/program/source-provenance.json": "e943cf9e3823513b38dfc4017c1feebc4a8a0e0d0e230f2efab9bc7702362384",
+    "apps/office/e2e/writer-native-table-column-drag.spec.ts": "043d2b4a28ac75bf597631581e7bf73b6f8733c134cc3c00c316c05a0f41a4fc",
+    "apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx": "8881d291823b02bd06b22c309928d6a4da0e033395ead618ecb9ba47e8f408db",
+    "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts": "034bb757227d5308cf37e408939804ed4ab58073dd9139deae294d4445e98972"
+  },
+  "sourceSHA256": {
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/source/uibase/docvw/edtwin3.cxx": "c31fb7bdad5a1e9cd5f7e33a939796945222a8066d27f431d180426d0707fd6f",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/inc/fesh.hxx": "1eba45926daa128a0d127b509ea94584dd6e9dce7d156f9c2c54249344d710fc",
+    "sw/source/uibase/uiview/viewtab.cxx": "f93e2b889762ab0165db3d1485d3bbae6e9e97794c79870c2299756b4095e7a1",
+    "svx/source/dialog/svxruler.cxx": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+  },
+  "oldAcceptanceByteIdentical": 499,
+  "totalAcceptanceFiles": 502,
+  "semanticRecords": 275,
+  "parentPrefixLength": 486687,
+  "parentPrefixSHA256": "f43a559b2f5deeae908a43fe1dac08394c620b329caf5e25127f59be8961265d",
+  "artifactFilesAudited": 18,
+  "forbiddenArtifacts": [],
+  "initialFullProfileCount": 1,
+  "passingCaseReplay": false,
+  "vendorRestored": true,
+  "fullParity": "unverified",
+  "remainingScope": "Row-height mouse resizing next; complete SvxRuler modifier/snapping/SfxColumnItem/full layout unverified; THKZ38 draft preserved",
+  "failures": []
+}
