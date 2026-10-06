@@ -4,7 +4,7 @@
  */
 import { getWriterNumFormatBullet } from "../../core/doc/number";
 
-import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
+import { SwASCWriter } from "../../filter/ascii/wrtasc";
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
 import type { WriterTransferParagraph } from "../../filter/basflt/writer-transfer";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
@@ -198,9 +198,11 @@ export class SwTransferable {
           };
         },
       );
+    const asciiWriter = new SwASCWriter();
+    asciiWriter.m_bWriteClipboardDoc = true;
     return {
       html: serializeWriterClipboardHtml(paragraphs),
-      plainText: serializeWriterClipboardPlainText(paragraphs),
+      plainText: asciiWriter.Write(pam),
     };
   }
 }

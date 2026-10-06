@@ -106,7 +106,7 @@ describe("native paragraph text surface", /** Registers actual model, range and 
       cursor.Assign(new SwPosition(f.second, 5), new SwPosition(f.first, 0));
       const full = f.shell.CreateTransferable().CreateSelection();
       expect(f.first.GetListKind()).toBe(kind);
-      expect(full?.plainText).toBe("Alpha\nOmega");
+      expect(full?.plainText).toBe((kind === "bullet" ? "    •" : "    1.") + " Alpha\nOmega");
       expect(full?.html).toContain(kind === "bullet" ? "<ul" : "<ol");
       expect(full?.html).not.toMatch(/Paragraph style:|Paragraph list:/);
       cursor.Assign(new SwPosition(f.second, 4), new SwPosition(f.first, 1));

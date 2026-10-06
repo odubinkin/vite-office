@@ -1,51 +1,51 @@
-/**
- * @fileoverview Serializes prepared Writer selections to readable plain text, following LibreOffice Writer's `sw/source/filter/ascii/ascatr.cxx` ownership boundary.
- */
+/** @fileoverview Outputs native text-node ASCII numbering and selected text from sw/source/filter/ascii/ascatr.cxx. */
+import { GetBulletChar, SwNumRule } from "../../core/doc/number";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import type { SwASCWriter } from "./wrtasc";
 
-import type { WriterTransferParagraph } from "../basflt/writer-transfer";
-
-/**
- * Serializes a prepared Writer transfer document to plain text with LibreOffice-like list labels for multiple complete list items.
- *
- * @param paragraphs - Ordered selected Writer paragraphs prepared by the transfer handler.
- * @returns Newline-separated visible plain text without accessibility-only descriptions.
- */
-export function serializeWriterClipboardPlainText(
-  paragraphs: readonly WriterTransferParagraph[],
+/** Writes one native text-node range and its source numbering prefix. @param writer - Native ASCII owner. @param node - Source text node. @param start - Selected UTF16 start. @param end - Selected UTF16 end. @param lastNode - Whether the original native endpoint is this node. @param singleParagraph - Whether the original selection is confined to one node. @returns Native paragraph output. */
+export function OutASC_SwTextNode(
+  writer: SwASCWriter,
+  node: SwTextNode,
+  start: number,
+  end: number,
+  lastNode: boolean,
+  singleParagraph: boolean,
 ): string {
-  const completeListItemCount = paragraphs.filter(isCompleteListItem).length;
-  return paragraphs
-    .map(
-      /**
-       * Serializes one transfer paragraph, using a list marker only when the copy contains multiple complete list items.
-       *
-       * @param paragraph - Prepared visible Writer paragraph.
-       * @returns Readable plain text for the paragraph.
-       */
-      function serializeParagraph(paragraph): string {
-        if (completeListItemCount < 2 || !isCompleteListItem(paragraph)) return paragraph.text;
-        return `${"    ".repeat(paragraph.listLevel + 1)}${paragraph.marker ?? getFallbackListMarker(paragraph)} ${paragraph.text}`;
-      },
-    )
-    .join("\n");
+  let result = "";
+  const rule = node.GetNumRule();
+  if (rule !== undefined && start === 0 && writer.m_bExportParagraphNumbering && !singleParagraph) {
+    const outline = rule === node.GetDoc().FindNumRulePtr(SwNumRule.GetOutlineRuleName());
+    let indentation = "";
+    if (!outline) {
+      const skipHeadingIndentation =
+        node.GetLeftMarginWithNum() === 0 &&
+        node.GetAttrOutlineLevel() > 0 &&
+        node.GetLeftMarginForTabCalculation() === 0;
+      if (!skipHeadingIndentation)
+        for (let level = 0; level <= node.GetActualListLevel(); level++) indentation += "    ";
+    }
+    let number = node.GetNumString();
+    if (number.length === 0 && !outline) {
+      if (node.HasBullet() && !node.HasVisibleNumberingOrBullet()) number = " ";
+      else if (node.HasBullet())
+        number = String.fromCharCode(GetBulletChar(node.GetActualListLevel()));
+      else if (!node.HasVisibleNumberingOrBullet()) number = "  ";
+    }
+    if (indentation.length !== 0 || number.length !== 0) result += indentation + number + " ";
+  }
+  result += node.GetText().slice(start, end);
+  if (
+    !lastNode ||
+    (!writer.m_bWriteClipboardDoc &&
+      !writer.m_bASCII_NoLastLineEnd &&
+      start === 0 &&
+      end === node.Len())
+  )
+    result += writer.GetLineEnd();
+  return result;
 }
 
-/**
- * Checks whether a transfer paragraph represents a complete semantic list item.
- *
- * @param paragraph - Prepared Writer paragraph inspected without mutation.
- * @returns True for complete bullet and numbered list items.
- */
-function isCompleteListItem(paragraph: WriterTransferParagraph): boolean {
-  return paragraph.listKind !== "none";
-}
-
-/**
- * Supplies a stable readable marker when a DOM list marker is unavailable during a test or browser selection.
- *
- * @param paragraph - Selected list paragraph missing its rendered marker metadata.
- * @returns Bullet or first ordered-list marker appropriate to the bounded list kind.
- */
-function getFallbackListMarker(paragraph: WriterTransferParagraph): string {
-  return paragraph.listKind === "bullet" ? "•" : "1.";
-}
+// Iteration187 removes serializeWriterClipboardPlainText and its synthetic
+// complete-list count/fallback marker contract; historical provenance anchors
+// identify that removed responsibility, not a retained compatibility adapter.

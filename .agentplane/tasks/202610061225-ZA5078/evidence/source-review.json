@@ -1,0 +1,24 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/filter/ascii/ascatr.cxx": "0417b547fc622a363704bfe879084d0e5c1de91fa20c109532e379be37e4c9b9",
+    "sw/source/filter/ascii/wrtasc.cxx": "837ff84e70881837893d896f8376533aed9e81afa55b2e08e587f44807909efb",
+    "sw/source/filter/ascii/wrtasc.hxx": "6c5650a5e5000baca40386852f9028cefcb3c2003f0325fc15bad46daf22698f",
+    "sw/source/filter/writer/writer.cxx": "e0c57e38fb6e3c5062fbc064582bbe7cfc0bdf3ef505f4da49f8979ac7e34579",
+    "sw/source/uibase/dochdl/swdtflvr.cxx": "78895e81d445a0c60a1793e91a90598718072d4c41d43fc6c7287fdd464059ee",
+    "sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+    "sw/source/core/doc/number.cxx": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129",
+    "sw/source/core/doc/DocumentSettingManager.cxx": "a737a8cdb6e967bd81389cc45f5e563bb9624fbf74deb52ca78f9bfd68d2b1ba"
+  },
+  "reviewer": "Same current agent; local pinned source reads only; no upstream code execution",
+  "contracts": [
+    "ASCII labels require a rule,start0,export numbering=true and more than one original native node. Partial last paragraphs and one list plus ordinary paragraph are admitted; complete-list-item counts are absent.",
+    "Nonoutline indentation is four spaces per actual level unless native numbering margin delta and tab left are zero on an outline-level heading. Outline identity is the document reserved rule pointer.",
+    "Number strings come from the real number tree/rule and counted state. Empty bullet strings use the configured default character for the level, not custom display glyphs; uncounted/empty labels retain native blank behavior.",
+    "Writer defaults export numbering=true, clipboard=false,noLastLineEnd=false. Transfer sets clipboard=true. Existing UTF8 LF text range subset only.",
+    "GetNumString and HasVisibleNumberingOrBullet cover represented native defaults; NO_NUMBERING_SHOW_FOLLOWBY native false default is verified, optional compatibility configuration remains unsupported.",
+    "Margin delta and tab calculation read independent native masks and represented twip items, including legacy hanging/absolute spacing. Physical-line decomposition preserves existing list-item capture and visible label bodies.",
+    "Full attributes,fields,redlines,WriteAll/table clipboard topology,cursor rings,file export options,desktop environment/native compatibility and broad core/UI parity remain unverified. Prior statuses/defaults/classes and deliberate save/open/recovery deviations retained."
+  ]
+}

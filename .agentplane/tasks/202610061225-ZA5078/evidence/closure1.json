@@ -1,0 +1,27 @@
+{
+  "profile": "upstream-absent original failed inventory marker case only",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "inventory-closure1",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern parity mapping CLI composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/ZA5078.inventory-closure1-results.json",
+      "exit": 1,
+      "bytes": 810,
+      "sha256": "7a0e90ca06e8fbc14c8de92eb9fc8bb3041217e53d67004db5423fd3ea648deb",
+      "caseCounts": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 2,
+        "total": 3
+      },
+      "failedCases": [
+        {
+          "file": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+          "name": "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": "Error: Parity local implementation marker is absent: apps/office/src/sw/source/filter/ascii/ascatr.ts :: repeat(paragraph.listLevel + 1)"
+        }
+      ],
+      "mapSHA256": "9ae5dc9991fbcb849ccd88f5560d356f4b8747ef7fcd90837349c20acc12a638"
+    }
+  ]
+}

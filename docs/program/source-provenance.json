@@ -9454,6 +9454,10 @@
           {
             "path": "apps/office/src/sw/source/core/edit/native-numbering-indent.test.ts",
             "marker": "native label-indent shell policy"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+            "marker": "original native node span"
           }
         ],
         "upstream": [
@@ -9640,6 +9644,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/inc/swtypes.hxx",
             "marker": "MAXLEVEL = 10"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+            "marker": "GetBulletChar"
           }
         ]
       },
@@ -9647,7 +9655,8 @@
       "localSymbols": [
         "SwNumFormat",
         "SwNumRule",
-        "NumDownChangesIndent"
+        "NumDownChangesIndent",
+        "GetBulletChar"
       ],
       "omittedResponsibilities": [
         "Native layout expansion,redline/original/undo arrays,wider numbering families and full native nonshown tree lifetimes,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified.",
@@ -9666,7 +9675,8 @@
         "Iteration63 restores mandatory operation document context across existing numbering tree mutations and notifications, SwList insert/remove/validate and SwNumRule.Validate, with protected Notify traversal. Text insertion/removal and node moves pass their owned document explicitly; first-client/text-derived operation fallbacks are removed while real-record reading policy retains text-owner precedence. Five owned tests and16 exact type/visibility checks cover empty/clientless roots, distinct owner/operation reading flags, rule invalidate-before-validate forwarding, actual insertion/removal, retained topology/raw caches and protected root/phantom traversal. Three new runtime cases and baseline type assertions fail before correction and pass afterward; old test matcher arguments are unchanged. Fresh pinned manual declaration/body/call-site hashes only; no native execution, helper/source artifacts or upstream access by project tests. Native text notification ownership/temporary blockers, dtor/client lifetimes, redline/range roots, complete access/const/final architecture, layout and browser obligations remain separately unverified. No whole-module/status/default/goal, registered IO/recovery or gate promotion.",
         "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
         " Iteration167 corrects native NumDownChangesIndent maximum level guard: upstream MAXLEVEL10 is a count while local WRITER_MAX_LIST_LEVEL9 is the maximum zero-based index. Level8 NONE/equal-indent must retain literal Tab rather than demotion. New actual native regression and tenth-level outline boundary cases; no semantic/default/classification promotion or IO changes.",
-        "Iteration171 restores native ChangeIndent and first-level anchor shifts across all10effective formats, modern active LISTTAB versus legacy clipping, inactive geometry and owned font/client/marker state. Pinned level SetIndent retains its local copy without committing fields and only invalidates; no invented Set call. Actual number-tree IsFirst self/child policy includes phantom ancestry and earlier real descendants. SwEditShell SetIndent resolves the explicit target rule while testing the actual current cursor first/multiselection gate, then uses DontSetItem without changing paragraph items/list IDs/count/start/cursor. SwUndoInsNum owns independent old/new rule copies within its existing constructor family; represented rule-format UndoRedo reuses the existing document DontSetItem primitive. Full ChgNumRuleFormats/character-style/history and merged/redline framework remain unverified. Native document-label StartDocDrag/ruler/UI integration remains a separately identified next obligation; no implemented UI promotion, new manager/model/DTO/TextRuns or compatibility wrapper. All prior semantic states/defaults/classes/IO exceptions and evidence retained; conscious save/open/recovery deviations unchanged."
+        "Iteration171 restores native ChangeIndent and first-level anchor shifts across all10effective formats, modern active LISTTAB versus legacy clipping, inactive geometry and owned font/client/marker state. Pinned level SetIndent retains its local copy without committing fields and only invalidates; no invented Set call. Actual number-tree IsFirst self/child policy includes phantom ancestry and earlier real descendants. SwEditShell SetIndent resolves the explicit target rule while testing the actual current cursor first/multiselection gate, then uses DontSetItem without changing paragraph items/list IDs/count/start/cursor. SwUndoInsNum owns independent old/new rule copies within its existing constructor family; represented rule-format UndoRedo reuses the existing document DontSetItem primitive. Full ChgNumRuleFormats/character-style/history and merged/redline framework remain unverified. Native document-label StartDocDrag/ruler/UI integration remains a separately identified next obligation; no implemented UI promotion, new manager/model/DTO/TextRuns or compatibility wrapper. All prior semantic states/defaults/classes/IO exceptions and evidence retained; conscious save/open/recovery deviations unchanged.",
+        "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
@@ -9678,7 +9688,8 @@
         "SwNumFormat::IsItemize",
         "void SwNumRule::Set( sal_uInt16 i, const SwNumFormat*",
         "SwNumFormat& SwNumFormat::operator=",
-        "NumDownChangesIndent"
+        "NumDownChangesIndent",
+        "GetBulletChar"
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -11870,6 +11881,10 @@
           {
             "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
             "marker": "Writer counted axes stay independent through paragraph history"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+            "marker": "original native node span"
           }
         ],
         "upstream": [
@@ -11908,6 +11923,10 @@
           {
             "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
             "marker": "SvxTextLeftMarginItem::ResolveLeft"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetLeftMarginForTabCalculation"
           }
         ]
       },
@@ -11917,7 +11936,13 @@
         "resolveSwListParagraphIndents",
         "SwListParagraphIndents",
         "resolveSwListTextLeftMargin",
-        "resolveSwListFirstLineIndent"
+        "resolveSwListFirstLineIndent",
+        "resolveSwLeftMarginWithNum",
+        "resolveSwLeftMarginForTabCalculation",
+        "GetSwTextNodeNumString",
+        "HasSwTextNodeVisibleNumbering",
+        "CaptureSwTextNodeListItems",
+        "GetSwTextNodeListLabel"
       ],
       "omittedResponsibilities": [
         "Complete imported custom-style/sideband/legacy/tab/device/RTL/table/redline/frame layout and native const/out-parameter lifetime remain separately unverified."
@@ -11925,7 +11950,9 @@
       "preservedResponsibilities": [
         "Iteration101 restores native sw::ListLevelIndents0/1/2 flags and live text-node applicability per axis: actual GetNum-bound rule presence, direct margin-before-direct-rule priority, and nearest style indent-before-rule traversal with native true fallthrough. A source-owned ndtxt split keeps the node under the unchanged1000-line limit. The selected alignment-value reader independently resolves supported text-left and counted signed16 first-line inputs with the existing ignore-first-line flag. Independent literal ownership/zero/signed boundaries, style/direct override, graph/clone destination and actual Writer history/no-op/direct absence are covered. Existing print bounds, frozen projection, rendering, filters and serialized listGeometryWins sideband remain byte-identical; native consumer migration requires imported custom-style hierarchy restoration after the initial failed absent application gate exposed flattened-style and exact DTO contracts. All304prior tests unchanged. Native complete import/style/tab/device/RTL/table/redline/list/frame layout and parent parity remain unverified. No module/status/default/exception or registered I/O/recovery promotion.",
         "Iteration143 retains native text-left for uncounted bound list nodes independently of marker visibility. Core resolver reuses independent alignment-axis ownership;legacy relative spacing adds paragraph text-left and absolute spacing subtracts ResolveLeft including hanging first-line contribution. Native uncounted first-line offset is zero. Immutable projection feeds shared body/cell rendering without marker/tab spacer or listGeometryWins heuristics;print bounds consume the same native primitive. Actual count UndoRedo,body/cell geometry,zero/negative/direct/style and legacy/follow cases provide bounded evidence. Counted marker/tab layout,RTL/font-relative/large-indent cell clamping,fullnativeframes/navigation/history/UI and broad parity remainunverified;all244existingstates/defaults/deviations unchanged.",
-        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged."
+        "Iteration144 projects native independent list text-left and first-line axes into shared body/cell presentation and print bounds. Counted alignment uses existing live mask;legacy firstline includes authored offset unless numbering compatibility ignores it,with native signed-short wrap;uncounted offset0 and ordinary paragraph fallback retain prior ownership. Renderer removes paragraphIndentWins and no longer gives legacy listGeometryWins metadata behavioral authority. Existing immutable listLayout receives resolved native axes;persisted/imported flag remains metadata only. Actual body/cell literal and Chromium paragraph/history marker measurements cover represented axes. Full label/tab/space/nothing follower widths,legacy minimum gap,wrapping,RTL/fontrelative/cellclamping and fullframes/UI remainunverified;all244existingstates/defaults/deviations unchanged.",
+        "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved.",
+        "Physical-line decomposition also moves existing CaptureListItems and GetListLabel bodies without behavioral changes; new numbering text/visibility bodies use the same actual SwTextNode owner via type-only imports."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
@@ -11933,7 +11960,8 @@
         "SwTextNode::AreListLevelIndentsApplicable",
         "SwTextNode::AreListLevelIndentsApplicableImpl",
         "SwTextNode::GetLeftMarginWithNum",
-        "SwTextNode::GetFirstLineOfsWithNum"
+        "SwTextNode::GetFirstLineOfsWithNum",
+        "SwTextNode::GetLeftMarginForTabCalculation"
       ]
     },
     {
@@ -12215,6 +12243,10 @@
           {
             "path": "apps/office/src/sw/source/core/txtnode/native-split-list-defaults.test.ts",
             "marker": "native shell Enter continues a restarted list through repeated Undo and Redo"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+            "marker": "original native node span"
           }
         ],
         "upstream": [
@@ -12401,6 +12433,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
             "marker": "SwTextNode* SwTextNode::MakeNewTextNode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetNumString"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::HasVisibleNumberingOrBullet"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetLeftMarginWithNum"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::GetLeftMarginForTabCalculation"
           }
         ]
       },
@@ -12441,7 +12489,8 @@
         "Iteration136 restores registered direct character FormatToTextAttr: five source/main SET pairs,duplicate clearing,AUTO span/gap conversion with old ranged items winning,MakeTextAttr insertion and adjacent equal pooled AUTO merging/FormatIgnore normalization. INET and zero portions retain owners;inherited collections and paragraph items are not converted. JoinTextNodes now applies nonempty-leading conversion or empty-leading character-only clear/copy. SwHistorySetFormat clones explicit items and releases destructive rollback;SwHistoryChangeFormatColl checks live text collection pointer/type. Join history records both boundaries' hints/direct items/collections;undo reconstructs fresh native hints,redo resets temporary end. This supersedes earlier absent format/coll conversion claims only for registered text/AUTO/INET paths. Undo clears only mutated character items before direct-item history rather than resetting unrelated paragraph items. Live assigned heading collection restoration uses native default SetListLevel=true and can add direct level0 even for the same collection. Two exact first-profile source-contradicted old expectations are corrected: fresh INET history owner and heading direct level0;all other old test cases are untouched. Full unpooled equal-value AUTO/CHARFMT/RSID/overlapping-family/notification/lifetime/layout history,table format variants,retained structural identity/AppendTextNode cloning,and cross-node selected deletion survivor/force/adapter remain unverified and require dependent work. Existing semantic states/defaults/exceptions and registered I/O/recovery deviations unchanged;whole-module and overall parity unverified,no promotion.",
         "Iteration149 source-confirmed continued-input failure exposed raw empty-source hint concatenation after multi-paragraph deletion. Native CutImpl zero length calls CopyAttr, which inserts copied items at one boundary. Bounded AUTO equal-boundary automatic item merge and INET equal-empty overwrite now run through native InsertItem(IS_COPY); NOHINTADJUST priority and explicit nonempty-copy guard remain. Existing ndtxt-hints owns the split within1000-line node limit. Nonempty full CutImpl/BuildPortions and general nesting/layout/history lifetimes remain unverified.",
         "Iteration153 restores represented native MoveTextAttr_To_AttrSet traversal for both split paragraphs: start-map stop at nonzero/partial/char-format ranges, DontMove continuation, AUTO style-handle or represented item SetAttr and removal only after changed direct items. Empty-end equal-boundary preparation now retains native hints and delegates to this shared operation instead of an AUTO-only direct mutation. Existing range validation is delegated unchanged under1000-line gate. Native read undo now retains removed nonempty boundary as actual disconnected SwTextNode with registered direct character items, original collection and consumed cut hints; Redo uses existing native FormatToTextAttr self and consumes actual cut hints, preserving character values without TextRuns/DTO projection. This resolves premature bare-fragment character-item loss caused by first-prefix conversion. Portable Map storage and original node-array ownership remain, no complete CutImpl/MoveRange or paragraph/list item move claim. All250 module states/defaults/classifications/exceptions and prior evidence preserved. Full zero-prefix CopyAttr/native cut identity/index/frame/style clients/list split resets/physical undo sections and broad UI/core parity remain unverified; conscious IO/recovery deviations preserved.",
-        "Iteration154 represents native logical split paragraph list/style defaults: interior/start split retains collection; follow collection applies only at original end; CopyDirectListLevel preserves explicit outline level only for self-follow assigned collection. Leading native items retain restart/counting, continuation resets restart/restart-value/counting and conditionally identity/level when no rule or outline departure. Actual hard outline numbering clears only on follow collection change. Existing core numbering owners serve UI Enter without TextRuns/DTO callbacks. All prior semantic states/defaults/classifications/exceptions and evidence preserved. Portable original-prefix/new-suffix physical identity, native page/break/keep/split/auto-frame resets, complete CutImpl and native undo-area/frame/client lifetimes, heading split Undo attribute restoration and broad UI/table behavior remain unverified; conscious IO/recovery deviations preserved."
+        "Iteration154 represents native logical split paragraph list/style defaults: interior/start split retains collection; follow collection applies only at original end; CopyDirectListLevel preserves explicit outline level only for self-follow assigned collection. Leading native items retain restart/counting, continuation resets restart/restart-value/counting and conditionally identity/level when no rule or outline departure. Actual hard outline numbering clears only on follow collection change. Existing core numbering owners serve UI Enter without TextRuns/DTO callbacks. All prior semantic states/defaults/classifications/exceptions and evidence preserved. Portable original-prefix/new-suffix physical identity, native page/break/keep/split/auto-frame resets, complete CutImpl and native undo-area/frame/client lifetimes, heading split Undo attribute restoration and broad UI/table behavior remain unverified; conscious IO/recovery deviations preserved.",
+        "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
@@ -12455,7 +12504,11 @@
         "SwTextNode::GetAttrListRestartValue()",
         "SwTextNode::MoveTextAttr_To_AttrSet",
         "SwTextNode::MakeNewTextNode",
-        "CopyDirectListLevel"
+        "CopyDirectListLevel",
+        "SwTextNode::GetNumString",
+        "SwTextNode::HasVisibleNumberingOrBullet",
+        "SwTextNode::GetLeftMarginWithNum",
+        "SwTextNode::GetLeftMarginForTabCalculation"
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -14085,24 +14138,33 @@
           {
             "marker": "serializeWriterClipboardPlainText",
             "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+            "marker": "original native node span"
           }
         ],
         "upstream": [
           {
             "marker": "SwASC_AttrIter::SwASC_AttrIter",
             "path": "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx",
+            "marker": "OutASC_SwTextNode"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
       "localSymbols": [
-        "serializeWriterClipboardPlainText"
+        "OutASC_SwTextNode"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwASC_AttrIter::SwASC_AttrIter, SwASC_AttrIter::SearchNext, SwASC_AttrIter::OutAttr, std::make_pair and the bounded serializeWriterClipboardPlainText contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Serializes prepared Writer selections to readable plain text, following LibreOffice Writer's `sw/source/filter/ascii/ascatr.cxx` ownership boundary."
+        "Serializes prepared Writer selections to readable plain text, following LibreOffice Writer's `sw/source/filter/ascii/ascatr.cxx` ownership boundary.",
+        "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/filter/ascii/ascatr.cxx",
@@ -14110,7 +14172,8 @@
         "SwASC_AttrIter::SwASC_AttrIter",
         "SwASC_AttrIter::SearchNext",
         "SwASC_AttrIter::OutAttr",
-        "std::make_pair"
+        "std::make_pair",
+        "OutASC_SwTextNode"
       ]
     },
     {
@@ -14174,6 +14237,47 @@
           }
         ]
       }
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "path": "apps/office/src/sw/source/filter/ascii/wrtasc.ts",
+            "marker": "SwASCWriter"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+            "marker": "native clipboard breaks"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/ascii/wrtasc.cxx",
+            "marker": "SwASCWriter::WriteStream"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/filter/writer/writer.cxx",
+            "marker": "m_bExportParagraphNumbering"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/ascii/wrtasc.ts",
+      "localSymbols": [
+        "SwASCWriter"
+      ],
+      "omittedResponsibilities": [
+        "Complete native ASCII options, fields, attribute iteration, redlines, tables, clipboard rings, all file export modes and browser platform configuration remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/ascii/wrtasc.cxx",
+      "upstreamSymbols": [
+        "SwASCWriter",
+        "SwASCWriter::WriteStream"
+      ]
     },
     {
       "classification": "upstream-mechanism",
@@ -15439,6 +15543,10 @@
           {
             "path": "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts",
             "marker": "Writer native text surface cell="
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+            "marker": "original native node span"
           }
         ],
         "upstream": [
@@ -15449,6 +15557,10 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx",
             "marker": "SwTransferable::PrepareForCopyTextRange"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx",
+            "marker": "SwTransferable::WriteObject"
           }
         ]
       },
@@ -15469,7 +15581,8 @@
       "preservedResponsibilities": [
         "Prepares HTML/STRING transfer content exclusively from SwDoc and SwPaM model state, copies before deleting on cut, and prefers rich HTML to plain text in the browser port, mirroring LibreOffice Writer's sw/source/uibase/dochdl/swdtflvr.cxx ownership boundary.",
         "Iteration184 removes SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations callback layers. Split shell algorithms accept the actual SwWrtShell identity via erased type-only imports and invoke native cursor/document/history/notification methods directly. Transfer insertion and imported list history call the same actual shell directly; no synthetic editing object, callback port, runtime cycle or new DTO projection. The shell alone supplies its native undo context for sequential initial operations. Existing482 test files and represented algorithm ordering/admission/grouping/attributes/table sections/composition and registered I/O deviations are preserved. No native clipboard/layout/mode/default or semantic-status promotion.",
-        "Iteration186 removes existing body-only document.paragraphs transfer ordering/slicing and its local orderPositions helper after real cell-copy acceptance proved the adapter rejects actual cell PaMs. SwPaM.Start/End and SwNodes connected text spans now own native ordering and offsets, preserving empty selected paragraphs and foreign-document/collapsed rejection. Existing HTML/ASCII writers retain MIME ownership. Actual forward/reverse partial and full cell selection, mixed body/cell graph excluding structural nodes, empty paragraph, foreign/collapsed and selected replacement/history cases provide bounded evidence. Upstream PrepareForCopyTextRange owns source PaM document and delegates CopyRange. This is bounded text transfer, not complete native copied table topology, cursor rings/box MIME, fields/redlines/embedded content or rich clipboard parity; prior semantic statuses/defaults/classes/evidence and conscious I/O/recovery deviations remain unchanged."
+        "Iteration186 removes existing body-only document.paragraphs transfer ordering/slicing and its local orderPositions helper after real cell-copy acceptance proved the adapter rejects actual cell PaMs. SwPaM.Start/End and SwNodes connected text spans now own native ordering and offsets, preserving empty selected paragraphs and foreign-document/collapsed rejection. Existing HTML/ASCII writers retain MIME ownership. Actual forward/reverse partial and full cell selection, mixed body/cell graph excluding structural nodes, empty paragraph, foreign/collapsed and selected replacement/history cases provide bounded evidence. Upstream PrepareForCopyTextRange owns source PaM document and delegates CopyRange. This is bounded text transfer, not complete native copied table topology, cursor rings/box MIME, fields/redlines/embedded content or rich clipboard parity; prior semantic statuses/defaults/classes/evidence and conscious I/O/recovery deviations remain unchanged.",
+        "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",
@@ -15477,7 +15590,8 @@
         "o3tl::convert",
         "UITestLogger::getInstance",
         "SwTransferable::SwTransferable",
-        "URIHelper::removePassword"
+        "URIHelper::removePassword",
+        "SwTransferable::WriteObject"
       ]
     },
     {

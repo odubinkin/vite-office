@@ -1,0 +1,7 @@
+{
+  "initial": "Five static gates PASS; file size FAIL1030. Scoped validator had no JSDoc errors but physical-line failure1030.",
+  "firstDecomposition": "Physical size FAIL1008; scoped ESLint and app TypeScript reported unused WRITER_LIST_WHICH_RANGES import.",
+  "resolution": "Removed unused import; exact existing CaptureListItems/GetListLabel bodies and new numbering bodies extracted within declared native helper. Final node993 physical lines. Scoped11file JSDoc/prettier/eslint PASS; npm exec tsc --project apps/office/tsconfig.json --noEmit PASS; npm run check:file-size PASS. Initial error records retained; passing full gates not replayed.",
+  "sourceAfterProfile": "Six initial production files byte-identical to final; app actual100 initial map kept byte-identical.",
+  "inventoryClosure": "Original failed inventory case only: full test marker absent exports labels only; closure1 removed repeat(paragraph.listLevel + 1) implementation marker absent; bounded source-map migration approved within standing task authorization,14paths; closure2 metadata lexical ordering failure; corrected ordering; closure3PASS. Threefocused runs each retain2filter skips; no passing/full replay."
+}

@@ -3,11 +3,61 @@ import {
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_NUMRULE,
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_RESTARTVALUE,
+  RES_PARATR_LIST_ISCOUNTED,
 } from "../../../inc/hintids";
-import type { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
+import type {
+  SvxFirstLineIndentItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/source/items/frmitems";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { WRITER_LIST_WHICH_RANGES } from "../doc/list";
+import { getWriterNumFormatBullet, SvxNumType } from "../doc/number";
 import { SwTextFormatColl } from "../doc/fmtcol";
 import { ListLevelIndents } from "../para/paratr";
 import type { SwTextNode } from "./ndtxt";
+
+/** Resolves the native numbering margin delta using supported twip items. @param node - Native text node. @param textLeft - Whether to compare text-left instead of outer-left margins. @returns Native delta, zero without a number record. */
+export function resolveSwLeftMarginWithNum(node: SwTextNode, textLeft = false): number {
+  const rule = node.GetNum()?.GetNumRule();
+  if (rule === undefined) return 0;
+  const format = rule.Get(Math.max(0, Math.min(9, node.GetActualListLevel()))),
+    left = (node.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
+    first = (
+      node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+    ).ResolveTextFirstLineOffset(),
+    outerLeft = left + Math.min(0, first);
+  if (format.GetPositionAndSpaceMode() === "label-width-and-position") {
+    let result = format.GetAbsLSpace();
+    if (!textLeft)
+      result =
+        format.GetFirstLineOffset() < 0 && result > -format.GetFirstLineOffset()
+          ? result + format.GetFirstLineOffset()
+          : 0;
+    return rule.IsAbsSpaces() ? result - outerLeft : result;
+  }
+  const mask = node.AreListLevelIndentsApplicable(),
+    resolvedLeft = mask & ListLevelIndents.LeftMargin ? format.GetIndentAt() : left,
+    resolvedFirst = mask & ListLevelIndents.FirstLine ? format.GetFirstLineIndent() : first;
+  return textLeft ? resolvedLeft - left : resolvedLeft + Math.min(0, resolvedFirst) - outerLeft;
+}
+
+/** Resolves native tab calculations independently of visible numbering. @param node - Native text node. @returns Left margin for tab calculations. */
+export function resolveSwLeftMarginForTabCalculation(node: SwTextNode): number {
+  const rule = node.GetNum()?.GetNumRule();
+  if (rule !== undefined) {
+    const format = rule.Get(Math.max(0, Math.min(9, node.GetActualListLevel())));
+    if (
+      format.GetPositionAndSpaceMode() === "label-alignment" &&
+      node.AreListLevelIndentsApplicable() & ListLevelIndents.LeftMargin
+    )
+      return format.GetIndentAt();
+  }
+  return (node.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
+}
 
 /** Determines independent native list-indent applicability from current ownership. @param node - Canonical text node. @returns Native bitmask. */
 export function resolveSwListLevelIndents(node: SwTextNode): ListLevelIndents {
@@ -100,4 +150,55 @@ export function resolveSwListFirstLineIndent(node: SwTextNode): number {
       ? 0
       : firstLine.ResolveTextFirstLineOffset());
   return (value << 16) >> 16;
+}
+
+/** Native text-node GetNumString body extracted under the physical-line budget. @param node - Actual native owner. @returns Native result. */
+export function GetSwTextNodeNumString(node: SwTextNode): string {
+  const rule = node.GetNum()?.GetNumRule();
+  if (rule === undefined || !node.IsCountedInList()) return "";
+  const level = Math.max(0, Math.min(9, node.GetActualListLevel())),
+    format = rule.Get(level);
+  return format.IsTextFormat() || format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE
+    ? rule.MakeNumString(node.GetNumberVector(), level)
+    : "";
+}
+
+/** Native text-node HasVisibleNumberingOrBullet body extracted under the physical-line budget. @param node - Actual native owner. @returns Native result. */
+export function HasSwTextNodeVisibleNumbering(node: SwTextNode): boolean {
+  const rule = node.GetNum()?.GetNumRule();
+  if (rule === undefined || !node.IsCountedInList()) return false;
+  const level = Math.max(0, Math.min(9, node.GetActualListLevel()));
+  return (
+    rule.Get(level).GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE ||
+    rule.MakeNumString(node.GetNumberVector(), level).length !== 0
+  );
+}
+
+/** Native text-node CaptureListItems body extracted under the physical-line budget. @param node - Actual native owner. @returns Native result. */
+export function CaptureSwTextNodeListItems(node: SwTextNode): SfxItemSet {
+  const captured = new SfxItemSet(node.GetDoc().GetAttrPool(), WRITER_LIST_WHICH_RANGES);
+  const attributes = node.GetpSwAttrSet();
+  for (const which of [
+    RES_PARATR_NUMRULE,
+    RES_PARATR_LIST_ID,
+    RES_PARATR_LIST_LEVEL,
+    RES_PARATR_LIST_ISRESTART,
+    RES_PARATR_LIST_RESTARTVALUE,
+    RES_PARATR_LIST_ISCOUNTED,
+  ]) {
+    const item = attributes?.GetItemIfSet(which, false);
+    if (item !== undefined) captured.Put(item);
+  }
+  return captured;
+}
+
+/** Preserves the existing visible list-label body under the node physical-line budget. @param node - Actual native owner. @returns Existing label or undefined. */
+export function GetSwTextNodeListLabel(node: SwTextNode): string | undefined {
+  const rule = node.GetNum()?.GetNumRule();
+  if (rule === undefined || !node.IsCountedInList()) return undefined;
+  const level = node.GetActualListLevel();
+  const format = rule.Get(level);
+  if (format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL)
+    return getWriterNumFormatBullet(format);
+  return rule.MakeNumString(node.GetNumberVector(), level);
 }

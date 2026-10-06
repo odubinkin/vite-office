@@ -1,0 +1,38 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on eight changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/filter/ascii/ascatr.ts": 52,
+        "apps/office/src/sw/source/filter/ascii/wrtasc.ts": 42,
+        "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": 342,
+        "apps/office/src/sw/source/core/txtnode/ndtxt.ts": 993,
+        "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts": 205,
+        "apps/office/src/sw/source/core/doc/number.ts": 690,
+        "apps/office/src/sw/source/filter/ascii/ascatr.test.ts": 47,
+        "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx": 252,
+        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts": 256,
+        "apps/office/src/sw/browser/editor/native-clipboard-lists.test.tsx": 156,
+        "apps/office/e2e/writer-native-clipboard-lists.spec.ts": 109
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/filter/ascii/ascatr.ts apps/office/src/sw/source/filter/ascii/wrtasc.ts apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts apps/office/src/sw/source/core/txtnode/ndtxt.ts apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts apps/office/src/sw/source/core/doc/number.ts apps/office/src/sw/source/filter/ascii/ascatr.test.ts apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts apps/office/src/sw/browser/editor/native-clipboard-lists.test.tsx apps/office/e2e/writer-native-clipboard-lists.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/filter/ascii/ascatr.ts apps/office/src/sw/source/filter/ascii/wrtasc.ts apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts apps/office/src/sw/source/core/txtnode/ndtxt.ts apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts apps/office/src/sw/source/core/doc/number.ts apps/office/src/sw/source/filter/ascii/ascatr.test.ts apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts apps/office/src/sw/browser/editor/native-clipboard-lists.test.tsx apps/office/e2e/writer-native-clipboard-lists.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

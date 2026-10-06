@@ -118,6 +118,12 @@ export function getWriterNumFormatBullet(format: ConstSwNumFormat | undefined): 
   return glyph === 0 ? "" : String.fromCodePoint(glyph);
 }
 
+/** Returns the native default bullet configuration glyph at an unsigned-byte level. @param level - Native list level. @returns Configured default UTF16 glyph. */
+export function GetBulletChar(level: number): number {
+  const chars = [0x2022, 0x25e6, 0x25aa, 0x2022, 0x25e6, 0x25aa, 0x2022, 0x25e6, 0x25aa, 0x2022];
+  return chars[Math.min(9, level & 0xff)] as number;
+}
+
 /** Const format reference: callers clone before changing an owned or shared level. */
 export type ConstSwNumFormat = Omit<SwNumFormat, `Set${string}` | "Assign">;
 

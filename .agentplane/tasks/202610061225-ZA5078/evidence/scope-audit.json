@@ -1,0 +1,37 @@
+{
+  "base": "7a55a68cf25bb56f3611b36318094281208c9b64",
+  "semanticPaths": [
+    "apps/office/src/sw/source/filter/ascii/ascatr.ts",
+    "apps/office/src/sw/source/filter/ascii/wrtasc.ts",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+    "apps/office/src/sw/source/core/txtnode/ndtxt-list-indent.ts",
+    "apps/office/src/sw/source/core/doc/number.ts",
+    "apps/office/src/sw/source/filter/ascii/ascatr.test.ts",
+    "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+    "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+    "apps/office/src/sw/browser/editor/native-clipboard-lists.test.tsx",
+    "apps/office/e2e/writer-native-clipboard-lists.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/parity/writer-command-slice.json"
+  ],
+  "oldTestFiles": 487,
+  "byteIdenticalOldTestFiles": 485,
+  "changedOldTests": [
+    "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+    "apps/office/src/sw/source/filter/ascii/ascatr.test.ts"
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+    "apps/office/src/sw/browser/editor/native-clipboard-lists.test.tsx",
+    "apps/office/e2e/writer-native-clipboard-lists.spec.ts"
+  ],
+  "totalAcceptanceFiles": 490,
+  "priorSemanticModules": 270,
+  "currentSemanticModules": 271,
+  "newNativeOwner": "Explicitly unverified SwASCWriter",
+  "priorStatesDefaultsClassificationsAndJustificationPreserved": true,
+  "evidenceChange": "Entire old evidence/responsibility/justification prefixes retained; only source-backed symbol additions/removed ASCII anchor replacement, new unverified owner and three corresponding Writer mapping markers changed.",
+  "failures": []
+}

@@ -1,0 +1,27 @@
+{
+  "profile": "upstream-absent original failed inventory marker case only",
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "inventory-closure2",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts --testNamePattern parity mapping CLI composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/ZA5078.inventory-closure2-results.json",
+      "exit": 1,
+      "bytes": 810,
+      "sha256": "2721f1166ca6f37e26bba51194227073160b31429f7ef39f1f1c82c3a959368c",
+      "caseCounts": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 2,
+        "total": 3
+      },
+      "failedCases": [
+        {
+          "file": "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+          "name": "parity mapping CLI composes the Writer mapping report with owned upstream marker evidence",
+          "assertion": "Error: Runtime module paths must be unique and lexicographically ordered."
+        }
+      ],
+      "mapSHA256": "22494e05b936d4f1bfabe34223cb8ad384e3c01bb889205660643f8fc1d2815b"
+    }
+  ]
+}

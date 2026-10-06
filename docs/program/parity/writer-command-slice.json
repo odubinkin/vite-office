@@ -1289,7 +1289,7 @@
           },
           {
             "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
-            "marker": "serializeWriterClipboardPlainText"
+            "marker": "OutASC_SwTextNode"
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
@@ -1307,7 +1307,7 @@
           },
           {
             "path": "apps/office/src/sw/source/filter/ascii/ascatr.test.ts",
-            "marker": "exports labels only"
+            "marker": "exports actual numbering"
           },
           {
             "path": "apps/office/e2e/writer-clipboard.spec.ts",
@@ -1809,7 +1809,7 @@
           },
           {
             "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
-            "marker": "repeat(paragraph.listLevel + 1)"
+            "marker": "GetActualListLevel()"
           }
         ],
         "tests": [

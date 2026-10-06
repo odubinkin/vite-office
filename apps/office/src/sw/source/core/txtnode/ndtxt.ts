@@ -1,12 +1,7 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
-import {
-  getWriterNumFormatKind,
-  SvxNumType,
-  getWriterNumFormatBullet,
-  SwNumRule,
-} from "../doc/number";
+import { getWriterNumFormatKind, SwNumRule } from "../doc/number";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
   SvxFirstLineIndentItem,
@@ -32,12 +27,7 @@ import {
   RES_PARATR_NUMRULE,
   RES_PARATR_OUTLINELEVEL,
 } from "../../../inc/hintids";
-import {
-  SwList,
-  WRITER_LIST_WHICH_RANGES,
-  WRITER_MAX_LIST_LEVEL,
-  type WriterParagraphListKind,
-} from "../doc/list";
+import { SwList, WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../doc/list";
 import { SwTextFormatColl, type SwFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
 import {
   HandleSetAttrAtTextNode,
@@ -59,7 +49,15 @@ import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
 import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query";
 
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
-import { resolveSwListLevelIndents } from "./ndtxt-list-indent";
+import {
+  resolveSwListLevelIndents,
+  GetSwTextNodeListLabel,
+  GetSwTextNodeNumString,
+  HasSwTextNodeVisibleNumbering,
+  CaptureSwTextNodeListItems,
+  resolveSwLeftMarginWithNum,
+  resolveSwLeftMarginForTabCalculation,
+} from "./ndtxt-list-indent";
 import { SwpHints } from "./ndhints";
 import {
   ReplaceTextNodeHints,
@@ -509,6 +507,22 @@ export class SwTextNode extends SwContentNode {
   public HasBullet(): boolean {
     return this.GetActualNumFormat()?.IsItemize() ?? false;
   }
+  /** Returns native default formatted numbering, excluding bullet formats and uncounted nodes. @returns Number string or empty. */
+  public GetNumString(): string {
+    return GetSwTextNodeNumString(this);
+  }
+  /** Reports visible native numbering with the pinned default follow-by compatibility behavior. @returns Native label visibility. */
+  public HasVisibleNumberingOrBullet(): boolean {
+    return HasSwTextNodeVisibleNumbering(this);
+  }
+  /** Reads the native numbering margin delta. @param textLeft - Whether to use text-left rather than outer-left. @returns Margin delta in twips. */
+  public GetLeftMarginWithNum(textLeft = false): number {
+    return resolveSwLeftMarginWithNum(this, textLeft);
+  }
+  /** Reads the native tab-calculation margin. @returns Left margin in twips. */
+  public GetLeftMarginForTabCalculation(): number {
+    return resolveSwLeftMarginForTabCalculation(this);
+  }
   /** Reads the actual level's effective const format through the bound optional rule. @returns Format or undefined. */
   private GetActualNumFormat(): ReturnType<SwNumRule["Get"]> | undefined {
     const level = Math.max(0, Math.min(WRITER_MAX_LIST_LEVEL, this.GetActualListLevel()));
@@ -589,20 +603,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Captures direct numbering/list items for exact undo/redo. @returns Independent item set. */
   public CaptureListItems(): SfxItemSet {
-    const captured = new SfxItemSet(this.GetDoc().GetAttrPool(), WRITER_LIST_WHICH_RANGES);
-    const attributes = this.GetpSwAttrSet();
-    for (const which of [
-      RES_PARATR_NUMRULE,
-      RES_PARATR_LIST_ID,
-      RES_PARATR_LIST_LEVEL,
-      RES_PARATR_LIST_ISRESTART,
-      RES_PARATR_LIST_RESTARTVALUE,
-      RES_PARATR_LIST_ISCOUNTED,
-    ]) {
-      const item = attributes?.GetItemIfSet(which, false);
-      if (item !== undefined) captured.Put(item);
-    }
-    return captured;
+    return CaptureSwTextNodeListItems(this);
   }
 
   /** Returns the document-owned list counter after validation. @returns One-based value for numbered list items. */
@@ -612,13 +613,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Returns the model-owned visible list label after validating the number tree. @returns Bullet or formatted numeric label. */
   public GetListLabel(): string | undefined {
-    const rule = this.mpNodeNum?.GetNumRule();
-    if (rule === undefined || !this.IsCountedInList()) return undefined;
-    const level = this.GetActualListLevel();
-    const format = rule.Get(level);
-    if (format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL)
-      return getWriterNumFormatBullet(format);
-    return rule.MakeNumString(this.GetNumberVector(), level);
+    return GetSwTextNodeListLabel(this);
   }
 
   /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param mode - Native insertion flags. @param attributes - Optional explicit character items. @param hyperlink - Optional explicit hyperlink. @returns Inserted text. */
