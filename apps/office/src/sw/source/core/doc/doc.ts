@@ -11,7 +11,12 @@ import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { GetSwTabRows, SetSwTabRows } from "../docnode/ndtbl";
-import { GetSwCursorRowSplit, SetSwRowSplit } from "../docnode/ndtbl1";
+import {
+  GetSwCursorRowSplit,
+  SetSwRowSplit,
+  GetSwRowHeight,
+  SetSwRowHeight,
+} from "../docnode/ndtbl1";
 import type { SwCursor } from "../crsr/swcrsr";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
@@ -95,6 +100,14 @@ export class SwDoc {
   /** Publishes native row split attributes through document-owned history. @param cursor - Actual current or selected cursor. @param split - New row item. @param cursorState - Optional shell cursor attributes. @returns Whether admitted. */
   public SetRowSplit(cursor: SwCursor, split: boolean, cursorState?: SwUndoCursorState): boolean {
     return SetSwRowSplit(this, cursor, split, cursorState);
+  }
+  /** Reads the common represented minimum-row-height item. @param cursor - Actual current or table-selected cursor. @returns Common height or no item. */
+  public static GetRowHeight(cursor: SwCursor): number | undefined {
+    return GetSwRowHeight(cursor);
+  }
+  /** Publishes represented minimum height through document-owned row attributes and history. @param cursor - Actual current or table-selected cursor. @param height - Minimum height in twips. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
+  public SetRowHeight(cursor: SwCursor, height: number, cursorState?: SwUndoCursorState): boolean {
+    return SetSwRowHeight(this, cursor, height, cursorState);
   }
   /** Applies native row-height deltas through the source ndtbl owner split. @param next - Requested rows. @param currentColumnOnly - Original hit cell only. @param frame - Physical frame. @param start - Actual cell. @param cursorState - Retained native cursor. @returns Whether changed. */
   public SetTabRows(

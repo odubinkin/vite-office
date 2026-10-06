@@ -9221,6 +9221,18 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "PopMode.DeleteStack"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowHeight"
           }
         ],
         "upstream": [
@@ -9439,6 +9451,18 @@
           {
             "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
             "marker": "enum class PopMode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::GetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowHeight"
           }
         ]
       },
@@ -9472,7 +9496,8 @@
         "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
         "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged.",
         "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
-        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
+        "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -11468,7 +11493,8 @@
         "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
         "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged.",
         "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
-        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
+        "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -11574,6 +11600,18 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "PopMode.DeleteStack"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowHeight"
           }
         ],
         "upstream": [
@@ -11672,6 +11710,18 @@
           {
             "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
             "marker": "enum class PopMode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::GetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowHeight"
           }
         ]
       },
@@ -22186,6 +22236,18 @@
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "PopMode.DeleteStack"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+            "marker": "SetSwRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "SetRowHeight"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "this.GetDoc().SetRowHeight"
           }
         ],
         "upstream": [
@@ -22256,6 +22318,18 @@
           {
             "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
             "marker": "enum class PopMode"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::SetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl1.cxx",
+            "marker": "SwDoc::GetRowHeight"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::SetRowHeight"
           }
         ]
       },
@@ -22268,7 +22342,8 @@
       ],
       "preservedResponsibilities": [
         "Iteration199 ports native Text Flow table/row split controls and removes conflated properties dontSplit and React first-row state. Native ndtbl1 aggregate reads original selected boxes/lines, true row default and no item for empty/mixed. SwDoc.GetRowSplit and SwFEShell.GetRowSplit retain source cursor/document ownership. SwTextFlowPage Reset saves original split/headline values; table child sensitivity does not clear row tristate; FillItemSet publishes only changed headline/table/row items. Browser source labels and mixed HTML checkbox use actual selected boxes, native page handlers/Reset/Cancel/OK, independent table and row setters. Insertion-only dontSplit remains separate. Original graph/list/cursor/grouped3UndoRedo/ODT/continued input and Chromium1280/390 covered. Full row-content splitting/nested/merged/fly/columns/protection/full item classes/SfxItemSet/widget suite and whole parity remain unverified; old contracts/classifications/registered exceptions retained.",
-        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained."
+        "Iteration200 ports native current-or-table-selected row split mutation to SwDoc/ndtbl1, original line collection, document-owned SwUndoAttrTable/history/notification and same-value requests. SwFEShell brackets and forwards; obsolete whole=true split SetRowAttr adapter removed. Properties caller uses source Push/temporary select-all/ClearMark/finally Pop; native registered cursor stack DeleteCurrent/DeleteStack retains original displayed endpoints and releases on shell Close. Existing selected scope, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input and all prior browser controls retained. Full nested/merged/fly/columns/protection/row-content splitting/full crsrsh selection/widget/SfxItemSet/full parity remains unverified; prior contracts/classifications/registered exceptions retained.",
+        "Iteration201 moves represented minimum-row-height selection, mutation and history into native SwDoc/ndtbl1 shared original row attributes. Ordinary current cursor ignores mark/ring; actual table-selected boxes select original flat rows once. Shell brackets and forwards; obsolete shell SetRowAttr removed. Common represented numeric height getter keeps default0/mixed-or-empty no item. Same-value history, unrelated row items, original graph/list/pending/cursor, grouped3UndoRedo/ODT/continued input retained. Full SwFormatFrameSize/fixed/relative/nested proportional heights/layout/full parity remain unverified; prior contracts/classifications/registered exceptions retained."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/docnode/ndtbl1.cxx",

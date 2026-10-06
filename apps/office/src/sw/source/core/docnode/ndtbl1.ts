@@ -1,5 +1,5 @@
-/** @fileoverview Collects represented native row split items from original selected lines in ndtbl1.cxx. */
-import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
+/** @fileoverview Owns represented native row attributes and history from original selected lines in ndtbl1.cxx. */
+import type { SwTable, SwTableBox, SwTableLine, SwTableLineFormat } from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
 import { SwTableBoxStartNode, SwTableNode } from "./node";
 import { SwTableCursor, type SwCursor } from "../crsr/swcrsr";
@@ -66,6 +66,36 @@ export function SetSwRowSplit(
   split: boolean,
   cursorState?: SwUndoCursorState,
 ): boolean {
+  return SetRowAttr(doc, cursor, { keepTogether: !split }, cursorState);
+}
+
+/** Reads the common represented minimum height, including the zero default. @param cursor - Original current or table-selected cursor. @returns Common height or no item for mixed or absent rows. */
+export function GetSwRowHeight(cursor: SwCursor): number | undefined {
+  const rows = CollectSwRowSplitLines(cursor),
+    first = rows[0];
+  if (first === undefined) return undefined;
+  const height = first.GetFormat().minHeight ?? 0;
+  for (const row of rows) if ((row.GetFormat().minHeight ?? 0) !== height) return undefined;
+  return height;
+}
+
+/** Applies the represented minimum-height item through native document row ownership. @param doc - Owning document. @param cursor - Actual current or table-selected cursor. @param height - Minimum height in twips. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
+export function SetSwRowHeight(
+  doc: SwDoc,
+  cursor: SwCursor,
+  height: number,
+  cursorState?: SwUndoCursorState,
+): boolean {
+  return SetRowAttr(doc, cursor, { minHeight: height }, cursorState);
+}
+
+/** Records original row attributes through one document transaction, including same-value requests. @param doc - Owning document. @param cursor - Actual current or table-selected cursor. @param value - Represented row item. @param cursorState - Optional shell history attributes. @returns Whether admitted. */
+function SetRowAttr(
+  doc: SwDoc,
+  cursor: SwCursor,
+  value: SwTableLineFormat,
+  cursorState?: SwUndoCursorState,
+): boolean {
   const node = cursor.GetPoint().GetNode() as SwTextNode;
   if (node.GetNodes() !== doc.nodes) return false;
   const rows = CollectSwRowSplitLines(cursor);
@@ -83,7 +113,7 @@ export function SetSwRowSplit(
           node.GetCharacterItemsAt(cursor.GetPoint().GetContentIndex()),
         );
       const action = new SwUndoAttrTable(table, before);
-      for (const row of rows) row.SetFormat({ ...row.GetFormat(), keepTogether: !split });
+      for (const row of rows) row.SetFormat({ ...row.GetFormat(), ...value });
       doc.GetUndoManager().AddUndoAction(action);
       doc.NotifyModelChange({
         kind: "node-content-changed",

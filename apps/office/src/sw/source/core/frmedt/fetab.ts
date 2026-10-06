@@ -4,7 +4,6 @@ import {
   SwTable,
   type SwTableBox,
   type SwTableFormat,
-  type SwTableLineFormat,
   type SwTableBoxFormat,
 } from "../table/swtable";
 import { SwTableBoxStartNode } from "../docnode/node";
@@ -373,7 +372,15 @@ export abstract class SwFEShell extends SwEditShell {
 
   /** Applies row height to current or selected rows. @param height - Minimum height in twips. @returns Whether admitted. */
   public SetRowHeight(height: number): boolean {
-    return this.SetRowAttr({ minHeight: height });
+    return this.RunNotificationTransaction(
+      /** Forwards actual native selection and pending history attributes. @returns Whether admitted. */
+      () => this.GetDoc().SetRowHeight(this.getShellCursor(), height, this.CaptureCursorState()),
+    );
+  }
+
+  /** Reads the common represented minimum height over native current or selected rows. @returns Common height or no item. */
+  public GetRowHeight(): number | undefined {
+    return SwDoc.GetRowHeight(this.getShellCursor());
   }
 
   /** Applies native row splitting through document-owned current or selected rows. @param split - Whether rows may split. @returns Whether admitted. */
@@ -417,29 +424,6 @@ export abstract class SwFEShell extends SwEditShell {
       /** Selects canonical box owners. @param box - Original box. @returns Whether selected. */ (
         box,
       ) => sections.includes(box.GetStartNode()),
-    );
-  }
-
-  /** Changes actual selected row-height formats. @param value - Row attributes. @returns Whether admitted. */
-  private SetRowAttr(value: SwTableLineFormat): boolean {
-    const table = this.IsCursorInTable()?.GetTable();
-    if (table === undefined) return false;
-    const boxes = this.GetTableBoxes(table, false);
-    return this.ChangeTable(
-      table,
-      /** Updates selected native rows. @returns Nothing. */ () => {
-        for (const row of table.GetTabLines())
-          if (
-            row
-              .GetTabBoxes()
-              .some(
-                /** Tests row selection. @param box - Actual box. @returns Whether selected. */ (
-                  box,
-                ) => boxes.includes(box),
-              )
-          )
-            row.SetFormat({ ...row.GetFormat(), ...value });
-      },
     );
   }
 

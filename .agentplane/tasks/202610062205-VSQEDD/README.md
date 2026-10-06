@@ -4,7 +4,7 @@ title: "Move represented row height mutation into native document ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved native document minimum-row-height ownership under standing iterative user authorization."
 doc_version: 3
-doc_updated_at: "2026-10-06T22:05:56.104Z"
+doc_updated_at: "2026-10-06T22:21:37.363Z"
 doc_updated_by: "CODER"
 description: "Iteration201: remove shell row-height mutation/history adapter; source current or table-selected original row scope, document-owned history and common represented minimum-height getter. Preserve registered exceptions and all previous acceptance contracts."
 sections:
@@ -56,7 +56,9 @@ sections:
     Doctor/routing/diff PASS, current AP/generated quality0forbidden. ExactSHA same-agent EVALUATOR explicitly not independent. Final prose before canonical verify; finish actualimplementationSHA and parent complete append, final clean tracked/untracked. Full SwFormatFrameSize/fixed/relative/nested proportional heights/merged/layout/row splitting/widgets/full parity unverified.
   Verification: "Pending implementation/evidence; full goal active."
   Rollback Plan: "Revert eventual implementation in a new task; retain original stashc85f4a0e453dfd06d6e199554784f2c286737472, no destructive reset or pop/drop. Restore vendor finally; raw only ignored app cache. No upstream sources/helpers/Python in AP."
-  Findings: "Clean main6685f051b407e5674066f5429aea6743ea3b038c, only active parent before this leaf; prior200complete. Read-only discovery pinned ndtbl1.cxx Set/GetRowHeight owns lcl_CollectLines true, SwUndoAttrTable and SetModified; fetab.cxx bracketed document forwarding. Existing shell SetRowAttr expands ordinary editing rings and owns ChangeTable/ApplyAction, actual architecture and selection divergence. Source fmtfsize.hxx/atrfrm.cxx has full SwFormatFrameSize default Variable height0 Fixed width0 and complete-item equality; source rowht dialog selects Minimum/Fixed. Existing app represents only minHeight, UI minRowHeight, min floor rendering/XML. This atomic task ports existing minimum-height ownership and shared flat-row selection; complete frame-size contracts remain unverified. One harmless wrong browser source path read failed; parent route recomputed, correct inventory path loaded before further action. No source stored in AP."
+  Findings: |-
+    Clean main6685f051b407e5674066f5429aea6743ea3b038c, only active parent before this leaf; prior200complete. Read-only discovery pinned ndtbl1.cxx Set/GetRowHeight owns lcl_CollectLines true, SwUndoAttrTable and SetModified; fetab.cxx bracketed document forwarding. Existing shell SetRowAttr expands ordinary editing rings and owns ChangeTable/ApplyAction, actual architecture and selection divergence. Source fmtfsize.hxx/atrfrm.cxx has full SwFormatFrameSize default Variable height0 Fixed width0 and complete-item equality; source rowht dialog selects Minimum/Fixed. Existing app represents only minHeight, UI minRowHeight, min floor rendering/XML. This atomic task ports existing minimum-height ownership and shared flat-row selection; complete frame-size contracts remain unverified. One harmless wrong browser source path read failed; parent route recomputed, correct inventory path loaded before further action. No source stored in AP.
+    Process recovery: implementation commit initially rejected because task parity tag requires parity/task/close/integrate scope, not code. Premature exact-SHA script then refused absent new test at prior AP-only HEAD; no quality verdict produced. Route recomputed, doctor0errors2known warnings; owner restored. Use enforced parity subject and evaluate only successful actual implementation SHA. No implementation or checks changed.
 id_source: "generated"
 ---
 ## Summary
@@ -94,3 +96,4 @@ Revert eventual implementation in a new task; retain original stashc85f4a0e453df
 ## Findings
 
 Clean main6685f051b407e5674066f5429aea6743ea3b038c, only active parent before this leaf; prior200complete. Read-only discovery pinned ndtbl1.cxx Set/GetRowHeight owns lcl_CollectLines true, SwUndoAttrTable and SetModified; fetab.cxx bracketed document forwarding. Existing shell SetRowAttr expands ordinary editing rings and owns ChangeTable/ApplyAction, actual architecture and selection divergence. Source fmtfsize.hxx/atrfrm.cxx has full SwFormatFrameSize default Variable height0 Fixed width0 and complete-item equality; source rowht dialog selects Minimum/Fixed. Existing app represents only minHeight, UI minRowHeight, min floor rendering/XML. This atomic task ports existing minimum-height ownership and shared flat-row selection; complete frame-size contracts remain unverified. One harmless wrong browser source path read failed; parent route recomputed, correct inventory path loaded before further action. No source stored in AP.
+Process recovery: implementation commit initially rejected because task parity tag requires parity/task/close/integrate scope, not code. Premature exact-SHA script then refused absent new test at prior AP-only HEAD; no quality verdict produced. Route recomputed, doctor0errors2known warnings; owner restored. Use enforced parity subject and evaluate only successful actual implementation SHA. No implementation or checks changed.
