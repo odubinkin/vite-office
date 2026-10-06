@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610060201-7FT9N6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T02:26:57.135Z",
+  "verdict": "pass",
+  "summary": "Native represented flat-table UI admission, original-only box painting and native editing/history are verified on semantic da99108222f1c0169580e3e87ce2dbf2e493be73; broad parity remains unverified.",
+  "evaluated_sha": "da99108222f1c0169580e3e87ce2dbf2e493be73",
+  "blueprint_digest": "cee33caca9e2a70afe1958fe12ad07d0bbf5a2b5c35f747a2f055578e9b3663f",
+  "findings": [
+    "Same current agent EVALUATOR, no independent reviewer claim. Actual whole-range/source and counter proof recomputed read-only at exact semantic SHA;449prior tests and258states/defaults/classes/IOexceptions/evidence prefixes preserved. ONE absent fullprofile and failure/new-only closure produce12691app109inventory5scripts157Chromium distinct passes,26newapp3Chrome. Registered deviations preserved; complex table/frame/core/UI parity remains unverified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610060201-7FT9N6/README.md",
+    ".agentplane/tasks/202610060201-7FT9N6/evidence/evaluator-proof.json",
+    ".agentplane/tasks/202610060201-7FT9N6/evidence/scope-audit.json",
+    ".agentplane/tasks/202610060201-7FT9N6/evidence/final-coverage.json",
+    ".agentplane/tasks/202610060201-7FT9N6/evidence/restored-source-audits.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full nested, merged, rowspan, split rows, cross-table, RTL, vertical, fly, protection and complete native frame/core/UI parity remain unverified."
+  ]
+}

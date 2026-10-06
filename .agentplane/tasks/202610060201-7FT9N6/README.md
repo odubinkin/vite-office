@@ -4,7 +4,7 @@ title: "Restore native cross-cell selection and repeated headline admission"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,25 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T02:29:54.902Z"
+  updated_by: "EVALUATOR"
+  note: "Supersedes preliminary evaluator report after successful bounded read-only proof recomputation at exact semantic da99108222f1c0169580e3e87ce2dbf2e493be73."
+  evaluated_sha: "da99108222f1c0169580e3e87ce2dbf2e493be73"
+  blueprint_digest: "cee33caca9e2a70afe1958fe12ad07d0bbf5a2b5c35f747a2f055578e9b3663f"
+  evidence_refs:
+    - ".agentplane/tasks/202610060201-7FT9N6/README.md"
+    - ".agentplane/tasks/202610060201-7FT9N6/quality/20261006-022954902-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060201-7FT9N6/quality/20261006-022954902-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060201-7FT9N6/quality/20261006-022954902-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060201-7FT9N6/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060201-7FT9N6/evidence/evaluator-proof.json"
+    - ".agentplane/tasks/202610060201-7FT9N6/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610060201-7FT9N6/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610060201-7FT9N6/evidence/restored-source-audits.json"
+  findings:
+    - "Actual evaluator-proof now exists and all counter/source hashes, entire contiguous unchanged ranges,449prior tests,258states/defaults/classes/IOexception/evidence prefixes,declared static/source/scope/hygiene checks verified. Same current agent EVALUATOR,no independent reviewer claim. Preliminary report ran after a duplicate inline identifier parse error; one unbounded assertion diagnostic was stopped only after identifying this task live process, then bounded hash comparisons and task-local quality artifact status checks passed. No tests or production changes during evaluation; broad parity unverified."
 commit: null
 comments:
   -
@@ -37,7 +56,7 @@ events:
     to: "DOING"
     note: "Start: Implement approved native flat-table selection admission and original-only painting through existing shell and DOM owners; preserve old tests and deliberate IO exceptions."
 doc_version: 3
-doc_updated_at: "2026-10-06T02:26:06.452Z"
+doc_updated_at: "2026-10-06T02:30:09.310Z"
 doc_updated_by: "CODER"
 description: "Align actual browser cross-cell gestures with native table cursor ownership and repeated headline restrictions; paint selected original boxes without selecting repeated headline copies. Preserve registered IO deviations and prior tests."
 sections:
@@ -80,6 +99,10 @@ sections:
     - Observation: Final represented UI table admission and paint verified:26newapp3newChromium;449prior tests byte-identical,258semantic state/default/classification/IOexception/evidence prefixes unchanged. Distinct12691app109inventory5scripts157Chromium passed across one initial profile and failure/new-only closures.
       Impact: Actual mounted table-cell geometry now carries false ordinary or true repeated headline classification; model-only edit-window coordinates remain ordinary PaM. UI cross-cell ranges use native UpdateCursor, original boxes/rings and direction; new repeated hits collapse to mark or reduce existing table cursor to fixed mark cell boundary. Repeated header copies never paint original selected-box state; editing and UndoRedo still share original nodes.
       Resolution: Six initial gates passed after format and lint fixture repairs; changed-file checks and five restored source audits passed. Final actual100percent coverage13119L14382S3459F10742B andinventory1464L1523S384F1080B. Counter proof admits only whole contiguous unchanged source ranges, ignores only generated anonymous-function ordinal names when exact mapped decl and loc/source match, and uses real final-source counters for changed ranges; no intermediate changed-source transfer. Three new missing behavior cases passed3with23skipped. Final global subset runner exits1reflect only expected partial coverage thresholds, never hidden test failures. AP4540files0forbidden beforequality,doctor0errors2knownwarnings,routing/diff passed. Bounded command errors included missing guessed paths, metadata missing upstream array before disk write, E2E parenthesis syntax,33 non-null fixture lint errors,1000-line changed gate,initial zero-test browser grep and two inline replacement parse errors before profile start; fixed without old oracle edits, passing/full replay or AP helpers/sources. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/fly/multicolumn/protection/frame/core/UI parity remains unverified,parentDOINGgoalACTIVE.
+
+    - Observation: Implementation commit is da99108222f1c0169580e3e87ce2dbf2e493be73. Earlier cdecf4f60c199845027883914b5cc8935b317de5 contained only already-staged AP evidence despite code message; source paths were then explicitly staged and committed. Preliminary quality report superseded by20261006-022954902-recovery-context after successful actual bounded read-only proof.
+      Impact: Exact source/coverage identity must refer to actual implementation commit; initial evaluator inline name collision, unbounded whole-map assertion diagnostics and expected dirty task README prevented first recomputation.
+      Resolution: Confirmed task-local live diagnostic PID by semantic SHA and evaluator-proof marker before stopping it; replaced whole-map assertion with exact recomputed serialized hashes and allowed only current task quality artifacts in status. Successful same-agent actual counter/source proof at semanticSHA,latest quality pass,no independent reviewer claim. No production changes or test/source-audit replay during evaluation. Final status and AP hygiene checked at close.
 id_source: "generated"
 ---
 ## Summary
@@ -137,3 +160,7 @@ Previous173 PROGRESS: committed and closed native repeated headline editing. Rea
 - Observation: Final represented UI table admission and paint verified:26newapp3newChromium;449prior tests byte-identical,258semantic state/default/classification/IOexception/evidence prefixes unchanged. Distinct12691app109inventory5scripts157Chromium passed across one initial profile and failure/new-only closures.
   Impact: Actual mounted table-cell geometry now carries false ordinary or true repeated headline classification; model-only edit-window coordinates remain ordinary PaM. UI cross-cell ranges use native UpdateCursor, original boxes/rings and direction; new repeated hits collapse to mark or reduce existing table cursor to fixed mark cell boundary. Repeated header copies never paint original selected-box state; editing and UndoRedo still share original nodes.
   Resolution: Six initial gates passed after format and lint fixture repairs; changed-file checks and five restored source audits passed. Final actual100percent coverage13119L14382S3459F10742B andinventory1464L1523S384F1080B. Counter proof admits only whole contiguous unchanged source ranges, ignores only generated anonymous-function ordinal names when exact mapped decl and loc/source match, and uses real final-source counters for changed ranges; no intermediate changed-source transfer. Three new missing behavior cases passed3with23skipped. Final global subset runner exits1reflect only expected partial coverage thresholds, never hidden test failures. AP4540files0forbidden beforequality,doctor0errors2knownwarnings,routing/diff passed. Bounded command errors included missing guessed paths, metadata missing upstream array before disk write, E2E parenthesis syntax,33 non-null fixture lint errors,1000-line changed gate,initial zero-test browser grep and two inline replacement parse errors before profile start; fixed without old oracle edits, passing/full replay or AP helpers/sources. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/fly/multicolumn/protection/frame/core/UI parity remains unverified,parentDOINGgoalACTIVE.
+
+- Observation: Implementation commit is da99108222f1c0169580e3e87ce2dbf2e493be73. Earlier cdecf4f60c199845027883914b5cc8935b317de5 contained only already-staged AP evidence despite code message; source paths were then explicitly staged and committed. Preliminary quality report superseded by20261006-022954902-recovery-context after successful actual bounded read-only proof.
+  Impact: Exact source/coverage identity must refer to actual implementation commit; initial evaluator inline name collision, unbounded whole-map assertion diagnostics and expected dirty task README prevented first recomputation.
+  Resolution: Confirmed task-local live diagnostic PID by semantic SHA and evaluator-proof marker before stopping it; replaced whole-map assertion with exact recomputed serialized hashes and allowed only current task quality artifacts in status. Successful same-agent actual counter/source proof at semanticSHA,latest quality pass,no independent reviewer claim. No production changes or test/source-audit replay during evaluation. Final status and AP hygiene checked at close.

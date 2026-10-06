@@ -1,0 +1,83 @@
+{
+  "evaluatedSHA": "da99108222f1c0169580e3e87ce2dbf2e493be73",
+  "sameCurrentAgentEvaluator": true,
+  "independentReviewerClaim": false,
+  "actualCountersAndWholeContiguousSourceRangesRecomputed": true,
+  "sourceIdentityVerified": true,
+  "scopeAndRecordedGateEvidenceVerified": true,
+  "sourceAndMetadataStatesPreserved": true,
+  "finalDistinctPassed": {
+    "app": 12691,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 157
+  },
+  "coverage": {
+    "lines": {
+      "total": 13119,
+      "covered": 13119,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14382,
+      "covered": 14382,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3459,
+      "covered": 3459,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10742,
+      "covered": 10742,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryCoverage": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "initialArtifactOnlyCommit": "cdecf4f60c199845027883914b5cc8935b317de5",
+  "implementationCommit": "da99108222f1c0169580e3e87ce2dbf2e493be73",
+  "diffSHA256": "1e62beb793f9123a2753032b3d9c0291d1a0ba4b13e4a8424a9ffd3fdc17bf12",
+  "limits": "Actual represented flat same-table UI cross-cell selection, repeated headline admission, original-only selected-box paint and shared native editing/history. Model-only positions retain text PaM; actual mounted table-cell classification drives native UpdateCursor. Full nested/merged/rowspan/split-row/cross-table/vertical/RTL/fly/multicolumn/protection/full native frame/core/UI parity unverified; deliberate IO exceptions unchanged,parent DOING,goal ACTIVE."
+}
