@@ -138,8 +138,6 @@ export abstract class SwEditShell extends SwCursorShell {
   }
   /** Returns the native document owner. @returns Document. */
   public abstract override GetDoc(): SwDoc;
-  /** Returns the actual editing selection ring. @returns Native cursor. */
-  public abstract GetCursor(): SwPaM;
   /** Captures displayed command cursor and pending item ownership. @returns Command boundary. */
   public abstract override CaptureCursorState(): SwUndoCursorState;
   /** Executes existing native action orchestration. @param action - History. @param tryMerge - Grouping policy. @param execute - Initial native mutation. @returns Whether changed. */
@@ -212,12 +210,12 @@ export abstract class SwEditShell extends SwCursorShell {
     );
   }
   /** Reads restart on an optional actual native range. @param range - Borrowed selection, otherwise current cursor. @returns Restart flag. */
-  public IsNumRuleStart(range = this.GetCursor()): boolean {
+  public IsNumRuleStart(range: SwPaM = this.GetCursor()): boolean {
     const node = range.GetPoint().GetNode();
     return node instanceof SwTextNode && node.IsListRestart();
   }
   /** Changes only restart flags at native normalized range end points. @param flag - Requested restart flag. @param cursor - Optional borrowed actual range. @returns Whether an eligible flag changed. */
-  public SetNumRuleStart(flag: boolean, cursor = this.GetCursor()): boolean {
+  public SetNumRuleStart(flag: boolean, cursor: SwPaM = this.GetCursor()): boolean {
     const state = this.CaptureCursorState();
     if (!cursor.IsMultiSelection()) {
       const node = cursor.GetPoint().GetNode();

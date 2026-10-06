@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 741,
+      "sha256": "44bc90bbd75614d9f483347dd381fad0121e2df596ba82b2491f7902ec92ea8c",
+      "diagnostics": [
+        "apps/office/src/sw/source/uibase/shells/textsh1.ts(773,44): error TS2345: Argument of type 'SwPaM' is not assignable to parameter of type 'SwCursor'.",
+        "  Type 'SwPaM' is missing the following properties from type 'SwCursor': Create, MoveSection, MoveTable, SttEndDoc, and 4 more.",
+        "apps/office/src/sw/source/uibase/shells/textsh1.ts(774,50): error TS2345: Argument of type 'SwPaM' is not assignable to parameter of type 'SwCursor'.",
+        "  Type 'SwPaM' is missing the following properties from type 'SwCursor': Create, MoveSection, MoveTable, SttEndDoc, and 4 more."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1354,
+      "sha256": "d916840541e25a41e43ab1c3335148802328e02b33f8125cc2f1568f706e731d",
+      "diagnostics": [
+        "apps/office/src/sw/source/core/edit/ednumber.ts(142,19): error TS2416: Property 'GetCursor' in type 'SwEditShell' is not assignable to the same property in base type 'SwCursorShell'.",
+        "    Type 'SwPaM' is missing the following properties from type 'SwCursor': Create, MoveSection, MoveTable, SttEndDoc, and 4 more.",
+        "apps/office/src/sw/source/core/edit/ednumber.ts(142,19): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'SwCursorShell'.",
+        "apps/office/src/sw/source/core/frmedt/fetab.ts(17,19): error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'SwEditShell'.",
+        "apps/office/src/sw/source/core/frmedt/fetab.ts(19,19): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'SwEditShell'.",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts(81,14): error TS2654: Non-abstract class 'SwWrtShell' is missing implementations for the following members of 'SwFEShell': 'HasBoxSelection', 'GetCursor'."
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "ce756698118fee597369e8c3623c70a39bd1d707c788caf53f9a6d206c25062f",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "bf36aacef17cb47751225e0b68bc69c6defcc07757f410e71a8723ae05557a86",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3464,
+      "sha256": "47d2f4fb1b49292eb587595ffe7b6fa78b601c69f69e8244adad0806a81218fb",
+      "diagnostics": []
+    }
+  ]
+}

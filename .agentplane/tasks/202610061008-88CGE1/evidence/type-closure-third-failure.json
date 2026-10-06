@@ -1,0 +1,24 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1785,
+      "sha256": "6135b741eb8204ece7f4cd200373d9d51587aeb5937bce0f34758f4133e182b1",
+      "diagnostics": [
+        "src/sw/browser/editor/native-table-selection-commands.test.tsx(121,14): error TS2345: Argument of type 'Element | null' is not assignable to parameter of type 'HTMLElement'.",
+        "src/sw/source/core/undo/native-list-rule-range.test.ts(431,74): error TS2656: Non-abstract class expression is missing implementations for the following members of 'SwEditShell': 'IsCursorInTable', 'GetTableSel'.",
+        "src/sw/source/core/undo/native-list-rule-range.test.ts(433,16): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'SwEditShell'.",
+        "src/sw/source/core/undo/native-list-rule-range.test.ts(439,16): error TS2416: Property 'GetCursor' in type '(Anonymous class)' is not assignable to the same property in base type 'SwEditShell'.",
+        "    Type 'SwPaM' is missing the following properties from type 'SwCursor': Create, MoveSection, MoveTable, SttEndDoc, and 4 more.",
+        "src/sw/source/core/undo/native-list-rule-range.test.ts(439,16): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'SwEditShell'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed"
+      ]
+    }
+  ]
+}

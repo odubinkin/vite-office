@@ -1,0 +1,20 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 790,
+      "sha256": "fadddb3b6cbb411f5efec5f39f7e8a21794ba0b5dbdcd8c05dfeb41e4f2242b0",
+      "diagnostics": [
+        "src/sw/browser/editor/native-table-selection-commands.test.tsx(121,14): error TS2345: Argument of type 'HTMLElement | null' is not assignable to parameter of type 'HTMLElement'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "scope": "Only new current leaf, including ignored files; no replay of historical AP census.",
+  "filesAudited": 20,
+  "forbiddenArtifacts": [],
+  "allowed": "Bounded English prose/counts/hashes/outcomes/exact failures; no upstream sources, executable helpers, raw maps, raw reports, probes, source frames or diagnostics dumps.",
+  "vendorRestored": true
+}

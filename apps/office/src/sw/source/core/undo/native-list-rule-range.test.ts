@@ -3,6 +3,7 @@ import { afterEach, expect, it } from "vitest";
 import { SwDoc, SetNumRuleMode } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwCursor } from "../crsr/swcrsr";
 import { SwNumRule } from "../doc/number";
 import { applyWriterParagraphList } from "../doc/list";
 import { SwNumRuleItem } from "../para/paratr";
@@ -421,7 +422,7 @@ it("native already-applied and DontSetItem flags preserve direct item ownership 
 it("native structural ranges ignore text-only rule and count payloads", /** Checks supported nontext guards without shell cursor adjuncts. @returns Nothing. */ () => {
   const owner = fixture("body"),
     point = new SwPosition(owner.first),
-    pam = new SwPaM(point),
+    pam = new SwCursor(point),
     rule = owner.doc.EnsureNumRule("Structural", "numbered");
   try {
     pam.GetPoint().nNode.Assign(owner.table.GetTableNode());
@@ -430,14 +431,22 @@ it("native structural ranges ignore text-only rule and count payloads", /** Chec
     const nativeOwner =
       new /** Actual native state owner for this structural fixture. */ (class extends SwEditShell {
         /** Supplies the inherited displayed cursor without changing the structural state-query range. @returns Cursor. */
-        public getShellCursor() {
+        public override getShellCursor() {
           return owner.shell.getShellCursor();
         }
         /** State-only fixture performs no table movement. @returns Nothing. */
         protected UpdateTableCursor(): void {}
         /** Supplies a real structural native range. @returns Range. */
-        public GetCursor(): SwPaM {
+        public override GetCursor(): SwCursor {
           return pam;
+        }
+        /** Supplies native table context from the existing real shell. @returns Table owner. */
+        public IsCursorInTable() {
+          return owner.shell.IsCursorInTable();
+        }
+        /** Supplies actual native selected boxes. @returns Original boxes. */
+        public GetTableSel() {
+          return owner.shell.GetTableSel();
         }
         /** Supplies the actual document. @returns Document. */
         public GetDoc(): SwDoc {

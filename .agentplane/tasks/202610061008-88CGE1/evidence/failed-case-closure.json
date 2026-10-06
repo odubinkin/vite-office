@@ -1,0 +1,94 @@
+{
+  "scope": "Only three original failed mounted cases and two original failed Chromium cases; passed cases not rerun; no rebuild",
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "d390dbe8b4efedfb6d9b23b0fcb091fb5c84fa4ddfe3d8e88dd24d17b591af0b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "9f5a937bfdee5f5c2a93aef79886dea7e7dbd3f6a8c2ee1ee0c25ce25232ae1f",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "1d35dc89bd9bfe1ba4ddfac8bb612d704340ff4e555cfc8dbe122c2ec985b970",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "10bfd28788f360d43a6fc56c15caf3454c668667918fe9bc7181cc3349586c3a",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "e63d9e8d877a71b43ac280557b81648861ca98c6cbb0816abb701da6eedd573d"
+  },
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-selection-commands.test.tsx -t ^native menu selection Select (Row|Column|Table)$ --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/88CGE1-closure.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 27763,
+      "sha256": "277e3afa89f1d353dc71818d9f7e4be75f41afc7cb89fae20c7abd910289e550",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  3 passed | 2 skipped (5)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 3,
+        "failed": 0,
+        "skipped": 2,
+        "total": 5
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 13785,
+          "covered": 3997,
+          "skipped": 0,
+          "pct": 28.99
+        },
+        "statements": {
+          "total": 15109,
+          "covered": 4167,
+          "skipped": 0,
+          "pct": 27.57
+        },
+        "functions": {
+          "total": 3616,
+          "covered": 1180,
+          "skipped": 0,
+          "pct": 32.63
+        },
+        "branches": {
+          "total": 11248,
+          "covered": 2063,
+          "skipped": 0,
+          "pct": 18.34
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 28.99,
+        "statements": 27.57,
+        "functions": 32.63,
+        "branches": 18.34
+      },
+      "incompleteFileCount": 239,
+      "coverageMapSHA256": "9d215128f77a4cc321f77a6168c71cc6c978a626640c7596519f51838bf3246d",
+      "exitReason": "Only global coverage thresholds in partial run; initial unchanged full-source maps are100%"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-selection-commands.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 655,
+      "sha256": "3273a2f3aed7b0983bf8e7b8a5fdc0e3bd259200b8d74a85e5a5fdeac4a57cba",
+      "totals": [
+        "2 passed (5.1s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T10:33:49.068Z",
+        "duration": 5119.478,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

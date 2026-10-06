@@ -1,0 +1,61 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 7469,
+      "sha256": "184b0ada4b0a402b0600d39274853f78f9b87b7ca2ca6cf32f66196920cd74d2",
+      "diagnostics": [
+        "src/sw/browser/editor/native-table-selection-commands.test.tsx(48,69): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/browser/editor/native-table-selection-commands.test.tsx(49,77): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/browser/editor/native-table-selection-commands.test.tsx(50,66): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/browser/editor/native-table-selection-commands.test.tsx(97,69): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error."
+      ]
+    }
+  ],
+  "exactFailures": [
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(48,69): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(49,77): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(50,66): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(97,69): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(98,77): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(99,60): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(115,65): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(116,73): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(118,61): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(121,14): error TS2345: Argument of type 'Element | null' is not assignable to parameter of type 'HTMLElement'.",
+    "src/sw/browser/editor/native-table-selection-commands.test.tsx(128,75): error TS2769: No overload matches this call.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "    Object literal may only specify known properties, and 'exact' does not exist in type 'ByRoleOptions'.",
+    "src/sw/source/core/undo/native-list-rule-range.test.ts(431,74): error TS2656: Non-abstract class expression is missing implementations for the following members of 'SwEditShell': 'IsCursorInTable', 'GetTableSel'.",
+    "src/sw/source/core/undo/native-list-rule-range.test.ts(433,16): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'SwEditShell'.",
+    "src/sw/source/core/undo/native-list-rule-range.test.ts(439,16): error TS2416: Property 'GetCursor' in type '(Anonymous class)' is not assignable to the same property in base type 'SwEditShell'.",
+    "src/sw/source/core/undo/native-list-rule-range.test.ts(439,16): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'SwEditShell'."
+  ]
+}

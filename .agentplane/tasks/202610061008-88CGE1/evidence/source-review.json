@@ -1,0 +1,25 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/crsr/trvltbl.cxx": "b881919f93573f3e68c82429bbc360b47b1c97aa0c265d970fc4f43817a79444",
+    "sw/source/core/crsr/crsrsh.cxx": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a",
+    "sw/inc/crsrsh.hxx": "d5b15bac7672883e45c63022c5f3b188d210373651dcf2895115b1a019af0503",
+    "sw/source/core/frmedt/tblsel.cxx": "97ce23ff487798ee5f6789025d7b53c1ff04118ac28a2a766f1e7165498bda4c",
+    "sw/source/uibase/wrtsh/select.cxx": "e52314599cd686635085927f18a311cf742424076e052a2770d0a8b46eff67d0",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/uibase/wrtsh/wrtsh1.cxx": "212c1c622fab71d59d8ec5566f40906d1840513391b8ec1e175b90befe6c04ac",
+    "sw/source/uibase/wrtsh/delete.cxx": "ad0cf9a7c733660d3f5513b08caaaeb2420c7dc6c0cc93956a790178eff30e57",
+    "sw/source/core/edit/eddel.cxx": "fb8da38059d71b0ac944f13c669df51e1af701c1e04d8e2760605c66feb0aab4",
+    "sw/inc/editsh.hxx": "b928e3ad82ba7a7391afacbcc32ae3a44d3fbcd6039ec05d17b18eb075429f1f",
+    "sw/sdi/swriter.sdi": "8ac7ed3ea9adb1b4cb61600726ebd1a6c6990e09bb9a54d88ef03b1cbcbc8f30",
+    "sw/uiconfig/swriter/menubar/menubar.xml": "5960200bd627fd19abe7cec701540400ddcde20d26243e7c3f43b986ef3e3bcb"
+  },
+  "ownership": "SwCursorShell owns actual ordinary/table cursor storage, materialization, cleanup, SelTableRowOrCol/SelTable/SelTableBox. SwWrtShell exposes thin entry points. SwTableShell dispatches four source-defined contextual void selection slots; cell skips standard reset while row/column/table reset prior selection.",
+  "endpoints": "Rows/columns use last paragraph end of first selected box as point and last box end as mark. Cell uses first paragraph offset zero as point after exchange; whole table uses first content zero as mark and last content end as point. New table cursor deletes ordinary mark only on first creation.",
+  "input": "Pinned Insert wrtsh1.cxx241 and DelRight delete.cxx288 delete selected content, enter standard mode, normalize/clear mark, then insert once. KillPams crsrsh.cxx1326 adopts displayed table point. New mounted fixtures originally expected X in every selected cell and new browser fixtures expected first-cell X. Corrections expect only native point cell X and other selected cells empty; existing production is unchanged.",
+  "inheritance": "Removed redundant abstract cursor/table state declarations. Optional numbering ranges remain native SwPaM as editsh.hxx573-574 defines. Expanded GetTableSel reads displayed point and mark as tblsel.cxx149-185, preserving ordinary marked endpoints.",
+  "menu": "EntireCell/EntireRow/EntireColumn/SelectTable native argument-free slots and Select submenu order are derived from swriter.sdi and menubar.xml644-652. Command count55. React consumes native cursor/box owners without new selection state or TextRuns conversion.",
+  "residual": "Complex frame/layout unions, protection, enhanced old-model drag, vertical/RTL/fly/merged/nested/rowspan tables, selection-mode and row-simple state, formulas/redlines/repeated headlines and complete upstream parity remain unverified.",
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED"
+}

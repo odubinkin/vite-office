@@ -8,7 +8,6 @@ import type { SwModelHint } from "../../../inc/hints";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import { SwCursor, SwTableCursor } from "../../core/crsr/swcrsr";
 import { SwTableBoxStartNode, SwTableNode } from "../../core/docnode/node";
-import { SwTable, type SwTableBox } from "../../core/table/swtable";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
@@ -82,8 +81,6 @@ interface WriterCompositionState {
 export class SwWrtShell extends SwFEShell {
   private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
-  private cursor: SwCursor;
-  private tableCursor: SwTableCursor | undefined;
   private readonly docShellSubscription: () => void;
   private readonly editing: SwWrtShellEditingOperations;
   private readonly listShell: SwListShell;
@@ -176,20 +173,6 @@ export class SwWrtShell extends SwFEShell {
     info.SetPaintLineNumbers(paint);
     return this.SetLineNumberInfo(info);
   }
-  /** Returns native editing cursors, materializing selected full-cell rings by default. @param makeTableCursor - Refresh boxes after displayed endpoint movement. @returns Current ordinary editing cursor. */
-  public GetCursor(makeTableCursor = true): SwCursor {
-    if (this.tableCursor !== undefined) {
-      if (makeTableCursor && this.tableCursor.IsCursorMovedUpdate())
-        this.tableCursor.NewTableSelection();
-      if (this.tableCursor.IsChgd()) this.cursor = this.tableCursor.MakeBoxSels(this.cursor);
-    }
-    return this.cursor;
-  }
-  /** Returns the native cursor used to display point and mark. @returns Table or ordinary display owner. */
-  public getShellCursor(): SwCursor {
-    return this.tableCursor ?? this.cursor;
-  }
-
   /** Starts native selection before moving to section, table or document beginning. @param select - Extend selection. @returns Native movement result. */
   public StartOfSection(select = false): boolean {
     return this.MoveSectionBoundary(true, select);
@@ -197,10 +180,6 @@ export class SwWrtShell extends SwFEShell {
   /** Starts native selection before moving to section, table or document end. @param select - Extend selection. @returns Native movement result. */
   public EndOfSection(select = false): boolean {
     return this.MoveSectionBoundary(false, select);
-  }
-  /** Reports the bounded shell table-selection mode. @returns Whether a native table cursor is active. */
-  public HasBoxSelection(): boolean {
-    return this.tableCursor !== undefined;
   }
   /** Queries native flag identities through the source-owned represented selection body. @returns Text/table/list flags. */
   public GetSelectionType(): SelectionType {
@@ -210,38 +189,28 @@ export class SwWrtShell extends SwFEShell {
   public IsCursorInTable(): SwTableNode | undefined {
     return IsCursorInTable(this);
   }
-  /** Selects the current flat row using native boxes and endpoint direction. @returns Whether a row was selected. */
-  public SelectTableRow(): boolean {
-    const table = this.IsCursorInTable();
-    if (table === undefined) return false;
-    const cursor = this.getShellCursor(),
-      point = cursor.GetPoint().GetNode().StartOfSectionNode(),
-      mark = cursor.GetMark().GetNode().StartOfSectionNode();
-    if (!(point instanceof SwTableBoxStartNode) || !(mark instanceof SwTableBoxStartNode))
-      return false;
-    const boxes: SwTableBox[] = [];
-    table.GetTable().CreateSelection(point, mark, boxes, SwTable.SEARCH_ROW);
-    if (boxes.length === 0) return false;
-    if (this.tableCursor === undefined)
-      this.tableCursor = new SwTableCursor(this.cursor.GetPoint());
+  /** Enters native standard mode at the displayed point, releasing all marks and cell rings. @returns Nothing. */
+  public EnterStdMode(): void {
+    this.cursor.Assign(this.getShellCursor().GetPoint());
+    this.ClearTableCursor();
     this.cursor.DeleteMark();
-    const first = (boxes[0] as SwTableBox).GetParagraphs().at(-1) as WriterParagraph,
-      last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as WriterParagraph;
-    this.tableCursor.DeleteMark();
-    this.tableCursor.GetPoint().Assign(last, last.Len());
-    this.tableCursor.SetMark();
-    this.tableCursor.GetPoint().Assign(first, first.Len());
-    this.tableCursor.ActualizeSelection(boxes);
-    this.pendingCharacterItems = first.GetCharacterItemsAt(first.Len());
-    this.docShell.GetUndoManager().BreakUndoGrouping();
-    this.NotifySelection();
-    return true;
+    this.UpdateTableCursor();
   }
-  /** Releases the table cursor without changing the persistent ordinary cursor. @returns Nothing. */
-  private ClearTableCursor(): void {
-    while (this.cursor.IsMultiSelection()) this.cursor.GetNext().Dispose();
-    this.tableCursor?.Dispose();
-    this.tableCursor = undefined;
+  /** Selects rows through the native core cursor owner. @returns Whether selected. */
+  public SelectTableRow(): boolean {
+    return this.SelTableRow();
+  }
+  /** Selects columns through the native core cursor owner. @returns Whether selected. */
+  public SelectTableCol(): boolean {
+    return this.SelTableCol();
+  }
+  /** Selects the current cell through the native core cursor owner. @returns Whether selected. */
+  public SelectTableCell(): boolean {
+    return this.SelTableBox();
+  }
+  /** Selects the current table through native content boundaries. @returns Whether selected. */
+  public SelectTable(): boolean {
+    return this.SelTable();
   }
   /** Implements the flat-cell GoStart/GoEnd decision order from move.cxx. @param start - Beginning direction. @param select - Extend selection. @returns Native movement result. */
   private MoveSectionBoundary(start: boolean, select: boolean): boolean {
@@ -297,7 +266,9 @@ export class SwWrtShell extends SwFEShell {
 
   /** Refreshes shell-owned input/bindings after core cell traversal. @returns Nothing. */
   protected override UpdateTableCursor(): void {
-    this.pendingCharacterItems = this.GetActiveParagraph().GetCharacterItemsAt(0);
+    this.pendingCharacterItems = this.GetActiveParagraph().GetCharacterItemsAt(
+      this.getShellCursor().GetPoint().GetContentIndex(),
+    );
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.NotifySelection();
   }

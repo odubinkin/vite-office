@@ -21,6 +21,10 @@
     "insertBookmark": ".uno:InsertBookmark",
     "insertBreak": ".uno:InsertBreak",
     "insertPageBreak": ".uno:InsertPagebreak",
+    "entireCell": ".uno:EntireCell",
+    "entireRow": ".uno:EntireRow",
+    "entireColumn": ".uno:EntireColumn",
+    "selectTable": ".uno:SelectTable",
     "insertTable": ".uno:InsertTable",
     "insertRowsBefore": ".uno:InsertRowsBefore",
     "insertRowsAfter": ".uno:InsertRowsAfter",
@@ -86,6 +90,10 @@
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertPagebreak" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:EntireCell" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:EntireRow" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:EntireColumn" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:SelectTable" },
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertTable" },
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertRowsBefore" },
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertRowsAfter" },
@@ -399,6 +407,58 @@
       "showsDialog": false,
       "shortcuts": ["Ctrl+Enter", "Meta+Enter"],
       "slotId": 20323
+    },
+    ".uno:EntireCell": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Select Cell",
+      "label": "Select Cell",
+      "iconName": "lc_entirecell.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20530
+    },
+    ".uno:EntireRow": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Select Row",
+      "label": "Select Row",
+      "iconName": "lc_entirerow.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20513
+    },
+    ".uno:EntireColumn": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Select Column",
+      "label": "Select Column",
+      "iconName": "lc_entirecolumn.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20514
+    },
+    ".uno:SelectTable": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Select Table",
+      "label": "Select Table",
+      "iconName": "lc_selecttable.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20515
     },
     ".uno:InsertTable": {
       "browserOwned": false,
@@ -1050,6 +1110,26 @@
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:EntireCell",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:EntireRow",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:EntireColumn",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:SelectTable",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
       "classification": "supported-upstream",
@@ -4185,46 +4265,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:EntireCell",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:EntireRow",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:EntireColumn",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:SelectTable",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:TableSelectMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:SetRowHeight",
@@ -6512,6 +6552,17 @@
             "kind": "menu",
             "label": "Insert"
           },
+          {
+            "id": ".uno:TableSelectMenu",
+            "items": [
+              { "commandUrl": ".uno:EntireCell", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:EntireRow", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:EntireColumn", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectTable", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Select"
+          },
           { "kind": "separator" },
           { "commandUrl": ".uno:TableDialog", "kind": "command", "visible": true }
         ],
@@ -8795,36 +8846,6 @@
         "context": [".uno:TableMenu"],
         "entryKind": "menu",
         "sourceUrl": ".uno:TableDeleteMenu"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:EntireCell"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:EntireRow"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:EntireColumn"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:SelectTable"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:TableSelectMenu"
       },
       {
         "classification": "X",

@@ -1,0 +1,216 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "d390dbe8b4efedfb6d9b23b0fcb091fb5c84fa4ddfe3d8e88dd24d17b591af0b",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "9f5a937bfdee5f5c2a93aef79886dea7e7dbd3f6a8c2ee1ee0c25ce25232ae1f",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "1d35dc89bd9bfe1ba4ddfac8bb612d704340ff4e555cfc8dbe122c2ec985b970",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "10bfd28788f360d43a6fc56c15caf3454c668667918fe9bc7181cc3349586c3a",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "e63d9e8d877a71b43ac280557b81648861ca98c6cbb0816abb701da6eedd573d"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "bd099722270436d263b3acc63c3a6d1725df7e7b6ba7392471aa46137ebe07b4",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/88CGE1.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 68470,
+      "sha256": "eaf67010773c2cca0fe67021991337cdc6ce49def80f0b61c0d662872ee5d505",
+      "totals": [
+        "Test Files  1 failed | 360 passed (361)",
+        "Tests  3 failed | 12838 passed (12841)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Row",
+          "assertion": [
+            "AssertionError: expected '' to be 'X' // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Column",
+          "assertion": [
+            "AssertionError: expected '' to be 'X' // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx > native menu selection Select Table",
+          "assertion": [
+            "AssertionError: expected '' to be 'X' // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 12838,
+        "failed": 3,
+        "skipped": 0,
+        "total": 12841
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 13785,
+          "covered": 13785,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15109,
+          "covered": 15109,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3616,
+          "covered": 3616,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11248,
+          "covered": 11248,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "264e7dd8270eb5053b3608f99e57e8a06822ceddb02a5813ee5ea0dee56b0eb3"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/88CGE1.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40604,
+      "sha256": "ce97be1346ace984cdde6c6b4acc09f3f0acd5498c0633fa126035a3d0909a0e",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "8e6fae6a004c2eb8593e0015a8d25470b9708a1eb914139154c3ffc219cd0def"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 219,
+      "sha256": "742090a225ec43f1f55b7823534cb9ac422440105f95aa0564aa54c7323235f3",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 33312,
+      "sha256": "8963d24b5902b9b1bcc60ccc88ed17b9ae382d153938ee6bb45bbc7b96dae990",
+      "totals": [
+        "2 failed",
+        "193 passed (2.5m)"
+      ],
+      "failedCases": [
+        {
+          "name": "writer-native-table-selection-commands.spec.ts > native table selection menu width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"X\"\u001b[39m",
+              "Received: \u001b[31m\"\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-table-selection-commands.spec.ts > native table selection menu width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"X\"\u001b[39m",
+              "Received: \u001b[31m\"\"\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T10:28:20.561Z",
+        "duration": 148311.738,
+        "expected": 193,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}

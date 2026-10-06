@@ -1,0 +1,34 @@
+{
+  "base": "184aeff391048b252dc4a4734f86c479bb8018c7",
+  "oldTestFiles": 479,
+  "byteIdenticalOldTestFiles": 477,
+  "changedOldTests": [
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/crsr/native-table-selection-ownership.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+    "apps/office/e2e/writer-native-table-selection-commands.spec.ts"
+  ],
+  "priorSemanticModules": 270,
+  "currentSemanticModules": 270,
+  "priorStatesDefaultsClassificationsAndEvidencePreserved": true,
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/edit/ednumber.ts",
+    "scripts/generate-writer-ui-resources.ts",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/crsr/native-table-selection-ownership.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+    "apps/office/e2e/writer-native-table-selection-commands.spec.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+    "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts"
+  ],
+  "failures": []
+}

@@ -2,6 +2,7 @@
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { createWriterInterface } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
+import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwFEShell } from "../../core/frmedt/fetab";
 import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 
@@ -72,7 +73,7 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
 export class SwTableShell {
   private readonly commandShell: SfxShell;
   /** Creates a table slot owner over the actual frame-editing shell. @param wrtShell - Native editing shell. @returns Nothing. */
-  public constructor(private readonly wrtShell: SwFEShell) {
+  public constructor(private readonly wrtShell: SwWrtShell) {
     this.commandShell = createSfxShell(
       this,
       createWriterInterface(
@@ -81,19 +82,30 @@ export class SwTableShell {
           WRITER_COMMAND_IDS.insertRowsAfter,
           WRITER_COMMAND_IDS.insertColumnsBefore,
           WRITER_COMMAND_IDS.insertColumnsAfter,
+          WRITER_COMMAND_IDS.entireCell,
+          WRITER_COMMAND_IDS.entireRow,
+          WRITER_COMMAND_IDS.entireColumn,
+          WRITER_COMMAND_IDS.selectTable,
         ].map(
-          /** Binds native void row slots. @param id - Generated command. @returns Slot handler. */
+          /** Binds native insertion and selection slots. @param id - Generated command. @returns Slot handler. */
           (id) => ({
             id,
             capabilityId: "CAP-0137" as const,
             /** Executes the native table command. @returns Whether inserted. */
             execute: () =>
-              this.Execute(
-                id === WRITER_COMMAND_IDS.insertRowsAfter ||
-                  id === WRITER_COMMAND_IDS.insertColumnsAfter,
-                id === WRITER_COMMAND_IDS.insertColumnsBefore ||
-                  id === WRITER_COMMAND_IDS.insertColumnsAfter,
-              ),
+              [
+                WRITER_COMMAND_IDS.entireCell,
+                WRITER_COMMAND_IDS.entireRow,
+                WRITER_COMMAND_IDS.entireColumn,
+                WRITER_COMMAND_IDS.selectTable,
+              ].includes(id)
+                ? this.Select(id)
+                : this.Execute(
+                    id === WRITER_COMMAND_IDS.insertRowsAfter ||
+                      id === WRITER_COMMAND_IDS.insertColumnsAfter,
+                    id === WRITER_COMMAND_IDS.insertColumnsBefore ||
+                      id === WRITER_COMMAND_IDS.insertColumnsAfter,
+                  ),
             /** Reads current native table state. @returns Whether available. */
             isEnabled: () => this.wrtShell.IsCursorInTable() !== undefined,
           }),
@@ -104,6 +116,18 @@ export class SwTableShell {
   /** Returns the native dispatcher shell. @returns Command shell. */
   public GetCommandShell(): SfxShell {
     return this.commandShell;
+  }
+  /** Executes native table selection with upstream standard-mode rules. @param id - Native selection slot. @returns Whether selected. */
+  private Select(id: string): boolean {
+    return this.wrtShell.RunNotificationTransaction(
+      /** Brackets standard reset and final selection. @returns Whether selected. */ () => {
+        if (id === WRITER_COMMAND_IDS.entireCell) return this.wrtShell.SelectTableCell();
+        this.wrtShell.EnterStdMode();
+        if (id === WRITER_COMMAND_IDS.entireRow) return this.wrtShell.SelectTableRow();
+        if (id === WRITER_COMMAND_IDS.entireColumn) return this.wrtShell.SelectTableCol();
+        return this.wrtShell.SelectTable();
+      },
+    );
   }
   /** Derives native count from actual selected row/column coordinates. @param behind - Trailing edge. @param columnMode - Native column command. @returns Whether inserted. */
   public Execute(behind: boolean, columnMode = false): boolean {

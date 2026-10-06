@@ -7,30 +7,24 @@ import {
   type SwTableLineFormat,
   type SwTableBoxFormat,
 } from "../table/swtable";
-import type { SwTableNode } from "../docnode/node";
+import { SwTableBoxStartNode } from "../docnode/node";
 import { CheckSplitCells } from "./tblsel";
 import { SwUndoAttrTable } from "../undo/untbl";
 
 /** Native frame-editing shell inherits the existing editing shell without an operation adapter. */
 export abstract class SwFEShell extends SwEditShell {
-  /** Resolves the actual current table. @returns Connected table node or absent. */
-  public abstract IsCursorInTable(): SwTableNode | undefined;
-  /** Reports native selected-box mode. @returns Whether boxes are selected. */
-  public abstract HasBoxSelection(): boolean;
-
   /** Returns original selected native boxes without a projection. @param search - Native rectangle, row or column expansion. @returns Actual box owners. */
-  public GetTableSel(search: 0 | 1 | 2 = SwTable.SEARCH_NONE): readonly SwTableBox[] {
+  public override GetTableSel(search: 0 | 1 | 2 = SwTable.SEARCH_NONE): readonly SwTableBox[] {
     const table = this.IsCursorInTable()?.GetTable();
     if (table === undefined) return [];
-    const boxes = this.GetTableBoxes(table, false);
-    if (search === SwTable.SEARCH_NONE || boxes.length === 0) return boxes;
+    if (search === SwTable.SEARCH_NONE) return this.GetTableBoxes(table, false);
+    const cursor = this.getShellCursor(),
+      point = cursor.GetPoint().GetNode().StartOfSectionNode(),
+      mark = cursor.GetMark().GetNode().StartOfSectionNode();
+    if (!(point instanceof SwTableBoxStartNode) || !(mark instanceof SwTableBoxStartNode))
+      return [];
     const selected: SwTableBox[] = [];
-    table.CreateSelection(
-      (boxes[0] as SwTableBox).GetStartNode(),
-      (boxes.at(-1) as SwTableBox).GetStartNode(),
-      selected,
-      search,
-    );
+    table.CreateSelection(point, mark, selected, search);
     return selected;
   }
   /** Inserts rows through native document ownership, retaining the original selection. @param count - Row count. @param behind - Insert after the selected edge. @returns Whether inserted. */
