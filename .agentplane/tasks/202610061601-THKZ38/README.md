@@ -4,7 +4,7 @@ title: "Port native absolute Writer column-page behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: port approved native absolute column-page owner and connect browser policy/controls under standing iterative authorization; retain all conscious I/O/recovery deviations and one absent full profile."
 doc_version: 3
-doc_updated_at: "2026-10-06T16:03:14.899Z"
+doc_updated_at: "2026-10-06T16:17:38.800Z"
 doc_updated_by: "CODER"
 description: "Iteration191 under the active upstream parity goal: replace React width-array edits with connected native SwTableColumnPage constant-width/adapt-table/proportional policies, modes and native field-window controls over SwTableRep. Preserve conscious save/open/recovery deviations; one approved leaf and one full absent profile, then only failed/new closures."
 sections:
@@ -72,7 +72,7 @@ sections:
     5. Once restored resource generation --check/source-tree/provenance/invariants/parity. Preserve275 prior metadata states/defaults/classifications/full evidence/responsibility/justification/symbol prefixes, append only native column-page symbols/evidence in existing modules; I/O/recovery mappings byte-identical. Doctor/routing/diff/pinned source hashes/current leaf/generated quality census0forbidden. Same-agent EVALUATOR exact implementation-SHA review explicitly not independent; clean final tracked state. Parent entire486687-character prefix SHA f43a559b2f5deeae908a43fe1dac08394c620b329caf5e25127f59be8961265d preserved. Parent/goal ACTIVE, full parity UNVERIFIED.
   Verification: "Pending implementation and declared verification. No completion or independent review claim."
   Rollback Plan: "Before implementation, preserve clean base138b1606d6178e3ca841597ada11fbcc67e1a500. Keep one scoped source commit and AP-only checkpoints; revert only this leaf's intentional paths if repair is necessary. Never reset unrelated work, edit DONE tasks or modify registered save/open/recovery deviations."
-  Findings: "Previous goal turn classified as progress: iteration190 DONE with implementation9911d7d81c1975c8d6eb79c3e7638f1270b12546 and parent checkpoint138b1606d6178e3ca841597ada11fbcc67e1a500; current checkout/main clean and only parent C9TN6M remains active. Confirmed current browser Columns directly replaces one width array entry and lacks native mode/remaining-space/window controls. Pinned tabledlg.cxx733..1225 and tablepg.hxx103 define SwTableColumnPage/MET_FIELDS5, constant-width next-column compensation, adapt-table width cap, proportional source round/MINLAY23 scaling, mode coupling and page spacing updates. Native tabsh.cxx272 sets line-selected from IsTableMode and !HasWholeTabSelection, both existing native queries already represented. Source Reset copies original SwTableRep and restores shared data; source native minimum controls clip zero widths rather than raising current React inline error. Platform SizeHdl preferred-width event, native percentages, full hidden/per-row table graph/frame notifications and broad UI/core parity remain unverified; this leaf makes the existing absolute column interaction directly native-owned."
+  Findings: "User reprioritized a concrete mouse column-resize failure before verification. Five unfinished semantic paths are preserved in local Git stash c85f4a0e453dfd06d6e199554784f2c286737472. No static or absence profile has run for this leaf. Resume this exact draft after the dedicated resize fix; preserve its original approved scope and verification contract. Whole parity remains unverified."
 id_source: "generated"
 ---
 ## Summary
@@ -121,4 +121,4 @@ Before implementation, preserve clean base138b1606d6178e3ca841597ada11fbcc67e1a5
 
 ## Findings
 
-Previous goal turn classified as progress: iteration190 DONE with implementation9911d7d81c1975c8d6eb79c3e7638f1270b12546 and parent checkpoint138b1606d6178e3ca841597ada11fbcc67e1a500; current checkout/main clean and only parent C9TN6M remains active. Confirmed current browser Columns directly replaces one width array entry and lacks native mode/remaining-space/window controls. Pinned tabledlg.cxx733..1225 and tablepg.hxx103 define SwTableColumnPage/MET_FIELDS5, constant-width next-column compensation, adapt-table width cap, proportional source round/MINLAY23 scaling, mode coupling and page spacing updates. Native tabsh.cxx272 sets line-selected from IsTableMode and !HasWholeTabSelection, both existing native queries already represented. Source Reset copies original SwTableRep and restores shared data; source native minimum controls clip zero widths rather than raising current React inline error. Platform SizeHdl preferred-width event, native percentages, full hidden/per-row table graph/frame notifications and broad UI/core parity remain unverified; this leaf makes the existing absolute column interaction directly native-owned.
+User reprioritized a concrete mouse column-resize failure before verification. Five unfinished semantic paths are preserved in local Git stash c85f4a0e453dfd06d6e199554784f2c286737472. No static or absence profile has run for this leaf. Resume this exact draft after the dedicated resize fix; preserve its original approved scope and verification contract. Whole parity remains unverified.
