@@ -1,10 +1,11 @@
 ---
 id: "202610061847-R9JM5A"
 title: "Port native Writer format-page draft lifecycle"
-status: "DOING"
+result_summary: "Ported native widget-local format-page draft ownership, Reset/Activate/FillItemSet/Deactivate, saved values and canonical history/input behavior. Nine approved paths and prior contract prefixes retained."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "13096app109inventory5scripts231Chromium pass; one full upstream-absent profile; actual100 coverage through verified identical source/maps without passing replay."
     - "Nine approved paths,511old acceptance files identical plus one accessor migration preserving all literal assertions,4new516total;276 prior metadata prefixes and registered exceptions preserved."
-commit: null
+commit:
+  hash: "c786204dd8b3469a9018ccacba20f99bb57ebabc"
+  message: "🚧 R9JM5A code: port native Writer format-page draft lifecycle"
 comments:
   -
     author: "CODER"
     body: "Start: approved iteration195 native absolute format-page field/reset/activation/deactivation ownership and change flags, nine scoped paths with retained historical literals, one upstream-absent full profile and actual source/map coverage proof; standing user goal authorization."
+  -
+    author: "CODER"
+    body: "Verified: native Writer format-page lifecycle;13096app109inventory5scripts231Chromium pass, actual100 identical-source/map coverage and all scoped gates. Same-agent quality phase explicitly not independent; parent/goal remain active."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native format-page draft lifecycle at c786204dd8b3469a9018ccacba20f99bb57ebabc:13096app109inventory5scripts231Chromium pass, actual100 coverage, one upstream-absent profile, static/source/scope/governance pass; same-agent EVALUATOR explicitly not independent. Parent/goal active."
+  -
+    type: "status"
+    at: "2026-10-06T19:27:37.438Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer format-page lifecycle;13096app109inventory5scripts231Chromium pass, actual100 identical-source/map coverage and all scoped gates. Same-agent quality phase explicitly not independent; parent/goal remain active."
 doc_version: 3
-doc_updated_at: "2026-10-06T19:27:24.233Z"
+doc_updated_at: "2026-10-06T19:27:37.440Z"
 doc_updated_by: "CODER"
 description: "Iteration195 under active implemented-runtime parity goal: move existing absolute table-format metric/radio state into SwFormatTablePage, publish shared SwTableRep only on native page deactivation, restore source Reset/Activate/FillItemSet/change flags, and connect React page activation. Preserve literal historical arithmetic, canonical history and registered deviations; update one historical field-state assertion surface and add four acceptance files. One full upstream-absent profile, failed/new-only closures, actual100 coverage and full-prefix preservation; raw source/results only ignored cache, no upstream execution in tests."
 sections:
