@@ -1,0 +1,32 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/inc/itabenum.ts": "b0034e9124bead2e946207665540c0d7cfd5a419b58954b1d074a22aad5fe679",
+    "apps/office/src/sw/source/ui/table/instable.ts": "a6723df1f4eb5eb9d8db48dda08144b6c3024edd838a6e1981c1cc3aace5c1b0",
+    "apps/office/src/sw/browser/presentation/WriterInsertTableDialog.tsx": "ee0f0ff42197fc7c49977f547d95fb2167c8b56e7ea54e2ca0da4cdaa30c524e",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "1f2877866c317a899bc82313a0870879557c87a0b72b1c2e017264d39208cfcb",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "cc034d28e1c2315eec7dd6f9fbaf26b07dde4f0f72e98268a5bad6b757edd7e7"
+  },
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-insert-table-dialog.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 629,
+      "sha256": "08d2e1b2aa3e2ef150a0a9beb5b392528dd91e4b90579749846db2a0c6396a65",
+      "totals": [
+        "2 passed (4.7s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T07:29:26.478Z",
+        "duration": 4650.062,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
