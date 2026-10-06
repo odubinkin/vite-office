@@ -1,0 +1,44 @@
+{
+  "verdict": "pass",
+  "evaluatedSHA": "2513804194e3fd2fe3055acae26d795712d4b729",
+  "sameAgent": true,
+  "independentReviewer": false,
+  "semanticPaths": [
+    "apps/office/e2e/writer-table-properties-history.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json"
+  ],
+  "actualDistinctCases": {
+    "app": 12731,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 167
+  },
+  "onlyOriginalFailuresReplayed": {
+    "app": 2,
+    "chromium": 2
+  },
+  "sourceIdentityVerified": true,
+  "coverageMapSHA256": {
+    "app": "58c88d17c6791bfba14d7fa8119354eea8e2f748b8e501b1e451545c2633a79d",
+    "inventory": "3f572617281870e3e2a8251c65685852d1e4ccc6af3f3340ce85ed949da1fcba"
+  },
+  "nativeSHA256": {
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/core/undo/untbl.cxx": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b"
+  },
+  "priorTestsByteIdentical": 456,
+  "priorSemanticContractsPreserved": 259,
+  "fullGoal": "ACTIVE",
+  "completeCoreUIParity": "UNVERIFIED",
+  "residual": "Native item/change-only/distinct attribute undo classes,complete alignment/spacing/relative width,complex table/frame and insertion/fullUI/core behavior remain unverified."
+}

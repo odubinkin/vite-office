@@ -4,7 +4,7 @@ title: "Route table properties through native editing and history owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,23 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T04:49:23.325Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exactSHA 2513804194e3fd2fe3055acae26d795712d4b729 PASS for bounded native table-property handoff and grouped attribute history; no independent reviewer claim; complete parity unverified."
+  evaluated_sha: "2513804194e3fd2fe3055acae26d795712d4b729"
+  blueprint_digest: "626dfcc93c69f2fc8edb8e192881a5c3dee336f133d52f55ebdf9d1d58d0f0c3"
+  evidence_refs:
+    - ".agentplane/tasks/202610060303-DDSYJ8/README.md"
+    - ".agentplane/tasks/202610060303-DDSYJ8/quality/20261006-044923325-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060303-DDSYJ8/quality/20261006-044923325-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060303-DDSYJ8/quality/20261006-044923325-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060303-DDSYJ8/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060303-DDSYJ8/evidence/exact-sha-review.json"
+    - ".agentplane/tasks/202610060303-DDSYJ8/evidence/final-coverage.json"
+  findings:
+    - "Actual12731app109inventory5scripts167Chrome PASS; only original2app/2Chrome closure, unchanged six production hashes and258exact maps, actual100coverage; native selection scopes/graph/cursor/lifecycle retained;456prior testfiles259semantic contracts and registeredIOexceptions preserved."
 commit: null
 comments:
   -
@@ -38,7 +55,7 @@ events:
     to: "DOING"
     note: "Start: implement native table-property ownership under standing iterative approval."
 doc_version: 3
-doc_updated_at: "2026-10-06T04:48:32.800Z"
+doc_updated_at: "2026-10-06T05:50:03.273Z"
 doc_updated_by: "CODER"
 description: "Iteration176: remove React table-property mutations through source-shaped SwFEShell and ItemSetToTableParam; grouped native attribute history and correct selection ownership. Full alignment controls remain a subsequent atomic task."
 sections:
@@ -66,7 +83,7 @@ sections:
     Command: six initial static gates and changed-file Prettier/ESLint/JSDoc/TypeScript/physical-line checks. Result: pass after only failed format/typecheck recovery; remaining initial gates executed once. Evidence: static-gates.json,changed-initial-statics.json,changed-failure-statics.json. Scope: approved11semantic paths.
     Command: ONE upstream-absent full build/app/inventory/scripts/Chromium profile and original-failure-only app/Chrome closure. Result: pass,actual distinct12731app109inventory5scripts167Chrome,0flaky. Initial2app+2Chrome failures are documented fixture subscription/tag-selection errors; original2app PASS5skip7total and2Chrome PASS. Coverage-only subset exit1 reflects unchanged global100threshold; final exact-source/map actualcounter merge100L/S/F/B. No prodchange/rebuild or passing/full replay. Evidence: absent-profile.json,closure-profile.json,final-coverage.json. Scope: native/mounted/production cases using owned classes only; vendor restored finally.
     Command: five restored source audits,scopeprefix/testidentity,doctor,routing,diff,ignored-inclusive AP scan. Result: pass;0semantic violations,456prior testfiles byte-identical,259prior semantic contracts preserved,261modules with2new unverified owners,doctor0errors2knownwarnings,4578APfiles0forbidden. Evidence: restored-source-audits.json,scope-audit.json,governance.json,artifact-audit.json. Scope: no upstream sources/helpers/Python/rawdiagnostics in AP,no policy/IOexceptions changes.
-    Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pending final SHA. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
+    Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pass at implementation SHA 2513804194e3fd2fe3055acae26d795712d4b729; quality 20261006-044923325-recovery-context, same-agent exactSHA phase, no independent reviewer claim. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
   Rollback Plan: "Revert the semantic commit; retain task evidence and registered I/O exceptions."
   Findings: |-
     Read-only discovery found React property mutation without native grouped history and row-wide box alignment. Three bounded guessed-path errors occurred (tabsh under ui/shells twice,wrtsh under sw/inc once); route recomputed and actual native uibase/core paths located, no source mutation after failures. Earlier summary discovery was read-only. Full goal remains ACTIVE and parity UNVERIFIED.
@@ -131,7 +148,7 @@ Iteration176 ONE direct CODER leaf under standing user approval. Restore represe
 Command: six initial static gates and changed-file Prettier/ESLint/JSDoc/TypeScript/physical-line checks. Result: pass after only failed format/typecheck recovery; remaining initial gates executed once. Evidence: static-gates.json,changed-initial-statics.json,changed-failure-statics.json. Scope: approved11semantic paths.
 Command: ONE upstream-absent full build/app/inventory/scripts/Chromium profile and original-failure-only app/Chrome closure. Result: pass,actual distinct12731app109inventory5scripts167Chrome,0flaky. Initial2app+2Chrome failures are documented fixture subscription/tag-selection errors; original2app PASS5skip7total and2Chrome PASS. Coverage-only subset exit1 reflects unchanged global100threshold; final exact-source/map actualcounter merge100L/S/F/B. No prodchange/rebuild or passing/full replay. Evidence: absent-profile.json,closure-profile.json,final-coverage.json. Scope: native/mounted/production cases using owned classes only; vendor restored finally.
 Command: five restored source audits,scopeprefix/testidentity,doctor,routing,diff,ignored-inclusive AP scan. Result: pass;0semantic violations,456prior testfiles byte-identical,259prior semantic contracts preserved,261modules with2new unverified owners,doctor0errors2knownwarnings,4578APfiles0forbidden. Evidence: restored-source-audits.json,scope-audit.json,governance.json,artifact-audit.json. Scope: no upstream sources/helpers/Python/rawdiagnostics in AP,no policy/IOexceptions changes.
-Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pending final SHA. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
+Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pass at implementation SHA 2513804194e3fd2fe3055acae26d795712d4b729; quality 20261006-044923325-recovery-context, same-agent exactSHA phase, no independent reviewer claim. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
 
 ## Rollback Plan
 
