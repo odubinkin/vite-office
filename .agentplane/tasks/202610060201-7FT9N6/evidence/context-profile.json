@@ -1,0 +1,112 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native partial cross-cell delete preserves both cell boundaries"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native partial cross-cell backspace preserves both cell boundaries"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native separator-only cross-cell delete clears selection without erasing cells"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native separator-only cross-cell backspace clears selection without erasing cells"
+    }
+  ],
+  "newCases": [
+    "keeps model-only edit-window cell ranges ordinary until actual table frame context arrives",
+    "reads ordinary table-frame geometry and formats the actual selected original column",
+    "reduces a live native row cursor when the actual moving view hit enters a repeated headline"
+  ],
+  "newChrome": "Writer native cross-cell bold formats the selected original rectangle and all headline text copies",
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "original-failed-and-genuinely-new-only-upstream-absent",
+      "exit": 0,
+      "sha256": "2a176321f130a9c7a9aae0493e72ca5af12deb47c7378d22ab2d8901d776be83",
+      "bytes": 1103
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/native-headline-selection.test.tsx --testNamePattern=^(native partial cross-cell delete preserves both cell boundaries|native partial cross-cell backspace preserves both cell boundaries|native separator-only cross-cell delete clears selection without erasing cells|native separator-only cross-cell backspace clears selection without erasing cells|keeps model-only edit-window cell ranges ordinary until actual table frame context arrives|reads ordinary table-frame geometry and formats the actual selected original column|reduces a live native row cursor when the actual moving view hit enters a repeated headline)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/7FT9N6.context-app-results.json",
+      "profile": "original-failed-and-genuinely-new-only-upstream-absent",
+      "exit": 1,
+      "sha256": "b9d50eb119a6268b8a135b1bf31129beb6ad397314f991affd8d40cabb6d8506",
+      "bytes": 3916,
+      "caseCounts": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 32,
+        "total": 39
+      },
+      "executedCases": [
+        "reads ordinary table-frame geometry and formats the actual selected original column",
+        "reduces a live native row cursor when the actual moving view hit enters a repeated headline",
+        "keeps model-only edit-window cell ranges ordinary until actual table frame context arrives",
+        "native partial cross-cell delete preserves both cell boundaries",
+        "native partial cross-cell backspace preserves both cell boundaries",
+        "native separator-only cross-cell delete clears selection without erasing cells",
+        "native separator-only cross-cell backspace clears selection without erasing cells"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverage": {
+        "lines": {
+          "total": 13119,
+          "covered": 4746,
+          "skipped": 0,
+          "pct": 36.17
+        },
+        "statements": {
+          "total": 14382,
+          "covered": 4971,
+          "skipped": 0,
+          "pct": 34.56
+        },
+        "functions": {
+          "total": 3459,
+          "covered": 1347,
+          "skipped": 0,
+          "pct": 38.94
+        },
+        "branches": {
+          "total": 10742,
+          "covered": 2558,
+          "skipped": 0,
+          "pct": 23.81
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "50c340a9cb75d3d05d8d6f9b779498d58f16ca25ee85d4e65ac3c6dda0e819b4"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-headline-selection.spec.ts --grep Writer native cross-cell bold formats the selected original rectangle and all headline text copies --reporter=list,json",
+      "profile": "original-failed-and-genuinely-new-only-upstream-absent",
+      "exit": 0,
+      "sha256": "3e3319e057cce239a7d7f13dd0ed4d01ac113b23fd2361ef9ecf1739e3506f73",
+      "bytes": 579,
+      "caseCounts": {
+        "startTime": "2026-10-06T02:20:53.217Z",
+        "duration": 1888.7160000000001,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ]
+}

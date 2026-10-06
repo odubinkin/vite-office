@@ -1,0 +1,5 @@
+{
+  "command": "npm exec -- prettier --check apps/office/src/sw/browser/editor/writer-selection-types.ts apps/office/src/sw/browser/editor/writer-selection.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/browser/editor/WriterEditableTable.tsx apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts apps/office/src/sw/browser/editor/native-headline-selection.test.tsx apps/office/e2e/writer-headline-selection.spec.ts",
+  "exit": 0,
+  "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+}

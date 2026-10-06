@@ -1,0 +1,299 @@
+{
+  "sourceProof": [
+    {
+      "file": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "oldSHA256": "75d7ab61004c6ab0a6bf45509e3336e4bd8aca6a24ad47a25102a845aff00f89",
+      "newSHA256": "55de416f8fb5b61137c236b7a625f08df6b1d9add19517f90c537575b1620e14",
+      "unchangedContiguousRanges": [
+        {
+          "first": 1,
+          "last": 328,
+          "delta": 0
+        },
+        {
+          "first": 330,
+          "last": 358,
+          "delta": 2
+        }
+      ],
+      "transferred": {
+        "statements": 137,
+        "functions": 24,
+        "branches": 108,
+        "individualBranchRanges": 1
+      },
+      "discarded": {
+        "statements": 1,
+        "functions": 1,
+        "branches": 3
+      }
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/writer-selection-types.ts",
+      "oldSHA256": "5576514914f87d87d884ce501949cafb09b15a985e61761d4b98c03b7efa1ca4",
+      "newSHA256": "0accf345ffa393859e4800cb9af1c3ca0d7dea664e13b083aab60183d1e56da8",
+      "unchangedContiguousRanges": [
+        {
+          "first": 1,
+          "last": 6,
+          "delta": 0
+        },
+        {
+          "first": 9,
+          "last": 18,
+          "delta": 0
+        }
+      ],
+      "transferred": {
+        "statements": 0,
+        "functions": 0,
+        "branches": 0,
+        "individualBranchRanges": 0
+      },
+      "discarded": {
+        "statements": 0,
+        "functions": 0,
+        "branches": 0
+      }
+    },
+    {
+      "file": "apps/office/src/sw/browser/editor/writer-selection.ts",
+      "oldSHA256": "74b6ec9ab91f090dc8e92c964653d7fa9308425eded3b2ce1e0370d67140314e",
+      "newSHA256": "20455f22bfba8ec093dd59191052fbd35dfd469a3288d40c1c15d8a0a20a279d",
+      "unchangedContiguousRanges": [
+        {
+          "first": 1,
+          "last": 271,
+          "delta": 0
+        },
+        {
+          "first": 273,
+          "last": 273,
+          "delta": 0
+        },
+        {
+          "first": 275,
+          "last": 303,
+          "delta": 3
+        }
+      ],
+      "transferred": {
+        "statements": 87,
+        "functions": 17,
+        "branches": 66,
+        "individualBranchRanges": 0
+      },
+      "discarded": {
+        "statements": 0,
+        "functions": 1,
+        "branches": 0
+      }
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "oldSHA256": "10a7852f802ec189ad3bae3cd52ac405da729cdbd6f7e15a3687c1694915e684",
+      "newSHA256": "678aadbe43ff1c6417f1b41047da1286e514a11729e4255d0f531d70ea5c6274",
+      "unchangedContiguousRanges": [
+        {
+          "first": 1,
+          "last": 22,
+          "delta": 0
+        },
+        {
+          "first": 25,
+          "last": 60,
+          "delta": 0
+        },
+        {
+          "first": 66,
+          "last": 272,
+          "delta": 7
+        }
+      ],
+      "transferred": {
+        "statements": 88,
+        "functions": 30,
+        "branches": 86,
+        "individualBranchRanges": 0
+      },
+      "discarded": {
+        "statements": 2,
+        "functions": 1,
+        "branches": 2
+      }
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+      "oldSHA256": "3b0178672ec7b5a965bc916f0c85fc022ca16f6491fd2496609a7973d7bf2b83",
+      "newSHA256": "2a46bdec919bb2e49783c891b503e6390597e8d75ac9d9bb6e52b5472ac7bd71",
+      "unchangedContiguousRanges": [
+        {
+          "first": 1,
+          "last": 6,
+          "delta": 0
+        },
+        {
+          "first": 8,
+          "last": 8,
+          "delta": 0
+        },
+        {
+          "first": 9,
+          "last": 44,
+          "delta": 28
+        }
+      ],
+      "transferred": {
+        "statements": 21,
+        "functions": 2,
+        "branches": 16,
+        "individualBranchRanges": 0
+      },
+      "discarded": {
+        "statements": 0,
+        "functions": 0,
+        "branches": 0
+      }
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "oldSHA256": "016d6c150dfbf1228cede9df06a0b7103c86139ec6a295a72add501f87fc675d",
+      "newSHA256": "1de7f72e2547e3d2415f9ea21a4f4686e429c9e4169b67ad7602a4d846d630d9",
+      "unchangedContiguousRanges": [
+        {
+          "first": 1,
+          "last": 60,
+          "delta": 0
+        },
+        {
+          "first": 62,
+          "last": 63,
+          "delta": 5
+        },
+        {
+          "first": 65,
+          "last": 70,
+          "delta": 4
+        },
+        {
+          "first": 72,
+          "last": 209,
+          "delta": 3
+        },
+        {
+          "first": 217,
+          "last": 434,
+          "delta": -3
+        },
+        {
+          "first": 437,
+          "last": 443,
+          "delta": -3
+        },
+        {
+          "first": 458,
+          "last": 472,
+          "delta": -17
+        },
+        {
+          "first": 478,
+          "last": 480,
+          "delta": -22
+        },
+        {
+          "first": 481,
+          "last": 996,
+          "delta": 4
+        }
+      ],
+      "transferred": {
+        "statements": 343,
+        "functions": 114,
+        "branches": 185,
+        "individualBranchRanges": 0
+      },
+      "discarded": {
+        "statements": 12,
+        "functions": 2,
+        "branches": 20
+      }
+    }
+  ],
+  "proofRule": "Only entire contiguous unchanged source ranges under actual line mapping and actual original counters; ranges crossing changes discarded. All unchanged files require exact actual maps/source identity; changed owners use actual final context counters plus eligible initial ranges. No intermediate changed-source counter transfer.",
+  "summary": {
+    "lines": {
+      "total": 13119,
+      "covered": 13119,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14382,
+      "covered": 14382,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3459,
+      "covered": 3459,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10742,
+      "covered": 10742,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "finalProductionSHA256": {
+    "apps/office/src/sw/browser/editor/writer-selection-types.ts": "0accf345ffa393859e4800cb9af1c3ca0d7dea664e13b083aab60183d1e56da8",
+    "apps/office/src/sw/browser/editor/writer-selection.ts": "20455f22bfba8ec093dd59191052fbd35dfd469a3288d40c1c15d8a0a20a279d",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "55de416f8fb5b61137c236b7a625f08df6b1d9add19517f90c537575b1620e14",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "7ee10afbccdd880eb694f8df96866ff22fe89855de240e95f4591ea2f1c99721",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "678aadbe43ff1c6417f1b41047da1286e514a11729e4255d0f531d70ea5c6274",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "1de7f72e2547e3d2415f9ea21a4f4686e429c9e4169b67ad7602a4d846d630d9",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts": "2a46bdec919bb2e49783c891b503e6390597e8d75ac9d9bb6e52b5472ac7bd71"
+  },
+  "finalMapSHA256": "cbc3b551d805639cdfd0d7780dd0052cb6b7d2b9bfbebf4b8c885cf833f6d1ce",
+  "finalInventoryMapSHA256": "b60403c9649b6569ca91f64e72c0bd2dd3c8448fd2b80d5db9778bbed7e789ba"
+}

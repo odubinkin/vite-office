@@ -1,0 +1,21 @@
+{
+  "command": "npm run test:coverage --workspace @vite-office/office -- /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/native-headline-selection.test.tsx --testNamePattern=^(rejects foreign table-frame endpoints while retaining an already active native box selection|deletes a same-cell follow text range through one original node and real history|replaces ordinary body text adjacent to the table without supplying table-frame geometry)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/7FT9N6.coverage-new-results.json",
+  "profile": "genuinely-new-cases-only-upstream-absent",
+  "vendorRestored": true,
+  "exit": 1,
+  "sha256": "63cdbceeb42dd1c955f5ca31b76d724ca8c57a28d8ccf6c0c145e89df7af6a8a",
+  "bytes": 2920,
+  "caseCounts": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 23,
+    "total": 26
+  },
+  "executedCases": [
+    "deletes a same-cell follow text range through one original node and real history",
+    "replaces ordinary body text adjacent to the table without supplying table-frame geometry",
+    "rejects foreign table-frame endpoints while retaining an already active native box selection"
+  ],
+  "failedCases": [],
+  "coverageMapSHA256": "b8f33567bb90986681eac7ae3f8a7d8455a98bcbdcc51f43fcc943be3f068a96"
+}

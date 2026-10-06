@@ -1,0 +1,263 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/editor/writer-selection-types.ts": "5576514914f87d87d884ce501949cafb09b15a985e61761d4b98c03b7efa1ca4",
+    "apps/office/src/sw/browser/editor/writer-selection.ts": "74b6ec9ab91f090dc8e92c964653d7fa9308425eded3b2ce1e0370d67140314e",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "75d7ab61004c6ab0a6bf45509e3336e4bd8aca6a24ad47a25102a845aff00f89",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "7ee10afbccdd880eb694f8df96866ff22fe89855de240e95f4591ea2f1c99721",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "10a7852f802ec189ad3bae3cd52ac405da729cdbd6f7e15a3687c1694915e684",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "016d6c150dfbf1228cede9df06a0b7103c86139ec6a295a72add501f87fc675d",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts": "3b0178672ec7b5a965bc916f0c85fc022ca16f6491fd2496609a7973d7bf2b83"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "4067311033af281fe9cdc2d3012f59a3ad626f16d4f1de00fe47856e74e36f3a",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/7FT9N6.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 1881879,
+      "sha256": "0a40329fc1702335e5c5cab4e7c128a68543b9f86fb95fd22278c1bf88f33253",
+      "totals": [
+        "Test Files  7 failed | 334 passed (341)",
+        "Tests  31 failed | 12650 passed (12681)",
+        "⎯⎯⎯⎯⎯⎯ Failed Tests 31 ⎯⎯⎯⎯⎯⎯⎯"
+      ],
+      "failedCases": [
+        "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx > native cell list level UI disables range commands at one cell limit and reenables them after native model invalidation",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native partial cross-cell delete preserves both cell boundaries",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native partial cross-cell backspace preserves both cell boundaries",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native separator-only cross-cell delete clears selection without erasing cells",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native separator-only cross-cell backspace clears selection without erasing cells",
+        "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts > native list-level node ranges changes both real cell nodes atomically with reversed=false",
+        "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts > native list-level node ranges changes both real cell nodes atomically with reversed=true",
+        "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts > native list-level node ranges validates every selected node before mutation at boundary=9",
+        "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts > native list-level node ranges validates every selected node before mutation at boundary=+0",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts > numeric composite style history targets current slots cells/forward/false",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts > numeric composite style history targets current slots cells/forward/true",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts > numeric composite style history targets current slots cells/reversed/false",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts > numeric composite style history targets current slots cells/reversed/true",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts > numeric standalone collection history rebuilds the current range cells",
+        "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts > native continuation adopts every current selected slot cells/forward/same",
+        "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts > native continuation adopts every current selected slot cells/forward/different",
+        "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts > native continuation adopts every current selected slot cells/forward/plain",
+        "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts > native continuation adopts every current selected slot cells/reversed/same",
+        "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts > native continuation adopts every current selected slot cells/reversed/different",
+        "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts > native continuation adopts every current selected slot cells/reversed/plain",
+        "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts > native selected list toggle and numeric history cover actual range cells/forward/numbered",
+        "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts > native selected list toggle and numeric history cover actual range cells/forward/bullet",
+        "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts > native selected list toggle and numeric history cover actual range cells/reversed/numbered",
+        "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts > native selected list toggle and numeric history cover actual range cells/reversed/bullet",
+        "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts > native list state reports mixed marker families before applying a range rule",
+        "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts > numeric list-level history targets current native slots cells/forward/false",
+        "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts > numeric list-level history targets current native slots cells/forward/true",
+        "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts > numeric list-level history targets current native slots cells/reversed/false",
+        "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts > numeric list-level history targets current native slots cells/reversed/true",
+        "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts > numeric numbering deletion restores current native history entries cells/forward",
+        "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts > numeric numbering deletion restores current native history entries cells/reversed"
+      ],
+      "errors": [],
+      "caseCounts": {
+        "passed": 12650,
+        "failed": 31,
+        "skipped": 0,
+        "total": 12681
+      },
+      "coverage": {
+        "lines": 99.89,
+        "statements": 99.88,
+        "functions": 100,
+        "branches": 99.87
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 13107,
+          "covered": 13093,
+          "skipped": 0,
+          "pct": 99.89
+        },
+        "statements": {
+          "total": 14369,
+          "covered": 14353,
+          "skipped": 0,
+          "pct": 99.88
+        },
+        "functions": {
+          "total": 3455,
+          "covered": 3455,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10728,
+          "covered": 10715,
+          "skipped": 0,
+          "pct": 99.87
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "2f0ed59a74f8f7a6cbf3a3eda7e4d9f67cc73182a7281a993f6cdfabe24eec19",
+      "incompleteFiles": {
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/edit/eddel.ts": {
+          "lines": {
+            "total": 57,
+            "covered": 43,
+            "skipped": 0,
+            "pct": 75.43
+          },
+          "functions": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 64,
+            "covered": 48,
+            "skipped": 0,
+            "pct": 75
+          },
+          "branches": {
+            "total": 49,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 77.55
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts": {
+          "lines": {
+            "total": 122,
+            "covered": 122,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 24,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 128,
+            "covered": 128,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 82,
+            "covered": 80,
+            "skipped": 0,
+            "pct": 97.56
+          }
+        }
+      }
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/7FT9N6.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "de378cbadf912604db07667915e63895b2a9eabe4198ff1c9ed04ed691e77713",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverageMapSHA256": "34f3cf8f7d27c02428ef1adc81b0b2d6026b3ee284a23a0cd9f8362faa0e2181",
+      "incompleteFiles": {}
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "69291d9ac7116161f8ed99e0d9d42c73aea9e31cc4f49d436c5a9b3996b10e86",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 22026,
+      "sha256": "828f3eafcd220878719a678704c858c88b1312c4441561d3f6da427dea51371a",
+      "totals": [
+        "156 passed (1.1m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T02:11:25.985Z",
+        "duration": 64312.451,
+        "expected": 156,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

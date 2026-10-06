@@ -1,0 +1,48 @@
+{
+  "base": "e65c65606b80454bfae69690421eb0cb352b61b2",
+  "semanticPaths": 12,
+  "productionOwners": 7,
+  "priorTestFiles": 449,
+  "priorTestFilesByteIdentical": 449,
+  "semanticRecords": 258,
+  "allStatesDefaultsClassificationsIOExceptionsPreserved": true,
+  "oldEvidenceAndResponsibilitiesPrefixesPreserved": true,
+  "oneFullAbsentProfile": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 26,
+  "newChromiumCases": 3,
+  "finalDistinctPassed": {
+    "app": 12691,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 157
+  },
+  "sourceProof": {
+    "apps/office/src/sw/browser/editor/writer-selection-types.ts": "0accf345ffa393859e4800cb9af1c3ca0d7dea664e13b083aab60183d1e56da8",
+    "apps/office/src/sw/browser/editor/writer-selection.ts": "20455f22bfba8ec093dd59191052fbd35dfd469a3288d40c1c15d8a0a20a279d",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "55de416f8fb5b61137c236b7a625f08df6b1d9add19517f90c537575b1620e14",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "7ee10afbccdd880eb694f8df96866ff22fe89855de240e95f4591ea2f1c99721",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "678aadbe43ff1c6417f1b41047da1286e514a11729e4255d0f531d70ea5c6274",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "1de7f72e2547e3d2415f9ea21a4f4686e429c9e4169b67ad7602a4d846d630d9",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts": "2a46bdec919bb2e49783c891b503e6390597e8d75ac9d9bb6e52b5472ac7bd71"
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/crsr/crsrsh.cxx",
+      "sha256": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a"
+    },
+    {
+      "path": "sw/source/core/crsr/viscrs.cxx",
+      "sha256": "2ff149513e2d08a89b6a60d9ea0bea85e93292058a196169e30d2ce745f02bae"
+    },
+    {
+      "path": "sw/source/core/layout/findfrm.cxx",
+      "sha256": "7aac19628a361f1910fe922fffb5db085b6e94dd8b9f2233558e6eee8a33e444"
+    },
+    {
+      "path": "sw/source/core/layout/trvlfrm.cxx",
+      "sha256": "b645a2e52578d13c35526fe765fa625ed258afbead0d11d70d7beaa9d1353b78"
+    }
+  ],
+  "validationLimit": "Actual represented flat same-table UI cross-cell selection, repeated headline admission, original-only selected-box paint and shared native editing/history. Model-only positions retain text PaM; actual mounted table-cell classification drives native UpdateCursor. Full nested/merged/rowspan/split-row/cross-table/vertical/RTL/fly/multicolumn/protection/full native frame/core/UI parity unverified; deliberate IO exceptions unchanged,parent DOING,goal ACTIVE."
+}

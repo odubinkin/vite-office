@@ -1,0 +1,40 @@
+[
+  {
+    "command": "npm exec -- tsx scripts/generate-writer-ui-resources.ts --check",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": "npm run check:source-tree",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 162,
+    "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e"
+  },
+  {
+    "command": "npm run check:source-provenance",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 205,
+    "sha256": "e34363da8996b44fe1355800d3fa2ab91dfe5e7cbd8bb41045ac41f748a38dfc"
+  },
+  {
+    "command": "npm run inventory:invariants",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 136,
+    "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe"
+  },
+  {
+    "command": "npm run inventory:parity",
+    "profile": "vendor-restored-source-audit",
+    "exit": 0,
+    "bytes": 1548792,
+    "sha256": "ab8c245df2f3e440d3fb4ee9fa1bb0e19c884d2a5ddf82dedcfa8c1c2ae9b3e8",
+    "semanticViolationCounts": [
+      0
+    ]
+  }
+]

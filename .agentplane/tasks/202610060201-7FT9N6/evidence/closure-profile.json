@@ -1,0 +1,254 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+      "name": "native cell list level UI disables range commands at one cell limit and reenables them after native model invalidation"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native partial cross-cell delete preserves both cell boundaries"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native partial cross-cell backspace preserves both cell boundaries"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native separator-only cross-cell delete clears selection without erasing cells"
+    },
+    {
+      "file": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
+      "name": "native separator-only cross-cell backspace clears selection without erasing cells"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+      "name": "native list-level node ranges changes both real cell nodes atomically with reversed=false"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+      "name": "native list-level node ranges changes both real cell nodes atomically with reversed=true"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+      "name": "native list-level node ranges validates every selected node before mutation at boundary=9"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-list-level-range.test.ts",
+      "name": "native list-level node ranges validates every selected node before mutation at boundary=+0"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "name": "numeric composite style history targets current slots cells/forward/false"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "name": "numeric composite style history targets current slots cells/forward/true"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "name": "numeric composite style history targets current slots cells/reversed/false"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "name": "numeric composite style history targets current slots cells/reversed/true"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "name": "numeric standalone collection history rebuilds the current range cells"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "name": "native continuation adopts every current selected slot cells/forward/same"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "name": "native continuation adopts every current selected slot cells/forward/different"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "name": "native continuation adopts every current selected slot cells/forward/plain"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "name": "native continuation adopts every current selected slot cells/reversed/same"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "name": "native continuation adopts every current selected slot cells/reversed/different"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-continuation.test.ts",
+      "name": "native continuation adopts every current selected slot cells/reversed/plain"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "name": "native selected list toggle and numeric history cover actual range cells/forward/numbered"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "name": "native selected list toggle and numeric history cover actual range cells/forward/bullet"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "name": "native selected list toggle and numeric history cover actual range cells/reversed/numbered"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "name": "native selected list toggle and numeric history cover actual range cells/reversed/bullet"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "name": "native list state reports mixed marker families before applying a range rule"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+      "name": "numeric list-level history targets current native slots cells/forward/false"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+      "name": "numeric list-level history targets current native slots cells/forward/true"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+      "name": "numeric list-level history targets current native slots cells/reversed/false"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+      "name": "numeric list-level history targets current native slots cells/reversed/true"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+      "name": "numeric numbering deletion restores current native history entries cells/forward"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts",
+      "name": "numeric numbering deletion restores current native history entries cells/reversed"
+    }
+  ],
+  "newCases": [
+    "updates an unchanged low-level cross-cell PaM once without changing the existing table cursor twice",
+    "ignores a stale follow-headline flag after native repeat count becomes zero",
+    "rejects foreign native point and mark before interactive table update",
+    "ignores a repeated mark when the moving point leaves the table"
+  ],
+  "newChrome": "Writer native cross-cell bold formats the selected original rectangle and all headline text copies",
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "original-failed-and-genuinely-new-only-upstream-absent",
+      "exit": 0,
+      "sha256": "ed3a55e0a42bb39b19d9567dbec13882be640600f06b5c20212d22589008c194",
+      "bytes": 1103
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- /Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/native-list-level-range.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/native-format-node-index.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/native-list-continuation.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/undo/native-numbering-node-index.test.ts /Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/uibase/docvw/native-headline-selection.test.ts --testNamePattern=^(native cell list level UI disables range commands at one cell limit and reenables them after native model invalidation|native partial cross-cell delete preserves both cell boundaries|native partial cross-cell backspace preserves both cell boundaries|native separator-only cross-cell delete clears selection without erasing cells|native separator-only cross-cell backspace clears selection without erasing cells|native list-level node ranges changes both real cell nodes atomically with reversed=false|native list-level node ranges changes both real cell nodes atomically with reversed=true|native list-level node ranges validates every selected node before mutation at boundary=9|native list-level node ranges validates every selected node before mutation at boundary=\\+0|numeric composite style history targets current slots cells/forward/false|numeric composite style history targets current slots cells/forward/true|numeric composite style history targets current slots cells/reversed/false|numeric composite style history targets current slots cells/reversed/true|numeric standalone collection history rebuilds the current range cells|native continuation adopts every current selected slot cells/forward/same|native continuation adopts every current selected slot cells/forward/different|native continuation adopts every current selected slot cells/forward/plain|native continuation adopts every current selected slot cells/reversed/same|native continuation adopts every current selected slot cells/reversed/different|native continuation adopts every current selected slot cells/reversed/plain|native selected list toggle and numeric history cover actual range cells/forward/numbered|native selected list toggle and numeric history cover actual range cells/forward/bullet|native selected list toggle and numeric history cover actual range cells/reversed/numbered|native selected list toggle and numeric history cover actual range cells/reversed/bullet|native list state reports mixed marker families before applying a range rule|numeric list-level history targets current native slots cells/forward/false|numeric list-level history targets current native slots cells/forward/true|numeric list-level history targets current native slots cells/reversed/false|numeric list-level history targets current native slots cells/reversed/true|numeric numbering deletion restores current native history entries cells/forward|numeric numbering deletion restores current native history entries cells/reversed|updates an unchanged low-level cross-cell PaM once without changing the existing table cursor twice|ignores a stale follow-headline flag after native repeat count becomes zero|rejects foreign native point and mark before interactive table update|ignores a repeated mark when the moving point leaves the table)$ --coverage.reportOnFailure --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/7FT9N6.closure-app-results.json",
+      "profile": "original-failed-and-genuinely-new-only-upstream-absent",
+      "exit": 1,
+      "sha256": "9cf8c4cd9065449ad4f908939e4101fa0d3a170a4e9eaca9cfae9387dda29a19",
+      "bytes": 13016,
+      "caseCounts": {
+        "passed": 31,
+        "failed": 4,
+        "skipped": 149,
+        "total": 184
+      },
+      "executedCases": [
+        "native cell list level UI disables range commands at one cell limit and reenables them after native model invalidation",
+        "native list-level node ranges changes both real cell nodes atomically with reversed=false",
+        "native list-level node ranges changes both real cell nodes atomically with reversed=true",
+        "native list-level node ranges validates every selected node before mutation at boundary=9",
+        "native list-level node ranges validates every selected node before mutation at boundary=+0",
+        "updates an unchanged low-level cross-cell PaM once without changing the existing table cursor twice",
+        "ignores a stale follow-headline flag after native repeat count becomes zero",
+        "rejects foreign native point and mark before interactive table update",
+        "ignores a repeated mark when the moving point leaves the table",
+        "native partial cross-cell delete preserves both cell boundaries",
+        "native partial cross-cell backspace preserves both cell boundaries",
+        "native separator-only cross-cell delete clears selection without erasing cells",
+        "native separator-only cross-cell backspace clears selection without erasing cells",
+        "numeric composite style history targets current slots cells/forward/false",
+        "numeric composite style history targets current slots cells/forward/true",
+        "numeric composite style history targets current slots cells/reversed/false",
+        "numeric composite style history targets current slots cells/reversed/true",
+        "numeric standalone collection history rebuilds the current range cells",
+        "native continuation adopts every current selected slot cells/forward/same",
+        "native continuation adopts every current selected slot cells/forward/different",
+        "native continuation adopts every current selected slot cells/forward/plain",
+        "native continuation adopts every current selected slot cells/reversed/same",
+        "native continuation adopts every current selected slot cells/reversed/different",
+        "native continuation adopts every current selected slot cells/reversed/plain",
+        "native selected list toggle and numeric history cover actual range cells/forward/numbered",
+        "native selected list toggle and numeric history cover actual range cells/forward/bullet",
+        "native selected list toggle and numeric history cover actual range cells/reversed/numbered",
+        "native selected list toggle and numeric history cover actual range cells/reversed/bullet",
+        "native list state reports mixed marker families before applying a range rule",
+        "numeric list-level history targets current native slots cells/forward/false",
+        "numeric list-level history targets current native slots cells/forward/true",
+        "numeric list-level history targets current native slots cells/reversed/false",
+        "numeric list-level history targets current native slots cells/reversed/true",
+        "numeric numbering deletion restores current native history entries cells/forward",
+        "numeric numbering deletion restores current native history entries cells/reversed"
+      ],
+      "failedCases": [
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native partial cross-cell delete preserves both cell boundaries",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native partial cross-cell backspace preserves both cell boundaries",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native separator-only cross-cell delete clears selection without erasing cells",
+        "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts > native separator-only cross-cell backspace clears selection without erasing cells"
+      ],
+      "errors": [],
+      "coverage": {
+        "lines": {
+          "total": 13117,
+          "covered": 5215,
+          "skipped": 0,
+          "pct": 39.75
+        },
+        "statements": {
+          "total": 14380,
+          "covered": 5505,
+          "skipped": 0,
+          "pct": 38.28
+        },
+        "functions": {
+          "total": 3459,
+          "covered": 1455,
+          "skipped": 0,
+          "pct": 42.06
+        },
+        "branches": {
+          "total": 10738,
+          "covered": 2993,
+          "skipped": 0,
+          "pct": 27.87
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverageMapSHA256": "29ca0dab3f08994dfe97432f725347d2f03159c0ef5a0cb9e078e7c5e5cdec16"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-headline-selection.spec.ts --grep ^Writer native cross-cell bold formats the selected original rectangle and all headline text copies$ --reporter=list,json",
+      "profile": "original-failed-and-genuinely-new-only-upstream-absent",
+      "exit": 1,
+      "sha256": "8907fa9d1c1e72ba5e7eb97576b3c5cb95f354dc1618dddf12d86084d476fd27",
+      "bytes": 354,
+      "caseCounts": {
+        "startTime": "2026-10-06T02:17:29.281Z",
+        "duration": 563.831,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ]
+}
