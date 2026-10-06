@@ -4,7 +4,7 @@ title: "Restore native table alignment and spacing dialog behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T06:59:39.952Z"
+  updated_by: "CODER"
+  note: "Verified semantic commit 09b3bdc58225f03f1e56c4af6217b463e8ef5e62. One complete upstream-absent profile plus only original failed or genuinely new acceptance cases: 12773 distinct application tests, 109 inventory tests, 5 script tests and 181 Chromium cases passed. Application and inventory real-counter coverage reached 100% in all four dimensions using exact maps or complete byte-identical ranges. Restored-source audits and bounded scope checks passed; registered IO/recovery deviations preserved. Exact-SHA same-agent quality verdict passed. Full project parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native absolute table format-page geometry under standing iterative authorization; preserve registered deviations and bounded acceptance evidence."
+  -
+    type: "verify"
+    at: "2026-10-06T06:59:39.952Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified semantic commit 09b3bdc58225f03f1e56c4af6217b463e8ef5e62. One complete upstream-absent profile plus only original failed or genuinely new acceptance cases: 12773 distinct application tests, 109 inventory tests, 5 script tests and 181 Chromium cases passed. Application and inventory real-counter coverage reached 100% in all four dimensions using exact maps or complete byte-identical ranges. Restored-source audits and bounded scope checks passed; registered IO/recovery deviations preserved. Exact-SHA same-agent quality verdict passed. Full project parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T06:55:49.436Z"
+doc_updated_at: "2026-10-06T06:59:40.040Z"
 doc_updated_by: "CODER"
 description: "Iteration177: source-shaped table format page owns six absolute alignment modes, linked width/LR fields and existing vertical spacing; native orientation ownership, grouped history and ODF geometry survive UI commands."
 sections:
@@ -73,7 +79,41 @@ sections:
     3. Only original failures or genuinely new acceptance cases may run subsequently upstream-absent; rebuild only after production change. Coverage must reach100% through real counters and exact unchanged maps or fully byte-identical contiguous source ranges. Skipped means skipped.
     4. New literal checks cover six modes, metric constraints, sensitivity, automatic restoration, column reconciliation, original graph/history, Worker and ODF geometry, browser behavior at1280/390.
     5. Restored source-tree/provenance/invariants/parity/resource-generation audits pass, scope/status preservation and bounded old-test changes established; git diff --check, doctor (known warnings only), policy routing and forbidden-AP artifact scan pass. Record exact-SHA same-agent evaluator and clean final state.
-  Verification: "Command: six initial static gates, changed-file closure checks, one full upstream-absent profile and only original failed/genuinely new cases. Result: pass after recorded closure. Evidence: validation-counts.json, static-gates.json, changed-failure-statics.json, absent-profile.json, closure-profile.json, last-failed-profile.json and final-coverage.json. Distinct12773app/109inventory/5scripts/181Chromium; Chrome0flaky; repeated unselected cases recorded as skipped. App and inventory100% L/S/F/B with strict source/map and complete contiguous-range proofs. Vendor restored after every profile. Source-tree/provenance/invariants/parity/resource checks pass; governance checks pass with doctor0errors2knownwarnings. Scope:18 semantic paths, three bounded source-confirmed old test changes,456oldtestfiles byte-identical and261prior semantic states/defaults/classifications/IOexceptions preserved. Whole-goal parity remains unverified."
+  Verification: |-
+    Command: six initial static gates, changed-file closure checks, one full upstream-absent profile and only original failed/genuinely new cases. Result: pass after recorded closure. Evidence: validation-counts.json, static-gates.json, changed-failure-statics.json, absent-profile.json, closure-profile.json, last-failed-profile.json and final-coverage.json. Distinct12773app/109inventory/5scripts/181Chromium; Chrome0flaky; repeated unselected cases recorded as skipped. App and inventory100% L/S/F/B with strict source/map and complete contiguous-range proofs. Vendor restored after every profile. Source-tree/provenance/invariants/parity/resource checks pass; governance checks pass with doctor0errors2knownwarnings. Scope:18 semantic paths, three bounded source-confirmed old test changes,456oldtestfiles byte-identical and261prior semantic states/defaults/classifications/IOexceptions preserved. Whole-goal parity remains unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T06:59:39.952Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified semantic commit 09b3bdc58225f03f1e56c4af6217b463e8ef5e62. One complete upstream-absent profile plus only original failed or genuinely new acceptance cases: 12773 distinct application tests, 109 inventory tests, 5 script tests and 181 Chromium cases passed. Application and inventory real-counter coverage reached 100% in all four dimensions using exact maps or complete byte-identical ranges. Restored-source audits and bounded scope checks passed; registered IO/recovery deviations preserved. Exact-SHA same-agent quality verdict passed. Full project parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T06:55:49.436Z, excerpt_hash=sha256:cc0d4bdb120fc4ac77dc6221aeda1bdab0fdf696d471ecf349b5aca363292dc1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060601-1KRKKA/blueprint/resolved-snapshot.json
+    - old_digest: 8b378d6243c72793da81c8cbc71e0510c062d291420a5be80b72672deafadf73
+    - current_digest: 8b378d6243c72793da81c8cbc71e0510c062d291420a5be80b72672deafadf73
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060601-1KRKKA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060601-1KRKKA
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's implementation commit and scoped lifecycle commits; preserve registered deviations and earlier evidence."
   Findings: |-
     Standing authorization covers this native geometry leaf. Discovery-only missing-path guesses were resolved through rg; no upstream/helper sources persisted. An initial in-memory metadata update failed on browser responsibilities naming before writing either metadata file; route was recomputed and the correct source-owned/browser field was used. The dependency allowlist admits the actual offapi enum module with no reverse dependencies. Two existing tests have bounded source-confirmed changes declared in Scope; all original numerical oracles remain.
@@ -109,6 +149,39 @@ Core table orientation and layout, native absolute format-page draft and column 
 ## Verification
 
 Command: six initial static gates, changed-file closure checks, one full upstream-absent profile and only original failed/genuinely new cases. Result: pass after recorded closure. Evidence: validation-counts.json, static-gates.json, changed-failure-statics.json, absent-profile.json, closure-profile.json, last-failed-profile.json and final-coverage.json. Distinct12773app/109inventory/5scripts/181Chromium; Chrome0flaky; repeated unselected cases recorded as skipped. App and inventory100% L/S/F/B with strict source/map and complete contiguous-range proofs. Vendor restored after every profile. Source-tree/provenance/invariants/parity/resource checks pass; governance checks pass with doctor0errors2knownwarnings. Scope:18 semantic paths, three bounded source-confirmed old test changes,456oldtestfiles byte-identical and261prior semantic states/defaults/classifications/IOexceptions preserved. Whole-goal parity remains unverified.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T06:59:39.952Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified semantic commit 09b3bdc58225f03f1e56c4af6217b463e8ef5e62. One complete upstream-absent profile plus only original failed or genuinely new acceptance cases: 12773 distinct application tests, 109 inventory tests, 5 script tests and 181 Chromium cases passed. Application and inventory real-counter coverage reached 100% in all four dimensions using exact maps or complete byte-identical ranges. Restored-source audits and bounded scope checks passed; registered IO/recovery deviations preserved. Exact-SHA same-agent quality verdict passed. Full project parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T06:55:49.436Z, excerpt_hash=sha256:cc0d4bdb120fc4ac77dc6221aeda1bdab0fdf696d471ecf349b5aca363292dc1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060601-1KRKKA/blueprint/resolved-snapshot.json
+- old_digest: 8b378d6243c72793da81c8cbc71e0510c062d291420a5be80b72672deafadf73
+- current_digest: 8b378d6243c72793da81c8cbc71e0510c062d291420a5be80b72672deafadf73
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060601-1KRKKA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060601-1KRKKA
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
