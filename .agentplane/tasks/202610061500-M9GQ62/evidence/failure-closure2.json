@@ -1,0 +1,36 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts -t ^rejects a structural cell-start cursor without a native text frame$ --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/M9GQ62.app-closure2-results.json",
+      "exit": 0,
+      "bytes": 645,
+      "sha256": "50484ec4cf98d30df89c1e080b4f88e321d8af0844240516264289930892d29d",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 4,
+        "total": 5
+      },
+      "coverageMapSHA256": "0c9fae0c8a298afdb29c6453fdba6242e5ab6af325b4879dad58af8a5d6019fc"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-tabcols.spec.ts --reporter=list,json",
+      "exit": 0,
+      "bytes": 663,
+      "sha256": "8fca2caf501235c34ddafa4e56706eff1030671d8163a822f754c180a23ad051",
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T15:37:34.704Z",
+        "duration": 5050.840999999999,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

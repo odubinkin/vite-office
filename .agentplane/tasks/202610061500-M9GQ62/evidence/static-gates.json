@@ -1,0 +1,68 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 1924,
+      "sha256": "cb99b38c0ac7d2032b8284827557a7726fae1a40d7522e1ec75f3e7fed80b341",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "   21:15  error  Forbidden non-null assertion                                           @typescript-eslint/no-non-null-assertion",
+        "   21:15  error  Forbidden non-null assertion                                           @typescript-eslint/no-non-null-assertion",
+        "  127:39  error  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions",
+        "   16:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   31:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   31:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   78:14  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   79:14  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   89:15  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   92:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   92:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 678,
+      "sha256": "22e1a2509310f58376426cd8c9acfdff8612394614daaceb33f25160515828bc",
+      "diagnostics": [
+        "src/sw/source/core/table/native-tabcols.test.ts(81,11): error TS6133: 'ignored' is declared but its value is never read.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "6df077ec40d91fe979460542d6d01f08d3cff17f69e588b996a2ab88553ca687",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "f77f9e6c510e7bc016b582f61a2eebfafe1d9b47dc302c18ec3dc052a52736bf",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3523,
+      "sha256": "3435f84765614bfde87b328c37ca4f80ee6a04b86a92a8cd2e8f9d8c2faec8fc",
+      "diagnostics": []
+    }
+  ]
+}

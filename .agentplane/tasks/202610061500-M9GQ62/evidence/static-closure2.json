@@ -1,0 +1,20 @@
+{
+  "records": [
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 666,
+      "sha256": "6708eea854933ec91f7d09968ebc6e95139eb97e31a4606e24194c5b4a7419b4",
+      "diagnostics": [
+        "src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts(98,7): error TS1135: Argument expression expected.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "kind": "typecheck",
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "failedCases": [],
+      "diagnostics": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/presentation/writer-view.test.tsx src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts src/sw/source/uibase/wrtsh/native-table-properties.test.ts src/sw/source/core/table/native-tabcols.test.ts -t ^Writer browser presentation inserts, selects, edits and reopens a canonical Writer table$|^uses document-owned native separators with stable history automatic=false$|^uses document-owned native separators with stable history automatic=true$|^rejects foreign tables, per-row writes and invalid geometry before normalization/history$|^native table property application uses native selection scope and one attribute history selected=false$|^native table property application uses native selection scope and one attribute history selected=true$|^preserves native ushort|^constructs the connected dialog draft|^retains geometry for an unattached|^reads an implicit connected|^admits native implicit widths --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reportOnFailure --coverage.reporter=json --coverage.reporter=json-summary --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/M9GQ62.app-closure1-results.json",
+      "exit": 0,
+      "bytes": 2210,
+      "sha256": "a063c302adcb869585b33844de067982ed181246c463142146bf7835f3c4111a",
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 16,
+        "failed": 0,
+        "skipped": 39,
+        "total": 55
+      },
+      "coverageMapSHA256": "5e8c0deb9a83cac0a988bab1da07831c3bb51ffc4f48bb83427f810dfa4638d7"
+    },
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "5f9594fac4de4a1d0310be4a9dc9400b1bd88a776dc30acb22471f5b297a2715",
+      "failedCases": [],
+      "diagnostics": [
+        "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+      ]
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-tabcols.spec.ts --reporter=list,json",
+      "exit": 1,
+      "bytes": 6729,
+      "sha256": "24c1d8f458ad7a1de940dbed1c09119d2c17a82457bc4cdf18e1e4d792ab010e",
+      "failedCases": [
+        {
+          "name": "writer-native-tabcols.spec.ts > native physical column draft from relative table width=1280",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"4\u001b[7m.00\u001b[27m\"\u001b[39m",
+              "Received: \u001b[31m\"4\"\u001b[39m"
+            ]
+          ]
+        },
+        {
+          "name": "writer-native-tabcols.spec.ts > native physical column draft from relative table width=390",
+          "errors": [
+            [
+              "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed",
+              "Expected: \u001b[32m\"4\u001b[7m.00\u001b[27m\"\u001b[39m",
+              "Received: \u001b[31m\"4\"\u001b[39m"
+            ]
+          ]
+        }
+      ],
+      "caseCounts": {
+        "startTime": "2026-10-06T15:34:54.796Z",
+        "duration": 14398.708,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      }
+    }
+  ]
+}

@@ -5,6 +5,8 @@ import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-co
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import type { SwFEShell } from "../../core/frmedt/fetab";
 import type { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwTabCols } from "../../core/bastyp/tabcol";
+import { SwTableRep } from "../table/swtablerep";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
 export interface SwTableProperties {
@@ -47,7 +49,14 @@ export function ItemSetToTableParam(shell: SwFEShell, value: SwTableProperties):
         shell.SetRowsToRepeat(value.headerRows, value.repeatHeaderRows);
         shell.SetRowHeight(value.minRowHeight);
         shell.SetBoxAlign(value.verticalAlign);
-        shell.SetTabCols(value.columnWidths);
+        const columns = new SwTabCols();
+        shell.GetTabCols(columns);
+        const representation = new SwTableRep(table, columns.GetRightMax());
+        representation.left = value.marginLeft ?? columns.GetLeft();
+        representation.right = value.marginRight ?? columns.GetRightMax() - columns.GetRight();
+        representation.columns.splice(0, representation.columns.length, ...value.columnWidths);
+        const singleRow = representation.FillTabCols(columns);
+        shell.SetTabCols(columns, singleRow);
         shell.SetTableAttr({
           width: value.width,
           ...(value.horiOrient === undefined

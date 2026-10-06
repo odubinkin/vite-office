@@ -7,7 +7,8 @@ import { SwNodes } from "../docnode/nodes";
 import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTable, SwTableBox, SwTableBoxFormat } from "../table/swtable";
-import { SwUndoTableNdsChg } from "../undo/untbl";
+import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
+import type { SwTabCols } from "../bastyp/tabcol";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -664,6 +665,63 @@ export class SwDoc {
           node,
         ) => (node instanceof SwTableNode ? [node.GetTable()] : []),
       );
+  }
+  /** Applies native table separators and publishes document-owned attribute history. @param table - Actual table. @param next - Requested separator geometry. @param previous - Original geometry. @param start - Actual current box. @param currentRowOnly - Independent row graph request. @param cursorState - Optional shell cursor attributes. @returns Whether admitted. */
+  public SetTabCols(
+    table: SwTable,
+    next: SwTabCols,
+    previous: SwTabCols,
+    start: SwTableBox,
+    currentRowOnly: boolean,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
+    if (
+      !this.GetTables().includes(table) ||
+      currentRowOnly ||
+      !table
+        .GetTabLines()
+        .some(
+          /** Checks actual native box ownership. @param line - Table row. @returns Whether connected. */ (
+            line,
+          ) => line.GetTabBoxes().includes(start),
+        )
+    )
+      return false;
+    const node = start.GetParagraphs()[0];
+    if (node === undefined || node.GetNodes() !== this.nodes) return false;
+    table.ValidateTabCols(next, previous);
+    return this.RunModelTransaction(
+      /** Records the original native table attributes around one admitted mutation. @returns Whether admitted. */
+      () => {
+        const before =
+          cursorState ?? createWriterCollapsedCursorState(node, 0, node.GetCharacterItemsAt(0));
+        const actualWidth = previous.GetRight() - previous.GetLeft();
+        const wishedWidth =
+          table.GetFormat().width ??
+          table
+            .GetColumnWidths()
+            .reduce(
+              /** Sums native box widths. @param sum - Prior total. @param width - Box width. @returns Total width. */ (
+                sum,
+                width,
+              ) => sum + width,
+              0,
+            );
+        if (actualWidth !== wishedWidth) {
+          table.AdjustWidths(wishedWidth, actualWidth);
+          table.SetFormat({ ...table.GetFormat(), width: actualWidth });
+          table.GetTabCols(previous, start);
+        }
+        const action = new SwUndoAttrTable(table, before);
+        table.SetTabCols(next, previous, start, currentRowOnly);
+        this.undoManager.AddUndoAction(action);
+        this.NotifyModelChange({
+          kind: "node-content-changed",
+          nodeIndex: table.GetTableNode().GetIndex(),
+        });
+        return true;
+      },
+    );
   }
   /** Inserts native counted flat rows and publishes one document-owned history record. @param boxes - Actual selected boxes. @param count - Native row count. @param behind - Insert after the selected edge. @param insertDummy - Native tracked-change policy. @param cursorState - Original browser cursor attributes. @param afterCursor - Optional unchanged live selection after insertion. @returns Whether admitted. */
   public InsertRow(

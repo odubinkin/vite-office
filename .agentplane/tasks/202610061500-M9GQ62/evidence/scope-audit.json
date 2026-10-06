@@ -1,0 +1,50 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/source/core/bastyp/tabcol.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/core/bastyp/tabcol.test.ts",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/e2e/writer-native-tabcols.spec.ts"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-tabcols.spec.ts",
+    "apps/office/src/sw/source/core/bastyp/tabcol.test.ts",
+    "apps/office/src/sw/source/core/bastyp/tabcol.ts",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts"
+  ],
+  "oldAcceptanceFiles": 495,
+  "oldAcceptanceChanged": [
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts"
+  ],
+  "oldAcceptanceByteIdentical": 494,
+  "newTests": [
+    "apps/office/e2e/writer-native-tabcols.spec.ts",
+    "apps/office/src/sw/source/core/bastyp/tabcol.test.ts",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts"
+  ],
+  "totalAcceptanceFiles": 499,
+  "priorSemanticRecords": 274,
+  "semanticRecords": 275,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 482408,
+  "parentPrefixSHA256": "3ae6e6d7f333100806ae8c6846c29ff265b114650700d6a19e04a1439e8af95f",
+  "failures": []
+}

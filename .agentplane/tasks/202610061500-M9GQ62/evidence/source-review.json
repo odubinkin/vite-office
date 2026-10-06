@@ -1,0 +1,24 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/inc/tabcol.hxx": "e6dcf5843ca128492726157fce5feddbcee03fec72d4c6ca3f98fd657a4f5ef9",
+    "sw/source/core/bastyp/tabcol.cxx": "5e306df6036f4b96e9e90eba1169090386acfbfb2a57bb6c4611905b8706d2b9",
+    "sw/inc/fesh.hxx": "1eba45926daa128a0d127b509ea94584dd6e9dce7d156f9c2c54249344d710fc",
+    "sw/inc/swtable.hxx": "2ee3e71e4d427fde37a57ec8d68bbe32b49d3d2c6ec492193568732fcbfab3fb",
+    "sw/source/core/table/swtable.cxx": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/table/swtablerep.cxx": "c68f5e0baaf04f92c1c473c7ccaec1616cd318c8827003ba4c4da7067895a17a",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163"
+  },
+  "reviewer": "Same current agent; pinned read-only sources, no upstream execution",
+  "contracts": [
+    "SwTabCols owns zero edge defaults, reserve-without-entry semantics, independent copied native entries, mutable position/minimum/maximum/hidden state, indexed insertion and default one-entry removal. Last-row-change default true. LONG_MAX sentinel is represented as a Number; exact wide native Long precision is unverified.",
+    "SwTable GetTabCols uses cumulative integer wish/actual scaling, source COLFUZZY20 insertion and adjacent limits for shared flat columns; hidden refresh preserves constraints. Actual foreign boxes reject. SetTabCols uses source edge integer differences/orientation arbitration, ushort change-list positions, fuzzy new-model width changes and source negative-width fallback. Independent row writes explicitly reject because model shares one width vector; full row/nested/hidden/span graph remains unrepresented.",
+    "SwFEShell GetTabCols reads actual horizontal frame and native text-box ownership, SetTabCols passes native geometry to SwDoc. SwDoc validates before print-width normalization, uses existing AdjustWidths and captures native SwUndoAttrTable after normalization as ndtbl.cxx2871 and3060. Direct shell/doc history retains original table/row/box/text identities with three UndoRedo cycles and continued text/list/ODT operations. Missing native text-frame references reject.",
+    "Connected SwTableRep reset derives physical column widths from actual SwTabCols separators; relative65535 frame/box widths become physical draft coordinates. Empty unattached read-only drafts preserve existing fixture compatibility. FillTabCols uses visible flat cumulative positions, source less-than3-twip edge rounding and right bound clamping. ItemSetToTableParam uses Get/Fill/Set native geometry; shell width-array mutation removed.",
+    "Initial full absent profile:12968 app pass6 fail;109 inventory pass actual100;5 scripts pass;212 Chromium pass. Closures run only original app6 failures and11 new app cases, plus2 newly introduced Chromium failures after expected numeric display4.00 versus actual4. Scoped skips39 and4 remain skipped. Existing mounted column editing and ODT case is byte-identical; two old native-property exact format expectations now assert source HoriOrientation.LEFT and native LR spacing while all historical owner/content/history/cursor/width assertions remain.",
+    "Full native frame-format width callbacks, automatic adjacent-column adjustment in column dialog, ruler border drag, hidden/nested/merged/rowspan/protected/shadow/RTL/vertical/multiframe geometry and broad core/UI parity remain unverified. All274 prior semantic fields and complete prefixes preserved plus1 explicitly unverified owner275; no registered save/open/recovery deviation change."
+  ]
+}

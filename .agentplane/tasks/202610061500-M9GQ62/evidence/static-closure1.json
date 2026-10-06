@@ -1,0 +1,31 @@
+{
+  "records": [
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 947,
+      "sha256": "3fc1d40edbf2dd61806c53a60f83d1ca9b91839697ea15e6c23dc25c58a762d0",
+      "diagnostics": [
+        "src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts(99,42): error TS2339: Property 'required' does not exist on type 'SwTableLine'.",
+        "src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts(99,51): error TS2304: Cannot find name 'GetTabBoxes'.",
+        "src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts(100,9): error TS2339: Property 'GetText' does not exist on type 'Assertion<any>'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    }
+  ]
+}

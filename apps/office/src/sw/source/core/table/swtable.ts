@@ -4,6 +4,7 @@ import type { SwTableBoxStartNode, SwTableNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwTextNode } from "../txtnode/ndtxt";
+import { SwTabCols } from "../bastyp/tabcol";
 
 /** Physical table geometry imported from Writer table style properties, in twips. */
 export interface SwTableFormat {
@@ -187,6 +188,209 @@ export class SwTable {
   /** Returns ordered column widths. @returns Widths in twips. */
   public GetColumnWidths(): readonly number[] {
     return this.columnWidths;
+  }
+
+  /** Fills native flat-table separators using source integer scaling and fuzzy insertion. @param result - Existing frame edges and output entries. @param start - Actual current box. @param refreshHidden - Refresh visibility only. @param currentRowOnly - Omit other-row constraint scan. @returns Whether the box belongs to this table. */
+  public GetTabCols(
+    result: SwTabCols,
+    start: SwTableBox,
+    refreshHidden = false,
+    currentRowOnly = false,
+  ): boolean {
+    if (
+      !this.lines.some(
+        /** Checks actual box ownership. @param line - Native row. @returns Whether connected. */ (
+          line,
+        ) => line.GetTabBoxes().includes(start),
+      )
+    )
+      return false;
+    const left = result.GetLeft(),
+      actual = result.GetRight() - left;
+    const wished =
+      this.format.width ??
+      this.columnWidths.reduce(
+        /** Sums canonical box widths. @param sum - Prior width. @param width - Box width. @returns Total. */ (
+          sum,
+          width,
+        ) => sum + width,
+        0,
+      );
+    const positions = [0];
+    let sum = 0;
+    for (const width of this.columnWidths) {
+      sum += width;
+      positions.push(wished === 0 ? 0 : Math.trunc((sum * actual) / wished));
+    }
+    if (refreshHidden) {
+      for (let i = 0; i < result.Count(); i++) {
+        const entry = result.GetEntry(i);
+        entry.nPos -= left;
+        entry.nMin -= left;
+        entry.nMax -= left;
+        entry.bHidden = true;
+      }
+    } else result.Remove(0, result.Count());
+    for (const position of positions.slice(0, -1)) {
+      if (refreshHidden) {
+        for (let i = 0; i < result.Count(); i++)
+          if (Math.abs(position - result.GetEntry(i).nPos) <= 20) {
+            result.SetHidden(i, false);
+            break;
+          }
+      } else {
+        let index = 0;
+        while (index < result.Count() && result.GetEntry(index).nPos < position) index++;
+        const before = index > 0 ? result.GetEntry(index - 1).nPos : undefined;
+        const after = index < result.Count() ? result.GetEntry(index).nPos : undefined;
+        if (
+          (before === undefined || position > before + 20) &&
+          (after === undefined || position < (after >= 20 ? after - 20 : after))
+        )
+          result.Insert(position, false, index);
+      }
+    }
+    if (!refreshHidden && !currentRowOnly) {
+      for (let column = 0; column < this.columnWidths.length; column++) {
+        const position = positions[column] as number,
+          minimum = positions[Math.max(0, column - 1)] as number,
+          maximum = positions[column + 1] as number;
+        for (let i = 0; i < result.Count(); i++) {
+          const entry = result.GetEntry(i),
+            low = entry.nPos >= 20 ? entry.nPos - 20 : entry.nPos;
+          if (position >= low && position <= entry.nPos + 20) {
+            entry.nMin = Math.max(entry.nMin, minimum);
+            entry.nMax = Math.min(entry.nMax, maximum);
+          } else if (maximum >= low && maximum <= entry.nPos + 20)
+            entry.nMin = Math.max(entry.nMin, position);
+        }
+      }
+    }
+    if (!refreshHidden) result.Remove(0);
+    for (let i = 0; i < result.Count(); i++) {
+      const entry = result.GetEntry(i);
+      entry.nPos += left;
+      entry.nMin += left;
+      entry.nMax += left;
+    }
+    return true;
+  }
+
+  /** Validates represented separator ingress before any frame normalization or history. @param next - Requested geometry. @param previous - Original geometry. @returns Nothing. */
+  public ValidateTabCols(next: SwTabCols, previous: SwTabCols): void {
+    const oldWidth = previous.GetRight() - previous.GetLeft(),
+      newWidth = next.GetRight() - next.GetLeft();
+    if (
+      next.Count() !== previous.Count() ||
+      !Number.isFinite(oldWidth) ||
+      !Number.isFinite(newWidth) ||
+      oldWidth <= 0 ||
+      newWidth <= 0
+    )
+      throw new Error("Writer table column width is invalid.");
+    let last = next.GetLeft();
+    for (let i = 0; i <= next.Count(); i++) {
+      const position = i === next.Count() ? next.GetRight() : next.GetEntry(i).nPos;
+      if (!Number.isFinite(position) || position <= last)
+        throw new Error("Writer table column width is invalid.");
+      last = position;
+    }
+  }
+
+  /** Applies native separator and edge changes to the represented shared flat box model. @param next - New frame geometry. @param previous - Original frame geometry. @param start - Actual current box. @param currentRowOnly - Unsupported independent row graph request. @returns Whether admitted. */
+  public SetTabCols(
+    next: SwTabCols,
+    previous: SwTabCols,
+    start: SwTableBox,
+    currentRowOnly: boolean,
+  ): boolean {
+    if (
+      currentRowOnly ||
+      !this.lines.some(
+        /** Checks actual box ownership. @param line - Native row. @returns Whether connected. */ (
+          line,
+        ) => line.GetTabBoxes().includes(start),
+      )
+    )
+      return false;
+    this.ValidateTabCols(next, previous);
+    const oldWidth = previous.GetRight() - previous.GetLeft(),
+      newWidth = next.GetRight() - next.GetLeft();
+    const oldWish =
+      this.format.width ??
+      this.columnWidths.reduce(
+        /** Sums canonical box widths. @param sum - Prior width. @param width - Box width. @returns Total. */ (
+          sum,
+          width,
+        ) => sum + width,
+        0,
+      );
+    let newWish = oldWish;
+    if (previous.GetLeft() !== next.GetLeft() || previous.GetRight() !== next.GetRight()) {
+      const leftDiff = Math.trunc(((previous.GetLeft() - next.GetLeft()) * oldWish) / oldWidth),
+        rightDiff = Math.trunc(((next.GetRight() - previous.GetRight()) * oldWish) / oldWidth);
+      newWish += leftDiff + rightDiff;
+      if (newWish < 0) newWish = 65535;
+      let orient = this.GetHoriOrient();
+      if (orient !== HoriOrientation.NONE && orient !== HoriOrientation.CENTER) {
+        const leftDistance = next.GetLeft() !== 0,
+          rightDistance = next.GetRight() !== next.GetRightMax();
+        if (!leftDistance && !rightDistance) orient = HoriOrientation.FULL;
+        else if (!rightDistance && next.GetLeft() > 0) orient = HoriOrientation.RIGHT;
+        else if (!leftDistance && next.GetRight() < next.GetRightMax())
+          orient = HoriOrientation.LEFT;
+        else if (orient !== HoriOrientation.FULL || Math.abs(oldWidth - newWidth) > 20)
+          orient = HoriOrientation.LEFT_AND_WIDTH;
+      }
+      this.format = {
+        ...this.format,
+        marginLeft: next.GetLeft(),
+        marginRight: next.GetRightMax() - next.GetRight(),
+        horiOrient: orient,
+        align: undefined,
+        ...(newWish === oldWish ? {} : { width: newWish }),
+      };
+    }
+    const changes: [number, number][] = [];
+    for (let i = 0; i <= previous.Count(); i++) {
+      const oldPosition =
+        i === previous.Count() ? oldWidth : previous.GetEntry(i).nPos - previous.GetLeft();
+      const newPosition = i === next.Count() ? newWidth : next.GetEntry(i).nPos - next.GetLeft();
+      const oldBorder = Math.trunc((oldPosition * oldWish) / oldWidth),
+        newBorder = Math.trunc((newPosition * newWish) / newWidth);
+      if (oldBorder !== newBorder && oldBorder > 0 && newBorder > 0)
+        changes.push([oldBorder & 0xffff, newBorder & 0xffff]);
+    }
+    let change = 0,
+      border = 0,
+      rest = 0;
+    for (let i = 0; i < this.columnWidths.length; i++) {
+      const width = this.columnWidths[i] as number;
+      let newBoxWidth = width - rest;
+      rest = 0;
+      border += width;
+      if (change < changes.length && border + 20 >= (changes[change] as [number, number])[0]) {
+        border -= 20;
+        while (change < changes.length && border > (changes[change] as [number, number])[0])
+          change++;
+        if (change < changes.length) {
+          border += 20;
+          if (border + 20 >= (changes[change] as [number, number])[0]) {
+            rest = (changes[change] as [number, number])[1] - border;
+            newBoxWidth += rest;
+            change++;
+          }
+        }
+      }
+      if (newBoxWidth !== width) {
+        if (newBoxWidth < 0) {
+          rest += 1 - newBoxWidth;
+          newBoxWidth = 1;
+        }
+        this.SetColumnWidth(i, newBoxWidth);
+      }
+    }
+    return true;
   }
 
   /** Changes one existing column's physical width. @param index - Zero-based column. @param twips - Positive width. @returns Nothing. */

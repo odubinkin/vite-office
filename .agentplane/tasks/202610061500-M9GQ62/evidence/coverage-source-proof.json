@@ -1,0 +1,10 @@
+{
+  "appSourceFiles": 272,
+  "appWholeIdenticalSourceFiles": 271,
+  "appContiguousRegionFiles": 1,
+  "inventoryWholeIdenticalSourceFiles": 38,
+  "totalSourceFiles": 310,
+  "appProofSHA256": "de0089eff9c8bc5b252065bcd129504516f679717fb10d8da3561a6c499c78b5",
+  "inventoryProofSHA256": "8975715c24580fe08a762c53f8d9d3469473f279784d46dfa638292cff9cee28",
+  "actualCountersOnly": true
+}

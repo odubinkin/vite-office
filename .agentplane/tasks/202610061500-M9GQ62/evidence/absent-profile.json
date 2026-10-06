@@ -1,0 +1,219 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/bastyp/tabcol.ts": "5c288bfe8c6838fb1b5aa384dc2dc0cd565d679e638582469fd8c018f183c567",
+    "apps/office/src/sw/source/core/table/swtable.ts": "50c67cc57892c177568a1d53b57a660e2784bb3d3a7c0ce0253c12b94ac6284c",
+    "apps/office/src/sw/source/core/doc/doc.ts": "7822d607fa6ba4aaf62a360bb132793778af63f83b36bad5b95e30fd2c2ce5e6",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "16e632960df303609611d6ab5239079154e5f03a66e26cb5eabe9a89e9abc8f3",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "ba57b97f6067dbb32255e47c21b63f9021d68cf9f1cf18012657fa31cd8d6db6",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "f6c57662f0198d0522d22df6cce4e746af9ea84df41f44496699f395aae1a5e8",
+    "apps/office/src/sw/source/core/bastyp/tabcol.test.ts": "d0ace5962ac0a6b77e00049b783da43215076e4f496f6ed45b3014413cd9d851",
+    "apps/office/src/sw/source/core/table/native-tabcols.test.ts": "87679730c4157c990ab4dfe945dbaaa6b192102eeb4cb733aabd90f3a0f37d99",
+    "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts": "da17495f18fad00d3d8f4d8e42fccb38672afd3c5e8a2599dacfa790d9af400b",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts": "7d29b8ba6de3dc95341959150fd4ca5d87b55458f7f58b5ed926a058dbba7300",
+    "docs/program/source-provenance.json": "85f364cbcabe7e48b98167f84e6e98807106190b0449d0bdf367cee5c062e097",
+    "docs/program/parity/runtime-inventory.json": "68987e7dbbf323e858f8e255a868ab0f8b99c345e41a0b747c941041fd7aee33"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "d3bab611449f5f00f94314bbee8495a3d18d67840a4f28ecd96c191da9f29573",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/M9GQ62.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 69743,
+      "sha256": "21d6f591cbe2ec20b1f5347e1fe29b338ea75c9e7d68dfc6df59de6ba42660c4",
+      "totals": [
+        "Test Files  3 failed | 370 passed (373)",
+        "Tests  6 failed | 12968 passed (12974)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/writer-view.test.tsx > Writer browser presentation inserts, selects, edits and reopens a canonical Writer table",
+          "assertion": [
+            "AssertionError: expected 21845 to be 2268 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts > uses document-owned native separators with stable history automatic=false",
+          "assertion": [
+            "AssertionError: expected undefined to be 'Numbering' // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts > uses document-owned native separators with stable history automatic=true",
+          "assertion": [
+            "AssertionError: expected 8640 to be 9360 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-tabcols-history.test.ts > rejects foreign tables, per-row writes and invalid geometry before normalization/history",
+          "assertion": [
+            "AssertionError: expected 8640 to be 9360 // Object.is equality"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts > native table property application uses native selection scope and one attribute history selected=false",
+          "assertion": [
+            "AssertionError: expected { width: 5000, align: undefined, …(5) } to deeply equal { width: 5000, align: 'left', …(2) }"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/uibase/wrtsh/native-table-properties.test.ts > native table property application uses native selection scope and one attribute history selected=true",
+          "assertion": [
+            "AssertionError: expected { width: 5000, align: undefined, …(5) } to deeply equal { width: 5000, align: 'left', …(2) }"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 12968,
+        "failed": 6,
+        "skipped": 0,
+        "total": 12974
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14317,
+          "covered": 14314,
+          "skipped": 0,
+          "pct": 99.97
+        },
+        "statements": {
+          "total": 15697,
+          "covered": 15689,
+          "skipped": 0,
+          "pct": 99.94
+        },
+        "functions": {
+          "total": 3677,
+          "covered": 3675,
+          "skipped": 0,
+          "pct": 99.94
+        },
+        "branches": {
+          "total": 11689,
+          "covered": 11680,
+          "skipped": 0,
+          "pct": 99.92
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 99.97,
+        "statements": 99.94,
+        "functions": 99.94,
+        "branches": 99.92
+      },
+      "incompleteFileCount": 3,
+      "coverageMapSHA256": "be231879a45c7a692a67c8fd5288d4a1e5f08aef489984babd0f9be8a5bba85e"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/M9GQ62.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40596,
+      "sha256": "ea1c244f5648c1ae5efb07be0fa00344a3087eedcd982c3c1780a2a2dec4597f",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "59c9092457d28c069b34c3d72e61b43ef178a5b175cfb01fd0fcd02afc694116"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 218,
+      "sha256": "45fa66bb024577cd45480d89d24bd6b88f0dfa4d83b902671d9554f0cbd4c32c",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 29157,
+      "sha256": "227e1ac43d6fd7b65f7d69d4a9f3bc3cf0c2bbbab3b477ecbaeb82628adf94a7",
+      "totals": [
+        "212 passed (1.5m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T15:24:34.537Z",
+        "duration": 92569.10900000001,
+        "expected": 212,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}

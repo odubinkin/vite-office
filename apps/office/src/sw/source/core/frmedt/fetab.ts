@@ -12,7 +12,8 @@ import { CheckSplitCells } from "./tblsel";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwUndoAttrTable } from "../undo/untbl";
 import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
-import type { SwTabFrame, SwTableMouseCell, SwTableMouseRect } from "../layout/tabfrm";
+import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../layout/tabfrm";
+import { SwTabCols } from "../bastyp/tabcol";
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -224,29 +225,60 @@ export abstract class SwFEShell extends SwEditShell {
     );
   }
 
-  /** Changes represented shared column widths through table attribute history. @param widths - Existing positive column widths. @returns Whether admitted. */
-  public SetTabCols(widths: readonly number[]): boolean {
+  /** Reads represented horizontal frame geometry into native separator data. @param result - Native output carrier. @returns Whether a table frame was represented. */
+  public GetTabCols(result: SwTabCols): boolean {
     const table = this.IsCursorInTable()?.GetTable();
     if (table === undefined) return false;
-    if (
-      widths.length !== table.GetColumnWidths().length ||
-      widths.some(
-        /** Rejects invalid native widths. @param width - Authored width. @returns Whether invalid. */ (
-          width,
-        ) => !Number.isFinite(width) || width <= 0,
+    const start = table
+      .GetTabLines()
+      .flatMap(
+        /** Reads actual row boxes. @param line - Native row. @returns Original boxes. */ (line) =>
+          line.GetTabBoxes(),
       )
-    )
-      throw new Error("Writer table column width is invalid.");
-    return this.ChangeTable(
-      table,
-      /** Replaces shared physical widths. @returns Nothing. */ () => {
-        widths.forEach(
-          /** Changes one canonical width. @param width - Physical width. @param index - Column index. @returns Nothing. */ (
-            width,
-            index,
-          ) => table.SetColumnWidth(index, width),
-        );
-      },
+      .find(
+        /** Finds the current native cell. @param box - Actual box. @returns Whether its section owns the point. */ (
+          box,
+        ) => box.GetParagraphs().includes(this.GetCursor().GetPoint().GetNode() as SwTextNode),
+      );
+    if (start === undefined) return false;
+    const page = this.GetDoc().GetPageDesc().GetValue();
+    const upperWidth = page.width - page.leftMargin - page.rightMargin;
+    const area = new SwTabFrame(table).Format(upperWidth);
+    result.SetLeftMin(page.leftMargin);
+    result.SetLeft(area.left);
+    result.SetRight(area.left + area.width);
+    result.SetRightMax(upperWidth);
+    return table.GetTabCols(result, start);
+  }
+
+  /** Delegates native separator changes to document-owned table/history mechanics. @param next - Requested native column geometry. @param currentRowOnly - Independent row graph request. @returns Whether admitted. */
+  public SetTabCols(next: SwTabCols, currentRowOnly: boolean): boolean {
+    const table = this.IsCursorInTable()?.GetTable();
+    if (table === undefined) return false;
+    const previous = new SwTabCols();
+    if (!this.GetTabCols(previous)) return false;
+    const start = table
+      .GetTabLines()
+      .flatMap(
+        /** Reads actual row boxes. @param line - Native row. @returns Original boxes. */ (line) =>
+          line.GetTabBoxes(),
+      )
+      .find(
+        /** Finds the current native cell. @param box - Actual box. @returns Whether its section owns the point. */ (
+          box,
+        ) => box.GetParagraphs().includes(this.GetCursor().GetPoint().GetNode() as SwTextNode),
+      );
+    return this.RunNotificationTransaction(
+      /** Lets the document own mutation and history without a width-array adapter. @returns Whether admitted. */
+      () =>
+        this.GetDoc().SetTabCols(
+          table,
+          next,
+          previous,
+          start as SwTableBox,
+          currentRowOnly,
+          this.CaptureCursorState(),
+        ),
     );
   }
 

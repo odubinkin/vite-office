@@ -1,5 +1,7 @@
 /** @fileoverview Verifies native table-property owners, selection, attribute-only history and lifecycle without upstream execution. */
 import { describe, it, expect, vi } from "vitest";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SwTabCols } from "../../core/bastyp/tabcol";
 import { SwDoc } from "../../core/doc/doc";
 import { subscribeToSwModify } from "../../../inc/calbck";
 import { SwDocShell } from "../app/docsh";
@@ -68,6 +70,21 @@ function fixture() {
   };
   return { doc, body, table, boxes, nodes, docShell, shell, edit, invalidate, value };
 }
+/** Builds invalid native geometry for the existing admission cases. @param widths - Original malformed widths. @returns Native carrier. */
+function invalidColumns(widths: readonly number[]): SwTabCols {
+  const result = new SwTabCols();
+  result.SetRight(
+    widths.reduce(
+      /** Sums original inputs. @param sum - Prior width. @param width - Next width. @returns Total. */ (
+        sum,
+        width,
+      ) => sum + width,
+      0,
+    ),
+  );
+  if (widths.length > 1) result.Insert(widths[0] as number, false, 0);
+  return result;
+}
 describe("native table property application", /** Registers actual-owner contracts. @returns Nothing. */ () => {
   it.each([false, true])(
     "uses native selection scope and one attribute history selected=%s",
@@ -97,7 +114,10 @@ describe("native table property application", /** Registers actual-owner contrac
       expect(f.table.GetColumnWidths()).toEqual([2000, 3000]);
       expect(f.table.GetFormat()).toEqual({
         width: 5000,
-        align: "left",
+        align: undefined,
+        horiOrient: HoriOrientation.LEFT,
+        marginLeft: 0,
+        marginRight: 3640,
         headerRows: 0,
         repeatHeaderRows: false,
       });
@@ -162,7 +182,7 @@ describe("native table property application", /** Registers actual-owner contrac
     f.edit.SetSelection({ point: { nodeIndex: f.body.GetIndex(), contentIndex: 1 } });
     expect(ItemSetToTableParam(f.shell, f.value)).toBe(false);
     expect(f.shell.SetTableAttr({ width: 4000 })).toBe(false);
-    expect(f.shell.SetTabCols([2000, 2000])).toBe(false);
+    expect(f.shell.SetTabCols(new SwTabCols(), false)).toBe(false);
     expect(f.shell.SetRowHeight(20)).toBe(false);
     expect(f.shell.SetBoxAlign("middle")).toBe(false);
     expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
@@ -184,7 +204,7 @@ describe("native table property application", /** Registers actual-owner contrac
       ).toThrow("Writer table column width is invalid.");
       expect(
         /** Invokes native column admission. @returns Admission. */ () =>
-          f.shell.SetTabCols(widths),
+          f.shell.SetTabCols(invalidColumns(widths), false),
       ).toThrow("Writer table column width is invalid.");
       expect(f.table.GetColumnWidths()).toEqual([3000, 3000]);
       expect(f.table.GetFormat().width).toBe(6000);
