@@ -4,7 +4,7 @@ title: "Move table Tab append into native cursor shell and document history owne
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T08:55:09.039Z"
+  updated_by: "EVALUATOR"
+  note: "Default table Tab append now follows inherited core cursor ownership and document insertion/history publication; all approved evidence passes on implementation642c72010a7146b4dcd01d29b778533cd84b0caf."
+  evaluated_sha: "642c72010a7146b4dcd01d29b778533cd84b0caf"
+  blueprint_digest: "226996115be763ac58a0a2b7b5029fb6843ee7c52b95bb7bef4ec54f0bc78bdf"
+  evidence_refs:
+    - ".agentplane/tasks/202610060832-HF3AX5/README.md"
+    - ".agentplane/tasks/202610060832-HF3AX5/quality/20261006-085509039-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060832-HF3AX5/quality/20261006-085509039-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060832-HF3AX5/quality/20261006-085509039-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060832-HF3AX5/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060832-HF3AX5/evidence/exact-sha-review.json"
+  findings:
+    - "Same current agent performed exact-SHA review; 12816 application,109 inventory,5 script and189 Chromium cases pass with100% application/inventory coverage; prior semantic records and registered exceptions are preserved. Full native hierarchy and nondefault table insertion remain unverified."
 commit: null
 comments:
   -
@@ -36,7 +52,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved native cursor-shell and document row-history ownership slice under standing iterative authorization, preserving existing defaults and registered exceptions."
 doc_version: 3
-doc_updated_at: "2026-10-06T08:52:50.128Z"
+doc_updated_at: "2026-10-06T08:55:29.700Z"
 doc_updated_by: "CODER"
 description: "Iteration180: remove table traversal and appended-row graph/history construction from SwWrtShell. Introduce the inherited native SwCursorShell source owner and route the existing flat final-cell append through SwDoc.InsertRow, with native document history publication and ordinary subsequent cursor traversal. Preserve existing behavior and explicitly retain unverified broader native contracts."
 sections:
@@ -62,6 +78,8 @@ sections:
     Governance: ignored-inclusive AP census4659files0forbidden; only two canonical MJS files and historical application QA screenshot exception, already visually verified iteration178. No upstream source, helpers, Python or raw diagnostics/source snapshots in AP. Doctor0errors2knownwarnings(old managed shim; DONE202610031635-2Z3962 missing implementation hash); routing and diff check PASS. Upstream restored in finally for full and failed-only profile. No test/runtime/browser reads, compiles or invokes upstream. Source hashes for six pinned native units are recorded. Same-agent exact-SHA quality review is required before final closure, with no independent-review claim.
 
     Full native SwViewShell/layout hierarchy, general selection/count/before/drag row modes, document DoesUndo/UndoGuard/formulas/autoformat/redline/DDE/protection, merged/nested/rowspan geometry, native retained undo content/Repeat and complete UI/core parity remain unverified. Registered save/open/recovery deviations remain unchanged. Parent and whole goal ACTIVE; this completed slice does not establish full upstream parity.
+
+    Closure evidence: implementation642c72010a7146b4dcd01d29b778533cd84b0caf. Exact-SHA same-agent EVALUATOR review PASS with no runtime errors or remaining failed cases. Initial auxiliary review falsely reported Script case drift because its whitespace regex was double-escaped; corrected failed-review-only closure PASS, without rerunning tests or passing checks. First implementation commit was rejected by E_GIT because --allow-tasks did not allow the eleven semantic paths; explicit reviewed per-path --allow arguments resolved it without changing scope or code. Bounded recovery evidence preserves both process failures. Quality report20261006-085509039-recovery-context recorded PASS. Parent/goal remains active and full parity unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -104,3 +122,5 @@ Restored source generation --check/source-tree/provenance/invariants/parity PASS
 Governance: ignored-inclusive AP census4659files0forbidden; only two canonical MJS files and historical application QA screenshot exception, already visually verified iteration178. No upstream source, helpers, Python or raw diagnostics/source snapshots in AP. Doctor0errors2knownwarnings(old managed shim; DONE202610031635-2Z3962 missing implementation hash); routing and diff check PASS. Upstream restored in finally for full and failed-only profile. No test/runtime/browser reads, compiles or invokes upstream. Source hashes for six pinned native units are recorded. Same-agent exact-SHA quality review is required before final closure, with no independent-review claim.
 
 Full native SwViewShell/layout hierarchy, general selection/count/before/drag row modes, document DoesUndo/UndoGuard/formulas/autoformat/redline/DDE/protection, merged/nested/rowspan geometry, native retained undo content/Repeat and complete UI/core parity remain unverified. Registered save/open/recovery deviations remain unchanged. Parent and whole goal ACTIVE; this completed slice does not establish full upstream parity.
+
+Closure evidence: implementation642c72010a7146b4dcd01d29b778533cd84b0caf. Exact-SHA same-agent EVALUATOR review PASS with no runtime errors or remaining failed cases. Initial auxiliary review falsely reported Script case drift because its whitespace regex was double-escaped; corrected failed-review-only closure PASS, without rerunning tests or passing checks. First implementation commit was rejected by E_GIT because --allow-tasks did not allow the eleven semantic paths; explicit reviewed per-path --allow arguments resolved it without changing scope or code. Bounded recovery evidence preserves both process failures. Quality report20261006-085509039-recovery-context recorded PASS. Parent/goal remains active and full parity unverified.

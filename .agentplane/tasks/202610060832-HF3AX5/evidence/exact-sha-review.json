@@ -1,0 +1,109 @@
+{
+  "evaluatedSHA": "642c72010a7146b4dcd01d29b778533cd84b0caf",
+  "reviewer": "Same current agent in EVALUATOR role; no independent reviewer claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12816,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 189
+  },
+  "caseIdentity": "file+fullName+occurrence for Vitest, file+fullTitle+project for Chromium; partial skipped remain skipped and are not additional passes",
+  "runtimeErrors": {
+    "application": [],
+    "inventory": []
+  },
+  "remainingFailedCases": {
+    "application": [],
+    "inventory": [],
+    "chromium": []
+  },
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/crsr/trvltbl.ts": "946da8b35d5d2365daab5adf041bb4e268b1447ee7ffa9aeee8fdd4b3b43b965",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "91caf5abdc8afdbdf23a58230876f88e7668503c11e6f680d08e23d7c93f147b",
+    "apps/office/src/sw/source/core/doc/doc.ts": "7c04a861166a78b394a69b9505f4144e8c0acc48d407f7b9b01932a650b7eaec",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "e63cf3f09d88949f31818bf918ee79658351046a595d94f89ae81c51e3719325",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "dd7e9ae7d99e0be8e3631e750af8fe2714393ae32e99df319c8820e2d081a93d"
+  },
+  "coverageCounts": {
+    "application": {
+      "lines": {
+        "total": 13510,
+        "covered": 13510,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14803,
+        "covered": 14803,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3553,
+        "covered": 3553,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 11030,
+        "covered": 11030,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "coverageProof": "266 complete exactly identical application maps, real maximum counters only; production bytes unchanged between full and original-case-only closure",
+  "pinnedSourceFiles": 6,
+  "priorSemanticRecordsPreserved": 268,
+  "oldTestFilesByteIdentical": 469,
+  "totalPriorTests": 470,
+  "sourceResponsibility": "new native cursor owner remains unverified; complete UI/core parity is not claimed",
+  "findings": [
+    "Native SwCursorShell inherits existing broadcaster and owns next/previous-cell movement; SwEditShell inherits it.",
+    "Document default final-row insertion connects actual sections and publishes already-executed row history; SwWrtShell no longer prepares sections or calls ApplyAction for this operation.",
+    "Core pending-item/native cursor/history ownership, mounted focus and repeated retained row identity, all existing mixed stacks and narrow/wide Chromium pass.",
+    "Registered I/O/recovery deviations and all268 prior semantic records/evidence prefixes remain unchanged; non-default table modes and complete native hierarchy/contracts remain unverified."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}

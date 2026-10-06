@@ -1,0 +1,7 @@
+{
+  "initialReviewExit": 1,
+  "exactFailure": "Script case drift",
+  "actualScriptResult": "Tests 5 passed (5)",
+  "cause": "The auxiliary review regex used a literal backslash instead of whitespace.",
+  "resolution": "Route recomputed; only the failed auxiliary review was corrected and repeated against the same implementation SHA. No test, build, source audit or static gate replay."
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610060832-HF3AX5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T08:55:09.039Z",
+  "verdict": "pass",
+  "summary": "Default table Tab append now follows inherited core cursor ownership and document insertion/history publication; all approved evidence passes on implementation642c72010a7146b4dcd01d29b778533cd84b0caf.",
+  "evaluated_sha": "642c72010a7146b4dcd01d29b778533cd84b0caf",
+  "blueprint_digest": "226996115be763ac58a0a2b7b5029fb6843ee7c52b95bb7bef4ec54f0bc78bdf",
+  "findings": [
+    "Same current agent performed exact-SHA review; 12816 application,109 inventory,5 script and189 Chromium cases pass with100% application/inventory coverage; prior semantic records and registered exceptions are preserved. Full native hierarchy and nondefault table insertion remain unverified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610060832-HF3AX5/README.md",
+    ".agentplane/tasks/202610060832-HF3AX5/evidence/exact-sha-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Only the existing flat final-row default append is implemented; complete native cursor/layout and general row/history contracts remain unverified."
+  ]
+}
