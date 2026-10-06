@@ -1,10 +1,11 @@
 ---
 id: "202610061008-88CGE1"
 title: "Move native table selection ownership into cursor shell and expose upstream selection menu"
-status: "DOING"
+result_summary: "Removed duplicated high-level table selection ownership, inherited actual core cursor rings and exposed native cell/row/column/table selection commands.12841app109inventory5scripts195Chrome distinct PASS; actual app/inventory100% coverage; one absent full profile and only original failed-fixture closures, vendor restored. Complex native layout/protection/clipboard and whole parity unverified; parent goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "Actual ordinary/table cursor ownership moved into SwCursorShell; duplicate row selection removed; native menu selection slots use actual point/mark and box owners, standard reset and one-point insertion after selected content deletion."
     - "One full absent profile and only five original failed fixture closures; no full/passing replay/rebuild/coverage transfer. Initial actual counters100%, production hashes unchanged, partial skipped cases stay skipped."
     - "270 prior semantic records preserved;477/479 old test files identical, two related fixtures preserve assertions except command count51to55. All declared gates and scope/artifact checks pass."
-commit: null
+commit:
+  hash: "0264126bc5f57c16b0a94884a4722408af1e2d05"
+  message: "🧩 88CGE1 code: move table selection into native cursor shell"
 comments:
   -
     author: "CODER"
     body: "Start: iteration183 source-owned cursor selection and upstream menu parity with one absent profile; whole parity unverified."
+  -
+    author: "CODER"
+    body: "Verified: native cursor-shell ownership and four table selection menu slots with source-defined point/mark, standard reset, input and reversible history; all scoped checks pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified source-owned native table selections at0264126bc5f57c16b0a94884a4722408af1e2d05:12841app109inventory5scripts195Chrome distinct PASS, actual app/inventory100% coverage, all declared gates/scope/source/quality pass. One full absent profile; only original failed fixtures rerun, production unchanged; vendor restored. Whole parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T10:40:33.729Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native cursor-shell ownership and four table selection menu slots with source-defined point/mark, standard reset, input and reversible history; all scoped checks pass."
 doc_version: 3
-doc_updated_at: "2026-10-06T10:40:19.912Z"
+doc_updated_at: "2026-10-06T10:40:33.730Z"
 doc_updated_by: "CODER"
 description: "Iteration183: refactor actual ordinary/table cursor ownership and row selection from SwWrtShell into source-owned SwCursorShell; native row/column/cell/table selection through upstream contextual slots with no React selection state, TextRuns conversion or document mutation; one absent verification profile."
 sections:
