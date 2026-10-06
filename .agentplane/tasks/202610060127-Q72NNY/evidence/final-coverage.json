@@ -1,0 +1,104 @@
+{
+  "sourceChangedAfterInitialProfile": [
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx"
+  ],
+  "sourceLocationProof": {
+    "oldSHA256": "6b969c57cf83713837c160af5fec0b1ada2f0c2b12886afa8d95cb8c54a9ab11",
+    "newSHA256": "27ea51a5ca0e19bd58193afc712167438df1b8eacff9386d16ca8a8c82f19b59",
+    "prefixUnchangedLines": 101,
+    "suffixUnchangedLines": 476,
+    "oldChangedLines": 1,
+    "newChangedLines": 4,
+    "lineDelta": 3,
+    "transferred": {
+      "statements": 140,
+      "functions": 45,
+      "branches": 74,
+      "individualBranchRanges": 2
+    },
+    "discarded": {
+      "statements": 3,
+      "functions": 3,
+      "branches": 1
+    },
+    "proof": "Transfer actual original counters only for exact identical geometry under contiguous unchanged source lines; changed function/statement/branch ranges use actual closure and failed-only counters. Native row formatter closure merge requires exact unchanged maps; all other initial counters retained."
+  },
+  "summary": {
+    "lines": {
+      "total": 13091,
+      "covered": 13091,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14352,
+      "covered": 14352,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3454,
+      "covered": 3454,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10702,
+      "covered": 10702,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "initialMapSHA256": "a2a5006eccb5adaec811a49ce02291c1579e00f83d70f523efb4dc41395797db",
+  "initialInventoryMapSHA256": "43acd8c1b66126d9e6715a30ac9cfd6619128fe0e15c376fc95aa2174334baec",
+  "closureMapSHA256": "ed13787f725832ff6c180db633a6037b99cf690d694c9a36a9ba3094a3c8cefd",
+  "failedOnlyMapSHA256": "4295c99f9299925bbd15eda280265dcfdbf6888ef5d845bd95177b52a2e48911",
+  "finalMapSHA256": "9e012e3276faf97409ef9a3f2cc7643344afe98effdf34d4690ddad90618085e",
+  "finalInventoryMapSHA256": "2ad818d6012a436459dcb5e1934246a7147ad8164359a4059723850402eab508",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "f650727a56ffe8e7af5ffde2b96d51540b234e86fd16af7d37fb546f1bcc9af8",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "a7fe4b0b60bb3aee071427f6882103ab7c914b6df3b17e043f243bbb9e6e2bc0",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "11f58f1a8724ed154030e5f10cf78a880e2b50ee1b4149f0ff0f2201d1f651c5",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "a29101eac8ea5d18952f71db019d72855fa06fc5639b28aed7a8a335bf9ae418",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "27ea51a5ca0e19bd58193afc712167438df1b8eacff9386d16ca8a8c82f19b59"
+  }
+}

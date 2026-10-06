@@ -38,6 +38,7 @@ export interface SwTableFrame {
   readonly firstRow: number;
   readonly lastRow: number;
   readonly afterParagraphIndex: number;
+  readonly repeatedHeaderRows?: number;
 }
 
 /** Device measured table rows; the core owns their placement. */
@@ -473,6 +474,7 @@ function tableFramesEqual(left: readonly SwTableFrame[], right: readonly SwTable
         frame.table === right[index]?.table &&
         frame.firstRow === right[index]?.firstRow &&
         frame.lastRow === right[index]?.lastRow &&
+        frame.repeatedHeaderRows === right[index]?.repeatedHeaderRows &&
         frame.afterParagraphIndex === right[index]?.afterParagraphIndex,
     )
   );
@@ -530,17 +532,73 @@ export function createSwPageFrames(
     for (const input of tables) {
       if (input.afterParagraphIndex !== afterParagraphIndex) continue;
       const format = input.table.GetFormat();
+      let repeat = input.table.GetRowsToRepeat();
+      let headlineHeight = input.rowHeights.slice(0, repeat).reduce(
+        /** Adds measured original headline heights. @param sum - Prior height. @param height - Row height. @returns Total. */
+        (sum, height) => sum + height,
+        0,
+      );
+      const initialPage = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
+      const initialBodyHeight =
+        initialPage.height - initialPage.topMargin - initialPage.bottomMargin;
+      if (repeat > 0 && headlineHeight > initialBodyHeight) {
+        input.table.SetRowsToRepeat(0);
+        repeat = 0;
+        headlineHeight = 0;
+      }
+      if (
+        repeat > 0 &&
+        hasContent() &&
+        used + (format.marginTop ?? 0) + headlineHeight + (input.rowHeights[repeat] ?? 0) >
+          initialBodyHeight
+      )
+        startFollowPage();
+      const tableStartPage = pageDescriptors[
+        pageDescriptors.length - 1
+      ] as WriterPageDescriptorValue;
+      if (
+        repeat > 0 &&
+        headlineHeight >
+          tableStartPage.height - tableStartPage.topMargin - tableStartPage.bottomMargin
+      ) {
+        input.table.SetRowsToRepeat(0);
+        repeat = 0;
+        headlineHeight = 0;
+      }
       for (let row = 0; row < input.rowHeights.length; row += 1) {
         const height = input.rowHeights[row] as number;
         const descriptor = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
         const bodyHeight = descriptor.height - descriptor.topMargin - descriptor.bottomMargin;
         const spacing = row === 0 ? (format.marginTop ?? 0) : 0;
-        if (hasContent() && used + spacing + height > bodyHeight) startFollowPage();
+        if (
+          hasContent() &&
+          used + spacing + height > bodyHeight &&
+          (repeat === 0 || row > repeat)
+        ) {
+          startFollowPage();
+          const follow = pageDescriptors[pageDescriptors.length - 1] as WriterPageDescriptorValue;
+          if (
+            repeat > 0 &&
+            headlineHeight > follow.height - follow.topMargin - follow.bottomMargin
+          ) {
+            input.table.SetRowsToRepeat(0);
+            repeat = 0;
+            headlineHeight = 0;
+          }
+          if (row > 0) used += headlineHeight;
+        }
         const frames = pageTables[pageTables.length - 1] as SwTableFrame[];
         const previous = frames[frames.length - 1];
         if (previous?.table === input.table && previous.lastRow === row - 1)
           frames[frames.length - 1] = { ...previous, lastRow: row };
-        else frames.push({ table: input.table, firstRow: row, lastRow: row, afterParagraphIndex });
+        else
+          frames.push({
+            table: input.table,
+            firstRow: row,
+            lastRow: row,
+            afterParagraphIndex,
+            ...(row > 0 && repeat > 0 ? { repeatedHeaderRows: repeat } : {}),
+          });
         used += (row === 0 ? (format.marginTop ?? 0) : 0) + height;
       }
       used += format.marginBottom ?? 0;

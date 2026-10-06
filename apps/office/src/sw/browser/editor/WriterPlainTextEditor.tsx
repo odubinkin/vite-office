@@ -95,14 +95,23 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
               element,
             ) => element.dataset.writerParagraphId === paragraphId,
           );
+          const focusNode = globalThis.getSelection()?.focusNode;
           return (
+            fragments.find(
+              /** Retains the actual header occurrence currently carrying the caret. @param element - Mounted occurrence. @returns Whether the caret belongs here. */
+              (element) =>
+                element.contains(focusNode ?? null) &&
+                Number(element.dataset.writerFragmentStart) <= offset &&
+                offset <= Number(element.dataset.writerFragmentEnd),
+            ) ??
             fragments.find(
               /** Finds the fragment containing the source offset. @param element - Mounted fragment. @returns Whether the offset belongs. */ (
                 element,
               ) =>
                 Number(element.dataset.writerFragmentStart) <= offset &&
                 offset <= Number(element.dataset.writerFragmentEnd),
-            ) ?? fragments[fragments.length - 1]
+            ) ??
+            fragments[fragments.length - 1]
           );
         },
       ),
@@ -160,12 +169,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         retainParagraphElement={
           /** Registers cell paragraphs in the same selection surface as body text. @param id - Shared display identity. @param element - Mounted paragraph. @returns Nothing. */
           (id, element) => {
-            if (element === null) paragraphElements.delete(id);
-            else paragraphElements.set(id, element);
+            const frameKey = `${frame.table.GetName()}:${frame.firstRow}:${id}`;
+            if (element === null) paragraphElements.delete(frameKey);
+            else paragraphElements.set(frameKey, element);
           }
         }
         firstRow={frame.firstRow}
         lastRow={frame.lastRow}
+        repeatedHeaderRows={frame.repeatedHeaderRows ?? 0}
         selectedBoxes={props.selectedTableBoxes}
         onSelectRow={
           /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (

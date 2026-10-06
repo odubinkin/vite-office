@@ -1,0 +1,48 @@
+{
+  "base": "b206a5c685a4ea0db741aa211ef4d36647415b39",
+  "changedSemanticPaths": 10,
+  "productionOwners": 5,
+  "priorTestFiles": 446,
+  "priorTestFilesByteIdentical": 446,
+  "sourceConfirmedExpectedPropertyMigration": [],
+  "existingSemanticRecordsPreserved": 258,
+  "totalSemanticRecords": 258,
+  "allStatesDefaultsClassificationsIOExceptionsPreserved": true,
+  "priorEvidencePreserved": true,
+  "sourceProof": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "f650727a56ffe8e7af5ffde2b96d51540b234e86fd16af7d37fb546f1bcc9af8",
+    "apps/office/src/sw/source/core/layout/newfrm.ts": "a7fe4b0b60bb3aee071427f6882103ab7c914b6df3b17e043f243bbb9e6e2bc0",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "11f58f1a8724ed154030e5f10cf78a880e2b50ee1b4149f0ff0f2201d1f651c5",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "a29101eac8ea5d18952f71db019d72855fa06fc5639b28aed7a8a335bf9ae418",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "27ea51a5ca0e19bd58193afc712167438df1b8eacff9386d16ca8a8c82f19b59"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 21,
+  "newChromiumCases": 3,
+  "finalDistinctPassed": {
+    "app": 12665,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 154
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/inc/swtable.hxx",
+      "sha256": "2ee3e71e4d427fde37a57ec8d68bbe32b49d3d2c6ec492193568732fcbfab3fb"
+    },
+    {
+      "path": "sw/source/core/layout/tabfrm.cxx",
+      "sha256": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f"
+    },
+    {
+      "path": "sw/source/core/layout/trvlfrm.cxx",
+      "sha256": "b645a2e52578d13c35526fe765fa625ed258afbead0d11d70d7beaa9d1353b78"
+    },
+    {
+      "path": "sw/source/core/crsr/crsrsh.cxx",
+      "sha256": "22a10693b0097a1788df0b2b63153790a37a4ce0f79ddaa4da8ec2c30c3c4f3a"
+    }
+  ],
+  "validationLimit": "Native represented flat horizontal whole-row repeated table headline count,follow-frame height and original-node painting/editing/history only. Full nested/merged/rowspan,row splitting,cross-box repeated table selection/painting,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; conscious IO exceptions unchanged,parent DOING,goal ACTIVE."
+}

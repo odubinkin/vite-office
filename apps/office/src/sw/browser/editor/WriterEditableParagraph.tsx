@@ -1,6 +1,6 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
 
-import { Fragment, useRef } from "react";
+import { Fragment, useId, useRef } from "react";
 import { browserFontFamily } from "./writer-font-family";
 
 import type {
@@ -38,7 +38,7 @@ export function WriterEditableParagraph({
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
-  const styleDescriptionId = `writer-paragraph-style-${paragraph.id}`;
+  const styleDescriptionId = `writer-paragraph-style-${useId()}`;
   const label =
     cellPosition === undefined
       ? index === 0

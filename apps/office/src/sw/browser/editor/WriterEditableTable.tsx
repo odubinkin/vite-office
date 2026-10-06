@@ -11,6 +11,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
   onSelectRow,
   firstRow = 0,
   lastRow = table.GetTabLines().length - 1,
+  repeatedHeaderRows = 0,
   retainElement,
   paragraphs,
   activeParagraphId,
@@ -21,6 +22,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
   onSelectRow: (row: number) => void;
   firstRow?: number;
   lastRow?: number;
+  repeatedHeaderRows?: number;
   retainElement?: (element: HTMLTableElement | null) => void;
   paragraphs: ReadonlyMap<number, WriterParagraphProjection>;
   activeParagraphId?: string;
@@ -62,14 +64,27 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
           )}
         </colgroup>
         <tbody>
-          {table
-            .GetTabLines()
-            .slice(firstRow, lastRow + 1)
-            .map(
-              /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
-                row,
-                fragmentRowIndex,
-              ) => (
+          {[
+            ...Array.from(
+              { length: repeatedHeaderRows },
+              /** Addresses original rows in repeated headlines. @param _slot - Array slot. @param index - Original row index. @returns Index. */
+              (_slot, index) => index,
+            ),
+            ...Array.from(
+              { length: lastRow - firstRow + 1 },
+              /** Addresses the source rows of this table fragment. @param _slot - Array slot. @param index - Fragment offset. @returns Original index. */
+              (_slot, index) => firstRow + index,
+            ),
+          ].map(
+            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+              rowIndex,
+              frameRowIndex,
+            ) => {
+              const row = table.GetTabLines()[rowIndex] as ReturnType<
+                SwTable["GetTabLines"]
+              >[number];
+              const isRepeatedHeadline = frameRowIndex < repeatedHeaderRows;
+              return (
                 <tr
                   aria-selected={row
                     .GetTabBoxes()
@@ -78,8 +93,9 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                         box,
                       ) => selectedBoxes?.includes(box.GetStartNode().GetIndex()) === true,
                     )}
-                  data-writer-table-row={firstRow + fragmentRowIndex}
-                  key={firstRow + fragmentRowIndex}
+                  data-writer-table-row={rowIndex}
+                  data-writer-repeated-headline={isRepeatedHeadline ? "true" : undefined}
+                  key={rowIndex}
                   style={{ height: (row.GetFormat().minHeight ?? 0) / 15 }}
                 >
                   {row.GetTabBoxes().map(
@@ -88,7 +104,6 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                       cellIndex,
                     ) => {
                       const cellFormat = cell.GetFormat();
-                      const rowIndex = firstRow + fragmentRowIndex;
                       const CellTag = rowIndex < (format.headerRows ?? 0) ? "th" : "td";
                       return (
                         <CellTag
@@ -118,7 +133,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                             verticalAlign: cellFormat.verticalAlign ?? "top",
                           }}
                         >
-                          {cellIndex === 0 ? (
+                          {cellIndex === 0 && !isRepeatedHeadline ? (
                             <button
                               aria-label={`Select row ${rowIndex + 1} in ${table.GetName()}`}
                               className="absolute -left-5 top-0 flex h-full w-5 cursor-e-resize items-center justify-center text-indigo-700 opacity-0 hover:opacity-100 focus:opacity-100"
@@ -177,8 +192,9 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                     },
                   )}
                 </tr>
-              ),
-            )}
+              );
+            },
+          )}
         </tbody>
       </table>
     </div>

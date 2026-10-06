@@ -127,6 +127,20 @@ export class SwTable {
     this.format = { ...value };
   }
 
+  /** Returns the native headline count capped by actual table lines. @returns Repeated line count. */
+  public GetRowsToRepeat(): number {
+    return Math.min(
+      this.lines.length,
+      this.format.repeatHeaderRows === true ? (this.format.headerRows ?? 0) & 0xffff : 0,
+    );
+  }
+
+  /** Sets the native unsigned headline count in the existing table format. @param count - Authored count. @returns Nothing. */
+  public SetRowsToRepeat(count: number): void {
+    const rows = count & 0xffff;
+    this.format = { ...this.format, headerRows: rows, repeatHeaderRows: rows !== 0 };
+  }
+
   /** Appends one defined column width. @param twips - Width in twips. @returns Nothing. */
   public AddColumnWidth(twips: number): void {
     this.columnWidths.push(twips);

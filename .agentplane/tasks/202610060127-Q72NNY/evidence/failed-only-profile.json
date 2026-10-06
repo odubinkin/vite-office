@@ -1,0 +1,59 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx",
+      "name": "native repeated table headline UI moves from a focused follow text frame to a lower source offset while preserving repeated headline owners"
+    }
+  ],
+  "newCases": [],
+  "failedOnlyFrom": "closure-profile.json",
+  "newChromiumCases": [
+    "Writer headline-adjacent text reflow retains a source caret beyond the old page fragment"
+  ],
+  "productionChanged": false,
+  "changedProduction": [
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx"
+  ],
+  "rebuild": false,
+  "correction": "Only failed added app/browser cases: wait for actual asynchronous native line measurements and imported body text; provide four device lines so native orphan/widow policy allows the intended two/two split. No production change,rebuild or passing replay.",
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-headlines.test.tsx --testNamePattern=native repeated table headline UI moves from a focused follow text frame to a lower source offset while preserving repeated headline owners --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/Q72NNY.failed-only-app-results.json",
+      "profile": "original-failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1269,
+      "sha256": "b64c2e5a5cd635fca60aba99b7388e9f52a06323745bcb8fdd3f78f2b28360e7",
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 6,
+        "total": 7
+      },
+      "executedCases": [
+        "native repeated table headline UI moves from a focused follow text frame to a lower source offset while preserving repeated headline owners"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "4295c99f9299925bbd15eda280265dcfdbf6888ef5d845bd95177b52a2e48911"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --grep Writer headline-adjacent text reflow retains a source caret beyond the old page fragment --reporter=list,json",
+      "profile": "original-failed-and-new-only-upstream-absent",
+      "exit": 0,
+      "bytes": 562,
+      "sha256": "78d8d6568777a369333759a57f54d28fe9ced91c7f925bd5a7af076a2111ce06",
+      "caseCounts": {
+        "startTime": "2026-10-06T01:50:18.715Z",
+        "duration": 2264.588,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "failedCases": []
+    }
+  ]
+}
