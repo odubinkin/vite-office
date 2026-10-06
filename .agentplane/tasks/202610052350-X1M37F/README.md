@@ -4,7 +4,7 @@ title: "Preserve native NONE numbering through ODT and remove UNO format reconst
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T00:05:21.953Z"
+  updated_by: "CODER"
+  note: "Command: six initial static gates with failed-only repair,changed-file validators,ONE full upstream-absent build/app/inventory/scripts/Chromium profile,five restored source audits,scope/metadata/prior-tests/map identity/AP/governance audits. Result:pass. Evidence:12597app109inventory5scripts147Chromium0flaky,100%L/S/F/B app/inventory; all source/map hashes tied to semantic dac0dd5edbf855e1298a53746660882b79682386;same-current-agent EVALUATOR exact SHA pass20261006-000500191-recovery-context. Scope: native NONE XML/UNO/core roundtrip and copy/setter ownership with mounted/browser list history,14semanticpaths. No passing/full replay or IO-policy change; full core/UI/list/table remains unverified ACTIVE."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: apply native NONE numbering XML/UNO correction and remove redundant format reconstruction under standing approved scope."
+  -
+    type: "verify"
+    at: "2026-10-06T00:05:21.953Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: six initial static gates with failed-only repair,changed-file validators,ONE full upstream-absent build/app/inventory/scripts/Chromium profile,five restored source audits,scope/metadata/prior-tests/map identity/AP/governance audits. Result:pass. Evidence:12597app109inventory5scripts147Chromium0flaky,100%L/S/F/B app/inventory; all source/map hashes tied to semantic dac0dd5edbf855e1298a53746660882b79682386;same-current-agent EVALUATOR exact SHA pass20261006-000500191-recovery-context. Scope: native NONE XML/UNO/core roundtrip and copy/setter ownership with mounted/browser list history,14semanticpaths. No passing/full replay or IO-policy change; full core/UI/list/table remains unverified ACTIVE."
 doc_version: 3
-doc_updated_at: "2026-10-06T00:04:00.008Z"
+doc_updated_at: "2026-10-06T00:05:22.045Z"
 doc_updated_by: "CODER"
 description: "One native list serialization and property-application correction under the approved UI/core convergence goal; preserve actual NumberingType NONE through XML/UNO/core and browser reopening, replacing redundant UNO format reconstruction with native copy/setter ownership."
 sections:
@@ -85,6 +91,36 @@ sections:
     5. After restoration only five source audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Doctor/routing/diff check; same-agent EVALUATOR exact semantic SHA pass, canonical verification/meaningful finish, whole parent Findings append and clean tracked/untracked main. Full native/core/UI/list/table objective stays unverified ACTIVE.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T00:05:21.953Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: six initial static gates with failed-only repair,changed-file validators,ONE full upstream-absent build/app/inventory/scripts/Chromium profile,five restored source audits,scope/metadata/prior-tests/map identity/AP/governance audits. Result:pass. Evidence:12597app109inventory5scripts147Chromium0flaky,100%L/S/F/B app/inventory; all source/map hashes tied to semantic dac0dd5edbf855e1298a53746660882b79682386;same-current-agent EVALUATOR exact SHA pass20261006-000500191-recovery-context. Scope: native NONE XML/UNO/core roundtrip and copy/setter ownership with mounted/browser list history,14semanticpaths. No passing/full replay or IO-policy change; full core/UI/list/table remains unverified ACTIVE.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T00:04:00.008Z, excerpt_hash=sha256:189715f0785a0dc966a7f52c4ac7a5bd08d8eddfd1bba1c94549da23807a949c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052350-X1M37F/blueprint/resolved-snapshot.json
+    - old_digest: 50880b9044b8548c2dcff50dfefb164cbf5291762b5a835dde09f5462a0f1734
+    - current_digest: 50880b9044b8548c2dcff50dfefb164cbf5291762b5a835dde09f5462a0f1734
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610052350-X1M37F
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610052350-X1M37F
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic commit for this leaf; preserve prior task evidence and registered IO deviations."
   Findings: |-
@@ -130,6 +166,36 @@ Iteration169 under the standing approved iterative native core/UI convergence go
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T00:05:21.953Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: six initial static gates with failed-only repair,changed-file validators,ONE full upstream-absent build/app/inventory/scripts/Chromium profile,five restored source audits,scope/metadata/prior-tests/map identity/AP/governance audits. Result:pass. Evidence:12597app109inventory5scripts147Chromium0flaky,100%L/S/F/B app/inventory; all source/map hashes tied to semantic dac0dd5edbf855e1298a53746660882b79682386;same-current-agent EVALUATOR exact SHA pass20261006-000500191-recovery-context. Scope: native NONE XML/UNO/core roundtrip and copy/setter ownership with mounted/browser list history,14semanticpaths. No passing/full replay or IO-policy change; full core/UI/list/table remains unverified ACTIVE.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T00:04:00.008Z, excerpt_hash=sha256:189715f0785a0dc966a7f52c4ac7a5bd08d8eddfd1bba1c94549da23807a949c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610052350-X1M37F/blueprint/resolved-snapshot.json
+- old_digest: 50880b9044b8548c2dcff50dfefb164cbf5291762b5a835dde09f5462a0f1734
+- current_digest: 50880b9044b8548c2dcff50dfefb164cbf5291762b5a835dde09f5462a0f1734
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610052350-X1M37F
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610052350-X1M37F
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
