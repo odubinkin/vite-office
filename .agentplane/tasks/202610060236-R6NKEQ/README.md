@@ -4,7 +4,7 @@ title: "Restore native horizontal table print geometry"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T02:57:59.313Z"
+  updated_by: "CODER"
+  note: "Verified: native horizontal table print geometry at 1fe8f0a2e73080f22c11e79d61b07fd1d0699979.31newapp8newChromium,452prior testfiles byte-identical; distinct12722app109inventory5scripts165Chromium allpass without upstream. Actual app/inventory100percent exact unchanged source/maps and real counters,one full profile then failed-only recovery,no production change or passing replay. Five restored audits,static/changed checks,scope/AP/governance pass. Same-agent exactSHA quality20261006-025741645-recovery-context;whole parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -57,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved native horizontal table print geometry under standing iterative user authorization."
+  -
+    type: "verify"
+    at: "2026-10-06T02:57:59.313Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: native horizontal table print geometry at 1fe8f0a2e73080f22c11e79d61b07fd1d0699979.31newapp8newChromium,452prior testfiles byte-identical; distinct12722app109inventory5scripts165Chromium allpass without upstream. Actual app/inventory100percent exact unchanged source/maps and real counters,one full profile then failed-only recovery,no production change or passing replay. Five restored audits,static/changed checks,scope/AP/governance pass. Same-agent exactSHA quality20261006-025741645-recovery-context;whole parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T02:56:27.240Z"
+doc_updated_at: "2026-10-06T02:57:59.370Z"
 doc_updated_by: "CODER"
 description: "Iteration175: move represented horizontal table geometry into native SwTabFrame Format ownership; honor imported left/center/right/margins and default full-width modes, actual page print width, right margin, proportional columns, repeated fragments, live editing and history. Preserve deliberate IO exceptions and prior tests; bounded geometry only, broader table/frame parity unverified."
 sections:
@@ -87,6 +93,36 @@ sections:
     5. After vendor restored, five source audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. ExactSHA sameagent EVALUATOR,no independent reviewer claim,semanticcommit,recordverify,meaningfulfinish,wholeparentcheckpoint;parentDOINGgoalACTIVE.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T02:57:59.313Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: native horizontal table print geometry at 1fe8f0a2e73080f22c11e79d61b07fd1d0699979.31newapp8newChromium,452prior testfiles byte-identical; distinct12722app109inventory5scripts165Chromium allpass without upstream. Actual app/inventory100percent exact unchanged source/maps and real counters,one full profile then failed-only recovery,no production change or passing replay. Five restored audits,static/changed checks,scope/AP/governance pass. Same-agent exactSHA quality20261006-025741645-recovery-context;whole parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T02:56:27.240Z, excerpt_hash=sha256:29fd5750f8b8fa065ff8fef93ff5074380f1badad3ba2535e9856957d860af83
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060236-R6NKEQ/blueprint/resolved-snapshot.json
+    - old_digest: 344fac156d62a7ebb3eb17afd76b2fac613035dfc986d615c3500efd021fc8a7
+    - current_digest: 344fac156d62a7ebb3eb17afd76b2fac613035dfc986d615c3500efd021fc8a7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060236-R6NKEQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060236-R6NKEQ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf semantic commit with a follow-up task; retain immutable verification history. Never change deliberate save/open/recovery exceptions."
   Findings: |-
@@ -133,6 +169,36 @@ Iteration175 under standing approved iterative goal. ONE atomic direct CODER lea
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T02:57:59.313Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: native horizontal table print geometry at 1fe8f0a2e73080f22c11e79d61b07fd1d0699979.31newapp8newChromium,452prior testfiles byte-identical; distinct12722app109inventory5scripts165Chromium allpass without upstream. Actual app/inventory100percent exact unchanged source/maps and real counters,one full profile then failed-only recovery,no production change or passing replay. Five restored audits,static/changed checks,scope/AP/governance pass. Same-agent exactSHA quality20261006-025741645-recovery-context;whole parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T02:56:27.240Z, excerpt_hash=sha256:29fd5750f8b8fa065ff8fef93ff5074380f1badad3ba2535e9856957d860af83
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060236-R6NKEQ/blueprint/resolved-snapshot.json
+- old_digest: 344fac156d62a7ebb3eb17afd76b2fac613035dfc986d615c3500efd021fc8a7
+- current_digest: 344fac156d62a7ebb3eb17afd76b2fac613035dfc986d615c3500efd021fc8a7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060236-R6NKEQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060236-R6NKEQ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
