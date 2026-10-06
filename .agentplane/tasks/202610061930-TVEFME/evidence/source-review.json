@@ -1,0 +1,16 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sfx2/source/dialog/tabdlg.cxx": "97684181a588cefdc5c1105a845ba41abb19eb8da21679fc82fcce52a77c4199",
+    "sw/uiconfig/swriter/ui/tableproperties.ui": "2a1a69d9ebf144eafb4b2d217e36f3468de36629247c29530d5aac58a729b143"
+  },
+  "contracts": [
+    "SfxTabDialogController::ResetHdl calls Reset only on active page using original input; Table Properties source UI includes Reset. Browser current page stays selected and other pages retain drafts.",
+    "Table/Columns existing native Reset owners retain shared carrier/vector identities and source sticky state/saved-value/activation behavior. Original canonical document graph/history unchanged until existing shell acceptance.",
+    "Represented Text Flow/Borders original controls captured once at mount and restored only within own page; active tab and geometry/local spacing/other-page drafts retained. Repeated Reset, invalid draft recovery, Cancel, OK, one history/3UndoRedo/input/ODT and Chromium1280/390 tested.",
+    "Six approved paths;516old acceptance files byte-identical,3new519total;276 previous metadata states/defaults/classifications/full prefixes and registered exceptions unchanged. Same-agent EVALUATOR explicitly not independent. Full SfxItemSet item ranges, native percent/name/text direction/widget bounds/Background and whole parity unverified; parent/goal active."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "historicalLiteralAssertionSurfacePreserved": true,
+  "approvedPaths": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts"
+  ],
+  "oldAcceptanceFiles": 516,
+  "oldAcceptanceChanged": [],
+  "oldAcceptanceByteIdentical": 516,
+  "newTests": [
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts"
+  ],
+  "totalAcceptanceFiles": 519,
+  "priorSemanticRecords": 276,
+  "semanticRecords": 276,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 504171,
+  "parentPrefixSHA256": "19caaf1a09d82585530dd681368bd0695f7e0358cdce2ffd914951074580bdcb",
+  "failures": []
+}
