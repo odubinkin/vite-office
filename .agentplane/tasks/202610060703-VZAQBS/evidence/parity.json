@@ -1,0 +1,9 @@
+{
+  "command": "npm run inventory:parity",
+  "exit": 0,
+  "bytes": 1577403,
+  "sha256": "5c69ddaf8b7496761c10ffe1d2b201a10d3a0c9e423850d9f54d5aa319ea6e0f",
+  "summary": [
+    "Runtime parity CLI passed after restoration; no blanket semantic promotion."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "command": "npm run check:source-provenance",
+  "exit": 0,
+  "bytes": 205,
+  "sha256": "69a0a656b1b44038951ca7c6b64d589e9699d625bf8e272b480455eb24c9327e",
+  "summary": [
+    "Source provenance check passed for 267 runtime modules (183 mapped, 68 browser adaptations, 16 local infrastructure)."
+  ]
+}

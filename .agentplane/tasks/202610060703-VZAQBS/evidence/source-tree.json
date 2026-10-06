@@ -1,0 +1,9 @@
+{
+  "command": "npm run check:source-tree",
+  "exit": 0,
+  "bytes": 162,
+  "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+  "summary": [
+    "LibreOffice source-tree check passed for 114 required paths and 33 retired roots."
+  ]
+}
