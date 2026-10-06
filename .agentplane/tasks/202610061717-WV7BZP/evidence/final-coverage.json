@@ -1,0 +1,187 @@
+{
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 14552,
+        "covered": 14552,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 15963,
+        "covered": 15962,
+        "skipped": 0,
+        "pct": 99.99
+      },
+      "functions": {
+        "total": 3709,
+        "covered": 3709,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 11894,
+        "covered": 11887,
+        "skipped": 0,
+        "pct": 99.94
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "995ec6b694c694ffc8d0333067aa02ebf14c40ea0c3e26bbbf14f02c431f2561",
+    "files": 273
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1460,
+        "skipped": 0,
+        "pct": 99.72
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1519,
+        "skipped": 0,
+        "pct": 99.73
+      },
+      "functions": {
+        "total": 384,
+        "covered": 381,
+        "skipped": 0,
+        "pct": 99.21
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "ed2d55c9457992fdd28541718292c6eedfa4545d18d3c511b9baaf7395309074",
+    "files": 38
+  },
+  "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+  "transfers": [],
+  "wholeIdenticalFileCount": 273,
+  "gaps": [
+    {
+      "file": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "summary": {
+        "lines": {
+          "total": 227,
+          "covered": 227,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 43,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 254,
+          "covered": 254,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 165,
+          "covered": 164,
+          "skipped": 0,
+          "pct": 99.39
+        }
+      },
+      "uncoveredStatementLines": [],
+      "uncoveredFunctionNames": [],
+      "uncoveredBranchLines": [
+        425
+      ]
+    },
+    {
+      "file": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "summary": {
+        "lines": {
+          "total": 76,
+          "covered": 76,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 85,
+          "covered": 84,
+          "skipped": 0,
+          "pct": 98.82
+        },
+        "branches": {
+          "total": 53,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 92.45
+        }
+      },
+      "uncoveredStatementLines": [
+        137
+      ],
+      "uncoveredFunctionNames": [],
+      "uncoveredBranchLines": [
+        84,
+        90,
+        91,
+        137
+      ]
+    },
+    {
+      "file": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+      "summary": {
+        "lines": {
+          "total": 165,
+          "covered": 165,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 47,
+          "covered": 47,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 188,
+          "covered": 188,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 149,
+          "covered": 147,
+          "skipped": 0,
+          "pct": 98.65
+        }
+      },
+      "uncoveredStatementLines": [],
+      "uncoveredFunctionNames": [],
+      "uncoveredBranchLines": [
+        42,
+        50
+      ]
+    }
+  ]
+}
