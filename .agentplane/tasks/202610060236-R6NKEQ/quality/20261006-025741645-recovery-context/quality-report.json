@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610060236-R6NKEQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T02:57:41.645Z",
+  "verdict": "pass",
+  "summary": "Verified represented native horizontal table print geometry at implementation SHA 1fe8f0a2e73080f22c11e79d61b07fd1d0699979; same-agent evaluator, no independent reviewer claim.",
+  "evaluated_sha": "1fe8f0a2e73080f22c11e79d61b07fd1d0699979",
+  "blueprint_digest": "344fac156d62a7ebb3eb17afd76b2fac613035dfc986d615c3500efd021fc8a7",
+  "findings": [
+    "Core SwTabFrame owns source-shaped orientation, wished width and signed LR geometry; root uses actual master/follow page bounds; existing browser tables consume native bounds and proportional columns.31newapp8newChromium cases;452prior testfiles byte-identical,258semantic states/defaults/classes/IOexceptions preserved. One full upstream-absent profile then failed-only fixture/metadata recovery,exact unchanged source/maps with real100percent counters independently recomputed. No production change/rebuild/passing replay after initial profile. Initial failures retained candidly. Newmodule and whole core/UI parity remain unverified; registered IO deviations unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610060236-R6NKEQ/README.md",
+    ".agentplane/tasks/202610060236-R6NKEQ/evidence/evaluator-proof.json",
+    ".agentplane/tasks/202610060236-R6NKEQ/evidence/scope-audit.json",
+    ".agentplane/tasks/202610060236-R6NKEQ/evidence/final-coverage.json",
+    ".agentplane/tasks/202610060236-R6NKEQ/evidence/absent-profile.json",
+    ".agentplane/tasks/202610060236-R6NKEQ/evidence/closure-profile.json",
+    ".agentplane/tasks/202610060236-R6NKEQ/evidence/failed-chromium-profile.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Relative-width/fly/outer-border/multicolumn/vertical/RTL/nested/merged/rowspan/split-row/protection/full native frame lifecycle,follow-width row remeasurement and table alignment property controls remain unverified. Same-agent evaluation is not independent review."
+  ]
+}

@@ -4,7 +4,7 @@ title: "Restore native horizontal table print geometry"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,27 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T02:57:41.645Z"
+  updated_by: "EVALUATOR"
+  note: "Verified represented native horizontal table print geometry at implementation SHA 1fe8f0a2e73080f22c11e79d61b07fd1d0699979; same-agent evaluator, no independent reviewer claim."
+  evaluated_sha: "1fe8f0a2e73080f22c11e79d61b07fd1d0699979"
+  blueprint_digest: "344fac156d62a7ebb3eb17afd76b2fac613035dfc986d615c3500efd021fc8a7"
+  evidence_refs:
+    - ".agentplane/tasks/202610060236-R6NKEQ/README.md"
+    - ".agentplane/tasks/202610060236-R6NKEQ/quality/20261006-025741645-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060236-R6NKEQ/quality/20261006-025741645-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060236-R6NKEQ/quality/20261006-025741645-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060236-R6NKEQ/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060236-R6NKEQ/evidence/evaluator-proof.json"
+    - ".agentplane/tasks/202610060236-R6NKEQ/evidence/scope-audit.json"
+    - ".agentplane/tasks/202610060236-R6NKEQ/evidence/final-coverage.json"
+    - ".agentplane/tasks/202610060236-R6NKEQ/evidence/absent-profile.json"
+    - ".agentplane/tasks/202610060236-R6NKEQ/evidence/closure-profile.json"
+    - ".agentplane/tasks/202610060236-R6NKEQ/evidence/failed-chromium-profile.json"
+  findings:
+    - "Core SwTabFrame owns source-shaped orientation, wished width and signed LR geometry; root uses actual master/follow page bounds; existing browser tables consume native bounds and proportional columns.31newapp8newChromium cases;452prior testfiles byte-identical,258semantic states/defaults/classes/IOexceptions preserved. One full upstream-absent profile then failed-only fixture/metadata recovery,exact unchanged source/maps with real100percent counters independently recomputed. No production change/rebuild/passing replay after initial profile. Initial failures retained candidly. Newmodule and whole core/UI parity remain unverified; registered IO deviations unchanged."
 commit: null
 comments:
   -

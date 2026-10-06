@@ -1,0 +1,93 @@
+{
+  "evaluatedSHA": "1fe8f0a2e73080f22c11e79d61b07fd1d0699979",
+  "sameAgentEvaluator": true,
+  "independentReviewerClaim": false,
+  "currentSemanticSourcesAndMetadataVerified": true,
+  "initialAndClosureMapsAndRealCountersIndependentlyRecomputed": true,
+  "noProductionSourceChangeAfterInitialProfile": true,
+  "scopeAndPreservedPriorTestsAndSemanticStatesEvidenceReviewed": true,
+  "diffSHA256": "96297782f5e14bf4424ceb824465502a524a669c61f45ac06c2946f0f51b90a2",
+  "distinctCases": {
+    "app": 12722,
+    "inventory": 109,
+    "chromium": 165
+  },
+  "actualCoverage": {
+    "app": {
+      "lines": {
+        "total": 13140,
+        "covered": 13140,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14404,
+        "covered": 14404,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3461,
+        "covered": 3461,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10773,
+        "covered": 10773,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "registeredIOExceptionsUnchanged": true,
+  "wholeCoreUIParity": "UNVERIFIED",
+  "residualLimits": [
+    "relative width",
+    "fly and outer-border offsets",
+    "vertical and RTL",
+    "multicolumn",
+    "nested/merged/rowspan/split-row/protection",
+    "follow-width row remeasurement",
+    "table properties alignment controls",
+    "complete native frame lifecycle"
+  ]
+}
