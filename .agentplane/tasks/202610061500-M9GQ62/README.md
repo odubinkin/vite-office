@@ -1,10 +1,11 @@
 ---
 id: "202610061500-M9GQ62"
 title: "Replace width-array table edits with native column separator ownership"
-status: "DOING"
+result_summary: "Removed shell width-array table mutation in favor of native SwTabCols and document-owned width/history mechanics; physical relative-column UI drafts and three UndoRedo cycles verified. Shared flat model only; complete column-page/frame notifications, ruler resize and complex layout remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610061500-M9GQ62/evidence/exact-sha-quality.json"
   findings:
     - "Native carrier replaces shell width-array mutation; document owns print normalization and attribute history; connected physical draft, actual owner/cursor/list/ODT and new Chromium history cases pass. Actual100 app/inventory coverage proven over identical whole source/maps or complete contiguous ranges with actual counters. One full absent profile and only failed/new closures; all274 prior metadata prefixes and494 old acceptance files preserved; goal/full parity remains active/unverified."
-commit: null
+commit:
+  hash: "9911d7d81c1975c8d6eb79c3e7638f1270b12546"
+  message: "🚧 M9GQ62 code: own table column edits with native separators"
 comments:
   -
     author: "CODER"
     body: "Start: replace approved connected width-array shell path with native separator/table/document ownership under standing iterative user authorization."
+  -
+    author: "CODER"
+    body: "Verified: native separator/history/physical draft paths pass;12985app109inventory5scripts214Chromium union with actual100 app/inventory coverage. Same-agent EVALUATOR exact implementation SHA PASS; full parity/goal remains unverified/active."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native separator ownership verified at implementation9911d7d81c1975c8d6eb79c3e7638f1270b12546. Union12985app109inventory5scripts214ChromiumPASS, actual100 app/inventory coverage. One full absent profile; closures only original failed/new cases, skips39 and4 retained, no passing/full replay. Source/static/scoped/scope/security gates PASS,doctor0errors2knownwarnings. Same-agent exact-SHA EVALUATOR phase PASS, not independent review. Full parity/goal remains unverified/active."
+  -
+    type: "status"
+    at: "2026-10-06T15:46:08.358Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native separator/history/physical draft paths pass;12985app109inventory5scripts214Chromium union with actual100 app/inventory coverage. Same-agent EVALUATOR exact implementation SHA PASS; full parity/goal remains unverified/active."
 doc_version: 3
-doc_updated_at: "2026-10-06T15:45:24.278Z"
+doc_updated_at: "2026-10-06T15:46:08.359Z"
 doc_updated_by: "CODER"
 description: "Iteration190 under C9TN6M: establish SwTabCols data/geometry contracts and document-owned table column mutation/history; remove the array-based SetTabCols shell contract from existing table properties. This is a connected prerequisite for native table border dragging; complete UI resize and broader layout remain open. Standing user iterative refactor authorization applies."
 sections:
