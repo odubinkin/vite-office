@@ -1,6 +1,6 @@
 {
-  "scope": "Current leaf and generated quality only; no historical census replay",
-  "filesAudited": 18,
+  "scope": "Current leaf and generated quality only; no historical audit replay",
+  "filesAudited": 23,
   "forbiddenArtifacts": [],
   "vendorRestored": true
 }

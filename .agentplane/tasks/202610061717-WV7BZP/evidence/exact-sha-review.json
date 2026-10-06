@@ -1,0 +1,156 @@
+{
+  "evaluatedSHA": "444b39c61bbd0b21187d4fa2083b24b2d9434e4e",
+  "reviewer": "Same current agent EVALUATOR phase; explicitly not independent review",
+  "implementationSHA256": {
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454",
+    "apps/office/src/sw/source/core/doc/doc.ts": "b2c3ddea5dff727fd95dedf51ac57a24e498576714c902df7e33ab430c317ddf",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "7af3b43280a9f367674b58cb37ea170d41446b1f1eee1da5f2ad7690c07f7cbb",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "b6a187f08f98fa2302495e038b2643ad3ea02260ae6daca81d1f6975ae100c68",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "04e5551e8b46686f434470a64202826534af8a97edc214bf8b0b34d8db8bff4f",
+    "docs/program/parity/runtime-inventory.json": "cace0e7366616dc3113a344c3fc737106cfce91d3818dee49d5349ccbfe79eae",
+    "docs/program/source-provenance.json": "850ae076c9bb0d13498acd05b3cc69af7c0a415f38f77f922ad50ccac6ed3f76",
+    "apps/office/e2e/writer-native-table-row-drag.spec.ts": "77adaf8746a0d062bf6c18c128ec6e7cf88a6464e9ede091731523f61e219eaf",
+    "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx": "90053fc17f5af3f56f35a184f1d4cccf9064c4c8e504c39a73a085ffb53c3f8e",
+    "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts": "88c248df31e7d9c6a9f9c9d07a888a8ad2ad6c9b80c1702d99a18162cd8aff98",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts": "8b21d945bf025bbb759c23317c0b5d4a742f37f933681a1864515e38b62a8ef6",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts": "6c66bcca13a684b5b63aedf03beb4e42fe51889fc8cdb3afb85537aa6c25a7a1"
+  },
+  "acceptance": {
+    "application": 13040,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 223,
+    "oldAcceptanceFilesByteIdentical": 504,
+    "newAcceptanceFiles": 4,
+    "totalAcceptanceFiles": 508,
+    "focusedNewCases": 5,
+    "focusedSkippedCasesNotPromoted": 34,
+    "noHistoricalPassingReplay": true
+  },
+  "coverage": {
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 14553,
+          "covered": 14553,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15963,
+          "covered": 15963,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3709,
+          "covered": 3709,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11892,
+          "covered": 11892,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "9967a8c1840bbf10ce3f5a25620f0d0cda96fe1ebead3f2249ed4e1101263469",
+      "files": 273
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "a625a1a0ecca6c8938efc6c5d3f00de1e68421e63532b3dfe56fe58342d85f3c",
+      "files": 38
+    },
+    "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+    "transfers": [
+      {
+        "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+        "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+        "initialSourceSHA256": "652f7dc1ad8f150f65a7b76f74c3d169ab88f50c07f2cf078b703d9bd02b4736",
+        "currentSourceSHA256": "31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454",
+        "regionCount": 4,
+        "transferredActualCounters": {
+          "statements": 248,
+          "functions": 39,
+          "branches": 65
+        }
+      },
+      {
+        "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+        "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+        "initialSourceSHA256": "c3dcc3496c1fdb048f0b4c762c981397da9d40b246e960a6c06cc15721b68172",
+        "currentSourceSHA256": "8b21d945bf025bbb759c23317c0b5d4a742f37f933681a1864515e38b62a8ef6",
+        "regionCount": 2,
+        "transferredActualCounters": {
+          "statements": 83,
+          "functions": 9,
+          "branches": 22
+        }
+      }
+    ],
+    "wholeIdenticalFileCount": 271,
+    "gaps": []
+  },
+  "proof": {
+    "app": {
+      "files": 273,
+      "wholeIdenticalFiles": 271,
+      "completeRegionFiles": 2,
+      "proofSHA256": "0bea7486e446359ef3df28734cc96e49822dbab8bca124b0a2119ea49d0bdb55"
+    },
+    "inventory": {
+      "files": 38,
+      "wholeIdenticalFiles": 38,
+      "proofSHA256": "bba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222"
+    },
+    "counterRule": "Complete identical source/maps or full contiguous byte-identical regions, full function declaration/body and full enclosing branch/locations only. Raw counters only; source digests checked. Focused skips remain skips.",
+    "failures": []
+  },
+  "semanticRecords": 276,
+  "priorRecordsAndPrefixesPreserved": 275,
+  "parentPrefixCharacters": 494113,
+  "parentPrefixSHA256": "88a9ab5e7e83b4cb66990c05fb2fefea4bb86893f7f71a664a2f3f0b2abef932",
+  "registeredFilenameAndIOExceptionsUnchanged": true,
+  "deferredStashPreserved": true,
+  "sourceContractsReviewed": true,
+  "failures": []
+}
