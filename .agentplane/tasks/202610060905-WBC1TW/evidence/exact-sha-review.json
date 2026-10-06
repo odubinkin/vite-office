@@ -1,0 +1,130 @@
+{
+  "evaluatedSHA": "fc664e2c9dc868cabac07854de739e4f3d50d0cd",
+  "reviewer": "Same current agent in EVALUATOR role; no independent review claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12823,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 191
+  },
+  "caseIdentity": "Vitest file+fullName+occurrence; Chromium file+fullTitle+project. Partial skipped are retained as skipped, never additional passes.",
+  "runtimeErrors": {
+    "application": [],
+    "inventory": []
+  },
+  "remainingFailures": {
+    "application": [],
+    "inventory": [],
+    "chromium": []
+  },
+  "implementationSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "f18439e60b01dd1b36253ab1130ddc7ccf67adce6d988b06205dd6a1fa403ecf",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "80c0ce3b10a7ccae10857a3f6190af9b134d03d6847eae82b752a9d9c44c3ce6",
+    "apps/office/src/sw/source/core/table/swtable.ts": "98f2613344a83f4ea1709ca581b69e18f281a148841becaa8308dfa568934f7d",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "378d2f3d644ec620db79e7c7c0016d2db243ced6f2ce38a88c4b10c4b43a5083",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "e3d0e8fe5793a15053a17851810ca9d559c721788395a8a69684684ff612c983",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "c45c53f230de3662d6adacd4e9e62df2294adfe9fd23879234aaf2def1de5910",
+    "apps/office/src/sw/source/uibase/uiview/view.ts": "a29bcef2d6b9cb7fe6b6aea939757eb377e483ee497c24d44e8aa372675e1950",
+    "scripts/generate-writer-ui-resources.ts": "a8f268a75266a0c8432f381b3439451998929cea5730a9304b127dfba3dabc18",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json": "e627053f12396af102be383299db8c4678a45b1d28901a3c492b84a763b19d98",
+    "docs/program/source-provenance.json": "0ee22a58dc818e795e14910bd39ed8e7ec0b0fda990fde51b44b37e0a9758d56",
+    "docs/program/parity/runtime-inventory.json": "ae636cb73448b873e4c0e0fe6c58d64789fc5d6ac8a5a5ed3c891d3f5ed1fd4f",
+    "docs/program/parity/writer-command-slice.json": "baa698b8151cf1f9367ed7f4c2baf4c133200e0a745c6f9add2df8b84a98b493",
+    "apps/office/src/sw/source/core/crsr/native-table-shell-owner.test.ts": "e15616be9c850b3e0723d0892fec840f8f2bf4e2ea9dcf536beb9b71f8df4728",
+    "apps/office/src/sw/source/core/table/native-row-insertion.test.ts": "6a9850431dc45a7f197232d7c87b947a93bf548e2af96d020059c760fac4354f",
+    "apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx": "dfbee9ef600feb2bad524c0006525e44af61f833bd6be1f48aca899b749aba3d",
+    "apps/office/e2e/writer-native-row-commands.spec.ts": "c73887e8dd15ae9f7ff80e482c1871923c989ffc87774eb4f6ee4c028df9fc5a",
+    "apps/office/src/sw/source/uibase/shells/native-list-context.test.ts": "7c52992e05b280b2aca2cce4a84a4d13b3ca56086b0bcc24c095beeaa94d8e7c",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts": "cea00af1e16d6276aabac0506768e7aef0024bba4b36cabbce9e4dd10c3d9ee7"
+  },
+  "coverage": {
+    "application": {
+      "exactMapOwners": 266,
+      "coverage": {
+        "lines": {
+          "total": 13566,
+          "covered": 13566,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14866,
+          "covered": 14866,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3571,
+          "covered": 3571,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11073,
+          "covered": 11073,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "783801f44fdc0a1ddc5393cebbb7f3a5e7a0c1898702185efb196a4bc3b79cbc"
+    },
+    "inventory": {
+      "exactMapOwners": 38,
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "9d6e0d84c0277722a8cceb282686e23fad17f5143c4b36a2139b6e0de759e783"
+    }
+  },
+  "coverageProof": "266 application and38 inventory complete identical maps and actual max counters; unchanged production bytes, one full absent profile and two original-case-only closures.",
+  "pinnedSourceFiles": 10,
+  "priorSemanticRecordsPreserved": 269,
+  "oldTestFilesByteIdentical": 470,
+  "totalPriorTestFiles": 473,
+  "findings": [
+    "Selected native boxes determine the boundary row and range count; table owns counted full-row insertion before/after with empty cells and source attributes.",
+    "SwDoc owns one already-executed undo publication; numeric row/table coordinates resolve recreated tables; original selection and pending attributes persist.",
+    "SwTableShell slots use actual inherited SwFEShell and native list/text/table dispatcher order; generated upstream menu resources expose49 commands.",
+    "Initial failures were obsolete context stack and command count expectations; original cases pass. Existing Tab behavior and all Chromium pass.",
+    "All prior semantic statuses/defaults/classifications/evidence and conscious I/O deviations preserved. Complex merged/nested/rowspan/redline/layout/formula/protection/repeated-headline state and full native undo reconstruction remain unverified."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}

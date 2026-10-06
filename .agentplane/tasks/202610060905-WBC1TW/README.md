@@ -4,7 +4,7 @@ title: "Implement native flat row insertion before and after selection across co
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: null
   note: null
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T09:32:22.895Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact-SHA review passes native counted row insertion and contextual menu routing at fc664e2c9dc868cabac07854de739e4f3d50d0cd; complete UI/core parity remains unverified."
+  evaluated_sha: "fc664e2c9dc868cabac07854de739e4f3d50d0cd"
+  blueprint_digest: "8f1a751f9d200aa752017a237b77ed8fb6d7b5404f4be541206c0cdd7d56b1b6"
+  evidence_refs:
+    - ".agentplane/tasks/202610060905-WBC1TW/README.md"
+    - ".agentplane/tasks/202610060905-WBC1TW/quality/20261006-093222895-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610060905-WBC1TW/quality/20261006-093222895-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610060905-WBC1TW/quality/20261006-093222895-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610060905-WBC1TW/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610060905-WBC1TW/evidence/exact-sha-review.json"
+  findings:
+    - "Actual native box/row/table ownership and one undo action preserve selection across before/after counts, mixed text history and recreated tables; all12823app109inventory5scripts191Chrome cases pass with100% actual-counter coverage."
+    - "One full absent profile, original-case-only closures and exact identical maps; all269 semantic statuses/defaults/classes/evidence and conscious I/O deviations preserved."
 commit: null
 comments:
   -
