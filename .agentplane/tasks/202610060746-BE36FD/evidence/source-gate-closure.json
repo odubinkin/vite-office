@@ -1,0 +1,15 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run inventory:modules -- --baseline docs/program/libreoffice-baseline.json --reference-root vendor/libreoffice-reference --output apps/office/node_modules/.cache/parity-coverage/BE36FD.core-module-inventory.json",
+      "exit": 0,
+      "bytes": 278,
+      "sha256": "5522cd0e80ecebf9d687368cc0f1a9bbf47b333013ce642e79097d069a89d8cd",
+      "diagnostics": [
+        "> vite-office@0.1.0 inventory:modules",
+        "> tsx scripts/libreoffice-inventory/modules-cli.ts --baseline docs/program/libreoffice-baseline.json --reference-root vendor/libreoffice-reference --output apps/office/node_modules/.cache/parity-coverage/BE36FD.core-module-inventory.json"
+      ]
+    }
+  ]
+}

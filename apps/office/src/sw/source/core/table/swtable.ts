@@ -16,6 +16,7 @@ export interface SwTableFormat {
   readonly marginTop?: number | undefined;
   readonly marginBottom?: number | undefined;
   readonly borderModel?: "collapsing" | "separating" | undefined;
+  readonly layoutSplit?: boolean | undefined;
 }
 
 /** Bounded row geometry owned by SwTableLine. */

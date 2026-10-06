@@ -1,5 +1,5 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
-import type { SwTableLine, SwTableBox } from "../../source/core/table/swtable";
+import { SwInsertTableFlags } from "../../inc/itabenum";
 /* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { TableProperties } from "lucide-react";
@@ -110,9 +110,7 @@ export function WriterWorkbench({
     /** Reads native table names for insertion. @param table - Existing table. @returns Name. */
     (table) => table.GetName(),
   );
-  let nextTableNumber = 1;
-  while (occupiedTableNames.includes("Table" + nextTableNumber)) nextTableNumber += 1;
-  const suggestedTableName = "Table" + nextTableNumber;
+  const suggestedTableName = activeDocument.GetUniqueTableName();
   const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
   const [lineNumberingDialog, setLineNumberingDialog] = useState(false);
   const currentTable = view.GetWrtShell().IsCursorInTable()?.GetTable();
@@ -130,6 +128,9 @@ export function WriterWorkbench({
             capabilityId: "CAP-0137",
             execute: /** Opens the insert dialog. @returns Nothing. */ () =>
               setTableDialog("insert"),
+            isEnabled:
+              /** Restricts insertion to the represented body context. @returns Availability. */ () =>
+                currentTable === undefined,
           },
           {
             id: WRITER_COMMAND_IDS.tableDialog,
@@ -156,66 +157,27 @@ export function WriterWorkbench({
   );
   /** Inserts a table from the upstream size grid with Writer's default table geometry. @param columns - Selected columns. @param rows - Selected rows. @returns Nothing. */
   function insertTableFromGrid(columns: number, rows: number): void {
-    const table = activeDocument.nodes.MakeTableNode(
-      suggestedTableName,
-      { width: availableTableWidth, align: "left", headerRows: 1, repeatHeaderRows: true },
-      view.GetWrtShell().GetActiveParagraph(),
-    );
-    const columnWidth = Math.floor(availableTableWidth / columns);
-    for (let column = 0; column < columns; column += 1)
-      table.AddColumnWidth(
-        column === columns - 1 ? availableTableWidth - columnWidth * (columns - 1) : columnWidth,
-      );
-    for (let row = 0; row < rows; row += 1) activeDocument.nodes.AppendTableRow(table, columns);
     view
-      .GetEditWin()
-      .FocusNode(
-        (
-          (
-            (table.GetTabLines()[0] as SwTableLine).GetTabBoxes()[0] as SwTableBox
-          ).GetParagraphs()[0] as SwTextNode
-        ).GetIndex(),
-      );
+      .GetWrtShell()
+      .InsertTable({ mnInsMode: SwInsertTableFlags.All, mnRowsToRepeat: 1 }, rows, columns);
   }
   const submitTable =
     /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
       value: WriterTableDialogValue,
     ): void => {
       if (tableDialog === "insert") {
-        const table = activeDocument.nodes.MakeTableNode(
-          value.name || suggestedTableName,
+        view.GetWrtShell().InsertTable(
           {
-            width: value.width,
-            align: "left",
-            headerRows: value.headerRows,
-            repeatHeaderRows: value.repeatHeaderRows,
+            mnInsMode:
+              (value.headerRows > 0 ? SwInsertTableFlags.Headline : 0) |
+              (value.dontSplit ? 0 : SwInsertTableFlags.SplitLayout),
+            mnRowsToRepeat: value.repeatHeaderRows ? value.headerRows : 0,
           },
-          view.GetWrtShell().GetActiveParagraph(),
+          value.rows,
+          value.columns,
+          value.name,
+          { padding: value.padding, border: value.border, verticalAlign: value.verticalAlign },
         );
-        for (const columnWidth of value.columnWidths) table.AddColumnWidth(columnWidth);
-        for (let row = 0; row < value.rows; row += 1)
-          activeDocument.nodes.AppendTableRow(
-            table,
-            value.columns,
-            { minHeight: value.minRowHeight, keepTogether: value.dontSplit },
-            Array.from(
-              { length: value.columns },
-              /** Handles the browser table interaction.  @returns Callback result. */ () => ({
-                padding: value.padding,
-                border: value.border,
-                verticalAlign: value.verticalAlign,
-              }),
-            ),
-          );
-        view
-          .GetEditWin()
-          .FocusNode(
-            (
-              (
-                (table.GetTabLines()[0] as SwTableLine).GetTabBoxes()[0] as SwTableBox
-              ).GetParagraphs()[0] as SwTextNode
-            ).GetIndex(),
-          );
       } else if (currentTable !== undefined) {
         ItemSetToTableParam(view.GetWrtShell(), value);
       }

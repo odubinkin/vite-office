@@ -287,7 +287,9 @@ export function getWriterMaterializedParagraphStyleDefinition(
 ): WriterParagraphStyleDefinition | undefined {
   return (
     getWriterAvailableParagraphStyleDefinition(id) ??
-    (id === "table-contents" ? getWriterParagraphStyleDefinition(id) : undefined)
+    (id === "table-contents" || id === "table-heading"
+      ? getWriterParagraphStyleDefinition(id)
+      : undefined)
   );
 }
 

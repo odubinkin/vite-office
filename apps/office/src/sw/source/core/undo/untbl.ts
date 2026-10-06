@@ -1,6 +1,9 @@
 /** @fileoverview Retains appended flat table sections through Writer's SwUndoTableNdsChg ownership from untbl.cxx. */
-import type { SwTable, SwTableLine, SwTableBox } from "../table/swtable";
-import type { SwTableNode } from "../docnode/node";
+import type { SwTable, SwTableLine, SwTableBox, SwTableBoxFormat } from "../table/swtable";
+import { SwTableNode, type SwTableBoxStartNode } from "../docnode/node";
+import type { SwDoc } from "../doc/doc";
+import type { SwInsertTableOptions } from "../../../inc/itabenum";
+import { SwPosition } from "../crsr/pam";
 import type { SwTableRowSection } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -10,6 +13,57 @@ import {
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "./undobj";
+
+/** Native insertion history keeps numeric coordinates and construction attributes, recreating sections on Redo. */
+export class SwUndoInsTable extends SwUndo {
+  private readonly m_nSttNode: number;
+  private readonly options: SwInsertTableOptions;
+  private readonly boxFormat: SwTableBoxFormat | undefined;
+  /** Captures bounded construction parameters without retaining an inserted graph. @param options - Native insertion flags. @param rows - Row count. @param columns - Column count. @param name - Requested table name. @param cursor - Insertion point after any split. @param boxFormat - Represented browser autoformat attributes. @returns Nothing. */
+  public constructor(
+    options: SwInsertTableOptions,
+    private readonly rows: number,
+    private readonly columns: number,
+    private name: string,
+    cursor: SwUndoCursorState,
+    boxFormat?: SwTableBoxFormat,
+  ) {
+    super("Insert Table", cursor, cursor);
+    this.m_nSttNode = cursor.point.node.GetIndex();
+    this.options = { ...options };
+    this.boxFormat = boxFormat === undefined ? undefined : { ...boxFormat };
+  }
+  /** Resolves the current recreated native owner. @param document - Actual document. @returns Connected table. */
+  public GetTable(document: SwDoc): SwTable {
+    return (document.GetNodes().at(this.m_nSttNode) as SwTableNode).GetTable();
+  }
+  /** Deletes the actual section rather than retaining its model graph. @param context - Native context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    context.GetDoc().GetNodes().DeleteTable(this.GetTable(context.GetDoc()).GetTableNode());
+  }
+  /** Reconstructs the table at the numeric boundary and selects its first native cell. @param context - Native context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    const document = context.GetDoc(),
+      position = new SwPosition(document.GetNodes().at(this.m_nSttNode) as SwTextNode, 0);
+    try {
+      const table = document.InsertTable(
+        this.options,
+        position,
+        this.rows,
+        this.columns,
+        this.name,
+        this.boxFormat,
+      );
+      this.name = table.GetName();
+      const line = table.GetTabLines()[0] as SwTableLine,
+        box = line.GetTabBoxes()[0] as SwTableBox,
+        cell = box.GetParagraphs()[0] as SwTextNode;
+      this.SetAfterCursor(createWriterCollapsedCursorState(cell, 0, cell.GetCharacterItemsAt(0)));
+    } finally {
+      position.Dispose();
+    }
+  }
+}
 
 /** Retains table attributes only, corresponding to native SaveTable's represented flat-grid slice. */
 class SaveTable {
@@ -108,18 +162,20 @@ export class SwUndoAttrTable extends SwUndo {
 
 /** Row insertion history retains its actual section nodes, never a projected table/document snapshot. */
 export class SwUndoTableNdsChg extends SwUndo {
+  private readonly m_nSttNode: number;
   private readonly beforeNode: number;
   private readonly beforeContent: number;
   private readonly afterContent: number;
   private readonly afterItems: SfxItemSet;
   /** Captures one appended row and its cursor boundaries. @param table - Connected table. @param section - Prepared row sections. @param before - Original cursor. @param after - New cell cursor. @returns Nothing. */
   public constructor(
-    private readonly table: SwTable,
-    private readonly section: SwTableRowSection,
+    table: SwTable,
+    private section: SwTableRowSection,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Insert Row", before, before);
+    this.m_nSttNode = table.GetTableNode().GetIndex();
     this.beforeNode = before.point.node.GetIndex();
     this.beforeContent = before.point.offset;
     this.afterContent = after.point.offset;
@@ -134,15 +190,21 @@ export class SwUndoTableNdsChg extends SwUndo {
     context
       .GetDoc()
       .nodes.RemoveTableRow(
-        this.table,
+        (context.GetDoc().nodes.at(this.m_nSttNode) as SwTableNode).GetTable(),
         this.section,
         context.GetDoc().nodes.at(this.beforeNode) as SwTextNode,
         this.beforeContent,
       );
   }
-  /** Reconnects the same row/cell/node identities. @param context - Native redo context. @returns Nothing. */
+  /** Resolves current table ownership numerically, rebuilding an empty row when its table section was recreated. @param context - Native redo context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    context.GetDoc().nodes.InsertTableRow(this.table, this.section);
+    const nodes = context.GetDoc().nodes,
+      table = (nodes.at(this.m_nSttNode) as SwTableNode).GetTable();
+    if (
+      (this.section.nodes[0] as SwTableBoxStartNode).StartOfSectionNode() !== table.GetTableNode()
+    )
+      this.section = nodes.PrepareTableRow(table, table.GetTabLines().at(-1) as SwTableLine);
+    nodes.InsertTableRow(table, this.section);
     this.SetAfterCursor(
       createWriterCollapsedCursorState(
         this.section.nodes[1] as SwTextNode,

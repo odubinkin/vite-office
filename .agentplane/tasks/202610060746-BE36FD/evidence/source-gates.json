@@ -1,0 +1,68 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm exec -- tsx scripts/generate-writer-ui-resources.ts --check",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exit": 0,
+      "bytes": 162,
+      "sha256": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "c6efaa97878ef8eead35e5c4e256cc119c5e8c83c8c1be1f5353c517c1f84da4",
+      "diagnostics": [
+        "Source provenance check passed for 268 runtime modules (184 mapped, 68 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm run inventory:modules",
+      "exit": 1,
+      "bytes": 663,
+      "sha256": "5426279e5bddb47240fb87ec0a538ef6dfefb7272952bde55188617ba6cf0d6c",
+      "diagnostics": [
+        "> vite-office@0.1.0 inventory:modules",
+        "> tsx scripts/libreoffice-inventory/modules-cli.ts",
+        "/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/modules-cli.ts:55",
+        "Error: Usage: inventory:modules -- --baseline <path> --reference-root <path> --output <path>",
+        "    at parseModuleCliOptions (/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/modules-cli.ts:55:11)",
+        "    at runModuleCli (/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/modules-cli.ts:78:19)",
+        "    at <anonymous> (/Users/odubinkin/Projects/vite-office/scripts/libreoffice-inventory/modules-cli.ts:130:9)"
+      ]
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exit": 0,
+      "bytes": 136,
+      "sha256": "8d0f3757af43331b4c62ffa7ccf5497bcce67449a871937b94a526bde8e7fdbe",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exit": 0,
+      "bytes": 1587220,
+      "sha256": "3a537435d7713f3e6c21e981ea180eddf8916457e4a153f06d76d31ea04c04e0",
+      "diagnostics": [
+        "> tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "        \"reason\": \"browser-runtime-inapplicable\",",
+        "        \"rationale\": \"Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow.\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/framework/browser/presentation/CommandMenuBar.tsx\",",
+        "      \"side\": \"upstream\"",
+        "      \"path\": \"apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx\","
+      ]
+    }
+  ]
+}

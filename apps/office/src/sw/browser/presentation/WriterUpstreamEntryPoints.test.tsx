@@ -1,6 +1,7 @@
 /** @fileoverview Integration checks for pinned Writer table, line spacing, and Tools entries. */
 import { describe, expect, it } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import { SvxLineSpacingItem } from "../../../editeng/source/items/paraitem";
 import { RES_PARATR_LINESPACING } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -28,6 +29,14 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
       within(screen.getByRole("dialog", { name: "Table Properties" })).getByRole("button", {
         name: "Cancel",
       }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    expect(screen.getByRole("menuitem", { name: "Table…" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    act(
+      /** Leaves the table before opening native body insertion. @returns Nothing. */ () => {
+        session.view.GetWrtShell().FocusNode(session.docShell.GetDoc().paragraphs[0] as SwTextNode);
+      },
     );
     fireEvent.click(screen.getByRole("button", { name: "Table" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Table…" }));

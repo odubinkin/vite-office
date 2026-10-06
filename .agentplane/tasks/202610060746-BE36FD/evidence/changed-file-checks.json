@@ -1,0 +1,63 @@
+{
+  "records": [
+    {
+      "command": "unchanged check-jsdoc.mjs validateSourceFile on changed source paths",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/edit/edtab.ts": 63,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 155,
+        "apps/office/src/sw/source/core/doc/doc.ts": 759,
+        "apps/office/src/sw/source/core/docnode/nodes.ts": 462,
+        "apps/office/src/sw/source/core/undo/untbl.ts": 209,
+        "apps/office/src/sw/source/core/table/swtable.ts": 244,
+        "apps/office/src/sw/inc/poolfmt.ts": 348,
+        "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": 274,
+        "apps/office/src/sw/browser/presentation/writer-view.tsx": 789,
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts": 234,
+        "apps/office/src/sw/browser/presentation/native-insert-table-command.test.tsx": 128,
+        "apps/office/e2e/writer-native-insert-table.spec.ts": 80,
+        "apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx": 101
+      },
+      "supersededAuxiliaryCounts": {
+        "apps/office/src/sw/source/core/edit/edtab.ts": 1,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 1,
+        "apps/office/src/sw/source/core/doc/doc.ts": 1,
+        "apps/office/src/sw/source/core/docnode/nodes.ts": 1,
+        "apps/office/src/sw/source/core/undo/untbl.ts": 1,
+        "apps/office/src/sw/source/core/table/swtable.ts": 1,
+        "apps/office/src/sw/inc/poolfmt.ts": 1,
+        "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": 1,
+        "apps/office/src/sw/browser/presentation/writer-view.tsx": 1,
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts": 1,
+        "apps/office/src/sw/browser/presentation/native-insert-table-command.test.tsx": 1,
+        "apps/office/e2e/writer-native-insert-table.spec.ts": 1,
+        "apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx": 1
+      },
+      "countRecovery": "Initial auxiliary regex matched literal backslashes rather than newlines; corrected physical LF counts only, with no passing gate replay."
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/edit/edtab.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/docnode/nodes.ts apps/office/src/sw/source/core/undo/untbl.ts apps/office/src/sw/source/core/table/swtable.ts apps/office/src/sw/inc/poolfmt.ts apps/office/src/sw/source/core/doc/poolfmt-defaults.ts apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts apps/office/src/sw/browser/presentation/native-insert-table-command.test.tsx apps/office/e2e/writer-native-insert-table.spec.ts apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/edit/edtab.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/docnode/nodes.ts apps/office/src/sw/source/core/undo/untbl.ts apps/office/src/sw/source/core/table/swtable.ts apps/office/src/sw/inc/poolfmt.ts apps/office/src/sw/source/core/doc/poolfmt-defaults.ts apps/office/src/sw/browser/presentation/writer-view.tsx apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts apps/office/src/sw/browser/presentation/native-insert-table-command.test.tsx apps/office/e2e/writer-native-insert-table.spec.ts apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+      "diagnostics": []
+    }
+  ]
+}

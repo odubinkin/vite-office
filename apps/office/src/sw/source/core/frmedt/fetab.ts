@@ -1,5 +1,5 @@
 /** @fileoverview Owns represented native SwFEShell table attributes, selection and history from fetab.cxx. */
-import { SwEditShell } from "../edit/ednumber";
+import { SwEditShell } from "../edit/edtab";
 import type {
   SwTable,
   SwTableBox,

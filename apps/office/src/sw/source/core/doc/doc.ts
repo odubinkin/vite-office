@@ -6,7 +6,9 @@ import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
-import type { SwTable } from "../table/swtable";
+import type { SwTable, SwTableBoxFormat } from "../table/swtable";
+import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import { DocumentMarkAccess } from "./docbm";
 import { DocumentListItemsManager } from "./DocumentListItemsManager";
@@ -660,6 +662,82 @@ export class SwDoc {
           node,
         ) => (node instanceof SwTableNode ? [node.GetTable()] : []),
       );
+  }
+  /** Resolves native first-unused table naming. @returns Unoccupied table name. */
+  public GetUniqueTableName(): string {
+    const names = this.GetTables().map(
+      /** Reads an actual frame name. @param table - Native table. @returns Name. */ (table) =>
+        table.GetName(),
+    );
+    let number = 1;
+    while (names.includes("Table" + number)) number++;
+    return "Table" + number;
+  }
+  /** Constructs represented flat table geometry and styles before an actual body position from ndtbl.cxx. @param options - Native flags and repetition. @param position - Body insertion position. @param rows - Row count. @param columns - Column count. @param name - Requested frame name. @param boxFormat - Existing browser autoformat attributes. @returns Native table. */
+  public InsertTable(
+    options: SwInsertTableOptions,
+    position: SwPosition,
+    rows: number,
+    columns: number,
+    name = "",
+    boxFormat?: SwTableBoxFormat,
+  ): SwTable {
+    const node = position.GetNode();
+    if (
+      !(node instanceof SwTextNode) ||
+      !this.paragraphs.includes(node) ||
+      !Number.isInteger(rows) ||
+      rows < 1 ||
+      rows > 65535 ||
+      !Number.isInteger(columns) ||
+      columns < 1 ||
+      columns > 65535
+    )
+      throw new Error(
+        "Writer insertion requires body text and positive unsigned table dimensions.",
+      );
+    const header = Boolean(options.mnInsMode & SwInsertTableFlags.Headline),
+      borders = Boolean(options.mnInsMode & SwInsertTableFlags.DefaultBorder),
+      repeat = header ? options.mnRowsToRepeat & 0xffff : 0,
+      width = Math.floor(65535 / columns) * columns;
+    if (
+      name === "" ||
+      this.GetTables().some(
+        /** Checks the actual native name set. @param table - Existing owner. @returns Collision. */ (
+          table,
+        ) => table.GetName() === name,
+      )
+    )
+      name = this.GetUniqueTableName();
+    const table = this.nodes.InsertTable(node, name, {
+      width,
+      horiOrient: HoriOrientation.FULL,
+      headerRows: header ? Math.max(1, repeat) : 0,
+      repeatHeaderRows: repeat !== 0,
+      layoutSplit: Boolean(options.mnInsMode & SwInsertTableFlags.SplitLayout),
+    });
+    for (let column = 0; column < columns; column++) table.AddColumnWidth(width / columns);
+    const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
+    for (let row = 0; row < rows; row++) {
+      const line = this.nodes.AppendTableRow(
+        table,
+        columns,
+        {},
+        Array.from(
+          { length: columns },
+          /** Creates independent represented box attributes. @returns Box format. */ () =>
+            boxFormat === undefined
+              ? { padding: borders ? 55 : 0, border: borders ? "0.5pt solid #000000" : "none" }
+              : { ...boxFormat },
+        ),
+      );
+      for (const box of line.GetTabBoxes())
+        for (const paragraph of box.GetParagraphs())
+          paragraph.ChgFormatColl(
+            this.GetTextFormatColl(row === 0 || row < repeat ? headStyle : "table-contents"),
+          );
+    }
+    return table;
   }
   /** Runs one semantic model transaction. @param mutation - Mutation callback. @returns Callback result. */
   public RunModelTransaction<Result>(mutation: () => Result): Result {

@@ -1,0 +1,27 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/edit/edtab.cxx": "5d224e7a922331770a1d495f96f9851d7d984792ccacbbe0e6a0c1b5f1319bb4",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/undo/untbl.cxx": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+    "sw/source/uibase/shells/basesh.cxx": "d7d8a38f7edcaccca958f81822304f494a8191d240b6d8cc527486b818d8b9ef",
+    "sw/source/core/doc/DocumentStylePoolManager.cxx": "214b7fe64a2bb165fe6a977cdc9c83e7b6c8b1f5e9cf96dd83720e2f462b880c",
+    "sw/inc/itabenum.hxx": "c6a19df97975a734dfced93d076c5cfa3f96694188e21a3d9141c64b35aac5ff"
+  },
+  "requirements": [
+    "SwEditShell InsertTable splits nonzero cursor text and inserts before the current body node",
+    "SwDoc unique naming and native FULL65535 reference table/column geometry",
+    "native Headline/SplitLayout/DefaultBorder bits and TableHeading versus TableContents styles",
+    "SwUndoInsTable deletes and recreates native sections; base command selects first table cell",
+    "SwUndoTableNdsChg constructor/Redo resolve actual table at numeric m_nSttNode"
+  ],
+  "omissions": [
+    "full document-owned undo append versus existing shell action orchestration",
+    "native SwBaseShell selection deletion/TextToTable and nested tables",
+    "full frame/item/cell border models and style/font propagation",
+    "full layout split and ODT persistence",
+    "full native row reconstruction/SaveTable/merged/protected lifetimes and Repeat",
+    "native full autoformat/localized name pools,redlines,frames and complete UI/core parity"
+  ],
+  "statuses": "All267 prior semantic fields/evidence prefixes preserved; new table shell remains unverified; parent goal ACTIVE and full parity UNVERIFIED."
+}

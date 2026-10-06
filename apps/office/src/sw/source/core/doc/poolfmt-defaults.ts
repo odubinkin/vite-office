@@ -121,6 +121,8 @@ export function getWriterParagraphStyleDefaults(
     };
   }
   switch (id) {
+    case "table-heading":
+      return { bold: true, adjust: SvxAdjust.Center, lineNumber: false };
     case "table-contents":
       return { lineNumber: false, orphans: 0, widows: 0 };
     case "text-body":

@@ -152,19 +152,47 @@ export class SwNodes {
   public MakeTableNode(name: string, format: SwTableFormat = {}, after?: SwTextNode): SwTable {
     if (after !== undefined && !this.getTextNodes().includes(after))
       throw new Error("Writer table insertion needs a body paragraph in this document.");
+    return this.MakeTableNodeAt(
+      after === undefined ? this.endOfContent.GetIndex() : after.GetIndex() + 1,
+      name,
+      format,
+    );
+  }
+
+  /** Inserts a table section immediately before a connected body paragraph like ndtbl.cxx. @param position - Actual insertion node. @param name - Table name. @param format - Frame attributes. @returns Connected table. */
+  public InsertTable(position: SwTextNode, name: string, format: SwTableFormat): SwTable {
+    if (!this.getTextNodes().includes(position))
+      throw new Error("Writer insertion requires a connected body paragraph.");
+    return this.MakeTableNodeAt(position.GetIndex(), name, format);
+  }
+
+  /** Constructs actual start/end owners at the requested native array boundary. @param index - Array boundary. @param name - Table name. @param format - Frame attributes. @returns Connected table. */
+  private MakeTableNodeAt(index: number, name: string, format: SwTableFormat): SwTable {
     const node = new SwTableNode(this, this.endOfContent.StartOfSectionNode());
     const end = new SwEndNode(this, node);
     node.setEndOfSection(end);
-    this.nodeArray.splice(
-      after === undefined ? this.endOfContent.GetIndex() : after.GetIndex() + 1,
-      0,
-      node,
-      end,
-    );
+    this.nodeArray.splice(index, 0, node, end);
     const table = new SwTable(node, name, format);
     node.SetTable(table);
     this.document.NotifyModelChange({ index: node.GetIndex(), kind: "node-inserted" });
     return table;
+  }
+
+  /** Deletes the complete inserted section and corrects live content indices to the following paragraph. @param tableNode - Connected native table section. @returns Nothing. */
+  public DeleteTable(tableNode: SwTableNode): void {
+    const index = this.indexOf(tableNode),
+      end = tableNode.EndOfSectionNode().GetIndex();
+    const next = this.at(end + 1);
+    if (!(next instanceof SwTextNode))
+      throw new Error("Writer inserted table needs following text.");
+    for (const node of this.nodeArray.slice(index + 1, end))
+      if (node instanceof SwTextNode) {
+        node.CollapseContentIndicesTo(next, 0);
+        this.m_aOutlineNodes.erase(node);
+        node.RemoveFromList();
+      }
+    this.nodeArray.splice(index, end - index + 1);
+    this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
   /** Appends one row and its cell sections to a table. @param table - Owning table. @param columnCount - Number of cells. @param lineFormat - Row geometry. @param boxFormats - Cell geometry by column. @returns New row. */

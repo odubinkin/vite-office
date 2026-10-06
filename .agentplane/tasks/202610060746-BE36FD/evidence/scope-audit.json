@@ -1,0 +1,36 @@
+{
+  "base": "33d21334229d",
+  "oldTestFiles": 466,
+  "byteIdenticalOldTestFiles": 465,
+  "changedOldTests": [
+    "apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx"
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+    "apps/office/src/sw/browser/presentation/native-insert-table-command.test.tsx",
+    "apps/office/e2e/writer-native-insert-table.spec.ts",
+    "apps/office/e2e/writer-native-insert-table-row-history.spec.ts"
+  ],
+  "priorSemanticModules": 267,
+  "currentSemanticModules": 268,
+  "priorStatesDefaultsClassificationsAndEvidencePreserved": true,
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/edit/edtab.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/inc/poolfmt.ts",
+    "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts",
+    "apps/office/src/sw/browser/presentation/native-insert-table-command.test.tsx",
+    "apps/office/e2e/writer-native-insert-table.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx",
+    "apps/office/e2e/writer-native-insert-table-row-history.spec.ts"
+  ],
+  "failures": []
+}

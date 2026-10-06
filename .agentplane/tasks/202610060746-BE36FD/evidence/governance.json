@@ -1,0 +1,18 @@
+{
+  "doctor": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 2,
+    "knownWarnings": [
+      "old managed hook shim",
+      "completed202610031635-2Z3962 lacks implementation hash"
+    ]
+  },
+  "routing": {
+    "exit": 0
+  },
+  "diffCheck": {
+    "exit": 0
+  },
+  "runners": "all terminal; vendor restored after every test profile; no source audits ran while vendor was absent"
+}

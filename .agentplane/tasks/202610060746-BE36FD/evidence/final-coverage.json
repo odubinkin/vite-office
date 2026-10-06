@@ -1,0 +1,145 @@
+{
+  "application": {
+    "lines": {
+      "total": 13491,
+      "covered": 13491,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14779,
+      "covered": 14779,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3550,
+      "covered": 3550,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 11005,
+      "covered": 11005,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "applicationMapSHA256": "282677f9b920c6dac2c2a46b22b0506fa4306e0476f6d623f29a7647a865ef01",
+  "proof": {
+    "exactFiles": 264,
+    "rebasedFiles": [
+      {
+        "path": "apps/office/src/sw/source/core/undo/untbl.ts",
+        "originalSHA256": "8705f6ceb479922d0abc01341581620aa6e1230c6da316a801ab761d2e9d5c61",
+        "currentSHA256": "5166bae3f0e4608dd83e5869a86662d7fd3840aafe79d5099de23b03f4899e25",
+        "statements": 51,
+        "functions": 18,
+        "branches": 1,
+        "skipped": 7,
+        "contiguousRanges": [
+          {
+            "oldStart": 1,
+            "oldEnd": 2,
+            "newStart": 1,
+            "newEnd": 2,
+            "sha256": "089480dd1f5d8326f60ed22e24e6842ca7c358498f4fdae281515446015c8537"
+          },
+          {
+            "oldStart": 4,
+            "oldEnd": 164,
+            "newStart": 4,
+            "newEnd": 164,
+            "sha256": "84a96d237e4c337b66bcba5182cce18f9660c114d1a78cac769abf513c484e9f"
+          },
+          {
+            "oldStart": 165,
+            "oldEnd": 170,
+            "newStart": 166,
+            "newEnd": 171,
+            "sha256": "e2ec94859d7b4afe5ad221e991e8400df5f6405d43e606e35d24ba0bf0e08a40"
+          },
+          {
+            "oldStart": 173,
+            "oldEnd": 176,
+            "newStart": 174,
+            "newEnd": 177,
+            "sha256": "492d13e7ddbbd9225eb0bf1a1084c0e7dee344dfd9efa253f3da49fc9ed9f543"
+          },
+          {
+            "oldStart": 177,
+            "oldEnd": 190,
+            "newStart": 179,
+            "newEnd": 192,
+            "sha256": "a5a36a71a7ebdd3cafc472741f94d57ade5a4043b0cbce23d74d4c37d9226920"
+          },
+          {
+            "oldStart": 192,
+            "oldEnd": 196,
+            "newStart": 194,
+            "newEnd": 198,
+            "sha256": "f9db9f8637f5968ee50ae14a46c3d3b4d574c559a3457e044f53878c70dcacec"
+          },
+          {
+            "oldStart": 198,
+            "oldEnd": 198,
+            "newStart": 200,
+            "newEnd": 200,
+            "sha256": "4b51220d460af8185f20ea05db4929a9d4f2ca51298b7edd9c8df89e8773f50c"
+          },
+          {
+            "oldStart": 200,
+            "oldEnd": 209,
+            "newStart": 208,
+            "newEnd": 217,
+            "sha256": "57895d39acf80c3bcbfaa68bdabe001580b1cc9c9bb5e5b7be963962b964b2dd"
+          }
+        ]
+      }
+    ],
+    "newFiles": []
+  },
+  "incomplete": {},
+  "inventory": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventoryMapSHA256": "42eb9c3620b0e0eda1cfa3b7385ad5904a83cc35f90ed207e3c1c1074d11d0a5",
+  "inventoryExactMapOwners": 38,
+  "distinctApplicationCases": 12811,
+  "scope": "Only untbl changed after full profile; complete byte-identical contiguous statement/function/branch ranges transfer actual counters. No endpoint-only or synthetic counter evidence."
+}

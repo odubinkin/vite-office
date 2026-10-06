@@ -1,0 +1,15 @@
+{
+  "fileCount": 4640,
+  "forbiddenArtifacts": [],
+  "allowedExistingArtifacts": [
+    ".agentplane/policy/check-routing.mjs",
+    ".agentplane/.upgrade/baseline/policy/check-routing.mjs",
+    ".agentplane/tasks/202610010156-ZDTVKE/browser-failure/test-failed-1.png"
+  ],
+  "initialFalsePositive": {
+    "file": ".agentplane/tasks/202610010156-ZDTVKE/browser-failure/test-failed-1.png",
+    "reason": "overbroad extension classifier flagged an existing tracked browser QA screenshot; visual inspection confirms browser UI, not upstream/source/helper/executable evidence; completed owner remains unchanged"
+  },
+  "vendorRestored": true,
+  "scope": "ignored-inclusive agentplane filename/type census; new task evidence is bounded prose/counts/hashes only"
+}

@@ -1,0 +1,70 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 226,
+      "sha256": "cf1b56514fc2c47fab476327020ff57739515a49b1e93733e9215c19997d90dc",
+      "diagnostics": [
+        "[warn] apps/office/src/sw/browser/presentation/writer-view.tsx",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 3217,
+      "sha256": "f03192cb46d5adb313db87ac1cb756fffb33783627acc4ca0f3e9a2c7a5dd15d",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  18:18  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  41:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  57:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "  57:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   15:12  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   33:20  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   42:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   42:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   42:21  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   46:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion",
+        "   46:9   error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "5e598fab7a0454199342a79a6ec0160a350b4fbe5e7d129dbffe1aed552853ad",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 959,
+      "sha256": "5780f37d4d46f5b35eee7739002cd293c1864a04079b14cd685a57d5c6bb2df8",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts:172 function is missing JSDoc",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts:194 function is missing JSDoc",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts:197 function is missing JSDoc",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts:204 function is missing JSDoc",
+        "apps/office/src/sw/source/core/undo/native-insert-table-history.test.ts:209 function is missing JSDoc"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3405,
+      "sha256": "fcae1c2196392e5bd849e66deb8b899b00fa5b3d3ce7e281f9cd4dbb664580bb",
+      "diagnostics": []
+    }
+  ]
+}

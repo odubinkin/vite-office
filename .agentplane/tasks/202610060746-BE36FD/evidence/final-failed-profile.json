@@ -1,0 +1,36 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/edit/edtab.ts": "a4119d5c04a6fc8e9efd06daa43e7b9ee0105bca8a288a3dc4515ccd803d5a7b",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "563a501345a1932585be011a23b6f9e2948921096a95e9dd7f08d90c5368ffb1",
+    "apps/office/src/sw/source/core/doc/doc.ts": "65a88f9a6c02ac208ba442776446a67d184b3cdecff387a877f2dc08341aaf56",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "6b124d2bcf240fd41cf691904d37f385ca134c3c3d03c5354e03ab869597052e",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "8705f6ceb479922d0abc01341581620aa6e1230c6da316a801ab761d2e9d5c61",
+    "apps/office/src/sw/source/core/table/swtable.ts": "cb6a1330c5189c5d009f282229acb840008e7d28d97347b195fda7f398176574",
+    "apps/office/src/sw/inc/poolfmt.ts": "a0d77184f6741ddfe297775a870535030c93550fe12da32877201da45d5a0865",
+    "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": "10f309b7103fee32f311bba3222703eb51da7be9ace4ab3caf94a76cac835bfd",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "1e7326a62b1b5bdd122413d1c4a9348c565562a0b258f2a34057b35fbaa96575"
+  },
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-insert-table.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 638,
+      "sha256": "b0d7c9e76758467e04c4f903442e77bb8f2b2ae1862c043de20e8c6f0125ed22",
+      "totals": [
+        "2 passed (4.1s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T08:11:04.399Z",
+        "duration": 4050.2699999999995,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
