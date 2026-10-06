@@ -1,0 +1,245 @@
+{
+  "implementationCommit": "8eade5e1bf32bf4cb9dd69abb7681bc5c693d976",
+  "reviewer": "Same current agent in EVALUATOR phase; not independent review",
+  "verdict": "pass",
+  "counts": {
+    "application": 12934,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 212
+  },
+  "originalAppFailures": 9,
+  "originalChromeFailures": 35,
+  "appFocused": [
+    {
+      "closure": 1,
+      "completed": 9,
+      "skipped": 17,
+      "passed": 9,
+      "failed": 0
+    },
+    {
+      "closure": 3,
+      "completed": 1,
+      "skipped": 6,
+      "passed": 0,
+      "failed": 1
+    },
+    {
+      "closure": 4,
+      "completed": 1,
+      "skipped": 6,
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "closure": 7,
+      "completed": 1,
+      "skipped": 7,
+      "passed": 1,
+      "failed": 0
+    }
+  ],
+  "chromeFocused": [
+    {
+      "closure": 2,
+      "completed": 1,
+      "passed": 0,
+      "failed": 1
+    },
+    {
+      "closure": 3,
+      "completed": 1,
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "closure": 5,
+      "completed": 34,
+      "passed": 31,
+      "failed": 3
+    },
+    {
+      "closure": 6,
+      "completed": 3,
+      "passed": 2,
+      "failed": 1
+    },
+    {
+      "closure": 7,
+      "completed": 1,
+      "passed": 1,
+      "failed": 0
+    }
+  ],
+  "coverage": {
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 14065,
+          "covered": 14065,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15423,
+          "covered": 15423,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3638,
+          "covered": 3638,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11518,
+          "covered": 11518,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "b82301b6e456a32614664aeb5dbe9cfbf770c256ba51352d244b99ded5968b9e",
+      "files": 269
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "e82c5df16847b7873e9a29924973aaac07eeed8e13a1ef8897303f9d0abfd53d",
+      "files": 38
+    },
+    "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+    "transfers": [
+      {
+        "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+        "kind": "entire contiguous byte-identical regions; full decl/body function and full enclosing branch/location maps; actual counters only",
+        "initialSourceSHA256": "951043e58e1c401eb4cb7aeafac4a1ccfee066c7b70cf40759ca2c3ca2a2f55a",
+        "currentSourceSHA256": "cd44ae396b04b4df35f32d60d26845fc9a2713014185635452136f1173564ec5",
+        "wholeByteIdenticalRegions": 3,
+        "regionHashes": [
+          "9bb01fb9e5084b9b2cc4b1518e165b4fbb5ea0d5ce9af9b07ed491b553bbeab8",
+          "9d3eda9bb926138be069d6b1fe90ae39d865f57672864cc56527136a875e6fea",
+          "f19e80c42fa2c9b202edea9368562a31c0718fd310e82e6981e5fa35a919c8d9"
+        ],
+        "transferredActualCounters": {
+          "statements": 194,
+          "functions": 33,
+          "branches": 54
+        }
+      }
+    ],
+    "wholeIdenticalFileCount": 268,
+    "gaps": []
+  },
+  "implementationSHA256": {
+    "apps/office/src/sw/inc/fesh.ts": "123d44744721d0acb704d1f16534a21e7e60b7e09d24b99fd49d8e8db4d84bcd",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "eaf2429781be40b7633e1cad188884ac92467388d2fa3deb648f8aa7fd52f761",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "b1384299859b3bac7e2c142d4fa3d951b09391fce8e938e8c4d749a0d8239539",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "8d2f1ffd110a26f1a1842a03a0d507ed10727ce7a6dac7f506d8883046da3060",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "ed33da28e2a391e5facc6b8bdb220d0f0818bf98ff2899a6f9e23bb8354328c6",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "cd44ae396b04b4df35f32d60d26845fc9a2713014185635452136f1173564ec5",
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "9d2564c007f52b9e58eb0277a32ec03b9bfc1f8129587f681899804d5494c203",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx": "53d8d54363ad531c760afb4eaa73f2e6187d5b7556b8bd538ba242a5d0adc30c",
+    "apps/office/src/sw/browser/editor/native-table-cursor-rings.test.tsx": "d4bcecf1ffb729fe29e73fc4199656afb87fd6d0fa9435fe817a33befe1d75bb",
+    "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx": "73d2583044e6ca97a3062158a9beccd9687a641a67aea05c0ade1464cc8a1b31",
+    "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx": "233f85664a1874bc1deb56575103fe57fb448a898882c8a9ebe8b366a89a7e92",
+    "apps/office/src/sw/browser/editor/native-table-paste.test.tsx": "7c749878f30651ce526e0ef7210e53380517b6bf78d2d694fa67a3f9542d2a46",
+    "apps/office/src/sw/browser/editor/native-table-plain-paste.test.tsx": "95031b5c4f2b167fee3223cdccf71ae009ec3f54e10ae84976afeeee00f9c707",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": "046982cedbaf56985dc7a7205c3332a959a138fa86e6b2c36f15ca8f0436ac2d",
+    "apps/office/src/sw/browser/editor/native-table-print-area.test.tsx": "b4495272f824f0b0473f743778abb0ab2489647d637c4713332673b6b52fb109",
+    "apps/office/src/sw/browser/editor/native-headline-selection.test.tsx": "098da1e02a299759d43407ece6e773fa77fab1d521be68cd459e58638fa1ff1d",
+    "apps/office/src/sw/browser/presentation/writer-view.test.tsx": "50fba4af8f62f0d971f1c9147fd599ebab6d80971fefbc7f03e2d78896e54cd2",
+    "apps/office/src/sw/browser/editor/native-table-delete.test.tsx": "771026e36a23c906d2e011139098f7990b4cb563b10bd056e7567b6882008683",
+    "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx": "06f14104d6c778131ed468a8a5956ace982624de25581ed63aefb5e202170ac7",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx": "f2ff007a4a4af13eaf5d6797c8b2585640bc96835caf16a46d509e352ae0c693",
+    "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx": "fae36cc4af6f15db7573342d0b6fb4ad4d51c32def6168ae2e609f5001349b3a",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "87b17a130406fe9b90923cf2882cd84363f82cba2501867badf567202e0bae71",
+    "apps/office/e2e/writer-table-headlines.spec.ts": "0908d5ca87893266907ec70173ce17db0c65f431d1ce6c52b7d8a8cef97ab951",
+    "apps/office/e2e/writer-table-row-lists.spec.ts": "035f9b46192c23568a71f6073634a6ce2556a2df3f11bef5a44a2394a52ccaf6",
+    "apps/office/e2e/writer-native-table-selection.spec.ts": "b5921be24a52a9174c59c9693d45ef8d5e4f16debc8fde6fa72ab7ae1456402c",
+    "apps/office/e2e/writer-native-table-delete.spec.ts": "79bcb996bd03f64516fbfe5c21622e6a642efc70cafca2923738f8560af1e3c1",
+    "apps/office/e2e/writer-table-alignment.spec.ts": "cc8ae3f9e51339b7dfecbe09c7c4a3d541f228e46b2062980b5cdea7f3d121d9",
+    "apps/office/e2e/writer-table-ring-continue.spec.ts": "9bd2131c543eb69d33987352bcf7e51bc77d8ebf4664bfb4a22b4ad11cbda061",
+    "apps/office/e2e/writer-native-table-plain-paste.spec.ts": "5563111c94f48fe977a8c818305f95aa09e5da7585f04b1768a46c1029fbbadc",
+    "apps/office/e2e/writer-native-table-cursor-rings.spec.ts": "5fa9cd1b30fcbe7190c6703e056288d6a7dfe33928b45244b5cf97b04babcf33",
+    "apps/office/e2e/writer-native-table-pointer.spec.ts": "d9252a0fe5b2670a72faf4ebf5f0e10a2873764f6974138faec788185a69c0e3",
+    "apps/office/e2e/writer-native-table-paste.spec.ts": "51c89a3600ed27cd3e11b24e94a6f4d426d6d9b02b3618bb72b932a7c2ae3e7f",
+    "apps/office/e2e/writer-table-properties-history.spec.ts": "e07c613eb81cbe80688eb59ee6c27a80a1adc817c070c9761f808f190a16975f",
+    "apps/office/e2e/writer-imported-table-lists.spec.ts": "4fbc7a9805858e528477ed19ef3096c761c16832ec38aebd92e3b946804a3fb0",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-selection.test.ts": "aa639339717da950d33a97813ba09fe0ba15ae5816923b26905b0880a0491f08",
+    "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts": "8231b0368f9d03a7a2e3233afcc098c1a729bd9ab27ff4326597b0e8eff481b4",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-paste.test.ts": "dcdd268b2833f498f072e9d5eb97d26e65ce801c3cd361bf8d9de92ade39903e",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts": "b420359f2eec53310c9ec7f09a4709ed9994fedca39853c0c6d98f1704f4f750",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-cursor-rings.test.ts": "91499ecf9da7a47ff5491bc684f205f3287ab728ab9d9e30f3a312f2aa6d4cee",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts": "48ba30d3c9ed5872558da27c3a3a229daa11e57f68aaa921506c65aa45c88fd6",
+    "apps/office/src/sw/source/core/edit/native-list-ring.test.ts": "131629047f013458392f18b6a306237f90bb48a1b1a0d90b6348082a4e2f7d87",
+    "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts": "db76596ee0edd82a70365f342a4b9d34dc8150c0b8803fb24b4579ea714b7184",
+    "apps/office/src/sw/source/core/frmedt/native-table-mouse.test.ts": "39675197f3e5bef3370b314887e8c4108d52fa73f7ac5ffb91fd2d0a9a47d927",
+    "apps/office/src/sw/browser/editor/native-table-mouse.test.tsx": "b944a579eb195509d1949540888779232fcae26089188d52b05eb68a2fc68b1e",
+    "apps/office/e2e/writer-native-table-mouse.spec.ts": "f17e2cc18d20be9b6dd72b5d9c1b785639ada40980e71874ba6c2da283e64a9b",
+    "apps/office/test-support/table-mouse.ts": "3b2cdb102c8b0d1a748738f7ee2674c42f1adf05f00336824a7619c8a0bfc2bf",
+    "apps/office/test-support/table-mouse-dom.ts": "59a7b97626ec1527869e0328acf69250a658bbad3e866ff8272c9ddc938eb953",
+    "apps/office/test-support/table-mouse-e2e.ts": "d6bba6aea2d297905f1657beebe6c202b78a39bf1d086dacdf2f49f1efe11e97",
+    "docs/program/source-provenance.json": "17badc111e59248fab384240d28b1c624755a1f75f0b3cd6066d8b4d51fabbdf",
+    "docs/program/parity/runtime-inventory.json": "608421c317faf3051f1d5a69b1c0c8df97f7f60397ef9b1e1e7f95dc6ca06fcf",
+    "apps/office/src/sw/browser/editor/WriterPlainTextEditor.empty.test.tsx": "c07be271cf7e129f79c336306287831af640b8f453544268191433c7cef09880",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx": "2dba29315364cddb1d713c8db820dcf33217ed4fe6db3bdbc6f7d35a4d484c93"
+  },
+  "sourceSHA256": {
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/wrtsh/select.cxx": "e52314599cd686635085927f18a311cf742424076e052a2770d0a8b46eff67d0",
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "sw/inc/fesh.hxx": "1eba45926daa128a0d127b509ea94584dd6e9dce7d156f9c2c54249344d710fc",
+    "include/svtools/ruler.hxx": "fe0d39a80344d230670b1efbf7f0aecbc769d8aa754b025d396f19bec4ac2526"
+  },
+  "priorSemanticStatesDefaultsClassificationsAndEntirePrefixesPreserved": true,
+  "oldAcceptanceByteIdentical": 454,
+  "totalAcceptanceFiles": 493,
+  "semanticRecords": 272,
+  "parentPrefixLength": 475703,
+  "parentPrefixSHA256": "b1a313255cde698b7cb91d002b6f77cfcb902c0a58a3f74fcd87339432f3498c",
+  "leafArtifactFilesAudited": 19,
+  "forbiddenArtifacts": [],
+  "initialFullProfileCount": 1,
+  "passingCaseReplay": false,
+  "vendorRestored": true,
+  "fullParity": "unverified",
+  "failures": []
+}

@@ -4,7 +4,7 @@ title: "Replace table row widget with native table mouse selection"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,28 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T14:08:46.147Z"
+  updated_by: "CODER"
+  note: "Native table mouse ownership verified at implementation8eade5e1bf32bf4cb9dd69abb7681bc5c693d976:12934app109inventory5scripts212Chromium aggregatePASS, actual100app/inventory, one full absent profile and only failed/genuine-new closures, source/scope/static/governance/same-agent exact-SHA qualityPASS; full parity unverified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-06T14:07:45.340Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact-SHA native table mouse review PASS at 8eade5e1bf32bf4cb9dd69abb7681bc5c693d976; not independent review."
+  evaluated_sha: "8eade5e1bf32bf4cb9dd69abb7681bc5c693d976"
+  blueprint_digest: "449efcdbbda1003a01e7e0ec76b06dae9d5ed208df05c8cccab4aac6d17e83bb"
+  evidence_refs:
+    - ".agentplane/tasks/202610061315-WFPZ8W/README.md"
+    - ".agentplane/tasks/202610061315-WFPZ8W/quality/20261006-140745340-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610061315-WFPZ8W/quality/20261006-140745340-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610061315-WFPZ8W/quality/20261006-140745340-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610061315-WFPZ8W/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610061315-WFPZ8W/evidence/exact-sha-quality.json"
+    - ".agentplane/tasks/202610061315-WFPZ8W/evidence/scope-audit.json"
+  findings:
+    - "Native geometry selects actual row/column/table owners and projected drag; artificial arrow/onSelectRow/edit row-index adapter removed.12934 app109 inventory5 scripts212 Chromium aggregate PASS; original failed cases or2 genuinely new cases only, focused skips retained. Actual100 app/inventory coverage proven from source bytes/maps/full function and branch locations.52 semantic paths,454 prior acceptance files identical,36 declared migrations,493 total,271 prior semantic states/full prefixes retained plus1 unverified owner272. Pinned sources read only; no AP source/helper artifacts; I/O/recovery exceptions unchanged."
 commit: null
 comments:
   -
@@ -36,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement source-owned table edge mouse selection under standing iterative refactor authorization; no upstream runtime dependency."
+  -
+    type: "verify"
+    at: "2026-10-06T14:08:46.147Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native table mouse ownership verified at implementation8eade5e1bf32bf4cb9dd69abb7681bc5c693d976:12934app109inventory5scripts212Chromium aggregatePASS, actual100app/inventory, one full absent profile and only failed/genuine-new closures, source/scope/static/governance/same-agent exact-SHA qualityPASS; full parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T14:03:32.522Z"
+doc_updated_at: "2026-10-06T14:08:46.201Z"
 doc_updated_by: "CODER"
 description: "Iteration188: select actual Writer rows, columns and entire tables at native frame edges, extend selection by dragging, remove React row callback/button and edit-window row-index adapter, preserve native cursor rings/history and conscious I/O exceptions."
 sections:
@@ -49,12 +72,48 @@ sections:
     2. ONE full upstream-absent build/app/inventory/scripts/Chromium profile. Vendor renamed/restored finally. Exact counts/errors/hashes before assertions; raw maps/cases/output/source snapshots only ignored app cache. No source/scope/AP audits while any absent profile is live. Afterwards only original failed cases or genuine new cases; never full/passing replay. Actual100 app/inventory coverage using only whole identical source/maps or complete contiguous byte-identical regions/full function+branch locations and actual counters; focused skips remain skipped.
     3. Native core/mounted/Chromium literal tests for left row/top column/corner table admission,10px strict outside threshold, resize priority, previous-frame overlap, forward/reverse row/column drag, closest original master/follow edge, same-cell no-op, foreign/stale/empty admission, right/double mouse rejection, capture cleanup, ordinary padding/list marker selection, table selection content/formatting and UndoRedo. All34 old files migrate only obsolete widget/adapter expectations preserving substantive existing assertions;456 old files identical,3 new files493total.
     4. Once restored generation --check/source-tree/provenance/invariants/parity; prior271 semantic fields/full prefixes preserved plus1 unverified owner. Doctor/routing/diff, source hashes, new leaf/generated quality artifact census0forbidden. Exact implementation-SHA same-agent quality; clean leaf close and parent entire475703-character prefix SHAb1a313255cde698b7cb91d002b6f77cfcb902c0a58a3f74fcd87339432f3498c preserved. Goal remains ACTIVE/full parity UNVERIFIED. Bounded same-task closure: the original absent run produced9 app failures and35 Chromium failures. Two additional old layout/empty-page test fixture files must declare the new native mouse teardown contract; all their layout/measurement assertions stay unchanged. Old acceptance scope36 changed/454 byte-identical of490;3 new files493total. DOM fixture selection must resolve the original row's physical master/follow table. Chromium exposes a genuine platform event/selection fault, to be corrected only within approved native mouse source owners; only original failures or genuine new regression cases repeat. Standing user iterative UI/core/refactor authorization covers this2-file fixture correction; no verification criterion changes.
-  Verification: "Declared implementation/verification gates PASS; exact-SHA same-agent quality still pending. Aggregate12934app109inventory5scripts212Chromium, actual100app/inventory, one initial full absent profile and only original failures/genuine new cases afterward. Source/resource5, scope/prior semantic prefixes, static/scoped checks and governance PASS; no upstream runtime invocation or AP sources/helpers; vendor restored. Full parity UNVERIFIED; goal/parent ACTIVE."
+  Verification: |-
+    PASS approved native table mouse leaf at implementationSHA 8eade5e1bf32bf4cb9dd69abb7681bc5c693d976. ONE original upstream-absent full profile plus only original-failure/genuine-new-case closures: aggregate12934app109inventory5scripts212Chromium, no remaining failures/runtime errors/initial skips/Chrome flaky; focused17/6/7filter skips remain skipped. Actual269app14065L15423S3638F11518B and38inventory1464L1523S384F1080B all100, actual counters/source/whole maps or complete contiguous ranges/full function declaration-body and enclosing branch locations proven, no fabrication or passing/full replay. Initial6 static gates and final scoped/type/format/physical checks PASS after preserved failures; source/resource5 gates,52path scope,454old testfiles identical/36 declared source-backed migrations/3new493total,271prior semantic fields/full prefixes retained plus1unverified owner272, unchanged Writer mapping, governance and exact-SHA same-agent quality PASS.5 pinned-source hashes/prose only; no upstream runtime invocation; vendor restored; registered save/open/recovery deviations unchanged. Leaf/quality 23files0forbidden; raw maps/cases/source bytes only ignored app cache. Doctor0errors2known warnings. Full native frame hierarchy/RTL/vertical/nested/merged/rowspan/protected/resize and wider core/UI parity UNVERIFIED; parent/goal ACTIVE. See evidence and generated quality report.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T14:08:46.147Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native table mouse ownership verified at implementation8eade5e1bf32bf4cb9dd69abb7681bc5c693d976:12934app109inventory5scripts212Chromium aggregatePASS, actual100app/inventory, one full absent profile and only failed/genuine-new closures, source/scope/static/governance/same-agent exact-SHA qualityPASS; full parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T14:08:45.746Z, excerpt_hash=sha256:df3a0fa1ed879f7456a2ed9c34220515a10f2e8fc1d3ff227dc759f561b3ac59
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061315-WFPZ8W/blueprint/resolved-snapshot.json
+    - old_digest: 449efcdbbda1003a01e7e0ec76b06dae9d5ed208df05c8cccab4aac6d17e83bb
+    - current_digest: 449efcdbbda1003a01e7e0ec76b06dae9d5ed208df05c8cccab4aac6d17e83bb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610061315-WFPZ8W
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610061315-WFPZ8W -m 🧩 WFPZ8W task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this native table mouse leaf through a separate scoped task if source-backed cursor or history regressions appear; preserve immutable DONE evidence and conscious document I/O exceptions."
   Findings: |-
     Previous187 DONE implementation7dbbb320d95a12873c6cfbe13b39ea899203f411; clean main checkpoint97fba108e8cdaa1524a8efd1888c916c4e1169f6. Pinned LibreOffice26.8.0.2 commit9bc445578031fecf56086729d8e4940c77e14d65. Confirmed fetab.cxx GetBox1833/WhichMouseTabCol2127/SelTableRowCol2006 and10px constant1831; include/svtools/ruler.hxx481 margin3; select.cxx886 wrapper; edtwin.cxx3201 mouse branch/capture and702/4337 drag; SwTab fesh.hxx183. Existing UI artificial arrow button exposes row-only callback; native core already owns table cursor/rings/row/column/table commands. Measured device geometry is a browser platform seam over actual model owners. Wider layout/RTL/vertical/protection/resize not proven. Read-only discovery speculative missing-path/empty searches corrected using actual file inventory and route recomputed, no source/helper copies in AP. No188 implementation yet. Full absent profile buildPASS; app12923PASS9FAIL actual100; inventory109PASS actual100; scripts5PASS; Chromium177PASS35FAIL0skip/flaky. Vendor restored finally. Initial static lint18/type2/docs contract failures repaired by changed-file validator/prettier/eslint/type closure. Setup first commit rejected malformed subject; route recomputed and correct subject committed0f7e0671c4cb. One further discovery path error corrected from actual file inventory. No full/passing replay, upstream runtime call or AP sources/helpers.
 
     Implementation completed: native SwTab declaration, measured actual SwTabFrame/SwTableBox geometry, SwFEShell GetBox/WhichMouseTabCol/SelTableRowCol, persistent edit-window mouse capture and native cursor/rings. Removed React onSelectRow/button/arrow and SwEditWin SelectTableRow node-index adapter. Browser physical print area is the union of original cell-frame rectangles, correcting collapsed HTML border offsets. Test-support fixtures remain outside runtime src and AP; actual Chromium row/column/corner/drag/format/UndoRedo and prior list/paste/delete/property/history tests pass. One full absent profile, followed exclusively by original failures or2 genuinely new border/lifecycle cases. App9 original failures closed; initial35 Chromium failures closed through same-case refinements. Selector zero-tests and closure parse failure were corrected without replaying passing cases. New regression fixture inherited-spy misuse corrected; current device measurements do not reuse inherited spies. Mobile actual wheel scrolling exposes native edges behind the fixed ruler; no UI model injection. Native whole-table alignment defaults retained; narrow new mouse fixture uses represented left alignment to keep all three columns physically visible, while prior Automatic/orientation tests retain every original assertion. Scope52 semantic paths,36 declared old acceptance migrations/454 byte-identical/3new493total;271 prior semantic states/defaults/classes/full evidence/responsibility/justification prefixes and whole Writer mapping retained; new native declaration unverified272records. Final app12934,inventory109,scripts5,Chromium212; no remaining failures, initial skips/runtime errors or Chrome flaky, focused filters17/6/7 retained as skips. Actual269app14065L15423S3638F11518B all100 SHAb82301b6e456a32614664aeb5dbe9cfbf770c256ba51352d244b99ded5968b9e;38inventory1464L1523S384F1080B all100 SHAe82c5df16847b7873e9a29924973aaac07eeed8e13a1ef8897303f9d0abfd53d. Coverage counters compose only complete identical source/maps or complete contiguous byte-identical regions with full function declaration/body and enclosing branch locations.268 production map sources unchanged since initial; changed measurement uses focused actual counters; raw proofs/cases/maps/source bytes only ignored app cache. Scoped JSDoc/physical-size/eslint/format and final typecheck PASS; final prettier warning corrected without full passing gate replay. Five restored source gates, semantic scope and governance PASS; doctor0errors2known warnings. Discovery speculative composition/image paths corrected using actual returned inventory and route; audit template missing optional symbol arrays corrected in memory, no AP helper. Quality exact implementation SHA review pending in same-agent EVALUATOR phase; no independent-review claim. Conscious I/O/recovery deviations unchanged. Full native layout/RTL/vertical/nested/merged/rowspan/protected/resizing and broader core/UI parity UNVERIFIED, goal/parent ACTIVE.
+
+    Exact implementationSHA 8eade5e1bf32bf4cb9dd69abb7681bc5c693d976 same-agent EVALUATOR PASS (not independent review). Case identities include file/full name/project/occurrence; source bytes/maps/complete contiguous function and branch counter proof rechecked.52 semantic committed paths match final bytes; aggregate12934app109inventory5scripts212Chrome, actual100 coverage. Original final scoped-format failure preserved with its real command/output hash; exact failed scoped gate closure run recorded separately PASS, correcting preliminary evidence status without changing code or tests. Generated quality report/prompt/opinion included in leaf census 23 files0forbidden. Quality and verification artifacts contain bounded English prose/counts/hashes/exact failures; all raw data remain ignored app cache. Entire parent475703-character prefix remains unchanged. Native full parity remains unverified.
 id_source: "generated"
 ---
 ## Summary
@@ -78,7 +137,40 @@ Standing user iterative UI/core/refactor authorization covers this single leaf. 
 
 ## Verification
 
-Declared implementation/verification gates PASS; exact-SHA same-agent quality still pending. Aggregate12934app109inventory5scripts212Chromium, actual100app/inventory, one initial full absent profile and only original failures/genuine new cases afterward. Source/resource5, scope/prior semantic prefixes, static/scoped checks and governance PASS; no upstream runtime invocation or AP sources/helpers; vendor restored. Full parity UNVERIFIED; goal/parent ACTIVE.
+PASS approved native table mouse leaf at implementationSHA 8eade5e1bf32bf4cb9dd69abb7681bc5c693d976. ONE original upstream-absent full profile plus only original-failure/genuine-new-case closures: aggregate12934app109inventory5scripts212Chromium, no remaining failures/runtime errors/initial skips/Chrome flaky; focused17/6/7filter skips remain skipped. Actual269app14065L15423S3638F11518B and38inventory1464L1523S384F1080B all100, actual counters/source/whole maps or complete contiguous ranges/full function declaration-body and enclosing branch locations proven, no fabrication or passing/full replay. Initial6 static gates and final scoped/type/format/physical checks PASS after preserved failures; source/resource5 gates,52path scope,454old testfiles identical/36 declared source-backed migrations/3new493total,271prior semantic fields/full prefixes retained plus1unverified owner272, unchanged Writer mapping, governance and exact-SHA same-agent quality PASS.5 pinned-source hashes/prose only; no upstream runtime invocation; vendor restored; registered save/open/recovery deviations unchanged. Leaf/quality 23files0forbidden; raw maps/cases/source bytes only ignored app cache. Doctor0errors2known warnings. Full native frame hierarchy/RTL/vertical/nested/merged/rowspan/protected/resize and wider core/UI parity UNVERIFIED; parent/goal ACTIVE. See evidence and generated quality report.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T14:08:46.147Z — VERIFY — ok
+
+By: CODER
+
+Note: Native table mouse ownership verified at implementation8eade5e1bf32bf4cb9dd69abb7681bc5c693d976:12934app109inventory5scripts212Chromium aggregatePASS, actual100app/inventory, one full absent profile and only failed/genuine-new closures, source/scope/static/governance/same-agent exact-SHA qualityPASS; full parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T14:08:45.746Z, excerpt_hash=sha256:df3a0fa1ed879f7456a2ed9c34220515a10f2e8fc1d3ff227dc759f561b3ac59
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061315-WFPZ8W/blueprint/resolved-snapshot.json
+- old_digest: 449efcdbbda1003a01e7e0ec76b06dae9d5ed208df05c8cccab4aac6d17e83bb
+- current_digest: 449efcdbbda1003a01e7e0ec76b06dae9d5ed208df05c8cccab4aac6d17e83bb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610061315-WFPZ8W
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610061315-WFPZ8W -m 🧩 WFPZ8W task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -89,3 +181,5 @@ Revert only this native table mouse leaf through a separate scoped task if sourc
 Previous187 DONE implementation7dbbb320d95a12873c6cfbe13b39ea899203f411; clean main checkpoint97fba108e8cdaa1524a8efd1888c916c4e1169f6. Pinned LibreOffice26.8.0.2 commit9bc445578031fecf56086729d8e4940c77e14d65. Confirmed fetab.cxx GetBox1833/WhichMouseTabCol2127/SelTableRowCol2006 and10px constant1831; include/svtools/ruler.hxx481 margin3; select.cxx886 wrapper; edtwin.cxx3201 mouse branch/capture and702/4337 drag; SwTab fesh.hxx183. Existing UI artificial arrow button exposes row-only callback; native core already owns table cursor/rings/row/column/table commands. Measured device geometry is a browser platform seam over actual model owners. Wider layout/RTL/vertical/protection/resize not proven. Read-only discovery speculative missing-path/empty searches corrected using actual file inventory and route recomputed, no source/helper copies in AP. No188 implementation yet. Full absent profile buildPASS; app12923PASS9FAIL actual100; inventory109PASS actual100; scripts5PASS; Chromium177PASS35FAIL0skip/flaky. Vendor restored finally. Initial static lint18/type2/docs contract failures repaired by changed-file validator/prettier/eslint/type closure. Setup first commit rejected malformed subject; route recomputed and correct subject committed0f7e0671c4cb. One further discovery path error corrected from actual file inventory. No full/passing replay, upstream runtime call or AP sources/helpers.
 
 Implementation completed: native SwTab declaration, measured actual SwTabFrame/SwTableBox geometry, SwFEShell GetBox/WhichMouseTabCol/SelTableRowCol, persistent edit-window mouse capture and native cursor/rings. Removed React onSelectRow/button/arrow and SwEditWin SelectTableRow node-index adapter. Browser physical print area is the union of original cell-frame rectangles, correcting collapsed HTML border offsets. Test-support fixtures remain outside runtime src and AP; actual Chromium row/column/corner/drag/format/UndoRedo and prior list/paste/delete/property/history tests pass. One full absent profile, followed exclusively by original failures or2 genuinely new border/lifecycle cases. App9 original failures closed; initial35 Chromium failures closed through same-case refinements. Selector zero-tests and closure parse failure were corrected without replaying passing cases. New regression fixture inherited-spy misuse corrected; current device measurements do not reuse inherited spies. Mobile actual wheel scrolling exposes native edges behind the fixed ruler; no UI model injection. Native whole-table alignment defaults retained; narrow new mouse fixture uses represented left alignment to keep all three columns physically visible, while prior Automatic/orientation tests retain every original assertion. Scope52 semantic paths,36 declared old acceptance migrations/454 byte-identical/3new493total;271 prior semantic states/defaults/classes/full evidence/responsibility/justification prefixes and whole Writer mapping retained; new native declaration unverified272records. Final app12934,inventory109,scripts5,Chromium212; no remaining failures, initial skips/runtime errors or Chrome flaky, focused filters17/6/7 retained as skips. Actual269app14065L15423S3638F11518B all100 SHAb82301b6e456a32614664aeb5dbe9cfbf770c256ba51352d244b99ded5968b9e;38inventory1464L1523S384F1080B all100 SHAe82c5df16847b7873e9a29924973aaac07eeed8e13a1ef8897303f9d0abfd53d. Coverage counters compose only complete identical source/maps or complete contiguous byte-identical regions with full function declaration/body and enclosing branch locations.268 production map sources unchanged since initial; changed measurement uses focused actual counters; raw proofs/cases/maps/source bytes only ignored app cache. Scoped JSDoc/physical-size/eslint/format and final typecheck PASS; final prettier warning corrected without full passing gate replay. Five restored source gates, semantic scope and governance PASS; doctor0errors2known warnings. Discovery speculative composition/image paths corrected using actual returned inventory and route; audit template missing optional symbol arrays corrected in memory, no AP helper. Quality exact implementation SHA review pending in same-agent EVALUATOR phase; no independent-review claim. Conscious I/O/recovery deviations unchanged. Full native layout/RTL/vertical/nested/merged/rowspan/protected/resizing and broader core/UI parity UNVERIFIED, goal/parent ACTIVE.
+
+Exact implementationSHA 8eade5e1bf32bf4cb9dd69abb7681bc5c693d976 same-agent EVALUATOR PASS (not independent review). Case identities include file/full name/project/occurrence; source bytes/maps/complete contiguous function and branch counter proof rechecked.52 semantic committed paths match final bytes; aggregate12934app109inventory5scripts212Chrome, actual100 coverage. Original final scoped-format failure preserved with its real command/output hash; exact failed scoped gate closure run recorded separately PASS, correcting preliminary evidence status without changing code or tests. Generated quality report/prompt/opinion included in leaf census 23 files0forbidden. Quality and verification artifacts contain bounded English prose/counts/hashes/exact failures; all raw data remain ignored app cache. Entire parent475703-character prefix remains unchanged. Native full parity remains unverified.
