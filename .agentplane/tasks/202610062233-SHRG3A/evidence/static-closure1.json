@@ -1,0 +1,19 @@
+{
+  "scope": "Only initial failed formatting files and failed application typecheck; passed tools typecheck and initial other gates not replayed.",
+  "records": [
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts apps/office/e2e/writer-native-row-frame-size.spec.ts",
+      "exit": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "exit": 0,
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+      "diagnostics": []
+    }
+  ]
+}
