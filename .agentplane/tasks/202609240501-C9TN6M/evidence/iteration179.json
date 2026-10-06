@@ -1,0 +1,32 @@
+{
+  "iteration": 179,
+  "parent": "202609240501-C9TN6M",
+  "leaf": "202610060746-BE36FD",
+  "leafStatus": "DONE",
+  "implementation": "a79ea63f62f50eaeed5697d813b9b6818713033d",
+  "close": "e3ddc8667b866e6d3b289874bb6cc8367f0f616f",
+  "previousFindingsLength": 449064,
+  "previousFindingsSha256": "014e85889a9e3b206218a28a01b40790b8b2769ff1186ae672675aa3eef99b52",
+  "updatedFindingsLength": 453057,
+  "updatedFindingsSha256": "a1da7f57b78c91b1bdd447924142d27b1f71d3b74a57c2ac173e26755721da9d",
+  "cases": {
+    "application": 12811,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 187
+  },
+  "coverage": {
+    "applicationPercent": 100,
+    "inventoryPercent": 100
+  },
+  "moduleOwners": 268,
+  "testFiles": 470,
+  "goalStatus": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "remainingFailures": 0,
+  "checkpointRecovery": {
+    "initialExit": 1,
+    "error": "ENOENT: parent evidence directory did not exist after successful Findings append",
+    "resolution": "Route recomputed; existing append verified; metadata directory created without reappending Findings."
+  }
+}
