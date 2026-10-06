@@ -64,24 +64,32 @@ function WriterTablePropertiesDialog({
   const [, refreshPage] = useState(0);
   const width = formatPage.GetFieldValue("width");
   const columnWidths = formatPage.data.columns;
-  const [minRowHeight, setMinRowHeight] = useState(rows?.[0]?.GetFormat().minHeight ?? 0);
-  const [padding, setPadding] = useState(rows?.[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100);
-  const [border, setBorder] = useState(
-    rows?.[0]?.GetTabBoxes()[0]?.GetFormat().border ?? "0.5pt solid #666666",
+  const [initial] = useState(
+    /** Retains initial input values for the represented Text Flow and Borders pages. @returns Original page values. */
+    () => ({
+      minRowHeight: rows[0]?.GetFormat().minHeight ?? 0,
+      padding: rows[0]?.GetTabBoxes()[0]?.GetFormat().padding ?? 100,
+      border: rows[0]?.GetTabBoxes()[0]?.GetFormat().border ?? "0.5pt solid #666666",
+      verticalAlign: rows[0]?.GetTabBoxes()[0]?.GetFormat().verticalAlign ?? "top",
+      headerRows: table.GetFormat().headerRows ?? 1,
+      repeatHeaderRows: table.GetFormat().repeatHeaderRows ?? true,
+      dontSplit: rows[0]?.GetFormat().keepTogether ?? false,
+    }),
   );
+  const [minRowHeight, setMinRowHeight] = useState(initial.minRowHeight);
+  const [padding, setPadding] = useState(initial.padding);
+  const [border, setBorder] = useState(initial.border);
   const [verticalAlign, setVerticalAlign] = useState<WriterTableDialogValue["verticalAlign"]>(
-    rows?.[0]?.GetTabBoxes()[0]?.GetFormat().verticalAlign ?? "top",
+    initial.verticalAlign,
   );
   const [error, setError] = useState<string>();
   const [activeTab, setActiveTab] = useState<"table" | "columns" | "text-flow" | "borders">(
     "table",
   );
-  const [hasHeader, setHasHeader] = useState((table.GetFormat().headerRows ?? 1) > 0);
-  const [headerRows, setHeaderRows] = useState(table.GetFormat().headerRows ?? 1);
-  const [repeatHeaderRows, setRepeatHeaderRows] = useState(
-    table.GetFormat().repeatHeaderRows ?? true,
-  );
-  const [dontSplit, setDontSplit] = useState(rows?.[0]?.GetFormat().keepTogether ?? false);
+  const [hasHeader, setHasHeader] = useState(initial.headerRows > 0);
+  const [headerRows, setHeaderRows] = useState(initial.headerRows);
+  const [repeatHeaderRows, setRepeatHeaderRows] = useState(initial.repeatHeaderRows);
+  const [dontSplit, setDontSplit] = useState(initial.dontSplit);
   const toCm =
     /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
       twips: number,
@@ -519,6 +527,34 @@ function WriterTablePropertiesDialog({
         </div>
         {error === undefined ? null : <p className="text-sm text-red-700">{error}</p>}
         <div className="flex justify-end gap-2">
+          <button
+            className="mr-auto rounded border px-3 py-1"
+            type="button"
+            onClick={
+              /** Resets only the current native page to its original input values. @returns Nothing. */ () => {
+                if (activeTab === "table") formatPage.Reset();
+                else if (activeTab === "columns") columnPage.Reset();
+                else if (activeTab === "text-flow") {
+                  setHasHeader(initial.headerRows > 0);
+                  setHeaderRows(initial.headerRows);
+                  setRepeatHeaderRows(initial.repeatHeaderRows);
+                  setDontSplit(initial.dontSplit);
+                  setMinRowHeight(initial.minRowHeight);
+                  setVerticalAlign(initial.verticalAlign);
+                } else {
+                  setPadding(initial.padding);
+                  setBorder(initial.border);
+                }
+                setError(undefined);
+                refreshPage(
+                  /** Presents reset native fields without changing the active page. @param version - Current version. @returns Next version. */
+                  (version) => version + 1,
+                );
+              }
+            }
+          >
+            Reset
+          </button>
           <button className="rounded border px-3 py-1" onClick={onCancel} type="button">
             Cancel
           </button>

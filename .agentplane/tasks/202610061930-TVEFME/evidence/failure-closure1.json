@@ -1,0 +1,34 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "920969952a9e36f947ae3667bda8d306924dc45477eb874890c36545d2b7ca2d",
+    "apps/office/src/sw/browser/presentation/native-table-properties-reset.test.tsx": "f79aa311f8ffb174ae7e24f1b62aa28b8addebc409b6de316f66027f521555e3",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-properties-reset-history.test.ts": "9d7e8a8d8782ddfee50e6e75c1cd95a7766b85bebd640778df842aec610e1416",
+    "apps/office/e2e/writer-native-table-properties-reset.spec.ts": "e5c6c1200ffedf03c5544952053bb70dbc7dbfb8ff480e8f60bdadd579665f11",
+    "docs/program/source-provenance.json": "0fee985df05a70b52d4b82a656a21308c916e0c4e9b52b660fb0c94e00437fac",
+    "docs/program/parity/runtime-inventory.json": "13f0d40442836017041a6473c0b29b70f7cc1e1a0b9904f70bd7924015ab573d"
+  },
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-properties-reset.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 749,
+      "sha256": "93b8a234b7fbabeae2d27ba261ee1e6486b3374725075c16fc489ea612234036",
+      "totals": [
+        "2 passed (6.3s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T19:50:55.967Z",
+        "duration": 6306.674999999999,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ],
+  "scope": "Only two originally failed Chromium reset cases; no production changes or historical passing replay"
+}
