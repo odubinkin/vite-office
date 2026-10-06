@@ -1,0 +1,46 @@
+{
+  "approvedPaths": [
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts",
+    "apps/office/e2e/writer-native-table-column-page.spec.ts",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/e2e/writer-native-table-column-page.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts"
+  ],
+  "oldAcceptanceFiles": 508,
+  "oldAcceptanceChanged": [
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx"
+  ],
+  "oldAcceptanceByteIdentical": 507,
+  "newTests": [
+    "apps/office/e2e/writer-native-table-column-page.spec.ts",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts"
+  ],
+  "totalAcceptanceFiles": 512,
+  "priorSemanticRecords": 276,
+  "semanticRecords": 276,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 498326,
+  "parentPrefixSHA256": "8e681957baed7400f5dd4741dcafa425137b093a530b89e753948c3c134db654",
+  "failures": []
+}
