@@ -1,10 +1,11 @@
 ---
 id: "202610060703-VZAQBS"
 title: "Restore native Insert Table dialog ownership and input behavior"
-status: "DOING"
+result_summary: "Native Insert Table input ownership and upstream control behavior verified; insertion command/history and full parity remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Actual manifests verify12790 app case identities by file/title/occurrence, preserving two old parameterized title collisions;109inventory,5scripts and183Chromium cases passed. No test replay was needed for this counting recovery."
     - "Native input ownership/source behavior,100%real-counter exact-map coverage, protected264prior semantic records and registered IO deviations satisfy the approved scope."
-commit: null
+commit:
+  hash: "2db7a927d5d493e39c90999604c04ee561b76bda"
+  message: "🧩 VZAQBS task: record verified native insertion inputs"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved native Insert Table dialog leaf under standing iterative UI parity authorization; preserve registered IO deviations and run exactly one full upstream-absent profile."
+  -
+    author: "CODER"
+    body: "Verified: Native Insert Table draft ownership, pinned defaults, filtered/collision-sensitive names, nonblocking warning, linked repetition and actual UI acceptance passed. Registered IO/recovery deviations preserved; complete project parity remains unverified."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. Native Insert Table inputs/defaults/name/sensitivity/repeat restoration satisfy approved scope. Exactly one full upstream-absent profile plus only original failed Chromium or genuinely new Workbench case;12790actual application case identities,109inventory,5scripts,183Chromium verified. Five selected-file cases remain skipped. Application/inventory100%real-counter coverage on264complete identical maps; seven pinned-source hashes and scope preservation checked. Latest corrected same-agent quality pass supersedes premature title-only census review. No IO/recovery deviation changes; full project parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-06T07:39:48.890Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Insert Table draft ownership, pinned defaults, filtered/collision-sensitive names, nonblocking warning, linked repetition and actual UI acceptance passed. Registered IO/recovery deviations preserved; complete project parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T07:39:27.023Z"
+doc_updated_at: "2026-10-06T07:39:48.892Z"
 doc_updated_by: "CODER"
 description: "Iteration178 under active parent 202609240501-C9TN6M: replace duplicated React insert-dialog state with source-owned SwInsTableDlg and SwInsertTableOptions. Match pinned input limits, large-table warning, name filter/collision sensitivity, header/repeat defaults and linked repeated-row restoration. Preserve table properties, represented styles and registered IO/recovery exceptions; insertion command/history remains a following leaf."
 sections:
@@ -129,6 +142,10 @@ sections:
     Restored source-tree/provenance/invariants/parity/resource-generation audits passed. Provenance reports267owners:183mapped68browser16infrastructure. Scope has11semantic paths, three new acceptance files,462of463old test files byte-identical. The only old file adds two explicit Header clicks, retaining all original literal option assertions. All264 prior protected semantic classifications/statuses/defaults/evidence prefixes and other inventory sections are preserved; three new owners remain explicitly unverified. Conscious save/open/recovery deviations are unchanged. Doctor reports zero errors and two previously known warnings; routing and diff whitespace checks pass. The first filename census overclassified one old tracked browser QA screenshot as a forbidden executable; visual inspection confirmed actual browser UI. Corrected census records the false positive and leaves its completed owner unchanged. No forbidden source/helper/probe/executable artifacts exist in agentplane; canonical framework validators and that existing non-source QA evidence are explicitly identified. Inline helper preparation/map syntax recoveries caused no semantic changes; map merge was accepted only after complete exact-map assertions succeeded.
 
     Latest exact-SHA same-agent quality review passes implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. The first auxiliary case census incorrectly deduplicated two legacy parameterized title collisions and reported12788 instead of12790; the premature first pass record is explicitly superseded. Corrected identities use file/title/occurrence and verify all12790 actual passing cases without a test rerun. The correction and latest quality report preserve the initial counting failure. Final clean checkout is confirmed before quality persistence and required again after closure. Full project parity is unverified and the parent/goal remain active. Next coherent leaf should route the grid and dialog insertion through native command/core/undo ownership, removing remaining WriterWorkbench graph writes.
+extensions:
+  implementation_commit:
+    hash: "a1bd6450c57473ca18aa64ea5a7cffce345d3f98"
+    message: "🧩 VZAQBS parity: restore native Insert Table input ownership"
 id_source: "generated"
 ---
 ## Summary
