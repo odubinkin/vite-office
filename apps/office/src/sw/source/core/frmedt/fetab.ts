@@ -14,6 +14,7 @@ import { SwUndoAttrTable } from "../undo/untbl";
 import { SwTab, type SwTableMousePoint } from "../../../inc/fesh";
 import { SwTabFrame, type SwTableMouseCell, type SwTableMouseRect } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
+import { SwDoc } from "../doc/doc";
 
 /** Native mouse hit over actual measured frame and box owners. */
 interface SwTableMouseHit {
@@ -35,6 +36,52 @@ function contains(rect: SwTableMouseRect, point: SwTableMousePoint, fuzzy = 0): 
 
 /** Native frame-editing shell inherits the existing editing shell without an operation adapter. */
 export abstract class SwFEShell extends SwEditShell {
+  /** Resolves current native cell-frame row geometry without a projected height array. @param result - Output carrier. @returns Whether represented. */
+  public GetTabRows(result: SwTabCols): boolean {
+    for (const frame of this.tableMouseFrames)
+      for (const cell of frame.mouseGeometry?.cells ?? [])
+        if (cell.box.GetParagraphs().includes(this.GetCursor().GetPoint().GetNode() as SwTextNode))
+          return SwDoc.GetTabRows(result, frame, cell.box);
+    return false;
+  }
+  /** Applies current-cell native row geometry while retaining the actual text PaM. @param next - Accepted rows. @param currentColumnOnly - Current hit frame only. @returns Whether changed. */
+  public SetTabRows(next: SwTabCols, currentColumnOnly: boolean): boolean {
+    for (const frame of this.tableMouseFrames)
+      for (const cell of frame.mouseGeometry?.cells ?? [])
+        if (cell.box.GetParagraphs().includes(this.GetCursor().GetPoint().GetNode() as SwTextNode))
+          return this.ApplyTabRows(next, currentColumnOnly, frame, cell.box);
+    return false;
+  }
+  /** Reads source row geometry at the captured document border. @param result - Output carrier. @param point - Physical hit. @returns Whether admitted. */
+  public GetMouseTabRows(result: SwTabCols, point: SwTableMousePoint): boolean {
+    const hit = this.GetBox(point);
+    return hit !== undefined && hit.row && SwDoc.GetTabRows(result, hit.frame, hit.cell.box);
+  }
+  /** Accepts mouse row geometry through native document history. @param next - Accepted carrier. @param currentColumnOnly - Original hit cell only. @param point - Captured hit. @returns Whether changed. */
+  public SetMouseTabRows(
+    next: SwTabCols,
+    currentColumnOnly: boolean,
+    point: SwTableMousePoint,
+  ): boolean {
+    const hit = this.GetBox(point);
+    return (
+      hit !== undefined &&
+      hit.row &&
+      this.ApplyTabRows(next, currentColumnOnly, hit.frame, hit.cell.box)
+    );
+  }
+  /** Groups native row mutation and notification without moving any cursor. @param next - Accepted carrier. @param currentColumnOnly - Original hit only. @param frame - Actual physical frame. @param box - Original connected box. @returns Whether changed. */
+  private ApplyTabRows(
+    next: SwTabCols,
+    currentColumnOnly: boolean,
+    frame: SwTabFrame,
+    box: SwTableBox,
+  ): boolean {
+    return this.RunNotificationTransaction(
+      /** Publishes one native attribute operation. @returns Whether changed. */ () =>
+        this.GetDoc().SetTabRows(next, currentColumnOnly, frame, box, this.CaptureCursorState()),
+    );
+  }
   private tableMouseFrames: readonly SwTabFrame[] = [];
   private tableMouseEnd: SwTableBox | undefined;
 

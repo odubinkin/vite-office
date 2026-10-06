@@ -3547,6 +3547,30 @@
           {
             "path": "apps/office/src/sw/browser/editor/native-table-column-drag.test.tsx",
             "marker": "mounted editable-text border owns mouse down, dragstart, selectionchange and the generated click"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "GetTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+            "marker": "GetSwTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwTableMouseGeometry"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "GetMouseTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+            "marker": "RulerRowDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+            "marker": "PaintColumnGuide"
           }
         ],
         "upstream": [
@@ -3593,6 +3617,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
             "marker": "SwEditWin::MouseButtonDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::GetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::SetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetMouseTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+            "marker": "SvxRuler::DragBorders"
           }
         ]
       },
@@ -3617,7 +3657,8 @@
         "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
         "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified.",
         "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
-        "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes."
+        "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes.",
+        "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged."
       ],
       "browserResponsibilities": [
         "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
@@ -8681,6 +8722,30 @@
           {
             "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
             "marker": "Writer native heading Tab retains styles and history"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "GetTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+            "marker": "GetSwTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwTableMouseGeometry"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "GetMouseTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+            "marker": "RulerRowDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+            "marker": "PaintColumnGuide"
           }
         ],
         "upstream": [
@@ -8815,6 +8880,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
             "marker": "case SwKeyState::OutlineDown:"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::GetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::SetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetMouseTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+            "marker": "SvxRuler::DragBorders"
           }
         ]
       },
@@ -8845,7 +8926,8 @@
         "Iteration180 gives next/previous cell ownership to inherited SwCursorShell from trvltbl.cxx. Existing final-row default append calls SwDoc.InsertRow, which connects native nodes before document-owned SwUndoTableNdsChg publication; shell traversal follows mutation and no SwWrtShell ApplyAction replay or row construction remains. SaveNewBoxes captures connected cursor coordinates. Actual native/mounted/Chromium tests cover retained row identities, pending attributes, native boundaries and repeated history. Default flat append is represented; non-default row modes, DDE/protection/layout/rowspan/merged/nested, full native SwCursorShell and undo/save content contracts remain unverified. Native parameter order is retained with optional browser cursor state for pending attributes. Prior268 semantic statuses/defaults/classifications/evidence and registered I/O/recovery exceptions are preserved.",
         "Iteration181 routes counted flat InsertRowsBefore/After through contextual SwTableShell, inherited SwFEShell, SwDoc document history and SwTable selected-edge insertion. Original selection is preserved; numeric table and insertion coordinates support mixed/recreated-table history. Complex merged/nested tables, row spans, redline/layout/formula/protection/repeated-headline state, full native undo section reconstruction and complete UI/core parity remain unverified. All prior269 semantic states/defaults/classes/evidence and registered I/O deviations remain unchanged.",
         "Iteration182 ports native counted flat InsertCol/NewInsertCol and cumulative AdjustWidths rounding, expands column search across actual rows and represents CheckSplitCells MINLAY using table/page print geometry. Native table shell exposes InsertColumnsBefore/After; shared document-owned SwUndoTableNdsChg retains actual box sections, numeric insertion coordinates and width attributes, preserving selection through mixed and recreated-table history. Prior269 semantic states/defaults/classes/evidence and registered I/O deviations preserved. Full merged/nested/rowspan/RTL/redline/per-edge-border/formula/protection/repeated-headline/frame/undo reconstruction and complete UI/core parity remain unverified.",
-        "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes."
+        "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
+        "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -9994,6 +10076,74 @@
       "evidence": {
         "local": [
           {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "GetTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+            "marker": "GetSwTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwTableMouseGeometry"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "GetMouseTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+            "marker": "RulerRowDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+            "marker": "PaintColumnGuide"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::GetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::SetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetMouseTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+            "marker": "SvxRuler::DragBorders"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "localSymbols": [
+        "GetSwTabRows",
+        "SetSwTabRows",
+        "GetSwTabRowDeviceScale"
+      ],
+      "omittedResponsibilities": [
+        "Complete native ndtbl graph mutation, vertical/RTL/merged/nested/protected/split-row and full parity remain unverified."
+      ],
+      "preservedResponsibilities": [
+        "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged.",
+        "SwDoc retains the native public row API; source-owned ndtbl functions define its row responsibility outside the near-limit generic document declaration. The file keeps the native ndtbl name and needs no filename exception."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/docnode/ndtbl.cxx",
+      "upstreamSymbols": [
+        "SwDoc::GetTabRows",
+        "SwDoc::SetTabRows"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "AttrSetHandleHelper",
             "path": "apps/office/src/sw/source/core/docnode/node-attribute-handle.ts"
           }
@@ -10770,7 +10920,8 @@
         "Iteration183 removes redundant abstract cursor ownership declarations after native GetCursor and table storage move into SwCursorShell. Expanded GetTableSel reads the actual displayed point/mark as native tblsel.cxx does, preserving ordinary marked row/column ranges. Prior270 states/defaults/classes/evidence and I/O deviations preserved; full native layout/protection/mode/complex-table contracts remain unverified.",
         "Iteration185 implements contextual Select All from actual native range state: current cell text, full table box selection, then parent text. Core owns common text, real table exit and extended structural boundaries; frame shell admits whole tables by first/last section edges; writer shell coordinates selection; browser synchronizes current DOM point/mark and restores actual ordinary/table owners. Literal core/mounted/Chromium acceptance exercises collapsed/partial/reversed/full/empty cells, repeated/native table mode, leading/trailing tables, imported table-only exit failure, native extras default, subsequent cell edit/history and unchanged neighbors/history. Prior270 semantic states/defaults/classes/full evidence and registered I/O deviations remain unchanged. Full hidden/nested/protected/layout/footnote lifecycle/native mode flags, document prepare-selection-all and structural deletion of extended boundary nodes, complete UI/core parity remain unverified.",
         "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
-        "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes."
+        "Iteration190 replaces shell width-array mutation with native SwTabCols: shell GetTabCols, SwTableRep FillTabCols, document SetTabCols and native flat SwTable separator adjustment. Document normalizes frame print width with existing AdjustWidths before attribute Undo, as ndtbl.cxx, retains actual table/row/box/text owners and publishes model changes. Source integer scaling, COLFUZZY20, edge orientation and visible draft rounding are represented. Shared flat horizontal widths only; independent row writes reject without mutation. Hidden/nested/span graphs, shadow/protection/RTL/vertical frames, complete native notifications, wide native Long precision, ruler border drag and full table behavior remain unverified. No parity promotion or registered save/open/recovery deviation changes.",
+        "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged."
       ],
       "omittedResponsibilities": [
         "Full native item-format,complex-table,frame-cache and UI lifecycle parity remains unverified."
@@ -10800,6 +10951,30 @@
           {
             "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
             "marker": "native border drag preserves the outside-table cursor, list and original graph through3 undo cycles"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "GetTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+            "marker": "GetSwTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwTableMouseGeometry"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "GetMouseTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+            "marker": "RulerRowDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+            "marker": "PaintColumnGuide"
           }
         ],
         "upstream": [
@@ -10814,6 +10989,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
             "marker": "SwFEShell::GetMouseTabCols"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::GetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::SetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetMouseTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+            "marker": "SvxRuler::DragBorders"
           }
         ]
       },
@@ -11074,7 +11265,8 @@
       "preservedResponsibilities": [
         "Iteration175 native represented horizontal table print geometry: SwTabFrame Format owns twip LR/wished-width orientation spacing and minimum23 guard;root supplies actual page upper print width for each master/follow fragment. Browser consumes immutable native print bounds and scales original column reference proportions;hidden measurement uses same owner. Signed left/right margins import/export reuse current table SAX/graph owners. No model clone,TextRuns translation or new adapter. Relative-width,fly/outer-border offsets,multicolumn,vertical/RTL,nested/merged/rowspan/split-row/full layout lifecycle and complete parity remain unverified;registered IO deviations unchanged.",
         "Iteration177 represents native absolute table formatting through SwFormatTablePage and SwTableRep, six numeric orientations, linked metric fields, sensitivity, automatic-width restoration and visible-column reconciliation. React displays the native draft and the existing shell group applies accepted frame attributes. Worker retains orientation and ODF projects native alignment and conditional LR margins. Full native item/relative-width/complex-table/RTL/fly/cache/protection and UI/core parity remain unverified. All prior261 semantic statuses/defaults/classes and registered IO deviations are preserved.",
-        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified."
+        "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
+        "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged."
       ],
       "omittedResponsibilities": [
         "Complete native layout frame construction,fly/border offsets,vertical/RTL/merged/nested/rowspan/split-row and relative-width semantics remain unverified."
@@ -11100,12 +11292,52 @@
           {
             "path": "apps/office/e2e/writer-native-table-mouse.spec.ts",
             "marker": "Writer native table mouse edge and drag"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "GetTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+            "marker": "GetSwTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwTableMouseGeometry"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "GetMouseTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+            "marker": "RulerRowDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+            "marker": "PaintColumnGuide"
           }
         ],
         "upstream": [
           {
             "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
             "marker": "SwTabFrame::Format"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::GetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::SetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetMouseTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+            "marker": "SvxRuler::DragBorders"
           }
         ]
       },
@@ -15963,6 +16195,30 @@
           {
             "path": "apps/office/src/sw/source/uibase/docvw/native-table-column-drag.test.ts",
             "marker": "native no-motion and cancelled releases leave no history and reject stale motion"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "GetTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+            "marker": "GetSwTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/layout/tabfrm.ts",
+            "marker": "SwTableMouseGeometry"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/frmedt/fetab.ts",
+            "marker": "GetMouseTabRows"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+            "marker": "RulerRowDrag"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+            "marker": "PaintColumnGuide"
           }
         ],
         "upstream": [
@@ -16121,6 +16377,22 @@
           {
             "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
             "marker": "SvxRuler::CalcMinMax"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::GetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndtbl.cxx",
+            "marker": "SwDoc::SetTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwFEShell::GetMouseTabRows"
+          },
+          {
+            "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+            "marker": "SvxRuler::DragBorders"
           }
         ]
       },
@@ -16146,7 +16418,8 @@
         "Iteration167 implements the represented nonmerged native docnum outline move-table using actual sorted outline index/predecessor range, creation-order assigned styles, lazy adjacent pool styles, occupied-level signed steps, whole-range rejection and actual collection/direct-outline mutation. Matching unoutl SwUndoOutlineLeftRight retains numeric range and signed offset, reuses the same primitive inversely for Undo and identically for Redo. SwEditShell retains native normalized ring order and short-circuit after failure with grouped successful delta history; default displacement one. SwEditWin eligible heading-at-start Tab/ShiftTab calls this native operation and owns the key, replacing unsupported fallback while retaining numbering/table priority and text/limit cases. Core primitive and portable shell history registration remain separated as existing runtime architecture; no snapshot/model/preparation/no-op callback/browser heuristic. Actual core/mounted DOM/production Chromium tests prove bounded behavior. Direct document auto-history, framework Repeat, failed-operation dirty flag, native StartAllAction layout batching, merged para props and conditional collections remain unrepresented/unverified. Full KeyInput/core/UI/list/table parity unverified.253 prior semantic states/defaults/classes/IO exceptions/evidence preserved;2 new partial owners stay unverified,255 modules.429 prior tests428 byte-identical with only exact old unsupported outline-case source-confirmed expectations corrected. Conscious save/open/recovery deviations unchanged.",
         "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
         "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",
-        "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes."
+        "Iteration189 moves table pointer policy to native SwEditWin::changeMousePointer/GetPointer and actual SwCursorShell::IsTableMode instead of a browser SwTab switch. Resize hints are HSizeBar/VSizeBar with native table-mode suppression; enhanced selection retains five native TabSelect glyphs. VCL browser projection owns CSS only and static16x16 X11 source/mask pixels with native hotspots. Literal native enum/switch/owner/asset tests, mounted pointer and real Chromium1280/390 cover represented behavior. Object-selectable arbitration, LibreOfficeKit, remaining pointer families, physical RTL/vertical layout, actual resize drag and complete native window contracts remain unverified; no semantic promotion or registered save/open/recovery changes.",
+        "Iteration194 ports horizontal native GetTabRows fuzzy25twip boundaries and SetTabRows interval-height deltas over connected original cell/row owners. The shared edit-window axis capture shifts subsequent row borders and the table bottom, previews without content/history, and records one SwUndoAttrTable on acceptance. Browser device capture protects editable text selection/drag and preserves cursor/list ownership through cancellation, Enter and Undo/Redo. Flat horizontal LTR and whole-row master/follow measurements are represented; native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row layout and full module/parent parity remain unverified. Registered save/open/recovery deviations unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",

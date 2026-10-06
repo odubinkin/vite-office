@@ -24,6 +24,10 @@ export interface SwTableMouseCell {
 }
 /** One master or follow frame's physical device geometry. */
 export interface SwTableMouseGeometry {
+  /** Actual device page-frame origin for native relative row coordinates. */
+  readonly pageTop?: number;
+  /** Native split-last-row flag; represented whole rows have no follow flow line. */
+  readonly hasFollowFlowLine?: boolean;
   readonly rect: SwTableMouseRect;
   readonly cells: readonly SwTableMouseCell[];
   readonly previous?: SwTableMouseRect;

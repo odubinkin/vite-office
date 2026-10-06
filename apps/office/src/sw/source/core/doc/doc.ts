@@ -9,6 +9,8 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwTable, SwTableBox, SwTableBoxFormat } from "../table/swtable";
 import { SwUndoAttrTable, SwUndoTableNdsChg } from "../undo/untbl";
 import type { SwTabCols } from "../bastyp/tabcol";
+import type { SwTabFrame } from "../layout/tabfrm";
+import { GetSwTabRows, SetSwTabRows } from "../docnode/ndtbl";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
 import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -79,6 +81,20 @@ export interface WriterEmbeddedFont {
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  /** Reads native row geometry over actual physical cell owners. @param result - Output carrier. @param frame - Native frame. @param start - Current cell. @returns Whether represented. */
+  public static GetTabRows(result: SwTabCols, frame: SwTabFrame, start: SwTableBox): boolean {
+    return GetSwTabRows(result, frame, start);
+  }
+  /** Applies native row-height deltas through the source ndtbl owner split. @param next - Requested rows. @param currentColumnOnly - Original hit cell only. @param frame - Physical frame. @param start - Actual cell. @param cursorState - Retained native cursor. @returns Whether changed. */
+  public SetTabRows(
+    next: SwTabCols,
+    currentColumnOnly: boolean,
+    frame: SwTabFrame,
+    start: SwTableBox,
+    cursorState?: SwUndoCursorState,
+  ): boolean {
+    return SetSwTabRows(this, next, currentColumnOnly, frame, start, cursorState);
+  }
   private mbDtor = false;
   private mbInReading = false;
   /** Reports the native document destruction phase. @returns Destruction flag. */

@@ -45,8 +45,9 @@ export class SwEditWin {
   private tableMouseStart: SwTableMousePoint | undefined;
   private tableRowDrag = false;
   private pointer = PointerStyle.Null;
-  private columnDrag:
+  private tableBorderDrag:
     | {
+        readonly axis: "column" | "row";
         readonly start: SwTableMousePoint;
         readonly original: SwTabCols;
         readonly next: SwTabCols;
@@ -121,10 +122,13 @@ export class SwEditWin {
   /** Starts native single-left-click table edge selection and optional capture. @param point - Device position. @param button - Platform button. @param clicks - Native click count. @returns Whether handled. */
   public MouseButtonDown(point: SwTableMousePoint, button = 0, clicks = 1): boolean {
     this.tableMouseStart = undefined;
-    this.columnDrag = undefined;
+    this.tableBorderDrag = undefined;
     if (button !== 0 || clicks !== 1) return false;
     const kind = this.WhichMouseTabCol(point);
-    if (kind === SwTab.COL_HORI && !this.wrtShell.IsTableMode()) return this.RulerColumnDrag(point);
+    if (!this.wrtShell.IsTableMode()) {
+      if (kind === SwTab.COL_HORI) return this.RulerColumnDrag(point);
+      if (kind === SwTab.ROW_HORI) return this.RulerRowDrag(point);
+    }
     if (kind !== SwTab.SEL_HORI && kind !== SwTab.ROWSEL_HORI && kind !== SwTab.COLSEL_HORI)
       return false;
     this.wrtShell.EnterStdMode();
@@ -181,7 +185,8 @@ export class SwEditWin {
         : index === original.Count()
           ? original.GetRight()
           : original.GetEntry(index).nPos;
-    this.columnDrag = {
+    this.tableBorderDrag = {
+      axis: "column",
       start: point,
       original,
       next: new SwTabCols(original),
@@ -196,23 +201,91 @@ export class SwEditWin {
     return true;
   }
 
+  /** Starts native horizontal row-border tracking with the source following-row translation policy. @param point - Actual document hit. @returns Whether admitted. */
+  public RulerRowDrag(point: SwTableMousePoint): boolean {
+    const hit = this.wrtShell.GetBox(point),
+      original = new SwTabCols();
+    if (hit === undefined || !hit.row || !this.wrtShell.GetMouseTabRows(original, point))
+      return false;
+    const rect = (hit.frame.mouseGeometry as NonNullable<SwTabFrame["mouseGeometry"]>).rect,
+      scale = original.GetRight() / (rect.bottom - rect.top),
+      origin = rect.top;
+    let index = -1,
+      distance = Infinity;
+    for (let i = 0; i < original.Count(); i++) {
+      const difference = Math.abs(origin + original.GetEntry(i).nPos / scale - point.y);
+      if (!original.IsHidden(i) && difference <= 5 && difference < distance) {
+        index = i;
+        distance = difference;
+      }
+    }
+    if (index === -1) {
+      if (Math.abs(rect.bottom - point.y) > 5 || !original.IsLastRowAllowedToChange()) return false;
+      index = original.Count();
+    }
+    const minimum =
+        index === original.Count()
+          ? index === 0
+            ? 0
+            : original.GetEntry(index - 1).nPos
+          : original.GetEntry(index).nMin,
+      position = index === original.Count() ? original.GetRight() : original.GetEntry(index).nPos;
+    this.tableBorderDrag = {
+      axis: "row",
+      start: point,
+      original,
+      next: new SwTabCols(original),
+      index,
+      initialPosition: position,
+      origin,
+      scale,
+      minimum: minimum + 5 * scale,
+      maximum: original.GetRightMax(),
+      position,
+    };
+    return true;
+  }
+  /** Reads the transient native guide on its physical axis. @returns Axis and device coordinate or no tracking. */
+  public GetTableBorderDragPosition():
+    Readonly<{ axis: "column" | "row"; position: number }> | undefined {
+    const drag = this.tableBorderDrag;
+    return drag === undefined
+      ? undefined
+      : { axis: drag.axis, position: drag.origin + drag.position / drag.scale };
+  }
+  /** Reads the row tracking coordinate without publishing content. @returns Guide Y or no row tracking. */
+  public GetTableRowDragPosition(): number | undefined {
+    const drag = this.GetTableBorderDragPosition();
+    return drag?.axis === "row" ? drag.position : undefined;
+  }
+
   /** Reads the transient device guide without publishing document content. @returns Current guide X coordinate or no tracking. */
   public GetTableColumnDragPosition(): number | undefined {
-    const drag = this.columnDrag;
-    return drag === undefined ? undefined : drag.origin + drag.position / drag.scale;
+    const drag = this.GetTableBorderDragPosition();
+    return drag?.axis === "column" ? drag.position : undefined;
   }
 
   /** Extends an active native table mouse capture. @param point - Device position. @returns Whether handled. */
   public MouseMove(point: SwTableMousePoint): boolean {
-    const drag = this.columnDrag;
+    const drag = this.tableBorderDrag;
     if (drag !== undefined) {
       drag.position = Math.round(
         Math.max(
           drag.minimum,
-          Math.min(drag.maximum, drag.initialPosition + (point.x - drag.start.x) * drag.scale),
+          Math.min(
+            drag.maximum,
+            drag.initialPosition +
+              (drag.axis === "column" ? point.x - drag.start.x : point.y - drag.start.y) *
+                drag.scale,
+          ),
         ),
       );
-      if (drag.index === -1) drag.next.SetLeft(drag.position);
+      if (drag.axis === "row") {
+        const delta = drag.position - drag.initialPosition;
+        drag.next.Assign(drag.original);
+        for (let i = drag.index; i < drag.next.Count(); i++) drag.next.GetEntry(i).nPos += delta;
+        drag.next.SetRight(drag.original.GetRight() + delta);
+      } else if (drag.index === -1) drag.next.SetLeft(drag.position);
       else if (drag.index === drag.next.Count()) drag.next.SetRight(drag.position);
       else drag.next.GetEntry(drag.index).nPos = drag.position;
       return true;
@@ -225,20 +298,18 @@ export class SwEditWin {
 
   /** Releases table capture and applies only accepted changed native separator geometry. @param cancelled - Discard transient ruler tracking. @param point - Optional final device position. @returns Whether capture was active. */
   public MouseButtonUp(cancelled = false, point?: SwTableMousePoint): boolean {
-    const drag = this.columnDrag,
+    const drag = this.tableBorderDrag,
       captured = this.tableMouseStart !== undefined || drag !== undefined;
     if (!cancelled && point !== undefined && drag !== undefined) this.MouseMove(point);
     this.tableMouseStart = undefined;
-    this.columnDrag = undefined;
+    this.tableBorderDrag = undefined;
     if (drag !== undefined && !cancelled) {
-      const before =
-        drag.index === -1
-          ? drag.original.GetLeft()
-          : drag.index === drag.original.Count()
-            ? drag.original.GetRight()
-            : drag.original.GetEntry(drag.index).nPos;
-      if (before !== drag.position)
-        this.Complete(this.wrtShell.SetMouseTabCols(drag.next, false, drag.start));
+      if (drag.initialPosition !== drag.position)
+        this.Complete(
+          drag.axis === "row"
+            ? this.wrtShell.SetMouseTabRows(drag.next, false, drag.start)
+            : this.wrtShell.SetMouseTabCols(drag.next, false, drag.start),
+        );
     }
     return captured;
   }

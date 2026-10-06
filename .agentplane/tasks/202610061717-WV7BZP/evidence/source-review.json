@@ -1,0 +1,19 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/docvw/edtwin.cxx": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3",
+    "svx/source/dialog/svxruler.cxx": "4289126ba34117e4c8c7b5cee3cba3ab8c7858f9386b93c073ae55c386081f9a"
+  },
+  "contracts": [
+    "Native GetTabRows collects actual cell top/bottom positions with ROWFUZZY25, lower-border minima and selected-column visibility, relative to the actual page/frame. Default horizontal Left0, Right measured print height, RightMaxLONGMAX; outer boundaries removed; follow-flow last-row flag retained. Native connected carrier admission makes the first boundary nonempty.",
+    "SetTabRows compares old/new interval heights and admits absolute differences>=25, finds original actual cells/lines and text content, applies measured height plus delta as the existing minimum format, groups one SwUndoAttrTable and retains the original PaM/list/table/row/box/paragraph owners.",
+    "Default SvxRuler DragBorders row tracking translates all following borders and Margin2. Shared axis draft/guide supports source5device-pixel minima, grow/shrink/bottom, no preview/history mutation, release/Enter acceptance, Escape/blur/teardown cancellation and stale/detached/foreign guards. Existing column APIs/contracts retained.",
+    "Native SwEditWin MouseButtonDown GrabFocus precedes source RulerColumnDrag. Browser border capture now focuses its editing host before suppressing platform text drag/selection, retaining the original PaM. Real Chromium verifies immediate continued typing after toolbarUndoRedo then border acceptance.",
+    "ONE full absent profile:13035appPASS,108inventoryPASS1FAIL on metadata sorting,5scriptsPASS,221oldChromiumPASS2newFAIL on continued typing. Closure1:new4appPASS24SKIP;original1inventoryFAIL on renamed registered private guide symbol;original2ChromiumFAIL on missing native GrabFocus. Closure2:new1focusappPASS6SKIP,original1inventoryPASS2SKIP,original2ChromiumPASS. Global focused coverage exits reflect filtered suites; final actual100 composed with complete source/map proofs. No historical passing/full replay.",
+    "All504 old acceptance files byte-identical+4new=508;275 previous contracts/prefixes retained+1new native source owner=276; registered filename and I/O exceptions unchanged. Source provenance rejects an unnecessary filename exception for native-named ndtbl; removed without changing prior exceptions. Full native modifiers/proportional/vertical/RTL/merged/nested/protected/split-row and full module/parent/goal parity remain unverified. Deferred THKZ38 stash preserved."
+  ]
+}
