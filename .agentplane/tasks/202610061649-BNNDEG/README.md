@@ -1,10 +1,11 @@
 ---
 id: "202610061649-BNNDEG"
 title: "Prevent Writer list labels from overlapping item text"
-status: "DOING"
+result_summary: "Implemented bounded label-width minimum and native legacy gap;13011app109inventory5scripts221Chrome current cases PASS without upstream, actual100 coverage,502oldtests and275metadata prefixes preserved. Full parity remains unverified."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202610061649-BNNDEG/evidence/governance.json"
   findings:
     - "Intrinsic glyph width plus native minimum distance prevents label/text overlap; original four-field listLayout and all502 prior acceptance files remain unchanged. Current acceptance13011app109inventory5scripts221Chromium PASS, actual100 app/inventory with strict source proof. Full native list/tab/font/continued-line layout and parent parity remain unverified."
-commit: null
+commit:
+  hash: "e625c6f3b56279490cd3fc9292afa2a3ee2f4d92"
+  message: "🚧 BNNDEG code: reserve native occupied list-label width"
 comments:
   -
     author: "CODER"
     body: "Start: explicit priority bullet-overlap fix and continuing authorized native UI parity; bounded intrinsic label width with upstream-absent verification."
+  -
+    author: "CODER"
+    body: "Verified: native intrinsic occupied label width prevents bullet/text overlap; old contracts preserved and all declared checks recorded at implementation e625c6f3b562."
 events:
   -
     type: "status"
@@ -68,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92 passes declared occupied-label criteria;13011app109inventory5scripts221Chromium PASS, actual100 source-proven coverage,502historical tests and275metadata prefixes unchanged. Restore canonical blueprint verification after final prose; no test replay."
+  -
+    type: "status"
+    at: "2026-10-06T17:12:21.896Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native intrinsic occupied label width prevents bullet/text overlap; old contracts preserved and all declared checks recorded at implementation e625c6f3b562."
 doc_version: 3
-doc_updated_at: "2026-10-06T17:12:04.292Z"
+doc_updated_at: "2026-10-06T17:12:21.897Z"
 doc_updated_by: "CODER"
 description: "Priority iteration193: match pinned SwNumberPortion minimum occupied width in the existing browser paragraph renderer; preserve native list ownership/defaults and all existing acceptance contracts."
 sections:
