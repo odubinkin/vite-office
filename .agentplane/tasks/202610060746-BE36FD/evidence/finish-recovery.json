@@ -1,0 +1,7 @@
+{
+  "command": "ap finish with explicit implementation hash and default close commit",
+  "exit": 5,
+  "failure": "clean tracked tree required; owner-scoped README verification record was not yet committed",
+  "taskState": "DOING; finish stopped before task state mutation",
+  "resolution": "Commit only recorded verification and bounded recovery metadata, then finish using explicit implementation a79ea63f62f50eaeed5697d813b9b6818713033d; no code or test replay."
+}
