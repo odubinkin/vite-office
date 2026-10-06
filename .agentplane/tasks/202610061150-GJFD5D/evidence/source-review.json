@@ -1,0 +1,19 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSHA256": {
+    "sw/source/core/access/accpara.cxx": "e83b0fcae42db297488d43e45d46a34cb14e1a5399181348a5db3bdead4ef6a1",
+    "sw/source/uibase/dochdl/swdtflvr.cxx": "78895e81d445a0c60a1793e91a90598718072d4c41d43fc6c7287fdd464059ee",
+    "sw/source/filter/ascii/ascatr.cxx": "0417b547fc622a363704bfe879084d0e5c1de91fa20c109532e379be37e4c9b9"
+  },
+  "reviewer": "Same current agent; local source reading only, no upstream execution",
+  "contracts": [
+    "SwAccessibleParagraph::getAccessibleDescription returns empty OUString (line638).",
+    "getText returns GetString; getTextRange takes the substring of that string (lines2047/2056).",
+    "getCharacterAttributes retrieves formatting separately (line1169); no synthetic style/list description text is inserted into selected paragraph content.",
+    "Shared React paragraph renderer removes the hidden metadata span and its useId/aria-describedby registry while retaining existing native text/identity/formatting/visual marker owners.",
+    "SwTransferable PrepareForCopyTextRange admits the source PaM document and delegates native CopyRange; local body-only array/order helper removed. Existing MIME writers remain bounded.",
+    "ASCII source uses export numbering and single-paragraph selection flags. Existing local multiple-complete-list-item heuristic remains unchanged; full ASCII/HTML list/table clipboard parity is unverified and a later native UI refactor candidate.",
+    "Native numbering-label selection, line decorations, cursor rings/box clipboard topology, complete accessibility and broad core/UI parity remain unverified."
+  ]
+}

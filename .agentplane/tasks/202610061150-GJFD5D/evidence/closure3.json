@@ -1,0 +1,25 @@
+{
+  "profile": "upstream-absent original four app/two Chromium failures and two genuine graph/ownership cases only",
+  "records": [
+    {
+      "kind": "app-closure3",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-paragraph-text-surface.test.tsx --testNamePattern copies native .* cell labels --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/GJFD5D.app-closure3-results.json",
+      "exit": 0,
+      "bytes": 683,
+      "sha256": "7a056e41e31892f1149acf5f5f4a350ec983d6d148dee517f07beab4bcd9a806",
+      "failedCases": [],
+      "counts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 9,
+        "total": 11
+      },
+      "mapSHA256": "5ba4e00c544c5388f82461d0f5cc817de2d0ecd6432de37c5ffae5e2047b10d1"
+    }
+  ],
+  "vendorRestored": true,
+  "sourceSHA256": {
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "dbc860f53ed0dc01299020b6de2d4fa5ac81a4c8c29283c6528fa7829a994109",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "5f6a0070ce2f6b98b84f598e83f90cc2f407357f7779fd2eb96654ad2fbde01b"
+  }
+}

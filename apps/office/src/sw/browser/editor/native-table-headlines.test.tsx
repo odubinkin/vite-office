@@ -145,24 +145,15 @@ describe("native repeated table headline UI", /** Registers actual shared-node d
       else Object.defineProperty(Range.prototype, "getClientRects", original);
     }
   });
-  it("paints shared original rows with unique descriptions and no repeated row gutter", /** Checks native frame/model and DOM ownership. @returns Nothing. */ () => {
+  it("paints shared original rows with empty descriptions and no repeated row gutter", /** Checks native frame/model and DOM ownership. @returns Nothing. */ () => {
     const f = fixture(),
       copies = headers();
     expect(copies).toHaveLength(3);
-    const ids = new Set(
-      copies.map(
-        /** Reads an occurrence description ID. @param element - Actual header. @returns ID. */ (
-          element,
-        ) => element.getAttribute("aria-describedby"),
-      ),
-    );
-    expect(ids.size).toBe(3);
     for (const element of copies) {
       expect(element).toHaveTextContent("Header");
       expect(element).toHaveAttribute("data-writer-node-index", String(f.header.GetIndex()));
-      expect(
-        document.getElementById(element.getAttribute("aria-describedby") as string),
-      ).toBeTruthy();
+      expect(element).not.toHaveAttribute("aria-describedby");
+      expect(element).not.toHaveAccessibleDescription();
     }
     expect(
       f.mounted.container.querySelectorAll('[data-writer-repeated-headline="true"]'),

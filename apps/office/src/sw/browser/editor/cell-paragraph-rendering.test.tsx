@@ -117,7 +117,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
     ["bullet", "•"],
   ] as const)(
     "renders the native %s label in the cell",
-    /** Checks real numbering owner and shared accessible description. @param kind - Native kind. @param label - Literal supported label. @returns Nothing. */ (
+    /** Checks real numbering owner and empty native description. @param kind - Native kind. @param label - Literal supported label. @returns Nothing. */ (
       kind,
       label,
     ) => {
@@ -129,9 +129,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
       expect(owner.node.GetListLabel()).toBe(label);
       expect(screen.getByTestId("writer-list-marker-" + id)).toHaveTextContent(label);
       expect(cell).toHaveAttribute("data-list-kind", kind);
-      expect(cell).toHaveAccessibleDescription(
-        new RegExp("Paragraph list: " + (kind === "bullet" ? "Unordered" : "Ordered") + " List"),
-      );
+      expect(cell).not.toHaveAccessibleDescription();
       expect(owner.doc.paragraphs[0]?.GetListKind()).toBe("none");
     },
   );
@@ -169,7 +167,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
     expect(cell).toHaveAttribute("data-list-kind", "numbered");
     expect(owner.neighbor.GetParagraphAlignment()).toBe("left");
   });
-  it("keeps style descriptions unique across the body and cell paragraphs", /** Checks stable native identity rather than duplicate ordinal IDs. @returns Nothing. */ () => {
+  it("keeps native identities and empty descriptions across body and cell paragraphs", /** Checks native text owners and source-backed empty descriptions. @returns Nothing. */ () => {
     const owner = fixture();
     owner.shell.SetParagraphStyle("heading-1");
     mount(owner);
@@ -177,8 +175,13 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
       body = screen.getByRole("textbox", { name: "Writer document text" });
     expect(cell).toHaveAttribute("data-style", "heading-1");
     expect(cell).toHaveStyle({ fontSize: "18pt", fontWeight: "700" });
-    expect(cell.getAttribute("aria-describedby")).not.toBe(body.getAttribute("aria-describedby"));
-    expect(cell).toHaveAccessibleDescription(/Heading 1/);
+    expect(cell.getAttribute("data-writer-paragraph-id")).not.toBe(
+      body.getAttribute("data-writer-paragraph-id"),
+    );
+    for (const element of [body, cell]) {
+      expect(element).not.toHaveAttribute("aria-describedby");
+      expect(element).not.toHaveAccessibleDescription();
+    }
   });
   it("uses the same paragraph style and native list label on the closed measurement surface", /** Checks native display inputs are shared without another attribute renderer. @returns Nothing. */ () => {
     const owner = fixture(),

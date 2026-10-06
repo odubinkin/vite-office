@@ -2982,6 +2982,14 @@
           {
             "path": "apps/office/e2e/writer-table-headlines.spec.ts",
             "marker": "Writer repeated table headlines edit the original native header"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+            "marker": "native paragraph text surface"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts",
+            "marker": "Writer native text surface cell="
           }
         ],
         "upstream": [
@@ -3048,6 +3056,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
             "marker": "Repeat the headlines."
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/access/accpara.cxx",
+            "marker": "SwAccessibleParagraph::getAccessibleDescription"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/access/accpara.cxx",
+            "marker": "SwAccessibleParagraph::getText()"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/access/accpara.cxx",
+            "marker": "SwAccessibleParagraph::getTextRange"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/access/accpara.cxx",
+            "marker": "SwAccessibleParagraph::getCharacterAttributes"
           }
         ]
       },
@@ -3068,7 +3092,8 @@
       "status": "local-only",
       "preservedResponsibilities": [
         "Iteration146 routes Ctrl/Meta HomeEnd through SwEditWin and native shell section movement. SwCursor resolves actual cell,table and document sentinel endpoints,first0/lastLen;MoveSection reports unchanged false,raw MoveTable accepts unchanged but rejects marked ordinary cursors,SttEndDoc accepts current document boundary. Shell owns cell then table then document order,independent bounded SwTableCursor conversion using current cell boundary as native table mark,ordinary cursor mark deletion,selection setup and pending/history refresh. DOM translates intent and direction only,no ordinal,sibling,TextRuns or navigation DTO decisions. Native,mounted and Chromium cases cover represented flat-table behavior. Full selected-box painting,cursor rings,protected/merged/nested/redline/layout selection and visual-line HomeEnd remain unverified;all existing246states/defaults/classifications and registered save/open/recovery deviations preserved. Chromium observed that old separate per-paragraph editable hosts clipped real multi-paragraph cell selection. Their overrides and the table noneditable wrapper are removed so existing document host owns all cell text;native decisions stay in core. Failed-only final-source Chromium and new host/split/join cases cover this correction.",
-        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved."
+        "Iteration173 restores existing repeated table headline functionality through native SwTable count/unsigned/capped ownership and original-row follow-frame state. Existing row-only formatter accounts measured repeated height, keeps master headlines with first nonsplittable body row, disables ordinary oversized headers to prevent loops, and retains unchanged frame identity. Browser reuses actual original cell/text projections and one edit window/history,distinct DOM descriptions,frame-local registration/current occurrence resolution; repeated headline row-selection gutter omitted as native table-mode restriction. Full nested/merged/rowspan/row splitting,cross-box repeated table selection,vertical/RTL/fly/multicolumn/protection/native frame/core/UI parity remains unverified; prior semantic states/defaults/classes/IO exceptions and registered save/open/recovery deviations preserved.",
+        "Iteration186 removes the synthetic hidden Paragraph style/list description span, React description ID and aria-describedby registry from the shared body/cell/measurement/repeated-headline renderer. Pinned SwAccessibleParagraph getAccessibleDescription returns empty; getText/getTextRange expose actual paragraph strings and getCharacterAttributes owns formatting separately. Native paragraph identities, portion text, labels, visual numbering/line decorations and formatting controls retain their existing owners. Actual mounted and Chromium forward/reverse body/cell selections, native clipboard, contextual Ctrl/Meta A, formatting and replacement Undo/Redo cover this bounded removal. Earlier claims about unique synthetic descriptions are superseded for this slice. Native numbering-label selection, line decorations and complete accessibility/core/UI parity remain unverified. All270 semantic states/defaults/classes and prior evidence/responsibility/justification prefixes and conscious save/open/recovery deviations remain unchanged."
       ]
     },
     {
@@ -15406,12 +15431,24 @@
           {
             "marker": "SwTransferable",
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+            "marker": "native paragraph text surface"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts",
+            "marker": "Writer native text surface cell="
           }
         ],
         "upstream": [
           {
             "marker": "SwTransferable::SwTransferable",
             "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx",
+            "marker": "SwTransferable::PrepareForCopyTextRange"
           }
         ]
       },
@@ -15431,7 +15468,8 @@
       ],
       "preservedResponsibilities": [
         "Prepares HTML/STRING transfer content exclusively from SwDoc and SwPaM model state, copies before deleting on cut, and prefers rich HTML to plain text in the browser port, mirroring LibreOffice Writer's sw/source/uibase/dochdl/swdtflvr.cxx ownership boundary.",
-        "Iteration184 removes SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations callback layers. Split shell algorithms accept the actual SwWrtShell identity via erased type-only imports and invoke native cursor/document/history/notification methods directly. Transfer insertion and imported list history call the same actual shell directly; no synthetic editing object, callback port, runtime cycle or new DTO projection. The shell alone supplies its native undo context for sequential initial operations. Existing482 test files and represented algorithm ordering/admission/grouping/attributes/table sections/composition and registered I/O deviations are preserved. No native clipboard/layout/mode/default or semantic-status promotion."
+        "Iteration184 removes SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations callback layers. Split shell algorithms accept the actual SwWrtShell identity via erased type-only imports and invoke native cursor/document/history/notification methods directly. Transfer insertion and imported list history call the same actual shell directly; no synthetic editing object, callback port, runtime cycle or new DTO projection. The shell alone supplies its native undo context for sequential initial operations. Existing482 test files and represented algorithm ordering/admission/grouping/attributes/table sections/composition and registered I/O deviations are preserved. No native clipboard/layout/mode/default or semantic-status promotion.",
+        "Iteration186 removes existing body-only document.paragraphs transfer ordering/slicing and its local orderPositions helper after real cell-copy acceptance proved the adapter rejects actual cell PaMs. SwPaM.Start/End and SwNodes connected text spans now own native ordering and offsets, preserving empty selected paragraphs and foreign-document/collapsed rejection. Existing HTML/ASCII writers retain MIME ownership. Actual forward/reverse partial and full cell selection, mixed body/cell graph excluding structural nodes, empty paragraph, foreign/collapsed and selected replacement/history cases provide bounded evidence. Upstream PrepareForCopyTextRange owns source PaM document and delegates CopyRange. This is bounded text transfer, not complete native copied table topology, cursor rings/box MIME, fields/redlines/embedded content or rich clipboard parity; prior semantic statuses/defaults/classes/evidence and conscious I/O/recovery deviations remain unchanged."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",

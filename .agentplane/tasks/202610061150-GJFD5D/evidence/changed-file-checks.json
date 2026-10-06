@@ -1,0 +1,35 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on eight changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": 278,
+        "apps/office/src/framework/browser/app/desktop.test.tsx": 544,
+        "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx": 255,
+        "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx": 277,
+        "apps/office/e2e/writer-lists.spec.ts": 72,
+        "apps/office/e2e/writer-cell-paragraph-format.spec.ts": 66,
+        "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx": 200,
+        "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts": 109
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx apps/office/src/framework/browser/app/desktop.test.tsx apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx apps/office/src/sw/browser/editor/native-table-headlines.test.tsx apps/office/e2e/writer-lists.spec.ts apps/office/e2e/writer-cell-paragraph-format.spec.ts apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx apps/office/e2e/writer-native-paragraph-text-surface.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx apps/office/src/framework/browser/app/desktop.test.tsx apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx apps/office/src/sw/browser/editor/native-table-headlines.test.tsx apps/office/e2e/writer-lists.spec.ts apps/office/e2e/writer-cell-paragraph-format.spec.ts apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx apps/office/e2e/writer-native-paragraph-text-surface.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

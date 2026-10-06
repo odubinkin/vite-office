@@ -1,0 +1,9 @@
+{
+  "scope": "New leaf subtree only; no repeated full AP census. Previous forbidden-source cleanup and historic app QA screenshot preserved.",
+  "filesAudited": 16,
+  "forbiddenArtifacts": [],
+  "vendorRestored": true,
+  "rawDataDestination": "ignored apps/office/node_modules/.cache/parity-coverage",
+  "upstreamSourceInArtifacts": false,
+  "executableHelperInArtifacts": false
+}

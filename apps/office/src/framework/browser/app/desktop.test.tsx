@@ -174,7 +174,7 @@ describe("App" /**
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
     expect(firstParagraph).toHaveStyle({ fontSize: "18pt" });
-    expect(firstParagraph).toHaveAccessibleDescription(/Paragraph style: Heading 1/);
+    expect(firstParagraph).not.toHaveAccessibleDescription();
     expect(
       within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByText(
         "Heading 1",
@@ -315,7 +315,7 @@ describe("App" /**
     const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Unordered List" }));
     expect(screen.getByTestId(`writer-list-marker-${paragraphId}`)).toHaveTextContent("•");
-    expect(paragraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
+    expect(paragraph).not.toHaveAccessibleDescription();
     expect(paragraph.textContent).not.toContain("•");
     expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
     expect(within(formattingToolbar).getByRole("button", { name: "Decrease" })).toBeDisabled();

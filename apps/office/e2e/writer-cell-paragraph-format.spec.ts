@@ -31,7 +31,7 @@ test("Writer cell paragraph alignment and native list display survive history an
     marker = page.locator('[data-writer-list-marker="' + id + '"]');
   await expect(marker).toHaveText("1.");
   await expect(cell).toHaveAttribute("data-list-kind", "numbered");
-  await expect(cell).toHaveAccessibleDescription(/Paragraph list: Ordered List/);
+  await expect(cell).toHaveAccessibleDescription("");
   await cell.press("Control+z");
   await expect(marker).toHaveCount(0);
   await expect(cell).toHaveCSS("text-align", "center");

@@ -1,0 +1,36 @@
+{
+  "profile": "upstream-absent original four app/two Chromium failures and two genuine graph/ownership cases only",
+  "records": [
+    {
+      "kind": "app-closure2",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-paragraph-text-surface.test.tsx --testNamePattern copies native .* cell labels --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/GJFD5D.app-closure2-results.json",
+      "exit": 1,
+      "bytes": 1488,
+      "sha256": "5a9a11efc512ff157ceb5b60f39dabcc3e10fafbcd5843beacbb72cd1c1b71e6",
+      "failedCases": [
+        {
+          "file": "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+          "name": "native paragraph text surface copies native bullet cell labels only for complete selected paragraphs",
+          "message": "AssertionError: expected 'Alpha\\nOmega' to be '• Alpha\\nOmega' // Object.is equality\n    at /Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx:108:31\n    at file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/runner"
+        },
+        {
+          "file": "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+          "name": "native paragraph text surface copies native numbered cell labels only for complete selected paragraphs",
+          "message": "AssertionError: expected 'Alpha\\nOmega' to be '1. Alpha\\nOmega' // Object.is equality\n    at /Users/odubinkin/Projects/vite-office/apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx:108:31\n    at file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/runner/dist/chunk-artifact.js:2027:60\n    at file:///Users/odubinkin/Projects/vite-office/node_modules/@vitest/runne"
+        }
+      ],
+      "counts": {
+        "passed": 0,
+        "failed": 2,
+        "skipped": 9,
+        "total": 11
+      },
+      "mapSHA256": "2ba01438e6bfcd6b1cb5e76b4bedebd1bbddf1c745cf09e1605baacb8238dda9"
+    }
+  ],
+  "vendorRestored": true,
+  "sourceSHA256": {
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "dbc860f53ed0dc01299020b6de2d4fa5ac81a4c8c29283c6528fa7829a994109",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "5f6a0070ce2f6b98b84f598e83f90cc2f407357f7779fd2eb96654ad2fbde01b"
+  }
+}

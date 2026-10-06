@@ -1,0 +1,34 @@
+{
+  "base": "66827dd6915e5d8534a8b93454d10877e02e9c5e",
+  "semanticPaths": [
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+    "apps/office/src/framework/browser/app/desktop.test.tsx",
+    "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx",
+    "apps/office/e2e/writer-lists.spec.ts",
+    "apps/office/e2e/writer-cell-paragraph-format.spec.ts",
+    "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+    "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
+  ],
+  "oldTestFiles": 485,
+  "byteIdenticalOldTestFiles": 480,
+  "changedOldTests": [
+    "apps/office/e2e/writer-cell-paragraph-format.spec.ts",
+    "apps/office/e2e/writer-lists.spec.ts",
+    "apps/office/src/framework/browser/app/desktop.test.tsx",
+    "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+    "apps/office/src/sw/browser/editor/native-table-headlines.test.tsx"
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+    "apps/office/e2e/writer-native-paragraph-text-surface.spec.ts"
+  ],
+  "priorSemanticModules": 270,
+  "currentSemanticModules": 270,
+  "priorStatesDefaultsClassificationsAndJustificationPreserved": true,
+  "evidenceChange": "All existing evidence/responsibilities/justification prefixes retained; source-backed contextual selection additions only.",
+  "failures": []
+}

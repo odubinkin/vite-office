@@ -1,6 +1,6 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
 
-import { Fragment, useId, useRef } from "react";
+import { Fragment, useRef } from "react";
 import { browserFontFamily } from "./writer-font-family";
 
 import type {
@@ -38,7 +38,6 @@ export function WriterEditableParagraph({
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
-  const styleDescriptionId = `writer-paragraph-style-${useId()}`;
   const label =
     cellPosition === undefined
       ? index === 0
@@ -78,12 +77,6 @@ export function WriterEditableParagraph({
           </span>
         ),
       )}
-      <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
-        Paragraph style: {paragraph.styleDisplayName}
-        {listMarker === undefined
-          ? ""
-          : ` Paragraph list: ${paragraph.list.kind === "bullet" ? "Unordered List" : "Ordered List"}.`}
-      </span>
       <div
         className={listMarker === undefined ? "" : "flex items-start"}
         style={{ marginInlineStart: listMarker === undefined ? undefined : `${markerStartPt}pt` }}
@@ -122,7 +115,6 @@ export function WriterEditableParagraph({
           </span>
         )}
         <p
-          aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
           data-writer-table-cell={

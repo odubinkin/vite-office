@@ -8,7 +8,6 @@ import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
 import type { WriterTransferParagraph } from "../../filter/basflt/writer-transfer";
 import { SwPosition, type WriterTextRange } from "../../core/crsr/pam";
-import type { SwDoc } from "../../core/doc/doc";
 import type { SwNode } from "../../core/docnode/node";
 import type {
   SwTextFragment,
@@ -155,68 +154,55 @@ export class SwTransferable {
     const document = this.shell.GetDoc();
     const pam = this.shell.GetCursor();
     if (!pam.HasMark()) return undefined;
-    const ordered = orderPositions(document, pam.GetPoint(), pam.GetMark());
-    const startIndex = document.paragraphs.indexOf(ordered.start.GetNode() as SwTextNode);
-    const endIndex = document.paragraphs.indexOf(ordered.end.GetNode() as SwTextNode);
-    if (startIndex < 0 || endIndex < 0) return undefined;
-    if (
-      startIndex === endIndex &&
-      ordered.start.GetContentIndex() === ordered.end.GetContentIndex()
-    )
-      return undefined;
-    const paragraphs = document.paragraphs.slice(startIndex, endIndex + 1).map(
-      /** Prepares one selected model paragraph. @param paragraph - Selected text node. @param relativeIndex - Index within the selected slice. @returns Format-writer paragraph input. */ (
-        paragraph,
-        relativeIndex,
-      ): WriterTransferParagraph => {
-        const index = startIndex + relativeIndex;
-        const start = index === startIndex ? ordered.start.GetContentIndex() : 0;
-        const end = index === endIndex ? ordered.end.GetContentIndex() : paragraph.Len();
-        const runs = getSelectedRuns(paragraph, start, end);
-        const complete = start === 0 && end === paragraph.Len();
-        const listKind = complete ? paragraph.GetListKind() : "none";
-        const number = listKind === "numbered" ? paragraph.GetListItemNumber() : undefined;
-        const marker =
-          listKind === "bullet"
-            ? getWriterNumFormatBullet(paragraph.GetNumRule()?.Get(paragraph.GetAttrListLevel()))
-            : number === undefined
-              ? undefined
-              : `${number}.`;
-        return {
-          html: serializeRuns(runs),
-          listKind,
-          listLevel: complete ? paragraph.GetAttrListLevel() : 0,
-          marker,
-          style: getModelParagraphStyle(paragraph),
-          text: runs
-            .map(
-              /** Reads one selected run's text. @param run - Selected run. @returns Visible text. */ (
-                run,
-              ) => run.text,
-            )
-            .join(""),
-        };
-      },
-    );
+    if (pam.GetPoint().GetNode().GetNodes() !== document.GetNodes()) return undefined;
+    const first = pam.Start(),
+      last = pam.End();
+    if (first.compare(last) === 0) return undefined;
+    const paragraphs = document
+      .GetNodes()
+      .entries()
+      .slice(first.GetNodeIndex(), last.GetNodeIndex() + 1)
+      .filter(
+        /** Retains text owners from the actual native range, including cells and empty paragraphs. @param node - Connected native node. @returns Whether the node owns text. */
+        (node): node is SwTextNode => node.IsTextNode(),
+      )
+      .map(
+        /** Prepares one selected model paragraph. @param paragraph - Selected text node. @returns Format-writer paragraph input. */ (
+          paragraph,
+        ): WriterTransferParagraph => {
+          const start = paragraph === first.GetNode() ? first.GetContentIndex() : 0;
+          const end = paragraph === last.GetNode() ? last.GetContentIndex() : paragraph.Len();
+          const runs = getSelectedRuns(paragraph, start, end);
+          const complete = start === 0 && end === paragraph.Len();
+          const listKind = complete ? paragraph.GetListKind() : "none";
+          const number = listKind === "numbered" ? paragraph.GetListItemNumber() : undefined;
+          const marker =
+            listKind === "bullet"
+              ? getWriterNumFormatBullet(paragraph.GetNumRule()?.Get(paragraph.GetAttrListLevel()))
+              : number === undefined
+                ? undefined
+                : `${number}.`;
+          return {
+            html: serializeRuns(runs),
+            listKind,
+            listLevel: complete ? paragraph.GetAttrListLevel() : 0,
+            marker,
+            style: getModelParagraphStyle(paragraph),
+            text: runs
+              .map(
+                /** Reads one selected run's text. @param run - Selected run. @returns Visible text. */ (
+                  run,
+                ) => run.text,
+              )
+              .join(""),
+          };
+        },
+      );
     return {
       html: serializeWriterClipboardHtml(paragraphs),
       plainText: serializeWriterClipboardPlainText(paragraphs),
     };
   }
-}
-
-/** Orders persistent Writer positions in document order. @param document - Owning Writer document. @param left - First endpoint. @param right - Second endpoint. @returns Ordered start and end positions. */
-function orderPositions(
-  document: SwDoc,
-  left: SwPosition,
-  right: SwPosition,
-): Readonly<{ end: SwPosition; start: SwPosition }> {
-  const leftIndex = document.paragraphs.indexOf(left.GetNode() as SwTextNode);
-  const rightIndex = document.paragraphs.indexOf(right.GetNode() as SwTextNode);
-  const leftFirst =
-    leftIndex < rightIndex ||
-    (leftIndex === rightIndex && left.GetContentIndex() <= right.GetContentIndex());
-  return leftFirst ? { end: right, start: left } : { end: left, start: right };
 }
 
 /** Copies a normalized run slice without mutating the source node. @param paragraph - Source text node. @param start - Inclusive UTF-16 offset. @param end - Exclusive UTF-16 offset. @returns Selected normalized runs. */

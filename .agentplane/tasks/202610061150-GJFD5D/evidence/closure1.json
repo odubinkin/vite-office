@@ -1,0 +1,49 @@
+{
+  "profile": "upstream-absent original four app/two Chromium failures and two genuine graph/ownership cases only",
+  "records": [
+    {
+      "kind": "build-changed",
+      "command": "npm run test:static",
+      "exit": 0,
+      "bytes": 1103,
+      "sha256": "6e0c5368ee03922bc8faf9475a3cc6c44ba68a1a8056cbb5fae3d68d644e9b42",
+      "failedCases": []
+    },
+    {
+      "kind": "app-closure1",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-paragraph-text-surface.test.tsx --testNamePattern keeps body/cell=true|ctrlKey selects actual cell|metaKey selects actual cell|copies actual mixed|retains empty selected --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=json-summary --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/GJFD5D.app-closure1-results.json",
+      "exit": 0,
+      "bytes": 774,
+      "sha256": "f85c9f2315bc22b04a5cb6f084c1b44ef6b8154e061ceeddd4a4286e87580a19",
+      "failedCases": [],
+      "counts": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 3,
+        "total": 9
+      },
+      "mapSHA256": "f5b0fc107eb79af5dbd0178327c607351710d33d97e61867207d08376fc675ed"
+    },
+    {
+      "kind": "chromium-closure1",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-paragraph-text-surface.spec.ts --grep cell=true --reporter=list,json",
+      "exit": 0,
+      "bytes": 679,
+      "sha256": "d5cbc7e80ff212296c40a5b40de3c3bddec33ecb9cf1f9e1bcc0e83c130eaea7",
+      "failedCases": [],
+      "counts": {
+        "startTime": "2026-10-06T12:09:53.023Z",
+        "duration": 2556.554,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ],
+  "vendorRestored": true,
+  "sourceSHA256": {
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx": "dbc860f53ed0dc01299020b6de2d4fa5ac81a4c8c29283c6528fa7829a994109",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": "5f6a0070ce2f6b98b84f598e83f90cc2f407357f7779fd2eb96654ad2fbde01b"
+  }
+}

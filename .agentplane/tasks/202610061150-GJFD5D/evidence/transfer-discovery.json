@@ -1,0 +1,12 @@
+{
+  "source": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+  "initialSourceSHA256": "03f521e0d5693e785da8bb0392997a07891249f3df7757a0a9aa2c27bcc4d871",
+  "baseline": "66827dd6915e5d8534a8b93454d10877e02e9c5e",
+  "sourceByteIdenticalToBaselineBeforeCorrection": true,
+  "originalFailures": {
+    "application": 4,
+    "chromium": 2
+  },
+  "reason": "Body-only document.paragraphs rejects native cell positions; direct SwPaM/SwNodes range ownership required. No copy assertions relaxed.",
+  "upstream": "SwTransferable::PrepareForCopyTextRange asserts source PaM document and calls native CopyRange."
+}

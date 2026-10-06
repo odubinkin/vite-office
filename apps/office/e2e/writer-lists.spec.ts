@@ -45,7 +45,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and persistent f
   await page.getByRole("menuitemradio", { exact: true, name: "Unordered List" }).click();
   await expect(secondMarker).toHaveText("•");
   await expect(secondParagraph).toHaveText("Second list item");
-  await expect(secondParagraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
+  await expect(secondParagraph).toHaveAccessibleDescription("");
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { name: "Demote Outline Level" }).click();

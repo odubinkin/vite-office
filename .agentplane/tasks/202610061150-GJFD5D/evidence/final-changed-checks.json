@@ -1,0 +1,36 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on two newly changed core/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts": 340,
+        "apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx": 226
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts apps/office/src/sw/browser/editor/native-paragraph-text-surface.test.tsx --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    },
+    {
+      "command": "npm exec -- tsc --project apps/office/tsconfig.json --noEmit",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "diagnostics": []
+    }
+  ]
+}
