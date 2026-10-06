@@ -4,7 +4,7 @@ title: "Route table properties through native editing and history owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T05:50:35.240Z"
+  updated_by: "CODER"
+  note: "PASS bounded native table-property handoff,selection scopes and grouped attribute history at implementation 2513804194e3fd2fe3055acae26d795712d4b729; sameagent quality 20261006-044923325-recovery-context. Actual12731app109inventory5scripts167Chrome PASS,actual100coverage,456prior testfiles259semantic contracts preserved. ONE full absentprofile;only2app2Chrome originalfailure closure;no upstream execution/APsources/helpers/no passingreplay/vendorrestored. CompletecoreUI/tableparityUNVERIFIED,goalACTIVE,parentDOING."
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native table-property ownership under standing iterative approval."
+  -
+    type: "verify"
+    at: "2026-10-06T05:50:35.240Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS bounded native table-property handoff,selection scopes and grouped attribute history at implementation 2513804194e3fd2fe3055acae26d795712d4b729; sameagent quality 20261006-044923325-recovery-context. Actual12731app109inventory5scripts167Chrome PASS,actual100coverage,456prior testfiles259semantic contracts preserved. ONE full absentprofile;only2app2Chrome originalfailure closure;no upstream execution/APsources/helpers/no passingreplay/vendorrestored. CompletecoreUI/tableparityUNVERIFIED,goalACTIVE,parentDOING."
 doc_version: 3
-doc_updated_at: "2026-10-06T05:50:03.273Z"
+doc_updated_at: "2026-10-06T05:50:35.326Z"
 doc_updated_by: "CODER"
 description: "Iteration176: remove React table-property mutations through source-shaped SwFEShell and ItemSetToTableParam; grouped native attribute history and correct selection ownership. Full alignment controls remain a subsequent atomic task."
 sections:
@@ -84,6 +90,39 @@ sections:
     Command: ONE upstream-absent full build/app/inventory/scripts/Chromium profile and original-failure-only app/Chrome closure. Result: pass,actual distinct12731app109inventory5scripts167Chrome,0flaky. Initial2app+2Chrome failures are documented fixture subscription/tag-selection errors; original2app PASS5skip7total and2Chrome PASS. Coverage-only subset exit1 reflects unchanged global100threshold; final exact-source/map actualcounter merge100L/S/F/B. No prodchange/rebuild or passing/full replay. Evidence: absent-profile.json,closure-profile.json,final-coverage.json. Scope: native/mounted/production cases using owned classes only; vendor restored finally.
     Command: five restored source audits,scopeprefix/testidentity,doctor,routing,diff,ignored-inclusive AP scan. Result: pass;0semantic violations,456prior testfiles byte-identical,259prior semantic contracts preserved,261modules with2new unverified owners,doctor0errors2knownwarnings,4578APfiles0forbidden. Evidence: restored-source-audits.json,scope-audit.json,governance.json,artifact-audit.json. Scope: no upstream sources/helpers/Python/rawdiagnostics in AP,no policy/IOexceptions changes.
     Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pass at implementation SHA 2513804194e3fd2fe3055acae26d795712d4b729; quality 20261006-044923325-recovery-context, same-agent exactSHA phase, no independent reviewer claim. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T05:50:35.240Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS bounded native table-property handoff,selection scopes and grouped attribute history at implementation 2513804194e3fd2fe3055acae26d795712d4b729; sameagent quality 20261006-044923325-recovery-context. Actual12731app109inventory5scripts167Chrome PASS,actual100coverage,456prior testfiles259semantic contracts preserved. ONE full absentprofile;only2app2Chrome originalfailure closure;no upstream execution/APsources/helpers/no passingreplay/vendorrestored. CompletecoreUI/tableparityUNVERIFIED,goalACTIVE,parentDOING.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T05:50:03.273Z, excerpt_hash=sha256:a2955261b7d8352f35424ecc6544b8760ec6f172dcb78fdd8e2497f8952f5283
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060303-DDSYJ8/blueprint/resolved-snapshot.json
+    - old_digest: 626dfcc93c69f2fc8edb8e192881a5c3dee336f133d52f55ebdf9d1d58d0f0c3
+    - current_digest: 626dfcc93c69f2fc8edb8e192881a5c3dee336f133d52f55ebdf9d1d58d0f0c3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060303-DDSYJ8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060303-DDSYJ8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic commit; retain task evidence and registered I/O exceptions."
   Findings: |-
     Read-only discovery found React property mutation without native grouped history and row-wide box alignment. Three bounded guessed-path errors occurred (tabsh under ui/shells twice,wrtsh under sw/inc once); route recomputed and actual native uibase/core paths located, no source mutation after failures. Earlier summary discovery was read-only. Full goal remains ACTIVE and parity UNVERIFIED.
@@ -149,6 +188,39 @@ Command: six initial static gates and changed-file Prettier/ESLint/JSDoc/TypeScr
 Command: ONE upstream-absent full build/app/inventory/scripts/Chromium profile and original-failure-only app/Chrome closure. Result: pass,actual distinct12731app109inventory5scripts167Chrome,0flaky. Initial2app+2Chrome failures are documented fixture subscription/tag-selection errors; original2app PASS5skip7total and2Chrome PASS. Coverage-only subset exit1 reflects unchanged global100threshold; final exact-source/map actualcounter merge100L/S/F/B. No prodchange/rebuild or passing/full replay. Evidence: absent-profile.json,closure-profile.json,final-coverage.json. Scope: native/mounted/production cases using owned classes only; vendor restored finally.
 Command: five restored source audits,scopeprefix/testidentity,doctor,routing,diff,ignored-inclusive AP scan. Result: pass;0semantic violations,456prior testfiles byte-identical,259prior semantic contracts preserved,261modules with2new unverified owners,doctor0errors2knownwarnings,4578APfiles0forbidden. Evidence: restored-source-audits.json,scope-audit.json,governance.json,artifact-audit.json. Scope: no upstream sources/helpers/Python/rawdiagnostics in AP,no policy/IOexceptions changes.
 Command: same-agent exact implementation-SHA EVALUATOR review followed by recorded verify and meaningful finish. Result: pass at implementation SHA 2513804194e3fd2fe3055acae26d795712d4b729; quality 20261006-044923325-recovery-context, same-agent exactSHA phase, no independent reviewer claim. Scope: no independent reviewer claim; whole goalACTIVE,parentDOING,complete core/UI/table parityUNVERIFIED.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T05:50:35.240Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS bounded native table-property handoff,selection scopes and grouped attribute history at implementation 2513804194e3fd2fe3055acae26d795712d4b729; sameagent quality 20261006-044923325-recovery-context. Actual12731app109inventory5scripts167Chrome PASS,actual100coverage,456prior testfiles259semantic contracts preserved. ONE full absentprofile;only2app2Chrome originalfailure closure;no upstream execution/APsources/helpers/no passingreplay/vendorrestored. CompletecoreUI/tableparityUNVERIFIED,goalACTIVE,parentDOING.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T05:50:03.273Z, excerpt_hash=sha256:a2955261b7d8352f35424ecc6544b8760ec6f172dcb78fdd8e2497f8952f5283
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060303-DDSYJ8/blueprint/resolved-snapshot.json
+- old_digest: 626dfcc93c69f2fc8edb8e192881a5c3dee336f133d52f55ebdf9d1d58d0f0c3
+- current_digest: 626dfcc93c69f2fc8edb8e192881a5c3dee336f133d52f55ebdf9d1d58d0f0c3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060303-DDSYJ8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060303-DDSYJ8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
