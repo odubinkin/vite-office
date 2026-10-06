@@ -4,7 +4,7 @@ title: "Implement native counted column insertion and width redistribution throu
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T10:04:38.441Z"
+  updated_by: "CODER"
+  note: "PASS at explicit implementation2c76be1460f59495b7ab618efa8babf2e7870c3d: all declared checks; one absent build/app12833/inventory109/scripts5/Chromium193;100% actual raw counters, no replay. Exact-SHA same-agent quality PASS; scope and source/helper prohibition satisfied. Complex layouts/history and whole parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -53,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: iteration182 native column ownership, width redistribution and UI slots with one absent profile; full parity unverified."
+  -
+    type: "verify"
+    at: "2026-10-06T10:04:38.441Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS at explicit implementation2c76be1460f59495b7ab618efa8babf2e7870c3d: all declared checks; one absent build/app12833/inventory109/scripts5/Chromium193;100% actual raw counters, no replay. Exact-SHA same-agent quality PASS; scope and source/helper prohibition satisfied. Complex layouts/history and whole parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T10:03:34.709Z"
+doc_updated_at: "2026-10-06T10:04:38.542Z"
 doc_updated_by: "CODER"
 description: "Iteration182: port flat SwTable InsertCol/NewInsertCol selected column edges and proportional cumulative rounding; native column search expansion, document-owned shared SwUndoTableNdsChg history and contextual InsertColumnsBefore/After slots. Preserve original selection, table geometry and I/O deviations; one full upstream-absent profile."
 sections:
@@ -66,7 +72,41 @@ sections:
     2. ONE full profile while vendor/libreoffice-reference is renamed inside repository and restored in finally: npm run test:static; full app/inventory coverage --coverage.reportOnFailure plus JSON case results; script acceptance; all Chromium against dist. Persist exit codes, exact failures, case identities/counts and hashes before assertions. Only original failures and genuinely new cases may rerun; no passing/full/source replay.
     3. New native and mounted/browser acceptance proves column count and before/after edges across all rows, upstream cumulative proportional width rounding and unchanged table print width, MINLAY refusal without mutation, original selection/pending items, native contextual menu slots, one undo action, mixed row/column/text and recreated-table history, mounted colgroup geometry and Chromium caret. App/inventory100% actual-counter coverage; only exact unchanged maps or entire byte-identical ranges may transfer counters.
     4. After upstream restoration: source-tree/provenance/invariant/parity and resource generation --check audits, prior test byte/semantic prefix scope checks, AP source/helper prohibition audit, doctor/routing and same-agent exact-SHA review. Explicit scoped implementation/evidence commits, verification then clean direct close; parent/goal active and full parity unverified.
-  Verification: "Command: six initial static gates; only failed lint/type/docs closures; scoped changed-file checks; ONE full upstream-absent build/app/inventory/scripts/Chromium profile; restored five source gates; scope and artifact audits; doctor/routing/diff; exact-SHA review. Result: PASS completed gates/profile, exact-SHA review pending. Evidence: evidence/*.json contains bounded outcomes/counts/hashes and exact initial failures;12833 application,109 inventory,5 script,193 Chromium;100% app/inventory raw-counter coverage;0 runtime/test/browser failures. Scope: counted flat native column insertion, width redistribution, selection/history/menu/colgroup/worker/ODF behavior. No profile replay or merged coverage. Full parity unverified."
+  Verification: |-
+    Command: six initial static gates; only failed lint/type/docs closures; scoped changed-file checks; ONE full upstream-absent build/app/inventory/scripts/Chromium profile; restored five source gates; scope and artifact audits; doctor/routing/diff; exact-SHA review. Result: PASS completed gates/profile, exact-SHA review pending. Evidence: evidence/*.json contains bounded outcomes/counts/hashes and exact initial failures;12833 application,109 inventory,5 script,193 Chromium;100% app/inventory raw-counter coverage;0 runtime/test/browser failures. Scope: counted flat native column insertion, width redistribution, selection/history/menu/colgroup/worker/ODF behavior. No profile replay or merged coverage. Full parity unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T10:04:38.441Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS at explicit implementation2c76be1460f59495b7ab618efa8babf2e7870c3d: all declared checks; one absent build/app12833/inventory109/scripts5/Chromium193;100% actual raw counters, no replay. Exact-SHA same-agent quality PASS; scope and source/helper prohibition satisfied. Complex layouts/history and whole parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T10:03:34.709Z, excerpt_hash=sha256:ca1895ed8bd0cfaf1ae3d537b4bc4f7b6e49cafa3a32c919db970a72619d6b9d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060937-TR4M9D/blueprint/resolved-snapshot.json
+    - old_digest: 7db24b2129f82ff778c72f711e860ca6b20bc79428ab08ed80a7305a57a82d30
+    - current_digest: 7db24b2129f82ff778c72f711e860ca6b20bc79428ab08ed80a7305a57a82d30
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060937-TR4M9D
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060937-TR4M9D
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation through a separate approved leaf if actual column graph/geometry/selection/history regresses; preserve registered I/O deviations and completed immutable evidence."
   Findings: |-
     Previous goal turn made verified progress: iteration181 DONE implementation fc664e2c9dc868cabac07854de739e4f3d50d0cd, parent checkpoint 52e82f832bd37a819bd809eb5861635a00d50ae6. Read-only discovery confirms native InsertCol/NewInsertCol, cumulative proportional AdjustWidths, column-search expansion and CheckSplitCells MINLAY admission are missing locally; menu commands are filtered. Native source preserves total width with cumulative rounding and copies empty first-paragraph attributes per source box. Discovery resolved wrong optional layout/worker/table-editor paths and unmatched shell glob; nonzero routes recomputed before mutation. No source/helper artifacts in AP.
@@ -104,6 +144,39 @@ Standing user authorization applies. Port SwTable InsertCol/NewInsertCol and cum
 ## Verification
 
 Command: six initial static gates; only failed lint/type/docs closures; scoped changed-file checks; ONE full upstream-absent build/app/inventory/scripts/Chromium profile; restored five source gates; scope and artifact audits; doctor/routing/diff; exact-SHA review. Result: PASS completed gates/profile, exact-SHA review pending. Evidence: evidence/*.json contains bounded outcomes/counts/hashes and exact initial failures;12833 application,109 inventory,5 script,193 Chromium;100% app/inventory raw-counter coverage;0 runtime/test/browser failures. Scope: counted flat native column insertion, width redistribution, selection/history/menu/colgroup/worker/ODF behavior. No profile replay or merged coverage. Full parity unverified.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T10:04:38.441Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS at explicit implementation2c76be1460f59495b7ab618efa8babf2e7870c3d: all declared checks; one absent build/app12833/inventory109/scripts5/Chromium193;100% actual raw counters, no replay. Exact-SHA same-agent quality PASS; scope and source/helper prohibition satisfied. Complex layouts/history and whole parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T10:03:34.709Z, excerpt_hash=sha256:ca1895ed8bd0cfaf1ae3d537b4bc4f7b6e49cafa3a32c919db970a72619d6b9d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060937-TR4M9D/blueprint/resolved-snapshot.json
+- old_digest: 7db24b2129f82ff778c72f711e860ca6b20bc79428ab08ed80a7305a57a82d30
+- current_digest: 7db24b2129f82ff778c72f711e860ca6b20bc79428ab08ed80a7305a57a82d30
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060937-TR4M9D
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060937-TR4M9D
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
