@@ -1,10 +1,11 @@
 ---
 id: "202610060033-QK6R6Y"
 title: "Restore native numbering indent mechanics behind label ruler gestures"
-status: "DOING"
+result_summary: "Restore native numbering indent and first-item tree policy with represented rule-format UndoRedo; preserve prior contracts and verify upstream-absent behavior."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202610060033-QK6R6Y/evidence/final-coverage.json"
   findings:
     - "Native indent numeric ownership and first-item tree policy restored in four existing owners, twelve new actual-value/history/package tests; all441 prior tests and258 semantic contracts preserved. Exact source/map identity supports actual100% coverage with only original failed-case closure."
-commit: null
+commit:
+  hash: "68f31a0cd8771cd3d08356b9097740b2208d9771"
+  message: "🧩 QK6R6Y task: record native numbering indent verification"
 comments:
   -
     author: "CODER"
     body: "Start: source-owned numbering indent and first-item mechanics under standing approved convergence goal; bounded native history, no UI workaround."
+  -
+    author: "CODER"
+    body: "Verified: Native numbering indent and first-item core mechanics restored; exact semantic SHA same-agent quality pass, upstream-absent tests and actual100% coverage, old contracts retained. UI label/ruler integration remains next obligation."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved bounded native numbering indent/first-item/history foundation verified at semantic 180f7bbc6b3c3af7d7fc0488745953999195b978. ONE full upstream-absent profile plus only2 original failed fixture cases; final12617app109inventory5scripts149Chromium pass and actual100%L/S/F/B. Six statics, five restored source audits,441 prior tests,258 contracts,exact8 paths,AP hygiene and exact-SHA same-agent evaluator passed. Actual document-label ruler UI integration remains next task; broad parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T00:53:57.333Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native numbering indent and first-item core mechanics restored; exact semantic SHA same-agent quality pass, upstream-absent tests and actual100% coverage, old contracts retained. UI label/ruler integration remains next obligation."
 doc_version: 3
-doc_updated_at: "2026-10-06T00:53:45.338Z"
+doc_updated_at: "2026-10-06T00:53:57.334Z"
 doc_updated_by: "CODER"
 description: "Iteration171: source-owned numbering indent and first-item policy with existing native rule/history owners, prerequisite to direct label-ruler UI integration; conscious IO deviations preserved."
 sections:
@@ -123,6 +136,10 @@ sections:
     8 semantic paths,4 existing production owners,2 metadata,2 new tests12 cases. All441 prior tests byte-identical,258 runtime records/states/defaults/classifications/IO exceptions and old evidence prefixes retained. New tests exercise native modes/active LISTTAB/inactive raw fields/copy/font/client/glyph/narrowing/zero/clamp/first-tree policy, actual cursor versus explicit target, multiselection/no-rule/nontext/negative-level branches, real history ownership, ODT/Worker values. No new full-module promotion.
     Six statics passed after only failed gates: lint unified-signatures native overload handled with targeted comment, typecheck native test fixture API corrections, docs two callback descriptions. ONE full upstream-absent profile: build pass12615 app pass2 new fixture failures of12617,109 inventory5 scripts149 Chromium pass0flaky. Initial failed cases used mode-dependent getters for inactive raw fields and inserted an empty phantom before AddChild that natively prunes it; corrected tests to raw GetPositionProperties and create phantom after real AddChild. Only those2 original failed cases repeated absent:2pass4skipped, no passing replay. No production change or rebuild after initial profile. Actual final100%L/S/F/B app13007/14261/3439/10582;inventory1464/1523/384/1080. Only actual SwNumberTree counters merged after exact source and statement/function/branch-map identity; all other initial coverage retained. Provisional initial99.99% statement/branch closed by real later-child branch executed in the original failed fixture. No invented counts/location transfer.
     Five restored source audits passed; semantic violations0. Scope audit confirms exact8 paths, prior test and metadata identity; ignored-inclusive AP4481files0 forbidden,doctor0errors2 known warnings,routing/diff passed. AP only bounded English prose/counts/hashes/outcomes, no sources/helpers/Python/probes/rawdiagnostics; raw maps/results/local initial sources only ignored appcache. Bounded read-only no-match/missing-path failures recomputed route before further mutation. Same current agent EVALUATOR exact semantic SHA, no independent review claim. No network/outside/global/subagents. Full native label/ruler/UI/framework/merged/redline/char-format/history/core/UI/list/table parity unverified; conscious save/open/recovery deviations unchanged,parent DOING,goal ACTIVE.
+extensions:
+  implementation_commit:
+    hash: "180f7bbc6b3c3af7d7fc0488745953999195b978"
+    message: "🧩 QK6R6Y code: restore native numbering indent and first-item mechanics"
 id_source: "generated"
 ---
 ## Summary
