@@ -4,7 +4,7 @@ title: "Restore native Insert Table dialog ownership and input behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T07:39:26.939Z"
+  updated_by: "CODER"
+  note: "Verified implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. Native Insert Table inputs/defaults/name/sensitivity/repeat restoration satisfy approved scope. Exactly one full upstream-absent profile plus only original failed Chromium or genuinely new Workbench case;12790actual application case identities,109inventory,5scripts,183Chromium verified. Five selected-file cases remain skipped. Application/inventory100%real-counter coverage on264complete identical maps; seven pinned-source hashes and scope preservation checked. Latest corrected same-agent quality pass supersedes premature title-only census review. No IO/recovery deviation changes; full project parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -57,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement the approved native Insert Table dialog leaf under standing iterative UI parity authorization; preserve registered IO deviations and run exactly one full upstream-absent profile."
+  -
+    type: "verify"
+    at: "2026-10-06T07:39:26.939Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. Native Insert Table inputs/defaults/name/sensitivity/repeat restoration satisfy approved scope. Exactly one full upstream-absent profile plus only original failed Chromium or genuinely new Workbench case;12790actual application case identities,109inventory,5scripts,183Chromium verified. Five selected-file cases remain skipped. Application/inventory100%real-counter coverage on264complete identical maps; seven pinned-source hashes and scope preservation checked. Latest corrected same-agent quality pass supersedes premature title-only census review. No IO/recovery deviation changes; full project parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T07:38:53.715Z"
+doc_updated_at: "2026-10-06T07:39:27.023Z"
 doc_updated_by: "CODER"
 description: "Iteration178 under active parent 202609240501-C9TN6M: replace duplicated React insert-dialog state with source-owned SwInsTableDlg and SwInsertTableOptions. Match pinned input limits, large-table warning, name filter/collision sensitivity, header/repeat defaults and linked repeated-row restoration. Preserve table properties, represented styles and registered IO/recovery exceptions; insertion command/history remains a following leaf."
 sections:
@@ -71,7 +77,41 @@ sections:
     3. Only original failures or genuinely new acceptance cases may run later upstream-absent; rebuild only after production changes. Preserve100%application/inventory coverage through real counters, exact maps or complete byte-identical contiguous source ranges.
     4. New native/UI/Chromium literals cover defaults, flags, native2million spin bounds, warning at rows256/columns64, no hard32/100 caps, header/repeat sensitivity, rows-minus-one repeat maximum, manual count restoration, name filter/collision sensitivity and accepted model-backed options at1280/390. Prior test assertions retain literal options after explicitly enabling Header.
     5. After restoration source-tree/provenance/invariants/parity and writer resource generation --check pass. Scope audit preserves prior264 protected semantic statuses/defaults/classes/evidence prefixes and all unrelated files/registered deviations. git diff --check, doctor known warnings, policy routing and forbidden-AP artifact audit pass. Record exact-SHA same-agent quality and clean final state.
-  Verification: "Passed the declared input/behavior contract: all eventual static and restored-source gates, exactly one full upstream-absent profile plus only original failed or genuinely new cases,12790distinct app/109inventory/5scripts/183Chromium cases; application/inventory100%real-counter coverage. Scope preservation and registered deviations pass. Exact-SHA quality and final clean state pending closure."
+  Verification: |-
+    Passed the declared input/behavior contract: all eventual static and restored-source gates, exactly one full upstream-absent profile plus only original failed or genuinely new cases,12790distinct app/109inventory/5scripts/183Chromium cases; application/inventory100%real-counter coverage. Scope preservation and registered deviations pass. Exact-SHA quality and final clean state pending closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T07:39:26.939Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. Native Insert Table inputs/defaults/name/sensitivity/repeat restoration satisfy approved scope. Exactly one full upstream-absent profile plus only original failed Chromium or genuinely new Workbench case;12790actual application case identities,109inventory,5scripts,183Chromium verified. Five selected-file cases remain skipped. Application/inventory100%real-counter coverage on264complete identical maps; seven pinned-source hashes and scope preservation checked. Latest corrected same-agent quality pass supersedes premature title-only census review. No IO/recovery deviation changes; full project parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T07:38:53.715Z, excerpt_hash=sha256:3ff5dd0cc7bc99a8261085704fd8516c797f60af858f9c78c72811a1f38e86da
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060703-VZAQBS/blueprint/resolved-snapshot.json
+    - old_digest: 22e2748209db6abde87270747e2d34886976a271fe04771cd4c8081c4fa96437
+    - current_digest: 22e2748209db6abde87270747e2d34886976a271fe04771cd4c8081c4fa96437
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060703-VZAQBS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060703-VZAQBS
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the intentional semantic commit for this leaf through a new executable task; do not modify completed task evidence or unrelated history."
   Findings: |-
     Iteration178 is implemented and verified within the native Insert Table input slice. SwInsTableDlg owns names, dimensions, stored header/repeat/split controls, linked sensitivity, compatibility warning and manually entered repeat-row restoration. SwInsertTableFlags/SwInsertTableOptions retain native numeric values and distinguish the header flag from repeated rows. React renders one native insertion owner; the properties draft is a separate component. Removed the duplicated React insert state and unsupported100-row/32-column submission limits. Ordinary generated names use the first unused canonical Table suffix, including an accepted empty native entry. Existing represented style choices and insertion model/history remain bounded and are not promoted to native parity.
@@ -114,6 +154,39 @@ Port and render a single native Insert Table draft with pinned defaults, name fi
 ## Verification
 
 Passed the declared input/behavior contract: all eventual static and restored-source gates, exactly one full upstream-absent profile plus only original failed or genuinely new cases,12790distinct app/109inventory/5scripts/183Chromium cases; application/inventory100%real-counter coverage. Scope preservation and registered deviations pass. Exact-SHA quality and final clean state pending closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T07:39:26.939Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified implementation a1bd6450c57473ca18aa64ea5a7cffce345d3f98. Native Insert Table inputs/defaults/name/sensitivity/repeat restoration satisfy approved scope. Exactly one full upstream-absent profile plus only original failed Chromium or genuinely new Workbench case;12790actual application case identities,109inventory,5scripts,183Chromium verified. Five selected-file cases remain skipped. Application/inventory100%real-counter coverage on264complete identical maps; seven pinned-source hashes and scope preservation checked. Latest corrected same-agent quality pass supersedes premature title-only census review. No IO/recovery deviation changes; full project parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T07:38:53.715Z, excerpt_hash=sha256:3ff5dd0cc7bc99a8261085704fd8516c797f60af858f9c78c72811a1f38e86da
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060703-VZAQBS/blueprint/resolved-snapshot.json
+- old_digest: 22e2748209db6abde87270747e2d34886976a271fe04771cd4c8081c4fa96437
+- current_digest: 22e2748209db6abde87270747e2d34886976a271fe04771cd4c8081c4fa96437
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060703-VZAQBS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060703-VZAQBS
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
