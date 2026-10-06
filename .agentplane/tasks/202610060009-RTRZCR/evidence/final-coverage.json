@@ -1,0 +1,79 @@
+{
+  "sourceChangedAfterInitialProfile": [],
+  "counterTransfer": "No counter transfer or replay: exact actual initial source/map identity, all app/inventory cases and coverage passed in the single upstream-absent profile; only two original failed Chromium cases repeated after source-confirmed oracle correction, no production changes or rebuild.",
+  "summary": {
+    "lines": {
+      "total": 12927,
+      "covered": 12927,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14175,
+      "covered": 14175,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3432,
+      "covered": 3432,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10526,
+      "covered": 10526,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "initialMapSHA256": "b5e1541d383cdf927dfb05ef375615014bbc9007b8b98820140d7b1cb870ef06",
+  "initialInventoryMapSHA256": "b0f088cb01bc95b3e286786f54a3a74791657fabff8e15cf853613dfd77655a2",
+  "finalMapSHA256": "582518c65e97bf6f201efcaefec61ab958aa646b8bb6e89722d030faf449df45",
+  "finalInventoryMapSHA256": "18948b82ffcc5f8a366aa4a160a9cf18371c47245d516aecdc57e48dd5713226",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "da159e03560e8f59b3b429b4b4b718f7d62b1c99ef6bf4998edd128122694b5c",
+    "apps/office/src/sw/browser/editor/writer-geometry.ts": "722b60563455614d15d167816c44ae7a4e593f17e75941bc99d877ee5dcd5e0e",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "39fba63d96cbdc3ce704dea3388d3aced39b6dcf4e926956b018995da5dc88fb",
+    "apps/office/src/sw/browser/editor/writer-selection.ts": "7057cfe2ebf9f19ea271bf4371c443a5d6b05d725c58a0577e2f8d36b8f04020"
+  }
+}

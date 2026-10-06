@@ -1,4 +1,5 @@
 /** @fileoverview Contains the optional browser geometry fallback for Writer pointer positions. */
+import { getWriterTextCaretPoint } from "./writer-selection";
 
 /** Browser caret endpoint resolved from viewport coordinates. */
 export interface BrowserWriterCaretPoint {
@@ -10,6 +11,7 @@ export interface BrowserWriterCaretPoint {
 /** Minimal geometry surface injected for deterministic tests. */
 export interface BrowserWriterCaretGeometry {
   readonly caretRangeFromPoint?: (x: number, y: number) => Range | null;
+  readonly elementFromPoint?: (x: number, y: number) => Element | null;
 }
 
 /** Resolves viewport coordinates into a Writer paragraph caret when native range APIs are needed. @param geometry - Injected browser range API. @param x - Viewport x coordinate. @param y - Viewport y coordinate. @returns Writer caret or undefined outside the document projection. */
@@ -19,7 +21,37 @@ export function getBrowserWriterCaretFromPoint(
   y: number,
 ): BrowserWriterCaretPoint | undefined {
   const range = geometry.caretRangeFromPoint?.(x, y);
-  if (range === null || range === undefined) return undefined;
+  const cell = geometry.elementFromPoint?.(x, y)?.closest("[data-writer-table-box]");
+  const point = range === null || range === undefined ? undefined : getParagraphCaret(range);
+  if (cell === null || cell === undefined) return point;
+  if (point !== undefined && cell.contains(point.paragraph)) return point;
+  let nearest: HTMLParagraphElement | undefined;
+  let distance = Infinity;
+  for (const paragraph of cell.querySelectorAll<HTMLParagraphElement>(
+    "[data-writer-paragraph-id]",
+  )) {
+    const bounds = paragraph.getBoundingClientRect();
+    const current = Math.max(bounds.top - y, y - bounds.bottom, 0);
+    if (current < distance) {
+      nearest = paragraph;
+      distance = current;
+    }
+  }
+  if (nearest === undefined) return undefined;
+  const bounds = nearest.getBoundingClientRect();
+  const clipped = geometry.caretRangeFromPoint?.(
+    Math.max(bounds.left, Math.min(x, bounds.right)),
+    Math.max(bounds.top, Math.min(y, bounds.bottom)),
+  );
+  const clippedPoint =
+    clipped === null || clipped === undefined ? undefined : getParagraphCaret(clipped);
+  if (clippedPoint?.paragraph === nearest) return clippedPoint;
+  const offset = y < bounds.top || x < bounds.left ? 0 : Number.MAX_SAFE_INTEGER;
+  return { ...getWriterTextCaretPoint(nearest, offset), paragraph: nearest };
+}
+
+/** Resolves a browser range only through an actual projected paragraph. @param range - Native range. @returns Projected paragraph caret, or undefined. */
+function getParagraphCaret(range: Range): BrowserWriterCaretPoint | undefined {
   const element =
     range.startContainer instanceof HTMLElement
       ? range.startContainer

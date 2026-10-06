@@ -1,0 +1,35 @@
+{
+  "vendorRestored": true,
+  "originalFailedChromium": [
+    "writer-native-table-pointer.spec.ts > Writer native table interior and gutter pointer width=1280",
+    "writer-native-table-pointer.spec.ts > Writer native table interior and gutter pointer width=390"
+  ],
+  "newCases": [],
+  "productionChanged": false,
+  "rebuild": false,
+  "oracleCorrection": "Native IsNumLabel routes to RulerMarginDrag/StartDocDrag(Indent), not a promised text caret. Removed only incorrect MKeep typing oracle, retained all padding/gutter/input/Undo/neighbor checks and marker no-row/no-text-mutation checks. Label indent dragging remains unverified.",
+  "records": [
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-native-table-pointer.spec.ts --reporter=list,json",
+      "profile": "original-failed-only-upstream-absent",
+      "exit": 0,
+      "bytes": 676,
+      "sha256": "093d38d70f87c87c55e215f6cb7ee6f1be0466897d0e31ca6999cf80d138287a",
+      "caseCounts": {
+        "startTime": "2026-10-06T00:25:35.913Z",
+        "duration": 3185.253,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "executedCases": [
+        "Writer native table interior and gutter pointer width=1280",
+        "Writer native table interior and gutter pointer width=390"
+      ],
+      "failedCases": [],
+      "errors": []
+    }
+  ]
+}

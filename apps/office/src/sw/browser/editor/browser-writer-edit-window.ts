@@ -47,7 +47,14 @@ export class BrowserWriterEditWindow {
       environment.document,
     );
     this.pointerSelection = new BrowserWriterPointerSelectionController(
-      caretRangeFromPoint === undefined ? {} : { caretRangeFromPoint },
+      {
+        ...(caretRangeFromPoint === undefined ? {} : { caretRangeFromPoint }),
+        ...(environment.document.elementFromPoint === undefined
+          ? {}
+          : {
+              elementFromPoint: environment.document.elementFromPoint.bind(environment.document),
+            }),
+      },
       this.selectionMapper.SetBaseAndExtent.bind(this.selectionMapper),
     );
     /* c8 ignore stop */

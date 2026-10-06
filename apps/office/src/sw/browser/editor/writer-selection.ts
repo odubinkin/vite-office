@@ -198,7 +198,7 @@ export function restoreWriterCollapsedCaret(
  * @param requestedOffset - Requested UTF-16 offset from the paragraph's visible-text start.
  * @returns A text-node position when visible text exists, otherwise the paragraph start.
  */
-function getWriterTextCaretPoint(
+export function getWriterTextCaretPoint(
   paragraph: HTMLParagraphElement,
   requestedOffset: number,
 ): Readonly<{ node: Node; offset: number }> {

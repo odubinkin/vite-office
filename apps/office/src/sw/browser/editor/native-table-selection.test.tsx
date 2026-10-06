@@ -171,9 +171,8 @@ it("table properties use native selected rows and preserve other row geometry", 
 
 it("row surface delegates to native selection and caret properties apply to its current row", /** Checks the row hit path and unselected native context. @returns Nothing. */ () => {
   const f = fixture(),
-    table = screen.getByRole("table", { name: "First" }),
-    rows = table.querySelectorAll("tr");
-  fireEvent.click(required(rows[1]));
+    rowSelector = screen.getByRole("button", { name: "Select row 2 in First" });
+  fireEvent.click(rowSelector);
   expect(painted("First")).toHaveLength(2);
   const node = required(required(f.boxes[0]).GetParagraphs()[0]);
   act(

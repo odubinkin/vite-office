@@ -80,16 +80,6 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                     )}
                   data-writer-table-row={firstRow + fragmentRowIndex}
                   key={firstRow + fragmentRowIndex}
-                  onClick={
-                    /** Selects row surfaces without intercepting text editing. @param event - Row click. @returns Nothing. */
-                    (event) => {
-                      if (
-                        !(event.target instanceof Element) ||
-                        event.target.closest("[data-writer-table-cell]") === null
-                      )
-                        onSelectRow(firstRow + fragmentRowIndex);
-                    }
-                  }
                   style={{ height: (row.GetFormat().minHeight ?? 0) / 15 }}
                 >
                   {row.GetTabBoxes().map(
@@ -102,6 +92,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                       const CellTag = rowIndex < (format.headerRows ?? 0) ? "th" : "td";
                       return (
                         <CellTag
+                          data-writer-table-box={cell.GetStartNode().GetIndex()}
                           data-writer-editor-selected={
                             selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
                               ? "true"
@@ -114,8 +105,8 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                           }
                           className={
                             selectedBoxes?.includes(cell.GetStartNode().GetIndex()) === true
-                              ? "bg-indigo-50 outline outline-1 outline-indigo-300"
-                              : ""
+                              ? "relative bg-indigo-50 outline outline-1 outline-indigo-300"
+                              : "relative"
                           }
                           key={cellIndex}
                           style={{
@@ -130,7 +121,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                           {cellIndex === 0 ? (
                             <button
                               aria-label={`Select row ${rowIndex + 1} in ${table.GetName()}`}
-                              className="mr-1 text-xs text-indigo-700"
+                              className="absolute -left-5 top-0 flex h-full w-5 cursor-e-resize items-center justify-center text-indigo-700 opacity-0 hover:opacity-100 focus:opacity-100"
                               contentEditable={false}
                               onMouseDown={
                                 /** Keeps browser focus at the document while a native row gesture runs. @param event - Pointer down. @returns Nothing. */ (
@@ -150,7 +141,7 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
                               }
                               type="button"
                             >
-                              ⋮
+                              →
                             </button>
                           ) : null}
                           {cell.GetParagraphs().map(

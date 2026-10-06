@@ -1,0 +1,49 @@
+{
+  "base": "ef4f6805b717cf3883b36c84ba91b8d597079e26",
+  "changedSemanticPaths": 10,
+  "productionOwners": 4,
+  "priorTestFiles": 438,
+  "priorTestFilesByteIdentical": 437,
+  "sourceConfirmedExpectedPropertyMigration": [
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx"
+  ],
+  "existingSemanticRecordsPreserved": 258,
+  "totalSemanticRecords": 258,
+  "allStatesDefaultsClassificationsIOExceptionsPreserved": true,
+  "priorEvidencePreserved": true,
+  "sourceProof": {
+    "apps/office/src/sw/browser/editor/WriterEditableTable.tsx": "da159e03560e8f59b3b429b4b4b718f7d62b1c99ef6bf4998edd128122694b5c",
+    "apps/office/src/sw/browser/editor/writer-geometry.ts": "722b60563455614d15d167816c44ae7a4e593f17e75941bc99d877ee5dcd5e0e",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "39fba63d96cbdc3ce704dea3388d3aced39b6dcf4e926956b018995da5dc88fb",
+    "apps/office/src/sw/browser/editor/writer-selection.ts": "7057cfe2ebf9f19ea271bf4371c443a5d6b05d725c58a0577e2f8d36b8f04020"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 8,
+  "newChromiumCases": 2,
+  "finalDistinctPassed": {
+    "app": 12605,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 149
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/uibase/docvw/edtwin.cxx",
+      "sha256": "f679baf21d41f78d6494bead35aebf6333eed298a6e24892452a4bb4623b7eb3"
+    },
+    {
+      "path": "sw/source/uibase/docvw/edtwin3.cxx",
+      "sha256": "c31fb7bdad5a1e9cd5f7e33a939796945222a8066d27f431d180426d0707fd6f"
+    },
+    {
+      "path": "sw/source/core/frmedt/fetab.cxx",
+      "sha256": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016"
+    },
+    {
+      "path": "sw/source/uibase/wrtsh/select.cxx",
+      "sha256": "e52314599cd686635085927f18a311cf742424076e052a2770d0a8b46eff67d0"
+    }
+  ],
+  "validationLimit": "Represented flat LTR table interior pointer geometry, actual projected paragraph caret, explicit row gutter/native box ownership and history only. Native number-label RulerMarginDrag/StartDocDrag(Indent) is a separately identified unverified behavior. Initial MKeep browser oracle corrected against native source; no caret workaround or production change after initial profile. Injected marker caret covers browser geometry only. RTL/vertical/nested/merged/protected/column/resizing/full native framework/layout/portion/core/UI/list/table parity remains unverified. Conscious IO deviations unchanged;parent DOING and goal ACTIVE."
+}

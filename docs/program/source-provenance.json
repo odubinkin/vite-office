@@ -3056,6 +3056,36 @@
           {
             "path": "apps/office/e2e/writer-native-table-selection.spec.ts",
             "marker": "Writer row selection paints core boxes and typing after caret kill preserves neighbors"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx",
+            "marker": "mounted table pointer"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/writer-table-geometry.test.ts",
+            "marker": "actual table cell containment"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-pointer.spec.ts",
+            "marker": "Writer native table interior and gutter pointer"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "void SwEditWin::MouseButtonDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwTab SwFEShell::WhichMouseTabCol"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "const SwFrame* SwFEShell::GetBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx",
+            "marker": "bool SwWrtShell::SelectTableRow"
           }
         ]
       },
@@ -3073,7 +3103,8 @@
       "status": "local-only",
       "preservedResponsibilities": [
         "Iteration146 routes Ctrl/Meta HomeEnd through SwEditWin and native shell section movement. SwCursor resolves actual cell,table and document sentinel endpoints,first0/lastLen;MoveSection reports unchanged false,raw MoveTable accepts unchanged but rejects marked ordinary cursors,SttEndDoc accepts current document boundary. Shell owns cell then table then document order,independent bounded SwTableCursor conversion using current cell boundary as native table mark,ordinary cursor mark deletion,selection setup and pending/history refresh. DOM translates intent and direction only,no ordinal,sibling,TextRuns or navigation DTO decisions. Native,mounted and Chromium cases cover represented flat-table behavior. Full selected-box painting,cursor rings,protected/merged/nested/redline/layout selection and visual-line HomeEnd remain unverified;all existing246states/defaults/classifications and registered save/open/recovery deviations preserved. Chromium observed that old separate per-paragraph editable hosts clipped real multi-paragraph cell selection. Their overrides and the table noneditable wrapper are removed so existing document host owns all cell text;native decisions stay in core. Failed-only final-source Chromium and new host/split/join cases cover this correction.",
-        "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion."
+        "Iteration147 removes React selectedTable/selectedTableRow and editor selected-row props. Native SwTableCursor owns a sorted deduplicated actual SwTableBox set, reconciles identity differences and NewTableSelection from actual point/mark sections. SwTable::CreateSelection supports represented flat shared-column rectangle and row expansion. Shell SelectTableRow uses last content endpoints (point first box,mark last), clears ordinary mark and creates no content history; table context follows selected boxes or actual point. SwEditWin converts a row hit to native node coordinates. Immutable selected-box start indices paint cells/whole rows; insert focuses first cell and properties use native cursor context. New actual native,mounted and Chromium assertions cover the bounded flow. Native rings,per-box edit cursor ranges,merged/nested/protected/hidden/unequal-row geometry,drag selection/column selection and full layout/history remain unverified. Existing246semantic statuses/classifications/defaults and registered I/O/recovery deviations preserved; no whole-module/goal promotion.",
+        "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained."
       ]
     },
     {
@@ -3235,6 +3266,18 @@
           {
             "path": "apps/office/e2e/writer-native-list-tab.spec.ts",
             "marker": "Writer body list and table Tab retain editing focus"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx",
+            "marker": "mounted table pointer"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/writer-table-geometry.test.ts",
+            "marker": "actual table cell containment"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-pointer.spec.ts",
+            "marker": "Writer native table interior and gutter pointer"
           }
         ],
         "upstream": [
@@ -3245,6 +3288,22 @@
           {
             "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
             "marker": "case KEY_TAB:"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "void SwEditWin::MouseButtonDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwTab SwFEShell::WhichMouseTabCol"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "const SwFrame* SwFEShell::GetBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx",
+            "marker": "bool SwWrtShell::SelectTableRow"
           }
         ]
       },
@@ -3264,7 +3323,8 @@
       "status": "local-only",
       "preservedResponsibilities": [
         "Iteration146 routes Ctrl/Meta HomeEnd through SwEditWin and native shell section movement. SwCursor resolves actual cell,table and document sentinel endpoints,first0/lastLen;MoveSection reports unchanged false,raw MoveTable accepts unchanged but rejects marked ordinary cursors,SttEndDoc accepts current document boundary. Shell owns cell then table then document order,independent bounded SwTableCursor conversion using current cell boundary as native table mark,ordinary cursor mark deletion,selection setup and pending/history refresh. DOM translates intent and direction only,no ordinal,sibling,TextRuns or navigation DTO decisions. Native,mounted and Chromium cases cover represented flat-table behavior. Full selected-box painting,cursor rings,protected/merged/nested/redline/layout selection and visual-line HomeEnd remain unverified;all existing246states/defaults/classifications and registered save/open/recovery deviations preserved.",
-        "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged."
+        "Iteration166 unifies represented ordinary body/list/table Tab in SwEditWin.HandleTab instead of browser table-only routing. Native numfunc::NumDownChangesIndent now belongs to number.ts and reads actual shell cursor/rule/current and next formats/NUMBER_NONE/indent/max-level decision. Paragraph-start list priority uses native NumUpDown/history, equal NONE indent inserts literal tab; cells retain native traversal; ordinary body Tab inserts literal text and ShiftTab consumes End no-op. Browser translates actual DOM selections/unmodified noncomposing keys through the same owner with no compatibility wrapper. Eligible assigned-outline-at-start operations remain explicitly unsupported pending native OutlineUpDown, not substituted by text insertion. Typed nonnull text cursors only; native null/nontext fallback, forms/input/contentcontrols/graphics/read-only/WebView/modified Tab/config/autocorrect/NumDown counter and full KeyInput remain unverified. Real core/DOM/production Chromium cases prove bounded behavior;253 existing semantic states/defaults/classes/IOexceptions/evidence and424 prior testfiles preserved,2 prior tests source-confirmed obsolete body refusal/method-name corrections only. No full-module or broad parity promotion; conscious save/open/recovery deviations unchanged.",
+        "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained."
       ]
     },
     {
@@ -3316,13 +3376,44 @@
           {
             "marker": "getBrowserWriterCaretFromPoint",
             "path": "apps/office/src/sw/browser/editor/writer-geometry.ts"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx",
+            "marker": "mounted table pointer"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/writer-table-geometry.test.ts",
+            "marker": "actual table cell containment"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-pointer.spec.ts",
+            "marker": "Writer native table interior and gutter pointer"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "void SwEditWin::MouseButtonDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwTab SwFEShell::WhichMouseTabCol"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "const SwFrame* SwFEShell::GetBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx",
+            "marker": "bool SwWrtShell::SelectTableRow"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/writer-geometry.ts",
       "rationale": "Contains the optional browser caretRangeFromPoint geometry fallback behind an injected surface; no native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
-        "Maps viewport pointer coordinates to Writer paragraph DOM caret endpoints when required."
+        "Maps viewport pointer coordinates to Writer paragraph DOM caret endpoints when required.",
+        "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -3383,13 +3474,44 @@
           {
             "path": "apps/office/src/sw/browser/presentation/writer-view-style-focus.test.tsx",
             "marker": "Writer style-box focus"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/native-table-pointer.test.tsx",
+            "marker": "mounted table pointer"
+          },
+          {
+            "path": "apps/office/src/sw/browser/editor/writer-table-geometry.test.ts",
+            "marker": "actual table cell containment"
+          },
+          {
+            "path": "apps/office/e2e/writer-native-table-pointer.spec.ts",
+            "marker": "Writer native table interior and gutter pointer"
+          }
+        ],
+        "upstream": [
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+            "marker": "void SwEditWin::MouseButtonDown"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "SwTab SwFEShell::WhichMouseTabCol"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+            "marker": "const SwFrame* SwFEShell::GetBox"
+          },
+          {
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx",
+            "marker": "bool SwWrtShell::SelectTableRow"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/writer-selection.ts",
       "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Iteration104 preserves focus of the editing host itself when restoring a collapsed DOM selection; paragraph-focused editing still follows the target paragraph, including Enter into an adjacent node. This keeps explicit document-container focus contracts and canonical cursor offsets while toolbar Tab remains outside the client. Source cursor ownership remains unchanged; full native/widget and wider parity remain unverified.",
       "responsibilities": [
-        "Converts browser DOM selections and collapsed carets to and from Writer model positions."
+        "Converts browser DOM selections and collapsed carets to and from Writer model positions.",
+        "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
