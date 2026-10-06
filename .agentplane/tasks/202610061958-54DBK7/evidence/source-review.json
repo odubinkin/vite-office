@@ -1,0 +1,18 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/uiconfig/swriter/ui/tabletextflowpage.ui": "429beb8d9aa3d5664ec4486bce67debc55737505307dd2ffa946b1cebce280f5",
+    "include/vcl/weld/SpinButton.hxx": "2d2a0978c9bc5d5374924014ea2515d50cb61b271848b4879453e8b7dc77dcff",
+    "vcl/source/weld/SpinButton.cxx": "5d6c22fffbf844d4dfeeef79e9183c967b64ab9208bcb086038f571374695e21"
+  },
+  "contracts": [
+    "SwTextFlowPage::Reset takes canonical FN_PARAM_TABLE_HEADLINE, checkbox>0, native numeric1..100 display and saved values; HeadLineCBClickHdl numeric sensitivity; FillItemSet compares saved checkbox/count and publishes checked count or0. Unchanged bounded display retains original input item. Positive spin values round with basegfx::fround64.",
+    "Browser properties use the existing native page owner directly, one Repeat header and The first/count/rows; no artificial Header, no raw-format1/true fallback, source100 cap independent of row count; Insert Table and existing storage/shell contracts intact.",
+    "Core/mounted/history/production tests cover headerless import, explicit disabled/repeat input, bounds, Reset/Cancel/OK across pages, original graph/list/cursor, one grouped3UndoRedo/ODT and continued input, Chromium1280/390.",
+    "11approved paths,519old acceptance516byte-identical+3known control migrations;2obsolete source assertion updates only, all remaining literal expectations preserved;4new523total;276metadata prior contracts/defaults/statuses/classifications/registered exceptions and full prefixes preserved. Same current-agent EVALUATOR explicitly not independent. Whole Text Flow/SfxItemSet/full parity unverified, parent/goal active."
+  ]
+}
