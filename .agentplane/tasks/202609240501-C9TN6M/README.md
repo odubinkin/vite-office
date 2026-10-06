@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 186
+revision: 187
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-06T05:55:31.593Z"
+doc_updated_at: "2026-10-06T07:00:52.261Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -719,6 +719,20 @@ sections:
     - Observation: Iteration176 parent checkpoint commit rejected: parity scope is not a registered parent task intent.
       Impact: LeafDDSYJ8 remains DONE and verified; only parent checkpoint README staged.
       Resolution: Recomputed route and use allowed task scope for the checkpoint; no source/test/gate replay.
+
+    Iteration 177: native absolute table format page completed (202610060601-1KRKKA DONE). Implementation 09b3bdc58225f03f1e56c4af6217b463e8ef5e62; quality persistence 6a1227a3cfcccbd41ea382cd37ce978bfe89b00b; verification a3527aaa184bd6c1e960be7825140ac6fdfc7cd5; deterministic close 7c84c0fe654ab6cc8b1fe615dc376eb669c5b889. This is a bounded absolute-geometry leaf, not complete Writer table or UI parity.
+
+    SwFormatTablePage and SwTableRep now own the six absolute modes, linked width/left/right constraints, control sensitivity, above/below spacing, automatic width restoration and native column reconciliation. React retains one native format-page draft and renders its values; the duplicated React geometry mechanism has been removed. Numeric HoriOrientation is authoritative; historical ODF spellings are admitted at the existing boundary. The existing seventh grouped SetTableAttr operation authors geometry and clears historical alignment spelling without another command adapter or history operation. Layout and existing Writer-to-xmloff projection follow the admitted orientation; Worker and genuine ODF persistence are covered.
+
+    Exactly one complete upstream-absent profile ran, followed only by original failed or genuinely new acceptance cases. Final distinct results: 12773 application cases, 109 inventory cases, 5 script cases and 181 Chromium cases passed. Full Chromium profile was 179 passed; two genuinely new automatic-width restoration cases passed afterward at desktop/mobile widths. Application coverage is 13372 lines, 14656 statements, 3517 functions and 10940 branches, all 100%; final map SHA256 5f25eaa61aba5783a1d5c936685a4f645a5a22a75feac514b538de6e62a615f4. Inventory coverage is 1464 lines, 1523 statements, 384 functions and 1080 branches, all 100%; final map SHA256 d5c7c29a3b8cf1a6c5ba322b130c83f9cdf2d1a779f29c4c9ea6081b1b9791ba. Failed-only runs retained 41/2 and later 10 skipped cases as skipped. No passing full family was replayed.
+
+    Initial failures were recorded before correction: two unchanged Desktop/Open DOM query timing failures, one old caret fixture implicitly relying on the superseded bare-table default, one new automatic-reset expectation contradicting retained native spacing, lexical inventory ordering and one weak IDL provenance marker. The old caret fixture now explicitly requests left alignment while retaining its literal width expectations. Original Desktop/Open cases passed in bounded failed-only retries without implementation or test changes; this is an intermittent observation, not a claimed IO product fix. Genuine new cases close constructor-owned minimum-width restoration and absent-spacing layout branches. Initial formatting/type/JSDoc failures and the exact scoped closures are recorded in the leaf.
+
+    Coverage transfer used real counters, exact unchanged maps, or complete byte-identical contiguous source ranges. For changed tabledlg, complete statement/function declaration and body/branch locations were checked; synthetic empty else locations were retained only under verified complete enclosing branch ranges. Five nonidentical entries were excluded and covered by real new cases. Raw coverage/maps/diagnostics remain only in ignored application cache. No upstream sources, helper scripts, Python, probes or binaries were added to agentplane.
+
+    All declared static gates and restored-source audits passed. The scope has 18 semantic paths, 456 of 459 prior tests byte-identical, three bounded old fixtures and four new test files. All 261 prior protected semantic fields and evidence prefixes remain preserved; three new source owners bring the inventory to 264 and remain explicitly unverified. Exact-SHA quality review was performed by the same agent, not an independent reviewer. Doctor retained zero errors and two known warnings; routing and artifact audits passed. Five newly persisted quality/review artifacts were checked as canonical prose/JSON with no forbidden artifact types. Vendor was restored after every absent profile; all runners are terminal. Registered saving/opening/recovery deviations remain unchanged.
+
+    Parent and overall goal remain active. Relative widths/percent controls, complete Sfx item/change-only ownership, hidden/merged columns, RTL/fly/cache/protection and complete table/list/core/UI behavior remain unverified. Insertion still has inherited direct React model writes and is a suitable following leaf. No complete upstream parity claim is made.
 id_source: "generated"
 ---
 ## Summary
@@ -1411,3 +1425,17 @@ Native Sfx frame-format item ownership,change-only dialog item submission,distin
 - Observation: Iteration176 parent checkpoint commit rejected: parity scope is not a registered parent task intent.
   Impact: LeafDDSYJ8 remains DONE and verified; only parent checkpoint README staged.
   Resolution: Recomputed route and use allowed task scope for the checkpoint; no source/test/gate replay.
+
+Iteration 177: native absolute table format page completed (202610060601-1KRKKA DONE). Implementation 09b3bdc58225f03f1e56c4af6217b463e8ef5e62; quality persistence 6a1227a3cfcccbd41ea382cd37ce978bfe89b00b; verification a3527aaa184bd6c1e960be7825140ac6fdfc7cd5; deterministic close 7c84c0fe654ab6cc8b1fe615dc376eb669c5b889. This is a bounded absolute-geometry leaf, not complete Writer table or UI parity.
+
+SwFormatTablePage and SwTableRep now own the six absolute modes, linked width/left/right constraints, control sensitivity, above/below spacing, automatic width restoration and native column reconciliation. React retains one native format-page draft and renders its values; the duplicated React geometry mechanism has been removed. Numeric HoriOrientation is authoritative; historical ODF spellings are admitted at the existing boundary. The existing seventh grouped SetTableAttr operation authors geometry and clears historical alignment spelling without another command adapter or history operation. Layout and existing Writer-to-xmloff projection follow the admitted orientation; Worker and genuine ODF persistence are covered.
+
+Exactly one complete upstream-absent profile ran, followed only by original failed or genuinely new acceptance cases. Final distinct results: 12773 application cases, 109 inventory cases, 5 script cases and 181 Chromium cases passed. Full Chromium profile was 179 passed; two genuinely new automatic-width restoration cases passed afterward at desktop/mobile widths. Application coverage is 13372 lines, 14656 statements, 3517 functions and 10940 branches, all 100%; final map SHA256 5f25eaa61aba5783a1d5c936685a4f645a5a22a75feac514b538de6e62a615f4. Inventory coverage is 1464 lines, 1523 statements, 384 functions and 1080 branches, all 100%; final map SHA256 d5c7c29a3b8cf1a6c5ba322b130c83f9cdf2d1a779f29c4c9ea6081b1b9791ba. Failed-only runs retained 41/2 and later 10 skipped cases as skipped. No passing full family was replayed.
+
+Initial failures were recorded before correction: two unchanged Desktop/Open DOM query timing failures, one old caret fixture implicitly relying on the superseded bare-table default, one new automatic-reset expectation contradicting retained native spacing, lexical inventory ordering and one weak IDL provenance marker. The old caret fixture now explicitly requests left alignment while retaining its literal width expectations. Original Desktop/Open cases passed in bounded failed-only retries without implementation or test changes; this is an intermittent observation, not a claimed IO product fix. Genuine new cases close constructor-owned minimum-width restoration and absent-spacing layout branches. Initial formatting/type/JSDoc failures and the exact scoped closures are recorded in the leaf.
+
+Coverage transfer used real counters, exact unchanged maps, or complete byte-identical contiguous source ranges. For changed tabledlg, complete statement/function declaration and body/branch locations were checked; synthetic empty else locations were retained only under verified complete enclosing branch ranges. Five nonidentical entries were excluded and covered by real new cases. Raw coverage/maps/diagnostics remain only in ignored application cache. No upstream sources, helper scripts, Python, probes or binaries were added to agentplane.
+
+All declared static gates and restored-source audits passed. The scope has 18 semantic paths, 456 of 459 prior tests byte-identical, three bounded old fixtures and four new test files. All 261 prior protected semantic fields and evidence prefixes remain preserved; three new source owners bring the inventory to 264 and remain explicitly unverified. Exact-SHA quality review was performed by the same agent, not an independent reviewer. Doctor retained zero errors and two known warnings; routing and artifact audits passed. Five newly persisted quality/review artifacts were checked as canonical prose/JSON with no forbidden artifact types. Vendor was restored after every absent profile; all runners are terminal. Registered saving/opening/recovery deviations remain unchanged.
+
+Parent and overall goal remain active. Relative widths/percent controls, complete Sfx item/change-only ownership, hidden/merged columns, RTL/fly/cache/protection and complete table/list/core/UI behavior remain unverified. Insertion still has inherited direct React model writes and is a suitable following leaf. No complete upstream parity claim is made.
