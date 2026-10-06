@@ -1,10 +1,11 @@
 ---
 id: "202610060937-TR4M9D"
 title: "Implement native counted column insertion and width redistribution through table UI"
-status: "DOING"
+result_summary: "Implemented native before/after counted columns, selected-range cumulative width redistribution, shared actual-cell creation and one document-owned history action. Original selection, mixed/recreated table undo/redo, native worker/ODF and browser colgroup behavior verified by one upstream-absent build plus12833 app/109 inventory/5 scripts/193 Chromium;100% raw-counter coverage;475/476 old tests identical and prior269 semantic statuses preserved. Conscious I/O deviations unchanged; complex layout/merged tables/full native undo unverified, parent and whole goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610060937-TR4M9D/evidence/scope-audit.json"
   findings:
     - "All declared gates and scope checks pass; no test replay, coverage transfer or source/helper AP copies. Prior269 semantic records preserved;270 current;475/476 old test files identical, one count fixture49->51."
-commit: null
+commit:
+  hash: "2c76be1460f59495b7ab618efa8babf2e7870c3d"
+  message: "🧩 TR4M9D code: insert native counted columns with conserved widths and shared history"
 comments:
   -
     author: "CODER"
     body: "Start: iteration182 native column ownership, width redistribution and UI slots with one absent profile; full parity unverified."
+  -
+    author: "CODER"
+    body: "Verified: native counted flat column insertion and conserved widths through actual table UI; all declared gates and exact-SHA same-agent review PASS; whole parity unverified."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS at explicit implementation2c76be1460f59495b7ab618efa8babf2e7870c3d: all declared checks; one absent build/app12833/inventory109/scripts5/Chromium193;100% actual raw counters, no replay. Exact-SHA same-agent quality PASS; scope and source/helper prohibition satisfied. Complex layouts/history and whole parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T10:04:55.255Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native counted flat column insertion and conserved widths through actual table UI; all declared gates and exact-SHA same-agent review PASS; whole parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T10:04:38.542Z"
+doc_updated_at: "2026-10-06T10:04:55.257Z"
 doc_updated_by: "CODER"
 description: "Iteration182: port flat SwTable InsertCol/NewInsertCol selected column edges and proportional cumulative rounding; native column search expansion, document-owned shared SwUndoTableNdsChg history and contextual InsertColumnsBefore/After slots. Preserve original selection, table geometry and I/O deviations; one full upstream-absent profile."
 sections:
