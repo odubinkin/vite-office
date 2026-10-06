@@ -1,0 +1,15 @@
+{
+  "evaluatedSHA": "dac0dd5edbf855e1298a53746660882b79682386",
+  "sameCurrentAgentEvaluator": true,
+  "independentReviewerClaim": false,
+  "semanticChangedPaths": 14,
+  "taskEvidencePathsInSameSemanticCommit": 9,
+  "scopeEvidenceSHA256": "a08666b6cc2cb8c0a7a115ce2a826fa6ff8e43c678bfb83b01f3cc41f4b8da81",
+  "diffSHA256": "557cfd9029bcf59cda71209626625e687d70dad6199b322cb0198c05d7ff8fae",
+  "sourceIdentityVerified": true,
+  "mapIdentityVerified": true,
+  "allRequiredEvidenceVerified": true,
+  "fullProfileCount": 1,
+  "passingReplays": 0,
+  "residualRisk": "Represented numeric NONE XML/UNO native ownership, copy/setter application, ODT reopening, list context and history only. Letters/Roman/custom/bitmap/full native UNO/XML/framework/layout/core/UI/list/table parity remains unverified. Conscious IO deviations unchanged;parent DOING and goal ACTIVE."
+}
