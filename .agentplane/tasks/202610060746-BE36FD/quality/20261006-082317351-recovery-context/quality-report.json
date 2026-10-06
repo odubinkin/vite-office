@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610060746-BE36FD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T08:23:17.351Z",
+  "verdict": "pass",
+  "summary": "Exact implementation SHA satisfies bounded native body table insertion and mixed history contract; full parity remains unverified.",
+  "evaluated_sha": "a79ea63f62f50eaeed5697d813b9b6818713033d",
+  "blueprint_digest": "cce48a86f5f7a139320e8790daac8e62a24233460b864aa217d8b21b360866db",
+  "findings": [
+    "Verified native insertion and current-table row redo ownership, actual case counts, complete coverage proof, scoped old-test and semantic preservation, and restored upstream profiles."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610060746-BE36FD/README.md",
+    ".agentplane/tasks/202610060746-BE36FD/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610060746-BE36FD/evidence/final-coverage.json",
+    ".agentplane/tasks/202610060746-BE36FD/evidence/scope-audit.json",
+    ".agentplane/tasks/202610060746-BE36FD/evidence/source-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native selection conversion,nested/merged/protected tables,full frame/item/autoformat/redline/layout and native row lifetimes remain unverified; registered I/O exceptions preserved."
+  ]
+}

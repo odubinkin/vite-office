@@ -1,0 +1,115 @@
+{
+  "evaluatedSHA": "a79ea63f62f50eaeed5697d813b9b6818713033d",
+  "reviewer": "Same current agent in EVALUATOR role; no independent reviewer claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12811,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 187
+  },
+  "caseIdentity": "file+fullName+occurrence for Vitest, file+fullTitle+project for Chromium; partial skipped remain skipped and are not additional passes",
+  "runtimeErrors": {
+    "application": [],
+    "inventory": []
+  },
+  "remainingFailedCases": {
+    "application": [],
+    "inventory": [],
+    "chromium": []
+  },
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/edit/edtab.ts": "a4119d5c04a6fc8e9efd06daa43e7b9ee0105bca8a288a3dc4515ccd803d5a7b",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "563a501345a1932585be011a23b6f9e2948921096a95e9dd7f08d90c5368ffb1",
+    "apps/office/src/sw/source/core/doc/doc.ts": "65a88f9a6c02ac208ba442776446a67d184b3cdecff387a877f2dc08341aaf56",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "6b124d2bcf240fd41cf691904d37f385ca134c3c3d03c5354e03ab869597052e",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "5166bae3f0e4608dd83e5869a86662d7fd3840aafe79d5099de23b03f4899e25",
+    "apps/office/src/sw/source/core/table/swtable.ts": "cb6a1330c5189c5d009f282229acb840008e7d28d97347b195fda7f398176574",
+    "apps/office/src/sw/inc/poolfmt.ts": "a0d77184f6741ddfe297775a870535030c93550fe12da32877201da45d5a0865",
+    "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": "10f309b7103fee32f311bba3222703eb51da7be9ace4ab3caf94a76cac835bfd",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "1e7326a62b1b5bdd122413d1c4a9348c565562a0b258f2a34057b35fbaa96575"
+  },
+  "coverageCounts": {
+    "application": {
+      "lines": {
+        "total": 13491,
+        "covered": 13491,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14779,
+        "covered": 14779,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3550,
+        "covered": 3550,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 11005,
+        "covered": 11005,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inventory": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "coverageProof": "264exact complete maps plus one full byte-identical contiguous-range rebase, real counters only; modified constructor/Redo counts come from genuinely new stack case",
+  "pinnedSourceFiles": 6,
+  "priorSemanticRecordsPreserved": 267,
+  "oldTestFilesByteIdentical": 465,
+  "totalPriorTests": 466,
+  "sourceResponsibility": "new native shell owner remains unverified; complete UI/core parity is not claimed",
+  "findings": [
+    "Direct React table graph writes are removed; grid and dialog use existing native graph and shell ownership.",
+    "Native collapsed-body position0/middle/end and grouped insertion/cursor history pass.",
+    "New mixed stack catches and repairs stale row target after table reconstruction; repeated actual core and Chromium stacks pass.",
+    "Registered save/open/recovery exceptions and all prior semantic statuses/defaults/classifications/evidence prefixes are preserved.",
+    "No tests/runtime/E2E read or invoke upstream; vendor restored after every profile.",
+    "Full native selection conversion/nested tables/frame/item/autoformat/redline/layout/row lifetime remain unverified."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}
