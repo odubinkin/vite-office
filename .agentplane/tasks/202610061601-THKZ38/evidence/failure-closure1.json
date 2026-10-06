@@ -1,0 +1,101 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "11b2f86aac8f8fd35578ee2ee47bad21109fdb78d620ac01950110e243b2c20e",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "c379bb175797e1c94c75a48165e0f77acde792a70f4afb5ae129e27473bc901a",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "71be278c7b1dee1219066c4a43140e94fb9a2f2d940ed96039f1a2db2aeb9aa2",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "89676f449427967939afcf0e4979bcb5e1bd941ad22de5d45dca4f67d5fd116c",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts": "30f820c90c86acbf6b5d3fe9f4f0342feb2dbbda4127ad9148cef54688747e55",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "3d4809ca044e32e5c307250c3e912492a0cab7fd376634a81aed9a4a8b37ce14",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "e1a88f76c94ddbb084740abe7fee630fb1446e9ed2c891f4c4105c71aa032ac0",
+    "apps/office/e2e/writer-native-table-column-page.spec.ts": "0c8a59544b7933daa7ade500a7e790dcbac2e7046ad0b97383aea102aca79e3c",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "f754b992f7cd2915635b5f7db38185e51e79c3b81c64124e8bebc04d37008bce",
+    "docs/program/source-provenance.json": "f6ac092c1f9483b7ca771a4637e4fe8609a2077ab83ab77dab6d0f0badd20383",
+    "docs/program/parity/runtime-inventory.json": "84c4560661ef4f67fee4be7a218b8716a8c4c2e2cc1cb5252cb64f44b4dc902c"
+  },
+  "records": [
+    {
+      "kind": "typecheck",
+      "command": "npm run typecheck",
+      "profile": "upstream-absent",
+      "exit": 2,
+      "bytes": 783,
+      "sha256": "256a31db6b428e91cdb778784c7d4476b1796c01514e8864cc86450054ccdb1c",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/ui/table/native-table-column-page.test.ts src/sw/browser/presentation/native-table-column-page.test.tsx -t mounted workbench passes actual row versus whole-table selection|mounted native column draft validates remaining table properties|native automatic column page reconciles changed available page space --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/THKZ38.app-closure1-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 33478,
+      "sha256": "fdc2f06cd1ac6c269ea562ced6c68096eb6f3daaffcbb6818cd8298e84699321",
+      "totals": [
+        "Test Files  2 failed (2)",
+        "Tests  2 failed | 1 passed | 32 skipped (35)"
+      ],
+      "failedCases": [
+        {
+          "name": "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx > mounted workbench passes actual row versus whole-table selection to native columns",
+          "assertion": [
+            "TypeError: point.GetNode is not a function"
+          ]
+        },
+        {
+          "name": "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts > native automatic column page reconciles changed available page space",
+          "assertion": [
+            "AssertionError: expected 9000 to be 6000 // Object.is equality"
+          ]
+        }
+      ],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 2,
+        "skipped": 32,
+        "total": 35
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14724,
+          "covered": 2103,
+          "skipped": 0,
+          "pct": 14.28
+        },
+        "statements": {
+          "total": 16155,
+          "covered": 2171,
+          "skipped": 0,
+          "pct": 13.43
+        },
+        "functions": {
+          "total": 3744,
+          "covered": 543,
+          "skipped": 0,
+          "pct": 14.5
+        },
+        "branches": {
+          "total": 12002,
+          "covered": 818,
+          "skipped": 0,
+          "pct": 6.81
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 14.28,
+        "statements": 13.43,
+        "functions": 14.5,
+        "branches": 6.81
+      },
+      "incompleteFileCount": 249,
+      "coverageMapSHA256": "897dd28bd1f5165404f6e9f78c58213317854ac868aea7d3ee91363a839f2553"
+    }
+  ]
+}
