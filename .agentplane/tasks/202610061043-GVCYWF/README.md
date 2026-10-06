@@ -4,7 +4,7 @@ title: "Remove callback editing and clipboard operation adapters from native Wri
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T11:00:38.294Z"
+  updated_by: "CODER"
+  note: "Verified actual native shell identity at422482e0a0c4635daa2f345ec39dfde5dd6fadad: two callback adapter layers removed,482 unchanged oldtests,12841app109inventory5scripts195Chrome PASS,100% actual app/inventory coverage. All static/scoped/source/scope/artifact/quality gates PASS; one absent profile, vendor restored. Full parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -55,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: remove two callback adapter layers using actual native shell identity; preserve behavior, one absent profile, whole parity unverified."
+  -
+    type: "verify"
+    at: "2026-10-06T11:00:38.294Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified actual native shell identity at422482e0a0c4635daa2f345ec39dfde5dd6fadad: two callback adapter layers removed,482 unchanged oldtests,12841app109inventory5scripts195Chrome PASS,100% actual app/inventory coverage. All static/scoped/source/scope/artifact/quality gates PASS; one absent profile, vendor restored. Full parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T11:00:28.552Z"
+doc_updated_at: "2026-10-06T11:00:38.377Z"
 doc_updated_by: "CODER"
 description: "Iteration184: remove SwWrtShellEditingOperations/SwWrtShellEditingPort and WriterPasteOperations callback layers; structural editing uses actual SwWrtShell owner, native cursor/document/history methods and direct transfer coordination. Preserve existing behavior and registered I/O deviations; verify all existing acceptance once upstream absent."
 sections:
@@ -68,7 +74,41 @@ sections:
     2. ONE full upstream-absent profile, vendor renamed inside repo/restored in finally: npm run test:static; full app/inventory coverage --coverage.reportOnFailure with JSON raw cases/maps; scripts acceptance; all Chromium against dist. Persist exact failures/counts/errors/hashes before asserting. No full/passing replay or tests invoking upstream; original failure/new-case closure only if necessary.
     3. All482 existing test files remain byte-identical; existing actual shell/mounted/browser cases cover body/table selected input, deletion/split/join, native hints/list state, plain/rich transfer, grouping/Undo/Redo/composition, notifications and replacement.100% actual app/inventory counters; any transfer only identical maps or entire byte-identical ranges with actual counters. No removed adapter symbols/callback objects in production, no runtime dependency cycle; genuine native SwWrtShell owner used directly.
     4. After restoration generation --check/source-tree/provenance/invariants/parity once. Scope audit all270 prior semantic statuses/defaults/classes preserved; precise removed-symbol metadata replacement only. Scoped AP source/helper prohibition, doctor/routing/diff and same-agent exact-SHA quality; scoped implementation/evidence/verification/clean close; preserve entire parent Findings prefix.
-  Verification: "Command: all six initial static gates; changed-path JSDoc/physical-lines/prettier/eslint; one absent full profile; once-restored source gates; scope/artifact/doctor/routing/diff and same-agent exact-SHA quality. Result: PASS at422482e0a0c4635daa2f345ec39dfde5dd6fadad. Evidence:12841app109inventory5scripts195Chrome distinct PASS,0failures/skips/flaky/runtimeerrors; actual app/inventory100% counters and byte-identical final maps. No closures/rebuilds/coverage merges/transfers/full passing replay. All482oldtests byte-identical;270prior semantic states/defaults/classes/justification preserved; exact obsolete-symbol metadata replacement only; source6pinnedfiles. Vendor restored, source hashes unchanged, doctor0errors2knownwarnings. Same current agent in EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE."
+  Verification: |-
+    Command: all six initial static gates; changed-path JSDoc/physical-lines/prettier/eslint; one absent full profile; once-restored source gates; scope/artifact/doctor/routing/diff and same-agent exact-SHA quality. Result: PASS at422482e0a0c4635daa2f345ec39dfde5dd6fadad. Evidence:12841app109inventory5scripts195Chrome distinct PASS,0failures/skips/flaky/runtimeerrors; actual app/inventory100% counters and byte-identical final maps. No closures/rebuilds/coverage merges/transfers/full passing replay. All482oldtests byte-identical;270prior semantic states/defaults/classes/justification preserved; exact obsolete-symbol metadata replacement only; source6pinnedfiles. Vendor restored, source hashes unchanged, doctor0errors2knownwarnings. Same current agent in EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T11:00:38.294Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified actual native shell identity at422482e0a0c4635daa2f345ec39dfde5dd6fadad: two callback adapter layers removed,482 unchanged oldtests,12841app109inventory5scripts195Chrome PASS,100% actual app/inventory coverage. All static/scoped/source/scope/artifact/quality gates PASS; one absent profile, vendor restored. Full parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T11:00:28.552Z, excerpt_hash=sha256:59f547a7e3c30cf2322eafc1686bbff5fe5eb32e7a896158a0dc4cdaf47560a8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061043-GVCYWF/blueprint/resolved-snapshot.json
+    - old_digest: ab27f162c4230ae9badaf3d1b2eacc730e68985b29dec8a9c24dc5e808b0bb8e
+    - current_digest: ab27f162c4230ae9badaf3d1b2eacc730e68985b29dec8a9c24dc5e808b0bb8e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610061043-GVCYWF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610061043-GVCYWF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert scoped implementation through a separate leaf if native cursor/history/transfer behavior regresses; preserve immutable DONE evidence and conscious I/O deviations."
   Findings: |-
     Previous turn made verified progress:183 DONE implementation0264126bc5f57c16b0a94884a4722408af1e2d05; parent checkpoint3c430aa4e84ef4c8e5a4d39a6d15677e62a4fe1b. Discovery shows native operations still invoked through SwWrtShellEditingOperations/SwWrtShellEditingPort and WriterPasteOperations object. Callback port originally avoided a runtime cycle, but a type-only actual-shell dependency now removes both synthetic identity layers without runtime import. Optional nonexistent table-paste/readtext/sw-inc-wrtsh/check-dependencies discovery paths resolved via actual rg/package commands; route recomputed before mutation. Full native behavior/layout/protection/clipboard and whole parity remain unverified.
@@ -110,6 +150,39 @@ Remove both synthetic callback editing/transfer ports and use actual native SwWr
 ## Verification
 
 Command: all six initial static gates; changed-path JSDoc/physical-lines/prettier/eslint; one absent full profile; once-restored source gates; scope/artifact/doctor/routing/diff and same-agent exact-SHA quality. Result: PASS at422482e0a0c4635daa2f345ec39dfde5dd6fadad. Evidence:12841app109inventory5scripts195Chrome distinct PASS,0failures/skips/flaky/runtimeerrors; actual app/inventory100% counters and byte-identical final maps. No closures/rebuilds/coverage merges/transfers/full passing replay. All482oldtests byte-identical;270prior semantic states/defaults/classes/justification preserved; exact obsolete-symbol metadata replacement only; source6pinnedfiles. Vendor restored, source hashes unchanged, doctor0errors2knownwarnings. Same current agent in EVALUATOR role, no independent reviewer claim. Full parity UNVERIFIED; parent/whole goal ACTIVE.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T11:00:38.294Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified actual native shell identity at422482e0a0c4635daa2f345ec39dfde5dd6fadad: two callback adapter layers removed,482 unchanged oldtests,12841app109inventory5scripts195Chrome PASS,100% actual app/inventory coverage. All static/scoped/source/scope/artifact/quality gates PASS; one absent profile, vendor restored. Full parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T11:00:28.552Z, excerpt_hash=sha256:59f547a7e3c30cf2322eafc1686bbff5fe5eb32e7a896158a0dc4cdaf47560a8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061043-GVCYWF/blueprint/resolved-snapshot.json
+- old_digest: ab27f162c4230ae9badaf3d1b2eacc730e68985b29dec8a9c24dc5e808b0bb8e
+- current_digest: ab27f162c4230ae9badaf3d1b2eacc730e68985b29dec8a9c24dc5e808b0bb8e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610061043-GVCYWF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610061043-GVCYWF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
