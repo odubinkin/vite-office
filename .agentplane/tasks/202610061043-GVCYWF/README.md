@@ -1,10 +1,11 @@
 ---
 id: "202610061043-GVCYWF"
 title: "Remove callback editing and clipboard operation adapters from native Writer shell"
-status: "DOING"
+result_summary: "Removed synthetic editing object and callback ports; native structural editing and transfer/list operations borrow actual SwWrtShell identity with type-only dependencies.117 net source lines removed,482 unchanged oldtests;12841app109inventory5scripts195Chrome PASS,100% actual app/inventory coverage. One absent profile; vendor restored; full native parity unverified and parent goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "Removed SwWrtShellEditingPort/SwWrtShellEditingOperations and WriterPasteOperations. Split algorithms and clipboard/list coordination call actual native shell/document/history methods directly with erased type-only dependencies;117 net source lines removed."
     - "All482 existing acceptance files byte-identical. ONE absent full profile PASS12841app109inventory5scripts195Chromium;100% actual app/inventory counters; no closures/replays/merges/transfers/rebuilds; production hashes unchanged."
     - "270 prior semantic states/defaults/classes/justification preserved; only obsolete-symbol references replaced. All six initial static gates, scoped checks, once-restored source gates and governance/scope/artifact checks pass."
-commit: null
+commit:
+  hash: "422482e0a0c4635daa2f345ec39dfde5dd6fadad"
+  message: "🧩 GVCYWF code: remove native editing and clipboard callback ports"
 comments:
   -
     author: "CODER"
     body: "Start: remove two callback adapter layers using actual native shell identity; preserve behavior, one absent profile, whole parity unverified."
+  -
+    author: "CODER"
+    body: "Verified: two callback editing/clipboard adapters removed; actual native shell owns cursor/document/history coordination, all unchanged acceptance and declared checks pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified actual native shell identity at422482e0a0c4635daa2f345ec39dfde5dd6fadad: two callback adapter layers removed,482 unchanged oldtests,12841app109inventory5scripts195Chrome PASS,100% actual app/inventory coverage. All static/scoped/source/scope/artifact/quality gates PASS; one absent profile, vendor restored. Full parity unverified."
+  -
+    type: "status"
+    at: "2026-10-06T11:00:52.836Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: two callback editing/clipboard adapters removed; actual native shell owns cursor/document/history coordination, all unchanged acceptance and declared checks pass."
 doc_version: 3
-doc_updated_at: "2026-10-06T11:00:38.377Z"
+doc_updated_at: "2026-10-06T11:00:52.838Z"
 doc_updated_by: "CODER"
 description: "Iteration184: remove SwWrtShellEditingOperations/SwWrtShellEditingPort and WriterPasteOperations callback layers; structural editing uses actual SwWrtShell owner, native cursor/document/history methods and direct transfer coordination. Preserve existing behavior and registered I/O deviations; verify all existing acceptance once upstream absent."
 sections:
