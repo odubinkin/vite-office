@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "command": "unchanged check-jsdoc.mjs validateSourceFile on changed source paths",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/table/swtable.ts": 408,
+        "apps/office/src/sw/source/core/docnode/nodes.ts": 553,
+        "apps/office/src/sw/source/core/doc/doc.ts": 828,
+        "apps/office/src/sw/source/core/undo/untbl.ts": 391,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 208,
+        "apps/office/src/sw/source/core/frmedt/tblsel.ts": 33,
+        "apps/office/src/sw/source/uibase/shells/tabsh.ts": 129,
+        "scripts/generate-writer-ui-resources.ts": 638,
+        "apps/office/src/sw/source/core/table/native-column-insertion.test.ts": 402,
+        "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx": 93,
+        "apps/office/e2e/writer-native-column-commands.spec.ts": 48,
+        "scripts/libreoffice-inventory/parity-mapping-cli.test.ts": 183
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/table/swtable.ts apps/office/src/sw/source/core/docnode/nodes.ts apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/undo/untbl.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/core/frmedt/tblsel.ts apps/office/src/sw/source/uibase/shells/tabsh.ts scripts/generate-writer-ui-resources.ts apps/office/src/sw/source/core/table/native-column-insertion.test.ts apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx apps/office/e2e/writer-native-column-commands.spec.ts scripts/libreoffice-inventory/parity-mapping-cli.test.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/table/native-column-insertion.test.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}

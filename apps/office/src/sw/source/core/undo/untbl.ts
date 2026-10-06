@@ -4,7 +4,7 @@ import { SwTableNode, type SwTableBoxStartNode } from "../docnode/node";
 import type { SwDoc } from "../doc/doc";
 import type { SwInsertTableOptions } from "../../../inc/itabenum";
 import { SwPosition } from "../crsr/pam";
-import type { SwTableRowSection } from "../docnode/nodes";
+import type { SwTableRowSection, SwTableBoxSection } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import {
   SwUndo,
@@ -159,7 +159,7 @@ export class SwUndoAttrTable extends SwUndo {
   }
 }
 
-/** Native row history stores insertion coordinates and actual inserted sections for the flat-grid slice. */
+/** Native row/column history stores insertion coordinates and actual inserted sections for the flat-grid slice. */
 export class SwUndoTableNdsChg extends SwUndo {
   private readonly m_nSttNode: number;
   private readonly beforeNode: number;
@@ -168,16 +168,23 @@ export class SwUndoTableNdsChg extends SwUndo {
   private readonly sourceRow: number;
   private readonly rowIndex: number;
   private sections: SwTableRowSection[];
+  private columnSections: { line: SwTableLine; section: SwTableBoxSection }[] = [];
+  private readonly sourceColumn: number;
+  private readonly columnIndex: number;
+  private readonly insertionNodes: readonly number[];
+  private readonly beforeWidths: readonly number[];
+  private afterWidths: readonly number[] = [];
   private customAfter = false;
-  /** Captures coordinates before mutation. @param table - Connected table. @param selection - Original boxes. @param before - Original cursor. @param count - Native count. @param behind - Selected edge direction. @returns Nothing. */
+  /** Captures coordinates before mutation. @param table - Connected table. @param selection - Original boxes. @param before - Original cursor. @param count - Native count. @param behind - Selected edge direction. @param columnMode - Native column insertion mode. @returns Nothing. */
   public constructor(
     table: SwTable,
     selection: readonly SwTableBox[],
     before: SwUndoCursorState,
     private readonly count: number,
     behind: boolean,
+    private readonly columnMode = false,
   ) {
-    super("Insert Row", before, before);
+    super(columnMode ? "Insert Column" : "Insert Row", before, before);
     this.m_nSttNode = table.GetTableNode().GetIndex();
     this.beforeNode = before.point.node.GetIndex();
     this.beforeContent = before.point.offset;
@@ -192,6 +199,34 @@ export class SwUndoTableNdsChg extends SwUndo {
     );
     this.sourceRow = behind ? Math.max(...selected) : Math.min(...selected);
     this.rowIndex = this.sourceRow + (behind ? 1 : 0);
+    const columns = selection.flatMap(
+      /** Resolves original native selected column coordinates. @param box - Selected box. @returns Owned column coordinates. */
+      (box) =>
+        table.GetTabLines().flatMap(
+          /** Resolves actual box identity in one row. @param line - Row. @returns Selected coordinate. */
+          (line) => {
+            const column = line.GetTabBoxes().indexOf(box);
+            return column < 0 ? [] : [column];
+          },
+        ),
+    );
+    this.sourceColumn = behind ? Math.max(...columns) : Math.min(...columns);
+    this.columnIndex = this.sourceColumn + (behind ? 1 : 0);
+    this.beforeWidths = columnMode ? [...table.GetColumnWidths()] : [];
+    this.insertionNodes = columnMode
+      ? table.GetTabLines().map(
+          /** Captures numeric native cell insertion boundaries before mutation. @param line - Original row. @returns Boundary index. */
+          (line) => {
+            const next = line.GetTabBoxes()[this.columnIndex];
+            return next === undefined
+              ? (line.GetTabBoxes().at(-1) as SwTableBox)
+                  .GetStartNode()
+                  .EndOfSectionNode()
+                  .GetIndex() + 1
+              : next.GetStartNode().GetIndex();
+          },
+        )
+      : [];
     const next = table.GetTabLines()[this.rowIndex];
     this.insertionNode =
       next === undefined
@@ -200,6 +235,12 @@ export class SwUndoTableNdsChg extends SwUndo {
   }
   /** Reports retained section units. @returns Node count. */
   public override GetPayloadSize(): number {
+    if (this.columnMode)
+      return this.columnSections.reduce(
+        /** Counts retained native cell nodes. @param sum - Prior units. @param saved - Actual cell section. @returns Total. */
+        (sum, saved) => sum + saved.section.nodes.length,
+        0,
+      );
     return this.sections.reduce(
       /** Counts actual retained nodes. @param count - Prior count. @param section - Inserted section. @returns Total. */
       (count, section) => count + section.nodes.length,
@@ -209,10 +250,26 @@ export class SwUndoTableNdsChg extends SwUndo {
   /** Removes all inserted rows as one native action. @param context - Native context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
     const nodes = context.GetDoc().nodes,
-      table = (nodes.at(this.m_nSttNode) as SwTableNode).GetTable(),
-      target = nodes.at(
-        this.beforeNode + (this.beforeNode >= this.insertionNode ? this.GetPayloadSize() : 0),
-      ) as SwTextNode;
+      table = (nodes.at(this.m_nSttNode) as SwTableNode).GetTable();
+    if (this.columnMode) {
+      const shift = this.columnSections.reduce(
+          /** Counts connected inserted sections before the original numeric point. @param sum - Prior correction. @param saved - Actual cell. @param index - Saved coordinate. @returns Correction. */
+          (sum, saved, index) =>
+            sum +
+            (this.beforeNode >= (this.insertionNodes[Math.floor(index / this.count)] as number)
+              ? saved.section.nodes.length
+              : 0),
+          0,
+        ),
+        target = nodes.at(this.beforeNode + shift) as SwTextNode;
+      for (const saved of [...this.columnSections].reverse())
+        nodes.RemoveTableBox(table, saved.line, saved.section, target, this.beforeContent);
+      table.SetColumnWidths(this.beforeWidths);
+      return;
+    }
+    const target = nodes.at(
+      this.beforeNode + (this.beforeNode >= this.insertionNode ? this.GetPayloadSize() : 0),
+    ) as SwTextNode;
     for (const section of [...this.sections].reverse())
       nodes.RemoveTableRow(table, section, target, this.beforeContent);
   }
@@ -220,6 +277,38 @@ export class SwUndoTableNdsChg extends SwUndo {
   protected override RedoImpl(context: SwUndoRedoContext): void {
     const nodes = context.GetDoc().nodes,
       table = (nodes.at(this.m_nSttNode) as SwTableNode).GetTable();
+    if (this.columnMode) {
+      if (
+        (
+          (this.columnSections[0] as { section: SwTableBoxSection }).section
+            .nodes[0] as SwTableBoxStartNode
+        ).StartOfSectionNode() !== table.GetTableNode()
+      ) {
+        this.columnSections = [];
+        for (const line of table.GetTabLines())
+          for (let i = 0; i < this.count; i++)
+            this.columnSections.push({
+              line,
+              section: nodes.PrepareTableBox(
+                table,
+                line.GetTabBoxes()[this.sourceColumn] as SwTableBox,
+              ),
+            });
+      }
+      this.columnSections.forEach(
+        /** Connects each retained native cell at its original row/column position. @param saved - Cell owner. @param index - Saved coordinate. @returns Nothing. */
+        (saved, index) =>
+          nodes.InsertTableBox(
+            table,
+            saved.line,
+            saved.section,
+            this.columnIndex + (index % this.count),
+          ),
+      );
+      table.SetColumnWidths(this.afterWidths);
+      if (!this.customAfter) this.SaveNewBoxes();
+      return;
+    }
     if (
       (
         (this.sections[0] as SwTableRowSection).nodes[0] as SwTableBoxStartNode
@@ -240,30 +329,61 @@ export class SwUndoTableNdsChg extends SwUndo {
   /** Records inserted native boxes after successful mutation. @param table - Initial connected owner. @param after - Optional preserved live selection. @returns Nothing. */
   public SaveNewBoxes(table?: SwTable, after?: SwUndoCursorState): void {
     if (table !== undefined) {
-      this.sections = table
-        .GetTabLines()
-        .slice(this.rowIndex, this.rowIndex + this.count)
-        .map(
-          /** Captures actual inserted node ranges. @param line - Connected row. @returns Actual section. */
-          (line) => {
-            const boxes = line.GetTabBoxes(),
-              start = (boxes[0] as SwTableBox).GetStartNode(),
-              end = (boxes.at(-1) as SwTableBox).GetStartNode().EndOfSectionNode();
-            return {
-              line,
-              nodes: start
-                .GetNodes()
-                .entries()
-                .slice(start.GetIndex(), end.GetIndex() + 1),
-            };
-          },
+      if (this.columnMode) {
+        this.afterWidths = [...table.GetColumnWidths()];
+        this.columnSections = table.GetTabLines().flatMap(
+          /** Captures actual inserted cells in each native row. @param line - Original row. @returns Retained owners. */
+          (line) =>
+            line
+              .GetTabBoxes()
+              .slice(this.columnIndex, this.columnIndex + this.count)
+              .map(
+                /** Captures the exact connected native section. @param box - Inserted box. @returns Retained section. */
+                (box) => ({
+                  line,
+                  section: {
+                    box,
+                    nodes: box
+                      .GetStartNode()
+                      .GetNodes()
+                      .entries()
+                      .slice(
+                        box.GetStartNode().GetIndex(),
+                        box.GetStartNode().EndOfSectionNode().GetIndex() + 1,
+                      ),
+                  },
+                }),
+              ),
         );
+      } else
+        this.sections = table
+          .GetTabLines()
+          .slice(this.rowIndex, this.rowIndex + this.count)
+          .map(
+            /** Captures actual inserted node ranges. @param line - Connected row. @returns Actual section. */
+            (line) => {
+              const boxes = line.GetTabBoxes(),
+                start = (boxes[0] as SwTableBox).GetStartNode(),
+                end = (boxes.at(-1) as SwTableBox).GetStartNode().EndOfSectionNode();
+              return {
+                line,
+                nodes: start
+                  .GetNodes()
+                  .entries()
+                  .slice(start.GetIndex(), end.GetIndex() + 1),
+              };
+            },
+          );
     }
     if (after !== undefined) {
       this.customAfter = true;
       this.SetAfterCursor(after);
     } else {
-      const first = (this.sections[0] as SwTableRowSection).nodes[1] as SwTextNode;
+      const first = (
+        this.columnMode
+          ? (this.columnSections[0] as { section: SwTableBoxSection }).section.nodes[1]
+          : (this.sections[0] as SwTableRowSection).nodes[1]
+      ) as SwTextNode;
       this.SetAfterCursor(createWriterCollapsedCursorState(first, 0, first.GetCharacterItemsAt(0)));
     }
   }

@@ -1,0 +1,32 @@
+{
+  "sourceReview": "Previously inspected pinned source responsibilities; hashes only, no source copies in AP",
+  "sourceSHA256": {
+    "sw/source/core/table/swnewtable.cxx": "222899c5938f08cf797c5e552ff5a9307a591e173e0708ac6f2efdf4f84a19da",
+    "sw/source/core/table/swtable.cxx": "10c536056498dd001b3a5c75638040ee5daef966ede231c66947da8e704b1206",
+    "sw/source/core/doc/tblrwcl.cxx": "f4d7786b18f6c011e66eee4332e2e44aaef9ad8d0480d6bfa5a6f065e836508a",
+    "sw/source/core/docnode/ndtbl.cxx": "d3220445657cd54a44fc741bebf5d514b4d62f5607fcfb5e0f7ef30700075d8d",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/core/frmedt/tblsel.cxx": "97ce23ff487798ee5f6789025d7b53c1ff04118ac28a2a766f1e7165498bda4c",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/core/undo/untbl.cxx": "147e1b9f9870416bc83d2b918a0621e810003594b9a95ede372518925b2c245b",
+    "sw/inc/doc.hxx": "e1607dcbe67d2e53c8e2100b2a23c9cb2ea78fe24317c6c288112170d0b759d0",
+    "sw/inc/swtypes.hxx": "51bf121cc074709d17314ffbba2d3676eae976a17dd2f4ee0e69d357fec3b361",
+    "sw/inc/swtable.hxx": "2ee3e71e4d427fde37a57ec8d68bbe32b49d3d2c6ec492193568732fcbfab3fb",
+    "sw/sdi/swriter.sdi": "8ac7ed3ea9adb1b4cb61600726ebd1a6c6990e09bb9a54d88ef03b1cbcbc8f30",
+    "sw/uiconfig/swriter/menubar/menubar.xml": "5960200bd627fd19abe7cec701540400ddcde20d26243e7c3f43b986ef3e3bcb"
+  },
+  "pin": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "represented": [
+    "SwTableShell selected coordinate count and before/after slots",
+    "SwFEShell column expansion and unsigned MINLAY guard",
+    "SwDoc single undo publication and default arguments",
+    "SwTable new-model averaged selected width, cumulative integer adjustment and actual box insertion",
+    "Shared SwNodes cell creation and SwUndoTableNdsChg numeric coordinates resolve recreated tables",
+    "Generated native columns are SfxImageItem slots without formal arguments"
+  ],
+  "limits": [
+    "Flat shared-column model only; native frame unions, follow-page geometry, vertical/RTL/fly, merged/nested/rowspan, protection, formulas, redline, repeated headline and full SaveTable/CreateNew graph reconstruction remain unverified",
+    "CheckSplitCells uses existing local SwTabFrame/page print geometry; does not claim complete native layout hierarchy",
+    "Whole goal ACTIVE; full parity UNVERIFIED"
+  ]
+}

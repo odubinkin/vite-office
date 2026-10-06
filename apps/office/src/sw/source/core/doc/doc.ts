@@ -699,6 +699,39 @@ export class SwDoc {
     );
   }
 
+  /** Inserts native columns and publishes one already-executed document history action. @param boxes - Expanded actual column selection. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Redline policy. @param cursorState - Optional shell attributes. @param afterCursor - Optional preserved live selection. @returns Whether inserted. */
+  public InsertCol(
+    boxes: readonly SwTableBox[],
+    count = 1,
+    behind = true,
+    insertDummy = true,
+    cursorState?: SwUndoCursorState,
+    afterCursor?: SwUndoCursorState,
+  ): boolean {
+    if (boxes.length === 0) return false;
+    const tableNode = (boxes[0] as SwTableBox).GetStartNode().StartOfSectionNode();
+    if (!(tableNode instanceof SwTableNode) || tableNode.GetNodes() !== this.nodes) return false;
+    return this.RunModelTransaction(
+      /** Publishes history only after native table insertion succeeds. @returns Whether inserted. */
+      () => {
+        const table = tableNode.GetTable(),
+          last = (boxes.at(-1) as SwTableBox).GetParagraphs().at(-1) as SwTextNode,
+          before =
+            cursorState ??
+            createWriterCollapsedCursorState(
+              last,
+              last.Len(),
+              last.GetCharacterItemsAt(last.Len()),
+            ),
+          action = new SwUndoTableNdsChg(table, boxes, before, count, behind, true);
+        if (!table.InsertCol(this, boxes, count, behind, insertDummy)) return false;
+        action.SaveNewBoxes(table, afterCursor);
+        this.undoManager.AddUndoAction(action);
+        return true;
+      },
+    );
+  }
+
   /** Resolves native first-unused table naming. @returns Unoccupied table name. */
   public GetUniqueTableName(): string {
     const names = this.GetTables().map(

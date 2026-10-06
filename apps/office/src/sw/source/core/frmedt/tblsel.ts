@@ -1,0 +1,32 @@
+/** @fileoverview Represents native CheckSplitCells admission for actual flat table print geometry from tblsel.cxx. */
+import type { SwFEShell } from "./fetab";
+import { SwTabFrame } from "../layout/tabfrm";
+import { SwTable } from "../table/swtable";
+/** Checks native unsigned MINLAY spacing against actual selected column print widths. @param shell - Actual native frame-editing shell. @param divisions - Native unsigned division count. @returns Whether the represented layout admits splitting. */
+export function CheckSplitCells(shell: SwFEShell, divisions: number): boolean {
+  if (!Number.isInteger(divisions) || divisions <= 1) return false;
+  const table = shell.IsCursorInTable()?.GetTable();
+  if (table === undefined) return false;
+  const boxes = shell.GetTableSel(SwTable.SEARCH_COL),
+    page = shell.GetDoc().GetPageDesc().GetValue(),
+    printWidth = new SwTabFrame(table).Format(
+      page.width - page.leftMargin - page.rightMargin,
+    ).width,
+    widths = table.GetColumnWidths(),
+    total = widths.reduce(
+      /** Adds native shared reference widths. @param sum - Prior extent. @param width - Column extent. @returns Total. */
+      (sum, width) => sum + width,
+      0,
+    ),
+    minimum = (divisions * 23) & 0xffff;
+  if (boxes.length === 0 || total <= 0) return false;
+  return table.GetTabLines().every(
+    /** Checks actual selected boxes without replacing layout/model owners. @param line - Native row. @returns Whether admitted. */
+    (line) =>
+      line.GetTabBoxes().every(
+        /** Tests selected cell print width. @param box - Actual box. @param column - Coordinate. @returns Whether wide enough. */
+        (box, column) =>
+          !boxes.includes(box) || ((widths[column] as number) * printWidth) / total >= minimum,
+      ),
+  );
+}

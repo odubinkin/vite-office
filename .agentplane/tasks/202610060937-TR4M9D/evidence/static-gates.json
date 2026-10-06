@@ -1,0 +1,64 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 0,
+      "bytes": 122,
+      "sha256": "ac1729f86eee878f5f4d6c948c510d2cc91bb5568f6dd088f70f3885e137d116",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 293,
+      "sha256": "2773b693e1099ab2fc0ae66a3f2ba4884f762df976e08cd2f2deea5a3269db0e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  79:31  error  'row' is assigned a value but never used  @typescript-eslint/no-unused-vars",
+        "✖ 1 problem (1 error, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 791,
+      "sha256": "9218166fd1bf5b3beb5567ddab55d6ff2f8b5f242271648157837cb011badd8a",
+      "diagnostics": [
+        "src/sw/source/core/table/native-column-insertion.test.ts(79,31): error TS6133: 'row' is declared but its value is never read.",
+        "src/sw/source/core/table/native-column-insertion.test.ts(122,35): error TS2304: Cannot find name 'SwTable'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "60a482970d6302b83564de4f9b45318afac213a91e7aa94fe4a79b6cd3632cd9",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 1,
+      "bytes": 533,
+      "sha256": "e9b72dc257ea627d8b34f0f6388ec9a57f867493e22bb7769903f7757663130e",
+      "diagnostics": [
+        "    throw new Error(`JSDoc validation failed:\\n${errors.join(\"\\n\")}`);",
+        "Error: JSDoc validation failed:",
+        "apps/office/src/sw/source/core/frmedt/fetab.ts:22 function documents 0/1 parameters"
+      ]
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3464,
+      "sha256": "172190b14bd726c25266f5579ab320d0fa679f47b7600603e3c94d8f44fa6e02",
+      "diagnostics": []
+    }
+  ]
+}

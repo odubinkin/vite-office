@@ -21,6 +21,12 @@ export interface SwTableRowSection {
   readonly nodes: readonly SwNode[];
 }
 
+/** Actual detached or retained native cell section. */
+export interface SwTableBoxSection {
+  readonly box: SwTableBox;
+  readonly nodes: readonly SwNode[];
+}
+
 /** Owns every Writer model node and the fixed non-content/content section sentinels. */
 export class SwNodes {
   private readonly nodeArray: SwNode[] = [];
@@ -242,17 +248,92 @@ export class SwNodes {
     const line = new SwTableLine(source.GetFormat()),
       nodes: SwNode[] = [];
     for (const box of source.GetTabBoxes()) {
-      const start = new SwTableBoxStartNode(this, tableNode),
-        original = this.at(box.GetStartNode().GetIndex() + 1) as SwTextNode,
-        paragraph = new SwTextNode(this, start, original.GetTextFormatColl()),
-        end = new SwEndNode(this, start);
-      start.setEndOfSection(end);
-      const items = original.GetpSwAttrSet();
-      if (items !== undefined) paragraph.SetAttr(items);
-      nodes.push(start, paragraph, end);
-      line.AddBox(new SwTableBox(start, box.GetFormat()));
+      const section = this.PrepareTableBox(table, box);
+      nodes.push(...section.nodes);
+      line.AddBox(section.box);
     }
     return { line, nodes };
+  }
+
+  /** Prepares actual empty cell nodes from native source-box first-paragraph attributes. @param table - Owner. @param source - Original source box. @returns Detached box section. */
+  public PrepareTableBox(table: SwTable, source: SwTableBox): SwTableBoxSection {
+    const tableNode = table.GetTableNode();
+    if (tableNode.GetNodes() !== this || source.GetStartNode().StartOfSectionNode() !== tableNode)
+      throw new Error("Writer table box belongs to another table.");
+    const original = source.GetParagraphs()[0] as SwTextNode,
+      start = new SwTableBoxStartNode(this, tableNode),
+      paragraph = new SwTextNode(this, start, original.GetTextFormatColl()),
+      end = new SwEndNode(this, start);
+    start.setEndOfSection(end);
+    const items = original.GetpSwAttrSet();
+    if (items !== undefined) paragraph.SetAttr(items);
+    return { box: new SwTableBox(start, source.GetFormat()), nodes: [start, paragraph, end] };
+  }
+  /** Connects an actual native cell section at its row coordinate. @param table - Owner. @param line - Connected row. @param section - Detached native box. @param column - Insertion coordinate. @returns Nothing. */
+  public InsertTableBox(
+    table: SwTable,
+    line: SwTableLine,
+    section: SwTableBoxSection,
+    column: number,
+  ): void {
+    if (
+      table.GetTableNode().GetNodes() !== this ||
+      !table.GetTabLines().includes(line) ||
+      line.GetTabBoxes().length === 0 ||
+      section.nodes.some(
+        /** Rejects foreign or connected section nodes. @param node - Actual owner. @returns Whether invalid. */
+        (node) => node.GetNodes() !== this || this.indexOfOrUndefined(node) !== undefined,
+      )
+    )
+      throw new Error("Writer table box is not detached from this document.");
+    if (!Number.isInteger(column) || column < 0 || column > line.GetTabBoxes().length)
+      throw new Error("Writer table column position is invalid.");
+    const next = line.GetTabBoxes()[column],
+      index =
+        next === undefined
+          ? (line.GetTabBoxes().at(-1) as SwTableBox).GetStartNode().EndOfSectionNode().GetIndex() +
+            1
+          : next.GetStartNode().GetIndex();
+    this.nodeArray.splice(index, 0, ...section.nodes);
+    line.AddBox(section.box, column);
+    for (const node of section.nodes)
+      if (node instanceof SwTextNode) {
+        node.AddToList();
+        this.InsertOutlineNode(node);
+      }
+    this.document.NotifyModelChange({ index, kind: "node-inserted" });
+  }
+  /** Disconnects only an inserted native box while retaining its actual owners. @param table - Owner. @param line - Connected row. @param section - Inserted actual nodes. @param target - Surviving native cursor node. @param offset - Cursor content. @returns Nothing. */
+  public RemoveTableBox(
+    table: SwTable,
+    line: SwTableLine,
+    section: SwTableBoxSection,
+    target: SwTextNode,
+    offset: number,
+  ): void {
+    if (table.GetTableNode().GetNodes() !== this || target.GetNodes() !== this)
+      throw new Error("Writer table history belongs to another document.");
+    if (!table.GetTabLines().includes(line) || !line.GetTabBoxes().includes(section.box))
+      throw new Error("Writer table box is not connected.");
+    const index = section.box.GetStartNode().GetIndex(),
+      end = section.box.GetStartNode().EndOfSectionNode().GetIndex();
+    if (
+      section.nodes.length !== end - index + 1 ||
+      section.nodes.some(
+        /** Requires exact connected native section ownership. @param node - Retained owner. @param delta - Section offset. @returns Whether mismatched. */
+        (node, delta) => this.nodeArray[index + delta] !== node,
+      )
+    )
+      throw new Error("Writer table box is not connected.");
+    for (const node of section.nodes)
+      if (node instanceof SwTextNode) {
+        node.CollapseContentIndicesTo(target, offset);
+        this.m_aOutlineNodes.erase(node);
+        node.RemoveFromList();
+      }
+    this.nodeArray.splice(index, section.nodes.length);
+    line.RemoveBox(section.box);
+    this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
   /** Connects a row's retained sections at its native boundary. @param table - Target table. @param section - Prepared or retained row. @param rowIndex - Native row position. @returns Nothing. */

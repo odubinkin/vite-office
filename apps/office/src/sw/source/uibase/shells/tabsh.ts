@@ -76,13 +76,24 @@ export class SwTableShell {
     this.commandShell = createSfxShell(
       this,
       createWriterInterface(
-        [WRITER_COMMAND_IDS.insertRowsBefore, WRITER_COMMAND_IDS.insertRowsAfter].map(
+        [
+          WRITER_COMMAND_IDS.insertRowsBefore,
+          WRITER_COMMAND_IDS.insertRowsAfter,
+          WRITER_COMMAND_IDS.insertColumnsBefore,
+          WRITER_COMMAND_IDS.insertColumnsAfter,
+        ].map(
           /** Binds native void row slots. @param id - Generated command. @returns Slot handler. */
           (id) => ({
             id,
             capabilityId: "CAP-0137" as const,
             /** Executes the native table command. @returns Whether inserted. */
-            execute: () => this.Execute(id === WRITER_COMMAND_IDS.insertRowsAfter),
+            execute: () =>
+              this.Execute(
+                id === WRITER_COMMAND_IDS.insertRowsAfter ||
+                  id === WRITER_COMMAND_IDS.insertColumnsAfter,
+                id === WRITER_COMMAND_IDS.insertColumnsBefore ||
+                  id === WRITER_COMMAND_IDS.insertColumnsAfter,
+              ),
             /** Reads current native table state. @returns Whether available. */
             isEnabled: () => this.wrtShell.IsCursorInTable() !== undefined,
           }),
@@ -94,24 +105,24 @@ export class SwTableShell {
   public GetCommandShell(): SfxShell {
     return this.commandShell;
   }
-  /** Derives native count from actual selected row coordinates. @param behind - Trailing edge. @returns Whether inserted. */
-  public Execute(behind: boolean): boolean {
+  /** Derives native count from actual selected row/column coordinates. @param behind - Trailing edge. @param columnMode - Native column command. @returns Whether inserted. */
+  public Execute(behind: boolean, columnMode = false): boolean {
     const table = this.wrtShell.IsCursorInTable()?.GetTable();
     if (table === undefined) return false;
     const boxes = this.wrtShell.GetTableSel(),
       selected = table.GetTabLines().flatMap(
         /** Resolves rows containing selected native boxes. @param row - Original row. @param index - Row coordinate. @returns Selected coordinate. */
         (row, index) =>
-          row.GetTabBoxes().some(
-            /** Tests actual selection identity. @param box - Original box. @returns Whether selected. */
-            (box) => boxes.includes(box),
-          )
-            ? [index]
-            : [],
+          row.GetTabBoxes().flatMap(
+            /** Reads actual selected coordinates. @param box - Native box. @param column - Coordinate. @returns Row or column coordinate. */
+            (box, column) => (boxes.includes(box) ? [columnMode ? column : index] : []),
+          ),
       );
     return (
       selected.length !== 0 &&
-      this.wrtShell.InsertRow(Math.max(...selected) - Math.min(...selected) + 1, behind)
+      (columnMode
+        ? this.wrtShell.InsertCol(Math.max(...selected) - Math.min(...selected) + 1, behind)
+        : this.wrtShell.InsertRow(Math.max(...selected) - Math.min(...selected) + 1, behind))
     );
   }
 }

@@ -1,13 +1,14 @@
 /** @fileoverview Owns represented native SwFEShell table attributes, selection and history from fetab.cxx. */
 import { SwEditShell } from "../edit/edtab";
-import type {
+import {
   SwTable,
-  SwTableBox,
-  SwTableFormat,
-  SwTableLineFormat,
-  SwTableBoxFormat,
+  type SwTableBox,
+  type SwTableFormat,
+  type SwTableLineFormat,
+  type SwTableBoxFormat,
 } from "../table/swtable";
 import type { SwTableNode } from "../docnode/node";
+import { CheckSplitCells } from "./tblsel";
 import { SwUndoAttrTable } from "../undo/untbl";
 
 /** Native frame-editing shell inherits the existing editing shell without an operation adapter. */
@@ -17,10 +18,20 @@ export abstract class SwFEShell extends SwEditShell {
   /** Reports native selected-box mode. @returns Whether boxes are selected. */
   public abstract HasBoxSelection(): boolean;
 
-  /** Returns original selected native boxes without a projection. @returns Actual box owners. */
-  public GetTableSel(): readonly SwTableBox[] {
+  /** Returns original selected native boxes without a projection. @param search - Native rectangle, row or column expansion. @returns Actual box owners. */
+  public GetTableSel(search: 0 | 1 | 2 = SwTable.SEARCH_NONE): readonly SwTableBox[] {
     const table = this.IsCursorInTable()?.GetTable();
-    return table === undefined ? [] : this.GetTableBoxes(table, false);
+    if (table === undefined) return [];
+    const boxes = this.GetTableBoxes(table, false);
+    if (search === SwTable.SEARCH_NONE || boxes.length === 0) return boxes;
+    const selected: SwTableBox[] = [];
+    table.CreateSelection(
+      (boxes[0] as SwTableBox).GetStartNode(),
+      (boxes.at(-1) as SwTableBox).GetStartNode(),
+      selected,
+      search,
+    );
+    return selected;
   }
   /** Inserts rows through native document ownership, retaining the original selection. @param count - Row count. @param behind - Insert after the selected edge. @returns Whether inserted. */
   public InsertRow(count: number, behind = true): boolean {
@@ -28,7 +39,33 @@ export abstract class SwFEShell extends SwEditShell {
       /** Captures current native cursor attributes and lets the document insert. @returns Whether admitted. */
       () => {
         const before = this.CaptureCursorState();
-        return this.GetDoc().InsertRow(this.GetTableSel(), count, behind, true, before, before);
+        return this.GetDoc().InsertRow(
+          this.GetTableSel(SwTable.SEARCH_ROW),
+          count,
+          behind,
+          true,
+          before,
+          before,
+        );
+      },
+    );
+  }
+
+  /** Inserts native columns after MINLAY layout admission while retaining actual selection. @param count - Native count. @param behind - Trailing edge. @returns Whether inserted. */
+  public InsertCol(count: number, behind = true): boolean {
+    if (!CheckSplitCells(this, (count + 1) & 0xffff)) return false;
+    return this.RunNotificationTransaction(
+      /** Publishes native document insertion after capturing live cursor attributes. @returns Whether inserted. */
+      () => {
+        const before = this.CaptureCursorState();
+        return this.GetDoc().InsertCol(
+          this.GetTableSel(SwTable.SEARCH_COL),
+          count,
+          behind,
+          true,
+          before,
+          before,
+        );
       },
     );
   }

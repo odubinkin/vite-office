@@ -1,0 +1,34 @@
+{
+  "base": "52e82f832bd37a819bd809eb5861635a00d50ae6",
+  "oldTestFiles": 476,
+  "byteIdenticalOldTestFiles": 475,
+  "changedOldTests": [
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+  ],
+  "newAcceptanceFiles": [
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+    "apps/office/e2e/writer-native-column-commands.spec.ts"
+  ],
+  "priorSemanticModules": 269,
+  "currentSemanticModules": 270,
+  "priorStatesDefaultsClassificationsAndEvidencePreserved": true,
+  "semanticPaths": [
+    "apps/office/src/sw/source/core/table/swtable.ts",
+    "apps/office/src/sw/source/core/docnode/nodes.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/undo/untbl.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/frmedt/tblsel.ts",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts",
+    "scripts/generate-writer-ui-resources.ts",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts",
+    "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+    "apps/office/e2e/writer-native-column-commands.spec.ts",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+  ],
+  "failures": []
+}

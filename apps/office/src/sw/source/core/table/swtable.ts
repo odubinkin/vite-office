@@ -86,9 +86,16 @@ export class SwTableLine {
     this.format = { ...value };
   }
 
-  /** Adds a cell to this row. @param box - Canonical cell. @returns Nothing. */
-  public AddBox(box: SwTableBox): void {
-    this.boxes.push(box);
+  /** Adds a cell to this row. @param box - Canonical cell. @param index - Native insertion coordinate. @returns Nothing. */
+  public AddBox(box: SwTableBox, index = this.boxes.length): void {
+    this.boxes.splice(index, 0, box);
+  }
+
+  /** Removes one connected original box during native history. @param box - Actual box. @returns Nothing. */
+  public RemoveBox(box: SwTableBox): void {
+    const index = this.boxes.indexOf(box);
+    if (index < 0) throw new Error("Writer table box is not connected.");
+    this.boxes.splice(index, 1);
   }
 
   /** Returns ordered cells. @returns Cell view. */
@@ -101,6 +108,7 @@ export class SwTableLine {
 export class SwTable {
   public static readonly SEARCH_NONE = 0;
   public static readonly SEARCH_ROW = 1;
+  public static readonly SEARCH_COL = 2;
   private readonly lines: SwTableLine[] = [];
   private readonly columnWidths: number[] = [];
   private readonly softPageBreakRows: number[] = [];
@@ -229,6 +237,121 @@ export class SwTable {
     return true;
   }
 
+  /** Restores the native shared width vector from table history. @param widths - Independent reference widths. @returns Nothing. */
+  public SetColumnWidths(widths: readonly number[]): void {
+    this.columnWidths.splice(0, this.columnWidths.length, ...widths);
+  }
+  /** Proportionally adjusts cumulative boundaries as native lcl_ModifyBoxes does. @param oldWidth - Original total. @param newWidth - Requested total. @returns Nothing. */
+  public AdjustWidths(oldWidth: number, newWidth: number): void {
+    let originalSum = 0,
+      sum = 0;
+    for (let i = 0; i < this.columnWidths.length; i++) {
+      originalSum += this.columnWidths[i] as number;
+      const wished = Math.trunc((originalSum * newWidth) / oldWidth);
+      this.columnWidths[i] = wished - sum;
+      sum = wished;
+    }
+  }
+  /** Enters native new-model column insertion. @param document - Owner. @param boxes - Expanded actual column boxes. @param count - Native unsigned count. @param behind - Trailing edge. @param insertDummy - Native redline policy. @returns Whether inserted. */
+  public InsertCol(
+    document: SwDoc,
+    boxes: readonly SwTableBox[],
+    count = 1,
+    behind = true,
+    insertDummy = true,
+  ): boolean {
+    return this.NewInsertCol(document, boxes, count, behind, insertDummy);
+  }
+  /** Inserts flat columns while conserving the existing native reference width. @param document - Owner. @param boxes - Actual boxes covering every row. @param count - Native count. @param behind - Trailing edge. @param insertDummy - Redline policy, unrepresented locally. @returns Whether inserted. */
+  private NewInsertCol(
+    document: SwDoc,
+    boxes: readonly SwTableBox[],
+    count: number,
+    behind: boolean,
+    insertDummy: boolean,
+  ): boolean {
+    void insertDummy;
+    if (
+      !Number.isInteger(count) ||
+      count < 1 ||
+      count > 0xffff ||
+      boxes.length === 0 ||
+      this.lines.length === 0 ||
+      this.tableNode.GetNodes() !== document.GetNodes()
+    )
+      return false;
+    const positions: number[] = [];
+    let addWidth = 0;
+    for (const line of this.lines) {
+      const selected: number[] = [];
+      line.GetTabBoxes().forEach(
+        /** Collects original selected columns and widths. @param box - Actual box. @param column - Native coordinate. @returns Nothing. */
+        (box, column) => {
+          if (boxes.includes(box)) {
+            selected.push(column);
+            addWidth += this.columnWidths[column] as number;
+          }
+        },
+      );
+      if (selected.length === 0 || line.GetTabBoxes().length !== this.columnWidths.length)
+        return false;
+      positions.push(behind ? Math.max(...selected) : Math.min(...selected));
+    }
+    if (
+      boxes.some(
+        /** Rejects foreign box identities. @param box - Selected box. @returns Whether foreign. */
+        (box) =>
+          !this.lines.some(
+            /** Finds a native original owner. @param line - Row. @returns Whether owned. */
+            (line) => line.GetTabBoxes().includes(box),
+          ),
+      )
+    )
+      return false;
+    if (
+      positions.some(
+        /** Shared-column geometry requires the same native edge in every flat row. @param position - Edge coordinate. @returns Whether nonuniform. */
+        (position) => position !== positions[0],
+      )
+    )
+      return false;
+    const tableWidth = this.columnWidths.reduce(
+      /** Adds native reference widths. @param sum - Prior sum. @param width - Native width. @returns Total. */
+      (sum, width) => sum + width,
+      0,
+    );
+    addWidth = Math.trunc(addWidth / this.lines.length) * count;
+    const resultingWidth = tableWidth + addWidth;
+    if (resultingWidth === 0) return false;
+    const newBoxWidth = Math.trunc(Math.trunc((addWidth * tableWidth) / resultingWidth) / count);
+    addWidth = newBoxWidth * count;
+    if (addWidth === 0 || addWidth >= tableWidth) return false;
+    this.AdjustWidths(tableWidth, tableWidth - addWidth);
+    this.lines.forEach(
+      /** Inserts native boxes using each row's source attributes. @param line - Original row. @param row - Coordinate. @returns Nothing. */
+      (line, row) => {
+        const sourceColumn = positions[row] as number,
+          source = line.GetTabBoxes()[sourceColumn] as SwTableBox,
+          index = sourceColumn + (behind ? 1 : 0);
+        for (let i = 0; i < count; i++)
+          document
+            .GetNodes()
+            .InsertTableBox(
+              this,
+              line,
+              document.GetNodes().PrepareTableBox(this, source),
+              index + i,
+            );
+      },
+    );
+    this.columnWidths.splice(
+      (positions[0] as number) + (behind ? 1 : 0),
+      0,
+      ...Array<number>(count).fill(newBoxWidth),
+    );
+    return true;
+  }
+
   /** Removes a retained row during native table history. @param line - Connected row. @returns Nothing. */
   public RemoveLine(line: SwTableLine): void {
     const index = this.lines.indexOf(line);
@@ -246,7 +369,7 @@ export class SwTable {
     start: SwTableBoxStartNode,
     end: SwTableBoxStartNode,
     boxes: SwTableBox[],
-    search: 0 | 1,
+    search: 0 | 1 | 2,
   ): void {
     boxes.length = 0;
     const endpoints: { row: number; column: number }[] = [];
@@ -263,7 +386,11 @@ export class SwTable {
     const left = Math.min(first.column, last.column),
       right = Math.max(first.column, last.column);
     boxes.length = 0;
-    for (let row = first.row; row <= last.row; row++)
+    for (
+      let row = search === SwTable.SEARCH_COL ? 0 : first.row;
+      row <= (search === SwTable.SEARCH_COL ? this.lines.length - 1 : last.row);
+      row++
+    )
       for (const [column, box] of (this.lines[row] as SwTableLine).GetTabBoxes().entries())
         if (search === SwTable.SEARCH_ROW || (column >= left && column <= right)) boxes.push(box);
   }

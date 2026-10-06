@@ -24,6 +24,8 @@
     "insertTable": ".uno:InsertTable",
     "insertRowsBefore": ".uno:InsertRowsBefore",
     "insertRowsAfter": ".uno:InsertRowsAfter",
+    "insertColumnsBefore": ".uno:InsertColumnsBefore",
+    "insertColumnsAfter": ".uno:InsertColumnsAfter",
     "headingOne": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
     "italic": ".uno:Italic",
     "lineSpacing": ".uno:LineSpacing",
@@ -87,6 +89,8 @@
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertTable" },
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertRowsBefore" },
     { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertRowsAfter" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertColumnsBefore" },
+    { "capabilityId": "CAP-0137", "commandUrl": ".uno:InsertColumnsAfter" },
     { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
     { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
@@ -443,6 +447,32 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 20509
+    },
+    ".uno:InsertColumnsBefore": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Insert Columns Before",
+      "label": "Insert Columns Before",
+      "iconName": "lc_insertcolumnsbefore.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20512
+    },
+    ".uno:InsertColumnsAfter": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0137",
+      "controlLabel": "Insert Columns After",
+      "label": "Insert Columns After",
+      "iconName": "lc_insertcolumnsafter.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20516
     },
     ".uno:Italic": {
       "browserOwned": false,
@@ -1037,6 +1067,16 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:InsertRowsAfter",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertColumnsBefore",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertColumnsAfter",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
@@ -4107,22 +4147,6 @@
       "classification": "X",
       "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:InsertColumnsBefore",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertColumnsAfter",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:InsertColumnDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
@@ -6480,7 +6504,10 @@
             "id": ".uno:TableInsertMenu",
             "items": [
               { "commandUrl": ".uno:InsertRowsBefore", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:InsertColumnsBefore", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertColumnsAfter", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Insert"
@@ -8738,18 +8765,6 @@
         "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertRowDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertColumnsBefore"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertColumnsAfter"
       },
       {
         "classification": "X",

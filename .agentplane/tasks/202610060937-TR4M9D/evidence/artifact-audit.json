@@ -1,0 +1,11 @@
+{
+  "scope": "Incremental newly created current leaf only, including ignored files; prior full census not repeated",
+  "fileCount": 11,
+  "extensions": [
+    ".md",
+    ".json"
+  ],
+  "forbiddenArtifacts": [],
+  "vendorRestored": true,
+  "content": "Bounded English task prose, counts, hashes, outcomes and exact failures; no upstream source, executable helper, raw maps or diagnostic dumps"
+}
