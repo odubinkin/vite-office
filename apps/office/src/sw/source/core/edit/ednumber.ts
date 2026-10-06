@@ -6,7 +6,7 @@ import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
 import { SetNumRuleMode, type SwDoc } from "../doc/doc";
 import { SwNumRule } from "../doc/number";
 import { WRITER_MAX_LIST_LEVEL } from "../doc/list";
-import { SwPaM } from "../crsr/pam";
+import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
@@ -97,6 +97,37 @@ export class SwPamRanges {
 }
 /** Core editing shell owns numbering commands; the represented broadcaster base preserves existing subscriptions. */
 export abstract class SwEditShell extends SwModify {
+  /** Changes an explicit position's rule through native first-current-cursor policy and DontSetItem ownership. @param indent - Native signed16 target. @param position - Borrowed actual label position. @returns Whether a numbered rule operation was admitted. */
+  public SetIndent(indent: number, position: SwPosition): boolean {
+    const node = position.GetNode();
+    const rule = node instanceof SwTextNode ? node.GetNumRule() : undefined;
+    if (rule === undefined) return false;
+    const changed = new SwNumRule(rule);
+    const cursor = this.GetCursor();
+    const current = cursor.GetPoint().GetNode();
+    if (
+      !cursor.IsMultiSelection() &&
+      current instanceof SwTextNode &&
+      current.GetNum()?.GetNumRule() !== undefined &&
+      current.GetNum()?.IsFirst() === true
+    )
+      changed.SetIndentOfFirstListLevelAndChangeOthers(indent);
+    else if (node instanceof SwTextNode && node.GetActualListLevel() >= 0)
+      changed.SetIndent(indent, node.GetActualListLevel());
+    const state = this.CaptureCursorState();
+    return this.ApplyAction(
+      new SwUndoInsNum(rule, changed, this.GetDoc(), state),
+      false,
+      /** Updates only native rule formats, preserving actual label and cursor positions. @returns Nothing. */ () => {
+        const range = new SwPaM(position);
+        try {
+          this.GetDoc().SetNumRule(range, changed, SetNumRuleMode.DontSetItem);
+        } finally {
+          range.Dispose();
+        }
+      },
+    );
+  }
   /** Reads native current-point numbering state independently of normalized range applicability. @returns Actual nonnegative list level or native MAXLEVEL count sentinel10. */
   public GetNumLevel(): number {
     const node = this.GetCursor().GetPoint().GetNode();

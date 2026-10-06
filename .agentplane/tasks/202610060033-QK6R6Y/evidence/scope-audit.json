@@ -1,0 +1,55 @@
+{
+  "base": "788ab057438b8808d3e1db6629a31af7294f0804",
+  "changedSemanticPaths": 8,
+  "productionOwners": 4,
+  "priorTestFiles": 441,
+  "priorTestFilesByteIdentical": 441,
+  "sourceConfirmedExpectedPropertyMigration": [],
+  "existingSemanticRecordsPreserved": 258,
+  "totalSemanticRecords": 258,
+  "allStatesDefaultsClassificationsIOExceptionsPreserved": true,
+  "priorEvidencePreserved": true,
+  "sourceProof": {
+    "apps/office/src/sw/source/core/doc/number.ts": "c6689eb82deffe59480bd89b5d8a7db925eb11e8876d97f50e5820e90edf2a87",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "de71171aa4ccc271168348171245fcb123281f8c89cdb2aa429823ba8effdcc2",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "85790ba0bbc9fc90ef1c24f7c388a9dc593ec9a591bbfcc39f893e54eed44874",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts": "c1334aaac9c2f35cf9cc06c35c714ad90857ff40cc82a7844568fa42e578c724"
+  },
+  "fullProfileCount": 1,
+  "passingTestReplays": 0,
+  "newAppCases": 12,
+  "newChromiumCases": 0,
+  "finalDistinctPassed": {
+    "app": 12617,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 149
+  },
+  "nativeSourceHashes": [
+    {
+      "path": "sw/source/core/doc/number.cxx",
+      "sha256": "516d41e83678d2a7ff06015464c7b18605e0d5a812809c54d9612550f1474129"
+    },
+    {
+      "path": "sw/source/core/edit/ednumber.cxx",
+      "sha256": "7b34fb57b996254abc10672d72423e69da4b009b6187e6c76ad709bc88115114"
+    },
+    {
+      "path": "sw/source/core/SwNumberTree/SwNumberTree.cxx",
+      "sha256": "c06bc5fee531f7526af80e3a434a5b723168e23e43a4ee9f6828635b483cf741"
+    },
+    {
+      "path": "sw/source/core/txtnode/ndtxt.cxx",
+      "sha256": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1"
+    },
+    {
+      "path": "sw/source/core/doc/docnum.cxx",
+      "sha256": "cc26bbbc1bf4fd2c8a86a2e3d11b6138556181b8e7919c35bc2806478804a1d4"
+    },
+    {
+      "path": "sw/source/core/undo/unnum.cxx",
+      "sha256": "92c83b8d46cdfb05d7b66dd4a7e170b724fc4a0a7dfa3c5ac2248732bb7a38d9"
+    }
+  ],
+  "validationLimit": "Source-owned numbering indent values, first-item tree ownership and represented rule-format history only. Native level SetIndent does not write its copied format as in pinned source. Existing document DontSetItem history replay preserves represented values, not full ChgNumRuleFormats/char-format/history equivalence. Actual document-label StartDocDrag/ruler/UI integration remains next explicit obligation; full native framework/merged/redline/layout/portion/core/UI/list/table parity remains unverified. Conscious IO deviations unchanged;parent DOING and goal ACTIVE."
+}

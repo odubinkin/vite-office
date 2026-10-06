@@ -1,0 +1,40 @@
+{
+  "vendorRestored": true,
+  "originalFailedApp": [
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-numbering-indent.test.ts",
+      "name": "shifts all alignment levels and only active LISTTAB while preserving native copy state"
+    },
+    {
+      "file": "apps/office/src/sw/source/core/doc/native-numbering-indent.test.ts",
+      "name": "accepts the second real child after an empty leading phantom"
+    }
+  ],
+  "newCases": [],
+  "productionChanged": false,
+  "rebuild": false,
+  "fixtureCorrection": "Check inactive fields through raw GetPositionProperties, preserving existing native mode-dependent getters; create leading empty phantom after normal AddChild removes empty phantoms and check later actual real item exclusion. No production or oracle-contract change.",
+  "records": [
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/doc/native-numbering-indent.test.ts --testNamePattern=shifts all alignment levels and only active LISTTAB while preserving native copy state|accepts the second real child after an empty leading phantom --coverage.reportOnFailure --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/QK6R6Y.closure-app-results.json",
+      "profile": "original-failed-only-upstream-absent",
+      "exit": 0,
+      "bytes": 1147,
+      "sha256": "da0bdd9caa7fdc0ebaab94004fe9e92a7bdfe3fffb52144f9dd61550b90ae5a1",
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 4,
+        "total": 6
+      },
+      "executedCases": [
+        "shifts all alignment levels and only active LISTTAB while preserving native copy state",
+        "accepts the second real child after an empty leading phantom"
+      ],
+      "failedCases": [],
+      "errors": [],
+      "coverageMapSHA256": "8e9b076db5d079322be9ff821b49e8545d11d1a757af6422140202f3e54022eb"
+    }
+  ]
+}

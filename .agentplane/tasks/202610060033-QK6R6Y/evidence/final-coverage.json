@@ -1,0 +1,82 @@
+{
+  "sourceChangedAfterInitialProfile": [],
+  "counterTransfer": "Exact actual unchanged source and statement/function/branch map identity for the number-tree owner; add only its original-failed-only actual closure counters. All other owners retain actual initial map counters. No passing/full replay, production change or rebuild.",
+  "counterMapIdentitySHA256": "f9bcff56381407b496a381be18de5c686d27a7656f1aedf6ca8e1840f2415a76",
+  "mergedOwner": "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts",
+  "summary": {
+    "lines": {
+      "total": 13007,
+      "covered": 13007,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 14261,
+      "covered": 14261,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 3439,
+      "covered": 3439,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10582,
+      "covered": 10582,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "inventorySummary": {
+    "lines": {
+      "total": 1464,
+      "covered": 1464,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1523,
+      "covered": 1523,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 384,
+      "covered": 384,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1080,
+      "covered": 1080,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "missing": [],
+  "initialMapSHA256": "f7028496a5857b66c6e3a512e88e1dda30614a2ed4dae35bde9411de0da936d9",
+  "initialInventoryMapSHA256": "35ef1efd11bd91122490713186c6fb10048fa1e0235cf396212d97dad7f93739",
+  "closureMapSHA256": "8e9b076db5d079322be9ff821b49e8545d11d1a757af6422140202f3e54022eb",
+  "finalMapSHA256": "cc0f90a580f6818761735bf11e5d3ae51f7762a088b9ea42bb0e74c049c9631f",
+  "finalInventoryMapSHA256": "056da6c626d5745711bfc2965c76a015e6695f418df831f80bde63a06b8665a4",
+  "finalProductionSHA256": {
+    "apps/office/src/sw/source/core/doc/number.ts": "c6689eb82deffe59480bd89b5d8a7db925eb11e8876d97f50e5820e90edf2a87",
+    "apps/office/src/sw/source/core/edit/ednumber.ts": "de71171aa4ccc271168348171245fcb123281f8c89cdb2aa429823ba8effdcc2",
+    "apps/office/src/sw/source/core/undo/unnum.ts": "85790ba0bbc9fc90ef1c24f7c388a9dc593ec9a591bbfcc39f893e54eed44874",
+    "apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts": "c1334aaac9c2f35cf9cc06c35c714ad90857ff40cc82a7844568fa42e578c724"
+  }
+}

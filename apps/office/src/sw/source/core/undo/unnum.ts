@@ -4,7 +4,8 @@ import { RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT } from "../
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwTextNode } from "../txtnode/ndtxt";
-import type { SwDoc } from "../doc/doc";
+import { SetNumRuleMode, type SwDoc } from "../doc/doc";
+import { SwNumRule } from "../doc/number";
 import {
   GetUndoTextNode,
   SwUndRng,
@@ -15,10 +16,12 @@ import {
 
 /** Numeric native paragraph numbering history; represented attribute tuples remain independently owned. */
 export class SwUndoInsNum extends SwUndo {
-  private readonly afterList: SfxItemSet;
+  private readonly afterList: SfxItemSet | undefined;
   private readonly m_rDoc: SwDoc;
   private readonly m_nNode: number;
-  private readonly beforeList: SfxItemSet;
+  private readonly beforeList: SfxItemSet | undefined;
+  private readonly m_pOldNumRule: SwNumRule | undefined;
+  private readonly m_aNumRule: SwNumRule | undefined;
 
   /** Creates one list transition. @param paragraph - Target node. @param beforeList - Original list items and optional indent history. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   public constructor(
@@ -27,44 +30,91 @@ export class SwUndoInsNum extends SwUndo {
     afterList: SfxItemSet,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
+  );
+  /** Captures the native old/new rule-format constructor family independently of paragraph attributes. @param oldRule - Previous rule. @param newRule - Accepted rule. @param document - Owning document. @param cursor - Existing command cursor boundary. @returns Nothing. */
+  public constructor(
+    oldRule: SwNumRule,
+    newRule: SwNumRule,
+    document: SwDoc,
+    cursor: SwUndoCursorState,
+  );
+  /** Initializes the native rule or existing item history family. @param owner - Actual paragraph or old rule. @param previous - Previous items or new rule. @param replacement - New items or document. @param before - Retained cursor. @param after - Optional final cursor for item operations. @returns Nothing. */
+  public constructor(
+    owner: SwTextNode | SwNumRule,
+    previous: SfxItemSet | SwNumRule,
+    replacement: SfxItemSet | SwDoc,
+    before: SwUndoCursorState,
+    after?: SwUndoCursorState,
   ) {
-    super("Numbering", before, after);
-    this.m_rDoc = paragraph.GetDoc();
-    this.m_nNode = paragraph.GetIndex();
-    this.beforeList = beforeList.Clone();
-    this.afterList = afterList.Clone();
+    super("Numbering", before, after ?? before);
+    if (owner instanceof SwNumRule) {
+      this.m_rDoc = replacement as SwDoc;
+      this.m_nNode = before.point.node.GetIndex();
+      this.m_pOldNumRule = new SwNumRule(owner);
+      this.m_aNumRule = new SwNumRule(previous as SwNumRule);
+      this.beforeList = undefined;
+      this.afterList = undefined;
+    } else {
+      this.m_rDoc = owner.GetDoc();
+      this.m_nNode = owner.GetIndex();
+      this.beforeList = (previous as SfxItemSet).Clone();
+      this.afterList = (replacement as SfxItemSet).Clone();
+      this.m_pOldNumRule = undefined;
+      this.m_aNumRule = undefined;
+    }
   }
 
   /** Reports the two bounded list item tuples. @returns Payload units. */
   public override GetPayloadSize(): number {
+    if (this.m_pOldNumRule !== undefined) return 20;
     let size = 6;
     for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT])
-      if (this.beforeList.GetItemState(which, false) !== SfxItemState.UNKNOWN) size += 2;
+      if ((this.beforeList as SfxItemSet).GetItemState(which, false) !== SfxItemState.UNKNOWN)
+        size += 2;
     return size;
   }
 
   /** Restores prior paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
+    if (this.m_pOldNumRule !== undefined) {
+      this.ApplyRuleFormats(context, this.m_pOldNumRule);
+      return;
+    }
     const paragraph = GetUndoTextNode(
       context.GetDoc(),
       this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
     );
     for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT])
-      if (this.beforeList.GetItemState(which, false) !== SfxItemState.UNKNOWN)
+      if ((this.beforeList as SfxItemSet).GetItemState(which, false) !== SfxItemState.UNKNOWN)
         paragraph.ResetAttr(which);
-    paragraph.SetListItems(this.beforeList);
+    paragraph.SetListItems(this.beforeList as SfxItemSet);
   }
 
   /** Reapplies paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
+    if (this.m_aNumRule !== undefined) {
+      this.ApplyRuleFormats(context, this.m_aNumRule);
+      return;
+    }
     const paragraph = GetUndoTextNode(
       context.GetDoc(),
       this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
     );
     for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT])
-      if (this.afterList.GetItemState(which, false) !== SfxItemState.UNKNOWN)
+      if ((this.afterList as SfxItemSet).GetItemState(which, false) !== SfxItemState.UNKNOWN)
         paragraph.ResetAttr(which);
-    paragraph.SetListItems(this.afterList);
+    paragraph.SetListItems(this.afterList as SfxItemSet);
+  }
+  /** Replays represented rule formats through the existing document DontSetItem primitive; full ChgNumRuleFormats history remains unverified. @param context - Actual history context. @param rule - Independently owned rule. @returns Nothing. */
+  private ApplyRuleFormats(context: SwUndoRedoContext, rule: SwNumRule): void {
+    const position = new SwPosition(context.GetDoc().GetNodes().at(this.m_nNode) as SwTextNode, 0);
+    const range = new SwPaM(position);
+    try {
+      context.GetDoc().SetNumRule(range, rule, SetNumRuleMode.DontSetItem);
+    } finally {
+      range.Dispose();
+      position.Dispose();
+    }
   }
 }
 

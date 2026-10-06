@@ -204,6 +204,27 @@ export abstract class SwNumberTreeNode {
     while (root?.mpParent !== undefined) root = root.mpParent;
     return root;
   }
+  /** Tests native first-item ownership including phantom ancestry. @returns Whether this is the first real list item, true for an orphan. */
+  public IsFirst(): boolean;
+  /** Tests the first real direct child after one leading phantom. @param child - Actual attached child. @returns Whether it occupies the native first-child position. */
+  // eslint-disable-next-line @typescript-eslint/unified-signatures -- Native self and required-child overloads retain distinct pointer domains.
+  public IsFirst(child: SwNumberTreeNode): boolean;
+  /** Dispatches native self and child overloads without validating counters. @param args - Omitted self query or actual attached child. @returns First-item state. */
+  public IsFirst(...args: [] | [child: SwNumberTreeNode]): boolean {
+    if (args.length !== 0) {
+      const first = this.mChildren.front() as SwNumberTreeNode;
+      return (first.IsPhantom() ? this.mChildren.at(1) : first) === args[0];
+    }
+    if (this.mpParent === undefined) return true;
+    if (!this.mpParent.IsFirst(this)) return false;
+    let ancestor: SwNumberTreeNode | undefined = this.mpParent;
+    while (ancestor !== undefined) {
+      if (!ancestor.IsPhantom() && ancestor.mpParent !== undefined) return false;
+      ancestor = ancestor.mpParent;
+    }
+    const first = this.mpParent.mChildren.front() as SwNumberTreeNode;
+    return this === first || first.HasOnlyPhantoms();
+  }
   /** Derives the native level from parent links. @returns Level, -1 when unattached. */
   public GetLevelInListTree(): number {
     return this.mpParent === undefined ? -1 : this.mpParent.GetLevelInListTree() + 1;

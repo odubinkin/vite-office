@@ -521,6 +521,49 @@ export class SwNumRule {
       : `${format.GetPrefix()}${marker}${format.GetSuffix()}`;
   }
 
+  /** Shifts every effective level using native active-mode geometry and legacy nonnegative clipping. @param difference - Native signed32 twip difference. @returns Nothing. */
+  public ChangeIndent(difference: number): void {
+    const delta = difference | 0;
+    for (let level = 0; level < 10; level++) {
+      const format = new SwNumFormat(this.Get(level));
+      const mode = format.GetPositionAndSpaceMode();
+      if (mode === "label-width-and-position") {
+        format.SetAbsLSpace(Math.max(0, delta + format.GetAbsLSpace()));
+      } else if (mode === "label-alignment") {
+        if (format.GetLabelFollowedBy() === "listtab")
+          format.SetListtabPos(format.GetListtabPos() + delta);
+        format.SetIndentAt(format.GetIndentAt() + delta);
+      }
+      this.Set(level, format);
+    }
+    this.invalidRuleFlag = true;
+  }
+  /** Executes the pinned level-indent body, whose local format copy is intentionally not written back. @param indent - Native signed16 target indent. @param level - Native level index. @returns Nothing. */
+  public SetIndent(indent: number, level: number): void {
+    const value = (indent << 16) >> 16;
+    const format = new SwNumFormat(this.Get(level));
+    const mode = format.GetPositionAndSpaceMode();
+    if (mode === "label-width-and-position") {
+      format.SetAbsLSpace(value);
+    } else if (mode === "label-alignment") {
+      if (format.GetLabelFollowedBy() === "listtab")
+        format.SetListtabPos(format.GetListtabPos() + value - format.GetIndentAt());
+      format.SetIndentAt(value);
+    }
+    this.invalidRuleFlag = true;
+  }
+  /** Moves the first-level anchor and shifts all other effective levels by its native difference. @param indent - Native signed16 first-level target. @returns Nothing. */
+  public SetIndentOfFirstListLevelAndChangeOthers(indent: number): void {
+    const value = (indent << 16) >> 16;
+    const format = this.Get(0);
+    let difference = 0;
+    if (format.GetPositionAndSpaceMode() === "label-width-and-position")
+      difference = value - format.GetFirstLineOffset() - format.GetAbsLSpace();
+    else if (format.GetPositionAndSpaceMode() === "label-alignment")
+      difference = value - format.GetIndentAt();
+    if (difference !== 0) this.ChangeIndent(difference);
+  }
+
   /** Copies through the native rule copy constructor. @returns Independent rule with native copy-specific defaults. */
   public clone(): SwNumRule {
     return new SwNumRule(this);
