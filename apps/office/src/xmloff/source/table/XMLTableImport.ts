@@ -17,6 +17,7 @@ export type OdfTableStyle =
       readonly marginTop?: number | undefined;
       readonly marginBottom?: number | undefined;
       readonly borderModel?: "collapsing" | "separating" | undefined;
+      readonly layoutSplit?: boolean | undefined;
     }
   | { readonly family: "table-column"; readonly columnWidth?: number | undefined }
   | {
@@ -105,6 +106,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
           XMLToken.FO_MARGIN_BOTTOM,
           XMLToken.TABLE_ALIGN,
           XMLToken.TABLE_BORDER_MODEL,
+          XMLToken.STYLE_MAY_BREAK_BETWEEN_ROWS,
         ],
         "table properties",
       );
@@ -120,6 +122,7 @@ export class XMLTableStyleContext extends SvXMLImportContext {
       const borderModel = attributes.get(XMLToken.TABLE_BORDER_MODEL) ?? undefined;
       if (borderModel !== undefined && borderModel !== "collapsing" && borderModel !== "separating")
         throw new Error(`Unsupported ODF table border model: ${borderModel}`);
+      const split = attributes.get(XMLToken.STYLE_MAY_BREAK_BETWEEN_ROWS);
       this.style = {
         family: "table",
         width: length(XMLToken.STYLE_WIDTH, "table width"),
@@ -143,6 +146,14 @@ export class XMLTableStyleContext extends SvXMLImportContext {
         marginBottom: length(XMLToken.FO_MARGIN_BOTTOM, "table margin"),
         align,
         borderModel,
+        // The native RES_LAYOUT_SPLIT mapper accepts legacy keep values as
+        // well as booleans; an unrecognized value publishes no item.
+        layoutSplit:
+          split === "auto" || split === "true"
+            ? true
+            : split === "always" || split === "false"
+              ? false
+              : undefined,
       };
     } else if (
       this.family === "table-column" &&

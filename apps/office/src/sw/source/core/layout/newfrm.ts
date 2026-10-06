@@ -536,6 +536,22 @@ export function createSwPageFrames(
     for (const input of tables) {
       if (input.afterParagraphIndex !== afterParagraphIndex) continue;
       const format = input.table.GetFormat();
+      const nativeFrame = new SwTabFrame(input.table);
+      if (!nativeFrame.IsLayoutSplitAllowed() && input.rowHeights.length > 0 && hasContent()) {
+        const bodyHeight =
+          activeDescriptor.value.height -
+          activeDescriptor.value.topMargin -
+          activeDescriptor.value.bottomMargin;
+        const wholeHeight = input.rowHeights.reduce(
+          /** Adds original measured rows to the native upper frame spacing. @param sum - Current height. @param height - Row height. @returns Whole frame height. */
+          (sum, height) => sum + height,
+          format.marginTop ?? 0,
+        );
+        // CalcHeightOfFirstContentLine takes the whole master when splitting
+        // is disabled. On an empty page MakeAll permits the no-predecessor
+        // oversized escape, without changing the authored split item.
+        if (used + wholeHeight > bodyHeight) startFollowPage();
+      }
       let repeat = input.table.GetRowsToRepeat();
       let headlineHeight = input.rowHeights.slice(0, repeat).reduce(
         /** Adds measured original headline heights. @param sum - Prior height. @param height - Row height. @returns Total. */
@@ -598,7 +614,7 @@ export function createSwPageFrames(
         else
           frames.push({
             table: input.table,
-            printArea: new SwTabFrame(input.table).Format(
+            printArea: nativeFrame.Format(
               activeDescriptor.value.width -
                 activeDescriptor.value.leftMargin -
                 activeDescriptor.value.rightMargin,

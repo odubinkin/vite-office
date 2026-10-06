@@ -1,0 +1,21 @@
+{
+  "vendorRestored": true,
+  "records": [
+    {
+      "command": "npm run check:source-provenance",
+      "exit": 0,
+      "bytes": 205,
+      "sha256": "fc99588f9796cb4967c180eabbd1b200daccaa48a64b401a00500093a3bee7dd",
+      "diagnostics": [
+        "Source provenance check passed for 276 runtime modules (191 mapped, 69 browser adaptations, 16 local infrastructure)."
+      ]
+    },
+    {
+      "command": "npm exec -- prettier --check docs/program/source-provenance.json docs/program/parity/runtime-inventory.json",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": []
+    }
+  ]
+}

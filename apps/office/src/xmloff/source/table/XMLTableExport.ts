@@ -20,6 +20,7 @@ export interface XMLTableExportSource {
     borderModel?: string | undefined;
     headerRows?: number | undefined;
     repeatHeaderRows?: boolean | undefined;
+    layoutSplit?: boolean | undefined;
   }>;
   readonly columnWidths: readonly number[];
   readonly softPageBreakRows: readonly number[];
@@ -79,6 +80,9 @@ export interface XMLTableExportSource {
       table.format.borderModel === undefined
         ? ""
         : ` table:border-model="${escapeXml(table.format.borderModel)}"`,
+      table.format.layoutSplit === undefined
+        ? ""
+        : ` style:may-break-between-rows="${table.format.layoutSplit ? "true" : "false"}"`,
     ].join("");
     automaticStyles += `<style:style style:name="${prefix}" style:family="table"><style:table-properties${tableProperties}/></style:style>`;
     body += `<table:table table:name="${escapeXml(table.name)}" table:style-name="${prefix}">`;

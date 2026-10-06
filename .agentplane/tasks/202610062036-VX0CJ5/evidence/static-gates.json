@@ -1,0 +1,51 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 227,
+      "sha256": "1b1dcaead1b2c937a07bf4f75ebc7305c8593ed4e5c280879e54c535c9527dab",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-table-layout-split.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "da1ddcc0e68dac8602916c5b19b7be766eda4f859bbd6ef7ee3e74cb78870ddc",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "e52307d27cd962ca962f0469ac826a2b91df7ed3924165c229e022274ebd53ae",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3789,
+      "sha256": "383d2b84b25514ba33b1097a08df8112e8cec116b643fc8084c114d4d05423b4",
+      "diagnostics": []
+    }
+  ]
+}

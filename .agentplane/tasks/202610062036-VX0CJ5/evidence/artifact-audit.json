@@ -1,0 +1,6 @@
+{
+  "scope": "Current leaf and generated quality only",
+  "filesAudited": 10,
+  "forbiddenArtifacts": [],
+  "vendorRestored": true
+}

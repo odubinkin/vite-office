@@ -1,0 +1,78 @@
+{
+  "app": {
+    "coverage": {
+      "lines": {
+        "total": 14808,
+        "covered": 14808,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 16244,
+        "covered": 16244,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3765,
+        "covered": 3765,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 12049,
+        "covered": 12049,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "e65d002005420d64b18cacc14f6b262825ae8c525cfac2c34688851f8d447186",
+    "files": 273
+  },
+  "inventory": {
+    "coverage": {
+      "lines": {
+        "total": 1464,
+        "covered": 1464,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1523,
+        "covered": 1523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 384,
+        "covered": 384,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1080,
+        "covered": 1080,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "mapSHA256": "4914512b9c0bddac54c74693b8e764bca7fe70c092a80583368dbed3a2023ae0",
+    "files": 38
+  },
+  "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+  "transfers": [],
+  "wholeIdenticalFileCount": 273,
+  "gaps": []
+}

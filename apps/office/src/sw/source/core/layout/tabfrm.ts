@@ -46,6 +46,11 @@ export class SwTabFrame {
     return this.table;
   }
 
+  /** Reads the native table-frame split item with its true default. @returns Whether table rows may occupy follow frames. */
+  public IsLayoutSplitAllowed(): boolean {
+    return this.table.GetFormat().layoutSplit ?? true;
+  }
+
   /** Resolves native orientation spacing without fly or outer-border offsets. @param upperWidth - Actual upper print width. @returns Table print area. */
   public Format(upperWidth: number): SwTablePrintArea {
     const format = this.table.GetFormat();

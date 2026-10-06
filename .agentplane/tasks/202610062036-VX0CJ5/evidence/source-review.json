@@ -1,0 +1,19 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/inc/fmtlsplt.hxx": "f1bad8d61cd26e6d8f950139bfe3d2c4c8ddab2f4f66982bc83352e686a10f18",
+    "sw/source/core/layout/tabfrm.cxx": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+    "sw/source/core/layout/frmtool.cxx": "6ce439b0e3081aeace445255ef29938e3deef0b4c5223445274d1042acb71ecf",
+    "sw/source/filter/xml/xmlitemm.cxx": "c60e545a9f8bf86b888f085e19d45f8bcf258e4431f2ba43114af9addc2c13c6",
+    "sw/source/filter/xml/xmlimpit.cxx": "1032896135559f7ec4f87655364b006de1260712c605f2b9fb9813eaab96e871",
+    "sw/source/filter/xml/xmlexpit.cxx": "1510deff9ba2bca1e2ace46c72f44a2934fe8fed213a7b3c7fb0132d66adeb58",
+    "sax/source/tools/converter.cxx": "03d4b8f571c9770fcbfa7503d8307c3f4dae0f6e481ee5c7ed6805a3daa19b12"
+  },
+  "contracts": [
+    "SwFormatLayoutSplit default true; IsLayoutSplitAllowed reads canonical format. Unsplittable master moves from occupied body, current empty/oversized master can split through !bDontSplit || !pIndPrev. Upper spacing plus rows determine full height; lower paragraph spacing is not native master height in represented body flow.",
+    "ODT may-break-between-rows map accepts true/auto and false/always; invalid does not publish item. Export canonical explicit true/false; absent remains absent.",
+    "11 approved paths,523 historical acceptance byte-identical+4new527;276 prior metadata contracts/defaults/statuses/classifications/full prefixes and registered filename/I/O exceptions preserved. Native/mounted/history/Chromium tests cover physical rows, single original graph, independent row keep policy,3UndoRedo/ODT/continued input. Same current-agent EVALUATOR explicitly not independent. Full row splitting/rowspan/fly/columns/nested/SfxItemSet/Text Flow UI/full parity unverified; parent/goal active."
+  ]
+}
