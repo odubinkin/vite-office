@@ -4,7 +4,7 @@ title: "Select all through native cell table and text contexts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T11:45:50.886Z"
+  updated_by: "CODER"
+  note: "Native contextual Select All at324f8c3e3984 verified: one absent full profile plus original failure/four new-case closures;12867/109/5/198 distinct cases, actual100 app/inventory coverage, no passing/full replay. Same-agent exact-SHA quality PASS;270states/482oldtestfiles and conscious deviations preserved; whole parity UNVERIFIED."
   attempts: 0
 quality_review:
   state: "pass"
@@ -58,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement source-owned contextual Select All under standing iterative authorization; one leaf, one upstream-absent profile."
+  -
+    type: "verify"
+    at: "2026-10-06T11:45:50.886Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native contextual Select All at324f8c3e3984 verified: one absent full profile plus original failure/four new-case closures;12867/109/5/198 distinct cases, actual100 app/inventory coverage, no passing/full replay. Same-agent exact-SHA quality PASS;270states/482oldtestfiles and conscious deviations preserved; whole parity UNVERIFIED."
 doc_version: 3
-doc_updated_at: "2026-10-06T11:42:37.515Z"
+doc_updated_at: "2026-10-06T11:45:50.943Z"
 doc_updated_by: "CODER"
 description: "Iteration185: replace body-only SelectAll with source-owned contextual selection and actual native cursor/table owners; verify core mounted and Chromium behavior without upstream."
 sections:
@@ -71,7 +77,41 @@ sections:
     2. ONE full upstream-absent profile, vendor renamed inside repo/restored in finally: npm run test:static; full app/inventory coverage --coverage.reportOnFailure with JSON raw cases/maps; scripts acceptance; all Chromium against dist. Persist exact failures/counts/errors/hashes before asserting. No full/passing replay or tests invoking upstream; original failure/new-case closure only if necessary.
     3. All482 prior acceptance files remain byte-identical. New core/mounted/Chromium cases check native Select All from collapsed/partial/reversed/multi-paragraph/empty cells; cell -> full table -> parent text; original actual ordinary/table cursor owners and marks; leading/trailing table extended range; already full/partial box mode; missing outer text; browser synchronization/repeat restore, subsequent editing/history and unchanged neighbors/document history.100% actual app/inventory counters; any transfer only identical maps or entire byte-identical ranges with actual counters. No UI press counter/body-only shortcut/synthetic selection port; actual core/frame/shell owners and native positions.
     4. After restoration generation --check/source-tree/provenance/invariants/parity once. Scope audit all270 prior semantic statuses/defaults/classes preserved; source-backed responsibilities/evidence additions only. Scoped AP source/helper prohibition, doctor/routing/diff and same-agent exact-SHA quality; scoped implementation/evidence/verification/clean close; preserve entire parent Findings prefix.
-  Verification: "Declared static and changed-path gates PASS; one full absent profile plus original failure/four genuine native-case closures complete. All482 prior tests byte-identical; actual app/inventory coverage100; Chromium195 initial successful cases plus3 original-failure closures PASS. Restored source/scope/governance gates PASS. Exact implementation SHA and same-agent evaluator review pending semantic commit; whole goal ACTIVE/full parity UNVERIFIED."
+  Verification: |-
+    Implementation 324f8c3e3984fddb682a3739f7dfeac145e0e3bf. PASS: six initial static gates; final scoped JSDoc/physical/format/lint/type checks; one upstream-absent full build/app/inventory/scripts/Chromium profile plus five original app failures, three original Chrome failures and four genuine native cases only. Aggregate distinct completed cases12867app109inventory5scripts198Chromium, no runtime errors/final failures/initial skips/flaky or passing/full replay; focused filter skips remain skips. Actual267app maps13861L15194S3605F11327B and38inventory maps1464L1523S384F1080B all100; only full identical maps/complete contiguous byte-identical source ranges transferred with actual counters, changed ranges supplied by focused runs. Once-restored source generation/tree/provenance/invariants/parity, scope/governance/artifact checks PASS. All482 prior test files byte-identical,3 new files;270 prior states/defaults/classes/evidence prefixes and conscious I/O/recovery deviations preserved. Same-agent exact-SHA/evaluator PASS; no independent review claim. Entire goal ACTIVE/full parity UNVERIFIED.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T11:45:50.886Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native contextual Select All at324f8c3e3984 verified: one absent full profile plus original failure/four new-case closures;12867/109/5/198 distinct cases, actual100 app/inventory coverage, no passing/full replay. Same-agent exact-SHA quality PASS;270states/482oldtestfiles and conscious deviations preserved; whole parity UNVERIFIED.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T11:45:50.483Z, excerpt_hash=sha256:d1fa50ab9ab50f2ba7937de0ae84f273ed4161542909fce2030e7459e1841c6b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061107-30SK7E/blueprint/resolved-snapshot.json
+    - old_digest: bfda50a5894f357b7ac54fda4cad9bc0ba1f4ec6711d7124b9d2683a74e4e756
+    - current_digest: bfda50a5894f357b7ac54fda4cad9bc0ba1f4ec6711d7124b9d2683a74e4e756
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610061107-30SK7E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610061107-30SK7E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert scoped semantic change through a separate leaf if cursor/table/UI behavior regresses; preserve DONE evidence and conscious deviations."
   Findings: |-
     184 DONE implementation422482e0a0c4635daa2f345ec39dfde5dd6fadad; parent7bd7e3fbfd95aa9b60ba7964f2e5d39a8b0ebaab. Native SelAll select.cxx131-229 uses actual full-section/whole-table cursor state. Core MoveOutOfTable, ExtendedSelectAll/ExtendedSelectedAll/StartsWith_ and frame HasWholeTabSelection own contextual selection. Local SelectAll only direct body paragraphs and browser shortcut omitted DOM synchronization. Optional guessed source/browser/core paths absent; discovery resolved via rg to vendor/libreoffice-reference actual pinned paths; routes recomputed before mutation. Full parity and structural deletion of extended table boundary nodes remain unverified.
@@ -100,7 +140,40 @@ Standing iterative UI/refactor authorization applies. Implement range-based nati
 
 ## Verification
 
-Declared static and changed-path gates PASS; one full absent profile plus original failure/four genuine native-case closures complete. All482 prior tests byte-identical; actual app/inventory coverage100; Chromium195 initial successful cases plus3 original-failure closures PASS. Restored source/scope/governance gates PASS. Exact implementation SHA and same-agent evaluator review pending semantic commit; whole goal ACTIVE/full parity UNVERIFIED.
+Implementation 324f8c3e3984fddb682a3739f7dfeac145e0e3bf. PASS: six initial static gates; final scoped JSDoc/physical/format/lint/type checks; one upstream-absent full build/app/inventory/scripts/Chromium profile plus five original app failures, three original Chrome failures and four genuine native cases only. Aggregate distinct completed cases12867app109inventory5scripts198Chromium, no runtime errors/final failures/initial skips/flaky or passing/full replay; focused filter skips remain skips. Actual267app maps13861L15194S3605F11327B and38inventory maps1464L1523S384F1080B all100; only full identical maps/complete contiguous byte-identical source ranges transferred with actual counters, changed ranges supplied by focused runs. Once-restored source generation/tree/provenance/invariants/parity, scope/governance/artifact checks PASS. All482 prior test files byte-identical,3 new files;270 prior states/defaults/classes/evidence prefixes and conscious I/O/recovery deviations preserved. Same-agent exact-SHA/evaluator PASS; no independent review claim. Entire goal ACTIVE/full parity UNVERIFIED.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T11:45:50.886Z — VERIFY — ok
+
+By: CODER
+
+Note: Native contextual Select All at324f8c3e3984 verified: one absent full profile plus original failure/four new-case closures;12867/109/5/198 distinct cases, actual100 app/inventory coverage, no passing/full replay. Same-agent exact-SHA quality PASS;270states/482oldtestfiles and conscious deviations preserved; whole parity UNVERIFIED.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T11:45:50.483Z, excerpt_hash=sha256:d1fa50ab9ab50f2ba7937de0ae84f273ed4161542909fce2030e7459e1841c6b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061107-30SK7E/blueprint/resolved-snapshot.json
+- old_digest: bfda50a5894f357b7ac54fda4cad9bc0ba1f4ec6711d7124b9d2683a74e4e756
+- current_digest: bfda50a5894f357b7ac54fda4cad9bc0ba1f4ec6711d7124b9d2683a74e4e756
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610061107-30SK7E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610061107-30SK7E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
