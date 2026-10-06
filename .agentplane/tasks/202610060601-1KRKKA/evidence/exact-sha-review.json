@@ -1,0 +1,57 @@
+{
+  "implementationCommit": "09b3bdc58225f03f1e56c4af6217b463e8ef5e62",
+  "reviewer": "Same current agent in EVALUATOR role; no independent reviewer claim",
+  "verdict": "pass",
+  "semanticSHA256": {
+    "apps/office/src/offapi/com/sun/star/text/HoriOrientation.ts": "16374e06e2f1191e5189a31f45e657591becad202f62184c30cb0e7539fd1047",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "26ad5a1aa15cd3d47f8313801cd34da0b60a1b103ee8589c6ac39e52f1d7f701",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "13df44756572c7ebd246e40ee1d2d892cc68edd289a515a646a640011a356739",
+    "apps/office/src/sw/source/core/table/swtable.ts": "14fa5c3650bc25abee5f3e16b25edd22a6bbdf5e3684cd0ecaac22db95334aeb",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "034ec120e2bed3d88c420ff4f0117fb29659f0cdaebe390a88f6400bde1c42e5",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "925d2acb9b11fdddc0ec0af81298fe1044b297f79dcb25ad70c16188ec39250d",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "ccb26aedec3446936134e2680c5ec3b77d6c9bed763bf32d94f300769d587abf",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "42ccdb0e929f614df8e83d7e463549bc0eabb33ba925ce8f3b833985cbbf7941",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "a0c18b64b31a4669a75599576f094852afaf35034cbc268c998ef5d3758593df",
+    "apps/office/src/sw/browser/presentation/native-table-properties.test.tsx": "d9939674149b1b74f65cbba70dce600adb5d57bb4f55b450b8e5afd008c4556f",
+    "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts": "0516057c513522fb2df299de3b71e1eb99d1906b66213dd9148280af066415ff",
+    "apps/office/src/sw/browser/presentation/native-table-alignment.test.tsx": "7b0831cf5a9ba4af46177c9144326f8188cbe850642afa74583f2cf307960efd",
+    "apps/office/src/sw/source/filter/xml/odt-table-alignment.test.ts": "88d75832c6affe1a5bac619599cce9491db5626275be81214d5a4d63a0634994",
+    "apps/office/e2e/writer-table-alignment.spec.ts": "d3cbaa0d93e8ff0c4317337d2d4ac576389fe18091483c2fe57367791436f283",
+    "scripts/check-module-boundaries.mjs": "968ecbebbee29cd3538c49b604c66784d9e75387acdfa02424d10e51f2480939",
+    "docs/program/source-provenance.json": "8699d602799d99c7bcd1a8b08b0bef0802e09a1b8c5cffdea9c5ef2b0e04e48f",
+    "docs/program/parity/runtime-inventory.json": "8eb692a181e3e5f119c8de72022093c196a54dfa1b32ef5d32f4326a4d88bf19",
+    "apps/office/src/sw/browser/editor/native-table-selection.test.tsx": "3d146c86af6e61d83037248ee55c9b90a7a93f021c734b041ce8bc32b62c3958"
+  },
+  "pinnedSourceSHA256": {
+    "offapi/com/sun/star/text/HoriOrientation.idl": "2aa8c5e805a0f8484aaeaf95c2d79d253bc3922ca9943667005085cf35a93935",
+    "sw/source/ui/table/tabledlg.cxx": "8784376ef8a6517596379155caa49027b70d4c801c0866c9991b9998e1781a5a",
+    "sw/source/uibase/table/swtablerep.cxx": "c68f5e0baaf04f92c1c473c7ccaec1616cd318c8827003ba4c4da7067895a17a",
+    "sw/source/uibase/inc/swtablerep.hxx": "fdc0f0fc924ff99a58b377f36243ab6dec90f80d16191568707819438bc0f112",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/source/core/layout/tabfrm.cxx": "d1d616197c6aeac1b1ba075995892b34cfdbea60838e88136f9bf4a52e90970f",
+    "sw/source/filter/xml/xmltbli.cxx": "eb46a2cbffc3700ed24c9099ec86e888bbdfa3a7b3a920de1356e4a98f264fab",
+    "sw/source/filter/xml/xmliteme.cxx": "364ba7151b4d3001864a1876df0e3150c268af263e27c2e6f1dccd27297156ac",
+    "sw/source/filter/xml/xmlithlp.cxx": "d45906f59ee38eb229f1d9fce656c710a24911bc5d58d38f2c2ad0c755fa1496"
+  },
+  "checkedContracts": [
+    "Native six absolute orientation IDs and geometry",
+    "Reset minimum is independent of saved automatic width",
+    "Native signed LR arithmetic, sensitivity and one correction pass",
+    "Native visible-column reconciliation",
+    "Actual grouped history, original graph/cursor owners and Worker/ODF geometry",
+    "Three bounded source-confirmed old fixtures/assertions retain numeric oracles"
+  ],
+  "evidence": [
+    "validation-counts.json",
+    "final-coverage.json",
+    "scope-audit.json",
+    "restored-source-audits.json",
+    "governance.json",
+    "artifact-audit.json"
+  ],
+  "residualRisks": [
+    "Two unchanged existing Desktop/Open tests had intermittent query timing and passed original-failure-only closure; no IO code/test changes",
+    "Relative percentages, native item/change-only ownership, hidden/merged columns,RTL/fly/cache/protection and full UI/core/list/table parity remain unverified"
+  ],
+  "wholeGoalStatus": "active; full parity unverified"
+}
