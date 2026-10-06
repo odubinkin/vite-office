@@ -1,10 +1,11 @@
 ---
 id: "202610060746-BE36FD"
 title: "Route Writer table insertion through native editing and undo ownership"
-status: "DOING"
+result_summary: "React grid and dialog table insertion now uses native shell, document and nodes with grouped undo; row history resolves recreated tables by native index. Full parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610060746-BE36FD/evidence/source-review.json"
   findings:
     - "Verified native insertion and current-table row redo ownership, actual case counts, complete coverage proof, scoped old-test and semantic preservation, and restored upstream profiles."
-commit: null
+commit:
+  hash: "d41d83017063d44e719ee3a0614de436984490fc"
+  message: "🧩 BE36FD task: persist verified insertion outcome"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native body table insertion and shared React command with grouped history."
+  -
+    author: "CODER"
+    body: "Verified: native body table insertion and current-table mixed history satisfy the approved slice; 12811 application, 109 inventory, 5 script and 187 Chromium cases pass, with 100% application and inventory coverage. Upstream-absent profiles and exact-SHA same-agent review pass; registered exceptions are preserved and the broader goal remains active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native body insertion and table/row/text history at a79ea63f62f50eaeed5697d813b9b6818713033d:12811app109inventory5scripts187Chromium;100%app/inventory real-counter coverage; six gates and failed/new-only closures; restored pinned upstream, preserved267semantic records and registered deviations; exact-SHA same-agent evaluator PASS."
+  -
+    type: "status"
+    at: "2026-10-06T08:27:58.047Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native body table insertion and current-table mixed history satisfy the approved slice; 12811 application, 109 inventory, 5 script and 187 Chromium cases pass, with 100% application and inventory coverage. Upstream-absent profiles and exact-SHA same-agent review pass; registered exceptions are preserved and the broader goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-06T08:24:15.802Z"
+doc_updated_at: "2026-10-06T08:27:58.049Z"
 doc_updated_by: "CODER"
 description: "Iteration179: replace direct React table graph writes with represented native body insertion, cursor splitting, numeric table insertion history and shared grid/dialog execution; preserve I/O exceptions and semantic status."
 sections:
@@ -127,6 +140,10 @@ sections:
     Command: restored-source generation --check/source-tree/provenance/invariants/parity and core module CLI. Result: pass;268owners184mapped68browser16infra. Initial optional core-module CLI invocation omitted required arguments; exact usage failure retained and only that invocation retried with baseline/reference/output arguments, writing metadata to ignored application cache. Scope:267prior semantic states/defaults/classifications/evidence prefixes and all other inventory sections preserved;465of466prior test files byte-identical, one old UI test gains native-context preconditions, four genuine new acceptance files. Doctor0errors2known warnings and routing/diff checks pass. Ignored-inclusive AP census finds0forbidden artifacts; only pre-existing canonical validators and the historical application QA screenshot are exempt. All evidence in AP is bounded English prose/counts/hashes/outcomes; raw results/maps/snapshots remain ignored application cache.
 
     Residual scope: direct-body collapsed cursors only. Document-owned undo append versus current shell orchestration, native selection deletion/TextToTable,nested/merged/protected contexts, full frame/item/edge borders/font propagation, native full autoformat/name pools, complete layout split/ODT persistence, redlines,frames,Repeat and full native row/SaveTable lifetimes remain unverified. Source-unit inheritance split adds table methods to the existing numbering owner without forwarding methods. Registered save/open/recovery deviations are preserved. No independent reviewer is claimed; exact-SHA review is by this agent in EVALUATOR phase. Parent goal remains ACTIVE; full parity UNVERIFIED.
+extensions:
+  implementation_commit:
+    hash: "a79ea63f62f50eaeed5697d813b9b6818713033d"
+    message: "🧩 BE36FD code: route table insertion through native shell and undo"
 id_source: "generated"
 ---
 ## Summary
