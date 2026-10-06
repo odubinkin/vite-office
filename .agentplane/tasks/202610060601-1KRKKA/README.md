@@ -1,10 +1,11 @@
 ---
 id: "202610060601-1KRKKA"
 title: "Restore native table alignment and spacing dialog behavior"
-status: "DOING"
+result_summary: "Native absolute table format-page geometry and UI history/persistence verified; full parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610060601-1KRKKA/evidence/scope-audit.json"
   findings:
     - "12773 application,109 inventory,5 scripts,181 Chromium distinct cases pass; all real coverage counters100%. One full absent profile plus original-failure/genuine-new closure; all261 prior semantic states preserved."
-commit: null
+commit:
+  hash: "a3527aaa184bd6c1e960be7825140ac6fdfc7cd5"
+  message: "🧩 1KRKKA task: record verified table format-page behavior"
 comments:
   -
     author: "CODER"
     body: "Start: implement native absolute table format-page geometry under standing iterative authorization; preserve registered deviations and bounded acceptance evidence."
+  -
+    author: "CODER"
+    body: "Verified: Native absolute table alignment, linked spacing, automatic width restoration, original native history and Worker/ODF geometry passed the approved evidence contract. Registered IO/recovery deviations preserved; complete project parity remains unverified."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified semantic commit 09b3bdc58225f03f1e56c4af6217b463e8ef5e62. One complete upstream-absent profile plus only original failed or genuinely new acceptance cases: 12773 distinct application tests, 109 inventory tests, 5 script tests and 181 Chromium cases passed. Application and inventory real-counter coverage reached 100% in all four dimensions using exact maps or complete byte-identical ranges. Restored-source audits and bounded scope checks passed; registered IO/recovery deviations preserved. Exact-SHA same-agent quality verdict passed. Full project parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-06T07:00:03.125Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native absolute table alignment, linked spacing, automatic width restoration, original native history and Worker/ODF geometry passed the approved evidence contract. Registered IO/recovery deviations preserved; complete project parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T06:59:40.040Z"
+doc_updated_at: "2026-10-06T07:00:03.127Z"
 doc_updated_by: "CODER"
 description: "Iteration177: source-shaped table format page owns six absolute alignment modes, linked width/LR fields and existing vertical spacing; native orientation ownership, grouped history and ODF geometry survive UI commands."
 sections:
@@ -121,6 +134,10 @@ sections:
     Initial statics: formatting required a second pass for the new Chromium test; TypeScript rejected unsupported Testing Library exact options; JSDoc required both new field parameters. All initial gates ultimately passed. ONE absent profile: build pass; application12767pass4fail; inventory108pass1fail; scripts5pass; Chromium179pass0flaky. Vendor restored in finally. Initial application failures: two unchanged desktop Open tests could not find Imported package/First copy; caret width fixture omitted its Left orientation (7.06 expected versus automatic15.24); new FULL-reset fixture incorrectly expected discarded LR attributes (native Reset preserves300/600 while print area ignores them). Inventory ordering used locale collation rather than lexical path order. Scope narrowly reconfirmed under standing authorization for the third old fixture file; both7.06/12.35 literals retained. Added genuine Reset-minimum excursion and absent-native-spacing cases; fixed constructor-owned minimum retention. Added two real browser automatic-width restoration traces. Full/passing families will not replay. Coverage closure will use complete unchanged maps or whole contiguous byte-identical source ranges.
 
     Closure: application5pass1fail41skipped; inventory1pass2skipped (coverage-only exit); new Chromium2pass0flaky. Final failed-only unchanged desktop case1pass10skipped; no I/O implementation or test changes. The two old Open tests showed intermittent query timing, retained as an observation rather than a claimed product fix. Conservative coverage transfer initially rejected non-coordinate synthetic branch locations; actual complete branch ranges and identical empty synthetic locations were then verified, and no changed source body counters were transferred. Source provenance initially rejected enum basename-only evidence; the actual LEFT_AND_WIDTH IDL declaration marker closed it. Source audits all pass after restoration. Scoped checker entrypoints invoke unchanged JSDoc validation declarations for four changed files, and physical counts remain below1000; no helpers persisted. Distinct12773app,109inventory,5scripts,181Chromium cases pass. App13372L14656S3517F10940B and inventory1464L1523S384F1080B all100% from real counters. Three bounded old fixtures/assertions retain numeric oracles;456/459 old tests byte-identical. All261 prior semantic classifications/states/defaults/exception and evidence prefixes preserved; three new owners remain unverified. Full core/UI/table/list parity and relative-width/complex-table lifetimes remain unverified.
+extensions:
+  implementation_commit:
+    hash: "09b3bdc58225f03f1e56c4af6217b463e8ef5e62"
+    message: "🧩 1KRKKA parity: route absolute table geometry through native format page"
 id_source: "generated"
 ---
 ## Summary
