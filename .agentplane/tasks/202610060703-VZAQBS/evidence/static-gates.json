@@ -1,0 +1,55 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 221,
+      "sha256": "15d99282e3c9d9a626250080e7a471d00ac5d173f8c19df72d3f6644d3433b68",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-insert-table-dialog.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 1,
+      "bytes": 2008,
+      "sha256": "25ed3573cfb308efa57ea04494db8b2452e1d3262e422533aa396766d1a91adc",
+      "diagnostics": [
+        "> eslint . --max-warnings 0",
+        "  143:19  error  Error: This value cannot be modified",
+        "  159:19  error  Error: This value cannot be modified",
+        "  194:19  error  Error: This value cannot be modified",
+        "✖ 3 problems (3 errors, 0 warnings)"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "95efafd3c495ee81bbd68b7a76c85f768c472e9dfd8bd28c4cd4c4209397e230",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "dc336d532e3d312d53781e062e1f16886b30af80ce2d40ff1da8d7e9f4b75fa3",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3405,
+      "sha256": "349933cea0d53e82f451ffdbb1866cd798ea945671d09ca2cd6dcee477efc30a",
+      "diagnostics": []
+    }
+  ]
+}
