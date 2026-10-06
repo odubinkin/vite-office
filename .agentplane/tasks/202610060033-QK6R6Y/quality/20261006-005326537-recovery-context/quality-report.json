@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610060033-QK6R6Y",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T00:53:26.537Z",
+  "verdict": "pass",
+  "summary": "Same current agent EVALUATOR validates exact semantic SHA 180f7bbc6b3c3af7d7fc0488745953999195b978 against approved bounded core scope; no independent reviewer claim.",
+  "evaluated_sha": "180f7bbc6b3c3af7d7fc0488745953999195b978",
+  "blueprint_digest": "239a210b2584f00e344212032280a72c868ee97354cfa2f6413d76acf1c5745f",
+  "findings": [
+    "Native indent numeric ownership and first-item tree policy restored in four existing owners, twelve new actual-value/history/package tests; all441 prior tests and258 semantic contracts preserved. Exact source/map identity supports actual100% coverage with only original failed-case closure."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610060033-QK6R6Y/README.md",
+    ".agentplane/tasks/202610060033-QK6R6Y/evidence/evaluator-proof.json",
+    ".agentplane/tasks/202610060033-QK6R6Y/evidence/scope-audit.json",
+    ".agentplane/tasks/202610060033-QK6R6Y/evidence/absent-profile.json",
+    ".agentplane/tasks/202610060033-QK6R6Y/evidence/closure-profile.json",
+    ".agentplane/tasks/202610060033-QK6R6Y/evidence/final-coverage.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Actual UI document-label StartDocDrag/ruler integration remains next task. Existing DontSetItem history replay does not establish full native ChgNumRuleFormats/char-format/framework behavior; broad core/UI/list/table parity remains unverified."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "evaluatedSHA": "180f7bbc6b3c3af7d7fc0488745953999195b978",
+  "sameCurrentAgentEvaluator": true,
+  "independentReviewerClaim": false,
+  "semanticChangedPaths": 8,
+  "taskEvidencePathsInSameSemanticCommit": 11,
+  "scopeEvidenceSHA256": "40f0d8d118764760c94a48e5f472b222d9b782271566432996176b99132994ff",
+  "diffSHA256": "d244b6a886fe359d8cda214c59c6b19397caa3e0bfc1cedcabd76f08809cc2a4",
+  "sourceIdentityVerified": true,
+  "mapIdentityVerified": true,
+  "allRequiredEvidenceVerified": true,
+  "fullProfileCount": 1,
+  "passingReplays": 0,
+  "residualRisk": "Source-owned numbering indent values, first-item tree ownership and represented rule-format history only. Native level SetIndent does not write its copied format as in pinned source. Existing document DontSetItem history replay preserves represented values, not full ChgNumRuleFormats/char-format/history equivalence. Actual document-label StartDocDrag/ruler/UI integration remains next explicit obligation; full native framework/merged/redline/layout/portion/core/UI/list/table parity remains unverified. Conscious IO deviations unchanged;parent DOING and goal ACTIVE."
+}
