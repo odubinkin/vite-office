@@ -1,10 +1,11 @@
 ---
 id: "202610062205-VSQEDD"
 title: "Move represented row height mutation into native document ownership"
-status: "DOING"
+result_summary: "Represented row height moved into document-owned native row attributes; obsolete shell adapter removed.13175app109inventory5scripts241Chromium PASS and actual100coverage;534old files byte-identical+2new536;277metadata prefixes and registered exceptions preserved. Same-agent review explicitly not independent; full frame-size contracts/full parity unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "ONE upstream-absent full profile:13175app109inventory5scripts241Chromium PASS0skip/flaky/fail. No focused or historical passing replay. Actual100coverage: one prior actual counter reused only after entire unchanged editing-host source/map proof."
     - "534old tests byte-identical plus2new536;277prior metadata full prefixes/classifications/defaults/contracts/registered save/open/recovery exceptions unchanged. Scope7paths, parent525703complete prefix retained."
     - "Six static and five source gates PASS, unchanged JSDoc/actual physical lines PASS, doctor0errors2known warnings and routing/diff PASS. Commit scope hook failure repaired without bypass; premature prior-SHA review rejected before verdict, successful actualSHA then PASS."
-commit: null
+commit:
+  hash: "1148a0da57386ef86bf5a6244ea9436b152b31a1"
+  message: "🚧 VSQEDD parity: move minimum row height into native document ownership"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native document minimum-row-height ownership under standing iterative user authorization."
+  -
+    author: "CODER"
+    body: "Verified: native document minimum-row-height ownership and original selection/history at1148a0da57386ef86bf5a6244ea9436b152b31a1; ONE upstream-absent profile and exactSHA quality complete. Full goal remains active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Approved native minimum-height owner leaf verified at1148a0da57386ef86bf5a6244ea9436b152b31a1.13175app109inventory5scripts241Chromium PASS;actual100coverage under whole identical source/map proof, no case replay;534old bytes+2new536;277prefixes;same-agent quality explicitly not independent. Full goal active."
+  -
+    type: "status"
+    at: "2026-10-06T22:23:01.674Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native document minimum-row-height ownership and original selection/history at1148a0da57386ef86bf5a6244ea9436b152b31a1; ONE upstream-absent profile and exactSHA quality complete. Full goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-06T22:22:38.726Z"
+doc_updated_at: "2026-10-06T22:23:01.676Z"
 doc_updated_by: "CODER"
 description: "Iteration201: remove shell row-height mutation/history adapter; source current or table-selected original row scope, document-owned history and common represented minimum-height getter. Preserve registered exceptions and all previous acceptance contracts."
 sections:
