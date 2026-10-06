@@ -4,7 +4,7 @@ title: "Restore native numbering indent mechanics behind label ruler gestures"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T00:53:45.280Z"
+  updated_by: "CODER"
+  note: "Approved bounded native numbering indent/first-item/history foundation verified at semantic 180f7bbc6b3c3af7d7fc0488745953999195b978. ONE full upstream-absent profile plus only2 original failed fixture cases; final12617app109inventory5scripts149Chromium pass and actual100%L/S/F/B. Six statics, five restored source audits,441 prior tests,258 contracts,exact8 paths,AP hygiene and exact-SHA same-agent evaluator passed. Actual document-label ruler UI integration remains next task; broad parity unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -56,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: source-owned numbering indent and first-item mechanics under standing approved convergence goal; bounded native history, no UI workaround."
+  -
+    type: "verify"
+    at: "2026-10-06T00:53:45.280Z"
+    author: "CODER"
+    state: "ok"
+    note: "Approved bounded native numbering indent/first-item/history foundation verified at semantic 180f7bbc6b3c3af7d7fc0488745953999195b978. ONE full upstream-absent profile plus only2 original failed fixture cases; final12617app109inventory5scripts149Chromium pass and actual100%L/S/F/B. Six statics, five restored source audits,441 prior tests,258 contracts,exact8 paths,AP hygiene and exact-SHA same-agent evaluator passed. Actual document-label ruler UI integration remains next task; broad parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T00:52:48.497Z"
+doc_updated_at: "2026-10-06T00:53:45.338Z"
 doc_updated_by: "CODER"
 description: "Iteration171: source-owned numbering indent and first-item policy with existing native rule/history owners, prerequisite to direct label-ruler UI integration; conscious IO deviations preserved."
 sections:
@@ -80,6 +86,36 @@ sections:
     5. Vendor restored before five source-dependent audits: npm exec -- tsx scripts/generate-writer-ui-resources.ts --check; npm run check:source-tree; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity. Same-agent EVALUATOR exact semantic SHA, canonical verify/meaningful finish and whole parent Findings append. Broad parity remains unverified ACTIVE.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T00:53:45.280Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Approved bounded native numbering indent/first-item/history foundation verified at semantic 180f7bbc6b3c3af7d7fc0488745953999195b978. ONE full upstream-absent profile plus only2 original failed fixture cases; final12617app109inventory5scripts149Chromium pass and actual100%L/S/F/B. Six statics, five restored source audits,441 prior tests,258 contracts,exact8 paths,AP hygiene and exact-SHA same-agent evaluator passed. Actual document-label ruler UI integration remains next task; broad parity unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T00:52:48.497Z, excerpt_hash=sha256:95ea974834fab6e6de96e4e60b134488bf85007c22cefb6b3b57294bdbbf8b02
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060033-QK6R6Y/blueprint/resolved-snapshot.json
+    - old_digest: 239a210b2584f00e344212032280a72c868ee97354cfa2f6413d76acf1c5745f
+    - current_digest: 239a210b2584f00e344212032280a72c868ee97354cfa2f6413d76acf1c5745f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060033-QK6R6Y
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060033-QK6R6Y
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this leaf's intentional semantic commit; retain task traceability and conscious save/open/recovery deviations."
   Findings: |-
@@ -119,6 +155,36 @@ Iteration171 under standing approved native UI/core convergence goal, one atomic
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T00:53:45.280Z — VERIFY — ok
+
+By: CODER
+
+Note: Approved bounded native numbering indent/first-item/history foundation verified at semantic 180f7bbc6b3c3af7d7fc0488745953999195b978. ONE full upstream-absent profile plus only2 original failed fixture cases; final12617app109inventory5scripts149Chromium pass and actual100%L/S/F/B. Six statics, five restored source audits,441 prior tests,258 contracts,exact8 paths,AP hygiene and exact-SHA same-agent evaluator passed. Actual document-label ruler UI integration remains next task; broad parity unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T00:52:48.497Z, excerpt_hash=sha256:95ea974834fab6e6de96e4e60b134488bf85007c22cefb6b3b57294bdbbf8b02
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060033-QK6R6Y/blueprint/resolved-snapshot.json
+- old_digest: 239a210b2584f00e344212032280a72c868ee97354cfa2f6413d76acf1c5745f
+- current_digest: 239a210b2584f00e344212032280a72c868ee97354cfa2f6413d76acf1c5745f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060033-QK6R6Y
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060033-QK6R6Y
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
