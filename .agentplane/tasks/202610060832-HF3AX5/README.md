@@ -1,10 +1,11 @@
 ---
 id: "202610060832-HF3AX5"
 title: "Move table Tab append into native cursor shell and document history ownership"
-status: "DOING"
+result_summary: "Table Tab now inherits SwCursorShell movement and uses document-owned default row insertion with already-executed native undo publication; SwWrtShell row construction and action replay removed. Full upstream parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - ".agentplane/tasks/202610060832-HF3AX5/evidence/exact-sha-review.json"
   findings:
     - "Same current agent performed exact-SHA review; 12816 application,109 inventory,5 script and189 Chromium cases pass with100% application/inventory coverage; prior semantic records and registered exceptions are preserved. Full native hierarchy and nondefault table insertion remain unverified."
-commit: null
+commit:
+  hash: "8335726e7f245e3722a4550dc178cebb19b58c4e"
+  message: "🧩 HF3AX5 task: persist verified native row ownership outcome"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved native cursor-shell and document row-history ownership slice under standing iterative authorization, preserving existing defaults and registered exceptions."
+  -
+    author: "CODER"
+    body: "Verified: inherited core cursor traversal and document-owned default row insertion/history satisfy the approved slice.12816application109inventory5scripts189Chromium cases;100%application/inventory coverage; upstream-absent profiles, restored source audits and same-agent exact-SHA quality pass. Registered exceptions preserved; full goal remains active."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native cursor-shell and document-owned default row insertion/history meet the approved slice on642c72010a7146b4dcd01d29b778533cd84b0caf.12816app109inventory5scripts189Chromium;100%app/inventory actual-counter coverage. One full upstream-absent profile plus original-failure-only closure, restored source audits and same-agent exact-SHA quality PASS. Registered exceptions and all268prior semantic records preserved; full parity remains unverified."
+  -
+    type: "status"
+    at: "2026-10-06T08:55:59.745Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: inherited core cursor traversal and document-owned default row insertion/history satisfy the approved slice.12816application109inventory5scripts189Chromium cases;100%application/inventory coverage; upstream-absent profiles, restored source audits and same-agent exact-SHA quality pass. Registered exceptions preserved; full goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-06T08:55:43.901Z"
+doc_updated_at: "2026-10-06T08:55:59.747Z"
 doc_updated_by: "CODER"
 description: "Iteration180: remove table traversal and appended-row graph/history construction from SwWrtShell. Introduce the inherited native SwCursorShell source owner and route the existing flat final-cell append through SwDoc.InsertRow, with native document history publication and ordinary subsequent cursor traversal. Preserve existing behavior and explicitly retain unverified broader native contracts."
 sections:
@@ -120,6 +133,10 @@ sections:
     Full native SwViewShell/layout hierarchy, general selection/count/before/drag row modes, document DoesUndo/UndoGuard/formulas/autoformat/redline/DDE/protection, merged/nested/rowspan geometry, native retained undo content/Repeat and complete UI/core parity remain unverified. Registered save/open/recovery deviations remain unchanged. Parent and whole goal ACTIVE; this completed slice does not establish full upstream parity.
 
     Closure evidence: implementation642c72010a7146b4dcd01d29b778533cd84b0caf. Exact-SHA same-agent EVALUATOR review PASS with no runtime errors or remaining failed cases. Initial auxiliary review falsely reported Script case drift because its whitespace regex was double-escaped; corrected failed-review-only closure PASS, without rerunning tests or passing checks. First implementation commit was rejected by E_GIT because --allow-tasks did not allow the eleven semantic paths; explicit reviewed per-path --allow arguments resolved it without changing scope or code. Bounded recovery evidence preserves both process failures. Quality report20261006-085509039-recovery-context recorded PASS. Parent/goal remains active and full parity unverified.
+extensions:
+  implementation_commit:
+    hash: "642c72010a7146b4dcd01d29b778533cd84b0caf"
+    message: "🧩 HF3AX5 code: move table traversal and row history to native core owners"
 id_source: "generated"
 ---
 ## Summary
