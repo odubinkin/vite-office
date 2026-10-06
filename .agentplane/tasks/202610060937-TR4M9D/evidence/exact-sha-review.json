@@ -1,0 +1,141 @@
+{
+  "evaluatedSHA": "2c76be1460f59495b7ab618efa8babf2e7870c3d",
+  "reviewer": "Same current agent in EVALUATOR role; no independent review claim",
+  "result": "pass",
+  "distinctCases": {
+    "application": 12833,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 193
+  },
+  "caseIdentity": "file+fullName/title+project when applicable+occurrence; skips retained as skips",
+  "caseResults": {
+    "application": {
+      "passed": 12833,
+      "failed": [],
+      "skipped": [],
+      "runtimeErrorSuites": 0
+    },
+    "inventory": {
+      "passed": 109,
+      "failed": [],
+      "skipped": [],
+      "runtimeErrorSuites": 0
+    },
+    "chromium": {
+      "passed": 193,
+      "failed": [],
+      "skipped": [],
+      "flaky": 0
+    }
+  },
+  "implementationSHA256": {
+    "apps/office/src/sw/source/core/table/swtable.ts": "bdf2125bd4d8d1fb46fc4a9d2ce3ad90d300b56f25361c8c609e592b7ebb8de2",
+    "apps/office/src/sw/source/core/docnode/nodes.ts": "4a8be928cf4c4771eb7cbe44e01f5245f10a91a37c4da9b623c98da0a6a12360",
+    "apps/office/src/sw/source/core/doc/doc.ts": "d3957362c42556022d369c13d93f781bbad231ec38ab81304fc1e76355c17171",
+    "apps/office/src/sw/source/core/undo/untbl.ts": "0cf45f389968d1311f53b0a22d71928bad8ad29005e15da52f4a9e88e1c2c0e6",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "c49658c02f1bc46f631d3d12ebc12b7d2f27f041274509454cd6ad8adc595074",
+    "apps/office/src/sw/source/core/frmedt/tblsel.ts": "04447937f469c8659534027da577f0d01d879dbf028225d2f9185d96885d458a",
+    "apps/office/src/sw/source/uibase/shells/tabsh.ts": "ca2ddd31868fc2dc7d919d0a923351f386166c955165593273db46660433e4b8",
+    "scripts/generate-writer-ui-resources.ts": "f583af0cda0233781db82b69e6542ff7a034a42131469e81269b5b29fa863c55",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json": "aef461c2ecfd5a6988c22f97cb766846ad949f5fdc1dcb34968a7c2a8ec3b18d",
+    "docs/program/source-provenance.json": "9142cbc3095858d0f1b2db9a1308a5e42668e6fdb76269c8539c4982c90eab16",
+    "docs/program/parity/runtime-inventory.json": "40827ca452a3fdf7fa6e482bc611c87d48a5fabde2e0a8f2b282c006b7584193",
+    "apps/office/src/sw/source/core/table/native-column-insertion.test.ts": "eb3c6922ae58e57a98a2abccb7de707ef7a02c18cd773396abf3e41a4cb3f3bb",
+    "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx": "c9e07c23b9974d3779f1562bda775876e04e10799d1803b5f6ceea38c00691f2",
+    "apps/office/e2e/writer-native-column-commands.spec.ts": "51920df0548e3baedc72f16d681dd071c1a00618d6e314bdfa408aa3cfbe13b5",
+    "scripts/libreoffice-inventory/parity-mapping-cli.test.ts": "7a1bbb9719a69c040bb5ddd398313623221765de61fd0105abd1da1df45fd6ad"
+  },
+  "coverage": {
+    "application": {
+      "coverage": {
+        "lines": {
+          "total": 13729,
+          "covered": 13729,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15044,
+          "covered": 15044,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3603,
+          "covered": 3603,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11221,
+          "covered": 11221,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "e3b1548f8e831f2002c733c259df9dc94c25d52bda2a06c194d2f77418080a01",
+      "files": 267,
+      "byteIdenticalRawMap": true
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "b728939e97bd47d98e04ec57c7b9ca633ea9f9389fa9930162afe4869405dbf3",
+      "files": 38,
+      "byteIdenticalRawMap": true
+    }
+  },
+  "coverageProof": "267 application and38 inventory raw maps copied byte-for-byte; actual counters only; no merges/transfers/test replay; production hashes unchanged since full absent profile.",
+  "pinnedSourceFiles": 13,
+  "priorSemanticRecordsPreserved": 269,
+  "currentSemanticRecords": 270,
+  "oldTestFilesByteIdentical": 475,
+  "totalPriorTestFiles": 476,
+  "findings": [
+    "Native selected column count and edge determine actual SwTable box insertion in every flat row; cumulative integer width adjustment preserves total geometry.",
+    "SwNodes row/column creation shares actual empty native box sections; SwDoc publishes one SwUndoTableNdsChg action with numeric reconstruction coordinates.",
+    "Table slots enter inherited frame-editing shell; original selection/pending items survive mixed row/column/text and recreated-table history. Native worker/ODF and mounted colgroups observe actual graph.",
+    "51 native contextual commands; prior269 states/defaults/classes/evidence and deliberate I/O deviations preserved.",
+    "Complex frame unions, follow-page geometry, vertical/RTL/fly, merged/nested/rowspan/protection/formula/redline/repeated-headline and full native undo graph reconstruction remain unverified."
+  ],
+  "wholeGoal": "ACTIVE",
+  "fullParity": "UNVERIFIED",
+  "failures": []
+}
