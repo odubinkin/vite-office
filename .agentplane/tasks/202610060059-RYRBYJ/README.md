@@ -1,10 +1,11 @@
 ---
 id: "202610060059-RYRBYJ"
 title: "Restore document label ruler drag admission and native cursor ownership"
-status: "DOING"
+result_summary: "Restored source-shaped horizontal document-label ruler drag without retained numbering-node adapter or synthetic handle events; 27 new app and2 browser cases,443 prior tests unchanged,actual100percent coverage. Conscious IO exceptions preserved."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610060059-RYRBYJ/evidence/evaluator-proof.json"
   findings:
     - "Exact nine semantic paths, source and counter-map identity, 443 unchanged prior tests and 258 preserved semantic records verified. One full absent profile plus only two original failures and three new cases; final 12644 app,109 inventory,5 scripts,151 Chromium passed, actual 100 percent coverage. All declared static/source/scope/hygiene gates passed. Immediate native label-node clear correctly applies copied items to current paragraph; real cancellation and history verified. No independent reviewer claim or full parity promotion."
-commit: null
+commit:
+  hash: "3bc5736d86d80cc4b0ea18c4a1d7eaa0f6c806fd"
+  message: "🧩 RYRBYJ task: record verified native ruler gesture"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native document label ruler admission and copied indent state using existing browser tracking and paragraph item history; preserve all previous tests/contracts and conscious IO exceptions."
+  -
+    author: "CODER"
+    body: "Verified: Native represented document-label ruler admission now uses existing shared tracking with synchronous target borrowing, copied native geometry, current cursor ownership, cancellation and real paragraph UndoRedo. Declared upstream-absent tests and source/scoped/hygiene checks passed; full UI parity remains unverified."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native horizontal document-label ruler admission, copied state and immediate target clear preserving current cursor; actual current paragraph history and cancellation. One full upstream-absent profile plus original-failed/new-only closure; final12644app109inventory5scripts151Chromium passed, actual100percent coverage,443prior tests unchanged258semantic records preserved. Six statics,five restored audits,scope/hygiene/governance passed. Same-agent EVALUATOR exact1874805e7d9d25af14487df1ee398a60af5adacf pass; full framework/list/table/core/UI parity unverified,IO exceptions unchanged."
+  -
+    type: "status"
+    at: "2026-10-06T01:24:04.859Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native represented document-label ruler admission now uses existing shared tracking with synchronous target borrowing, copied native geometry, current cursor ownership, cancellation and real paragraph UndoRedo. Declared upstream-absent tests and source/scoped/hygiene checks passed; full UI parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T01:23:47.967Z"
+doc_updated_at: "2026-10-06T01:24:04.861Z"
 doc_updated_by: "CODER"
 description: "Iteration172 under standing approved iterative core/UI convergence authorization, one atomic CODER leaf direct main. Previous171 is PROGRESS evidenced by semantic180f7bbc6b3c3af7d7fc0488745953999195b978 and DONE verification. Restore native document-origin indent drag for real Writer list-label DOM hits using one existing ruler tracking owner. Source-confirmed edtwin3254 sets numbering node only to update ruler bindings, calls StartDocDrag then clears it immediately even on admission; do not invent retained label rule ownership or force SetIndent at later acceptance. Snapshot native StateTabWin label geometry from actual SwTextNode and current paragraph items, signed-short left offset, native SetLeft/ResolveTextLeft negative-first adjustment. StartDocDrag admits single left document input, matches Bottom indent horizontal hit policy, tab precedence and right-before-left order, preserves actual cursor instead of pointer text normalization. Reuse startDrag/useRulerTracking and existing cancellation/key priority/guides; transient copied indent painting and accepted changed-position application through existing SetParagraphRulerIndents actual item/history owner. No change on unmoved or cancelled input; accepted current-selection semantics match source after immediate node clear. Existing ruler direct gestures remain unchanged. Cancel tracking on hide/inactive/unmount/document owner replacement. Four existing browser production files, two metadata,three new tests (ruler native admission, mounted actual Writer model/history/cursor/list identity, ordinary Open Chromium1280/390),9 paths. All443 prior tests byte-identical and258runtime state/default/class/IOexception/evidence prefixes retained, no module promotion. Six statics then ONE full upstream-absent build/app/inventory/scripts/Chromium, failed/new-only recovery afterward; actual100%maps only ignored appcache with exact source/map identity proof if needed. AP never sources/helpers/Python/probes/rawdiagnostics. Five restored source audits, scope/sourcehash/prior-tests/metadata/AP/doctor/routing/diff, same-agent exact-SHA EVALUATOR, canonical meaningful verify/finish and whole parent checkpoint. No network/outside/global/subagents. Conscious save/open/recovery exceptions unchanged. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/framework/ruler/label/list/table/core/UI remains unverified."
 sections:
@@ -122,6 +135,10 @@ sections:
     Six initial static gates eventually passed, recovering only failed gates: initial formatting1file, lint2errors and TypeScript owner/projection/fixture errors. Resolved actual existing projection id/nodeIndex to native SwTextNode rather than inventing node id or store API. Changed-file checks passed; final test-fixture-only checks recovered unused bindings2, nonoptional delete TS2790 and readonly delete TS2704x2. Final fixture destructure/void cleanup after closure preserved runtime behavior and assertions; successful tests were not replayed. Bounded guessed-path/no-match read-only lookups required route recomputation; no network/global/outside access or subagents.
     ONE full upstream-absent build/profile:12639 app pass2 new fixture failures of12641;109 inventory5 scripts151 Chromium pass0flaky. Both new ruler guide failures were caused by absent fixture canvas clipping bounds; supplied real canvas geometry. Only original2 failures plus3 genuinely missing native outside/frame-relative/omitted-settings cases ran afterwards absent:5pass14skipped19total. Final distinct12644app109inventory5scripts151Chromium. Production unchanged after initial profile; no rebuild, passing/full replay or upstream test/runtime dependency. Vendor restored before all5 source audits, semantic violations0.
     Actual final100% app13061L14322S3450F10662B andinventory1464L1523S384F1080B. Added only actual closure counters for WriterRulers after exact unchanged source/statement/function/branch map identity; retained actual original counters elsewhere. Scope/source-hash/metadata/prior-test checks passed. Ignored-inclusive AP4500files0forbidden, doctor0errors2knownwarnings, routing and diff checks passed. AP contains only bounded English prose/counts/hashes/outcomes; no upstream/local sources/helpers/Python/probes/rawdiagnostics. Raw maps/results/initial local source snapshots remain ignored appcache. Same-agent exact semantic SHA evaluation required before meaningful finish. Parent DOING and goal ACTIVE; next one-task priority is source-proven list/table UI mechanics, without blanket parity promotion.
+extensions:
+  implementation_commit:
+    hash: "1874805e7d9d25af14487df1ee398a60af5adacf"
+    message: "🧩 RYRBYJ code: restore native document label ruler tracking"
 id_source: "generated"
 ---
 ## Summary
