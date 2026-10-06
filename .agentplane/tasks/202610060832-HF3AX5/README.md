@@ -4,7 +4,7 @@ title: "Move table Tab append into native cursor shell and document history owne
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-06T08:55:43.804Z"
+  updated_by: "CODER"
+  note: "Native cursor-shell and document-owned default row insertion/history meet the approved slice on642c72010a7146b4dcd01d29b778533cd84b0caf.12816app109inventory5scripts189Chromium;100%app/inventory actual-counter coverage. One full upstream-absent profile plus original-failure-only closure, restored source audits and same-agent exact-SHA quality PASS. Registered exceptions and all268prior semantic records preserved; full parity remains unverified."
   attempts: 0
 quality_review:
   state: "pass"
@@ -51,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the approved native cursor-shell and document row-history ownership slice under standing iterative authorization, preserving existing defaults and registered exceptions."
+  -
+    type: "verify"
+    at: "2026-10-06T08:55:43.804Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native cursor-shell and document-owned default row insertion/history meet the approved slice on642c72010a7146b4dcd01d29b778533cd84b0caf.12816app109inventory5scripts189Chromium;100%app/inventory actual-counter coverage. One full upstream-absent profile plus original-failure-only closure, restored source audits and same-agent exact-SHA quality PASS. Registered exceptions and all268prior semantic records preserved; full parity remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-06T08:55:29.700Z"
+doc_updated_at: "2026-10-06T08:55:43.901Z"
 doc_updated_by: "CODER"
 description: "Iteration180: remove table traversal and appended-row graph/history construction from SwWrtShell. Introduce the inherited native SwCursorShell source owner and route the existing flat final-cell append through SwDoc.InsertRow, with native document history publication and ordinary subsequent cursor traversal. Preserve existing behavior and explicitly retain unverified broader native contracts."
 sections:
@@ -64,7 +70,41 @@ sections:
     2. ONE full profile while vendor/libreoffice-reference is renamed inside repository and restored in finally: npm run test:static; full app/inventory coverage --coverage.reportOnFailure plus JSON case results; script acceptance; all Chromium against dist. Persist exit codes, exact failures, case identities/counts and hashes before assertions. Only original failures and genuinely new cases may rerun; no passing/full/source replay.
     3. New native and mounted/browser acceptance proves inherited cursor ownership, document row insertion/history with no shell ApplyAction, actual final-cell traversal, no insertion at forbidden boundaries, notification coherence, pending attribute undo, ordinary row identities and insertion-row-text repeated Undo/Redo. App/inventory100% actual-counter coverage; only exact unchanged maps or entire byte-identical ranges may transfer counters.
     4. After upstream restoration: source-tree/provenance/invariant/parity and resource generation --check audits, prior test byte/semantic prefix scope checks, AP source/helper prohibition audit, doctor/routing and same-agent exact-SHA review. Explicit scoped implementation/evidence commits, verification then clean direct close; parent/goal active and full parity unverified.
-  Verification: "Pending implementation and exact-source verification."
+  Verification: |-
+    Pending implementation and exact-source verification.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T08:55:43.804Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native cursor-shell and document-owned default row insertion/history meet the approved slice on642c72010a7146b4dcd01d29b778533cd84b0caf.12816app109inventory5scripts189Chromium;100%app/inventory actual-counter coverage. One full upstream-absent profile plus original-failure-only closure, restored source audits and same-agent exact-SHA quality PASS. Registered exceptions and all268prior semantic records preserved; full parity remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T08:55:29.700Z, excerpt_hash=sha256:e5adee6dea69e5209b13f34bb8726f40926cb9c272444853a453d24d7b7d63d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060832-HF3AX5/blueprint/resolved-snapshot.json
+    - old_digest: 226996115be763ac58a0a2b7b5029fb6843ee7c52b95bb7bef4ec54f0bc78bdf
+    - current_digest: 226996115be763ac58a0a2b7b5029fb6843ee7c52b95bb7bef4ec54f0bc78bdf
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610060832-HF3AX5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610060832-HF3AX5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the scoped implementation commit through a separate approved task if native default cell traversal/history regresses; preserve registered I/O deviations and immutable completed task evidence."
   Findings: |-
     Iteration180 native cursor-shell and document row ownership implementation complete. SwEditShell now inherits SwCursorShell from the pinned trvltbl.cxx source unit. Existing next/previous cell movement is inherited; SwWrtShell retains only its input/bindings refresh hook and no longer prepares row sections or instantiates row history. At the actual final unmarked cell, core shell invokes default SwDoc.InsertRow then calls native SwCursor.GoNextCell. The document connects actual sections and appends already-executed SwUndoTableNdsChg after SaveNewBoxes captures connected cursor coordinates. Native parameter order/defaults count1/behindtrue/insertDummytrue are preserved for the represented existing append; optional browser cursor adjunct retains pending character attributes. Supported operation is explicitly bounded: non-default row modes are rejected and remain unimplemented, not marked verified.
@@ -104,6 +144,39 @@ Standing user authorization covers iterative native UI/core refactoring. Port ac
 ## Verification
 
 Pending implementation and exact-source verification.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T08:55:43.804Z — VERIFY — ok
+
+By: CODER
+
+Note: Native cursor-shell and document-owned default row insertion/history meet the approved slice on642c72010a7146b4dcd01d29b778533cd84b0caf.12816app109inventory5scripts189Chromium;100%app/inventory actual-counter coverage. One full upstream-absent profile plus original-failure-only closure, restored source audits and same-agent exact-SHA quality PASS. Registered exceptions and all268prior semantic records preserved; full parity remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T08:55:29.700Z, excerpt_hash=sha256:e5adee6dea69e5209b13f34bb8726f40926cb9c272444853a453d24d7b7d63d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610060832-HF3AX5/blueprint/resolved-snapshot.json
+- old_digest: 226996115be763ac58a0a2b7b5029fb6843ee7c52b95bb7bef4ec54f0bc78bdf
+- current_digest: 226996115be763ac58a0a2b7b5029fb6843ee7c52b95bb7bef4ec54f0bc78bdf
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610060832-HF3AX5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610060832-HF3AX5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
