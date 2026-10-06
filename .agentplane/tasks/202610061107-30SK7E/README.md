@@ -1,10 +1,11 @@
 ---
 id: "202610061107-30SK7E"
 title: "Select all through native cell table and text contexts"
-status: "DOING"
+result_summary: "Completed represented native contextual Select All and DOM synchronization;12867 application,109 inventory,5 scripts,198 Chromium distinct completed cases. All482 old test files and270 semantic statuses/defaults/classes preserved. Whole goal ACTIVE/full parity UNVERIFIED; paragraph metadata DOM leakage and wider native contracts deferred."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Same current agent review: native cell/table/text owners, actual ranges and DOM synchronization verified; no independent review claim."
     - "12867 app,109 inventory,5 scripts,198 Chromium distinct completed cases; no passing/full replay. All482 old acceptance files byte-identical;270 semantic classifications/defaults preserved."
     - "Paragraph metadata DOM leakage and wider hidden/nested/protected/layout/PrepareSelAll/structural deletion remain unverified; whole goal ACTIVE."
-commit: null
+commit:
+  hash: "324f8c3e3984fddb682a3739f7dfeac145e0e3bf"
+  message: "🧩 30SK7E code: select all through native cell table and text owners"
 comments:
   -
     author: "CODER"
     body: "Start: Implement source-owned contextual Select All under standing iterative authorization; one leaf, one upstream-absent profile."
+  -
+    author: "CODER"
+    body: "Verified: Native cell table and surrounding-text Select All implemented at324f8c3e3984; one upstream-absent full profile plus original failures/four genuine cases, actual100 coverage, exact-SHA quality PASS."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native contextual Select All at324f8c3e3984 verified: one absent full profile plus original failure/four new-case closures;12867/109/5/198 distinct cases, actual100 app/inventory coverage, no passing/full replay. Same-agent exact-SHA quality PASS;270states/482oldtestfiles and conscious deviations preserved; whole parity UNVERIFIED."
+  -
+    type: "status"
+    at: "2026-10-06T11:46:20.331Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native cell table and surrounding-text Select All implemented at324f8c3e3984; one upstream-absent full profile plus original failures/four genuine cases, actual100 coverage, exact-SHA quality PASS."
 doc_version: 3
-doc_updated_at: "2026-10-06T11:45:50.943Z"
+doc_updated_at: "2026-10-06T11:46:20.332Z"
 doc_updated_by: "CODER"
 description: "Iteration185: replace body-only SelectAll with source-owned contextual selection and actual native cursor/table owners; verify core mounted and Chromium behavior without upstream."
 sections:
