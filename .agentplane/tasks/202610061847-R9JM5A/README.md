@@ -4,7 +4,7 @@ title: "Port native Writer format-page draft lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -61,7 +61,7 @@ events:
     state: "ok"
     note: "Verified native format-page draft lifecycle at c786204dd8b3469a9018ccacba20f99bb57ebabc:13096app109inventory5scripts231Chromium pass, actual100 coverage, one upstream-absent profile, static/source/scope/governance pass; same-agent EVALUATOR explicitly not independent. Parent/goal active."
 doc_version: 3
-doc_updated_at: "2026-10-06T19:27:00.532Z"
+doc_updated_at: "2026-10-06T19:27:24.233Z"
 doc_updated_by: "CODER"
 description: "Iteration195 under active implemented-runtime parity goal: move existing absolute table-format metric/radio state into SwFormatTablePage, publish shared SwTableRep only on native page deactivation, restore source Reset/Activate/FillItemSet/change flags, and connect React page activation. Preserve literal historical arithmetic, canonical history and registered deviations; update one historical field-state assertion surface and add four acceptance files. One full upstream-absent profile, failed/new-only closures, actual100 coverage and full-prefix preservation; raw source/results only ignored cache, no upstream execution in tests."
 sections:
@@ -140,6 +140,8 @@ sections:
     Bounded read-only failures: nested JS template parser failed before execution/writes; lAutoWidth search in sw/inc found no matches; guessed nonexistent core/bastyp/tabrow.ts produced rg exit2. Route recomputed, actual tablemgr/swtypes declarations and existing ndtbl representation used; no scope/verification drift.
 
     Same current-agent EVALUATOR exact implementation-SHA phase is explicitly not independent review. Native percentage/name/text-direction/full SfxItemSet/frame notifications, full widget units/ranges/Reset UI, hidden/per-row graph and adaptive SizeHdl remain UNVERIFIED. Parent and goal ACTIVE; whole implemented-runtime parity UNVERIFIED.
+
+    Post-quality current-leaf census initially used an overly broad snapshot-name expression and falsely flagged AgentPlane canonical blueprint/resolved-snapshot.json. Verification/tail were accidentally advanced before inspecting that census result. Route recomputed; corrected to the existing artifact-specific forbidden pattern, current16files0forbidden. Canonical blueprint retained, no source/tests/policy/criteria changed and no passing test replay. Exact implementation c786204dd8b3469a9018ccacba20f99bb57ebabc, quality quality/20261006-192647537-recovery-context/quality-report.json pass; same agent explicitly not independent.
 id_source: "generated"
 ---
 ## Summary
@@ -234,3 +236,5 @@ Scope9 approved semantic paths;512 prior acceptance files511 byte-identical plus
 Bounded read-only failures: nested JS template parser failed before execution/writes; lAutoWidth search in sw/inc found no matches; guessed nonexistent core/bastyp/tabrow.ts produced rg exit2. Route recomputed, actual tablemgr/swtypes declarations and existing ndtbl representation used; no scope/verification drift.
 
 Same current-agent EVALUATOR exact implementation-SHA phase is explicitly not independent review. Native percentage/name/text-direction/full SfxItemSet/frame notifications, full widget units/ranges/Reset UI, hidden/per-row graph and adaptive SizeHdl remain UNVERIFIED. Parent and goal ACTIVE; whole implemented-runtime parity UNVERIFIED.
+
+Post-quality current-leaf census initially used an overly broad snapshot-name expression and falsely flagged AgentPlane canonical blueprint/resolved-snapshot.json. Verification/tail were accidentally advanced before inspecting that census result. Route recomputed; corrected to the existing artifact-specific forbidden pattern, current16files0forbidden. Canonical blueprint retained, no source/tests/policy/criteria changed and no passing test replay. Exact implementation c786204dd8b3469a9018ccacba20f99bb57ebabc, quality quality/20261006-192647537-recovery-context/quality-report.json pass; same agent explicitly not independent.
