@@ -1,0 +1,61 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 223,
+      "sha256": "aeead0f15924d664091fa8bd412dd50a9f15bed361e5d4752ec7c36747d3645f",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-table-row-drag.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 869,
+      "sha256": "acd120dc82afb6951ee1800689f40f1dfe9a422306658b888dbbe12ca308adce",
+      "diagnostics": [
+        "src/sw/source/core/docnode/native-tabrows.test.ts(143,38): error TS2551: Property 'splice' does not exist on type 'readonly SwTableBox[]'. Did you mean 'slice'?",
+        "src/sw/source/uibase/docvw/native-table-row-drag.test.ts(168,45): error TS2339: Property 'contentIndex' does not exist on type 'SwUndoCursorPosition'.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "da1ddcc0e68dac8602916c5b19b7be766eda4f859bbd6ef7ee3e74cb78870ddc",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "3f5a299e0dcf0688d81022bfa1321250d890170e4ae1d3c62297bdb83f6671c7",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3658,
+      "sha256": "89ed88c38e3253f97bc1a14e9cca9e6539d4b29fede534d22f2b5cb2834eb9fe",
+      "diagnostics": []
+    }
+  ]
+}

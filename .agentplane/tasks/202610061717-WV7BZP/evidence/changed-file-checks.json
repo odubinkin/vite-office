@@ -1,0 +1,38 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/doc/doc.ts": 902,
+        "apps/office/src/sw/source/core/docnode/ndtbl.ts": 160,
+        "apps/office/src/sw/source/core/layout/tabfrm.ts": 83,
+        "apps/office/src/sw/source/core/frmedt/fetab.ts": 467,
+        "apps/office/src/sw/source/uibase/docvw/edtwin.ts": 541,
+        "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": 559,
+        "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts": 162,
+        "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts": 221,
+        "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx": 127,
+        "apps/office/e2e/writer-native-table-row-drag.spec.ts": 155
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/docnode/ndtbl.ts apps/office/src/sw/source/core/layout/tabfrm.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/docnode/native-tabrows.test.ts apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx apps/office/e2e/writer-native-table-row-drag.spec.ts",
+      "exit": 1,
+      "bytes": 167,
+      "sha256": "6e91bf5fd0dab3e646db74caf8b9ab829b126dbee0d1c665686142d965ac23bd",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-table-row-drag.spec.ts",
+        "[warn] Code style issues found in the above file. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm exec -- eslint apps/office/src/sw/source/core/doc/doc.ts apps/office/src/sw/source/core/docnode/ndtbl.ts apps/office/src/sw/source/core/layout/tabfrm.ts apps/office/src/sw/source/core/frmedt/fetab.ts apps/office/src/sw/source/uibase/docvw/edtwin.ts apps/office/src/sw/browser/editor/browser-writer-edit-window.ts apps/office/src/sw/source/core/docnode/native-tabrows.test.ts apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx apps/office/e2e/writer-native-table-row-drag.spec.ts --max-warnings 0",
+      "exit": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": []
+    }
+  ]
+}
