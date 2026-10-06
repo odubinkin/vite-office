@@ -1,0 +1,64 @@
+{
+  "records": [
+    {
+      "command": "npm run format:check",
+      "exit": 1,
+      "bytes": 292,
+      "sha256": "717f64b9daf6d15c1fea232e80e51d69a6b242c3f84a62df0b769e65dad224b0",
+      "diagnostics": [
+        "[warn] apps/office/e2e/writer-native-row-frame-size.spec.ts",
+        "[warn] apps/office/src/sw/source/core/docnode/native-row-frame-size.test.ts",
+        "[warn] Code style issues found in 2 files. Run Prettier with --write to fix."
+      ]
+    },
+    {
+      "command": "npm run lint",
+      "exit": 0,
+      "bytes": 55,
+      "sha256": "a6172cb57fa696e705408fdc605fba1ae07b852fdf0614d7c2b623349e285b6e",
+      "diagnostics": [
+        "> eslint . --max-warnings 0"
+      ]
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 2,
+      "bytes": 1227,
+      "sha256": "186b2f541ff78b44d8bc0285fe1e6ed5dd78d911537d48f10b00d1b7e74cacae",
+      "diagnostics": [
+        "src/sw/browser/editor/native-row-frame-size.test.tsx(49,76): error TS2769: No overload matches this call.",
+        "  Overload 1 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "  Overload 2 of 2, '(role: ByRoleMatcher, options?: ByRoleOptions | undefined): HTMLElement', gave the following error.",
+        "src/sw/inc/fmtfsize.test.ts(14,11): error TS2540: Cannot assign to 'height' because it is a read-only property.",
+        "npm error Lifecycle script `typecheck` failed with error:",
+        "npm error code 2",
+        "npm error path /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error workspace @vite-office/office@0.1.0",
+        "npm error location /Users/odubinkin/Projects/vite-office/apps/office",
+        "npm error command failed",
+        "npm error command sh -c tsc --noEmit"
+      ]
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exit": 0,
+      "bytes": 189,
+      "sha256": "0bed7b904d772b3c06cb09f5662386b4357267ab1c108a6f9bdde8d2f7195bae",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:docs",
+      "exit": 0,
+      "bytes": 119,
+      "sha256": "1948dc33c1649184f17dd0b1667568cabdd821e584c59fc3c8cb5f40579730d4",
+      "diagnostics": []
+    },
+    {
+      "command": "npm run check:file-size",
+      "exit": 0,
+      "bytes": 3865,
+      "sha256": "1dacf015c53d1e0dfcc7b191fff09fa15fc760747e6b65f767916e831959da4d",
+      "diagnostics": []
+    }
+  ]
+}
