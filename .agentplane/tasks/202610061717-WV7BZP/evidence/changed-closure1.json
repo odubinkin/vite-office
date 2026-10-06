@@ -1,0 +1,24 @@
+{
+  "records": [
+    {
+      "command": "Unchanged JSDoc validator on approved changed code/acceptance paths; actual physical-line count",
+      "exit": 0,
+      "errors": [],
+      "physicalLines": {
+        "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts": 162,
+        "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts": 221,
+        "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx": 127,
+        "apps/office/e2e/writer-native-table-row-drag.spec.ts": 153
+      }
+    },
+    {
+      "command": "npm exec -- prettier --check apps/office/src/sw/source/core/docnode/native-tabrows.test.ts apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx apps/office/e2e/writer-native-table-row-drag.spec.ts",
+      "exit": 0,
+      "bytes": 66,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "diagnostics": [
+        "All matched files use Prettier code style!"
+      ]
+    }
+  ]
+}
