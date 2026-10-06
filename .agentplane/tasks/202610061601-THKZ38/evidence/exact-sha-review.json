@@ -1,0 +1,131 @@
+{
+  "evaluatedSHA": "7a6b96fdc3f6aea5d181fad1825a43a92e78fc83",
+  "reviewer": "Same current agent EVALUATOR phase; explicitly not independent review",
+  "implementationSHA256": {
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "f754b992f7cd2915635b5f7db38185e51e79c3b81c64124e8bebc04d37008bce",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "71be278c7b1dee1219066c4a43140e94fb9a2f2d940ed96039f1a2db2aeb9aa2",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "89676f449427967939afcf0e4979bcb5e1bd941ad22de5d45dca4f67d5fd116c",
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "11b2f86aac8f8fd35578ee2ee47bad21109fdb78d620ac01950110e243b2c20e",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "c379bb175797e1c94c75a48165e0f77acde792a70f4afb5ae129e27473bc901a",
+    "docs/program/parity/runtime-inventory.json": "84c4560661ef4f67fee4be7a218b8716a8c4c2e2cc1cb5252cb64f44b4dc902c",
+    "docs/program/source-provenance.json": "f6ac092c1f9483b7ca771a4637e4fe8609a2077ab83ab77dab6d0f0badd20383",
+    "apps/office/e2e/writer-native-table-column-page.spec.ts": "0c8a59544b7933daa7ade500a7e790dcbac2e7046ad0b97383aea102aca79e3c",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "2eff211b9ad5d0f0125558da4479fb56ad820306156a54b42c6fe11ad8a7702d",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts": "c29573739fb67f367ba9907e456673ed79d685d4130e327c44647c31a3ed5595",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "e1a88f76c94ddbb084740abe7fee630fb1446e9ed2c891f4c4105c71aa032ac0"
+  },
+  "acceptance": {
+    "application": 13079,
+    "inventory": 109,
+    "scripts": 5,
+    "chromium": 227,
+    "oldAcceptanceFilesByteIdentical": 507,
+    "knownNativeMinimumMigration": 1,
+    "newAcceptanceFiles": 4,
+    "totalAcceptanceFiles": 512,
+    "focusedNewCases": 2,
+    "focusedSkippedCasesNotPromoted": 65,
+    "noHistoricalPassingReplay": true
+  },
+  "coverage": {
+    "app": {
+      "coverage": {
+        "lines": {
+          "total": 14724,
+          "covered": 14724,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16155,
+          "covered": 16155,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3744,
+          "covered": 3744,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12002,
+          "covered": 12002,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "8b000cbbca0eac5a4b5f1b1749a1ce7803a64195c5034face8e79407010b231a",
+      "files": 273
+    },
+    "inventory": {
+      "coverage": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "mapSHA256": "11dc2864301bd08eb0d3af37129a6e7172aaa51c74a3e0b38e22735eaae6cee6",
+      "files": 38
+    },
+    "proof": "Actual initial counters transferred only over full identical maps/source or complete contiguous identical source ranges with full mapped locations; current changed ranges use focused raw counters. Skipped cases retained as skipped. No counts fabricated.",
+    "transfers": [],
+    "wholeIdenticalFileCount": 273,
+    "gaps": []
+  },
+  "proof": {
+    "app": {
+      "files": 273,
+      "wholeIdenticalFiles": 273,
+      "completeRegionFiles": 0,
+      "proofSHA256": "087f386e722705ebee4cd0f69c56b6c461a51bd2aece7b6b290ea99bbc4b1566"
+    },
+    "inventory": {
+      "files": 38,
+      "wholeIdenticalFiles": 38,
+      "proofSHA256": "bba763d4d7885fd8e6c808012fa5076f978483a51ef15926e7e324b1ca130222"
+    },
+    "counterRule": "Complete identical source/maps or full contiguous byte-identical regions, full function declaration/body and full enclosing branch/locations only. Raw counters only; source digests checked. Focused skips remain skips.",
+    "failures": []
+  },
+  "semanticRecords": 276,
+  "priorRecordsAndPrefixesPreserved": 276,
+  "parentPrefixCharacters": 498326,
+  "parentPrefixSHA256": "8e681957baed7400f5dd4741dcafa425137b093a530b89e753948c3c134db654",
+  "registeredFilenameAndIOExceptionsUnchanged": true,
+  "deferredStashPreserved": true,
+  "sourceContractsReviewed": true,
+  "failures": []
+}
