@@ -1,0 +1,88 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "11b2f86aac8f8fd35578ee2ee47bad21109fdb78d620ac01950110e243b2c20e",
+    "apps/office/src/sw/source/uibase/table/swtablerep.ts": "c379bb175797e1c94c75a48165e0f77acde792a70f4afb5ae129e27473bc901a",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "71be278c7b1dee1219066c4a43140e94fb9a2f2d940ed96039f1a2db2aeb9aa2",
+    "apps/office/src/sw/browser/presentation/writer-view.tsx": "89676f449427967939afcf0e4979bcb5e1bd941ad22de5d45dca4f67d5fd116c",
+    "apps/office/src/sw/source/ui/table/native-table-column-page.test.ts": "c29573739fb67f367ba9907e456673ed79d685d4130e327c44647c31a3ed5595",
+    "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx": "2eff211b9ad5d0f0125558da4479fb56ad820306156a54b42c6fe11ad8a7702d",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-column-page-history.test.ts": "e1a88f76c94ddbb084740abe7fee630fb1446e9ed2c891f4c4105c71aa032ac0",
+    "apps/office/e2e/writer-native-table-column-page.spec.ts": "0c8a59544b7933daa7ade500a7e790dcbac2e7046ad0b97383aea102aca79e3c",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx": "f754b992f7cd2915635b5f7db38185e51e79c3b81c64124e8bebc04d37008bce",
+    "docs/program/source-provenance.json": "f6ac092c1f9483b7ca771a4637e4fe8609a2077ab83ab77dab6d0f0badd20383",
+    "docs/program/parity/runtime-inventory.json": "84c4560661ef4f67fee4be7a218b8716a8c4c2e2cc1cb5252cb64f44b4dc902c"
+  },
+  "records": [
+    {
+      "kind": "typecheck",
+      "command": "npm run typecheck",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/ui/table/native-table-column-page.test.ts src/sw/browser/presentation/native-table-column-page.test.tsx -t mounted workbench passes actual row versus whole-table selection|native automatic column page reconciles changed available page space --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/THKZ38.app-closure2-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 28490,
+      "sha256": "ebed5c288b97ec66d1aecdbc31150495f3f2436eccfee1abaa328434b99d1613",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  2 passed | 33 skipped (35)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 33,
+        "total": 35
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14724,
+          "covered": 3674,
+          "skipped": 0,
+          "pct": 24.95
+        },
+        "statements": {
+          "total": 16155,
+          "covered": 3815,
+          "skipped": 0,
+          "pct": 23.61
+        },
+        "functions": {
+          "total": 3744,
+          "covered": 1068,
+          "skipped": 0,
+          "pct": 28.52
+        },
+        "branches": {
+          "total": 12002,
+          "covered": 1796,
+          "skipped": 0,
+          "pct": 14.96
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 24.95,
+        "statements": 23.61,
+        "functions": 28.52,
+        "branches": 14.96
+      },
+      "incompleteFileCount": 244,
+      "coverageMapSHA256": "a6d6fd7cd8563f8dceeacecefe09cb0b7132a6c31ed42a30eae5b41d0c2accdf"
+    }
+  ]
+}
