@@ -1,0 +1,179 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "b2c3ddea5dff727fd95dedf51ac57a24e498576714c902df7e33ab430c317ddf",
+    "apps/office/src/sw/source/core/docnode/ndtbl.ts": "8b21d945bf025bbb759c23317c0b5d4a742f37f933681a1864515e38b62a8ef6",
+    "apps/office/src/sw/source/core/layout/tabfrm.ts": "b6a187f08f98fa2302495e038b2643ad3ea02260ae6daca81d1f6975ae100c68",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts": "7af3b43280a9f367674b58cb37ea170d41446b1f1eee1da5f2ad7690c07f7cbb",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.ts": "04e5551e8b46686f434470a64202826534af8a97edc214bf8b0b34d8db8bff4f",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts": "31f0716ba99faec45d08f966387308e32a41c2cceb1bcd0ec4ac8416b2492454",
+    "apps/office/src/sw/source/core/docnode/native-tabrows.test.ts": "88c248df31e7d9c6a9f9c9d07a888a8ad2ad6c9b80c1702d99a18162cd8aff98",
+    "apps/office/src/sw/source/uibase/docvw/native-table-row-drag.test.ts": "6c66bcca13a684b5b63aedf03beb4e42fe51889fc8cdb3afb85537aa6c25a7a1",
+    "apps/office/src/sw/browser/editor/native-table-row-drag.test.tsx": "90053fc17f5af3f56f35a184f1d4cccf9064c4c8e504c39a73a085ffb53c3f8e",
+    "apps/office/e2e/writer-native-table-row-drag.spec.ts": "77adaf8746a0d062bf6c18c128ec6e7cf88a6464e9ede091731523f61e219eaf",
+    "docs/program/source-provenance.json": "b0ed31d425936b19e49e269ad7805578e33616048036a868d96945bf891c672b",
+    "docs/program/parity/runtime-inventory.json": "cace0e7366616dc3113a344c3fc737106cfce91d3818dee49d5349ccbfe79eae"
+  },
+  "records": [
+    {
+      "kind": "typecheck",
+      "command": "npm run typecheck",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 240,
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "86f21b97567f1597eaf339e809f688476590c5f98eea24540056b0d8d3c862dd",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/browser/editor/native-table-row-drag.test.tsx -t mounted native border GrabFocus leaves toolbar focus --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WV7BZP.app-closure2-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 28101,
+      "sha256": "1666ee8324072d81ac76b33546c18e268633d5a8f37b4a4c578c7774f2b05f1e",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 6 skipped (7)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 6,
+        "total": 7
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14553,
+          "covered": 3661,
+          "skipped": 0,
+          "pct": 25.15
+        },
+        "statements": {
+          "total": 15963,
+          "covered": 3809,
+          "skipped": 0,
+          "pct": 23.86
+        },
+        "functions": {
+          "total": 3709,
+          "covered": 1072,
+          "skipped": 0,
+          "pct": 28.9
+        },
+        "branches": {
+          "total": 11892,
+          "covered": 1850,
+          "skipped": 0,
+          "pct": 15.55
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 25.15,
+        "statements": 23.86,
+        "functions": 28.9,
+        "branches": 15.55
+      },
+      "incompleteFileCount": 244,
+      "coverageMapSHA256": "38dc5c3121e1c350406672198eb9b48b053d5d47a3be6fb3408e4216a8a39450"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- scripts/libreoffice-inventory/parity-mapping-cli.test.ts -t composes the Writer mapping report with owned upstream marker evidence --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/WV7BZP.inventory-closure2-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 5248,
+      "sha256": "b5651ae1cd664bfd226287d1b05172b9414c210fba57a2a95be2fe3e2372c1dd",
+      "totals": [
+        "Test Files  1 passed (1)",
+        "Tests  1 passed | 2 skipped (3)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 2,
+        "total": 3
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 433,
+          "skipped": 0,
+          "pct": 29.57
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 439,
+          "skipped": 0,
+          "pct": 28.82
+        },
+        "functions": {
+          "total": 384,
+          "covered": 120,
+          "skipped": 0,
+          "pct": 31.25
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 401,
+          "skipped": 0,
+          "pct": 37.12
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 29.57,
+        "statements": 28.82,
+        "functions": 31.25,
+        "branches": 37.12
+      },
+      "incompleteFileCount": 38,
+      "coverageMapSHA256": "8af1fabd85431aa3e1b7e4f2a28f720333075c9d59a53c1cf47f63fad75a550f"
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts writer-native-table-row-drag.spec.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 631,
+      "sha256": "deca427bb2d169544867c3bb0921d31fa8347e3599dddd47fce034fe259b7ebf",
+      "totals": [
+        "2 passed (5.7s)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T17:51:34.679Z",
+        "duration": 5679.420999999999,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
