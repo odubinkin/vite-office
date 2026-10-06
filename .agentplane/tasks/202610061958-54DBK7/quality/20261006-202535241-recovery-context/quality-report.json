@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610061958-54DBK7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-06T20:25:35.241Z",
+  "verdict": "pass",
+  "summary": "Exact implementation3d42da6c92ab390a0cdc4370c39cd70dc17ac939 passes approved native Text Flow headline subset; same current-agent EVALUATOR, explicitly not independent review.",
+  "evaluated_sha": "3d42da6c92ab390a0cdc4370c39cd70dc17ac939",
+  "blueprint_digest": "2babcd1802b6765435a82ddafcc50c75925146d55e281d2f253790f28742f9c1",
+  "findings": [
+    "Pinned Reset/saved checkbox/count/FillItemSet/sensitivity/native1..100/rounding contracts mapped to core page and one native browser Repeat header control; inherited unchanged original count preserved. Original table/list/cursor/grouped3UndoRedo/ODT/input and Chromium1280/390 evidence passes.",
+    "ONE upstream-absent profile13118app109inventory5scripts235Chromium passes0skip/flaky. Initial coverage threshold branch gap closed only using verified whole byte-identical editing-host source/maps with real earlier counters; actual100 app/inventory, no passing/full replay. Provenance callback macro spelling corrected only in two metadata files; original failed gate and changed JSON closure pass, validator unchanged.",
+    "11approvedpaths,519old516byte-identical+3known control migrations and only2obsolete source assertion updates;4new523total.276metadata complete prefixes/contracts/defaults/statuses/classifications and registered exceptions intact; complete parent prefix retained; doctor0errors2existing warnings, routing/diff pass; deferred stash retained."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610061958-54DBK7/README.md",
+    ".agentplane/tasks/202610061958-54DBK7/evidence/exact-sha-review.json",
+    ".agentplane/tasks/202610061958-54DBK7/evidence/coverage-source-proof.json",
+    ".agentplane/tasks/202610061958-54DBK7/evidence/source-closure1.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [
+    "Same current agent implemented and evaluated this commit; role switch does not provide independent review."
+  ],
+  "residual_risks": [
+    "Full Text Flow break/split/keep/text direction, full SfxItemSet ranges/notifications, other native bounds/Background and whole existing kernel/browser parity remain unverified. Parent and goal active."
+  ]
+}
