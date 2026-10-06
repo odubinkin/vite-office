@@ -1,0 +1,179 @@
+{
+  "vendorRestored": true,
+  "preProfileSHA256": {
+    "apps/office/src/sw/source/ui/table/tabledlg.ts": "518ba63f009920970dcc1976919e8869ea2b9f11e241f6b97b135674f66a6159",
+    "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx": "67251746c4a615be4c01aa28c5d79c967138eb7a1bacf595752d663654c6a22b",
+    "apps/office/src/sw/source/ui/table/native-table-format-page.test.ts": "5ab8b5f22946637a31e3e02f11ec45b499401ba0ca79ac8cb6190a664d457a22",
+    "apps/office/src/sw/source/ui/table/native-table-format-lifecycle.test.ts": "a146077b04e81f9ae785d39ea23519877e496e32acced9c3d7b47e612a6666ba",
+    "apps/office/src/sw/browser/presentation/native-table-format-lifecycle.test.tsx": "e1282dda69ef35daa08813a45156dd43c948b23a54aeda29af9b83b26b5d30cc",
+    "apps/office/src/sw/source/uibase/wrtsh/native-table-format-lifecycle-history.test.ts": "a78482fc9a9099104087bfe5581115a20b692f64f8280826700cbf86aca88440",
+    "apps/office/e2e/writer-native-table-format-lifecycle.spec.ts": "8ebf88ac3d9c0dc2ba7ae4a43bc4d517b7d451782b9cb02452ccfd1db62ff852",
+    "docs/program/source-provenance.json": "1149f3821fd32870aa64cbc14071748ee6efbaddf31773c732986bd3060a1ef5",
+    "docs/program/parity/runtime-inventory.json": "d09493e8b3426228f0b5ab38888d6bd195ff8ca10ed169686523fc46fca262c7"
+  },
+  "records": [
+    {
+      "kind": "build",
+      "command": "npm run test:static",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 1443,
+      "sha256": "1ba255f14c23b3a7590e55a81fd1276e621f1c758834e722ee31ed4dd07ad621",
+      "totals": [],
+      "failedCases": []
+    },
+    {
+      "kind": "app",
+      "command": "npm run test:coverage --workspace @vite-office/office -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/R9JM5A.app-results.json",
+      "profile": "upstream-absent",
+      "exit": 1,
+      "bytes": 74963,
+      "sha256": "6bea8dd0789cc2bc1c59111a4d047057ca17cd54f354dc44fc57a7662aef2342",
+      "totals": [
+        "Test Files  385 passed (385)",
+        "Tests  13096 passed (13096)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 13096,
+        "failed": 0,
+        "skipped": 0,
+        "total": 13096
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 14766,
+          "covered": 14766,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16199,
+          "covered": 16199,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3749,
+          "covered": 3749,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12027,
+          "covered": 12026,
+          "skipped": 0,
+          "pct": 99.99
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 99.99
+      },
+      "incompleteFileCount": 1,
+      "coverageMapSHA256": "0128c7233f1b7cdf62bbb4c23090a969ada51c7b287b34774f03a25e71d2e928"
+    },
+    {
+      "kind": "inventory",
+      "command": "npm run test:inventory:coverage -- --coverage.reportOnFailure --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=html --coverage.reporter=json --reporter=default --reporter=json --outputFile=/Users/odubinkin/Projects/vite-office/apps/office/node_modules/.cache/parity-coverage/R9JM5A.inventory-results.json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 40604,
+      "sha256": "7f9e8cc0f5375594699f0fc60adefe879e7fe677363dc7886c351a93da9a8b0c",
+      "totals": [
+        "Test Files  36 passed (36)",
+        "Tests  109 passed (109)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "passed": 109,
+        "failed": 0,
+        "skipped": 0,
+        "total": 109
+      },
+      "errors": [],
+      "coverageCounts": {
+        "lines": {
+          "total": 1464,
+          "covered": 1464,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1523,
+          "covered": 1523,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 384,
+          "covered": 384,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1080,
+          "covered": 1080,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "coverage": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      },
+      "incompleteFileCount": 0,
+      "coverageMapSHA256": "de9ce9ee65b38d4cddbc352d4b435f4fa22931d3cbdcc50140153d9239679f58"
+    },
+    {
+      "kind": "scripts",
+      "command": "npm exec -- vitest run scripts/check-source-provenance.test.ts scripts/writer-ui-resource-model.test.ts",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 220,
+      "sha256": "34e6d204076cfc57c64a5ab267c980121a00af95187df4958afbff39bae596f3",
+      "totals": [
+        "Test Files  2 passed (2)",
+        "Tests  5 passed (5)"
+      ],
+      "failedCases": []
+    },
+    {
+      "kind": "chromium",
+      "command": "npm exec -- playwright test --config apps/office/playwright.config.ts --reporter=list,json",
+      "profile": "upstream-absent",
+      "exit": 0,
+      "bytes": 31808,
+      "sha256": "4c2c0e61ff22f44a6ab2d0c9a95a097cf2ab6eb83268b096a1f3139a19853b17",
+      "totals": [
+        "231 passed (3.9m)"
+      ],
+      "failedCases": [],
+      "caseCounts": {
+        "startTime": "2026-10-06T19:17:08.733Z",
+        "duration": 235659.634,
+        "expected": 231,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ]
+}
