@@ -1,10 +1,11 @@
 ---
 id: "202610062133-B4YMFA"
 title: "Move native row split selection into document ownership"
-status: "DOING"
+result_summary: "Native row split selection and history moved into document; whole Properties selection uses native cursor stack and retains pending input. Full row-content splitting and complete native lifecycle remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "ONE upstream-absent full profile13164initial appPASS+originalfailedclosure1PASS+4genuinenewPASS=13169current;109inventory5scripts241Chromium PASS. Three filtered closures retain23skip observations and replay no historical passing cases; final production rebuildPASS. Actual100 source/maps/counters proof."
     - "11approvedpaths,531old tests byte-identical+3new534;277old metadata full prefixes/defaults/statuses/classifications/registered exceptions and parent520287 prefix intact. Original native graph/list/pending/cursor/grouped3UndoRedo/ODT/input retained; source/scoped/static gates and doctor/routing/diff PASS."
-commit: null
+commit:
+  hash: "5dd9b091ce82aa9955e76aee443aa98c1977f7bb"
+  message: "🚧 B4YMFA code: port native document row split and cursor stack ownership"
 comments:
   -
     author: "CODER"
     body: "Start: iteration200 native row split document ownership and temporary dialog selection under standing iterative authorization; no upstream/raw sources in AP, one absent test profile."
+  -
+    author: "CODER"
+    body: "Verified: document-owned native row split and caller temporary selection/cursor stack ownership.13169current app109inventory5scripts241initial ChromiumPASS without upstream; focused failures/new cases closed, actual100 proof and same-agent qualityPASS. Whole parity active."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native document row split and caller cursor stack ownership verified on5dd9b091ce82aa9955e76aee443aa98c1977f7bb. ONE full absent profile plus only originalfailed/new native closures:13169current app109inventory5scripts241initial ChromiumPASS; actual100 proof. Same-agent exactSHA qualityPASS, whole parity active."
+  -
+    type: "status"
+    at: "2026-10-06T22:00:35.681Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: document-owned native row split and caller temporary selection/cursor stack ownership.13169current app109inventory5scripts241initial ChromiumPASS without upstream; focused failures/new cases closed, actual100 proof and same-agent qualityPASS. Whole parity active."
 doc_version: 3
-doc_updated_at: "2026-10-06T22:00:13.272Z"
+doc_updated_at: "2026-10-06T22:00:35.683Z"
 doc_updated_by: "CODER"
 description: "Iteration200: replace shell whole-table row setter adapter with native SwDoc/ndtbl1 current-or-selected row mutation and source caller temporary whole-table selection using native cursor stack. Preserve original model/history/storage and deliberate exceptions."
 sections:
