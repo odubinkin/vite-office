@@ -1,0 +1,18 @@
+{
+  "baselineTag": "libreoffice-26.8.0.2",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "reviewer": "Same current agent; pinned sources read-only, no upstream execution",
+  "sourceSHA256": {
+    "sw/source/core/docnode/ndtbl1.cxx": "c94a3a78edc61fc2b2a0419371f70cffc5466ceca3d0b8f29160cceff0b37663",
+    "sw/source/core/frmedt/fetab.cxx": "e7b7c7164f76d7e67eddcf863128d41c3c2ea2946362b8509bab0bc2cdc9f016",
+    "sw/source/uibase/shells/tabsh.cxx": "ac075f90575663fac974e2804e7111b1df3f596eb5bb400fb9fc2f4be0058163",
+    "sw/inc/fmtfsize.hxx": "e880b0482e55550ee27f1b8f49d8a84a3894056298dab20ef3c4a5a22522e6b0",
+    "sw/source/core/layout/atrfrm.cxx": "61410fa07c330f5a0be094ac3e484bca0dbf439c0d8662460494a27952b1b82c",
+    "sw/source/ui/table/rowht.cxx": "d2f674e43223f744ec8caa905f732677aecc04efe5fcfc2117257effb05bff58"
+  },
+  "contracts": [
+    "Native SetRowHeight/GetRowHeight owns current/table-selected line collection, table attribute undo and modification; shell brackets document forwarding. Ordinary current cursor ignores mark/ring, selected rows original and unique in represented flat graph.",
+    "Existing app minHeight numeric slice retained; zero default/common height/mixed-or-empty no item verified for represented values. Source full SwFormatFrameSize default Variable height0 Fixed width0, complete-item equality and Fixed/Minimum dialog types reviewed; complete item/fixed/relative/nested proportional height handling remains unverified.",
+    "7approved paths;534old tests byte-identical+2new536,277prior metadata prefixes/defaults/statuses/classifications/registered exceptions preserved. Same current-agent evaluator explicitly not independent; full parity and parent/goal active."
+  ]
+}

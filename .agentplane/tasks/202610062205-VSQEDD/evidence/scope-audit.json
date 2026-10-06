@@ -1,0 +1,35 @@
+{
+  "historicalLiteralAssertionSurfacePreserved": true,
+  "approvedPaths": [
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts",
+    "docs/program/source-provenance.json",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "actualSemanticPaths": [
+    "apps/office/src/sw/source/core/doc/doc.ts",
+    "apps/office/src/sw/source/core/docnode/ndtbl1.ts",
+    "apps/office/src/sw/source/core/frmedt/fetab.ts",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts"
+  ],
+  "oldAcceptanceFiles": 534,
+  "oldAcceptanceChanged": [],
+  "oldAcceptanceByteIdentical": 534,
+  "newTests": [
+    "apps/office/src/sw/source/core/docnode/native-row-height-owner.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/native-row-height-owner-history.test.ts"
+  ],
+  "totalAcceptanceFiles": 536,
+  "priorSemanticRecords": 277,
+  "semanticRecords": 277,
+  "entirePriorPrefixesPreserved": true,
+  "parentPrefixCharacters": 525703,
+  "parentPrefixSHA256": "cfab4560c2a7cac6797e5659cdc5ee8e46044763c960c874e0b0646c215da33c",
+  "failures": []
+}
