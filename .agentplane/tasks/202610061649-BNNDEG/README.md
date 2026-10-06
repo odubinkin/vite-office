@@ -4,7 +4,7 @@ title: "Prevent Writer list labels from overlapping item text"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -19,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-06T17:10:36.967Z"
+  updated_at: "2026-10-06T17:12:04.238Z"
   updated_by: "CODER"
-  note: "Verified exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92: all declared gates pass,13011app109inventory5scripts221Chrome current cases, actual100 coverage; same-agent evaluator, no independent-review claim."
+  note: "Verified: exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92 passes declared occupied-label criteria;13011app109inventory5scripts221Chromium PASS, actual100 source-proven coverage,502historical tests and275metadata prefixes unchanged. Restore canonical blueprint verification after final prose; no test replay."
   attempts: 0
 quality_review:
   state: "pass"
@@ -62,8 +62,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92: all declared gates pass,13011app109inventory5scripts221Chrome current cases, actual100 coverage; same-agent evaluator, no independent-review claim."
+  -
+    type: "verify"
+    at: "2026-10-06T17:12:04.238Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92 passes declared occupied-label criteria;13011app109inventory5scripts221Chromium PASS, actual100 source-proven coverage,502historical tests and275metadata prefixes unchanged. Restore canonical blueprint verification after final prose; no test replay."
 doc_version: 3
-doc_updated_at: "2026-10-06T17:11:12.030Z"
+doc_updated_at: "2026-10-06T17:12:04.292Z"
 doc_updated_by: "CODER"
 description: "Priority iteration193: match pinned SwNumberPortion minimum occupied width in the existing browser paragraph renderer; preserve native list ownership/defaults and all existing acceptance contracts."
 sections:
@@ -80,6 +86,39 @@ sections:
     Result: PASS at implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92. Current acceptance union13011app109inventory5scripts221Chromium; no historical passing/full replay.502 old acceptance files byte-identical+2new=504;275 metadata contracts/prefixes retained. Actual100 app272/inventory38 across lines/statements/functions/branches with strict complete source proof.
     Evidence: evidence/exact-sha-review.json,absent-profile.json,failure-closure1/2/3.json,final-coverage.json,coverage-source-proof.json,source-gates.json,scope-audit.json,source-review.json,governance.json,changed-file-checks.json and quality/20261006-171036198-recovery-context/quality-report.json. Same current agent EVALUATOR phase explicitly not independent review. Source/raw diagnostics/cases/maps remain only ignored application cache. Vendor restored; THKZ38 stash preserved.
     Scope: occupied list-label width in existing browser renderer and immutable distance projection. Complete native font/tab/alignment/continued-line/clipping/layout and whole parity remain UNVERIFIED; parent/goal ACTIVE.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-06T17:12:04.238Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92 passes declared occupied-label criteria;13011app109inventory5scripts221Chromium PASS, actual100 source-proven coverage,502historical tests and275metadata prefixes unchanged. Restore canonical blueprint verification after final prose; no test replay.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T17:12:03.839Z, excerpt_hash=sha256:fb525952e66acbad09c07eb8a61e20eba711aa30f7f32578f85659d0144b5aa7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061649-BNNDEG/blueprint/resolved-snapshot.json
+    - old_digest: 6f233a3770469ce17c66c02d0de14dd0d600bc6daa0b16d5acc1b90119dda5bf
+    - current_digest: 6f233a3770469ce17c66c02d0de14dd0d600bc6daa0b16d5acc1b90119dda5bf
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610061649-BNNDEG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610061649-BNNDEG --result verified-202610061649-BNNDEG --commit 8486f1f595d7e37d6e0f7c64ed6e7648805002ea
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the final leaf implementation commit with a new task; preserve other task history and the THKZ38 stash."
   Findings: |-
     Pinned porfld.cxx SwNumberPortion::Format sets nDiff at least m_nFixWidth+m_nMinDist. txtfld.cxx NewNumberPortion supplies zero minimum distance for label-alignment and GetCharTextDistance for legacy position mode. Current fixed-width browser marker can overflow into editable text when the slot is narrower than the glyph. Bound this fix to intrinsic occupied width; wider native tabs/alignment/font-device/layout parity remains unverified.
@@ -89,6 +128,8 @@ sections:
     Actual100 app272files L14425S15820F3688B11789 map9fe0761d10f8d10359add7d2bd0e4651a529363c69590dfdb141bd7cd052f5dd;inventory38files L1464S1523F384B1080 map2bb3c6c1d2293b5a4d2df8c7d4ba57c96e51ee48176a56fc3c7894eb0f56e1e7. Only complete source/map or contiguous byte-identical regions/full function declaration-body/full enclosing branch-location proofs admit actual counters. Raw maps/source/cases stay in ignored app cache; focused skips not promoted.
     Six initial static gates executed once; only failed format/docs rechecked, scoped changed acceptance checks and required type/build after production correction. Restored five source gatesPASS; scopePASS; doctor0errors2knownwarnings,routing/diffPASS; current-leaf census0forbidden. Same-agent EVALUATOR exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92 PASS, explicitly not independent. Full native font/style/RTL/alignment/tab fallback/continued-line indentation/clipping/layout parity remains unverified; parent/goal ACTIVE. Row resize remains next priority.
     Coverage source proof: app270whole-identical+2complete-region files, raw proofSHA8a4baa6ac19263e42e10b72163f5ff92a62fa78d2c6feb6a2bc89eea29ce7c68;inventory38whole-identical, raw proofSHAb1662f9d320f06d26815b24845b2b5c8d10e74f29ad002812c630a3f38a2d606. Exact-SHA acceptance identity audit preserves duplicate occurrence identities, excludes8superseded draft nested-field cases, admits8actual new separate-contract cases and1newcompatibility case, retains2+8focused skips as skipped. Same-agent review0failures; evaluator report quality/20261006-171036198-recovery-context/quality-report.json.
+
+    Lifecycle closeout observation: initial finish validation rejected missing recorded blueprint verification after the human-readable Verification section was rewritten. No implementation/test failure. Restore canonical ap verify after final prose updates;persist final verification tail;finish actual implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92. Scope/approvals/exact-SHA evaluator unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -117,6 +158,39 @@ Result: PASS at implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92. Current
 Evidence: evidence/exact-sha-review.json,absent-profile.json,failure-closure1/2/3.json,final-coverage.json,coverage-source-proof.json,source-gates.json,scope-audit.json,source-review.json,governance.json,changed-file-checks.json and quality/20261006-171036198-recovery-context/quality-report.json. Same current agent EVALUATOR phase explicitly not independent review. Source/raw diagnostics/cases/maps remain only ignored application cache. Vendor restored; THKZ38 stash preserved.
 Scope: occupied list-label width in existing browser renderer and immutable distance projection. Complete native font/tab/alignment/continued-line/clipping/layout and whole parity remain UNVERIFIED; parent/goal ACTIVE.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-06T17:12:04.238Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92 passes declared occupied-label criteria;13011app109inventory5scripts221Chromium PASS, actual100 source-proven coverage,502historical tests and275metadata prefixes unchanged. Restore canonical blueprint verification after final prose; no test replay.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-06T17:12:03.839Z, excerpt_hash=sha256:fb525952e66acbad09c07eb8a61e20eba711aa30f7f32578f85659d0144b5aa7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610061649-BNNDEG/blueprint/resolved-snapshot.json
+- old_digest: 6f233a3770469ce17c66c02d0de14dd0d600bc6daa0b16d5acc1b90119dda5bf
+- current_digest: 6f233a3770469ce17c66c02d0de14dd0d600bc6daa0b16d5acc1b90119dda5bf
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610061649-BNNDEG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610061649-BNNDEG --result verified-202610061649-BNNDEG --commit 8486f1f595d7e37d6e0f7c64ed6e7648805002ea
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the final leaf implementation commit with a new task; preserve other task history and the THKZ38 stash.
@@ -130,3 +204,5 @@ Initial full absent buildPASS,13009appPASS1oldexact-layoutFAIL,109inventoryPASSa
 Actual100 app272files L14425S15820F3688B11789 map9fe0761d10f8d10359add7d2bd0e4651a529363c69590dfdb141bd7cd052f5dd;inventory38files L1464S1523F384B1080 map2bb3c6c1d2293b5a4d2df8c7d4ba57c96e51ee48176a56fc3c7894eb0f56e1e7. Only complete source/map or contiguous byte-identical regions/full function declaration-body/full enclosing branch-location proofs admit actual counters. Raw maps/source/cases stay in ignored app cache; focused skips not promoted.
 Six initial static gates executed once; only failed format/docs rechecked, scoped changed acceptance checks and required type/build after production correction. Restored five source gatesPASS; scopePASS; doctor0errors2knownwarnings,routing/diffPASS; current-leaf census0forbidden. Same-agent EVALUATOR exact implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92 PASS, explicitly not independent. Full native font/style/RTL/alignment/tab fallback/continued-line indentation/clipping/layout parity remains unverified; parent/goal ACTIVE. Row resize remains next priority.
 Coverage source proof: app270whole-identical+2complete-region files, raw proofSHA8a4baa6ac19263e42e10b72163f5ff92a62fa78d2c6feb6a2bc89eea29ce7c68;inventory38whole-identical, raw proofSHAb1662f9d320f06d26815b24845b2b5c8d10e74f29ad002812c630a3f38a2d606. Exact-SHA acceptance identity audit preserves duplicate occurrence identities, excludes8superseded draft nested-field cases, admits8actual new separate-contract cases and1newcompatibility case, retains2+8focused skips as skipped. Same-agent review0failures; evaluator report quality/20261006-171036198-recovery-context/quality-report.json.
+
+Lifecycle closeout observation: initial finish validation rejected missing recorded blueprint verification after the human-readable Verification section was rewritten. No implementation/test failure. Restore canonical ap verify after final prose updates;persist final verification tail;finish actual implementation e625c6f3b56279490cd3fc9292afa2a3ee2f4d92. Scope/approvals/exact-SHA evaluator unchanged.
